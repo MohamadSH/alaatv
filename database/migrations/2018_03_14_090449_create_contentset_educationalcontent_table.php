@@ -1,0 +1,47 @@
+<?php
+
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateContentsetEducationalcontentTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('contentset_educationalcontent', function (Blueprint $table) {
+            $table->unsignedInteger('contentset_id');
+            $table->unsignedInteger('edc_id');
+            $table->integer("order")->default(0)->comment("ترتیب");
+            $table->primary(['contentset_id','edc_id' ]);
+
+            $table->foreign('contentset_id')
+                ->references('id')
+                ->on('contentsets')
+                ->onDelete('cascade')
+                ->onupdate('cascade');
+
+            $table->foreign('edc_id')
+                ->references('id')
+                ->on('educationalcontents')
+                ->onDelete('cascade')
+                ->onupdate('cascade');
+        });
+        DB::statement("ALTER TABLE `contentset_educationalcontent` comment 'رابطه چند به چند دسته محتوا با محتوا'");
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('contentset_educationalcontent');
+    }
+}

@@ -1,0 +1,136 @@
+<?php
+
+namespace App\Http\Middleware;
+
+use App\Http\Controllers\OrderController;
+use App\Orderproduct;
+use App\Product;
+use App\Traits\ProductCommon;
+use Closure;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
+
+class OrderCheck
+{
+    use ProductCommon;
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @return mixed
+     */
+    public function handle($request, Closure $next)
+    {
+        /**
+         * Initiating an order for the user
+         * at the moment he opens the website
+         */
+        if(Auth::check()){
+            /**
+             * Making an open order for the user or retrieving the existing one
+             */
+            $openOrder = Auth::user()->openOrders()->get();
+            if($openOrder->isEmpty()){
+                $request = new Request();
+                $request->offsetSet("paymentstatus_id" , Config::get("constants.PAYMENT_STATUS_UNPAID"));
+                $request->offsetSet("orderstatus_id" , Config::get("constants.ORDER_STATUS_OPEN"));
+                $request->offsetSet("user_id" , Auth::user()->id);
+                $controller = new OrderController();
+                $order = $controller->store($request);
+
+            }else{
+                $order = $openOrder->first();
+            }
+            /**
+             *  end
+             */
+
+            /**
+             *  Putting found order id in session
+             */
+            if(isset($order))
+            {
+                session()->put("order_id" , $order->id);
+//                session()->save();
+            }
+            /**
+             *  end
+             */
+
+            /**
+             *  Pulling orderProducts that user has added to the cart before login
+             */
+            if(session()->has("orderproducts"))
+            {
+				$products = session()->pull("orderproducts");
+                if(session()->has("orderproductAttributes")) $attributes = session()->pull("orderproductAttributes");
+                foreach ($products as $key=>$value)
+                {
+                    $product = Product::where("id",$key)->get()->first();
+                    if(isset($product) && strlen($product->validateProduct()) == 0)
+                    {
+                        $orderproduct = new Orderproduct();
+                        $orderproduct->product_id = $product->id;
+                        $orderproduct->order_id = $order->id;
+
+                        if($orderproduct->save()){
+
+                            if(isset($product->amount)) {
+                                $product->amount = $product->amount - 1;
+                                $product->update();
+                            }
+                            if(isset($attributes) && isset($attributes[$product->id]))
+                            {
+                                $orderproductAttributes = $attributes[$product->id];
+                                foreach ($orderproductAttributes as $orderproductAttribute => $extraCost)
+                                {
+                                    $myParent = $this->makeParentArray($product);
+                                    $myParent = end($myParent);
+                                    $attributevalues = $myParent->attributevalues->where("id" , $orderproductAttribute);
+                                    if($attributevalues->isNotEmpty())
+                                    {
+                                        $orderproduct->attributevalues()->attach($attributevalues->first()->id,["extraCost"=>$attributevalues->first()->pivot->extraCost]);
+                                    }else{
+
+                                    }
+                                }
+                            }
+                            $costArray = array() ;
+                            $costArray = $orderproduct->obtainOrderproductCost();
+                            if(isset($costArray["cost"])) $orderproduct->cost = ((1-($costArray["productDiscount"]/100))*$costArray["cost"]) - $costArray["productDiscountAmount"];
+                            else $orderproduct->cost = null ;
+                            $orderproduct->update();
+
+                            /**
+                             * Attaching simple product gifts to the order
+                             */
+                            $attachedGifts = array();
+                            foreach ($value["gifts"] as $gift)
+                            {
+                                if($attachedGifts->contains($gift->id)) continue;
+                                else $attachedGifts->push($gift->id);
+                                if($order->orderproducts(Config::get("constants.ORDER_PRODUCT_GIFT"))->whereHas("product" , function($q) use($gift){
+                                    $q->where("id" , $gift->id);
+                                })->get()->isNotEmpty()) continue;
+
+                                $orderproduct->attachGift($gift) ;
+                            }
+                            /**
+                             *    end
+                             */
+
+                        }
+                    }
+                }
+            }
+            /**
+             *  end
+             */
+
+        }
+        return $next($request);
+    }
+
+}

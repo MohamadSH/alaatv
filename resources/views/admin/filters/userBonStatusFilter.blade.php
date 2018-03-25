@@ -1,0 +1,1 @@
+{!! Form::select("userBonStatus" , $userBonStatuses, null, ['class' => 'form-control' , "placeholder" => "وضعیت بن"]) !!}

@@ -1,0 +1,62 @@
+<?php
+
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+
+class BloodTypeSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        DB::table('bloodtypes')->delete();
+        $data = array(
+            array(
+                'id' => '1',
+                'name' => 'O+',
+                'displayName' => 'O مثبت',
+            ),
+            array(
+                'id' => '2',
+                'name' => 'O−',
+                'displayName' => 'O منفی',
+            ),
+            array(
+                'id' => '3',
+                'name' => 'A+',
+                'displayName' => 'A مثبت',
+            ),
+            array(
+                'id' => '4',
+                'name' => 'A−',
+                'displayName' => 'A منفی',
+            ),
+            array(
+                'id' => '5',
+                'name' => 'B+',
+                'displayName' => 'B مثبت',
+            ),
+            array(
+                'id' => '6',
+                'name' => 'B−',
+                'displayName' => 'B منفی',
+            ),
+            array(
+                'id' => '7',
+                'name' => 'AB+',
+                'displayName' => 'AB مثبت',
+            ),
+            array(
+                'id' => '8',
+                'name' => 'AB−',
+                'displayName' => 'AB منفی',
+            )
+
+        );
+
+        DB::table('bloodtypes')->insert($data); // Query Builder
+    }
+}

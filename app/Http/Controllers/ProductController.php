@@ -1,0 +1,1169 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Attribute;
+use App\Attributeset;
+use App\Attributetype;
+use App\Attributevalue;
+use App\Bon;
+use App\Http\Requests\AddComplimentaryProductRequest;
+use App\Http\Requests\EditProductRequest;
+use App\Http\Requests\InsertProductRequest;
+use App\Product;
+use App\Productfiletype;
+use App\Traits\ProductCommon;
+use App\User;
+use App\Websitepage;
+
+use App\Websitesetting;
+use Carbon\Carbon;
+use Helpers\Helper;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Input;
+
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\File;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
+use Meta;
+
+class ProductController extends Controller
+{
+    protected $helper;
+    protected $response ;
+
+    use ProductCommon;
+
+    function __construct()
+    {
+        $this->middleware('permission:'.Config::get('constants.LIST_PRODUCT_ACCESS'),['only'=>'index']);
+        $this->middleware('permission:'.Config::get('constants.INSERT_PRODUCT_ACCESS'),['only'=>'create']);
+        $this->middleware('permission:'.Config::get('constants.REMOVE_PRODUCT_ACCESS'),['only'=>'destroy']);
+        $this->middleware('permission:'.Config::get('constants.SHOW_PRODUCT_ACCESS'),['only'=>'edit']);
+        $this->middleware('permission:'.Config::get('constants.EDIT_PRODUCT_ACCESS'),['only'=>'update']);
+        $this->middleware('permission:'.Config::get('constants.EDIT_CONFIGURE_PRODUCT_ACCESS'),['only'=> ['childProductEnable' , 'completeEachChildPivot']]);
+        $this->middleware('permission:'.Config::get('constants.INSERT_CONFIGURE_PRODUCT_ACCESS'),['only'=>'makeConfiguration' , 'createConfiguration']);
+        $this->middleware('auth', ['except' => ['show' , 'refreshPrice' , 'search' , 'showPartial' , 'landing1' , 'landing2' ]]);
+
+        $this->helper = new Helper();
+        $this->response = new Response();
+
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $products = Product::getProducts()->orderBy('created_at' , 'Desc')->get() ;
+        return view("product.index" , compact("products" ));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(InsertProductRequest $request)
+    {
+        $product = new Product();
+        $product->fill($request->all());
+
+        if(strlen($request->get("introVideo"))>0)
+            if(!preg_match("/^http:\/\//", $product->introVideo) && !preg_match("/^https:\/\//", $product->introVideo) )
+                 $product->introVideo = "http://". $product->introVideo ;
+
+        if ($request->hasFile("file")) {
+            $file = $request->file('file');
+            $extension = $file->getClientOriginalExtension();
+            $fileName = basename($file->getClientOriginalName() , ".".$extension) . "_" . date("YmdHis") . '.' . $extension;
+            if (Storage::disk(Config::get('constants.DISK5'))->put($fileName, File::get($file))) {
+                $product->file = $fileName;
+            }
+        }
+
+        if ($request->hasFile("image")) {
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalExtension();
+            $fileName = basename($file->getClientOriginalName() , ".".$extension) . "_" . date("YmdHis") . '.' . $extension;
+            if (Storage::disk(Config::get('constants.DISK4'))->put($fileName, File::get($file))) {
+                $product->image = $fileName;
+//                $img = Image::make(Storage::disk(Config::get('constants.DISK4'))->getAdapter()->getPathPrefix().$fileName);
+//                $img->resize(256, 256);
+//                $img->save(Storage::disk(Config::get('constants.DISK4'))->getAdapter()->getPathPrefix().$fileName);
+            }
+
+        }
+
+        if ($request->get('amountLimit') == 0){
+            $product->amount = null;
+        }
+        $bon = Bon::where('id', $request->get('bon_id'))->first();
+        if(strlen($request->get('bonPlus')) == 0) $bonPlus = 0; else $bonPlus = $request->get('bonPlus');
+        if(strlen($request->get('bonDiscount')) == 0) $bonDiscount = 0; else $bonDiscount = $request->get('bonDiscount');
+
+        if($request->has("isFree")) $product->isFree = 1;
+        else $product->isFree = 0;
+
+        if(strlen(preg_replace('/\s+/', '', $product->discount)) == 0) $product->discount = 0;
+
+        if($request->has("order"))
+        {
+            if(strlen(preg_replace('/\s+/', '', $request->get("order"))) == 0) $product->order = 0;
+            $productsWithSameOrder = Product::getProducts(0 , 1)->where("order" , $product->order)->get();
+            if(!$productsWithSameOrder->isEmpty())
+            {
+                $productsWithGreaterOrder =  Product::getProducts(0 , 1)->where("order" ,">=" ,$product->order)->get();
+                foreach ($productsWithGreaterOrder as $graterProduct)
+                {
+                    $graterProduct->order = $graterProduct->order + 1 ;
+                    $graterProduct->update();
+                }
+            }
+        }
+
+        if ($product->save()) {
+            if($bonPlus || $bonDiscount)
+                $product->bons()->attach($bon->id, ['discount' => $bonDiscount, 'bonPlus' => $bonPlus]);
+            return $this->response->setStatusCode(200);
+        }
+        else{
+            return $this->response->setStatusCode(503);
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Product  $product
+     * @return \Illuminate\Http\Response
+     */
+    public function show($product)
+    {
+        if(Input::has("dp")) {
+            $defaultProducts = array();
+            array_push($defaultProducts , (int)Input::get("dp"));
+        }
+
+        if(in_array($product->id , [193,194,195])) return redirect(action("ProductController@show" , 184) , 301);
+        Meta::set('title', substr($product->name, 0 , Config::get("constants.META_TITLE_LIMIT")));
+        Meta::set('image', route('image', ['category'=>'4','w'=>'338' , 'h'=>'338' ,  'filename' =>  $product->image ]));
+        Meta::set('keywords', substr($product->name , 0 , Config::get("constants.META_KEYWORDS_LIMIT")));
+        Meta::set('description', substr($product->shortDescription, 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
+
+        $descriptionIframe = Input::get("partial");
+
+        if(isset($product->producttype->id))
+            $productType = $product->producttype->id;
+        else
+            $productType = null;
+
+        $allAttributeCollection = $product->getAllAttributes() ;
+        $selectCollection = $allAttributeCollection["selectCollection"];
+        $groupedCheckboxCollection = $allAttributeCollection["groupedCheckboxCollection"];
+        $extraSelectCollection = $allAttributeCollection["extraSelectCollection"];
+        $extraCheckboxCollection = $allAttributeCollection["extraCheckboxCollection"];
+        $simpleInfoAttributes = $allAttributeCollection["simpleInfoAttributes"];
+        $checkboxInfoAttributes = $allAttributeCollection["checkboxInfoAttributes"];
+        if($product->producttype_id == Config::get("constants.PRODUCT_TYPE_SELECTABLE"))
+            if(isset($defaultProducts))
+                $childrenArray = $this->makeChildrenArray($product  , "NESTED" ,"ONLY_ENABLE", $defaultProducts);
+            else
+                $childrenArray = $this->makeChildrenArray($product  , "NESTED","ONLY_ENABLE" );
+
+        if(session()->has("adminOrder_id")) $user = User::where("id" , session()->get("customer_id"))->first();
+        elseif(Auth::check()) $user = Auth::user();
+
+        if(isset($user))
+            $costArray = $product->obtainProductCost( $user );
+        else
+            $costArray = $product->obtainProductCost( );
+
+        $discount = $costArray["bonDiscount"]+$costArray["productDiscount"];
+        $cost = $costArray["cost"];
+
+        if(Config::has("constants.EXCLUDED_RELATED_PRODUCTS"))
+            $excludedProducts = Config::get("constants.EXCLUDED_RELATED_PRODUCTS");
+        else
+            $excludedProducts = [] ;
+        $otherProducts = Product::getProducts(0,1)->whereNotIn("id",$excludedProducts)->orderBy('created_at' , 'Desc')->where("id","<>" , $product->id)->get()   ;
+        $otherProductChunks = $otherProducts->chunk(4);
+
+        if(Config::has("constants.EXCLUSIVE_RELATED_PRODUCTS"))
+            $exclusiveOtherProductIds = Config::get("constants.EXCLUSIVE_RELATED_PRODUCTS");
+        else
+            $exclusiveOtherProductIds = [] ;
+        $exclusiveOtherProducts = Product::whereIn("id" , $exclusiveOtherProductIds)->get();
+//        $disqusPayload = Auth::user()->disqusSSO();
+
+        if(Auth::check())
+        {
+            $baseUrl = url("/");
+            $productPath = str_replace($baseUrl , "" , action("ProductController@show" , $product->id));
+            $websitepage = Websitepage::firstOrNew(["url"=>$productPath ]);
+            $productSeenCount = 0 ;
+            if(!isset($websitepage->id))
+            {
+                $websitepage->save();
+            }
+            if(isset($websitepage->id))
+            {
+                if(!Auth::user()->seensitepages->contains($websitepage->id))
+                     Auth::user()->seensitepages()->attach($websitepage->id );
+                else
+                {
+                    Auth::user()->seensitepages()->updateExistingPivot($websitepage->id, ["numberOfVisit"=> Auth::user()->seensitepages()->where("id" , $websitepage->id)->first()->pivot->numberOfVisit+1 , "updated_at"=>Carbon::now()]);
+                }
+                $productSeenCount = $websitepage->userschecked()->count();
+            }
+        }
+
+//            if(file_exists($product->introVideo)) $productIntroVideo = $product->introVideo ;
+        if(isset($product->introVideo) && strlen($product->introVideo) > 0)
+             $productIntroVideo = $product->introVideo;
+
+        /** Product files */
+        $productsWithPamphlet = collect();
+        $children = $this->makeChildrenArray($product );
+        //////////////////////////////PAMPHLETS////////////////////////////////////
+        $filesArray = array();
+        foreach($product->validProductfiles("pamphlet")->get() as $productfile)
+        {
+            array_push($filesArray, ["file" => $productfile->file, "name" => $productfile->name , "product_id"=>$productfile->product_id]);
+        }
+        if(!empty($filesArray)) $productsWithPamphlet->put($product->name,$filesArray);
+        foreach ($children as $child)
+        {
+            $filesArray = array();
+            foreach($child->validProductfiles("pamphlet")->get() as $productfile)
+            {
+                array_push($filesArray, ["file" => $productfile->file, "name" => $productfile->name , "product_id"=>$productfile->product_id]);
+            }
+            if(!empty($filesArray)) $productsWithPamphlet->put($child->name,$filesArray);
+        }
+
+        ////////////////////////////    VIDEOS /////////////////////////
+        $productsWithVideo = collect();
+        $filesArray = array();
+        foreach($product->validProductfiles("video")->get() as $productfile)
+        {
+            array_push($filesArray, ["file" => $productfile->file, "name" => $productfile->name , "product_id"=>$productfile->product_id]);
+        }
+        if(!empty($filesArray)) $productsWithVideo->put($product->name,$filesArray);
+        foreach ($children as $child)
+        {
+            $filesArray = array();
+            foreach($child->validProductfiles("video")->get() as $productfile)
+            {
+                array_push($filesArray, ["file" => $productfile->file, "name" => $productfile->name , "product_id"=>$productfile->product_id]);
+            }
+            if(!empty($filesArray)) $productsWithVideo->put($child->name,$filesArray);
+        }
+
+        /**
+         * Product sample photos
+         */
+            $productSamplePhotos = $product->photos->where("enable" , 1)->sortBy("order");
+
+        /**
+         * end of product sample photos
+         */
+
+        /**
+         * Product gifts
+         */
+        $gifts = $product->gifts;
+        $giftCollection = collect();
+        foreach ($gifts as $gift)
+        {
+            $giftCollection->push(["product"=>$gift , "link"=>$this->makeProductLink($gift)]);
+        }
+        /**
+         * end of product gifts
+         */
+
+        $isLive = $product->isHappening();
+        if(Auth::check() && Auth::user()->hasRole("admin") && $isLive!== false) $isLive = 0 ;
+
+        return view("product.show" , compact("product" , "productType" ,"productSeenCount","productIntroVideo" , "otherProductChunks"  , 'discount' , 'cost' , "selectCollection" ,"simpleInfoAttributes"
+            , "checkboxInfoAttributes" , "extraSelectCollection" , "extraCheckboxCollection" , 'groupedCheckboxCollection'  , "descriptionIframe"
+            , "isProductExistInOrder" , "childrenArray" , "productsWithVideo" , "productsWithPamphlet" , "exclusiveOtherProducts" , "productSamplePhotos" , "giftCollection" , "isLive" ));
+    }
+
+    /**
+     * Display partial information of the specified resource.
+     *
+     * @param  \App\Product  $product
+     * @return \Illuminate\Http\Response
+     */
+    public function showPartial($product){
+        return redirect(action("ProductController@show" , $product)."?partial=true");
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \app\Product  $product
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($product)
+    {
+        $amountLimit = [
+            0 => 'نامحدود',
+            1 => 'محدود'
+        ];
+        if(isset($product->amount)){$defaultAmountLimit = 1;}
+        else{$defaultAmountLimit = 0;}
+
+        $enableStatus = [
+            0 => 'غیرفعال',
+            1 => 'فعال'
+        ];
+        if(isset($product->enable) && $product->enable){$defaultEnableStatus = 1;}
+        else{$defaultEnableStatus = 0;}
+
+        $attributesets = Attributeset::pluck('name' , 'id')->toArray();
+
+        $bonName = Config::get("constants.BON1");
+        $bons = $product->bons->where("name" , $bonName)->where("isEnable" , 1);
+        if($bons->isEmpty()) $bons = Bon::where('name', $bonName)->first();
+        else $bons = $bons->first();
+
+        $productFiles = $product->productfiles->sortBy("order");
+        $productFileTypes = Productfiletype::pluck('displayName', 'id')->toArray();
+        $defaultProductFileOrders = collect();
+        foreach ($productFileTypes as $key=>$productFileType)
+        {
+            $lastProductFile = $product->productfiles->where("productfiletype_id" , $key)->sortByDesc("order")->first();
+            if(isset($lastProductFile))
+            {
+                $lastOrderNumber = $lastProductFile->order + 1;
+                $defaultProductFileOrders->push(["fileTypeId"=>$key , "lastOrder"=>$lastOrderNumber]);
+            }else{
+                $defaultProductFileOrders->push(["fileTypeId"=>$key , "lastOrder"=>1]);
+            }
+        }
+        $productFileTypes = array_add($productFileTypes , 0 , "انتخاب کنید");
+        $productFileTypes = array_sort_recursive($productFileTypes);
+
+        $products = $this->makeProductCollection();
+
+        $producttype = $product->producttype->displayName ;
+
+        $productPhotos = $product->photos->sortBy("order") ;
+        if($product->photos->isNotEmpty())
+            $defaultProductPhotoOrder = $product->photos->sortByDesc("order")->first()->order + 1    ;
+        else $defaultProductPhotoOrder = 0;
+
+        return view("product.edit" , compact("product" , "amountLimit" , "defaultAmountLimit" , "enableStatus" , "defaultEnableStatus" , "attributesets", "bons" , "productFiles" , "productFileTypes"  , "products" , "defaultProductFileOrders" , "producttype" , "productPhotos" , "defaultProductPhotoOrder")) ;
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \app\Product  $product
+     * @return \Illuminate\Http\Response
+     */
+    public function update(EditProductRequest $request, $product)
+    {
+        $oldFile = $product->file;
+        $oldImage = $product->image;
+
+        $product->fill($request->all());
+
+        if(strlen($request->get("introVideo"))>0)
+            if(!preg_match("/^http:\/\//", $product->introVideo) && !preg_match("/^https:\/\//", $product->introVideo) )
+                $product->introVideo = "http://". $product->introVideo ;
+
+        if($request->has("changeChildrenPrice"))
+            if($product->hasChildren())
+            {
+                foreach ($product->children as $child)
+                {
+                    $child->basePrice = $product->basePrice ;
+                    $child->update();
+                }
+            }
+
+        if ($request->hasFile("file")) {
+            $file = $request->file('file');
+            $extension = $file->getClientOriginalExtension();
+            $fileName = basename($file->getClientOriginalName() , ".".$extension) . "_" . date("YmdHis") . '.' . $extension;
+            if (Storage::disk(Config::get('constants.DISK5'))->put($fileName, File::get($file))) {
+                Storage::disk(Config::get('constants.DISK5'))->delete($oldFile);
+                $product->file = $fileName;
+            }
+        }
+
+        if ($request->hasFile("image")) {
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalExtension();
+            $fileName = basename($file->getClientOriginalName() , ".".$extension) . "_" . date("YmdHis") . '.' . $extension;
+            if (Storage::disk(Config::get('constants.DISK4'))->put($fileName, File::get($file))) {
+                Storage::disk(Config::get('constants.DISK4'))->delete($oldImage);
+                $product->image = $fileName;
+//                $img = Image::make(Storage::disk(Config::get('constants.DISK4'))->getAdapter()->getPathPrefix().$fileName);
+//                $img->resize(256, 256);
+//                $img->save(Storage::disk(Config::get('constants.DISK4'))->getAdapter()->getPathPrefix().$fileName);
+            }
+        }
+
+        if ($request->get('amountLimit') == 0){
+            $product->amount = null;
+        }
+
+        $bon = Bon::where('id', $request->get('bon_id'))->first();
+        if(strlen($request->get('bonPlus')) == 0) $bonPlus = 0; else $bonPlus = $request->get('bonPlus');
+        if(strlen($request->get('bonDiscount')) == 0) $bonDiscount = 0; else $bonDiscount = $request->get('bonDiscount');
+
+        if($bonPlus || $bonDiscount){
+            $product->bons()->sync([$bon->id, ['discount' => $bonDiscount , 'bonPlus' => $bonPlus]]);
+        }
+
+        if($request->has("isFree")) $product->isFree = 1;
+        else $product->isFree = 0;
+
+        if(strlen(preg_replace('/\s+/', '', $product->discount)) == 0) $product->discount = 0;
+        if(strlen(preg_replace('/\s+/', '', $product->shortDescription)) == 0) $product->shortDescription = null;
+        if(strlen(preg_replace('/\s+/', '', $product->longDescription)) == 0) $product->longDescription = null;
+        if(strlen(preg_replace('/\s+/', '', $product->specialDescription)) == 0) $product->specialDescription = null;
+
+        if($request->has("order"))
+        {
+            if(strlen(preg_replace('/\s+/', '', $request->get("order"))) == 0) $product->order = 0;
+            $productsWithSameOrder = Product::getProducts(0 , 1)->where("id" , "<>" , $product->id)->where("order" , $product->order)->get();
+            if(!$productsWithSameOrder->isEmpty())
+            {
+                $productsWithGreaterOrder =  Product::getProducts(0 , 1)->where("id" , "<>" , $product->id)->where("order" ,">=" ,$product->order)->get();
+                foreach ($productsWithGreaterOrder as $graterProduct)
+                {
+                    $graterProduct->order = $graterProduct->order + 1 ;
+                    $graterProduct->update();
+                }
+            }
+        }
+
+        if ($product->update()) {
+            session()->put('success', 'اصلاح محصول با موفقیت انجام شد');
+        }
+        else{
+            session()->put('error', 'خطای پایگاه داده');
+        }
+        return redirect()->back();
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \app\Product  $product
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($product)
+    {
+        if ($product->delete()) session()->put('success', 'محصول با موفقیت اصلاح شد');
+        else session()->put('error', 'خطای پایگاه داده');
+        return redirect()->back() ;
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function refreshPrice(Request $request)
+    {
+        $inputType = $request->get("type");
+        $attributevalues = $request->get("attributeState");
+        $product = Product::FindorFail($request->get("product"));
+        if(session()->has("adminOrder_id")) $user = User::where("id" , session()->get("customer_id"))->first();
+        elseif(Auth::check()) $user = Auth::user();
+        switch ($inputType)
+        {
+            case  "extraAttribute":
+                $totalExtraCost = 0;
+                if(isset($attributevalues))
+                    foreach ($attributevalues as $attributevalueId)
+                    {
+
+                        $attributevalue = $product->attributevalues->where("id",$attributevalueId)->first();
+                        if(isset($attributevalue->pivot->extraCost )) $extraCost = $attributevalue->pivot->extraCost;
+                        else $extraCost = 0;
+                        $totalExtraCost = $totalExtraCost + $extraCost ;
+                    }
+                return json_encode(array('totalExtraCost' => $totalExtraCost ));
+                break;
+            case "mainAttribute":
+                if($product->hasChildren()) {
+                    foreach ($product->children as $child) {
+                        $childAttributevalues = $child->attributevalues;
+                        $flag = true;
+                        foreach ($attributevalues as $attributevalue) {
+                            if (!$childAttributevalues->contains($attributevalue)) {
+                                $flag = false;
+                                break;
+                            }
+                        }
+                        if ($flag && $childAttributevalues->count() == count($attributevalues)) {
+                            $simpleProduct = $child;
+                            break;
+                        }
+                    }
+                }else{
+
+                    $simpleProduct = $product;
+                }
+                if(isset($simpleProduct) && (!isset($simpleProduct->quantity) || $simpleProduct->quantity>0))
+                {
+                    if(isset($user))
+                        $costArray = $simpleProduct->obtainProductCost($user );
+                    else
+                        $costArray = $simpleProduct->obtainProductCost( );
+//                    $costArray = array_add($costArray , 'shortDescription' ,$simpleProduct->shortDescription );
+//                    $costArray = array_add($costArray , 'longDescription' ,$simpleProduct->longDescription );
+                    $cost = $costArray["cost"] ;
+                    $costForCustomer = ((1 - ($costArray["bonDiscount"] / 100)) * ((1 - ($costArray["productDiscount"] / 100)) * $costArray["cost"])) - $costArray["productDiscountAmount"];
+                    return json_encode(["cost"=>$cost , "costForCustomer"=>(int)$costForCustomer]);
+                }elseif(!isset($simpleProduct))
+                {
+                    return json_encode(array('productWarning' => "محصول مورد نظر یافت نشد"));
+                }else  return json_encode(array('productWarning' => "محصول مورد نظر تمام شده است"));
+                break;
+            case "productSelection":
+                $productIds = Input::get("products");
+                $cost = 0;
+                $costForCustomer = 0;
+                if(isset($productIds))
+                {
+                    foreach ($productIds as $key => $simpleProductId)
+                    {
+                        $simpleProduct = Product::FindOrFail($simpleProductId);
+                        if($simpleProduct->hasParents())
+                        {
+                            if (in_array($simpleProduct->parents->first()->id, $productIds))
+                            {
+                                array_forget($productIds, $key);
+                                $childrenArray = $this->makeChildrenArray($simpleProduct);
+                                foreach ($childrenArray as $child)
+                                {
+                                    array_forget($productIds, array_flip($productIds)[$child->id]);
+                                }
+                            }
+                        }
+                    }
+                    foreach ($productIds as $id)
+                    {
+                        $simpleProduct = Product::FindOrFail($id);
+                        if(isset($user))
+                            $costArray = $simpleProduct->obtainProductCost($user );
+                        else
+                            $costArray = $simpleProduct->obtainProductCost( );
+                        $cost += $costArray["cost"] ;
+                        $costForCustomer += ((1 - ($costArray["bonDiscount"] / 100)) * ((1 - ($costArray["productDiscount"] / 100)) * $costArray["cost"])) - $costArray["productDiscountAmount"];
+                    }
+                }
+                return json_encode(["cost"=>$cost , "costForCustomer"=>(int)$costForCustomer]);
+                break;
+            default: break;
+        }
+    }
+
+    /**
+     * Search for a product
+     *
+     * @param
+     * @return \Illuminate\Http\Response
+     */
+    public function search()
+    {
+        $setting = Websitesetting::where("version" , 1)->get()->first();
+        $setting = json_decode($setting->setting);
+
+        $itemsPerPage = 16;
+        if(session()->has("adminOrder_id"))
+        {
+            $products = Product::getProducts()->orderBy("order")->paginate($itemsPerPage);
+        }else{
+            if(Config::has("constants.PRODUCT_SEARCH_EXCLUDED_PRODUCTS"))
+                $excludedProducts = Config::get("constants.PRODUCT_SEARCH_EXCLUDED_PRODUCTS");
+            else
+                $excludedProducts = [] ;
+            $products = Product::getProducts(0,1)->whereNotIn("id",$excludedProducts)->orderBy("order")->paginate($itemsPerPage);
+        }
+
+
+        $costCollection = $this->makeCostCollection($products);
+
+        $metaKeywords = "";
+        $metaDescription = "" ;
+        foreach ($products as $product)
+        {
+            $metaKeywords .= $product->name."-";
+            $metaDescription .= $product->name."-" ;
+        }
+
+        Meta::set('keywords', substr($metaKeywords , 0 , Config::get("constants.META_KEYWORDS_LIMIT")));
+        Meta::set('description', substr($metaDescription , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
+        Meta::set('title', substr("خدمات ".$setting->site->name, 0 , Config::get("constants.META_TITLE_LIMIT")));
+        Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $setting->site->siteLogo ]));
+
+        return view("product.portfolio" , compact("products" , "costCollection")) ;
+    }
+
+    /**
+     * enable or disable children of product
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \app\Product  $product
+     * @return \Illuminate\Http\Response
+     */
+    public function childProductEnable(Request $request , $product){
+        $parent = $product->parents->first();
+        if($product->enable == 1) {
+            $product->enable = 0;
+            foreach ($product->attributevalues as $attributevalue) {
+                $flag = 0;
+                $children = $parent->children->where("id","!=" , $product->id)->where("enable" , 1);
+                foreach ($children as $child) {
+                    if ($child->attributevalues->contains($attributevalue) == true) {
+                        $flag = 1;
+                        break;
+                    }
+                }
+                if ($flag == 0)  $parent->attributevalues()->detach($attributevalue);
+            }
+        }
+        elseif ($product->enable == 0){
+            $product->enable = 1;
+            foreach ($product->attributevalues as $attributevalue) {
+                if($parent->attributevalues->contains($attributevalue) == false) {
+                    if(isset($attributevalue->pivot->extraCost) && $attributevalue->pivot->extraCost>0) $attributevalueDescription = "+".number_format($attributevalue->pivot->extraCost)."تومان";
+                    else $attributevalueDescription = null ;
+                    $parent->attributevalues()->attach($attributevalue->id,["description"=> $attributevalueDescription]);
+                }
+            }
+        }
+        if ($product->update()) {
+            session()->put('success', 'وضعیت فرزند محصول با موفقیت تغییر کرد');
+        }
+        else{
+            session()->put('error', 'خطای پایگاه داده');
+        }
+        return redirect()->back();
+    }
+
+    /**
+     * Show the form for configure the specified resource.
+     *
+     * @param  \app\Product  $product
+     * @return \Illuminate\Http\Response
+     */
+    public function createConfiguration($product){
+            $attributeCollection = collect();
+            $attributeGroups = $product->attributeset->attributeGroups ;
+            foreach ($attributeGroups as $attributeGroup)
+            {
+                $attributeType = Attributetype::where("name" , "main")->get()->first() ;
+                $attributes = $attributeGroup->attributes->where("pivot.attributetype_id" , $attributeType->id);
+                foreach ($attributes as $attribute)
+                {
+                    $attributeValues = $attribute->attributevalues ;
+                    $attributeValuesCollect = collect();
+                    foreach ($attributeValues as $attributeValue)
+                    {
+                        $attributeValuesCollect->push($attributeValue);
+//                        array_push($attributeValuesArray , $attributeValue);
+                    }
+                    $attributeCollection->push( ["attribute"=>$attribute , "attributeControl"=>$attribute->attributecontrol->name , "attributevalues"=>$attributeValuesCollect]);
+                }
+            }
+            return view("product.configureProduct.createConfiguration" , compact("product" , "attributeCollection"));
+    }
+
+    /**
+     * make children for product
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \app\Product  $product
+     * @return \Illuminate\Http\Response
+     */
+    public function makeConfiguration(Request $request, $product){
+
+        $matrix = [];
+        $array = [] ; // checkbox attribute values
+
+        //attach attributevalues that are chosen for the product
+//        foreach ($product->attributeset->attributegroups as $attributegroup)
+//        {
+//            $i = 0;
+//            foreach ($attributegroup->attributes as $attribute){
+//                if(isset($request->all()[$attribute->id])){
+//                    $j = 0;
+//                    foreach ($request->all()[$attribute->id] as $value){
+//                        $attributevalue = Attributevalue::findOrFail($value);
+//                        $product->attributevalues()->attach($attributevalue);
+//                        $matrix[$i][$j] = $attributevalue->id;
+//                        $j++;
+//                    }
+//                    $i++;
+//                }
+//            }
+//        }
+        $attributeIds = $request->get("attributevalues");
+        $extraCosts = $request->get("extraCost");
+        $orders = $request->get("order");
+        $descriptions = $request->get("description");
+        $i = 0;
+        foreach ($attributeIds as $attributeId)
+        {
+            $j = 0 ;
+            foreach ($attributeId as $attributevalueId)
+            {
+                $extraCost = $extraCosts[$attributevalueId];
+                if(!isset($extraCost[0])) $extraCost = 0;
+
+                $order = $orders[$attributevalueId];
+                if(!isset($order[0])) $order = 0;
+
+                $description = $descriptions[$attributevalueId] ;
+                if(!isset($description[0])) $description = null;
+
+                $attributevalue = Attributevalue::findOrFail($attributevalueId );
+                $product->attributevalues()->attach($attributevalue, ["extraCost"=>$extraCost , "order"=>$order, "description"=>$description]);
+                if(strcmp($attributevalue->attribute->attributecontrol->name , "groupedCheckbox") == 0)
+                {
+                    array_push($array,$attributevalue->id);
+                }else{
+                    $matrix[$i][$j] = $attributevalue->id;
+                    $j++;
+                }
+            }
+            $i++;
+        }
+
+        if(sizeof($matrix) == 0) return redirect()->back();
+        if(sizeof($matrix) == 1) $productConfigurations = current($matrix);
+        elseif(sizeof($matrix) >= 2) {
+            $vertex = array_pop($matrix);
+            $productConfigurations =  $this->cartesianProduct($matrix, $vertex)[0];
+        }
+
+        foreach ($array as $item){
+            foreach ($productConfigurations as $productConfig)
+            {
+                $newProductConfig = $productConfig . ",".$item;
+                array_push($productConfigurations , $newProductConfig) ;
+            }
+        }
+
+        foreach ($productConfigurations as $productConfig) {
+            $childProduct = $product->replicate();
+            $childProduct->order = 0 ;
+            $attributevalueIds = explode(",", $productConfig);
+            $productName = "";
+            $attributevalues = [];
+            foreach ($attributevalueIds as $attributevalueId) {
+                $attributevalue = Attributevalue::findOrFail($attributevalueId);
+                array_push($attributevalues, $attributevalue);
+                $productName = $productName . "-" . $attributevalue->name;
+            }
+            $childProduct->name = $product->name . $productName;
+            $childProduct->producttype_id = 1;
+            if ($childProduct->save()) {
+                $childProduct->parents()->attach($product);
+                foreach ($attributevalues as $attributevalue) {
+
+                    $extraCost = $extraCosts[$attributevalue->id];
+                    if(!isset($extraCost[0])) $extraCost = 0;
+
+                    $order = $orders[$attributevalue->id];
+                    if(!isset($order[0])) $order = 0;
+
+                    $description = $descriptions[$attributevalue->id] ;
+                    if(!isset($description[0])) $description = null;
+
+                    $childProduct->attributevalues()->attach($attributevalue, ["extraCost"=>$extraCost , "order"=>$order, "description"=>$description]);
+                }
+
+            } else {
+                session()->put('error', 'خطای پایگاه داده');
+            }
+        }
+        return redirect(action("ProductController@edit", $product));
+    }
+
+    /**
+     * make cartesian product
+     *
+     * @param  $matrix
+     * @param  $vertex
+     * @return $result
+     */
+    function cartesianProduct($matrix, $vertex){
+        if(sizeof($matrix) == 0) {$result[0][0] = $vertex; return $result;}
+        elseif(sizeof($matrix) == 1) {
+            $result = [];
+            $index = 0;
+            foreach (current($matrix) as $firstItem) {
+                foreach ($vertex as $secondItem) {
+                    $result[0][$index] = $firstItem.",".$secondItem;
+                    $index++;
+                }
+            }
+            return $result;
+        }
+        elseif(sizeof($matrix) >= 2){
+            $vertex2 = array_pop($matrix);
+            return $this->cartesianProduct($this->cartesianProduct($matrix, $vertex2), $vertex);
+        }
+    }
+
+    /**
+     * Show the form for setting pivots for attributevalues
+     *
+     * @param  \app\Product  $product
+     * @return \Illuminate\Http\Response
+     */
+    public function editAttributevalues($product)
+    {
+
+        $attributeValuesCollection = collect() ;
+
+       $attributeset = $product->attributeset;
+       $attributeGroups = $attributeset->attributegroups;
+       foreach ($attributeGroups as $attributeGroup)
+       {
+           $attributes = $attributeGroup->attributes->sortBy("order");
+           foreach ($attributes as $attribute)
+           {
+               $type = Attributetype::FindOrFail($attribute->pivot->attributetype_id);
+               $productAttributevlues = $product->attributevalues->where("attribute_id" , $attribute->id);
+               $attrributevalues = $attribute->attributevalues;
+               if(!isset($attributeValuesCollection[$type->id])) $attributeValuesCollection->put($type->id,collect(["name"=>$type->name,"displayName"=>$type->description , "attributes"=>[]]));
+               $helperCollection = collect($attributeValuesCollection[$type->id]["attributes"]);
+               $helperCollection->push(["name"=>$attribute->displayName,"type"=>$type , "values"=>$attrributevalues , "productAttributevalues"=>$productAttributevlues ]);
+               $attributeValuesCollection[$type->id]->put("attributes",$helperCollection);
+           }
+       }
+        return view('product.configureProduct.editAttributevalues', compact('product' ,'attributeValuesCollection'));
+    }
+
+    /**
+     * set pivot for attributevalues
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \app\Product  $product
+     * @return \Illuminate\Http\Response
+     */
+    public function updateAttributevalues(Request $request, $product){
+        dd($request->all());
+        $product->attributevalues()->detach($product->attributevalues->pluck("id")->toArray()) ;
+        $newAttributevalues = $request->get("attributevalues");
+        $newExtraCost = $request->get("extraCost");
+        $newDescription = $request->get("description");
+        foreach ($newAttributevalues as $attributevalueId){
+            $extraCost = $newExtraCost[$attributevalueId];
+            if(strlen($extraCost) == 0) $extraCost = null;
+            $description = $newDescription[$attributevalueId];
+            if(strlen($extraCost) == 0) $extraCost = null;
+            if($product->attributevalues()->attach($attributevalueId ,["extraCost" => $extraCost, "description" => $description])){
+                $children =  $product->children()->whereHas("attributevalues" , function ($q) use ($attributevalueId){
+                    $q->where("id" , $attributevalueId);
+                })->get();
+                foreach ($children as $child){
+                        $child->attributevalues()->where("id",$attributevalueId)->updateExistingPivot($attributevalueId ,["extraCost" => $extraCost, "description" => $description]);
+                }
+            }
+        }
+        return redirect(action("ProductController@edit", $product));
+    }
+
+    /**
+     * Show live view page for this product(In case it has one!)
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showLive(Product $product){
+        return redirect(action("ProductController@show" , $product));
+    }
+
+    /**
+     * Attach a complimentary product to a product
+     *
+     * @param \App\Product $product
+     * @param \App\Http\Requests\AddComplimentaryProductRequest $request
+     * @return \Illuminate\Http\Response
+     */
+    public function addComplimentary(AddComplimentaryProductRequest $request , $product){
+        $complimentary = Product::findOrFail($request->get("complimentaryproducts"));
+
+        if($product->complimentaryproducts->contains($complimentary))
+        {
+            session()->put('error', 'این اشانتیون قبلا درج شده است');
+        }
+        else
+        {
+            $product->complimentaryproducts()->attach($complimentary);
+            session()->put('success', 'درج اشانتیون با موفقیت انجام شد');
+        }
+        return redirect()->back();
+    }
+
+    /**
+     * Detach a complimentary product to a product
+     *
+     * @param \App\Product $complimentary
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function removeComplimentary(Request $request,Product $complimentary){
+        $product = Product::findOrFail($request->get("productId"));
+        $product->complimentaryproducts()->detach($complimentary);
+        session()->put('success', 'حذف اشانتیون با موفقیت انجام شد');
+        return $this->response->setStatusCode(200);
+    }
+
+    /**
+     * Attach a gift product to a product
+     *
+     * @param \App\Product $product
+     * @param \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function addGift(Request $request , $product){
+        $gift = Product::findOrFail($request->get("giftProducts"));
+
+        if($product->gifts->contains($gift))
+        {
+            session()->put('error', 'این هدیه قبلا به این محصول اضافه شده است');
+        }
+        else
+        {
+            $product->gifts()->attach($gift, ["relationtype_id"=>Config::get("constants.PRODUCT_INTERRELATION_GIFT")]);
+            session()->put('success', 'هدیه با موفقیت به محصول اضافه شد');
+        }
+        return redirect()->back();
+    }
+
+    /**
+     * Detach a gift product to a product
+     *
+     * @param \App\Product $product
+     * @param \App\Product $gift
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function removeGift(Request $request , Product $product)
+    {
+        $gift = Product::where("id" ,    $request->get("giftId"))->get()->first();
+        if(!isset($gift)) return $this->response->setStatusCode(503)->setContent(["message"=>"خطا! چنین محصول هدیه ای وجود ندارد"]);
+
+        if($product->gifts()->detach($gift->id))
+            return $this->response->setStatusCode(200)->setContent(["message"=>"هدیه با موفقیت حذف شد"]);
+        else
+            return $this->response->setStatusCode(503)->setContent(["message"=>"خطا در حذف هدیه . لطفا دوباره اقدام نمایید"]);
+    }
+
+    /**
+     * Products Special Landing Page
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function landing1()
+    {
+        Meta::set('title', "تخته خاک|همایش ویژه دی");
+        Meta::set('keywords', substr("همایش ویژه دی ماه تخته خاک حمع بندی کنکور اساتید آلاء تست درسنامه تخفیف", 0 , Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
+        Meta::set('description', substr("همایش ویژه دی ماه تخته خاک حمع بندی کنکور اساتید آلاء تست درسنامه تخفیف" , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
+        $productIds = Config::get("constants.HAMAYESH_PRODUCT");
+        $products = Product::whereIn("id" , $productIds)->orderBy("order")->where("enable" , 1)->get();
+        $attribute = Attribute::where("name" , "major")->get()->first();
+        $withFilter = true;
+
+        $landingProducts = collect();
+        foreach ($products as $product)
+        {
+            $majors = [];
+            if(isset($attribute))
+            {
+                $majors = $product->attributevalues->where("attribute_id" , $attribute->id)->pluck("name")->toArray();
+            }
+
+            $landingProducts->push(["product"=>$product , "majors"=>$majors]);
+        }
+
+        $costCollection = $this->makeCostCollection($products) ;
+        return view("product.landing1" , compact("landingProducts" , "costCollection" , "withFilter" ));
+    }
+
+    /**
+    * Products Special Landing Page
+    *
+    * @return \Illuminate\Http\Response
+    */
+    public function landing2()
+    {
+        $gheireHozoori = Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_ALLTOGHETHER") ;
+        if(Input::has("utm_term"))
+        {
+            $utm_term = Input::get("utm_term");
+            switch ($utm_term)
+            {
+                case "700":
+                    $gheireHozoori = Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_ALLTOGHETHER");
+                    break;
+                case "260":
+                    $gheireHozoori = Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_DEFAULT");
+                    break;
+                default:
+                    break;
+            }
+        }
+        Meta::set('title', "تخته خاک|اردوی طلایی نوروز ۹۷");
+        Meta::set('keywords', substr("اردوی حضوری دختران و پسران اردوی غیر حضوری نوروز ۹۷", 0 , Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
+        Meta::set('description', substr("اردوی حضوری دختران و پسران اردوی غیر حضوری نوروز ۹۷" , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
+
+        $products = Product::whereIn("id" , Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT"))->orwhereIn("id" , Config::get("constants.ORDOO_HOZOORI_NOROOZ_97_PRODUCT"))->orderBy("order")->where("enable" , 1)->get();
+
+        $landingProducts = collect();
+        foreach ($products as $product)
+        {
+            $landingProducts->push(["product"=>$product]);
+        }
+        $costCollection = $this->makeCostCollection($products) ;
+        return view("product.landing2" , compact("landingProducts" , "costCollection" , "utm_term" , "gheireHozoori" ));
+    }
+
+
+    /**
+     * Copy a product completely
+     *
+     * @param \App\Product $product
+     * @return \Illuminate\Http\Response
+     */
+    public function copy(Product $product)
+    {
+        $newProduct = $product->replicate();
+        $correspondenceArray = array();
+        $done = true;
+        if($newProduct->save())
+        {
+            /**
+             * Copying children
+             */
+            if($product->hasChildren())
+            {
+                foreach ($product->children as $child)
+                {
+                    $response = $this->copy($child);
+                    if($response->getStatusCode() == 200)
+                    {
+                        $response = json_decode($response->getContent());
+                        $newChildId = $response->newProductId;
+                        if(isset($newChildId)) {
+                              $correspondenceArray[$child->id] = $newChildId;
+                              $newProduct->children()->attach($newChildId);
+                        }else{
+                            $done = false;
+                        }
+                    }else{
+                        $done = false;
+                    }
+                }
+            }
+
+            /**
+             * Copying attributeValues
+             */
+            foreach ($product->attributevalues as $attributevalue)
+            {
+                $newProduct->attributevalues()->attach($attributevalue->id , ["extraCost"=>$attributevalue->pivot->extraCost , "description"=>$attributevalue->pivot->description]);
+            }
+
+            /**
+             * Copying bons
+             */
+            foreach ($product->bons as $bon)
+            {
+                $newProduct->bons()->attach($bon->id , ["discount"=>$bon->pivot->discount , "bonPlus"=>$bon->pivot->bonPlus]) ;
+            }
+
+            /**
+             * Copying coupons
+             */
+            $newProduct->coupons()->attach($product->coupons->pluck('id')->toArray()) ;
+
+            /**
+             * Copying complimentary
+             */
+            foreach ($product->complimentaryproducts as $complimentaryproduct)
+            {
+                $flag = $this->haveSameFamily(collect([$product , $complimentaryproduct]));
+                if(!$flag)
+                {
+                    $newProduct->complimentaryproducts()->attach($complimentaryproduct->id);
+                }
+
+            }
+
+            /**
+             * Copying gifts
+             */
+            foreach ($product->gifts as $gift)
+            {
+                $flag = $this->haveSameFamily(collect([$product , $gift]));
+                if(!$flag)
+                {
+                        $newProduct->gifts()->attach($gift->id , ["relationtype_id"=>Config::get("constants.PRODUCT_INTERRELATION_GIFT")]);
+                }
+            }
+
+            if($product->hasChildren())
+            {
+                $children = $product->children ;
+                foreach ($children as $child)
+                {
+                    $childComplementarities = $child->complimentaryproducts ;
+                    $intersects = $childComplementarities->intersect($children) ;
+                    foreach ($intersects as $intersect)
+                    {
+                        $correspondingChild = Product::where("id" , $correspondenceArray[$child->id])->get()->first() ;
+                        $correspondingComplimentary = $correspondenceArray[$intersect->id];
+                        $correspondingChild->complimentaryproducts()->attach($correspondingComplimentary) ;
+                    }
+                }
+            }
+
+            if($done == false){
+                foreach ($newProduct->children as $child)
+                {
+                    $child->forceDelete();
+                }
+                $newProduct->forceDelete();
+                return $this->response->setStatusCode(503)->setContent(["message"=>"خطا در کپی از الجاقی محصول . لطفا دوباره اقدام نمایید"]);
+            }else
+            {
+                return $this->response->setStatusCode(200)->setContent(["message"=>"عملیات کپی با موفقیت انجام شد." , "newProductId"=>$newProduct->id]);
+            }
+        }else{
+            return $this->response->setStatusCode(503)->setContent(["message"=>"خطا در کپی از اطلاعات پایه ای محصول . لطفا دوباره اقدام نمایید"]);
+        }
+    }
+}

@@ -1,0 +1,1 @@
+{!! Form::select("transactionType" , $transactionTypes, null , ["class" => "form-control" , "placeholder" => "همه"]) !!}
