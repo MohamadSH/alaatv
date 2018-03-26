@@ -85,7 +85,13 @@
                     @elseif(in_array("article" , $educationalContent->contenttypes->pluck("name")->toArray()))
                                 {!! $educationalContent->context !!}
                     @elseif($educationalContent->getFilesUrl()->isNotEmpty())
-                        <iframe class="google-docs" src='http://docs.google.com/viewer?url={{$educationalContent->getFilesUrl()->first()}}&embedded=true' width='100%' height='760' style='border: none;'></iframe>
+                        @if($educationalContent->file->getExtention() === "pdf")
+                            <iframe class="google-docs" src='http://docs.google.com/viewer?url={{$educationalContent->getFilesUrl()->first()}}&embedded=true' width='100%' height='760' style='border: none;'></iframe>
+                        @elseif(isset($educationalContent->description[0]))
+                            <p>
+                            {!! $educationalContent->description !!}
+                            </p>
+                        @endif
                     @endif
                 </div>
 
@@ -93,24 +99,26 @@
         </div>
 
         <div class="col-md-4">
-            <div class="portlet light ">
-                <div class="portlet-title">
-                    <div class="caption">
-                        <i class="fa fa-comment-o" aria-hidden="true"></i>
-                        @if(in_array("article" , $educationalContent->contenttypes->pluck("name")->toArray()))
-                            درباره مقاله
-                        @else
-                            درباره فایل
-                        @endif
+            @if( ( !is_null($educationalContent->file) and $educationalContent->file->getExtention() != "rar" ) or is_null($educationalContent->file))
+                <div class="portlet light ">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="fa fa-comment-o" aria-hidden="true"></i>
+                            @if(in_array("article" , $educationalContent->contenttypes->pluck("name")->toArray()))
+                                درباره مقاله
+                            @else
+                                درباره فایل
+                            @endif
+                        </div>
                     </div>
-                </div>
-                <div class="portlet-body text-justify" >
-                    <div class="scroller" style="height:200px" data-rail-visible="1" data-rail-color="black" data-handle-color="#a1b2bd">
-                        @if(isset($educationalContent->description[0])) {!! $educationalContent->description !!} @endif
-                    </div>
+                    <div class="portlet-body text-justify" >
+                        <div class="scroller" style="height:200px" data-rail-visible="1" data-rail-color="black" data-handle-color="#a1b2bd">
+                            @if(isset($educationalContent->description[0])) {!! $educationalContent->description !!} @endif
+                        </div>
 
+                    </div>
                 </div>
-            </div>
+            @endif
             @if(in_array("article" , $educationalContent->contenttypes->pluck("name")->toArray()))
                 <div class="row margin-bottom-10">
                     <div class="col-md-12">

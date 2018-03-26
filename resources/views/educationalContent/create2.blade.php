@@ -88,7 +88,7 @@
                         <div class="dropzone-previews"></div>
                         <div class="dz-message needsclick"><h4 class="sbold ">
                                 فایل خود را اینجا بیندازید و یا بر روی این قسمت کلیک کنید</h4>
-                            <span class="needsclick"><span class="label label-info">توجه:</span>فرمت مجاز <label style="color:red;">pdf</label> </span>
+                            <span class="needsclick"><span class="label label-info">توجه:</span>فرمت مجاز <label style="color:red;">pdf,rar</label> </span>
 
                         </div>
                     </div>
@@ -158,13 +158,14 @@
             uploadMultiple: false,
             parallelUploads: 1,
             maxFiles: 10 ,
-            maxFilesize: 40,
-            dictFileTooBig:"حجم فایل شما  حداکثر می تواند 40 مگابایت باشد",
+            maxFilesize: 500,
+            timeout: 3600000,
+            dictFileTooBig:"حجم فایل شما  حداکثر می تواند 500 مگابایت باشد",
             dictMaxFilesExceeded : "حداکثر تعداد مجاز انتخاب شما تمام شد",
             dictFallbackMessage:"مرورگر شما قابلیت درگ اند دراپ را پشتیبانی نمی کند!",
-            dictInvalidFileType:"فرمت فایل شما باید pdf باشد.",
+            dictInvalidFileType:"فرمت فایل شما باید pdf یا rar باشد.",
             dictResponseError : "خطا در آپلود",
-            acceptedFiles:".pdf",
+            acceptedFiles:".pdf,.rar",
             previewsContainer: "#dropzone-elements",
             previewTemplate: '<div class="row"><div class="portlet light">\n' +
             '<div class="portlet-body">\n' +
@@ -466,7 +467,7 @@
                         var fileNameHidden = Dropzone.createElement("<input type='hidden' name='file' value='"+response.fileName+"'>");
                         files.previewElement.querySelector('.form-horizontal').appendChild(fileNameHidden);
                     }else{
-                        $("#my-awesome-dropzone").append("<span class='font-red'>" + "خطا در آپلود فایل "+files.name + "</span></br>");
+                        $("#my-awesome-dropzone").append("<span class='font-red'>" + "خطا در آپلود فایل "+files.name + "</span></br>"+response.toString() +"</br>");
                     }
 
 //                    if (typeof(response.sessionData) != "undefined" && response.sessionData != null)
@@ -482,7 +483,7 @@
 //                        });
                 });
                 this.on("error", function(files, response) {
-                    $("#my-awesome-dropzone").append("<span class='font-red'>" + "خطا در آپلود فایل "+files.name + "</span></br>");
+                    $("#my-awesome-dropzone").append("<span class='font-red'>" + "خطا در آپلود فایل "+files.name + "</span></br>"+response.toString() +"</br>");
                     // Gets triggered when there was an error sending the files.
                     // Maybe show form again, and notify user of error
                 });

@@ -1348,12 +1348,14 @@ class HomeController extends Controller
      */
     public function uploadFile(\Illuminate\Http\Request $request)
     {
+
         $filePath = $request->header("X-File-Name");
         $fileName = $request->header("X-Dataname");
         $filePrefix="";
         $contentId = $request->header("X-Dataid");
         $disk = $request->header("X-Datatype");
         $done = false;
+
         try {
             $dirname = pathinfo($filePath, PATHINFO_DIRNAME);
             $ext = pathinfo($fileName, PATHINFO_EXTENSION);
@@ -1397,12 +1399,16 @@ class HomeController extends Controller
 
             }else{
                 $filesystem = Storage::disk($disk . "Sftp");
-                if($filesystem->put($fileName, File::get($newFileNameDir))) $done = true;
+                if($filesystem->put($fileName, fopen($newFileNameDir, 'r+'))) {
+                    $done = true;
+//                    dd($done);
+                }
+
             }
-                if($done)
-                    return $this->response->setStatusCode(200)->setContent(["fileName"=>$fileName , "prefix"=>$filePrefix]);
-                else
-                    return $this->response->setStatusCode(503);
+            if($done)
+                return $this->response->setStatusCode(200)->setContent(["fileName"=>$fileName , "prefix"=>$filePrefix]);
+            else
+                return $this->response->setStatusCode(503);
         } catch (\Exception $e) {
             //            return $this->TAG.' '.$e->getMessage();
             return $this->response->setStatusCode(503)->setContent(["message"=>"خطای غیرمنتظره در آپلود فایل"]);

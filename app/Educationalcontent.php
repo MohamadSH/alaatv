@@ -38,7 +38,8 @@ class Educationalcontent extends Model
     }
 
     public function files(){
-        return $this->belongsToMany('App\File', 'educationalcontent_file', 'content_id', 'file_id')->withPivot("caption" , "label");
+//        return $this->belongsToMany('App\File', 'educationalcontent_file', 'content_id', 'file_id')->withPivot("caption" , "label");
+        return $this->belongsToMany('App\File', 'educationalcontent_file', 'content_id', 'file_id')->withPivot("caption" );
     }
 
     public function contentsets()
@@ -220,6 +221,11 @@ class Educationalcontent extends Model
         return $displayMajors ;
     }
 
+    public function getFileAttribute(){
+        if(! is_null($this->files ) )
+            return $this->files->first();
+        return null;
+    }
     public function getFilesUrl()
     {
         $files = $this->files ;
@@ -227,7 +233,8 @@ class Educationalcontent extends Model
         foreach ($files as $file)
         {
             $url = $file->getUrl() ;
-            if(isset($url[0])) $links->push($url);
+            if(isset($url[0]))
+                $links->push($url);
         }
         return $links ;
     }
