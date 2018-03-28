@@ -941,7 +941,8 @@ class HomeController extends Controller
                 }
                 $diskName = Config::get('constants.DISK13');
                 $cloudFile = Productfile::where("file", $fileName)->where("product_id", $productId)->get()->first()->cloudFile;
-                $productFileLink = "http://".env("SFTP_HOST" , "").":8090/". $cloudFile;
+                //TODO: verify "$productFileLink = "http://".env("SFTP_HOST" , "").":8090/". $cloudFile;"
+                $productFileLink = env("DOWNLOAD_HOST_PROTOCOL" , "http://").env("DOWNLOAD_HOST_NAME" , "dl.takhtekhak.com"). $cloudFile;
                 $unixTime = Carbon::today()->addDays(2)->timestamp;
                 $userIP = Request::ip();
                 $linkHash = $this->helper->generateSecurePathHash($unixTime, $userIP, "TakhteKhak", $cloudFile);
@@ -1010,7 +1011,9 @@ class HomeController extends Controller
                     $fileHost = Storage::drive($diskName)->getAdapter()->getHost();
                     if (isset($fileHost)) {
                         $fileRoot = Storage::drive($diskName)->getAdapter()->getRoot();
-                        $fileRemotePath = "http://" . $fileHost . ":8090" . "/public" . explode("public", $fileRoot)[1];
+                        //TODO: verify "$fileRemotePath = "http://" . $fileHost . ":8090" . "/public" . explode("public", $fileRoot)[1];"
+                        $fileRemotePath = env("DOWNLOAD_HOST_PROTOCOL" , "http://").env("DOWNLOAD_HOST_NAME" , "dl.takhtekhak.com"). "/public" . explode("public", $fileRoot)[1];
+
                         return response()->redirectTo($fileRemotePath . $fileName);
                     } else {
                         $fs = Storage::disk($diskName)->getDriver();
@@ -1044,6 +1047,7 @@ class HomeController extends Controller
 //
                 $diskAdapter = Storage::disk($diskName)->getAdapter();
                 $diskType = class_basename($diskAdapter);
+                //TODO: baraye chie ?
                 switch ($diskType) {
                     case "SftpAdapter" :
                         if (isset($file)) {

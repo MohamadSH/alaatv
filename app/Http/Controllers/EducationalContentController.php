@@ -39,7 +39,7 @@ class EducationalContentController extends Controller
         {
             $authException = ["index" , "show" , "search"  ];
         }else{
-            $authException = ["index" , "show" ,"search"  ];
+            $authException = ["index" ,"search"  ];
         }
         $this->middleware('auth', ['except' => $authException]);
 

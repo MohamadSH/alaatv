@@ -14,45 +14,45 @@
     <h2 class="hidden">همایش اردو فیلم جزوه تخته خاک سؤال مشاوره ریاضی فیزیک دیفرانسیل شیمی</h2>
     @include("partials.slideShow1" ,["marginBottom"=>"25"])
     <div class="clearfix"></div>
-    <div class="row">
-        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-            <a class="dashboard-stat dashboard-stat-v2 blue" >
-                <div class="visual">
-                    <i class="fa fa-user"></i>
-                </div>
-                <div class="details">
-                    <div class="number">
-                        <span data-counter="counterup" data-value="@if(isset($userCount)){{$userCount}} @else 0 @endif">0</span>
-                    </div>
-                    <div class="desc"> تعداد کل کاربران </div>
-                </div>
-            </a>
-        </div>
-        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-            <a class="dashboard-stat dashboard-stat-v2 red">
-                <div class="visual">
-                    <i class="fa fa-question"></i>
-                </div>
-                <div class="details">
-                    <div class="number">
-                        <span data-counter="counterup" data-value="@if(isset($consultingQuestionCount)){{$consultingQuestionCount}}@else 0 @endif">0</span> </div>
-                    <div class="desc"> تعداد کل سؤالات مشاوره ای </div>
-                </div>
-            </a>
-        </div>
-        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-            <a class="dashboard-stat dashboard-stat-v2 green">
-                <div class="visual">
-                    <i class="fa fa-play"></i>
-                </div>
-                <div class="details">
-                    <div class="number">
-                        <span data-counter="counterup" data-value="@if(isset($consultationCount)){{$consultationCount}} @else 0 @endif">0</span>
-                    </div>
-                    <div class="desc"> تعداد کل مشاوره ها </div>
-                </div>
-            </a>
-        </div>
+    {{--<div class="row">--}}
+        {{--<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">--}}
+            {{--<a class="dashboard-stat dashboard-stat-v2 blue" >--}}
+                {{--<div class="visual">--}}
+                    {{--<i class="fa fa-user"></i>--}}
+                {{--</div>--}}
+                {{--<div class="details">--}}
+                    {{--<div class="number">--}}
+                        {{--<span data-counter="counterup" data-value="@if(isset($userCount)){{$userCount}} @else 0 @endif">0</span>--}}
+                    {{--</div>--}}
+                    {{--<div class="desc"> تعداد کل کاربران </div>--}}
+                {{--</div>--}}
+            {{--</a>--}}
+        {{--</div>--}}
+        {{--<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">--}}
+            {{--<a class="dashboard-stat dashboard-stat-v2 red">--}}
+                {{--<div class="visual">--}}
+                    {{--<i class="fa fa-question"></i>--}}
+                {{--</div>--}}
+                {{--<div class="details">--}}
+                    {{--<div class="number">--}}
+                        {{--<span data-counter="counterup" data-value="@if(isset($consultingQuestionCount)){{$consultingQuestionCount}}@else 0 @endif">0</span> </div>--}}
+                    {{--<div class="desc"> تعداد کل سؤالات مشاوره ای </div>--}}
+                {{--</div>--}}
+            {{--</a>--}}
+        {{--</div>--}}
+        {{--<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">--}}
+            {{--<a class="dashboard-stat dashboard-stat-v2 green">--}}
+                {{--<div class="visual">--}}
+                    {{--<i class="fa fa-play"></i>--}}
+                {{--</div>--}}
+                {{--<div class="details">--}}
+                    {{--<div class="number">--}}
+                        {{--<span data-counter="counterup" data-value="@if(isset($consultationCount)){{$consultationCount}} @else 0 @endif">0</span>--}}
+                    {{--</div>--}}
+                    {{--<div class="desc"> تعداد کل مشاوره ها </div>--}}
+                {{--</div>--}}
+            {{--</a>--}}
+        {{--</div>--}}
         {{--<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">--}}
         {{--<a class="dashboard-stat dashboard-stat-v2 green">--}}
         {{--<div class="visual">--}}
@@ -66,19 +66,19 @@
         {{--</div>--}}
         {{--</a>--}}
         {{--</div>--}}
-        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-            <a class="dashboard-stat dashboard-stat-v2 purple">
-                <div class="visual">
-                    <i class="fa fa-calendar"></i>
-                </div>
-                <div class="details">
-                    <div class="number" dir="ltr" >
-                        <span data-counter="counterup" data-value="@if(isset($currentYear)) {{$currentYear}} @else 0 @endif">0</span>/<span data-counter="counterup" data-value="@if(isset($currentMonth)) {{$currentMonth}} @else 0 @endif">0</span>/<span data-counter="counterup" data-value="@if(isset($currentDay)) {{$currentDay}} @else 0 @endif">0</span> </div>
-                    <div class="desc"> امروز </div>
-                </div>
-            </a>
-        </div>
-    </div>
+        {{--<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">--}}
+            {{--<a class="dashboard-stat dashboard-stat-v2 purple">--}}
+                {{--<div class="visual">--}}
+                    {{--<i class="fa fa-calendar"></i>--}}
+                {{--</div>--}}
+                {{--<div class="details">--}}
+                    {{--<div class="number" dir="ltr" >--}}
+                        {{--<span data-counter="counterup" data-value="@if(isset($currentYear)) {{$currentYear}} @else 0 @endif">0</span>/<span data-counter="counterup" data-value="@if(isset($currentMonth)) {{$currentMonth}} @else 0 @endif">0</span>/<span data-counter="counterup" data-value="@if(isset($currentDay)) {{$currentDay}} @else 0 @endif">0</span> </div>--}}
+                    {{--<div class="desc"> امروز </div>--}}
+                {{--</div>--}}
+            {{--</a>--}}
+        {{--</div>--}}
+    {{--</div>--}}
     <!-- END DASHBOARD STATS 1-->
     {{--<div class="row">--}}
         {{--<div class="col-md-6">--}}

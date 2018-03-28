@@ -33,7 +33,7 @@
 @endsection
 
 @section("content")
-    <a href="{{action("ProductController@showLive" , 183)}}"><img src="/img/extra/arabi-live-ad.jpg" width="100%"></a>
+    {{--<a href="{{action("ProductController@showLive" , 183)}}"><img src="/img/extra/arabi-live-ad.jpg" width="100%"></a>--}}
     <div class="portfolio-content portfolio-1" >
         @if($products->isEmpty())
             <div class="note " style="background-color: #00d4db;">
