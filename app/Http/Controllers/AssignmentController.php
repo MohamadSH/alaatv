@@ -85,7 +85,7 @@ class AssignmentController extends Controller
 
         if(strlen($request->get("analysisVideoLink"))>0)
             if(!preg_match("/^http:\/\//", $assignment->analysisVideoLink) && !preg_match("/^https:\/\//", $assignment->analysisVideoLink) )
-                $assignment->analysisVideoLink = "http://". $assignment->analysisVideoLink ;
+                $assignment->analysisVideoLink = "https://". $assignment->analysisVideoLink ;
 
         if ($assignment->save()) {
             $assignment->majors()->sync($request->get('majors', []));
@@ -157,7 +157,7 @@ class AssignmentController extends Controller
 
         if(strlen($request->get("analysisVideoLink"))>0)
             if(!preg_match("/^http:\/\//", $assignment->analysisVideoLink) && !preg_match("/^https:\/\//", $assignment->analysisVideoLink) )
-                $assignment->analysisVideoLink = "http://". $assignment->analysisVideoLink ;
+                $assignment->analysisVideoLink = "https://". $assignment->analysisVideoLink ;
 
         if ($assignment->update()) {
             session()->put('success', 'اصلاح تمرین با موفقیت انجام شد');

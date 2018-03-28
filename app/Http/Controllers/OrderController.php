@@ -1689,7 +1689,7 @@ class OrderController extends Controller
                         $smsInfo["from"] = getenv("SMS_PROVIDER_DEFAULT_NUMBER");
                         $response = $this->helper->medianaSendSMS($smsInfo);
 
-                        $messageCore = "لطفا با مراجعه به آدرس زیر اطلاعات خود را برای شرکت در اردو تکمیل نمایید و یا در صورت تکمیل بودن ، اطلاعات خود را تایید کنید."."\n"."http://k96.ir/user/info"."\n"."تخته خاک";
+                        $messageCore = "لطفا با مراجعه به آدرس زیر اطلاعات خود را برای شرکت در اردو تکمیل نمایید و یا در صورت تکمیل بودن ، اطلاعات خود را تایید کنید."."\n"."https://k96.ir/user/info"."\n"."تخته خاک";
                         $message = "سلام ".$gender.$user->getfullName()."\n".$messageCore;
                         $smsInfo["message"] = $message;
                         $response = $this->helper->medianaSendSMS($smsInfo);

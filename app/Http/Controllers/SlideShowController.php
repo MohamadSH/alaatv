@@ -78,7 +78,7 @@ class SlideShowController extends Controller
         {
             if(strcmp($slide->link[0], "#") !=0 )
                 if(!preg_match("/^http:\/\//",$slide->link) && !preg_match("/^https:\/\//", $slide->link) )
-                $slide->link = "http://".$slide->link;
+                $slide->link = "https://".$slide->link;
         }
 
         if ($request->hasFile("photo")) {
@@ -177,7 +177,7 @@ class SlideShowController extends Controller
         {
             if(strcmp($slide->link[0], "#")!=0)
                 if(!preg_match("/^http:\/\//",$slide->link) && !preg_match("/^https:\/\//", $slide->link))
-                    $slide->link = "http://".$slide->link;
+                    $slide->link = "https://".$slide->link;
         }
 
         if ($request->hasFile("photo")) {

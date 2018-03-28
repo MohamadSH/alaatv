@@ -88,7 +88,7 @@ class ProductController extends Controller
 
         if(strlen($request->get("introVideo"))>0)
             if(!preg_match("/^http:\/\//", $product->introVideo) && !preg_match("/^https:\/\//", $product->introVideo) )
-                 $product->introVideo = "http://". $product->introVideo ;
+                 $product->introVideo = "https://". $product->introVideo ;
 
         if ($request->hasFile("file")) {
             $file = $request->file('file');
@@ -391,7 +391,7 @@ class ProductController extends Controller
 
         if(strlen($request->get("introVideo"))>0)
             if(!preg_match("/^http:\/\//", $product->introVideo) && !preg_match("/^https:\/\//", $product->introVideo) )
-                $product->introVideo = "http://". $product->introVideo ;
+                $product->introVideo = "https://". $product->introVideo ;
 
         if($request->has("changeChildrenPrice"))
             if($product->hasChildren())

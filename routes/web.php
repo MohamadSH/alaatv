@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Redis;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -323,3 +324,12 @@ Route::get( "copydepartmentlessonfromremote" , "RemoteDataCopyController@copyDep
 Route::get( "copyvideofromremote" , "RemoteDataCopyController@copyVideo");
 Route::get( "copydepartmentlessontotakhtekhak" , "SanatisharifmergeController@copyDepartmentlesson");
 Route::get( "copyvideototakhtekhak" , "SanatisharifmergeController@copyVideo");
+
+
+/**
+ * Tagging System
+ */
+Route::get('/redis', function () {
+    Redis::set("key", "testValue");
+    return Redis::get("key");
+});

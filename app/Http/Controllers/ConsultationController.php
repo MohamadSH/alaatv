@@ -67,11 +67,11 @@ class ConsultationController extends Controller
 
         if(strlen($request->get("videoPageLink"))>0)
             if(!preg_match("/^http:\/\//",$consultation->videoPageLink) && !preg_match("/^https:\/\//", $consultation->videoPageLink))
-                $consultation->videoPageLink = "http://".$consultation->videoPageLink;
+                $consultation->videoPageLink = "https://".$consultation->videoPageLink;
 
         if(strlen($request->get("textScriptLink"))>0)
             if(!preg_match("/^http:\/\//",$consultation->textScriptLink) && !preg_match("/^https:\/\//", $consultation->textScriptLink) )
-                $consultation->textScriptLink = "http://".$consultation->textScriptLink;
+                $consultation->textScriptLink = "https://".$consultation->textScriptLink;
 
         if ($request->hasFile("thumbnail")) {
             $file = $request->file('thumbnail');
@@ -143,11 +143,11 @@ class ConsultationController extends Controller
 
         if(strlen($request->get("videoPageLink"))>0)
             if(!preg_match("/^http:\/\//",$consultation->videoPageLink) && !preg_match("/^https:\/\//", $consultation->videoPageLink))
-                $consultation->videoPageLink = "http://".$consultation->videoPageLink;
+                $consultation->videoPageLink = "https://".$consultation->videoPageLink;
 
         if(strlen($request->get("textScriptLink"))>0)
             if(!preg_match("/^http:\/\//",$consultation->textScriptLink) && !preg_match("/^https:\/\//", $consultation->textScriptLink) )
-                $consultation->textScriptLink = "http://".$consultation->textScriptLink;
+                $consultation->textScriptLink = "https://".$consultation->textScriptLink;
 
         if ($consultation->update()) {
             session()->put("success", "اطلاعات مشاوره با موفقیت اصلاح شد");

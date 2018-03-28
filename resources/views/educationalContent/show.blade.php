@@ -241,7 +241,7 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <a href="{{action("ProductController@landing2")}}"><img src="http://takhtekhak.com/image/4/300/300/D1-TALAEE-6_20180209174708.jpg" alt="اردو غیر حضوری" style="width: 100%"></a>
+                    <a href="{{action("ProductController@landing2")}}"><img src="https://takhtekhak.com/image/4/300/300/D1-TALAEE-6_20180209174708.jpg" alt="اردو غیر حضوری" style="width: 100%"></a>
                 </div>
             </div>
         </div>

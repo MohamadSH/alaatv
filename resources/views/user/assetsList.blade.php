@@ -58,11 +58,11 @@
                         </div>
                         <div class="progress-info" style="text-align: justify ; color:#768086">
                             با مرورگر کروم وارد سایت
-                            <a href="http://k96.ir">k96.ir</a>
+                            <a href="https://k96.ir">k96.ir</a>
                             بشید بعد از ورود
                             (یعنی وارد کردن شماره موبایل و کد ملی خودتون)
                             به قسمت فیلم ها و جزوات پروفایل خودتون مراجعه کنید یعنی لینک
-                            <a href="http://k96.ir/asset">K96.ir/asset</a>
+                            <a href="https://k96.ir/asset">K96.ir/asset</a>
                             بعد رو هر لینکی که کلیک کنید می تونید راحت با نرم افزار IDM دانلود کنید.
                         </div>
                     </div>
@@ -83,7 +83,7 @@
                         <div class="progress-info" style="text-align: justify ; color: #768086;">
                             ابتدا نرم افزار ADM رو باز کنید، از تو منوی نرم افزار browser یا همون مرورگر رو انتخاب کنید.
                             بعد بزنید
-                            <a href="http://k96.ir">k96.ir</a>
+                            <a href="https://k96.ir">k96.ir</a>
                             و ادامه ی راه شبیه کامپیوتر است.
                             فقط دقت کنید با گوشی اگه می خواهید با ADM دانلود کنید با مرورگر دیگه سایت رو باز نکنید و حتما از مرورگر خود ADM استفاده کنید.
                         </div>

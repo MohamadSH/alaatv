@@ -24,7 +24,8 @@
         "neoxia/laravel-sftp": "^1.0",
         "webpatser/laravel-uuid": "^3.0",
         "cloned/luckybox": "^0.9.0",
-        "zarinpal/zarinpal": "^1.3"
+        "zarinpal/zarinpal": "^1.3",
+        "predis/predis": "^1.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
