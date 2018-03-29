@@ -181,6 +181,9 @@ class EducationalContentController extends Controller
         $educationalContent = new Educationalcontent();
         $educationalContent->fill($request->all()) ;
 
+        $fileController = new FileController();
+        $fileRequest = new InsertFileRequest();
+
         if($request->has("validSinceTime"))
         {
             $time =  $request->get("validSinceTime");
@@ -199,37 +202,16 @@ class EducationalContentController extends Controller
         if($request->has("contenttypes"))
         {
             $contentTypes = $request->get("contenttypes");
-//            if($request->has("order") )
-//            {
-//                if(strlen(preg_replace('/\s+/', '', $request->get("order"))) == 0) $educationalContent->order = 0;
-//
-//                $contentsWithSameType = \App\Educationalcontent::query() ;
-//                foreach ($contentTypes as $id)
-//                {
-//                    $contentsWithSameType = $contentsWithSameType->whereHas("contenttypes" , function ($q) use ($id)
-//                    {
-//                        $q->where("id" , $id ) ;
-//                    });
-//                }
-//
-//                $contentsWithSameOrder = $contentsWithSameType->where("order" , $educationalContent->order);
-//                if($contentsWithSameOrder->get()->isNotEmpty())
-//                {
-//                    $contentsWithGreaterOrder =  $contentsWithSameType->where("order" ,">=" ,$educationalContent->order)->get();
-//                    foreach ($contentsWithGreaterOrder as $graterContent)
-//                    {
-//                        $graterContent->order = $graterContent->order + 1 ;
-//                        $graterContent->update();
-//                    }
-//                }
-//            }
         }
 
-        if($request->has("enable")) $educationalContent->enable = 1;
-        else $educationalContent->enable = 0 ;
+        if($request->has("enable"))
+            $educationalContent->enable = 1;
+        else
+            $educationalContent->enable = 0 ;
 
         $done = false ;
         if($educationalContent->save()){
+
             if($request->has("contentsets"))
             {
                 $contentSets = $request->get("contentsets");
@@ -239,49 +221,6 @@ class EducationalContentController extends Controller
                         $educationalContent->contentsets()->attach($contentSet["id"] , ["order"=>$contentSet["order"]]);
                     else
                         $educationalContent->contentsets()->attach($contentSet["id"]);
-                }
-            }
-            if(isset($contentTypes))
-            {
-                $educationalContent->contenttypes()->attach($contentTypes);
-
-                if ($request->hasFile("file1"))
-                {
-                    $file = $request->file('file1');
-                    $extension = $file->getClientOriginalExtension();
-
-                    $fileName = basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
-                    $disk = $educationalContent->fileMultiplexer($contentTypes);
-                    if ($disk) {
-                        if (Storage::disk($disk)->put($fileName, File::get($file))) {
-                            $fileController = new FileController();
-                            $request = new InsertFileRequest();
-                            $request->offsetSet('name' ,$fileName ) ;
-                            $request->offsetSet('disk' , $disk) ;
-                            $fileId = $fileController->store($request) ;
-                            if($fileId)
-                                $educationalContent->files()->attach($fileId);
-                        }
-                    }
-                }
-
-                if ($request->hasFile("file2"))
-                {
-                    $file = $request->file('file2');
-                    $extension = $file->getClientOriginalExtension();
-                    $fileName = basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
-                    $disk = $educationalContent->fileMultiplexer($contentTypes);
-                    if ($disk) {
-                        if (Storage::disk($disk)->put($fileName, File::get($file))) {
-                            $fileController = new FileController();
-                            $request = new InsertFileRequest();
-                            $request->offsetSet('name' ,$fileName ) ;
-                            $request->offsetSet('disk' , $disk) ;
-                            $fileId = $fileController->store($request) ;
-                            if($fileId)
-                                $educationalContent->files()->attach($fileId);
-                        }
-                    }
                 }
             }
 
@@ -297,25 +236,71 @@ class EducationalContentController extends Controller
                 $educationalContent->grades()->attach($grades);
             }
 
+            if(isset($contentTypes))
+            {
+                $educationalContent->contenttypes()->attach($contentTypes);
+
+                if ($request->hasFile("file1"))
+                {
+                    $file = $request->file('file1');
+                    $extension = $file->getClientOriginalExtension();
+
+                    $fileName = basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
+                    $disk = $educationalContent->fileMultiplexer($contentTypes);
+                    if ($disk) {
+                        if (Storage::disk($disk)->put($fileName, File::get($file))) {
+
+                            $fileRequest->offsetSet('name' ,$fileName ) ;
+                            $fileRequest->offsetSet('disk' , $disk) ;
+                            $fileId = $fileController->store($fileRequest) ;
+                            if($fileId)
+                                $educationalContent->files()->attach($fileId);
+                        }
+                    }
+                }
+
+                if ($request->hasFile("file2"))
+                {
+                    $file = $request->file('file2');
+                    $extension = $file->getClientOriginalExtension();
+                    $fileName = basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
+                    $disk = $educationalContent->fileMultiplexer($contentTypes);
+                    if ($disk) {
+                        if (Storage::disk($disk)->put($fileName, File::get($file))) {
+
+                            $fileRequest->offsetSet('name' ,$fileName ) ;
+                            $fileRequest->offsetSet('disk' , $disk) ;
+                            $fileId = $fileController->store($request) ;
+                            if($fileId)
+                                $educationalContent->files()->attach($fileId);
+                        }
+                    }
+                }
+            }
+
+
             if($request->has("file"))
             {
-                if($request->has("caption")) $caption = $request->get("caption");
+                if($request->has("caption"))
+                    $caption = $request->get("caption");
                 if(isset($caption))
-                    $files = ["name"=>$request->get("file"),"caption"=> $caption];
+                    $files = [ 0 => ["name"=>$request->get("file"),"caption"=> $caption] ];
                 else
-                    $files = ["name"=>$request->get("file")];
+                    $files = [ 0 => [ "name"=>$request->get("file")] ];
+
+
             }
             elseif($request->has("files")) {
                 $files = $request->get("files");
             } //ToDo : should be merged
+
             if(isset($files))
             {
                 foreach ($files as $file)
                 {
                     $fileName = $file["name"];
                     if(strlen(preg_replace('/\s+/', '',  $fileName) ) == 0) continue;
-                    $fileController = new FileController();
-                    $fileRequest = new InsertFileRequest();
+
                     $fileRequest->offsetSet('name' ,$fileName ) ;
                     $disk = $educationalContent->fileMultiplexer();
                     if($disk !== false) $fileRequest->offsetSet('disk_id' , $disk->id) ;
@@ -329,6 +314,7 @@ class EducationalContentController extends Controller
                         else $educationalContent->files()->attach($fileId);
                     }
                 }
+
             }
 
             if($request->ajax() || $request->has("fromAPI")) $done = true;
