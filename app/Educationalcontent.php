@@ -196,15 +196,19 @@ class Educationalcontent extends Model
 
     public function getDisplayName()
     {
-        $displayName = "" ;
-        $rootContentType = $this->contenttypes()->whereDoesntHave("parents")->get()->first();
-        $childContentType = $this->contenttypes()->whereHas("parents", function ($q) use ($rootContentType) {
-            $q->where("id", $rootContentType->id);
-        })->get()->first();
-        if(isset($rootContentType->displayName[0])) $displayName .= $rootContentType->displayName." " ;
-        if(isset($this->name[0])) $displayName .= $this->name ." " ;
-        if(isset($childContentType->displayName[0])) $displayName .= $childContentType->displayName . " " ;
-        $displayName .= $this->displayMajors() ;
+        try{
+            $displayName = "" ;
+            $rootContentType = $this->contenttypes()->whereDoesntHave("parents")->get()->first();
+            $childContentType = $this->contenttypes()->whereHas("parents", function ($q) use ($rootContentType) {
+                $q->where("id", $rootContentType->id);
+            })->get()->first();
+            if(isset($rootContentType->displayName[0])) $displayName .= $rootContentType->displayName." " ;
+            if(isset($this->name[0])) $displayName .= $this->name ." " ;
+            if(isset($childContentType->displayName[0])) $displayName .= $childContentType->displayName . " " ;
+            $displayName .= $this->displayMajors() ;
+        } catch (\Exception $e){
+            return $e->getMessage();
+        }
         return $displayName ;
     }
 

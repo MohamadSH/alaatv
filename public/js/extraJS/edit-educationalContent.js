@@ -132,7 +132,7 @@ var u = Dropzone.options.myAwesomeDropzone = { // The camelized version of the I
             // Gets triggered when the files have successfully been sent.
             // Redirect user or notify of success
             $("#editForm").find(':submit').prop("disabled" , false);
-            var fileNameHidden = "<input type='hidden' name='file[]' value='"+response+"'>";
+            var fileNameHidden = "<input type='hidden' name='file[]' value='"+response.fileName+"'>";
             $("#editForm").append(fileNameHidden);
         });
         this.on("error", function(files, response) {
