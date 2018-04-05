@@ -71,6 +71,11 @@ class TagController extends Controller
         return $response;
     }
 
+    /**
+     * GET /rt/id/:bucket/:id
+     * Get all tags for an ID
+     */
+
     public function get(Request $request , $bucket , $id){
         $response = null;
         $this->redis->get($bucket, $id, function($err, $result) use(& $response) {
