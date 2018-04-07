@@ -19,7 +19,8 @@ class Majortype extends Model
         'description',
     ];
 
-    public function majors(){
+    public function majors()
+    {
         return $this->hasMany('\App\Major');
     }
 }
