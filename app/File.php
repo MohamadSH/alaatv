@@ -56,4 +56,9 @@ class File extends Model
         }
         return $fileRemotePath ;
     }
+
+    public function getExtention(){
+        $ext = pathinfo($this->name, PATHINFO_EXTENSION);
+        return $ext ;
+    }
 }

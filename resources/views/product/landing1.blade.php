@@ -36,7 +36,7 @@
         {{--</div>--}}
     {{--</div>--}}
     <div class="col-xs-12">
-        <div class="blog-banner blog-container" style="background-image:url(http://takhtekhak.com/image/9/1280/500/clock_20171203125805.jpg);">
+        <div class="blog-banner blog-container" style="background-image:url(https://takhtekhak.com/image/9/1280/500/clock_20171203125805.jpg);">
             <h2 class="blog-title blog-banner-title">
                 <a href="javascript:;">سبقت در پیچ اول رالی کنکور</a>
             </h2>

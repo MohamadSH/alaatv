@@ -24,7 +24,7 @@
 @section("content")
     <div class="row">
         <div class="col-xs-12">
-            <div class="blog-banner blog-container" style="background-image:url(http://takhtekhak.com/image/9/1280/500/Untitled-1_20180213153803.jpg);">
+            <div class="blog-banner blog-container" style="background-image:url(https://takhtekhak.com/image/9/1280/500/Untitled-1_20180213153803.jpg);">
                 <h2 class="blog-title blog-banner-title">
                     <a href="javascript:;">اردوطلایی: سبقت در پیچ دوم رالی کنکور</a>
                 </h2>
@@ -38,7 +38,7 @@
                     <div class="col-md-3">
                         <div class="mt-card-item">
                             <div class="mt-card-avatar mt-overlay-7" >
-                                <img  id="b1" src="http://takhtekhak.com/image/9/582/280/box-1_20180213165237.jpg" />
+                                <img  id="b1" src="https://takhtekhak.com/image/9/582/280/box-1_20180213165237.jpg" />
                                 <div class="mt-overlay">
                                     <h2  style="padding: 0">نشست با رتبه 1 کنکور 95</h2>
                                     <div class="mt-info font-white">
@@ -53,7 +53,7 @@
                     <div class="col-md-3">
                         <div class="mt-card-item">
                             <div class="mt-card-avatar mt-overlay-7">
-                                <img src="http://takhtekhak.com/image/9/582/280/ordu2-new_20180215143133.jpg" />
+                                <img src="https://takhtekhak.com/image/9/582/280/ordu2-new_20180215143133.jpg" />
                                 <div class="mt-overlay">
                                     <h2  style="padding: 0">مشاوره فردی</h2>
                                     <div class="mt-info font-white">
@@ -70,7 +70,7 @@
                     <div class="col-md-3">
                         <div class="mt-card-item">
                             <div class="mt-card-avatar mt-overlay-7">
-                                <img src="http://takhtekhak.com/image/9/582/280/box-3_20180213165250.jpg" />
+                                <img src="https://takhtekhak.com/image/9/582/280/box-3_20180213165250.jpg" />
                                 <div class="mt-overlay">
                                     <h2  style="padding: 0">کلاس آموزشی</h2>
                                     <div class="mt-info font-white">
@@ -85,7 +85,7 @@
                     <div class="col-md-3">
                         <div class="mt-card-item">
                             <div class="mt-card-avatar mt-overlay-7">
-                                <img src="http://takhtekhak.com/image/9/582/280/box-2_20180213165244.jpg" />
+                                <img src="https://takhtekhak.com/image/9/582/280/box-2_20180213165244.jpg" />
                                 <div class="mt-overlay">
                                     <h2  style="padding: 0">برنامه های تفریحی</h2>
                                     <div class="mt-info font-white">

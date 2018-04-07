@@ -61,13 +61,14 @@ var u = Dropzone.options.myAwesomeDropzone = { // The camelized version of the I
     uploadMultiple: true,
     parallelUploads: 5,
     maxFiles: 5 ,
-    maxFilesize: 40,
-    dictFileTooBig:"حجم فایل شما  حداکثر می تواند 40 مگابایت باشد",
+    maxFilesize: 500,
+    timeout: 3600000,
+    dictFileTooBig:"حجم فایل شما  حداکثر می تواند 500 مگابایت باشد",
     dictMaxFilesExceeded : "حداکثر تعداد مجاز انتخاب شما تمام شد",
     dictFallbackMessage:"مرورگر شما قابلیت درگ اند دراپ را پشتیبانی نمی کند!",
     dictInvalidFileType:"فرمت فایل شما باید mp3 باشد.",
     dictResponseError : "خطا در آپلود",
-    acceptedFiles:".pdf",
+    acceptedFiles:".pdf,.rar",
 
     // The setting up of the dropzone
     init: function() {
@@ -131,7 +132,7 @@ var u = Dropzone.options.myAwesomeDropzone = { // The camelized version of the I
             // Gets triggered when the files have successfully been sent.
             // Redirect user or notify of success
             $("#editForm").find(':submit').prop("disabled" , false);
-            var fileNameHidden = "<input type='hidden' name='file[]' value='"+response+"'>";
+            var fileNameHidden = "<input type='hidden' name='file[]' value='"+response.fileName+"'>";
             $("#editForm").append(fileNameHidden);
         });
         this.on("error", function(files, response) {

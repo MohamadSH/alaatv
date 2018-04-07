@@ -85,7 +85,13 @@
                     @elseif(in_array("article" , $educationalContent->contenttypes->pluck("name")->toArray()))
                                 {!! $educationalContent->context !!}
                     @elseif($educationalContent->getFilesUrl()->isNotEmpty())
-                        <iframe class="google-docs" src='http://docs.google.com/viewer?url={{$educationalContent->getFilesUrl()->first()}}&embedded=true' width='100%' height='760' style='border: none;'></iframe>
+                        @if($educationalContent->file->getExtention() === "pdf")
+                            <iframe class="google-docs" src='http://docs.google.com/viewer?url={{$educationalContent->getFilesUrl()->first()}}&embedded=true' width='100%' height='760' style='border: none;'></iframe>
+                        @elseif(isset($educationalContent->description[0]))
+                            <p>
+                            {!! $educationalContent->description !!}
+                            </p>
+                        @endif
                     @endif
                 </div>
 
@@ -93,24 +99,26 @@
         </div>
 
         <div class="col-md-4">
-            <div class="portlet light ">
-                <div class="portlet-title">
-                    <div class="caption">
-                        <i class="fa fa-comment-o" aria-hidden="true"></i>
-                        @if(in_array("article" , $educationalContent->contenttypes->pluck("name")->toArray()))
-                            درباره مقاله
-                        @else
-                            درباره فایل
-                        @endif
+            @if( ( !is_null($educationalContent->file) and $educationalContent->file->getExtention() != "rar" ) or is_null($educationalContent->file))
+                <div class="portlet light ">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="fa fa-comment-o" aria-hidden="true"></i>
+                            @if(in_array("article" , $educationalContent->contenttypes->pluck("name")->toArray()))
+                                درباره مقاله
+                            @else
+                                درباره فایل
+                            @endif
+                        </div>
                     </div>
-                </div>
-                <div class="portlet-body text-justify" >
-                    <div class="scroller" style="height:200px" data-rail-visible="1" data-rail-color="black" data-handle-color="#a1b2bd">
-                        @if(isset($educationalContent->description[0])) {!! $educationalContent->description !!} @endif
-                    </div>
+                    <div class="portlet-body text-justify" >
+                        <div class="scroller" style="height:200px" data-rail-visible="1" data-rail-color="black" data-handle-color="#a1b2bd">
+                            @if(isset($educationalContent->description[0])) {!! $educationalContent->description !!} @endif
+                        </div>
 
+                    </div>
                 </div>
-            </div>
+            @endif
             @if(in_array("article" , $educationalContent->contenttypes->pluck("name")->toArray()))
                 <div class="row margin-bottom-10">
                     <div class="col-md-12">
@@ -233,7 +241,7 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <a href="{{action("ProductController@landing2")}}"><img src="http://takhtekhak.com/image/4/300/300/D1-TALAEE-6_20180209174708.jpg" alt="اردو غیر حضوری" style="width: 100%"></a>
+                    <a href="{{action("ProductController@landing2")}}"><img src="https://takhtekhak.com/image/4/300/300/D1-TALAEE-6_20180209174708.jpg" alt="اردو غیر حضوری" style="width: 100%"></a>
                 </div>
             </div>
         </div>
@@ -254,67 +262,4 @@
     <script src="/assets/pages/scripts/table-datatables-responsive.min.js" type="text/javascript"></script>
     <script src="/assets/pages/scripts/ui-extended-modals.min.js" type="text/javascript"></script>
     <script src="/js/extraJS/jQueryNumberFormat/jquery.number.min.js" type="text/javascript"></script>
-@endsection
-
-@section("extraJS")
-    <script src="/js/extraJS/scripts/admin-makeDataTable.js" type="text/javascript"></script>
-    <script type="text/javascript">
-
-        makeDataTableWithoutButton("educationalContent_table");
-
-        $(document).on("change", ".educationalContentFilter", function (){
-            contentLoad();
-        });
-
-        $(document).on("click", "#goButton", function (){
-            contentLoad();
-        });
-
-        $(document).ready(function () {
-            contentLoad();
-        });
-
-        function contentLoad() {
-            var formData = $("#educationalContentFilterForm").serialize();
-            var columns= [ "columns[]=name" , "columns[]=description" , "columns[]=grade" , "columns[]=major" , "columns[]=contentType" , "columns[]=file" , "columns[]=created_at"] ;
-            formData = formData + "&" + columns.join('&') ;
-            $("#content-table-loading").removeClass("hidden");
-            $.ajax({
-                type: "GET",
-                url: "/educationalcontent",
-                data:formData,
-                success: function (result) {
-                    // console.log(result);
-                    // console.log(result.responseText);
-                    var newDataTable =$("#educationalContent_table").DataTable();
-                    newDataTable.destroy();
-                    $('#educationalContent_table > tbody').html(result);
-                    makeDataTableWithoutButton("educationalContent_table");
-                    $("#content-table-loading").addClass("hidden");
-                },
-                error: function (result) {
-//                    console.log(result);
-//                    console.log(result.responseText);
-                }
-            });
-            return false;
-        }
-
-        function initialContentTypeSelect() {
-            var selected = $("#rootContentTypes option:selected").text();
-            if(selected == "آزمون")
-            {
-                $("#childContentTypes").prop("disabled" , false);
-            }else{
-                $("#childContentTypes").val("0");
-                $("#childContentTypes").prop("disabled" , true);
-            }
-        }
-
-        initialContentTypeSelect();
-
-        $('#rootContentTypes').on('change', function() {
-            initialContentTypeSelect();
-        });
-    </script>
 @endsection

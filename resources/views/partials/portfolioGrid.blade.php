@@ -19,7 +19,7 @@
         <div class="cbp-item hamayesh " >
             <div class="cbp-caption">
                 <div class="cbp-caption-defaultWrap">
-                    <img  src="http://takhtekhak.com/image/4/256/256/arabi-naseh_20180206093949.jpg"  alt="جمع بندی عربی کنکور میلاد ناصح زاده">
+                    <img  src="https://takhtekhak.com/image/4/256/256/arabi-naseh_20180206093949.jpg"  alt="جمع بندی عربی کنکور میلاد ناصح زاده">
                 </div>
                 <div class="cbp-caption-activeWrap">
                     <div class="cbp-l-caption-alignCenter">

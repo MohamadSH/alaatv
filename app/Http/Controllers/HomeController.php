@@ -941,11 +941,18 @@ class HomeController extends Controller
                 }
                 $diskName = Config::get('constants.DISK13');
                 $cloudFile = Productfile::where("file", $fileName)->where("product_id", $productId)->get()->first()->cloudFile;
-                $productFileLink = "http://".env("SFTP_HOST" , "").":8090/". $cloudFile;
+                //TODO: verify "$productFileLink = "http://".env("SFTP_HOST" , "").":8090/". $cloudFile;"
+                $productFileLink = env("DOWNLOAD_HOST_PROTOCOL" , "http://").env("DOWNLOAD_HOST_NAME" , "dl.takhtekhak.com"). $cloudFile;
                 $unixTime = Carbon::today()->addDays(2)->timestamp;
                 $userIP = Request::ip();
+                //TODO: fix diffrent Ip
+                $ipArray = explode(".",$userIP);
+                $ipArray[3] = 0;
+                $userIP = implode(".",$ipArray);
+
                 $linkHash = $this->helper->generateSecurePathHash($unixTime, $userIP, "TakhteKhak", $cloudFile);
                 $externalLink = $productFileLink . "?md5=" . $linkHash . "&expires=" . $unixTime;
+//                dd($temp."+".$userIP);
                 break;
             case "فایل کارنامه" :
                 $diskName = Config::get('constants.DISK14');
@@ -1010,7 +1017,9 @@ class HomeController extends Controller
                     $fileHost = Storage::drive($diskName)->getAdapter()->getHost();
                     if (isset($fileHost)) {
                         $fileRoot = Storage::drive($diskName)->getAdapter()->getRoot();
-                        $fileRemotePath = "http://" . $fileHost . ":8090" . "/public" . explode("public", $fileRoot)[1];
+                        //TODO: verify "$fileRemotePath = "http://" . $fileHost . ":8090" . "/public" . explode("public", $fileRoot)[1];"
+                        $fileRemotePath = env("DOWNLOAD_HOST_PROTOCOL" , "http://").env("DOWNLOAD_HOST_NAME" , "dl.takhtekhak.com"). "/public" . explode("public", $fileRoot)[1];
+
                         return response()->redirectTo($fileRemotePath . $fileName);
                     } else {
                         $fs = Storage::disk($diskName)->getDriver();
@@ -1044,6 +1053,7 @@ class HomeController extends Controller
 //
                 $diskAdapter = Storage::disk($diskName)->getAdapter();
                 $diskType = class_basename($diskAdapter);
+                //TODO: baraye chie ?
                 switch ($diskType) {
                     case "SftpAdapter" :
                         if (isset($file)) {
@@ -1348,12 +1358,14 @@ class HomeController extends Controller
      */
     public function uploadFile(\Illuminate\Http\Request $request)
     {
+
         $filePath = $request->header("X-File-Name");
         $fileName = $request->header("X-Dataname");
         $filePrefix="";
         $contentId = $request->header("X-Dataid");
         $disk = $request->header("X-Datatype");
         $done = false;
+
         try {
             $dirname = pathinfo($filePath, PATHINFO_DIRNAME);
             $ext = pathinfo($fileName, PATHINFO_EXTENSION);
@@ -1397,12 +1409,16 @@ class HomeController extends Controller
 
             }else{
                 $filesystem = Storage::disk($disk . "Sftp");
-                if($filesystem->put($fileName, File::get($newFileNameDir))) $done = true;
+                if($filesystem->put($fileName, fopen($newFileNameDir, 'r+'))) {
+                    $done = true;
+//                    dd($done);
+                }
+
             }
-                if($done)
-                    return $this->response->setStatusCode(200)->setContent(["fileName"=>$fileName , "prefix"=>$filePrefix]);
-                else
-                    return $this->response->setStatusCode(503);
+            if($done)
+                return $this->response->setStatusCode(200)->setContent(["fileName"=>$fileName , "prefix"=>$filePrefix]);
+            else
+                return $this->response->setStatusCode(503);
         } catch (\Exception $e) {
             //            return $this->TAG.' '.$e->getMessage();
             return $this->response->setStatusCode(503)->setContent(["message"=>"خطای غیرمنتظره در آپلود فایل"]);

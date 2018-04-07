@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Redis;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -323,3 +324,14 @@ Route::get( "copydepartmentlessonfromremote" , "RemoteDataCopyController@copyDep
 Route::get( "copyvideofromremote" , "RemoteDataCopyController@copyVideo");
 Route::get( "copydepartmentlessontotakhtekhak" , "SanatisharifmergeController@copyDepartmentlesson");
 Route::get( "copyvideototakhtekhak" , "SanatisharifmergeController@copyVideo");
+
+//Route::get("/lip",function (){
+//    $userIP = \Request::ip();
+//    $ipArray = explode(".",$userIP);
+//    $userIP = $ipArray[0].".".$ipArray[1].".".$ipArray[2]."."."0";
+//    dd($userIP);
+//});
+
+/**
+ * Tagging System
+ */

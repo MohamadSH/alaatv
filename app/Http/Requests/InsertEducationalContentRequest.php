@@ -27,10 +27,10 @@ class InsertEducationalContentRequest extends FormRequest
     public function rules()
     {
         $fileExtraRule = "";
-        if(Input::hasFile("file")) $fileExtraRule = "|mimes:pdf";
+        if(Input::hasFile("file")) $fileExtraRule = "|mimes:pdf,rar";
 
         $file2ExtraRule = "";
-        if(Input::hasFile("file2")) $file2ExtraRule = "mimes:pdf";
+        if(Input::hasFile("file2")) $file2ExtraRule = "mimes:pdf,rar";
 
 
         return [

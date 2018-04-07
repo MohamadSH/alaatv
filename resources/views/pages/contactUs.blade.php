@@ -148,7 +148,7 @@
 @endsection
 
 @section("footerPageLevelPlugin")
-    <script src="http://maps.google.com/maps/api/js?sensor=false&key=AIzaSyCbQCgACu0rgugWcMB1QeXNMrroEvs1WTo" type="text/javascript"></script>
+    <script src="https://maps.google.com/maps/api/js?sensor=false&key=AIzaSyCbQCgACu0rgugWcMB1QeXNMrroEvs1WTo" type="text/javascript"></script>
     <script src="/assets/global/plugins/gmaps/gmaps.min.js" type="text/javascript"></script>
 @endsection
 
