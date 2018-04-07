@@ -23,6 +23,10 @@ class Educationalcontent extends Model
         'order' ,
         'validSince',
         'template_id',
+        'metaTitle',
+        'metaDescription',
+        'metaKeywords',
+        'tags',
     ];
 
     public function contenttypes(){
@@ -38,13 +42,12 @@ class Educationalcontent extends Model
     }
 
     public function files(){
-//        return $this->belongsToMany('App\File', 'educationalcontent_file', 'content_id', 'file_id')->withPivot("caption" , "label");
-        return $this->belongsToMany('App\File', 'educationalcontent_file', 'content_id', 'file_id')->withPivot("caption" );
+        return $this->belongsToMany('App\File', 'educationalcontent_file', 'content_id', 'file_id')->withPivot("caption" , "label");
     }
 
     public function contentsets()
     {
-        return $this->belongsToMany("\App\Contentset" , "contentset_educationalcontent","edc_id","contentset_id")->withPivot("id");
+        return $this->belongsToMany("\App\Contentset" , "contentset_educationalcontent","edc_id","contentset_id")->withPivot("order" , "isDefault");
     }
 
     public function template()

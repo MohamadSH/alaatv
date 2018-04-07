@@ -945,8 +945,14 @@ class HomeController extends Controller
                 $productFileLink = env("DOWNLOAD_HOST_PROTOCOL" , "http://").env("DOWNLOAD_HOST_NAME" , "dl.takhtekhak.com"). $cloudFile;
                 $unixTime = Carbon::today()->addDays(2)->timestamp;
                 $userIP = Request::ip();
+                //TODO: fix diffrent Ip
+                $ipArray = explode(".",$userIP);
+                $ipArray[3] = 0;
+                $userIP = implode(".",$ipArray);
+
                 $linkHash = $this->helper->generateSecurePathHash($unixTime, $userIP, "TakhteKhak", $cloudFile);
                 $externalLink = $productFileLink . "?md5=" . $linkHash . "&expires=" . $unixTime;
+//                dd($temp."+".$userIP);
                 break;
             case "فایل کارنامه" :
                 $diskName = Config::get('constants.DISK14');

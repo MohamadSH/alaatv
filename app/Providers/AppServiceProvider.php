@@ -214,6 +214,16 @@ class AppServiceProvider extends ServiceProvider
                     if($discounttypes->where("name" , "cost")->isNotEmpty())
                         Config::set("constants.DISCOUNT_TYPE_COST" , $discounttypes->where("name" , "cost")->first()->id);
                 }
+                //                //=============================DISCOUNT TYPES
+                if (Schema::hasTable('discounttypes'))
+                {
+                    $discounttypes = \App\Discounttype::all();
+                    if($discounttypes->where("name" , "percentage")->isNotEmpty())
+                        Config::set("constants.DISCOUNT_TYPE_PERCENTAGE" , $discounttypes->where("name" , "percentage")->first()->id);
+                    if($discounttypes->where("name" , "cost")->isNotEmpty())
+                        Config::set("constants.DISCOUNT_TYPE_COST" , $discounttypes->where("name" , "cost")->first()->id);
+                }
+
             }
 
 

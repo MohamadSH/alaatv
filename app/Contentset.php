@@ -20,6 +20,6 @@ class Contentset extends Model
 
 
     public function educationalcontents(){
-        return $this->belongsToMany("\App\Contentset" , "contentset_educationalcontent","contentset_id","edc_id")->withPivot("id");
+        return $this->belongsToMany("\App\Educationalcontent" , "contentset_educationalcontent","contentset_id","edc_id")->withPivot("order" , "isDefault");
     }
 }

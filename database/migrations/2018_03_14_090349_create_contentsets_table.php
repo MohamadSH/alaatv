@@ -14,7 +14,8 @@ class CreateContentsetsTable extends Migration
      */
     public function up()
     {
-        Schema::create('contentsets', function (Blueprint $table) {
+        Schema::create('contentsets', function (Blueprint $table)
+        {
             $table->increments('id');
             $table->string("name")->nullable()->comment("نام");
             $table->string("description")->nullable()->comment("توضیح");
