@@ -21,8 +21,8 @@ var reportTable = '<table class="table table-striped table-bordered table-hover 
     '                            <th class="none"> کد ملی </th>\n' +
     '                            <th class="desktop"> موبایل </th>\n' +
     '                            <th class="none"> ایمیل </th>\n' +
-    '                            <th class="desktop"> شهر </th>\n' +
-    '                            <th class="desktop"> استان </th>\n' +
+    '                            <th class="none"> شهر </th>\n' +
+    '                            <th class="none"> استان </th>\n' +
     '                            <th class="none">وضعیت شماره موبایل </th>\n' +
     '                            <th class="none"> کد پستی </th>\n' +
     '                            <th class="none"> آدرس </th>\n' +

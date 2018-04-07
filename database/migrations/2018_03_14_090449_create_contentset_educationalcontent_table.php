@@ -18,6 +18,7 @@ class CreateContentsetEducationalcontentTable extends Migration
             $table->unsignedInteger('contentset_id');
             $table->unsignedInteger('edc_id');
             $table->integer("order")->default(0)->comment("ترتیب");
+            $table->tinyInteger("isDefault")->default(0)->comment("مشخص کننده دسته پیش فرض");
             $table->primary(['contentset_id','edc_id' ]);
 
             $table->foreign('contentset_id')

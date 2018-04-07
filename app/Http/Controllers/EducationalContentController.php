@@ -217,8 +217,14 @@ class EducationalContentController extends Controller
                 $contentSets = $request->get("contentsets");
                 foreach ($contentSets as $contentSet)
                 {
+                    $pivots = array();
                     if(isset($contentSet["order"]))
-                        $educationalContent->contentsets()->attach($contentSet["id"] , ["order"=>$contentSet["order"]]);
+                        $pivots["order"] = $contentSet["order"];
+                    if(isset($contentSet["isDefault"]))
+                        $pivots["isDefault"] = $contentSet["isDefault"];
+
+                    if(!empty($pivots))
+                        $educationalContent->contentsets()->attach($contentSet["id"] , $pivots);
                     else
                         $educationalContent->contentsets()->attach($contentSet["id"]);
                 }
@@ -343,9 +349,10 @@ class EducationalContentController extends Controller
         $setting = Websitesetting::where("version" , 1)->get()->first();
         $setting = json_decode($setting->setting);
 
-        if(Auth::check()&& Auth::user()->can(Config::get('constants.SHOW_EDUCATIONAL_CONTENT_ACCESS'))) $pass = true;
+        if(Auth::check() && Auth::user()->can(Config::get('constants.SHOW_EDUCATIONAL_CONTENT_ACCESS'))) $pass = true;
         else $pass = false ;
-        if($pass || $educationalContent->isValid() && $educationalContent->isEnable()) {
+        if($pass || $educationalContent->isValid() && $educationalContent->isEnable())
+        {
             $contentsWithSameType = $educationalContent->contentsWithSameType()->orderBy("validSince","DESC")->take(5)->get();
             $soonContentsWithSameType = $educationalContent->contentsWithSameType(1,0)->orderBy("validSince","ASC")->soon()->take(5)->get() ;
             $rootContentType = $educationalContent->contenttypes()->whereDoesntHave("parents")->get()->first();
@@ -361,7 +368,41 @@ class EducationalContentController extends Controller
             Meta::set('description', substr($educationalContent->description, 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
             Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $setting->site->siteLogo ]));
 
-            return view("educationalContent.show", compact("educationalContent", "rootContentType", "childContentType", "contentsWithSameType" , "soonContentsWithSameType"));
+            switch($educationalContent->template->name)
+            {
+                case "video1":
+                    $contentSet = $educationalContent->contentsets->where("pivot.isDefault" , 1)->first();
+                    $contentsWithSameSet =  $contentSet->educationalcontents ;
+                    $videoSources = collect();
+                    foreach ($contentsWithSameSet as $content)
+                    {
+                        $time_now = date('Hi');
+                        $file = $content->files->where("pivot.label" , "hd")->first()->name ;
+                        $download_link_postfix = md5($file).$time_now;
+                        $download_link_postfix = str_replace("+","-",$download_link_postfix);
+                        $download_link_postfix = str_replace("/","_",$download_link_postfix);
+                        $download_link_postfix = str_replace("=","",$download_link_postfix);
+                        $videoSources->put( "hd" , ["src"=>$file."?md5=".$download_link_postfix , "caption"=>$content->files->where("pivot.label" , "hd")->first()->pivot->caption]) ;
+
+                        $file = $content->files->where("pivot.label" , "hq")->first()->name ;
+                        $download_link_postfix = md5($file).$time_now;
+                        $download_link_postfix = str_replace("+","-",$download_link_postfix);
+                        $download_link_postfix = str_replace("/","_",$download_link_postfix);
+                        $download_link_postfix = str_replace("=","",$download_link_postfix);
+                        $videoSources->put( "hq" , ["src"=>$file."?md5=".$download_link_postfix , "caption"=>$content->files->where("pivot.label" , "hq")->first()->pivot->caption]) ;
+
+                        $file = $content->files->where("pivot.label" , "240p")->first()->name ;
+                        $download_link_postfix = md5($file).$time_now;
+                        $download_link_postfix = str_replace("+","-",$download_link_postfix);
+                        $download_link_postfix = str_replace("/","_",$download_link_postfix);
+                        $download_link_postfix = str_replace("=","",$download_link_postfix);
+                        $videoSources->put( "240p" , ["src"=>$file."?md5=".$download_link_postfix ,  "caption"=>$content->files->where("pivot.label" , "240p")->first()->pivot->caption]) ;
+                    }
+                    break;
+                default:
+                    break;
+            }
+            return view("educationalContent.show", compact("educationalContent", "rootContentType", "childContentType", "contentsWithSameType" , "soonContentsWithSameType" , "educationalContentSet" , "contentsWithSameSet" , "videoSources"));
         }
         else
             abort(404);
