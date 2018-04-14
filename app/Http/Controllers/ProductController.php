@@ -176,9 +176,6 @@ class ProductController extends Controller
      */
     public function show(Request $request, $product)
     {
-
-
-
         $defaultProducts = null;
         if($request->has("dp")) {
             $defaultProducts = [];
@@ -196,9 +193,7 @@ class ProductController extends Controller
         $descriptionIframe = $request->partial;
         $productType = $product->producttype->id;
 
-        //TODO: Fix 35 Query with 26 duplicates (Sohrab)
         $allAttributeCollection = $product->getAllAttributes() ;
-        return response()->make("Ok".$product->id.":".$productType);
 
         $this->addSimpleInfoAttributes($product);
         //return $product;
@@ -737,7 +732,7 @@ class ProductController extends Controller
             foreach ($attributeGroups as $attributeGroup)
             {
                 $attributeType = Attributetype::where("name" , "main")->get()->first() ;
-                $attributes = $attributeGroup->attributes->where("pivot.attributetype_id" , $attributeType->id);
+                $attributes = $product->attributeset->attributes()->where("attributetype_id" , $attributeType->id);
                 foreach ($attributes as $attribute)
                 {
                     $attributeValues = $attribute->attributevalues ;
@@ -909,7 +904,7 @@ class ProductController extends Controller
            $attributes = $attributeGroup->attributes->sortBy("order");
            foreach ($attributes as $attribute)
            {
-               $type = Attributetype::FindOrFail($attribute->pivot->attributetype_id);
+               $type = Attributetype::FindOrFail($attribute->attributetype_id);
                $productAttributevlues = $product->attributevalues->where("attribute_id" , $attribute->id);
                $attrributevalues = $attribute->attributevalues;
                if(!isset($attributeValuesCollection[$type->id])) $attributeValuesCollection->put($type->id,collect(["name"=>$type->name,"displayName"=>$type->description , "attributes"=>[]]));

@@ -78,29 +78,17 @@ class HomeController extends Controller
 
     public function debug(Request $request){
 
-        $a = Attributegroup::find(1)->attributes;
-//        dd($a);
-//        return $a;
-        $product = \App\Product::find( $request->get("p") );
-        $product->getAllAttributes() ;
-//        dd($product->children);
-//        return $product->getAllAttributes();
-        $attributeset = $product->attributeset;
-        $attributes = $attributeset->attributes();
-//        return $attributes;
-//        dd($attributes);
-        $productType = $product->producttype->id;
-        if (!$product->relationLoaded('attributevalues'))
-            $product->load('attributevalues');
+        $product = Product::find($request->get("p"));
+//        return $product->attributevalues;
+//        return $product->attributeset->attributes()->load('attributetype');
+        $attributeType = "main";
+        $attributeType = Attributetype::all()->where("name", $attributeType)->first();
 
-        $attributes->load('attributetype','attributecontrol');
-
-        foreach ( $attributes as $attribute) {
-            $attributeType = $attribute->attributetype;
-            $controlName = $attribute->attributecontrol->name;
-            $attributevalues = $product->attributevalues->where("attribute_id", $attribute->id)->sortBy("pivot.order");
-            dump($attributevalues);
+        $attributesArray = array();
+        foreach ($product->attributeset->attributes()->where("attributetype_id", $attributeType->id) as $attribute) {
+                array_push($attributesArray, $attribute->id);
         }
+        dd($attributesArray);
         return response()->make("Ok");
 
     }
