@@ -176,9 +176,6 @@ class ProductController extends Controller
      */
     public function show(Request $request, $product)
     {
-
-
-
         $defaultProducts = null;
         if($request->has("dp")) {
             $defaultProducts = [];
@@ -196,9 +193,7 @@ class ProductController extends Controller
         $descriptionIframe = $request->partial;
         $productType = $product->producttype->id;
 
-        //TODO: Fix 35 Query with 26 duplicates (Sohrab)
         $allAttributeCollection = $product->getAllAttributes() ;
-        return response()->make("Ok".$product->id.":".$productType);
 
         $this->addSimpleInfoAttributes($product);
         //return $product;

@@ -4,10 +4,12 @@ namespace App;
 
 use App\Traits\ProductCommon;
 use  App\Helpers\Helper;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Laravel\Scout\Searchable;
@@ -579,6 +581,33 @@ class Product extends Model
         return $array;
     }
 
+    private function makeSimpleInfoAttributes(&$attributevalues, &$attribute, &$attributeType, Collection &$simpleInfoAttributes ){
+        $infoAttributeArray = [];
+        foreach ($attributevalues as $attributevalue) {
+
+            array_push($infoAttributeArray, ["displayName" => $attribute->displayName, "name" => $attributevalue->name,"index" => $attributevalue->name, "value" => $attributevalue->id, "type" => $attributeType->name]);
+
+        }
+        if (!empty($infoAttributeArray))
+            $simpleInfoAttributes->put($attribute->displayName, $infoAttributeArray);
+    }
+    private function makeSelectAttributes(&$attributevalues, &$result){
+        foreach ($attributevalues as $attributevalue) {
+            $attributevalueIndex = $attributevalue->name;
+            if (isset($attributevalue->pivot->description) && strlen($attributevalue->pivot->description) > 0)
+                $attributevalueIndex .= "( " . $attributevalue->pivot->description . " )";
+
+            if (isset($attributevalue->pivot->extraCost)) {
+                if ($attributevalue->pivot->extraCost > 0)
+                    $attributevalueIndex .= "(+" . number_format($attributevalue->pivot->extraCost) . " تومان)";
+                elseif ($attributevalue->pivot->extraCost < 0)
+                    $attributevalueIndex .= "(-" . number_format($attributevalue->pivot->extraCost) . " تومان)";
+            }
+
+            $result = array_add($result, $attributevalue->id, $attributevalueIndex);
+        }
+    }
+
     public function getAllAttributes()
     {
         $product = $this;
@@ -604,119 +633,55 @@ class Product extends Model
                 $attributeType = $attribute->attributetype;
                 $controlName = $attribute->attributecontrol->name;
                 $attributevalues = $product->attributevalues->where("attribute_id", $attribute->id)->sortBy("pivot.order");
+
                 if (!$attributevalues->isEmpty()) {
                     switch ($controlName) {
                         case "select":
                             if($attributeType->name == "extra"){
-                                if($productType == Config::get("constants.PRODUCT_TYPE_SELECTABLE")){
-                                    $select = array();
-                                    foreach ($attributevalues as $attributevalue) {
+                                $select = array();
+                                $this->makeSelectAttributes($attributevalues,$select);
+                                if (!empty($select))
+                                    $extraSelectCollection->put($attribute->id, ["attributeDescription" => $attribute->displayName, "attributevalues" => $select]);
 
-                                        $attributevalueIndex = $attributevalue->name;
-
-                                        if (isset($attributevalue->pivot->description) && strlen($attributevalue->pivot->description) > 0) $attributevalueIndex .= "( " . $attributevalue->pivot->description . " )";
-
-                                        if (isset($attributevalue->pivot->extraCost)) {
-                                            if ($attributevalue->pivot->extraCost > 0) $attributevalueIndex .= "(+" . number_format($attributevalue->pivot->extraCost) . " تومان)";
-                                            if ($attributevalue->pivot->extraCost < 0) $attributevalueIndex .= "(-" . number_format($attributevalue->pivot->extraCost) . " تومان)";
-                                        }
-
-                                        $select = array_add($select, $attributevalue->id, $attributevalueIndex);
-                                    }
-                                    if (!empty($select)) $extraSelectCollection->put($attribute->id, ["attributeDescription" => $attribute->displayName, "attributevalues" => $select]);
-                                }else{
-                                    $select = array();
-                                    foreach ($attributevalues as $attributevalue) {
-
-                                        $attributevalueIndex = $attributevalue->name;
-
-                                        if (isset($attributevalue->pivot->description) && strlen($attributevalue->pivot->description) > 0) $attributevalueIndex .= "( " . $attributevalue->pivot->description . " )";
-
-                                        if (isset($attributevalue->pivot->extraCost)) {
-                                            if ($attributevalue->pivot->extraCost > 0) $attributevalueIndex .= "(+" . number_format($attributevalue->pivot->extraCost) . " تومان)";
-                                            elseif ($attributevalue->pivot->extraCost < 0) $attributevalueIndex .= "(-" . number_format($attributevalue->pivot->extraCost) . " تومان)";
-                                        }
-
-                                        $select = array_add($select, $attributevalue->id, $attributevalueIndex);
-                                    }
-                                    if (!empty($select)) $extraSelectCollection->put($attribute->id, ["attributeDescription" => $attribute->displayName, "attributevalues" => $select]);
-                                }
                             }elseif($attributeType->name == "main"&&  $productType == Config::get("constants.PRODUCT_TYPE_CONFIGURABLE")){
                                 if ($attributevalues->count() == 1) {
-                                    $attributevalue = $attributevalues->first();
-                                    $infoAttributeArray = array();
-                                    array_push($infoAttributeArray, ["displayName" => $attribute->displayName, "name" => $attributevalue->name, "value" => $attributevalue->id, "type" => $attributeType->name]);
-                                    $simpleInfoAttributes->put($attribute->displayName, $infoAttributeArray);
+                                    $this->makeSimpleInfoAttributes($attributevalues,$attribute,$attributeType,$simpleInfoAttributes);
                                 } else {
                                     $select = array();
-                                    foreach ($attributevalues as $attributevalue) {
-                                        $attributevalueIndex = $attributevalue->name;
-                                        if (isset($attributevalue->pivot->description) && strlen($attributevalue->pivot->description) > 0) $attributevalueIndex .= "( " . $attributevalue->pivot->description . " )";
-
-                                        if (isset($attributevalue->pivot->extraCost)) {
-                                            if ($attributevalue->pivot->extraCost > 0) $attributevalueIndex .= "(+" . number_format($attributevalue->pivot->extraCost) . " تومان)";
-                                            elseif ($attributevalue->pivot->extraCost < 0) $attributevalueIndex .= "(-" . number_format($attributevalue->pivot->extraCost) . " تومان)";
-                                        }
-
-                                        $select = array_add($select, $attributevalue->id, $attributevalueIndex);
-                                    }
-//                                    dd($attribute);
-                                    if (!empty($select)) $selectCollection->put($attribute->pivot->description, $select);
+                                    $this->makeSelectAttributes($attributevalues,$select);
+                                    if (!empty($select))
+                                        $selectCollection->put($attribute->pivot->description, $select);
                                 }
                             }
                             else{ // 1
-                                $infoAttributeArray = array();
-                                foreach ($attributevalues as $attributevalue) {
-                                    array_push($infoAttributeArray, ["displayName" => $attribute->displayName, "name" => $attributevalue->name, "value" => $attributevalue->id, "type" => $attributeType->name]);
-                                }
-                                if (!empty($infoAttributeArray))
-                                    $simpleInfoAttributes->put($attribute->displayName, $infoAttributeArray);
+                                $this->makeSimpleInfoAttributes($attributevalues,$attribute,$attributeType,$simpleInfoAttributes);
                             }
                             break;
                         case "groupedCheckbox":
                             if($attributeType->name == "extra"){
-                                if($productType == Config::get("constants.PRODUCT_TYPE_SELECTABLE")) {
-                                    $groupedCheckbox = collect();
-                                    foreach ($attributevalues as $attributevalue) {
-                                        $attributevalueIndex = $attributevalue->name;
-                                        if (isset($attributevalue->pivot->description) && strlen($attributevalue->pivot->description) > 0) $attributevalueIndex .= "( " . $attributevalue->pivot->description . " )";
+                                $groupedCheckbox = collect();
+                                foreach ($attributevalues as $attributevalue) {
+                                    $attributevalueIndex = $attributevalue->name;
+                                    if (isset($attributevalue->pivot->description) && strlen($attributevalue->pivot->description) > 0)
+                                        $attributevalueIndex .= "( " . $attributevalue->pivot->description . " )";
 
-                                        if (isset($attributevalue->pivot->extraCost)) {
-                                            if ($attributevalue->pivot->extraCost > 0) $attributevalueIndex .= "(+" . number_format($attributevalue->pivot->extraCost) . " تومان)";
-                                            if ($attributevalue->pivot->extraCost < 0) $attributevalueIndex .= "(-" . number_format($attributevalue->pivot->extraCost) . " تومان)";
-                                        }
-
-                                        $groupedCheckbox->put($attributevalue->id, ["index" => $attributevalueIndex]);
+                                    if (isset($attributevalue->pivot->extraCost)) {
+                                        if ($attributevalue->pivot->extraCost > 0)
+                                            $attributevalueIndex .= "(+" . number_format($attributevalue->pivot->extraCost) . " تومان)";
+                                        if ($attributevalue->pivot->extraCost < 0)
+                                            $attributevalueIndex .= "(-" . number_format($attributevalue->pivot->extraCost) . " تومان)";
                                     }
-                                    if (!empty($groupedCheckbox)) $extraCheckboxCollection->put($attribute->displayName, $groupedCheckbox);
-                                }else{
-                                    $groupedCheckbox = collect();
-                                    foreach ($attributevalues as $attributevalue) {
-                                        $attributevalueIndex = $attributevalue->name;
-                                        if (isset($attributevalue->pivot->description) && strlen($attributevalue->pivot->description) > 0) $attributevalueIndex .= "( " . $attributevalue->pivot->description . " )";
 
-                                        if (isset($attributevalue->pivot->extraCost)) {
-                                            if ($attributevalue->pivot->extraCost > 0) $attributevalueIndex .= "(+" . number_format($attributevalue->pivot->extraCost) . " تومان)";
-                                            if ($attributevalue->pivot->extraCost < 0) $attributevalueIndex .= "(-" . number_format($attributevalue->pivot->extraCost) . " تومان)";
-                                        }
-
-                                        $groupedCheckbox->put($attributevalue->id, ["index" => $attributevalueIndex]);
-                                    }
-                                    if (!empty($groupedCheckbox)) $extraCheckboxCollection->put($attribute->displayName, $groupedCheckbox);
+                                    $groupedCheckbox->put($attributevalue->id, ["index" => $attributevalueIndex,"value" => $attributevalue->id, "type" => $attributeType->name, "productType" => $product->producttype->name]);
                                 }
+                                if (!empty($groupedCheckbox))
+                                    $extraCheckboxCollection->put($attribute->displayName, $groupedCheckbox);
 
                             }
                             else {
                                 if ($product->producttype->id == Config::get("constants.PRODUCT_TYPE_CONFIGURABLE")) {
                                     if($attributeType->name == "information"){
-                                        $infoAttributeArray = array();
-                                        foreach ($attributevalues as $attributevalue) {
-                                            array_push($infoAttributeArray, ["displayName" => $attribute->displayName, "index" => $attributevalue->name, "value" => $attributevalue->id, "type" => $attributeType->name]);
-                                        }
-                                        if (!empty($infoAttributeArray)){
-                                            //$simpleInfoAttributes->put($attribute->displayName, $infoAttributeArray);
-                                            $checkboxInfoAttributes->put( $attribute->displayName , $infoAttributeArray);
-                                        }
+                                        $this->makeSimpleInfoAttributes($attributevalues,$attribute,$attributeType,$checkboxInfoAttributes);
                                     }else {
                                         $groupedCheckbox = array();
                                         foreach ($attributevalues as $attributevalue) {
@@ -729,40 +694,26 @@ class Product extends Model
                                             if (isset($attributevalue->pivot->extraCost)) {
                                                 if ($attributevalue->pivot->extraCost > 0) {
                                                     $attributevalueExtraCost = "+" . number_format($attributevalue->pivot->extraCost) . " تومان";
-                                                    if ($product->discount > 0) $attributevalueExtraCostWithDiscount = number_format("+" . $attributevalue->pivot->extraCost * (1 - ($product->discount / 100))) . " تومان";
-                                                    else $attributevalueExtraCostWithDiscount = 0;
+                                                    if ($product->discount > 0)
+                                                        $attributevalueExtraCostWithDiscount = number_format("+" . $attributevalue->pivot->extraCost * (1 - ($product->discount / 100))) . " تومان";
+                                                    else
+                                                        $attributevalueExtraCostWithDiscount = 0;
                                                 } elseif ($attributevalue->pivot->extraCost < 0) {
                                                     $attributevalueExtraCost = "-" . number_format($attributevalue->pivot->extraCost) . " تومان";
-                                                    if ($product->discount > 0) $attributevalueExtraCostWithDiscount = number_format("-" . $attributevalue->pivot->extraCost * (1 - ($product->discount / 100))) . " تومان";
-                                                    else $attributevalueExtraCostWithDiscount = 0;
+                                                    if ($product->discount > 0)
+                                                        $attributevalueExtraCostWithDiscount = number_format("-" . $attributevalue->pivot->extraCost * (1 - ($product->discount / 100))) . " تومان";
+                                                    else
+                                                        $attributevalueExtraCostWithDiscount = 0;
                                                 }
 
                                             }
-
-
                                             $groupedCheckbox = array_add($groupedCheckbox, $attributevalue->id, ["index" => $attributevalueIndex, "extraCost" => $attributevalueExtraCost, "extraCostWithDiscount" => $attributevalueExtraCostWithDiscount, "value" => $attributevalue->id, "type" => $attributeType->name, "productType" => $product->producttype->name]);
                                         }
                                         if (!empty($groupedCheckbox))
                                             $groupedCheckboxCollection->put($attribute->pivot->description, $groupedCheckbox);
                                     }
-                                } else if ($product->producttype->id == Config::get("constants.PRODUCT_TYPE_SIMPLE")) {
-                                    //5,2
-                                    $infoAttributeArray = array();
-                                    foreach ($attributevalues as $attributevalue) {
-                                        array_push($infoAttributeArray, ["displayName" => $attribute->displayName, "name" => $attributevalue->name, "value" => $attributevalue->id, "type" => $attributeType->name]);
-                                    }
-                                    if (!empty($infoAttributeArray)){
-                                        //$simpleInfoAttributes->put($attribute->displayName, $infoAttributeArray);
-                                        $checkboxInfoAttributes->put( $attribute->displayName , $infoAttributeArray);
-                                    }
                                 } else {
-                                    $infoAttributeArray = array();
-                                    foreach ($attributevalues as $attributevalue) {
-                                        array_push($infoAttributeArray, [ "displayName" => $attribute->displayName, "name" => $attributevalue->name,"value" => $attributevalue->id, "type" => $attributeType->name]);
-                                    }
-                                    if (!empty($infoAttributeArray)){
-                                        $checkboxInfoAttributes->put($attribute->displayName, $infoAttributeArray);
-                                    }
+                                    $this->makeSimpleInfoAttributes($attributevalues,$attribute,$attributeType,$checkboxInfoAttributes);
                                 }
                             }
                             break;
