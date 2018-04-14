@@ -6,7 +6,9 @@ use App\Articlecategory;
 use App\Assignmentstatus;
 use App\Attribute;
 use App\Attributecontrol;
+use App\Attributegroup;
 use App\Attributeset;
+use App\Attributetype;
 use App\Checkoutstatus;
 use App\Consultation;
 use App\Consultationstatus;
@@ -40,12 +42,13 @@ use App\Userupload;
 use App\Useruploadstatus;
 use App\Websitesetting;
 use App\Websitepage;
+use App\Http\Requests\Request;
 use Carbon\Carbon;
-use Helpers\Helper;
+use App\Helpers\Helper;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Response;
@@ -73,6 +76,34 @@ class HomeController extends Controller
     use ProductCommon;
     use DateCommon;
 
+    public function debug(Request $request){
+
+        $a = Attributegroup::find(1)->attributes;
+//        dd($a);
+//        return $a;
+        $product = \App\Product::find( $request->get("p") );
+        $product->getAllAttributes() ;
+//        dd($product->children);
+//        return $product->getAllAttributes();
+        $attributeset = $product->attributeset;
+        $attributes = $attributeset->attributes();
+//        return $attributes;
+//        dd($attributes);
+        $productType = $product->producttype->id;
+        if (!$product->relationLoaded('attributevalues'))
+            $product->load('attributevalues');
+
+        $attributes->load('attributetype','attributecontrol');
+
+        foreach ( $attributes as $attribute) {
+            $attributeType = $attribute->attributetype;
+            $controlName = $attribute->attributecontrol->name;
+            $attributevalues = $product->attributevalues->where("attribute_id", $attribute->id)->sortBy("pivot.order");
+            dump($attributevalues);
+        }
+        return response()->make("Ok");
+
+    }
     public function __construct()
     {
 //        $agent = new Agent();
@@ -919,7 +950,7 @@ class HomeController extends Controller
                         $message = "شما ابتدا باید یکی از این محصولات را سفارش دهید و یا اگر سفارش داده اید مبلغ را تسویه نمایید: " . "<br>";
                         $productIds = array();
                         foreach ($products as $product) {
-                            $myParents = $this->makeParentArray($product);
+                            $myParents = $product->parents;
                             if (!empty($myParents)) {
                                 $rootParent = end($myParents);
                                 if (!in_array($rootParent->id, $productIds)) {
@@ -1590,7 +1621,7 @@ class HomeController extends Controller
                     }
                 }
 
-                $parentsArray = $this->makeParentArray($product);
+                $parentsArray = $product->parents;
                 if (!empty($parentsArray)) {
                     foreach ($parentsArray as $parent) {
                         foreach ($parent->gifts as $gift) {

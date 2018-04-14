@@ -7,7 +7,7 @@ use App\Attributecontrol;
 use App\Attributevalue;
 use App\Http\Requests\EditAttributeRequest;
 use App\Http\Requests\InsertAttributeRequest;
-use Helpers\Helper;
+use App\Helpers\Helper;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;

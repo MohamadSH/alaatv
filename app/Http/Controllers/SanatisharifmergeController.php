@@ -14,13 +14,14 @@ class SanatisharifmergeController extends Controller
     use MetaCommon;
     protected $response;
 
-    protected function determineTags($deplessonid)
-    {
-        $tags = array();
+    private function s($deplessonid, & $c , $mod){
         switch ($deplessonid)
         {
             case 1 :
-                $tags=["ریاضی"];
+                if($mod=1)
+                    $c=["ریاضی"];
+                else
+                    $c = " جمع بندی بازتاب نور";
                 break;
             case 3 :
                 break;
@@ -371,7 +372,19 @@ class SanatisharifmergeController extends Controller
             default:
                 break;
         }
+    }
+
+    protected function determineTags($deplessonid)
+    {
+        $tags = array();
+        s($deplessonid,$tags,1);
         return $tags;
+    }
+    protected function determineContentSetName($deplessonid)
+    {
+        $name = null;
+        s($deplessonid,$name,0);
+        return $name;
     }
 
     public function __construct()

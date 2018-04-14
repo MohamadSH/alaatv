@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Contentset extends Model
 {
     use SoftDeletes;
-    protected $dates = ['deleted_at'];
+    /**      * The attributes that should be mutated to dates.        */
+    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     /**
      * @var array
@@ -19,7 +20,8 @@ class Contentset extends Model
     ];
 
 
-    public function educationalcontents(){
-        return $this->belongsToMany("\App\Educationalcontent" , "contentset_educationalcontent","contentset_id","edc_id")->withPivot("order" , "isDefault");
+    public function educationalcontents()
+    {
+        return $this->belongsToMany("\App\Educationalcontent", "contentset_educationalcontent", "contentset_id", "edc_id")->withPivot("order", "isDefault");
     }
 }

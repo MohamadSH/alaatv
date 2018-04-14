@@ -27,7 +27,7 @@ use App\User;
 use App\Userbon;
 use App\Websitesetting;
 use Carbon\Carbon;
-use Helpers\Helper;
+use App\Helpers\Helper;
 use Illuminate\Http\Request;
 use App\Http\Requests\EditOrderRequest;
 use App\Http\Requests;
@@ -80,7 +80,7 @@ class OrderController extends Controller
                 $extraAttributes = $orderproduct->attributevalues;
                 foreach($extraAttributes as $extraAttribute)
                 {
-                    $myParent = $this->makeParentArray($orderproduct->product);
+                    $myParent = $orderproduct->product->parents;
                     $myParent = end($myParent);
                     $productAttributevalue = $myParent->attributevalues->where("id" ,  $extraAttribute->id)->first();
 
@@ -101,7 +101,7 @@ class OrderController extends Controller
                     $bons = $orderproduct->product->bons->where("name" , $bonName)->where("pivot.discount",">","0")->where("isEnable" , 1);
                     if($bons->isEmpty())
                     {
-                        $parentsArray = $this->makeParentArray($orderproduct->product);
+                        $parentsArray = $orderproduct->product->parents;
                         if(!empty($parentsArray))
                         {
                             foreach ($parentsArray as $parent)
@@ -782,7 +782,7 @@ class OrderController extends Controller
 //                        if($order->orderpostinginfos->first()->update()) $insertPostingInfo=true;
 //                    }
                     if($insertPostingInfo && $request->has('postingSMS')){
-                        $myParents  = $this->makeParentArray($order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->get()->first()->product) ;
+                        $myParents  = Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT")->get()->first()->product->parents;
                         if (!empty($myParents)){
                             $rootParent = end($myParents);
                             $productName =$rootParent->name  ;
@@ -1103,7 +1103,7 @@ class OrderController extends Controller
                         if(!in_array($order->coupon->id, $orderproduct->product->coupons->pluck('id')->toArray()))
                         {
                             $hasCoupon = false;
-                            $parentsArray = $this->makeParentArray($orderproduct->product);
+                            $parentsArray = $orderproduct->product->parents;
                             foreach ($parentsArray as $parent)
                             {
                                 if(in_array($order->coupon->id, $parent->coupons->pluck('id')->toArray()))
@@ -1254,7 +1254,7 @@ class OrderController extends Controller
                                     }
                                     foreach ($orderproduct->attributevalues as $value) {
                                         if ($orderproduct->product->hasParents()) {
-                                            $myParent = $this->makeParentArray($orderproduct->product);
+                                            $myParent = $orderproduct->product->parents;
                                             $myParent = end($myParent);
                                             $attributevalue = $myParent->attributevalues->where("id", $value->id);
                                         }
@@ -1309,7 +1309,7 @@ class OrderController extends Controller
                         if(!in_array($order->coupon->id, $orderproduct->product->coupons->pluck('id')->toArray()))
                         {
                             $hasCoupon = false;
-                            $parentsArray = $this->makeParentArray($orderproduct->product);
+                            $parentsArray = $orderproduct->product->parents;
                             foreach ($parentsArray as $parent)
                             {
                                 if(in_array($order->coupon->id, $parent->coupons->pluck('id')->toArray()))
@@ -1481,7 +1481,7 @@ class OrderController extends Controller
                                     }
                                     foreach ($orderproduct->attributevalues as $value) {
                                         if ($orderproduct->product->hasParents()) {
-                                            $myParent = $this->makeParentArray($orderproduct->product);
+                                            $myParent = $orderproduct->product->parents;
                                             $myParent = end($myParent);
                                             $attributevalue = $myParent->attributevalues->where("id", $value->id);
                                         }
@@ -1559,7 +1559,7 @@ class OrderController extends Controller
                             if(!in_array($order->coupon->id, $orderproduct->product->coupons->pluck('id')->toArray()))
                             {
                                 $hasCoupon = false;
-                                $parentsArray = $this->makeParentArray($orderproduct->product);
+                                $parentsArray = $orderproduct->product->parents;
                                 foreach ($parentsArray as $parent)
                                 {
                                     if(in_array($order->coupon->id, $parent->coupons->pluck('id')->toArray()))

@@ -3,7 +3,7 @@
 namespace App;
 
 use Carbon\Carbon;
-use Helpers\Helper;
+use App\Helpers\Helper;
 use Iatstuti\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
@@ -24,32 +24,33 @@ class User extends Authenticatable
 
     use Notifiable;
 
-    use SoftDeletes , CascadeSoftDeletes;
+    use SoftDeletes, CascadeSoftDeletes;
 
-    protected $cascadeDeletes = ['orders' , 'userbons' , 'useruploads' , 'verificationmessages' , 'bankaccounts' , 'contacts' , 'mbtianswers'];
-    protected $dates = ['deleted_at'];
-    protected $lockProfile = ["province", "city", "address", "postalCode", "school", "gender_id", "major_id","email"]; //columns being used for locking user's profile
-    protected $completeInfo = ["photo" , "province", "city","address","postalCode" ,"school", "gender_id", "major_id" , "grade_id" , "phone" ,"bloodtype_id" , "allergy" , "medicalCondition" , "diet"];
-    protected $medicalInfo = ["bloodtype_id" , "allergy" , "medicalCondition" , "diet"];
+    protected $cascadeDeletes = ['orders', 'userbons', 'useruploads', 'verificationmessages', 'bankaccounts', 'contacts', 'mbtianswers'];
+    /**      * The attributes that should be mutated to dates.        */
+    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+    protected $lockProfile = ["province", "city", "address", "postalCode", "school", "gender_id", "major_id", "email"]; //columns being used for locking user's profile
+    protected $completeInfo = ["photo", "province", "city", "address", "postalCode", "school", "gender_id", "major_id", "grade_id", "phone", "bloodtype_id", "allergy", "medicalCondition", "diet"];
+    protected $medicalInfo = ["bloodtype_id", "allergy", "medicalCondition", "diet"];
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'firstName' ,
-        'lastName' ,
+        'firstName',
+        'lastName',
         'mobile',
         'password',
-        'nationalCode' ,
-        'mobileNumberVerification' ,
-        'photo' ,
-        'province' ,
+        'nationalCode',
+        'mobileNumberVerification',
+        'photo',
+        'province',
         'city',
-        'address' ,
-        'postalCode' ,
-        'school' ,
-        'major_id' ,
+        'address',
+        'postalCode',
+        'school',
+        'major_id',
         'grade_id',
         'gender_id',
         'userstatus_id',
@@ -63,7 +64,38 @@ class User extends Authenticatable
         'medicalCondition',
         'diet',
     ];
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'password', 'remember_token',
+    ];
 
+    public static function roleFilter($users, $rolesId)
+    {
+        $users = $users->whereHas('roles', function ($q) use ($rolesId) {
+            $q->whereIn("id", $rolesId);
+        });
+        return $users;
+    }
+
+    public static function majorFilter($users, $majorsId)
+    {
+
+        if (in_array(0, $majorsId))
+            $users = $users->whereDoesntHave("major");
+        else
+            $users = $users->whereIn("major_id", $majorsId);
+
+        return $users;
+    }
+
+    public static function orderStatusFilter($users, $orderStatusesId)
+    {
+        return $users->whereIn('id', Order::whereIn("orderstatus_id", $orderStatusesId)->pluck('user_id'));
+    }
 
     public function getRememberToken()
     {
@@ -80,24 +112,18 @@ class User extends Authenticatable
         return 'remember_token';
     }
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
-
-    public function major(){
+    public function major()
+    {
         return $this->belongsTo('App\Major');
     }
 
-    public function gender(){
+    public function gender()
+    {
         return $this->belongsTo('App\Gender');
     }
 
-    public function userstatus(){
+    public function userstatus()
+    {
         return $this->belongsTo('App\Userstatus');
     }
 
@@ -108,7 +134,7 @@ class User extends Authenticatable
 
     public function openOrders()
     {
-        return $this->hasMany('App\Order')->where("orderstatus_id" , Config::get("constants.ORDER_STATUS_OPEN"));
+        return $this->hasMany('App\Order')->where("orderstatus_id", Config::get("constants.ORDER_STATUS_OPEN"));
     }
 
     public function userbons()
@@ -116,16 +142,18 @@ class User extends Authenticatable
         return $this->hasMany('\App\Userbon');
     }
 
-    public  function useruploads()
+    public function useruploads()
     {
         return $this->hasMany('\App\Userupload');
     }
 
-    public function verificationmessages(){
+    public function verificationmessages()
+    {
         return $this->hasMany('\App\Verificationmessage');
     }
 
-    public function bankaccounts(){
+    public function bankaccounts()
+    {
         return $this->hasMany('\App\Bankaccount');
     }
 
@@ -141,38 +169,42 @@ class User extends Authenticatable
 
     public function seensitepages()
     {//Site pages that user has seen
-        return $this->belongsToMany('\App\Websitepage', 'userseensitepages', 'user_id', 'websitepage_id')->withPivot("created_at" , "numberOfVisit");
+        return $this->belongsToMany('\App\Websitepage', 'userseensitepages', 'user_id', 'websitepage_id')->withPivot("created_at", "numberOfVisit");
     }
 
-    public function usersurveyanswers(){
+    public function usersurveyanswers()
+    {
         return $this->hasMany('\App\Usersurveyanswer');
     }
 
-    public function eventresults(){
+    public function eventresults()
+    {
         return $this->hasMany('\App\Eventresult');
     }
 
-    public function belongings(){
+    public function belongings()
+    {
         return $this->belongsToMany('\App\Belonging');
     }
 
     public function employeeschedules()
     {
-        return $this->hasMany("\App\Employeeschedule") ;
+        return $this->hasMany("\App\Employeeschedule");
     }
 
-    public function employeetimesheets(){
-        return $this->hasMany("\App\Employeetimesheet") ;
+    public function employeetimesheets()
+    {
+        return $this->hasMany("\App\Employeetimesheet");
     }
 
     public function lotteries()
     {
-        return $this->belongsToMany("\App\Lottery")->withPivot("rank" , "prizes");
+        return $this->belongsToMany("\App\Lottery")->withPivot("rank", "prizes");
     }
 
     public function bloodtype()
     {
-        return $this->belongsTo("\App\Bloodtype") ;
+        return $this->belongsTo("\App\Bloodtype");
     }
 
     public function grade()
@@ -185,14 +217,14 @@ class User extends Authenticatable
      * @return number of bons that user has of the specified bon
      * Converting Created_at field to jalali
      */
-    public function userHasBon($bonName){
-        $bon = Bon::all()->where('name' , $bonName)->where('isEnable' , 1);
-        if($bon->isEmpty())
+    public function userHasBon($bonName)
+    {
+        $bon = Bon::all()->where('name', $bonName)->where('isEnable', 1);
+        if ($bon->isEmpty())
             return false;
-        $userbons = $this->userbons->where("bon_id" , $bon->first()->id)->where("userbonstatus_id" , Config::get("constants.USERBON_STATUS_ACTIVE"));
+        $userbons = $this->userbons->where("bon_id", $bon->first()->id)->where("userbonstatus_id", Config::get("constants.USERBON_STATUS_ACTIVE"));
         $totalBonNumber = 0;
-        foreach($userbons as $userbon)
-        {
+        foreach ($userbons as $userbon) {
             $totalBonNumber = $totalBonNumber + $userbon->validateBon();
         }
         return $totalBonNumber;
@@ -205,13 +237,14 @@ class User extends Authenticatable
      * @param \app\User $user
      * @return  \Illuminate\Database\Eloquent\Collection a collection of user valid bons of specified bon
      */
-    public function userValidBons(Bon $bon){
-        return Userbon::where("user_id" , $this->id)->where("bon_id" , $bon->id)->where("userbonstatus_id" , Config::get("constants.USERBON_STATUS_ACTIVE"))->whereColumn('totalNumber', '>' , 'usedNumber')
+    public function userValidBons(Bon $bon)
+    {
+        return Userbon::where("user_id", $this->id)->where("bon_id", $bon->id)->where("userbonstatus_id", Config::get("constants.USERBON_STATUS_ACTIVE"))->whereColumn('totalNumber', '>', 'usedNumber')
             ->where(function ($query) {
-                $query->whereNull("validSince")->orwhere("validSince","<" , Carbon::now());
+                $query->whereNull("validSince")->orwhere("validSince", "<", Carbon::now());
             })
             ->where(function ($query) {
-                $query->whereNull("validUntil")->orwhere("validUntil",">" , Carbon::now());
+                $query->whereNull("validUntil")->orwhere("validUntil", ">", Carbon::now());
             })->get();
     }
 
@@ -220,17 +253,17 @@ class User extends Authenticatable
      *
      * @return string
      */
-    public function disqusSSO(){
-        if(isset($this->firstName) && isset($this->lastName) && isset($this->mobile) ) {
-            if(isset($this->photo) && strlen($this->photo)>0) {
+    public function disqusSSO()
+    {
+        if (isset($this->firstName) && isset($this->lastName) && isset($this->mobile)) {
+            if (isset($this->photo) && strlen($this->photo) > 0) {
                 $data = array(
                     "id" => $this->mobile,
                     "username" => $this->firstName . " " . $this->lastName,
                     "email" => $this->mobile . "@takhtekhak.com",
                     "avatar" => route('image', ['category' => '1', 'w' => '39', 'h' => '39', 'filename' => $this->photo])
                 );
-            }
-            else {
+            } else {
                 $data = array(
                     "id" => $this->mobile,
                     "username" => $this->firstName . " " . $this->lastName,
@@ -268,22 +301,24 @@ class User extends Authenticatable
      * @return string
      * Converting Created_at field to jalali
      */
-    public function CreatedAt_Jalali(){
+    public function CreatedAt_Jalali()
+    {
         $helper = new Helper();
-        $explodedDateTime = explode(" " , $this->created_at);
+        $explodedDateTime = explode(" ", $this->created_at);
 //        $explodedTime = $explodedDateTime[1] ;
-        return $helper->convertDate($this->created_at , "toJalali" );
+        return $helper->convertDate($this->created_at, "toJalali");
     }
 
     /**
      * @return string
      * Converting Updated_at field to jalali
      */
-    public function UpdatedAt_Jalali(){
+    public function UpdatedAt_Jalali()
+    {
         $helper = new Helper();
-        $explodedDateTime = explode(" " , $this->updated_at);
+        $explodedDateTime = explode(" ", $this->updated_at);
 //        $explodedTime = $explodedDateTime[1] ;
-        return $helper->convertDate($this->updated_at , "toJalali" );
+        return $helper->convertDate($this->updated_at, "toJalali");
     }
 
     public function returnLockProfileItems()
@@ -301,13 +336,12 @@ class User extends Authenticatable
         return $this->medicalInfo;
     }
 
-    public function completion($type = "full" , $columns = [])
+    public function completion($type = "full", $columns = [])
     {
         $tableColumns = Schema::getColumnListing("users");
-        switch ($type)
-        {
+        switch ($type) {
             case "full":
-                $importantColumns = array("firstName", "lastName", "mobile", "nationalCode", "province", "city", "address", "postalCode",  "gender_id", "mobileNumberVerification");
+                $importantColumns = array("firstName", "lastName", "mobile", "nationalCode", "province", "city", "address", "postalCode", "gender_id", "mobileNumberVerification");
                 break;
             case "fullAddress":
                 $importantColumns = array("firstName", "lastName", "mobile", "nationalCode", "province", "city", "address");
@@ -332,11 +366,10 @@ class User extends Authenticatable
 
         $numberOfColumns = count($importantColumns);
         $unsetColumns = 0;
-        if ($numberOfColumns > 0)
-        {
+        if ($numberOfColumns > 0) {
             foreach ($tableColumns as $tableColumn) {
                 if (in_array($tableColumn, $importantColumns)) {
-                    if(strcmp($tableColumn, "photo") == 0 && strcmp(Auth::user()->photo , Config::get('constants.PROFILE_DEFAULT_IMAGE')) == 0){
+                    if (strcmp($tableColumn, "photo") == 0 && strcmp(Auth::user()->photo, Config::get('constants.PROFILE_DEFAULT_IMAGE')) == 0) {
                         $unsetColumns++;
                     }
                     if (!isset($this->$tableColumn) || strlen(preg_replace('/\s+/', '', $this->$tableColumn)) == 0) {
@@ -349,57 +382,36 @@ class User extends Authenticatable
             }
 
             return (1 - ($unsetColumns / $numberOfColumns)) * 100;
-        }else return 100 ;
+        } else return 100;
 
     }
 
-    public static function roleFilter($users ,$rolesId){
-        $users =  $users->whereHas('roles', function($q) use ($rolesId) {$q->whereIn("id", $rolesId);});
-        return $users;
-    }
-
-    public static function majorFilter($users ,$majorsId){
-
-        if (in_array(0, $majorsId))
-            $users = $users->whereDoesntHave("major");
-        else
-            $users = $users->whereIn("major_id", $majorsId);
-
-        return $users;
-    }
-
-    public static function orderStatusFilter($users ,$orderStatusesId){
-        return $users->whereIn('id', Order::whereIn("orderstatus_id" , $orderStatusesId)->pluck('user_id'));
-    }
-
-    public function ordermanagercomments(){
+    public function ordermanagercomments()
+    {
         return $this->hasMany('App\Ordermanagercomment');
     }
 
     public function getfullName($mode = "firstNameFirst")
     {
-        $fullName = "" ;
-        switch ($mode)
-        {
+        $fullName = "";
+        switch ($mode) {
             case "firstNameFirst":
-                if(isset($this->firstName[0]) || isset($user->lastName[0]))
-                {
-                    if(isset($this->firstName[0])) $fullName .= $this->firstName." " ;
-                    if(isset($this->lastName[0])) $fullName .= $this->lastName ;
+                if (isset($this->firstName[0]) || isset($user->lastName[0])) {
+                    if (isset($this->firstName[0])) $fullName .= $this->firstName . " ";
+                    if (isset($this->lastName[0])) $fullName .= $this->lastName;
 
                 }
                 break;
             case "lastNameFirst":
-                if(isset($this->firstName[0]) || isset($user->lastName[0]))
-                {
-                    if(isset($this->firstName[0])) $fullName .= $this->lastName." " ;
-                    if(isset($this->lastName[0])) $fullName .= $this->firstName ;
+                if (isset($this->firstName[0]) || isset($user->lastName[0])) {
+                    if (isset($this->firstName[0])) $fullName .= $this->lastName . " ";
+                    if (isset($this->lastName[0])) $fullName .= $this->firstName;
                 }
                 break;
             default:
                 break;
         }
 
-        return $fullName ;
+        return $fullName;
     }
 }

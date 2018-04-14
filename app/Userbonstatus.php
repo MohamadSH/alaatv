@@ -14,11 +14,12 @@ class Userbonstatus extends Model
      */
     protected $fillable = [
         'name',
-        'description' ,
+        'description',
         'order',
     ];
 
-    public function userbons(){
+    public function userbons()
+    {
         return $this->hasMany('App\Userbon');
     }
 }

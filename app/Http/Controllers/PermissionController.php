@@ -6,7 +6,7 @@ use App\Http\Requests\EditPermissionRequest;
 use App\Http\Requests\InsertPermissionRequest;
 use App\Permission;
 use Illuminate\Support\Facades\Config;
-use Helpers\Helper;
+use App\Helpers\Helper;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;

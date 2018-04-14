@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Producttype extends Model
 {
     use SoftDeletes;
-    protected $dates = ['deleted_at'];
+    /**      * The attributes that should be mutated to dates.        */
+    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     /**
      * @var array
@@ -16,7 +17,7 @@ class Producttype extends Model
     protected $fillable = [
         'name',
         'displayName',
-        'description' ,
+        'description',
     ];
 
     public function products()

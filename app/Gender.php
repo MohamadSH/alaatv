@@ -8,14 +8,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Gender extends Model
 {
     use SoftDeletes;
-    protected $dates = ['deleted_at'];
+    /**      * The attributes that should be mutated to dates.        */
+    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     /**
      * @var array
      */
     protected $fillable = [
         'name',
-        'description' ,
+        'description',
         'order',
     ];
 

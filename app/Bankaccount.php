@@ -8,7 +8,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Bankaccount extends Model
 {
     use SoftDeletes;
-    protected $dates = ['deleted_at'];
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -16,13 +25,14 @@ class Bankaccount extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id' ,
-        'bank_id' ,
+        'user_id',
+        'bank_id',
         'accountNumber',
         'cardNumber',
     ];
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo('\App\User');
     }
 
@@ -31,7 +41,8 @@ class Bankaccount extends Model
         return $this->belongsTo('\App\Bank');
     }
 
-    public function transactions(){
+    public function transactions()
+    {
         return $this->hasMany('\App\Transaction');
     }
 }

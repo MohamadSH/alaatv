@@ -183,7 +183,7 @@
                                 {!! $educationalContent->context !!}
                             @elseif($educationalContent->getFilesUrl()->isNotEmpty())
                                 @if($educationalContent->file->getExtention() === "pdf")
-                                    <iframe class="google-docs" src='http://docs.google.com/viewer?url={{$educationalContent->getFilesUrl()->first()}}&embedded=true' width='100%' height='760' style='border: none;'></iframe>
+                                    <iframe class="google-docs" src='https://docs.google.com/viewer?url={{$educationalContent->getFilesUrl()->first()}}&embedded=true' width='100%' height='760' style='border: none;'></iframe>
                                 @elseif(isset($educationalContent->description[0]))
                                     <p>
                                         {!! $educationalContent->description !!}

@@ -70,6 +70,8 @@ return [
         'redis' => [
             'driver' => 'redis',
             'connection' => 'default',
+            'cluster' => false,
+            'client' => 'phpredis',
         ],
 
     ],

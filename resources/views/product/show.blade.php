@@ -52,7 +52,7 @@
                                 </div>
                                 @if(Auth::check() && $isLive <= 0)
                                 <div class="actions">
-                                    <a href="http://takhtekhak.com/download?fileName=8f81bfae-d7de-410d-abb1-9d475fb25bbb" class="btn btn-lg yellow ">
+                                    <a href="/download?fileName=8f81bfae-d7de-410d-abb1-9d475fb25bbb" class="btn btn-lg yellow ">
                                         <i class="fa fa-download"></i> دانلود جزوه این جلسه </a>
                                 </div>
                                 @endif
@@ -358,8 +358,8 @@
                                                         </div>
                                                         <div class="portlet-body">
                                                             <ul class="list-unstyled">
-                                                                @if(isset($childrenArray) && !empty($childrenArray))
-                                                                    @each('product.partials.showChildren', $childrenArray, 'product')
+                                                                @if(isset($product->children) && !empty($product->children))
+                                                                    @each('product.partials.showChildren', $product->children, 'product')
                                                                 @endif
                                                             </ul>
                                                         </div>

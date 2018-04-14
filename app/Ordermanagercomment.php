@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Ordermanagercomment extends Model
 {
     use SoftDeletes;
-    protected $dates = ['deleted_at'];
+    /**      * The attributes that should be mutated to dates.        */
+    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     /**
      * @var array
@@ -19,10 +20,13 @@ class Ordermanagercomment extends Model
         'comment'
     ];
 
-    public function order(){
+    public function order()
+    {
         return $this->belongsTo('App\Order');
     }
-    public function user(){
+
+    public function user()
+    {
         return $this->belongsTo('App\User');
     }
 }

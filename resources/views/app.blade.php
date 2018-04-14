@@ -14,7 +14,7 @@
             @include("partials.headMeta")
         @show
         <!-- BEGIN GLOBAL MANDATORY STYLES -->
-        {{--<link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />--}}
+        {{--<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />--}}
 
         @section("css")
             <link rel="stylesheet" href="{{ mix('/css/mandatory_all.css') }}">

@@ -6,7 +6,7 @@ use App\Http\Requests\EditPhoneRequest;
 use App\Http\Requests\InsertPhoneRequest;
 use App\Phone;
 use Illuminate\Http\Request;
-use Helpers\Helper;
+use App\Helpers\Helper;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Response;
 

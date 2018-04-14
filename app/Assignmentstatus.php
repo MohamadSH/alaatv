@@ -8,18 +8,28 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Assignmentstatus extends Model
 {
     use SoftDeletes;
-    protected $dates = ['deleted_at'];
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
 
     /**
      * @var array
      */
     protected $fillable = [
         'name',
-        'description' ,
+        'description',
         'order',
     ];
 
-    public function assignments(){
+    public function assignments()
+    {
         return $this->hasMany('App\Assignment');
     }
 }

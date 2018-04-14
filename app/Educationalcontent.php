@@ -3,7 +3,7 @@
 namespace App;
 
 use Carbon\Carbon;
-use Helpers\Helper;
+use App\Helpers\Helper;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Config;
@@ -14,13 +14,14 @@ class Educationalcontent extends Model
 {
     use SoftDeletes;
 
-    protected $dates = ['deleted_at'];
+    /**      * The attributes that should be mutated to dates.        */
+    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     protected $fillable = [
         'name',
         'description',
         'context',
-        'order' ,
+        'order',
         'validSince',
         'template_id',
         'metaTitle',
@@ -29,25 +30,24 @@ class Educationalcontent extends Model
         'tags',
     ];
 
-    public function contenttypes(){
-        return $this->belongsToMany('App\Contenttype', 'educationalcontent_contenttype', 'content_id', 'contenttype_id');
-    }
-
-    public function grades(){
+    public function grades()
+    {
         return $this->belongsToMany('App\Grade');
     }
 
-    public function majors(){
+    public function majors()
+    {
         return $this->belongsToMany('App\Major');
     }
 
-    public function files(){
-        return $this->belongsToMany('App\File', 'educationalcontent_file', 'content_id', 'file_id')->withPivot("caption" , "label");
+    public function files()
+    {
+        return $this->belongsToMany('App\File', 'educationalcontent_file', 'content_id', 'file_id')->withPivot("caption", "label");
     }
 
     public function contentsets()
     {
-        return $this->belongsToMany("\App\Contentset" , "contentset_educationalcontent","edc_id","contentset_id")->withPivot("order" , "isDefault");
+        return $this->belongsToMany("\App\Contentset", "contentset_educationalcontent", "edc_id", "contentset_id")->withPivot("order", "isDefault");
     }
 
     public function template()
@@ -59,91 +59,83 @@ class Educationalcontent extends Model
      * @return string
      * Converting Created_at field to jalali
      */
-    public function CreatedAt_Jalali(){
+    public function CreatedAt_Jalali()
+    {
         $helper = new Helper();
-        $explodedDateTime = explode(" " , $this->created_at);
+        $explodedDateTime = explode(" ", $this->created_at);
 //        $explodedTime = $explodedDateTime[1] ;
-        return $helper->convertDate($this->created_at , "toJalali" );
+        return $helper->convertDate($this->created_at, "toJalali");
     }
 
     /**
      * @return string
      * Converting Updated_at field to jalali
      */
-    public function UpdatedAt_Jalali(){
+    public function UpdatedAt_Jalali()
+    {
         $helper = new Helper();
-        $explodedDateTime = explode(" " , $this->updated_at);
+        $explodedDateTime = explode(" ", $this->updated_at);
 //        $explodedTime = $explodedDateTime[1] ;
-        return $helper->convertDate($this->updated_at , "toJalali" );
+        return $helper->convertDate($this->updated_at, "toJalali");
     }
 
     /**
      * @return string
      * Converting Created_at field to jalali
      */
-    public function validSince_Jalali(){
+    public function validSince_Jalali()
+    {
         $helper = new Helper();
-        $explodedDateTime = explode(" " , $this->validSince);
-        $explodedTime = $explodedDateTime[1] ;
-        return $helper->convertDate($this->validSince , "toJalali" )." ".$explodedTime;
+        $explodedDateTime = explode(" ", $this->validSince);
+        $explodedTime = $explodedDateTime[1];
+        return $helper->convertDate($this->validSince, "toJalali") . " " . $explodedTime;
     }
 
-    public function fileMultiplexer($contentTypes=array())
+    public function fileMultiplexer($contentTypes = array())
     {
-        if(!empty($contentTypes))
-        {
-            if (in_array(Contenttype::where("name", "exam")->get()->first()->id, $contentTypes))
-            {
+        if (!empty($contentTypes)) {
+            if (in_array(Contenttype::where("name", "exam")->get()->first()->id, $contentTypes)) {
                 $disk = Config::get('constants.DISK18_CLOUD');
-            } elseif(in_array(Contenttype::where("name", "pamphlet")->get()->first()->id, $contentTypes))
-            {
+            } elseif (in_array(Contenttype::where("name", "pamphlet")->get()->first()->id, $contentTypes)) {
                 $disk = Config::get('constants.DISK19_CLOUD');
-            } elseif(in_array(Contenttype::where("name", "book")->get()->first()->id, $contentTypes))
-            {
+            } elseif (in_array(Contenttype::where("name", "book")->get()->first()->id, $contentTypes)) {
                 $disk = Config::get('constants.DISK20_CLOUD');
             }
-            if(isset($disk))
+            if (isset($disk))
                 return $disk;
             else
                 return false;
-        }
-        else{
-            if (in_array(Contenttype::where("name", "exam")->get()->first()->id, $this->contenttypes->pluck("id")->toArray()))
-            {
+        } else {
+            if (in_array(Contenttype::where("name", "exam")->get()->first()->id, $this->contenttypes->pluck("id")->toArray())) {
                 $disk = Config::get('constants.DISK18_CLOUD');
-            } elseif(in_array(Contenttype::where("name", "pamphlet")->get()->first()->id, $this->contenttypes->pluck("id")->toArray()))
-            {
+            } elseif (in_array(Contenttype::where("name", "pamphlet")->get()->first()->id, $this->contenttypes->pluck("id")->toArray())) {
                 $disk = Config::get('constants.DISK19_CLOUD');
-            } elseif(in_array(Contenttype::where("name", "book")->get()->first()->id, $this->contenttypes->pluck("id")->toArray()))
-            {
+            } elseif (in_array(Contenttype::where("name", "book")->get()->first()->id, $this->contenttypes->pluck("id")->toArray())) {
                 $disk = Config::get('constants.DISK20_CLOUD');
             }
 
-            if(isset($disk))
-            {
+            if (isset($disk)) {
 
-                $disk = Disk::where("name" , $disk)->get()->first();
+                $disk = Disk::where("name", $disk)->get()->first();
                 return $disk;
-            }
-            else
-            {
+            } else {
                 return false;
             }
         }
 
-        return false ;
+        return false;
     }
 
     public function isValid(): bool
     {
-        if($this->validSince < Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran') )
+        if ($this->validSince < Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'))
             return true;
         return false;
     }
 
     public function isEnable(): bool
     {
-        if($this->enable )
+        if ($this->enable)
             return true;
         return false;
     }
@@ -156,7 +148,7 @@ class Educationalcontent extends Model
      * @return \Illuminate\Database\Eloquent\Builder
      */
 
-    public function scopeEnable($query,$enable=1)
+    public function scopeEnable($query, $enable = 1)
     {
         return $query->where('enable', $enable);
     }
@@ -169,7 +161,7 @@ class Educationalcontent extends Model
      */
     public function scopeValid($query)
     {
-        return $query->where('validSince','<',Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'));
+        return $query->where('validSince', '<', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'));
     }
 
     /**
@@ -180,70 +172,75 @@ class Educationalcontent extends Model
      */
     public function scopeSoon($query)
     {
-        return $query->where('validSince','>',Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'));
+        return $query->where('validSince', '>', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'));
     }
 
-    public function contentsWithSameType( $enable = 1 , $valid = 1)
+    public function contentsWithSameType($enable = 1, $valid = 1)
     {
-        $contentsWithSameType = Educationalcontent::where("id", "<>", $this->id) ;
-        if($enable) $contentsWithSameType = $contentsWithSameType->enable() ;
-        if($valid) $contentsWithSameType = $contentsWithSameType->valid() ;
+        $contentsWithSameType = Educationalcontent::where("id", "<>", $this->id);
+        if ($enable) $contentsWithSameType = $contentsWithSameType->enable();
+        if ($valid) $contentsWithSameType = $contentsWithSameType->valid();
         $contentTypes = $this->contenttypes->pluck("id")->toArray();
         foreach ($contentTypes as $id) {
             $contentsWithSameType = $contentsWithSameType->whereHas("contenttypes", function ($q) use ($id) {
                 $q->where("id", $id);
             });
         }
-        return $contentsWithSameType ;
+        return $contentsWithSameType;
     }
 
     public function getDisplayName()
     {
-        try{
-            $displayName = "" ;
+        try {
+            $displayName = "";
             $rootContentType = $this->contenttypes()->whereDoesntHave("parents")->get()->first();
             $childContentType = $this->contenttypes()->whereHas("parents", function ($q) use ($rootContentType) {
                 $q->where("id", $rootContentType->id);
             })->get()->first();
-            if(isset($rootContentType->displayName[0])) $displayName .= $rootContentType->displayName." " ;
-            if(isset($this->name[0])) $displayName .= $this->name ." " ;
-            if(isset($childContentType->displayName[0])) $displayName .= $childContentType->displayName . " " ;
-            $displayName .= $this->displayMajors() ;
-        } catch (\Exception $e){
+            if (isset($rootContentType->displayName[0])) $displayName .= $rootContentType->displayName . " ";
+            if (isset($this->name[0])) $displayName .= $this->name . " ";
+            if (isset($childContentType->displayName[0])) $displayName .= $childContentType->displayName . " ";
+            $displayName .= $this->displayMajors();
+        } catch (\Exception $e) {
             return $e->getMessage();
         }
-        return $displayName ;
+        return $displayName;
+    }
+
+    public function contenttypes()
+    {
+        return $this->belongsToMany('App\Contenttype', 'educationalcontent_contenttype', 'content_id', 'contenttype_id');
     }
 
     public function displayMajors()
     {
         $displayMajors = "";
-        foreach($this->majors as $major )
-        {
-            if(count($this->majors)>1 && $major->id != $this->majors->last()->id)
-                $displayMajors .= $major->name." / " ;
+        foreach ($this->majors as $major) {
+            if (count($this->majors) > 1 && $major->id != $this->majors->last()->id)
+                $displayMajors .= $major->name . " / ";
             else
-                $displayMajors .= $major->name. " ";
+                $displayMajors .= $major->name . " ";
         }
-        return $displayMajors ;
+        return $displayMajors;
     }
 
-    public function getFileAttribute(){
-        if(! is_null($this->files ) )
+    public function getFileAttribute()
+    {
+        if (!is_null($this->files))
             return $this->files->first();
         return null;
     }
+
     public function getFilesUrl()
     {
-        $files = $this->files ;
-        $links = collect() ;
-        foreach ($files as $file)
-        {
-            $url = $file->getUrl() ;
-            if(isset($url[0]))
+        $files = $this->files;
+        $links = collect();
+        foreach ($files as $file) {
+            $url = $file->getUrl();
+            if (isset($url[0]))
                 $links->push($url);
         }
-        return $links ;
+        return $links;
     }
 
 }

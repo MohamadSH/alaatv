@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Orderpostinginfo extends Model
 {
     use SoftDeletes;
-    protected $dates = ['deleted_at'];
+    /**      * The attributes that should be mutated to dates.        */
+    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     /**
      * The attributes that are mass assignable.
@@ -16,8 +17,8 @@ class Orderpostinginfo extends Model
      * @var array
      */
     protected $fillable = [
-        'order_id' ,
-        'postCode' ,
+        'order_id',
+        'postCode',
     ];
 
     public function order()

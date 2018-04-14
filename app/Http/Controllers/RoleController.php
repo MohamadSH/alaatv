@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\EditPermissionRequest;
 use App\Http\Requests\InsertPermissionRequest;
 use App\Permission;
-use Helpers\Helper;
+use App\Helpers\Helper;
 use Illuminate\Http\Response;
 use Zizaco\Entrust\Entrust;
 

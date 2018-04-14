@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Usersurveyanswer extends Model
 {
     use SoftDeletes;
-    protected $dates = ['deleted_at'];
+    /**      * The attributes that should be mutated to dates.        */
+    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     /**
      * @var array
@@ -21,19 +22,23 @@ class Usersurveyanswer extends Model
         'answer',
     ];
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo('\App\User');
     }
 
-    public function question(){
+    public function question()
+    {
         return $this->belongsTo('\App\Question');
     }
 
-    public function survey(){
+    public function survey()
+    {
         return $this->belongsTo('\App\Survey');
     }
 
-    public function event(){
+    public function event()
+    {
         return $this->belongsTo('\App\Event');
     }
 

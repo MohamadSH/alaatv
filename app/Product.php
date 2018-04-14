@@ -3,11 +3,12 @@
 namespace App;
 
 use App\Traits\ProductCommon;
-use Helpers\Helper;
+use  App\Helpers\Helper;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Laravel\Scout\Searchable;
 
@@ -17,18 +18,24 @@ class Product extends Model
 //    use Searchable;
     use ProductCommon;
 
-    protected $dates = ['deleted_at'];
-    use ProductCommon ;
     /**
+     * The attributes that should be mutated to dates.
+     *
      * @var array
      */
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
+
     protected $fillable = [
         'name',
-        'basePrice' ,
+        'basePrice',
         'shortDescription',
         'longDescription',
         'slogan',
-        'image' ,
+        'image',
         'file',
         'validSince',
         'validUntil',
@@ -43,185 +50,232 @@ class Product extends Model
         'specialDescription'
     ];
 
-    public function producttype(){
-        return $this->belongsTo('App\Producttype');
+    public function cacheKey()
+    {
+        $key = $this->getKey();
+        $time= isset($this->update) ? $this->updated_at->timestamp : $this->created_at->timestamp;
+        return sprintf(
+            "%s-%s",
+            //$this->getTable(),
+            $key,
+            $time
+        );
     }
 
-    public function attributeset(){
+
+
+    public static function recentProducts($number)
+    {
+        return self::getProducts(0, 1)->take($number)->orderBy('created_at', 'Desc');
+    }
+
+    public static function getProducts($configurable = 0, $enable = 0)
+    {
+        if ($configurable == 1) {
+            $products = \App\Product::configurable();
+            if ($enable == 1)
+                $products = $products->enable();
+        } else if ($configurable == 0) {
+            $products = \App\Product::select()->doesntHave('parents');
+            if ($enable == 1)
+                $products->enable();
+        }
+
+        return $products;
+    }
+
+    public function producttype()
+    {
+        return $this->belongsTo('App\Producttype')->withDefault();
+    }
+
+    public function attributeset()
+    {
         return $this->belongsTo('App\Attributeset')->orderBy('order');
     }
 
-    public function children(){
-        return $this->belongsToMany('App\Product', 'childproduct_parentproduct', 'parent_id', 'child_id')->withPivot("isDefault" , "control_id" , "description");
+    public function children()
+    {
+        return $this->belongsToMany('App\Product',
+                                    'childproduct_parentproduct',
+                                    'parent_id',
+                                    'child_id')
+                    ->withPivot("isDefault",
+                                        "control_id",
+                                        "description",
+                                        "parent_id")
+                    ->with('children');
     }
 
-    public function hasChildren($depth = 1){
-        $counter = 0;
-        $myProduct = $this;
-        while($myProduct->children->isNotEmpty())
-        {
-            if($counter >= $depth) break ;
-            $myProduct = $myProduct->children->first() ;
-            $counter++ ;
-        }
-        if($myProduct->id == $this->id || $counter != $depth) return false ;
-        else return true;
+    public function parents()
+    {
+        return $this->belongsToMany('App\Product',
+            'childproduct_parentproduct',
+            'child_id',
+            'parent_id')
+            ->withPivot("isDefault", "control_id", "description");
     }
 
-    public function orderproducts(){
+    public function orderproducts()
+    {
         return $this->hasMany('App\Orderproduct');
-    }
-
-    public function parents(){
-        return $this->belongsToMany('App\Product', 'childproduct_parentproduct', 'child_id', 'parent_id')->withPivot("isDefault" , "control_id" , "description");
-    }
-
-    public function hasParents($depth = 1){
-        $counter = 0;
-        $myProduct = $this;
-        while(!$myProduct->parents->isEmpty())
-        {
-            if($counter >= $depth) break ;
-            $myProduct = $myProduct->parents->first() ;
-            $counter++ ;
-        }
-        if($myProduct->id == $this->id || $counter != $depth) return false ;
-        else return true;
-    }
-
-    public function getGrandParent(){
-        $counter = 1 ;
-        $parentsArray = array();
-        $myProduct = $this ;
-        while($myProduct->hasParents())
-        {
-            $parentsArray = array_add($parentsArray , $counter++ , $myProduct->parents->first() );
-            $myProduct = $myProduct->parents->first() ;
-        }
-        if(empty($parentsArray))
-            return false;
-        else
-            return array_last($parentsArray) ;
     }
 
     public function getDisplayName()
     {
-//        $parentArray = $this->makeParentArray($this);
-        $childrenArray = array_reverse($this->makeChildrenArray($this , "SIMPLE"));
-        if($this->getGrandParent())
-        {
+        $key="product:getDisplayName:".$this->cacheKey();
 
-            if ($this->getGrandParent()->producttype_id == Config::get("constants.PRODUCT_TYPE_SELECTABLE"))
-            {
-                $myName = $this->getGrandParent()->name." - ".$this->name ;
-                if(!empty($childrenArray)) $myName .= " : " ;
-                $lastChild = last($childrenArray);
-                foreach ($childrenArray as $child)
-                {
-                    $myName .= $child->name ;
-                    if($child->id != $lastChild->id) $myName .= " - " ;
+        return Cache::remember($key,Config::get("constants.CACHE_60"),function () {
+            $childrenArray = array_reverse($this->children->toArray());
+            if ($this->getGrandParent()) {
+
+                if ($this->getGrandParent()->producttype_id == Config::get("constants.PRODUCT_TYPE_SELECTABLE")) {
+                    $myName = $this->getGrandParent()->name . " - " . $this->name;
+                    if (!empty($childrenArray)) $myName .= " : ";
+                    $lastChild = last($childrenArray);
+                    foreach ($childrenArray as $child) {
+                        $myName .= $child->name;
+                        if ($child->id != $lastChild->id) $myName .= " - ";
+                    }
+                    return $myName;
+                } else {
+                    return $this->name;
                 }
-                return  $myName  ;
-            }else {
-                return $this->name ;
+            } else {
+                return $this->name;
             }
-        }
-        else{
-            return $this->name;
-        }
+        });
+
+    }
+
+    public function getGrandParent()
+    {
+        $key="product:getGrandParent:".$this->cacheKey();
+        return Cache::remember($key,Config::get("constants.CACHE_60"),function () {
+            $counter = 1;
+            $parentsArray = array();
+            $myProduct = $this;
+            while ($myProduct->hasParents()) {
+                $parentsArray = array_add($parentsArray, $counter++, $myProduct->parents->first());
+                $myProduct = $myProduct->parents->first();
+            }
+            if (empty($parentsArray))
+                return false;
+            else
+                return array_last($parentsArray);
+        });
+
+    }
+
+    public function hasParents($depth = 1)
+    {
+        $key="product:hasParents:".$depth."-".$this->cacheKey();
+        return Cache::remember($key,Config::get("constants.CACHE_60"),function () use($depth) {
+            $counter = 0;
+            $myProduct = $this;
+            while (!$myProduct->parents->isEmpty()) {
+                if ($counter >= $depth) break;
+                $myProduct = $myProduct->parents->first();
+                $counter++;
+            }
+            if ($myProduct->id == $this->id || $counter != $depth) return false;
+            else return true;
+        });
+
     }
 
     public function gifts()
     {
         return $this->belongsToMany('App\Product', 'product_product', 'p1_id', 'p2_id')
-            ->withPivot('relationtype_id' )
+            ->withPivot('relationtype_id')
             ->join('productinterrelations', 'relationtype_id', 'productinterrelations.id')
-            ->where("relationtype_id" , Config::get("constants.PRODUCT_INTERRELATION_GIFT"));
-    }
-
-    public function hasGifts()
-    {
-        if($this->gifts->isEmpty())
-            return false;
-        else
-            return true;
+            ->where("relationtype_id", Config::get("constants.PRODUCT_INTERRELATION_GIFT"));
     }
 
     public function getGifts()
     {
-        $gifts = collect();
-        if($this->hasGifts()){
-            foreach ($this->gifts as $gift)
-            {
-                $gifts->push($gift);
+        $key="product:getGifts:".$this->cacheKey();
+        return Cache::remember($key,Config::get("constants.CACHE_60"),function () {
+            $gifts = collect();
+            if ($this->hasGifts()) {
+                foreach ($this->gifts as $gift) {
+                    $gifts->push($gift);
+                }
             }
-        }
+            return $gifts;
+        });
 
-//        $grandParent = $this->getGrandParent();
-//        if ($grandParent !== false) {
-//            foreach ($grandParent->gifts as $gift)
-//            {
-//                $gifts->push($gift);
-//            }
-//        }
+    }
 
-        return $gifts ;
+    public function hasGifts()
+    {
+        $key="product:hasGifts:".$this->cacheKey();
+        return Cache::remember($key,Config::get("constants.CACHE_60"),function () {
+            if ($this->gifts->isEmpty())
+                return false;
+            else
+                return true;
+        });
+
     }
 
     public function hasValidFiles($fileType)
     {
-        return !$this->validProductfiles($fileType)->get()->isEmpty() ;
+        $key="product:hasValidFiles:".$fileType.$this->cacheKey();
+        return Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($fileType){
+            return !$this->validProductfiles($fileType)->get()->isEmpty();
+        });
+
     }
 
-    public function attributevalues($attributeType=null)
+    public function validProductfiles($fileType = "")
     {
-        if(isset($attributeType))
-        {
-            $attributeType = Attributetype::all()->where("name" , $attributeType)->first();
-            $attributesArray = array();
-            foreach ($this->attributeset->attributegroups as $attributegroup)
-            {
-                foreach ($attributegroup->attributes()->get()->where("pivot.attributetype_id" , $attributeType->id) as $attribute)
-                {
-                    array_push($attributesArray , $attribute->id);
-                }
-            }
-            return $this->belongsToMany('App\Attributevalue')->whereIn("attribute_id" , $attributesArray)->withPivot("extraCost" , "description");
-        }else{
-            return $this->belongsToMany('App\Attributevalue')->withPivot("extraCost" , "description");
+        $product = $this;
+
+        $files = $product->hasMany('\App\Productfile')
+            ->where('enable', 1)
+            ->where(function ($query) {
+                $query->where('validSince', '<', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
+                    ->timezone('Asia/Tehran'))
+                    ->orwhereNull('validSince');
+            })
+            ->orderBy("order");
+        if ($files->count() != 0 && strlen($fileType) > 0) {
+            $fileTypeId = Productfiletype::all()->where("name", $fileType)->first();
+            $files->where('productfiletype_id', $fileTypeId->id);
         }
+        return $files;
     }
 
     public function attributevalueTree($attributeType = null)
     {
-        if($attributeType)
-        {
-            $attributeType = Attributetype::all()->where("name" , $attributeType)->first();
-            $attributesArray = array();
-            foreach ($this->attributeset->attributegroups as $attributegroup)
-            {
-                foreach ($attributegroup->attributes()->get()->where("pivot.attributetype_id" , $attributeType->id) as $attribute)
-                {
-                    array_push($attributesArray , $attribute->id);
+        $key="product:attributevalueTree:".$attributeType.$this->cacheKey();
+        return Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($attributeType){
+            if ($attributeType) {
+                $attributeType = Attributetype::all()->where("name", $attributeType)->first();
+                $attributesArray = array();
+                foreach ($this->attributeset->attributegroups as $attributegroup) {
+                    foreach ($attributegroup->attributes()->get()->where("pivot.attributetype_id", $attributeType->id) as $attribute) {
+                        array_push($attributesArray, $attribute->id);
+                    }
                 }
             }
-        }
-        $parentArray = $this->makeParentArray($this) ;
-        array_push($parentArray,$this);
-        $attributes = collect();
-        foreach ($parentArray as $parent)
-        {
-            if(isset($attributesArray))
-                $attributevalues = $parent->attributevalues->whereIn("attribute_id" , $attributesArray) ;
-            else
-                $attributevalues = $parent->attributevalues ;
-            foreach ($attributevalues as $attributevalue)
-            {
-                if(!$attributes->has($attributevalue->id))
-                    $attributes->put($attributevalue->id , ["attributevalue"=>$attributevalue , "attribute"=>$attributevalue->attribute]);
+            $parentArray = $this->parents;
+            array_push($parentArray, $this);
+            $attributes = collect();
+            foreach ($parentArray as $parent) {
+                if (isset($attributesArray))
+                    $attributevalues = $parent->attributevalues->whereIn("attribute_id", $attributesArray);
+                else
+                    $attributevalues = $parent->attributevalues;
+                foreach ($attributevalues as $attributevalue) {
+                    if (!$attributes->has($attributevalue->id))
+                        $attributes->put($attributevalue->id, ["attributevalue" => $attributevalue, "attribute" => $attributevalue->attribute]);
+                }
             }
-        }
-        return $attributes;
+            return $attributes;
+        });
+
     }
 
     public function scopeEnable($query)
@@ -233,84 +287,89 @@ class Product extends Model
     {
         return $query->where('producttype_id', '=', 2);
     }
+
     public function scopeSimple($query)
     {
         return $query->where('producttype_id', '=', 1);
     }
 
-    public function title(){
-        if(isset($this->slogan) && strlen($this->slogan)>0)
-            return $this->name.":".$this->slogan;
+    public function title()
+    {
+        if (isset($this->slogan) && strlen($this->slogan) > 0)
+            return $this->name . ":" . $this->slogan;
         else return $this->name;
     }
 
     public function bons()
     {
-        return $this->belongsToMany('\App\Bon')->withPivot('discount' ,'bonPlus');
+        return $this->belongsToMany('\App\Bon')->withPivot('discount', 'bonPlus');
     }
 
     public function calculateBonPlus($bonId)
     {
-        $bonPlus = 0 ;
-        $bonPlus += $this->bons->where("id" , $bonId)->sum("pivot.bonPlus");
-        if($bonPlus == 0)
-        {
-            $parentsArray = $this->makeParentArray($this);
-            if(!empty($parentsArray))
-            {
-                foreach ($parentsArray as $parent)
-                {
-                    $bonPlus += $parent->bons->where("id" , $bonId)->sum("pivot.bonPlus");
+        $key="product:calculateBonPlus:".$bonId.$this->cacheKey();
+        return Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($bonId){
+            $bonPlus = 0;
+            $bonPlus += $this->bons->where("id", $bonId)->sum("pivot.bonPlus");
+            if ($bonPlus == 0) {
+                $parentsArray = $this->parents;
+                if (!empty($parentsArray)) {
+                    foreach ($parentsArray as $parent) {
+                        $bonPlus += $parent->bons->where("id", $bonId)->sum("pivot.bonPlus");
+                    }
                 }
             }
-        }
-        return $bonPlus;
+            return $bonPlus;
+        });
+
     }
 
-    public function coupons(){
+    public function coupons()
+    {
         return $this->belongsToMany('App\Coupon');
     }
 
-    public function productfiles(){
+    public function productfiles()
+    {
         return $this->hasMany('\App\Productfile');
     }
 
-    public function photos(){
+    public function photos()
+    {
         return $this->hasMany('\App\Productphoto');
     }
 
-    public function validateProduct(){
-        if( !$this->enable )
+    public function validateProduct()
+    {
+        if (!$this->enable)
             return "محصول مورد نظر غیر فعال است";
-        elseif(isset($this->amount) && $this->amount >= 0 )
+        elseif (isset($this->amount) && $this->amount >= 0)
             return "محصول مورد نظر تمام شده است";
-        elseif( isset($this->validSince) && Carbon::now() < $this->validSince)
+        elseif (isset($this->validSince) && Carbon::now() < $this->validSince)
             return "تاریخ شروع سفارش محصول مورد نظر آغاز نشده است";
-        elseif( isset($this->validUntil) && Carbon::now() > $this->validUntil )
+        elseif (isset($this->validUntil) && Carbon::now() > $this->validUntil)
             return "تاریخ سفارش محصول مورد نظر  به پایان رسیده است";
         else return "";
     }
 
-    public function validProductfiles($fileType = ""){
+    public function hasComplimentaries()
+    {
+        $key="product:hasComplimentaries:".$this->cacheKey();
+        return Cache::remember($key,Config::get("constants.CACHE_60"),function () {
+            return !$this->complimentaryproducts()->get()->isEmpty();
+        });
 
-        $files = $this->hasMany('\App\Productfile')->where('enable' ,1 )->where(function ($query) {
-            $query->where('validSince','<',Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'))
-                ->orwhereNull('validSince');
-        })->orderBy("order");
-        if($files->count()!=0 && strlen($fileType)>0)
-        {
-            $fileTypeId = Productfiletype::all()->where("name" , $fileType)->first();
-            $files->where('productfiletype_id' , $fileTypeId->id);
-        }
-        return $files;
     }
 
-    public function complimentaryproducts(){
+    public function complimentaryproducts()
+    {
         return $this->belongsToMany('App\Product', 'complimentaryproduct_product', 'product_id', 'complimentary_id');
     }
 
-    public function hasComplimentaries(){
-        return !$this->complimentaryproducts()->get()->isEmpty();
+    public function calculatePayablePrice()
+    {
+        $costArray = $this->obtainProductCost();
+        return (($costArray["cost"] * (1 - ($costArray["productDiscount"] / 100))) * (1 - ($costArray["bonDiscount"] / 100)) - $costArray["productDiscountAmount"]);
     }
 
     /**
@@ -320,161 +379,163 @@ class Product extends Model
      * @param \App\User $intendedUser
      * @return array
      */
-    public function obtainProductCost(User $intendedUser = null){
-        // Obtaining discount
-        $bonDiscount = 0 ;
-        $productDiscount = 0 ;
-        $productDiscountAmount = 0 ;
-        $bonName = Config::get("constants.BON1");
-        if(isset($intendedUser)) $user = $intendedUser ;
-        elseif(Auth::check()) $user = Auth::user() ;
+    public function obtainProductCost(User $intendedUser = null)
+    {
 
-        $totalBonNumber = 0 ;
-        if(isset($user))
-        {
+        // Obtaining discount
+        $bonDiscount = 0;
+        $productDiscount = 0;
+        $productDiscountAmount = 0;
+        $bonName = Config::get("constants.BON1");
+        if (isset($intendedUser))
+            $user = $intendedUser;
+        elseif (Auth::check())
+            $user = Auth::user();
+
+        $totalBonNumber = 0;
+        if (isset($user)) {
             $totalBonNumber = $user->userHasBon($bonName);
-            $bons = $this->bons->where("name" , $bonName)->where("isEnable" , 1);
-            if($bons->isEmpty())
-            {
-                $parentsArray = $this->makeParentArray($this);
-                if(!empty($parentsArray))
-                {
-                    foreach ($parentsArray as $parent)
-                    {
-                        $bons= $parent->bons->where("name" , $bonName)->where("isEnable" , 1);
-                        if(!$bons->isEmpty()) break ;
+            $bons = $this->bons->where("name", $bonName)->where("isEnable", 1);
+            if ($bons->isEmpty()) {
+                $parentsArray = $this->parents;
+
+                if (!empty($parentsArray)) {
+                    foreach ($parentsArray as $parent) {
+                        $bons = $parent->bons->where("name", $bonName)->where("isEnable", 1);
+                        if (!$bons->isEmpty()) break;
                     }
                 }
             }
-            if($bons->isNotEmpty())
-            {
+            if ($bons->isNotEmpty()) {
                 $bonDiscount += $bons->first()->pivot->discount * $totalBonNumber;
             }
         }
 
         //////////////////////////////
 
-        $cost = 0 ;
+        $cost = 0;
         //Adding product base price
 
-        if($this->hasChildren())
-        {
-            if($this->basePrice == 0)
-            {
-                $children = $this->children ;
-                $childBonDiscount = 0 ;
-                foreach ($children as $child)
-                {
-                    if($bonDiscount == 0)
-                    {
-                        $childBons = $child->bons->where("name" , $bonName)->where("isEnable" , 1);
-                        if($childBons->isNotEmpty()) $childBonDiscount += $childBons->first()->pivot->discount * $totalBonNumber ;
+        if ($this->hasChildren()) {
+            if ($this->basePrice == 0) {
+                $children = $this->children;
+                $childBonDiscount = 0;
+                foreach ($children as $child) {
+                    if ($bonDiscount == 0) {
+                        $childBons = $child->bons->where("name", $bonName)->where("isEnable", 1);
+                        if ($childBons->isNotEmpty()) $childBonDiscount += $childBons->first()->pivot->discount * $totalBonNumber;
                     }
-                    $cost += $child->basePrice ;
-                    $productDiscountAmount += ($child->discount/100) * $child->basePrice ;
+                    $cost += $child->basePrice;
+                    $productDiscountAmount += ($child->discount / 100) * $child->basePrice;
                 }
-                $bonDiscount = $childBonDiscount ;
-            }else
-            {
-                $cost += $this->basePrice ;
-                $productDiscount += $this->discount ;
+                $bonDiscount = $childBonDiscount;
+            } else {
+                $cost += $this->basePrice;
+                $productDiscount += $this->discount;
             }
-        }else{
-            if(isset($this->discount) && $this->discount > 0) $productDiscount += $this->discount ;
-            elseif(!$this->parents->where("producttype_id", Config::get("constants.PRODUCT_TYPE_CONFIGURABLE"))->isEmpty() && isset($this->parents->first()->discount)) $productDiscount += $this->parents->first()->discount;
-            if($this->hasParents())
-            {
-                if($this->basePrice != 0 && $this->basePrice != $this->parents->first()->basePrice) $cost += $this->basePrice;
+        } else {
+            if (isset($this->discount) && $this->discount > 0) $productDiscount += $this->discount;
+            elseif (!$this->parents->where("producttype_id", Config::get("constants.PRODUCT_TYPE_CONFIGURABLE"))->isEmpty() && isset($this->parents->first()->discount)) $productDiscount += $this->parents->first()->discount;
+            if ($this->hasParents()) {
+                if ($this->basePrice != 0 && $this->basePrice != $this->parents->first()->basePrice) $cost += $this->basePrice;
                 else  $cost += $this->parents->first()->basePrice;
 
-            }else
-            {
+            } else {
                 $cost += $this->basePrice;
             }
         }
         /////////////////////////////////
 
         // Adding attributes extra cost
-        if($this->producttype_id != Config::get("constants.PRODUCT_TYPE_CONFIGURABLE"))
-        {
+        if ($this->producttype_id != Config::get("constants.PRODUCT_TYPE_CONFIGURABLE")) {
             $attributevalues = $this->attributevalues('main')->get();
-            foreach($attributevalues as $attributevalue)
-            {
-                if(isset($attributevalue->pivot->extraCost)) $cost += $attributevalue->pivot->extraCost;
+            foreach ($attributevalues as $attributevalue) {
+                if (isset($attributevalue->pivot->extraCost)) $cost += $attributevalue->pivot->extraCost;
             }
         }
 
         //////////////////////////////
-        return ["cost"=>(int)$cost , "productDiscount"=>$productDiscount , 'bonDiscount'=>$bonDiscount , "productDiscountAmount"=>$productDiscountAmount];
+        return ["cost" => (int)$cost, "productDiscount" => $productDiscount, 'bonDiscount' => $bonDiscount, "productDiscountAmount" => $productDiscountAmount];
     }
 
-    public function calculatePayablePrice()
+    public function hasChildren($depth = 1)
     {
-       $costArray = $this->obtainProductCost();
-       return (($costArray["cost"]*(1-($costArray["productDiscount"]/100)))*(1-($costArray["bonDiscount"]/100)) - $costArray["productDiscountAmount"]);
+        $key="product:hasChildren:".$depth.$this->cacheKey();
+        return Cache::remember($key,Config::get("constants.CACHE_60"),function () use($depth){
+            $counter = 0;
+            $myProduct = $this;
+            while ($myProduct->children->isNotEmpty()) {
+                if ($counter >= $depth) break;
+                $myProduct = $myProduct->children->first();
+                $counter++;
+            }
+            if ($myProduct->id == $this->id || $counter != $depth) return false;
+            else return true;
+        });
+    }
+
+    public function attributevalues($attributeType = null)
+    {
+        if (isset($attributeType)) {
+            $attributeType = Attributetype::all()->where("name", $attributeType)->first();
+            $attributesArray = array();
+            foreach ($this->attributeset->attributegroups as $attributegroup) {
+                foreach ($attributegroup->attributes()->get()->where("pivot.attributetype_id", $attributeType->id) as $attribute) {
+                    array_push($attributesArray, $attribute->id);
+                }
+            }
+            return $this->belongsToMany('App\Attributevalue')->whereIn("attribute_id", $attributesArray)->withPivot("extraCost", "description");
+        } else {
+            return $this->belongsToMany('App\Attributevalue')->withPivot("extraCost", "description");
+        }
     }
 
     /**
      * @return string
      * Converting Created_at field to jalali
      */
-    public function CreatedAt_Jalali(){
+    public function CreatedAt_Jalali()
+    {
         $helper = new Helper();
-        $explodedDateTime = explode(" " , $this->created_at);
+        $explodedDateTime = explode(" ", $this->created_at);
 //        $explodedTime = $explodedDateTime[1] ;
-        return $helper->convertDate($this->created_at , "toJalali" );
+        return $helper->convertDate($this->created_at, "toJalali");
     }
 
     /**
      * @return string
      * Converting Updated_at field to jalali
      */
-    public function UpdatedAt_Jalali(){
+    public function UpdatedAt_Jalali()
+    {
         $helper = new Helper();
-        $explodedDateTime = explode(" " , $this->updated_at);
+        $explodedDateTime = explode(" ", $this->updated_at);
 //        $explodedTime = $explodedDateTime[1] ;
-        return $helper->convertDate($this->updated_at , "toJalali" );
+        return $helper->convertDate($this->updated_at, "toJalali");
     }
 
     /**
      * @return string
      * Converting Created_at field to jalali
      */
-    public function validSince_Jalali(){
+    public function validSince_Jalali()
+    {
         $helper = new Helper();
-        $explodedDateTime = explode(" " , $this->validSince);
+        $explodedDateTime = explode(" ", $this->validSince);
 //        $explodedTime = $explodedDateTime[1] ;
-        return $helper->convertDate($this->validSince , "toJalali" );
+        return $helper->convertDate($this->validSince, "toJalali");
     }
 
     /**
      * @return string
      * Converting Created_at field to jalali
      */
-    public function validUntil_Jalali(){
+    public function validUntil_Jalali()
+    {
         $helper = new Helper();
-        $explodedDateTime = explode(" " , $this->validUntil);
+        $explodedDateTime = explode(" ", $this->validUntil);
 //        $explodedTime = $explodedDateTime[1] ;
-        return $helper->convertDate($this->validUntil , "toJalali" );
-    }
-
-    public static function getProducts($configurable = 0 , $enable = 0){
-
-        if($configurable == 1){
-            $products = \App\Product::configurable();
-            if($enable == 1)
-                $products = $products->enable();
-        }else if($configurable == 0) {
-            $products = \App\Product::select()->doesntHave('parents');
-            if($enable == 1)
-                $products->enable();
-        }
-
-        return $products;
-    }
-
-    public static function recentProducts($number){
-        return self::getProducts(0,1)->take($number)->orderBy('created_at' , 'Desc');
+        return $helper->convertDate($this->validUntil, "toJalali");
     }
 
     /**
@@ -520,325 +581,259 @@ class Product extends Model
 
     public function getAllAttributes()
     {
-        $product = $this ;
-        $selectCollection = collect();
-        $groupedCheckboxCollection = collect();
-        $extraSelectCollection = collect();
-        $extraCheckboxCollection = collect();
-        $simpleInfoAttributes = collect();
-        $checkboxInfoAttributes = collect();
-        $attributeset = $product->attributeset;
-        if(isset($product->producttype->id))
+        $product = $this;
+        $key = 'product:'."getAllAttributes:".$product->id;
+
+        return Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($product){
+
+            $selectCollection = collect();
+            $groupedCheckboxCollection = collect();
+            $extraSelectCollection = collect();
+            $extraCheckboxCollection = collect();
+            $simpleInfoAttributes = collect();
+            $checkboxInfoAttributes = collect();
+            $attributeset = $product->attributeset;
+            $attributes = $attributeset->attributes();
             $productType = $product->producttype->id;
-        else
-            $productType = null;
+            if (!$product->relationLoaded('attributevalues'))
+                $product->load('attributevalues');
 
-        switch ($productType)
-        {
-            case Config::get("constants.PRODUCT_TYPE_SIMPLE"):
-            /**
-             *  end
-             */
-            case Config::get("constants.PRODUCT_TYPE_CONFIGURABLE"):
-//                $iteratedAttributes = Array();
-                foreach ($attributeset->attributegroups->sortBy("order") as $attributegroup)
-                {
-                    foreach ($attributegroup->attributes()->get()->sortBy("order") as $attribute)
-                    {
-//                    if(in_array($attribute->id , $iteratedAttributes)) continue;
-//                    else array_push($iteratedAttributes , $attribute->id);
-                        $attributeType = Attributetype::FindOrFail($attribute->pivot->attributetype_id);
-                        $controlName = $attribute->attributecontrol->name;
-                        $attributevalues = $product->attributevalues->where("attribute_id" , $attribute->id)->sortBy("pivot.order");
-                        if(!$attributevalues->isEmpty())
-                        {
+            $attributes->load('attributetype','attributecontrol');
 
-                            switch ($attributeType->name)
-                            {
-                                case "information":
-                                    switch ($controlName){
-                                        case "select":
-                                            $infoAttributeArray = array();
-                                            foreach ($attributevalues as $attributevalue)
-                                            {
-                                                array_push($infoAttributeArray , ["displayName" => $attribute->displayName , "name"=>$attributevalue->name, "value"=>$attributevalue->id , "type"=>$attributeType->name]) ;
-                                            }
-                                            if(!empty($infoAttributeArray)) $simpleInfoAttributes->put( $attribute->displayName , $infoAttributeArray);
-                                            break;
-                                        case "groupedCheckbox":
-                                            $infoAttributeArray = array();
-                                            foreach ($attributevalues as $attributevalue)
-                                            {
-                                                array_push($infoAttributeArray , ["value"=>$attributevalue->id , "index"=>$attributevalue->name]) ;
-                                            }
-                                            if(!empty($infoAttributeArray)) $checkboxInfoAttributes->put( $attribute->displayName , $infoAttributeArray);
-                                            break;
-                                        default: break;
+            foreach ( $attributes as $attribute) {
+                $attributeType = $attribute->attributetype;
+                $controlName = $attribute->attributecontrol->name;
+                $attributevalues = $product->attributevalues->where("attribute_id", $attribute->id)->sortBy("pivot.order");
+                if (!$attributevalues->isEmpty()) {
+                    switch ($controlName) {
+                        case "select":
+                            if($attributeType->name == "extra"){
+                                if($productType == Config::get("constants.PRODUCT_TYPE_SELECTABLE")){
+                                    $select = array();
+                                    foreach ($attributevalues as $attributevalue) {
+
+                                        $attributevalueIndex = $attributevalue->name;
+
+                                        if (isset($attributevalue->pivot->description) && strlen($attributevalue->pivot->description) > 0) $attributevalueIndex .= "( " . $attributevalue->pivot->description . " )";
+
+                                        if (isset($attributevalue->pivot->extraCost)) {
+                                            if ($attributevalue->pivot->extraCost > 0) $attributevalueIndex .= "(+" . number_format($attributevalue->pivot->extraCost) . " تومان)";
+                                            if ($attributevalue->pivot->extraCost < 0) $attributevalueIndex .= "(-" . number_format($attributevalue->pivot->extraCost) . " تومان)";
+                                        }
+
+                                        $select = array_add($select, $attributevalue->id, $attributevalueIndex);
                                     }
-                                    break;
-                                case "main":
-                                    switch ($product->producttype->id)
-                                    {
-                                        case Config::get("constants.PRODUCT_TYPE_CONFIGURABLE") :
-                                            switch ($controlName)
-                                            {
-                                                case "select":
-                                                    if ($attributevalues->count() == 1) {
-                                                        $attributevalue = $attributevalues->first();
-                                                        $infoAttributeArray = array();
-                                                        array_push($infoAttributeArray, ["displayName" => $attribute->displayName, "name" => $attributevalue->name, "value" => $attributevalue->id, "type" => $attributeType->name]);
-                                                        $simpleInfoAttributes->put($attribute->displayName, $infoAttributeArray);
-                                                    } else {
-                                                        $select = array();
-                                                        foreach ($attributevalues as $attributevalue) {
-                                                            $attributevalueIndex = $attributevalue->name;
-                                                            if (isset($attributevalue->pivot->description) && strlen($attributevalue->pivot->description) > 0) $attributevalueIndex .= "( " . $attributevalue->pivot->description . " )";
+                                    if (!empty($select)) $extraSelectCollection->put($attribute->id, ["attributeDescription" => $attribute->displayName, "attributevalues" => $select]);
+                                }else{
+                                    $select = array();
+                                    foreach ($attributevalues as $attributevalue) {
 
-                                                            if (isset($attributevalue->pivot->extraCost)) {
-                                                                if ($attributevalue->pivot->extraCost > 0) $attributevalueIndex .= "(+" . number_format($attributevalue->pivot->extraCost) . " تومان)";
-                                                                elseif ($attributevalue->pivot->extraCost < 0) $attributevalueIndex .= "(-" . number_format($attributevalue->pivot->extraCost) . " تومان)";
-                                                            }
+                                        $attributevalueIndex = $attributevalue->name;
 
-                                                            $select = array_add($select, $attributevalue->id, $attributevalueIndex);
-                                                        }
-                                                        if (!empty($select)) $selectCollection->put($attribute->pivot->description, $select);
-                                                    }
-                                                    break;
-                                                case "groupedCheckbox":
-                                                    $groupedCheckbox = array();
-                                                    foreach ($attributevalues as $attributevalue) {
-                                                        $attributevalueIndex = $attributevalue->name;
-                                                        if (isset($attributevalue->pivot->description) && strlen($attributevalue->pivot->description) > 0) $attributevalueIndex .= "( " . $attributevalue->pivot->description . " )";
+                                        if (isset($attributevalue->pivot->description) && strlen($attributevalue->pivot->description) > 0) $attributevalueIndex .= "( " . $attributevalue->pivot->description . " )";
 
-                                                        $attributevalueExtraCost = "" ;
-                                                        $attributevalueExtraCostWithDiscount = "" ;
-                                                        if (isset($attributevalue->pivot->extraCost)) {
-                                                            if ($attributevalue->pivot->extraCost > 0) {
-                                                                $attributevalueExtraCost = "+" . number_format($attributevalue->pivot->extraCost) . " تومان";
-                                                                if($product->discount>0) $attributevalueExtraCostWithDiscount = number_format("+".$attributevalue->pivot->extraCost * (1-($product->discount/100)))." تومان";
-                                                                else $attributevalueExtraCostWithDiscount= 0 ;
-                                                            }
-                                                            elseif ($attributevalue->pivot->extraCost < 0) {
-                                                                $attributevalueExtraCost = "-" . number_format($attributevalue->pivot->extraCost) . " تومان";
-                                                                if($product->discount>0) $attributevalueExtraCostWithDiscount = number_format("-".$attributevalue->pivot->extraCost * (1-($product->discount/100)))." تومان";
-                                                                else $attributevalueExtraCostWithDiscount= 0 ;
-                                                            }
+                                        if (isset($attributevalue->pivot->extraCost)) {
+                                            if ($attributevalue->pivot->extraCost > 0) $attributevalueIndex .= "(+" . number_format($attributevalue->pivot->extraCost) . " تومان)";
+                                            elseif ($attributevalue->pivot->extraCost < 0) $attributevalueIndex .= "(-" . number_format($attributevalue->pivot->extraCost) . " تومان)";
+                                        }
 
-                                                        }
-
-
-                                                        $groupedCheckbox = array_add($groupedCheckbox, $attributevalue->id, ["index"=>$attributevalueIndex , "extraCost"=>$attributevalueExtraCost , "extraCostWithDiscount" => $attributevalueExtraCostWithDiscount]);
-                                                    }
-                                                    if (!empty($groupedCheckbox)) $groupedCheckboxCollection->put($attribute->pivot->description, $groupedCheckbox);
-                                                    break;
-                                                default:
-                                                    break;
-                                            }
-                                            break;
-                                        case Config::get("constants.PRODUCT_TYPE_SIMPLE"):
-//                                            if($product->hasParents()) return redirect(action("HomeController@error404"));
-                                            $infoAttributeArray = array();
-                                            foreach ($attributevalues as $attributevalue)
-                                            {
-                                                array_push($infoAttributeArray , ["displayName" => $attribute->displayName , "name"=>$attributevalue->name, "value"=>$attributevalue->id , "type"=>$attributeType->name]) ;
-                                            }
-                                            if(!empty($infoAttributeArray)) $simpleInfoAttributes->put( $attribute->displayName , $infoAttributeArray);
-
-                                            break;
-                                        default: break;
+                                        $select = array_add($select, $attributevalue->id, $attributevalueIndex);
                                     }
-                                    break;
-                                case "extra":
-                                    switch ($controlName)
-                                    {
-                                        case "select":
-                                            $select = array();
-                                            foreach ($attributevalues as $attributevalue)
-                                            {
+                                    if (!empty($select)) $extraSelectCollection->put($attribute->id, ["attributeDescription" => $attribute->displayName, "attributevalues" => $select]);
+                                }
+                            }elseif($attributeType->name == "main"&&  $productType == Config::get("constants.PRODUCT_TYPE_CONFIGURABLE")){
+                                if ($attributevalues->count() == 1) {
+                                    $attributevalue = $attributevalues->first();
+                                    $infoAttributeArray = array();
+                                    array_push($infoAttributeArray, ["displayName" => $attribute->displayName, "name" => $attributevalue->name, "value" => $attributevalue->id, "type" => $attributeType->name]);
+                                    $simpleInfoAttributes->put($attribute->displayName, $infoAttributeArray);
+                                } else {
+                                    $select = array();
+                                    foreach ($attributevalues as $attributevalue) {
+                                        $attributevalueIndex = $attributevalue->name;
+                                        if (isset($attributevalue->pivot->description) && strlen($attributevalue->pivot->description) > 0) $attributevalueIndex .= "( " . $attributevalue->pivot->description . " )";
 
-                                                $attributevalueIndex = $attributevalue->name ;
+                                        if (isset($attributevalue->pivot->extraCost)) {
+                                            if ($attributevalue->pivot->extraCost > 0) $attributevalueIndex .= "(+" . number_format($attributevalue->pivot->extraCost) . " تومان)";
+                                            elseif ($attributevalue->pivot->extraCost < 0) $attributevalueIndex .= "(-" . number_format($attributevalue->pivot->extraCost) . " تومان)";
+                                        }
 
-                                                if(isset($attributevalue->pivot->description) && strlen($attributevalue->pivot->description)>0)  $attributevalueIndex .= "( ".$attributevalue->pivot->description." )";
-
-                                                if(isset($attributevalue->pivot->extraCost) )
-                                                {
-                                                    if($attributevalue->pivot->extraCost>0) $attributevalueIndex .= "(+".number_format($attributevalue->pivot->extraCost)." تومان)";
-                                                    elseif($attributevalue->pivot->extraCost<0) $attributevalueIndex .= "(-".number_format($attributevalue->pivot->extraCost)." تومان)";
-                                                }
-
-                                                $select= array_add($select , $attributevalue->id , $attributevalueIndex) ;
-                                            }
-                                            if(!empty($select)) $extraSelectCollection->put( $attribute->id, ["attributeDescription"=>$attribute->displayName , "attributevalues"=>$select]);
-                                            break;
-                                        case "groupedCheckbox":
-                                            $groupedCheckbox = collect();
-                                            foreach ($attributevalues as $attributevalue)
-                                            {
-                                                $attributevalueIndex = $attributevalue->name ;
-                                                if(isset($attributevalue->pivot->description) && strlen($attributevalue->pivot->description)>0)  $attributevalueIndex .= "( ".$attributevalue->pivot->description." )";
-
-                                                if(isset($attributevalue->pivot->extraCost) )
-                                                {
-                                                    if($attributevalue->pivot->extraCost>0) $attributevalueIndex .= "(+".number_format($attributevalue->pivot->extraCost)." تومان)";
-                                                    if($attributevalue->pivot->extraCost<0) $attributevalueIndex .= "(-".number_format($attributevalue->pivot->extraCost)." تومان)";
-                                                }
-
-                                                $groupedCheckbox->put($attributevalue->id , ["index"=>$attributevalueIndex ]) ;
-                                            }
-                                            if(!empty($groupedCheckbox)) $extraCheckboxCollection->put( $attribute->displayName , $groupedCheckbox);
-                                            break;
-                                        default: break;
+                                        $select = array_add($select, $attributevalue->id, $attributevalueIndex);
                                     }
-                                    break;
-                                default:
-                                    break;
+//                                    dd($attribute);
+                                    if (!empty($select)) $selectCollection->put($attribute->pivot->description, $select);
+                                }
                             }
-                        }
+                            else{ // 1
+                                $infoAttributeArray = array();
+                                foreach ($attributevalues as $attributevalue) {
+                                    array_push($infoAttributeArray, ["displayName" => $attribute->displayName, "name" => $attributevalue->name, "value" => $attributevalue->id, "type" => $attributeType->name]);
+                                }
+                                if (!empty($infoAttributeArray))
+                                    $simpleInfoAttributes->put($attribute->displayName, $infoAttributeArray);
+                            }
+                            break;
+                        case "groupedCheckbox":
+                            if($attributeType->name == "extra"){
+                                if($productType == Config::get("constants.PRODUCT_TYPE_SELECTABLE")) {
+                                    $groupedCheckbox = collect();
+                                    foreach ($attributevalues as $attributevalue) {
+                                        $attributevalueIndex = $attributevalue->name;
+                                        if (isset($attributevalue->pivot->description) && strlen($attributevalue->pivot->description) > 0) $attributevalueIndex .= "( " . $attributevalue->pivot->description . " )";
 
+                                        if (isset($attributevalue->pivot->extraCost)) {
+                                            if ($attributevalue->pivot->extraCost > 0) $attributevalueIndex .= "(+" . number_format($attributevalue->pivot->extraCost) . " تومان)";
+                                            if ($attributevalue->pivot->extraCost < 0) $attributevalueIndex .= "(-" . number_format($attributevalue->pivot->extraCost) . " تومان)";
+                                        }
+
+                                        $groupedCheckbox->put($attributevalue->id, ["index" => $attributevalueIndex]);
+                                    }
+                                    if (!empty($groupedCheckbox)) $extraCheckboxCollection->put($attribute->displayName, $groupedCheckbox);
+                                }else{
+                                    $groupedCheckbox = collect();
+                                    foreach ($attributevalues as $attributevalue) {
+                                        $attributevalueIndex = $attributevalue->name;
+                                        if (isset($attributevalue->pivot->description) && strlen($attributevalue->pivot->description) > 0) $attributevalueIndex .= "( " . $attributevalue->pivot->description . " )";
+
+                                        if (isset($attributevalue->pivot->extraCost)) {
+                                            if ($attributevalue->pivot->extraCost > 0) $attributevalueIndex .= "(+" . number_format($attributevalue->pivot->extraCost) . " تومان)";
+                                            if ($attributevalue->pivot->extraCost < 0) $attributevalueIndex .= "(-" . number_format($attributevalue->pivot->extraCost) . " تومان)";
+                                        }
+
+                                        $groupedCheckbox->put($attributevalue->id, ["index" => $attributevalueIndex]);
+                                    }
+                                    if (!empty($groupedCheckbox)) $extraCheckboxCollection->put($attribute->displayName, $groupedCheckbox);
+                                }
+
+                            }
+                            else {
+                                if ($product->producttype->id == Config::get("constants.PRODUCT_TYPE_CONFIGURABLE")) {
+                                    if($attributeType->name == "information"){
+                                        $infoAttributeArray = array();
+                                        foreach ($attributevalues as $attributevalue) {
+                                            array_push($infoAttributeArray, ["displayName" => $attribute->displayName, "index" => $attributevalue->name, "value" => $attributevalue->id, "type" => $attributeType->name]);
+                                        }
+                                        if (!empty($infoAttributeArray)){
+                                            //$simpleInfoAttributes->put($attribute->displayName, $infoAttributeArray);
+                                            $checkboxInfoAttributes->put( $attribute->displayName , $infoAttributeArray);
+                                        }
+                                    }else {
+                                        $groupedCheckbox = array();
+                                        foreach ($attributevalues as $attributevalue) {
+                                            $attributevalueIndex = $attributevalue->name;
+                                            if (isset($attributevalue->pivot->description) && strlen($attributevalue->pivot->description) > 0)
+                                                $attributevalueIndex .= "( " . $attributevalue->pivot->description . " )";
+
+                                            $attributevalueExtraCost = "";
+                                            $attributevalueExtraCostWithDiscount = "";
+                                            if (isset($attributevalue->pivot->extraCost)) {
+                                                if ($attributevalue->pivot->extraCost > 0) {
+                                                    $attributevalueExtraCost = "+" . number_format($attributevalue->pivot->extraCost) . " تومان";
+                                                    if ($product->discount > 0) $attributevalueExtraCostWithDiscount = number_format("+" . $attributevalue->pivot->extraCost * (1 - ($product->discount / 100))) . " تومان";
+                                                    else $attributevalueExtraCostWithDiscount = 0;
+                                                } elseif ($attributevalue->pivot->extraCost < 0) {
+                                                    $attributevalueExtraCost = "-" . number_format($attributevalue->pivot->extraCost) . " تومان";
+                                                    if ($product->discount > 0) $attributevalueExtraCostWithDiscount = number_format("-" . $attributevalue->pivot->extraCost * (1 - ($product->discount / 100))) . " تومان";
+                                                    else $attributevalueExtraCostWithDiscount = 0;
+                                                }
+
+                                            }
+
+
+                                            $groupedCheckbox = array_add($groupedCheckbox, $attributevalue->id, ["index" => $attributevalueIndex, "extraCost" => $attributevalueExtraCost, "extraCostWithDiscount" => $attributevalueExtraCostWithDiscount, "value" => $attributevalue->id, "type" => $attributeType->name, "productType" => $product->producttype->name]);
+                                        }
+                                        if (!empty($groupedCheckbox))
+                                            $groupedCheckboxCollection->put($attribute->pivot->description, $groupedCheckbox);
+                                    }
+                                } else if ($product->producttype->id == Config::get("constants.PRODUCT_TYPE_SIMPLE")) {
+                                    //5,2
+                                    $infoAttributeArray = array();
+                                    foreach ($attributevalues as $attributevalue) {
+                                        array_push($infoAttributeArray, ["displayName" => $attribute->displayName, "name" => $attributevalue->name, "value" => $attributevalue->id, "type" => $attributeType->name]);
+                                    }
+                                    if (!empty($infoAttributeArray)){
+                                        //$simpleInfoAttributes->put($attribute->displayName, $infoAttributeArray);
+                                        $checkboxInfoAttributes->put( $attribute->displayName , $infoAttributeArray);
+                                    }
+                                } else {
+                                    $infoAttributeArray = array();
+                                    foreach ($attributevalues as $attributevalue) {
+                                        array_push($infoAttributeArray, [ "displayName" => $attribute->displayName, "name" => $attributevalue->name,"value" => $attributevalue->id, "type" => $attributeType->name]);
+                                    }
+                                    if (!empty($infoAttributeArray)){
+                                        $checkboxInfoAttributes->put($attribute->displayName, $infoAttributeArray);
+                                    }
+                                }
+                            }
+                            break;
+                        default:
+                            break;
                     }
                 }
-                break;
-            case Config::get("constants.PRODUCT_TYPE_SELECTABLE"):
-                foreach ($attributeset->attributegroups as $attributegroup)
-                {
-                    //$attributegroup->attributes did not work!!!!!!!
-                    foreach ($attributegroup->attributes()->get()->sortBy("order") as $attribute)
-                    {
-                        $attributeType = Attributetype::FindOrFail($attribute->pivot->attributetype_id);
-                        $controlName = $attribute->attributecontrol->name;
-                        $attributevalues = $product->attributevalues->where("attribute_id" , $attribute->id)->sortBy("pivot.order");
-                        if(!$attributevalues->isEmpty())
-                        {
-                            switch ($attributeType->name) {
-                                case "information":
-                                case "main":
-                                    switch ($controlName) {
-                                        case "select":
-                                            $infoAttributeArray = array();
-                                            foreach ($attributevalues as $attributevalue)
-                                            {
-                                                array_push($infoAttributeArray , ["displayName" => $attribute->displayName , "name"=>$attributevalue->name]) ;
-                                            }
-                                            if(!empty($infoAttributeArray)) $simpleInfoAttributes->put( $attribute->displayName , $infoAttributeArray);
-                                            break;
-                                        case "groupedCheckbox":
-                                            $infoAttributeArray = array();
-                                            foreach ($attributevalues as $attributevalue) {
-                                                array_push($infoAttributeArray, ["value" => $attributevalue->id, "index" => $attributevalue->name]);
-                                            }
-                                            if (!empty($infoAttributeArray)) $checkboxInfoAttributes->put($attribute->displayName, $infoAttributeArray);
-                                            break;
-                                        default:
-                                            break;
-                                    }
-                                    break;
-                                case "extra":
-                                    switch ($controlName)
-                                    {
-                                        case "select":
-                                            $select = array();
-                                            foreach ($attributevalues as $attributevalue)
-                                            {
 
-                                                $attributevalueIndex = $attributevalue->name ;
+            }
 
-                                                if(isset($attributevalue->pivot->description) && strlen($attributevalue->pivot->description)>0)  $attributevalueIndex .= "( ".$attributevalue->pivot->description." )";
+            return [
+                "selectCollection" => $selectCollection,
+                "groupedCheckboxCollection" => $groupedCheckboxCollection,
+                "extraSelectCollection" => $extraSelectCollection,
+                "extraCheckboxCollection" => $extraCheckboxCollection,
+                "simpleInfoAttributes" => $simpleInfoAttributes,
+                "checkboxInfoAttributes" => $checkboxInfoAttributes,
+            ];
 
-                                                if(isset($attributevalue->pivot->extraCost) )
-                                                {
-                                                    if($attributevalue->pivot->extraCost>0) $attributevalueIndex .= "(+".number_format($attributevalue->pivot->extraCost)." تومان)";
-                                                    if($attributevalue->pivot->extraCost<0) $attributevalueIndex .= "(-".number_format($attributevalue->pivot->extraCost)." تومان)";
-                                                }
+        });
 
-                                                $select= array_add($select , $attributevalue->id , $attributevalueIndex) ;
-                                            }
-                                            if(!empty($select)) $extraSelectCollection->put( $attribute->id, ["attributeDescription"=>$attribute->displayName , "attributevalues"=>$select]);
-                                            break;
-                                        case "groupedCheckbox":
-                                            $groupedCheckbox = collect();
-                                            foreach ($attributevalues as $attributevalue)
-                                            {
-                                                $attributevalueIndex = $attributevalue->name ;
-                                                if(isset($attributevalue->pivot->description) && strlen($attributevalue->pivot->description)>0)  $attributevalueIndex .= "( ".$attributevalue->pivot->description." )";
-
-                                                if(isset($attributevalue->pivot->extraCost) )
-                                                {
-                                                    if($attributevalue->pivot->extraCost>0) $attributevalueIndex .= "(+".number_format($attributevalue->pivot->extraCost)." تومان)";
-                                                    if($attributevalue->pivot->extraCost<0) $attributevalueIndex .= "(-".number_format($attributevalue->pivot->extraCost)." تومان)";
-                                                }
-
-                                                $groupedCheckbox->put($attributevalue->id , ["index"=>$attributevalueIndex ]) ;
-                                            }
-                                            if(!empty($groupedCheckbox)) $extraCheckboxCollection->put( $attribute->displayName , $groupedCheckbox);
-                                            break;
-                                        default: break;
-                                    }
-                                    break;
-                                default:
-                            }
-                        }
-
-                    }
-                }
-                break;
-            default:
-                return [];
-                break;
-        }
-        return [ "selectCollection" => $selectCollection,
-                 "groupedCheckboxCollection" => $groupedCheckboxCollection ,
-                 "extraSelectCollection" => $extraSelectCollection ,
-                 "extraCheckboxCollection" => $extraCheckboxCollection ,
-                 "simpleInfoAttributes" => $simpleInfoAttributes ,
-                 "checkboxInfoAttributes" => $checkboxInfoAttributes ,
-                ];
     }
 
     public function getRootImage()
     {
-        $image = "";
-        $grandParent = $this->getGrandParent();
-        if( $grandParent !== false)
-        {
-            if(isset($grandParent->image)) $image = $grandParent->image;
-        }else{
-            if(isset($this->image)) $image = $this->image;
-        }
-        return $image;
+        $key="product:getRootImage:".$this->cacheKey();
+        return Cache::remember($key,Config::get("constants.CACHE_60"),function () use($depth){
+            $image = "";
+            $grandParent = $this->getGrandParent();
+            if ($grandParent !== false) {
+                if (isset($grandParent->image)) $image = $grandParent->image;
+            } else {
+                if (isset($this->image)) $image = $this->image;
+            }
+            return $image;
+        });
+
+
     }
 
     public function isHappening()
     {
         $isHappening = false;
         $now = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran');
-        if($this->id == 183){
-            $productStartTime =  Carbon::create(2018, 03 , 03 , 22, 47, 20 , 'Asia/Tehran');
-            $productEndTime =  Carbon::create(2018, 03 , 03 , 23, 47, 20 , 'Asia/Tehran');
-            if($now->between($productStartTime, $productEndTime)) $isHappening = 0;
-            elseif($now->diffInMinutes($productStartTime, false)>0) $isHappening = $now->diffInMinutes($productStartTime, false);
+        if ($this->id == 183) {
+            $productStartTime = Carbon::create(2018, 03, 03, 22, 47, 20, 'Asia/Tehran');
+            $productEndTime = Carbon::create(2018, 03, 03, 23, 47, 20, 'Asia/Tehran');
+            if ($now->between($productStartTime, $productEndTime)) $isHappening = 0;
+            elseif ($now->diffInMinutes($productStartTime, false) > 0) $isHappening = $now->diffInMinutes($productStartTime, false);
             else $isHappening = $now->diffInMinutes($productEndTime, false);
         }
-        return $isHappening ;
+        return $isHappening;
     }
 
     public function isEnableToPurchase()
     {
         //ToDo : should be removed in future
-        if(in_array($this->id , Config::get("constants.DONATE_PRODUCT"))) return true;
-        $grandParent = $this->getGrandParent() ;
-        if($grandParent !== false)
-        {
-                if(!$grandParent->enable) return false;
+        if (in_array($this->id, Config::get("constants.DONATE_PRODUCT"))) return true;
+        $grandParent = $this->getGrandParent();
+        if ($grandParent !== false) {
+            if (!$grandParent->enable) return false;
         }
 
-        if($this->hasParents())
-        {
-            if(!$this->parents()->first()->enable) return false ;
+        if ($this->hasParents()) {
+            if (!$this->parents()->first()->enable) return false;
         }
 
-        if(!$this->enable){
+        if (!$this->enable) {
             return false;
         }
         return true;
     }
+
 }

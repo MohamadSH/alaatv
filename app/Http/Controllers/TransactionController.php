@@ -14,7 +14,7 @@ use App\Order;
 use App\Product;
 use App\Transactionstatus;
 use Carbon\Carbon;
-use Helpers\Helper;
+use App\Helpers\Helper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;

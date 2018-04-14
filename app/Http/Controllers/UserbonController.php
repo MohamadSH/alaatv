@@ -6,7 +6,7 @@ use App\Http\Requests\AttachUserBonRequest;
 use App\Http\Requests\InsertUserBonRequest;
 use App\Product;
 use App\Userbon;
-use Helpers\Helper;
+use App\Helpers\Helper;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;

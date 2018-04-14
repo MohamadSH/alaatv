@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Orderstatus extends Model
 {
     use SoftDeletes;
-    protected $dates = ['deleted_at'];
+    /**      * The attributes that should be mutated to dates.        */
+    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     /**
      * @var array
@@ -16,10 +17,11 @@ class Orderstatus extends Model
     protected $fillable = [
         'name',
         'displayName',
-        'description' ,
+        'description',
     ];
 
-    public function orders(){
+    public function orders()
+    {
         return $this->hasMany('App\Order');
     }
 
