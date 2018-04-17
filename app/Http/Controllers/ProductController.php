@@ -564,7 +564,7 @@ class ProductController extends Controller
             ."products:"
             .( isset($productIds) && !is_null($productIds) ?implode("",$productIds) : "");
 
-        return Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($inputType,$attributevalues,$user,$product) {
+        return Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($inputType,$attributevalues,$user,$product,$productIds) {
 
             switch ($inputType)
             {
@@ -669,7 +669,7 @@ class ProductController extends Controller
                             else
                                 $costArray = $simpleProduct->calculatePayablePrice( );
                             $cost += $costArray["cost"] ;
-                            $costForCustomer += $costArray["costForCustomer"];
+                            $costForCustomer += $costArray["CustomerCost"];
                         }
                     }
                     $result = json_encode(

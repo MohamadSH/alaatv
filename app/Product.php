@@ -133,11 +133,13 @@ class Product extends Model
 
                 if ($this->getGrandParent()->producttype_id == Config::get("constants.PRODUCT_TYPE_SELECTABLE")) {
                     $myName = $this->getGrandParent()->name . " - " . $this->name;
-                    if (!empty($childrenArray)) $myName .= " : ";
+                    if (!empty($childrenArray))
+                        $myName .= " : ";
                     $lastChild = last($childrenArray);
                     foreach ($childrenArray as $child) {
                         $myName .= $child->name;
-                        if ($child->id != $lastChild->id) $myName .= " - ";
+                        if ($child->id != $lastChild->id)
+                            $myName .= " - ";
                     }
                     return $myName;
                 } else {
