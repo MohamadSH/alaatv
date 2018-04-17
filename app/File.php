@@ -11,7 +11,8 @@ class File extends Model
 {
     use SoftDeletes;
 
-    protected $dates = ['deleted_at'];
+    /**      * The attributes that should be mutated to dates.        */
+    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     protected $fillable = [
         'name',
@@ -25,40 +26,41 @@ class File extends Model
     {
         parent::boot();
         self::creating(function ($model) {
-            $model->uuid = (string) Uuid::generate(4);
+            $model->uuid = (string)Uuid::generate(4);
         });
     }
 
-    public function educationalcontents(){
+    public function educationalcontents()
+    {
         return $this->belongsToMany('App\Educationalcontent', 'educationalcontent_file', 'file_id', 'content_id')->withPivot("caption");
     }
 
     public function disks()
     {
-        return $this->belongsToMany("\App\Disk")->orderBy("priority" )->withPivot("priority");
+        return $this->belongsToMany("\App\Disk")->orderBy("priority")->withPivot("priority");
     }
 
     public function getUrl()
     {
         $fileRemotePath = "";
-        $diskAdapter = Storage::disk($this->disks->first()->name )->getAdapter();
+        $diskAdapter = Storage::disk($this->disks->first()->name)->getAdapter();
         $diskType = class_basename($diskAdapter);
-        switch ($diskType)
-        {
+        switch ($diskType) {
             case "SftpAdapter" :
-                $fileHost = $diskAdapter->getHost() ;
-                if(isset($fileHost)){
-                    $fileRoot = $diskAdapter->getRoot() ;
-                    $fileRemotePath = env("DOWNLOAD_SERVER_PROTOCOL").$fileHost.":".env("DOWNLOAD_SERVER_PORT")."/".env("DOWNLOAD_SERVER_PARTIAL_PATH").explode("public" , $fileRoot)[1];
+                $fileHost = $diskAdapter->getHost();
+                if (isset($fileHost)) {
+                    $fileRoot = $diskAdapter->getRoot();
+                    $fileRemotePath = env("DOWNLOAD_SERVER_PROTOCOL") . $fileHost . ":" . env("DOWNLOAD_SERVER_PORT") . "/" . env("DOWNLOAD_SERVER_PARTIAL_PATH") . explode("public", $fileRoot)[1];
                     $fileRemotePath .= $this->name;
                 }
                 break;
         }
-        return $fileRemotePath ;
+        return $fileRemotePath;
     }
 
-    public function getExtention(){
+    public function getExtention()
+    {
         $ext = pathinfo($this->name, PATHINFO_EXTENSION);
-        return $ext ;
+        return $ext;
     }
 }

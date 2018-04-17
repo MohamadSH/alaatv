@@ -8,7 +8,7 @@
 
 namespace App;
 
-use Helpers\Helper;
+use App\Helpers\Helper;
 use Laratrust\LaratrustRole;
 
 class Role extends LaratrustRole
@@ -34,22 +34,24 @@ class Role extends LaratrustRole
      * @return string
      * Converting Created_at field to jalali
      */
-    public function CreatedAt_Jalali(){
+    public function CreatedAt_Jalali()
+    {
         $helper = new Helper();
-        $explodedDateTime = explode(" " , $this->created_at);
+        $explodedDateTime = explode(" ", $this->created_at);
 //        $explodedTime = $explodedDateTime[1] ;
-        return $helper->convertDate($this->created_at , "toJalali" );
+        return $helper->convertDate($this->created_at, "toJalali");
     }
 
     /**
      * @return string
      * Converting Updated_at field to jalali
      */
-    public function UpdatedAt_Jalali(){
+    public function UpdatedAt_Jalali()
+    {
         $helper = new Helper();
-        $explodedDateTime = explode(" " , $this->updated_at);
+        $explodedDateTime = explode(" ", $this->updated_at);
 //        $explodedTime = $explodedDateTime[1] ;
-        return $helper->convertDate($this->updated_at , "toJalali" );
+        return $helper->convertDate($this->updated_at, "toJalali");
     }
 
 }

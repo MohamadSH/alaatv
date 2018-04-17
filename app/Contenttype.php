@@ -9,33 +9,37 @@ class Contenttype extends Model
 {
     use SoftDeletes;
 
-    protected $dates = ['deleted_at'];
+    /**      * The attributes that should be mutated to dates.        */
+    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     protected $fillable = [
         'name',
         'displayName',
-        'description' ,
+        'description',
         'order',
         'enable',
     ];
 
-    public function educationalcontents(){
+    public function educationalcontents()
+    {
         return $this->belongsToMany('App\Educationalcontent', 'educationalcontent_contenttype', 'contenttype_id', 'content_id');
     }
 
-    public function parents(){
+    public function parents()
+    {
         return $this->belongsToMany('App\Contenttype', 'contenttype_contenttype', 't2_id', 't1_id')
-            ->withPivot('relationtype_id' )
+            ->withPivot('relationtype_id')
             ->join('contenttypeinterraltions', 'relationtype_id', 'contenttypeinterraltions.id')
 //            ->select('major1_id AS id', 'majorinterrelationtypes.name AS pivot_relationName' , 'majorinterrelationtypes.displayName AS pivot_relationDisplayName')
-            ->where("relationtype_id" , 1);
+            ->where("relationtype_id", 1);
     }
 
-    public function children(){
+    public function children()
+    {
         return $this->belongsToMany('App\Contenttype', 'contenttype_contenttype', 't1_id', 't2_id')
-            ->withPivot('relationtype_id' )
+            ->withPivot('relationtype_id')
             ->join('contenttypeinterraltions', 'relationtype_id', 'contenttypeinterraltions.id')
-            ->where("relationtype_id" , 1);
+            ->where("relationtype_id", 1);
     }
 
 }

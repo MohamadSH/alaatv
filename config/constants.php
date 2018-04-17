@@ -264,6 +264,9 @@ return [
     'DONATE_PRODUCT' => [180],
     'HAMAYESH_DEY_LOTTERY'=> 'hamyeshDey',
     'HAMAYESH_LOTTERY_EXCHANGE_DISCOUNT' => 35,
-    'MRTOLOUI'=>32294,
-    'MRTOLOUI_COUPON' => 284,
+
+    //Cache
+    'CACHE_60' => 0,
+    'CACHE_5' => 5,
+
 ];

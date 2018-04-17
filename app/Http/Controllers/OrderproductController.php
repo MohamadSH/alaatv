@@ -111,7 +111,7 @@ class OrderproductController extends Controller
                     if(in_array($simpleProduct->parents->first()->id , $products))
                     {
                         array_forget($products , $key);
-                        $childrenArray = $this->makeChildrenArray($simpleProduct);
+                        $childrenArray = $simpleProduct->children;
                         foreach ($childrenArray as $child)
                         {
                             array_forget($products , array_flip($products)[$child->id]);
@@ -186,7 +186,7 @@ class OrderproductController extends Controller
                         if(isset($extraAttributes))
                             foreach($extraAttributes as $value)
                             {
-                                $myParent = $this->makeParentArray($simpleProduct);
+                                $myParent = $simpleProduct->parents;
                                 $myParent = end($myParent);
                                 $attributevalue = $myParent->attributevalues->where("id" , $value);
                                 if($attributevalue->isNotEmpty())
@@ -221,7 +221,7 @@ class OrderproductController extends Controller
                             $bonName = Config::get("constants.BON1");
                             $bons = $simpleProduct->bons->where("name" , $bonName)->where("pivot.discount",">","0")->where("isEnable" , 1);
                             if($bons->isEmpty()){
-                                $parentsArray = $this->makeParentArray($simpleProduct);
+                                $parentsArray = $simpleProduct->parents;
                                 if(!empty($parentsArray))
                                 {
                                     foreach ($parentsArray as $parent)
@@ -310,7 +310,7 @@ class OrderproductController extends Controller
                 if(isset($extraAttributes)) {
                     $extraAttributeArray = array();
                     foreach ($extraAttributes as $value) {
-                        $myParent = $this->makeParentArray($simpleProduct);
+                        $myParent = $simpleProduct->parents;
                         $myParent = end($myParent);
                         $attributevalue = $myParent->attributevalues->where("id", $value);
 

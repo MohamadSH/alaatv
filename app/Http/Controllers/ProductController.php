@@ -18,10 +18,12 @@ use App\Websitepage;
 
 use App\Websitesetting;
 use Carbon\Carbon;
-use Helpers\Helper;
+use App\Helpers\Helper;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Input;
 
 use Illuminate\Support\Facades\Config;
@@ -149,47 +151,69 @@ class ProductController extends Controller
         }
     }
 
+    //TODO: remove after Attribute fix
+    private function addSimpleInfoAttributes(Product &$product){
+        $productsArray = [];
+        array_push($productsArray, $product);
+
+        while (count($productsArray)){
+            $pop = array_pop($productsArray);
+            if(!isset($pop['simpleInfoAttributes'])){
+                $allAttributeCollection = $pop->getAllAttributes() ;
+                $pop['simpleInfoAttributes'] = $allAttributeCollection["simpleInfoAttributes"];
+            }
+            foreach ($pop->children as &$p){
+                array_push($productsArray, $p);
+            }
+        }
+    }
     /**
      * Display the specified resource.
      *
-     * @param  \App\Product  $product
+     * @param Request $request
+     * @param  \App\Product $product
      * @return \Illuminate\Http\Response
      */
-    public function show($product)
+    public function show(Request $request, $product)
     {
-        if(Input::has("dp")) {
-            $defaultProducts = array();
-            array_push($defaultProducts , (int)Input::get("dp"));
+        $defaultProducts = null;
+        if($request->has("dp")) {
+            $defaultProducts = [];
+            array_push($defaultProducts , (int)$request->dp);
         }
 
-        if(in_array($product->id , [193,194,195])) return redirect(action("ProductController@show" , 184) , 301);
+        if(in_array($product->id , [193,194,195]))
+            return redirect(action("ProductController@show" , 184), 301);
+
         Meta::set('title', substr($product->name, 0 , Config::get("constants.META_TITLE_LIMIT")));
         Meta::set('image', route('image', ['category'=>'4','w'=>'338' , 'h'=>'338' ,  'filename' =>  $product->image ]));
         Meta::set('keywords', substr($product->name , 0 , Config::get("constants.META_KEYWORDS_LIMIT")));
         Meta::set('description', substr($product->shortDescription, 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
 
-        $descriptionIframe = Input::get("partial");
-
-        if(isset($product->producttype->id))
-            $productType = $product->producttype->id;
-        else
-            $productType = null;
+        $descriptionIframe = $request->partial;
+        $productType = $product->producttype->id;
 
         $allAttributeCollection = $product->getAllAttributes() ;
+
+        $this->addSimpleInfoAttributes($product);
+        //return $product;
+
         $selectCollection = $allAttributeCollection["selectCollection"];
         $groupedCheckboxCollection = $allAttributeCollection["groupedCheckboxCollection"];
         $extraSelectCollection = $allAttributeCollection["extraSelectCollection"];
         $extraCheckboxCollection = $allAttributeCollection["extraCheckboxCollection"];
         $simpleInfoAttributes = $allAttributeCollection["simpleInfoAttributes"];
         $checkboxInfoAttributes = $allAttributeCollection["checkboxInfoAttributes"];
-        if($product->producttype_id == Config::get("constants.PRODUCT_TYPE_SELECTABLE"))
-            if(isset($defaultProducts))
-                $childrenArray = $this->makeChildrenArray($product  , "NESTED" ,"ONLY_ENABLE", $defaultProducts);
-            else
-                $childrenArray = $this->makeChildrenArray($product  , "NESTED","ONLY_ENABLE" );
 
-        if(session()->has("adminOrder_id")) $user = User::where("id" , session()->get("customer_id"))->first();
-        elseif(Auth::check()) $user = Auth::user();
+
+//        return $checkboxInfoAttributes;
+
+        if(session()->has("adminOrder_id"))
+            $user = User::where("id" , session()->get("customer_id"))->first();
+        elseif(Auth::check())
+            $user = Auth::user();
+
+//        return response()->make("Ok".$product->id.":".$productType);
 
         if(isset($user))
             $costArray = $product->obtainProductCost( $user );
@@ -203,6 +227,8 @@ class ProductController extends Controller
             $excludedProducts = Config::get("constants.EXCLUDED_RELATED_PRODUCTS");
         else
             $excludedProducts = [] ;
+
+
         $otherProducts = Product::getProducts(0,1)->whereNotIn("id",$excludedProducts)->orderBy('created_at' , 'Desc')->where("id","<>" , $product->id)->get()   ;
         $otherProductChunks = $otherProducts->chunk(4);
 
@@ -239,48 +265,64 @@ class ProductController extends Controller
         if(isset($product->introVideo) && strlen($product->introVideo) > 0)
              $productIntroVideo = $product->introVideo;
 
-        /** Product files */
-        $productsWithPamphlet = collect();
-        $children = $this->makeChildrenArray($product );
-        //////////////////////////////PAMPHLETS////////////////////////////////////
-        $filesArray = array();
-        foreach($product->validProductfiles("pamphlet")->get() as $productfile)
-        {
-            array_push($filesArray, ["file" => $productfile->file, "name" => $productfile->name , "product_id"=>$productfile->product_id]);
-        }
-        if(!empty($filesArray)) $productsWithPamphlet->put($product->name,$filesArray);
-        foreach ($children as $child)
-        {
-            $filesArray = array();
-            foreach($child->validProductfiles("pamphlet")->get() as $productfile)
-            {
-                array_push($filesArray, ["file" => $productfile->file, "name" => $productfile->name , "product_id"=>$productfile->product_id]);
-            }
-            if(!empty($filesArray)) $productsWithPamphlet->put($child->name,$filesArray);
-        }
 
-        ////////////////////////////    VIDEOS /////////////////////////
-        $productsWithVideo = collect();
-        $filesArray = array();
-        foreach($product->validProductfiles("video")->get() as $productfile)
-        {
-            array_push($filesArray, ["file" => $productfile->file, "name" => $productfile->name , "product_id"=>$productfile->product_id]);
-        }
-        if(!empty($filesArray)) $productsWithVideo->put($product->name,$filesArray);
-        foreach ($children as $child)
-        {
-            $filesArray = array();
-            foreach($child->validProductfiles("video")->get() as $productfile)
+
+        $key="product:validProductfiles:pamphlet|video".$product->cacheKey();
+
+        [$productsWithPamphlet,$productsWithVideo] = Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($product){
+
+            /** Product files */
+            $productsWithPamphlet = collect();
+            //////////////////////////////PAMPHLETS////////////////////////////////////
+            $filesArray = [];
+            $productsFiles = $product->validProductfiles("pamphlet")->get();
+            foreach($productsFiles as $productfile)
             {
                 array_push($filesArray, ["file" => $productfile->file, "name" => $productfile->name , "product_id"=>$productfile->product_id]);
             }
-            if(!empty($filesArray)) $productsWithVideo->put($child->name,$filesArray);
-        }
+            if(!empty($filesArray))
+                $productsWithPamphlet->put($product->name,$filesArray);
+
+            foreach ($product->children as $child)
+            {
+                $filesArray = [];
+                $productsFiles = $child->validProductfiles("pamphlet")->get();
+                foreach( $productsFiles as $productfile)
+                {
+                    array_push($filesArray, ["file" => $productfile->file, "name" => $productfile->name , "product_id"=>$productfile->product_id]);
+                }
+                if(!empty($filesArray))
+                    $productsWithPamphlet->put($child->name,$filesArray);
+            }
+
+            ////////////////////////////    VIDEOS /////////////////////////
+            $productsWithVideo = collect();
+            $filesArray = array();
+            foreach($product->validProductfiles("video")->get() as $productfile)
+            {
+                array_push($filesArray, ["file" => $productfile->file, "name" => $productfile->name , "product_id"=>$productfile->product_id]);
+            }
+            if(!empty($filesArray)) $productsWithVideo->put($product->name,$filesArray);
+            foreach ($product->children as $child)
+            {
+                $filesArray = array();
+                foreach($child->validProductfiles("video")->get() as $productfile)
+                {
+                    array_push($filesArray, ["file" => $productfile->file, "name" => $productfile->name , "product_id"=>$productfile->product_id]);
+                }
+                if(!empty($filesArray)) $productsWithVideo->put($child->name,$filesArray);
+            }
+
+            return [$productsWithPamphlet,$productsWithVideo];
+        });
 
         /**
          * Product sample photos
          */
-            $productSamplePhotos = $product->photos->where("enable" , 1)->sortBy("order");
+        $key="product:SamplePhotos:".$product->cacheKey();
+        $productSamplePhotos = Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($product){
+            return $product->photos->where("enable" , 1)->sortBy("order");
+        });
 
         /**
          * end of product sample photos
@@ -289,22 +331,29 @@ class ProductController extends Controller
         /**
          * Product gifts
          */
-        $gifts = $product->gifts;
-        $giftCollection = collect();
-        foreach ($gifts as $gift)
-        {
-            $giftCollection->push(["product"=>$gift , "link"=>$this->makeProductLink($gift)]);
-        }
+        $key="product:Gifts:".$product->cacheKey();
+        $giftCollection =  Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($product){
+            $gCollection = collect();
+            $gifts = $product->gifts;
+
+            foreach ($gifts as $gift)
+            {
+                $gCollection->push(["product"=>$gift , "link"=>$this->makeProductLink($gift)]);
+            }
+            return $gCollection;
+        });
+
         /**
          * end of product gifts
          */
+
 
         $isLive = $product->isHappening();
         if(Auth::check() && Auth::user()->hasRole("admin") && $isLive!== false) $isLive = 0 ;
 
         return view("product.show" , compact("product" , "productType" ,"productSeenCount","productIntroVideo" , "otherProductChunks"  , 'discount' , 'cost' , "selectCollection" ,"simpleInfoAttributes"
             , "checkboxInfoAttributes" , "extraSelectCollection" , "extraCheckboxCollection" , 'groupedCheckboxCollection'  , "descriptionIframe"
-            , "isProductExistInOrder" , "childrenArray" , "productsWithVideo" , "productsWithPamphlet" , "exclusiveOtherProducts" , "productSamplePhotos" , "giftCollection" , "isLive" ));
+            , "isProductExistInOrder"  , "productsWithVideo" , "productsWithPamphlet" , "exclusiveOtherProducts" , "productSamplePhotos" , "giftCollection" , "isLive" ));
     }
 
     /**
@@ -473,8 +522,9 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \app\Product  $product
+     * @param  \app\Product $product
      * @return \Illuminate\Http\Response
+     * @throws \Exception
      */
     public function destroy($product)
     {
@@ -484,7 +534,7 @@ class ProductController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     *
      *
      * @param \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -561,7 +611,7 @@ class ProductController extends Controller
                             if (in_array($simpleProduct->parents->first()->id, $productIds))
                             {
                                 array_forget($productIds, $key);
-                                $childrenArray = $this->makeChildrenArray($simpleProduct);
+                                $childrenArray = $simpleProduct->children;
                                 foreach ($childrenArray as $child)
                                 {
                                     array_forget($productIds, array_flip($productIds)[$child->id]);
@@ -682,7 +732,7 @@ class ProductController extends Controller
             foreach ($attributeGroups as $attributeGroup)
             {
                 $attributeType = Attributetype::where("name" , "main")->get()->first() ;
-                $attributes = $attributeGroup->attributes->where("pivot.attributetype_id" , $attributeType->id);
+                $attributes = $product->attributeset->attributes()->where("attributetype_id" , $attributeType->id);
                 foreach ($attributes as $attribute)
                 {
                     $attributeValues = $attribute->attributevalues ;
@@ -854,7 +904,7 @@ class ProductController extends Controller
            $attributes = $attributeGroup->attributes->sortBy("order");
            foreach ($attributes as $attribute)
            {
-               $type = Attributetype::FindOrFail($attribute->pivot->attributetype_id);
+               $type = Attributetype::FindOrFail($attribute->attributetype_id);
                $productAttributevlues = $product->attributevalues->where("attribute_id" , $attribute->id);
                $attrributevalues = $attribute->attributevalues;
                if(!isset($attributeValuesCollection[$type->id])) $attributeValuesCollection->put($type->id,collect(["name"=>$type->name,"displayName"=>$type->description , "attributes"=>[]]));

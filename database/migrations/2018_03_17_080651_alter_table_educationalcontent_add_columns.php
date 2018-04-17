@@ -14,10 +14,11 @@ class AlterTableEducationalcontentAddColumns extends Migration
     public function up()
     {
         Schema::table('educationalcontents', function (Blueprint $table) {
-            $table->unsignedInteger("template_id")->nullable()->comment("آی دی مشخص کننده قالب این گرافیکی این محتوا");
-            $table->string("metaTitle")->nullable()->comment("متا تایتل محتوا");
-            $table->string("metaDescription")->nullable()->comment("متا دیسکریپشن محتوا");
-            $table->string("metaKeywords")->nullable()->comment("متای کلمات کلیدی محتوا");
+            $table->unsignedInteger("template_id")->nullable()->comment("آی دی مشخص کننده قالب این گرافیکی این محتوا")->after("id");
+            $table->string("metaTitle")->nullable()->comment("متا تایتل محتوا")->after("description");
+            $table->string("metaDescription")->nullable()->comment("متا دیسکریپشن محتوا")->after("metaTitle");
+            $table->string("metaKeywords")->nullable()->comment("متای کلمات کلیدی محتوا")->after("metaDescription");
+            $table->text("tags")->nullable()->comment("تگ ها")->after("metaKeywords");
 
             $table->foreign('template_id')
                 ->references('id')

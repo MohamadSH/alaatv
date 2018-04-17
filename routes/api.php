@@ -15,10 +15,6 @@ use Illuminate\Http\Request;
 
 Auth::routes();
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:api');
-
 Route::post('uploadFile' , 'HomeController@uploadFile');
 
 Route::group(['prefix' => 'v1'], function () {

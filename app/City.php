@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class City extends Model
 {
     use SoftDeletes;
-    protected $dates = ['deleted_at'];
+    /**      * The attributes that should be mutated to dates.        */
+    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     /**
      * @var array
@@ -18,7 +19,8 @@ class City extends Model
         'name'
     ];
 
-    public function province(){
+    public function province()
+    {
         return $this->belongsTo('\App\Province');
     }
 }

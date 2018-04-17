@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Majortype extends Model
 {
     use SoftDeletes;
-    protected $dates = ['deleted_at'];
+    /**      * The attributes that should be mutated to dates.        */
+    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     /**
      * @var array
@@ -19,7 +20,8 @@ class Majortype extends Model
         'description',
     ];
 
-    public function majors(){
+    public function majors()
+    {
         return $this->hasMany('\App\Major');
     }
 }

@@ -11,7 +11,7 @@ use App\Http\Requests\InsertPhoneRequest;
 use App\Phonetype;
 use App\Relative;
 use Illuminate\Http\Request;
-use Helpers\Helper;
+use App\Helpers\Helper;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Input;

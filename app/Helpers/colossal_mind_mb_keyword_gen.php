@@ -9,7 +9,7 @@
  * https://github.com/peterkahl/multibyte-keyword-generator
  *
  */
-class colossal_mind_mb_keyword_gen {
+class  colossal_mind_mb_keyword_gen {
     //declare variables
     var $contents;
     var $encoding;

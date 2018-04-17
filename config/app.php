@@ -191,6 +191,9 @@ return [
         App\Providers\RouteServiceProvider::class,
 
     ],
+    'development-providers' => [
+        Barryvdh\Debugbar\ServiceProvider::class,
+    ],
 
     /*
     |--------------------------------------------------------------------------

@@ -8,18 +8,20 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Userstatus extends Model
 {
     use SoftDeletes;
-    protected $dates = ['deleted_at'];
+    /**      * The attributes that should be mutated to dates.        */
+    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     /**
      * @var array
      */
     protected $fillable = [
         'name',
-        'description' ,
+        'description',
         'order',
     ];
 
-    public function users(){
+    public function users()
+    {
         return $this->hasMany('App\User');
     }
 }

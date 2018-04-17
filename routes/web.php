@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Redis;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,43 +12,9 @@ use Illuminate\Support\Facades\Redis;
 */
 
 
-Route::model('user', 'App\User');
-Route::model('assignment', 'App\Assignment');
-Route::model('consultation', 'App\Consultation');
-Route::model('order', 'App\Order');
-Route::model('product', 'App\Product');
-Route::model('orderproduct', 'App\Orderproduct');
-Route::model('attributevalue', 'App\Attributevalue');
-Route::model('permission', 'App\Permission');
-Route::model('role', 'App\Role');
-Route::model('coupon', 'App\Coupon');
-Route::model('userupload', 'App\Userupload');
-Route::model('verificationmessage', 'App\Verificationmessage');
-Route::model('attribute', 'App\Attribute');
-Route::model('attributeset', 'App\Attributeset');
-Route::model('attributegroup', 'App\Attributegroup');
-Route::model('userbon', 'App\Userbon');
-Route::model('mbtianswer', 'App\Mbtianswer');
-Route::model('contact', 'App\Contact');
-Route::model('phone', 'App\Phone');
-Route::model('afterloginformcontrol', 'App\Afterloginformcontrol');
-Route::model('article', 'App\Article');
-Route::model('articlecategory', 'App\Articlecategory');
-Route::model('slideshow', 'App\Slideshow');
-Route::model('websiteSetting', 'App\Websitesetting');
-Route::model('productfile', 'App\Productfile');
-Route::model('city', 'App\City');
-Route::model('c', 'App\Educationalcontent');
-Route::model('file', 'App\File');
-Route::model("employeetimesheet" , "\App\Employeetimesheet") ;
-Route::model("productphoto" , "\App\Productphoto") ;
-
 Auth::routes();
 
 //Route::get('search',"HomeController@search");
-Route::get('/home', function(){
-    return redirect("/",301);
-});
 Route::get( '/' , 'HomeController@index');
 Route::get('404', 'HomeController@error404');
 Route::get('403', 'HomeController@error403');
@@ -176,33 +141,6 @@ Route::group(['middleware' => 'auth'], function()
     Route::resource('eventresult' , "EventresultController");
     Route::resource('productphoto' , "ProductphotoController");
 
-    Route::get('resetVMRd', function(){
-        $users = User::all();
-        foreach ($users as $u) {
-                $u->password = bcrypt($u->nationalCode);
-                $u->update();
-
-//            if($u->id >= 360) {
-//                $u->password = bcrypt($u->nationalCode);
-//                $u->update();
-//                $smsInfo = array();
-//                $smsInfo["to"] = array(ltrim($u->mobile, '0'));
-//                /**
-//                 * Sending generated password through SMS
-//                 */
-//                $smsInfo["message"] = "رمز عبور شما تغییر کرد \n" . "رمز عبور: \n" . $u->nationalCode . "\n اردوی طلایی";
-//                $response = $this->helper->medianaSendSMS($smsInfo);
-//                if (!$response["error"]) {
-//                    echo $u->id . "\n<br>";
-//                } else {
-//                    echo $u->nationalCode . "\n<br>";
-//                }
-//            }
-
-        }
-    });
-
-
     Route::get('MBTI-Participation' , "MbtianswerController@create");
     Route::get('MBTI-Introduction' , "MbtianswerController@introduction");
     Route::resource('mbtianswer' , "MbtianswerController");
@@ -221,56 +159,6 @@ Route::group(['middleware' => 'auth'], function()
     Route::get('smsbot' , "HomeController@smsBot");
 
     Route::get("bot" , "HomeController@bot");
-
-
-    Route::get(
-    /**
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-        'sohrab', function (){
-        /**
-         * Query f  or getting Hamayesh Dey users
-         */
-        if(Auth::check() && !Auth::user()->hasRole("admin")) abort(404);
-//            $hamayesh = Illuminate\Support\Facades\Config::get("constants.HAMAYESH_CHILDREN") ;
-//            $users = \App\User::whereHas("orders" , function ($q) use($hamayesh) {
-//                $q->whereHas("orderproducts" , function ($q2) use($hamayesh){
-//                   $q2->whereIn( "product_id" , $hamayesh) ;
-//                })->whereIn("orderstatus_id" , [2,5] )->whereIn("paymentstatus_id", [2,3]);
-//            })->get() ;
-//            dump("number of total users: ". $users->count());
-//
-//            $bon = \App\Bon::where("name" , Config::get("constants.BON2"))->get()->first() ;
-//            $counter = 0;
-//            foreach ($users as $user)
-//            {
-//                $userPoints = $user->userbons()->where("bon_id" , 2)->get();
-//                if($userPoints->isEmpty())
-//                {
-//                    $userbon = new \App\Userbon();
-//                    $userbon->user_id = $user->id;
-//                    $userbon->bon_id = $bon->id;
-//                    $userbon->totalNumber = 1;
-//                    $userbon->userbonstatus_id = Config::get("constants.USERBON_STATUS_ACTIVE");
-//                    if (!$userbon->save()) {
-//                        dump("Error=> user: ".$user->id." didn't get his points.");
-//                    }else{
-//                        $counter++ ;
-//                    }
-//                }
-//
-//            }
-//            dump("number of users processed : ".$counter);
-//            dd("finish");
-        /**
-         *  End
-         */
-
-        /**checking session */
-//        dd(session()->all());
-         /**  **/
-});
-
 });
 Route::post('user/getPassword' , 'UserController@sendGeneratedPassword');
 
@@ -325,12 +213,8 @@ Route::get( "copyvideofromremote" , "RemoteDataCopyController@copyVideo");
 Route::get( "copydepartmentlessontotakhtekhak" , "SanatisharifmergeController@copyDepartmentlesson");
 Route::get( "copyvideototakhtekhak" , "SanatisharifmergeController@copyVideo");
 
-//Route::get("/lip",function (){
-//    $userIP = \Request::ip();
-//    $ipArray = explode(".",$userIP);
-//    $userIP = $ipArray[0].".".$ipArray[1].".".$ipArray[2]."."."0";
-//    dd($userIP);
-//});
+
+Route::get("/debug", 'HomeController@debug');
 
 /**
  * Tagging System

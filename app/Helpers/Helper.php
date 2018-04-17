@@ -6,22 +6,8 @@
  * Time: 3:38 PM
  */
 
-namespace Helpers;
-
-
-use App\Bon;
-use App\Coupon;
-use App\Order;
-use App\Orderproduct;
-use App\Product;
-use App\User;
-use App\Userbon;
+namespace App\Helpers;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
-use phpDocumentor\Reflection\Types\Array_;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Response;
 
 class Helper

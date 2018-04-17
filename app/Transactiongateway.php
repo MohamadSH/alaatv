@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Transactiongateway extends Model
 {
     use SoftDeletes;
-    protected $dates = ['deleted_at'];
+    /**      * The attributes that should be mutated to dates.        */
+    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     /**
      * @var array
@@ -18,7 +19,7 @@ class Transactiongateway extends Model
         'displayName',
         'description',
         'merchantNumber',
-        'enable' ,
+        'enable',
         'order',
         'bank_id',
         'merchantPassword',
@@ -27,7 +28,8 @@ class Transactiongateway extends Model
 
     ];
 
-    public function transactions(){
+    public function transactions()
+    {
         return $this->hasMany('\App\Transaction');
     }
 }

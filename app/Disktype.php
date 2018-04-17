@@ -9,13 +9,15 @@ class Disktype extends Model
 {
     use SoftDeletes;
 
-    protected $dates = ['deleted_at'];
+    /**      * The attributes that should be mutated to dates.        */
+    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     protected $fillable = [
         'name',
     ];
 
-   public function disks(){
-       return $this->hasMany("\App\Disk");
-   }
+    public function disks()
+    {
+        return $this->hasMany("\App\Disk");
+    }
 }

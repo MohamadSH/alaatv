@@ -42,7 +42,7 @@ use App\Userstatus;
 use App\Verificationmessagestatuse;
 use App\Websitesetting;
 use Carbon\Carbon;
-use Helpers\Helper;
+use App\Helpers\Helper;
 use Illuminate\Http\Request;
 use Auth;
 use Hash;
@@ -1276,7 +1276,7 @@ class UserController extends Controller
             if(!in_array($product->id,$productsWithPamphlet))
             {
                 array_push($productsWithPamphlet,$product->id) ;
-                $parentsArray = $this->makeParentArray($product);
+                $parentsArray = $product->parents;
                 if(!empty($parentsArray))
                 {
                     foreach ($parentsArray as $parent)
@@ -1327,7 +1327,7 @@ class UserController extends Controller
                         }
                     }
                 }
-                $childrenArray = $this->makeChildrenArray($product,"SIMPLE") ;
+                $childrenArray = $product->children;
                 if (!empty($childrenArray)) {
                     foreach ($childrenArray as $child) {
                         if (!in_array($child->id, $productsWithPamphlet)) {
@@ -1381,7 +1381,7 @@ class UserController extends Controller
                             if(!empty($pamphletArray))
                                 $pamphlets->put($gift->id, [ "productName"=>$gift->getDisplayName(), "pamphlets"=>$pamphletArray]);
                         }
-                        $parentsArray = $this->makeParentArray($gift);
+                        $parentsArray = $gift->parent;
                         if (!empty($parentsArray)) {
                             foreach ($parentsArray as $parent) {
                                 if (!in_array($parent->id, $productsWithPamphlet)) {
@@ -1416,7 +1416,7 @@ class UserController extends Controller
             /** VIDEOS */
             if(!in_array($product->id,$productsWithVideo)) {
                 array_push($productsWithVideo, $product->id);
-                $parentsArray = $this->makeParentArray($product);
+                $parentsArray = $product->parents;
                 if (!empty($parentsArray)) {
                     foreach ($parentsArray as $parent) {
                         if (!in_array($parent->id, $productsWithVideo)) {
@@ -1460,7 +1460,7 @@ class UserController extends Controller
                     }
                 }
 
-                $childrenArray = $this->makeChildrenArray($product,"SIMPLE") ;
+                $childrenArray = $product->children;
                 if (!empty($childrenArray)) {
                     foreach ($childrenArray as $child) {
                         if (!in_array($child->id, $productsWithVideo)) {
@@ -1512,7 +1512,7 @@ class UserController extends Controller
                                 $videos->put($gift->id, [ "productName"=>$gift->getDisplayName(), "videos"=>$videoArray]);
                         }
 
-                        $parentsArray = $this->makeParentArray($gift);
+                        $parentsArray = $gift->parents;
                         if (!empty($parentsArray)) {
                             foreach ($parentsArray as $parent) {
                                 if (!in_array($parent->id, $productsWithVideo)) {

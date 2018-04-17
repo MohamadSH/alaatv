@@ -8,7 +8,7 @@ use App\Attributegroup;
 use App\Attributeset;
 use App\Http\Requests\EditAttributesetRequest;
 use App\Http\Requests\InsertAttributesetRequest;
-use Helpers\Helper;
+use App\Helpers\Helper;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;

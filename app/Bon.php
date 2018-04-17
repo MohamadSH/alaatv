@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Bon extends Model
 {
     use SoftDeletes;
-    protected $dates = ['deleted_at'];
+    /**      * The attributes that should be mutated to dates.        */
+    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     /**
      * @var array
@@ -16,14 +17,14 @@ class Bon extends Model
     protected $fillable = [
         'name',
         'displayName',
-        'description' ,
+        'description',
         'order',
         'enable',
     ];
 
     public function products()
     {
-        return $this->belongsToMany('\App\Product')->withPivot('discount' ,'bonPlus');
+        return $this->belongsToMany('\App\Product')->withPivot('discount', 'bonPlus');
     }
 
     public function users()
@@ -31,7 +32,8 @@ class Bon extends Model
         return $this->belongsToMany('\App\User')->withPivot('number');
     }
 
-    public function userbons(){
+    public function userbons()
+    {
         return $this->hasMany('\App\Userbon');
     }
 

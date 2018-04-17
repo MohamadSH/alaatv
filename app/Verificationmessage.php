@@ -11,12 +11,13 @@ class Verificationmessage extends Model
      */
     protected $fillable = [
         'user_id',
-        'code' ,
+        'code',
         'verificationmessagestatus_id',
         'expired_at'
     ];
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo('\app\User');
     }
 

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Traits\CharacterCommon;
 use App\User;
 use App\Userstatus;
-use Helpers\Helper;
+use App\Helpers\Helper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Validation\Rule;
