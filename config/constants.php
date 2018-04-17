@@ -266,7 +266,10 @@ return [
     'HAMAYESH_LOTTERY_EXCHANGE_DISCOUNT' => 35,
 
     //Cache
-    'CACHE_60' => 0,
+    'CACHE_60' => 60,
+    'CACHE_10' => 10,
     'CACHE_5' => 5,
+    'CACHE_3' => 3,
+
 
 ];

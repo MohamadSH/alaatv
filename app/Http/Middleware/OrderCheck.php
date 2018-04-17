@@ -86,7 +86,7 @@ class OrderCheck
                                 $orderproductAttributes = $attributes[$product->id];
                                 foreach ($orderproductAttributes as $orderproductAttribute => $extraCost)
                                 {
-                                    $myParent = $product->parents;
+                                    $myParent = $this->makeParentArray($product);
                                     $myParent = end($myParent);
                                     $attributevalues = $myParent->attributevalues->where("id" , $orderproductAttribute);
                                     if($attributevalues->isNotEmpty())

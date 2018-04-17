@@ -79,6 +79,9 @@ class HomeController extends Controller
     public function debug(Request $request){
 
         $product = Product::find($request->get("p"));
+
+
+        return $product->BoneName(Config::get("constants.BON1"));
 //        return $product->attributevalues;
 //        return $product->attributeset->attributes()->load('attributetype');
         $attributeType = "main";
@@ -938,7 +941,7 @@ class HomeController extends Controller
                         $message = "شما ابتدا باید یکی از این محصولات را سفارش دهید و یا اگر سفارش داده اید مبلغ را تسویه نمایید: " . "<br>";
                         $productIds = array();
                         foreach ($products as $product) {
-                            $myParents = $product->parents;
+                            $myParents = $this->makeParentArray($product);
                             if (!empty($myParents)) {
                                 $rootParent = end($myParents);
                                 if (!in_array($rootParent->id, $productIds)) {

@@ -186,7 +186,7 @@ class OrderproductController extends Controller
                         if(isset($extraAttributes))
                             foreach($extraAttributes as $value)
                             {
-                                $myParent = $simpleProduct->parents;
+                                $myParent = $this->makeParentArray($simpleProduct);
                                 $myParent = end($myParent);
                                 $attributevalue = $myParent->attributevalues->where("id" , $value);
                                 if($attributevalue->isNotEmpty())
@@ -221,7 +221,7 @@ class OrderproductController extends Controller
                             $bonName = Config::get("constants.BON1");
                             $bons = $simpleProduct->bons->where("name" , $bonName)->where("pivot.discount",">","0")->where("isEnable" , 1);
                             if($bons->isEmpty()){
-                                $parentsArray = $simpleProduct->parents;
+                                $parentsArray = $this->makeParentArray($simpleProduct);
                                 if(!empty($parentsArray))
                                 {
                                     foreach ($parentsArray as $parent)
@@ -310,7 +310,7 @@ class OrderproductController extends Controller
                 if(isset($extraAttributes)) {
                     $extraAttributeArray = array();
                     foreach ($extraAttributes as $value) {
-                        $myParent = $simpleProduct->parents;
+                        $myParent = $this->makeParentArray($simpleProduct);
                         $myParent = end($myParent);
                         $attributevalue = $myParent->attributevalues->where("id", $value);
 

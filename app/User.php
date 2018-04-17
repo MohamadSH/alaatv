@@ -8,7 +8,9 @@ use Iatstuti\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Schema;
 use Laratrust\Traits\LaratrustUserTrait;
 use Illuminate\Support\Facades\Config;
@@ -73,28 +75,58 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public static function roleFilter($users, $rolesId)
+    public function cacheKey()
     {
-        $users = $users->whereHas('roles', function ($q) use ($rolesId) {
-            $q->whereIn("id", $rolesId);
+        $key = $this->getKey();
+        $time= isset($this->update) ? $this->updated_at->timestamp : $this->created_at->timestamp;
+        return sprintf(
+            "%s-%s",
+            //$this->getTable(),
+            $key,
+            $time
+        );
+    }
+
+    public static function roleFilter(Collection $users, $rolesId)
+    {
+        $key="user:roleFilter:".implode($users->pluck('id')->toArray())."-".$rolesId;
+
+        return Cache::remember($key,Config::get("constants.CACHE_60"),function () use($users, $rolesId) {
+
+            $users = $users->whereHas('roles', function ($q) use ($rolesId) {
+                $q->whereIn("id", $rolesId);
+            });
+            return $users;
         });
-        return $users;
     }
 
     public static function majorFilter($users, $majorsId)
     {
+        $key="user:majorFilter:".implode($users->pluck('id')->toArray())."-".$majorsId;
 
-        if (in_array(0, $majorsId))
-            $users = $users->whereDoesntHave("major");
-        else
-            $users = $users->whereIn("major_id", $majorsId);
+        return Cache::remember($key,Config::get("constants.CACHE_60"),function () use($users, $majorsId) {
 
-        return $users;
+            if (in_array(0, $majorsId))
+                $users = $users->whereDoesntHave("major");
+            else
+                $users = $users->whereIn("major_id", $majorsId);
+
+            return $users;
+
+        });
+
+
     }
 
     public static function orderStatusFilter($users, $orderStatusesId)
     {
-        return $users->whereIn('id', Order::whereIn("orderstatus_id", $orderStatusesId)->pluck('user_id'));
+        $key="user:orderStatusFilter:".implode($users->pluck('id')->toArray())."-".$orderStatusesId;
+
+        return Cache::remember($key,Config::get("constants.CACHE_60"),function () use($users, $orderStatusesId) {
+
+            return $users->whereIn('id', Order::whereIn("orderstatus_id", $orderStatusesId)->pluck('user_id'));
+        });
+
     }
 
     public function getRememberToken()
@@ -219,15 +251,22 @@ class User extends Authenticatable
      */
     public function userHasBon($bonName)
     {
-        $bon = Bon::all()->where('name', $bonName)->where('isEnable', 1);
-        if ($bon->isEmpty())
-            return false;
-        $userbons = $this->userbons->where("bon_id", $bon->first()->id)->where("userbonstatus_id", Config::get("constants.USERBON_STATUS_ACTIVE"));
-        $totalBonNumber = 0;
-        foreach ($userbons as $userbon) {
-            $totalBonNumber = $totalBonNumber + $userbon->validateBon();
-        }
-        return $totalBonNumber;
+        $key="user:userHasBon:".$this->cacheKey()."-".$bonName;
+
+        return Cache::remember($key,Config::get("constants.CACHE_60"),function () use($bonName) {
+
+            $bon = Bon::all()->where('name', $bonName)->where('isEnable', '=', 1);;
+            if ($bon->isEmpty())
+                return false;
+            $userbons = $this->userbons->where("bon_id", $bon->first()->id)->where("userbonstatus_id", Config::get("constants.USERBON_STATUS_ACTIVE"));
+            $totalBonNumber = 0;
+            foreach ($userbons as $userbon) {
+                $totalBonNumber = $totalBonNumber + $userbon->validateBon();
+            }
+            return $totalBonNumber;
+
+        });
+
     }
 
     /**
@@ -239,13 +278,18 @@ class User extends Authenticatable
      */
     public function userValidBons(Bon $bon)
     {
-        return Userbon::where("user_id", $this->id)->where("bon_id", $bon->id)->where("userbonstatus_id", Config::get("constants.USERBON_STATUS_ACTIVE"))->whereColumn('totalNumber', '>', 'usedNumber')
-            ->where(function ($query) {
-                $query->whereNull("validSince")->orwhere("validSince", "<", Carbon::now());
-            })
-            ->where(function ($query) {
-                $query->whereNull("validUntil")->orwhere("validUntil", ">", Carbon::now());
-            })->get();
+        $key="user:userValidBons:".$this->cacheKey()."-".(isset($bon) ? $bon->cacheKey() : "");
+
+        return Cache::remember($key,Config::get("constants.CACHE_60"),function () use($bon) {
+            return Userbon::where("user_id", $this->id)->where("bon_id", $bon->id)->where("userbonstatus_id", Config::get("constants.USERBON_STATUS_ACTIVE"))->whereColumn('totalNumber', '>', 'usedNumber')
+                ->where(function ($query) {
+                    $query->whereNull("validSince")->orwhere("validSince", "<", Carbon::now());
+                })
+                ->where(function ($query) {
+                    $query->whereNull("validUntil")->orwhere("validUntil", ">", Carbon::now());
+                })->get();
+        });
+
     }
 
     /**

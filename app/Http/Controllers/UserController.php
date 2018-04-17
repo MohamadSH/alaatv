@@ -1276,7 +1276,7 @@ class UserController extends Controller
             if(!in_array($product->id,$productsWithPamphlet))
             {
                 array_push($productsWithPamphlet,$product->id) ;
-                $parentsArray = $product->parents;
+                $parentsArray = $this->makeParentArray($product);
                 if(!empty($parentsArray))
                 {
                     foreach ($parentsArray as $parent)
@@ -1284,8 +1284,10 @@ class UserController extends Controller
                         if(!in_array($parent->id,$productsWithPamphlet))
                         {
                             array_push($productsWithPamphlet,$parent->id) ;
-                            if(isset($pamphlets[$parent->id])) $pamphletArray = $pamphlets[$parent->id];
-                            else $pamphletArray = array();
+                            if(isset($pamphlets[$parent->id]))
+                                $pamphletArray = $pamphlets[$parent->id];
+                            else
+                                $pamphletArray = array();
                             foreach($parent->validProductfiles("pamphlet")->get() as $productfile)
                             {
                                 array_push($pamphletArray , [ "file"=>$productfile->file , "name"=>$productfile->name , "product_id"=>$productfile->product_id ]);
@@ -1381,7 +1383,7 @@ class UserController extends Controller
                             if(!empty($pamphletArray))
                                 $pamphlets->put($gift->id, [ "productName"=>$gift->getDisplayName(), "pamphlets"=>$pamphletArray]);
                         }
-                        $parentsArray = $gift->parent;
+                        $parentsArray = $this->makeParentArray($gift);
                         if (!empty($parentsArray)) {
                             foreach ($parentsArray as $parent) {
                                 if (!in_array($parent->id, $productsWithPamphlet)) {
@@ -1416,7 +1418,7 @@ class UserController extends Controller
             /** VIDEOS */
             if(!in_array($product->id,$productsWithVideo)) {
                 array_push($productsWithVideo, $product->id);
-                $parentsArray = $product->parents;
+                $parentsArray = $this->makeParentArray($product);
                 if (!empty($parentsArray)) {
                     foreach ($parentsArray as $parent) {
                         if (!in_array($parent->id, $productsWithVideo)) {
@@ -1512,7 +1514,7 @@ class UserController extends Controller
                                 $videos->put($gift->id, [ "productName"=>$gift->getDisplayName(), "videos"=>$videoArray]);
                         }
 
-                        $parentsArray = $gift->parents;
+                        $parentsArray = $this->makeParentArray($gift);
                         if (!empty($parentsArray)) {
                             foreach ($parentsArray as $parent) {
                                 if (!in_array($parent->id, $productsWithVideo)) {

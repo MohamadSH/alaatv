@@ -185,7 +185,7 @@ class Order extends Model
                                     $flag = true;
                                     if (!in_array($this->coupon->id, $orderproduct->product->coupons->pluck('id')->toArray())) {
                                         $flag = false;
-                                        $parentsArray = $orderproduct->product->parrents;
+                                        $parentsArray = $this->makeParentArray($orderproduct->product);
                                         foreach ($parentsArray as $parent) {
                                             if (in_array($this->coupon->id, $parent->coupons->pluck('id')->toArray())) {
                                                 $flag = true;

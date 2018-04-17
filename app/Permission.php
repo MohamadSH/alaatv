@@ -9,7 +9,7 @@
 namespace App;
 
 use App\Helpers\Helper;
-use Laratrust\LaratrustPermission;
+use Laratrust\Models\LaratrustPermission;
 
 class Permission extends LaratrustPermission
 {

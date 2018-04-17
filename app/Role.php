@@ -9,7 +9,7 @@
 namespace App;
 
 use App\Helpers\Helper;
-use Laratrust\LaratrustRole;
+use Laratrust\Models\LaratrustRole;
 
 class Role extends LaratrustRole
 {

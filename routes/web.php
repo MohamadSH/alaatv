@@ -180,7 +180,7 @@ Route::post('sendMail', 'HomeController@sendMail');
 
 Route::get('showPartial/{product}' , 'ProductController@showPartial');
 Route::resource('product', 'ProductController');
-Route::post('refreshPrice' , 'ProductController@refreshPrice');
+Route::post('refreshPrice/{product}' , 'ProductController@refreshPrice');
 
 Route::post('orderproduct/checkout' , 'OrderproductController@checkOutOrderproducts') ;
 Route::resource('orderproduct', 'OrderproductController');

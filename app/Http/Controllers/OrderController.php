@@ -80,7 +80,7 @@ class OrderController extends Controller
                 $extraAttributes = $orderproduct->attributevalues;
                 foreach($extraAttributes as $extraAttribute)
                 {
-                    $myParent = $orderproduct->product->parents;
+                    $myParent = $this->makeParentArray($orderproduct->product);
                     $myParent = end($myParent);
                     $productAttributevalue = $myParent->attributevalues->where("id" ,  $extraAttribute->id)->first();
 
@@ -101,7 +101,7 @@ class OrderController extends Controller
                     $bons = $orderproduct->product->bons->where("name" , $bonName)->where("pivot.discount",">","0")->where("isEnable" , 1);
                     if($bons->isEmpty())
                     {
-                        $parentsArray = $orderproduct->product->parents;
+                        $parentsArray = $this->makeParentArray($orderproduct->product);
                         if(!empty($parentsArray))
                         {
                             foreach ($parentsArray as $parent)
@@ -1103,7 +1103,7 @@ class OrderController extends Controller
                         if(!in_array($order->coupon->id, $orderproduct->product->coupons->pluck('id')->toArray()))
                         {
                             $hasCoupon = false;
-                            $parentsArray = $orderproduct->product->parents;
+                            $parentsArray = $this->makeParentArray($orderproduct->product);
                             foreach ($parentsArray as $parent)
                             {
                                 if(in_array($order->coupon->id, $parent->coupons->pluck('id')->toArray()))
@@ -1254,7 +1254,7 @@ class OrderController extends Controller
                                     }
                                     foreach ($orderproduct->attributevalues as $value) {
                                         if ($orderproduct->product->hasParents()) {
-                                            $myParent = $orderproduct->product->parents;
+                                            $myParent = $this->makeParentArray($orderproduct->product);
                                             $myParent = end($myParent);
                                             $attributevalue = $myParent->attributevalues->where("id", $value->id);
                                         }
@@ -1309,7 +1309,7 @@ class OrderController extends Controller
                         if(!in_array($order->coupon->id, $orderproduct->product->coupons->pluck('id')->toArray()))
                         {
                             $hasCoupon = false;
-                            $parentsArray = $orderproduct->product->parents;
+                            $parentsArray = $this->makeParentArray($orderproduct->product);
                             foreach ($parentsArray as $parent)
                             {
                                 if(in_array($order->coupon->id, $parent->coupons->pluck('id')->toArray()))
@@ -1481,7 +1481,7 @@ class OrderController extends Controller
                                     }
                                     foreach ($orderproduct->attributevalues as $value) {
                                         if ($orderproduct->product->hasParents()) {
-                                            $myParent = $orderproduct->product->parents;
+                                            $myParent = $this->makeParentArray($orderproduct->product);
                                             $myParent = end($myParent);
                                             $attributevalue = $myParent->attributevalues->where("id", $value->id);
                                         }
@@ -1559,7 +1559,7 @@ class OrderController extends Controller
                             if(!in_array($order->coupon->id, $orderproduct->product->coupons->pluck('id')->toArray()))
                             {
                                 $hasCoupon = false;
-                                $parentsArray = $orderproduct->product->parents;
+                                $parentsArray = $this->makeParentArray($orderproduct->product);
                                 foreach ($parentsArray as $parent)
                                 {
                                     if(in_array($order->coupon->id, $parent->coupons->pluck('id')->toArray()))

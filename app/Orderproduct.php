@@ -121,7 +121,7 @@ class Orderproduct extends Model
             $product = $this->product;
             if ($product->isFree) $costArray["cost"] = null;
             else {
-                $costArray = $product->obtainProductCost();
+                $costArray = $product->calculatePayablePrice();
 
                 foreach ($this->attributevalues as $attributevalue) {
                     $orderProductExtraCost += $attributevalue->pivot->extraCost;
@@ -131,7 +131,7 @@ class Orderproduct extends Model
                 foreach ($userbons as $userbon) {
                     $bons = $product->bons->where("id", $userbon->bon_id)->where("isEnable", 1);
                     if ($bons->isEmpty()) {
-                        $parentsArray = $product->parrents;
+                        $parentsArray = $this->makeParentArray($product);
                         if (!empty($parentsArray)) {
                             foreach ($parentsArray as $parent) {
                                 $bons = $parent->bons->where("id", $userbon->bon_id)->where("isEnable", 1);
@@ -210,7 +210,7 @@ class Orderproduct extends Model
         $giftOrderproduct->orderproducttype_id = Config::get("constants.ORDER_PRODUCT_GIFT");
         $giftOrderproduct->order_id = $this->order->id;
         $giftOrderproduct->product_id = $gift->id;
-        $giftOrderproduct->cost = $gift->obtainProductCost()["cost"];
+        $giftOrderproduct->cost = $gift->calculatePayablePrice()["cost"];
         $giftOrderproduct->discountPercentage = 100;
         $giftOrderproduct->save();
 

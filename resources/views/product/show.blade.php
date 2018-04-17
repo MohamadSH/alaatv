@@ -779,9 +779,9 @@
                                                         <h5 class="price-text-color bold">
                                                             @if($otherProduct->isFree)
                                                                 <div class="text-center bold font-red" style="font-size: inherit">رایگان </div>
-                                                            @elseif($otherProduct->obtainProductCost()["productDiscount"]+$otherProduct->obtainProductCost()["bonDiscount"]>0)
+                                                            @elseif($otherProduct->calculatePayablePrice()["productDiscount"]+$otherProduct->calculatePayablePrice()["bonDiscount"]>0)
                                                                 <div class="text-center bold font-red" style=" text-decoration: line-through;font-size: inherit">@if(isset($otherProduct->basePrice)){{number_format($otherProduct->basePrice)}} تومان@endif</div>
-                                                                <div class="text-center bold font-green " style="font-size: inherit"> @if(Auth::check()) {{number_format((1-(($otherProduct->discount+$otherProduct->obtainProductCost()["bonDiscount"])/100))*$otherProduct->obtainProductCost()["cost"])}} @else @if(isset($otherProduct->basePrice)){{number_format(((1-($otherProduct->discount/100))*$otherProduct->basePrice))}} تومان@endif @endif</div>
+                                                                <div class="text-center bold font-green " style="font-size: inherit"> @if(Auth::check()) {{number_format((1-(($otherProduct->discount+$otherProduct->calculatePayablePrice()["bonDiscount"])/100))*$otherProduct->calculatePayablePrice()["cost"])}} @else @if(isset($otherProduct->basePrice)){{number_format(((1-($otherProduct->discount/100))*$otherProduct->basePrice))}} تومان@endif @endif</div>
                                                             @else
                                                                 <div class="text-center bold font-green" style="padding-bottom: 28px;font-size: inherit">@if(isset($otherProduct->basePrice)){{number_format($otherProduct->basePrice)}} تومان@endif </div>
                                                             @endif
@@ -817,9 +817,9 @@
                                                                 <h5 class="price-text-color bold">
                                                                     @if($otherProduct->isFree)
                                                                         <div class="text-center bold font-red" style="font-size: inherit">رایگان </div>
-                                                                    @elseif($otherProduct->obtainProductCost()["productDiscount"]+$otherProduct->obtainProductCost()["bonDiscount"]>0)
+                                                                    @elseif($otherProduct->calculatePayablePrice()["productDiscount"]+$otherProduct->calculatePayablePrice()["bonDiscount"]>0)
                                                                         <div class="text-center bold font-red" style=" text-decoration: line-through;font-size: inherit">@if(isset($otherProduct->basePrice)){{number_format($otherProduct->basePrice)}} تومان@endif</div>
-                                                                        <div class="text-center bold font-green " style="font-size: inherit"> @if(Auth::check()) {{number_format((1-(($otherProduct->discount+$otherProduct->obtainProductCost()["bonDiscount"])/100))*$otherProduct->obtainProductCost()["cost"])}} @else @if(isset($otherProduct->basePrice)){{number_format(((1-($otherProduct->discount/100))*$otherProduct->basePrice))}} تومان@endif @endif</div>
+                                                                        <div class="text-center bold font-green " style="font-size: inherit"> @if(Auth::check()) {{number_format((1-(($otherProduct->discount+$otherProduct->calculatePayablePrice()["bonDiscount"])/100))*$otherProduct->calculatePayablePrice()["cost"])}} @else @if(isset($otherProduct->basePrice)){{number_format(((1-($otherProduct->discount/100))*$otherProduct->basePrice))}} تومان@endif @endif</div>
                                                                     @else
                                                                         <div class="text-center bold font-green" style="padding-bottom: 28px;font-size: inherit">@if(isset($otherProduct->basePrice)){{number_format($otherProduct->basePrice)}} تومان@endif </div>
                                                                     @endif

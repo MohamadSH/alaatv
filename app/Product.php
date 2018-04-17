@@ -260,7 +260,7 @@ class Product extends Model
                         array_push($attributesArray, $attribute->id);
                 }
             }
-            $parentArray = $this->parents;
+            $parentArray = $this->makeParentArray($this) ;
             array_push($parentArray, $this);
             $attributes = collect();
             foreach ($parentArray as $parent) {
@@ -305,6 +305,14 @@ class Product extends Model
         return $this->belongsToMany('\App\Bon')->withPivot('discount', 'bonPlus');
     }
 
+    public function BoneName($bonName){
+        $key="product:BoneName:".$this->cacheKey()."-bone:".$bonName;
+        return Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($bonName){
+            return $this->bons->where("name", $bonName)->where("isEnable", 1);
+        });
+
+    }
+
     public function calculateBonPlus($bonId)
     {
         $key="product:calculateBonPlus:".$bonId.$this->cacheKey();
@@ -312,7 +320,7 @@ class Product extends Model
             $bonPlus = 0;
             $bonPlus += $this->bons->where("id", $bonId)->sum("pivot.bonPlus");
             if ($bonPlus == 0) {
-                $parentsArray = $this->parents;
+                $parentsArray = $this->makeParentArray($this);
                 if (!empty($parentsArray)) {
                     foreach ($parentsArray as $parent) {
                         $bonPlus += $parent->bons->where("id", $bonId)->sum("pivot.bonPlus");
@@ -366,10 +374,14 @@ class Product extends Model
         return $this->belongsToMany('App\Product', 'complimentaryproduct_product', 'product_id', 'complimentary_id');
     }
 
-    public function calculatePayablePrice()
+    public function calculatePayablePrice(User $user = null)
     {
-        $costArray = $this->obtainProductCost();
-        return (($costArray["cost"] * (1 - ($costArray["productDiscount"] / 100))) * (1 - ($costArray["bonDiscount"] / 100)) - $costArray["productDiscountAmount"]);
+        if(isset($user))
+            $costArray = $this->obtainProductCost($user);
+        else
+            $costArray = $this->obtainProductCost( );
+        array_push($costArray, []);
+        return $costArray;
     }
 
     /**
@@ -379,83 +391,101 @@ class Product extends Model
      * @param \App\User $intendedUser
      * @return array
      */
-    public function obtainProductCost(User $intendedUser = null)
+    private function obtainProductCost(User $intendedUser = null)
     {
 
-        // Obtaining discount
-        $bonDiscount = 0;
-        $productDiscount = 0;
-        $productDiscountAmount = 0;
-        $bonName = Config::get("constants.BON1");
         if (isset($intendedUser))
             $user = $intendedUser;
         elseif (Auth::check())
             $user = Auth::user();
+        else
+            $user = null;
 
-        $totalBonNumber = 0;
-        if (isset($user)) {
-            $totalBonNumber = $user->userHasBon($bonName);
-            $bons = $this->bons->where("name", $bonName)->where("isEnable", 1);
-            if ($bons->isEmpty()) {
-                $parentsArray = $this->parents;
+        $key="product:obtainProductCost:".$this->cacheKey()."-user:".(isset($user) ? $user->cacheKey() : "");
 
-                if (!empty($parentsArray)) {
-                    foreach ($parentsArray as $parent) {
-                        $bons = $parent->bons->where("name", $bonName)->where("isEnable", 1);
-                        if (!$bons->isEmpty()) break;
+        return Cache::remember($key,Config::get("constants.CACHE_3"),function () use($user)  {
+            // Obtaining discount
+            $bonDiscount = 0;
+            $productDiscount = 0;
+            $productDiscountAmount = 0;
+            $bonName = Config::get("constants.BON1");
+
+            $totalBonNumber = 0;
+            if (isset($user)) {
+                $totalBonNumber = $user->userHasBon($bonName);
+                $bons = $this->BoneName($bonName);
+                if ($bons->isEmpty()) {
+                    $parentsArray = $this->makeParentArray($this);
+
+                    if (!empty($parentsArray)) {
+                        foreach ($parentsArray as $parent) {
+                            $bons = $parent->BoneName($bonName);
+                            if (!$bons->isEmpty())
+                                break;
+                        }
                     }
                 }
-            }
-            if ($bons->isNotEmpty()) {
-                $bonDiscount += $bons->first()->pivot->discount * $totalBonNumber;
-            }
-        }
-
-        //////////////////////////////
-
-        $cost = 0;
-        //Adding product base price
-
-        if ($this->hasChildren()) {
-            if ($this->basePrice == 0) {
-                $children = $this->children;
-                $childBonDiscount = 0;
-                foreach ($children as $child) {
-                    if ($bonDiscount == 0) {
-                        $childBons = $child->bons->where("name", $bonName)->where("isEnable", 1);
-                        if ($childBons->isNotEmpty()) $childBonDiscount += $childBons->first()->pivot->discount * $totalBonNumber;
-                    }
-                    $cost += $child->basePrice;
-                    $productDiscountAmount += ($child->discount / 100) * $child->basePrice;
+                if ($bons->isNotEmpty()) {
+                    $bonDiscount += $bons->first()->pivot->discount * $totalBonNumber;
                 }
-                $bonDiscount = $childBonDiscount;
+            }
+
+            //////////////////////////////
+
+            $cost = 0;
+            //Adding product base price
+
+            if ($this->hasChildren()) {
+                if ($this->basePrice == 0) {
+                    $children = $this->children;
+                    $childBonDiscount = 0;
+                    foreach ($children as $child) {
+                        if ($bonDiscount == 0) {
+                            $childBons = $child->bons->where("name", $bonName)->where("isEnable", 1);
+                            if ($childBons->isNotEmpty())
+                                $childBonDiscount += $childBons->first()->pivot->discount * $totalBonNumber;
+                        }
+                        $cost += $child->basePrice;
+                        $productDiscountAmount += ($child->discount / 100) * $child->basePrice;
+                    }
+                    $bonDiscount = $childBonDiscount;
+                } else {
+                    $cost += $this->basePrice;
+                    $productDiscount += $this->discount;
+                }
             } else {
-                $cost += $this->basePrice;
-                $productDiscount += $this->discount;
-            }
-        } else {
-            if (isset($this->discount) && $this->discount > 0) $productDiscount += $this->discount;
-            elseif (!$this->parents->where("producttype_id", Config::get("constants.PRODUCT_TYPE_CONFIGURABLE"))->isEmpty() && isset($this->parents->first()->discount)) $productDiscount += $this->parents->first()->discount;
-            if ($this->hasParents()) {
-                if ($this->basePrice != 0 && $this->basePrice != $this->parents->first()->basePrice) $cost += $this->basePrice;
-                else  $cost += $this->parents->first()->basePrice;
+                if (isset($this->discount) && $this->discount > 0)
+                    $productDiscount += $this->discount;
+                elseif (!$this->parents->where("producttype_id", Config::get("constants.PRODUCT_TYPE_CONFIGURABLE"))->isEmpty() && isset($this->parents->first()->discount)) $productDiscount += $this->parents->first()->discount;
+                if ($this->hasParents()) {
+                    if ($this->basePrice != 0 && $this->basePrice != $this->parents->first()->basePrice)
+                        $cost += $this->basePrice;
+                    else  $cost += $this->parents->first()->basePrice;
 
-            } else {
-                $cost += $this->basePrice;
+                } else {
+                    $cost += $this->basePrice;
+                }
             }
-        }
-        /////////////////////////////////
+            /////////////////////////////////
 
-        // Adding attributes extra cost
-        if ($this->producttype_id != Config::get("constants.PRODUCT_TYPE_CONFIGURABLE")) {
-            $attributevalues = $this->attributevalues('main')->get();
-            foreach ($attributevalues as $attributevalue) {
-                if (isset($attributevalue->pivot->extraCost)) $cost += $attributevalue->pivot->extraCost;
+            // Adding attributes extra cost
+            if ($this->producttype_id != Config::get("constants.PRODUCT_TYPE_CONFIGURABLE")) {
+                $attributevalues = $this->attributevalues('main')->get();
+                foreach ($attributevalues as $attributevalue) {
+                    if (isset($attributevalue->pivot->extraCost)) $cost += $attributevalue->pivot->extraCost;
+                }
             }
-        }
 
-        //////////////////////////////
-        return ["cost" => (int)$cost, "productDiscount" => $productDiscount, 'bonDiscount' => $bonDiscount, "productDiscountAmount" => $productDiscountAmount];
+            //////////////////////////////
+
+            return [
+                "cost" => (int)$cost,
+                "productDiscount" => $productDiscount,
+                'bonDiscount' => $bonDiscount,
+                "productDiscountAmount" => $productDiscountAmount,
+                'CustomerCost' =>(int)(((int)$cost * (1 - ($productDiscount / 100))) * (1 - ($bonDiscount / 100)) - $productDiscountAmount)
+            ];
+        });
     }
 
     //TODO: issue #97

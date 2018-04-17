@@ -16,7 +16,7 @@
         "yab/laravel-scout-mysql-driver": "^2.0",
         "econea/nusoap": "v0.9.5.3",
         "algolia/algoliasearch-client-php": "^1.18",
-        "santigarcor/laratrust": "4.0.*",
+        "santigarcor/laratrust": "5.0.*",
         "eusonlito/laravel-meta": "3.1.*",
         "intervention/image": "^2.4",
         "intervention/imagecache": "^2.3",
