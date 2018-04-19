@@ -320,9 +320,9 @@
                                                         @foreach($giftCollection as $gift)
                                                             <li class="text-center bold">
                                                                 @if(strlen($gift["link"])>0)
-                                                                    <a target="_blank" href="{{$gift["link"]}}">{{$gift["product"]->getDisplayName()}}</a>
+                                                                    <a target="_blank" href="{{$gift["link"]}}">{{$gift["product"]->name}}</a>
                                                                 @else
-                                                                    {{$gift["product"]->getDisplayName()}}
+                                                                    {{$gift["product"]->name}}
                                                                 @endif
                                                             </li>
                                                         @endforeach

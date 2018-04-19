@@ -29,7 +29,7 @@
                 @foreach($order->orderproducts as $orderproduct)
                     @if(isset($orderproduct->product->id))
                         <span class="bold " style="font-style: italic; ">@if($orderproduct->orderproducttype_id == Config::get("constants.ORDER_PRODUCT_GIFT"))<img src="/assets/extra/gift-box.png" width="25">@endif<a style="color:#607075" target="_blank" href="@if($orderproduct->product->hasParents()){{action("ProductController@show",$orderproduct->product->parents->first())}} @else  {{action("ProductController@show",$orderproduct->product)}} @endif">
-                                {{$orderproduct->product->getDisplayName()}}</a></span>@if(isset($orderproduct->checkoutstatus_id)) - <span class="font-red bold">{{$orderproduct->checkoutstatus->displayName}}</span>@endif<br>
+                                {{$orderproduct->product->name}}</a></span>@if(isset($orderproduct->checkoutstatus_id)) - <span class="font-red bold">{{$orderproduct->checkoutstatus->displayName}}</span>@endif<br>
 
                         @foreach($orderproduct->product->attributevalues('main')->get() as $attributevalue)
                             {{$attributevalue->attribute->displayName}} : <span style="font-weight: normal">{{$attributevalue->name}} @if(isset(   $attributevalue->pivot->description) && strlen($attributevalue->pivot->description)>0 ) {{$attributevalue->pivot->description}} @endif</span><br>

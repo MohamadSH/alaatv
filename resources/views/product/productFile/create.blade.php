@@ -32,7 +32,7 @@
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
-                <a href="{{action("ProductController@edit" , $product)}}">اصلاح محصول {{$product->getDisplayName()}}</a>
+                <a href="{{action("ProductController@edit" , $product)}}">اصلاح محصول {{$product->name}}</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>

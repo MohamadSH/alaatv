@@ -29,7 +29,7 @@ use Meta;
 class EducationalContentController extends Controller
 {
     protected $response ;
-
+    protected $setting ;
     use ProductCommon ;
 
     public function __construct()
@@ -48,6 +48,7 @@ class EducationalContentController extends Controller
         $this->middleware('permission:'.Config::get("constants.REMOVE_EDUCATIONAL_CONTENT_ACCESS"),['only'=>'destroy']);
 
         $this->response = new Response();
+        $this->setting = json_decode(app('setting')->setting);
     }
 
     /**
@@ -346,8 +347,6 @@ class EducationalContentController extends Controller
      */
     public function show(Educationalcontent $educationalContent)
     {
-        $setting = Websitesetting::where("version" , 1)->get()->first();
-        $setting = json_decode($setting->setting);
 
         if(Auth::check() && Auth::user()->can(Config::get('constants.SHOW_EDUCATIONAL_CONTENT_ACCESS'))) $pass = true;
         else $pass = false ;
@@ -366,7 +365,7 @@ class EducationalContentController extends Controller
                 Meta::set('title', substr($educationalContent->getDisplayName() , 0 , Config::get("constants.META_TITLE_LIMIT")));
             Meta::set('keywords', substr($educationalContent->getDisplayName() , 0 , Config::get("constants.META_KEYWORDS_LIMIT")));
             Meta::set('description', substr($educationalContent->description, 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
-            Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $setting->site->siteLogo ]));
+            Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
 
             switch($educationalContent->template->name)
             {
@@ -601,12 +600,12 @@ class EducationalContentController extends Controller
             $metaKeywords .= $educationalContent->name."-";
             $metaDescription .= $educationalContent->name."-" ;
         }
-        $setting = Websitesetting::where("version" , 1)->get()->first();
-        $setting = json_decode($setting->setting);
-        Meta::set('title', substr("محتوای آموزشی ".$setting->site->name, 0 , Config::get("constants.META_TITLE_LIMIT")));
+
+
+        Meta::set('title', substr("محتوای آموزشی ".$this->setting->site->name, 0 , Config::get("constants.META_TITLE_LIMIT")));
         Meta::set('keywords', substr($metaKeywords , 0 , Config::get("constants.META_KEYWORDS_LIMIT")));
         Meta::set('description', substr($metaDescription , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
-        Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $setting->site->siteLogo ]));
+        Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
 
         return view("educationalContent.search" , compact("educationalContents" , "pageName" , "majors" , "grades" , "rootContentTypes", "childContentTypes" , "soonEducationalContents" , "products" , "costCollection"));
     }

@@ -48,6 +48,7 @@ class OrderController extends Controller
 {
     protected $helper ;
     protected $response ;
+    protected $setting;
     use ProductCommon ;
     use RequestCommon;
     function __construct()
@@ -60,6 +61,7 @@ class OrderController extends Controller
         $this->middleware('permission:'.Config::get('constants.REMOVE_ORDER_ACCESS'),['only'=>'destroy']);
         $this->middleware('permission:'.Config::get('constants.SHOW_ORDER_ACCESS'),['only'=>'edit']);
         $this->middleware('permission:'.Config::get('constants.INSERT_ORDER_ACCESS'),['only'=>'exitAdminInsertOrder']);
+        $this->setting = json_decode(app('setting')->setting);
     }
 
     private function renewOrderproducs($orderproducts)
@@ -901,12 +903,12 @@ class OrderController extends Controller
      */
     public function checkoutReview()
     {
-        $setting = Websitesetting::where("version" , 1)->get()->first();
-        $setting = json_decode($setting->setting);
+
+        
         Meta::set('title', substr("تخته خاک|بازبینی سفارش" , 0 , Config::get("constants.META_TITLE_LIMIT")));
-        Meta::set('keywords', substr($setting->site->seo->homepage->metaKeywords, 0 , Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
-        Meta::set('description', substr($setting->site->seo->homepage->metaDescription , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
-        Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $setting->site->siteLogo ]));
+        Meta::set('keywords', substr($this->setting->site->seo->homepage->metaKeywords, 0 , Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
+        Meta::set('description', substr($this->setting->site->seo->homepage->metaDescription , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
+        Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
 
         if(!Auth::check()) return redirect(action("OrderController@checkoutAuth"));
 //         Mohammad : I used this code because in case there is no open order in database
@@ -999,12 +1001,11 @@ class OrderController extends Controller
      */
     public function checkoutPayment()
     {
-        $setting = Websitesetting::where("version" , 1)->get()->first();
-        $setting = json_decode($setting->setting);
+        
         Meta::set('title', substr("تخته خاک|پرداخت" , 0 , Config::get("constants.META_TITLE_LIMIT")));
-        Meta::set('keywords', substr($setting->site->seo->homepage->metaKeywords, 0 , Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
-        Meta::set('description', substr($setting->site->seo->homepage->metaDescription , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
-        Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $setting->site->siteLogo ]));
+        Meta::set('keywords', substr($this->setting->site->seo->homepage->metaKeywords, 0 , Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
+        Meta::set('description', substr($this->setting->site->seo->homepage->metaDescription , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
+        Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
 
         if(session()->has("couponMessageSuccess")) session()->flash('success', session()->pull("couponMessageSuccess"));
         elseif(session()->has("couponMessageError")) session()->flash('error', session()->pull("couponMessageError"));

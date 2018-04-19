@@ -4,6 +4,8 @@ namespace App\Providers;
 
 
 use App\Websitesetting;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
@@ -56,12 +58,20 @@ class AppServiceProvider extends ServiceProvider
         //try catch For migration
         try {
             if(Schema::hasTable('websitesettings')) {
-                $setting = Websitesetting::where("version" , 1)->get()->first();
+                $key="AppServiceProvider:websitesettings";
+
+                $setting  = Cache::remember($key,Config::get("constants.CACHE_600"),function () {
+                    return Websitesetting::where("version" , 1)->get()->first();
+                });
+
                 $wSetting = json_decode($setting->setting);
                 view()->share('wSetting', $wSetting);
                 view()->share('setting', $setting);
                 if(isset($wSetting->site->name))
                     Config::set("constants.SITE_NAME" , $wSetting->site->name);
+                $this->app->singleton('setting', function () use ($setting){
+                    return $setting;
+                });
             }
 
             if(Schema::hasTable('bons')) {

@@ -148,7 +148,8 @@ class RedisTagging extends Singleton
         $cTags = count($tags);
         if( $cTags == 0 ) {
             $cb(null, [
-                "total_items" => 0,
+                "total_items_result" => 0,
+                "total_items_db" => 0,
                 "items" => [],
                 "tags" => $tags,
                 "limit" => $limit,
@@ -182,11 +183,15 @@ class RedisTagging extends Singleton
         }
 
         try{
-            if(strcmp($order,self::CONST_ORDER_DESC) == 0)
-                $tagsresult = $redis->zRange($resultkey, $offset , $lastElement, $withScores);
-            else
+            $total_items_db = $redis->zCount($resultkey,"-inf","+inf");
+            if(strcmp($order,self::CONST_ORDER_DESC) == 0){
                 $tagsresult = $redis->zRevRange($resultkey, $offset , $lastElement, $withScores);
+            }
+            else{
+                $tagsresult = $redis->zRange($resultkey, $offset , $lastElement, $withScores);
+            }
         } catch (Exception $e){
+            $total_items_db = 0;
             $cb($e, [
                 "msg"=>"Error!"
             ]);
@@ -220,7 +225,8 @@ class RedisTagging extends Singleton
             }
         }
         $cb(null, [
-            "total_items" => count($tagsresult),
+            "total_items_result" => count($tagsresult),
+            "total_items_db" => $total_items_db,
             "items" => $result,
             "tags" => $tags,
             "limit" => $limit,

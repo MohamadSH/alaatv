@@ -210,7 +210,7 @@
                                                         <div class="orderproductDiv" id="orderproductDiv_{{$orderproduct->id}}" style="display: none">
                                                             <div class="col-md-4">
                                                                     محصول فعلی:
-                                                                    <text class="form-control-static font-blue" >{{$orderproduct->product->getDisplayName()}}</text>
+                                                                    <text class="form-control-static font-blue" >{{$orderproduct->product->name}}</text>
                                                             </div>
                                                             <div class="col-md-2">
                                                                     پرداخت شده:

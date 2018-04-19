@@ -76,7 +76,7 @@
 {{--                                                                        @if($orderproduct->product->hasParents()){{$orderproduct->product->parents->first()->name}}--}}
 {{--                                                                        @else {{$orderproduct->product->name}}--}}
                                                                         {{--@endif--}}
-                                                                    {{$orderproduct->product->getDisplayName()}}
+                                                                    {{$orderproduct->product->name}}
                                                                 </div>
                                                             </div>
                                                             @if($orderproduct->product->getGrandParent() && $orderproduct->product->getGrandParent()->producttype_id == Config::get("constants.PRODUCT_TYPE_SELECTABLE"))

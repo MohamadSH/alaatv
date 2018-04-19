@@ -505,7 +505,7 @@ class TransactionController extends Controller
         foreach ($order->orderproducts as $orderproduct)
         {
             if(isset($orderproduct->product->id))
-                $description .= " ".$orderproduct->product->getDisplayName()." ,";
+                $description .= " ".$orderproduct->product->name." ,";
             else
                 $description .= " یک محصول نامشخص ,";
         }

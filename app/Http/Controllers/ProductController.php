@@ -37,7 +37,7 @@ class ProductController extends Controller
 {
     protected $helper;
     protected $response ;
-
+    protected $setting ;
     use ProductCommon;
 
     function __construct()
@@ -53,6 +53,7 @@ class ProductController extends Controller
 
         $this->helper = new Helper();
         $this->response = new Response();
+        $this->setting = json_decode(app('setting')->setting);
 
     }
 
@@ -560,9 +561,9 @@ class ProductController extends Controller
             .$product->cacheKey()
             ."-user"
             .( isset($user) && !is_null($user) ? $user->cacheKey() : "")
-            ."\\attrValues:".implode("",$attributevalues)
+            ."\\attrValues:".( isset($attributevalues) ? implode("",$attributevalues) : "-")
             ."products:"
-            .( isset($productIds) && !is_null($productIds) ?implode("",$productIds) : "");
+            .( isset($productIds) ? implode("",$productIds) : "");
 
         return Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($inputType,$attributevalues,$user,$product,$productIds) {
 
@@ -696,20 +697,20 @@ class ProductController extends Controller
      */
     public function search()
     {
-        $setting = Websitesetting::where("version" , 1)->get()->first();
-        $setting = json_decode($setting->setting);
 
-        $itemsPerPage = 16;
-        if(session()->has("adminOrder_id"))
-        {
-            $products = Product::getProducts()->orderBy("order")->paginate($itemsPerPage);
-        }else{
-            if(Config::has("constants.PRODUCT_SEARCH_EXCLUDED_PRODUCTS"))
-                $excludedProducts = Config::get("constants.PRODUCT_SEARCH_EXCLUDED_PRODUCTS");
-            else
-                $excludedProducts = [] ;
-            $products = Product::getProducts(0,1)->whereNotIn("id",$excludedProducts)->orderBy("order")->paginate($itemsPerPage);
-        }
+        $key="product:search";
+        $products = Cache::remember($key,Config::get("constants.CACHE_60"),function () {
+            $itemsPerPage = 16;
+            if (session()->has("adminOrder_id")) {
+               return Product::getProducts()->orderBy("order")->paginate($itemsPerPage);
+            } else {
+                if (Config::has("constants.PRODUCT_SEARCH_EXCLUDED_PRODUCTS"))
+                    $excludedProducts = Config::get("constants.PRODUCT_SEARCH_EXCLUDED_PRODUCTS");
+                else
+                    $excludedProducts = [];
+                 return Product::getProducts(0, 1)->whereNotIn("id", $excludedProducts)->orderBy("order")->paginate($itemsPerPage);
+            }
+        });
 
 
         $costCollection = $this->makeCostCollection($products);
@@ -721,11 +722,10 @@ class ProductController extends Controller
             $metaKeywords .= $product->name."-";
             $metaDescription .= $product->name."-" ;
         }
-
         Meta::set('keywords', substr($metaKeywords , 0 , Config::get("constants.META_KEYWORDS_LIMIT")));
         Meta::set('description', substr($metaDescription , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
-        Meta::set('title', substr("خدمات ".$setting->site->name, 0 , Config::get("constants.META_TITLE_LIMIT")));
-        Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $setting->site->siteLogo ]));
+        Meta::set('title', substr("خدمات ".$this->setting->site->name, 0 , Config::get("constants.META_TITLE_LIMIT")));
+        Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
 
         return view("product.portfolio" , compact("products" , "costCollection")) ;
     }

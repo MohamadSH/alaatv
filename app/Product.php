@@ -52,6 +52,19 @@ class Product extends Model
         'specialDescription'
     ];
 
+    /**
+     * All of the relationships to be touched.
+     *
+     * @var array
+     */
+    protected $touches = [
+        'producttype',
+        'attributeset',
+        'validProductfiles',
+        'bons'
+    ];
+
+
     public function cacheKey()
     {
         $key = $this->getKey();
@@ -123,35 +136,6 @@ class Product extends Model
         return $this->hasMany('App\Orderproduct');
     }
 
-    public function getDisplayName()
-    {
-        $key="product:getDisplayName:".$this->cacheKey();
-
-        return Cache::remember($key,Config::get("constants.CACHE_60"),function () {
-            $childrenArray = array_reverse($this->children->toArray());
-            if ($this->getGrandParent()) {
-
-                if ($this->getGrandParent()->producttype_id == Config::get("constants.PRODUCT_TYPE_SELECTABLE")) {
-                    $myName = $this->getGrandParent()->name . " - " . $this->name;
-                    if (!empty($childrenArray))
-                        $myName .= " : ";
-                    $lastChild = last($childrenArray);
-                    foreach ($childrenArray as $child) {
-                        $myName .= $child->name;
-                        if ($child->id != $lastChild->id)
-                            $myName .= " - ";
-                    }
-                    return $myName;
-                } else {
-                    return $this->name;
-                }
-            } else {
-                return $this->name;
-            }
-        });
-
-    }
-
     public function getGrandParent()
     {
         $key="product:getGrandParent:".$this->cacheKey();
@@ -178,12 +162,15 @@ class Product extends Model
             $counter = 0;
             $myProduct = $this;
             while (!$myProduct->parents->isEmpty()) {
-                if ($counter >= $depth) break;
+                if ($counter >= $depth)
+                    break;
                 $myProduct = $myProduct->parents->first();
                 $counter++;
             }
-            if ($myProduct->id == $this->id || $counter != $depth) return false;
-            else return true;
+            if ($myProduct->id == $this->id || $counter != $depth)
+                return false;
+            else
+                return true;
         });
 
     }
@@ -201,11 +188,20 @@ class Product extends Model
         $key="product:getGifts:".$this->cacheKey();
         return Cache::remember($key,Config::get("constants.CACHE_60"),function () {
             $gifts = collect();
-            if ($this->hasGifts()) {
-                foreach ($this->gifts as $gift) {
+
+            foreach ($this->gifts as $gift) {
+                $gifts->push($gift);
+            }
+
+
+            $grandParent = $this->getGrandParent();
+            if ($grandParent !== false) {
+                foreach ($grandParent->gifts as $gift)
+                {
                     $gifts->push($gift);
                 }
             }
+
             return $gifts;
         });
 
@@ -299,7 +295,8 @@ class Product extends Model
     {
         if (isset($this->slogan) && strlen($this->slogan) > 0)
             return $this->name . ":" . $this->slogan;
-        else return $this->name;
+        else
+            return $this->name;
     }
 
     public function bons()
@@ -359,7 +356,8 @@ class Product extends Model
             return "تاریخ شروع سفارش محصول مورد نظر آغاز نشده است";
         elseif (isset($this->validUntil) && Carbon::now() > $this->validUntil)
             return "تاریخ سفارش محصول مورد نظر  به پایان رسیده است";
-        else return "";
+        else
+            return "";
     }
 
     public function hasComplimentaries()
@@ -505,7 +503,8 @@ class Product extends Model
             }
             if ($myProduct->id == $this->id || $counter != $depth)
                 return false;
-            else return true;
+            else
+                return true;
         });
     }
 
@@ -776,9 +775,11 @@ class Product extends Model
             $image = "";
             $grandParent = $this->getGrandParent();
             if ($grandParent !== false) {
-                if (isset($grandParent->image)) $image = $grandParent->image;
+                if (isset($grandParent->image))
+                    $image = $grandParent->image;
             } else {
-                if (isset($this->image)) $image = $this->image;
+                if (isset($this->image))
+                    $image = $this->image;
             }
             return $image;
         });
@@ -794,29 +795,38 @@ class Product extends Model
             $productStartTime = Carbon::create(2018, 03, 03, 22, 47, 20, 'Asia/Tehran');
             $productEndTime = Carbon::create(2018, 03, 03, 23, 47, 20, 'Asia/Tehran');
             if ($now->between($productStartTime, $productEndTime)) $isHappening = 0;
-            elseif ($now->diffInMinutes($productStartTime, false) > 0) $isHappening = $now->diffInMinutes($productStartTime, false);
-            else $isHappening = $now->diffInMinutes($productEndTime, false);
+            elseif ($now->diffInMinutes($productStartTime, false) > 0)
+                $isHappening = $now->diffInMinutes($productStartTime, false);
+            else
+                $isHappening = $now->diffInMinutes($productEndTime, false);
         }
         return $isHappening;
     }
 
     public function isEnableToPurchase()
     {
-        //ToDo : should be removed in future
-        if (in_array($this->id, Config::get("constants.DONATE_PRODUCT"))) return true;
-        $grandParent = $this->getGrandParent();
-        if ($grandParent !== false) {
-            if (!$grandParent->enable) return false;
-        }
+        $key="product:isEnableToPurchase:".$this->cacheKey();
+        return Cache::remember($key,Config::get("constants.CACHE_60"),function () {
 
-        if ($this->hasParents()) {
-            if (!$this->parents()->first()->enable) return false;
-        }
+            //ToDo : should be removed in future
+            if (in_array($this->id, Config::get("constants.DONATE_PRODUCT")))
+                return true;
+            $grandParent = $this->getGrandParent();
+            if ($grandParent !== false) {
+                if (!$grandParent->enable)
+                    return false;
+            }
 
-        if (!$this->enable) {
-            return false;
-        }
-        return true;
+            if ($this->hasParents()) {
+                if (!$this->parents()->first()->enable)
+                    return false;
+            }
+
+            if (!$this->enable) {
+                return false;
+            }
+            return true;
+        });
     }
 
 }
