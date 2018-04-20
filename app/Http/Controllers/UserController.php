@@ -31,6 +31,7 @@ use App\Province;
 use App\Relative;
 use App\Traits\CharacterCommon;
 use App\Traits\DateCommon;
+use App\Traits\Helper;
 use App\Traits\ProductCommon;
 use App\Traits\RequestCommon;
 use App\Transaction;
@@ -42,7 +43,6 @@ use App\Userstatus;
 use App\Verificationmessagestatuse;
 use App\Websitesetting;
 use Carbon\Carbon;
-use App\Helpers\Helper;
 use Illuminate\Http\Request;
 use Auth;
 use Hash;
@@ -60,13 +60,14 @@ use stdClass;
 class UserController extends Controller
 {
     protected $response ;
-    protected $helper;
     protected $setting;
     
     use ProductCommon;
     use DateCommon;
     use RequestCommon;
     use CharacterCommon ;
+    use Helper;
+    
     function __construct()
     {
         /** setting permissions
@@ -78,7 +79,6 @@ class UserController extends Controller
         $this->middleware('permission:'.Config::get('constants.SHOW_USER_ACCESS'),['only'=>'edit']);
 
         $this->response = new Response();
-        $this->helper = new Helper();
         $this->setting = json_decode(app('setting')->setting);
     }
 
@@ -114,7 +114,7 @@ class UserController extends Controller
         $updatedTimeEnable = Input::get('updatedTimeEnable');
         if(strlen($updatedSinceDate)>0 && strlen($updatedTillDate)>0 && isset($updatedTimeEnable))
         {
-            $users = $this->helper->timeFilterQuery($users, $updatedSinceDate, $updatedTillDate, 'updated_at');
+            $users = $this->timeFilterQuery($users, $updatedSinceDate, $updatedTillDate, 'updated_at');
         }
 
         //filter by firstName, lastName, nationalCode, mobile
@@ -238,7 +238,7 @@ class UserController extends Controller
                 $createdTimeEnable = Input::get('completedTimeEnable');
                 if(strlen($createdSinceDate)>0 && strlen($createdTillDate)>0 && isset($createdTimeEnable))
                 {
-                    $orders = $this->helper->timeFilterQuery($orders, $createdSinceDate, $createdTillDate, 'created_at');
+                    $orders = $this->timeFilterQuery($orders, $createdSinceDate, $createdTillDate, 'created_at');
                 }
                 $orders = $orders->get();
                 $users = $users->whereIn("id" , $orders->pluck("user_id")->toArray());
@@ -1027,7 +1027,7 @@ class UserController extends Controller
 
         if($verificationMessages->isEmpty())
         {
-            $response = $this->helper->medianaSendSMS($smsInfo);
+            $response = $this->medianaSendSMS($smsInfo);
 //                  $response = array("error"=>false , "message"=>"ارسال موفقیت آمیز بود");
             if(!$response["error"]){
                 $request = new Request();
@@ -1069,7 +1069,7 @@ class UserController extends Controller
                     $verificationMessage->expired_at = $now ;
                     if($verificationMessage->update())
                     {
-                        $response = $this->helper->medianaSendSMS($smsInfo);
+                        $response = $this->medianaSendSMS($smsInfo);
 //                  $response = array("error"=>false , "message"=>"ارسال موفقیت آمیز بود");
                         if(!$response["error"]){
                             $request = new Request();
@@ -1138,7 +1138,7 @@ class UserController extends Controller
             session()->put("tab", "tab_1_3");
             return redirect()->back();
         }
-//        $password = $this->helper->generateRandomPassword(4);
+//        $password = $this->generateRandomPassword(4);
         $password = ["rawPassword"=>$user->nationalCode , "hashPassword"=>bcrypt($user->nationalCode)];
         $user->password = $password["hashPassword"];
 
@@ -1148,7 +1148,7 @@ class UserController extends Controller
         $smsInfo = array();
         $smsInfo["to"] = array(ltrim($user->mobile, '0'));
         $smsInfo["message"] = "کاربر گرامی رمز عبور شما تغییر کرد.\n رمزعبور جدید ".$password["rawPassword"]."\n تخته خاک";
-        $response = $this->helper->medianaSendSMS($smsInfo);
+        $response = $this->medianaSendSMS($smsInfo);
 //          $response = array("error"=>false , "message"=>"ارسال موفقیت آمیز بود");
         if(!$response["error"]){
             $user->passwordRegenerated_at = Carbon::now();

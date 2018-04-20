@@ -65,7 +65,8 @@ class OrderCheck
             if(session()->has("orderproducts"))
             {
 				$products = session()->pull("orderproducts");
-                if(session()->has("orderproductAttributes")) $attributes = session()->pull("orderproductAttributes");
+                if(session()->has("orderproductAttributes"))
+                    $attributes = session()->pull("orderproductAttributes");
                 foreach ($products as $key=>$value)
                 {
                     $product = Product::where("id",$key)->get()->first();
@@ -97,10 +98,12 @@ class OrderCheck
                                     }
                                 }
                             }
-                            $costArray = array() ;
+
                             $costArray = $orderproduct->obtainOrderproductCost();
-                            if(isset($costArray["cost"])) $orderproduct->cost = ((1-($costArray["productDiscount"]/100))*$costArray["cost"]) - $costArray["productDiscountAmount"];
-                            else $orderproduct->cost = null ;
+                            if(isset($costArray["cost"]))
+                                $orderproduct->cost = $costArray["CustomerCost"];
+                            else
+                                $orderproduct->cost = null ;
                             $orderproduct->update();
 
                             /**
@@ -109,11 +112,14 @@ class OrderCheck
                             $attachedGifts = array();
                             foreach ($value["gifts"] as $gift)
                             {
-                                if($attachedGifts->contains($gift->id)) continue;
-                                else $attachedGifts->push($gift->id);
+                                if($attachedGifts->contains($gift->id))
+                                    continue;
+                                else
+                                    $attachedGifts->push($gift->id);
                                 if($order->orderproducts(Config::get("constants.ORDER_PRODUCT_GIFT"))->whereHas("product" , function($q) use($gift){
                                     $q->where("id" , $gift->id);
-                                })->get()->isNotEmpty()) continue;
+                                })->get()->isNotEmpty())
+                                    continue;
 
                                 $orderproduct->attachGift($gift) ;
                             }

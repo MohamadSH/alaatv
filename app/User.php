@@ -3,7 +3,6 @@
 namespace App;
 
 use Carbon\Carbon;
-use App\Helpers\Helper;
 use Iatstuti\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
@@ -347,10 +346,9 @@ class User extends Authenticatable
      */
     public function CreatedAt_Jalali()
     {
-        $helper = new Helper();
         $explodedDateTime = explode(" ", $this->created_at);
 //        $explodedTime = $explodedDateTime[1] ;
-        return $helper->convertDate($this->created_at, "toJalali");
+        return $this->convertDate($this->created_at, "toJalali");
     }
 
     /**
@@ -359,10 +357,9 @@ class User extends Authenticatable
      */
     public function UpdatedAt_Jalali()
     {
-        $helper = new Helper();
         $explodedDateTime = explode(" ", $this->updated_at);
 //        $explodedTime = $explodedDateTime[1] ;
-        return $helper->convertDate($this->updated_at, "toJalali");
+        return $this->convertDate($this->updated_at, "toJalali");
     }
 
     public function returnLockProfileItems()

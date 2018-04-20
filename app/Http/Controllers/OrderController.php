@@ -13,6 +13,7 @@ use App\Http\Requests\SubmitCouponRequest;
 use App\Ordermanagercomment;
 use App\Orderpostinginfo;
 use App\Paymentmethod;
+use App\Traits\Helper;
 use App\Traits\ProductCommon;
 use App\Traits\RequestCommon;
 use App\Transaction;
@@ -27,7 +28,6 @@ use App\User;
 use App\Userbon;
 use App\Websitesetting;
 use Carbon\Carbon;
-use App\Helpers\Helper;
 use Illuminate\Http\Request;
 use App\Http\Requests\EditOrderRequest;
 use App\Http\Requests;
@@ -46,14 +46,13 @@ use Meta;
 
 class OrderController extends Controller
 {
-    protected $helper ;
+    use Helper;
     protected $response ;
     protected $setting;
     use ProductCommon ;
     use RequestCommon;
     function __construct()
     {
-        $this->helper = new Helper();
         $this->response = new Response();
 
         $this->middleware('permission:'.Config::get('constants.LIST_ORDER_ACCESS'),['only'=>'index']);
@@ -178,7 +177,7 @@ class OrderController extends Controller
         $createdTimeEnable = Input::get('createdTimeEnable');
         if(strlen($createdSinceDate)>0 && strlen($createdTillDate)>0 && isset($createdTimeEnable))
         {
-            $orders = $this->helper->timeFilterQuery($orders, $createdSinceDate, $createdTillDate, 'created_at');
+            $orders = $this->timeFilterQuery($orders, $createdSinceDate, $createdTillDate, 'created_at');
         }
 
         $updatedSinceDate = Input::get('updatedSinceDate');
@@ -186,7 +185,7 @@ class OrderController extends Controller
         $updatedTimeEnable = Input::get('updatedTimeEnable');
         if(strlen($updatedSinceDate)>0 && strlen($updatedTillDate)>0 && isset($updatedTimeEnable))
         {
-            $orders = $this->helper->timeFilterQuery($orders, $updatedSinceDate, $updatedTillDate, 'updated_at');
+            $orders = $this->timeFilterQuery($orders, $updatedSinceDate, $updatedTillDate, 'updated_at');
         }
 
         $completedSinceDate = Input::get('completedSinceDate');
@@ -194,7 +193,7 @@ class OrderController extends Controller
         $completedTimeEnable = Input::get('completedTimeEnable');
         if(strlen($completedSinceDate)>0 && strlen($completedTillDate)>0 && isset($completedTimeEnable))
         {
-            $orders = $this->helper->timeFilterQuery($orders, $completedSinceDate, $completedTillDate, 'completed_at');
+            $orders = $this->timeFilterQuery($orders, $completedSinceDate, $completedTillDate, 'completed_at');
         }
 
         $firstName = trim(Input::get('firstName'));
@@ -987,7 +986,7 @@ class OrderController extends Controller
         $orderCost = $orderCostArray["rawCostWithDiscount"] + $orderCostArray["rawCostWithoutDiscount"];
         $user = $order->user ;
 
-        $todayDate = $this->helper->convertDate(Carbon::now()->toDateTimeString() , "toJalali" );
+        $todayDate = $this->convertDate(Carbon::now()->toDateTimeString() , "toJalali" );
         return view("order.checkout.invoice" , compact("orderproducts" , "orderCost"  , 'costCollection' , 'user' , 'todayDate'));
 
 
@@ -1688,12 +1687,12 @@ class OrderController extends Controller
                         $smsInfo["message"] = $message;
                         $smsInfo["to"] = $mobiles;
                         $smsInfo["from"] = getenv("SMS_PROVIDER_DEFAULT_NUMBER");
-                        $response = $this->helper->medianaSendSMS($smsInfo);
+                        $response = $this->medianaSendSMS($smsInfo);
 
                         $messageCore = "لطفا با مراجعه به آدرس زیر اطلاعات خود را برای شرکت در اردو تکمیل نمایید و یا در صورت تکمیل بودن ، اطلاعات خود را تایید کنید."."\n"."https://k96.ir/user/info"."\n"."تخته خاک";
                         $message = "سلام ".$gender.$user->getfullName()."\n".$messageCore;
                         $smsInfo["message"] = $message;
-                        $response = $this->helper->medianaSendSMS($smsInfo);
+                        $response = $this->medianaSendSMS($smsInfo);
                     }
                 }
             }

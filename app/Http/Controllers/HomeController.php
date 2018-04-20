@@ -32,6 +32,7 @@ use App\Relative;
 use App\Role;
 use App\Slideshow;
 use App\Traits\DateCommon;
+use App\Traits\Helper;
 use App\Traits\ProductCommon;
 use App\Transactionstatus;
 use App\User;
@@ -44,7 +45,6 @@ use App\Websitesetting;
 use App\Websitepage;
 use App\Http\Requests\Request;
 use Carbon\Carbon;
-use App\Helpers\Helper;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -63,13 +63,13 @@ use Auth;
 
 class HomeController extends Controller
 {
+    use Helper;
     /**
      * Create a new controller instance.
      *
      * @return void
      */
 
-    protected $helper;
     protected $response;
     protected $sideBarAdmin;
     protected $setting;
@@ -114,7 +114,6 @@ class HomeController extends Controller
         $this->middleware('permission:' . Config::get("constants.LIST_ORDER_ACCESS"), ['only' => 'adminOrder']);
         $this->middleware('permission:' . Config::get("constants.SMS_ADMIN_PANEL_ACCESS"), ['only' => 'adminSMS']);
         $this->middleware('permission:' . Config::get("constants.REPORT_ADMIN_PANEL_ACCESS"), ['only' => 'adminReport']);
-        $this->helper = new Helper();
         $this->response = new Response();
         $this->setting = json_decode(app('setting')->setting);
 
@@ -156,8 +155,7 @@ class HomeController extends Controller
         $consultationCount = $consultations->count();
         $userCount = User::count();
         $pageName = "dashboard";
-        $helper = new Helper();
-        $todayDate = $helper->convertDate(Carbon::now()->toDateTimeString(), "toJalali");
+        $todayDate = $this->convertDate(Carbon::now()->toDateTimeString(), "toJalali");
         $todayDate = explode("/", $todayDate);
         $currentDay = $todayDate[2];
         $currentMonth = $todayDate[1];
@@ -577,7 +575,7 @@ class HomeController extends Controller
 
         $pageName = "admin";
 
-        $smsCredit = (int)$this->helper->medianaGetCredit();
+        $smsCredit = (int)$this->medianaGetCredit();
 
         $smsProviderNumber = Config::get('constants.SMS_PROVIDER_NUMBER');
 
@@ -795,7 +793,7 @@ class HomeController extends Controller
             $smsInfo["message"] = $customizedMessage;
             $smsInfo["to"] = $mobiles;
             $smsInfo["from"] = "+985000145";
-            $response = $this->helper->medianaSendSMS($smsInfo);
+            $response = $this->medianaSendSMS($smsInfo);
             if (!$response["error"]) {
 
             } else {
@@ -837,9 +835,9 @@ class HomeController extends Controller
         $smsInfo["message"] = $message;
         $smsInfo["to"] = $mobiles;
         $smsInfo["from"] = $from;
-        $response = $this->helper->medianaSendSMS($smsInfo);
+        $response = $this->medianaSendSMS($smsInfo);
         if (!$response["error"]) {
-            $smsCredit = $this->helper->medianaGetCredit();
+            $smsCredit = $this->medianaGetCredit();
             return $this->response->setContent($smsCredit)->setStatusCode(200);
         } else {
             return $this->response->setStatusCode(503);
@@ -959,7 +957,7 @@ class HomeController extends Controller
                 $ipArray[3] = 0;
                 $userIP = implode(".",$ipArray);
 
-                $linkHash = $this->helper->generateSecurePathHash($unixTime, $userIP, "TakhteKhak", $cloudFile);
+                $linkHash = $this->generateSecurePathHash($unixTime, $userIP, "TakhteKhak", $cloudFile);
                 $externalLink = $productFileLink . "?md5=" . $linkHash . "&expires=" . $unixTime;
 //                dd($temp."+".$userIP);
                 break;
@@ -1446,7 +1444,7 @@ class HomeController extends Controller
 //
 //            $prize = json_decode($userlottery->pivot->prizes)->items[0]->name ;
             $smsInfo["message"] = "سلام ، کاربر گرامی نتیجه قرعه کشی در پروفایل شما قرار داده شد - تخته خاک";
-            $response = $this->helper->medianaSendSMS($smsInfo);
+            $response = $this->medianaSendSMS($smsInfo);
             dump($response);
 
         }

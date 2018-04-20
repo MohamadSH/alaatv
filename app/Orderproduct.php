@@ -2,6 +2,7 @@
 
 namespace App;
 
+
 use App\Traits\ProductCommon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -13,6 +14,7 @@ class Orderproduct extends Model
     /**      * The attributes that should be mutated to dates.        */
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
     use ProductCommon;
+
     /**
      * @var array
      */
@@ -74,8 +76,10 @@ class Orderproduct extends Model
     public function getExtraCost($extraAttributevaluesId = null)
     {
         $extraCost = 0;
-        if (isset($extraAttributevaluesId)) $extraAttributevalues = $this->attributevalues->whereIn("id", $extraAttributevaluesId);
-        else $extraAttributevalues = $this->attributevalues;
+        if (isset($extraAttributevaluesId))
+            $extraAttributevalues = $this->attributevalues->whereIn("id", $extraAttributevaluesId);
+        else
+            $extraAttributevalues = $this->attributevalues;
         foreach ($extraAttributevalues as $attributevalue) {
             $extraCost += $attributevalue->pivot->extraCost;
         }
@@ -161,8 +165,15 @@ class Orderproduct extends Model
             $productDiscountAmount = $this->discountAmount;
         }
 
-
-        return ["cost" => $costArray["cost"], "extraCost" => $orderProductExtraCost, "productDiscount" => $productDiscount, 'bonDiscount' => $bonDiscount, "productDiscountAmount" => (int)$productDiscountAmount];
+        $cost = (int)$costArray["cost"];
+        return [
+            "cost" => $cost,
+            "extraCost" => $orderProductExtraCost,
+            "productDiscount" => $productDiscount,
+            'bonDiscount' => $bonDiscount,
+            "productDiscountAmount" => (int)$productDiscountAmount,
+            'CustomerCost' =>(int)(((int)$cost * (1 - ($productDiscount / 100))) * (1 - ($bonDiscount / 100)) - $productDiscountAmount)
+        ];
     }
 
     public function getTotalBonNumber()

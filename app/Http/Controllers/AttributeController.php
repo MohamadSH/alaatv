@@ -7,19 +7,16 @@ use App\Attributecontrol;
 use App\Attributevalue;
 use App\Http\Requests\EditAttributeRequest;
 use App\Http\Requests\InsertAttributeRequest;
-use App\Helpers\Helper;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class AttributeController extends Controller
 {
-    protected $helper ;
     protected $response ;
 
     function __construct()
     {
-        $this->helper = new Helper();
         $this->response = new Response();
 
         $this->middleware('permission:'.Config::get('constants.LIST_ATTRIBUTE_ACCESS'),['only'=>'index']);
@@ -83,7 +80,7 @@ class AttributeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param Attribute $attribute
      * @return \Illuminate\Http\Response
      */
     public function edit(Attribute $attribute)
@@ -99,8 +96,8 @@ class AttributeController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param EditAttributeRequest $request
+     * @param Attribute $attribute
      * @return \Illuminate\Http\Response
      */
     public function update(EditAttributeRequest $request, Attribute $attribute)
@@ -119,8 +116,9 @@ class AttributeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param Attribute $attribute
      * @return \Illuminate\Http\Response
+     * @throws \Exception
      */
     public function destroy(Attribute $attribute)
     {

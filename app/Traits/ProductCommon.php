@@ -12,7 +12,7 @@ trait ProductCommon
         $key = null;
         foreach ($products as $product)
             $key .= $product->cacheKey()."-";
-        $key="product:makeCostCollection:".$key;
+        $key="product:makeCostCollection:".md5($key);
 
         return Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($products){
             $costCollection = collect();

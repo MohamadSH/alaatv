@@ -12,13 +12,13 @@ use App\Http\Requests\EditProductRequest;
 use App\Http\Requests\InsertProductRequest;
 use App\Product;
 use App\Productfiletype;
+use App\Traits\Helper;
 use App\Traits\ProductCommon;
 use App\User;
 use App\Websitepage;
 
 use App\Websitesetting;
 use Carbon\Carbon;
-use App\Helpers\Helper;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -35,7 +35,7 @@ use Meta;
 
 class ProductController extends Controller
 {
-    protected $helper;
+    use Helper;
     protected $response ;
     protected $setting ;
     use ProductCommon;
@@ -51,7 +51,6 @@ class ProductController extends Controller
         $this->middleware('permission:'.Config::get('constants.INSERT_CONFIGURE_PRODUCT_ACCESS'),['only'=>'makeConfiguration' , 'createConfiguration']);
         $this->middleware('auth', ['except' => ['show' , 'refreshPrice' , 'search' , 'showPartial' , 'landing1' , 'landing2' ]]);
 
-        $this->helper = new Helper();
         $this->response = new Response();
         $this->setting = json_decode(app('setting')->setting);
 

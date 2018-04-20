@@ -7,7 +7,6 @@ use App\Employeetimesheet;
 use App\Traits\DateCommon;
 use App\User;
 use Carbon\Carbon;
-use App\Helpers\Helper;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\Config;
@@ -126,8 +125,7 @@ class Kernel extends ConsoleKernel
                         $message = $employeeTimeSheet->getEmployeeFullName()." عزیز، " ;
                     else $message = "" ;
                     $message .= "سلام ممنون از زحمات شما"."\n";
-                    $helper = new Helper();
-                    $todayJalaliDate = $helper->convertDate($toDayDate , "toJalali");
+                    $todayJalaliDate = $this->convertDate($toDayDate , "toJalali");
                     $todayJalaliDate = explode("/" , $todayJalaliDate);
                     $jalaliYear = $todayJalaliDate[0];
                     $jalaliMonth = $this->convertToJalaliMonth($todayJalaliDate[1]);
@@ -153,13 +151,13 @@ class Kernel extends ConsoleKernel
                             $smsInfo["to"] = array(ltrim($employee->mobile, '0'));
                             $smsInfo["from"] = getenv("SMS_PROVIDER_DEFAULT_NUMBER");
                             $smsInfo["message"] = $message ;
-                            $response = $helper->medianaSendSMS($smsInfo);
+                            $response = $this->medianaSendSMS($smsInfo);
                         }else{
                             $smsInfo = array();
                             $smsInfo["to"] = array(ltrim("09190195476", '0'));
                             $smsInfo["from"] = getenv("SMS_PROVIDER_DEFAULT_NUMBER");
                             $smsInfo["message"] = $message ;
-                            $response = $helper->medianaSendSMS($smsInfo);
+                            $response = $this->medianaSendSMS($smsInfo);
                         }
                     }
                 }
