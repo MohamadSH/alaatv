@@ -62,7 +62,8 @@ class Product extends Model
         'producttype',
         'attributeset',
         'validProductfiles',
-        'bons'
+        'bons',
+        'attributevalues'
     ];
 
 

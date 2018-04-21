@@ -59,7 +59,8 @@ class OrderproductController extends Controller
     {
         $product_id = $request->get("product_id");
         $product = Product::FindorFail($product_id) ;
-        if( ( Auth::check() && !Auth::user()->can(Config::get('constants.ORDER_ANY_THING')) ) && !session()->has("adminOrder_id"))
+        $user = Auth::user();
+        if( ( Auth::check() && !$user->can(Config::get('constants.ORDER_ANY_THING')) ) && !session()->has("adminOrder_id"))
         {
             $validateProduct = $product->validateProduct();
             if (strlen($validateProduct) != 0) {
@@ -92,7 +93,8 @@ class OrderproductController extends Controller
                         }
                         break;
                     case "simple" :
-                        if(session()->has("adminOrder_id"))$children = $product->children;
+                        if(session()->has("adminOrder_id"))
+                            $children = $product->children;
                         else $children = $product->children->where("enable" , 1);
 
                         $simpleProducts = [$product] ;
@@ -118,7 +120,8 @@ class OrderproductController extends Controller
                         }
                     }
                 }
-                if(in_array($productId , $products)) array_push($simpleProducts , $simpleProduct);
+                if(in_array($productId , $products))
+                    array_push($simpleProducts , $simpleProduct);
             }
         }else{
             session()->put("error" , "لطفا ابتدا در قسمت \"انتخاب محصول\" تیک محصولات مورد نظرتون رو بزنید(انتخاب کنید)");
@@ -144,7 +147,8 @@ class OrderproductController extends Controller
              */
             if(session()->has("adminOrder_id"))
             {
-                if(!Auth::user()->can(Config::get('constants.INSERT_ORDER_ACCESS'))) return redirect(action("HomeController@error403"));
+                if(!$user->can(Config::get('constants.INSERT_ORDER_ACCESS')))
+                    return redirect(action("HomeController@error403"));
                 $order_id = session()->get("adminOrder_id");
                 $user_id = session()->get("customer_id");
                 $user = User::FindOrFail($user_id);
@@ -152,9 +156,9 @@ class OrderproductController extends Controller
             }else
             {
                 $order_id = session()->get("order_id");
-                $user = Auth::user();
                 $order = Order::FindorFail($order_id);
-                if($order->user->id != Auth::user()->id) return redirect(action("HomeController@error403"));
+                if($order->user->id != $user->id)
+                    return redirect(action("HomeController@error403"));
             }
             /**
              * end

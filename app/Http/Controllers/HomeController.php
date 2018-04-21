@@ -346,7 +346,8 @@ class HomeController extends Controller
     public function adminOrder()
     {
         $pageName = "admin";
-        if (Auth::user()->can(Config::get('constants.SHOW_OPENBYADMIN_ORDER')))
+        $user = Auth::user();
+        if ($user->can(Config::get('constants.SHOW_OPENBYADMIN_ORDER')))
             $orderstatuses = Orderstatus::whereNotIn('id', [Config::get("constants.ORDER_STATUS_OPEN")])->pluck('displayName', 'id');
         else
             $orderstatuses = Orderstatus::whereNotIn('id', [Config::get("constants.ORDER_STATUS_OPEN"), Config::get("constants.ORDER_STATUS_OPEN_BY_ADMIN")])->pluck('displayName', 'id')->toArray();
@@ -358,7 +359,7 @@ class HomeController extends Controller
         $checkoutStatuses[0] = "نامشخص";
         $checkoutStatuses = array_sort_recursive($checkoutStatuses);
 
-        if(Auth::user()->hasRole("onlineNoroozMarketing"))
+        if($user->hasRole("onlineNoroozMarketing"))
         {
             $products = [Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_ROOT")];
             $products = $this->makeProductCollection($products);
@@ -848,6 +849,7 @@ class HomeController extends Controller
     {
         $fileName = Input::get('fileName');
         $contentType = Input::get('content');
+        $user = Auth::user();
         switch ($contentType) {
             case "عکس پروفایل":
                 $diskName = Config::get('constants.DISK1');
@@ -886,7 +888,7 @@ class HomeController extends Controller
                 break;
             case "فایل محصول" :
                 $productId = Input::get("pId");
-                if (!Auth::user()->can(Config::get("constants.DOWNLOAD_PRODUCT_FILE"))) {
+                if (!$user->can(Config::get("constants.DOWNLOAD_PRODUCT_FILE"))) {
                     $products = Product::whereIn('id',
                         Product::whereHas('validProductfiles', function ($q) use ($fileName) {
                             $q->where("file", $fileName);
@@ -915,7 +917,7 @@ class HomeController extends Controller
                     })->pluck("id")
                     )
                         ->get();
-                    $validOrders = Auth::user()->orders()->whereHas('orderproducts', function ($q) use ($products) {
+                    $validOrders = $user->orders()->whereHas('orderproducts', function ($q) use ($products) {
                         $q->whereIn("product_id", $products->pluck("id"));
                     })->whereIn("orderstatus_id", [Config::get("constants.ORDER_STATUS_CLOSED"), Config::get("constants.ORDER_STATUS_POSTED"), Config::get("constants.ORDER_STATUS_READY_TO_POST")])->whereIn("paymentstatus_id", [Config::get("constants.PAYMENT_STATUS_PAID")])->get();
 

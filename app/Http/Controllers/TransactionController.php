@@ -45,8 +45,10 @@ class TransactionController extends Controller
      * @return boolean
      */
     private function checkOrderAuthority(Order $order){
-        if($order->user_id == Auth::user()->id) return true;
-        else return false;
+        if($order->user_id == Auth::user()->id)
+            return true;
+        else
+            return false;
     }
 
     /**

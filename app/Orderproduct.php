@@ -29,6 +29,21 @@ class Orderproduct extends Model
         'includedInCoupon',
         'checkoutstatus_id'
     ];
+    protected $touches = [
+        'attributevalues'
+    ];
+
+    public function cacheKey()
+    {
+        $key = $this->getKey();
+        $time= isset($this->update) ? $this->updated_at->timestamp : $this->created_at->timestamp;
+        return sprintf(
+            "%s-%s",
+            //$this->getTable(),
+            $key,
+            $time
+        );
+    }
 
     public function order()
     {
@@ -75,16 +90,21 @@ class Orderproduct extends Model
 
     public function getExtraCost($extraAttributevaluesId = null)
     {
-        $extraCost = 0;
-        if (isset($extraAttributevaluesId))
-            $extraAttributevalues = $this->attributevalues->whereIn("id", $extraAttributevaluesId);
-        else
-            $extraAttributevalues = $this->attributevalues;
-        foreach ($extraAttributevalues as $attributevalue) {
-            $extraCost += $attributevalue->pivot->extraCost;
-        }
+        $key="Orderproduct:getExtraCost:".$this->cacheKey();
 
-        return $extraCost;
+        return Cache::remember($key,Config::get("constants.CACHE_60"),function () {
+            $extraCost = 0;
+            if (isset($extraAttributevaluesId))
+                $extraAttributevalues = $this->attributevalues->whereIn("id", $extraAttributevaluesId);
+            else
+                $extraAttributevalues = $this->attributevalues;
+            foreach ($extraAttributevalues as $attributevalue) {
+                $extraCost += $attributevalue->pivot->extraCost;
+            }
+
+            return $extraCost;
+        });
+
     }
 
     public function calculatePayableCost($withOrderCoupon = false)
@@ -188,7 +208,8 @@ class Orderproduct extends Model
     public function isNormalType()
     {
         if ($this->orderproducttype_id == Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT") || !isset($this->orderproductstatus_id)) return true;
-        else return false;
+        else
+            return false;
     }
 
     public function fillCostValues($costArray)
@@ -200,15 +221,19 @@ class Orderproduct extends Model
             $this->discountPercentage = 100;
             $this->discountAmount = 0;
         } else {
-            if (isset($costArray["productDiscount"])) $this->discountPercentage = $costArray["productDiscount"];
-            if (isset($costArray["productDiscountAmount"])) $this->discountAmount = $costArray["productDiscountAmount"];
+            if (isset($costArray["productDiscount"]))
+                $this->discountPercentage = $costArray["productDiscount"];
+            if (isset($costArray["productDiscountAmount"]))
+                $this->discountAmount = $costArray["productDiscountAmount"];
         }
     }
 
     public function isGiftType()
     {
-        if ($this->orderproducttype_id == Config::get("constants.ORDER_PRODUCT_GIFT")) return true;
-        else return false;
+        if ($this->orderproducttype_id == Config::get("constants.ORDER_PRODUCT_GIFT"))
+            return true;
+        else
+            return false;
     }
 
     /** Attaches a gift to the order of this orderproduct which is related to this orderproduct
