@@ -46,6 +46,8 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Auth;
 use Hash;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -55,6 +57,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\View;
 use Meta ;
+use Monolog\Handler\ElasticSearchHandler;
 use stdClass;
 
 class UserController extends Controller
@@ -176,7 +179,7 @@ class UserController extends Controller
         $productsId = Input::get('products');
         if(isset($seenProductEnable) && isset($productsId))
         {
-            $productUrls = array();
+            $productUrls = [];
             $baseUrl = url("/");
             foreach ($productsId as $productId)
             {
@@ -415,7 +418,7 @@ class UserController extends Controller
         /**
          * For selling books
          */
-        $hasPishtaz= array();
+        $hasPishtaz= [];
         if(isset($orders))
             foreach ($users as $user)
             {
@@ -438,7 +441,7 @@ class UserController extends Controller
         }
 
         $previousPath = url()->previous();
-        $usersId = array();
+        $usersId = [];
         $numberOfFatherPhones = 0;
         $numberOfMotherPhones = 0;
         $usersIdCount=0;
@@ -1022,7 +1025,7 @@ class UserController extends Controller
             return redirect()->back() ;
         }
 
-        $smsInfo = array();
+        $smsInfo = [];
         $smsInfo["to"] = array(ltrim($user->mobile, '0'));
         $smsInfo["message"] = "کد احراز شما در تخته خاک: ".$verificationCode;
 
@@ -1146,7 +1149,7 @@ class UserController extends Controller
         /**
          * Sending auto generated password through SMS
          */
-        $smsInfo = array();
+        $smsInfo = [];
         $smsInfo["to"] = array(ltrim($user->mobile, '0'));
         $smsInfo["message"] = "کاربر گرامی رمز عبور شما تغییر کرد.\n رمزعبور جدید ".$password["rawPassword"]."\n تخته خاک";
         $response = $this->medianaSendSMS($smsInfo);
@@ -1253,6 +1256,67 @@ class UserController extends Controller
         return view("user.completeRegister" , compact("formFields" , "note" , "formByPass", "tables"));
     }
 
+    private function addVideoPamphlet($productArray, &$productsWithPamphlet ,  &$productsWithVideo,  Collection &$pamphlets , Collection &$videos){
+
+        $videoArray = [];
+        $pamphletArray = [];
+        if(!empty($productArray)){
+
+            foreach ($productArray as $product)
+            {
+
+                if(!in_array($product->id,$pamphletArray) && !in_array($product->id, $videoArray))
+                {
+                    array_push($productsWithPamphlet,$product->id) ;
+                    array_push($productsWithVideo, $product->id);
+
+                    if(isset($pamphlets[$product->id]))
+                        $pamphletArray = $pamphletArray[$product->id];
+                    else
+                        $pamphletArray = [];
+                    if(isset($videos[$product->id]))
+                        $videoArray = $videoArray[$product->id];
+                    else
+                        $videoArray = [];
+
+                    foreach($product->validProductfiles as $productfile)
+                    {
+                        if($productfile->productfiletype_id == Config::get("constants.PRODUCT_FILE_TYPE_PAMPHLET")) {
+                            array_push($pamphletArray, [
+                                "file" => $productfile->file,
+                                "name" => $productfile->name,
+                                "product_id" => $productfile->product_id
+                            ]);
+                        }
+                        else {
+
+                            array_push($videoArray, [
+                                "file" => $productfile->file,
+                                "name" => $productfile->name,
+                                "product_id" => $productfile->product_id
+                            ]);
+                        }
+
+                    }
+
+                    if(!empty($pamphletArray))
+                        $pamphlets->put($product->id, [
+                            "productName"=>$product->name,
+                            "pamphlets"=>$pamphletArray
+                        ]);
+
+                    if(!empty($videoArray))
+                        $videos->put($product->id, [
+                            "productName"=>$product->name,
+                            "videos"=>$videoArray
+                        ]);
+                }
+
+                $this->addVideoPamphlet($product->complimentaryproducts,$productsWithPamphlet,$productsWithVideo,$pamphlets,$videos);
+            }
+        }
+    }
+
     /**
      * Showing files to user which he has got for his orders
      *
@@ -1261,299 +1325,91 @@ class UserController extends Controller
     public function userProductFiles()
     {
 
-        
+
+
         Meta::set('title', "تخته خاک|فایل ها");
         Meta::set('keywords', substr("صفحه فایل های کاربر\n".$this->setting->site->seo->homepage->metaKeywords, 0 , Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
         Meta::set('description', substr("صفحه فایل های کاربر\n".$this->setting->site->seo->homepage->metaDescription , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
         Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
         $sideBarMode = "closed";
-        $products = Product::whereHas("orderproducts" , function ($q){
-            $q->whereIn("order_id" , Order::where("user_id" , Auth::user()->id)->whereIn("orderstatus_id" , [Config::get("constants.ORDER_STATUS_CLOSED"),Config::get("constants.ORDER_STATUS_POSTED"), Config::get("constants.ORDER_STATUS_READY_TO_POST")])->pluck("id"));
-        })->get();
-        $pamphlets = collect();
-        $videos = collect() ;
-        $productsWithVideo = array();
-        $productsWithPamphlet = array();
-        foreach($products as $product)
-        {
-            /** PAMPHLETS */
-            if(!in_array($product->id,$productsWithPamphlet))
+        $user = Auth::user();
+        $products = $user->products();
+
+
+
+
+
+        $key="user:userProductFiles:".$user->cacheKey().":P=".md5($products->pluck("id")->implode('-') );
+        [$videos,$pamphlets] = Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($products){
+            $products->load('complimentaryproducts');
+            $products->load('children');
+            $products->load('validProductfiles');
+            $productsWithVideo = [];
+            $productsWithPamphlet = [];
+            $pamphlets = collect();
+            $videos = collect() ;
+            foreach($products as $product)
             {
-                array_push($productsWithPamphlet,$product->id) ;
-                $parentsArray = $this->makeParentArray($product);
-                if(!empty($parentsArray))
+                if(!in_array($product->id,$productsWithPamphlet) && !in_array($product->id,$productsWithVideo ))
                 {
-                    foreach ($parentsArray as $parent)
-                    {
-                        if(!in_array($parent->id,$productsWithPamphlet))
-                        {
-                            array_push($productsWithPamphlet,$parent->id) ;
-                            if(isset($pamphlets[$parent->id]))
-                                $pamphletArray = $pamphlets[$parent->id];
-                            else
-                                $pamphletArray = array();
-                            foreach($parent->validProductfiles("pamphlet")->get() as $productfile)
-                            {
-                                array_push($pamphletArray , [ "file"=>$productfile->file , "name"=>$productfile->name , "product_id"=>$productfile->product_id ]);
-                            }
-                            if(!empty($pamphletArray))
-                                $pamphlets->put($parent->id, [ "productName"=>$parent->name, "pamphlets"=>$pamphletArray]);
-                        }
 
-                        foreach ($parent->complimentaryproducts as $complimentaryproduct)
-                        {
-                            if (!in_array($complimentaryproduct->id, $productsWithPamphlet))
-                            {
-                                array_push($productsWithPamphlet, $complimentaryproduct->id);
-                                if(isset($pamphlets[$complimentaryproduct->id])) $pamphletArray = $pamphlets[$complimentaryproduct->id];
-                                else $pamphletArray = array();
-                                foreach ($complimentaryproduct->validProductfiles("pamphlet")->get() as $productfile)
-                                {
-                                    array_push($pamphletArray, ["file" => $productfile->file, "name" => $productfile->name, "product_id"=>$productfile->product_id]);
-                                }
-                                if(!empty($pamphletArray))
-                                    $pamphlets->put($complimentaryproduct->id, [ "productName"=>$complimentaryproduct->name, "pamphlets"=>$pamphletArray]);
-                            }
-                        }
-                    }
-                    $grandParent = end($parentsArray);
-                    if($grandParent->hasGifts())
-                    {
-                        foreach ($grandParent->gifts as $gift) {
-                            if (!in_array($gift->id, $productsWithPamphlet)) {
-                                array_push($productsWithPamphlet, $gift->id);
-                                if(isset($pamphlets[$gift->id])) $pamphletArray = $pamphlets[$gift->id];
-                                else $pamphletArray = array();
-                                foreach ($gift->validProductfiles("pamphlet")->get() as $productfile) {
-                                    array_push($pamphletArray, ["file" => $productfile->file, "name" => $productfile->name , "product_id" => $productfile->product_id]);
-                                }
-                                if(!empty($pamphletArray))
-                                    $pamphlets->put($gift->id, [ "productName"=>$gift->name, "pamphlets"=>$pamphletArray]);
-                            }
-                        }
-                    }
-                }
-                $childrenArray = $product->children;
-                if (!empty($childrenArray)) {
-                    foreach ($childrenArray as $child) {
-                        if (!in_array($child->id, $productsWithPamphlet)) {
-                            array_push($productsWithPamphlet, $child->id);
-                            if(isset($pamphlets[$child->id])) $pamphletArray = $pamphlets[$child->id];
-                            else $pamphletArray = array();
-                            foreach ($child->validProductfiles("pamphlet")->get() as $productfile) {
-                                array_push($pamphletArray, ["file" => $productfile->file, "name" => $productfile->name, "product_id"=>$productfile->product_id]);
-                            }
-                            if(!empty($pamphletArray))
-                                $pamphlets->put($child->id, [ "productName"=>$child->name, "pamphlets"=>$pamphletArray]);
-                        }
-                    }
-                }
-                $pamphletArray = array();
-                if($pamphlets->has($product->id)) $pamphletArray = $pamphlets->pull($product->id) ;
-                foreach($product->validProductfiles("pamphlet")->get() as $productfile)
-                {
-                    array_push($pamphletArray , [ "file"=>$productfile->file , "name"=>$productfile->name , "product_id"=>$productfile->product_id ]);
-                }
-                if(!empty($pamphletArray))
-                    $pamphlets->put($product->id, [ "productName"=>$product->name, "pamphlets"=>$pamphletArray]);
+                    array_push($productsWithPamphlet,$product->id) ;
+                    array_push($productsWithVideo, $product->id);
 
-                if($product->hasComplimentaries())
-                    foreach( $product->complimentaryproducts as $complimentaryproduct)
-                    {
-                        if(!in_array($complimentaryproduct->id,$productsWithPamphlet) )
-                        {
-                            array_push($productsWithPamphlet,$complimentaryproduct->id) ;
-                            if(isset($pamphlets[$complimentaryproduct->id])) $pamphletArray = $pamphlets[$complimentaryproduct->id];
-                            else $pamphletArray = array();
-                            foreach($complimentaryproduct->validProductfiles("pamphlet")->get() as $productfile)
-                            {
-                                array_push($pamphletArray , [ "file"=>$productfile->file , "name"=>$productfile->name , "product_id"=>$productfile->product_id ]);
-                            }
-                            if(!empty($pamphletArray))
-                                $pamphlets->put($complimentaryproduct->id, [ "productName"=>$complimentaryproduct->name, "pamphlets"=>$pamphletArray]);
-                        }
-                    }
+                    $parentsArray = $this->makeParentArray($product);
 
-                if($product->hasGifts())
-                {
-                    foreach ($product->gifts as $gift) {
-                        if(isset($pamphlets[$gift->id])) $pamphletArray = $pamphlets[$gift->id];
-                        else $pamphletArray = array();
-                        if (!in_array($gift->id, $productsWithPamphlet)) {
-                            array_push($productsWithPamphlet, $gift->id);
-                            foreach ($gift->validProductfiles("pamphlet")->get() as $productfile) {
-                                array_push($pamphletArray, ["file" => $productfile->file, "name" => $productfile->name , "product_id" => $productfile->product_id]);
-                            }
-                            if(!empty($pamphletArray))
-                                $pamphlets->put($gift->id, [ "productName"=>$gift->name, "pamphlets"=>$pamphletArray]);
-                        }
-                        $parentsArray = $this->makeParentArray($gift);
-                        if (!empty($parentsArray)) {
-                            foreach ($parentsArray as $parent) {
-                                if (!in_array($parent->id, $productsWithPamphlet)) {
-                                    array_push($productsWithPamphlet, $parent->id);
-                                    if(isset($pamphlets[$parent->id])) $pamphletArray = $pamphlets[$parent->id];
-                                    else $pamphletArray = array();
-                                    foreach ($parent->validProductfiles("pamphlet")->get() as $productfile) {
-                                        array_push($pamphletArray, ["file" => $productfile->file, "name" => $productfile->name , "product_id" => $productfile->product_id]);
-                                    }
-                                    if(!empty($pamphletArray))
-                                        $pamphlets->put($parent->id, [ "productName"=>$parent->name, "pamphlets"=>$pamphletArray]);
-                                }
-                                foreach ($parent->complimentaryproducts as $complimentaryproduct) {
-                                    if (!in_array($complimentaryproduct->id, $productsWithPamphlet)) {
-                                        array_push($productsWithPamphlet, $complimentaryproduct->id);
-                                        if(isset($pamphlets[$complimentaryproduct->id])) $pamphletArray = $pamphlets[$complimentaryproduct->id];
-                                        else $pamphletArray = array();
-                                        foreach ($complimentaryproduct->validProductfiles("pamphlet")->get() as $productfile) {
-                                            array_push($pamphletArray, ["file" => $productfile->file, "name" => $productfile->name , "product_id" => $productfile->product_id]);
-                                        }
-                                        if(!empty($pamphletArray))
-                                            $pamphlets->put($complimentaryproduct->id, [ "productName"=>$complimentaryproduct->name, "pamphlets"=>$pamphletArray]);
-                                    }
-                                }
-                            }
-                        }
+                    $this->addVideoPamphlet($parentsArray,$productsWithPamphlet,$productsWithVideo,$pamphlets,$videos);
+
+                    $childrenArray = $product->children;
+                    $this->addVideoPamphlet($childrenArray,$productsWithPamphlet,$productsWithVideo,$pamphlets,$videos);
+
+                    $pamphletArray = [];
+                    $videoArray = [];
+                    if($pamphlets->has($product->id))
+                        $pamphletArray = $pamphlets->pull($product->id) ;
+                    if ($videos->has($product->id))
+                        $videoArray = $videos->pull($product->id);
+
+                    foreach($product->validProductfiles as $productfile)
+                    {
+                        if($productfile->productfiletype_id == Config::get("PRODUCT_FILE_TYPE_PAMPHLET"))
+                            array_push($pamphletArray , [
+                                "file"=>$productfile->file ,
+                                "name"=>$productfile->name ,
+                                "product_id"=>$productfile->product_id
+                            ]);
+                        else
+                            array_push($videoArray, [
+                                "file" => $productfile->file,
+                                "name" => $productfile->name ,
+                                "product_id" => $productfile->product_id
+                            ]);
+
                     }
+                    if(!empty($pamphletArray))
+                        $pamphlets->put($product->id,
+                            [
+                                "productName"=>$product->name,
+                                "pamphlets"=>$pamphletArray
+                            ]);
+
+                    if(!empty($videoArray))
+                        $videos->put($product->id, [
+                            "productName"=>$product->name,
+                            "videos"=>$videoArray
+                        ]);
+                    $c = $product->complimentaryproducts;
+                    $this->addVideoPamphlet($c,$productsWithPamphlet,$productsWithVideo,$pamphlets,$videos);
                 }
             }
-             /** PAMPHLETS END */
+            return [$videos,$pamphlets];
+        });
 
-            /** VIDEOS */
-            if(!in_array($product->id,$productsWithVideo)) {
-                array_push($productsWithVideo, $product->id);
-                $parentsArray = $this->makeParentArray($product);
-                if (!empty($parentsArray)) {
-                    foreach ($parentsArray as $parent) {
-                        if (!in_array($parent->id, $productsWithVideo)) {
-                            array_push($productsWithVideo, $parent->id);
-                            if(isset($videos[$parent->id])) $videoArray = $videos[$parent->id];
-                            else $videoArray = array();
-                            foreach ($parent->validProductfiles("video")->get() as $productfile) {
-                                array_push($videoArray, ["file" => $productfile->file, "name" => $productfile->name , "product_id" => $productfile->product_id]);
-                            }
-                            if(!empty($videoArray))
-                                $videos->put($parent->id, [ "productName"=>$parent->name, "videos"=>$videoArray]);
-                        }
-                        foreach ($parent->complimentaryproducts as $complimentaryproduct) {
-                            if (!in_array($complimentaryproduct->id, $productsWithVideo)) {
-                                array_push($productsWithVideo, $complimentaryproduct->id);
-                                if(isset($videos[$complimentaryproduct->id])) $videoArray = $videos[$complimentaryproduct->id];
-                                else $videoArray = array();
-                                foreach ($complimentaryproduct->validProductfiles("video")->get() as $productfile) {
-                                    array_push($videoArray, ["file" => $productfile->file, "name" => $productfile->name , "product_id" => $productfile->product_id]);
-                                }
-                                if(!empty($videoArray))
-                                    $videos->put($complimentaryproduct->id, [ "productName"=>$complimentaryproduct->name, "videos"=>$videoArray]);
-                            }
-                        }
-                    }
-                    $grandParent = end($parentsArray);
-                    if($grandParent->hasGifts())
-                    {
-                        foreach ($grandParent->gifts as $gift) {
-                            if (!in_array($gift->id, $productsWithVideo)) {
-                                array_push($productsWithVideo, $gift->id);
-                                if(isset($videos[$gift->id])) $videoArray = $videos[$gift->id];
-                                else $videoArray = array();
-                                foreach ($gift->validProductfiles("video")->get() as $productfile) {
-                                    array_push($videoArray, ["file" => $productfile->file, "name" => $productfile->name , "product_id" => $productfile->product_id]);
-                                }
-                                if(!empty($videoArray))
-                                    $videos->put($gift->id, [ "productName"=>$gift->name, "videos"=>$videoArray]);
-                            }
-                        }
-                    }
-                }
-
-                $childrenArray = $product->children;
-                if (!empty($childrenArray)) {
-                    foreach ($childrenArray as $child) {
-                        if (!in_array($child->id, $productsWithVideo)) {
-                            array_push($productsWithVideo, $child->id);
-                            if(isset($videos[$child->id])) $videoArray = $videos[$child->id];
-                            else $videoArray = array();
-                            foreach ($child->validProductfiles("video")->get() as $productfile) {
-                                array_push($videoArray, ["file" => $productfile->file, "name" => $productfile->name , "product_id" => $productfile->product_id]);
-                            }
-                            if(!empty($videoArray))
-                                $videos->put($child->id, [ "productName"=>$child->name, "videos"=>$videoArray]);
-                        }
-                    }
-                }
-                $videoArray = array();
-                if ($videos->has($product->id)) $videoArray = $videos->pull($product->id);
-                foreach ($product->validProductfiles("video")->get() as $productfile) {
-                    array_push($videoArray, ["file" => $productfile->file, "name" => $productfile->name , "product_id" => $productfile->product_id]);
-                }
-                if(!empty($videoArray))
-                    $videos->put($product->id, [ "productName"=>$product->name, "videos"=>$videoArray]);
-
-                if ($product->hasComplimentaries())
-                    foreach ($product->complimentaryproducts as $complimentaryproduct) {
-                        if(isset($videos[$complimentaryproduct->id])) $videoArray = $videos[$complimentaryproduct->id];
-                        else $videoArray = array();
-                        if (!in_array($complimentaryproduct->id, $productsWithVideo)) {
-                            array_push($productsWithVideo, $complimentaryproduct->id);
-                            foreach ($complimentaryproduct->validProductfiles("video")->get() as $productfile) {
-                                array_push($videoArray, ["file" => $productfile->file, "name" => $productfile->name , "product_id" => $productfile->product_id]);
-                            }
-                            if(!empty($videoArray))
-                                $videos->put($complimentaryproduct->id, [ "productName"=>$complimentaryproduct->name, "videos"=>$videoArray]);
-                        }
-
-                    }
-
-                if($product->hasGifts())
-                {
-                    foreach ($product->gifts as $gift) {
-                        if(isset($videos[$gift->id])) $videoArray = $videos[$gift->id];
-                        else $videoArray = array();
-                        if (!in_array($gift->id, $productsWithVideo)) {
-                            array_push($productsWithVideo, $gift->id);
-                            foreach ($gift->validProductfiles("video")->get() as $productfile) {
-                                array_push($videoArray, ["file" => $productfile->file, "name" => $productfile->name , "product_id" => $productfile->product_id]);
-                            }
-                            if(!empty($videoArray))
-                                $videos->put($gift->id, [ "productName"=>$gift->name, "videos"=>$videoArray]);
-                        }
-
-                        $parentsArray = $this->makeParentArray($gift);
-                        if (!empty($parentsArray)) {
-                            foreach ($parentsArray as $parent) {
-                                if (!in_array($parent->id, $productsWithVideo)) {
-                                    array_push($productsWithVideo, $parent->id);
-                                    if(isset($videos[$parent->id])) $videoArray = $videos[$parent->id];
-                                    else $videoArray = array();
-                                    foreach ($parent->validProductfiles("video")->get() as $productfile) {
-                                        array_push($videoArray, ["file" => $productfile->file, "name" => $productfile->name , "product_id" => $productfile->product_id]);
-                                    }
-                                    if(!empty($videoArray))
-                                        $videos->put($parent->id, [ "productName"=>$parent->name, "videos"=>$videoArray]);
-                                }
-                                foreach ($parent->complimentaryproducts as $complimentaryproduct) {
-                                    if (!in_array($complimentaryproduct->id, $productsWithVideo)) {
-                                        array_push($productsWithVideo, $complimentaryproduct->id);
-                                        if(isset($videos[$complimentaryproduct->id])) $videoArray = $videos[$complimentaryproduct->id];
-                                        else $videoArray = array();
-                                        foreach ($complimentaryproduct->validProductfiles("video")->get() as $productfile) {
-                                            array_push($videoArray, ["file" => $productfile->file, "name" => $productfile->name , "product_id" => $productfile->product_id]);
-                                        }
-                                        if(!empty($videoArray))
-                                            $videos->put($complimentaryproduct->id, [ "productName"=>$complimentaryproduct->name, "videos"=>$videoArray]);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                /** VIDEOS END */
-                }
-            /** VIDEOS END */
-        }
         $isEmptyProducts = $products->isEmpty();
-        $user = Auth::user();
-        return view("user.assetsList" , compact('section' , 'sideBarMode'  ,'isEmptyProducts' ,  'pamphlets' , 'videos' , 'user'));
+        $userCompletion = (int)$user->completion();
+        return view("user.assetsList" ,
+            compact('section' , 'sideBarMode'  ,'isEmptyProducts' ,  'pamphlets' , 'videos' , 'user' , 'userCompletion')
+        );
     }
 
     /**
@@ -1585,7 +1441,7 @@ class UserController extends Controller
                 $response = Route::dispatch($request);
                 $answersCollection = json_decode($response->content());
                 \Illuminate\Support\Facades\Request::replace($originalInput);
-                $questionAnswerArray = Array();
+                $questionAnswerArray = [];
                 foreach ($answersCollection as $answerCollection)
                 {
                     /** Making answers */
@@ -1631,7 +1487,7 @@ class UserController extends Controller
                     $response = Route::dispatch($request);
                     $dataJson = json_decode($response->content());
                     \Illuminate\Support\Facades\Request::replace($originalInput);
-                    $rootMajorArray = array();
+                    $rootMajorArray = [];
                     $majorsArray = array() ;
                     foreach ($dataJson as $item)
                     {
@@ -1642,7 +1498,7 @@ class UserController extends Controller
                 }elseif(strpos( $question->dataSourceUrl , "city" ) !== false)
                 {
                     $provinces = Province::orderBy("name")->get();
-                    $provinceCityArray = array();
+                    $provinceCityArray = [];
                     foreach ($provinces as $province)
                     {
                         $requestUrl = url("/").$requestBaseUrl."?provinces[]=$province->id";
@@ -1939,7 +1795,7 @@ class UserController extends Controller
         $orderFiles = $order->files;
 
         //////////Lock fields//////////
-        $lockedFields = array();
+        $lockedFields = [];
         if($user->lockProfile)
         {
             $lockedFields = $user->returnLockProfileItems();

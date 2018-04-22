@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Traits\Helper;
 use Carbon\Carbon;
 use Iatstuti\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -10,6 +11,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Schema;
 use Laratrust\Traits\LaratrustUserTrait;
 use Illuminate\Support\Facades\Config;
@@ -26,6 +28,7 @@ class User extends Authenticatable
     use Notifiable;
 
     use SoftDeletes, CascadeSoftDeletes;
+    use Helper;
 
     protected $cascadeDeletes = ['orders', 'userbons', 'useruploads', 'verificationmessages', 'bankaccounts', 'contacts', 'mbtianswers'];
     /**      * The attributes that should be mutated to dates.        */
@@ -241,6 +244,35 @@ class User extends Authenticatable
     public function grade()
     {
         return $this->belongsTo("\App\Grade");
+    }
+
+    public function products(){
+        $result = DB::table('products')
+            ->join('orderproducts', function ($join){
+                $join->on('products.id', '=', 'orderproducts.product_id')
+                    ->whereNull('orderproducts.deleted_at');
+            })
+            ->join('orders',function ($join){
+                $join->on( 'orders.id', '=', 'orderproducts.order_id')
+                    ->whereIn('orders.orderstatus_id',[
+                        Config::get("constants.ORDER_STATUS_CLOSED"),
+                        Config::get("constants.ORDER_STATUS_POSTED"),
+                        Config::get("constants.ORDER_STATUS_READY_TO_POST")
+                    ])
+                    ->whereNull('orders.deleted_at');
+            })
+            ->join('users','users.id', '=', 'orders.user_id')
+            ->select([
+
+                "products.*"
+            ])
+            ->where('users.id','=',$this->getKey())
+            ->whereNull('products.deleted_at')
+            ->distinct()
+            ->get();
+        $result = Product::hydrate($result->toArray());
+
+        return $result;
     }
 
     /**

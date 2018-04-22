@@ -46,9 +46,18 @@ class Attributeset extends Model
         $key = "Attributeset:".$this->cacheKey();
         return Cache::remember($key,Config::get("constants.CACHE_60"),function () {
             $result = DB::table('attributesets')
-                ->join('attributegroups', 'attributesets.id', '=', 'attributegroups.attributeset_id')
-                ->join('attribute_attributegroup', 'attribute_attributegroup.attributegroup_id', '=', 'attributegroups.id')
-                ->join('attributes', 'attributes.id', '=', 'attribute_attributegroup.attribute_id')
+                ->join('attributegroups',function ($join){
+                    $join->on( 'attributesets.id', '=', 'attributegroups.attributeset_id')
+                        ->whereNull('attributegroups.deleted_at');
+                })
+                ->join('attribute_attributegroup', function ($join){
+                    $join->on('attribute_attributegroup.attributegroup_id', '=', 'attributegroups.id');
+
+                })
+                ->join('attributes', function ($join){
+                    $join->on('attributes.id', '=', 'attribute_attributegroup.attribute_id')
+                        ->whereNull('attributes.deleted_at');
+                })
                 ->select([
                     "attributes.*",
                     'attribute_attributegroup.attributegroup_id as pivot_attributegroup_id',
@@ -56,6 +65,7 @@ class Attributeset extends Model
                     'attribute_attributegroup.description as pivot_description',
                     ])
                 ->where('attributesets.id','=',$this->id)
+                ->whereNull('attributesets.deleted_at')
                 ->get();
 
             $result = Attribute::hydrate($result->toArray());

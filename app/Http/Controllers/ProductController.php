@@ -696,21 +696,23 @@ class ProductController extends Controller
      */
     public function search()
     {
+        if (session()->has("adminOrder_id")) {
+            $adminOrder = true;
 
-        $key="product:search";
-        $products = Cache::remember($key,Config::get("constants.CACHE_60"),function () {
-            $itemsPerPage = 16;
-            if (session()->has("adminOrder_id")) {
-               return Product::getProducts()->orderBy("order")->paginate($itemsPerPage);
-            } else {
-                if (Config::has("constants.PRODUCT_SEARCH_EXCLUDED_PRODUCTS"))
-                    $excludedProducts = Config::get("constants.PRODUCT_SEARCH_EXCLUDED_PRODUCTS");
-                else
-                    $excludedProducts = [];
-                 return Product::getProducts(0, 1)->whereNotIn("id", $excludedProducts)->orderBy("order")->paginate($itemsPerPage);
-            }
-        });
+        }
+        else
+            $adminOrder = false;
 
+        $itemsPerPage = 16;
+        if ($adminOrder) {
+            $products =  Product::getProducts()->orderBy("order")->paginate($itemsPerPage);;
+        } else {
+            if (Config::has("constants.PRODUCT_SEARCH_EXCLUDED_PRODUCTS"))
+                $excludedProducts = Config::get("constants.PRODUCT_SEARCH_EXCLUDED_PRODUCTS");
+            else
+                $excludedProducts = [];
+            $products =  Product::getProducts(0, 1)->whereNotIn("id", $excludedProducts)->orderBy("order")->paginate($itemsPerPage);;
+        }
 
         $costCollection = $this->makeCostCollection($products);
 

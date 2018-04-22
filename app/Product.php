@@ -89,11 +89,11 @@ class Product extends Model
     public static function getProducts($configurable = 0, $enable = 0)
     {
         if ($configurable == 1) {
-            $products = \App\Product::configurable();
+            $products = Product::configurable();
             if ($enable == 1)
                 $products = $products->enable();
         } else if ($configurable == 0) {
-            $products = \App\Product::select()->doesntHave('parents');
+            $products = Product::select()->doesntHave('parents')->whereNull('deleted_at');
             if ($enable == 1)
                 $products->enable();
         }
@@ -242,10 +242,15 @@ class Product extends Model
                     ->orwhereNull('validSince');
             })
             ->orderBy("order");
-        if ($files->count() != 0 && strlen($fileType) > 0) {
-            $fileTypeId = Productfiletype::all()->where("name", $fileType)->first();
-            $files->where('productfiletype_id', $fileTypeId->id);
-        }
+
+        if($fileType == "video")
+            $fileTypeId = Config::get("constants.PRODUCT_FILE_TYPE_VIDEO");
+        elseif($fileType == "pamphlet")
+            $fileTypeId = Config::get("constants.PRODUCT_FILE_TYPE_PAMPHLET");
+
+        if (isset($fileTypeId))
+            $files->where('productfiletype_id', $fileTypeId);
+
         return $files;
     }
 

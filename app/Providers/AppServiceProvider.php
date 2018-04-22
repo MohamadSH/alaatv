@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 
+use App\Productfiletype;
 use App\Websitesetting;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Cache;
@@ -224,7 +225,7 @@ class AppServiceProvider extends ServiceProvider
                     if($discounttypes->where("name" , "cost")->isNotEmpty())
                         Config::set("constants.DISCOUNT_TYPE_COST" , $discounttypes->where("name" , "cost")->first()->id);
                 }
-                //                //=============================DISCOUNT TYPES
+//                =============================DISCOUNT TYPES
                 if (Schema::hasTable('discounttypes'))
                 {
                     $discounttypes = \App\Discounttype::all();
@@ -232,6 +233,15 @@ class AppServiceProvider extends ServiceProvider
                         Config::set("constants.DISCOUNT_TYPE_PERCENTAGE" , $discounttypes->where("name" , "percentage")->first()->id);
                     if($discounttypes->where("name" , "cost")->isNotEmpty())
                         Config::set("constants.DISCOUNT_TYPE_COST" , $discounttypes->where("name" , "cost")->first()->id);
+                }
+//                =============================PRODUCT FILE TYPES
+                if (Schema::hasTable('productfiletypes'))
+                {
+                    $productfiletypes = Productfiletype::all();
+                    if($productfiletypes->where("name" , "video")->isNotEmpty())
+                        Config::set("constants.PRODUCT_FILE_TYPE_VIDEO" , $productfiletypes->where("name" , "video")->first()->id);
+                    if($productfiletypes->where("name" , "pamphlet")->isNotEmpty())
+                        Config::set("constants.PRODUCT_FILE_TYPE_PAMPHLET" , $productfiletypes->where("name" , "pamphlet")->first()->id);
                 }
 
             }

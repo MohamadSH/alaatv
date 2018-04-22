@@ -20,6 +20,7 @@ use App\Http\Requests\ContactUsFormRequest;
 use App\Http\Requests\SendSMSRequest;
 use App\Lottery;
 use App\Major;
+use App\Order;
 use App\Orderstatus;
 use App\Paymentmethod;
 use App\Paymentstatus;
@@ -80,20 +81,36 @@ class HomeController extends Controller
 
     public function debug(Request $request){
 
-        $product = Product::find($request->get("p"));
+//        $product = Product::find($request->get("p"));
 
 
-        return $productType = $product->producttype;
-//        return $product->attributevalues;
-//        return $product->attributeset->attributes()->load('attributetype');
-        $attributeType = "main";
-        $attributeType = Attributetype::all()->where("name", $attributeType)->first();
+        $user = Auth::user();
+        $products = Product::whereHas("orderproducts" , function ($q) use ($user){
+            $q->whereIn(
+                "order_id" ,
+                $user->orders->whereIn("orderstatus_id" ,
+                    [
+                        Config::get("constants.ORDER_STATUS_CLOSED"),
+                        Config::get("constants.ORDER_STATUS_POSTED"),
+                        Config::get("constants.ORDER_STATUS_READY_TO_POST")
+                    ]
+                )->pluck("id")
+            );
+        })->distinct()->get();
 
-        $attributesArray = array();
-        foreach ($product->attributeset->attributes()->where("attributetype_id", $attributeType->id) as $attribute) {
-                array_push($attributesArray, $attribute->id);
-        }
-        dd($attributesArray);
+        dd([$products->pluck("id"),$user->products()->pluck("id")]);
+//        $user->products();
+
+
+//        $products = $user->orders->whereIn("orderstatus_id" ,
+//                        [
+//                            Config::get("constants.ORDER_STATUS_CLOSED"),
+//                            Config::get("constants.ORDER_STATUS_POSTED"),
+//                            Config::get("constants.ORDER_STATUS_READY_TO_POST")
+//                        ]
+//        );
+//        dd($products);
+
         return response()->make("Ok");
 
     }
