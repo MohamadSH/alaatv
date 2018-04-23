@@ -10,7 +10,7 @@
         <td>@if(isset($transaction->cost))<span dir="ltr">{{number_format($transaction->cost)}}</span> @else <span class="label label-sm label-danger"> درج نشده </span>  @endif</td>
         @endpermission
         @permission((Config::get('constants.SHOW_TRANSACTION_TOTAL_FILTERED_COST_ACCESS')))
-        <td>@if(isset($transactionOrderproductCost[$transaction->id])){{number_format( $transactionOrderproductCost[$transaction->id]["cost"]  )}}@else<span class="label label-sm label-warning"> نامشخص </span>  @endif</td>
+        <td>@if(isset($transactionOrderproductCost[$transaction->id]))<span dir="ltr">{{number_format( $transactionOrderproductCost[$transaction->id]["cost"]  )}}</span>@else<span class="label label-sm label-warning"> نامشخص </span>  @endif</td>
         <td>@if(isset($transactionOrderproductCost[$transaction->id])){{number_format($transactionOrderproductCost[$transaction->id]["extraCost"])}} @else <span class="label label-sm label-warning"> نامشخص </span>  @endif</td>
         @endpermission
         <td>

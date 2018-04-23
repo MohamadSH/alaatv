@@ -157,13 +157,13 @@ class Product extends Model
             }
         }
 
-//        $grandParent = $this->getGrandParent();
-//        if ($grandParent !== false) {
-//            foreach ($grandParent->gifts as $gift)
-//            {
-//                $gifts->push($gift);
-//            }
-//        }
+        $grandParent = $this->getGrandParent();
+        if ($grandParent !== false) {
+            foreach ($grandParent->gifts as $gift)
+            {
+                $gifts->push($gift);
+            }
+        }
 
         return $gifts ;
     }

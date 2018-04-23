@@ -16,6 +16,7 @@ class Contentset extends Model
     protected $fillable = [
         'name',
         'description',
+        'tags'
     ];
 
 

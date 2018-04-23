@@ -35,57 +35,57 @@
     @include("systemMessage.flash")
 
         @if(!isset($descriptionIframe) || !$descriptionIframe)
-            @if(isset($isLive) && $isLive !== false)
-                <div class="row">
-                    <div class="col-md-12">
-                            <div class="portlet light profile">
-                            <div class="portlet-title">
-                                <div class="caption">
-                                    @if($isLive == 0)
-                                    <span class="caption-subject bold font-green uppercase"><img src="/img/extra/live-rs.png" height="50px"></span>
-                                    <span class="caption-helper">پخش زنده</span>
-                                    @elseif($isLive > 0 )
-                                        <span class="caption-helper">پخش زنده هنوز شروع نشده است</span>
-                                    @else
-                                        <span class="caption-helper">باز پخش آخرین جلسه</span>
-                                    @endif
-                                </div>
-                                @if(Auth::check() && $isLive <= 0)
-                                <div class="actions">
-                                    <a href="http://takhtekhak.com/download?fileName=8f81bfae-d7de-410d-abb1-9d475fb25bbb" class="btn btn-lg yellow ">
-                                        <i class="fa fa-download"></i> دانلود جزوه این جلسه </a>
-                                </div>
-                                @endif
-                            </div>
-                            <div class="portlet-body">
-                                <div class="clearfix text-center">
-                                    @if(Auth::check())
-                                        @if($isLive <= 0)
-                                            <div  class="chooseServer clearfix">
-                                                <h3 class="font-blue bold">
-                                                    لطفا برای تماشا @if($isLive == 0)ی پخش زنده@endif یکی از گزینه های زیر را انتخاب نمایید
-                                                </h3>
-                                                <p>
-                                                    <button type="button" class="btn purple btn-lg chooseServerButton" id="nationalServer">سرور داخلی</button>
-                                                    <button type="button" class="btn red btn-lg chooseServerButton" id="youtubeServer">یوتیوب(نیاز به قندشکن😉)</button>
-                                                </p>
-                                            </div>
-                                            <iframe frameborder="0" allowfullscreen id="liveFrame" src="" width="100%" height="500"></iframe>
-                                        @elseif($isLive > 0 )
-                                            <h3>جلسه چهارم بخش زنده اطلاع داده خواهد شد  </h3>
-                                        @endif
-                                            <button type="button" onclick="$('html, body').animate({scrollTop: $('#replayPrevious').offset().top}, 2000);" class="btn dark btn">تماشای جلسات دیگر</button>
-                                            <button type="button" onclick="$('html, body').animate({scrollTop: $('#attributesPortlet').offset().top}, 2000);" class="btn blue btn">دانلود جزوات</button>
-                                    @else
-                                        <h4>برای تماشا وارد شوید</h4>
-                                        <a class="btn green btn-lg" href="{{route("login")}}">ورود</a>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @endif
+            {{--@if(isset($isLive) && $isLive !== false)--}}
+                {{--<div class="row">--}}
+                    {{--<div class="col-md-12">--}}
+                            {{--<div class="portlet light profile">--}}
+                            {{--<div class="portlet-title">--}}
+                                {{--<div class="caption">--}}
+                                    {{--@if($isLive == 0)--}}
+                                    {{--<span class="caption-subject bold font-green uppercase"><img src="/img/extra/live-rs.png" height="50px"></span>--}}
+                                    {{--<span class="caption-helper">پخش زنده</span>--}}
+                                    {{--@elseif($isLive > 0 )--}}
+                                        {{--<span class="caption-helper">پخش زنده هنوز شروع نشده است</span>--}}
+                                    {{--@else--}}
+                                        {{--<span class="caption-helper">باز پخش آخرین جلسه</span>--}}
+                                    {{--@endif--}}
+                                {{--</div>--}}
+                                {{--@if(Auth::check() && $isLive <= 0)--}}
+                                {{--<div class="actions">--}}
+                                    {{--<a href="http://takhtekhak.com/download?fileName=8f81bfae-d7de-410d-abb1-9d475fb25bbb" class="btn btn-lg yellow ">--}}
+                                        {{--<i class="fa fa-download"></i> دانلود جزوه این جلسه </a>--}}
+                                {{--</div>--}}
+                                {{--@endif--}}
+                            {{--</div>--}}
+                            {{--<div class="portlet-body">--}}
+                                {{--<div class="clearfix text-center">--}}
+                                    {{--@if(Auth::check())--}}
+                                        {{--@if($isLive <= 0)--}}
+                                            {{--<div  class="chooseServer clearfix">--}}
+                                                {{--<h3 class="font-blue bold">--}}
+                                                    {{--لطفا برای تماشا @if($isLive == 0)ی پخش زنده@endif یکی از گزینه های زیر را انتخاب نمایید--}}
+                                                {{--</h3>--}}
+                                                {{--<p>--}}
+                                                    {{--<button type="button" class="btn purple btn-lg chooseServerButton" id="nationalServer">سرور داخلی</button>--}}
+                                                    {{--<button type="button" class="btn red btn-lg chooseServerButton" id="youtubeServer">یوتیوب(نیاز به قندشکن😉)</button>--}}
+                                                {{--</p>--}}
+                                            {{--</div>--}}
+                                            {{--<iframe frameborder="0" allowfullscreen id="liveFrame" src="" width="100%" height="500"></iframe>--}}
+                                        {{--@elseif($isLive > 0 )--}}
+                                            {{--<h3>جلسه چهارم بخش زنده اطلاع داده خواهد شد  </h3>--}}
+                                        {{--@endif--}}
+                                            {{--<button type="button" onclick="$('html, body').animate({scrollTop: $('#replayPrevious').offset().top}, 2000);" class="btn dark btn">تماشای جلسات دیگر</button>--}}
+                                            {{--<button type="button" onclick="$('html, body').animate({scrollTop: $('#attributesPortlet').offset().top}, 2000);" class="btn blue btn">دانلود جزوات</button>--}}
+                                    {{--@else--}}
+                                        {{--<h4>برای تماشا وارد شوید</h4>--}}
+                                        {{--<a class="btn green btn-lg" href="{{route("login")}}">ورود</a>--}}
+                                    {{--@endif--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+            {{--@endif--}}
             <div class="row">
                 <div class="col-md-12">
                     <!-- BEGIN Portlet PORTLET-->
@@ -103,6 +103,7 @@
                                             <li>
                                                 <img  src="{{ route('image', ['category'=>'4','w'=>'338' , 'h'=>'338' ,  'filename' =>  $product->image ]) }}"    alt="عکس محصول@if(isset($product->name[0])) {{$product->name}} @endif"  class="img-responsive pic-bordered" style="width: 100%"  />
                                             </li>
+                                            @if($product->enable)
                                             @if($product->isFree)
                                                 <li>
                                                     <li style="text-align: center;"><a class="bg-blue bg-font-blue" href="javascript:;">رایگان</a> </li>
@@ -167,6 +168,7 @@
                                                     </li>
                                                 @endif
                                             @endif
+                                            @endif
                                             @if(session()->has("adminOrder_id"))
                                                 <button type="submit" id="orderButton1" class="btn btn-lg green col-md-12 col-xs-12 col-sm-12" ><i class="fa fa-cart-plus"></i>افزودن برای {{Session::get("customer_firstName")}} {{Session::get("customer_lastName")}}</button>
                                             @else
@@ -177,7 +179,7 @@
                                                         <button type="submit" id="orderButton1" class="btn btn-lg green col-md-12 col-xs-12 col-sm-12" ><i class="fa fa-cart-plus"></i>افزودن به سبد</button>
                                                     @endif
                                                 @else
-                                                    <a href="javascript:;" class="btn btn-lg default col-md-12 col-xs-12 col-sm-12 font-red"> این محصول غیر فعال است</a>
+                                                    <a href="javascript:;" class="btn btn-lg default col-md-12 col-xs-12 col-sm-12 font-red">@if($product->id==183) این محصول رایگان است @else این محصول غیرفعال است@endif</a>
                                                 @endif
                                             @endif
 
@@ -467,42 +469,123 @@
             </div>
         @endif
         @if(!isset($descriptionIframe) || !$descriptionIframe)
-        @if(Auth::check() && (isset($isLive) && $isLive !== false))
-            <div class="row" id="replayPrevious">
-            <div class="col-md-12">
-                <div  class="portlet light profile">
-                    <div class="portlet-body">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <h3>تماشای جلسه اول</h3>
-                            </div>
-                            <div class="col-md-8">
-                                <a href="{{action("EducationalContentController@show",130)}}" class="btn btn-lg green ">
-                                     رفتن به صفحه تماشا </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div  class="portlet light profile">
-                        <div class="portlet-body">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <h3>تماشای جلسه دوم</h3>
-                                </div>
-                                <div class="col-md-8">
-                                    <a href="{{action("EducationalContentController@show",131)}}" class="btn btn-lg green ">
-                                        رفتن به صفحه تماشا </a>
+        @if(isset($isLive) && $isLive !== false)
+            @if(Auth::check())
+                <div class="row" id="replayPrevious">
+                    <div class="col-md-12">
+                        <div  class="portlet light profile">
+                            <div class="portlet-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <h3>تماشا/دانلود جلسه اول</h3>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <a href="{{action("EducationalContentController@show",130)}}" class="btn btn-lg green ">
+                                            رفتن به صفحه تماشا </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div  class="portlet light profile">
+                            <div class="portlet-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <h3>تماشا/دانلود جلسه دوم</h3>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <a href="{{action("EducationalContentController@show",131)}}" class="btn btn-lg green ">
+                                            رفتن به صفحه تماشا </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div  class="portlet light profile">
+                            <div class="portlet-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <h3>تماشا/دانلود جلسه سوم</h3>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <a href="{{action("EducationalContentController@show",144)}}" class="btn btn-lg green ">
+                                            رفتن به صفحه تماشا </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div  class="portlet light profile">
+                            <div class="portlet-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <h3>تماشا/دانلود جلسه چهارم</h3>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <a href="{{action("EducationalContentController@show",145)}}" class="btn btn-lg green ">
+                                            رفتن به صفحه تماشا </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div  class="portlet light profile">
+                            <div class="portlet-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <h3>تماشا/دانلود جلسه پنجم</h3>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <a href="{{action("EducationalContentController@show",156)}}" class="btn btn-lg green ">
+                                            رفتن به صفحه تماشا </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div  class="portlet light profile">
+                            <div class="portlet-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <h3>تماشا/دانلود جلسه ششم</h3>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <a href="{{action("EducationalContentController@show",157)}}" class="btn btn-lg green ">
+                                            رفتن به صفحه تماشا </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @elseif(!Auth::check())
+                <div class="row">
+                    <div class="col-md-12">
+                        <div  class="portlet light profile">
+                            <div class="portlet-body text-center bold">
+                                <h4><a href="{{route("login")}}">لطفا برای تماشای فیلم جلسات ابتدا وارد سایت شوید</a></h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
         @endif
+
         @endif
         @if( isset($product->longDescription[0]) || ($productsWithVideo->isNotEmpty() || $productsWithPamphlet->isNotEmpty()))
             <div class="row">

@@ -34,7 +34,7 @@ trait ProductCommon
 
                 foreach ($children as $child)
                 {
-                    $childAllAttributes = $child->getAllAttributes();
+                     $childAllAttributes = $child->getAllAttributes();
                     $simpleInfoAttributes = $childAllAttributes["simpleInfoAttributes"];
                     $grandChildren = $child->children;
 
