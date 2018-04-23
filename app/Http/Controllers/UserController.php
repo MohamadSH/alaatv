@@ -1266,7 +1266,7 @@ class UserController extends Controller
         $products = Product::whereHas("orderproducts" , function ($q){
             $q->whereIn("order_id" , Order::where("user_id" , Auth::user()->id)->whereIn("orderstatus_id" , [Config::get("constants.ORDER_STATUS_CLOSED"),Config::get("constants.ORDER_STATUS_POSTED"), Config::get("constants.ORDER_STATUS_READY_TO_POST")])->pluck("id"));
         })->get();
-        $pamphlets = collect();
+         $pamphlets = collect();
         $videos = collect() ;
         $productsWithVideo = array();
         $productsWithPamphlet = array();
@@ -1545,6 +1545,7 @@ class UserController extends Controller
                 }
             /** VIDEOS END */
         }
+
         $isEmptyProducts = $products->isEmpty();
         $user = Auth::user();
         return view("user.assetsList" , compact('section' , 'sideBarMode'  ,'isEmptyProducts' ,  'pamphlets' , 'videos' , 'user'));

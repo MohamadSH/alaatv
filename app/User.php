@@ -212,6 +212,11 @@ class User extends Authenticatable
         return $this->belongsTo("\App\Grade");
     }
 
+    public function contents()
+    {
+        return $this->hasMany("\App\Educationalcontent" , "author_id" , "id");
+    }
+
     /**
      * @param string $bonName
      * @return number of bons that user has of the specified bon

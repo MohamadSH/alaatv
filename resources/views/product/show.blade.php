@@ -103,9 +103,12 @@
                                             <li>
                                                 <img  src="{{ route('image', ['category'=>'4','w'=>'338' , 'h'=>'338' ,  'filename' =>  $product->image ]) }}"    alt="عکس محصول@if(isset($product->name[0])) {{$product->name}} @endif"  class="img-responsive pic-bordered" style="width: 100%"  />
                                             </li>
+                                            @if($product->enable)
                                             @if($product->isFree)
                                                 <li>
-                                                    <li style="text-align: center;"><a class="bg-blue bg-font-blue" href="javascript:;">رایگان</a> </li>
+                                                    <li style="text-align: center;">
+                                                        <a class="bg-blue bg-font-blue" href="javascript:;">رایگان</a>
+                                                    </li>
                                                 </li>
                                             @else
                                                 @if(!$product->bons->where("name" , Config::get("constants.BON1"))->where("isEnable" , 1)->isEmpty()
@@ -167,6 +170,7 @@
                                                     </li>
                                                 @endif
                                             @endif
+                                            @endif
                                             @if(session()->has("adminOrder_id"))
                                                 <button type="submit" id="orderButton1" class="btn btn-lg green col-md-12 col-xs-12 col-sm-12" ><i class="fa fa-cart-plus"></i>افزودن برای {{Session::get("customer_firstName")}} {{Session::get("customer_lastName")}}</button>
                                             @else
@@ -177,7 +181,7 @@
                                                         <button type="submit" id="orderButton1" class="btn btn-lg green col-md-12 col-xs-12 col-sm-12" ><i class="fa fa-cart-plus"></i>افزودن به سبد</button>
                                                     @endif
                                                 @else
-                                                    <a href="javascript:;" class="btn btn-lg default col-md-12 col-xs-12 col-sm-12 font-red"> این محصول غیر فعال است</a>
+                                                    <a href="javascript:;" class="btn btn-lg default col-md-12 col-xs-12 col-sm-12 font-red">@if($product->id==183) این محصول رایگان است @else این محصول غیرفعال است@endif</a>
                                                 @endif
                                             @endif
 
@@ -467,42 +471,123 @@
             </div>
         @endif
         @if(!isset($descriptionIframe) || !$descriptionIframe)
-        @if(Auth::check() && (isset($isLive) && $isLive !== false))
-            <div class="row" id="replayPrevious">
-            <div class="col-md-12">
-                <div  class="portlet light profile">
-                    <div class="portlet-body">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <h3>تماشای جلسه اول</h3>
-                            </div>
-                            <div class="col-md-8">
-                                <a href="{{action("EducationalContentController@show",130)}}" class="btn btn-lg green ">
-                                     رفتن به صفحه تماشا </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div  class="portlet light profile">
-                        <div class="portlet-body">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <h3>تماشای جلسه دوم</h3>
-                                </div>
-                                <div class="col-md-8">
-                                    <a href="{{action("EducationalContentController@show",131)}}" class="btn btn-lg green ">
-                                        رفتن به صفحه تماشا </a>
+        @if(isset($isLive) && $isLive !== false)
+            @if(Auth::check())
+                <div class="row" id="replayPrevious">
+                    <div class="col-md-12">
+                        <div  class="portlet light profile">
+                            <div class="portlet-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <h3>تماشا/دانلود جلسه اول</h3>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <a href="{{action("EducationalContentController@show",130)}}" class="btn btn-lg green ">
+                                            رفتن به صفحه تماشا </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div  class="portlet light profile">
+                            <div class="portlet-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <h3>تماشا/دانلود جلسه دوم</h3>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <a href="{{action("EducationalContentController@show",131)}}" class="btn btn-lg green ">
+                                            رفتن به صفحه تماشا </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div  class="portlet light profile">
+                            <div class="portlet-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <h3>تماشا/دانلود جلسه سوم</h3>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <a href="{{action("EducationalContentController@show",144)}}" class="btn btn-lg green ">
+                                            رفتن به صفحه تماشا </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div  class="portlet light profile">
+                            <div class="portlet-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <h3>تماشا/دانلود جلسه چهارم</h3>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <a href="{{action("EducationalContentController@show",145)}}" class="btn btn-lg green ">
+                                            رفتن به صفحه تماشا </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div  class="portlet light profile">
+                            <div class="portlet-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <h3>تماشا/دانلود جلسه پنجم</h3>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <a href="{{action("EducationalContentController@show",156)}}" class="btn btn-lg green ">
+                                            رفتن به صفحه تماشا </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div  class="portlet light profile">
+                            <div class="portlet-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <h3>تماشا/دانلود جلسه ششم</h3>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <a href="{{action("EducationalContentController@show",157)}}" class="btn btn-lg green ">
+                                            رفتن به صفحه تماشا </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @elseif(!Auth::check())
+                <div class="row">
+                    <div class="col-md-12">
+                        <div  class="portlet light profile">
+                            <div class="portlet-body text-center bold">
+                                <h4><a href="{{route("login")}}">لطفا برای تماشای فیلم جلسات ابتدا وارد سایت شوید</a></h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
         @endif
+
         @endif
         @if( isset($product->longDescription[0]) || ($productsWithVideo->isNotEmpty() || $productsWithPamphlet->isNotEmpty()))
             <div class="row">

@@ -12,14 +12,18 @@ use App\Attributetype;
 use App\Checkoutstatus;
 use App\Consultation;
 use App\Consultationstatus;
+use App\Contentset;
+use App\Contenttype;
 use App\Coupon;
 use App\Coupontype;
 use App\Educationalcontent;
 use App\Gender;
+use App\Grade;
 use App\Http\Requests\ContactUsFormRequest;
 use App\Http\Requests\SendSMSRequest;
 use App\Lottery;
 use App\Major;
+use App\Orderproduct;
 use App\Orderstatus;
 use App\Paymentmethod;
 use App\Paymentstatus;
@@ -31,6 +35,7 @@ use App\Question;
 use App\Relative;
 use App\Role;
 use App\Slideshow;
+use App\Traits\APIRequestCommon;
 use App\Traits\DateCommon;
 use App\Traits\ProductCommon;
 use App\Transactionstatus;
@@ -52,6 +57,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\View;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Sftp\SftpAdapter;
 use Meta;
@@ -63,6 +69,9 @@ use Auth;
 
 class HomeController extends Controller
 {
+    use APIRequestCommon ;
+    use ProductCommon;
+    use DateCommon;
     /**
      * Create a new controller instance.
      *
@@ -73,8 +82,7 @@ class HomeController extends Controller
     protected $response;
     protected $sideBarAdmin;
     private static $TAG = HomeController::class;
-    use ProductCommon;
-    use DateCommon;
+
 
     public function debug(Request $request){
 
@@ -114,20 +122,309 @@ class HomeController extends Controller
 
     }
 
-    public function search(Request $request)
+    public function search()
     {
-        $search = $request->get("search");
-
+        //ToDo : load ha : file haye thumbnail mahsoolat , code mojood dar partial/search/contetnset.blade
         try {
-            $productSearch = Product::search($search)->where("enable", 1)->paginate(10);
-            $articleSearch = Article::search($search)->paginate(10);
-        } catch (\Exception    $error) {
-            $message = "با عرض پوزش ، در حال حاضر دسترسی به این بخش مقدور نمی باشد";
-            return $this->errorPage($message);
+            if(Input::has("itemTypes"))
+            {
+                $itemTypes = Input::get("itemTypes");
+                if(!is_array($itemTypes)) return $this->response->setStatusCode(422)->setContent(["message"=>"bad input: itemTypes"]) ;
+            }
+            else
+            {
+                $itemTypes = array("video" , "pamphlet" , "contentset", "product" , "article");
+            }
+
+            $tagFlag = false;
+            if(Input::has("tags"))
+            {
+                $tagFlag = true;
+                $tagInput = Input::get("tags");
+                //ToDo: Appropriate error page
+                if(!is_array($tagInput)) return $this->response->setStatusCode(422)->setContent(["message"=>"bad input: tags"]) ;
+                $tags = "";
+                foreach ($tagInput as $key => $tag)
+                {
+                        if(strlen($tag)<=0)
+                            continue;
+                        $tags .= "\"$tag\"";
+                }
+                if(strlen($tags) <= 0 )
+                    $tagFlag = false;
+
+            }
+
+            $tagArray = array();
+            $items = collect();
+            $paginationSetting = collect([
+                [
+                    "itemType"=>"video" ,
+                    "pageName" => "videopage",
+                    "itemPerPage" => "12"
+                ],
+                [
+                    "itemType"=>"pamphlet" ,
+                    "pageName" => "pamphletpage",
+                    "itemPerPage" => "10"
+                ],
+                [
+                    "itemType"=>"article" ,
+                    "pageName" => "articlepage",
+                    "itemPerPage" => "10"
+                ],
+                [
+                    "itemType"=>"contentset" ,
+                    "pageName" => "contentsetpage",
+                    "itemPerPage" => "10"
+                ]
+            ]);
+            foreach ($itemTypes as $itemType)
+            {
+                $requestSubPath = "&withscores=1";
+                if($tagFlag)
+                {
+                    $requestBasePath = env("TAG_API_URL")."tags/";
+                    switch ($itemType)
+                    {
+                        case "video":
+                            $perPage = $paginationSetting->where("itemType" , "video")->first()["itemPerPage"];
+                            $pageName = $paginationSetting->where("itemType" , "video")->first()["pageName"];
+                            $requestSubPath .= "&limit=".(int)$perPage;
+                            if(Input::has($pageName))
+                            {
+                                $pageNum = Input::get($pageName);
+                                $offset = $perPage * ($pageNum - 1);
+                                $requestSubPath .= "&offset=".$offset;
+                            }
+                            else
+                            {
+                                $requestSubPath .= "&offset=0";
+                            }
+                            $bucket = "content";
+                            $itemTypeTag = "فیلم";
+                            break;
+                        case "pamphlet":
+                            $perPage = $paginationSetting->where("itemType" , "pamphlet")->first()["itemPerPage"];
+                            $pageName = $paginationSetting->where("itemType" , "pamphlet")->first()["pageName"];
+                            $requestSubPath .= "&limit=".(int)$perPage;
+                            if(Input::has($pageName))
+                            {
+                                $pageNum = Input::get($pageName);
+                                $offset = $perPage * ($pageNum - 1);
+                                $requestSubPath .= "&offset=".$offset;
+                            }
+                            else
+                            {
+                                $requestSubPath .= "&offset=0";
+                            }
+                            $bucket = "content";
+                            $itemTypeTag = "جزوه";
+                            break;
+                        case "article":
+                            $perPage = $paginationSetting->where("itemType" , "article")->first()["itemPerPage"];
+                            $pageName = $paginationSetting->where("itemType" , "article")->first()["pageName"];
+                            $requestSubPath .= "&limit=".(int)$perPage;
+                            if(Input::has($pageName))
+                            {
+                                $pageNum = Input::get($pageName);
+                                $offset = $perPage * ($pageNum - 1);
+                                $requestSubPath .= "&offset=".$offset;
+                            }
+                            else
+                            {
+                                $requestSubPath .= "&offset=0";
+                            }
+                            $bucket = "content";
+                            $itemTypeTag = "مقاله";
+                            break;
+                        case "contentset":
+                            $perPage = $paginationSetting->where("itemType" , "contentset")->first()["itemPerPage"];
+                            $pageName = $paginationSetting->where("itemType" , "contentset")->first()["pageName"];
+                            $requestSubPath .= "&limit=".(int)$perPage;
+                            if(Input::has($pageName))
+                            {
+                                $pageNum = Input::get($pageName);
+                                $offset = $perPage * ($pageNum - 1);
+                                $requestSubPath .= "&offset=".$offset;
+                            }
+                            else
+                            {
+                                $requestSubPath .= "&offset=0";
+                            }
+                            $bucket = "contentset";
+                            $itemTypeTag = "کلاس_درس";
+                            break;
+                        default:
+                            $bucket = $itemType;
+                            break;
+                    }
+
+                    if(!in_array($itemTypeTag , $tagInput))
+                        $tags .= "\"$itemTypeTag\"";
+                    $tags = str_replace("\"\"" , "\",\"" , $tags);
+                    $tags = "[".$tags."]";
+                    $bucketRequestPath = $requestBasePath.$bucket."?tags=$tags".$requestSubPath;
+                    $response = $this->sendRequest($bucketRequestPath,"GET" );
+                    if($response["statusCode"] == 200){
+                        $result = json_decode($response["result"]);
+                        $total_items_db = $result->data->total_items_db ;
+                        $arrayOfId = array();
+                        foreach ($result->data->items as $item)
+                        {
+                            array_push($arrayOfId , $item->id);
+                        }
+                        foreach ($result->data->tags as $tag)
+                        {
+                            if(!in_array($tag , $tagArray)) array_push($tagArray , $tag);
+                        }
+                    }
+                }
+                $costCollection = collect();
+                switch ($itemType)
+                {
+                    case "video":
+                        $query = Educationalcontent::select()->whereHas("contenttypes" , function ($q){
+                            $q->where("name" , "video");
+                        })->orderBy("created_at" , "desc");
+                        if(isset($arrayOfId))
+                        {
+                            //Todo: mishe in query nakhore ba ye if rooye arrayOfId
+                            $query->whereIn("id" , $arrayOfId);
+                            $query = $query->get();
+                            $options = [
+                                "pageName" => $paginationSetting->where("itemType" , "video")->first()["pageName"]
+                            ];
+                            $query = new LengthAwarePaginator($query,(isset($total_items_db))?$total_items_db:0,$paginationSetting->where("itemType" , "video")->first()["itemPerPage"],null  , $options);
+                        }else
+                        {
+                            $query = $query->paginate($paginationSetting->where("itemType" , "video")->first()["itemPerPage"] , ['*'] , $paginationSetting->where("itemType" , "video")->first()["pageName"]);
+                        }
+                            //Sample Code For Text Search
+//                        $text = Input::get("searchText");
+//                        $this->QueryCommin($text , ["name" , "description" , $query]);
+                        break;
+                    case "pamphlet":
+                        $query = Educationalcontent::select()->whereHas("contenttypes" , function ($q){
+                            $q->where("name" , "pamphlet");
+                        })->orderBy("created_at" , "desc");
+                        if(isset($arrayOfId))
+                        {
+                            $query->whereIn("id" , $arrayOfId);
+                            $query = $query->get();
+                            $options = [
+                                "pageName" => $paginationSetting->where("itemType" , "pamphlet")->first()["pageName"]
+                            ];
+                            $query = new LengthAwarePaginator($query,(isset($total_items_db))?$total_items_db:0,$paginationSetting->where("itemType" , "pamphlet")->first()["itemPerPage"],null  , $options);
+                        }else
+                        {
+                            $query = $query->paginate($paginationSetting->where("itemType" , "pamphlet")->first()["itemPerPage"] , ['*'] , $paginationSetting->where("itemType" , "pamphlet")->first()["pageName"]);
+                        }
+                        break;
+                    case "article":
+                        $query = Educationalcontent::select()->whereHas("contenttypes" , function ($q){
+                            $q->where("name" , "article");
+                        })->orderBy("created_at" , "desc");
+                        if(isset($arrayOfId))
+                        {
+                            $query->whereIn("id" , $arrayOfId);
+                            $query = $query->get();
+                            $options = [
+                                "pageName" => $paginationSetting->where("itemType" , "article")->first()["pageName"]
+                            ];
+                            $query = new LengthAwarePaginator($query,(isset($total_items_db))?$total_items_db:0,$paginationSetting->where("itemType" , "article")->first()["itemPerPage"],null  , $options);
+                        }else
+                        {
+                            $query = $query->paginate($paginationSetting->where("itemType" , "article")->first()["itemPerPage"] , ['*'] , $paginationSetting->where("itemType" , "article")->first()["pageName"]);
+                        }
+                        break;
+                    case "contentset":
+                        $query = Contentset::select()->orderBy("created_at" , "desc");
+                        if(isset($arrayOfId))
+                        {
+                            $query->whereIn("id" , $arrayOfId);
+                            $query = $query->get();
+                            $options = [
+                                "pageName" => $paginationSetting->where("itemType" , "contentset")->first()["pageName"]
+                            ];
+                            $query = new LengthAwarePaginator($query,(isset($total_items_db))?$total_items_db:0,$paginationSetting->where("itemType" , "contentset")->first()["itemPerPage"],null  , $options);
+                        }else
+                        {
+                            $query = $query->paginate($paginationSetting->where("itemType" , "contentset")->first()["itemPerPage"] , ['*'] , $paginationSetting->where("itemType" , "contentset")->first()["pageName"]);
+                        }
+                        break;
+                    case "product":
+                        $query = Product::getProducts(0,1)->orderBy("order");
+                        if(isset($arrayOfId))
+                        {
+                            $query->whereIn("id" , $arrayOfId);
+                        }
+                        $query = $query->get();
+//                        $costCollection = $this->makeCostCollection($query);
+                        break;
+                    default:
+                        continue 2;
+                        break;
+                }
+                if(isset($total_items_db)) $totalObjectsCount = $total_items_db;
+                else $totalObjectsCount = $query->count();
+                $items->push([
+                    "type"=>$itemType,
+                    "totalitems"=> (isset($totalObjectsCount))?$totalObjectsCount:0,
+                    "view"=>View::make('partials.search.'.$itemType, array('items' => $query))->render(),
+                    "costCollection"=>$costCollection
+                ]);
+            }
+            $totalTags = array();
+//            $majorCollection = collect([
+//                ["description"=>"رشته_ریاضی", "name"=>"ریاضی"] ,
+//                ["description"=>"رشته_تجربی", "name"=>"تجربی" ],
+//                ["description"=>"رشته_انسانی", "name"=>"انسانی" ]
+//            ]);
+            $majorCollection = Major::all();
+            $totalTags = array_merge($totalTags , $majorCollection->pluck("description")->toArray()) ;
+            $majors = $majorCollection->pluck(  "name" , "description")->toArray();
+
+            $gradeCollection = Grade::where("name" ,'<>' , 'graduated' )->get();
+            $totalTags = array_merge($totalTags , $gradeCollection->pluck("description")->toArray()) ;
+            $grades = $gradeCollection->pluck('displayName' , 'description')->toArray() ;
+//            $grades = array_sort_recursive($grades);
+
+            $lessonCollection = collect([
+                ["value"=>"" , "index"=>"همه دروس"],
+                ["value"=>"دیفرانسیل", "index"=>"دیفرانسیل"] ,
+                ["value"=>"تحلیلی", "index"=>"تحلیلی"] ,
+                ["value"=>"گسسته", "index"=>"گسسته"] ,
+                ["value"=>"زیست_شناسی", "index"=>"زیست شناسی"] ,
+                ["value"=>"ریاضی_تجربی", "index"=>"ریاضی تجربی"] ,
+                ["value"=>"فیزیک", "index"=>"فیزیک"] ,
+                ["value"=>"شیمی", "index"=>"شیمی" ],
+                ["value"=>"عربی", "index"=>"عربی" ],
+                ["value"=>"دین_و_زندگی", "index"=>"دین و زندگی" ],
+                ["value"=>"زیان", "index"=>"زیان" ],
+            ]);
+            $totalTags = array_merge($totalTags , $lessonCollection->pluck("value")->toArray()) ;
+            $lessons = $lessonCollection->pluck("index" , "value")->toArray();
+
+            $extraTagArray  = array_diff($tagArray , $totalTags );
+
+//            $rootContentTypes = Contenttype::where("enable", 1)->whereDoesntHave("parents")->pluck("displayName" , "displayName")->toArray() ;
+//            $childContentTypes = Contenttype::whereHas("parents" , function ($q) {
+//                $q->where("name" , "exam") ;
+//            })->pluck("displayName" , "displayName")->toArray() ;
+            if(Request::ajax())
+            {
+                return $this->response->setStatusCode(200)->setContent(["items"=>$items , "itemTypes"=>$itemTypes]);
+            }
+            else
+            {
+                $sideBarMode = "closed";
+                return view("pages.search" , compact("items"  ,"itemTypes" ,"tagArray" , "extraTagArray", "majors" , "grades" , "rootContentTypes", "childContentTypes" , "lessons" , "sideBarMode" ));
+            }
+        }catch (\Exception    $e) {
+            $message = "unexpected error";
+            return $this->response->setStatusCode(503)->setContent(["message"=>$message , "error"=>$e->getMessage() , "line"=>$e->getLine() , "file"=>$e->getFile()]);
         }
-
-
-        return view('pages.search', compact('productSearch', 'articleSearch'));
     }
 
     /**
@@ -938,7 +1235,8 @@ class HomeController extends Controller
                         $message = "شما ابتدا باید یکی از این محصولات را سفارش دهید و یا اگر سفارش داده اید مبلغ را تسویه نمایید: " . "<br>";
                         $productIds = array();
                         foreach ($products as $product) {
-                            $myParents = $product->parents;
+                            //$myParents = $product->parents;
+                            $myParents = $this->makeParentArray($product);
                             if (!empty($myParents)) {
                                 $rootParent = end($myParents);
                                 if (!in_array($rootParent->id, $productIds)) {
@@ -1474,7 +1772,41 @@ class HomeController extends Controller
 
     public function bot()
     {
+        /**
+         * Giving gift to users
 
+        $carbon = new Carbon("2018-02-20 00:00:00");
+        $orderproducts = Orderproduct::whereIn("product_id" ,[ 100] )->whereHas("order" , function ($q) use ($carbon)
+        {
+//           $q->where("orderstatus_id" , 1)->where("created_at" ,">" , $carbon);
+           $q->where("orderstatus_id" , 2)->whereIn("paymentstatus_id" , [2,3])->where("completed_at" ,">" , $carbon);
+        })->get();
+        dump("تعداد سفارش ها" . $orderproducts->count());
+        $users = array();
+        $counter = 0;
+        foreach ($orderproducts as $orderproduct)
+        {
+            $order = $orderproduct->order;
+            if($order->orderproducts->where("product_id" , 107)->isNotEmpty()) continue ;
+
+            $giftOrderproduct = new Orderproduct();
+            $giftOrderproduct->orderproducttype_id = Config::get("constants.ORDER_PRODUCT_GIFT");
+            $giftOrderproduct->order_id = $order->id ;
+            $giftOrderproduct->product_id = 107 ;
+            $giftOrderproduct->cost = 24000 ;
+            $giftOrderproduct->discountPercentage = 100 ;
+            $giftOrderproduct->save() ;
+
+            $giftOrderproduct->parents()->attach($orderproduct->id , ["relationtype_id"=>Config::get("constants.ORDER_PRODUCT_INTERRELATION_PARENT_CHILD")]);
+            $counter++;
+            if(isset($order->user->id))
+                array_push($users , $order->user->id);
+            else
+                array_push($users , 0);
+        }
+        dump($counter." done");
+        dd($users);
+         */
         /**
          *  Converting Hamayesh with Poshtibani to without poshtibani
         if (!Auth::user()->hasRole("admin")) abort(404);
@@ -1608,8 +1940,8 @@ class HomeController extends Controller
                         }
                     }
                 }
-
-                $parentsArray = $product->parents;
+                //$parentsArray = $product->parents;
+                $parentsArray = $this->makeParentArray($product);
                 if (!empty($parentsArray)) {
                     foreach ($parentsArray as $parent) {
                         foreach ($parent->gifts as $gift) {
@@ -1633,5 +1965,300 @@ class HomeController extends Controller
         dd("finish");
          * */
     }
+
+    public function tagBot()
+    {
+        $counter = 0;
+        try{
+            dump( "start time:". Carbon::now("asia/tehran"));
+            if(!Input::has("t"))    return $this->response->setStatusCode(422)->setContent(["message"=>"Wrong inputs: Please pass parameter t. Available values: v , p , cs"]);
+            $type = Input::get("t");
+            switch($type)
+            {
+                case "v":
+                    $items = Educationalcontent::whereHas("contenttypes" , function ($q){
+                        $q->where("name" , "video");
+                    });
+                    if(Input::has("id"))
+                    {
+                        $contentId = Input::get("id");
+                        $items->where("id" , $contentId);
+                    }
+                    $items = $items->get();
+                    foreach ($items->where("tags" , null) as $item)
+                    {
+                        $myTags = [
+                            "فیلم"
+                        ];
+                        switch ($item->id)
+                        {
+                            case 130:
+                                array_merge($myTags , [
+                                    "عربی" ,
+                                    "ضبط_استودیویی",
+                                    "جمع_بندی",
+                                    "میلاد_ناصح_زاده"
+                                ] );
+                                break;
+                            case 131:
+                                array_merge($myTags , [
+                                    "عربی" ,
+                                    "ضبط_استودیویی",
+                                    "جمع_بندی",
+                                    "میلاد_ناصح_زاده"
+                                ]);
+                                break;
+                            case 144:
+                                array_merge($myTags , [
+                                    "عربی" ,
+                                    "ضبط_استودیویی",
+                                    "جمع_بندی",
+                                    "میلاد_ناصح_زاده"
+                                ]);
+                                break;
+                            case 145:
+                                array_merge($myTags , [
+                                    "عربی" ,
+                                    "ضبط_استودیویی",
+                                    "جمع_بندی",
+                                    "میلاد_ناصح_زاده"
+                                ] );
+                                break;
+                            default :
+                                break;
+                        }
+                        array_merge($myTags , $item->majors->pluck("description")->toArray() );
+                        array_merge($myTags , $item->grades->where("name" , "graduated")->pluck("description")->toArray() );
+                        $item->tags = json_encode($myTags);
+                    }
+                    $bucket = "content";
+                    break;
+                case "p":
+                    $items = Educationalcontent::whereHas("contenttypes" , function ($q){
+                        $q->where("name" , "pamphlet");
+                    });
+                    if(Input::has("id"))
+                    {
+                        $contentId = Input::get("id");
+                        $items->where("id" , $contentId);
+                    }
+                    $items = $items->get();
+                    //ToDo: tage pdf afzoode shavad
+                    foreach ($items->where("tags" , null) as $item)
+                    {
+                        $myTags = [
+                            "جزوه"
+                        ];
+                        switch ($item->id)
+                        {
+                            default :
+                                break;
+                        }
+                        array_merge($myTags , $item->majors->pluck("description")->toArray() );
+                        array_merge($myTags , $item->grades->where("name" , "graduated")->pluck("description")->toArray() );
+                        $item->tags = json_encode($myTags);
+                    }
+                    $bucket = "content";
+                    break;
+                case "b":
+                    $items = Educationalcontent::whereHas("contenttypes" , function ($q){
+                        $q->where("name" , "book");
+                    });
+                    $items = $items->get();
+                    //ToDo: tage pdf afzoode shavad
+                    foreach ($items->where("tags" , null) as $item)
+                    {
+                        $myTags = [
+                            "کتاب_درسی",
+                            "جزوه" ];
+                        switch ($item->id)
+                        {
+                            default :
+                                break;
+                        }
+                        array_merge($myTags , $item->majors->pluck("description")->toArray() );
+                        array_merge($myTags , $item->grades->where("name" , "graduated")->pluck("description")->toArray() );
+                        $item->tags = json_encode($myTags);
+                    }
+                    $bucket = "content";
+                    break;
+                case "e":
+                    $items = Educationalcontent::whereHas("contenttypes" , function ($q){
+                        $q->where("name" , "exam");
+                    });
+                    $items = $items->get();
+                    //ToDo: tage pdf afzoode shavad
+                    foreach ($items->where("tags" , null) as $item)
+                    {
+                        $myTags = array(["آزمون"]);
+                        $childContentTypes = Contenttype::whereHas("parents" , function ($q) {
+                            $q->where("name" , "exam") ;
+                        })->pluck("displayName")->toArray() ;
+                        array_merge($myTags , $childContentTypes );
+                        array_merge($myTags , $item->majors->pluck("description")->toArray() );
+                        array_merge($myTags , $item->grades->where("name" , "graduated")->pluck("description")->toArray() );
+                        $item->tags = json_encode($myTags);
+                    }
+                    $bucket = "content";
+                    break;
+                case "a":
+                    $items = Educationalcontent::whereHas("contenttypes" , function ($q){
+                        $q->where("name" , "article");
+                    });
+                    $items = $items->get();
+                    foreach ($items->where("tags" , null) as $item)
+                    {
+                        $myTags = array(["مقاله"]);
+                        switch ($item->id)
+                        {
+                            default :
+                                break;
+                        }
+                        array_merge($myTags , $item->majors->pluck("description")->toArray() );
+                        array_merge($myTags , $item->grades->where("name" , "graduated")->pluck("description")->toArray() );
+                        $item->tags = json_encode($myTags);
+                    }
+                    $bucket = "content";
+                    break;
+                case "cs":
+                    $items = Contentset::orderBy("id");
+                    if(Input::has("id"))
+                    {
+                        $id = Input::get("id");
+                        $items = $items->where("id" , $id);
+                    }
+                    $items = $items->get();
+                    $bucket = "contentset";
+                    break;
+                //ToDo: determining product tags
+                case "pr":
+                    if(Input::has("id"))
+                    {
+                        $id = Input::get("id");
+                        $productIds = [$id];
+                    }else
+                    {
+                        $productIds = [99 , 104 , 92 , 91 , 181 , 107 , 69 , 65 , 61 , 163 , 135 , 131 , 139 , 143 , 147 , 155 , 119 , 123 , 183];
+                    }
+
+                    $items = collect() ;
+                    foreach ($productIds as $productId)
+                    {
+                        $tags = array();
+                        switch ($productId)
+                        {
+                            case 99:
+                                $tags = ["محصول", "رشته_ریاضی" , "رشته_تجربی"  ,"کلاس_کنکور" , "شیمی" , 'مهدی_صنیعی_طهرانی' ];
+                                break;
+                            case 104:
+                                $tags = ["محصول", "رشته_ریاضی" , "رشته_تجربی"  , "رشته_انسانی" ,"کلاس_کنکور" , "دین_و_زندگی" , 'جعفر_زنجبرزاده' ];
+                                break;
+                            case 92:
+                                $tags = ["محصول", "رشته_ریاضی" , "رشته_تجربی"  ,"کلاس_کنکور" , "فیزیک" , 'دکتر_پیمان_طلوعی' ];
+                                break;
+                            case 91:
+                                $tags = ["محصول", "رشته_ریاضی" , "رشته_تجربی"  ,"کلاس_کنکور" , "شیمی" , 'مهدی_صنیعی_طهرانی' ];
+                                break;
+                            case 181:
+                                $tags = ["محصول", "رشته_تجربی" ,"دهمنظام_آموزشی_جدید" , "زیست_شناسی" , 'جلال_موقاری' ];
+                                break;
+                            case 107:
+                                $tags = ["محصول", "رشته_ریاضی" , "رشته_تجربی"  ,"کلاس_کنکور" , "شیمی" , 'مهدی_صنیعی_طهرانی' ];
+                                break;
+                            case 69:
+                                $tags = ["محصول", "رشته_تجربی"   ,"کلاس_کنکور" , "زیست_شناسی" , 'محمد_پازوکی' ];
+                                break;
+                            case 65:
+                                $tags = ["محصول", "رشته_تجربی"   ,"کلاس_کنکور" , "ریاضی_تجربی" , 'رضا_شامیزاده' ];
+                                break;
+                            case 61:
+                                $tags = ["محصول", "رشته_ریاضی"   ,"کلاس_کنکور" , "دیفرانسیل" , 'محمد_صادق_ثابتی' ];
+                                break;
+                            case 163:
+                                $tags = ["محصول", "رشته_ریاضی"   ,"کلاس_کنکور" , "گسسته" , 'بهمن_مؤذنی_پور' ];
+                                break;
+                            case 135:
+                                $tags = ["محصول", "رشته_تجربی"   ,"کلاس_کنکور" , "ریاضی_تجربی" , 'محمدامین_نباخته' ];
+                                break;
+                            case 131:
+                                $tags = ["محصول", "رشته_تجربی"   ,"کلاس_کنکور" , "ریاضی_تجربی" , 'مهدی_امینی_راد' ];
+                                break;
+                            case 139:
+                                $tags = ["محصول", "رشته_تجربی"   ,"کلاس_کنکور" , "زیست_شناسی" , 'ابوالفضل_جعفری' ];
+                                break;
+                            case 143:
+                                $tags = ["محصول", "رشته_ریاضی" , "رشته_تجربی"  ,"کلاس_کنکور" , "شیمی" , 'مهدی_صنیعی_طهرانی' ];
+                                break;
+                            case 147:
+                                $tags = ["محصول", "رشته_ریاضی" , "رشته_تجربی"  , "رشته_انسانی" ,"کلاس_کنکور" , "عربی" , 'محسن_آهویی' ];
+                                break;
+                            case 155:
+                                $tags = ["محصول", "رشته_ریاضی" , "رشته_تجربی"  ,"کلاس_کنکور" , "فیزیک" , 'دکتر_پیمان_طلوعی' ];
+                                break;
+                            case 119:
+                                $tags = ["محصول", "رشته_ریاضی"   ,"کلاس_کنکور" , "تحلیلی" , 'محمد_صادق_ثابتی' ];
+                                break;
+                            case 123:
+                                $tags = ["محصول", "رشته_ریاضی"   ,"کلاس_کنکور" , "دیفرانسیل" , 'محمد_صادق_ثابتی' ];
+                                break;
+                            case 183:
+                                $tags = ["محصول", "رشته_ریاضی" , "رشته_تجربی" , "رشته_انسانی" ,"کلاس_کنکور" , "عربی" , 'میلاد_ناصح_زاده' ];
+                                break;
+                            default:
+                                break;
+                        }
+                        $items->push(["id"=>$productId , "tags"=>json_encode($tags)]);
+                    }
+                    $bucket = "product";
+                    break;
+                case "ec":
+
+                    break;
+                default:
+                    return $this->response->setStatusCode(422)->setContent(["message"=>"Unprocessable input t."]);
+                    break;
+            }
+            dump("available items: ".$items->count());
+            $successCounter = 0 ;
+            $failedCounter = 0 ;
+            $warningCounter = 0 ;
+            foreach ($items as $item)
+            {
+                $itemTagsArray = json_decode($item["tags"]);
+                if(is_array($itemTagsArray) && !empty($itemTagsArray) && isset($item["id"]))
+                {
+                    $params = [
+                        "tags"=> $item["tags"] ,
+                    ];
+                    if(isset($item["created_at"]) && strlen($item["created_at"]) > 0 )  $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $item["created_at"] )->timestamp;
+//                    $params["score"] = $item["id"];
+                    $response =  $this->sendRequest(env("TAG_API_URL")."id/$bucket/".$item["id"] , "PUT", $params);
+                    if($response["statusCode"] == 200)
+                    {
+                        $successCounter++;
+                    }
+                    else
+                    {
+                        dump("item #".$item["id"]." failed. response : ".$response["statusCode"]);
+                        $failedCounter++;
+                    }
+                    $counter++;
+                }elseif(is_array($itemTagsArray) && empty($itemTagsArray))
+                {
+                    $warningCounter++;
+                    dump("warning no tags found for item #".$item["id"]);
+                }
+            }
+            dump($successCounter." items successfully done");
+            dump($failedCounter." items failed");
+            dump($warningCounter." warnings");
+            return $this->response->setStatusCode(200)->setContent(["message"=>"Done! number of processed items : ".$counter]);
+        }catch(\Exception $e)
+        {
+            $message = "unexpected error";
+            return $this->response->setStatusCode(503)->setContent(["message" => $message,"number of successfully processed items"=>$counter, "error" => $e->getMessage(), "line" => $e->getLine()]);
+        }
+    }
+
 
 }

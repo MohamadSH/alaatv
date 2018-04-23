@@ -25,13 +25,16 @@ class CreateSanatisharifmergesTable extends Migration
             $table->string('videolink')->nullable()->comment("آدرس فایل hd فیلم");
             $table->string('videolinkhq')->nullable()->comment("آدرس فایل hq فیلم");
             $table->string('videolink240p')->nullable()->comment("آدرس فایل 240p فیلم");
+            $table->string('videolinktakhtesefid')->nullable()->comment("آدرس فایل در سرور تخته سفید");
             $table->tinyInteger("videoEnable")->nullable()->comment("فعال بودن یا نبودن فیلم");
             $table->string('thumbnail')->nullable()->comment("آدرس فایل تامبنیل فیلم");
             $table->unsignedInteger('pamphletid')->nullable()->comment("آی دی مشخص کننده یک جزوه");
             $table->tinyInteger('pamphletTransferred')->default(0)->comment("جزوه به تخته خاک منتقل شده یا خیر؟");
             $table->string('pamphletname')->nullable()->comment("نام جزوه");
             $table->string('pamphletaddress')->nullable()->comment("آدرس فایل جزوه");
-            $table->string('pamhpletdescrip')->nullable()->comment("توضیح فیلم");
+            $table->string('pamphletdescrip')->nullable()->comment("توضیح جزوه");
+            $table->integer('pamphletsession')->default(0)->comment("جلسه جزوه");
+            $table->tinyInteger("pamphletEnable")->nullable()->comment("فعال بودن یا نبودن جزوه");
             $table->tinyInteger("isexercise")->default(0)->comment("فایل جزوه یک آزمون است یا خیر");
             $table->unsignedInteger('lessonid')->nullable()->comment("آی دی مشخص کننده درس");
             $table->tinyInteger('lessonTransferred')->default(0)->comment("درس به تخته خاک منتقل شده یا خیر؟");

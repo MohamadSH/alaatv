@@ -1,4 +1,5 @@
 <?php
+namespace App\Helpers;
 /**
  *
  * Multibyte Keyword Generator
@@ -9,7 +10,103 @@
  * https://github.com/peterkahl/multibyte-keyword-generator
  *
  */
-class  colossal_mind_mb_keyword_gen {
+class  colossalMindMbKeywordGen {
+    const COMMON_WORDS_EN_GB =  array('able', 'about', 'above', 'act', 'add', 'afraid', 'after', 'again', 'against', 'age', 'ago', 'agree', 'all', 'almost', 'alone', 'along', 'already', 'also', 'although', 'always', 'am', 'amount', 'an', 'and', 'anger', 'angry', 'animal', 'another', 'answer', 'any', 'appear', 'apple', 'are', 'arrive', 'arm', 'arms', 'around', 'arrive', 'as', 'ask', 'at', 'attempt', 'aunt', 'away', 'back', 'bad', 'bag', 'bay', 'be', 'became', 'because', 'become', 'been', 'before', 'began', 'begin', 'behind', 'being', 'bell', 'belong', 'below', 'beside', 'best', 'better', 'between', 'beyond', 'big', 'body', 'bone', 'born', 'borrow', 'both', 'bottom', 'box', 'boy', 'break', 'bring', 'brought', 'bug', 'built', 'busy', 'but', 'buy', 'by', 'call', 'came', 'can', 'cause', 'choose', 'close', 'close', 'consider', 'come', 'consider', 'considerable', 'contain', 'continue', 'could', 'cry', 'cut', 'dare', 'dark', 'deal', 'dear', 'decide', 'deep', 'did', 'die', 'do', 'does', 'dog', 'done', 'doubt', 'down', 'during', 'each', 'ear', 'early', 'eat', 'effort', 'either', 'else', 'end', 'enjoy', 'enough', 'enter', 'etc', 'even', 'ever', 'every', 'except', 'expect', 'explain', 'fail', 'fall', 'far', 'fat', 'favor', 'fear', 'feel', 'feet', 'fell', 'felt', 'few', 'fill', 'find', 'fit', 'fly', 'follow', 'for', 'forever', 'forget', 'from', 'front', 'full', 'fully', 'gave', 'get', 'gives', 'goes', 'gone', 'good', 'got', 'gray', 'great', 'green', 'grew', 'grow', 'guess', 'had', 'half', 'hang', 'happen', 'has', 'hat', 'have', 'he', 'hear', 'heard', 'held', 'hello', 'help', 'her', 'here', 'hers', 'high', 'highest', 'highly', 'hill', 'him', 'his', 'hit', 'hold', 'hot', 'how', 'however', 'i', 'if', 'ill', 'in', 'include', 'including', 'included', 'indeed', 'instead', 'into', 'iron', 'is', 'it', 'its', 'just', 'keep', 'kept', 'knew', 'know', 'known', 'late', 'least', 'led', 'left', 'lend', 'less', 'let', 'like', 'likely', 'lone', 'long', 'longer', 'look', 'lot', 'make', 'many', 'may', 'me', 'mean', 'met', 'might', 'mile', 'mine', 'moon', 'more', 'most', 'move', 'much', 'must', 'my', 'near', 'nearly', 'necessary', 'neither', 'never', 'next', 'no', 'none', 'nor', 'not', 'note', 'nothing', 'now', 'number', 'of', 'off', 'often', 'oh', 'on', 'once', 'only', 'or', 'other', 'ought', 'our', 'out', 'please', 'prepare', 'probable', 'pull', 'pure', 'push', 'put', 'raise', 'ran', 'rather', 'reach', 'realize', 'reply', 'require', 'rest', 'run', 'said', 'same', 'sat', 'saw', 'say', 'see', 'seem', 'seen', 'self', 'sell', 'sent', 'separate', 'set', 'shall', 'she', 'should', 'side', 'sign', 'since', 'so', 'sold', 'some', 'soon', 'sorry', 'stay', 'step', 'stick', 'still', 'stood', 'such', 'sudden', 'suppose', 'take', 'taken', 'talk', 'tall', 'tell', 'ten', 'than', 'thank', 'that', 'the', 'their', 'them', 'then', 'there', 'therefore', 'these', 'they', 'this', 'those', 'though', 'through', 'till', 'to', 'today', 'told', 'tomorrow', 'too', 'took', 'tore', 'tought', 'toward', 'tried', 'tries', 'trust', 'try', 'turn', 'two', 'under', 'until', 'up', 'upon', 'us', 'use', 'usual', 'various', 'verb', 'very', 'visit', 'want', 'was', 'we', 'well', 'went', 'were', 'what', 'when', 'where', 'whether', 'which', 'while', 'white', 'who', 'whom', 'whose', 'why', 'will', 'with', 'within', 'without', 'would', 'yes', 'yet', 'you', 'young', 'your', 'yours');
+    const COMMON_WORDS_FA_IR = array(
+    'به',
+    'های',
+    'در',
+    'ادامه',
+    'از',
+    'کنید',
+    'است',
+    'را',
+    'کلیک',
+    'که',
+    'خود',
+    'می',
+    'آن',
+    'ان',
+    'تا',
+    'بر',
+    'است',
+    'هست',
+    'شده',
+    'ها',
+    'هم',
+    'شود',
+    'شد',
+    'می',
+    'دارد',
+    'برای',
+    'با',
+    'تو',
+    'بود',
+    'اگر',
+    'ما',
+    'من',
+    'او',
+    ' ',
+    '،',
+    'ها',
+    '.',
+    'کاملا',
+    'حتما',
+    'شده',
+    'رسید',
+    'بر هم',
+    'شدن',
+    'البته',
+    'دارد',
+    'رای',
+    'برای',
+    'داشته',
+    'باشند',
+    'باشد',
+    'این',
+    'آن',
+    'داشتند',
+    'بالا',
+    'بیاید ',
+    'آنها',
+    'برقرار',
+    'نداشته',
+    'دارند',
+    'باید',
+    'چند',
+    'هستند',
+    'چون',
+    'بیاید ',
+    'به','با', 'بی', 'بند', 'بدهد', 'بت', 'بي', 'بتان', 'بِ', 'بُ', 'بم', 'باً', 'بَ', 'بة', 'بشو', 'بى',
+    'های', 'ها', 'هاي', 'هاست', 'هاى', 'هاش', 'هام', 'هاشو', 'هات', 'هاتان', 'هاشان', 'هایى',
+    'در', 'دری', 'درم', 'درهم', 'درِ', 'دره', 'درش', 'درن',
+    'ادامۀ',
+    'از', 'ازه', 'ازتون', 'ازش', 'ازی', 'ازن', 'ازي',
+    'است','ای','اي','ام','اش','اتان','ات', 'ایی', 'امان', 'اى', 'اتو', 'اء', 'اِ', 'اه', 'اهای', 'ايي',
+    'را', 'راست', 'رای', 'راي',
+'که', 'کی', 'کِ', 'کاش', 'کشان', 'کتون', 'کُ', 'کَ', 'کي',
+'می', 'مي', 'مه', 'مى', 'متان', 'مت', 'متون', 'مُ', 'مَ', 'مشو', 'مِ', 'مش', 'ماً', 'متو', 'مم', 'مة', 'مك', 'مون',
+'خود', 'خودي', 'خودی', 'خودِ', 'خودت', 'خودش', 'خودم', 'خودمان', 'خودشان', 'خودتو', 'خودمون', 'خودتون', 'خودشو', 'خودتان', 'خودشم', 'خودشون',
+'آن', 'آنها', 'آنان', 'آنجا', 'آنچه', 'آنم', 'آنند', 'آنكه', 'آنِ', 'آنت', 'آنی',
+'تا', 'تام', 'تایی', 'تای', 'تاشو', 'تاي',
+'این', 'اینکه', 'اینم', 'اینه', 'اینی', 'اینو',
+'بر', 'برهم', 'بره', 'برند', 'برم', 'بری', 'بریم', 'برِ', 'برش', 'برن', 'بران', 'بري',
+'شده', 'شدن', 'شدت', 'شدم', 'شدند', 'شدی', 'شدة', 'شدگان', 'شدیم', 'شدد', 'شدش',
+'ﺑﻪ',
+'هم', 'همه', 'همین', 'همی', 'همة', 'همت', 'همو',
+'کردن', 'کرد', 'کرده', 'کردند', 'کردم', 'کردی', 'کردیم', 'کردة', 'کردو',
+'باشد', 'باشید', 'باشند', 'باش', 'باشیم', 'باشی', 'باشم', 'باشه', 'باشيم', 'باشن', 'باشيد',
+'ﻫﺎ', 'ﻫﺎي', 'ﻫﺎی', 'ﻫﺎى',
+'شود',
+'ﻣﯽ', 'ﻣﯽ',
+'دارد', 'دارند', 'دار', 'داران', 'دارم', 'داره', 'داری', 'دارن', 'داري', 'دارش',
+'ﺑﺎ',
+'بود', 'بودن', 'بودند', 'بوده', 'بودم', 'بودی', 'بودیم',
+'دهم', 'دهد', 'دهند', 'دهی',
+'تو', 'توی',
+'اگر',
+''
+);
     //declare variables
     var $contents;
     var $encoding;
@@ -31,7 +128,7 @@ class  colossal_mind_mb_keyword_gen {
     // minimum phrase length for inclusion into the 3-word phrase metakeys
     var $phrase3WordLengthMin;
     //------------------------------------------------------------------
-    function colossal_mind_mb_keyword_gen ($params) {
+    function __construct ($params) {
         // language or default language; if not defined
         if (!isset($params['lang'])) $this->lang = 'en_GB';
         else $this->lang = $params['lang']; // case sensitive
@@ -92,6 +189,10 @@ class  colossal_mind_mb_keyword_gen {
             $this->phrase3WordLengthMinOccur = 3;
         }
         //--------------------------------------------------------------
+    }
+    //------------------------------------------------------------------
+    function getConst($name){
+        return constant("self::{$name}");
     }
     //------------------------------------------------------------------
     function get_keywords () {
@@ -159,7 +260,7 @@ class  colossal_mind_mb_keyword_gen {
         // IGNORE WORDS LIST
         // add, remove, edit as needed
         // make sure that paths are correct and necessary files are uploaded to your server
-        require_once(dirname(__FILE__) .'/common-words-'.$this->lang.'.php');
+        $common = $this->getConst("COMMON_WORDS_".strtoupper($this->lang));
         if (isset($common)) {
 //			var_dump($common);
             foreach ($common as $word) $str = str_replace(' '.$word.' ', ' ', $str);
@@ -214,7 +315,7 @@ class  colossal_mind_mb_keyword_gen {
     //single words
     function parse_words () {
         if ($this->wordLengthMin === 0) return false; // 0 means disable
-        $str = implode(' ', $this->contents);
+        $str = implode(' ', (array)$this->contents);
         $str = $this->strip_punctuations($str);
         // create an array out of the site contents
         $s = explode(' ', $str);

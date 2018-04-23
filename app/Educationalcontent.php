@@ -28,6 +28,7 @@ class Educationalcontent extends Model
         'metaDescription',
         'metaKeywords',
         'tags',
+        'author_id'
     ];
 
     public function grades()
@@ -53,6 +54,11 @@ class Educationalcontent extends Model
     public function template()
     {
         return $this->belongsTo("\App\Template");
+    }
+
+    public function user()
+    {
+        return $this->belongsTo("\App\User" , "author_id" ,"id");
     }
 
     /**

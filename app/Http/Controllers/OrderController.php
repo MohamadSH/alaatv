@@ -798,8 +798,8 @@ class OrderController extends Controller
                         if(strlen($order->user->lastName)>0) $fullName .= " ".$order->user->lastName;
                         if(strlen($fullName)>0) $smsRequest["message"] = $fullName;
                         else $smsRequest["message"] = "کاربر گرامی";
-                        $smsRequest["message"]  .= " شماره مرسوله پستی ".$productName." ".$request->get('postCode')." می باشد - تخته خاک";
-//                        $smsRequest["message"]  .= " برنامه و دفترچه عید نوروز برای شما پست شد"."\n"."کد رهگیری مرسوله: ".$request->get('postCode')."\n"."تخته خاک - K96.IR";
+//                        $smsRequest["message"]  .= " شماره مرسوله پستی ".$productName." ".$request->get('postCode')." می باشد - تخته خاک";
+                        $smsRequest["message"]  .= " دفترچه بعد از عید برای شما پست شد"."\n"."کد رهگیری مرسوله: ".$request->get('postCode')."\n"."تخته خاک - K96.IR";
                         $smsRequest["users"] = $order->user_id;
                         $response = $controller->sendSMS($smsRequest);
                         if($response->getStatusCode() == 200) $smsMessageSuccess = "پیامک کد رهگیری برای کاربر ارسال شد";
