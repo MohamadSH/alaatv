@@ -126,7 +126,6 @@ class EducationalContentController extends Controller
         $educationalContents = $educationalContents->get();
         if(Input::has("columns"))
             $columns = Input::get("columns");
-
         return view("educationalContent.index" , compact("educationalContents" , "columns"));
     }
 

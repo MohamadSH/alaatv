@@ -14,7 +14,6 @@ use Illuminate\Http\Request;
 use Auth;
 use Config ;
 use Illuminate\Http\Response;
-
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\View;
 
