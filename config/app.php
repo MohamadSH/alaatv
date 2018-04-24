@@ -189,6 +189,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        App\Providers\MedianaServiceProvider::class,
+
     ],
     'development-providers' => [
         Barryvdh\Debugbar\ServiceProvider::class,

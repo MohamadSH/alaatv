@@ -153,6 +153,22 @@ return [
             'port' => env('REDIS_PORT', 6379),
             'database' => 1,
             'read_timeout' => 60,
+        ],
+
+        'horizon' => [
+            'host' => env('REDIS_HOST', 'localhost'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', 6379),
+            'database' => 2,
+            'read_timeout' => 60,
+        ],
+
+        'queue' => [
+            'host' => env('REDIS_HOST', 'localhost'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', 6379),
+            'database' => 3,
+            'read_timeout' => 60,
         ]
 
     ],

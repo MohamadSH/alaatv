@@ -20,6 +20,8 @@ use App\Http\Requests\ContactUsFormRequest;
 use App\Http\Requests\SendSMSRequest;
 use App\Lottery;
 use App\Major;
+use App\Notifications\InvoicePaid;
+use App\Notifications\UserRegisterd;
 use App\Order;
 use App\Orderstatus;
 use App\Paymentmethod;
@@ -81,36 +83,9 @@ class HomeController extends Controller
 
     public function debug(Request $request){
 
-//        $product = Product::find($request->get("p"));
-
-
-        $user = Auth::user();
-        $products = Product::whereHas("orderproducts" , function ($q) use ($user){
-            $q->whereIn(
-                "order_id" ,
-                $user->orders->whereIn("orderstatus_id" ,
-                    [
-                        Config::get("constants.ORDER_STATUS_CLOSED"),
-                        Config::get("constants.ORDER_STATUS_POSTED"),
-                        Config::get("constants.ORDER_STATUS_READY_TO_POST")
-                    ]
-                )->pluck("id")
-            );
-        })->distinct()->get();
-
-        dd([$products->pluck("id"),$user->products()->pluck("id")]);
-//        $user->products();
-
-
-//        $products = $user->orders->whereIn("orderstatus_id" ,
-//                        [
-//                            Config::get("constants.ORDER_STATUS_CLOSED"),
-//                            Config::get("constants.ORDER_STATUS_POSTED"),
-//                            Config::get("constants.ORDER_STATUS_READY_TO_POST")
-//                        ]
-//        );
-//        dd($products);
-
+        $u = Auth::user();
+        $u->notify(new UserRegisterd($u));
+        dd($u);
         return response()->make("Ok");
 
     }
@@ -763,9 +738,11 @@ class HomeController extends Controller
         $relatives = explode(',', $relatives);
 
         $users = User::whereIn("id", $usersId)->get();
-        if ($users->isEmpty()) return $this->response->setStatusCode(451);
+        if ($users->isEmpty())
+            return $this->response->setStatusCode(451);
 
-        if (!isset($from) || strlen($from) == 0) $from = getenv("SMS_PROVIDER_DEFAULT_NUMBER");
+        if (!isset($from) || strlen($from) == 0)
+            $from = getenv("SMS_PROVIDER_DEFAULT_NUMBER");
 
         /**
          *  for customized message to every user

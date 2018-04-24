@@ -19,23 +19,59 @@ use Illuminate\Support\Facades\Config;
 
 class User extends Authenticatable
 {
-//    use EntrustUserTrait {
-//        EntrustUserTrait::restore insteadof SoftDeletes;
-//    }
-
+    use Helper;
+    use SoftDeletes, CascadeSoftDeletes;
     use LaratrustUserTrait;
-
     use Notifiable;
 
-    use SoftDeletes, CascadeSoftDeletes;
-    use Helper;
 
-    protected $cascadeDeletes = ['orders', 'userbons', 'useruploads', 'verificationmessages', 'bankaccounts', 'contacts', 'mbtianswers'];
+    protected $cascadeDeletes = [
+        'orders',
+        'userbons',
+        'useruploads',
+        'verificationmessages',
+        'bankaccounts',
+        'contacts',
+        'mbtianswers'
+    ];
     /**      * The attributes that should be mutated to dates.        */
-    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
-    protected $lockProfile = ["province", "city", "address", "postalCode", "school", "gender_id", "major_id", "email"]; //columns being used for locking user's profile
-    protected $completeInfo = ["photo", "province", "city", "address", "postalCode", "school", "gender_id", "major_id", "grade_id", "phone", "bloodtype_id", "allergy", "medicalCondition", "diet"];
-    protected $medicalInfo = ["bloodtype_id", "allergy", "medicalCondition", "diet"];
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
+    protected $lockProfile = [
+        "province",
+        "city",
+        "address",
+        "postalCode",
+        "school",
+        "gender_id",
+        "major_id",
+        "email"
+    ]; //columns being used for locking user's profile
+    protected $completeInfo = [
+        "photo",
+        "province",
+        "city",
+        "address",
+        "postalCode",
+        "school",
+        "gender_id",
+        "major_id",
+        "grade_id",
+        "phone",
+        "bloodtype_id",
+        "allergy",
+        "medicalCondition",
+        "diet"
+    ];
+    protected $medicalInfo = [
+        "bloodtype_id",
+        "allergy",
+        "medicalCondition",
+        "diet"
+    ];
     /**
      * The attributes that are mass assignable.
      *
@@ -74,7 +110,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
 
     public function cacheKey()
@@ -486,5 +523,10 @@ class User extends Authenticatable
         }
 
         return $fullName;
+    }
+
+    public function routeNotificationForPhoneNumber()
+    {
+        return ltrim($this->mobile, '0');
     }
 }

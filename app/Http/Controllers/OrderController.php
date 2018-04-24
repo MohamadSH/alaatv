@@ -11,6 +11,7 @@ use App\Helpers\ENPayment;
 use App\Http\Requests\InsertTransactionRequest;
 use App\Http\Requests\SendSMSRequest;
 use App\Http\Requests\SubmitCouponRequest;
+use App\Notifications\InvoicePaid;
 use App\Ordermanagercomment;
 use App\Orderpostinginfo;
 use App\Paymentmethod;
@@ -1149,7 +1150,8 @@ class OrderController extends Controller
 //                $result["Status"]="success";
 //                $result["RefID"] = "mohamad2";
 //            }
-            if(!isset($result)) exit("پاسخی از سایت درگاه پرداخت دریافت نشد!") ;
+            if(!isset($result))
+                exit("پاسخی از سایت درگاه پرداخت دریافت نشد!") ;
             if(strcmp(array_get($result,"Status"),'success')==0)
             {
                 if($order->orderstatus_id == Config::get("constants.ORDER_STATUS_OPEN"))
@@ -1168,12 +1170,15 @@ class OrderController extends Controller
                 $order->orderstatus_id = Config::get("constants.ORDER_STATUS_CLOSED");
                 if($transaction->cost < (int)$order->totalCost() )
                 {
-                    if((int)$order->totalPaidCost() < (int)$order->totalCost()) $order->paymentstatus_id = Config::get("constants.PAYMENT_STATUS_INDEBTED");
+                    if((int)$order->totalPaidCost() < (int)$order->totalCost())
+                        $order->paymentstatus_id = Config::get("constants.PAYMENT_STATUS_INDEBTED");
                 }
                 $order->timestamps = false;
                 $order->completed_at = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran');
-                if($order->update()) $result = array_add($result , "saveOrder" , 1);
-                else $result = array_add($result , "saveOrder" , 0);
+                if($order->update())
+                    $result = array_add($result , "saveOrder" , 1);
+                else
+                    $result = array_add($result , "saveOrder" , 0);
                 $order->timestamps = true;
                 $orderproducts = $order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->get();
 
@@ -1409,8 +1414,10 @@ class OrderController extends Controller
                     }
                     $order->timestamps = false;
                     $order->completed_at = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran');
-                    if($order->update()) $result = array_add($result , "saveOrder" , 1);
-                    else $result = array_add($result , "saveOrder" , 0);
+                    if($order->update())
+                        $result = array_add($result , "saveOrder" , 1);
+                    else
+                        $result = array_add($result , "saveOrder" , 0);
                     $order->timestamps = true;
                     $orderproducts = $order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->get();
 
@@ -1432,7 +1439,8 @@ class OrderController extends Controller
                                 $bons = $grandParent->bons->where("name" , $bonName)->where("isEnable" , 1);
                             }
                         }
-                        if(in_array($simpleProduct->id , $checkedProducts)) continue;
+                        if(in_array($simpleProduct->id , $checkedProducts))
+                            continue;
                         if($bons->isNotEmpty()) {
                             $bon = $bons->first();
                             $bonPlus = $bon->pivot->bonPlus;
@@ -1540,7 +1548,8 @@ class OrderController extends Controller
                 session()->forget("customer_firstName");
                 session()->forget("customer_lastName");
                 $order = Order::FindorFail($order_id);
-            }else
+            }
+            else
             {
                 $result["isAdminOrder"] = false;
                 $order_id = session()->get("order_id");
@@ -1669,44 +1678,11 @@ class OrderController extends Controller
         /**
          * Sending SMS to Ordoo 97 customers
          */
-            if($sendSMS && isset($order))
-            {
-                if($order->orderproducts()->whereHas("product" ,function ($q){
-                    $q->whereIn("product_id" , Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT"))
-                        ->orwhereIn("product_id" , Config::get("constants.ORDOO_HOZOORI_NOROOZ_97_PRODUCT"));
-                })->get()->isNotEmpty())
-                {
-                    if(isset($order->user_id))
-                    {
-                        $user = $order->user;
-                        if(isset($user->gender_id))
-                        {
-                            if($user->gender->name=="خانم")
-                                $gender = "خانم ";
-                            elseif($user->gender->name=="آقا")
-                                $gender = "آقای ";
-                            else
-                                $gender = "";
-                        }else{
-                            $gender = "";
-                        }
-
-                        $messageCore = "در کانال اختصاصی اردوطلایی عضو بشید و تا قبل از اردو از خدمات آن بهره ببرید."."\n"."- این کانال فقط مخصوص بچه های اردوطلایی هست."."\n"."https://t.me/joinchat/AAAAAEUjS73Z3ghfuX7LZA";
-                        $message = "سلام ".$gender.$user->getfullName()."\n".$messageCore;
-                        $mobiles = [ltrim($user->mobile, '0')];
-                        $smsInfo = array();
-                        $smsInfo["message"] = $message;
-                        $smsInfo["to"] = $mobiles;
-                        $smsInfo["from"] = getenv("SMS_PROVIDER_DEFAULT_NUMBER");
-                        $response = $this->medianaSendSMS($smsInfo);
-
-                        $messageCore = "لطفا با مراجعه به آدرس زیر اطلاعات خود را برای شرکت در اردو تکمیل نمایید و یا در صورت تکمیل بودن ، اطلاعات خود را تایید کنید."."\n"."https://k96.ir/user/info"."\n"."تخته خاک";
-                        $message = "سلام ".$gender.$user->getfullName()."\n".$messageCore;
-                        $smsInfo["message"] = $message;
-                        $response = $this->medianaSendSMS($smsInfo);
-                    }
-                }
-            }
+        if($sendSMS && isset($order))
+        {
+            $user = $order->user;
+            $user->notify(new InvoicePaid($order));
+        }
 
         return view('order.checkout.verification',compact('result')) ;
         //'Status'(index) going to be 'success', 'error' or 'canceled'

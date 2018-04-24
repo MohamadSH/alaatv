@@ -1,0 +1,94 @@
+<?php
+
+namespace App\Broadcasting;
+
+use App\Classes\sms\MedianaClient;
+use App\Classes\sms\MedianaMessage;
+use Illuminate\Notifications\Notification;
+use Illuminate\Queue\SerializesModels;
+
+class MedianaChannel
+{
+    use SerializesModels;
+
+    /**
+     * The client instance.
+     *
+     * @var MedianaClient
+     */
+    protected $client;
+
+
+    /**
+     * Create a new channel instance.
+     *
+     * @param MedianaClient $client
+     * @return void
+     */
+    public function __construct(MedianaClient $client)
+    {
+        $this->client = $client;
+    }
+
+    /**
+     * Send the given notification.
+     *
+     * @param mixed        $notifiable
+     * @param Notification $notification
+     *
+     * @return array
+     */
+    public function send($notifiable, Notification $notification)
+    {
+        $to = $this->getTo($notifiable);
+        $message = $notification->toMediana($notifiable);
+        if (is_string($message)) {
+            $message = new MedianaMessage($message);
+        }
+        return $this->client->send(
+            $this->buildParams($message, $to)
+        );
+    }
+
+
+    /**
+     * Get phone number.
+     *
+     * @param $notifiable
+     *
+     * @return mixed
+     */
+    protected function getTo($notifiable)
+    {
+        if ($to = $notifiable->routeNotificationForPhoneNumber()) {
+            return $to;
+        }
+        return $notifiable->phone_number;
+    }
+
+    /**
+     * Build up params.
+     *
+     * @param MedianaMessage $message
+     * @param string            $to
+     *
+     * @return array
+     */
+    protected function buildParams(MedianaMessage $message, $to)
+    {
+        $optionalFields = array_filter([
+//            'time'    => data_get($message, 'sendAt'),
+        ]);
+        $param = array_merge([
+            'to'         => json_encode([$to]),
+            'message'    => trim($message->content),
+            'op'         =>'send',
+        ], $optionalFields);
+
+        if(isset($message->from))
+            $param['from'] = $message->from;
+        return $param;
+    }
+
+
+}
