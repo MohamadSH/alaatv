@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Traits\CharacterCommon;
+use App\Traits\Helper;
 use App\User;
 use App\Userstatus;
-use App\Helpers\Helper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Validation\Rule;
@@ -18,6 +18,7 @@ use Illuminate\Auth\Events\Registered;
 class RegisterController extends Controller
 {
     use CharacterCommon;
+    use Helper;
     /*
     |--------------------------------------------------------------------------
     | Register Controller
@@ -37,7 +38,6 @@ class RegisterController extends Controller
      * @var string
      */
     protected $redirectTo ;
-    protected $helper;
 
     /**
      * Create a new controller instance.
@@ -48,7 +48,6 @@ class RegisterController extends Controller
     {
         $this->middleware('guest');
         $this->redirectTo = action("ProductController@search");
-        $this->helper = new Helper();
     }
 
     /**
@@ -109,7 +108,7 @@ class RegisterController extends Controller
           $data["photo"]  = Config::get('constants.PROFILE_DEFAULT_IMAGE');
           $data["userstatus_id"] = Userstatus::all()->where("name" , "active")->first()->id ;
           
-//          $password = $this->helper->generateRandomPassword(4);
+//          $password = $this->generateRandomPassword(4);
 
         if(!isset($data['firstName']) || strlen(preg_replace('/\s+/', '', $data['firstName'])) == 0)  $data['firstName'] = NULL;
         if(!isset($data['lastName']) || strlen(preg_replace('/\s+/', '', $data['lastName'])) == 0)  $data['lastName'] = NULL;
@@ -154,7 +153,7 @@ class RegisterController extends Controller
 //
 //        $smsInfo["message"] = "سلام به تخته خاک خوش آمدید\n نام کاربری: ".$user->mobile."\nرمزعبور: ".$password["rawPassword"] ;
         $smsInfo["message"] = "سلام به تخته خاک خوش آمدید\n نام کاربری: ".$user->mobile."رمز عبور: \n". $data['nationalCode'];
-        $response = $this->helper->medianaSendSMS($smsInfo);
+        $response = $this->medianaSendSMS($smsInfo);
 ////          $response = array("error"=>false , "message"=>"ارسال موفقیت آمیز بود");
 //        if(!$response["error"]){
 //            $user->passwordRegenerated_at = Carbon::now();
@@ -172,7 +171,7 @@ class RegisterController extends Controller
 //         */
 //        $verificationCode = rand(1000,99999);
 //        $smsInfo["message"] = "کد احراز هویت شما: ".$verificationCode."\n تخته خاک";
-//        $response = $this->helper->medianaSendSMS($smsInfo);
+//        $response = $this->medianaSendSMS($smsInfo);
 ////        $response = array("error"=>false , "message"=>"ارسال موفقیت آمیز بود");
 //        if(!$response["error"]){
 //            $verificationMessageStatusSent = Verificationmessagestatuse::all()->where("name","sent")->first();

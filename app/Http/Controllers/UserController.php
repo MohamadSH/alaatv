@@ -31,6 +31,7 @@ use App\Province;
 use App\Relative;
 use App\Traits\CharacterCommon;
 use App\Traits\DateCommon;
+use App\Traits\Helper;
 use App\Traits\ProductCommon;
 use App\Traits\RequestCommon;
 use App\Transaction;
@@ -42,7 +43,6 @@ use App\Userstatus;
 use App\Verificationmessagestatuse;
 use App\Websitesetting;
 use Carbon\Carbon;
-use App\Helpers\Helper;
 use Illuminate\Http\Request;
 use Auth;
 use Hash;
@@ -60,11 +60,14 @@ use stdClass;
 class UserController extends Controller
 {
     protected $response ;
-    protected $helper;
+    protected $setting;
+    
     use ProductCommon;
     use DateCommon;
     use RequestCommon;
     use CharacterCommon ;
+    use Helper;
+    
     function __construct()
     {
         /** setting permissions
@@ -76,7 +79,7 @@ class UserController extends Controller
         $this->middleware('permission:'.Config::get('constants.SHOW_USER_ACCESS'),['only'=>'edit']);
 
         $this->response = new Response();
-        $this->helper = new Helper();
+        $this->setting = json_decode(app('setting')->setting);
     }
 
     public function findTech(Request $request){
@@ -111,7 +114,7 @@ class UserController extends Controller
         $updatedTimeEnable = Input::get('updatedTimeEnable');
         if(strlen($updatedSinceDate)>0 && strlen($updatedTillDate)>0 && isset($updatedTimeEnable))
         {
-            $users = $this->helper->timeFilterQuery($users, $updatedSinceDate, $updatedTillDate, 'updated_at');
+            $users = $this->timeFilterQuery($users, $updatedSinceDate, $updatedTillDate, 'updated_at');
         }
 
         //filter by firstName, lastName, nationalCode, mobile
@@ -235,7 +238,7 @@ class UserController extends Controller
                 $createdTimeEnable = Input::get('completedTimeEnable');
                 if(strlen($createdSinceDate)>0 && strlen($createdTillDate)>0 && isset($createdTimeEnable))
                 {
-                    $orders = $this->helper->timeFilterQuery($orders, $createdSinceDate, $createdTillDate, 'created_at');
+                    $orders = $this->timeFilterQuery($orders, $createdSinceDate, $createdTillDate, 'created_at');
                 }
                 $orders = $orders->get();
                 $users = $users->whereIn("id" , $orders->pluck("user_id")->toArray());
@@ -596,12 +599,12 @@ class UserController extends Controller
      */
     public function show($user)
     {
-        $setting = Websitesetting::where("version" , 1)->get()->first();
-        $setting = json_decode($setting->setting);
+
+        
         Meta::set('title', "تخته خاک|پروفایل");
-        Meta::set('keywords', substr($setting->site->seo->homepage->metaKeywords, 0 , Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
-        Meta::set('description', substr($setting->site->seo->homepage->metaDescription , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
-        Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $setting->site->siteLogo ]));
+        Meta::set('keywords', substr($this->setting->site->seo->homepage->metaKeywords, 0 , Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
+        Meta::set('description', substr($this->setting->site->seo->homepage->metaDescription , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
+        Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
         if(
             ( $user->id === Auth::id() ) ||
             ( Auth::user()->hasRole(Config::get('constants.ROLE_ADMIN') ) ) ||
@@ -769,6 +772,7 @@ class UserController extends Controller
      *
      * @param  User $user
      * @return \Illuminate\Http\Response
+     * @throws \Exception
      */
     public function destroy($user)
     {
@@ -899,12 +903,12 @@ class UserController extends Controller
 //            session()->put("userOrders",true);
 //            return redirect(action("UserController@showProfile"));
 //        }
-        $setting = Websitesetting::where("version" , 1)->get()->first();
-        $setting = json_decode($setting->setting);
+
+        
         Meta::set('title', "تخته خاک|سفارش ها");
-        Meta::set('keywords', substr($setting->site->seo->homepage->metaKeywords, 0 , Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
-        Meta::set('description', substr($setting->site->seo->homepage->metaDescription , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
-        Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $setting->site->siteLogo ]));
+        Meta::set('keywords', substr($this->setting->site->seo->homepage->metaKeywords, 0 , Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
+        Meta::set('description', substr($this->setting->site->seo->homepage->metaDescription , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
+        Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
         $debitCard = Bankaccount::all()->where("user_id" , 2)->first();
         $orders = Auth::user()->orders->where("orderstatus_id","<>",Config::get("constants.ORDER_STATUS_OPEN"))->where("orderstatus_id","<>",Config::get("constants.ORDER_STATUS_OPEN_BY_ADMIN"))->sortByDesc("completed_at");
 
@@ -944,12 +948,12 @@ class UserController extends Controller
      */
     public function uploadConsultingQuestion()
     {
-        $setting = Websitesetting::where("version" , 1)->get()->first();
-        $setting = json_decode($setting->setting);
+
+        
         Meta::set('title', "تخته خاک|آپلود سؤال آموزشی");
         Meta::set('keywords', "سؤال مشاوره ای مشاور رایگان صوتی مشاوره پاسخ");
         Meta::set('description', "پرسیدن سؤال آموزشی رایگان به صورت فایل صوتی از مشاور کاملا رابگان");
-        Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $setting->site->siteLogo ]));
+        Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
         return view("user.uploadConsultingQuestion");
     }
 
@@ -959,12 +963,12 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function uploads(){
-        $setting = Websitesetting::where("version" , 1)->get()->first();
-        $setting = json_decode($setting->setting);
+
+        
         Meta::set('title', "تخته خاک|لیست سؤالات مشاوره ای");
         Meta::set('keywords', "سؤال مشاوره ای مشاور رایگان صوتی مشاوره پاسخ");
         Meta::set('description', "پرسیدن سؤال آموزشی رایگان به صورت فایل صوتی از مشاور کاملا رابگان");
-        Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $setting->site->siteLogo ]));
+        Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
         $questions = Auth::user()->useruploads->where("isEnable","1");
         $counter = 1;
         return view("user.consultingQuestions" , compact("questions" , "counter"));
@@ -1024,7 +1028,7 @@ class UserController extends Controller
 
         if($verificationMessages->isEmpty())
         {
-            $response = $this->helper->medianaSendSMS($smsInfo);
+            $response = $this->medianaSendSMS($smsInfo);
 //                  $response = array("error"=>false , "message"=>"ارسال موفقیت آمیز بود");
             if(!$response["error"]){
                 $request = new Request();
@@ -1066,7 +1070,7 @@ class UserController extends Controller
                     $verificationMessage->expired_at = $now ;
                     if($verificationMessage->update())
                     {
-                        $response = $this->helper->medianaSendSMS($smsInfo);
+                        $response = $this->medianaSendSMS($smsInfo);
 //                  $response = array("error"=>false , "message"=>"ارسال موفقیت آمیز بود");
                         if(!$response["error"]){
                             $request = new Request();
@@ -1135,7 +1139,7 @@ class UserController extends Controller
             session()->put("tab", "tab_1_3");
             return redirect()->back();
         }
-//        $password = $this->helper->generateRandomPassword(4);
+//        $password = $this->generateRandomPassword(4);
         $password = ["rawPassword"=>$user->nationalCode , "hashPassword"=>bcrypt($user->nationalCode)];
         $user->password = $password["hashPassword"];
 
@@ -1145,7 +1149,7 @@ class UserController extends Controller
         $smsInfo = array();
         $smsInfo["to"] = array(ltrim($user->mobile, '0'));
         $smsInfo["message"] = "کاربر گرامی رمز عبور شما تغییر کرد.\n رمزعبور جدید ".$password["rawPassword"]."\n تخته خاک";
-        $response = $this->helper->medianaSendSMS($smsInfo);
+        $response = $this->medianaSendSMS($smsInfo);
 //          $response = array("error"=>false , "message"=>"ارسال موفقیت آمیز بود");
         if(!$response["error"]){
             $user->passwordRegenerated_at = Carbon::now();
@@ -1256,12 +1260,12 @@ class UserController extends Controller
      */
     public function userProductFiles()
     {
-        $setting = Websitesetting::where("version" , 1)->get()->first();
-        $setting = json_decode($setting->setting);
+
+        
         Meta::set('title', "تخته خاک|فایل ها");
-        Meta::set('keywords', substr("صفحه فایل های کاربر\n".$setting->site->seo->homepage->metaKeywords, 0 , Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
-        Meta::set('description', substr("صفحه فایل های کاربر\n".$setting->site->seo->homepage->metaDescription , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
-        Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $setting->site->siteLogo ]));
+        Meta::set('keywords', substr("صفحه فایل های کاربر\n".$this->setting->site->seo->homepage->metaKeywords, 0 , Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
+        Meta::set('description', substr("صفحه فایل های کاربر\n".$this->setting->site->seo->homepage->metaDescription , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
+        Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
         $sideBarMode = "closed";
         $products = Product::whereHas("orderproducts" , function ($q){
             $q->whereIn("order_id" , Order::where("user_id" , Auth::user()->id)->whereIn("orderstatus_id" , [Config::get("constants.ORDER_STATUS_CLOSED"),Config::get("constants.ORDER_STATUS_POSTED"), Config::get("constants.ORDER_STATUS_READY_TO_POST")])->pluck("id"));
@@ -1276,7 +1280,7 @@ class UserController extends Controller
             if(!in_array($product->id,$productsWithPamphlet))
             {
                 array_push($productsWithPamphlet,$product->id) ;
-                $parentsArray = $product->parents;
+                $parentsArray = $this->makeParentArray($product);
                 if(!empty($parentsArray))
                 {
                     foreach ($parentsArray as $parent)
@@ -1284,14 +1288,16 @@ class UserController extends Controller
                         if(!in_array($parent->id,$productsWithPamphlet))
                         {
                             array_push($productsWithPamphlet,$parent->id) ;
-                            if(isset($pamphlets[$parent->id])) $pamphletArray = $pamphlets[$parent->id];
-                            else $pamphletArray = array();
+                            if(isset($pamphlets[$parent->id]))
+                                $pamphletArray = $pamphlets[$parent->id];
+                            else
+                                $pamphletArray = array();
                             foreach($parent->validProductfiles("pamphlet")->get() as $productfile)
                             {
                                 array_push($pamphletArray , [ "file"=>$productfile->file , "name"=>$productfile->name , "product_id"=>$productfile->product_id ]);
                             }
                             if(!empty($pamphletArray))
-                                $pamphlets->put($parent->id, [ "productName"=>$parent->getDisplayName(), "pamphlets"=>$pamphletArray]);
+                                $pamphlets->put($parent->id, [ "productName"=>$parent->name, "pamphlets"=>$pamphletArray]);
                         }
 
                         foreach ($parent->complimentaryproducts as $complimentaryproduct)
@@ -1306,7 +1312,7 @@ class UserController extends Controller
                                     array_push($pamphletArray, ["file" => $productfile->file, "name" => $productfile->name, "product_id"=>$productfile->product_id]);
                                 }
                                 if(!empty($pamphletArray))
-                                    $pamphlets->put($complimentaryproduct->id, [ "productName"=>$complimentaryproduct->getDisplayName(), "pamphlets"=>$pamphletArray]);
+                                    $pamphlets->put($complimentaryproduct->id, [ "productName"=>$complimentaryproduct->name, "pamphlets"=>$pamphletArray]);
                             }
                         }
                     }
@@ -1322,7 +1328,7 @@ class UserController extends Controller
                                     array_push($pamphletArray, ["file" => $productfile->file, "name" => $productfile->name , "product_id" => $productfile->product_id]);
                                 }
                                 if(!empty($pamphletArray))
-                                    $pamphlets->put($gift->id, [ "productName"=>$gift->getDisplayName(), "pamphlets"=>$pamphletArray]);
+                                    $pamphlets->put($gift->id, [ "productName"=>$gift->name, "pamphlets"=>$pamphletArray]);
                             }
                         }
                     }
@@ -1338,7 +1344,7 @@ class UserController extends Controller
                                 array_push($pamphletArray, ["file" => $productfile->file, "name" => $productfile->name, "product_id"=>$productfile->product_id]);
                             }
                             if(!empty($pamphletArray))
-                                $pamphlets->put($child->id, [ "productName"=>$child->getDisplayName(), "pamphlets"=>$pamphletArray]);
+                                $pamphlets->put($child->id, [ "productName"=>$child->name, "pamphlets"=>$pamphletArray]);
                         }
                     }
                 }
@@ -1349,7 +1355,7 @@ class UserController extends Controller
                     array_push($pamphletArray , [ "file"=>$productfile->file , "name"=>$productfile->name , "product_id"=>$productfile->product_id ]);
                 }
                 if(!empty($pamphletArray))
-                    $pamphlets->put($product->id, [ "productName"=>$product->getDisplayName(), "pamphlets"=>$pamphletArray]);
+                    $pamphlets->put($product->id, [ "productName"=>$product->name, "pamphlets"=>$pamphletArray]);
 
                 if($product->hasComplimentaries())
                     foreach( $product->complimentaryproducts as $complimentaryproduct)
@@ -1364,7 +1370,7 @@ class UserController extends Controller
                                 array_push($pamphletArray , [ "file"=>$productfile->file , "name"=>$productfile->name , "product_id"=>$productfile->product_id ]);
                             }
                             if(!empty($pamphletArray))
-                                $pamphlets->put($complimentaryproduct->id, [ "productName"=>$complimentaryproduct->getDisplayName(), "pamphlets"=>$pamphletArray]);
+                                $pamphlets->put($complimentaryproduct->id, [ "productName"=>$complimentaryproduct->name, "pamphlets"=>$pamphletArray]);
                         }
                     }
 
@@ -1379,9 +1385,9 @@ class UserController extends Controller
                                 array_push($pamphletArray, ["file" => $productfile->file, "name" => $productfile->name , "product_id" => $productfile->product_id]);
                             }
                             if(!empty($pamphletArray))
-                                $pamphlets->put($gift->id, [ "productName"=>$gift->getDisplayName(), "pamphlets"=>$pamphletArray]);
+                                $pamphlets->put($gift->id, [ "productName"=>$gift->name, "pamphlets"=>$pamphletArray]);
                         }
-                        $parentsArray = $gift->parent;
+                        $parentsArray = $this->makeParentArray($gift);
                         if (!empty($parentsArray)) {
                             foreach ($parentsArray as $parent) {
                                 if (!in_array($parent->id, $productsWithPamphlet)) {
@@ -1392,7 +1398,7 @@ class UserController extends Controller
                                         array_push($pamphletArray, ["file" => $productfile->file, "name" => $productfile->name , "product_id" => $productfile->product_id]);
                                     }
                                     if(!empty($pamphletArray))
-                                        $pamphlets->put($parent->id, [ "productName"=>$parent->getDisplayName(), "pamphlets"=>$pamphletArray]);
+                                        $pamphlets->put($parent->id, [ "productName"=>$parent->name, "pamphlets"=>$pamphletArray]);
                                 }
                                 foreach ($parent->complimentaryproducts as $complimentaryproduct) {
                                     if (!in_array($complimentaryproduct->id, $productsWithPamphlet)) {
@@ -1403,7 +1409,7 @@ class UserController extends Controller
                                             array_push($pamphletArray, ["file" => $productfile->file, "name" => $productfile->name , "product_id" => $productfile->product_id]);
                                         }
                                         if(!empty($pamphletArray))
-                                            $pamphlets->put($complimentaryproduct->id, [ "productName"=>$complimentaryproduct->getDisplayName(), "pamphlets"=>$pamphletArray]);
+                                            $pamphlets->put($complimentaryproduct->id, [ "productName"=>$complimentaryproduct->name, "pamphlets"=>$pamphletArray]);
                                     }
                                 }
                             }
@@ -1416,7 +1422,7 @@ class UserController extends Controller
             /** VIDEOS */
             if(!in_array($product->id,$productsWithVideo)) {
                 array_push($productsWithVideo, $product->id);
-                $parentsArray = $product->parents;
+                $parentsArray = $this->makeParentArray($product);
                 if (!empty($parentsArray)) {
                     foreach ($parentsArray as $parent) {
                         if (!in_array($parent->id, $productsWithVideo)) {
@@ -1427,7 +1433,7 @@ class UserController extends Controller
                                 array_push($videoArray, ["file" => $productfile->file, "name" => $productfile->name , "product_id" => $productfile->product_id]);
                             }
                             if(!empty($videoArray))
-                                $videos->put($parent->id, [ "productName"=>$parent->getDisplayName(), "videos"=>$videoArray]);
+                                $videos->put($parent->id, [ "productName"=>$parent->name, "videos"=>$videoArray]);
                         }
                         foreach ($parent->complimentaryproducts as $complimentaryproduct) {
                             if (!in_array($complimentaryproduct->id, $productsWithVideo)) {
@@ -1438,7 +1444,7 @@ class UserController extends Controller
                                     array_push($videoArray, ["file" => $productfile->file, "name" => $productfile->name , "product_id" => $productfile->product_id]);
                                 }
                                 if(!empty($videoArray))
-                                    $videos->put($complimentaryproduct->id, [ "productName"=>$complimentaryproduct->getDisplayName(), "videos"=>$videoArray]);
+                                    $videos->put($complimentaryproduct->id, [ "productName"=>$complimentaryproduct->name, "videos"=>$videoArray]);
                             }
                         }
                     }
@@ -1454,7 +1460,7 @@ class UserController extends Controller
                                     array_push($videoArray, ["file" => $productfile->file, "name" => $productfile->name , "product_id" => $productfile->product_id]);
                                 }
                                 if(!empty($videoArray))
-                                    $videos->put($gift->id, [ "productName"=>$gift->getDisplayName(), "videos"=>$videoArray]);
+                                    $videos->put($gift->id, [ "productName"=>$gift->name, "videos"=>$videoArray]);
                             }
                         }
                     }
@@ -1471,7 +1477,7 @@ class UserController extends Controller
                                 array_push($videoArray, ["file" => $productfile->file, "name" => $productfile->name , "product_id" => $productfile->product_id]);
                             }
                             if(!empty($videoArray))
-                                $videos->put($child->id, [ "productName"=>$child->getDisplayName(), "videos"=>$videoArray]);
+                                $videos->put($child->id, [ "productName"=>$child->name, "videos"=>$videoArray]);
                         }
                     }
                 }
@@ -1481,7 +1487,7 @@ class UserController extends Controller
                     array_push($videoArray, ["file" => $productfile->file, "name" => $productfile->name , "product_id" => $productfile->product_id]);
                 }
                 if(!empty($videoArray))
-                    $videos->put($product->id, [ "productName"=>$product->getDisplayName(), "videos"=>$videoArray]);
+                    $videos->put($product->id, [ "productName"=>$product->name, "videos"=>$videoArray]);
 
                 if ($product->hasComplimentaries())
                     foreach ($product->complimentaryproducts as $complimentaryproduct) {
@@ -1493,7 +1499,7 @@ class UserController extends Controller
                                 array_push($videoArray, ["file" => $productfile->file, "name" => $productfile->name , "product_id" => $productfile->product_id]);
                             }
                             if(!empty($videoArray))
-                                $videos->put($complimentaryproduct->id, [ "productName"=>$complimentaryproduct->getDisplayName(), "videos"=>$videoArray]);
+                                $videos->put($complimentaryproduct->id, [ "productName"=>$complimentaryproduct->name, "videos"=>$videoArray]);
                         }
 
                     }
@@ -1509,10 +1515,10 @@ class UserController extends Controller
                                 array_push($videoArray, ["file" => $productfile->file, "name" => $productfile->name , "product_id" => $productfile->product_id]);
                             }
                             if(!empty($videoArray))
-                                $videos->put($gift->id, [ "productName"=>$gift->getDisplayName(), "videos"=>$videoArray]);
+                                $videos->put($gift->id, [ "productName"=>$gift->name, "videos"=>$videoArray]);
                         }
 
-                        $parentsArray = $gift->parents;
+                        $parentsArray = $this->makeParentArray($gift);
                         if (!empty($parentsArray)) {
                             foreach ($parentsArray as $parent) {
                                 if (!in_array($parent->id, $productsWithVideo)) {
@@ -1523,7 +1529,7 @@ class UserController extends Controller
                                         array_push($videoArray, ["file" => $productfile->file, "name" => $productfile->name , "product_id" => $productfile->product_id]);
                                     }
                                     if(!empty($videoArray))
-                                        $videos->put($parent->id, [ "productName"=>$parent->getDisplayName(), "videos"=>$videoArray]);
+                                        $videos->put($parent->id, [ "productName"=>$parent->name, "videos"=>$videoArray]);
                                 }
                                 foreach ($parent->complimentaryproducts as $complimentaryproduct) {
                                     if (!in_array($complimentaryproduct->id, $productsWithVideo)) {
@@ -1534,7 +1540,7 @@ class UserController extends Controller
                                             array_push($videoArray, ["file" => $productfile->file, "name" => $productfile->name , "product_id" => $productfile->product_id]);
                                         }
                                         if(!empty($videoArray))
-                                            $videos->put($complimentaryproduct->id, [ "productName"=>$complimentaryproduct->getDisplayName(), "videos"=>$videoArray]);
+                                            $videos->put($complimentaryproduct->id, [ "productName"=>$complimentaryproduct->name, "videos"=>$videoArray]);
                                     }
                                 }
                             }
@@ -1672,12 +1678,12 @@ class UserController extends Controller
      */
     public function submitKonkurResult()
     {
-        $setting = Websitesetting::where("version" , 1)->get()->first();
-        $setting = json_decode($setting->setting);
+
+        
         Meta::set('title', "تخته خاک|رتبه کنکور 96");
-        Meta::set('keywords', substr($setting->site->seo->homepage->metaKeywords, 0 , Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
-        Meta::set('description', substr($setting->site->seo->homepage->metaDescription , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
-        Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $setting->site->siteLogo ]));
+        Meta::set('keywords', substr($this->setting->site->seo->homepage->metaKeywords, 0 , Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
+        Meta::set('description', substr($this->setting->site->seo->homepage->metaDescription , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
+        Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
         $majors = Major::where("majortype_id" ,1)->get()->pluck("name" , "id")->toArray();
         $majors = array_add($majors , 0 , "انتخاب رشته");
         $majors = array_sort_recursive($majors);

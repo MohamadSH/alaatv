@@ -2,14 +2,15 @@
 
 namespace App;
 
+use App\Traits\Helper;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Helpers\Helper;
 
 class Coupon extends Model
 {
     use SoftDeletes;
+    use Helper;
     /**      * The attributes that should be mutated to dates.        */
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
@@ -80,10 +81,9 @@ class Coupon extends Model
      */
     public function CreatedAt_Jalali()
     {
-        $helper = new Helper();
         $explodedDateTime = explode(" ", $this->created_at);
 //        $explodedTime = $explodedDateTime[1] ;
-        return $helper->convertDate($this->created_at, "toJalali");
+        return $this->convertDate($this->created_at, "toJalali");
     }
 
     /**
@@ -92,10 +92,9 @@ class Coupon extends Model
      */
     public function UpdatedAt_Jalali()
     {
-        $helper = new Helper();
         $explodedDateTime = explode(" ", $this->updated_at);
 //        $explodedTime = $explodedDateTime[1] ;
-        return $helper->convertDate($this->updated_at, "toJalali");
+        return $this->convertDate($this->updated_at, "toJalali");
     }
 
     /**
@@ -104,10 +103,9 @@ class Coupon extends Model
      */
     public function ValidSince_Jalali()
     {
-        $helper = new Helper();
         $explodedDateTime = explode(" ", $this->validSince);
         $explodedTime = $explodedDateTime[1];
-        $explodedDate = $helper->convertDate($this->validSince, "toJalali");
+        $explodedDate = $this->convertDate($this->validSince, "toJalali");
         return ($explodedDate . " " . $explodedTime);
     }
 
@@ -117,10 +115,9 @@ class Coupon extends Model
      */
     public function ValidUntil_Jalali()
     {
-        $helper = new Helper();
         $explodedDateTime = explode(" ", $this->validUntil);
         $explodedTime = $explodedDateTime[1];
-        $explodedDate = $helper->convertDate($this->validUntil, "toJalali");
+        $explodedDate = $this->convertDate($this->validUntil, "toJalali");
         return ($explodedDate . " " . $explodedTime);
     }
 }

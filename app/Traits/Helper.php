@@ -1,17 +1,12 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: mohamamad
- * Date: 10/27/2016
- * Time: 3:38 PM
- */
+namespace App\Traits;
 
-namespace App\Helpers;
-use Carbon\Carbon;
+
 use Illuminate\Http\Response;
 
-class Helper
+trait Helper
 {
+    protected $response;
     public function __construct()
     {
         $this->response = new Response();
@@ -146,7 +141,7 @@ class Helper
         else
             $from =getenv("SMS_PROVIDER_DEFAULT_NUMBER") ;
 
-            $param = array
+        $param = array
         (
             'uname'=>getenv("MEDIANA_USERNAME"),
             'pass'=>getenv("MEDIANA_PASSWORD"),
@@ -237,7 +232,7 @@ class Helper
      */
     public function generateRandomPassword($length)
     {
-        //uncomment for avoiding giving similar passwords
+//uncomment for avoiding giving similar passwords
 //        for($i=1 ; $i<=100 ; $i++)
 //        {
 //            $generatedPassword =rand(1000,99999);
@@ -272,5 +267,4 @@ class Helper
         $str = str_replace("=","",$str);
         return $str;
     }
-
 }

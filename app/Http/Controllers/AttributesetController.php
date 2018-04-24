@@ -8,7 +8,6 @@ use App\Attributegroup;
 use App\Attributeset;
 use App\Http\Requests\EditAttributesetRequest;
 use App\Http\Requests\InsertAttributesetRequest;
-use App\Helpers\Helper;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -16,12 +15,10 @@ use Illuminate\Http\Response;
 
 class AttributesetController extends Controller
 {
-    protected $helper ;
     protected $response ;
 
     function __construct()
     {
-        $this->helper = new Helper();
         $this->response = new Response();
 
         $this->middleware('permission:'.Config::get('constants.LIST_ATTRIBUTESET_ACCESS'),['only'=>'index']);

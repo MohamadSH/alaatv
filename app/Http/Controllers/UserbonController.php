@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AttachUserBonRequest;
 use App\Http\Requests\InsertUserBonRequest;
 use App\Product;
+use App\Traits\Helper;
 use App\Userbon;
-use App\Helpers\Helper;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Input;
 
 class UserbonController extends Controller
 {
+    use Helper;
     protected $response ;
 
     function __construct()
@@ -26,7 +27,6 @@ class UserbonController extends Controller
         $this->middleware('permission:'.Config::get('constants.REMOVE_USER_BON_ACCESS'),['only'=>'destroy']);
 
         $this->response = new Response();
-        $this->helper = new Helper();
     }
 
     /**
@@ -43,7 +43,7 @@ class UserbonController extends Controller
         $createdTimeEnable = Input::get('createdTimeEnable');
         if(strlen($createdSinceDate)>0 && strlen($createdTillDate)>0 && isset($createdTimeEnable))
         {
-            $userbons = $this->helper->timeFilterQuery($userbons, $createdSinceDate, $createdTillDate, 'created_at');
+            $userbons = $this->timeFilterQuery($userbons, $createdSinceDate, $createdTillDate, 'created_at');
         }
 
         $productsId = Input::get("products");

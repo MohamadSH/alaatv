@@ -4,7 +4,6 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Helpers\Helper;
 use Illuminate\Support\Facades\Config;
 
 class Transaction extends Model
@@ -69,10 +68,9 @@ class Transaction extends Model
      */
     public function CreatedAt_Jalali()
     {
-        $helper = new Helper();
         $explodedDateTime = explode(" ", $this->created_at);
 //        $explodedTime = $explodedDateTime[1] ;
-        return $helper->convertDate($this->created_at, "toJalali");
+        return $this->convertDate($this->created_at, "toJalali");
     }
 
     /**
@@ -81,10 +79,9 @@ class Transaction extends Model
      */
     public function CompletedAt_Jalali()
     {
-        $helper = new Helper();
         $explodedDateTime = explode(" ", $this->completed_at);
 //        $explodedTime = $explodedDateTime[1] ;
-        return $helper->convertDate($this->completed_at, "toJalali");
+        return $this->convertDate($this->completed_at, "toJalali");
     }
 
     /**
@@ -93,10 +90,9 @@ class Transaction extends Model
      */
     public function DeadlineAt_Jalali()
     {
-        $helper = new Helper();
         $explodedDateTime = explode(" ", $this->deadline_at);
 //        $explodedTime = $explodedDateTime[1] ;
-        return $helper->convertDate($this->deadline_at, "toJalali");
+        return $this->convertDate($this->deadline_at, "toJalali");
     }
 
     public function parents()

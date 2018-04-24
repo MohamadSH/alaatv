@@ -40,8 +40,8 @@ function refreshPrice(type) {
     var product = $("input[name=product_id]").val();
     $.ajax({
         type: "POST",
-        url: "/refreshPrice",
-        data: { attributeState: attributeState ,  product: product , products:productsState ,  type:type  },
+        url: "/refreshPrice/"+product,
+        data: { attributeState: attributeState , products:productsState ,  type:type  },
         statusCode: {
             //The status for when action was successful
             200: function (response) {
@@ -134,8 +134,8 @@ $(document).on("ifChanged", ".extraAttribute", function (){
 
     $.ajax({
         type: "POST",
-        url: "/refreshPrice",
-        data: { attributeState: attributeState   ,   product: product  , type:"extraAttribute" },
+        url: "/refreshPrice/"+product,
+        data: { attributeState: attributeState  , type:"extraAttribute" },
         statusCode: {
             //The status for when action was successful
             200: function (response) {
@@ -199,8 +199,8 @@ $(document).on("change", ".extraAttribute", function (){
 
     $.ajax({
         type: "POST",
-        url: "/refreshPrice",
-        data: { attributeState: attributeState   ,   product: product  , type:"extraAttribute" },
+        url: "/refreshPrice/"+product,
+        data: { attributeState: attributeState  , type:"extraAttribute" },
         statusCode: {
             //The status for when action was successful
             200: function (response) {

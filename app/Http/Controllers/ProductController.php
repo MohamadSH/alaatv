@@ -12,13 +12,13 @@ use App\Http\Requests\EditProductRequest;
 use App\Http\Requests\InsertProductRequest;
 use App\Product;
 use App\Productfiletype;
+use App\Traits\Helper;
 use App\Traits\ProductCommon;
 use App\User;
 use App\Websitepage;
 
 use App\Websitesetting;
 use Carbon\Carbon;
-use App\Helpers\Helper;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -35,9 +35,9 @@ use Meta;
 
 class ProductController extends Controller
 {
-    protected $helper;
+    use Helper;
     protected $response ;
-
+    protected $setting ;
     use ProductCommon;
 
     function __construct()
@@ -51,10 +51,12 @@ class ProductController extends Controller
         $this->middleware('permission:'.Config::get('constants.INSERT_CONFIGURE_PRODUCT_ACCESS'),['only'=>'makeConfiguration' , 'createConfiguration']);
         $this->middleware('auth', ['except' => ['show' , 'refreshPrice' , 'search' , 'showPartial' , 'landing1' , 'landing2' ]]);
 
-        $this->helper = new Helper();
         $this->response = new Response();
+        $this->setting = json_decode(app('setting')->setting);
 
     }
+
+
 
     /**
      * Display a listing of the resource.
@@ -151,7 +153,7 @@ class ProductController extends Controller
         }
     }
 
-    //TODO: remove after Attribute fix
+
     private function addSimpleInfoAttributes(Product &$product){
         $productsArray = [];
         array_push($productsArray, $product);
@@ -216,9 +218,9 @@ class ProductController extends Controller
 //        return response()->make("Ok".$product->id.":".$productType);
 
         if(isset($user))
-            $costArray = $product->obtainProductCost( $user );
+            $costArray = $product->calculatePayablePrice( $user );
         else
-            $costArray = $product->obtainProductCost( );
+            $costArray = $product->calculatePayablePrice( );
 
         $discount = $costArray["bonDiscount"]+$costArray["productDiscount"];
         $cost = $costArray["cost"];
@@ -350,7 +352,7 @@ class ProductController extends Controller
 
         $isLive = $product->isHappening();
         if(Auth::check() && Auth::user()->hasRole("admin") && $isLive!== false) $isLive = 0 ;
-
+//        return response()->make("Ok");
         return view("product.show" , compact("product" , "productType" ,"productSeenCount","productIntroVideo" , "otherProductChunks"  , 'discount' , 'cost' , "selectCollection" ,"simpleInfoAttributes"
             , "checkboxInfoAttributes" , "extraSelectCollection" , "extraCheckboxCollection" , 'groupedCheckboxCollection'  , "descriptionIframe"
             , "isProductExistInOrder"  , "productsWithVideo" , "productsWithPamphlet" , "exclusiveOtherProducts" , "productSamplePhotos" , "giftCollection" , "isLive" ));
@@ -536,104 +538,154 @@ class ProductController extends Controller
     /**
      *
      *
-     * @param \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     * @param Product $product
      * @return \Illuminate\Http\Response
      */
-    public function refreshPrice(Request $request)
+    public function refreshPrice(Request $request, Product $product)
     {
+        $productIds = $request->get("products");
         $inputType = $request->get("type");
         $attributevalues = $request->get("attributeState");
-        $product = Product::FindorFail($request->get("product"));
-        if(session()->has("adminOrder_id")) $user = User::where("id" , session()->get("customer_id"))->first();
-        elseif(Auth::check()) $user = Auth::user();
-        switch ($inputType)
-        {
-            case  "extraAttribute":
-                $totalExtraCost = 0;
-                if(isset($attributevalues))
-                    foreach ($attributevalues as $attributevalueId)
-                    {
+        $user = null ;
+        if(session()->has("adminOrder_id"))
+            $user = User::where("id" , session()->get("customer_id"))->first();
+        elseif(Auth::check())
+            $user = Auth::user();
 
-                        $attributevalue = $product->attributevalues->where("id",$attributevalueId)->first();
-                        if(isset($attributevalue->pivot->extraCost )) $extraCost = $attributevalue->pivot->extraCost;
-                        else $extraCost = 0;
-                        $totalExtraCost = $totalExtraCost + $extraCost ;
+
+        $key="product:refreshPrice:Type"
+            .$inputType
+            ."\\"
+            .$product->cacheKey()
+            ."-user"
+            .( isset($user) && !is_null($user) ? $user->cacheKey() : "")
+            ."\\attrValues:".( isset($attributevalues) ? implode("",$attributevalues) : "-")
+            ."products:"
+            .( isset($productIds) ? implode("",$productIds) : "");
+
+        return Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($inputType,$attributevalues,$user,$product,$productIds) {
+
+            switch ($inputType)
+            {
+                case  "extraAttribute":
+                    $totalExtraCost = 0;
+                    if(isset($attributevalues)) {
+                        foreach ($attributevalues as $attributevalueId) {
+
+                            $attributevalue = $product->attributevalues->where("id", $attributevalueId)->first();
+                            if (isset($attributevalue->pivot->extraCost))
+                                $extraCost = $attributevalue->pivot->extraCost;
+                            else
+                                $extraCost = 0;
+                            $totalExtraCost = $totalExtraCost + $extraCost;
+                        }
                     }
-                return json_encode(array('totalExtraCost' => $totalExtraCost ));
-                break;
-            case "mainAttribute":
-                if($product->hasChildren()) {
-                    foreach ($product->children as $child) {
-                        $childAttributevalues = $child->attributevalues;
-                        $flag = true;
-                        foreach ($attributevalues as $attributevalue) {
-                            if (!$childAttributevalues->contains($attributevalue)) {
-                                $flag = false;
+                    $result =  json_encode(
+                        [
+                            'totalExtraCost' => $totalExtraCost
+                        ]
+                    );
+                    break;
+                case "mainAttribute":
+                    if($product->hasChildren()) {
+                        // find the child ( selected by user )
+                        foreach ($product->children as $child) {
+                            $childAttributevalues = $child->attributevalues;
+                            $flag = true;
+                            foreach ($attributevalues as $attributevalue) {
+                                if (!$childAttributevalues->contains($attributevalue)) {
+                                    $flag = false;
+                                    break;
+                                }
+                            }
+                            if ($flag && $childAttributevalues->count() == count($attributevalues)) {
+                                $simpleProduct = $child;
                                 break;
                             }
                         }
-                        if ($flag && $childAttributevalues->count() == count($attributevalues)) {
-                            $simpleProduct = $child;
-                            break;
-                        }
-                    }
-                }else{
+                    }else{
 
-                    $simpleProduct = $product;
-                }
-                if(isset($simpleProduct) && (!isset($simpleProduct->quantity) || $simpleProduct->quantity>0))
-                {
-                    if(isset($user))
-                        $costArray = $simpleProduct->obtainProductCost($user );
-                    else
-                        $costArray = $simpleProduct->obtainProductCost( );
-//                    $costArray = array_add($costArray , 'shortDescription' ,$simpleProduct->shortDescription );
-//                    $costArray = array_add($costArray , 'longDescription' ,$simpleProduct->longDescription );
-                    $cost = $costArray["cost"] ;
-                    $costForCustomer = ((1 - ($costArray["bonDiscount"] / 100)) * ((1 - ($costArray["productDiscount"] / 100)) * $costArray["cost"])) - $costArray["productDiscountAmount"];
-                    return json_encode(["cost"=>$cost , "costForCustomer"=>(int)$costForCustomer]);
-                }elseif(!isset($simpleProduct))
-                {
-                    return json_encode(array('productWarning' => "محصول مورد نظر یافت نشد"));
-                }else  return json_encode(array('productWarning' => "محصول مورد نظر تمام شده است"));
-                break;
-            case "productSelection":
-                $productIds = Input::get("products");
-                $cost = 0;
-                $costForCustomer = 0;
-                if(isset($productIds))
-                {
-                    foreach ($productIds as $key => $simpleProductId)
+                        $simpleProduct = $product;
+                    }
+                    if(isset($simpleProduct) && (!isset($simpleProduct->quantity) || $simpleProduct->quantity>0))
                     {
-                        $simpleProduct = Product::FindOrFail($simpleProductId);
-                        if($simpleProduct->hasParents())
+                        if(isset($user))
+                            $costArray = $simpleProduct->calculatePayablePrice($user );
+                        else
+                            $costArray = $simpleProduct->calculatePayablePrice( );
+                        $cost = $costArray["cost"] ;
+                        $costForCustomer = $costArray['CustomerCost'];
+                        $result = json_encode(
+                            [
+                                "cost"=>$cost ,
+                                "costForCustomer"=>$costForCustomer
+                            ]
+                        );
+                    }
+                    elseif(!isset($simpleProduct))
+                    {
+                        $result = json_encode(
+                            [
+                                'productWarning' => "محصول مورد نظر یافت نشد"
+                            ]
+                        );
+                    }
+                    else
+                        $result = json_encode(
+                            [
+                                'productWarning' => "محصول مورد نظر تمام شده است"
+                            ]
+                        );
+                    break;
+                case "productSelection":
+
+                    $cost = 0;
+                    $costForCustomer = 0;
+                    if(isset($productIds))
+                    {
+                        $productIds = Product::whereIn('id',$productIds)->get();
+                        $productIds->load('parents');
+                        foreach ($productIds as $key => $simpleProduct)
                         {
-                            if (in_array($simpleProduct->parents->first()->id, $productIds))
+                            if($simpleProduct->hasParents())
                             {
-                                array_forget($productIds, $key);
-                                $childrenArray = $simpleProduct->children;
-                                foreach ($childrenArray as $child)
+                                if ($productIds->contains($simpleProduct->parents->first()))
                                 {
-                                    array_forget($productIds, array_flip($productIds)[$child->id]);
+                                    $productIds->forget($key);
+                                    $childrenArray = $simpleProduct->children;
+                                    foreach ($childrenArray as $child)
+                                    {
+                                        $ck = $productIds->search($child);
+                                        $productIds->forget($ck);
+                                    }
                                 }
                             }
                         }
+                        foreach ($productIds as $simpleProduct)
+                        {
+                            if(isset($user))
+                                $costArray = $simpleProduct->calculatePayablePrice($user );
+                            else
+                                $costArray = $simpleProduct->calculatePayablePrice( );
+                            $cost += $costArray["cost"] ;
+                            $costForCustomer += $costArray["CustomerCost"];
+                        }
                     }
-                    foreach ($productIds as $id)
-                    {
-                        $simpleProduct = Product::FindOrFail($id);
-                        if(isset($user))
-                            $costArray = $simpleProduct->obtainProductCost($user );
-                        else
-                            $costArray = $simpleProduct->obtainProductCost( );
-                        $cost += $costArray["cost"] ;
-                        $costForCustomer += ((1 - ($costArray["bonDiscount"] / 100)) * ((1 - ($costArray["productDiscount"] / 100)) * $costArray["cost"])) - $costArray["productDiscountAmount"];
-                    }
-                }
-                return json_encode(["cost"=>$cost , "costForCustomer"=>(int)$costForCustomer]);
-                break;
-            default: break;
-        }
+                    $result = json_encode(
+                        [
+                            "cost"=>$cost ,
+                            "costForCustomer"=> $costForCustomer
+                        ]
+                    );
+                    break;
+                default:
+                    $result =[];
+                    break;
+            }
+            return $result;
+        });
+
     }
 
     /**
@@ -644,20 +696,20 @@ class ProductController extends Controller
      */
     public function search()
     {
-        $setting = Websitesetting::where("version" , 1)->get()->first();
-        $setting = json_decode($setting->setting);
 
-        $itemsPerPage = 16;
-        if(session()->has("adminOrder_id"))
-        {
-            $products = Product::getProducts()->orderBy("order")->paginate($itemsPerPage);
-        }else{
-            if(Config::has("constants.PRODUCT_SEARCH_EXCLUDED_PRODUCTS"))
-                $excludedProducts = Config::get("constants.PRODUCT_SEARCH_EXCLUDED_PRODUCTS");
-            else
-                $excludedProducts = [] ;
-            $products = Product::getProducts(0,1)->whereNotIn("id",$excludedProducts)->orderBy("order")->paginate($itemsPerPage);
-        }
+        $key="product:search";
+        $products = Cache::remember($key,Config::get("constants.CACHE_60"),function () {
+            $itemsPerPage = 16;
+            if (session()->has("adminOrder_id")) {
+               return Product::getProducts()->orderBy("order")->paginate($itemsPerPage);
+            } else {
+                if (Config::has("constants.PRODUCT_SEARCH_EXCLUDED_PRODUCTS"))
+                    $excludedProducts = Config::get("constants.PRODUCT_SEARCH_EXCLUDED_PRODUCTS");
+                else
+                    $excludedProducts = [];
+                 return Product::getProducts(0, 1)->whereNotIn("id", $excludedProducts)->orderBy("order")->paginate($itemsPerPage);
+            }
+        });
 
 
         $costCollection = $this->makeCostCollection($products);
@@ -669,11 +721,10 @@ class ProductController extends Controller
             $metaKeywords .= $product->name."-";
             $metaDescription .= $product->name."-" ;
         }
-
         Meta::set('keywords', substr($metaKeywords , 0 , Config::get("constants.META_KEYWORDS_LIMIT")));
         Meta::set('description', substr($metaDescription , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
-        Meta::set('title', substr("خدمات ".$setting->site->name, 0 , Config::get("constants.META_TITLE_LIMIT")));
-        Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $setting->site->siteLogo ]));
+        Meta::set('title', substr("خدمات ".$this->setting->site->name, 0 , Config::get("constants.META_TITLE_LIMIT")));
+        Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
 
         return view("product.portfolio" , compact("products" , "costCollection")) ;
     }

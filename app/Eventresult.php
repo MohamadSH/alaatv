@@ -2,13 +2,14 @@
 
 namespace App;
 
-use App\Helpers\Helper;
+use App\Traits\Helper;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Eventresult extends Model
 {
     use SoftDeletes;
+    use Helper;
     /**      * The attributes that should be mutated to dates.        */
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
@@ -41,9 +42,8 @@ class Eventresult extends Model
      */
     public function CreatedAt_Jalali()
     {
-        $helper = new Helper();
         $explodedDateTime = explode(" ", $this->created_at);
 //        $explodedTime = $explodedDateTime[1] ;
-        return $helper->convertDate($this->created_at, "toJalali");
+        return $this->convertDate($this->created_at, "toJalali");
     }
 }

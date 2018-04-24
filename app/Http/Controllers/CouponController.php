@@ -7,7 +7,6 @@ use App\Coupontype;
 use App\Http\Requests\EditCouponRequest;
 use App\Http\Requests\InsertCouponRequest;
 use App\Product;
-use App\Helpers\Helper;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
@@ -15,12 +14,10 @@ use Carbon\Carbon;
 
 class CouponController extends Controller
 {
-    protected $helper ;
     protected $response ;
 
     function __construct()
     {
-        $this->helper = new Helper();
         $this->response = new Response();
 
         $this->middleware('permission:'.Config::get('constants.LIST_COUPON_ACCESS'),['only'=>'index']);

@@ -12,18 +12,16 @@ use Illuminate\Http\Request;
 use App\Http\Requests\EditPermissionRequest;
 use App\Http\Requests\InsertPermissionRequest;
 use App\Permission;
-use App\Helpers\Helper;
 use Illuminate\Http\Response;
 use Zizaco\Entrust\Entrust;
 
 class RoleController extends Controller
 {
-    protected $helper ;
+
     protected $response ;
 
     function __construct()
     {
-        $this->helper = new Helper();
         $this->response = new Response();
 
         $this->middleware('role:admin');

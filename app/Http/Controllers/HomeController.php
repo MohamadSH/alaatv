@@ -37,6 +37,7 @@ use App\Role;
 use App\Slideshow;
 use App\Traits\APIRequestCommon;
 use App\Traits\DateCommon;
+use App\Traits\Helper;
 use App\Traits\ProductCommon;
 use App\Transactionstatus;
 use App\User;
@@ -49,7 +50,6 @@ use App\Websitesetting;
 use App\Websitepage;
 use App\Http\Requests\Request;
 use Carbon\Carbon;
-use App\Helpers\Helper;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -69,6 +69,7 @@ use Auth;
 
 class HomeController extends Controller
 {
+    use Helper;
     use APIRequestCommon ;
     use ProductCommon;
     use DateCommon;
@@ -78,15 +79,19 @@ class HomeController extends Controller
      * @return void
      */
 
-    protected $helper;
     protected $response;
     protected $sideBarAdmin;
+    protected $setting;
+
     private static $TAG = HomeController::class;
 
 
     public function debug(Request $request){
 
         $product = Product::find($request->get("p"));
+
+
+        return $productType = $product->producttype;
 //        return $product->attributevalues;
 //        return $product->attributeset->attributes()->load('attributetype');
         $attributeType = "main";
@@ -117,8 +122,8 @@ class HomeController extends Controller
         $this->middleware('permission:' . Config::get("constants.LIST_ORDER_ACCESS"), ['only' => 'adminOrder']);
         $this->middleware('permission:' . Config::get("constants.SMS_ADMIN_PANEL_ACCESS"), ['only' => 'adminSMS']);
         $this->middleware('permission:' . Config::get("constants.REPORT_ADMIN_PANEL_ACCESS"), ['only' => 'adminReport']);
-        $this->helper = new Helper();
         $this->response = new Response();
+        $this->setting = json_decode(app('setting')->setting);
 
     }
 
@@ -434,12 +439,11 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $setting = Websitesetting::where("version", 1)->get()->first();
-        $setting = json_decode($setting->setting);
-        Meta::set('title', substr($setting->site->seo->homepage->metaTitle, 0, Config::get("constants.META_TITLE_LIMIT")));
-        Meta::set('keywords', substr($setting->site->seo->homepage->metaKeywords, 0, Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
-        Meta::set('description', substr($setting->site->seo->homepage->metaDescription, 0, Config::get("constants.META_DESCRIPTION_LIMIT")));
-        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $setting->site->siteLogo]));
+
+        Meta::set('title', substr($this->setting->site->seo->homepage->metaTitle, 0, Config::get("constants.META_TITLE_LIMIT")));
+        Meta::set('keywords', substr($this->setting->site->seo->homepage->metaKeywords, 0, Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
+        Meta::set('description', substr($this->setting->site->seo->homepage->metaDescription, 0, Config::get("constants.META_DESCRIPTION_LIMIT")));
+        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
 //        $assignmentstatus_active = Assignmentstatus::all()->where("name" , "active")->first();
 //        $assignments = Assignment::all()->sortByDesc('created_at')->where("assignmentstatus_id" , $assignmentstatus_active->id);
         $consultationstatus_active = Consultationstatus::all()->where("name", "active")->first();
@@ -448,8 +452,7 @@ class HomeController extends Controller
         $consultationCount = $consultations->count();
         $userCount = User::count();
         $pageName = "dashboard";
-        $helper = new Helper();
-        $todayDate = $helper->convertDate(Carbon::now()->toDateTimeString(), "toJalali");
+        $todayDate = $this->convertDate(Carbon::now()->toDateTimeString(), "toJalali");
         $todayDate = explode("/", $todayDate);
         $currentDay = $todayDate[2];
         $currentMonth = $todayDate[1];
@@ -594,10 +597,8 @@ class HomeController extends Controller
 
         $pageName = "admin";
 
-        $setting = Websitesetting::where("version", 1)->get()->first();
-        $setting = json_decode($setting->setting);
         Meta::set('title', substr("تخته خاک|مدیریت کاربران", 0, Config::get("constants.META_TITLE_LIMIT")));
-        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $setting->site->siteLogo]));
+        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
 
         return view("admin.index", compact("pageName", "majors", "userStatuses", "permissions", "roles", "limitStatus", "orderstatuses", "paymentstatuses", "enableStatus", "genders", "hasOrder", "products",
             "lockProfileStatus", "mobileNumberVerification", "tableDefaultColumns", "sortBy", "sortType", "coupons", "addressSpecialFilter", "checkoutStatuses"));
@@ -628,10 +629,8 @@ class HomeController extends Controller
             $defaultProductOrder = 1;
         }
 
-        $setting = Websitesetting::where("version", 1)->get()->first();
-        $setting = json_decode($setting->setting);
         Meta::set('title', substr("تخته خاک|مدیریت محصولات", 0, Config::get("constants.META_TITLE_LIMIT")));
-        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $setting->site->siteLogo]));
+        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
         $pageName = "admin";
         return view("admin.indexProduct", compact("pageName", "attributecontrols", "enableStatus", "attributesets", "limitStatus", "products", "coupontype", "productTypes", "defaultProductOrder"));
     }
@@ -644,7 +643,8 @@ class HomeController extends Controller
     public function adminOrder()
     {
         $pageName = "admin";
-        if (Auth::user()->can(Config::get('constants.SHOW_OPENBYADMIN_ORDER')))
+        $user = Auth::user();
+        if ($user->can(Config::get('constants.SHOW_OPENBYADMIN_ORDER')))
             $orderstatuses = Orderstatus::whereNotIn('id', [Config::get("constants.ORDER_STATUS_OPEN")])->pluck('displayName', 'id');
         else
             $orderstatuses = Orderstatus::whereNotIn('id', [Config::get("constants.ORDER_STATUS_OPEN"), Config::get("constants.ORDER_STATUS_OPEN_BY_ADMIN")])->pluck('displayName', 'id')->toArray();
@@ -656,7 +656,7 @@ class HomeController extends Controller
         $checkoutStatuses[0] = "نامشخص";
         $checkoutStatuses = array_sort_recursive($checkoutStatuses);
 
-        if(Auth::user()->hasRole("onlineNoroozMarketing"))
+        if($user->hasRole("onlineNoroozMarketing"))
         {
             $products = [Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_ROOT")];
             $products = $this->makeProductCollection($products);
@@ -696,10 +696,8 @@ class HomeController extends Controller
         $userBonTableDefaultColumns = ["نام کاربر", "تعداد بن تخصیص داده شده", "وضعیت بن", "نام کالایی که از خرید آن بن دریافت کرده است", "تاریخ درج", "عملیات"];
         $addressSpecialFilter = ["بدون فیلتر خاص", "بدون آدرس ها", "آدرس دارها"];
 
-        $setting = Websitesetting::where("version", 1)->get()->first();
-        $setting = json_decode($setting->setting);
         Meta::set('title', substr("تخته خاک|مدیریت سفارش ها", 0, Config::get("constants.META_TITLE_LIMIT")));
-        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $setting->site->siteLogo]));
+        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
 
         return view("admin.indexOrder", compact("pageName", "orderstatuses", "products", "paymentMethods", "majors", "paymentstatuses", "sortBy", "sortType", "transactionTypes", "orderTableDefaultColumns", "coupons", "transactionStatuses", "transactionTableDefaultColumns", "userBonTableDefaultColumns", "userBonStatuses", "attributevalueCollection", "addressSpecialFilter", "checkoutStatuses"));
     }
@@ -717,10 +715,9 @@ class HomeController extends Controller
         $consultationStatuses = Consultationstatus::pluck('name', 'id');
         $consultationStatuses->prepend("انتخاب وضعیت");
 
-        $setting = Websitesetting::where("version", 1)->get()->first();
-        $setting = json_decode($setting->setting);
+
         Meta::set('title', substr("تخته خاک|مدیریت محتوا", 0, Config::get("constants.META_TITLE_LIMIT")));
-        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $setting->site->siteLogo]));
+        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
 
         $pageName = "admin";
         return view("admin.indexContent", compact("pageName", "assignmentStatuses", "consultationStatuses", "majors"));
@@ -740,10 +737,9 @@ class HomeController extends Controller
         $answeredQuestionsCount = Userupload::all()->where("useruploadstatus_id", $questionStatusDone->id)->count();
         $counter = 0;
 
-        $setting = Websitesetting::where("version", 1)->get()->first();
-        $setting = json_decode($setting->setting);
+
         Meta::set('title', substr("تخته خاک|پنل مشاور", 0, Config::get("constants.META_TITLE_LIMIT")));
-        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $setting->site->siteLogo]));
+        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
         $pageName = "consultantAdmin";
         return view("admin.consultant.consultantAdmin", compact("questions", "counter", "pageName", "newQuestionsCount", "answeredQuestionsCount"));
     }
@@ -752,6 +748,7 @@ class HomeController extends Controller
      * Show consultant admin entekhab reshte
      *
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     public function consultantEntekhabReshte()
     {
@@ -796,10 +793,9 @@ class HomeController extends Controller
             $userSurveyAnswers->push(["questionStatement" => $question->statement, "questionAnswer" => $dataJson]);
         }
 
-        $setting = Websitesetting::where("version", 1)->get()->first();
-        $setting = json_decode($setting->setting);
+
         Meta::set('title', substr("تخته خاک|پنل انتخاب رشته", 0, Config::get("constants.META_TITLE_LIMIT")));
-        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $setting->site->siteLogo]));
+        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
 
         return view("admin.consultant.consultantEntekhabReshte", compact("user", "storedMajors", "selectedMajors", "userSurveyAnswers"));
     }
@@ -815,10 +811,9 @@ class HomeController extends Controller
         $surveyId = 1;
         $usersurveyanswers = Usersurveyanswer::where("event_id", $eventId)->where("survey_id", $surveyId)->get()->groupBy("user_id");
 
-        $setting = Websitesetting::where("version", 1)->get()->first();
-        $setting = json_decode($setting->setting);
+
         Meta::set('title', substr("تخته خاک|لیست انتخاب رشته", 0, Config::get("constants.META_TITLE_LIMIT")));
-        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $setting->site->siteLogo]));
+        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
 
         return view("admin.consultant.consultantEntekhabReshteList", compact("usersurveyanswers"));
     }
@@ -878,17 +873,16 @@ class HomeController extends Controller
 
         $pageName = "admin";
 
-        $smsCredit = (int)$this->helper->medianaGetCredit();
+        $smsCredit = (int)$this->medianaGetCredit();
 
         $smsProviderNumber = Config::get('constants.SMS_PROVIDER_NUMBER');
 
         $coupons = Coupon::pluck('name', 'id')->toArray();
         $coupons = array_sort_recursive($coupons);
 
-        $setting = Websitesetting::where("version", 1)->get()->first();
-        $setting = json_decode($setting->setting);
+
         Meta::set('title', substr("تخته خاک|پنل پیامک", 0, Config::get("constants.META_TITLE_LIMIT")));
-        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $setting->site->siteLogo]));
+        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
 
         return view("admin.indexSMS", compact("pageName", "majors", "userStatuses",
             "roles", "relatives", "orderstatuses", "paymentstatuses", "genders", "products", "allRootProducts", "lockProfileStatus",
@@ -910,10 +904,9 @@ class HomeController extends Controller
         $sideBarMode = "closed";
         $section = "slideShow";
 
-        $setting = Websitesetting::where("version", 1)->get()->first();
-        $setting = json_decode($setting->setting);
+
         Meta::set('title', substr("تخته خاک|مدیریت اسلاید شو", 0, Config::get("constants.META_TITLE_LIMIT")));
-        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $setting->site->siteLogo]));
+        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
 
         return view("admin.siteConfiguration.slideShow", compact("slides", "sideBarMode", "section", "slideDisk", "slideContentName", "slideWebsitepageId"));
     }
@@ -939,10 +932,10 @@ class HomeController extends Controller
      */
     public function adminSiteConfig()
     {
-        $setting = Websitesetting::where("version", 1)->get()->first();
+        $this->setting = Websitesetting::where("version", 1)->get()->first();
 
         Meta::set('title', substr("تخته خاک|پیکربندی سایت", 0, Config::get("constants.META_TITLE_LIMIT")));
-        return redirect(action('WebsiteSettingController@show', $setting));
+        return redirect(action('WebsiteSettingController@show', $this->setting));
     }
 
     /**
@@ -957,10 +950,8 @@ class HomeController extends Controller
             $q->where("major1_id", $parentMajor->id);
         })->get();
 
-        $setting = Websitesetting::where("version", 1)->get()->first();
-        $setting = json_decode($setting->setting);
         Meta::set('title', substr("تخته خاک|مدیریت رشته", 0, Config::get("constants.META_TITLE_LIMIT")));
-        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $setting->site->siteLogo]));
+        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
 
         return view("admin.indexMajor", compact("parentMajor", "majors"));
     }
@@ -1009,10 +1000,9 @@ class HomeController extends Controller
 
         $pageName = "admin";
 
-        $setting = Websitesetting::where("version", 1)->get()->first();
-        $setting = json_decode($setting->setting);
+
         Meta::set('title', substr("تخته خاک|پنل گزارش", 0, Config::get("constants.META_TITLE_LIMIT")));
-        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $setting->site->siteLogo]));
+        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
 
         $checkoutStatuses = Checkoutstatus::pluck('displayName', 'id')->toArray();
         $checkoutStatuses[0] = "نامشخص";
@@ -1030,10 +1020,9 @@ class HomeController extends Controller
         $lottery = Lottery::where("name", Config::get("constants.HAMAYESH_DEY_LOTTERY"))->get()->first();
         $userlotteries = $lottery->users->where("pivot.rank", ">", 0)->sortBy("pivot.rank");
 
-        $setting = Websitesetting::where("version", 1)->get()->first();
-        $setting = json_decode($setting->setting);
+
         Meta::set('title', substr("تخته خاک|پنل قرعه کشی", 0, Config::get("constants.META_TITLE_LIMIT")));
-        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $setting->site->siteLogo]));
+        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
         $pageName = "admin";
         return view("admin.indexLottery", compact("userlotteries", "pageName"));
     }
@@ -1102,7 +1091,7 @@ class HomeController extends Controller
             $smsInfo["message"] = $customizedMessage;
             $smsInfo["to"] = $mobiles;
             $smsInfo["from"] = "+985000145";
-            $response = $this->helper->medianaSendSMS($smsInfo);
+            $response = $this->medianaSendSMS($smsInfo);
             if (!$response["error"]) {
 
             } else {
@@ -1144,9 +1133,9 @@ class HomeController extends Controller
         $smsInfo["message"] = $message;
         $smsInfo["to"] = $mobiles;
         $smsInfo["from"] = $from;
-        $response = $this->helper->medianaSendSMS($smsInfo);
+        $response = $this->medianaSendSMS($smsInfo);
         if (!$response["error"]) {
-            $smsCredit = $this->helper->medianaGetCredit();
+            $smsCredit = $this->medianaGetCredit();
             return $this->response->setContent($smsCredit)->setStatusCode(200);
         } else {
             return $this->response->setStatusCode(503);
@@ -1157,6 +1146,7 @@ class HomeController extends Controller
     {
         $fileName = Input::get('fileName');
         $contentType = Input::get('content');
+        $user = Auth::user();
         switch ($contentType) {
             case "عکس پروفایل":
                 $diskName = Config::get('constants.DISK1');
@@ -1195,7 +1185,7 @@ class HomeController extends Controller
                 break;
             case "فایل محصول" :
                 $productId = Input::get("pId");
-                if (!Auth::user()->can(Config::get("constants.DOWNLOAD_PRODUCT_FILE"))) {
+                if (!$user->can(Config::get("constants.DOWNLOAD_PRODUCT_FILE"))) {
                     $products = Product::whereIn('id',
                         Product::whereHas('validProductfiles', function ($q) use ($fileName) {
                             $q->where("file", $fileName);
@@ -1224,7 +1214,7 @@ class HomeController extends Controller
                     })->pluck("id")
                     )
                         ->get();
-                    $validOrders = Auth::user()->orders()->whereHas('orderproducts', function ($q) use ($products) {
+                    $validOrders = $user->orders()->whereHas('orderproducts', function ($q) use ($products) {
                         $q->whereIn("product_id", $products->pluck("id"));
                     })->whereIn("orderstatus_id", [Config::get("constants.ORDER_STATUS_CLOSED"), Config::get("constants.ORDER_STATUS_POSTED"), Config::get("constants.ORDER_STATUS_READY_TO_POST")])->whereIn("paymentstatus_id", [Config::get("constants.PAYMENT_STATUS_PAID")])->get();
 
@@ -1235,7 +1225,6 @@ class HomeController extends Controller
                         $message = "شما ابتدا باید یکی از این محصولات را سفارش دهید و یا اگر سفارش داده اید مبلغ را تسویه نمایید: " . "<br>";
                         $productIds = array();
                         foreach ($products as $product) {
-                            //$myParents = $product->parents;
                             $myParents = $this->makeParentArray($product);
                             if (!empty($myParents)) {
                                 $rootParent = end($myParents);
@@ -1267,7 +1256,7 @@ class HomeController extends Controller
                 $ipArray[3] = 0;
                 $userIP = implode(".",$ipArray);
 
-                $linkHash = $this->helper->generateSecurePathHash($unixTime, $userIP, "TakhteKhak", $cloudFile);
+                $linkHash = $this->generateSecurePathHash($unixTime, $userIP, "TakhteKhak", $cloudFile);
                 $externalLink = $productFileLink . "?md5=" . $linkHash . "&expires=" . $unixTime;
 //                dd($temp."+".$userIP);
                 break;
@@ -1454,26 +1443,24 @@ class HomeController extends Controller
 
     function aboutUs()
     {
-        $setting = Websitesetting::where("version", 1)->get()->first();
-        $setting = json_decode($setting->setting);
-        Meta::set('keywords', substr($setting->site->seo->homepage->metaKeywords, 0, Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
-        Meta::set('description', substr($setting->site->seo->homepage->metaDescription, 0, Config::get("constants.META_DESCRIPTION_LIMIT")));
+
+        Meta::set('keywords', substr($this->setting->site->seo->homepage->metaKeywords, 0, Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
+        Meta::set('description', substr($this->setting->site->seo->homepage->metaDescription, 0, Config::get("constants.META_DESCRIPTION_LIMIT")));
         Meta::set('title', "تخته خاک|درباره ما");
-        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $setting->site->siteLogo]));
+        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
 
         return view("pages.aboutUs");
     }
 
     function contactUs()
     {
-        $setting = Websitesetting::where("version", 1)->get()->first();
-        $setting = json_decode($setting->setting);
-        Meta::set('keywords', substr($setting->site->seo->homepage->metaKeywords, 0, Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
-        Meta::set('description', substr($setting->site->seo->homepage->metaDescription, 0, Config::get("constants.META_DESCRIPTION_LIMIT")));
+
+        Meta::set('keywords', substr($this->setting->site->seo->homepage->metaKeywords, 0, Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
+        Meta::set('description', substr($this->setting->site->seo->homepage->metaDescription, 0, Config::get("constants.META_DESCRIPTION_LIMIT")));
         Meta::set('title', "تخته خاک|تماس با ما");
-        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $setting->site->siteLogo]));
+        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
         $emergencyContacts = collect();
-        foreach ($setting->branches->main->emergencyContacts as $emergencyContact)
+        foreach ($this->setting->branches->main->emergencyContacts as $emergencyContact)
         {
             $number = "";
             if(isset($emergencyContact->number)  && strlen($emergencyContact->number)>0) $number =$emergencyContact->number;
@@ -1489,23 +1476,21 @@ class HomeController extends Controller
 
     function rules()
     {
-        $setting = Websitesetting::where("version", 1)->get()->first();
-        $setting = json_decode($setting->setting);
+
         Meta::set('title', "تخته خاک|قوانین");
-        Meta::set('keywords', substr($setting->site->seo->homepage->metaKeywords, 0, Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
-        Meta::set('description', substr($setting->site->seo->homepage->metaDescription, 0, Config::get("constants.META_DESCRIPTION_LIMIT")));
-        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $setting->site->siteLogo]));
+        Meta::set('keywords', substr($this->setting->site->seo->homepage->metaKeywords, 0, Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
+        Meta::set('description', substr($this->setting->site->seo->homepage->metaDescription, 0, Config::get("constants.META_DESCRIPTION_LIMIT")));
+        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
         return view("pages.rules");
     }
 
     function siteMap()
     {
-        $setting = Websitesetting::where("version", 1)->get()->first();
-        $setting = json_decode($setting->setting);
+
         Meta::set('title', 'تخته خاک|نقشه سایت');
-        Meta::set('keywords', substr($setting->site->seo->homepage->metaKeywords, 0, Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
-        Meta::set('description', substr($setting->site->seo->homepage->metaDescription, 0, Config::get("constants.META_DESCRIPTION_LIMIT")));
-        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $setting->site->siteLogo]));
+        Meta::set('keywords', substr($this->setting->site->seo->homepage->metaKeywords, 0, Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
+        Meta::set('description', substr($this->setting->site->seo->homepage->metaDescription, 0, Config::get("constants.META_DESCRIPTION_LIMIT")));
+        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
         $products = Product::getProducts(0, 1)->orderBy("order")->get();
         $articlecategories = Articlecategory::where('enable', 1)->orderBy('order')->get();
         $articlesWithoutCategory = Article::where('articlecategory_id', null)->get();
@@ -1552,8 +1537,8 @@ class HomeController extends Controller
     public function sendMail(ContactUsFormRequest $request)
     {
 
-        $setting = Websitesetting::where("version", 1)->get()->first();
-        $wSetting = json_decode($setting->setting);
+        $this->setting = Websitesetting::where("version", 1)->get()->first();
+        $wSetting = json_decode($this->setting->setting);
 
 //        try {
 //            $sent = Mail::send('emailLayouts.contactUs',
@@ -1758,7 +1743,7 @@ class HomeController extends Controller
 //
 //            $prize = json_decode($userlottery->pivot->prizes)->items[0]->name ;
             $smsInfo["message"] = "سلام ، کاربر گرامی نتیجه قرعه کشی در پروفایل شما قرار داده شد - تخته خاک";
-            $response = $this->helper->medianaSendSMS($smsInfo);
+            $response = $this->medianaSendSMS($smsInfo);
             dump($response);
 
         }

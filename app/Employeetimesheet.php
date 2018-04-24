@@ -3,9 +3,9 @@
 namespace App;
 
 use App\Traits\DateCommon;
+use App\Traits\Helper;
 use Carbon\Carbon;
 use function GuzzleHttp\Psr7\str;
-use App\Helpers\Helper;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -13,7 +13,9 @@ class Employeetimesheet extends Model
 {
     use SoftDeletes;
     use DateCommon;
-    protected $dates = ['deleted_at'];
+    use Helper;
+    /**      * The attributes that should be mutated to dates.        */
+    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     protected $fillable = [
         'user_id',
@@ -364,10 +366,9 @@ class Employeetimesheet extends Model
      */
     public function getUpdatedAtAttribute($value)
     {
-        $helper = new Helper();
         $explodedDateTime = explode(" ", $value);
 //        $explodedTime = $explodedDateTime[1] ;
-        return $helper->convertDate($value, "toJalali");
+        return $this->convertDate($value, "toJalali");
     }
 
     /**
@@ -378,10 +379,9 @@ class Employeetimesheet extends Model
      */
     public function getCreatedAtAttribute($value)
     {
-        $helper = new Helper();
         $explodedDateTime = explode(" ", $value);
 //        $explodedTime = $explodedDateTime[1] ;
-        return $helper->convertDate($value, "toJalali");
+        return $this->convertDate($value, "toJalali");
     }
 
     /**
@@ -392,8 +392,7 @@ class Employeetimesheet extends Model
      */
     public function getDateAttribute($value)
     {
-        $helper = new Helper();
-        return $helper->convertDate($value, "toJalali");
+        return $this->convertDate($value, "toJalali");
     }
 
     /**

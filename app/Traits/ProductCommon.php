@@ -87,7 +87,7 @@ trait ProductCommon
         $key = null;
         foreach ($products as $product)
             $key .= $product->cacheKey()."-";
-        $key="product:makeCostCollection:".$key;
+        $key="product:makeCostCollection:".md5($key);
 
         return Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($products){
             $costCollection = collect();
@@ -98,10 +98,10 @@ trait ProductCommon
                     $enableChildren = $product->children->where("enable" , 1);
                     if($enableChildren->count() == 1 )
                     {
-                        $costArray = $enableChildren->first()->obtainProductCost();
-                    }else $costArray  = $product->obtainProductCost();
+                        $costArray = $enableChildren->first()->calculatePayablePrice();
+                    }else $costArray  = $product->calculatePayablePrice();
 
-                }else $costArray  = $product->obtainProductCost();
+                }else $costArray  = $product->calculatePayablePrice();
 
                 $costCollection->put( $product->id , ["cost"=>$costArray["cost"] , 'productDiscount'=>$costArray["productDiscount"] , 'bonDiscount'=>$costArray['bonDiscount'] ]);
             }
@@ -178,5 +178,19 @@ trait ProductCommon
             return $link;
         });
 
+    }
+
+    protected function makeParentArray($myProduct)
+    {
+        $key="product:makeParentArray:".$myProduct->cacheKey();
+        return Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($myProduct) {
+            $counter = 1;
+            $parentsArray = array();
+            while ($myProduct->hasParents()) {
+                $parentsArray = array_add($parentsArray, $counter++, $myProduct->parents->first());
+                $myProduct = $myProduct->parents->first();
+            }
+            return $parentsArray;
+        });
     }
 }

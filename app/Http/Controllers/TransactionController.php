@@ -8,13 +8,13 @@ use App\Http\Requests\EditTransactionRequest;
 use App\Http\Requests\InsertTransactionRequest;
 use App\Orderproduct;
 use App\Paymentmethod;
+use App\Traits\Helper;
 use App\Transaction;
 use App\Transactiongateway;
 use App\Order;
 use App\Product;
 use App\Transactionstatus;
 use Carbon\Carbon;
-use App\Helpers\Helper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
@@ -29,11 +29,10 @@ use Illuminate\Http\Response;
 class TransactionController extends Controller
 {
 
-    protected $helper ;
+    use Helper;
     protected $response ;
     function __construct()
     {
-        $this->helper = new Helper();
         $this->response = new Response();
         $this->middleware('permission:'.Config::get('constants.LIST_TRANSACTION_ACCESS'),['only'=>'index']);
         $this->middleware('permission:'.Config::get('constants.SHOW_TRANSACTION_ACCESS'),['only'=>'edit']);
@@ -46,8 +45,10 @@ class TransactionController extends Controller
      * @return boolean
      */
     private function checkOrderAuthority(Order $order){
-        if($order->user_id == Auth::user()->id) return true;
-        else return false;
+        if($order->user_id == Auth::user()->id)
+            return true;
+        else
+            return false;
     }
 
     /**
@@ -246,7 +247,7 @@ class TransactionController extends Controller
         $createdTimeEnable = Input::get('createdTimeEnable');
         if(strlen($createdSinceDate)>0 && strlen($createdTillDate)>0 && isset($createdTimeEnable))
         {
-            $transactions = $this->helper->timeFilterQuery($transactions, $createdSinceDate, $createdTillDate, 'completed_at');
+            $transactions = $this->timeFilterQuery($transactions, $createdSinceDate, $createdTillDate, 'completed_at');
         }
 
         $deadlineSinceDate = Input::get('DeadlineSinceDate');
@@ -254,7 +255,7 @@ class TransactionController extends Controller
         $deadlineTimeEnable = Input::get('DeadlineTimeEnable');
         if(strlen($deadlineSinceDate)>0 && strlen($deadlineTillDate)>0 && isset($deadlineTimeEnable))
         {
-            $transactions = $this->helper->timeFilterQuery($transactions, $deadlineSinceDate, $deadlineTillDate, 'deadline_at');
+            $transactions = $this->timeFilterQuery($transactions, $deadlineSinceDate, $deadlineTillDate, 'deadline_at');
         }
 
         if(Input::has('transactionStatus'))
@@ -491,7 +492,7 @@ class TransactionController extends Controller
          */
 
         //                if(Auth::user()->hasRole("admin")) $cost = 100;
-//                else $cost = $this->helper->obtainOrderCost($order );
+//                else $cost = $this->obtainOrderCost($order );
         if(Auth::check())
         {
             $description = "تخته خاک-".Auth::user()->mobile."-محصولات: ";
@@ -505,7 +506,7 @@ class TransactionController extends Controller
         foreach ($order->orderproducts as $orderproduct)
         {
             if(isset($orderproduct->product->id))
-                $description .= " ".$orderproduct->product->getDisplayName()." ,";
+                $description .= " ".$orderproduct->product->name." ,";
             else
                 $description .= " یک محصول نامشخص ,";
         }
