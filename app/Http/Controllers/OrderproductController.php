@@ -281,7 +281,6 @@ class OrderproductController extends Controller
                             if($order->orderproducts(Config::get("constants.ORDER_PRODUCT_GIFT"))->whereHas("product" , function($q) use($gift){
                                 $q->where("id" , $gift->id);
                             })->get()->isNotEmpty()) continue;
-
                             $orderproduct->attachGift($gift) ;
                         }
                         /**

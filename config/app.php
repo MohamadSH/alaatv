@@ -194,6 +194,10 @@ return [
         Barryvdh\Debugbar\ServiceProvider::class,
     ],
 
+    'deployment-providers'=>
+    [
+        Barryvdh\Debugbar\ServiceProvider::class,
+    ],
     /*
     |--------------------------------------------------------------------------
     | Class Aliases
@@ -247,6 +251,7 @@ return [
         'Meta'    => Eusonlito\LaravelMeta\Facade::class,
         'Sitemap' => Watson\Sitemap\Facades\Sitemap::class,
         'Image' => Intervention\Image\Facades\Image::class,
+        'Debugbar' => Barryvdh\Debugbar\Facade::class,
     ],
 
 ];

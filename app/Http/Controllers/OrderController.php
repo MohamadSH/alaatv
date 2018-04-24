@@ -947,7 +947,7 @@ class OrderController extends Controller
     public function checkoutReview()
     {
 
-        
+
         Meta::set('title', substr("تخته خاک|بازبینی سفارش" , 0 , Config::get("constants.META_TITLE_LIMIT")));
         Meta::set('keywords', substr($this->setting->site->seo->homepage->metaKeywords, 0 , Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
         Meta::set('description', substr($this->setting->site->seo->homepage->metaDescription , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
@@ -1016,7 +1016,7 @@ class OrderController extends Controller
      */
     public function checkoutPayment()
     {
-        
+
         Meta::set('title', substr("تخته خاک|پرداخت" , 0 , Config::get("constants.META_TITLE_LIMIT")));
         Meta::set('keywords', substr($this->setting->site->seo->homepage->metaKeywords, 0 , Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
         Meta::set('description', substr($this->setting->site->seo->homepage->metaDescription , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
