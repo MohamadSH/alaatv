@@ -70,18 +70,6 @@ trait ProductCommon
         return $childrenArray ;
     }
 
-    protected function makeParentArray($myProduct)
-    {
-        $counter = 1 ;
-        $parentsArray = array();
-        while($myProduct->hasParents())
-        {
-            $parentsArray = array_add($parentsArray , $counter++ , $myProduct->parents->first() );
-            $myProduct = $myProduct->parents->first() ;
-        }
-        return $parentsArray ;
-    }
-
     protected function makeCostCollection($products)
     {
         $key = null;
