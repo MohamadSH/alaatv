@@ -2280,12 +2280,6 @@ class SanatisharifmergeController extends Controller
         }
         return $userId ;
     }
-    protected function determineContentSetName($deplessonid)
-    {
-        $name = null;
-        s($deplessonid,$name,0);
-        return $name;
-    }
 
     /**
      * Display a listing of the resource.
