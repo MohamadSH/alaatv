@@ -204,6 +204,10 @@ Route::group(['middleware' => 'auth'], function()
          *  End
          */
 
+        $user =  \App\User::onlyTrashed();
+        dd($user->get());
+
+
         /**checking session */
 //        dd(session()->all());
          /**  **/

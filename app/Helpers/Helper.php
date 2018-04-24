@@ -200,7 +200,8 @@ class Helper
         else return $this->response->setStatusCode(503);
     }
 
-    public function medianaGetCredit(){
+    public function medianaGetCredit()
+    {
         $url = getenv("MEDIANA_API_URL");
         $param = array
         (
