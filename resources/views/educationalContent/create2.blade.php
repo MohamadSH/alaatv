@@ -231,7 +231,7 @@
             // The setting up of the dropzone
             init: function() {
                 this.on("addedfile", function(file) {
-                    file.previewElement.querySelector('[type="submit"]').disabled=true;
+                    // file.previewElement.querySelector('[type="submit"]').disabled=true;
                     $("#grades").parents("div .col-md-2").css("border","");
                     $("#majors").parents("div .col-md-2").css("border","");
                     $("#rootContentTypes").parent("div .col-md-2").removeClass("has-error");
@@ -463,7 +463,7 @@
 //                    var methodInput = Dropzone.createElement("<input type='hidden' name='_method' value='PUT'>");
 //                    files.previewElement.querySelector('.form-horizontal').appendChild(methodInput);
                     if(response.fileName.length > 0){
-                        files.previewElement.querySelector('[type="submit"]').disabled=false;
+                        // files.previewElement.querySelector('[type="submit"]').disabled=false;
                         var fileNameHidden = Dropzone.createElement("<input type='hidden' name='file' value='"+response.fileName+"'>");
                         files.previewElement.querySelector('.form-horizontal').appendChild(fileNameHidden);
                     }else{

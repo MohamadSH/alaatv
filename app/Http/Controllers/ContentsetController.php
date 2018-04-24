@@ -45,6 +45,10 @@ class ContentsetController extends Controller
         $contentSet = new Contentset();
         $contentSet->fill($request->all());
         if($request->has("id")) $contentSet->id = $request->get("id");
+        if($request->has("enable")) $contentSet->enable = 1;
+        else $contentSet->enable = 0;
+        if($request->has("display")) $contentSet->display = 1;
+        else $contentSet->display = 0;
         if($contentSet->save()) return $this->response->setStatusCode(200);
         else return $this->response->setStatusCode(503);
     }

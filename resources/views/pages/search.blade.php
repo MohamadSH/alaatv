@@ -2,113 +2,473 @@
 
 @section("css")
     <link rel="stylesheet" href="{{ mix('/css/all.css') }}">
+    <link rel="stylesheet" type="text/css" href="/assets/extra/slick/slick/slick.css">
+    <link rel="stylesheet" type="text/css" href="/assets/extra/slick/slick/slick-theme.css">
+    <style type="text/css">
+        /**
+         product slider styles
+         */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .slider {
+            width: 70%;
+            margin: 100px auto;
+        }
+
+        .slick-slide {
+            margin: 0px 20px;
+        }
+
+        .slick-slide img {
+            width: 100%;
+        }
+
+        .slick-prev:before,
+        .slick-next:before {
+            color: black;
+        }
+
+
+        .slick-slide {
+            transition: all ease-in-out .3s;
+            opacity: .2;
+        }
+
+        .slick-active {
+            opacity: 1;
+        }
+
+        .slick-current {
+            opacity: 1;
+        }
+
+    </style>
+@endsection
+
+@section("bodyClass")
+    class = "page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-sidebar-closed page-md"
 @endsection
 
 @section("pageBar")
-    <div class="page-bar">
-        <ul class="page-breadcrumb">
-            <li>
-                <i class="icon-home"></i>
-                <a href="{{action("HomeController@index")}}">خانه</a>
-                <i class="fa fa-angle-left"></i>
-            </li>
-            <li>
-                <span>جستجو</span>
-            </li>
-        </ul>
-    </div>
+    {{--<div class="page-bar">--}}
+        {{--<ul class="page-breadcrumb">--}}
+            {{--<li>--}}
+                {{--<i class="icon-home"></i>--}}
+                {{--<a href="{{action("HomeController@index")}}">خانه</a>--}}
+                {{--<i class="fa fa-angle-left"></i>--}}
+            {{--</li>--}}
+            {{--<li>--}}
+                {{--<span>جستجو</span>--}}
+            {{--</li>--}}
+        {{--</ul>--}}
+    {{--</div>--}}
 @endsection
 @section("content")
+    <div class="search-page search-content-4">
+        <div class="search-bar bordered">
+            <div class="row">
+
+                {!! Form::open(['action'=> 'EducationalContentController@index'  ,'role'=>'form' , 'id' => 'itemFilterForm'  ]) !!}
+                <div class="form-body">
+                    {{--CHECKBOXES FOR BUCKETS--}}
+                    {{--<div class="form-group form-md-line-input form-md-floating-label has-info">--}}
+                    {{--<div class="col-md-12 itemType hidden">--}}
+                    {{--<input type="checkbox" name="itemTypes[]" value="contentset" >دسته محتوا--}}
+                    {{--<input type="checkbox" name="itemTypes[]" value="content">محتوا--}}
+                    {{--<input type="checkbox" name="itemTypes[]" value="product">محصول--}}
+                    {{--</div>--}}
+                    {{--</div>--}}
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sd-4 col-xs-12">
+                            <div class="form-group form-md-line-input form-md-floating-label has-info">
+                                {!! Form::select('tags[]',$grades,(isset($tagArray))?$tagArray:null,['class' => 'form-control itemFilter' , 'placeholder'=>'همه مقاطع' ]) !!}
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sd-4 col-xs-12">
+                            <div class="form-group form-md-line-input form-md-floating-label has-info">
+                                {!! Form::select('tags[]',$majors,(isset($tagArray))?$tagArray:null,['class' => 'form-control itemFilter' , 'placeholder'=>'همه رشته ها' ]) !!}
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sd-4 col-xs-12">
+                            <div class="form-group form-md-line-input form-md-floating-label has-info">
+                                {!! Form::select('tags[]',$lessons,(isset($tagArray))?$tagArray:null,['class' => 'form-control itemFilter' ]) !!}
+                            </div>
+                        </div>
+                    </div>
+                    @if(!empty($extraTagArray))
+                        <div class="row">
+                            <div class="col-md-12">
+                                @include("partials.search.tagLabel" , ["tags"=>$extraTagArray])
+                            </div>
+                        </div>
+                    @endif
+                </div>
+                {!! Form::close() !!}
+                <div class="row text-center">
+                    <img id="content-search-loading" src="/assets/extra/load2.GIF" alt="loading"  style="display: none ; width: 20px;">
+                </div>
+            </div>
+            {{--TEXT SEARCH--}}
+            {{--<div class="row">--}}
+                {{--<div class="col-md-12">--}}
+                    {{--<div class="input-group " >--}}
+                        {{--<input type="text" class="form-control" placeholder="اینجا بنویسید . . . ">--}}
+                        {{--<span class="input-group-btn">--}}
+                            {{--<button class="btn blue uppercase bold" type="button">بگرد</button>--}}
+                        {{--</span>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+            {{--</div>--}}
+        </div>
+    </div>
+    {{--<div class="search-page search-content-2">--}}
+        {{--<div class="search-bar ">--}}
+            {{--<div class="row">--}}
+                {{--<div class="col-md-12">--}}
+                    {{--<div class="input-group">--}}
+                        {{--<input type="text" class="form-control" placeholder="Search for...">--}}
+                        {{--<span class="input-group-btn">--}}
+                                            {{--<button class="btn blue uppercase bold" type="button">Search</button>--}}
+                                        {{--</span>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+            {{--</div>--}}
+        {{--</div>--}}
+    {{--</div>--}}
     <div class="row">
-        <div class="col-lg-12 col-xs-12 col-sm-12">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
             <!-- BEGIN PORTLET-->
             <div class="portlet light ">
                 <div class="portlet-title tabbable-line">
                     <div class="caption">
                         <i class="icon-globe font-dark hide"></i>
-                        <span class="caption-subject font-dark bold uppercase">جستجو در نخنه خاک</span>
+                        <span class="caption-subject font-dark bold uppercase">محصولات آلاء</span>
+                    </div>
+                </div>
+                <div class="portlet-body" id="productDiv">
+                    <div class="row">
+                        <section class="regular slider" style="width: 95%;margin-top: 0px ; margin-bottom: 15px;">
+                            {!!  $items->where("type" , "product")->first()["view"]  !!}
+                        </section>
+                    </div>
+                </div>
+            </div>
+            <!-- END PORTLET-->
+            <!-- BEGIN PORTLET-->
+            <div class="portlet light ">
+                <div class="portlet-title tabbable-line">
+                    <div class="caption">
+                        <i class="icon-globe font-dark hide"></i>
+                        <span class="caption-subject font-dark bold uppercase">فیلم ها و جزوات آموزشی آلاء</span>
                     </div>
                     <ul class="nav nav-tabs">
-                        <li class="active">
-                            <a href="#tab_1_1" class="active" data-toggle="tab">خدمات</a>
+                        @if($items->where("type" , "article")->first()["totalitems"] > 0)
+                        <li>
+                            <a href="#tab_article" data-toggle="tab"> Article </a>
+                        </li>
+                        @endif
+                        <li>
+                            <a href="#tab_content_pamphlet" data-toggle="tab"> PDF </a>
                         </li>
                         <li>
-                            <a href="#tab_1_2" data-toggle="tab"> مقالات </a>
+                            <a href="#tab_content_video"   data-toggle="tab">Video</a>
+                        </li>
+                        <li class="active">
+                            <a href="#tab_contentset" data-toggle="tab"> Playlist </a>
                         </li>
                     </ul>
                 </div>
-                <div class="portlet-body">
-                    <!--BEGIN TABS-->
+                <div class="portlet-body " >
                     <div class="tab-content">
-                        <div class="tab-pane active" id="tab_1_1">
-                            @if($productSearch->total() === 0)
-                                <p>خدمتی یافت نشد!</p>
-                            @else
-                                <ul class="feeds">
-                                    @foreach($productSearch as $p)
-                                        @if(!$p->hasParents())
-                                            <li>
-                                                <a href="{{ action("ProductController@show",$p) }}">
-                                                    <div class="col1">
-                                                        <div class="cont">
-                                                            <div class="cont-col1">
-                                                                <div class="label label-sm label-info">
-                                                                    <i class="fa fa-shopping-cart"></i>
-                                                                </div>
-                                                            </div>
-                                                            <div class="cont-col2">
-                                                                <div class="desc">{{ $p->name }}</div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col2">
-                                                        <div class="date"> {{ $p->CreatedAt_Jalali() }}</div>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                        @endif
-                                    @endforeach
-                                </ul>
-
-                            @endif
-
+                        <div class="tab-pane" id="tab_content_video">
+                            {!!  $items->where("type" , "video")->first()["view"] !!}
                         </div>
-                        <div class="tab-pane" id="tab_1_2">
-
-                            @if($articleSearch->total() === 0)
-                                <p>مقاله ای یافت نشد!</p>
-                            @else
-                                <ul class="feeds">
-                                    @foreach($articleSearch as $art)
-                                        <li>
-                                            <a href="{{ action('ArticleController@show',$art) }}">
-                                                <div class="col1">
-                                                    <div class="cont">
-                                                        <div class="cont-col1">
-                                                            <div class="label label-sm label-success">
-                                                                <i class="fa fa-book"></i>
-                                                            </div>
-                                                        </div>
-                                                        <div class="cont-col2">
-                                                            <div class="desc"> {{ $art->title }}</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col2">
-                                                    <div class="date"> {{ $art->CreatedAt_Jalali() }}</div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            @endif
+                        <div class="tab-pane text-center" id="tab_content_pamphlet">
+                            {!! $items->where("type" , "pamphlet")->first()["view"]  !!}
+                        </div>
+                        <div class="tab-pane active text-center" id="tab_contentset">
+                            {!! $items->where("type" , "contentset")->first()["view"]  !!}
+                        </div>
+                        <div class="tab-pane text-center" id="tab_article">
+                            {!! $items->where("type" , "article")->first()["view"]  !!}
                         </div>
                     </div>
-                    <!--END TABS-->
+
                 </div>
             </div>
             <!-- END PORTLET-->
         </div>
     </div>
+@endsection
 
+@section("footerPageLevelPlugin")
+    <script src="{{ mix('/js/footer_Page_Level_Plugin.js') }}" type="text/javascript"></script>
+    <script src="/assets/global/plugins/cubeportfolio/js/jquery.cubeportfolio.min.js" type="text/javascript"></script>
+@endsection
+
+@section("footerPageLevelScript")
+    <script src="/js/extraJS/jQueryNumberFormat/jquery.number.min.js" type="text/javascript"></script>
+@endsection
+
+@section("extraJS")
+    <script src="{{ mix('/js/Page_Level_Script_all.js') }}" type="text/javascript"></script>
+    <script src="/assets/extra/slick/slick/slick.min.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            initialSlick($(".regular"));
+            initialVideoPortfolio();
+            initialContentTypeSelect();
+        });
+
+        $(document).on('click', '.pagination a', function (e) {
+            var query = $(this).attr('href').split('?')[1];
+            var parameters = query.split('=');
+            var pageName = parameters[0];
+            var itemType = pageName.split('page');
+            contentLoad(parameters[0] , parameters[1] , itemType[0]);
+            e.preventDefault();
+        });
+        
+        function reloadSlick(element) {
+            element[0].slick.refresh();
+        }
+        
+        function initialSlick(element) {
+            element.slick({
+                auto:true,
+                dots: true,
+                infinite: false,
+                speed: 300,
+                slidesToShow: 4,
+                slidesToScroll: 4,
+                responsive: [
+                    {
+                        breakpoint: 1024,
+                        settings: {
+                            slidesToShow: 3,
+                            slidesToScroll: 3,
+                            infinite: true,
+                            dots: true
+                        }
+                    },
+                    {
+                        breakpoint: 600,
+                        settings: {
+                            slidesToShow: 2,
+                            slidesToScroll: 2
+                        }
+                    },
+                    {
+                        breakpoint: 480,
+                        settings: {
+                            slidesToShow: 1,
+                            slidesToScroll: 1,
+                            dots: false
+                        }
+                    }
+                    // You can unslick at a given breakpoint now by adding:
+                    // settings: "unslick"
+                    // instead of a settings object
+                ],
+                rtl:true
+            });
+        }
+        
+        function initialVideoPortfolio() {
+            (function($, window, document, undefined) {
+                'use strict';
+
+                // init cubeportfolio
+                $('#js-grid-juicy-projects').cubeportfolio({
+                    filters: '#js-filters-juicy-projects',
+                    loadMore: '#js-loadMore-juicy-projects',
+                    loadMoreAction: 'click',
+                    layoutMode: 'grid',
+                    defaultFilter: '*',
+                    animationType: 'quicksand',
+                    gapHorizontal: 35,
+                    gapVertical: 30,
+                    gridAdjustment: 'responsive',
+                    mediaQueries: [{
+                        width: 1500,
+                        cols: 4
+                    }, {
+                        width: 1100,
+                        cols: 4
+                    }, {
+                        width: 800,
+                        cols: 3
+                    }, {
+                        width: 480,
+                        cols: 3
+                    }, {
+                        width: 320,
+                        cols: 1
+                    }],
+                    caption: 'overlayBottomReveal',
+                    displayType: 'sequentially',
+                    displayTypeSpeed: 80,
+
+                    // lightbox
+                    lightboxDelegate: '.cbp-lightbox',
+                    lightboxGallery: true,
+                    lightboxTitleSrc: 'data-title',
+                    lightboxCounter: '<div class="cbp-popup-lightbox-counter"> of </div>',
+
+                    // singlePage popup
+                    singlePageDelegate: '.cbp-singlePage',
+                    singlePageDeeplinking: true,
+                    singlePageStickyNavigation: true,
+                    singlePageCounter: '<div class="cbp-popup-singlePage-counter"> of </div>',
+                    singlePageCallback: function(url, element) {
+                        // to update singlePage content use the following method: this.updateSinglePage(yourContent)
+                        var t = this;
+
+                        $.ajax({
+                            url: url,
+                            type: 'GET',
+                            dataType: 'html',
+                            timeout: 10000
+                        })
+                            .done(function(result) {
+                                t.updateSinglePage(result);
+                            })
+                            .fail(function() {
+                                t.updateSinglePage('AJAX Error! Please refresh the page!');
+                            });
+                    },
+                });
+
+            })(jQuery, window, document);
+        }
+
+        function contentLoad(pageName , pageNumber, itemType) {
+            // initiated from url
+
+            var formData = $("#itemFilterForm").find(':not(input[name=_token])').filter(function(index, element) {
+                return $(element).val() != '';
+            }).serialize();
+
+            if( pageNumber != undefined && pageNumber > 0 )
+            {
+                var numberQuery  ;
+                if (pageName.length > 0)
+                {
+                    numberQuery = [ pageName+"="+pageNumber ] ;
+                }
+                else
+                {
+                    numberQuery = [ "page="+pageNumber ] ;
+                }
+                formData = formData + "&" + numberQuery.join('&') ;
+            }else
+            {
+                $("#content-search-loading").show();
+            }
+
+            if(formData.length > 0) changeUrl(formData);
+
+            if( itemType != undefined &&  itemType.length > 0 )
+            {
+                var typesQuery = [ "itemTypes[]="+itemType ] ;
+                formData = formData + "&" + typesQuery.join('&') ;
+            }
+
+            console.log(formData);
+            $.ajax({
+                type: "GET",
+                url: "{{action("HomeController@search")}}" ,
+                data:formData,
+                statusCode:
+                    {
+                        200:function (response) {
+                            console.log(response);
+                            var items = response.items;
+                            // var itemTypes = response.itemTypes;
+                            // location.hash = page;
+                            $.each(items , function (key , item) {
+                                switch(item.type) {
+                                    case "contentset":
+                                        $("#tab_contentset").html(item.view);
+                                        break;
+                                    case "video":
+                                        $("#js-grid-juicy-projects").cubeportfolio('destroy');
+                                        $("#tab_content_video").html(item.view);
+                                        initialVideoPortfolio();
+                                        break;
+                                    case "pamphlet":
+                                        $("#tab_content_pamphlet").html(item.view);
+                                        break;
+                                    case "product":
+                                        var element = $(".regular");
+                                        $(".regular").slick('unslick');
+                                        $("#productDiv .row .regular").html(item.view);
+                                        initialSlick(element);
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            });
+                            $("#content-search-loading").hide();
+
+                        },
+                        422:function (response) {
+                            console.log(response);
+                        },
+                        503:function (response) {
+                            console.log(response);
+                        }
+                    }
+            });
+            return false;
+        }
+
+        function initialContentTypeSelect() {
+            var selected = $("#rootContentTypes option:selected").text();
+            if(selected == "آزمون")
+            {
+                $("#childContentTypes").prop("disabled" , false);
+            }else{
+                $("#childContentTypes").val("");
+                $("#childContentTypes").prop("disabled" , true);
+            }
+        }
+
+        function changeUrl(appendUrl)
+        {
+            var newUrl="{{action("HomeController@search")}}"+"?"+appendUrl;
+            window.history.pushState("data","Title",newUrl);
+            document.title=newUrl;
+        }
+
+        // $(window).on('hashchange', function() {
+        //     if (window.location.hash) {
+        //         var page = window.location.hash.replace('#', '');
+        //         if (page == Number.NaN || page <= 0) {
+        //             return false;
+        //         } else {
+        //             getPosts(page);
+        //         }
+        //     }
+        // });
+
+        $(document).on("change", ".itemFilter", function (){
+            contentLoad();
+        });
+
+        $(document).on("click", ".itemType", function (){
+            contentLoad();
+        });
+
+        $(document).on("click", "#goButton", function (){
+            contentLoad();
+        });
+
+        $('#rootContentTypes').on('change', function() {
+            initialContentTypeSelect();
+        });
+    </script>
 @endsection

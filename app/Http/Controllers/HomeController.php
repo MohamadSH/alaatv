@@ -12,14 +12,18 @@ use App\Attributetype;
 use App\Checkoutstatus;
 use App\Consultation;
 use App\Consultationstatus;
+use App\Contentset;
+use App\Contenttype;
 use App\Coupon;
 use App\Coupontype;
 use App\Educationalcontent;
 use App\Gender;
+use App\Grade;
 use App\Http\Requests\ContactUsFormRequest;
 use App\Http\Requests\SendSMSRequest;
 use App\Lottery;
 use App\Major;
+use App\Orderproduct;
 use App\Notifications\InvoicePaid;
 use App\Notifications\UserRegisterd;
 use App\Order;
@@ -34,6 +38,7 @@ use App\Question;
 use App\Relative;
 use App\Role;
 use App\Slideshow;
+use App\Traits\APIRequestCommon;
 use App\Traits\DateCommon;
 use App\Traits\Helper;
 use App\Traits\ProductCommon;
@@ -55,6 +60,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\View;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Sftp\SftpAdapter;
 use Meta;
@@ -67,6 +73,9 @@ use Auth;
 class HomeController extends Controller
 {
     use Helper;
+    use APIRequestCommon ;
+    use ProductCommon;
+    use DateCommon;
     /**
      * Create a new controller instance.
      *
@@ -76,10 +85,9 @@ class HomeController extends Controller
     protected $response;
     protected $sideBarAdmin;
     protected $setting;
-    
+
     private static $TAG = HomeController::class;
-    use ProductCommon;
-    use DateCommon;
+
 
     public function debug(Request $request){
 
@@ -111,20 +119,309 @@ class HomeController extends Controller
 
     }
 
-    public function search(Request $request)
+    public function search()
     {
-        $search = $request->get("search");
-
+        //ToDo : load ha : file haye thumbnail mahsoolat , code mojood dar partial/search/contetnset.blade
         try {
-            $productSearch = Product::search($search)->where("enable", 1)->paginate(10);
-            $articleSearch = Article::search($search)->paginate(10);
-        } catch (\Exception    $error) {
-            $message = "با عرض پوزش ، در حال حاضر دسترسی به این بخش مقدور نمی باشد";
-            return $this->errorPage($message);
+            if(Input::has("itemTypes"))
+            {
+                $itemTypes = Input::get("itemTypes");
+                if(!is_array($itemTypes)) return $this->response->setStatusCode(422)->setContent(["message"=>"bad input: itemTypes"]) ;
+            }
+            else
+            {
+                $itemTypes = array("video" , "pamphlet" , "contentset", "product" , "article");
+            }
+
+            $tagFlag = false;
+            if(Input::has("tags"))
+            {
+                $tagFlag = true;
+                $tagInput = Input::get("tags");
+                //ToDo: Appropriate error page
+                if(!is_array($tagInput)) return $this->response->setStatusCode(422)->setContent(["message"=>"bad input: tags"]) ;
+                $tags = "";
+                foreach ($tagInput as $key => $tag)
+                {
+                        if(strlen($tag)<=0)
+                            continue;
+                        $tags .= "\"$tag\"";
+                }
+                if(strlen($tags) <= 0 )
+                    $tagFlag = false;
+
+            }
+
+            $tagArray = array();
+            $items = collect();
+            $paginationSetting = collect([
+                [
+                    "itemType"=>"video" ,
+                    "pageName" => "videopage",
+                    "itemPerPage" => "12"
+                ],
+                [
+                    "itemType"=>"pamphlet" ,
+                    "pageName" => "pamphletpage",
+                    "itemPerPage" => "10"
+                ],
+                [
+                    "itemType"=>"article" ,
+                    "pageName" => "articlepage",
+                    "itemPerPage" => "10"
+                ],
+                [
+                    "itemType"=>"contentset" ,
+                    "pageName" => "contentsetpage",
+                    "itemPerPage" => "10"
+                ]
+            ]);
+            foreach ($itemTypes as $itemType)
+            {
+                $requestSubPath = "&withscores=1";
+                if($tagFlag)
+                {
+                    $requestBasePath = env("TAG_API_URL")."tags/";
+                    switch ($itemType)
+                    {
+                        case "video":
+                            $perPage = $paginationSetting->where("itemType" , "video")->first()["itemPerPage"];
+                            $pageName = $paginationSetting->where("itemType" , "video")->first()["pageName"];
+                            $requestSubPath .= "&limit=".(int)$perPage;
+                            if(Input::has($pageName))
+                            {
+                                $pageNum = Input::get($pageName);
+                                $offset = $perPage * ($pageNum - 1);
+                                $requestSubPath .= "&offset=".$offset;
+                            }
+                            else
+                            {
+                                $requestSubPath .= "&offset=0";
+                            }
+                            $bucket = "content";
+                            $itemTypeTag = "فیلم";
+                            break;
+                        case "pamphlet":
+                            $perPage = $paginationSetting->where("itemType" , "pamphlet")->first()["itemPerPage"];
+                            $pageName = $paginationSetting->where("itemType" , "pamphlet")->first()["pageName"];
+                            $requestSubPath .= "&limit=".(int)$perPage;
+                            if(Input::has($pageName))
+                            {
+                                $pageNum = Input::get($pageName);
+                                $offset = $perPage * ($pageNum - 1);
+                                $requestSubPath .= "&offset=".$offset;
+                            }
+                            else
+                            {
+                                $requestSubPath .= "&offset=0";
+                            }
+                            $bucket = "content";
+                            $itemTypeTag = "جزوه";
+                            break;
+                        case "article":
+                            $perPage = $paginationSetting->where("itemType" , "article")->first()["itemPerPage"];
+                            $pageName = $paginationSetting->where("itemType" , "article")->first()["pageName"];
+                            $requestSubPath .= "&limit=".(int)$perPage;
+                            if(Input::has($pageName))
+                            {
+                                $pageNum = Input::get($pageName);
+                                $offset = $perPage * ($pageNum - 1);
+                                $requestSubPath .= "&offset=".$offset;
+                            }
+                            else
+                            {
+                                $requestSubPath .= "&offset=0";
+                            }
+                            $bucket = "content";
+                            $itemTypeTag = "مقاله";
+                            break;
+                        case "contentset":
+                            $perPage = $paginationSetting->where("itemType" , "contentset")->first()["itemPerPage"];
+                            $pageName = $paginationSetting->where("itemType" , "contentset")->first()["pageName"];
+                            $requestSubPath .= "&limit=".(int)$perPage;
+                            if(Input::has($pageName))
+                            {
+                                $pageNum = Input::get($pageName);
+                                $offset = $perPage * ($pageNum - 1);
+                                $requestSubPath .= "&offset=".$offset;
+                            }
+                            else
+                            {
+                                $requestSubPath .= "&offset=0";
+                            }
+                            $bucket = "contentset";
+                            $itemTypeTag = "دسته_محتوا";
+                            break;
+                        default:
+                            $bucket = $itemType;
+                            break;
+                    }
+
+                    if(!in_array($itemTypeTag , $tagInput))
+                        $tags .= "\"$itemTypeTag\"";
+                    $tags = str_replace("\"\"" , "\",\"" , $tags);
+                    $tags = "[".$tags."]";
+                    $bucketRequestPath = $requestBasePath.$bucket."?tags=$tags".$requestSubPath;
+                    $response = $this->sendRequest($bucketRequestPath,"GET" );
+                    if($response["statusCode"] == 200){
+                        $result = json_decode($response["result"]);
+                        $total_items_db = $result->data->total_items_db ;
+                        $arrayOfId = array();
+                        foreach ($result->data->items as $item)
+                        {
+                            array_push($arrayOfId , $item->id);
+                        }
+                        foreach ($result->data->tags as $tag)
+                        {
+                            if(!in_array($tag , $tagArray)) array_push($tagArray , $tag);
+                        }
+                    }
+                }
+                $costCollection = collect();
+                switch ($itemType)
+                {
+                    case "video":
+                        $query = Educationalcontent::select()->whereHas("contenttypes" , function ($q){
+                            $q->where("name" , "video");
+                        })->orderBy("created_at" , "desc");
+                        if(isset($arrayOfId))
+                        {
+                            //Todo: mishe in query nakhore ba ye if rooye arrayOfId
+                            $query->whereIn("id" , $arrayOfId);
+                            $query = $query->get();
+                            $options = [
+                                "pageName" => $paginationSetting->where("itemType" , "video")->first()["pageName"]
+                            ];
+                            $query = new LengthAwarePaginator($query,(isset($total_items_db))?$total_items_db:0,$paginationSetting->where("itemType" , "video")->first()["itemPerPage"],null  , $options);
+                        }else
+                        {
+                            $query = $query->paginate($paginationSetting->where("itemType" , "video")->first()["itemPerPage"] , ['*'] , $paginationSetting->where("itemType" , "video")->first()["pageName"]);
+                        }
+                            //Sample Code For Text Search
+//                        $text = Input::get("searchText");
+//                        $this->QueryCommin($text , ["name" , "description" , $query]);
+                        break;
+                    case "pamphlet":
+                        $query = Educationalcontent::select()->whereHas("contenttypes" , function ($q){
+                            $q->where("name" , "pamphlet");
+                        })->orderBy("created_at" , "desc");
+                        if(isset($arrayOfId))
+                        {
+                            $query->whereIn("id" , $arrayOfId);
+                            $query = $query->get();
+                            $options = [
+                                "pageName" => $paginationSetting->where("itemType" , "pamphlet")->first()["pageName"]
+                            ];
+                            $query = new LengthAwarePaginator($query,(isset($total_items_db))?$total_items_db:0,$paginationSetting->where("itemType" , "pamphlet")->first()["itemPerPage"],null  , $options);
+                        }else
+                        {
+                            $query = $query->paginate($paginationSetting->where("itemType" , "pamphlet")->first()["itemPerPage"] , ['*'] , $paginationSetting->where("itemType" , "pamphlet")->first()["pageName"]);
+                        }
+                        break;
+                    case "article":
+                        $query = Educationalcontent::select()->whereHas("contenttypes" , function ($q){
+                            $q->where("name" , "article");
+                        })->orderBy("created_at" , "desc");
+                        if(isset($arrayOfId))
+                        {
+                            $query->whereIn("id" , $arrayOfId);
+                            $query = $query->get();
+                            $options = [
+                                "pageName" => $paginationSetting->where("itemType" , "article")->first()["pageName"]
+                            ];
+                            $query = new LengthAwarePaginator($query,(isset($total_items_db))?$total_items_db:0,$paginationSetting->where("itemType" , "article")->first()["itemPerPage"],null  , $options);
+                        }else
+                        {
+                            $query = $query->paginate($paginationSetting->where("itemType" , "article")->first()["itemPerPage"] , ['*'] , $paginationSetting->where("itemType" , "article")->first()["pageName"]);
+                        }
+                        break;
+                    case "contentset":
+                        $query = Contentset::select()->orderBy("created_at" , "desc");
+                        if(isset($arrayOfId))
+                        {
+                            $query->whereIn("id" , $arrayOfId);
+                            $query = $query->get();
+                            $options = [
+                                "pageName" => $paginationSetting->where("itemType" , "contentset")->first()["pageName"]
+                            ];
+                            $query = new LengthAwarePaginator($query,(isset($total_items_db))?$total_items_db:0,$paginationSetting->where("itemType" , "contentset")->first()["itemPerPage"],null  , $options);
+                        }else
+                        {
+                            $query = $query->paginate($paginationSetting->where("itemType" , "contentset")->first()["itemPerPage"] , ['*'] , $paginationSetting->where("itemType" , "contentset")->first()["pageName"]);
+                        }
+                        break;
+                    case "product":
+                        $query = Product::getProducts(0,1)->orderBy("order");
+                        if(isset($arrayOfId))
+                        {
+                            $query->whereIn("id" , $arrayOfId);
+                        }
+                        $query = $query->get();
+//                        $costCollection = $this->makeCostCollection($query);
+                        break;
+                    default:
+                        continue 2;
+                        break;
+                }
+                if(isset($total_items_db)) $totalObjectsCount = $total_items_db;
+                else $totalObjectsCount = $query->count();
+                $items->push([
+                    "type"=>$itemType,
+                    "totalitems"=> (isset($totalObjectsCount))?$totalObjectsCount:0,
+                    "view"=>View::make('partials.search.'.$itemType, array('items' => $query))->render(),
+                    "costCollection"=>$costCollection
+                ]);
+            }
+            $totalTags = array();
+//            $majorCollection = collect([
+//                ["description"=>"رشته_ریاضی", "name"=>"ریاضی"] ,
+//                ["description"=>"رشته_تجربی", "name"=>"تجربی" ],
+//                ["description"=>"رشته_انسانی", "name"=>"انسانی" ]
+//            ]);
+            $majorCollection = Major::all();
+            $totalTags = array_merge($totalTags , $majorCollection->pluck("description")->toArray()) ;
+            $majors = $majorCollection->pluck(  "name" , "description")->toArray();
+
+            $gradeCollection = Grade::where("name" ,'<>' , 'graduated' )->get();
+            $totalTags = array_merge($totalTags , $gradeCollection->pluck("description")->toArray()) ;
+            $grades = $gradeCollection->pluck('displayName' , 'description')->toArray() ;
+//            $grades = array_sort_recursive($grades);
+
+            $lessonCollection = collect([
+                ["value"=>"" , "index"=>"همه دروس"],
+                ["value"=>"دیفرانسیل", "index"=>"دیفرانسیل"] ,
+                ["value"=>"تحلیلی", "index"=>"تحلیلی"] ,
+                ["value"=>"گسسته", "index"=>"گسسته"] ,
+                ["value"=>"زیست_شناسی", "index"=>"زیست شناسی"] ,
+                ["value"=>"ریاضی_تجربی", "index"=>"ریاضی تجربی"] ,
+                ["value"=>"فیزیک", "index"=>"فیزیک"] ,
+                ["value"=>"شیمی", "index"=>"شیمی" ],
+                ["value"=>"عربی", "index"=>"عربی" ],
+                ["value"=>"دین_و_زندگی", "index"=>"دین و زندگی" ],
+                ["value"=>"زیان", "index"=>"زیان" ],
+            ]);
+            $totalTags = array_merge($totalTags , $lessonCollection->pluck("value")->toArray()) ;
+            $lessons = $lessonCollection->pluck("index" , "value")->toArray();
+
+            $extraTagArray  = array_diff($tagArray , $totalTags );
+
+//            $rootContentTypes = Contenttype::where("enable", 1)->whereDoesntHave("parents")->pluck("displayName" , "displayName")->toArray() ;
+//            $childContentTypes = Contenttype::whereHas("parents" , function ($q) {
+//                $q->where("name" , "exam") ;
+//            })->pluck("displayName" , "displayName")->toArray() ;
+            if(Request::ajax())
+            {
+                return $this->response->setStatusCode(200)->setContent(["items"=>$items , "itemTypes"=>$itemTypes]);
+            }
+            else
+            {
+                $sideBarMode = "closed";
+                return view("pages.search" , compact("items"  ,"itemTypes" ,"tagArray" , "extraTagArray", "majors" , "grades" , "rootContentTypes", "childContentTypes" , "lessons" , "sideBarMode" ));
+            }
+        }catch (\Exception    $e) {
+            $message = "unexpected error";
+            return $this->response->setStatusCode(503)->setContent(["message"=>$message , "error"=>$e->getMessage() , "line"=>$e->getLine() , "file"=>$e->getFile()]);
         }
-
-
-        return view('pages.search', compact('productSearch', 'articleSearch'));
     }
 
     /**
@@ -291,7 +588,7 @@ class HomeController extends Controller
         $checkoutStatuses = array_sort_recursive($checkoutStatuses);
 
         $pageName = "admin";
-        
+
         Meta::set('title', substr("تخته خاک|مدیریت کاربران", 0, Config::get("constants.META_TITLE_LIMIT")));
         Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
 
@@ -323,7 +620,7 @@ class HomeController extends Controller
         } else {
             $defaultProductOrder = 1;
         }
-        
+
         Meta::set('title', substr("تخته خاک|مدیریت محصولات", 0, Config::get("constants.META_TITLE_LIMIT")));
         Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
         $pageName = "admin";
@@ -1454,7 +1751,290 @@ class HomeController extends Controller
 
     public function bot()
     {
+        /**
+         *  Creating user accounts for Alaa teachers
+         */
 
+        $userteacher = array(
+            array('userid' => '2','userfirstname' => 'رضا','userlastname' => 'شامیزاده'),
+            array('userid' => '3','userfirstname' => 'روح الله','userlastname' => 'حاجی سلیمانی'),
+            array('userid' => '4','userfirstname' => 'محسن','userlastname' => 'شهریان'),
+            array('userid' => '5','userfirstname' => 'علیرضا','userlastname' => 'رمضانی'),
+            array('userid' => '6','userfirstname' => 'پدرام','userlastname' => 'علیمرادی'),
+            array('userid' => '7','userfirstname' => 'عبدالرضا','userlastname' => 'مرادی'),
+            array('userid' => '8','userfirstname' => 'علی اکبر','userlastname' => 'عزتی'),
+            array('userid' => '9','userfirstname' => 'مسعود','userlastname' => 'حدادی'),
+            array('userid' => '20','userfirstname' => 'محمدرضا','userlastname' => 'مقصودی'),
+            array('userid' => '97','userfirstname' => 'محمد علی','userlastname' => 'امینی راد'),
+            array('userid' => '103','userfirstname' => 'مهدی','userlastname' => 'تفتی'),
+            array('userid' => '246','userfirstname' => '','userlastname' => 'جعفری'),
+            array('userid' => '274','userfirstname' => 'گروه آموزشی','userlastname' => ' '),
+            array('userid' => '307','userfirstname' => 'حمید','userlastname' => 'فدایی فرد'),
+            array('userid' => '308','userfirstname' => 'کیاوش','userlastname' => 'فراهانی'),
+            array('userid' => '310','userfirstname' => 'مصطفی','userlastname' => 'جعفری نژاد'),
+            array('userid' => '311','userfirstname' => 'رفیع','userlastname' => 'رفیعی'),
+            array('userid' => '313','userfirstname' => 'علی','userlastname' => 'صدری'),
+            array('userid' => '314','userfirstname' => 'امید','userlastname' => 'زاهدی'),
+            array('userid' => '315','userfirstname' => 'مشاوران دبیرستان','userlastname' => ''),
+            array('userid' => '318','userfirstname' => 'محسن','userlastname' => 'معینی'),
+            array('userid' => '319','userfirstname' => 'میلاد','userlastname' => 'ناصح زاده'),
+            array('userid' => '320','userfirstname' => 'محمد','userlastname' => 'پازوکی'),
+            array('userid' => '321','userfirstname' => '','userlastname' => 'جهانبخش'),
+            array('userid' => '322','userfirstname' => 'حسن','userlastname' => 'مرصعی'),
+            array('userid' => '323','userfirstname' => '','userlastname' => 'بختیاری'),
+            array('userid' => '324','userfirstname' => 'علی نقی','userlastname' => 'طباطبایی'),
+            array('userid' => '325','userfirstname' => 'وحید','userlastname' => 'کبریایی'),
+            array('userid' => '326','userfirstname' => '','userlastname' => 'درویش'),
+            array('userid' => '363','userfirstname' => '','userlastname' => 'صابری'),
+            array('userid' => '364','userfirstname' => 'دکتر','userlastname' => 'ارشی'),
+            array('userid' => '366','userfirstname' => 'جعفر','userlastname' => 'رنجبرزاده'),
+            array('userid' => '367','userfirstname' => 'محمد رضا','userlastname' => 'آقاجانی'),
+            array('userid' => '478','userfirstname' => 'محمد رضا ','userlastname' => 'حسینی فرد'),
+            array('userid' => '533','userfirstname' => 'محمد','userlastname' => 'صادقی'),
+            array('userid' => '534','userfirstname' => 'باقر','userlastname' => 'رضا خانی'),
+            array('userid' => '535','userfirstname' => 'معین','userlastname' => 'کریمی'),
+            array('userid' => '536','userfirstname' => 'حسین','userlastname' => 'کرد'),
+            array('userid' => '537','userfirstname' => '','userlastname' => 'دورانی'),
+            array('userid' => '965','userfirstname' => 'کاظم','userlastname' => 'کاظمی'),
+            array('userid' => '1427','userfirstname' => '','userlastname' => 'کازرانیان'),
+            array('userid' => '1428','userfirstname' => '','userlastname' => 'شاه محمدی'),
+            array('userid' => '1431','userfirstname' => 'محمد حسین','userlastname' => 'شکیباییان'),
+            array('userid' => '2875','userfirstname' => 'یاشار','userlastname' => 'بهمند'),
+            array('userid' => '3172','userfirstname' => 'خسرو','userlastname' => 'محمد زاده'),
+            array('userid' => '3895','userfirstname' => 'میثم','userlastname' => 'حسین خانی'),
+            array('userid' => '3906','userfirstname' => 'پوریا','userlastname' => 'رحیمی'),
+            array('userid' => '3971','userfirstname' => '','userlastname' => 'نوری'),
+            array('userid' => '3972','userfirstname' => 'رضا','userlastname' => 'آقاجانی'),
+            array('userid' => '3973','userfirstname' => 'مهدی','userlastname' => 'امینی راد'),
+            array('userid' => '3974','userfirstname' => '','userlastname' => 'رخ صفت'),
+            array('userid' => '3975','userfirstname' => 'بهمن','userlastname' => 'مؤذنی پور'),
+            array('userid' => '3976','userfirstname' => 'محمد صادق','userlastname' => 'ثابتی'),
+            array('userid' => '3977','userfirstname' => 'مهدی','userlastname' => 'جلادتی'),
+            array('userid' => '3979','userfirstname' => 'داریوش','userlastname' => 'راوش'),
+            array('userid' => '3980','userfirstname' => 'پیمان','userlastname' => 'طلوعی'),
+            array('userid' => '3993','userfirstname' => 'محمد حسین','userlastname' => 'انوشه'),
+            array('userid' => '3998','userfirstname' => 'عباس','userlastname' => 'راستی بروجنی'),
+            array('userid' => '4012','userfirstname' => 'جواد','userlastname' => 'نایب کبیر'),
+            array('userid' => '4019','userfirstname' => 'عمار','userlastname' => ' تاج بخش'),
+            array('userid' => '4020','userfirstname' => 'سروش','userlastname' => 'معینی'),
+            array('userid' => '4021','userfirstname' => '','userlastname' => 'نادریان'),
+            array('userid' => '4022','userfirstname' => 'شهروز','userlastname' => 'رحیمی'),
+            array('userid' => '4023','userfirstname' => 'سیروس','userlastname' => 'نصیری'),
+            array('userid' => '4030','userfirstname' => 'مهدی','userlastname' => 'صنیعی طهرانی'),
+            array('userid' => '4034','userfirstname' => 'هامون','userlastname' => 'سبطی'),
+            array('userid' => '4035','userfirstname' => 'حامد','userlastname' => 'پویان نظر'),
+            array('userid' => '4036','userfirstname' => 'فرشید','userlastname' => 'داداشی'),
+            array('userid' => '4037','userfirstname' => 'ناصر','userlastname' => 'حشمتی'),
+            array('userid' => '4038','userfirstname' => 'محمدامین','userlastname' => 'نباخته'),
+            array('userid' => '4039','userfirstname' => 'جلال','userlastname' => 'موقاری'),
+            array('userid' => '4040','userfirstname' => 'محسن','userlastname' => ' آهویی'),
+            array('userid' => '4041','userfirstname' => 'مهدی','userlastname' => 'ناصر شریعت'),
+            array('userid' => '4043','userfirstname' => 'سید حسام الدین','userlastname' => 'جلالی'),
+            array('userid' => '4046','userfirstname' => 'ابوالفضل','userlastname' => 'جعفری')
+        );
+        $accountPasswords = array();
+        $accounts = collect();
+        $accountCounterSuccess = 0;
+        $accountCounterFailed = 0;
+        dump("Available names: ".count($userteacher));
+        foreach ($userteacher as $teacher)
+        {
+            $info = [];
+            if(strlen($teacher["userfirstname"]) > 0) $info["firstName"] = $teacher["userfirstname"];
+            if(strlen($teacher["userlastname"]) > 0) $info["lastName"] = $teacher["userlastname"];
+            $info["mobile"] = "09991234567";
+            $info["nationalCode"] = "0000000000";
+            $password = rand(999999999 , 9999999999);
+            array_push($accountPasswords , $password);
+            $info["password"] = bcrypt($password);
+            // determining major
+            switch ($teacher["userid"])
+            {
+                case 2:
+                    $info["major_id"] = 1;
+                    break;
+                case 3:
+                    $info["major_id"] = 1;
+                    break;
+                case 4:
+                    $info["major_id"] = 1;
+                    break;
+                case 6:
+                    $info["major_id"] = 1;
+                    break;
+                case 7:
+                    $info["major_id"] = 3;
+                    break;
+                case 9:
+                    $info["major_id"] = 2;
+                    break;
+                case 20:
+                    $info["major_id"] = 1;
+                    break;
+                case 97:
+                    $info["major_id"] = 2;
+                    break;
+                case 103:
+                    $info["major_id"] = 3;
+                    break;
+                case 307:
+                    $info["major_id"] = 1;
+                    break;
+                case 310:
+                    $info["major_id"] = 1;
+                    break;
+                case 318:
+                    $info["major_id"] = 1;
+                    break;
+                case 319:
+                    $info["major_id"] = 3;
+                    break;
+                case 320:
+                    $info["major_id"] = 2;
+                    break;
+                case 324:
+                    $info["major_id"] = 3;
+                    break;
+                case 325:
+                    $info["major_id"] = 1;
+                    break;
+                case 364:
+                    $info["major_id"] = 2;
+                    break;
+                case 366:
+                    $info["major_id"] = 3;
+                    break;
+                case 478:
+                    $info["major_id"] = 1;
+                    break;
+                case 536:
+                    $info["major_id"] = 1;
+                    break;
+                case 2875:
+                    $info["major_id"] = 1;
+                    break;
+                case 3172:
+                    $info["major_id"] = 3;
+                    break;
+                case 3895:
+                    $info["major_id"] = 3;
+                    break;
+                case 3906:
+                    $info["major_id"] = 2;
+                    break;
+                case 3972:
+                    $info["major_id"] = 3;
+                    break;
+                case 3973:
+                    $info["major_id"] = 2;
+                    break;
+                case 3975:
+                    $info["major_id"] = 1;
+                    break;
+                case 3976:
+                    $info["major_id"] = 1;
+                    break;
+                case 3977:
+                    $info["major_id"] = 3;
+                    break;
+                case 3979:
+                    $info["major_id"] = 3;
+                    break;
+                case 3980:
+                    $info["major_id"] = 1;
+                    break;
+                case 3998:
+                    $info["major_id"] = 2;
+                    break;
+                case 4012:
+                    $info["major_id"] = 1;
+                    break;
+                case 4020:
+                    $info["major_id"] = 1;
+                    break;
+                case 4022:
+                    $info["major_id"] = 1;
+                    break;
+                case 4023:
+                    $info["major_id"] = 1;
+                    break;
+                case 4034:
+                    $info["major_id"] = 3;
+                    break;
+                case 4038:
+                    $info["major_id"] = 2;
+                    break;
+                case 4039:
+                    $info["major_id"] = 2;
+                    break;
+                case 4040:
+                    $info["major_id"] = 3;
+                    break;
+                case 4041:
+                    $info["major_id"] = 3;
+                    break;
+                case 4046:
+                    $info["major_id"] = 2;
+                    break;
+                default:
+                    break;
+            }
+            $account = new User();
+            $account->fill($info);
+            if($account->save())
+            {
+                $accountCounterSuccess++;
+                $accounts->push($account);
+            }
+            else
+            {
+                $accountCounterFailed++ ;
+            }
+        }
+
+        dump("Number of failed accounts: ".$accountCounterFailed);
+        dump("Number of successful accounts: ".$accountCounterSuccess);
+        dump("accounts:");
+        dump($accounts);
+        dump("passwords:");
+        dump($accountPasswords);
+        dd("done");
+
+        /**
+         * Giving gift to users
+
+        $carbon = new Carbon("2018-02-20 00:00:00");
+        $orderproducts = Orderproduct::whereIn("product_id" ,[ 100] )->whereHas("order" , function ($q) use ($carbon)
+        {
+//           $q->where("orderstatus_id" , 1)->where("created_at" ,">" , $carbon);
+           $q->where("orderstatus_id" , 2)->whereIn("paymentstatus_id" , [2,3])->where("completed_at" ,">" , $carbon);
+        })->get();
+        dump("تعداد سفارش ها" . $orderproducts->count());
+        $users = array();
+        $counter = 0;
+        foreach ($orderproducts as $orderproduct)
+        {
+            $order = $orderproduct->order;
+            if($order->orderproducts->where("product_id" , 107)->isNotEmpty()) continue ;
+
+            $giftOrderproduct = new Orderproduct();
+            $giftOrderproduct->orderproducttype_id = Config::get("constants.ORDER_PRODUCT_GIFT");
+            $giftOrderproduct->order_id = $order->id ;
+            $giftOrderproduct->product_id = 107 ;
+            $giftOrderproduct->cost = 24000 ;
+            $giftOrderproduct->discountPercentage = 100 ;
+            $giftOrderproduct->save() ;
+
+            $giftOrderproduct->parents()->attach($orderproduct->id , ["relationtype_id"=>Config::get("constants.ORDER_PRODUCT_INTERRELATION_PARENT_CHILD")]);
+            $counter++;
+            if(isset($order->user->id))
+                array_push($users , $order->user->id);
+            else
+                array_push($users , 0);
+        }
+        dump($counter." done");
+        dd($users);
+         */
         /**
          *  Converting Hamayesh with Poshtibani to without poshtibani
         if (!Auth::user()->hasRole("admin")) abort(404);
@@ -1588,8 +2168,8 @@ class HomeController extends Controller
                         }
                     }
                 }
-
-                $parentsArray = $product->parents;
+                //$parentsArray = $product->parents;
+                $parentsArray = $this->makeParentArray($product);
                 if (!empty($parentsArray)) {
                     foreach ($parentsArray as $parent) {
                         foreach ($parent->gifts as $gift) {
@@ -1613,5 +2193,542 @@ class HomeController extends Controller
         dd("finish");
          * */
     }
+
+    public function tagBot()
+    {
+        $counter = 0;
+        try{
+            dump( "start time:". Carbon::now("asia/tehran"));
+            if(!Input::has("t"))    return $this->response->setStatusCode(422)->setContent(["message"=>"Wrong inputs: Please pass parameter t. Available values: v , p , cs"]);
+            $type = Input::get("t");
+            switch($type)
+            {
+                case "v": //Video
+                    $bucket = "content";
+                    $items = Educationalcontent::whereHas("contenttypes" , function ($q){
+                        $q->where("name" , "video");
+                    });
+                    if(Input::has("id"))
+                    {
+                        $contentId = Input::get("id");
+                        $items->where("id" , $contentId);
+                    }
+                    $items = $items->get();
+                    foreach ($items->where("tags" , null) as $item)
+                    {
+                        $myTags = [
+                            "فیلم"
+                        ];
+                        $majors = $item->majors->pluck("description")->toArray() ;
+                        if(!empty($majors))
+                            $myTags = array_merge($myTags ,  $majors);
+                        $grades = $item->grades->where("name" , "graduated")->pluck("description")->toArray() ;
+                        if(!empty($grades))
+                            $myTags = array_merge($myTags , $grades );
+                        // ToDo : author_id
+                        switch ($item->id)
+                        {
+                            case 130:
+                                $myTags = array_merge($myTags , [
+                                    "عربی" ,
+                                    "ضبط_استودیویی",
+                                    "جمع_بندی",
+                                    "پیش",
+                                    "پایه",
+                                    "نظام_آموزشی_قدیم" ,
+                                    "نظام_آموزشی_جدید" ,
+                                    "میلاد_ناصح_زاده"
+                                ] );
+                                break;
+                            case 131:
+                                $myTags = array_merge($myTags , [
+                                    "عربی" ,
+                                    "ضبط_استودیویی",
+                                    "جمع_بندی",
+                                    "میلاد_ناصح_زاده",
+                                    "پیش",
+                                    "پایه",
+                                    "نظام_آموزشی_قدیم" ,
+                                    "نظام_آموزشی_جدید" ,
+                                ]);
+                                break;
+                            case 144:
+                                $myTags = array_merge($myTags , [
+                                    "عربی" ,
+                                    "ضبط_استودیویی",
+                                    "جمع_بندی",
+                                    "میلاد_ناصح_زاده",
+                                    "پیش",
+                                    "پایه",
+                                    "نظام_آموزشی_قدیم" ,
+                                    "نظام_آموزشی_جدید" ,
+                                ]);
+                                break;
+                            case 145:
+                                $myTags = array_merge($myTags , [
+                                    "عربی" ,
+                                    "ضبط_استودیویی",
+                                    "جمع_بندی",
+                                    "میلاد_ناصح_زاده",
+                                    "پیش",
+                                    "پایه",
+                                    "نظام_آموزشی_قدیم" ,
+                                    "نظام_آموزشی_جدید" ,
+                                ] );
+                                break;
+                            case 156:
+                                $myTags = array_merge($myTags , [
+                                    "عربی" ,
+                                    "ضبط_استودیویی",
+                                    "جمع_بندی",
+                                    "میلاد_ناصح_زاده",
+                                    "پیش",
+                                    "پایه",
+                                    "نظام_آموزشی_قدیم" ,
+                                    "نظام_آموزشی_جدید" ,
+                                ] );
+                                break;
+                            case 157:
+                                $myTags = array_merge($myTags , [
+                                    "عربی" ,
+                                    "ضبط_استودیویی",
+                                    "جمع_بندی",
+                                    "میلاد_ناصح_زاده",
+                                    "پیش",
+                                    "پایه",
+                                    "نظام_آموزشی_قدیم" ,
+                                    "نظام_آموزشی_جدید" ,
+                                ] );
+                                break;
+                            default :
+                                break;
+                        }
+                        $myTags = array_merge($myTags ,["متوسطه2"]);
+                        $tagsJson = [
+                            "bucket" => $bucket,
+                            "tags" => $myTags
+                        ];
+                        $item->tags = json_encode($tagsJson);
+                        $item->update();
+                    }
+                    break;
+                case "p": //Pamphlet
+                    $bucket = "content";
+                    $items = Educationalcontent::whereHas("contenttypes" , function ($q){
+                        $q->where("name" , "pamphlet");
+                    });
+                    if(Input::has("id"))
+                    {
+                        $contentId = Input::get("id");
+                        $items->where("id" , $contentId);
+                    }
+                    $items = $items->get();
+                    foreach ($items->where("tags" , null) as $item)
+                    {
+                        $myTags = [
+                            "جزوه" ,
+                            "PDF"
+                        ];
+                        $majors = $item->majors->pluck("description")->toArray() ;
+                        if(!empty($majors))
+                            $myTags = array_merge($myTags ,  $majors);
+                        $grades = $item->grades->where("name" , "graduated")->pluck("description")->toArray() ;
+                        if(!empty($grades))
+                            $myTags = array_merge($myTags , $grades );
+                        switch ($item->id)
+                        {
+                            case 115:
+                                $myTags = array_merge($myTags , [
+                                    "گسسته",
+                                    "پیش",
+                                    "نظام_آموزشی_قدیم" ,
+                                ]);
+                                break;
+                            case 112:
+                                $myTags = array_merge($myTags , [
+                                    "تحلیلی",
+                                    "پیش",
+                                    "نظام_آموزشی_قدیم" ,
+                                ]);
+                                break;
+                            case 126:
+                            case 114:
+                            case 127:
+                                $myTags = array_merge($myTags , [
+                                    "آمار_و_مدلسازی",
+                                    "پیش",
+                                    "نظام_آموزشی_قدیم" ,
+                                    ]);
+                                break;
+                            case 133:
+                                $myTags = array_merge($myTags , [
+                                    "پیش",
+                                ]);
+                                break;
+                            case 136:
+                                $myTags = array_merge($myTags , [
+                                    "فیزیک",
+                                    "پیش",
+                                    "همایش",
+                                    "نظام_آموزشی_قدیم" ,
+                                ] );
+                                break;
+                            case 119:
+                            case 128:
+                            case 129:
+                            case 143:
+                            case 146:
+                                $myTags = array_merge($myTags , [
+                                    "عربی",
+                                    "پیش",
+                                    "نظام_آموزشی_قدیم" ,
+                                ] );
+                                break;
+                            case 120:
+                                $myTags = array_merge($myTags , [
+                                    "زیست_شناسی",
+                                    "پیش",
+                                    "نظام_آموزشی_قدیم" ,
+                                ]);
+                                break;
+                            case 121:
+                                $myTags = array_merge($myTags , [
+                                    "زیست_شناسی",
+                                    "پایه",
+                                    "نظام_آموزشی_جدید" ,
+                                ]);
+                                break;
+                            case 122:
+                                $myTags = array_merge($myTags , [
+                                    "ادبیات",
+                                    "پیش",
+                                    "نظام_آموزشی_قدیم" ,
+                                ]);
+                                break;
+                            case 123:
+                            case 124:
+                            case 125:
+                            case 2:
+                            case 3:
+                            case 55:
+                            case 56:
+                            case 57:
+                            case 58:
+                            case 59:
+                            case 60:
+                            case 61:
+                            case 62:
+                            case 63:
+                            case 64:
+                            case 65:
+                            case 66:
+                            case 67:
+                            case 137:
+                            case 147:
+                            case 148:
+                            case 149:
+                            case 150:
+                            case 151:
+                            case 152:
+                            case 153:
+                            case 154:
+                            case 155:
+                                $myTags = array_merge($myTags , [
+                                    "شیمی",
+                                    "پیش",
+                                    "نظام_آموزشی_قدیم" ,
+                                ] );
+                                break;
+                            default :
+                                break;
+                        }
+                        $myTags = array_merge($myTags ,["متوسطه2"]);
+                        $tagsJson = [
+                            "bucket" => $bucket,
+                            "tags" => $myTags
+                        ];
+                        $item->tags = json_encode($tagsJson);
+                        $item->update();
+                    }
+                    break;
+                case "b": //Book
+                    $bucket = "content";
+                    $items = Educationalcontent::whereHas("contenttypes" , function ($q){
+                        $q->where("name" , "book");
+                    });
+                    $items = $items->get();
+                    foreach ($items->where("tags" , null) as $item)
+                    {
+                        $myTags = [
+                            "کتاب_درسی",
+                            "PDF" ,
+                            "پایه" ,
+                            "نظام_آموزشی_جدید" ,
+                        ];
+                        $majors = $item->majors->pluck("description")->toArray() ;
+                        if(!empty($majors))
+                            $myTags = array_merge($myTags ,  $majors);
+                        $grades = $item->grades->where("name" , "graduated")->pluck("description")->toArray() ;
+                        if(!empty($grades))
+                            $myTags = array_merge($myTags , $grades );
+                        $myTags = array_merge($myTags ,["متوسطه2"]);
+                        $tagsJson = [
+                            "bucket" => $bucket,
+                            "tags" => $myTags
+                        ];
+                        $item->tags = json_encode($tagsJson);
+                        $item->update();
+                    }
+                    break;
+                case "e": //Exam
+                    $bucket = "content";
+                    $items = Educationalcontent::whereHas("contenttypes" , function ($q){
+                        $q->where("name" , "exam");
+                    });
+                    $items = $items->get();
+                    //ToDo: tage pdf afzoode shavad
+                    foreach ($items->where("tags" , null) as $item)
+                    {
+                        $myTags = [
+                            "آزمون",
+                            "PDF"
+                        ];
+                        $childContentTypes = Contenttype::whereHas("parents" , function ($q) {
+                            $q->where("name" , "exam") ;
+                        })->pluck("description")->toArray() ;
+                        $myTags = array_merge($myTags , $childContentTypes );
+
+                        $majors = $item->majors->pluck("description")->toArray() ;
+                        if(!empty($majors))
+                            $myTags = array_merge($myTags ,  $majors);
+                        $grades = $item->grades->where("name" , "graduated")->pluck("description")->toArray() ;
+                        if(!empty($grades))
+                            $myTags = array_merge($myTags , $grades );
+
+                        switch ($item->id)
+                        {
+                            case 141:
+                            case 142:
+                                $myTags = array_merge($myTags , [
+                                    "عربی",
+                                    "پیش",
+                                    "نظام_آموزشی_قدیم" ,
+                                ]);
+                                break;
+                            case 116:
+                            case 16:
+                            case 17:
+                            case 18:
+                            case 13:
+                            case 14:
+                            case 15:
+                                $myTags = array_merge($myTags , [
+                                    "پایه",
+                                    "نظام_آموزشی_جدید" ,
+                                ]);
+                                break;
+                            default:
+                                $myTags = array_merge($myTags , [
+                                    "پیش",
+                                    "نظام_آموزشی_قدیم" ,
+                                ]);
+                                break;
+                        }
+
+                        $myTags = array_merge($myTags ,["متوسطه2"]);
+                        $tagsJson = [
+                            "bucket" => $bucket,
+                            "tags" => $myTags
+                        ];
+                        $item->tags = json_encode($tagsJson);
+                        $item->update();
+                    }
+                    break;
+                case "a": //Article
+                    $bucket = "content";
+                    $items = Educationalcontent::whereHas("contenttypes" , function ($q){
+                        $q->where("name" , "article");
+                    });
+                    $items = $items->get();
+                    foreach ($items->where("tags" , null) as $item)
+                    {
+                        $myTags = [
+                            "مقاله"
+                            ];
+                        $majors = $item->majors->pluck("description")->toArray() ;
+                        if(!empty($majors))
+                            $myTags = array_merge($myTags ,  $majors);
+                        $grades = $item->grades->where("name" , "graduated")->pluck("description")->toArray() ;
+                        if(!empty($grades))
+                            $myTags = array_merge($myTags , $grades );
+                        switch ($item->id)
+                        {
+                            case 132:
+                                $myTags = array_merge($myTags , [
+                                    "پیش",
+                                    "نظام_آموزشی_قدیم" ,
+                                    "مشاوره",
+                                    "مهدی_ناصر_شریعت"
+                                ]);
+                                break;
+                            default :
+                                break;
+                        }
+
+                        $myTags = array_merge($myTags ,["متوسطه2"]);
+                        $tagsJson = [
+                            "bucket" => $bucket,
+                            "tags" => $myTags
+                        ];
+                        $item->tags = json_encode($tagsJson);
+                        $item->update();
+                    }
+                    break;
+                case "cs": //Contentset
+                    $items = Contentset::orderBy("id");
+                    if(Input::has("id"))
+                    {
+                        $id = Input::get("id");
+                        $items = $items->where("id" , $id);
+                    }
+                    $items = $items->get();
+                    $bucket = "contentset";
+                    break;
+                case "pr": //Product
+                    $bucket = "product";
+                    if(Input::has("id"))
+                    {
+                        $id = Input::get("id");
+                        $productIds = [$id];
+                    }else
+                    {
+                        $productIds = [99 , 104 , 92 , 91 , 181 , 107 , 69 , 65 , 61 , 163 , 135 , 131 , 139 , 143 , 147 , 155 , 119 , 123 , 183];
+                    }
+
+                    $items = collect() ;
+                    foreach ($productIds as $productId)
+                    {
+                        $myTags = [
+                            "محصول" ,
+                            "نظام_آموزشی_قدیم",
+                            "پیش"
+                        ];
+                        switch ($productId)
+                        {
+                            case 99:
+                                $myTags = array_merge($myTags , ["رشته_ریاضی" , "رشته_تجربی"  ,"کنکور" , "شیمی" , 'مهدی_صنیعی_طهرانی'  ]);
+                                break;
+                            case 104:
+                                $myTags = array_merge($myTags , ["رشته_ریاضی" , "رشته_تجربی"  , "رشته_انسانی" ,"کنکور" , "دین_و_زندگی" , 'جعفر_زنجبرزاده' ]);
+                                break;
+                            case 92:
+                                $myTags = array_merge($myTags , ["رشته_ریاضی" , "رشته_تجربی"  ,"کنکور" , "فیزیک" , 'دکتر_پیمان_طلوعی' ]);
+                                break;
+                            case 91:
+                                $myTags = array_merge($myTags , ["رشته_ریاضی" , "رشته_تجربی"  ,"کنکور" , "شیمی" , 'مهدی_صنیعی_طهرانی' ]);
+                                break;
+                            case 181:
+                                $myTags = [ "محصول", "رشته_تجربی" ,"دهم" , "نظام_آموزشی_جدید" , "پایه" , "زیست_شناسی" , 'جلال_موقاری' ];
+                                break;
+                            case 107:
+                                $myTags = array_merge($myTags , ["رشته_ریاضی" , "رشته_تجربی"  ,"کنکور" , "شیمی" , 'مهدی_صنیعی_طهرانی' ]);
+                                break;
+                            case 69:
+                                $myTags = array_merge($myTags , ["رشته_تجربی"   ,"کنکور" , "زیست_شناسی" , 'محمد_پازوکی' ]);
+                                break;
+                            case 65:
+                                $myTags = array_merge($myTags , ["رشته_تجربی"   ,"کنکور" , "ریاضی_تجربی" , 'رضا_شامیزاده' ]);
+                                break;
+                            case 61:
+                                $myTags = array_merge($myTags , ["رشته_ریاضی"   ,"کنکور" , "دیفرانسیل" , 'محمد_صادق_ثابتی' ]);
+                                break;
+                            case 163:
+                                $myTags = array_merge($myTags , ["رشته_ریاضی"   ,"کنکور" , "گسسته" , 'بهمن_مؤذنی_پور' ]);
+                                break;
+                            case 135:
+                                $myTags = array_merge($myTags , ["رشته_تجربی"   ,"کنکور" , "ریاضی_تجربی" , 'محمدامین_نباخته' ]);
+                                break;
+                            case 131:
+                                $myTags = array_merge($myTags , ["رشته_تجربی"   ,"کنکور" , "ریاضی_تجربی" , 'مهدی_امینی_راد' ]);
+                                break;
+                            case 139:
+                                $myTags = array_merge($myTags , ["رشته_تجربی"   ,"کنکور" , "زیست_شناسی" , 'ابوالفضل_جعفری' ]);
+                                break;
+                            case 143:
+                                $myTags = array_merge($myTags , ["رشته_ریاضی" , "رشته_تجربی"  ,"کنکور" , "شیمی" , 'مهدی_صنیعی_طهرانی' ]);
+                                break;
+                            case 147:
+                                $myTags = array_merge($myTags , ["رشته_ریاضی" , "رشته_تجربی"  , "رشته_انسانی" ,"کنکور" , "عربی" , 'محسن_آهویی' ]);
+                                break;
+                            case 155:
+                                $myTags = array_merge($myTags , ["رشته_ریاضی" , "رشته_تجربی"  ,"کنکور" , "فیزیک" , 'دکتر_پیمان_طلوعی' ]);
+                                break;
+                            case 119:
+                                $myTags = array_merge($myTags , ["رشته_ریاضی"   ,"کنکور" , "تحلیلی" , 'محمد_صادق_ثابتی' ]);
+                                break;
+                            case 123:
+                                $myTags = array_merge($myTags , ["رشته_ریاضی"   ,"کنکور" , "دیفرانسیل" , 'محمد_صادق_ثابتی' ]);
+                                break;
+                            case 183:
+                                $myTags = array_merge($myTags , ["رشته_ریاضی" , "رشته_تجربی" , "رشته_انسانی" ,"کنکور" , "عربی" , 'میلاد_ناصح_زاده' ]);
+                                break;
+                            default:
+                                break;
+                        }
+                        $myTags = array_merge($myTags ,["متوسطه2"]);
+
+                        $tagsJson = [
+                            "bucket" => $bucket,
+                            "tags" => $myTags
+                        ];
+                        $items->push(["id"=>$productId , "tags"=>json_encode($tagsJson)]);
+                    }
+                    break;
+                default:
+                    return $this->response->setStatusCode(422)->setContent(["message"=>"Unprocessable input t."]);
+                    break;
+            }
+            dump("available items: ".$items->count());
+            $successCounter = 0 ;
+            $failedCounter = 0 ;
+            $warningCounter = 0 ;
+            foreach ($items as $item)
+            {
+                $itemTagsArray = json_decode($item["tags"]->tags);
+                if(is_array($itemTagsArray) && !empty($itemTagsArray) && isset($item["id"]))
+                {
+                    $params = [
+                        "tags"=> $itemTagsArray ,
+                    ];
+                    if(isset($item["created_at"]) && strlen($item["created_at"]) > 0 )  $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $item["created_at"] )->timestamp;
+
+                    $response =  $this->sendRequest(env("TAG_API_URL")."id/$bucket/".$item["id"] , "PUT", $params);
+                    if($response["statusCode"] == 200)
+                    {
+                        $successCounter++;
+                    }
+                    else
+                    {
+                        dump("item #".$item["id"]." failed. response : ".$response["statusCode"]);
+                        $failedCounter++;
+                    }
+                    $counter++;
+                }elseif(is_array($itemTagsArray) && empty($itemTagsArray))
+                {
+                    $warningCounter++;
+                    dump("warning no tags found for item #".$item["id"]);
+                }
+            }
+            dump($successCounter." items successfully done");
+            dump($failedCounter." items failed");
+            dump($warningCounter." warnings");
+            return $this->response->setStatusCode(200)->setContent(["message"=>"Done! number of processed items : ".$counter]);
+        }catch(\Exception $e)
+        {
+            $message = "unexpected error";
+            return $this->response->setStatusCode(503)->setContent(["message" => $message,"number of successfully processed items"=>$counter, "error" => $e->getMessage(), "line" => $e->getLine()]);
+        }
+    }
+
 
 }

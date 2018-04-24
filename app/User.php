@@ -283,6 +283,11 @@ class User extends Authenticatable
         return $this->belongsTo("\App\Grade");
     }
 
+    public function contents()
+    {
+        return $this->hasMany("\App\Educationalcontent" , "author_id" , "id");
+    }
+
     public function products(){
         $result = DB::table('products')
             ->join('orderproducts', function ($join){

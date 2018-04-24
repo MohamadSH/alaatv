@@ -15,76 +15,62 @@
 @endsection
 
 @section("pageBar")
-    {{--<div class="page-bar">--}}
-    {{--<ul class="page-breadcrumb">--}}
-    {{--<li>--}}
-    {{--<i class="icon-home"></i>--}}
-    {{--<a href="{{action("HomeController@index")}}">خانه</a>--}}
-    {{--<i class="fa fa-angle-left"></i>--}}
-    {{--</li>--}}
-    {{--<li>--}}
-    {{--<span>سفارش های من</span>--}}
-    {{--</li>--}}
-    {{--</ul>--}}
-    {{--<div class="page-toolbar">--}}
-    {{--<div class="btn-group pull-right">--}}
 
-    {{--<a  class="btn btn-fit-height bg-red-soft bg-font-dark " href="{{ action("UserController@userProductFiles")  }}"><i class="fa fa-download"></i>فیلم ها و جزوه ها</a>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--</div>--}}
 @endsection
 
+@section("bodyClass")
+    class = "page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-sidebar-closed page-md"
+@endsection
 
 @section("content")
     <div class="row">
         <div class="col-md-4">
             <div class="portlet light ">
                 {{--<div class="portlet-title">--}}
-                    {{--<div class="caption">--}}
-                         {{--فیلتر--}}
-                    {{--</div>--}}
-                    {{--<div class="tools"> </div>--}}
+                {{--<div class="caption">--}}
+                {{--فیلتر--}}
+                {{--</div>--}}
+                {{--<div class="tools"> </div>--}}
 
                 {{--</div>--}}
                 <div class="portlet-body" >
                     {!! Form::open(['action'=> 'EducationalContentController@index'  ,'class'=>'form-horizontal form-row-seperated' , 'id' => 'educationalContentFilterForm'  ]) !!}
-                        <div class="form-body">
-                            <div class="form-group form-md-line-input has-info form-md-floating-label">
-                                <div class="col-md-12">
-                                    <div class="input-group input-group-sm">
-                                        <div class="input-group-control">
-                                            <input name="searchText" type="text" class="form-control input-sm" id="searchText">
-                                            <label for="searchText">متن جستجو</label>
-                                        </div>
-                                        <span class="input-group-btn btn-right">
+                    <div class="form-body">
+                        <div class="form-group form-md-line-input has-info form-md-floating-label">
+                            <div class="col-md-12">
+                                <div class="input-group input-group-sm">
+                                    <div class="input-group-control">
+                                        <input name="searchText" type="text" class="form-control input-sm" id="searchText">
+                                        <label for="searchText">متن جستجو</label>
+                                    </div>
+                                    <span class="input-group-btn btn-right">
                                             <button class="btn green-haze" type="button" id="goButton">بگرد!</button>
                                         </span>
-                                    </div>
                                 </div>
                             </div>
-                            <div class="form-group form-md-line-input form-md-floating-label has-info">
-                                <div class="col-md-12">
-                                    @include('admin.filters.gradeFilter' , ["dropdown"=>true , 'dropdownClass'=>'educationalContentFilter'])
-                                </div>
-                            </div>
-                            <div class="form-group form-md-line-input form-md-floating-label has-info">
-                                <div class="col-md-12">
-                                    @include('admin.filters.majorFilter' , ["dropdown"=>true , 'dropdownClass'=>'educationalContentFilter'])
-                                </div>
-                            </div>
-                            <div class="form-group form-md-line-input form-md-floating-label has-info">
-                                <div class="col-md-12">
-                                    @include("admin.filters.contentTypeFilter" , ['dropdownClass'=>'educationalContentFilter'])
-                                </div>
-                            </div>
-                            {{--<div class="form-group">--}}
-                                {{--<div class="col-md-12">--}}
-                                    {{--<a href="javascript:;" class="btn btn-lg bg-font-dark reload" style="background: #489fff">فیلتر</a>--}}
-                                    {{--<img class="hidden" id="order-portlet-loading" src="{{Config::get('constants.FILTER_LOADING_GIF')}}"  width="5%">--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
                         </div>
+                        <div class="form-group form-md-line-input form-md-floating-label has-info">
+                            <div class="col-md-12">
+                                @include('admin.filters.gradeFilter' , ["dropdown"=>true , 'dropdownClass'=>'educationalContentFilter'])
+                            </div>
+                        </div>
+                        <div class="form-group form-md-line-input form-md-floating-label has-info">
+                            <div class="col-md-12">
+                                @include('admin.filters.majorFilter' , ["dropdown"=>true , 'dropdownClass'=>'educationalContentFilter'])
+                            </div>
+                        </div>
+                        <div class="form-group form-md-line-input form-md-floating-label has-info">
+                            <div class="col-md-12">
+                                @include("admin.filters.contentTypeFilter" , ['dropdownClass'=>'educationalContentFilter'])
+                            </div>
+                        </div>
+                        {{--<div class="form-group">--}}
+                        {{--<div class="col-md-12">--}}
+                        {{--<a href="javascript:;" class="btn btn-lg bg-font-dark reload" style="background: #489fff">فیلتر</a>--}}
+                        {{--<img class="hidden" id="order-portlet-loading" src="{{Config::get('constants.FILTER_LOADING_GIF')}}"  width="5%">--}}
+                        {{--</div>--}}
+                        {{--</div>--}}
+                    </div>
                     {!! Form::close() !!}
                     <div class="row text-center">
                         <img class="hidden" id="content-table-loading" src="/assets/extra/load2.GIF" alt="loading"  style="width: 20px;">

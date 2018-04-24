@@ -159,6 +159,60 @@ Route::group(['middleware' => 'auth'], function()
     Route::get('smsbot' , "HomeController@smsBot");
 
     Route::get("bot" , "HomeController@bot");
+
+
+    Route::get(
+    /**
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+        'sohrab', function (){
+        /**
+         * Query f  or getting Hamayesh Dey users
+         */
+        if(Auth::check() && !Auth::user()->hasRole("admin")) abort(404);
+//            $hamayesh = Illuminate\Support\Facades\Config::get("constants.HAMAYESH_CHILDREN") ;
+//            $users = \App\User::whereHas("orders" , function ($q) use($hamayesh) {
+//                $q->whereHas("orderproducts" , function ($q2) use($hamayesh){
+//                   $q2->whereIn( "product_id" , $hamayesh) ;
+//                })->whereIn("orderstatus_id" , [2,5] )->whereIn("paymentstatus_id", [2,3]);
+//            })->get() ;
+//            dump("number of total users: ". $users->count());
+//
+//            $bon = \App\Bon::where("name" , Config::get("constants.BON2"))->get()->first() ;
+//            $counter = 0;
+//            foreach ($users as $user)
+//            {
+//                $userPoints = $user->userbons()->where("bon_id" , 2)->get();
+//                if($userPoints->isEmpty())
+//                {
+//                    $userbon = new \App\Userbon();
+//                    $userbon->user_id = $user->id;
+//                    $userbon->bon_id = $bon->id;
+//                    $userbon->totalNumber = 1;
+//                    $userbon->userbonstatus_id = Config::get("constants.USERBON_STATUS_ACTIVE");
+//                    if (!$userbon->save()) {
+//                        dump("Error=> user: ".$user->id." didn't get his points.");
+//                    }else{
+//                        $counter++ ;
+//                    }
+//                }
+//
+//            }
+//            dump("number of users processed : ".$counter);
+//            dd("finish");
+        /**
+         *  End
+         */
+
+        $user =  \App\User::onlyTrashed();
+        dd($user->get());
+
+
+        /**checking session */
+//        dd(session()->all());
+         /**  **/
+});
+
 });
 Route::post('user/getPassword' , 'UserController@sendGeneratedPassword');
 
@@ -210,8 +264,11 @@ Route::get( "copylessonfromremote" , "RemoteDataCopyController@copyLesson");
 Route::get( "copydepartmentfromremote" , "RemoteDataCopyController@copyDepartment");
 Route::get( "copydepartmentlessonfromremote" , "RemoteDataCopyController@copyDepartmentlesson");
 Route::get( "copyvideofromremote" , "RemoteDataCopyController@copyVideo");
+Route::get( "copypamphletfromremote" , "RemoteDataCopyController@copyPamphlet");
 Route::get( "copydepartmentlessontotakhtekhak" , "SanatisharifmergeController@copyDepartmentlesson");
-Route::get( "copyvideototakhtekhak" , "SanatisharifmergeController@copyVideo");
+Route::get( "copycontenttotakhtekhak" , "SanatisharifmergeController@copyContent");
+
+Route::get("ctag" , "EducationalContentController@retrieveTags");
 
 
 Route::get("/debug", 'HomeController@debug');

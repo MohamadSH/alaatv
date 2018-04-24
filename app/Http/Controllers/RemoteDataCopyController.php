@@ -61,6 +61,9 @@ class RemoteDataCopyController extends Controller
         if(!isset($lastDeplesson)) $lastDeplesson = 0;
         $departmentlessons = $this->connection->select("CALL `getalldepartmentlessondetail`(".$lastDeplesson.")");
 //        dd($departmentlessons);
+        $successCounter = 0 ;
+        $failedCounter = 0 ;
+        dump("number of available videos : ".count($departmentlessons));
         foreach ($departmentlessons as $departmentlesson)
         {
             $depid = $departmentlesson->depid;
@@ -82,12 +85,15 @@ class RemoteDataCopyController extends Controller
             $response = $sanatisharifSyncController->store($sanatisharifDataRequest);
             if($response->getStatusCode() == 200)
             {
-
+                $successCounter++;
             }elseif($response->getStatusCode() == 503){
+                $failedCounter++;
                 dump("departmentlesson wasn't copied. id: ".$departmentlessonid);
             }
         }
-        return $this->response->setStatusCode(200)->setContent(["message"=>"همسان سازی با موفقیت انجام شد"]);
+        dump("number of failed videos : ".$failedCounter);
+        dump("number of copied videos : ".$successCounter);
+        return $this->response->setStatusCode(200)->setContent(["message"=>"Data sync done successfully"]);
     }
 
     public function copyVideo(SanatisharifmergeController $sanatisharifSyncController)
@@ -95,6 +101,9 @@ class RemoteDataCopyController extends Controller
         $lastVideo = Sanatisharifmerge::groupBy('videoid')->get()->max('videoid');
         if(!isset($lastVideo)) $lastVideo = 0;
         $videos = $this->connection->select("CALL `getallvideocompleteinfo`(".$lastVideo.")");
+        $successCounter = 0 ;
+        $failedCounter = 0 ;
+        dump("number of available videos : ".count($videos));
         foreach ($videos as $video)
         {
             $depid = $video->depid;
@@ -105,12 +114,35 @@ class RemoteDataCopyController extends Controller
             $sanatisharifDataRequest->offsetSet("videoname" , $video->videoname );
             $sanatisharifDataRequest->offsetSet("videodescrip" , $video->videodescrip );
             $sanatisharifDataRequest->offsetSet("videosession" , $video->session );
-//            $sanatisharifDataRequest->offsetSet("keywords" ,  );
             $sanatisharifDataRequest->offsetSet("videolink" , $video->videolink );
             $sanatisharifDataRequest->offsetSet("videolinkhq" , $video->videolinkhq );
             $sanatisharifDataRequest->offsetSet("videolink240p" , $video->videolink240p );
+
+            $sanatisharifDataRequest->offsetSet("videolinktakhtesefid" , $video->videolinkonline );
             $sanatisharifDataRequest->offsetSet("videoEnable" , $video->isenable );
-            $sanatisharifDataRequest->offsetSet("thumbnail" , $video->thumbnail );
+
+            if(is_null($video->thumbnail))
+            {
+                $flag = true;
+                if(isset($video->videolink))
+                    $filePath = $video->videolink;
+                elseif(isset($video->videolinkhq))
+                    $filePath = $video->videolinkhq;
+                elseif(isset($video->videolink240p))
+                    $filePath = $video->videolink240p;
+                else
+                    $flag = false;
+
+                if($flag)
+                {
+                    $pathInfoArray = pathinfo($filePath);
+                    $sanatisharifDataRequest->offsetSet("thumbnail" , "https://cdn.sanatisharif.ir/media/thumbnails/".$video->departmentlessonid."/". $pathInfoArray["filename"] . ".jpg");
+                }
+            }
+            else
+            {
+                $sanatisharifDataRequest->offsetSet("thumbnail" , $video->thumbnail );
+            }
             $sanatisharifDataRequest->offsetSet("lessonid" ,$lessonid );
             $sanatisharifDataRequest->offsetSet("lessonname" , $video->lessonname );
             $sanatisharifDataRequest->offsetSet("lessonEnable" , $video->lessonEnable );
@@ -126,18 +158,63 @@ class RemoteDataCopyController extends Controller
             $response = $sanatisharifSyncController->store($sanatisharifDataRequest);
             if($response->getStatusCode() == 200)
             {
-
+                $successCounter++;
             }elseif($response->getStatusCode() == 503){
+                $failedCounter++;
                 dump("video wasn't copied. id: ".$videoid);
             }
         }
-
-        return $this->response->setStatusCode(200)->setContent(["message"=>"همسان سازی با موفقیت انجام شد"]);
+        dump("number of failed videos : ".$failedCounter);
+        dump("number of copied videos : ".$successCounter);
+        return $this->response->setStatusCode(200)->setContent(["message"=>"Data sync done successfully"]);
     }
 
-    public function copyPamphlet()
+    public function copyPamphlet(SanatisharifmergeController $sanatisharifSyncController)
     {
+        $lastPamphlet = Sanatisharifmerge::groupBy('pamphletid')->get()->max('pamphletid');
+        if(!isset($lastPamphlet)) $lastPamphlet = 0;
+        $pamphlets = $this->connection->select("CALL `getallpamphletcompleteinfo`(".$lastPamphlet.")");
+        $successCounter = 0 ;
+        $failedCounter = 0 ;
+        dump("number of available pamphlets : ".count($pamphlets));
+        foreach ($pamphlets as $pamphlet)
+        {
+            $depid = $pamphlet->depid;
+            $lessonid =  $pamphlet->lessonid;
+            $pamphletid = $pamphlet->pamphletid;
+            $sanatisharifDataRequest = new Request();
+            $sanatisharifDataRequest->offsetSet("pamphletid" , $pamphletid );
+            $sanatisharifDataRequest->offsetSet("pamphletname" , $pamphlet->pamphletname );
+            $sanatisharifDataRequest->offsetSet("pamphletdescrip" , $pamphlet->pamphletdescrip );
+            $sanatisharifDataRequest->offsetSet("pamphletsession" , $pamphlet->session );
+            $sanatisharifDataRequest->offsetSet("pamphletaddress" , $pamphlet->pamphletaddress );
+            $sanatisharifDataRequest->offsetSet("isexercise" , $pamphlet->isexercise );
 
+            $sanatisharifDataRequest->offsetSet("pamphletEnable" , $pamphlet->isenable );
+            $sanatisharifDataRequest->offsetSet("lessonid" ,$lessonid );
+            $sanatisharifDataRequest->offsetSet("lessonname" , $pamphlet->lessonname );
+            $sanatisharifDataRequest->offsetSet("lessonEnable" , $pamphlet->lessonEnable );
+            $sanatisharifDataRequest->offsetSet("depid" , $depid );
+            $sanatisharifDataRequest->offsetSet("depname" , $pamphlet->depname );
+            $sanatisharifDataRequest->offsetSet("depyear" , $pamphlet->depyear );
+            $sanatisharifDataRequest->offsetSet("departmentlessonid" , $pamphlet->departmentlessonid );
+            $sanatisharifDataRequest->offsetSet("departmentlessonEnable" , $pamphlet->departmentlessonEnable );
+            $sanatisharifDataRequest->offsetSet("teacherfirstname" , $pamphlet->userfirstname );
+            $sanatisharifDataRequest->offsetSet("teacherlastname" , $pamphlet->userlastname );
+            $sanatisharifDataRequest->offsetSet("pageOldAddress" , "/Sanati-Sharif-Pamphlet/$lessonid/$depid/$pamphletid");
+
+            $response = $sanatisharifSyncController->store($sanatisharifDataRequest);
+            if($response->getStatusCode() == 200)
+            {
+                $successCounter++;
+            }elseif($response->getStatusCode() == 503){
+                $failedCounter++;
+                dump("pamphlet wasn't copied. id: ".$pamphletid);
+            }
+        }
+        dump("number of failed pamphlets : ".$failedCounter);
+        dump("number of copied pamphlets : ".$successCounter);
+        return $this->response->setStatusCode(200)->setContent(["message"=>"Data sync done successfully"]);
     }
 
 
