@@ -2543,7 +2543,7 @@ class SanatisharifmergeController extends Controller
                             break;
                         case "p":
                             $files = array();
-                            $domain = "http://sanatisharif.ir/";
+                            $domain = "https://sanatisharif.ir/";
                             if(isset($sanatisharifRecord->pamphletaddress)) array_push($files ,["name"=>$domain.$sanatisharifRecord->pamphletaddress  ]);
                             if(!empty($files)) $storeContentReuest->offsetSet("files" , $files );
                             $template_id = 2;
