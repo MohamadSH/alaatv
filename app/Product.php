@@ -520,7 +520,6 @@ class Product extends Model
         if (isset($attributeType)) {
             $attributeType = Attributetype::all()->where("name", $attributeType)->first();
             $attributesArray = array();
-            $attributesArray = array();
             foreach ($this->attributeset->attributes()->where("attributetype_id", $attributeType->id) as $attribute) {
                 array_push($attributesArray, $attribute->id);
             }
