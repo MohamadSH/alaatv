@@ -271,6 +271,7 @@ return [
     'CACHE_10' => 10,
     'CACHE_5' => 5,
     'CACHE_3' => 3,
+    'CACHE_1' =>1 ,
 
 
 ];

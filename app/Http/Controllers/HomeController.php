@@ -54,6 +54,7 @@ use App\Websitesetting;
 use App\Websitepage;
 use App\Http\Requests\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -93,9 +94,8 @@ class HomeController extends Controller
 
     public function debug(Request $request){
 
-        $u = Auth::user();
-        $u->notify(new UserRegisterd($u));
-        dd($u);
+////        Cache::forget("product:");
+        Cache::tags('bon')->flush();
         return response()->make("Ok");
 
     }

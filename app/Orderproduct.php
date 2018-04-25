@@ -90,9 +90,9 @@ class Orderproduct extends Model
 
     public function getExtraCost($extraAttributevaluesId = null)
     {
-        $key="Orderproduct:getExtraCost:".$this->cacheKey();
+        $key="Orderproduct:getExtraCost:".$this->cacheKey()."\\".(isset($extraAttributevaluesId) ? implode(".",$extraAttributevaluesId) : "-");
 
-        return Cache::remember($key,Config::get("constants.CACHE_60"),function () {
+        return Cache::remember($key,Config::get("constants.CACHE_60"),function () use($extraAttributevaluesId) {
             $extraCost = 0;
             if (isset($extraAttributevaluesId))
                 $extraAttributevalues = $this->attributevalues->whereIn("id", $extraAttributevaluesId);
