@@ -250,7 +250,11 @@ class RouteServiceProvider extends ServiceProvider
         Route::bind('c', function($value){
             $key = "Educationalcontent:".$value;
            return Cache::remember($key,Config::get("constants.CACHE_5"),function () use ($value){
-                return Educationalcontent::where('id', $value)->first() ?? abort(404);
+               $c = Educationalcontent::where('id', $value)->first();
+               if (isset($c)) {
+                   $c->load("template");
+               }
+                return  $c ?? abort(404);
             });
 
         });

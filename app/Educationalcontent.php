@@ -247,4 +247,14 @@ class Educationalcontent extends Model
         return $links;
     }
 
+    public function getTagsAttribute($value)
+    {
+        return json_decode($value);
+    }
+
+//    public function setTagsAttribute($value)
+//    {
+//        return json_encode($value);
+//    }
+
 }

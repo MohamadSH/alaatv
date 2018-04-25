@@ -14,7 +14,7 @@
  
 Auth::routes();
 
-Route::get('content',"HomeController@search");
+Route::get('c',"HomeController@search");
 Route::get( '/' , 'HomeController@index');
 Route::get('404', 'HomeController@error404');
 Route::get('403', 'HomeController@error403');
@@ -196,7 +196,10 @@ Route::get('image/{category}/{w}/{h}/{filename}', [
 //Route::get('certificates', 'HomeController@certificates');
 Route::get('sitemap.xml', 'HomeController@siteMapXML');
 
-Route::resource('c' , 'EducationalContentController');
+Route::resource('c', 'EducationalContentController', ['except' => [
+    'index'
+]]);
+Route::get('content' , 'EducationalContentController@index');
 
 Route::get('content/search', 'EducationalContentController@search');
 Route::get('content/create2', 'EducationalContentController@create2');
@@ -218,7 +221,7 @@ Route::get( "copycontenttotakhtekhak" , "SanatisharifmergeController@copyContent
 
 Route::get("ctag" , "EducationalContentController@retrieveTags");
 
-
+ROute::get("tagbot", "HomeController@tagbot");
 Route::get("/debug", 'HomeController@debug');
 
 /**

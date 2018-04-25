@@ -54,7 +54,7 @@ use App\Websitesetting;
 use App\Websitepage;
 use App\Http\Requests\Request;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -145,9 +145,9 @@ class HomeController extends Controller
                 $tags = "";
                 foreach ($tagInput as $key => $tag)
                 {
-                        if(strlen($tag)<=0)
-                            continue;
-                        $tags .= "\"$tag\"";
+                    if(strlen($tag)<=0)
+                        continue;
+                    $tags .= "\"$tag\"";
                 }
                 if(strlen($tags) <= 0 )
                     $tagFlag = false;
@@ -180,6 +180,7 @@ class HomeController extends Controller
             ]);
             foreach ($itemTypes as $itemType)
             {
+                $bucketTags = "";
                 $requestSubPath = "&withscores=1";
                 if($tagFlag)
                 {
@@ -252,18 +253,23 @@ class HomeController extends Controller
                                 $requestSubPath .= "&offset=0";
                             }
                             $bucket = "contentset";
-                            $itemTypeTag = "دسته_محتوا";
+                            $itemTypeTag = "دوره_آموزشی";
+                            break;
+                        case "product":
+                            $bucket = "product";
+                            $itemTypeTag = "محصول";
                             break;
                         default:
                             $bucket = $itemType;
                             break;
                     }
 
+                    $bucketTags = $tags ;
                     if(!in_array($itemTypeTag , $tagInput))
-                        $tags .= "\"$itemTypeTag\"";
-                    $tags = str_replace("\"\"" , "\",\"" , $tags);
-                    $tags = "[".$tags."]";
-                    $bucketRequestPath = $requestBasePath.$bucket."?tags=$tags".$requestSubPath;
+                        $bucketTags .= "\"$itemTypeTag\"";
+                    $bucketTags = str_replace("\"\"" , "\",\"" , $bucketTags);
+                    $bucketTags = "[".$bucketTags."]";
+                    $bucketRequestPath = $requestBasePath.$bucket."?tags=$bucketTags".$requestSubPath;
                     $response = $this->sendRequest($bucketRequestPath,"GET" );
                     if($response["statusCode"] == 200){
                         $result = json_decode($response["result"]);
@@ -299,7 +305,7 @@ class HomeController extends Controller
                         {
                             $query = $query->paginate($paginationSetting->where("itemType" , "video")->first()["itemPerPage"] , ['*'] , $paginationSetting->where("itemType" , "video")->first()["pageName"]);
                         }
-                            //Sample Code For Text Search
+                        //Sample Code For Text Search
 //                        $text = Input::get("searchText");
 //                        $this->QueryCommin($text , ["name" , "description" , $query]);
                         break;
@@ -1961,7 +1967,7 @@ class HomeController extends Controller
         $counter = 0;
         try{
             dump( "start time:". Carbon::now("asia/tehran"));
-            if(!Input::has("t"))    return $this->response->setStatusCode(422)->setContent(["message"=>"Wrong inputs: Please pass parameter t. Available values: v , p , cs"]);
+            if(!Input::has("t"))    return $this->response->setStatusCode(422)->setContent(["message"=>"Wrong inputs: Please pass parameter t. Available values: v , p , cs , pr , e , b ,a"]);
             $type = Input::get("t");
             switch($type)
             {
@@ -2161,7 +2167,7 @@ class HomeController extends Controller
                                 break;
                             case 122:
                                 $myTags = array_merge($myTags , [
-                                    "ادبیات",
+                                    "زبان_و_ادبیات_فارسی",
                                     "پیش",
                                     "نظام_آموزشی_قدیم" ,
                                 ]);
@@ -2345,6 +2351,7 @@ class HomeController extends Controller
                     }
                     break;
                 case "cs": //Contentset
+                    $bucket = "contentset";
                     $items = Contentset::orderBy("id");
                     if(Input::has("id"))
                     {
@@ -2352,7 +2359,7 @@ class HomeController extends Controller
                         $items = $items->where("id" , $id);
                     }
                     $items = $items->get();
-                    $bucket = "contentset";
+
                     break;
                 case "pr": //Product
                     $bucket = "product";
@@ -2364,16 +2371,16 @@ class HomeController extends Controller
                     {
                         $productIds = [99 , 104 , 92 , 91 , 181 , 107 , 69 , 65 , 61 , 163 , 135 , 131 , 139 , 143 , 147 , 155 , 119 , 123 , 183];
                     }
-
-                    $items = collect() ;
-                    foreach ($productIds as $productId)
+                    $items = Product::whereIn("id" , $productIds) ;
+                    $items = $items->get();
+                    foreach ($items->where("tags" , null) as $item)
                     {
                         $myTags = [
                             "محصول" ,
                             "نظام_آموزشی_قدیم",
                             "پیش"
                         ];
-                        switch ($productId)
+                        switch ($item->id)
                         {
                             case 99:
                                 $myTags = array_merge($myTags , ["رشته_ریاضی" , "رشته_تجربی"  ,"کنکور" , "شیمی" , 'مهدی_صنیعی_طهرانی'  ]);
@@ -2441,7 +2448,8 @@ class HomeController extends Controller
                             "bucket" => $bucket,
                             "tags" => $myTags
                         ];
-                        $items->push(["id"=>$productId , "tags"=>json_encode($tagsJson)]);
+                        $item->tags = json_encode($tagsJson);
+                        $item->update();
                     }
                     break;
                 default:
@@ -2454,15 +2462,21 @@ class HomeController extends Controller
             $warningCounter = 0 ;
             foreach ($items as $item)
             {
-                $itemTagsArray = json_decode($item["tags"]->tags);
+                $itemTagsArray = $item->tags->tags;
                 if(is_array($itemTagsArray) && !empty($itemTagsArray) && isset($item["id"]))
                 {
                     $params = [
-                        "tags"=> $itemTagsArray ,
+                        "tags"=> json_encode($itemTagsArray) ,
                     ];
-                    if(isset($item["created_at"]) && strlen($item["created_at"]) > 0 )  $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $item["created_at"] )->timestamp;
+                    if(isset($item->created_at) && strlen($item->created_at) > 0 )
+                        $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $item->created_at )->timestamp;
 
-                    $response =  $this->sendRequest(env("TAG_API_URL")."id/$bucket/".$item["id"] , "PUT", $params);
+                    $response =  $this->sendRequest(
+                        env("TAG_API_URL")."id/$bucket/".$item->id ,
+                        "PUT",
+                        $params
+                    );
+
                     if($response["statusCode"] == 200)
                     {
                         $successCounter++;
@@ -2476,14 +2490,16 @@ class HomeController extends Controller
                 }elseif(is_array($itemTagsArray) && empty($itemTagsArray))
                 {
                     $warningCounter++;
-                    dump("warning no tags found for item #".$item["id"]);
+                    dump("warning no tags found for item #".$item->id);
                 }
             }
             dump($successCounter." items successfully done");
             dump($failedCounter." items failed");
             dump($warningCounter." warnings");
+            dump( "finish time:". Carbon::now("asia/tehran"));
             return $this->response->setStatusCode(200)->setContent(["message"=>"Done! number of processed items : ".$counter]);
-        }catch(\Exception $e)
+        }
+        catch(\Exception $e)
         {
             $message = "unexpected error";
             return $this->response->setStatusCode(503)->setContent(["message" => $message,"number of successfully processed items"=>$counter, "error" => $e->getMessage(), "line" => $e->getLine()]);
