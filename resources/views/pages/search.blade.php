@@ -173,23 +173,23 @@
                         <li>
                             <a href="#tab_content_pamphlet" data-toggle="tab"> PDF </a>
                         </li>
-                        <li>
-                            <a href="#tab_content_video"   data-toggle="tab">Video</a>
-                        </li>
                         <li class="active">
+                            <a href="#tab_content_video"  data-toggle="tab">Video</a>
+                        </li>
+                        <li >
                             <a href="#tab_contentset" data-toggle="tab"> Playlist </a>
                         </li>
                     </ul>
                 </div>
                 <div class="portlet-body " >
                     <div class="tab-content">
-                        <div class="tab-pane" id="tab_content_video">
+                        <div class="tab-pane active" id="tab_content_video">
                             {!!  $items->where("type" , "video")->first()["view"] !!}
                         </div>
                         <div class="tab-pane text-center" id="tab_content_pamphlet">
                             {!! $items->where("type" , "pamphlet")->first()["view"]  !!}
                         </div>
-                        <div class="tab-pane active text-center" id="tab_contentset">
+                        <div class="tab-pane text-center" id="tab_contentset">
                             {!! $items->where("type" , "contentset")->first()["view"]  !!}
                         </div>
                         <div class="tab-pane text-center" id="tab_article">
@@ -232,8 +232,8 @@
             e.preventDefault();
         });
         
-        function reloadSlick(element) {
-            element[0].slick.refresh();
+        function destroySlick(element) {
+            element.slick('unslick');
         }
         
         function initialSlick(element) {
@@ -283,9 +283,9 @@
 
                 // init cubeportfolio
                 $('#js-grid-juicy-projects').cubeportfolio({
-                    filters: '#js-filters-juicy-projects',
-                    loadMore: '#js-loadMore-juicy-projects',
-                    loadMoreAction: 'click',
+                    // filters: '#js-filters-juicy-projects',
+                    // loadMore: '#js-loadMore-juicy-projects',
+                    // loadMoreAction: 'click',
                     layoutMode: 'grid',
                     defaultFilter: '*',
                     animationType: 'quicksand',
@@ -351,7 +351,7 @@
             var formData = $("#itemFilterForm").find(':not(input[name=_token])').filter(function(index, element) {
                 return $(element).val() != '';
             }).serialize();
-
+            formData =  decodeURIComponent(formData);
             if( pageNumber != undefined && pageNumber > 0 )
             {
                 var numberQuery  ;
@@ -369,7 +369,8 @@
                 $("#content-search-loading").show();
             }
 
-            if(formData.length > 0) changeUrl(formData);
+            if(formData.length > 0)
+                changeUrl(formData);
 
             if( itemType != undefined &&  itemType.length > 0 )
             {
@@ -404,7 +405,7 @@
                                         break;
                                     case "product":
                                         var element = $(".regular");
-                                        $(".regular").slick('unslick');
+                                        destroySlick(element) ;
                                         $("#productDiv .row .regular").html(item.view);
                                         initialSlick(element);
                                         break;
@@ -439,7 +440,7 @@
 
         function changeUrl(appendUrl)
         {
-            var newUrl="{{action("HomeController@search")}}"+"?"+appendUrl;
+            var newUrl = "{{action("HomeController@search")}}"+"?"+appendUrl;
             window.history.pushState("data","Title",newUrl);
             document.title=newUrl;
         }

@@ -832,4 +832,9 @@ class Product extends Model
         });
     }
 
+    public function getTagsAttribute($value)
+    {
+        return json_decode($value);
+    }
+
 }

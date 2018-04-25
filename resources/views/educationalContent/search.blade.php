@@ -51,7 +51,10 @@
                         </div>
                         <div class="form-group form-md-line-input form-md-floating-label has-info">
                             <div class="col-md-12">
-                                @include('admin.filters.gradeFilter' , ["dropdown"=>true , 'dropdownClass'=>'educationalContentFilter'])
+                                @include('admin.filters.gradeFilter', [
+                                     "dropdown"=>true ,
+                                     'dropdownClass'=>'educationalContentFilter'
+                                  ])
                             </div>
                         </div>
                         <div class="form-group form-md-line-input form-md-floating-label has-info">
@@ -80,7 +83,9 @@
             @if($soonEducationalContents->isNotEmpty())
                 <div class="row">
                     <div class="col-md-12 margin-top-20">
-                        @include("educationalContent.partials.similarContent" , ["soonContentsWithSameType"=>$soonEducationalContents])
+                        @include("educationalContent.partials.similarContent" , [
+                            "soonContentsWithSameType"=>$soonEducationalContents
+                        ])
 
                     </div>
                 </div>

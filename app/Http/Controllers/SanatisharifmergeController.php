@@ -1736,7 +1736,7 @@ class SanatisharifmergeController extends Controller
                         "ضبط_کلاس_درس" ,
                         "نظام_آموزشی_قدیم" ,
                         "پایه" ,
-                        "شبیه_سار_کلاس_درس"
+                        "شبیه_ساز_کلاس_درس"
                     ]);
                 else
                     $c = "";
@@ -1748,7 +1748,7 @@ class SanatisharifmergeController extends Controller
                         "ضبط_کلاس_درس" ,
                         "نظام_آموزشی_قدیم" ,
                         "پایه",
-                        "شبیه_سار_کلاس_درس"
+                        "شبیه_ساز_کلاس_درس"
                             ]);
                 else
                     $c = "";
@@ -1760,7 +1760,7 @@ class SanatisharifmergeController extends Controller
                                 "ضبط_کلاس_درس" ,
                                 "نظام_آموزشی_قدیم" ,
                                 "پایه",
-                                "شبیه_سار_کلاس_درس"
+                                "شبیه_ساز_کلاس_درس"
                                 ]);
                 else
                     $c = "";
@@ -1772,7 +1772,7 @@ class SanatisharifmergeController extends Controller
                                 "ضبط_کلاس_درس" ,
                                 "نظام_آموزشی_قدیم" ,
                                 "پیش",
-                                "شبیه_سار_کلاس_درس"
+                                "شبیه_ساز_کلاس_درس"
                                 ]);
                 else
                     $c = "";
@@ -1820,7 +1820,7 @@ class SanatisharifmergeController extends Controller
                                 "ضبط_کلاس_درس" ,
                                 "نظام_آموزشی_قدیم" ,
                                 "پیش" ,
-                                "شبیه_سار_کلاس_درس"
+                                "شبیه_ساز_کلاس_درس"
                                 ]);
                 else
                     $c = "";
@@ -1852,7 +1852,7 @@ class SanatisharifmergeController extends Controller
                                 "ضبط_کلاس_درس" ,
                                 "نظام_آموزشی_قدیم" ,
                                 "پیش",
-                                "شبیه_سار_کلاس_درس"
+                                "شبیه_ساز_کلاس_درس"
                                                 ]);
                 else
                     $c = "";
@@ -1944,7 +1944,7 @@ class SanatisharifmergeController extends Controller
                         "ضبط_کلاس_درس" ,
                         "نظام_آموزشی_قدیم" ,
                         "پیش" ,
-                        "شبیه_سار_کلاس_درس"
+                        "شبیه_ساز_کلاس_درس"
                     ]);
                 else
                     $c = "";
@@ -1956,7 +1956,7 @@ class SanatisharifmergeController extends Controller
                         "ضبط_کلاس_درس" ,
                         "نظام_آموزشی_قدیم" ,
                         "پیش" ,
-                        "شبیه_سار_کلاس_درس"
+                        "شبیه_ساز_کلاس_درس"
                     ]);
                 else
                     $c = "";
@@ -2986,7 +2986,7 @@ class SanatisharifmergeController extends Controller
             switch ($contentType)
             {
                 case "v" :
-                    $threshold = 250;
+                    $threshold = 300;
                     $contentTypeLable = "video";
                     $contentTypePersianLable = "فیلم";
                     break;
@@ -2997,6 +2997,7 @@ class SanatisharifmergeController extends Controller
                     $contentTypePersianLable2 = "PDF";
                     break;
                 default:
+                    return $this->response->setStatusCode(422)->setContent(["message"=>"Wrong inputs: Please pass parameter t. Available values: p , v"]);
                     break;
             }
             $sanatisharifRecords = Sanatisharifmerge::whereNotNull($contentTypeLable."id")->where($contentTypeLable."Transferred" , 0)->get();
@@ -3181,16 +3182,18 @@ class SanatisharifmergeController extends Controller
                     dump($contentTypeLable."id ".$sanatisharifRecord->$idColumn." done");
                 }catch(\Exception $e){
                     $failCounter++;
-                    dump($e->getMessage());
-                    dump("Error on processing $contentTypeLable ID: ".$sanatisharifRecord->$idColumn);
+                    dump($e->getMessage()." ".$e->getLine()." ".$e->getFile());
+                    dump("failed on processing $contentTypeLable ID: ".$sanatisharifRecord->$idColumn);
                 }
             }
             dump($successCounter." records transferred successfully");
             dump($skippedCounter." records skipped");
             dump($failCounter." records failed");
             dump($warningCounter." warnings");
+            dump( "finish time:". Carbon::now("asia/tehran"));
             return $this->response->setStatusCode(200)->setContent(["message"=>"Transfer Done Successfully"]);
-        }catch (\Exception    $e) {
+        }
+        catch (\Exception    $e) {
             $message = "unexpected error";
             return $this->response->setStatusCode(503)->setContent(["message"=>$message , "error"=>$e->getMessage() , "line"=>$e->getLine()]);
         }
