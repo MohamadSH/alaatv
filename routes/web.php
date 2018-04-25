@@ -14,7 +14,7 @@
  
 Auth::routes();
 
-//Route::get('search',"HomeController@search");
+Route::get('content',"HomeController@search");
 Route::get( '/' , 'HomeController@index');
 Route::get('404', 'HomeController@error404');
 Route::get('403', 'HomeController@error403');
@@ -218,7 +218,7 @@ Route::get( "copycontenttotakhtekhak" , "SanatisharifmergeController@copyContent
 
 Route::get("ctag" , "EducationalContentController@retrieveTags");
 
-
+ROute::get("tagbot", "HomeController@tagbot");
 Route::get("/debug", 'HomeController@debug');
 
 /**

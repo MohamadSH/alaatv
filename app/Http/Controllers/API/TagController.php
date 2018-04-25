@@ -74,6 +74,10 @@ class TagController extends Controller
     /**
      * GET /rt/id/:bucket/:id
      * Get all tags for an ID
+     * @param Request $request
+     * @param $bucket
+     * @param $id
+     * @return null
      */
 
     public function get(Request $request , $bucket , $id){
@@ -118,29 +122,32 @@ class TagController extends Controller
     /**
      * GET /rt/tags/:bucket?queryparams
      * The main method. Return the IDs for one or more tags. When more than one tag is supplied the query can be an intersection (default) or a union.
-        type=inter (default) only those IDs will be returned where all tags match.
-        type=union all IDs where any tag matches will be returned.
-
-        Parameters:
-
-        tags (String) a JSON string of one or more tags.
-        type (String) optional Either inter (default) or union.
-        limit (Number) optional Default: 100.
-        offset (Number) optional Default: 0 The amount of items to skip. Useful for paging thru items.
-        withscores (Number) optional Default: 0 Set this to 1 to also return the scores for each item.
-        order (String) optional Either asc or desc (default).
-        Example:
-
-        GET /rt/tags/concerts?tags=["Berlin","rock"]&limit=2&offset=4&type=inter
-
-        Returns:
-
-        {
-            "total_items":108,
-            "items":["8167","25652"],
-            "limit":2,
-            "offset":4
-        }
+     * type=inter (default) only those IDs will be returned where all tags match.
+     * type=union all IDs where any tag matches will be returned.
+     *
+     * Parameters:
+     *
+     * tags (String) a JSON string of one or more tags.
+     * type (String) optional Either inter (default) or union.
+     * limit (Number) optional Default: 100.
+     * offset (Number) optional Default: 0 The amount of items to skip. Useful for paging thru items.
+     * withscores (Number) optional Default: 0 Set this to 1 to also return the scores for each item.
+     * order (String) optional Either asc or desc (default).
+     * Example:
+     *
+     * GET /rt/tags/concerts?tags=["Berlin","rock"]&limit=2&offset=4&type=inter
+     *
+     * Returns:
+     *
+     * {
+     * "total_items":108,
+     * "items":["8167","25652"],
+     * "limit":2,
+     * "offset":4
+     * }
+     * @param Request $request
+     * @param $bucket
+     * @return null
      */
     public function index(Request $request , $bucket ){
         $tags = $request->tags;
