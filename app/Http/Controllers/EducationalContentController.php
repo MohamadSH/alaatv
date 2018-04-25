@@ -605,6 +605,8 @@ class EducationalContentController extends Controller
      */
     public function search()
     {
+        return redirect('/c',301);
+        /**
         $pageName = "educationalContent" ;
 
         $highSchoolType = Majortype::where("name" , "highschool")->get()->first();
@@ -651,6 +653,8 @@ class EducationalContentController extends Controller
         Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
 
         return view("educationalContent.search" , compact("educationalContents" , "pageName" , "majors" , "grades" , "rootContentTypes", "childContentTypes" , "soonEducationalContents" , "products" , "costCollection"));
+         *
+         * **/
     }
 
 
