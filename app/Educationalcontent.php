@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Traits\Helper;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Storage;
 class Educationalcontent extends Model
 {
     use SoftDeletes;
+    use Helper;
 
     /**      * The attributes that should be mutated to dates.        */
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
@@ -244,5 +246,15 @@ class Educationalcontent extends Model
         }
         return $links;
     }
+
+    public function getTagsAttribute($value)
+    {
+        return json_decode($value);
+    }
+
+//    public function setTagsAttribute($value)
+//    {
+//        return json_encode($value);
+//    }
 
 }

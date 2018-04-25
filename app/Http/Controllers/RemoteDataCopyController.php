@@ -63,7 +63,7 @@ class RemoteDataCopyController extends Controller
 //        dd($departmentlessons);
         $successCounter = 0 ;
         $failedCounter = 0 ;
-        dump("number of available videos : ".count($departmentlessons));
+        dump("number of available deplessons : ".count($departmentlessons));
         foreach ($departmentlessons as $departmentlesson)
         {
             $depid = $departmentlesson->depid;
