@@ -90,8 +90,9 @@ class EmployeetimesheetController extends Controller
      */
     public function create()
     {
-        $userId = Auth::user()->id ;
-        $userTodayTimeSheets = Employeetimesheet::where("date" , Carbon::today('Asia/Tehran'))->where("user_id" , Auth::user()->id)->get() ;
+        $user = Auth::user();
+        $userId =$user->id ;
+        $userTodayTimeSheets = Employeetimesheet::where("date" , Carbon::today('Asia/Tehran'))->where("user_id" , $user->id)->get() ;
         if($userTodayTimeSheets->count() > 1 )
         {
             session()->flash("warning", "شما برای امروز بیش از یک ساعت کاری وارد نموده اید!") ;
@@ -123,9 +124,10 @@ class EmployeetimesheetController extends Controller
      */
     public function store(InsertEmployeeTimeSheet $request)
     {
+        $user = Auth::user();
         if(!$request->has("modifier_id"))
         {
-            $request->offsetSet("modifier_id" , Auth::user()->id) ;
+            $request->offsetSet("modifier_id" , $user->id) ;
         }
 
         $employeeTimeSheet = new Employeetimesheet();
@@ -230,9 +232,10 @@ class EmployeetimesheetController extends Controller
      */
     public function update(Request $request, Employeetimesheet $employeeTimeSheet)
     {
+        $user = Auth::user();
         if(!$request->has("modifier_id"))
         {
-            $request->offsetSet("modifier_id" , Auth::user()->id) ;
+            $request->offsetSet("modifier_id" , $user->id) ;
         }
 
         $employeeTimeSheet->fill($request->all());

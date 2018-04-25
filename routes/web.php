@@ -10,7 +10,7 @@
 | to using a Closure or controller method. Build something great!
 |
 */
-
+ 
 
 Auth::routes();
 
@@ -159,6 +159,8 @@ Route::group(['middleware' => 'auth'], function()
     Route::get('smsbot' , "HomeController@smsBot");
 
     Route::get("bot" , "HomeController@bot");
+
+
 });
 Route::post('user/getPassword' , 'UserController@sendGeneratedPassword');
 
@@ -180,7 +182,7 @@ Route::post('sendMail', 'HomeController@sendMail');
 
 Route::get('showPartial/{product}' , 'ProductController@showPartial');
 Route::resource('product', 'ProductController');
-Route::post('refreshPrice' , 'ProductController@refreshPrice');
+Route::post('refreshPrice/{product}' , 'ProductController@refreshPrice');
 
 Route::post('orderproduct/checkout' , 'OrderproductController@checkOutOrderproducts') ;
 Route::resource('orderproduct', 'OrderproductController');
@@ -210,8 +212,11 @@ Route::get( "copylessonfromremote" , "RemoteDataCopyController@copyLesson");
 Route::get( "copydepartmentfromremote" , "RemoteDataCopyController@copyDepartment");
 Route::get( "copydepartmentlessonfromremote" , "RemoteDataCopyController@copyDepartmentlesson");
 Route::get( "copyvideofromremote" , "RemoteDataCopyController@copyVideo");
+Route::get( "copypamphletfromremote" , "RemoteDataCopyController@copyPamphlet");
 Route::get( "copydepartmentlessontotakhtekhak" , "SanatisharifmergeController@copyDepartmentlesson");
-Route::get( "copyvideototakhtekhak" , "SanatisharifmergeController@copyVideo");
+Route::get( "copycontenttotakhtekhak" , "SanatisharifmergeController@copyContent");
+
+Route::get("ctag" , "EducationalContentController@retrieveTags");
 
 
 Route::get("/debug", 'HomeController@debug');

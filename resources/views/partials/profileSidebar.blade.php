@@ -31,11 +31,6 @@
     <!-- SIDEBAR MENU -->
     <div class="profile-usermenu">
         <ul class="nav">
-            @if( $user->id == Auth::id() )
-            {{--<li>--}}
-            {{--<a href="page_user_profile_1.html">--}}
-            {{--<i class="icon-home"></i> Overview </a>--}}
-            {{--</li>--}}
             <li @if(strcmp(url()->current() , action("UserController@show",$user)) == 0) class="active" @endif >
                 <a href="{{ action("UserController@show",$user) }}">
                     <i class="icon-settings"></i> تنظیمات حساب کاربری </a>
@@ -57,13 +52,6 @@
                 <a href="{{action("UserController@submitKonkurResult")}}">
                     <i class="fa fa-graduation-cap"></i> ثبت رتبه 96 </a>
             </li>
-            {{--<li @if(strcmp(url()->current() , action("UserController@showSurvey")) == 0) class="active" @endif >--}}
-                {{--<a href="{{action("UserController@showSurvey")}}" class="font-red">--}}
-                    {{--<i class="fa fa-graduation-cap"></i> انتخاب رشته </a>--}}
-            {{--</li>--}}
-                @else
-                <li></li>
-            @endif
         </ul>
     </div>
     <!-- END MENU -->
@@ -93,7 +81,7 @@
                 </div>
             @endif
         </div>
-        @if(!$user->mobileNumberVerification and  $user->id == Auth::id())
+        @if(!$user->mobileNumberVerification )
             <div class="margin-top-20 profile-desc-link">
                 <div class="form-group form-md-line-input">
                     {!! Form::open(['method' => 'POST','action' => ['UserController@submitVerificationCode']]) !!}
@@ -149,12 +137,14 @@
     </div>
 </div>
 <!-- END PORTLET MAIN -->
-@if( $user->id == Auth::id() )
+
 <div class="portlet light ">
     <div class="portlet-title">
         <div class="caption" style="width: 100%; text-align: center">
             <span class="caption-subject font-dark bold uppercase">میزان تکمیل پروفایل</span>
-            @if(!$user->mobileNumberVerification)<span class="label label-warning">توجه! یکی از موارد ، تایید شماره موبایل می باشد </span>@endif
+            @if(!$user->mobileNumberVerification)
+                <span class="label label-warning">توجه! یکی از موارد ، تایید شماره موبایل می باشد </span>
+            @endif
         </div>
         {{--<div class="actions">--}}
         {{--<a href="javascript:;" class="btn btn-sm btn-circle red easy-pie-chart-reload">--}}
@@ -169,12 +159,11 @@
             <div class="margin-bottom-10 visible-sm"> </div>
             <div class="col-md-4">
                 <div class="easy-pie-chart">
-                    <div class="number @if((int)$user->completion() < 50) bounce @elseif((int)$user->completion() >= 50 && (int)$user->completion() < 90) transactions @elseif((int)$user->completion() >= 90) visits @endif" data-percent="{{ (int)$user->completion() }}">
-                        <span>{{ (int)$user->completion() }}</span>% </div>
+                    <div class="number @if($userCompletion < 50) bounce @elseif($userCompletion >= 50 && $userCompletion < 90) transactions @elseif((int)$userCompletion >= 90) visits @endif" data-percent="{{ $userCompletion }}">
+                        <span>{{ $userCompletion }}</span>% </div>
                 </div>
             </div>
             <div class="margin-bottom-10 visible-sm"> </div>
         </div>
     </div>
 </div>
-@endif

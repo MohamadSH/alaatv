@@ -11,7 +11,6 @@ use App\Http\Requests\InsertPhoneRequest;
 use App\Phonetype;
 use App\Relative;
 use Illuminate\Http\Request;
-use App\Helpers\Helper;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Input;
@@ -19,7 +18,7 @@ use Illuminate\Support\Facades\Input;
 class ContactController extends Controller
 {
     protected $response ;
-    protected $helper;
+
 
     function __construct()
     {
@@ -31,7 +30,7 @@ class ContactController extends Controller
         $this->middleware('permission:'.Config::get('constants.EDIT_CONTACT_ACCESS'),['only'=>'edit']);
 
         $this->response = new Response();
-        $this->helper = new Helper();
+
     }
 
     /**

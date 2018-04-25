@@ -1,25 +1,16 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: mohamamad
- * Date: 10/27/2016
- * Time: 3:38 PM
- */
+namespace App\Traits;
 
-namespace App\Helpers;
+
 use Carbon\Carbon;
 use Illuminate\Http\Response;
 
-class Helper
+trait Helper
 {
-    public function __construct()
-    {
-        $this->response = new Response();
-    }
+    protected $response;
 
-    private function jalali_to_gregorian($j_y, $j_m, $j_d, $mod = '')
+    protected function jalali_to_gregorian($j_y, $j_m, $j_d, $mod = '')
     {
-
         $d_4 = ($j_y + 1) % 4;
 
         $doy_j = ($j_m < 7) ? (($j_m - 1) * 31) + $j_d : (($j_m - 7) * 30) + $j_d + 186;
@@ -59,7 +50,7 @@ class Helper
 
     }
 
-    private function gregorian_to_jalali($g_y, $g_m, $g_d, $mod = '')
+    protected function gregorian_to_jalali($g_y, $g_m, $g_d, $mod = '')
     {
 
         $d_4 = $g_y % 4;
@@ -133,33 +124,34 @@ class Helper
      * Sending SMS request to Mediana SMS Panel
      *
      * @param array $params
-     * @return string
+     * @return array|string
      */
     public function medianaSendSMS(array $params)
     {
         $url = getenv("MEDIANA_API_URL");
 
 //        $rcpt_nm = array('9121111111','9122222222');
-        if(isset($params["to"])) $rcpt_nm =  $params["to"];
+        if(isset($params["to"]))
+            $rcpt_nm =  $params["to"];
         if(isset($params["from"]))
             $from = $params["from"];
         else
             $from =getenv("SMS_PROVIDER_DEFAULT_NUMBER") ;
 
-            $param = array
-        (
+        $param = [
             'uname'=>getenv("MEDIANA_USERNAME"),
             'pass'=>getenv("MEDIANA_PASSWORD"),
             'from'=>$from,
             'message'=>$params["message"],
             'to'=>json_encode($rcpt_nm),
             'op'=>'send'
-        );
+        ];
 
         $handler = curl_init($url);
         curl_setopt($handler, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($handler, CURLOPT_POSTFIELDS, $param);
         curl_setopt($handler, CURLOPT_RETURNTRANSFER, true);
+
         $response = curl_exec($handler);
         $response =  json_decode($response);
         $res_code = $response[0];
@@ -168,10 +160,16 @@ class Helper
         switch ($res_code)
         {
             case 0 :
-                return array("error"=>false , "message"=>"ارسال موفقیت آمیز بود");
+                return [
+                    "error"=>false ,
+                    "message"=>"ارسال موفقیت آمیز بود"
+                ];
                 break;
             default:
-                return array("error"=>true , "message"=>"پاسخ سرور نا شناخته است");
+                return [
+                    "error"=>true ,
+                    "message"=>"پاسخ سرور نا شناخته است"
+                ];
                 break;
         }
     }
@@ -184,23 +182,32 @@ class Helper
      */
     public function medianaSendPatternSMS(array $params)
     {
-        $client = new \SoapClient(getenv("MEDIANA_PATTERN_API_URL"));
+        $this->response = new Response();
+        $client = new \SoapClient(
+            getenv("MEDIANA_PATTERN_API_URL")
+        );
         $user = getenv("MEDIANA_USERNAME");
         $pass = getenv("MEDIANA_PASSWORD");
         if(isset($params["from"]))
             $from = $params["from"];
         else
             $from =getenv("SMS_PROVIDER_DEFAULT_NUMBER") ;
-        if(isset($params["to"])) $rcpt_nm =  $params["to"];
-        if(isset($params["patternCode"])) $pattern_code = $params["patternCode"];
-        if(isset($params["inputData"])) $input_data = $params["inputData"];
+        if(isset($params["to"]))
+            $rcpt_nm =  $params["to"];
+        if(isset($params["patternCode"]))
+            $pattern_code = $params["patternCode"];
+        if(isset($params["inputData"]))
+            $input_data = $params["inputData"];
 
         $response = $client->sendPatternSms($from , $rcpt_nm , $user , $pass , $pattern_code  , $input_data);
-        if($response) return $this->response->setStatusCode(200);
-        else return $this->response->setStatusCode(503);
+        if($response)
+            return $this->response->setStatusCode(200);
+        else
+            return $this->response->setStatusCode(503);
     }
 
-    public function medianaGetCredit(){
+    public function medianaGetCredit()
+    {
         $url = getenv("MEDIANA_API_URL");
         $param = array
         (
@@ -236,19 +243,6 @@ class Helper
      */
     public function generateRandomPassword($length)
     {
-        //uncomment for avoiding giving similar passwords
-//        for($i=1 ; $i<=100 ; $i++)
-//        {
-//            $generatedPassword =rand(1000,99999);
-//            $generatedPasswordHash = bcrypt($generatedPassword);
-//            $similarPasswords = User::all()->where("password" , $generatedPasswordHash);
-//            if($similarPasswords->isEmpty()){
-//                break;
-//            }
-//        }
-//        if(!isset($generatedPassword) || !isset($generatedPasswordHash)){
-//            return false;
-//        }
         $generatedPassword = rand(1000,9999);
         $generatedPasswordHash = bcrypt($generatedPassword);
         return ["rawPassword"=>$generatedPassword , "hashPassword"=>$generatedPasswordHash];
@@ -271,5 +265,4 @@ class Helper
         $str = str_replace("=","",$str);
         return $str;
     }
-
 }

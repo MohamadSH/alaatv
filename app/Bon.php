@@ -21,6 +21,17 @@ class Bon extends Model
         'order',
         'enable',
     ];
+    public function cacheKey()
+    {
+        $key = $this->getKey();
+        $time= isset($this->updated_at) ? $this->updated_at->timestamp : $this->created_at->timestamp;
+        return sprintf(
+            "%s-%s",
+            //$this->getTable(),
+            $key,
+            $time
+        );
+    }
 
     public function products()
     {
@@ -40,5 +51,9 @@ class Bon extends Model
     public function bontype()
     {
         return $this->belongsTo("\App\BonType");
+    }
+    public function scopeEnable($query)
+    {
+        return $query->where('isEnable', '=', 1);
     }
 }

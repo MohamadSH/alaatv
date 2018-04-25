@@ -35,4 +35,12 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
+    'medianaSMS' =>[
+        'url' => env('MEDIANA_API_URL','http://37.130.202.188/api/select'),
+        'userName' => env('MEDIANA_USERNAME','demo'),
+        'password' => env('MEDIANA_PASSWORD','demo'),
+        'from' => env('SMS_PROVIDER_DEFAULT_NUMBER',''),
+
+    ]
+
 ];

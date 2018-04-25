@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\Helpers\Helper;
+use App\Traits\Helper;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 class Attributeset extends Model
 {
     use SoftDeletes;
+    use Helper;
     /**
      * The attributes that should be mutated to dates.
      *
@@ -45,9 +46,18 @@ class Attributeset extends Model
         $key = "Attributeset:".$this->cacheKey();
         return Cache::remember($key,Config::get("constants.CACHE_60"),function () {
             $result = DB::table('attributesets')
-                ->join('attributegroups', 'attributesets.id', '=', 'attributegroups.attributeset_id')
-                ->join('attribute_attributegroup', 'attribute_attributegroup.attributegroup_id', '=', 'attributegroups.id')
-                ->join('attributes', 'attributes.id', '=', 'attribute_attributegroup.attribute_id')
+                ->join('attributegroups',function ($join){
+                    $join->on( 'attributesets.id', '=', 'attributegroups.attributeset_id')
+                        ->whereNull('attributegroups.deleted_at');
+                })
+                ->join('attribute_attributegroup', function ($join){
+                    $join->on('attribute_attributegroup.attributegroup_id', '=', 'attributegroups.id');
+
+                })
+                ->join('attributes', function ($join){
+                    $join->on('attributes.id', '=', 'attribute_attributegroup.attribute_id')
+                        ->whereNull('attributes.deleted_at');
+                })
                 ->select([
                     "attributes.*",
                     'attribute_attributegroup.attributegroup_id as pivot_attributegroup_id',
@@ -55,6 +65,7 @@ class Attributeset extends Model
                     'attribute_attributegroup.description as pivot_description',
                     ])
                 ->where('attributesets.id','=',$this->id)
+                ->whereNull('attributesets.deleted_at')
                 ->get();
 
             $result = Attribute::hydrate($result->toArray());
@@ -102,10 +113,9 @@ class Attributeset extends Model
      */
     public function CreatedAt_Jalali()
     {
-        $helper = new Helper();
         $explodedDateTime = explode(" ", $this->created_at);
 //        $explodedTime = $explodedDateTime[1] ;
-        return $helper->convertDate($this->created_at, "toJalali");
+        return $this->convertDate($this->created_at, "toJalali");
     }
 
     /**
@@ -114,9 +124,8 @@ class Attributeset extends Model
      */
     public function UpdatedAt_Jalali()
     {
-        $helper = new Helper();
         $explodedDateTime = explode(" ", $this->updated_at);
 //        $explodedTime = $explodedDateTime[1] ;
-        return $helper->convertDate($this->updated_at, "toJalali");
+        return $this->convertDate($this->updated_at, "toJalali");
     }
 }

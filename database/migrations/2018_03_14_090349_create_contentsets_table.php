@@ -19,6 +19,7 @@ class CreateContentsetsTable extends Migration
             $table->increments('id');
             $table->string("name")->nullable()->comment("نام");
             $table->string("description")->nullable()->comment("توضیح");
+            $table->text("tags")->nullable()->comment("تگ ها");
             $table->tinyInteger("enable")->default(1)->comment("فعال/غیرفعال");
             $table->tinyInteger("display")->default(1)->comment("نمایش/عدم نمایش");
             $table->timestamps();

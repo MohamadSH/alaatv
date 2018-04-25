@@ -5,20 +5,18 @@ namespace App\Http\Controllers;
 use App\Http\Requests\EditPermissionRequest;
 use App\Http\Requests\InsertPermissionRequest;
 use App\Permission;
+use App\Traits\Helper;
 use Illuminate\Support\Facades\Config;
-use App\Helpers\Helper;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 
 class PermissionController extends Controller
 {
-    protected $helper ;
     protected $response ;
 
     function __construct()
     {
-        $this->helper = new Helper();
         $this->response = new Response();
 
         $this->middleware('permission:'.Config::get('constants.LIST_PERMISSION_ACCESS'),['only'=>'index']);

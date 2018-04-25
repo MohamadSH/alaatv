@@ -6,7 +6,6 @@ use App\Http\Requests\EditPhoneRequest;
 use App\Http\Requests\InsertPhoneRequest;
 use App\Phone;
 use Illuminate\Http\Request;
-use App\Helpers\Helper;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Response;
 
@@ -14,7 +13,6 @@ use Illuminate\Http\Response;
 class PhoneController extends Controller
 {
     protected $response ;
-    protected $helper;
 
     function __construct()
     {
@@ -24,7 +22,6 @@ class PhoneController extends Controller
         $this->middleware('permission:'.Config::get('constants.EDIT_CONTACT_ACCESS'),['only'=>'edit']);
 
         $this->response = new Response();
-        $this->helper = new Helper();
     }
 
     /**

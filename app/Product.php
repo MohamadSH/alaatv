@@ -2,8 +2,8 @@
 
 namespace App;
 
+use App\Traits\Helper;
 use App\Traits\ProductCommon;
-use  App\Helpers\Helper;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -19,6 +19,7 @@ class Product extends Model
     use SoftDeletes;
 //    use Searchable;
     use ProductCommon;
+    use Helper;
 
     /**
      * The attributes that should be mutated to dates.
@@ -52,6 +53,20 @@ class Product extends Model
         'specialDescription'
     ];
 
+    /**
+     * All of the relationships to be touched.
+     *
+     * @var array
+     */
+    protected $touches = [
+        'producttype',
+        'attributeset',
+        'validProductfiles',
+        'bons',
+        'attributevalues'
+    ];
+
+
     public function cacheKey()
     {
         $key = $this->getKey();
@@ -74,11 +89,11 @@ class Product extends Model
     public static function getProducts($configurable = 0, $enable = 0)
     {
         if ($configurable == 1) {
-            $products = \App\Product::configurable();
+            $products = Product::configurable();
             if ($enable == 1)
                 $products = $products->enable();
         } else if ($configurable == 0) {
-            $products = \App\Product::select()->doesntHave('parents');
+            $products = Product::select()->doesntHave('parents')->whereNull('deleted_at');
             if ($enable == 1)
                 $products->enable();
         }
@@ -123,33 +138,6 @@ class Product extends Model
         return $this->hasMany('App\Orderproduct');
     }
 
-    public function getDisplayName()
-    {
-        $key="product:getDisplayName:".$this->cacheKey();
-
-        return Cache::remember($key,Config::get("constants.CACHE_60"),function () {
-            $childrenArray = array_reverse($this->children->toArray());
-            if ($this->getGrandParent()) {
-
-                if ($this->getGrandParent()->producttype_id == Config::get("constants.PRODUCT_TYPE_SELECTABLE")) {
-                    $myName = $this->getGrandParent()->name . " - " . $this->name;
-                    if (!empty($childrenArray)) $myName .= " : ";
-                    $lastChild = last($childrenArray);
-                    foreach ($childrenArray as $child) {
-                        $myName .= $child->name;
-                        if ($child->id != $lastChild->id) $myName .= " - ";
-                    }
-                    return $myName;
-                } else {
-                    return $this->name;
-                }
-            } else {
-                return $this->name;
-            }
-        });
-
-    }
-
     public function getGrandParent()
     {
         $key="product:getGrandParent:".$this->cacheKey();
@@ -176,12 +164,15 @@ class Product extends Model
             $counter = 0;
             $myProduct = $this;
             while (!$myProduct->parents->isEmpty()) {
-                if ($counter >= $depth) break;
+                if ($counter >= $depth)
+                    break;
                 $myProduct = $myProduct->parents->first();
                 $counter++;
             }
-            if ($myProduct->id == $this->id || $counter != $depth) return false;
-            else return true;
+            if ($myProduct->id == $this->id || $counter != $depth)
+                return false;
+            else
+                return true;
         });
 
     }
@@ -199,11 +190,20 @@ class Product extends Model
         $key="product:getGifts:".$this->cacheKey();
         return Cache::remember($key,Config::get("constants.CACHE_60"),function () {
             $gifts = collect();
-            if ($this->hasGifts()) {
-                foreach ($this->gifts as $gift) {
+
+            foreach ($this->gifts as $gift) {
+                $gifts->push($gift);
+            }
+
+
+            $grandParent = $this->getGrandParent();
+            if ($grandParent !== false) {
+                foreach ($grandParent->gifts as $gift)
+                {
                     $gifts->push($gift);
                 }
             }
+
             return $gifts;
         });
 
@@ -242,10 +242,15 @@ class Product extends Model
                     ->orwhereNull('validSince');
             })
             ->orderBy("order");
-        if ($files->count() != 0 && strlen($fileType) > 0) {
-            $fileTypeId = Productfiletype::all()->where("name", $fileType)->first();
-            $files->where('productfiletype_id', $fileTypeId->id);
-        }
+
+        if($fileType == "video")
+            $fileTypeId = Config::get("constants.PRODUCT_FILE_TYPE_VIDEO");
+        elseif($fileType == "pamphlet")
+            $fileTypeId = Config::get("constants.PRODUCT_FILE_TYPE_PAMPHLET");
+
+        if (isset($fileTypeId))
+            $files->where('productfiletype_id', $fileTypeId);
+
         return $files;
     }
 
@@ -260,7 +265,7 @@ class Product extends Model
                         array_push($attributesArray, $attribute->id);
                 }
             }
-            $parentArray = $this->parents;
+            $parentArray = $this->makeParentArray($this) ;
             array_push($parentArray, $this);
             $attributes = collect();
             foreach ($parentArray as $parent) {
@@ -297,12 +302,21 @@ class Product extends Model
     {
         if (isset($this->slogan) && strlen($this->slogan) > 0)
             return $this->name . ":" . $this->slogan;
-        else return $this->name;
+        else
+            return $this->name;
     }
 
     public function bons()
     {
         return $this->belongsToMany('\App\Bon')->withPivot('discount', 'bonPlus');
+    }
+
+    public function BoneName($bonName){
+        $key="product:BoneName:".$this->cacheKey()."-bone:".$bonName;
+        return Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($bonName){
+            return $this->bons->where("name", $bonName)->where("isEnable", 1);
+        });
+
     }
 
     public function calculateBonPlus($bonId)
@@ -312,7 +326,7 @@ class Product extends Model
             $bonPlus = 0;
             $bonPlus += $this->bons->where("id", $bonId)->sum("pivot.bonPlus");
             if ($bonPlus == 0) {
-                $parentsArray = $this->parents;
+                $parentsArray = $this->makeParentArray($this);
                 if (!empty($parentsArray)) {
                     foreach ($parentsArray as $parent) {
                         $bonPlus += $parent->bons->where("id", $bonId)->sum("pivot.bonPlus");
@@ -349,7 +363,8 @@ class Product extends Model
             return "تاریخ شروع سفارش محصول مورد نظر آغاز نشده است";
         elseif (isset($this->validUntil) && Carbon::now() > $this->validUntil)
             return "تاریخ سفارش محصول مورد نظر  به پایان رسیده است";
-        else return "";
+        else
+            return "";
     }
 
     public function hasComplimentaries()
@@ -366,10 +381,14 @@ class Product extends Model
         return $this->belongsToMany('App\Product', 'complimentaryproduct_product', 'product_id', 'complimentary_id');
     }
 
-    public function calculatePayablePrice()
+    public function calculatePayablePrice(User $user = null)
     {
-        $costArray = $this->obtainProductCost();
-        return (($costArray["cost"] * (1 - ($costArray["productDiscount"] / 100))) * (1 - ($costArray["bonDiscount"] / 100)) - $costArray["productDiscountAmount"]);
+        if(isset($user))
+            $costArray = $this->obtainProductCost($user);
+        else
+            $costArray = $this->obtainProductCost( );
+        array_push($costArray, []);
+        return $costArray;
     }
 
     /**
@@ -379,83 +398,101 @@ class Product extends Model
      * @param \App\User $intendedUser
      * @return array
      */
-    public function obtainProductCost(User $intendedUser = null)
+    private function obtainProductCost(User $intendedUser = null)
     {
 
-        // Obtaining discount
-        $bonDiscount = 0;
-        $productDiscount = 0;
-        $productDiscountAmount = 0;
-        $bonName = Config::get("constants.BON1");
         if (isset($intendedUser))
             $user = $intendedUser;
         elseif (Auth::check())
             $user = Auth::user();
+        else
+            $user = null;
 
-        $totalBonNumber = 0;
-        if (isset($user)) {
-            $totalBonNumber = $user->userHasBon($bonName);
-            $bons = $this->bons->where("name", $bonName)->where("isEnable", 1);
-            if ($bons->isEmpty()) {
-                $parentsArray = $this->parents;
+        $key="product:obtainProductCost:".$this->cacheKey()."-user:".(isset($user) ? $user->cacheKey() : "");
 
-                if (!empty($parentsArray)) {
-                    foreach ($parentsArray as $parent) {
-                        $bons = $parent->bons->where("name", $bonName)->where("isEnable", 1);
-                        if (!$bons->isEmpty()) break;
+        return Cache::remember($key,Config::get("constants.CACHE_3"),function () use($user)  {
+            // Obtaining discount
+            $bonDiscount = 0;
+            $productDiscount = 0;
+            $productDiscountAmount = 0;
+            $bonName = Config::get("constants.BON1");
+
+            $totalBonNumber = 0;
+            if (isset($user)) {
+                $totalBonNumber = $user->userHasBon($bonName);
+                $bons = $this->BoneName($bonName);
+                if ($bons->isEmpty()) {
+                    $parentsArray = $this->makeParentArray($this);
+
+                    if (!empty($parentsArray)) {
+                        foreach ($parentsArray as $parent) {
+                            $bons = $parent->BoneName($bonName);
+                            if (!$bons->isEmpty())
+                                break;
+                        }
                     }
                 }
-            }
-            if ($bons->isNotEmpty()) {
-                $bonDiscount += $bons->first()->pivot->discount * $totalBonNumber;
-            }
-        }
-
-        //////////////////////////////
-
-        $cost = 0;
-        //Adding product base price
-
-        if ($this->hasChildren()) {
-            if ($this->basePrice == 0) {
-                $children = $this->children;
-                $childBonDiscount = 0;
-                foreach ($children as $child) {
-                    if ($bonDiscount == 0) {
-                        $childBons = $child->bons->where("name", $bonName)->where("isEnable", 1);
-                        if ($childBons->isNotEmpty()) $childBonDiscount += $childBons->first()->pivot->discount * $totalBonNumber;
-                    }
-                    $cost += $child->basePrice;
-                    $productDiscountAmount += ($child->discount / 100) * $child->basePrice;
+                if ($bons->isNotEmpty()) {
+                    $bonDiscount += $bons->first()->pivot->discount * $totalBonNumber;
                 }
-                $bonDiscount = $childBonDiscount;
+            }
+
+            //////////////////////////////
+
+            $cost = 0;
+            //Adding product base price
+
+            if ($this->hasChildren()) {
+                if ($this->basePrice == 0) {
+                    $children = $this->children;
+                    $childBonDiscount = 0;
+                    foreach ($children as $child) {
+                        if ($bonDiscount == 0) {
+                            $childBons = $child->bons->where("name", $bonName)->where("isEnable", 1);
+                            if ($childBons->isNotEmpty())
+                                $childBonDiscount += $childBons->first()->pivot->discount * $totalBonNumber;
+                        }
+                        $cost += $child->basePrice;
+                        $productDiscountAmount += ($child->discount / 100) * $child->basePrice;
+                    }
+                    $bonDiscount = $childBonDiscount;
+                } else {
+                    $cost += $this->basePrice;
+                    $productDiscount += $this->discount;
+                }
             } else {
-                $cost += $this->basePrice;
-                $productDiscount += $this->discount;
-            }
-        } else {
-            if (isset($this->discount) && $this->discount > 0) $productDiscount += $this->discount;
-            elseif (!$this->parents->where("producttype_id", Config::get("constants.PRODUCT_TYPE_CONFIGURABLE"))->isEmpty() && isset($this->parents->first()->discount)) $productDiscount += $this->parents->first()->discount;
-            if ($this->hasParents()) {
-                if ($this->basePrice != 0 && $this->basePrice != $this->parents->first()->basePrice) $cost += $this->basePrice;
-                else  $cost += $this->parents->first()->basePrice;
+                if (isset($this->discount) && $this->discount > 0)
+                    $productDiscount += $this->discount;
+                elseif (!$this->parents->where("producttype_id", Config::get("constants.PRODUCT_TYPE_CONFIGURABLE"))->isEmpty() && isset($this->parents->first()->discount)) $productDiscount += $this->parents->first()->discount;
+                if ($this->hasParents()) {
+                    if ($this->basePrice != 0 && $this->basePrice != $this->parents->first()->basePrice)
+                        $cost += $this->basePrice;
+                    else  $cost += $this->parents->first()->basePrice;
 
-            } else {
-                $cost += $this->basePrice;
+                } else {
+                    $cost += $this->basePrice;
+                }
             }
-        }
-        /////////////////////////////////
+            /////////////////////////////////
 
-        // Adding attributes extra cost
-        if ($this->producttype_id != Config::get("constants.PRODUCT_TYPE_CONFIGURABLE")) {
-            $attributevalues = $this->attributevalues('main')->get();
-            foreach ($attributevalues as $attributevalue) {
-                if (isset($attributevalue->pivot->extraCost)) $cost += $attributevalue->pivot->extraCost;
+            // Adding attributes extra cost
+            if ($this->producttype_id != Config::get("constants.PRODUCT_TYPE_CONFIGURABLE")) {
+                $attributevalues = $this->attributevalues('main')->get();
+                foreach ($attributevalues as $attributevalue) {
+                    if (isset($attributevalue->pivot->extraCost)) $cost += $attributevalue->pivot->extraCost;
+                }
             }
-        }
 
-        //////////////////////////////
-        return ["cost" => (int)$cost, "productDiscount" => $productDiscount, 'bonDiscount' => $bonDiscount, "productDiscountAmount" => $productDiscountAmount];
+            //////////////////////////////
+
+            return [
+                "cost" => (int)$cost,
+                "productDiscount" => $productDiscount,
+                'bonDiscount' => $bonDiscount,
+                "productDiscountAmount" => $productDiscountAmount,
+                'CustomerCost' =>(int)(((int)$cost * (1 - ($productDiscount / 100))) * (1 - ($bonDiscount / 100)) - $productDiscountAmount)
+            ];
+        });
     }
 
     //TODO: issue #97
@@ -473,7 +510,8 @@ class Product extends Model
             }
             if ($myProduct->id == $this->id || $counter != $depth)
                 return false;
-            else return true;
+            else
+                return true;
         });
     }
 
@@ -498,10 +536,9 @@ class Product extends Model
      */
     public function CreatedAt_Jalali()
     {
-        $helper = new Helper();
         $explodedDateTime = explode(" ", $this->created_at);
 //        $explodedTime = $explodedDateTime[1] ;
-        return $helper->convertDate($this->created_at, "toJalali");
+        return $this->convertDate($this->created_at, "toJalali");
     }
 
     /**
@@ -510,10 +547,9 @@ class Product extends Model
      */
     public function UpdatedAt_Jalali()
     {
-        $helper = new Helper();
         $explodedDateTime = explode(" ", $this->updated_at);
 //        $explodedTime = $explodedDateTime[1] ;
-        return $helper->convertDate($this->updated_at, "toJalali");
+        return $this->convertDate($this->updated_at, "toJalali");
     }
 
     /**
@@ -522,10 +558,9 @@ class Product extends Model
      */
     public function validSince_Jalali()
     {
-        $helper = new Helper();
         $explodedDateTime = explode(" ", $this->validSince);
 //        $explodedTime = $explodedDateTime[1] ;
-        return $helper->convertDate($this->validSince, "toJalali");
+        return $this->convertDate($this->validSince, "toJalali");
     }
 
     /**
@@ -534,10 +569,9 @@ class Product extends Model
      */
     public function validUntil_Jalali()
     {
-        $helper = new Helper();
         $explodedDateTime = explode(" ", $this->validUntil);
 //        $explodedTime = $explodedDateTime[1] ;
-        return $helper->convertDate($this->validUntil, "toJalali");
+        return $this->convertDate($this->validUntil, "toJalali");
     }
 
     /**
@@ -744,9 +778,11 @@ class Product extends Model
             $image = "";
             $grandParent = $this->getGrandParent();
             if ($grandParent !== false) {
-                if (isset($grandParent->image)) $image = $grandParent->image;
+                if (isset($grandParent->image))
+                    $image = $grandParent->image;
             } else {
-                if (isset($this->image)) $image = $this->image;
+                if (isset($this->image))
+                    $image = $this->image;
             }
             return $image;
         });
@@ -762,29 +798,38 @@ class Product extends Model
             $productStartTime = Carbon::create(2018, 03, 03, 22, 47, 20, 'Asia/Tehran');
             $productEndTime = Carbon::create(2018, 03, 03, 23, 47, 20, 'Asia/Tehran');
             if ($now->between($productStartTime, $productEndTime)) $isHappening = 0;
-            elseif ($now->diffInMinutes($productStartTime, false) > 0) $isHappening = $now->diffInMinutes($productStartTime, false);
-            else $isHappening = $now->diffInMinutes($productEndTime, false);
+            elseif ($now->diffInMinutes($productStartTime, false) > 0)
+                $isHappening = $now->diffInMinutes($productStartTime, false);
+            else
+                $isHappening = $now->diffInMinutes($productEndTime, false);
         }
         return $isHappening;
     }
 
     public function isEnableToPurchase()
     {
-        //ToDo : should be removed in future
-        if (in_array($this->id, Config::get("constants.DONATE_PRODUCT"))) return true;
-        $grandParent = $this->getGrandParent();
-        if ($grandParent !== false) {
-            if (!$grandParent->enable) return false;
-        }
+        $key="product:isEnableToPurchase:".$this->cacheKey();
+        return Cache::remember($key,Config::get("constants.CACHE_60"),function () {
 
-        if ($this->hasParents()) {
-            if (!$this->parents()->first()->enable) return false;
-        }
+            //ToDo : should be removed in future
+            if (in_array($this->id, Config::get("constants.DONATE_PRODUCT")))
+                return true;
+            $grandParent = $this->getGrandParent();
+            if ($grandParent !== false) {
+                if (!$grandParent->enable)
+                    return false;
+            }
 
-        if (!$this->enable) {
-            return false;
-        }
-        return true;
+            if ($this->hasParents()) {
+                if (!$this->parents()->first()->enable)
+                    return false;
+            }
+
+            if (!$this->enable) {
+                return false;
+            }
+            return true;
+        });
     }
 
 }

@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Notifications\UserRegisterd;
 use App\Traits\CharacterCommon;
+use App\Traits\Helper;
 use App\User;
 use App\Userstatus;
-use App\Helpers\Helper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Validation\Rule;
@@ -18,6 +19,7 @@ use Illuminate\Auth\Events\Registered;
 class RegisterController extends Controller
 {
     use CharacterCommon;
+    use Helper;
     /*
     |--------------------------------------------------------------------------
     | Register Controller
@@ -37,7 +39,6 @@ class RegisterController extends Controller
      * @var string
      */
     protected $redirectTo ;
-    protected $helper;
 
     /**
      * Create a new controller instance.
@@ -48,7 +49,6 @@ class RegisterController extends Controller
     {
         $this->middleware('guest');
         $this->redirectTo = action("ProductController@search");
-        $this->helper = new Helper();
     }
 
     /**
@@ -109,7 +109,7 @@ class RegisterController extends Controller
           $data["photo"]  = Config::get('constants.PROFILE_DEFAULT_IMAGE');
           $data["userstatus_id"] = Userstatus::all()->where("name" , "active")->first()->id ;
           
-//          $password = $this->helper->generateRandomPassword(4);
+//          $password = $this->generateRandomPassword(4);
 
         if(!isset($data['firstName']) || strlen(preg_replace('/\s+/', '', $data['firstName'])) == 0)  $data['firstName'] = NULL;
         if(!isset($data['lastName']) || strlen(preg_replace('/\s+/', '', $data['lastName'])) == 0)  $data['lastName'] = NULL;
@@ -143,60 +143,7 @@ class RegisterController extends Controller
             'userstatus_id' => $data["userstatus_id"],
             'email'=>$data['email'],
         ]);
-
-
-        $smsInfo = array();
-        $smsInfo["to"] = array(ltrim($user->mobile, '0'));
-		$smsInfo["from"] = getenv("SMS_PROVIDER_DEFAULT_NUMBER");
-//        /**
-//         * Sending auto generated password through SMS
-//         */
-//
-//        $smsInfo["message"] = "سلام به تخته خاک خوش آمدید\n نام کاربری: ".$user->mobile."\nرمزعبور: ".$password["rawPassword"] ;
-        $smsInfo["message"] = "سلام به تخته خاک خوش آمدید\n نام کاربری: ".$user->mobile."رمز عبور: \n". $data['nationalCode'];
-        $response = $this->helper->medianaSendSMS($smsInfo);
-////          $response = array("error"=>false , "message"=>"ارسال موفقیت آمیز بود");
-//        if(!$response["error"]){
-//            $user->passwordRegenerated_at = Carbon::now();
-//            $user->update();
-//            session()->put("welcomePasswordMessage" , "رمز عبور شما به شماره موبایلتان پیامک شد. در صورت عدم دریافت پیامک پس از ۵ دقیقه، می توانید با رفتن به تغییر رمز عبور در پروفایل خود، درخواست ارسال رمز جدید نمایید.");
-//        }else{
-//            session()->put("welcomePasswordMessage" , "ارسال پیامک حاوی رمز عبور با مشکل مواجه شد! لطفا با مراجعه به تغییر رمز عبور در پروفایل خود، درخواست ارسال رمز جدید نمایید.");
-//        }
-//        /**
-//         *    end
-//         */
-//
-//        /**
-//         * Sending account verification code through SMS
-//         */
-//        $verificationCode = rand(1000,99999);
-//        $smsInfo["message"] = "کد احراز هویت شما: ".$verificationCode."\n تخته خاک";
-//        $response = $this->helper->medianaSendSMS($smsInfo);
-////        $response = array("error"=>false , "message"=>"ارسال موفقیت آمیز بود");
-//        if(!$response["error"]){
-//            $verificationMessageStatusSent = Verificationmessagestatuse::all()->where("name","sent")->first();
-//            $request = new Request();
-//            $request->offsetSet("user_id" ,  $user->id);
-//            $request->offsetSet("code" ,  $verificationCode);
-//            $request->offsetSet("verificationmessagestatus_id" ,  $verificationMessageStatusSent->id);
-//            $request->offsetSet("expired_at" ,   Carbon::now()->addMinutes(Config::get('constants.MOBILE_VERIFICATION_TIME_LIMIT')));
-//            $verificationMessageController = new VerificationmessageController();
-//            if($verificationMessageController->store($request))
-//            {
-//                session()->put("welcomeVerifyCodeMessage" , "کد احراز هویت شما به شماره موبایلتان پیامک شد. شما ۳۰ دقیقه فرصت دارید با رفتن به پروفایل خود کد دریافتی را در قسمت مشخص شده وارد نموده و بدین وسیله حساب کاربری خود را تایید نمایید. در صورت عدم دریافت پیامک پس از ۵ دقیقه ،  می توانید با رفتن به پروفایل خود درخواست ارسال کد جدید نمایید.");
-//            }else{
-//                session()->put("welcomeVerifyCodeMessage" , "در ارسال کد احراز هویت شما خطایی رخ داد . لطفا با رفتن به پروفایل خود درخواست ارسال کد جدید نمایید.اگر در این فاصله پیامکی دریافت کردید لطفا آن را در نظر نگیرید");
-//            }
-//        }else{
-//            session()->put("welcomeVerifyCodeMessage" , "ارسال پیامک احراز هویت شما با مشکل مواجه شد! لطفا با رفتن به پروفایل خود درخواست ارسال کد جدید نمایید.");
-//        }
-//        /**
-//         *    end
-//         */
-//
-
-
+        $user->notify(new UserRegisterd());
         return $user;
     }
 

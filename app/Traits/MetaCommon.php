@@ -1,6 +1,6 @@
 <?php namespace App\Traits;
 
-use colossal_mind_mb_keyword_gen;
+use \App\Helpers\colossalMindMbKeywordGen;
 
 trait MetaCommon
 {
@@ -77,7 +77,7 @@ trait MetaCommon
 
         //----------------------------------------------------------------------
         //REQUIRED
-        $keyword = new colossal_mind_mb_keyword_gen($params);
+        $keyword = new colossalMindMbKeywordGen($params);
         // REQUIRED
         $autoKeywords = $keyword->get_keywords();
 

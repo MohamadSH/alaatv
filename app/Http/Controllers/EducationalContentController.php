@@ -12,10 +12,10 @@ use App\Http\Requests\InsertFileRequest;
 use App\Major;
 use App\Majortype;
 use App\Product;
+use App\Traits\APIRequestCommon;
 use App\Traits\ProductCommon;
 use App\Websitesetting;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
@@ -28,8 +28,9 @@ use Meta;
 
 class EducationalContentController extends Controller
 {
+    use APIRequestCommon;
     protected $response ;
-
+    protected $setting ;
     use ProductCommon ;
 
     public function __construct()
@@ -48,6 +49,7 @@ class EducationalContentController extends Controller
         $this->middleware('permission:'.Config::get("constants.REMOVE_EDUCATIONAL_CONTENT_ACCESS"),['only'=>'destroy']);
 
         $this->response = new Response();
+        $this->setting = json_decode(app('setting')->setting);
     }
 
     /**
@@ -124,7 +126,6 @@ class EducationalContentController extends Controller
         $educationalContents = $educationalContents->get();
         if(Input::has("columns"))
             $columns = Input::get("columns");
-
         return view("educationalContent.index" , compact("educationalContents" , "columns"));
     }
 
@@ -346,11 +347,10 @@ class EducationalContentController extends Controller
      */
     public function show(Educationalcontent $educationalContent)
     {
-        $setting = Websitesetting::where("version" , 1)->get()->first();
-        $setting = json_decode($setting->setting);
 
-        if(Auth::check() && Auth::user()->can(Config::get('constants.SHOW_EDUCATIONAL_CONTENT_ACCESS'))) $pass = true;
-        else $pass = false ;
+//        if(Auth::check() && Auth::user()->can(Config::get('constants.SHOW_EDUCATIONAL_CONTENT_ACCESS'))) $pass = true;
+//        else $pass = false ;
+        $pass=true;
         if($pass || $educationalContent->isValid() && $educationalContent->isEnable())
         {
             $contentsWithSameType = $educationalContent->contentsWithSameType()->orderBy("validSince","DESC")->take(5)->get();
@@ -366,43 +366,83 @@ class EducationalContentController extends Controller
                 Meta::set('title', substr($educationalContent->getDisplayName() , 0 , Config::get("constants.META_TITLE_LIMIT")));
             Meta::set('keywords', substr($educationalContent->getDisplayName() , 0 , Config::get("constants.META_KEYWORDS_LIMIT")));
             Meta::set('description', substr($educationalContent->description, 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
-            Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $setting->site->siteLogo ]));
+            Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
 
             switch($educationalContent->template->name)
             {
                 case "video1":
-                    $contentSet = $educationalContent->contentsets->where("pivot.isDefault" , 1)->first();
-                    $contentsWithSameSet =  $contentSet->educationalcontents ;
+                    $files = collect();
                     $videoSources = collect();
-                    foreach ($contentsWithSameSet as $content)
+//                    $time_now = date('Hi');
+                    $file = $educationalContent->files->where("pivot.label" , "hd")->first() ;
+                    if(isset($file))
                     {
-                        $time_now = date('Hi');
-                        $file = $content->files->where("pivot.label" , "hd")->first()->name ;
-                        $download_link_postfix = md5($file).$time_now;
-                        $download_link_postfix = str_replace("+","-",$download_link_postfix);
-                        $download_link_postfix = str_replace("/","_",$download_link_postfix);
-                        $download_link_postfix = str_replace("=","",$download_link_postfix);
-                        $videoSources->put( "hd" , ["src"=>$file."?md5=".$download_link_postfix , "caption"=>$content->files->where("pivot.label" , "hd")->first()->pivot->caption]) ;
-
-                        $file = $content->files->where("pivot.label" , "hq")->first()->name ;
-                        $download_link_postfix = md5($file).$time_now;
-                        $download_link_postfix = str_replace("+","-",$download_link_postfix);
-                        $download_link_postfix = str_replace("/","_",$download_link_postfix);
-                        $download_link_postfix = str_replace("=","",$download_link_postfix);
-                        $videoSources->put( "hq" , ["src"=>$file."?md5=".$download_link_postfix , "caption"=>$content->files->where("pivot.label" , "hq")->first()->pivot->caption]) ;
-
-                        $file = $content->files->where("pivot.label" , "240p")->first()->name ;
-                        $download_link_postfix = md5($file).$time_now;
-                        $download_link_postfix = str_replace("+","-",$download_link_postfix);
-                        $download_link_postfix = str_replace("/","_",$download_link_postfix);
-                        $download_link_postfix = str_replace("=","",$download_link_postfix);
-                        $videoSources->put( "240p" , ["src"=>$file."?md5=".$download_link_postfix ,  "caption"=>$content->files->where("pivot.label" , "240p")->first()->pivot->caption]) ;
+//                        $download_link_postfix = md5($file->name).$time_now;
+//                        $download_link_postfix = str_replace("+","-",$download_link_postfix);
+//                        $download_link_postfix = str_replace("/","_",$download_link_postfix);
+//                        $download_link_postfix = str_replace("=","",$download_link_postfix);
+//                        $videoSources->put( "hd" , ["src"=>$file->name."?md5=".$download_link_postfix , "caption"=>$file->pivot->caption]) ;
+                        $videoSources->put( "hd" , ["src"=>$file->name , "caption"=>$file->pivot->caption]) ;
                     }
+
+                    $file = $educationalContent->files->where("pivot.label" , "hq")->first() ;
+                    if(isset($file))
+                    {
+//                        $download_link_postfix = md5($file->name).$time_now;
+//                        $download_link_postfix = str_replace("+","-",$download_link_postfix);
+//                        $download_link_postfix = str_replace("/","_",$download_link_postfix);
+//                        $download_link_postfix = str_replace("=","",$download_link_postfix);
+//                        $videoSources->put( "hq" , ["src"=>$file->name."?md5=".$download_link_postfix , "caption"=>$file->pivot->caption]) ;
+                        $videoSources->put( "hq" , ["src"=>$file->name , "caption"=>$file->pivot->caption]) ;
+                    }
+
+                    $file = $educationalContent->files->where("pivot.label" , "240p")->first() ;
+                    if(isset($file))
+                    {
+//                        $download_link_postfix = md5($file->name).$time_now;
+//                        $download_link_postfix = str_replace("+","-",$download_link_postfix);
+//                        $download_link_postfix = str_replace("/","_",$download_link_postfix);
+//                        $download_link_postfix = str_replace("=","",$download_link_postfix);
+//                        $videoSources->put( "240p" , ["src"=>$file->name."?md5=".$download_link_postfix ,  "caption"=>$file->pivot->caption]) ;
+                        $videoSources->put( "240p" , ["src"=>$file->name ,  "caption"=>$file->pivot->caption]) ;
+                    }
+                    $file = $educationalContent->files->where("pivot.label" , "thumbnail")->first();
+                    if(isset($file))
+                        $files->put("thumbnail" , $file->name);
+                    $files->put("videoSource" , $videoSources);
+
+                    $contenSets = $educationalContent->contentsets->where("pivot.isDefault" , 1);
+                    if($contenSets->isNotEmpty())
+                    {
+                        $contentSet = $contenSets->first();
+                        $sameContents =  $contentSet->educationalcontents ;
+                        $contentsWithSameSet = collect();
+                        foreach ($sameContents as $content)
+                        {
+                            $file = $content->files->where("pivot.label" , "thumbnail")->first();
+                            if(isset($file)) $thumbnailFile = $file->name;
+                            else $thumbnailFile = "" ;
+
+                            $contentTypes = $content->contenttypes->pluck("name")->toArray();
+                            if(in_array("video" , $contentTypes ))
+                                $myContentType = "video";
+                            elseif(in_array("pamphlet" , $contentTypes ))
+                                $myContentType = "pamphlet";
+
+                            $contentsWithSameSet->push(["type"=> $myContentType , "content"=>$content , "thumbnail"=>$thumbnailFile]);
+                        }
+                    }
+
                     break;
                 default:
                     break;
             }
-            return view("educationalContent.show", compact("educationalContent", "rootContentType", "childContentType", "contentsWithSameType" , "soonContentsWithSameType" , "educationalContentSet" , "contentsWithSameSet" , "videoSources"));
+            $response = $this->sendRequest(env("TAG_API_URL")."id/content/".$educationalContent->id,"GET");
+            if($response["statusCode"] == 200){
+                $result = json_decode($response["result"]);
+                $tags = $result->data->tags;
+            }
+            return view("educationalContent.show", compact("educationalContent", "rootContentType", "childContentType", "contentsWithSameType" , "soonContentsWithSameType" , "educationalContentSet" , "contentsWithSameSet" , "videoSources" , "files" , "tags"));
         }
         else
             abort(404);
@@ -601,12 +641,12 @@ class EducationalContentController extends Controller
             $metaKeywords .= $educationalContent->name."-";
             $metaDescription .= $educationalContent->name."-" ;
         }
-        $setting = Websitesetting::where("version" , 1)->get()->first();
-        $setting = json_decode($setting->setting);
-        Meta::set('title', substr("محتوای آموزشی ".$setting->site->name, 0 , Config::get("constants.META_TITLE_LIMIT")));
+
+
+        Meta::set('title', substr("محتوای آموزشی ".$this->setting->site->name, 0 , Config::get("constants.META_TITLE_LIMIT")));
         Meta::set('keywords', substr($metaKeywords , 0 , Config::get("constants.META_KEYWORDS_LIMIT")));
         Meta::set('description', substr($metaDescription , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
-        Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $setting->site->siteLogo ]));
+        Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
 
         return view("educationalContent.search" , compact("educationalContents" , "pageName" , "majors" , "grades" , "rootContentTypes", "childContentTypes" , "soonEducationalContents" , "products" , "costCollection"));
     }
@@ -638,7 +678,7 @@ class EducationalContentController extends Controller
      * @param \App\File $file
      * @return \Illuminate\Http\Response
      */
-    public function storeFileCaption(InsertEducationalContentFileCaption $request , $educationalContent , $file)
+    public function storeFileCaption(InsertEducationalContentFileCaption $request , Educationalcontent $educationalContent , File $file)
     {
         $caption = $request->get("caption");
         if(strcmp($educationalContent->files()->where("id" , $file->id)->get()->first()->pivot->caption , $caption) == 0)
@@ -651,4 +691,24 @@ class EducationalContentController extends Controller
             return $this->response->setStatusCode(503) ;
         }
      }
+
+    public function retrieveTags()
+    {
+        if(Input::has("apipath"))
+        {
+            $apipath = Input::get("apipath");
+            $client = new \GuzzleHttp\Client();
+            $res = $client->get( $apipath );
+            $responseStatus = $res->getStatusCode();
+            if($responseStatus == 200)
+            {
+                $result = $res->getBody()->getContents();
+                return $this->response->setStatusCode(200)->setContent($result);
+            }
+            else
+            {
+                return $this->response->setStatusCode($responseStatus);
+            }
+        }
+    }
 }

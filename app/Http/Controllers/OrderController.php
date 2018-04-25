@@ -8,11 +8,14 @@ use App\Bankaccount;
 use App\Bon;
 use App\Coupon;
 use App\Helpers\ENPayment;
+use App\Http\Requests\InsertTransactionRequest;
 use App\Http\Requests\SendSMSRequest;
 use App\Http\Requests\SubmitCouponRequest;
+use App\Notifications\InvoicePaid;
 use App\Ordermanagercomment;
 use App\Orderpostinginfo;
 use App\Paymentmethod;
+use App\Traits\Helper;
 use App\Traits\ProductCommon;
 use App\Traits\RequestCommon;
 use App\Transaction;
@@ -27,7 +30,6 @@ use App\User;
 use App\Userbon;
 use App\Websitesetting;
 use Carbon\Carbon;
-use App\Helpers\Helper;
 use Illuminate\Http\Request;
 use App\Http\Requests\EditOrderRequest;
 use App\Http\Requests;
@@ -46,13 +48,13 @@ use Meta;
 
 class OrderController extends Controller
 {
-    protected $helper ;
+    use Helper;
     protected $response ;
+    protected $setting;
     use ProductCommon ;
     use RequestCommon;
     function __construct()
     {
-        $this->helper = new Helper();
         $this->response = new Response();
 
         $this->middleware('permission:'.Config::get('constants.LIST_ORDER_ACCESS'),['only'=>'index']);
@@ -60,6 +62,7 @@ class OrderController extends Controller
         $this->middleware('permission:'.Config::get('constants.REMOVE_ORDER_ACCESS'),['only'=>'destroy']);
         $this->middleware('permission:'.Config::get('constants.SHOW_ORDER_ACCESS'),['only'=>'edit']);
         $this->middleware('permission:'.Config::get('constants.INSERT_ORDER_ACCESS'),['only'=>'exitAdminInsertOrder']);
+        $this->setting = json_decode(app('setting')->setting);
     }
 
     private function renewOrderproducs($orderproducts)
@@ -80,7 +83,7 @@ class OrderController extends Controller
                 $extraAttributes = $orderproduct->attributevalues;
                 foreach($extraAttributes as $extraAttribute)
                 {
-                    $myParent = $orderproduct->product->parents;
+                    $myParent = $this->makeParentArray($orderproduct->product);
                     $myParent = end($myParent);
                     $productAttributevalue = $myParent->attributevalues->where("id" ,  $extraAttribute->id)->first();
 
@@ -101,7 +104,7 @@ class OrderController extends Controller
                     $bons = $orderproduct->product->bons->where("name" , $bonName)->where("pivot.discount",">","0")->where("isEnable" , 1);
                     if($bons->isEmpty())
                     {
-                        $parentsArray = $orderproduct->product->parents;
+                        $parentsArray = $this->makeParentArray($orderproduct->product);
                         if(!empty($parentsArray))
                         {
                             foreach ($parentsArray as $parent)
@@ -165,7 +168,8 @@ class OrderController extends Controller
      */
     public function index()
     {
-        if(Auth::user()->can(Config::get('constants.SHOW_OPENBYADMIN_ORDER')))
+        $user = Auth::user();
+        if($user->can(Config::get('constants.SHOW_OPENBYADMIN_ORDER')))
             $orders = Order::where("orderstatus_id","<>", Config::get("constants.ORDER_STATUS_OPEN"));
         else
             $orders = Order::where("orderstatus_id","<>",Config::get("constants.ORDER_STATUS_OPEN"))->where("orderstatus_id","<>",Config::get("constants.ORDER_STATUS_OPEN_BY_ADMIN"));
@@ -176,7 +180,7 @@ class OrderController extends Controller
         $createdTimeEnable = Input::get('createdTimeEnable');
         if(strlen($createdSinceDate)>0 && strlen($createdTillDate)>0 && isset($createdTimeEnable))
         {
-            $orders = $this->helper->timeFilterQuery($orders, $createdSinceDate, $createdTillDate, 'created_at');
+            $orders = $this->timeFilterQuery($orders, $createdSinceDate, $createdTillDate, 'created_at');
         }
 
         $updatedSinceDate = Input::get('updatedSinceDate');
@@ -184,7 +188,7 @@ class OrderController extends Controller
         $updatedTimeEnable = Input::get('updatedTimeEnable');
         if(strlen($updatedSinceDate)>0 && strlen($updatedTillDate)>0 && isset($updatedTimeEnable))
         {
-            $orders = $this->helper->timeFilterQuery($orders, $updatedSinceDate, $updatedTillDate, 'updated_at');
+            $orders = $this->timeFilterQuery($orders, $updatedSinceDate, $updatedTillDate, 'updated_at');
         }
 
         $completedSinceDate = Input::get('completedSinceDate');
@@ -192,7 +196,7 @@ class OrderController extends Controller
         $completedTimeEnable = Input::get('completedTimeEnable');
         if(strlen($completedSinceDate)>0 && strlen($completedTillDate)>0 && isset($completedTimeEnable))
         {
-            $orders = $this->helper->timeFilterQuery($orders, $completedSinceDate, $completedTillDate, 'completed_at');
+            $orders = $this->timeFilterQuery($orders, $completedSinceDate, $completedTillDate, 'completed_at');
         }
 
         $firstName = trim(Input::get('firstName'));
@@ -684,6 +688,7 @@ class OrderController extends Controller
     public function update(EditOrderRequest $request, Order $order)
     {
         $oldOrderStatus = $order->orderstatus_id;
+        $user = Auth::user();
 
         if(isset($order->coupon->id)) {
             $oldCoupon = $order->coupon;
@@ -732,19 +737,19 @@ class OrderController extends Controller
                 if($request->has('managerDescription'))
                     $managerComment->comment = $request->get('managerDescription');
                 $managerComment->order_id = $order->id;
-                $managerComment->user_id = Auth::user()->id;
+                $managerComment->user_id = $user->id;
                 $managerComment->save();
             }
             else{
                 $order->ordermanagercomments->first()->comment = $request->get('managerDescription');
-                $order->ordermanagercomments->first()->user_id = Auth::user()->id;
+                $order->ordermanagercomments->first()->user_id = $user->id;
                 $order->ordermanagercomments->first()->update();
             }
         }else{
             if (!$order->ordermanagercomments->isEmpty())
             {
                 $order->ordermanagercomments->first()->comment = null;
-                $order->ordermanagercomments->first()->user_id = Auth::user()->id;
+                $order->ordermanagercomments->first()->user_id = $user->id;
                 $order->ordermanagercomments->first()->update();
             }
         }
@@ -755,10 +760,14 @@ class OrderController extends Controller
                 $controller = new HomeController();
                 $smsRequest = new SendSMSRequest();
                 $fullName = "";
-                if(strlen($order->user->firstName)>0) $fullName .= $order->user->firstName;
-                if(strlen($order->user->lastName)>0) $fullName .= " ".$order->user->lastName;
-                if(strlen($fullName)>0) $smsRequest["message"] = $fullName;
-                else $smsRequest["message"] = "کاربر گرامی";
+                if(strlen($order->user->firstName)>0)
+                    $fullName .= $order->user->firstName;
+                if(strlen($order->user->lastName)>0)
+                    $fullName .= " ".$order->user->lastName;
+                if(strlen($fullName)>0)
+                    $smsRequest["message"] = $fullName;
+                else
+                    $smsRequest["message"] = "کاربر گرامی";
                 $smsRequest["message"]  .= " سلام، وضعیت سفارش شما در تخته خاک به ".$order->orderstatus->displayName." تغییر کرد";
                 $smsRequest["users"] = $order->user_id;
                 $controller->sendSMS($smsRequest);
@@ -774,8 +783,9 @@ class OrderController extends Controller
                         $postingInfo = new Orderpostinginfo();
                         $postingInfo->postCode = $request->get('postCode');
                         $postingInfo->order_id = $order->id;
-                        $postingInfo->user_id = Auth::user()->id;
-                        if($postingInfo->save()) $insertPostingInfo=true;
+                        $postingInfo->user_id = $user->id;
+                        if($postingInfo->save())
+                            $insertPostingInfo=true;
 //                    }
 //                    else{
 //                        $order->orderpostinginfos->first()->postCode = $request->get('postCode');
@@ -794,16 +804,22 @@ class OrderController extends Controller
                         $controller = new HomeController();
                         $smsRequest = new SendSMSRequest();
                         $fullName = "";
-                        if(strlen($order->user->firstName)>0) $fullName .= $order->user->firstName;
-                        if(strlen($order->user->lastName)>0) $fullName .= " ".$order->user->lastName;
-                        if(strlen($fullName)>0) $smsRequest["message"] = $fullName;
-                        else $smsRequest["message"] = "کاربر گرامی";
+                        if(strlen($order->user->firstName)>0)
+                            $fullName .= $order->user->firstName;
+                        if(strlen($order->user->lastName)>0)
+                            $fullName .= " ".$order->user->lastName;
+                        if(strlen($fullName)>0)
+                            $smsRequest["message"] = $fullName;
+                        else
+                            $smsRequest["message"] = "کاربر گرامی";
                         $smsRequest["message"]  .= " شماره مرسوله پستی ".$productName." ".$request->get('postCode')." می باشد - تخته خاک";
 //                        $smsRequest["message"]  .= " برنامه و دفترچه عید نوروز برای شما پست شد"."\n"."کد رهگیری مرسوله: ".$request->get('postCode')."\n"."تخته خاک - K96.IR";
                         $smsRequest["users"] = $order->user_id;
                         $response = $controller->sendSMS($smsRequest);
-                        if($response->getStatusCode() == 200) $smsMessageSuccess = "پیامک کد رهگیری برای کاربر ارسال شد";
-                        else $smsMessageError = "خطا در ارسال پیامک کد رهگیری";
+                        if($response->getStatusCode() == 200)
+                            $smsMessageSuccess = "پیامک کد رهگیری برای کاربر ارسال شد";
+                        else
+                            $smsMessageError = "خطا در ارسال پیامک کد رهگیری";
 
                     }
                 }else{}
@@ -815,11 +831,12 @@ class OrderController extends Controller
                 if (Storage::disk(Config::get('constants.DISK10'))->put($fileName, File::get($file))) {
                     $orderFileRequest = new Request();
                     $orderFileRequest->offsetSet("order_id" ,  $order->id);
-                    $orderFileRequest->offsetSet("user_id" ,  Auth::user()->id);
+                    $orderFileRequest->offsetSet("user_id" , $user->id);
                     $orderFileRequest->offsetSet("file" , $fileName );
                     $orderFileController = new OrderFileController();
                     $responseStatus = $orderFileController->store($orderFileRequest);
-                    if($responseStatus->getStatusCode() != 200) session()->put('error', 'خطا در ذخیره اطلاعات فایل');
+                    if($responseStatus->getStatusCode() != 200)
+                        session()->put('error', 'خطا در ذخیره اطلاعات فایل');
                 } else {
                     session()->put('error', 'بارگذاری فایل سفارش با مشکل مواجه شد!');
                 }
@@ -861,7 +878,8 @@ class OrderController extends Controller
      */
     public function checkoutAuth()
     {
-        if(Auth::check()) return redirect(action("OrderController@checkoutReview"));
+        if(Auth::check())
+            return redirect(action("OrderController@checkoutReview"));
         return view("order.checkout.auth");
     }
 
@@ -873,7 +891,8 @@ class OrderController extends Controller
      */
     public function checkoutCompleteInfo()
     {
-        if(Auth::user()->completion("afterLoginForm") == 100) {
+        $user = Auth::user();
+        if($user->completion("afterLoginForm") == 100) {
             session()->pull("success");
             session()->pull("tab");
             session()->pull("belongsTo");
@@ -889,10 +908,37 @@ class OrderController extends Controller
             }
         }
         $note = "لطفا برای ادامه مراحل اطلاعات زیر را تکمیل نمایید";
-        if(!Auth::check()) return redirect(action("OrderController@checkoutAuth"));
+        if(!Auth::check())
+            return redirect(action("OrderController@checkoutAuth"));
         return view("order.checkout.completeInfo" , compact("formFields" , "note" , "tables"));
     }
 
+    private function getUserOrder(){
+        if(!Auth::check())
+            return redirect(action("OrderController@checkoutAuth"));
+
+        $user = Auth::user();
+        if(session()->has("adminOrder_id"))
+        {
+            if(!$user->can(Config::get('constants.INSERT_ORDER_ACCESS')))
+                return redirect(action("HomeController@error403"));
+            $user_id = session()->get("customer_id");
+            $user = User::FindOrFail($user_id);
+            $orderstatus_id = Config::get("constants.ORDER_STATUS_OPEN_BY_ADMIN");
+        }else
+        {
+            $orderstatus_id = Config::get("constants.ORDER_STATUS_OPEN");
+        }
+
+        $order = $user->orders->where("orderstatus_id" , $orderstatus_id)->first();
+        $orderproducts = $order->orderproducts->sortByDesc("created_at");
+
+        return [
+            $user,
+            $order ,
+            $orderproducts
+        ];
+    }
     /**
      * Showing authentication step in the checkout process
      *
@@ -901,29 +947,14 @@ class OrderController extends Controller
      */
     public function checkoutReview()
     {
-        $setting = Websitesetting::where("version" , 1)->get()->first();
-        $setting = json_decode($setting->setting);
+
+
         Meta::set('title', substr("تخته خاک|بازبینی سفارش" , 0 , Config::get("constants.META_TITLE_LIMIT")));
-        Meta::set('keywords', substr($setting->site->seo->homepage->metaKeywords, 0 , Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
-        Meta::set('description', substr($setting->site->seo->homepage->metaDescription , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
-        Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $setting->site->siteLogo ]));
+        Meta::set('keywords', substr($this->setting->site->seo->homepage->metaKeywords, 0 , Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
+        Meta::set('description', substr($this->setting->site->seo->homepage->metaDescription , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
+        Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
 
-        if(!Auth::check()) return redirect(action("OrderController@checkoutAuth"));
-//         Mohammad : I used this code because in case there is no open order in database
-//         for this user , the record will be inserted through \App\Http\Middleware\OrderCheck
-//         but it can't get it by Auth:user()->orders!
-        if(session()->has("adminOrder_id"))
-        {
-            if(!Auth::user()->can(Config::get('constants.INSERT_ORDER_ACCESS'))) return redirect(action("HomeController@error403"));
-            $user_id = session()->get("customer_id");
-            $user = User::FindOrFail($user_id);
-            $order = Order::all()->where("user_id",$user->id)->where("orderstatus_id" , Config::get("constants.ORDER_STATUS_OPEN_BY_ADMIN"))->first();
-        }else
-        {
-            $order = Order::all()->where("user_id",Auth::user()->id)->where("orderstatus_id" , Config::get("constants.ORDER_STATUS_OPEN"))->first();
-        }
-
-        $orderproducts = $order->orderproducts->sortByDesc("created_at");
+        [$user, $order , $orderproducts] = $this->getUserOrder();
 
         $renewedOrderproducts = $this->renewOrderproducs($orderproducts);
         $orderproductsRawCost = (int)$renewedOrderproducts["rawCost"];
@@ -959,20 +990,7 @@ class OrderController extends Controller
     public function checkoutInvoice()
     {
 
-        if(!Auth::check()) return redirect(action("OrderController@checkoutAuth"));
-
-        if(session()->has("adminOrder_id"))
-        {
-            if(!Auth::user()->can(Config::get('constants.INSERT_ORDER_ACCESS'))) return redirect(action("HomeController@error403"));
-            $user_id = session()->get("customer_id");
-            $user = User::FindOrFail($user_id);
-            $order = Order::all()->where("user_id",$user->id)->where("orderstatus_id" , Config::get("constants.ORDER_STATUS_OPEN_BY_ADMIN"))->first();
-        }else
-        {
-            $order = Order::all()->where("user_id",Auth::user()->id)->where("orderstatus_id" , Config::get("constants.ORDER_STATUS_OPEN"))->first();
-        }
-
-        $orderproducts = $order->orderproducts->sortByDesc("created_at");
+        [$user, $order , $orderproducts] = $this->getUserOrder();
 
         $costCollection = collect();
         foreach ($orderproducts as $orderproduct)
@@ -985,7 +1003,7 @@ class OrderController extends Controller
         $orderCost = $orderCostArray["rawCostWithDiscount"] + $orderCostArray["rawCostWithoutDiscount"];
         $user = $order->user ;
 
-        $todayDate = $this->helper->convertDate(Carbon::now()->toDateTimeString() , "toJalali" );
+        $todayDate = $this->convertDate(Carbon::now()->toDateTimeString() , "toJalali" );
         return view("order.checkout.invoice" , compact("orderproducts" , "orderCost"  , 'costCollection' , 'user' , 'todayDate'));
 
 
@@ -999,40 +1017,33 @@ class OrderController extends Controller
      */
     public function checkoutPayment()
     {
-        $setting = Websitesetting::where("version" , 1)->get()->first();
-        $setting = json_decode($setting->setting);
-        Meta::set('title', substr("تخته خاک|پرداخت" , 0 , Config::get("constants.META_TITLE_LIMIT")));
-        Meta::set('keywords', substr($setting->site->seo->homepage->metaKeywords, 0 , Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
-        Meta::set('description', substr($setting->site->seo->homepage->metaDescription , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
-        Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $setting->site->siteLogo ]));
 
-        if(session()->has("couponMessageSuccess")) session()->flash('success', session()->pull("couponMessageSuccess"));
-        elseif(session()->has("couponMessageError")) session()->flash('error', session()->pull("couponMessageError"));
-        elseif(session()->has("couponMessageInfo")) session()->flash('info', session()->pull("couponMessageInfo"));
+        Meta::set('title', substr("تخته خاک|پرداخت" , 0 , Config::get("constants.META_TITLE_LIMIT")));
+        Meta::set('keywords', substr($this->setting->site->seo->homepage->metaKeywords, 0 , Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
+        Meta::set('description', substr($this->setting->site->seo->homepage->metaDescription , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
+        Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
+
+        if(session()->has("couponMessageSuccess"))
+            session()->flash('success', session()->pull("couponMessageSuccess"));
+        elseif(session()->has("couponMessageError"))
+            session()->flash('error', session()->pull("couponMessageError"));
+        elseif(session()->has("couponMessageInfo"))
+            session()->flash('info', session()->pull("couponMessageInfo"));
 
         $previousPath = url()->previous();
         if(strcmp($previousPath , action("OrderController@checkoutReview"))==0
             || strcmp($previousPath , action("OrderController@checkoutPayment"))==0)
         {
-            if(!Auth::check()) return redirect(action("OrderController@checkoutAuth"));
+            if(!Auth::check())
+                return redirect(action("OrderController@checkoutAuth"));
 
             //read OrderController@checkoutReview
-            if(session()->has("adminOrder_id"))
-            {
-                if(!Auth::user()->can(Config::get('constants.INSERT_ORDER_ACCESS'))) return redirect(action("HomeController@error403"));
-                $user_id = session()->get("customer_id");
-                $user = User::FindOrFail($user_id);
-                $order = Order::all()->where("user_id",$user->id)->where("orderstatus_id" , Config::get("constants.ORDER_STATUS_OPEN_BY_ADMIN"))->first();
-            }else
-            {
-                $order = Order::all()->where("user_id",Auth::user()->id)->where("orderstatus_id" , Config::get("constants.ORDER_STATUS_OPEN"))->first();
-            }
+            [$user, $order , $orderproducts] = $this->getUserOrder();
 
-            if($order->orderproducts->isNotEmpty())
+            if($orderproducts->isNotEmpty())
             {
                 $gateways = Transactiongateway::all()->where("enable",1)->sortBy("order")->pluck("displayName" , "name");
 
-                $orderproducts = $order->orderproducts->sortByDesc("created_at");
                 $this->renewOrderproducs($orderproducts);
 
                 $renewedOrder = Order::where("id" , $order->id)->get()->first();
@@ -1085,6 +1096,7 @@ class OrderController extends Controller
     public function verifyPayment(Request $request)
     {
         $sendSMS = true;
+        $user = Auth::user();
         if(Input::has('Authority') && Input::has('Status') )
         {    // it is an online transaction verification
             $result["isAdminOrder"] = false;
@@ -1103,7 +1115,7 @@ class OrderController extends Controller
                         if(!in_array($order->coupon->id, $orderproduct->product->coupons->pluck('id')->toArray()))
                         {
                             $hasCoupon = false;
-                            $parentsArray = $orderproduct->product->parents;
+                            $parentsArray = $this->makeParentArray($orderproduct->product);
                             foreach ($parentsArray as $parent)
                             {
                                 if(in_array($order->coupon->id, $parent->coupons->pluck('id')->toArray()))
@@ -1138,7 +1150,8 @@ class OrderController extends Controller
 //                $result["Status"]="success";
 //                $result["RefID"] = "mohamad2";
 //            }
-            if(!isset($result)) exit("پاسخی از سایت درگاه پرداخت دریافت نشد!") ;
+            if(!isset($result))
+                exit("پاسخی از سایت درگاه پرداخت دریافت نشد!") ;
             if(strcmp(array_get($result,"Status"),'success')==0)
             {
                 if($order->orderstatus_id == Config::get("constants.ORDER_STATUS_OPEN"))
@@ -1157,12 +1170,15 @@ class OrderController extends Controller
                 $order->orderstatus_id = Config::get("constants.ORDER_STATUS_CLOSED");
                 if($transaction->cost < (int)$order->totalCost() )
                 {
-                    if((int)$order->totalPaidCost() < (int)$order->totalCost()) $order->paymentstatus_id = Config::get("constants.PAYMENT_STATUS_INDEBTED");
+                    if((int)$order->totalPaidCost() < (int)$order->totalCost())
+                        $order->paymentstatus_id = Config::get("constants.PAYMENT_STATUS_INDEBTED");
                 }
                 $order->timestamps = false;
                 $order->completed_at = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran');
-                if($order->update()) $result = array_add($result , "saveOrder" , 1);
-                else $result = array_add($result , "saveOrder" , 0);
+                if($order->update())
+                    $result = array_add($result , "saveOrder" , 1);
+                else
+                    $result = array_add($result , "saveOrder" , 0);
                 $order->timestamps = true;
                 $orderproducts = $order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->get();
 
@@ -1254,7 +1270,7 @@ class OrderController extends Controller
                                     }
                                     foreach ($orderproduct->attributevalues as $value) {
                                         if ($orderproduct->product->hasParents()) {
-                                            $myParent = $orderproduct->product->parents;
+                                            $myParent = $this->makeParentArray($orderproduct->product);
                                             $myParent = end($myParent);
                                             $attributevalue = $myParent->attributevalues->where("id", $value->id);
                                         }
@@ -1309,7 +1325,7 @@ class OrderController extends Controller
                         if(!in_array($order->coupon->id, $orderproduct->product->coupons->pluck('id')->toArray()))
                         {
                             $hasCoupon = false;
-                            $parentsArray = $orderproduct->product->parents;
+                            $parentsArray = $this->makeParentArray($orderproduct->product);
                             foreach ($parentsArray as $parent)
                             {
                                 if(in_array($order->coupon->id, $parent->coupons->pluck('id')->toArray()))
@@ -1398,8 +1414,10 @@ class OrderController extends Controller
                     }
                     $order->timestamps = false;
                     $order->completed_at = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran');
-                    if($order->update()) $result = array_add($result , "saveOrder" , 1);
-                    else $result = array_add($result , "saveOrder" , 0);
+                    if($order->update())
+                        $result = array_add($result , "saveOrder" , 1);
+                    else
+                        $result = array_add($result , "saveOrder" , 0);
                     $order->timestamps = true;
                     $orderproducts = $order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->get();
 
@@ -1421,7 +1439,8 @@ class OrderController extends Controller
                                 $bons = $grandParent->bons->where("name" , $bonName)->where("isEnable" , 1);
                             }
                         }
-                        if(in_array($simpleProduct->id , $checkedProducts)) continue;
+                        if(in_array($simpleProduct->id , $checkedProducts))
+                            continue;
                         if($bons->isNotEmpty()) {
                             $bon = $bons->first();
                             $bonPlus = $bon->pivot->bonPlus;
@@ -1481,7 +1500,7 @@ class OrderController extends Controller
                                     }
                                     foreach ($orderproduct->attributevalues as $value) {
                                         if ($orderproduct->product->hasParents()) {
-                                            $myParent = $orderproduct->product->parents;
+                                            $myParent = $this->makeParentArray($orderproduct->product);
                                             $myParent = end($myParent);
                                             $attributevalue = $myParent->attributevalues->where("id", $value->id);
                                         }
@@ -1519,7 +1538,7 @@ class OrderController extends Controller
             $result = array();
             if(session()->has("adminOrder_id"))
             {
-                if(!Auth::user()->can(Config::get('constants.INSERT_ORDER_ACCESS'))) return redirect(action("HomeController@error403"));
+                if(!$user->can(Config::get('constants.INSERT_ORDER_ACCESS'))) return redirect(action("HomeController@error403"));
                 $result["isAdminOrder"] = true;
                 $order_id = session()->get("adminOrder_id");
                 $result["customer_firstName"] = session()->get("customer_firstName");
@@ -1529,14 +1548,15 @@ class OrderController extends Controller
                 session()->forget("customer_firstName");
                 session()->forget("customer_lastName");
                 $order = Order::FindorFail($order_id);
-            }else
+            }
+            else
             {
                 $result["isAdminOrder"] = false;
                 $order_id = session()->get("order_id");
                 session()->forget("order_id");
                 $order = Order::FindorFail($order_id);
                 if($order->orderstatus_id != Config::get("constants.ORDER_STATUS_OPEN")) return redirect(action("HomeController@error403"));
-                if($order->user->id != Auth::user()->id) return redirect(action("HomeController@error403"));
+                if($order->user->id != $user->id) return redirect(action("HomeController@error403"));
             }
 
             if($order->orderproducts->isEmpty())  return redirect(action("OrderController@checkoutReview"));
@@ -1559,7 +1579,7 @@ class OrderController extends Controller
                             if(!in_array($order->coupon->id, $orderproduct->product->coupons->pluck('id')->toArray()))
                             {
                                 $hasCoupon = false;
-                                $parentsArray = $orderproduct->product->parents;
+                                $parentsArray = $this->makeParentArray($orderproduct->product);
                                 foreach ($parentsArray as $parent)
                                 {
                                     if(in_array($order->coupon->id, $parent->coupons->pluck('id')->toArray()))
@@ -1658,44 +1678,11 @@ class OrderController extends Controller
         /**
          * Sending SMS to Ordoo 97 customers
          */
-            if($sendSMS && isset($order))
-            {
-                if($order->orderproducts()->whereHas("product" ,function ($q){
-                    $q->whereIn("product_id" , Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT"))
-                        ->orwhereIn("product_id" , Config::get("constants.ORDOO_HOZOORI_NOROOZ_97_PRODUCT"));
-                })->get()->isNotEmpty())
-                {
-                    if(isset($order->user_id))
-                    {
-                        $user = $order->user;
-                        if(isset($user->gender_id))
-                        {
-                            if($user->gender->name=="خانم")
-                                $gender = "خانم ";
-                            elseif($user->gender->name=="آقا")
-                                $gender = "آقای ";
-                            else
-                                $gender = "";
-                        }else{
-                            $gender = "";
-                        }
-
-                        $messageCore = "در کانال اختصاصی اردوطلایی عضو بشید و تا قبل از اردو از خدمات آن بهره ببرید."."\n"."- این کانال فقط مخصوص بچه های اردوطلایی هست."."\n"."https://t.me/joinchat/AAAAAEUjS73Z3ghfuX7LZA";
-                        $message = "سلام ".$gender.$user->getfullName()."\n".$messageCore;
-                        $mobiles = [ltrim($user->mobile, '0')];
-                        $smsInfo = array();
-                        $smsInfo["message"] = $message;
-                        $smsInfo["to"] = $mobiles;
-                        $smsInfo["from"] = getenv("SMS_PROVIDER_DEFAULT_NUMBER");
-                        $response = $this->helper->medianaSendSMS($smsInfo);
-
-                        $messageCore = "لطفا با مراجعه به آدرس زیر اطلاعات خود را برای شرکت در اردو تکمیل نمایید و یا در صورت تکمیل بودن ، اطلاعات خود را تایید کنید."."\n"."https://k96.ir/user/info"."\n"."تخته خاک";
-                        $message = "سلام ".$gender.$user->getfullName()."\n".$messageCore;
-                        $smsInfo["message"] = $message;
-                        $response = $this->helper->medianaSendSMS($smsInfo);
-                    }
-                }
-            }
+        if($sendSMS && isset($order))
+        {
+            $user = $order->user;
+            $user->notify(new InvoicePaid($order));
+        }
 
         return view('order.checkout.verification',compact('result')) ;
         //'Status'(index) going to be 'success', 'error' or 'canceled'
@@ -1710,17 +1697,20 @@ class OrderController extends Controller
     public function submitCoupon(SubmitCouponRequest $request){
         $couponCode = $request->coupon;
         $coupon = Coupon::all()->where("code" , $couponCode)->first();
+        $user = Auth::user();
         if(isset($coupon)){
             if(session()->has("adminOrder_id"))
             {
-                if(!Auth::user()->can(Config::get('constants.INSERT_ORDER_ACCESS'))) return redirect(action("HomeController@error403"));
+                if(!$user->can(Config::get('constants.INSERT_ORDER_ACCESS')))
+                    return redirect(action("HomeController@error403"));
                 $order_id = session()->get("adminOrder_id");
                 $order = Order::FindorFail($order_id);
             }else
             {
                 $order_id = session()->get("order_id");
                 $order = Order::where("id" , $order_id)->get()->first() ;
-                if($order->user->id != Auth::user()->id ) return redirect(action("HomeController@error403"));
+                if($order->user->id != $user->id )
+                    return redirect(action("HomeController@error403"));
             }
 
             $validateCoupon = $coupon->validateCoupon();
@@ -1818,16 +1808,19 @@ class OrderController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function removeCoupon(){
+        $user = Auth::user();
         if(session()->has("adminOrder_id"))
         {
-            if(!Auth::user()->can(Config::get('constants.INSERT_ORDER_ACCESS'))) return redirect(action("HomeController@error403"));
+            if(!$user->can(Config::get('constants.INSERT_ORDER_ACCESS')))
+                return redirect(action("HomeController@error403"));
             $order_id = session()->get("adminOrder_id");
             $order = Order::FindorFail($order_id);
         }else
         {
             $order_id = session()->get("order_id");
             $order = Order::FindorFail($order_id);
-            if($order->user->id != Auth::user()->id) return redirect(action("HomeController@error403"));
+            if($order->user->id != $user->id)
+                return redirect(action("HomeController@error403"));
         }
 
         if(isset($order->coupon->id)){
@@ -1928,7 +1921,8 @@ class OrderController extends Controller
     /**
      * Detach orderproducts from their order
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
+     * @return Response
      */
     public function detachOrderproduct(Request $request)
     {
@@ -2085,7 +2079,10 @@ class OrderController extends Controller
     /**
      * Exchange some order products
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Order $order
+     * @param  \Illuminate\Http\Request $request
+     * @param TransactionController $transactionController
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function exchangeOrderproduct(Order $order , Request $request , TransactionController $transactionController)
     {
@@ -2130,7 +2127,7 @@ class OrderController extends Controller
         {
             $done = true;
             $request->offsetSet("order_id" , $order->id);
-            $transactionRequest =  new \App\Http\Requests\InsertTransactionRequest();
+            $transactionRequest =  new InsertTransactionRequest();
             $transactionRequest->offsetSet("order_id" , $order->id);
             $cost = $request->get("cost");
             if($request->has("cost")) $transactionRequest->offsetSet("cost" , -$cost);
@@ -2143,8 +2140,10 @@ class OrderController extends Controller
             if(strlen( preg_replace('/\s+/', '',$request->get("managerComment"))) != 0  )
                 $transactionRequest->offsetSet("managerComment" , $request->get("managerComment"));
             $transactionRequest->offsetSet("destinationBankAccount_id" , 1);
-            if($request->has("paymentmethod_id")) $transactionRequest->offsetSet("paymentmethod_id" , $request->get("paymentmethod_id"));
-            if($request->has("transactionstatus_id")) $transactionRequest->offsetSet("transactionstatus_id" , $request->get("transactionstatus_id"));
+            if($request->has("paymentmethod_id"))
+                $transactionRequest->offsetSet("paymentmethod_id" , $request->get("paymentmethod_id"));
+            if($request->has("transactionstatus_id"))
+                $transactionRequest->offsetSet("transactionstatus_id" , $request->get("transactionstatus_id"));
 
             $transactionController->store($transactionRequest);
             session()->forget("success");

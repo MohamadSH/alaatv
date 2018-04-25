@@ -94,6 +94,8 @@ class RouteServiceProvider extends ServiceProvider
                     $product->load('attributeset');
                if($product->producttype_id == Config::get("constants.PRODUCT_TYPE_SELECTABLE"))
                    $product->load('children');
+               if (!$product->relationLoaded('bons'))
+                   $product->load('bons');
                return $product;
             });
 

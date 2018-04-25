@@ -3,7 +3,10 @@
 namespace App\Providers;
 
 
+use App\Productfiletype;
 use App\Websitesetting;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
@@ -56,12 +59,20 @@ class AppServiceProvider extends ServiceProvider
         //try catch For migration
         try {
             if(Schema::hasTable('websitesettings')) {
-                $setting = Websitesetting::where("version" , 1)->get()->first();
+                $key="AppServiceProvider:websitesettings";
+
+                $setting  = Cache::remember($key,Config::get("constants.CACHE_600"),function () {
+                    return Websitesetting::where("version" , 1)->get()->first();
+                });
+
                 $wSetting = json_decode($setting->setting);
                 view()->share('wSetting', $wSetting);
                 view()->share('setting', $setting);
                 if(isset($wSetting->site->name))
                     Config::set("constants.SITE_NAME" , $wSetting->site->name);
+                $this->app->singleton('setting', function () use ($setting){
+                    return $setting;
+                });
             }
 
             if(Schema::hasTable('bons')) {
@@ -214,7 +225,7 @@ class AppServiceProvider extends ServiceProvider
                     if($discounttypes->where("name" , "cost")->isNotEmpty())
                         Config::set("constants.DISCOUNT_TYPE_COST" , $discounttypes->where("name" , "cost")->first()->id);
                 }
-                //                //=============================DISCOUNT TYPES
+//                =============================DISCOUNT TYPES
                 if (Schema::hasTable('discounttypes'))
                 {
                     $discounttypes = \App\Discounttype::all();
@@ -222,6 +233,15 @@ class AppServiceProvider extends ServiceProvider
                         Config::set("constants.DISCOUNT_TYPE_PERCENTAGE" , $discounttypes->where("name" , "percentage")->first()->id);
                     if($discounttypes->where("name" , "cost")->isNotEmpty())
                         Config::set("constants.DISCOUNT_TYPE_COST" , $discounttypes->where("name" , "cost")->first()->id);
+                }
+//                =============================PRODUCT FILE TYPES
+                if (Schema::hasTable('productfiletypes'))
+                {
+                    $productfiletypes = Productfiletype::all();
+                    if($productfiletypes->where("name" , "video")->isNotEmpty())
+                        Config::set("constants.PRODUCT_FILE_TYPE_VIDEO" , $productfiletypes->where("name" , "video")->first()->id);
+                    if($productfiletypes->where("name" , "pamphlet")->isNotEmpty())
+                        Config::set("constants.PRODUCT_FILE_TYPE_PAMPHLET" , $productfiletypes->where("name" , "pamphlet")->first()->id);
                 }
 
             }
