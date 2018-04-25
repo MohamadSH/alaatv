@@ -368,74 +368,76 @@ class EducationalContentController extends Controller
             Meta::set('description', substr($educationalContent->description, 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
             Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
 
-            switch($educationalContent->template->name)
-            {
-                case "video1":
-                    $files = collect();
-                    $videoSources = collect();
-//                    $time_now = date('Hi');
-                    $file = $educationalContent->files->where("pivot.label" , "hd")->first() ;
-                    if(isset($file))
-                    {
-//                        $download_link_postfix = md5($file->name).$time_now;
-//                        $download_link_postfix = str_replace("+","-",$download_link_postfix);
-//                        $download_link_postfix = str_replace("/","_",$download_link_postfix);
-//                        $download_link_postfix = str_replace("=","",$download_link_postfix);
-//                        $videoSources->put( "hd" , ["src"=>$file->name."?md5=".$download_link_postfix , "caption"=>$file->pivot->caption]) ;
-                        $videoSources->put( "hd" , ["src"=>$file->name , "caption"=>$file->pivot->caption]) ;
-                    }
-
-                    $file = $educationalContent->files->where("pivot.label" , "hq")->first() ;
-                    if(isset($file))
-                    {
-//                        $download_link_postfix = md5($file->name).$time_now;
-//                        $download_link_postfix = str_replace("+","-",$download_link_postfix);
-//                        $download_link_postfix = str_replace("/","_",$download_link_postfix);
-//                        $download_link_postfix = str_replace("=","",$download_link_postfix);
-//                        $videoSources->put( "hq" , ["src"=>$file->name."?md5=".$download_link_postfix , "caption"=>$file->pivot->caption]) ;
-                        $videoSources->put( "hq" , ["src"=>$file->name , "caption"=>$file->pivot->caption]) ;
-                    }
-
-                    $file = $educationalContent->files->where("pivot.label" , "240p")->first() ;
-                    if(isset($file))
-                    {
-//                        $download_link_postfix = md5($file->name).$time_now;
-//                        $download_link_postfix = str_replace("+","-",$download_link_postfix);
-//                        $download_link_postfix = str_replace("/","_",$download_link_postfix);
-//                        $download_link_postfix = str_replace("=","",$download_link_postfix);
-//                        $videoSources->put( "240p" , ["src"=>$file->name."?md5=".$download_link_postfix ,  "caption"=>$file->pivot->caption]) ;
-                        $videoSources->put( "240p" , ["src"=>$file->name ,  "caption"=>$file->pivot->caption]) ;
-                    }
-                    $file = $educationalContent->files->where("pivot.label" , "thumbnail")->first();
-                    if(isset($file))
-                        $files->put("thumbnail" , $file->name);
-                    $files->put("videoSource" , $videoSources);
-
-                    $contenSets = $educationalContent->contentsets->where("pivot.isDefault" , 1);
-                    if($contenSets->isNotEmpty())
-                    {
-                        $contentSet = $contenSets->first();
-                        $sameContents =  $contentSet->educationalcontents ;
-                        $contentsWithSameSet = collect();
-                        foreach ($sameContents as $content)
+            if (isset($educationalContent->template)) {
+                switch($educationalContent->template->name)
+                {
+                    case "video1":
+                        $files = collect();
+                        $videoSources = collect();
+    //                    $time_now = date('Hi');
+                        $file = $educationalContent->files->where("pivot.label" , "hd")->first() ;
+                        if(isset($file))
                         {
-                            $file = $content->files->where("pivot.label" , "thumbnail")->first();
-                            if(isset($file)) $thumbnailFile = $file->name;
-                            else $thumbnailFile = "" ;
-
-                            $contentTypes = $content->contenttypes->pluck("name")->toArray();
-                            if(in_array("video" , $contentTypes ))
-                                $myContentType = "video";
-                            elseif(in_array("pamphlet" , $contentTypes ))
-                                $myContentType = "pamphlet";
-
-                            $contentsWithSameSet->push(["type"=> $myContentType , "content"=>$content , "thumbnail"=>$thumbnailFile]);
+    //                        $download_link_postfix = md5($file->name).$time_now;
+    //                        $download_link_postfix = str_replace("+","-",$download_link_postfix);
+    //                        $download_link_postfix = str_replace("/","_",$download_link_postfix);
+    //                        $download_link_postfix = str_replace("=","",$download_link_postfix);
+    //                        $videoSources->put( "hd" , ["src"=>$file->name."?md5=".$download_link_postfix , "caption"=>$file->pivot->caption]) ;
+                            $videoSources->put( "hd" , ["src"=>$file->name , "caption"=>$file->pivot->caption]) ;
                         }
-                    }
 
-                    break;
-                default:
-                    break;
+                        $file = $educationalContent->files->where("pivot.label" , "hq")->first() ;
+                        if(isset($file))
+                        {
+    //                        $download_link_postfix = md5($file->name).$time_now;
+    //                        $download_link_postfix = str_replace("+","-",$download_link_postfix);
+    //                        $download_link_postfix = str_replace("/","_",$download_link_postfix);
+    //                        $download_link_postfix = str_replace("=","",$download_link_postfix);
+    //                        $videoSources->put( "hq" , ["src"=>$file->name."?md5=".$download_link_postfix , "caption"=>$file->pivot->caption]) ;
+                            $videoSources->put( "hq" , ["src"=>$file->name , "caption"=>$file->pivot->caption]) ;
+                        }
+
+                        $file = $educationalContent->files->where("pivot.label" , "240p")->first() ;
+                        if(isset($file))
+                        {
+    //                        $download_link_postfix = md5($file->name).$time_now;
+    //                        $download_link_postfix = str_replace("+","-",$download_link_postfix);
+    //                        $download_link_postfix = str_replace("/","_",$download_link_postfix);
+    //                        $download_link_postfix = str_replace("=","",$download_link_postfix);
+    //                        $videoSources->put( "240p" , ["src"=>$file->name."?md5=".$download_link_postfix ,  "caption"=>$file->pivot->caption]) ;
+                            $videoSources->put( "240p" , ["src"=>$file->name ,  "caption"=>$file->pivot->caption]) ;
+                        }
+                        $file = $educationalContent->files->where("pivot.label" , "thumbnail")->first();
+                        if(isset($file))
+                            $files->put("thumbnail" , $file->name);
+                        $files->put("videoSource" , $videoSources);
+
+                        $contenSets = $educationalContent->contentsets->where("pivot.isDefault" , 1);
+                        if($contenSets->isNotEmpty())
+                        {
+                            $contentSet = $contenSets->first();
+                            $sameContents =  $contentSet->educationalcontents ;
+                            $contentsWithSameSet = collect();
+                            foreach ($sameContents as $content)
+                            {
+                                $file = $content->files->where("pivot.label" , "thumbnail")->first();
+                                if(isset($file)) $thumbnailFile = $file->name;
+                                else $thumbnailFile = "" ;
+
+                                $contentTypes = $content->contenttypes->pluck("name")->toArray();
+                                if(in_array("video" , $contentTypes ))
+                                    $myContentType = "video";
+                                elseif(in_array("pamphlet" , $contentTypes ))
+                                    $myContentType = "pamphlet";
+
+                                $contentsWithSameSet->push(["type"=> $myContentType , "content"=>$content , "thumbnail"=>$thumbnailFile]);
+                            }
+                        }
+
+                        break;
+                    default:
+                        break;
+                }
             }
             $response = $this->sendRequest(env("TAG_API_URL")."id/content/".$educationalContent->id,"GET");
             if($response["statusCode"] == 200){
