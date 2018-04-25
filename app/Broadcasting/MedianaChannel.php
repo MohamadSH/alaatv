@@ -78,11 +78,15 @@ class MedianaChannel
     {
         $optionalFields = array_filter([
 //            'time'    => data_get($message, 'sendAt'),
+//            'input_data' => data_get($message , 'input_data'),
+
         ]);
         $param = array_merge([
-            'to'         => json_encode([$to]),
-            'message'    => trim($message->content),
-            'op'         =>'send',
+            'to'           => json_encode([$to]),
+            'message'      => trim(data_get($message , 'content')),
+            'op'           =>'send',
+//            'pattern_code' => trim(data_get($message , 'pattern_code')),
+
         ], $optionalFields);
 
         if(isset($message->from))

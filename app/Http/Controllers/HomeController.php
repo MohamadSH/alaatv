@@ -39,6 +39,7 @@ use App\Relative;
 use App\Role;
 use App\Slideshow;
 use App\Traits\APIRequestCommon;
+use App\Traits\CharacterCommon;
 use App\Traits\DateCommon;
 use App\Traits\Helper;
 use App\Traits\ProductCommon;
@@ -76,6 +77,7 @@ class HomeController extends Controller
     use APIRequestCommon ;
     use ProductCommon;
     use DateCommon;
+    use CharacterCommon;
     /**
      * Create a new controller instance.
      *
@@ -409,7 +411,7 @@ class HomeController extends Controller
 //            $childContentTypes = Contenttype::whereHas("parents" , function ($q) {
 //                $q->where("name" , "exam") ;
 //            })->pluck("displayName" , "displayName")->toArray() ;
-            if(Request::ajax())
+            if(request()->ajax())
             {
                 return $this->response->setStatusCode(200)->setContent(["items"=>$items , "itemTypes"=>$itemTypes]);
             }
@@ -493,10 +495,19 @@ class HomeController extends Controller
          *  end of code
          */
 
-        $educationalContents = Educationalcontent::enable()->valid()->orderBy("validSince", "DESC")->take(10)->get();
+        $educationalContents = Educationalcontent::enable()
+            ->valid()
+            ->orderBy("validSince", "DESC")
+            ->take(10)
+            ->get();
         $educationalContentCollection = collect();
         foreach ($educationalContents as $educationalContent) {
-            $educationalContentCollection->push(["id" => $educationalContent->id, "displayName" => $educationalContent->getDisplayName(), "validSince_Jalali" => explode(" ", $educationalContent->validSince_Jalali())[0]]);
+            $educationalContentCollection
+                ->push([
+                    "id" => $educationalContent->id,
+                    "displayName" => $educationalContent->getDisplayName(),
+                    "validSince_Jalali" => explode(" ", $educationalContent->validSince_Jalali())[0]
+                ]);
         }
 
         return view('pages.dashboard1', compact('consultations', 'consultationCount', 'consultingQuestionCount', 'pageName', 'userCount', 'currentDay', 'currentMonth', 'currentYear', 'ordooRegisteredCount', 'girlsOrdooRegisteredCount', 'boysOrdooRegisteredCount', 'boysBlocks', 'girlsBlocks', 'slides', 'slideCounter', 'products', 'costCollection', 'slideDisk', 'educationalContents', 'educationalContentCollection'));
@@ -1752,255 +1763,6 @@ class HomeController extends Controller
     public function bot()
     {
         /**
-         *  Creating user accounts for Alaa teachers
-         */
-
-        $userteacher = array(
-            array('userid' => '2','userfirstname' => 'رضا','userlastname' => 'شامیزاده'),
-            array('userid' => '3','userfirstname' => 'روح الله','userlastname' => 'حاجی سلیمانی'),
-            array('userid' => '4','userfirstname' => 'محسن','userlastname' => 'شهریان'),
-            array('userid' => '5','userfirstname' => 'علیرضا','userlastname' => 'رمضانی'),
-            array('userid' => '6','userfirstname' => 'پدرام','userlastname' => 'علیمرادی'),
-            array('userid' => '7','userfirstname' => 'عبدالرضا','userlastname' => 'مرادی'),
-            array('userid' => '8','userfirstname' => 'علی اکبر','userlastname' => 'عزتی'),
-            array('userid' => '9','userfirstname' => 'مسعود','userlastname' => 'حدادی'),
-            array('userid' => '20','userfirstname' => 'محمدرضا','userlastname' => 'مقصودی'),
-            array('userid' => '97','userfirstname' => 'محمد علی','userlastname' => 'امینی راد'),
-            array('userid' => '103','userfirstname' => 'مهدی','userlastname' => 'تفتی'),
-            array('userid' => '246','userfirstname' => '','userlastname' => 'جعفری'),
-            array('userid' => '274','userfirstname' => 'گروه آموزشی','userlastname' => ' '),
-            array('userid' => '307','userfirstname' => 'حمید','userlastname' => 'فدایی فرد'),
-            array('userid' => '308','userfirstname' => 'کیاوش','userlastname' => 'فراهانی'),
-            array('userid' => '310','userfirstname' => 'مصطفی','userlastname' => 'جعفری نژاد'),
-            array('userid' => '311','userfirstname' => 'رفیع','userlastname' => 'رفیعی'),
-            array('userid' => '313','userfirstname' => 'علی','userlastname' => 'صدری'),
-            array('userid' => '314','userfirstname' => 'امید','userlastname' => 'زاهدی'),
-            array('userid' => '315','userfirstname' => 'مشاوران دبیرستان','userlastname' => ''),
-            array('userid' => '318','userfirstname' => 'محسن','userlastname' => 'معینی'),
-            array('userid' => '319','userfirstname' => 'میلاد','userlastname' => 'ناصح زاده'),
-            array('userid' => '320','userfirstname' => 'محمد','userlastname' => 'پازوکی'),
-            array('userid' => '321','userfirstname' => '','userlastname' => 'جهانبخش'),
-            array('userid' => '322','userfirstname' => 'حسن','userlastname' => 'مرصعی'),
-            array('userid' => '323','userfirstname' => '','userlastname' => 'بختیاری'),
-            array('userid' => '324','userfirstname' => 'علی نقی','userlastname' => 'طباطبایی'),
-            array('userid' => '325','userfirstname' => 'وحید','userlastname' => 'کبریایی'),
-            array('userid' => '326','userfirstname' => '','userlastname' => 'درویش'),
-            array('userid' => '363','userfirstname' => '','userlastname' => 'صابری'),
-            array('userid' => '364','userfirstname' => 'دکتر','userlastname' => 'ارشی'),
-            array('userid' => '366','userfirstname' => 'جعفر','userlastname' => 'رنجبرزاده'),
-            array('userid' => '367','userfirstname' => 'محمد رضا','userlastname' => 'آقاجانی'),
-            array('userid' => '478','userfirstname' => 'محمد رضا ','userlastname' => 'حسینی فرد'),
-            array('userid' => '533','userfirstname' => 'محمد','userlastname' => 'صادقی'),
-            array('userid' => '534','userfirstname' => 'باقر','userlastname' => 'رضا خانی'),
-            array('userid' => '535','userfirstname' => 'معین','userlastname' => 'کریمی'),
-            array('userid' => '536','userfirstname' => 'حسین','userlastname' => 'کرد'),
-            array('userid' => '537','userfirstname' => '','userlastname' => 'دورانی'),
-            array('userid' => '965','userfirstname' => 'کاظم','userlastname' => 'کاظمی'),
-            array('userid' => '1427','userfirstname' => '','userlastname' => 'کازرانیان'),
-            array('userid' => '1428','userfirstname' => '','userlastname' => 'شاه محمدی'),
-            array('userid' => '1431','userfirstname' => 'محمد حسین','userlastname' => 'شکیباییان'),
-            array('userid' => '2875','userfirstname' => 'یاشار','userlastname' => 'بهمند'),
-            array('userid' => '3172','userfirstname' => 'خسرو','userlastname' => 'محمد زاده'),
-            array('userid' => '3895','userfirstname' => 'میثم','userlastname' => 'حسین خانی'),
-            array('userid' => '3906','userfirstname' => 'پوریا','userlastname' => 'رحیمی'),
-            array('userid' => '3971','userfirstname' => '','userlastname' => 'نوری'),
-            array('userid' => '3972','userfirstname' => 'رضا','userlastname' => 'آقاجانی'),
-            array('userid' => '3973','userfirstname' => 'مهدی','userlastname' => 'امینی راد'),
-            array('userid' => '3974','userfirstname' => '','userlastname' => 'رخ صفت'),
-            array('userid' => '3975','userfirstname' => 'بهمن','userlastname' => 'مؤذنی پور'),
-            array('userid' => '3976','userfirstname' => 'محمد صادق','userlastname' => 'ثابتی'),
-            array('userid' => '3977','userfirstname' => 'مهدی','userlastname' => 'جلادتی'),
-            array('userid' => '3979','userfirstname' => 'داریوش','userlastname' => 'راوش'),
-            array('userid' => '3980','userfirstname' => 'پیمان','userlastname' => 'طلوعی'),
-            array('userid' => '3993','userfirstname' => 'محمد حسین','userlastname' => 'انوشه'),
-            array('userid' => '3998','userfirstname' => 'عباس','userlastname' => 'راستی بروجنی'),
-            array('userid' => '4012','userfirstname' => 'جواد','userlastname' => 'نایب کبیر'),
-            array('userid' => '4019','userfirstname' => 'عمار','userlastname' => ' تاج بخش'),
-            array('userid' => '4020','userfirstname' => 'سروش','userlastname' => 'معینی'),
-            array('userid' => '4021','userfirstname' => '','userlastname' => 'نادریان'),
-            array('userid' => '4022','userfirstname' => 'شهروز','userlastname' => 'رحیمی'),
-            array('userid' => '4023','userfirstname' => 'سیروس','userlastname' => 'نصیری'),
-            array('userid' => '4030','userfirstname' => 'مهدی','userlastname' => 'صنیعی طهرانی'),
-            array('userid' => '4034','userfirstname' => 'هامون','userlastname' => 'سبطی'),
-            array('userid' => '4035','userfirstname' => 'حامد','userlastname' => 'پویان نظر'),
-            array('userid' => '4036','userfirstname' => 'فرشید','userlastname' => 'داداشی'),
-            array('userid' => '4037','userfirstname' => 'ناصر','userlastname' => 'حشمتی'),
-            array('userid' => '4038','userfirstname' => 'محمدامین','userlastname' => 'نباخته'),
-            array('userid' => '4039','userfirstname' => 'جلال','userlastname' => 'موقاری'),
-            array('userid' => '4040','userfirstname' => 'محسن','userlastname' => ' آهویی'),
-            array('userid' => '4041','userfirstname' => 'مهدی','userlastname' => 'ناصر شریعت'),
-            array('userid' => '4043','userfirstname' => 'سید حسام الدین','userlastname' => 'جلالی'),
-            array('userid' => '4046','userfirstname' => 'ابوالفضل','userlastname' => 'جعفری')
-        );
-        $accountPasswords = array();
-        $accounts = collect();
-        $accountCounterSuccess = 0;
-        $accountCounterFailed = 0;
-        dump("Available names: ".count($userteacher));
-        foreach ($userteacher as $teacher)
-        {
-            $info = [];
-            if(strlen($teacher["userfirstname"]) > 0) $info["firstName"] = $teacher["userfirstname"];
-            if(strlen($teacher["userlastname"]) > 0) $info["lastName"] = $teacher["userlastname"];
-            $info["mobile"] = "09991234567";
-            $info["nationalCode"] = "0000000000";
-            $password = rand(999999999 , 9999999999);
-            array_push($accountPasswords , $password);
-            $info["password"] = bcrypt($password);
-            // determining major
-            switch ($teacher["userid"])
-            {
-                case 2:
-                    $info["major_id"] = 1;
-                    break;
-                case 3:
-                    $info["major_id"] = 1;
-                    break;
-                case 4:
-                    $info["major_id"] = 1;
-                    break;
-                case 6:
-                    $info["major_id"] = 1;
-                    break;
-                case 7:
-                    $info["major_id"] = 3;
-                    break;
-                case 9:
-                    $info["major_id"] = 2;
-                    break;
-                case 20:
-                    $info["major_id"] = 1;
-                    break;
-                case 97:
-                    $info["major_id"] = 2;
-                    break;
-                case 103:
-                    $info["major_id"] = 3;
-                    break;
-                case 307:
-                    $info["major_id"] = 1;
-                    break;
-                case 310:
-                    $info["major_id"] = 1;
-                    break;
-                case 318:
-                    $info["major_id"] = 1;
-                    break;
-                case 319:
-                    $info["major_id"] = 3;
-                    break;
-                case 320:
-                    $info["major_id"] = 2;
-                    break;
-                case 324:
-                    $info["major_id"] = 3;
-                    break;
-                case 325:
-                    $info["major_id"] = 1;
-                    break;
-                case 364:
-                    $info["major_id"] = 2;
-                    break;
-                case 366:
-                    $info["major_id"] = 3;
-                    break;
-                case 478:
-                    $info["major_id"] = 1;
-                    break;
-                case 536:
-                    $info["major_id"] = 1;
-                    break;
-                case 2875:
-                    $info["major_id"] = 1;
-                    break;
-                case 3172:
-                    $info["major_id"] = 3;
-                    break;
-                case 3895:
-                    $info["major_id"] = 3;
-                    break;
-                case 3906:
-                    $info["major_id"] = 2;
-                    break;
-                case 3972:
-                    $info["major_id"] = 3;
-                    break;
-                case 3973:
-                    $info["major_id"] = 2;
-                    break;
-                case 3975:
-                    $info["major_id"] = 1;
-                    break;
-                case 3976:
-                    $info["major_id"] = 1;
-                    break;
-                case 3977:
-                    $info["major_id"] = 3;
-                    break;
-                case 3979:
-                    $info["major_id"] = 3;
-                    break;
-                case 3980:
-                    $info["major_id"] = 1;
-                    break;
-                case 3998:
-                    $info["major_id"] = 2;
-                    break;
-                case 4012:
-                    $info["major_id"] = 1;
-                    break;
-                case 4020:
-                    $info["major_id"] = 1;
-                    break;
-                case 4022:
-                    $info["major_id"] = 1;
-                    break;
-                case 4023:
-                    $info["major_id"] = 1;
-                    break;
-                case 4034:
-                    $info["major_id"] = 3;
-                    break;
-                case 4038:
-                    $info["major_id"] = 2;
-                    break;
-                case 4039:
-                    $info["major_id"] = 2;
-                    break;
-                case 4040:
-                    $info["major_id"] = 3;
-                    break;
-                case 4041:
-                    $info["major_id"] = 3;
-                    break;
-                case 4046:
-                    $info["major_id"] = 2;
-                    break;
-                default:
-                    break;
-            }
-            $account = new User();
-            $account->fill($info);
-            if($account->save())
-            {
-                $accountCounterSuccess++;
-                $accounts->push($account);
-            }
-            else
-            {
-                $accountCounterFailed++ ;
-            }
-        }
-
-        dump("Number of failed accounts: ".$accountCounterFailed);
-        dump("Number of successful accounts: ".$accountCounterSuccess);
-        dump("accounts:");
-        dump($accounts);
-        dump("passwords:");
-        dump($accountPasswords);
-        dd("done");
-
-        /**
          * Giving gift to users
 
         $carbon = new Carbon("2018-02-20 00:00:00");
@@ -2225,7 +1987,6 @@ class HomeController extends Controller
                         $grades = $item->grades->where("name" , "graduated")->pluck("description")->toArray() ;
                         if(!empty($grades))
                             $myTags = array_merge($myTags , $grades );
-                        // ToDo : author_id
                         switch ($item->id)
                         {
                             case 130:
@@ -2486,7 +2247,6 @@ class HomeController extends Controller
                         $q->where("name" , "exam");
                     });
                     $items = $items->get();
-                    //ToDo: tage pdf afzoode shavad
                     foreach ($items->where("tags" , null) as $item)
                     {
                         $myTags = [
@@ -2619,10 +2379,10 @@ class HomeController extends Controller
                                 $myTags = array_merge($myTags , ["رشته_ریاضی" , "رشته_تجربی"  ,"کنکور" , "شیمی" , 'مهدی_صنیعی_طهرانی'  ]);
                                 break;
                             case 104:
-                                $myTags = array_merge($myTags , ["رشته_ریاضی" , "رشته_تجربی"  , "رشته_انسانی" ,"کنکور" , "دین_و_زندگی" , 'جعفر_زنجبرزاده' ]);
+                                $myTags = array_merge($myTags , ["رشته_ریاضی" , "رشته_تجربی"  , "رشته_انسانی" ,"کنکور" , "دین_و_زندگی" , 'جعفر_رنجبرزاده' ]);
                                 break;
                             case 92:
-                                $myTags = array_merge($myTags , ["رشته_ریاضی" , "رشته_تجربی"  ,"کنکور" , "فیزیک" , 'دکتر_پیمان_طلوعی' ]);
+                                $myTags = array_merge($myTags , ["رشته_ریاضی" , "رشته_تجربی"  ,"کنکور" , "فیزیک" , 'پیمان_طلوعی' ]);
                                 break;
                             case 91:
                                 $myTags = array_merge($myTags , ["رشته_ریاضی" , "رشته_تجربی"  ,"کنکور" , "شیمی" , 'مهدی_صنیعی_طهرانی' ]);
@@ -2661,7 +2421,7 @@ class HomeController extends Controller
                                 $myTags = array_merge($myTags , ["رشته_ریاضی" , "رشته_تجربی"  , "رشته_انسانی" ,"کنکور" , "عربی" , 'محسن_آهویی' ]);
                                 break;
                             case 155:
-                                $myTags = array_merge($myTags , ["رشته_ریاضی" , "رشته_تجربی"  ,"کنکور" , "فیزیک" , 'دکتر_پیمان_طلوعی' ]);
+                                $myTags = array_merge($myTags , ["رشته_ریاضی" , "رشته_تجربی"  ,"کنکور" , "فیزیک" , 'پیمان_طلوعی' ]);
                                 break;
                             case 119:
                                 $myTags = array_merge($myTags , ["رشته_ریاضی"   ,"کنکور" , "تحلیلی" , 'محمد_صادق_ثابتی' ]);
