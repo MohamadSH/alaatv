@@ -16,17 +16,19 @@ Auth::routes();
 
 Route::get('c',"HomeController@search");
 Route::get( '/' , 'HomeController@index');
+Route::get( 'home' , 'HomeController@home');
 Route::get('404', 'HomeController@error404');
 Route::get('403', 'HomeController@error403');
 Route::get('500', 'HomeController@error500');
 Route::get('error', 'HomeController@errorPage');
-//Route::get('siteMap', 'HomeController@siteMap');
 Route::get('download', "HomeController@download");
-
+Route::get('aboutUs', 'HomeController@aboutUs');
+Route::get('contactUs', 'HomeController@contactUs');
+Route::get('rules', 'HomeController@rules');
 Route::get('articleList', 'ArticleController@showList');
-//Route::get('certificates', 'HomeController@certificates');
+Route::get('sitemap.xml', 'HomeController@siteMapXML');
+
 Route::resource('article', 'ArticleController');
-//Route::get('findTech', "UserController@findTech");
 Route::group(['middleware' => 'auth'], function()
 {
     Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
@@ -174,38 +176,39 @@ Route::group(['prefix' => 'checkout'], function () {
     });
 });
 
-Route::get('product/search', 'ProductController@search');
-Route::get('aboutUs', 'HomeController@aboutUs');
-Route::get('contactUs', 'HomeController@contactUs');
-Route::get('rules', 'HomeController@rules');
 Route::post('sendMail', 'HomeController@sendMail');
 
-Route::get('showPartial/{product}' , 'ProductController@showPartial');
+Route::get('product/search', 'ProductController@search');
 Route::resource('product', 'ProductController');
+Route::get('showPartial/{product}' , 'ProductController@showPartial');
 Route::post('refreshPrice/{product}' , 'ProductController@refreshPrice');
 
-Route::post('orderproduct/checkout' , 'OrderproductController@checkOutOrderproducts') ;
+Route::group(['prefix' => 'orderproduct'], function () {
+    Route::post('checkout' , 'OrderproductController@checkOutOrderproducts') ;
+});
 Route::resource('orderproduct', 'OrderproductController');
-
 
 Route::get('image/{category}/{w}/{h}/{filename}', [
     'as'   => 'image',
     'uses' => 'HomeController@getImage',
 ]);
 
-//Route::get('certificates', 'HomeController@certificates');
-Route::get('sitemap.xml', 'HomeController@siteMapXML');
+Route::resource('c', 'EducationalContentController', [
+    'except' => [
+        'index'
+    ]
+]);
 
-Route::resource('c', 'EducationalContentController', ['except' => [
-    'index'
-]]);
-Route::get('content' , 'EducationalContentController@index');
+Route::group(['prefix' => 'content'], function () {
+    Route::get('/' , 'EducationalContentController@index');
+    Route::get('search', 'EducationalContentController@search');
+    Route::get('create2', 'EducationalContentController@create2');
+});
 
-Route::get('content/search', 'EducationalContentController@search');
-Route::get('content/create2', 'EducationalContentController@create2');
-
-Route::get('landing/1' , 'ProductController@landing1') ;
-Route::get('landing/2' , 'ProductController@landing2') ;
+Route::group(['prefix' => 'landing'], function () {
+    Route::get('1' , 'ProductController@landing1') ;
+    Route::get('2' , 'ProductController@landing2') ;
+});
 
 /**
  *  SANATI SHARIF SYNC
@@ -218,12 +221,9 @@ Route::get( "copyvideofromremote" , "RemoteDataCopyController@copyVideo");
 Route::get( "copypamphletfromremote" , "RemoteDataCopyController@copyPamphlet");
 Route::get( "copydepartmentlessontotakhtekhak" , "SanatisharifmergeController@copyDepartmentlesson");
 Route::get( "copycontenttotakhtekhak" , "SanatisharifmergeController@copyContent");
-
 Route::get("ctag" , "EducationalContentController@retrieveTags");
-
 ROute::get("tagbot", "HomeController@tagbot");
-Route::get("/debug", 'HomeController@debug');
+Route::get("debug", 'HomeController@debug');
 
-/**
- * Tagging System
- */
+//Route::get('certificates', 'HomeController@certificates');
+//Route::get('findTech', "UserController@findTech");
