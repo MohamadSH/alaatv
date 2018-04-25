@@ -9,7 +9,7 @@
 @endsection
 
 @section("title")
-    <title>تخته خاک|پنل مشاور - انتخاب رشته</title>
+    <title>آلاء|پنل مشاور - انتخاب رشته</title>
 @endsection
 
 @section("pageBar")

@@ -50,8 +50,8 @@ License: You must have a valid license purchased only from themeforest(the above
 <div class="logo bg-font-dark">
     <a href="{{action("HomeController@index")}}">
         <img @if(isset($wSetting->site->siteLogo))src="{{route('image', ['category'=>'11','w'=>'135' , 'h'=>'67' ,  'filename' =>  $wSetting->site->siteLogo ])}}" @endif alt="" /> </a>
-    <h3 >تخته‌خاک - خدمات نوین آموزش</h3>
-    <h4>با نظارت مستقیم آلاء</h4>
+    <h3 >آلاء - خدمات نوین آموزش</h3>
+    <h4>مجری توسعه عدالت آموزشی</h4>
 </div>
 <!-- END LOGO -->
 <!-- BEGIN LOGIN -->
@@ -60,7 +60,7 @@ License: You must have a valid license purchased only from themeforest(the above
 @include("partials.loginForm" ,["withHeader"=>false])
     <!-- END LOGIN FORM -->
 </div>
-<div class="copyright"> Copyright © Alaa 2016 </div>
+<div class="copyright"> Copyright © Alaa 2017 </div>
 <!--[if lt IE 9]>
 <script src="/assets/global/plugins/respond.min.js"></script>
 <script src="/assets/global/plugins/excanvas.min.js"></script>

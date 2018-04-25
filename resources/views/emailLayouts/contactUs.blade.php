@@ -4,7 +4,7 @@
     <meta charset="utf-8">
 </head>
 <body style="direction: rtl;">
-<h2>تخته خاک - تماس با ما</h2>
+<h2>آلاء - تماس با ما</h2>
 
 <div >
     <ul>

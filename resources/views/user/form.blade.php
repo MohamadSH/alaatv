@@ -165,7 +165,7 @@
         <!-- BEGIN REGISTRATION FORM 2 -->
         <form  action="{{ action("Auth\RegisterController@register") }}" enctype="multipart/form-data" method="post" >
             {{ csrf_field() }}
-            <h2>عضویت در سایت تخته خاک</h2>
+            <h2>عضویت در سایت آلاء</h2>
             <p class="caption-subject bold uppercase">بعد از ثبت نام می توانید خدمات مختلف را ببینید و هر کدام را که خواستید سفارش بدید.</p>
             <div class="form-group col-md-6 {{ $errors->has('firstName') ? ' has-error' : '' }}" style="border-bottom: none !important;">
                 <label for="firstName" class="control-label visible-ie8 visible-ie9">نام</label>

@@ -9,7 +9,7 @@
 @endsection
 
 @section("title")
-    <title>تخته خاک|بازبینی سفارش</title>
+    <title>آلاء|بازبینی سفارش</title>
 @endsection
 
 @section("content")

@@ -14,7 +14,7 @@
  
 Auth::routes();
 
-//Route::get('search',"HomeController@search");
+Route::get('content',"HomeController@search");
 Route::get( '/' , 'HomeController@index');
 Route::get('404', 'HomeController@error404');
 Route::get('403', 'HomeController@error403');

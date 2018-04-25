@@ -20,7 +20,7 @@
 @endsection
 
 {{--@section('title')--}}
-    {{--<title>تخته خاک|تماس با ما</title>--}}
+    {{--<title>آلاء|تماس با ما</title>--}}
 {{--@endsection--}}
 
 @section("content")

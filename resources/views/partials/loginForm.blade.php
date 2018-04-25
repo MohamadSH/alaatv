@@ -1,4 +1,4 @@
-@if(isset($withHeader) && $withHeader)<h1 class="bold">ورود به سایت تخته خاک</h1>@endif
+@if(isset($withHeader) && $withHeader)<h1 class="bold">ورود به سایت آلاء</h1>@endif
 <p> برای ورود <span class="font-red bold" style="line-height: normal">نیازی به ثبت نام نیست. </span> تنها شماره موبایل و کد ملی خود را وارد نمایند</p>
 <form action="{{action("Auth\LoginController@login")}}" class="login-form" method="post" >
     {{ csrf_field() }}

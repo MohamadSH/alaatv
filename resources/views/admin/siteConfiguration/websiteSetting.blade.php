@@ -14,7 +14,7 @@
 @endsection
 
 @section("title")
-    <title>تخته خاک|تنظیمات سایت</title>
+    <title>آلاء|تنظیمات سایت</title>
 @endsection
 
 @section("pageBar")
