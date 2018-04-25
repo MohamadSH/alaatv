@@ -11,7 +11,7 @@
 |
 */
  
-
+ 
 Auth::routes();
 
 //Route::get('search',"HomeController@search");
