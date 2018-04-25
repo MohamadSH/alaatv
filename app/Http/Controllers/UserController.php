@@ -1258,10 +1258,10 @@ class UserController extends Controller
 
     private function addVideoPamphlet($productArray, &$productsWithPamphlet ,  &$productsWithVideo,  Collection &$pamphlets , Collection &$videos){
 
-        $videoArray = [];
-        $pamphletArray = [];
-        if(!empty($productArray)){
 
+        if(!empty($productArray)){
+            $videoArray = [];
+            $pamphletArray = [];
             foreach ($productArray as $product)
             {
 
@@ -1271,11 +1271,11 @@ class UserController extends Controller
                     array_push($productsWithVideo, $product->id);
 
                     if(isset($pamphlets[$product->id]))
-                        $pamphletArray = $pamphletArray[$product->id];
+                        $pamphletArray = $pamphlets[$product->id];
                     else
                         $pamphletArray = [];
                     if(isset($videos[$product->id]))
-                        $videoArray = $videoArray[$product->id];
+                        $videoArray = $videos[$product->id];
                     else
                         $videoArray = [];
 

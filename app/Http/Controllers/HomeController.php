@@ -1265,7 +1265,7 @@ class HomeController extends Controller
                 //TODO: verify "$productFileLink = "http://".env("SFTP_HOST" , "").":8090/". $cloudFile;"
                 $productFileLink = env("DOWNLOAD_HOST_PROTOCOL" , "https://").env("DOWNLOAD_HOST_NAME" , "dl.takhtekhak.com"). $cloudFile;
                 $unixTime = Carbon::today()->addDays(2)->timestamp;
-                $userIP = Request::ip();
+                $userIP = request()->ip();
                 //TODO: fix diffrent Ip
                 $ipArray = explode(".",$userIP);
                 $ipArray[3] = 0;
