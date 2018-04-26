@@ -118,7 +118,7 @@ class HomeController extends Controller
 
     }
 
-    public function search()
+    public function search( Request $request )
     {
         //ToDo : load ha : file haye thumbnail mahsoolat , code mojood dar partial/search/contetnset.blade
         try {
@@ -133,6 +133,7 @@ class HomeController extends Controller
             }
 
             $tagFlag = false;
+            $tagInput = array();
             if(Input::has("tags"))
             {
                 $tagFlag = true;
@@ -150,8 +151,6 @@ class HomeController extends Controller
                     $tagFlag = false;
 
             }
-
-            $tagArray = array();
             $items = collect();
             $paginationSetting = collect([
                 [
@@ -275,10 +274,6 @@ class HomeController extends Controller
                         foreach ($result->data->items as $item)
                         {
                             array_push($arrayOfId , $item->id);
-                        }
-                        foreach ($result->data->tags as $tag)
-                        {
-                            if(!in_array($tag , $tagArray)) array_push($tagArray , $tag);
                         }
                     }
                 }
@@ -408,7 +403,7 @@ class HomeController extends Controller
             $totalTags = array_merge($totalTags , $lessonCollection->pluck("value")->toArray()) ;
             $lessons = $lessonCollection->pluck("index" , "value")->toArray();
 
-            $extraTagArray  = array_diff($tagArray , $totalTags );
+            $extraTagArray  = array_diff($tagInput , $totalTags );
 
 //            $rootContentTypes = Contenttype::where("enable", 1)->whereDoesntHave("parents")->pluck("displayName" , "displayName")->toArray() ;
 //            $childContentTypes = Contenttype::whereHas("parents" , function ($q) {

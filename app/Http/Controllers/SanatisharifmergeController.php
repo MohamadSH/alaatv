@@ -3000,13 +3000,19 @@ class SanatisharifmergeController extends Controller
                     return $this->response->setStatusCode(422)->setContent(["message"=>"Wrong inputs: Please pass parameter t. Available values: p , v"]);
                     break;
             }
-            $sanatisharifRecords = Sanatisharifmerge::whereNotNull($contentTypeLable."id")->where($contentTypeLable."Transferred" , 0)->get();
-//            dd(count($sanatisharifRecords));
             $idColumn = $contentTypeLable."id";
             $nameColumn = $contentTypeLable."name";
             $descriptionColumn = $contentTypeLable."descrip";
             $enableColumn = $contentTypeLable."Enable";
             $sessionColumn = $contentTypeLable."session";
+
+            $sanatisharifRecords = Sanatisharifmerge::whereNotNull($contentTypeLable."id")->where($contentTypeLable."Transferred" , 0);
+            if(Input::has("id"))
+            {
+                $id = Input::get("id");
+                $sanatisharifRecords->where($idColumn ,$id );
+            }
+            $sanatisharifRecords = $sanatisharifRecords->get();
 
             $counter = 0 ;
             $successCounter = 0 ;
@@ -3050,13 +3056,13 @@ class SanatisharifmergeController extends Controller
                                 $response = $this->update($request , $sanatisharifRecord);
                                 if($response->getStatusCode() == 200)
                                 {
-
+                                    $skippedCounter++ ;
                                 }elseif($response->getStatusCode() == 503)
                                 {
-                                    $skippedCounter++ ;
+                                    $failCounter++ ;
                                     dump("Skipped status wasn't saved for video: ".$sanatisharifRecord->videoid);
                                 }
-                                continue;
+                                continue 2;
                             }
 
                             $files = array();
