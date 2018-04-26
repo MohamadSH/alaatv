@@ -2745,6 +2745,10 @@ class SanatisharifmergeController extends Controller
             }
         }
 
+        if(!isset($userfirstname))
+            $userfirstname = "";
+        if(!isset($userlastname))
+            $userlastname = "";
 
         return [
             "firstname" =>$userfirstname ,
@@ -2916,29 +2920,34 @@ class SanatisharifmergeController extends Controller
                 }
                 $request = new Request();
 
-                $name = $this->determineContentSetName($sanatisharifRecord->departmentlessonid , $sanatisharifRecord->lessonname , $sanatisharifRecord->depname,$sanatisharifRecord->depyear) ;
+
                 $request->offsetSet("id" , $sanatisharifRecord->departmentlessonid);
-                $request->offsetSet("name" , $name);
                 $request->offsetSet("enable" , $sanatisharifRecord->departmentlessonEnable);
                 $request->offsetSet("display" , $sanatisharifRecord->departmentlessonEnable);
 
                 $tags = [
                     "دوره_آموزشی"
                 ];
+                $name = $this->determineContentSetName($sanatisharifRecord->departmentlessonid , $sanatisharifRecord->lessonname , $sanatisharifRecord->depname,$sanatisharifRecord->depyear) ;
                 $tags = array_merge($tags ,$this->deplessonMultiplexer($sanatisharifRecord->departmentlessonid,1));
                 $tags = array_merge($tags , $this->departmentMultiplexer($sanatisharifRecord->depid)) ;
                 $tags = array_merge($tags , $this->lessonMultiplexer($sanatisharifRecord->lessonid , $this->make_slug($sanatisharifRecord->lessonname))) ;
                 $teacherNameArray =  $this->determineTeacherName($sanatisharifRecord->teacherfirstname , $sanatisharifRecord->teacherlastname , $sanatisharifRecord->departmentlessonid , 1);
                 $teacherName = $this->makeName($teacherNameArray["firstname"] , $teacherNameArray["lastname"]) ;
                 if(strlen($teacherName) > 0)
+                {
                     array_push($tags , $this->make_slug($teacherName , "_") );
+                    $name .= " " .$teacherName;
+                }
+
                 $tagsJson = [
                     "bucket" => "contentset",
                     "tags" => $tags
                 ];
                 $request->offsetSet("tags" , json_encode($tagsJson));
-
                 dump($tags);
+
+                $request->offsetSet("name" , $name);
                 $controller = new ContentsetController();
                 $response = $controller->store($request);
                 if($response->getStatusCode() == 200)
@@ -2981,8 +2990,8 @@ class SanatisharifmergeController extends Controller
     public function copyContent()
     {
         try{
-            if(!Input::has("type")) return $this->response->setStatusCode(422)->setContent(["message"=>"Wrong inputs: Please pass parameter t. Available values: p , v"]);
-            else $contentType = Input::get("type");
+            if(!Input::has("t")) return $this->response->setStatusCode(422)->setContent(["message"=>"Wrong inputs: Please pass parameter t. Available values: p , v"]);
+            else $contentType = Input::get("t");
 
             switch ($contentType)
             {
@@ -3067,19 +3076,54 @@ class SanatisharifmergeController extends Controller
                             }
 
                             $files = array();
-                            if(isset($sanatisharifRecord->videolink)) array_push($files ,["name"=>$sanatisharifRecord->videolink , "caption"=>"کیفیت عالی" , "label"=>"hd" ]);
-                            if(isset($sanatisharifRecord->videolinkhq)) array_push($files ,["name"=>$sanatisharifRecord->videolinkhq , "caption"=>"کیفیت بالا" , "label"=>"hq" ]);
-                            if(isset($sanatisharifRecord->videolink240p)) array_push($files ,["name"=>$sanatisharifRecord->videolink240p , "caption"=>"کیفیت متوسط" , "label"=>"240p" ]);
-                            if(isset($sanatisharifRecord->thumbnail)) array_push($files ,["name"=>$sanatisharifRecord->thumbnail , "caption"=>"تامبنیل" , "label"=>"thumbnail" ]);
+                            if(isset($sanatisharifRecord->videolink) && strlen($sanatisharifRecord->videolink)>0) array_push($files ,
+                                [
+                                   "name"=>$sanatisharifRecord->videolink,
+                                    "caption"=>"کیفیت عالی" , "label"=>"hd"
+                            ]);
+                            if(isset($sanatisharifRecord->videolinkhq) && strlen($sanatisharifRecord->videolinkhq)>0) array_push($files ,
+                                [
+                                "name"=>$sanatisharifRecord->videolinkhq ,
+                                "caption"=>"کیفیت بالا" , "label"=>"hq"
+                            ]);
+                            if(isset($sanatisharifRecord->videolink240p) && strlen($sanatisharifRecord->videolink240p)>0) array_push($files ,
+                                ["name"=>$sanatisharifRecord->videolink240p ,
+                                    "caption"=>"کیفیت متوسط" , "label"=>"240p"
+                                ]);
+                            if(isset($sanatisharifRecord->thumbnail) && strlen($sanatisharifRecord->thumbnail)>0)
+                            {
+                                $thumbnailFile = $sanatisharifRecord->thumbnail ;
+                            }
+                            else
+                            {
+                                if(isset($sanatisharifRecord->videolink) && strlen($sanatisharifRecord->videolink)>0)
+                                    $filePath = $sanatisharifRecord->videolink;
+                                elseif(isset($sanatisharifRecord->videolinkhq) && strlen($sanatisharifRecord->videolinkhq)>0)
+                                    $filePath = $sanatisharifRecord->videolinkhq;
+                                elseif(isset($sanatisharifRecord->videolink240p) && strlen($sanatisharifRecord->videolink240p)>0)
+                                    $filePath = $sanatisharifRecord->videolink240p;
+
+                                if(isset($filePath))
+                                {
+                                    $pathInfoArray = pathinfo($filePath);
+                                    $thumbnailFile = "https://cdn.sanatisharif.ir/media/thumbnails/".$sanatisharifRecord->departmentlessonid."/". $pathInfoArray["filename"] . ".jpg"  ;
+                                }
+                            }
+                            array_push($files , [
+                                "name"=>$thumbnailFile ,
+                                "caption"=>"تامبنیل" , "label"=>"thumbnail"
+                            ] );
                             if(!empty($files)) $storeContentReuest->offsetSet("files" , $files );
                             $template_id = 1;
                             $contentTypeId = [8];
                             break;
                         case "p":
                             $files = array();
-                            $domain = "https://sanatisharif.ir/";
-                            if(isset($sanatisharifRecord->pamphletaddress)) array_push($files ,["name"=>$domain.$sanatisharifRecord->pamphletaddress  ]);
-                            if(!empty($files)) $storeContentReuest->offsetSet("files" , $files );
+                            $pamphletFileName = basename($sanatisharifRecord->pamphletaddress);
+                            if(isset($sanatisharifRecord->pamphletaddress) && strlen($sanatisharifRecord->pamphletaddress)>0)
+                                array_push($files ,["name"=>$pamphletFileName  , "disk_id" => 4 ]);
+                            if(!empty($files))
+                                $storeContentReuest->offsetSet("files" , $files );
                             $template_id = 2;
                             $contentTypeId = [1];
                             break;
@@ -3089,21 +3133,22 @@ class SanatisharifmergeController extends Controller
 
                     $storeContentReuest->offsetSet("template_id" , $template_id);
 
-                    if(strlen($sanatisharifRecord->$nameColumn) > 0)
+                    if( isset($sanatisharifRecord->$nameColumn) && strlen($sanatisharifRecord->$nameColumn) > 0)
                     {
                         $storeContentReuest->offsetSet("name" , $sanatisharifRecord->$nameColumn);
                         $metaTitle = strip_tags(htmlspecialchars(substr($sanatisharifRecord->$nameColumn ,0,55)));
                         $storeContentReuest->offsetSet("metaTitle" , $metaTitle );
                     }
 
-                    if(strlen($sanatisharifRecord->$descriptionColumn) > 0)
+                    if(isset($sanatisharifRecord->$descriptionColumn) && strlen($sanatisharifRecord->$descriptionColumn) > 0)
                     {
                         $storeContentReuest->offsetSet("description" , $sanatisharifRecord->$descriptionColumn);
                         $metaDescription =  htmlspecialchars(strip_tags(substr($sanatisharifRecord->$descriptionColumn, 0 , 155)));
                         $storeContentReuest->offsetSet("metaDescription" , $metaDescription);
                     }
 
-                    if(strlen($sanatisharifRecord->$nameColumn)>0 || strlen($sanatisharifRecord->$descriptionColumn)>0)
+                    if( (isset($sanatisharifRecord->$nameColumn) && strlen($sanatisharifRecord->$nameColumn)>0)
+                        || (isset($sanatisharifRecord->$descriptionColumn) && strlen($sanatisharifRecord->$descriptionColumn)>0) )
                     {
                         $text = strip_tags($sanatisharifRecord->$nameColumn) . " " . strip_tags($sanatisharifRecord->$descriptionColumn);
                         $text = preg_replace('/[^\p{L}|\p{N}]+/u', ' ', $text);

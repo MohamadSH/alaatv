@@ -1095,6 +1095,16 @@ class OrderController extends Controller
      */
     public function verifyPayment(Request $request)
     {
+
+        $result = [
+            "Status" => "error",
+            "error" => '-21',
+//            "saveBon" => 0
+        ];
+//        return redirect(action("OrderController@successfulPayment" , [
+//            "result" => $result
+//        ]));
+
         $sendSMS = true;
         $user = Auth::user();
         if(Input::has('Authority') && Input::has('Status') )
@@ -1106,11 +1116,11 @@ class OrderController extends Controller
             $transaction = Transaction::where('authority' ,$authority)->firstOrFail() ;
             $order = Order::FindorFail($transaction->order_id);
             if(isset($order->coupon->id )){
-				if($order->coupon->coupontype->id == 2)
-				{
-					$flag = false;
-					foreach ($order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->get() as $orderproduct)
-					{
+                if($order->coupon->coupontype->id == 2)
+                {
+                    $flag = false;
+                    foreach ($order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->get() as $orderproduct)
+                    {
                         $hasCoupon = true;
                         if(!in_array($order->coupon->id, $orderproduct->product->coupons->pluck('id')->toArray()))
                         {
@@ -1126,20 +1136,20 @@ class OrderController extends Controller
                             }
                         }
 
-						if($hasCoupon)
-						{
-							$flag = true;
-						}
-					}
-					if(!$flag)
-					{
-						$order->coupon->usageNumber = $order->coupon->usageNumber - 1;
-						$order->coupon->update();
-						$order->coupon_id = null;
-						$order->couponDiscount = 0 ;
-						$order->couponDiscountAmount = 0 ;
-					}
-				}
+                        if($hasCoupon)
+                        {
+                            $flag = true;
+                        }
+                    }
+                    if(!$flag)
+                    {
+                        $order->coupon->usageNumber = $order->coupon->usageNumber - 1;
+                        $order->coupon->update();
+                        $order->coupon_id = null;
+                        $order->couponDiscount = 0 ;
+                        $order->couponDiscountAmount = 0 ;
+                    }
+                }
             }
 
             $zarinPal = new Zarinpal($transaction->transactiongateway->merchantNumber,new SoapDriver());
@@ -1151,7 +1161,7 @@ class OrderController extends Controller
 //                $result["RefID"] = "mohamad2";
 //            }
             if(!isset($result))
-                exit("پاسخی از سایت درگاه پرداخت دریافت نشد!") ;
+                abort(404) ;
             if(strcmp(array_get($result,"Status"),'success')==0)
             {
                 if($order->orderstatus_id == Config::get("constants.ORDER_STATUS_OPEN"))
@@ -1251,8 +1261,8 @@ class OrderController extends Controller
                         $request->offsetSet("orderstatus_id", Config::get("constants.ORDER_STATUS_OPEN"));
                         $request->offsetSet("user_id", $order->user_id);
                         $request->offsetSet("coupon_id", $order->coupon_id);
-						$request->offsetSet("couponDiscount", $order->couponDiscount);
-						$request->offsetSet("couponDiscountAmount", $order->couponDiscountAmount);
+                        $request->offsetSet("couponDiscount", $order->couponDiscount);
+                        $request->offsetSet("couponDiscountAmount", $order->couponDiscountAmount);
                         $request->offsetSet("checkOutDateTime", $order->checkOutDateTime);
                         $controller = new OrderController();
                         $newOrder = $controller->store($request);
@@ -1569,12 +1579,12 @@ class OrderController extends Controller
             {
                 $paymentMethod = Input::get('paymentmethod');
                 if(isset($order->coupon->id))
-				{
-					if($order->coupon->coupontype_id == 2)
-					{
-						$flag = false;
-						foreach ($order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->get() as $orderproduct)
-						{
+                {
+                    if($order->coupon->coupontype_id == 2)
+                    {
+                        $flag = false;
+                        foreach ($order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->get() as $orderproduct)
+                        {
                             $hasCoupon = true;
                             if(!in_array($order->coupon->id, $orderproduct->product->coupons->pluck('id')->toArray()))
                             {
@@ -1595,16 +1605,16 @@ class OrderController extends Controller
                                 $flag = true;
                             }
 
-						}
-						if(!$flag)
-						{
-							$order->coupon->usageNumber = $order->coupon->usageNumber - 1;
-							$order->coupon->update();
-							$order->coupon_id = null;
+                        }
+                        if(!$flag)
+                        {
+                            $order->coupon->usageNumber = $order->coupon->usageNumber - 1;
+                            $order->coupon->update();
+                            $order->coupon_id = null;
                             $order->couponDiscount = 0 ;
                             $order->couponDiscountAmount = 0 ;
-						}
-					}
+                        }
+                    }
                 }
                 $debitCard = Bankaccount::all()->where("user_id" , 2)->first();
                 if(isset($debitCard))
@@ -1684,9 +1694,94 @@ class OrderController extends Controller
             $user->notify(new InvoicePaid($order));
         }
 
-        return view('order.checkout.verification',compact('result')) ;
+
+        if(isset($result["Status"]))
+        {
+            if(isset($result["RefID"]))
+            {
+                return redirect(action("OrderController@successfulPayment" , [
+                    "result" => $result
+                ]));
+            }elseif(strcmp($result["Status"],'canceled')==0 || (strcmp($result["Status"],'error')==0 && isset($result["error"]) && strcmp($result["error"],'-22')==0))
+            {
+                if(isset($result["tryAgain"]) && !$result["tryAgain"])
+                    return redirect(action("OrderController@failedPayment" , [
+                        "result" => $result
+                    ]));
+            }
+        }
+
+        return redirect(action("OrderController@otherPayment" , [
+            "result" => $result
+        ]));
+
+//        return view('order.checkout.verification',compact('result')) ;
         //'Status'(index) going to be 'success', 'error' or 'canceled'
     }
+
+    /**
+     * Successful payments
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+     function successfulPayment(Request $request)
+     {
+         $previousUrl = url()->previous();
+         if(!isset($previousUrl) || strcmp($previousUrl , env("SERVER")."/checkout/verifyPayment") != 0)
+             abort(404);
+         if($request->has("result"))
+         {
+             $result = $request->get("result");
+             return view('order.checkout.verification',compact('result')) ;
+         }
+         else
+         {
+             abort(404);
+         }
+     }
+
+    /**
+     *  repeat an old payment
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    function failedPayment(Request $request)
+    {
+        $previousUrl = url()->previous();
+        if(!isset($previousUrl) || strcmp($previousUrl , env("SERVER")."/checkout/verifyPayment") != 0)
+            abort(404);
+        if($request->has("result"))
+        {
+            $result = $request->get("result");
+            return view('order.checkout.verification',compact('result')) ;
+        }
+        else
+        {
+            abort(404);
+        }
+    }
+
+    /**
+     *  Payments other than successful and failed
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    function otherPayment(Request $request)
+    {
+        if($request->has("result"))
+        {
+            $result = $request->get("result");
+            return view('order.checkout.verification',compact('result')) ;
+        }
+        else
+        {
+            abort(404);
+        }
+    }
+
 
     /**
      * Submits a coupon for the order

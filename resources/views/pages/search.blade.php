@@ -369,14 +369,14 @@
                 $("#content-search-loading").show();
             }
 
-            // changeUrl(formData);
+            changeUrl(formData);
 
             if( itemType != undefined &&  itemType.length > 0 )
             {
                 var typesQuery = [ "itemTypes[]="+itemType ] ;
                 formData = formData + "&" + typesQuery.join('&') ;
             }
-            console.log(formData);
+            // console.log(formData);
             $.ajax({
                 type: "GET",
                 url: "{{action("HomeController@search")}}" ,

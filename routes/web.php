@@ -88,9 +88,6 @@ Route::group(['middleware' => 'auth'], function()
     Route::post('exchangeOrderproduct/{order}' , 'OrderController@exchangeOrderproduct');
     Route::resource('order', 'OrderController');
 
-    Route::any('checkout/verifyPayment', "OrderController@verifyPayment");
-
-
     Route::post('order/detachorderproduct' , 'OrderController@detachOrderproduct');
     Route::post('order/addOrderproduct/{product}', "OrderController@addOrderproduct");
     Route::delete('order/removeOrderproduct/{product}', "OrderController@removeOrderproduct");
@@ -172,6 +169,10 @@ Route::group(['prefix' => 'checkout'], function () {
         Route::get('review', "OrderController@checkoutReview");
         Route::get('payment', "OrderController@checkoutPayment");
     });
+    Route::get('successfulPayment' , "OrderController@successfulPayment");
+    Route::get('failedPayment' , "OrderController@failedPayment");
+    Route::get('returnFromPayment' , "OrderController@otherPayment");
+    Route::any('verifyPayment', "OrderController@verifyPayment");
 });
 
 Route::get('product/search', 'ProductController@search');

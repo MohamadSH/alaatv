@@ -268,50 +268,36 @@
                                 @endif
                             </div>
                             <div class="actions">
-                                @if($educationalContent->template->name == "pamphlet1")
+                                @if($educationalContent->files->count() == 1)
                                     <a target="_blank"
-                                       href="{{$educationalContent->files->first()->name}}"
+                                       href="{{action("HomeController@download" , ["fileName"=>$educationalContent->files->first()->uuid ])}}"
                                        class="btn btn-circle green btn-outline btn-sm"><i class="fa fa-download"></i>
                                         دانلود </a>
-                                @elseif($educationalContent->template->name == "pamphlet2")
-                                    @if($educationalContent->files->count() == 1)
-                                        <a target="_blank"
-                                           href="{{action("HomeController@download" , ["fileName"=>$educationalContent->files->first()->uuid ])}}"
-                                           class="btn btn-circle green btn-outline btn-sm"><i class="fa fa-download"></i>
-                                            دانلود </a>
-                                    @else
-                                        <div class="btn-group">
-                                            <button class="btn btn-circle green btn-outline btn-sm" data-toggle="dropdown"
-                                                    aria-expanded="true">دانلود
-                                                <i class="fa fa-angle-down"></i>
-                                            </button>
-                                            <ul class="dropdown-menu">
-                                                @foreach($educationalContent->files as $file)
-                                                    <li>
-                                                        <a target="_blank"
-                                                           href="{{action("HomeController@download" , ["fileName"=>$file->uuid ])}}">
-                                                            فایل {{$file->pivot->caption}}</a>
-                                                    </li>
-                                                @endforeach
-                                            </ul>
-                                        </div>
-                                    @endif
+                                @else
+                                    <div class="btn-group">
+                                        <button class="btn btn-circle green btn-outline btn-sm" data-toggle="dropdown"
+                                                aria-expanded="true">دانلود
+                                            <i class="fa fa-angle-down"></i>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            @foreach($educationalContent->files as $file)
+                                                <li>
+                                                    <a target="_blank"
+                                                       href="{{action("HomeController@download" , ["fileName"=>$file->uuid ])}}">
+                                                        فایل {{$file->pivot->caption}}</a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
                                 @endif
-
                             </div>
                         </div>
                         <div class="portlet-body">
                             @if($educationalContent->getFilesUrl()->isNotEmpty())
                                 @if($educationalContent->file->getExtention() === "pdf")
-                                    @if($educationalContent->template->name == "pamphlet1")
-                                        <iframe class="google-docs"
-                                                src='http://docs.google.com/viewer?url={{$educationalContent->file->name}}&embedded=true'
-                                                width='100%' height='760' style='border: none;'></iframe>
-                                    @elseif($educationalContent->template->name == "pamphlet2")
-                                        <iframe class="google-docs"
-                                                src='http://docs.google.com/viewer?url={{$educationalContent->getFilesUrl()->first()}}&embedded=true'
-                                                width='100%' height='760' style='border: none;'></iframe>
-                                    @endif
+                                    <iframe class="google-docs"
+                                            src='http://docs.google.com/viewer?url={{$educationalContent->getFilesUrl()->first()}}&embedded=true'
+                                            width='100%' height='760' style='border: none;'></iframe>
                                 @endif
                             @endif
                             <div class="row">
