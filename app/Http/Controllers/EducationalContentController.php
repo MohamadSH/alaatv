@@ -444,7 +444,8 @@ class EducationalContentController extends Controller
                 $result = json_decode($response["result"]);
                 $tags = $result->data->tags;
             }
-            return view("educationalContent.show", compact("educationalContent", "rootContentType", "childContentType", "contentsWithSameType" , "soonContentsWithSameType" , "educationalContentSet" , "contentsWithSameSet" , "videoSources" , "files" , "tags"));
+            $sideBarMode = "closed";
+            return view("educationalContent.show", compact("educationalContent", "rootContentType", "childContentType", "contentsWithSameType" , "soonContentsWithSameType" , "educationalContentSet" , "contentsWithSameSet" , "videoSources" , "files" , "tags" , "sideBarMode"));
         }
         else
             abort(404);
