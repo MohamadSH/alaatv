@@ -143,7 +143,7 @@ class User extends Authenticatable
     {
         $key="user:majorFilter:".implode($users->pluck('id')->toArray())."-".$majorsId;
 
-        return Cache::remember($key,Config::get("constants.CACHE_60"),function () use($users, $majorsId) {
+        return Cache::remember($key,Config::get("constants.CACHE_3"),function () use($users, $majorsId) {
 
             if (in_array(0, $majorsId))
                 $users = $users->whereDoesntHave("major");
@@ -161,7 +161,7 @@ class User extends Authenticatable
     {
         $key="user:orderStatusFilter:".implode($users->pluck('id')->toArray())."-".$orderStatusesId;
 
-        return Cache::remember($key,Config::get("constants.CACHE_60"),function () use($users, $orderStatusesId) {
+        return Cache::remember($key,Config::get("constants.CACHE_3"),function () use($users, $orderStatusesId) {
 
             return $users->whereIn('id', Order::whereIn("orderstatus_id", $orderStatusesId)->pluck('user_id'));
         });
@@ -319,19 +319,23 @@ class User extends Authenticatable
 
     /**
      * @param string $bonName
-     * @return number of bons that user has of the specified bon
+     * @return bool|number
      * Converting Created_at field to jalali
      */
     public function userHasBon($bonName)
     {
         $key="user:userHasBon:".$this->cacheKey()."-".$bonName;
 
-        return Cache::remember($key,Config::get("constants.CACHE_60"),function () use($bonName) {
+        return Cache::tags('bon')->remember($key,Config::get("constants.CACHE_60"),function () use($bonName) {
 
-            $bon = Bon::all()->where('name', $bonName)->where('isEnable', '=', 1);;
+            $bon = Bon::all()
+                ->where('name', $bonName)
+                ->where('isEnable', '=', 1);
             if ($bon->isEmpty())
                 return false;
-            $userbons = $this->userbons->where("bon_id", $bon->first()->id)->where("userbonstatus_id", Config::get("constants.USERBON_STATUS_ACTIVE"));
+            $userbons = $this->userbons
+                ->where("bon_id", $bon->first()->id)
+                ->where("userbonstatus_id", Config::get("constants.USERBON_STATUS_ACTIVE"));
             $totalBonNumber = 0;
             foreach ($userbons as $userbon) {
                 $totalBonNumber = $totalBonNumber + $userbon->validateBon();
@@ -353,8 +357,11 @@ class User extends Authenticatable
     {
         $key="user:userValidBons:".$this->cacheKey()."-".(isset($bon) ? $bon->cacheKey() : "");
 
-        return Cache::remember($key,Config::get("constants.CACHE_60"),function () use($bon) {
-            return Userbon::where("user_id", $this->id)->where("bon_id", $bon->id)->where("userbonstatus_id", Config::get("constants.USERBON_STATUS_ACTIVE"))->whereColumn('totalNumber', '>', 'usedNumber')
+        return Cache::tags('bon')->remember($key,Config::get("constants.CACHE_60"),function () use($bon) {
+            return Userbon::where("user_id", $this->id)
+                ->where("bon_id", $bon->id)
+                ->where("userbonstatus_id", Config::get("constants.USERBON_STATUS_ACTIVE"))
+                ->whereColumn('totalNumber', '>', 'usedNumber')
                 ->where(function ($query) {
                     $query->whereNull("validSince")->orwhere("validSince", "<", Carbon::now());
                 })

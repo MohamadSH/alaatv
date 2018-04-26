@@ -6,11 +6,13 @@ namespace App\Providers;
 use App\Productfiletype;
 use App\Websitesetting;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
+use Laravel\Horizon\Horizon;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,6 +23,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Horizon::auth(function ($request) {
+            if( Auth::check() && Auth::user()->hasRole("admin") ){
+                return true;
+            }
+            else{
+                return false;
+            }
+        });
         Schema::defaultStringLength(191);
 
         /**

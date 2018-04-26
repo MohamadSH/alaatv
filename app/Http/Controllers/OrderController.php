@@ -35,6 +35,7 @@ use App\Http\Requests\EditOrderRequest;
 use App\Http\Requests;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
@@ -1692,6 +1693,7 @@ class OrderController extends Controller
         {
             $user = $order->user;
             $user->notify(new InvoicePaid($order));
+            Cache::tags('bon')->flush();
         }
 
 

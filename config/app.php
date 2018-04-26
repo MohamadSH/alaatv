@@ -190,6 +190,7 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         App\Providers\MedianaServiceProvider::class,
+        Backup\BackupServiceProvider::class,
 
     ],
     'development-providers' => [

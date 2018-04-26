@@ -553,7 +553,6 @@ class ProductController extends Controller
         elseif(Auth::check())
             $user = Auth::user();
 
-
         $key="product:refreshPrice:Type"
             .$inputType
             ."\\"
@@ -564,8 +563,8 @@ class ProductController extends Controller
             ."products:"
             .( isset($productIds) ? implode("",$productIds) : "");
 
-        return Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($inputType,$attributevalues,$user,$product,$productIds) {
 
+        return Cache::tags('bon')->remember($key,  Config::get("constants.CACHE_60") , function () use($inputType,$attributevalues,$user,$product,$productIds){
             switch ($inputType)
             {
                 case  "extraAttribute":
