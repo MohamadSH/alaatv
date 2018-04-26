@@ -191,3 +191,5 @@ mix.copyDirectory('public/assets/global/plugins/bootstrap/fonts/','public/fonts/
 
 mix.copyDirectory('public/assets/global/img/','public/img/').version();
 mix.copy('public/assets/global/plugins/datatables/images','public/plugins/datatables/images');
+
+mix.js('./resources/assets/js/app.js', 'public/js/videojs/app.js');
