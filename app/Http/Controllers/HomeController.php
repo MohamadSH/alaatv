@@ -93,6 +93,13 @@ class HomeController extends Controller
 
 
     public function debug(Request $request){
+
+        $file = new \App\File();
+        $file->name = "https://dl.takhtekhak.com/public/c/video/naseh/naseh001.mp4";
+        if($file->save())
+            dd($file->id);
+        else
+            dd("failed");
         return response()->make("Ok");
 
     }

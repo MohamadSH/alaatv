@@ -101,7 +101,7 @@
                     @if(!empty($extraTagArray))
                         <div class="row">
                             <div class="col-md-12">
-                                @include("partials.search.tagLabel" , ["tags"=>$extraTagArray])
+                                @include("partials.search.tagLabel" , ["tags"=>$extraTagArray , "withCloseIcon"=>true  , "withInput"=>true])
                             </div>
                         </div>
                     @endif
@@ -369,15 +369,13 @@
                 $("#content-search-loading").show();
             }
 
-            if(formData.length > 0)
-                changeUrl(formData);
+            // changeUrl(formData);
 
             if( itemType != undefined &&  itemType.length > 0 )
             {
                 var typesQuery = [ "itemTypes[]="+itemType ] ;
                 formData = formData + "&" + typesQuery.join('&') ;
             }
-
             console.log(formData);
             $.ajax({
                 type: "GET",
@@ -386,7 +384,7 @@
                 statusCode:
                     {
                         200:function (response) {
-                            console.log(response);
+                            // console.log(response);
                             var items = response.items;
                             // var itemTypes = response.itemTypes;
                             // location.hash = page;
@@ -461,6 +459,12 @@
         });
 
         $(document).on("click", ".itemType", function (){
+            contentLoad();
+        });
+
+        $(document).on("click", ".removeTagLabel", function (){
+            var id = $(this).data("role");
+            $("#tag_"+id).remove();
             contentLoad();
         });
 

@@ -2572,7 +2572,7 @@ class SanatisharifmergeController extends Controller
         if(isset($depyear))
         {
             $year_plus_remainder = (int)$depyear % 100 +1 ;
-            $yearLabel = " ($depyear-$year_plus_remainder)" ;
+            $yearLabel = " ($year_plus_remainder-$depyear)" ;
         }
         else
         {
@@ -2977,6 +2977,7 @@ class SanatisharifmergeController extends Controller
                 ]);
         }
     }
+
     public function copyContent()
     {
         try{
