@@ -67,6 +67,7 @@ use Illuminate\Support\Facades\View;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Sftp\SftpAdapter;
 use Meta;
+use App\VideoContent;
 use Watson\Sitemap\Facades\Sitemap;
 use SSH;
 use Auth;
@@ -95,9 +96,9 @@ class HomeController extends Controller
 
     public function debug(Request $request){
 
-////        Cache::forget("product:");
-        Cache::tags('bon')->flush();
-        return response()->make("Ok");
+        $video = Educationalcontent::find(7839);
+
+        return view("educationalContent.embed",compact('video','files'));
 
     }
     public function __construct()

@@ -9,6 +9,7 @@ use App\Http\Requests\EditEducationalContentRequest;
 use App\Http\Requests\InsertEducationalContentFileCaption;
 use App\Http\Requests\InsertEducationalContentRequest;
 use App\Http\Requests\InsertFileRequest;
+use App\Http\Requests\Request;
 use App\Major;
 use App\Majortype;
 use App\Product;
@@ -129,6 +130,19 @@ class EducationalContentController extends Controller
         return view("educationalContent.index" , compact("educationalContents" , "columns"));
     }
 
+    public function embed(Request $request , Educationalcontent $video){
+
+        //TODO: Authentication
+
+        //TODO: use Content Type instead of template_id
+
+        if($video->template_id != 1)
+            return redirect('/',301);
+
+        $files = $video->files;
+        return view("educationalContent.embed",compact('video','files'));
+
+    }
     /**
      * Show the form for creating a new resource.
      *
