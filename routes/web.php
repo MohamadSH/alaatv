@@ -15,7 +15,7 @@
 Auth::routes();
 
 Route::get('c',"HomeController@search");
-Route::get('embed/c/{content}',"EducationalContentController@embed");
+Route::get('embed/c/{educationalcontent}',"EducationalContentController@embed");
 Route::get( '/' , 'HomeController@index');
 Route::get( 'home' , 'HomeController@home');
 Route::get('404', 'HomeController@error404');

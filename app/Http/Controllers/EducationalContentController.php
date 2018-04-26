@@ -17,7 +17,7 @@ use App\Traits\APIRequestCommon;
 use App\Traits\ProductCommon;
 use App\Websitesetting;
 use Carbon\Carbon;
-use Eusonlito\LaravelMeta\Meta;
+use Meta;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
@@ -39,7 +39,7 @@ class EducationalContentController extends Controller
         $agent = new Agent();
         if ($agent->isRobot())
         {
-            $authException = ["index" , "show" , "search"  ];
+            $authException = ["index" , "show" , "search" ,"embed" ];
         }else{
             $authException = ["index" ,"search"  ];
         }
