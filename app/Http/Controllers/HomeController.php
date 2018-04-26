@@ -1320,7 +1320,8 @@ class HomeController extends Controller
                     abort("404");
                 }
         }
-        if (isset($downloadPriority) && strcmp($downloadPriority, "cloudFirst") == 0) {
+        if (isset($downloadPriority) && strcmp($downloadPriority, "cloudFirst") == 0)
+        {
             if (isset($externalLink)) {
                 return redirect($externalLink);
             } elseif (Storage::disk($diskName)->exists($fileName)) {
@@ -1353,8 +1354,8 @@ class HomeController extends Controller
                     if (isset($fileHost)) {
                         $fileRoot = Storage::drive($diskName)->getAdapter()->getRoot();
                         //TODO: verify "$fileRemotePath = "http://" . $fileHost . ":8090" . "/public" . explode("public", $fileRoot)[1];"
-                        $fileRemotePath = env("DOWNLOAD_HOST_PROTOCOL" , "https://").env("DOWNLOAD_HOST_NAME" , "dl.takhtekhak.com"). "/public" . explode("public", $fileRoot)[1];
 
+                        $fileRemotePath = env("DOWNLOAD_HOST_PROTOCOL" , "https://").env("DOWNLOAD_HOST_NAME" , "dl.takhtekhak.com"). "/public" . explode("public", $fileRoot)[1];
                         return response()->redirectTo($fileRemotePath . $fileName);
                     } else {
                         $fs = Storage::disk($diskName)->getDriver();
