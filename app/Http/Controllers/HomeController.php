@@ -96,7 +96,8 @@ class HomeController extends Controller
 
     public function debug(Request $request){
 
-        $video = Educationalcontent::find(7839);
+        $url = $request->url();
+        dd($url);
 
         return view("educationalContent.embed",compact('video','files'));
 

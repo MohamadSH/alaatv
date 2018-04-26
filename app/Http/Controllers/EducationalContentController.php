@@ -17,6 +17,7 @@ use App\Traits\APIRequestCommon;
 use App\Traits\ProductCommon;
 use App\Websitesetting;
 use Carbon\Carbon;
+use Eusonlito\LaravelMeta\Meta;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
@@ -25,7 +26,6 @@ use Illuminate\Support\Facades\Input;
 use Auth;
 use Jenssegers\Agent\Agent;
 use SSH;
-use Meta;
 
 class EducationalContentController extends Controller
 {
@@ -130,18 +130,18 @@ class EducationalContentController extends Controller
         return view("educationalContent.index" , compact("educationalContents" , "columns"));
     }
 
-    public function embed(Request $request , Educationalcontent $video){
-
+    public function embed(Request $request , Educationalcontent $educationalcontent){
+        $url = $request->url();
+        Meta::set('canonical',str_replace('/embed/','/',$url));
         //TODO: Authentication
 
         //TODO: use Content Type instead of template_id
 
-        if($video->template_id != 1)
+        if($educationalcontent->template_id != 1)
             return redirect('/',301);
-
+        $video = $educationalcontent;
         $files = $video->files;
         return view("educationalContent.embed",compact('video','files'));
-
     }
     /**
      * Show the form for creating a new resource.
