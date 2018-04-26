@@ -101,7 +101,7 @@
                     @if(!empty($extraTagArray))
                         <div class="row">
                             <div class="col-md-12">
-                                @include("partials.search.tagLabel" , ["tags"=>$extraTagArray])
+                                @include("partials.search.tagLabel" , ["tags"=>$extraTagArray , "withCloseIcon"=>true  , "withInput"=>true])
                             </div>
                         </div>
                     @endif
@@ -138,10 +138,11 @@
             {{--</div>--}}
         {{--</div>--}}
     {{--</div>--}}
-    <div class="row">
+    <div class="row" >
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
+        @if($items->where("type" , "product")->first()["totalitems"] > 0)
             <!-- BEGIN PORTLET-->
-            <div class="portlet light ">
+            <div class="portlet light " id="productPortlet">
                 <div class="portlet-title tabbable-line">
                     <div class="caption">
                         <i class="icon-globe font-dark hide"></i>
@@ -157,6 +158,7 @@
                 </div>
             </div>
             <!-- END PORTLET-->
+        @endif
             <!-- BEGIN PORTLET-->
             <div class="portlet light ">
                 <div class="portlet-title tabbable-line">
@@ -167,7 +169,7 @@
                     <ul class="nav nav-tabs">
                         @if($items->where("type" , "article")->first()["totalitems"] > 0)
                         <li>
-                            <a href="#tab_article" data-toggle="tab"> Article </a>
+                            <a href="#tab_content_article" data-toggle="tab"> Article </a>
                         </li>
                         @endif
                         <li>
@@ -192,7 +194,7 @@
                         <div class="tab-pane text-center" id="tab_contentset">
                             {!! $items->where("type" , "contentset")->first()["view"]  !!}
                         </div>
-                        <div class="tab-pane text-center" id="tab_article">
+                        <div class="tab-pane text-center" id="tab_content_article">
                             {!! $items->where("type" , "article")->first()["view"]  !!}
                         </div>
                     </div>
@@ -369,16 +371,14 @@
                 $("#content-search-loading").show();
             }
 
-            if(formData.length > 0)
-                changeUrl(formData);
+            changeUrl(formData);
 
             if( itemType != undefined &&  itemType.length > 0 )
             {
                 var typesQuery = [ "itemTypes[]="+itemType ] ;
                 formData = formData + "&" + typesQuery.join('&') ;
             }
-
-            console.log(formData);
+            // console.log(formData);
             $.ajax({
                 type: "GET",
                 url: "{{action("HomeController@search")}}" ,
@@ -391,6 +391,7 @@
                             // var itemTypes = response.itemTypes;
                             // location.hash = page;
                             $.each(items , function (key , item) {
+                                var totalItems = item.totalitems;
                                 switch(item.type) {
                                     case "contentset":
                                         $("#tab_contentset").html(item.view);
@@ -404,10 +405,32 @@
                                         $("#tab_content_pamphlet").html(item.view);
                                         break;
                                     case "product":
-                                        var element = $(".regular");
-                                        destroySlick(element) ;
-                                        $("#productDiv .row .regular").html(item.view);
-                                        initialSlick(element);
+                                        if(totalItems > 0)
+                                        {
+                                            $("#productPortlet").show();
+                                            var element = $(".regular");
+                                            destroySlick(element) ;
+                                            $("#productDiv .row .regular").html(item.view);
+                                            initialSlick(element);
+                                        }
+                                        else
+                                        {
+                                            $("#productPortlet").hide();
+                                        }
+
+                                        break;
+                                    case "article":
+                                        if(totalItems > 0)
+                                        {
+                                            $("#tab_content_article").html(item.view);
+                                            $("#tab_content_article").show();
+                                            $('a[href^="#tab_content_article]').show();
+                                        }
+                                        else
+                                        {
+                                            $("#tab_content_article").hide();
+                                            $('a[href^="#tab_content_article]').hide();
+                                        }
                                         break;
                                     default:
                                         break;
@@ -461,6 +484,12 @@
         });
 
         $(document).on("click", ".itemType", function (){
+            contentLoad();
+        });
+
+        $(document).on("click", ".removeTagLabel", function (){
+            var id = $(this).data("role");
+            $("#tag_"+id).remove();
             contentLoad();
         });
 

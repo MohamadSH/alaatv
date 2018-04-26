@@ -1369,7 +1369,9 @@ class HomeController extends Controller
 
 //
             }
-        } else {
+        }
+        else
+        {
             if (Storage::disk($diskName)->exists($fileName)) {
 //            Other download method :  problem => it changes the file name to download
 //            $file = Storage::disk($diskName)->get($fileName);
@@ -1385,10 +1387,13 @@ class HomeController extends Controller
 //                    return response()->download(Storage::drive($diskName)->getAdapter()->getRoot() . $fileName);
 //
                 $diskAdapter = Storage::disk($diskName)->getAdapter();
+                $rootPath = $diskAdapter->getRoot();
+                $rootPath = str_replace(env("SFTP_ROOT") , env("DOWNLOAD_HOST_PROTOCOL").env("DOWNLOAD_HOST_NAME") ,$rootPath );
                 $diskType = class_basename($diskAdapter);
                 //TODO: baraye chie ?
                 switch ($diskType) {
                     case "SftpAdapter" :
+                        /** GET THE FILE
                         if (isset($file)) {
                             $url = $file->getUrl();
                             if (isset($url[0])) {
@@ -1405,6 +1410,8 @@ class HomeController extends Controller
                                 ]);
                             }
                         }
+                         * */
+                        return redirect($rootPath.basename($fileName));
                         break;
                     case "Local" :
                         $fs = Storage::disk($diskName)->getDriver();

@@ -77,11 +77,12 @@
                                         گر شما فعال است و از آخرین نسخه ی مرورگر استفاده می کنید.</p>
                                 </video>
                             </div>
-                            {{--<hr>--}}
-                            {{--<ul class="list-inline">--}}
-                            {{--<li><i class="fa fa-map-marker"></i>مدرس : محمدرضا مقصودی</li>&nbsp;--}}
-                            {{--<li><i class="fa fa-heart"></i>&nbsp;سوم دبیرستان ۹۶-۹۷</li>--}}
-                            {{--</ul>--}}
+                            @if(isset($educationalContent->author_id))
+                                <hr>
+                                <ul class="list-inline">
+                                    <li><i class="fa fa-user"></i>مدرس : {{$educationalContent->user->getfullName()}}</li>&nbsp;
+                                </ul>
+                            @endif
                             <div class="row">
                                 <div class="col-md-12">
                                     @if(!empty($tags))
@@ -94,7 +95,8 @@
 
                     </div>
                 </div>
-                <div class="col-md-4 margin-bottom-15">
+                @if(isset($contentsWithSameSet))
+                    <div class="col-md-4 margin-bottom-15">
                     <div class="mt-element-list">
                         <div class="mt-list-head list-news ext-1 font-white bg-yellow-crusta">
                             <div class="list-head-title-container">
@@ -134,6 +136,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
             </div>
             <div class="row">
                 <div class="col-md-12">
@@ -154,7 +157,8 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            @if(isset($contentsWithSameSet))
+                <div class="row">
                 <div class="col-md-12">
                     <div class="portlet light ">
                         <div class="portlet-title">
@@ -249,14 +253,20 @@
                     {{--</div>--}}
                 </div>
             </div>
-        @elseif($educationalContent->template->name == "pamphlet1")
+            @endif
+        @elseif($educationalContent->template->name == "pamphlet1" ||
+                $educationalContent->template->name == "pamphlet2")
             <div class="row">
                 <div class="col-md-8">
                     <div class="portlet light ">
                         <div class="portlet-title">
                             <div class="caption">
                                 <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                                @if($educationalContent->template->name == "pamphlet1")
+                                    جزوه {{$educationalContent->name}}
+                                @elseif($educationalContent->template->name == "pamphlet2")
                                     {{$educationalContent->getDisplayName()}}
+                                @endif
                             </div>
                             <div class="actions">
                                 @if($educationalContent->files->count() == 1)
@@ -364,6 +374,14 @@
                         </div>
                         <div class="portlet-body">
                                 {!! $educationalContent->context !!}
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        @if(!empty($tags))
+                                            <hr>
+                                            @include("partials.search.tagLabel" , ["tags"=>$tags])
+                                        @endif
+                                    </div>
+                                </div>
                         </div>
 
                     </div>

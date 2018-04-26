@@ -310,8 +310,17 @@ class EducationalContentController extends Controller
                     if(strlen(preg_replace('/\s+/', '',  $fileName) ) == 0) continue;
 
                     $fileRequest->offsetSet('name' ,$fileName ) ;
-                    $disk = $educationalContent->fileMultiplexer();
-                    if($disk !== false) $fileRequest->offsetSet('disk_id' , $disk->id) ;
+                    if(isset($file["disk_id"]))
+                    {
+                        $fileRequest->offsetSet('disk_id' , $file["disk_id"]) ;
+                    }
+                    else
+                    {
+                        $disk = $educationalContent->fileMultiplexer();
+                        if($disk !== false)
+                            $fileRequest->offsetSet('disk_id' , $disk->id) ;
+                    }
+
                     $fileId = $fileController->store($fileRequest) ;
                     if($fileId)
                     {

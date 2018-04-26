@@ -117,32 +117,10 @@ class RemoteDataCopyController extends Controller
             $sanatisharifDataRequest->offsetSet("videolink" , $video->videolink );
             $sanatisharifDataRequest->offsetSet("videolinkhq" , $video->videolinkhq );
             $sanatisharifDataRequest->offsetSet("videolink240p" , $video->videolink240p );
-
+            $sanatisharifDataRequest->offsetSet("thumbnail" , $video->thumbnail );
             $sanatisharifDataRequest->offsetSet("videolinktakhtesefid" , $video->videolinkonline );
             $sanatisharifDataRequest->offsetSet("videoEnable" , $video->isenable );
 
-            if(is_null($video->thumbnail))
-            {
-                $flag = true;
-                if(isset($video->videolink))
-                    $filePath = $video->videolink;
-                elseif(isset($video->videolinkhq))
-                    $filePath = $video->videolinkhq;
-                elseif(isset($video->videolink240p))
-                    $filePath = $video->videolink240p;
-                else
-                    $flag = false;
-
-                if($flag)
-                {
-                    $pathInfoArray = pathinfo($filePath);
-                    $sanatisharifDataRequest->offsetSet("thumbnail" , "https://cdn.sanatisharif.ir/media/thumbnails/".$video->departmentlessonid."/". $pathInfoArray["filename"] . ".jpg");
-                }
-            }
-            else
-            {
-                $sanatisharifDataRequest->offsetSet("thumbnail" , $video->thumbnail );
-            }
             $sanatisharifDataRequest->offsetSet("lessonid" ,$lessonid );
             $sanatisharifDataRequest->offsetSet("lessonname" , $video->lessonname );
             $sanatisharifDataRequest->offsetSet("lessonEnable" , $video->lessonEnable );
