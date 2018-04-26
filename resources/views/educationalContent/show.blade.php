@@ -77,11 +77,12 @@
                                         گر شما فعال است و از آخرین نسخه ی مرورگر استفاده می کنید.</p>
                                 </video>
                             </div>
-                            {{--<hr>--}}
-                            {{--<ul class="list-inline">--}}
-                            {{--<li><i class="fa fa-map-marker"></i>مدرس : محمدرضا مقصودی</li>&nbsp;--}}
-                            {{--<li><i class="fa fa-heart"></i>&nbsp;سوم دبیرستان ۹۶-۹۷</li>--}}
-                            {{--</ul>--}}
+                            @if(isset($educationalContent->author_id))
+                                <hr>
+                                <ul class="list-inline">
+                                    <li><i class="fa fa-user"></i>مدرس : {{$educationalContent->user->getfullName()}}</li>&nbsp;
+                                </ul>
+                            @endif
                             <div class="row">
                                 <div class="col-md-12">
                                     @if(!empty($tags))
@@ -373,6 +374,14 @@
                         </div>
                         <div class="portlet-body">
                                 {!! $educationalContent->context !!}
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        @if(!empty($tags))
+                                            <hr>
+                                            @include("partials.search.tagLabel" , ["tags"=>$tags])
+                                        @endif
+                                    </div>
+                                </div>
                         </div>
 
                     </div>

@@ -2601,6 +2601,9 @@ class SanatisharifmergeController extends Controller
                 case 23:
                     $userid = 318;
                     break;
+                case 28:
+                    $userid = 0 ;
+                    break;
                 case 34 :
                     $userid = 0;
                     break;

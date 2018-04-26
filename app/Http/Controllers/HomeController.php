@@ -383,22 +383,38 @@ class HomeController extends Controller
             $majors = $majorCollection->pluck(  "name" , "description")->toArray();
 
             $gradeCollection = Grade::where("name" ,'<>' , 'graduated' )->get();
+            $gradeCollection->push(["displayName"=>"اول دبیرستان" , "description"=>"اول_دبیرستان"]);
+            $gradeCollection->push(["displayName"=>"دوم دبیرستان" , "description"=>"دوم_دبیرستان"]);
+            $gradeCollection->push(["displayName"=>"سوم دبیرستان" , "description"=>"سوم_دبیرستان"]);
+            $gradeCollection->push(["displayName"=>"چهارم دبیرستان" , "description"=>"چهارم_دبیرستان"]);
             $totalTags = array_merge($totalTags , $gradeCollection->pluck("description")->toArray()) ;
             $grades = $gradeCollection->pluck('displayName' , 'description')->toArray() ;
 //            $grades = array_sort_recursive($grades);
 
             $lessonCollection = collect([
                 ["value"=>"" , "index"=>"همه دروس"],
-                ["value"=>"دیفرانسیل", "index"=>"دیفرانسیل"] ,
-                ["value"=>"تحلیلی", "index"=>"تحلیلی"] ,
-                ["value"=>"گسسته", "index"=>"گسسته"] ,
-                ["value"=>"زیست_شناسی", "index"=>"زیست شناسی"] ,
-                ["value"=>"ریاضی_تجربی", "index"=>"ریاضی تجربی"] ,
+                ["value"=>"مشاوره", "index"=>"مشاوره"] ,
                 ["value"=>"فیزیک", "index"=>"فیزیک"] ,
                 ["value"=>"شیمی", "index"=>"شیمی" ],
                 ["value"=>"عربی", "index"=>"عربی" ],
+                ["value"=>"زبان_و_ادبیات_فارسی", "index"=>"زبان و ادبیات فارسی" ],
                 ["value"=>"دین_و_زندگی", "index"=>"دین و زندگی" ],
-                ["value"=>"زیان", "index"=>"زیان" ],
+                ["value"=>"زبان_انگلیسی", "index"=>"زبان انگلیسی" ],
+                ["value"=>"دیفرانسیل", "index"=>"دیفرانسیل"] ,
+                ["value"=>"تحلیلی", "index"=>"تحلیلی"] ,
+                ["value"=>"گسسته", "index"=>"گسسته"] ,
+                ["value"=>"حسابان", "index"=>"حسابان"] ,
+                ["value"=>"جبر_و_احتمال", "index"=>"جبر و احتمال"] ,
+                ["value"=>"ریاضی_پایه", "index"=>"ریاضی پایه"] ,
+                ["value"=>"هندسه_پایه", "index"=>"هندسه پایه"] ,
+                ["value"=>"ریاضی_تجربی", "index"=>"ریاضی تجربی"] ,
+                ["value"=>"ریاضی_انسانی", "index"=>"ریاضی انسانی"] ,
+                ["value"=>"زیست_شناسی", "index"=>"زیست شناسی"] ,
+                ["value"=>"آمار_و_مدلسازی", "index"=>"آمار و مدلسازی"] ,
+                ["value"=>"ریاضی_و_آمار", "index"=>"ریاضی و آمار"] ,
+                ["value"=>"منطق", "index"=>"منطق"] ,
+                ["value"=>"اخلاق", "index"=>"اخلاق"] ,
+                ["value"=>"المپیاد_نجوم", "index"=>"المپیاد نجوم"] ,
             ]);
             $totalTags = array_merge($totalTags , $lessonCollection->pluck("value")->toArray()) ;
             $lessons = $lessonCollection->pluck("index" , "value")->toArray();
@@ -1345,7 +1361,9 @@ class HomeController extends Controller
 
 //
             }
-        } else {
+        }
+        else
+        {
             if (Storage::disk($diskName)->exists($fileName)) {
 //            Other download method :  problem => it changes the file name to download
 //            $file = Storage::disk($diskName)->get($fileName);
@@ -1361,10 +1379,13 @@ class HomeController extends Controller
 //                    return response()->download(Storage::drive($diskName)->getAdapter()->getRoot() . $fileName);
 //
                 $diskAdapter = Storage::disk($diskName)->getAdapter();
+                $rootPath = $diskAdapter->getRoot();
+                $rootPath = str_replace(env("SFTP_ROOT") , env("DOWNLOAD_HOST_PROTOCOL").env("DOWNLOAD_HOST_NAME") ,$rootPath );
                 $diskType = class_basename($diskAdapter);
                 //TODO: baraye chie ?
                 switch ($diskType) {
                     case "SftpAdapter" :
+                        /** GET THE FILE
                         if (isset($file)) {
                             $url = $file->getUrl();
                             if (isset($url[0])) {
@@ -1381,6 +1402,8 @@ class HomeController extends Controller
                                 ]);
                             }
                         }
+                         * */
+                        return redirect($rootPath.basename($fileName));
                         break;
                     case "Local" :
                         $fs = Storage::disk($diskName)->getDriver();
