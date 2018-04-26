@@ -51,7 +51,6 @@
 @endsection
 
 @section("content")
-
     @if(isset($educationalContent->template))
         @if($educationalContent->template->name == "video1")
             <div class="row">
@@ -59,8 +58,32 @@
                     <div class="portlet light ">
                         <div class="portlet-title">
                             <div class="caption">
-                                <i class="fa fa-file-text-o" aria-hidden="true"></i>
-                                فیلم {{$educationalContent->name}}
+                                <i class="fa fa-video-camera" aria-hidden="true"></i>
+                                فیلم {{(isset($sessionNumber))?"جلسه ".$sessionNumber." - ":""}} {{$educationalContent->name}}
+                            </div>
+                            <div class="actions">
+                                @if($educationalContent->files->where("pivot.label" ,"<>" , "thumbnail")->count() == 1)
+                                    <a target="_blank"
+                                       href="{{$educationalContent->files->where("pivot.label" ,"<>" , "thumbnail")->first()->name}}"
+                                       class="btn btn-circle green btn-outline btn-sm"><i class="fa fa-download"></i>
+                                        دانلود </a>
+                                @else
+                                    <div class="btn-group">
+                                        <button class="btn btn-circle green btn-outline btn-sm" data-toggle="dropdown"
+                                                aria-expanded="true">دانلود
+                                            <i class="fa fa-angle-down"></i>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            @foreach($files["videoSource"] as $source)
+                                                <li>
+                                                    <a target="_blank"
+                                                       href="{{$source["src"]}}">
+                                                        فایل {{$source["caption"]}}</a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                         <div class="portlet-body">
@@ -122,7 +145,7 @@
                                                          src="{{(isset($item["thumbnail"]))?$item["thumbnail"]:''}}"/>
                                                 </a>
                                             </div>
-                                            <div class="list-datetime bold uppercase font-yellow-casablanca"> {{(isset($item["content"]->name))?$item["content"]->name:"بدون عنوان"}} </div>
+                                            <div class="list-datetime bold uppercase font-yellow-casablanca"> {{(isset($item["content"]->name))?$item["content"]->name." - ":""}}{{(isset($sessionNumber))?" جلسه ".$item["session"]:""}} </div>
                                             <div class="list-item-content">
                                                 <h3 class="uppercase bold">
                                                     <a href="javascript:;">&nbsp;</a>
@@ -148,16 +171,19 @@
                             </div>
                         </div>
                         <div class="portlet-body text-justify">
+                            @if(isset($educationalContent->description[0]))
                             <div class="scroller" style="height:100px" data-rail-visible="1" data-rail-color="black"
                                  data-handle-color="#a1b2bd">
-                                @if(isset($educationalContent->description[0])) {!! $educationalContent->description !!} @endif
+                                    {!! $educationalContent->description !!}
                             </div>
-
+                            @else
+                                به زودی ...
+                            @endif
                         </div>
                     </div>
                 </div>
             </div>
-            @if(isset($contentsWithSameSet))
+            @if(isset($contentsWithSameSet) && $contentsWithSameSet->whereIn("type" , "pamphlet" )->isNotEmpty())
                 <div class="row">
                 <div class="col-md-12">
                     <div class="portlet light ">
@@ -174,7 +200,7 @@
                                     @foreach($chunk as $item)
                                         <div class="m-grid-col m-grid-col-middle m-grid-col-center">
 
-                                            <img width="80" alt="{{$item["content"]->name}}" src="{{( ( isset($item["thumbnail"]) && ( strlen($item["thumbnail"]) > 0 ) ) ? $item["thumbnail"] : 'https://www.freeiconspng.com/uploads/orange-pdf-icon-32.png' )}}"/>
+                                            <img width="80" alt="{{$item["content"]->name}}" src="{{( ( isset($item["thumbnail"]) && ( strlen($item["thumbnail"]) > 0 ) ) ? $item["thumbnail"] : '' )}}"/>
                                             <br/>
                                             <a href="{{action("EducationalContentController@show" , $item["content"])}}">
                                                     <i class="fa fa-angle-left"></i>
@@ -254,24 +280,19 @@
                 </div>
             </div>
             @endif
-        @elseif($educationalContent->template->name == "pamphlet1" ||
-                $educationalContent->template->name == "pamphlet2")
+        @elseif($educationalContent->template->name == "pamphlet1" )
             <div class="row">
                 <div class="col-md-8">
                     <div class="portlet light ">
                         <div class="portlet-title">
                             <div class="caption">
                                 <i class="fa fa-file-text-o" aria-hidden="true"></i>
-                                @if($educationalContent->template->name == "pamphlet1")
-                                    جزوه {{$educationalContent->name}}
-                                @elseif($educationalContent->template->name == "pamphlet2")
-                                    {{$educationalContent->getDisplayName()}}
-                                @endif
+                                    {{$educationalContentDisplayName}}
                             </div>
                             <div class="actions">
-                                @if($educationalContent->files->count() == 1)
+                                @if($files->count() == 1)
                                     <a target="_blank"
-                                       href="{{action("HomeController@download" , ["fileName"=>$educationalContent->files->first()->uuid ])}}"
+                                       href="{{action("HomeController@download" , ["fileName"=>$files->first()->uuid ])}}"
                                        class="btn btn-circle green btn-outline btn-sm"><i class="fa fa-download"></i>
                                         دانلود </a>
                                 @else
@@ -281,7 +302,7 @@
                                             <i class="fa fa-angle-down"></i>
                                         </button>
                                         <ul class="dropdown-menu">
-                                            @foreach($educationalContent->files as $file)
+                                            @foreach($files as $file)
                                                 <li>
                                                     <a target="_blank"
                                                        href="{{action("HomeController@download" , ["fileName"=>$file->uuid ])}}">
@@ -294,13 +315,11 @@
                             </div>
                         </div>
                         <div class="portlet-body">
-                            @if($educationalContent->getFilesUrl()->isNotEmpty())
-                                @if($educationalContent->file->getExtention() === "pdf")
+                                @if($fileToShow->getExtention() === "pdf")
                                     <iframe class="google-docs"
-                                            src='http://docs.google.com/viewer?url={{$educationalContent->getFilesUrl()->first()}}&embedded=true'
+                                            src='http://docs.google.com/viewer?url={{$fileToShow->getUrl()}}&embedded=true'
                                             width='100%' height='760' style='border: none;'></iframe>
                                 @endif
-                            @endif
                             <div class="row">
                                 <div class="col-md-12">
                                     @if(!empty($tags))
@@ -324,7 +343,11 @@
                         <div class="portlet-body text-justify">
                             <div class="scroller" style="height:200px" data-rail-visible="1" data-rail-color="black"
                                  data-handle-color="#a1b2bd">
-                                @if(isset($educationalContent->description[0])) {!! $educationalContent->description !!} @endif
+                                @if(isset($educationalContent->description[0]))
+                                    {!! $educationalContent->description !!}
+                                @else
+                                    به زودی ...
+                                @endif
                             </div>
 
                         </div>

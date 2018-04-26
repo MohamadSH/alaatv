@@ -29,7 +29,8 @@ class Educationalcontent extends Model
         'metaDescription',
         'metaKeywords',
         'tags',
-        'author_id'
+        'author_id',
+        'contenttype_id'
     ];
 
     public function grades()
