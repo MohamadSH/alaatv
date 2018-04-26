@@ -37,6 +37,7 @@ use App\Producttype;
 use App\Question;
 use App\Relative;
 use App\Role;
+use App\Sanatisharifmerge;
 use App\Slideshow;
 use App\Traits\APIRequestCommon;
 use App\Traits\CharacterCommon;
@@ -386,22 +387,38 @@ class HomeController extends Controller
             $majors = $majorCollection->pluck(  "name" , "description")->toArray();
 
             $gradeCollection = Grade::where("name" ,'<>' , 'graduated' )->get();
+            $gradeCollection->push(["displayName"=>"اول دبیرستان" , "description"=>"اول_دبیرستان"]);
+            $gradeCollection->push(["displayName"=>"دوم دبیرستان" , "description"=>"دوم_دبیرستان"]);
+            $gradeCollection->push(["displayName"=>"سوم دبیرستان" , "description"=>"سوم_دبیرستان"]);
+            $gradeCollection->push(["displayName"=>"چهارم دبیرستان" , "description"=>"چهارم_دبیرستان"]);
             $totalTags = array_merge($totalTags , $gradeCollection->pluck("description")->toArray()) ;
             $grades = $gradeCollection->pluck('displayName' , 'description')->toArray() ;
 //            $grades = array_sort_recursive($grades);
 
             $lessonCollection = collect([
                 ["value"=>"" , "index"=>"همه دروس"],
-                ["value"=>"دیفرانسیل", "index"=>"دیفرانسیل"] ,
-                ["value"=>"تحلیلی", "index"=>"تحلیلی"] ,
-                ["value"=>"گسسته", "index"=>"گسسته"] ,
-                ["value"=>"زیست_شناسی", "index"=>"زیست شناسی"] ,
-                ["value"=>"ریاضی_تجربی", "index"=>"ریاضی تجربی"] ,
+                ["value"=>"مشاوره", "index"=>"مشاوره"] ,
                 ["value"=>"فیزیک", "index"=>"فیزیک"] ,
                 ["value"=>"شیمی", "index"=>"شیمی" ],
                 ["value"=>"عربی", "index"=>"عربی" ],
+                ["value"=>"زبان_و_ادبیات_فارسی", "index"=>"زبان و ادبیات فارسی" ],
                 ["value"=>"دین_و_زندگی", "index"=>"دین و زندگی" ],
-                ["value"=>"زیان", "index"=>"زیان" ],
+                ["value"=>"زبان_انگلیسی", "index"=>"زبان انگلیسی" ],
+                ["value"=>"دیفرانسیل", "index"=>"دیفرانسیل"] ,
+                ["value"=>"تحلیلی", "index"=>"تحلیلی"] ,
+                ["value"=>"گسسته", "index"=>"گسسته"] ,
+                ["value"=>"حسابان", "index"=>"حسابان"] ,
+                ["value"=>"جبر_و_احتمال", "index"=>"جبر و احتمال"] ,
+                ["value"=>"ریاضی_پایه", "index"=>"ریاضی پایه"] ,
+                ["value"=>"هندسه_پایه", "index"=>"هندسه پایه"] ,
+                ["value"=>"ریاضی_تجربی", "index"=>"ریاضی تجربی"] ,
+                ["value"=>"ریاضی_انسانی", "index"=>"ریاضی انسانی"] ,
+                ["value"=>"زیست_شناسی", "index"=>"زیست شناسی"] ,
+                ["value"=>"آمار_و_مدلسازی", "index"=>"آمار و مدلسازی"] ,
+                ["value"=>"ریاضی_و_آمار", "index"=>"ریاضی و آمار"] ,
+                ["value"=>"منطق", "index"=>"منطق"] ,
+                ["value"=>"اخلاق", "index"=>"اخلاق"] ,
+                ["value"=>"المپیاد_نجوم", "index"=>"المپیاد نجوم"] ,
             ]);
             $totalTags = array_merge($totalTags , $lessonCollection->pluck("value")->toArray()) ;
             $lessons = $lessonCollection->pluck("index" , "value")->toArray();
@@ -605,7 +622,7 @@ class HomeController extends Controller
 
         $pageName = "admin";
 
-        Meta::set('title', substr("تخته خاک|مدیریت کاربران", 0, Config::get("constants.META_TITLE_LIMIT")));
+        Meta::set('title', substr("آلاء|مدیریت کاربران", 0, Config::get("constants.META_TITLE_LIMIT")));
         Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
 
         return view("admin.index", compact("pageName", "majors", "userStatuses", "permissions", "roles", "limitStatus", "orderstatuses", "paymentstatuses", "enableStatus", "genders", "hasOrder", "products",
@@ -637,7 +654,7 @@ class HomeController extends Controller
             $defaultProductOrder = 1;
         }
 
-        Meta::set('title', substr("تخته خاک|مدیریت محصولات", 0, Config::get("constants.META_TITLE_LIMIT")));
+        Meta::set('title', substr("آلاء|مدیریت محصولات", 0, Config::get("constants.META_TITLE_LIMIT")));
         Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
         $pageName = "admin";
         return view("admin.indexProduct", compact("pageName", "attributecontrols", "enableStatus", "attributesets", "limitStatus", "products", "coupontype", "productTypes", "defaultProductOrder"));
@@ -704,7 +721,7 @@ class HomeController extends Controller
         $userBonTableDefaultColumns = ["نام کاربر", "تعداد بن تخصیص داده شده", "وضعیت بن", "نام کالایی که از خرید آن بن دریافت کرده است", "تاریخ درج", "عملیات"];
         $addressSpecialFilter = ["بدون فیلتر خاص", "بدون آدرس ها", "آدرس دارها"];
 
-        Meta::set('title', substr("تخته خاک|مدیریت سفارش ها", 0, Config::get("constants.META_TITLE_LIMIT")));
+        Meta::set('title', substr("آلاء|مدیریت سفارش ها", 0, Config::get("constants.META_TITLE_LIMIT")));
         Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
 
         return view("admin.indexOrder", compact("pageName", "orderstatuses", "products", "paymentMethods", "majors", "paymentstatuses", "sortBy", "sortType", "transactionTypes", "orderTableDefaultColumns", "coupons", "transactionStatuses", "transactionTableDefaultColumns", "userBonTableDefaultColumns", "userBonStatuses", "attributevalueCollection", "addressSpecialFilter", "checkoutStatuses"));
@@ -724,7 +741,7 @@ class HomeController extends Controller
         $consultationStatuses->prepend("انتخاب وضعیت");
 
 
-        Meta::set('title', substr("تخته خاک|مدیریت محتوا", 0, Config::get("constants.META_TITLE_LIMIT")));
+        Meta::set('title', substr("آلاء|مدیریت محتوا", 0, Config::get("constants.META_TITLE_LIMIT")));
         Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
 
         $pageName = "admin";
@@ -746,7 +763,7 @@ class HomeController extends Controller
         $counter = 0;
 
 
-        Meta::set('title', substr("تخته خاک|پنل مشاور", 0, Config::get("constants.META_TITLE_LIMIT")));
+        Meta::set('title', substr("آلاء|پنل مشاور", 0, Config::get("constants.META_TITLE_LIMIT")));
         Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
         $pageName = "consultantAdmin";
         return view("admin.consultant.consultantAdmin", compact("questions", "counter", "pageName", "newQuestionsCount", "answeredQuestionsCount"));
@@ -802,7 +819,7 @@ class HomeController extends Controller
         }
 
 
-        Meta::set('title', substr("تخته خاک|پنل انتخاب رشته", 0, Config::get("constants.META_TITLE_LIMIT")));
+        Meta::set('title', substr("آلاء|پنل انتخاب رشته", 0, Config::get("constants.META_TITLE_LIMIT")));
         Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
 
         return view("admin.consultant.consultantEntekhabReshte", compact("user", "storedMajors", "selectedMajors", "userSurveyAnswers"));
@@ -820,7 +837,7 @@ class HomeController extends Controller
         $usersurveyanswers = Usersurveyanswer::where("event_id", $eventId)->where("survey_id", $surveyId)->get()->groupBy("user_id");
 
 
-        Meta::set('title', substr("تخته خاک|لیست انتخاب رشته", 0, Config::get("constants.META_TITLE_LIMIT")));
+        Meta::set('title', substr("آلاء|لیست انتخاب رشته", 0, Config::get("constants.META_TITLE_LIMIT")));
         Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
 
         return view("admin.consultant.consultantEntekhabReshteList", compact("usersurveyanswers"));
@@ -889,7 +906,7 @@ class HomeController extends Controller
         $coupons = array_sort_recursive($coupons);
 
 
-        Meta::set('title', substr("تخته خاک|پنل پیامک", 0, Config::get("constants.META_TITLE_LIMIT")));
+        Meta::set('title', substr("آلاء|پنل پیامک", 0, Config::get("constants.META_TITLE_LIMIT")));
         Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
 
         return view("admin.indexSMS", compact("pageName", "majors", "userStatuses",
@@ -913,7 +930,7 @@ class HomeController extends Controller
         $section = "slideShow";
 
 
-        Meta::set('title', substr("تخته خاک|مدیریت اسلاید شو", 0, Config::get("constants.META_TITLE_LIMIT")));
+        Meta::set('title', substr("آلاء|مدیریت اسلاید شو", 0, Config::get("constants.META_TITLE_LIMIT")));
         Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
 
         return view("admin.siteConfiguration.slideShow", compact("slides", "sideBarMode", "section", "slideDisk", "slideContentName", "slideWebsitepageId"));
@@ -942,7 +959,7 @@ class HomeController extends Controller
     {
         $this->setting = Websitesetting::where("version", 1)->get()->first();
 
-        Meta::set('title', substr("تخته خاک|پیکربندی سایت", 0, Config::get("constants.META_TITLE_LIMIT")));
+        Meta::set('title', substr("آلاء|پیکربندی سایت", 0, Config::get("constants.META_TITLE_LIMIT")));
         return redirect(action('WebsiteSettingController@show', $this->setting));
     }
 
@@ -958,7 +975,7 @@ class HomeController extends Controller
             $q->where("major1_id", $parentMajor->id);
         })->get();
 
-        Meta::set('title', substr("تخته خاک|مدیریت رشته", 0, Config::get("constants.META_TITLE_LIMIT")));
+        Meta::set('title', substr("آلاء|مدیریت رشته", 0, Config::get("constants.META_TITLE_LIMIT")));
         Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
 
         return view("admin.indexMajor", compact("parentMajor", "majors"));
@@ -1009,7 +1026,7 @@ class HomeController extends Controller
         $pageName = "admin";
 
 
-        Meta::set('title', substr("تخته خاک|پنل گزارش", 0, Config::get("constants.META_TITLE_LIMIT")));
+        Meta::set('title', substr("آلاء|پنل گزارش", 0, Config::get("constants.META_TITLE_LIMIT")));
         Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
 
         $checkoutStatuses = Checkoutstatus::pluck('displayName', 'id')->toArray();
@@ -1029,7 +1046,7 @@ class HomeController extends Controller
         $userlotteries = $lottery->users->where("pivot.rank", ">", 0)->sortBy("pivot.rank");
 
 
-        Meta::set('title', substr("تخته خاک|پنل قرعه کشی", 0, Config::get("constants.META_TITLE_LIMIT")));
+        Meta::set('title', substr("آلاء|پنل قرعه کشی", 0, Config::get("constants.META_TITLE_LIMIT")));
         Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
         $pageName = "admin";
         return view("admin.indexLottery", compact("userlotteries", "pageName"));
@@ -1456,7 +1473,7 @@ class HomeController extends Controller
 
         Meta::set('keywords', substr($this->setting->site->seo->homepage->metaKeywords, 0, Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
         Meta::set('description', substr($this->setting->site->seo->homepage->metaDescription, 0, Config::get("constants.META_DESCRIPTION_LIMIT")));
-        Meta::set('title', "تخته خاک|درباره ما");
+        Meta::set('title', "آلاء|درباره ما");
         Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
 
         return view("pages.aboutUs");
@@ -1467,7 +1484,7 @@ class HomeController extends Controller
 
         Meta::set('keywords', substr($this->setting->site->seo->homepage->metaKeywords, 0, Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
         Meta::set('description', substr($this->setting->site->seo->homepage->metaDescription, 0, Config::get("constants.META_DESCRIPTION_LIMIT")));
-        Meta::set('title', "تخته خاک|تماس با ما");
+        Meta::set('title', "آلاء|تماس با ما");
         Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
         $emergencyContacts = collect();
         foreach ($this->setting->branches->main->emergencyContacts as $emergencyContact)
@@ -1487,7 +1504,7 @@ class HomeController extends Controller
     function rules()
     {
 
-        Meta::set('title', "تخته خاک|قوانین");
+        Meta::set('title', "آلاء|قوانین");
         Meta::set('keywords', substr($this->setting->site->seo->homepage->metaKeywords, 0, Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
         Meta::set('description', substr($this->setting->site->seo->homepage->metaDescription, 0, Config::get("constants.META_DESCRIPTION_LIMIT")));
         Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
@@ -1497,7 +1514,7 @@ class HomeController extends Controller
     function siteMap()
     {
 
-        Meta::set('title', 'تخته خاک|نقشه سایت');
+        Meta::set('title', 'آلاء|نقشه سایت');
         Meta::set('keywords', substr($this->setting->site->seo->homepage->metaKeywords, 0, Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
         Meta::set('description', substr($this->setting->site->seo->homepage->metaDescription, 0, Config::get("constants.META_DESCRIPTION_LIMIT")));
         Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
@@ -1643,7 +1660,7 @@ class HomeController extends Controller
 
         $text .= "\r\n\r\n--" . $boundary . "--";
 
-        $subject = "تخته خاک - تماس با ما";
+        $subject = "آلاء - تماس با ما";
 
         try {
             $numSent = mail($to, $subject, $text, $headers);
@@ -1752,7 +1769,7 @@ class HomeController extends Controller
             $smsInfo["from"] = getenv("SMS_PROVIDER_DEFAULT_NUMBER");
 //
 //            $prize = json_decode($userlottery->pivot->prizes)->items[0]->name ;
-            $smsInfo["message"] = "سلام ، کاربر گرامی نتیجه قرعه کشی در پروفایل شما قرار داده شد - تخته خاک";
+            $smsInfo["message"] = "سلام ، کاربر گرامی نتیجه قرعه کشی در پروفایل شما قرار داده شد - آلاء";
             $response = $this->medianaSendSMS($smsInfo);
             dump($response);
 
@@ -2504,6 +2521,7 @@ class HomeController extends Controller
             return $this->response->setStatusCode(503)->setContent(["message" => $message,"number of successfully processed items"=>$counter, "error" => $e->getMessage(), "line" => $e->getLine()]);
         }
     }
+
 
 
 }

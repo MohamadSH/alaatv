@@ -604,7 +604,7 @@ class UserController extends Controller
     {
 
         
-        Meta::set('title', "تخته خاک|پروفایل");
+        Meta::set('title', "آلاء|پروفایل");
         Meta::set('keywords', substr($this->setting->site->seo->homepage->metaKeywords, 0 , Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
         Meta::set('description', substr($this->setting->site->seo->homepage->metaDescription , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
         Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
@@ -908,7 +908,7 @@ class UserController extends Controller
 //        }
 
         
-        Meta::set('title', "تخته خاک|سفارش ها");
+        Meta::set('title', "آلاء|سفارش ها");
         Meta::set('keywords', substr($this->setting->site->seo->homepage->metaKeywords, 0 , Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
         Meta::set('description', substr($this->setting->site->seo->homepage->metaDescription , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
         Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
@@ -953,7 +953,7 @@ class UserController extends Controller
     {
 
         
-        Meta::set('title', "تخته خاک|آپلود سؤال آموزشی");
+        Meta::set('title', "آلاء|آپلود سؤال آموزشی");
         Meta::set('keywords', "سؤال مشاوره ای مشاور رایگان صوتی مشاوره پاسخ");
         Meta::set('description', "پرسیدن سؤال آموزشی رایگان به صورت فایل صوتی از مشاور کاملا رابگان");
         Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
@@ -968,7 +968,7 @@ class UserController extends Controller
     public function uploads(){
 
         
-        Meta::set('title', "تخته خاک|لیست سؤالات مشاوره ای");
+        Meta::set('title', "آلاء|لیست سؤالات مشاوره ای");
         Meta::set('keywords', "سؤال مشاوره ای مشاور رایگان صوتی مشاوره پاسخ");
         Meta::set('description', "پرسیدن سؤال آموزشی رایگان به صورت فایل صوتی از مشاور کاملا رابگان");
         Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
@@ -1027,7 +1027,7 @@ class UserController extends Controller
 
         $smsInfo = [];
         $smsInfo["to"] = array(ltrim($user->mobile, '0'));
-        $smsInfo["message"] = "کد احراز شما در تخته خاک: ".$verificationCode;
+        $smsInfo["message"] = "کد احراز شما در آلاء: ".$verificationCode;
 
         if($verificationMessages->isEmpty())
         {
@@ -1151,7 +1151,7 @@ class UserController extends Controller
          */
         $smsInfo = [];
         $smsInfo["to"] = array(ltrim($user->mobile, '0'));
-        $smsInfo["message"] = "کاربر گرامی رمز عبور شما تغییر کرد.\n رمزعبور جدید ".$password["rawPassword"]."\n تخته خاک";
+        $smsInfo["message"] = "کاربر گرامی رمز عبور شما تغییر کرد.\n رمزعبور جدید ".$password["rawPassword"]."\n آلاء";
         $response = $this->medianaSendSMS($smsInfo);
 //          $response = array("error"=>false , "message"=>"ارسال موفقیت آمیز بود");
         if(!$response["error"]){
@@ -1327,7 +1327,7 @@ class UserController extends Controller
 
 
 
-        Meta::set('title', "تخته خاک|فایل ها");
+        Meta::set('title', "آلاء|فایل ها");
         Meta::set('keywords', substr("صفحه فایل های کاربر\n".$this->setting->site->seo->homepage->metaKeywords, 0 , Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
         Meta::set('description', substr("صفحه فایل های کاربر\n".$this->setting->site->seo->homepage->metaDescription , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
         Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
@@ -1535,7 +1535,7 @@ class UserController extends Controller
     {
 
         
-        Meta::set('title', "تخته خاک|رتبه کنکور 96");
+        Meta::set('title', "آلاء|رتبه کنکور 96");
         Meta::set('keywords', substr($this->setting->site->seo->homepage->metaKeywords, 0 , Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
         Meta::set('description', substr($this->setting->site->seo->homepage->metaDescription , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
         Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));

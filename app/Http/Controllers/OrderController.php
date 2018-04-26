@@ -769,7 +769,7 @@ class OrderController extends Controller
                     $smsRequest["message"] = $fullName;
                 else
                     $smsRequest["message"] = "کاربر گرامی";
-                $smsRequest["message"]  .= " سلام، وضعیت سفارش شما در تخته خاک به ".$order->orderstatus->displayName." تغییر کرد";
+                $smsRequest["message"]  .= " سلام، وضعیت سفارش شما در آلاء به ".$order->orderstatus->displayName." تغییر کرد";
                 $smsRequest["users"] = $order->user_id;
                 $controller->sendSMS($smsRequest);
             }
@@ -813,8 +813,8 @@ class OrderController extends Controller
                             $smsRequest["message"] = $fullName;
                         else
                             $smsRequest["message"] = "کاربر گرامی";
-                        $smsRequest["message"]  .= " شماره مرسوله پستی ".$productName." ".$request->get('postCode')." می باشد - تخته خاک";
-//                        $smsRequest["message"]  .= " برنامه و دفترچه عید نوروز برای شما پست شد"."\n"."کد رهگیری مرسوله: ".$request->get('postCode')."\n"."تخته خاک - K96.IR";
+                        $smsRequest["message"]  .= " شماره مرسوله پستی ".$productName." ".$request->get('postCode')." می باشد - آلاء";
+//                        $smsRequest["message"]  .= " برنامه و دفترچه عید نوروز برای شما پست شد"."\n"."کد رهگیری مرسوله: ".$request->get('postCode')."\n"."آلاء - K96.IR";
                         $smsRequest["users"] = $order->user_id;
                         $response = $controller->sendSMS($smsRequest);
                         if($response->getStatusCode() == 200)
@@ -950,7 +950,7 @@ class OrderController extends Controller
     {
 
 
-        Meta::set('title', substr("تخته خاک|بازبینی سفارش" , 0 , Config::get("constants.META_TITLE_LIMIT")));
+        Meta::set('title', substr("آلاء|بازبینی سفارش" , 0 , Config::get("constants.META_TITLE_LIMIT")));
         Meta::set('keywords', substr($this->setting->site->seo->homepage->metaKeywords, 0 , Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
         Meta::set('description', substr($this->setting->site->seo->homepage->metaDescription , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
         Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
@@ -1019,7 +1019,7 @@ class OrderController extends Controller
     public function checkoutPayment()
     {
 
-        Meta::set('title', substr("تخته خاک|پرداخت" , 0 , Config::get("constants.META_TITLE_LIMIT")));
+        Meta::set('title', substr("آلاء|پرداخت" , 0 , Config::get("constants.META_TITLE_LIMIT")));
         Meta::set('keywords', substr($this->setting->site->seo->homepage->metaKeywords, 0 , Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
         Meta::set('description', substr($this->setting->site->seo->homepage->metaDescription , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
         Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));

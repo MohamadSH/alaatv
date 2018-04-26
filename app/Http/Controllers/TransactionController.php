@@ -495,12 +495,12 @@ class TransactionController extends Controller
 //                else $cost = $this->obtainOrderCost($order );
         if(Auth::check())
         {
-            $description = "تخته خاک-".Auth::user()->mobile."-محصولات: ";
+            $description = "آلاء-".Auth::user()->mobile."-محصولات: ";
 //            $mobile = Auth::user()->mobile;
         }
         else
         {
-            $description = "تخته خاک-"." مشتری ناشناس- ";
+            $description = "آلاء-"." مشتری ناشناس- ";
 //            $mobile="";
         }
         foreach ($order->orderproducts as $orderproduct)
