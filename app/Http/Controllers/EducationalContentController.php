@@ -369,15 +369,19 @@ class EducationalContentController extends Controller
                 $q->where("id", $rootContentType->id);
             })->get()->first();
 
-            if(in_array("article" , $educationalContent->contenttypes->pluck("name")->toArray()))
-                Meta::set('title', substr($educationalContent->name , 0 , Config::get("constants.META_TITLE_LIMIT")));
-            else
-                Meta::set('title', substr($educationalContent->getDisplayName() , 0 , Config::get("constants.META_TITLE_LIMIT")));
-            Meta::set('keywords', substr($educationalContent->getDisplayName() , 0 , Config::get("constants.META_KEYWORDS_LIMIT")));
-            Meta::set('description', substr($educationalContent->description, 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
-            Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
+            $educationalContentDisplayName = $educationalContent->getDisplayName();
 
-            if (isset($educationalContent->template)) {
+            /**
+             *      Retrieving Tags
+             */
+            $response = $this->sendRequest(env("TAG_API_URL")."id/content/".$educationalContent->id,"GET");
+            if($response["statusCode"] == 200){
+                $result = json_decode($response["result"]);
+                $tags = $result->data->tags;
+            }
+
+            if (isset($educationalContent->template))
+            {
                 switch($educationalContent->template->name)
                 {
                     case "video1":
@@ -425,6 +429,7 @@ class EducationalContentController extends Controller
                         if($contenSets->isNotEmpty())
                         {
                             $contentSet = $contenSets->first();
+                            $sessionNumber = $contentSet->pivot->order;
                             $sameContents =  $contentSet->educationalcontents ;
                             $contentsWithSameSet = collect();
                             foreach ($sameContents as $content)
@@ -439,22 +444,53 @@ class EducationalContentController extends Controller
                                 elseif(in_array("pamphlet" , $contentTypes ))
                                     $myContentType = "pamphlet";
 
-                                $contentsWithSameSet->push(["type"=> $myContentType , "content"=>$content , "thumbnail"=>$thumbnailFile]);
+                                $session = $content->pivot->order;
+                                $contentsWithSameSet->push(["type"=> $myContentType , "content"=>$content , "thumbnail"=>$thumbnailFile , "session"=>$session]);
                             }
                         }
+                        break;
+                    case  "pamphlet1":
+                        $files = $educationalContent->files;
+                        $fileToShow = $educationalContent->file;
+                        break;
+                    case "article" :
 
                         break;
                     default:
                         break;
                 }
             }
-            $response = $this->sendRequest(env("TAG_API_URL")."id/content/".$educationalContent->id,"GET");
-            if($response["statusCode"] == 200){
-                $result = json_decode($response["result"]);
-                $tags = $result->data->tags;
+
+            $metaFromTags = "";
+            foreach ($tags as $tag)
+            {
+                $metaFromTags .= $tag ;
+                $metaFromTags .= ",";
             }
+
+            if(isset($sessionNumber))
+                $metaTitlePrefix = "جلسه ".$sessionNumber." - ";
+            else
+                $metaTitlePrefix = "";
+            if(isset($educationalContent->metaTitle) && strlen($educationalContent->metaTitle) > 0)
+                Meta::set('title', substr($metaTitlePrefix.$educationalContent->metaTitle , 0 , Config::get("constants.META_TITLE_LIMIT")));
+            else
+                Meta::set('title', substr( $metaTitlePrefix.$metaFromTags, 0 , Config::get("constants.META_TITLE_LIMIT")));
+
+            if(isset($educationalContent->metaKeywords) && strlen($educationalContent->metaKeywords) > 0)
+                Meta::set('keywords', substr($educationalContent->metaKeywords , 0 , Config::get("constants.META_KEYWORDS_LIMIT")));
+            else
+                Meta::set('keywords', substr( $metaFromTags, 0 , Config::get("constants.META_KEYWORDS_LIMIT")));
+
+            if(isset($educationalContent->metaDescription) && strlen($educationalContent->metaDescription) > 0)
+                Meta::set('description', substr($educationalContent->metaDescription, 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
+            else
+                Meta::set('description', substr($metaFromTags, 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
+
+            Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
+
             $sideBarMode = "closed";
-            return view("educationalContent.show", compact("educationalContent", "rootContentType", "childContentType", "contentsWithSameType" , "soonContentsWithSameType" , "educationalContentSet" , "contentsWithSameSet" , "videoSources" , "files" , "tags" , "sideBarMode"));
+            return view("educationalContent.show", compact("educationalContent", "rootContentType", "childContentType", "contentsWithSameType" , "soonContentsWithSameType" , "educationalContentSet" , "contentsWithSameSet" , "videoSources" , "files" , "tags" , "sideBarMode" , "educationalContentDisplayName" , "sessionNumber" , "fileToShow"));
         }
         else
             abort(404);

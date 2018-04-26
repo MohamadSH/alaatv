@@ -2753,6 +2753,9 @@ class SanatisharifmergeController extends Controller
         if(!isset($userlastname))
             $userlastname = "";
 
+        if($userfirstname == "گروه آموزشی" || $userfirstname == "مشاوران دبیرستان")
+            $userfirstname = "";
+
         return [
             "firstname" =>$userfirstname ,
             "lastname" => $userlastname
@@ -3118,6 +3121,7 @@ class SanatisharifmergeController extends Controller
                             ] );
                             if(!empty($files)) $storeContentReuest->offsetSet("files" , $files );
                             $template_id = 1;
+                            $contenttype_id = 8;
                             $contentTypeId = [8];
                             break;
                         case "p":
@@ -3128,6 +3132,7 @@ class SanatisharifmergeController extends Controller
                             if(!empty($files))
                                 $storeContentReuest->offsetSet("files" , $files );
                             $template_id = 2;
+                            $contenttype_id = 1;
                             $contentTypeId = [1];
                             break;
                         default:
@@ -3135,6 +3140,7 @@ class SanatisharifmergeController extends Controller
                     }
 
                     $storeContentReuest->offsetSet("template_id" , $template_id);
+                    $storeContentReuest->offsetSet("contenttype_id" , $contenttype_id);
 
                     if( isset($sanatisharifRecord->$nameColumn) && strlen($sanatisharifRecord->$nameColumn) > 0)
                     {
