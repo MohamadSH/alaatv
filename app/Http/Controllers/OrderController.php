@@ -951,11 +951,13 @@ class OrderController extends Controller
 
 
         $url = $request->url();
-        Meta::set('canonical',$url);
-        Meta::set('title', "آلاء|بازبینی سفارش");
-        Meta::set('keywords', $this->setting->site->seo->homepage->metaKeywords);
-        Meta::set('description', $this->setting->site->seo->homepage->metaDescription);
-        Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
+        $title = "آلاء|بازبینی سفارش";
+        SEO::setTitle($title);
+        SEO::opengraph()->setUrl($url);
+        SEO::setCanonical($url);
+        SEO::twitter()->setSite("آلاء");
+        SEO::setDescription($this->setting->site->seo->homepage->metaDescription);
+        SEO::opengraph()->addImage(route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]), ['height' => 100, 'width' => 100]);
 
         [$user, $order , $orderproducts] = $this->getUserOrder();
 
@@ -981,7 +983,7 @@ class OrderController extends Controller
         $orderHasOrdrooGheireHozoori = $order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
             ->whereIn("product_id" , Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_NOT_DEFAULT"))->get()->isNotEmpty();
 
-        return view("order.checkout.review" , compact("orderproducts" , "orderCost" , "orderproductsRawCost" , 'costCollection' ,'orderproductLinks' , 'orderHasOrdrooGheireHozoori'));
+        return view("order.checkout.review" , compact("user","orderproducts" , "orderCost" , "orderproductsRawCost" , 'costCollection' ,'orderproductLinks' , 'orderHasOrdrooGheireHozoori'));
     }
 
     /**
@@ -1022,11 +1024,13 @@ class OrderController extends Controller
     {
 
         $url = $request->url();
-        Meta::set('canonical',$url);
-        Meta::set('title', "آلاء|پرداخت");
-        Meta::set('keywords', $this->setting->site->seo->homepage->metaKeywords);
-        Meta::set('description', $this->setting->site->seo->homepage->metaDescription);
-        Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
+        $title = "آلاء | پرداخت";
+        SEO::setTitle($title);
+        SEO::opengraph()->setUrl($url);
+        SEO::setCanonical($url);
+        SEO::twitter()->setSite("آلاء");
+        SEO::setDescription($this->setting->site->seo->homepage->metaDescription);
+        SEO::opengraph()->addImage(route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]), ['height' => 100, 'width' => 100]);
 
         if(session()->has("couponMessageSuccess"))
             session()->flash('success', session()->pull("couponMessageSuccess"));

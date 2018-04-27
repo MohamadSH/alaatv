@@ -3325,6 +3325,9 @@ class SanatisharifmergeController extends Controller
         return redirect($newUri,301);
 
     }
+    public function redirectEmbedVideo(Request $request , $lId = null , $dId = null, $vId = null){
+
+    }
 
     public function redirectPamphlet(Request $request , $lId = null , $dId = null, $pId = null){
         $key = "Url:".$lId."-".$dId."-".$pId;
@@ -3343,6 +3346,8 @@ class SanatisharifmergeController extends Controller
         });
         return redirect($newUri,301);
     }
+
+
 
 //    public function redirectVideo
 }

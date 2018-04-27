@@ -120,14 +120,6 @@ class ArticleController extends Controller
      */
     public function show(Request $request, $article)
     {
-        $url = $request->url();
-        Meta::set('canonical',$url);
-        Meta::set('title', $article->title);
-        Meta::set('image',  route('image', ['category'=>'8','w'=>'608' , 'h'=>'608' ,  'filename' =>  $article->image ]));
-        if(isset($article->keyword) && strlen($article->keyword)>0)
-            Meta::set('keywords', $article->keyword);
-        Meta::set('description', $article->brief);
-
         $articlecategories = Articlecategory::where('enable', 1)->get();
 
         $otherArticlesType = "same";
@@ -268,9 +260,6 @@ class ArticleController extends Controller
             $metaKeywords .= $article->title."-" ;
             $metaDescription .= $article->title."-" ;
         }
-        Meta::set('keywords', substr($metaKeywords , 0 , Config::get("constants.META_KEYWORDS_LIMIT")));
-        Meta::set('description', substr($metaDescription, 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
-        Meta::set('title', substr("articles", 0 , Config::get("constants.META_TITLE_LIMIT")));
 
         return view('article.list', compact('articles', 'articlecategories', 'categoryId' , 'articleCategoryName',  'countWithoutCategory' , 'recentArticles' , "slides" , "slideCounter" , "slideDisk"));
     }

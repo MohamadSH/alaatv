@@ -229,6 +229,7 @@ Route::get("debug", 'HomeController@debug');
 
 Route::get('Sanati-Sharif-Lesson/{lId?}/{dId?}','SanatisharifmergeController@redirectLesson');
 Route::get('Sanati-Sharif-Video/{lId?}/{dId?}/{vId?}','SanatisharifmergeController@redirectVideo');
+Route::get('Sanati-Sharif-Video/{lId?}/{dId?}/{vId?}','SanatisharifmergeController@redirectEmbedVideo');
 Route::get('Sanati-Sharif-Pamphlet/{lId?}/{dId?}/{pId?}','SanatisharifmergeController@redirectPamphlet');
 Route::get('SanatiSharif-News', 'HomeController@home');
 
