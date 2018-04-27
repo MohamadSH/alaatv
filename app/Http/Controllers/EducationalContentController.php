@@ -365,10 +365,11 @@ class EducationalContentController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Educationalcontent   $educationalContent
+     * @param Request $request
+     * @param  \App\Educationalcontent $educationalContent
      * @return \Illuminate\Http\Response
      */
-    public function show(Educationalcontent $educationalContent)
+    public function show(Request $request, Educationalcontent $educationalContent)
     {
 
 //        if(Auth::check() && Auth::user()->can(Config::get('constants.SHOW_EDUCATIONAL_CONTENT_ACCESS'))) $pass = true;
@@ -394,11 +395,13 @@ class EducationalContentController extends Controller
                 $tags = $result->data->tags;
             }
 
+            $title ='';
             if (isset($educationalContent->template))
             {
                 switch($educationalContent->template->name)
                 {
                     case "video1":
+                        $title ='فیلم ';
                         $files = collect();
                         $videoSources = collect();
     //                    $time_now = date('Hi');
@@ -464,11 +467,12 @@ class EducationalContentController extends Controller
                         }
                         break;
                     case  "pamphlet1":
+                        $title ='جزوه ';
                         $files = $educationalContent->files;
                         $fileToShow = $educationalContent->file;
                         break;
                     case "article" :
-
+                        $title ='';
                         break;
                     default:
                         break;
@@ -486,25 +490,34 @@ class EducationalContentController extends Controller
                 $metaTitlePrefix = "جلسه ".$sessionNumber." - ";
             else
                 $metaTitlePrefix = "";
-            if(isset($educationalContent->metaTitle) && strlen($educationalContent->metaTitle) > 0)
-                Meta::set('title', substr($metaTitlePrefix.$educationalContent->metaTitle , 0 , Config::get("constants.META_TITLE_LIMIT")));
-            else
-                Meta::set('title', substr( $metaTitlePrefix.$metaFromTags, 0 , Config::get("constants.META_TITLE_LIMIT")));
+            $url = $request->url();
+            $title .= ( isset($sessionNumber)? "جلسه ".$sessionNumber." - ":"" )." ".$educationalContent->name;
+            Meta::set('canonical',$url);
+//            if(isset($educationalContent->metaTitle) && strlen($educationalContent->metaTitle) > 0)
+//                Meta::set('title', $metaTitlePrefix.$educationalContent->metaTitle);
+//            else
+//                Meta::set('title', $title);
+            Meta::set('title', $title);
 
             if(isset($educationalContent->metaKeywords) && strlen($educationalContent->metaKeywords) > 0)
-                Meta::set('keywords', substr($educationalContent->metaKeywords , 0 , Config::get("constants.META_KEYWORDS_LIMIT")));
+                Meta::set('keywords', $educationalContent->metaKeywords);
             else
-                Meta::set('keywords', substr( $metaFromTags, 0 , Config::get("constants.META_KEYWORDS_LIMIT")));
+                Meta::set('keywords', $metaFromTags);
 
             if(isset($educationalContent->metaDescription) && strlen($educationalContent->metaDescription) > 0)
-                Meta::set('description', substr($educationalContent->metaDescription, 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
+                Meta::set('description', $educationalContent->metaDescription);
             else
-                Meta::set('description', substr($metaFromTags, 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
+                Meta::set('description', $metaFromTags);
 
-            Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
+            //TODO: move thumbnails to sftp storage
+            if(isset( $educationalContent->thumbnails ))
+                Meta::set('image', $educationalContent->thumbnails->first()->name);
+            else
+                Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
 
             $sideBarMode = "closed";
-            return view("educationalContent.show", compact("educationalContent", "rootContentType", "childContentType", "contentsWithSameType" , "soonContentsWithSameType" , "educationalContentSet" , "contentsWithSameSet" , "videoSources" , "files" , "tags" , "sideBarMode" , "educationalContentDisplayName" , "sessionNumber" , "fileToShow"));
+
+            return view("educationalContent.show", compact("title","educationalContent", "rootContentType", "childContentType", "contentsWithSameType" , "soonContentsWithSameType" , "educationalContentSet" , "contentsWithSameSet" , "videoSources" , "files" , "tags" , "sideBarMode" , "educationalContentDisplayName" , "sessionNumber" , "fileToShow"));
         }
         else
             abort(404);
@@ -642,8 +655,9 @@ class EducationalContentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Educationalcontent  $educationalContent
+     * @param  \App\Educationalcontent $educationalContent
      * @return \Illuminate\Http\Response
+     * @throws \Exception
      */
     public function destroy($educationalContent)
     {
@@ -666,55 +680,6 @@ class EducationalContentController extends Controller
     public function search()
     {
         return redirect('/c',301);
-        /**
-        $pageName = "educationalContent" ;
-
-        $highSchoolType = Majortype::where("name" , "highschool")->get()->first();
-        $majors = Major::where("majortype_id" , $highSchoolType->id)->pluck('name', 'id')->toArray();
-        $majors = array_add($majors , 0 , "همه رشته ها");
-        $majors = array_sort_recursive($majors);
-
-        $grades = Grade::where("name" ,'<>' , 'graduated' )->pluck('displayName', 'id')->toArray(); //ToDo:
-        $grades = array_add($grades , 0 , "همه مقاطع");
-        $grades = array_sort_recursive($grades);
-
-        $rootContentTypes = Contenttype::where("enable", 1)->whereDoesntHave("parents")->pluck("displayName" , "id")->toArray() ;
-        $rootContentTypes = array_add($rootContentTypes , 0 , "نوع محتوا");
-        $rootContentTypes = array_sort_recursive($rootContentTypes);
-
-        $childContentTypes = Contenttype::whereHas("parents" , function ($q) {
-            $q->where("name" , "exam") ;
-        })->pluck("displayName" , "id")->toArray() ;
-        $childContentTypes = array_add($childContentTypes , 0 , "زیر شاخه");
-        $childContentTypes = array_sort_recursive($childContentTypes);
-
-        $soonEducationalContents = Educationalcontent::soon()->orderBy("validSince")->take(9)->get() ;
-
-        if(Config::has("constants.EDUCATIONAL_CONTENT_EXCLUDED_PRODUCTS"))
-            $excludedProducts = Config::get("constants.EDUCATIONAL_CONTENT_EXCLUDED_PRODUCTS");
-        else
-            $excludedProducts = [] ;
-        $products = Product::recentProducts(3)->whereNotIn("id",$excludedProducts)->get();
-        $costCollection = $this->makeCostCollection($products) ;
-
-        $educationalContents = Educationalcontent::enable()->valid()->orderBy("validSince","DESC")->take(10)->get() ;
-        $metaKeywords = "";
-        $metaDescription = "" ;
-        foreach ($educationalContents as $educationalContent)
-        {
-            $metaKeywords .= $educationalContent->name."-";
-            $metaDescription .= $educationalContent->name."-" ;
-        }
-
-
-        Meta::set('title', substr("محتوای آموزشی ".$this->setting->site->name, 0 , Config::get("constants.META_TITLE_LIMIT")));
-        Meta::set('keywords', substr($metaKeywords , 0 , Config::get("constants.META_KEYWORDS_LIMIT")));
-        Meta::set('description', substr($metaDescription , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
-        Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
-
-        return view("educationalContent.search" , compact("educationalContents" , "pageName" , "majors" , "grades" , "rootContentTypes", "childContentTypes" , "soonEducationalContents" , "products" , "costCollection"));
-         *
-         * **/
     }
 
 

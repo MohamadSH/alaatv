@@ -946,13 +946,15 @@ class OrderController extends Controller
      * @param
      * @return \Illuminate\Http\Response
      */
-    public function checkoutReview()
+    public function checkoutReview(Request $request)
     {
 
 
-        Meta::set('title', substr("آلاء|بازبینی سفارش" , 0 , Config::get("constants.META_TITLE_LIMIT")));
-        Meta::set('keywords', substr($this->setting->site->seo->homepage->metaKeywords, 0 , Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
-        Meta::set('description', substr($this->setting->site->seo->homepage->metaDescription , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
+        $url = $request->url();
+        Meta::set('canonical',$url);
+        Meta::set('title', "آلاء|بازبینی سفارش");
+        Meta::set('keywords', $this->setting->site->seo->homepage->metaKeywords);
+        Meta::set('description', $this->setting->site->seo->homepage->metaDescription);
         Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
 
         [$user, $order , $orderproducts] = $this->getUserOrder();
@@ -1016,12 +1018,14 @@ class OrderController extends Controller
      * @param $request
      * @return \Illuminate\Http\Response
      */
-    public function checkoutPayment()
+    public function checkoutPayment(Request $request)
     {
 
-        Meta::set('title', substr("آلاء|پرداخت" , 0 , Config::get("constants.META_TITLE_LIMIT")));
-        Meta::set('keywords', substr($this->setting->site->seo->homepage->metaKeywords, 0 , Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
-        Meta::set('description', substr($this->setting->site->seo->homepage->metaDescription , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
+        $url = $request->url();
+        Meta::set('canonical',$url);
+        Meta::set('title', "آلاء|پرداخت");
+        Meta::set('keywords', $this->setting->site->seo->homepage->metaKeywords);
+        Meta::set('description', $this->setting->site->seo->homepage->metaDescription);
         Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
 
         if(session()->has("couponMessageSuccess"))

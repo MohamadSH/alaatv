@@ -66,11 +66,11 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\View;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Sftp\SftpAdapter;
-use Meta;
-use App\VideoContent;
-use Watson\Sitemap\Facades\Sitemap;
+
 use SSH;
 use Auth;
+use Meta;
+use Watson\Sitemap\Facades\Sitemap;
 
 //use Jenssegers\Agent\Agent;
 
@@ -95,7 +95,6 @@ class HomeController extends Controller
 
 
     public function debug(Request $request){
-
         $url = $request->url();
         dd($url);
 

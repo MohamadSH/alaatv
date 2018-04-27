@@ -20,9 +20,6 @@
     {{--<link href="http://vjs.zencdn.net/6.6.3/video-js.css" rel="stylesheet">--}}
 @endsection
 
-@section("title")
-    <title>آلاء|محتوای آموزشی|جزوه|آزمون</title>
-@endsection
 @section("pageBar")
 
 @endsection
@@ -59,7 +56,7 @@
                         <div class="portlet-title">
                             <div class="caption">
                                 <i class="fa fa-video-camera" aria-hidden="true"></i>
-                                فیلم {{(isset($sessionNumber))?"جلسه ".$sessionNumber." - ":""}} {{$educationalContent->name}}
+                                {{ isset($title) ? $title : '' }}
                             </div>
                             <div class="actions">
                                 @if($educationalContent->files->where("pivot.label" ,"<>" , "thumbnail")->count() == 1)
@@ -114,13 +111,35 @@
                                     @endif
                                 </div>
                             </div>
-                        </div>
 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="portlet light ">
+                                <div class="portlet-title">
+                                    <div class="caption">
+                                        <i class="fa fa-comment-o" aria-hidden="true"></i>
+                                        توضیح این جلسه
+                                    </div>
+                                </div>
+                                <div class="portlet-body text-justify">
+                                    @if(isset($educationalContent->description[0]))
+                                        <div class="scroller" style="height:100px" data-rail-visible="1" data-rail-color="black"
+                                             data-handle-color="#a1b2bd">
+                                            {!! $educationalContent->description !!}
+                                        </div>
+                                    @else
+                                        به زودی ...
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 @if(isset($contentsWithSameSet))
                     <div class="col-md-4 margin-bottom-15">
-                    <div class="mt-element-list">
+                        <div class="mt-element-list">
                         <div class="mt-list-head list-news ext-1 font-white bg-yellow-crusta">
                             <div class="list-head-title-container">
                                 <h3 class="list-title">جلسات دیگر</h3>
@@ -128,7 +147,7 @@
                             <div class="list-count pull-right bg-yellow-saffron"></div>
                         </div>
                         <div class="mt-list-container list-news ext-2">
-                            <div class="scroller" style="height:500px" data-always-visible="1" data-rail-visible="1"
+                            <div class="scroller" style="min-height: 50px; max-height:650px" data-always-visible="1" data-rail-visible="1"
                                  data-rail-color="red" data-handle-color="green">
                                 <ul>
 
@@ -158,31 +177,10 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                    </div>
                 @endif
             </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="portlet light ">
-                        <div class="portlet-title">
-                            <div class="caption">
-                                <i class="fa fa-comment-o" aria-hidden="true"></i>
-                                توضیح این جلسه
-                            </div>
-                        </div>
-                        <div class="portlet-body text-justify">
-                            @if(isset($educationalContent->description[0]))
-                            <div class="scroller" style="height:100px" data-rail-visible="1" data-rail-color="black"
-                                 data-handle-color="#a1b2bd">
-                                    {!! $educationalContent->description !!}
-                            </div>
-                            @else
-                                به زودی ...
-                            @endif
-                        </div>
-                    </div>
-                </div>
-            </div>
+
             @if(isset($contentsWithSameSet) && $contentsWithSameSet->whereIn("type" , "pamphlet" )->isNotEmpty())
                 <div class="row">
                 <div class="col-md-12">

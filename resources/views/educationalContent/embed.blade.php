@@ -9,9 +9,13 @@
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta content="width=device-width, initial-scale=1" name="viewport" />
+        {!! Meta::tag('robots') !!}
+        {!! Meta::tag('site_name', 'آلاء') !!}
+        {!! Meta::tag('url', Request::url()); !!}
         @if(!empty(Meta::get('canonical')))
             {!! Meta::tag('canonical') !!}
         @endif
+        {!! Meta::tag('locale', 'fa_IR') !!}
     </head>
     <body>
         <div data-vjs-player>
