@@ -17,6 +17,7 @@ use App\Traits\APIRequestCommon;
 use App\Traits\ProductCommon;
 use App\Websitesetting;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Meta;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
@@ -371,118 +372,150 @@ class EducationalContentController extends Controller
      * @param Request $request
      * @param  \App\Educationalcontent $educationalContent
      * @return \Illuminate\Http\Response
+     * @throws \Exception
      */
     public function show(Request $request, Educationalcontent $educationalContent)
     {
-        [ $author, $title, $educationalContent, $rootContentType, $childContentType, $contentsWithSameType, $soonContentsWithSameType, $educationalContentSet, $contentsWithSameSet, $videoSources, $files, $tags, $sideBarMode, $educationalContentDisplayName, $sessionNumber, $fileToShow ] = null ;
+
         $pass=true;
         if($pass || $educationalContent->isValid() && $educationalContent->isEnable())
         {
-            $contentsWithSameType = $educationalContent->contentsWithSameType()->orderBy("validSince","DESC")->take(5)->get();
-            $soonContentsWithSameType = $educationalContent->contentsWithSameType(1,0)->orderBy("validSince","ASC")->soon()->take(5)->get() ;
-            $rootContentType = $educationalContent->contenttypes()->whereDoesntHave("parents")->get()->first();
-            $childContentType = $educationalContent->contenttypes()->whereHas("parents", function ($q) use ($rootContentType) {
-                $q->where("id", $rootContentType->id);
-            })->get()->first();
 
             $educationalContentDisplayName = $educationalContent->getDisplayName();
 
             /**
              *      Retrieving Tags
              */
-            $response = $this->sendRequest(env("TAG_API_URL")."id/content/".$educationalContent->id,"GET");
+            $response = $this->sendRequest(
+                env("TAG_API_URL")."id/content/".$educationalContent->id,
+                "GET"
+            );
+
             if($response["statusCode"] == 200){
                 $result = json_decode($response["result"]);
                 $tags = $result->data->tags;
+            } else {
+                $tags =[];
             }
 
+            //TODO: replace metaTag Mod with contentType
             $metaTagMod = 1;
-            $title ='';
             if (isset($educationalContent->template))
             {
-                switch($educationalContent->template->name)
-                {
-                    case "video1":
-                        $metaTagMod = 1;
-                        $title ='فیلم ';
-                        $files = collect();
-                        $videoSources = collect();
-    //                    $time_now = date('Hi');
-                        $file = $educationalContent->files->where("pivot.label" , "hd")->first() ;
-                        if(isset($file))
-                        {
-                            $videoSources->put( "hd" , ["src"=>$file->name , "caption"=>$file->pivot->caption]) ;
-                        }
+                $key = "content:show".$educationalContent->cacheKey();
+                [
+                    $author,
+                    $educationalContent,
+                    $contentsWithSameSet,
+                    $videoSources,
+                    $files,
+                    $fileToShow,
+                    $metaTagMod
+                ] =  Cache::remember($key,Config::get("constants.CACHE_60"),function () use($educationalContent) {
+                    $contentsWithSameSet = null ;
+                    $videoSources = null ;
+                    $files = null;
+                    $fileToShow = null;
 
-                        $file = $educationalContent->files->where("pivot.label" , "hq")->first() ;
-                        if(isset($file))
-                        {
-                            $videoSources->put( "hq" , ["src"=>$file->name , "caption"=>$file->pivot->caption]) ;
-                        }
+                    switch($educationalContent->template->name)
+                    {
+                        case "video1":
+                            $metaTagMod = 1;
+                            $files = collect();
+                            $videoSources = collect();
+                            //                    $time_now = date('Hi');
 
-                        $file = $educationalContent->files->where("pivot.label" , "240p")->first() ;
-                        if(isset($file))
-                        {
-                            $videoSources->put( "240p" , ["src"=>$file->name ,  "caption"=>$file->pivot->caption]) ;
-                        }
-                        $file = $educationalContent->files->where("pivot.label" , "thumbnail")->first();
-                        if(isset($file))
-                            $files->put("thumbnail" , $file->name);
-                        $files->put("videoSource" , $videoSources);
-
-                        $contenSets = $educationalContent->contentsets->where("pivot.isDefault" , 1);
-                        if($contenSets->isNotEmpty())
-                        {
-                            $contentSet = $contenSets->first();
-                            $sessionNumber = $contentSet->pivot->order;
-                            $sameContents =  $contentSet->educationalcontents ;
-                            $contentsWithSameSet = collect();
-                            $sameContents->load('files');
-                            $sameContents->load('contenttypes');
-                            foreach ($sameContents as $content)
+                            $file = $educationalContent->files->where("pivot.label" , "hd")->first() ;
+                            if(isset($file))
                             {
-                                $file = $content->files->where("pivot.label" , "thumbnail")->first();
-                                if(isset($file))
-                                    $thumbnailFile = $file->name;
-                                else
-                                    $thumbnailFile = "" ;
-
-                                $contentTypes = $content->contenttypes->pluck("name")->toArray();
-                                if(in_array("video" , $contentTypes ))
-                                    $myContentType = "video";
-                                elseif(in_array("pamphlet" , $contentTypes ))
-                                    $myContentType = "pamphlet";
-
-                                $session = $content->pivot->order;
-                                $contentsWithSameSet->push([
-                                    "type"=> $myContentType ,
-                                    "content"=>$content ,
-                                    "thumbnail"=>$thumbnailFile ,
-                                    "session"=>$session
-                                ]);
+                                $videoSources->put( "hd" , ["src"=>$file->name , "caption"=>$file->pivot->caption]) ;
                             }
-                        }
+
+                            $file = $educationalContent->files->where("pivot.label" , "hq")->first() ;
+                            if(isset($file))
+                            {
+                                $videoSources->put( "hq" , ["src"=>$file->name , "caption"=>$file->pivot->caption]) ;
+                            }
+
+                            $file = $educationalContent->files->where("pivot.label" , "240p")->first() ;
+                            if(isset($file))
+                            {
+                                $videoSources->put( "240p" , ["src"=>$file->name ,  "caption"=>$file->pivot->caption]) ;
+                            }
+                            $file = $educationalContent->files->where("pivot.label" , "thumbnail")->first();
+                            if(isset($file))
+                                $files->put("thumbnail" , $file->name);
+                            $files->put("videoSource" , $videoSources);
+
+                            $contenSets = $educationalContent->contentsets->where("pivot.isDefault" , 1);
+                            if($contenSets->isNotEmpty())
+                            {
+                                $contentSet = $contenSets->first();
+                                $sameContents =  $contentSet->educationalcontents ;
+                                $contentsWithSameSet = collect();
+                                $sameContents->load('files');
+                                $sameContents->load('contenttype');
+
+                                foreach ($sameContents as $content)
+                                {
+                                    $file = $content->files->where("pivot.label" , "thumbnail")->first();
+                                    if(isset($file))
+                                        $thumbnailFile = $file->name;
+                                    else
+                                        $thumbnailFile = "" ;
+
+                                    if (isset($content->contenttype)) {
+                                        $myContentType = $content->contenttype->name;
+                                    }else{
+                                        $myContentType ="";
+                                    }
+                                    $session = $content->pivot->order;
+                                    $contentsWithSameSet->push([
+                                        "type"=> $myContentType ,
+                                        "content"=>$content ,
+                                        "thumbnail"=>$thumbnailFile ,
+                                        "session"=>$session
+                                    ]);
+                                }
+                            }
 
 
-                        break;
-                    case  "pamphlet1":
-                        $metaTagMod = 2;
-                        $title ='جزوه ';
-                        $files = $educationalContent->files;
-                        $fileToShow = $educationalContent->file;
-                        break;
-                    case "article" :
-                        $metaTagMod = 3;
-                        $title ='';
-                        break;
-                    default:
-                        break;
-                }
+                            break;
+                        case  "pamphlet1":
+                            $metaTagMod = 2;
+                            $files = $educationalContent->files;
+                            $fileToShow = $educationalContent->file;
+                            break;
+                        case "article" :
+                            $metaTagMod = 3;
+                            break;
+                        default:
+                            $metaTagMod = 4;
+                            break;
+                    }
+
+                    $author = null;
+                    if (isset($educationalContent->user)) {
+                        $author = $educationalContent->user->getfullName();
+                    }
+
+                    return [
+                        $author,
+                        $educationalContent,
+                        $contentsWithSameSet,
+                        $videoSources,
+                        $files,
+                        $fileToShow,
+                        $metaTagMod
+                    ];
+
+                });
+
             }
-            $url = $request->url();
-            $title .= ( isset($sessionNumber)? "جلسه ".$sessionNumber." - ":"" )." ".$educationalContent->name;
 
-            SEO::setTitle($title);
+            $url = $request->url();
+
+            SEO::setTitle($educationalContentDisplayName);
             if(isset($educationalContent->metaDescription) && strlen($educationalContent->metaDescription) > 0)
                 SEO::setDescription($educationalContent->metaDescription);
             else
@@ -494,16 +527,10 @@ class EducationalContentController extends Controller
             SEO::setCanonical($url);
             SEO::twitter()->setSite("آلاء");
             //TODO: move thumbnails to sftp storage
-            if( $educationalContent->thumbnails->isNotEmpty())
-                SEO::opengraph()->addImage($educationalContent->thumbnails->first()->name, ['height' => 720, 'width' => 1280]);
+            if(isset($files['thumbnail']))
+                SEO::opengraph()->addImage($files['thumbnail'], ['height' => 720, 'width' => 1280]);
             else
                 SEO::opengraph()->addImage(route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]), ['height' => 100, 'width' => 100]);
-
-            if (isset($educationalContent->user)) {
-                $author = $educationalContent->user->getfullName();
-            }
-            else
-                $author = null;
 
 
             switch ($metaTagMod){
@@ -546,11 +573,9 @@ class EducationalContentController extends Controller
                     break;
             }
 
-
-
             $sideBarMode = "closed";
 
-            return view("educationalContent.show", compact("author","title","educationalContent", "rootContentType", "childContentType", "contentsWithSameType" , "soonContentsWithSameType" , "educationalContentSet" , "contentsWithSameSet" , "videoSources" , "files" , "tags" , "sideBarMode" , "educationalContentDisplayName" , "sessionNumber" , "fileToShow"));
+            return view("educationalContent.show", compact("author","educationalContent", "rootContentType", "childContentType", "contentsWithSameType" , "soonContentsWithSameType" , "educationalContentSet" , "contentsWithSameSet" , "videoSources" , "files" , "tags" , "sideBarMode" , "educationalContentDisplayName" , "sessionNumber" , "fileToShow"));
         }
         else
             abort(404);
