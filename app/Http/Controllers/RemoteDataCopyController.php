@@ -71,6 +71,7 @@ class RemoteDataCopyController extends Controller
             $departmentlessonid = $departmentlesson->departmentlessonid;
             $sanatisharifDataRequest = new Request();
             $sanatisharifDataRequest->offsetSet("departmentlessonid" , $departmentlessonid );
+            $sanatisharifDataRequest->offsetSet("pic" , $departmentlesson->pic );
             $sanatisharifDataRequest->offsetSet("departmentlessonEnable" , $departmentlesson->isenable );
             $sanatisharifDataRequest->offsetSet("depid" , $depid );
             $sanatisharifDataRequest->offsetSet("depname" , $departmentlesson->depname );

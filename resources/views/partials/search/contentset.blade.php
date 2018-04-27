@@ -2,7 +2,7 @@
     <ul class="feeds" >
         @foreach($items as $contentset)
             <li>
-                <a href="@if($contentset->educationalcontents->isNotEmpty()){{action("EducationalContentController@show", $contentset->educationalcontents->sortBy("pivot.order")->first()->id)}} @else #@endif">
+                <a href="@if($contentset->educationalcontents->isNotEmpty()){{action("EducationalContentController@show", $contentset->educationalcontents->sortBy("pivot.order")->last()->id)}} @else #@endif">
                     <div class="col1">
                         <div class="cont">
                             <div class="cont-col1">
