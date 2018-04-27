@@ -133,8 +133,8 @@ class UseruploadController extends Controller
                 if(strlen($userupload->user->firstName)>0) $fullName .= $userupload->user->firstName;
                 if(strlen($userupload->user->lastName)>0) $fullName .= " ".$userupload->user->lastName;
                 $userUploadStatusName = Useruploadstatus::where('id', $userupload->useruploadstatus_id)->pluck('displayName')->toArray();
-                if(strlen($fullName)>0) $smsRequest["message"] = $fullName." عزیز وضعیت سوال مشاوره ای شما به حالت ".$userUploadStatusName[0]." تغییر کرد-تخته خاک";
-                else $smsRequest["message"] = " کاربر گرامی وضعیت سوال مشاوره ای شما به حالت ".$userUploadStatusName[0]." تغییر کرد-تخته خاک";
+                if(strlen($fullName)>0) $smsRequest["message"] = $fullName." عزیز وضعیت سوال مشاوره ای شما به حالت ".$userUploadStatusName[0]." تغییر کرد-آلاء";
+                else $smsRequest["message"] = " کاربر گرامی وضعیت سوال مشاوره ای شما به حالت ".$userUploadStatusName[0]." تغییر کرد-آلاء";
                 $smsRequest["users"] = $userupload->user_id;
                 $smsstatus =  $controller->sendSMS($smsRequest);
                 return $this->response->setStatusCode(200)->setContent($smsstatus->getStatusCode());

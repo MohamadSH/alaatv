@@ -15,6 +15,7 @@
 Auth::routes();
 
 Route::get('c',"HomeController@search");
+Route::get('embed/c/{educationalcontent}',"EducationalContentController@embed");
 Route::get( '/' , 'HomeController@index');
 Route::get( 'home' , 'HomeController@home');
 Route::get('404', 'HomeController@error404');
@@ -225,6 +226,12 @@ Route::get( "copycontenttotakhtekhak" , "SanatisharifmergeController@copyContent
 Route::get("ctag" , "EducationalContentController@retrieveTags");
 ROute::get("tagbot", "HomeController@tagbot");
 Route::get("debug", 'HomeController@debug');
+
+Route::get('Sanati-Sharif-Lesson/{lId?}/{dId?}','SanatisharifmergeController@redirectLesson');
+Route::get('Sanati-Sharif-Video/{lId?}/{dId?}/{vId?}','SanatisharifmergeController@redirectVideo');
+Route::get('Sanati-Sharif-Pamphlet/{lId?}/{dId?}/{pId?}','SanatisharifmergeController@redirectPamphlet');
+Route::get('SanatiSharif-News', 'HomeController@home');
+
 
 //Route::get('certificates', 'HomeController@certificates');
 //Route::get('findTech', "UserController@findTech");

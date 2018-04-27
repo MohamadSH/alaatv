@@ -11,6 +11,7 @@ use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Input;
 
 class SanatisharifmergeController extends Controller
@@ -2907,7 +2908,11 @@ class SanatisharifmergeController extends Controller
     public function copyDepartmentlesson()
     {
         try {
-            $sanatisharifRecords = Sanatisharifmerge::whereNull("videoid")->whereNull("pamphletid")->whereNotNull("departmentlessonid")->where("departmentlessonTransferred" , 0)->get();
+            $sanatisharifRecords = Sanatisharifmerge::whereNull("videoid")
+                ->whereNull("pamphletid")
+                ->whereNotNull("departmentlessonid")
+                ->where("departmentlessonTransferred" , 0)
+                ->get();
 //        $sanatisharifRecords = Sanatisharifmerge::groupBy('departmentlessonid')->where("departmentlessonTransferred" , 0);
             //Bug: farze kon ye deplesson ham khodesh vared shode ham video barayash vared shode. man chon bar asase sotoone departmentlessonTransferred filter mikonam
             // var recordi ke deplessonid va videoid darad dataye departmentlessonTransferred sefr ast kare filtere man ra kharab mikonad
@@ -3261,4 +3266,83 @@ class SanatisharifmergeController extends Controller
 
     }
 
+
+    private function getDepLessonTags($lId = null , $dId = null ){
+        $key = "getDepLessonTags:".$lId."-".$dId;
+        return Cache::rememberForever ($key,function () use ($lId,$dId) {
+            $tag1 = [];
+            $tag2 = [];
+            $tag3 = [];
+            if(isset($lId) && isset($dId)){
+                $tag1 = $this->departmentMultiplexer($dId);
+                $oldContent = Sanatisharifmerge::where('lessonid','=',$lId)
+                    ->where('depid','=',$dId)
+                    ->first();
+                $tag2 = $this->lessonMultiplexer($lId,$oldContent->lessonname);
+                $tag3 = $this->determineTeacherName(
+                    $oldContent->teacherfirstname,
+                    $oldContent->teacherlastname,
+                    $oldContent->departmentlessonid,
+                    1);
+                $tag3 = $this->makeName($tag3["firstname"],$tag3["lastname"]);
+                if(strlen($tag3) > 0)
+                    $tag3 = [$this->make_slug($tag3 , "_")];
+                else
+                    $tag3 =[];
+            }elseif (isset($lId)){
+                $oldContent = Sanatisharifmerge::where('lessonid','=',$lId)->first();
+                if (isset($oldContent)) {
+                    $tag1 = $this->lessonMultiplexer($lId,$oldContent->lessonname);
+                }
+            }
+            $tag = array_merge($tag1,$tag2,$tag3);
+            return $tag;
+        });
+    }
+
+    public function redirectLesson(Request $request , $lId = null , $dId = null){
+        $tag = $this->getDepLessonTags($lId, $dId);
+        $newUri = urldecode(action("HomeController@search" , ["tags"=>$tag]));
+        return redirect($newUri,301);
+    }
+
+    public function redirectVideo(Request $request , $lId = null , $dId = null, $vId = null){
+
+        $key = "Url:".$lId."-".$dId."-".$vId;
+        $newUri = Cache::rememberForever ($key,function () use ($lId,$dId,$vId) {
+            if( isset($vId) ) {
+                $v = Sanatisharifmerge::where('videoid','=',$vId)->first();
+                if (isset($v)) {
+                    if (isset($v->educationalcontent)) {
+                        return action('EducationalContentController@show',$v->educationalcontent);
+                    }
+                }
+            }
+            $tag = $this->getDepLessonTags($lId, $dId);
+            return urldecode(action("HomeController@search" , ["tags"=>$tag]));
+
+        });
+        return redirect($newUri,301);
+
+    }
+
+    public function redirectPamphlet(Request $request , $lId = null , $dId = null, $pId = null){
+        $key = "Url:".$lId."-".$dId."-".$pId;
+        $newUri = Cache::rememberForever ($key,function () use ($lId,$dId,$pId) {
+            if( isset($pId) ) {
+                $p = Sanatisharifmerge::where('pamphletid','=',$pId)->first();
+                if (isset($p)) {
+                    if (isset($p->educationalcontent)) {
+                        return action('EducationalContentController@show',$p->educationalcontent);
+                    }
+                }
+            }
+            $tag = $this->getDepLessonTags($lId, $dId);
+            return urldecode(action("HomeController@search" , ["tags"=>$tag]));
+
+        });
+        return redirect($newUri,301);
+    }
+
+//    public function redirectVideo
 }
