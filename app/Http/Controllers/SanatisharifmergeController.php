@@ -110,13 +110,6 @@ class SanatisharifmergeController extends Controller
     "password" => "8912042338",
   ]
    , [
-        "userid" => "274",
-    "userfirstname" => "گروه آموزشی",
-    "userlastname" => " ",
-    "mobile" => "09996214616",
-    "password" => "2706214616",
-  ]
-   , [
         "userid" => "307",
     "userfirstname" => "حمید",
     "userlastname" => "فدایی فرد",
@@ -157,13 +150,6 @@ class SanatisharifmergeController extends Controller
     "userlastname" => "زاهدی",
     "mobile" => "09998374076",
     "password" => "1978374076",
-  ]
-   , [
-        "userid" => "315",
-    "userfirstname" => "مشاوران دبیرستان",
-    "userlastname" => "",
-    "mobile" => "09994951579",
-    "password" => "8014951579",
   ]
    , [
         "userid" => "318",
@@ -2944,7 +2930,11 @@ class SanatisharifmergeController extends Controller
                 $tags = array_merge($tags ,$this->deplessonMultiplexer($sanatisharifRecord->departmentlessonid,1));
                 $tags = array_merge($tags , $this->departmentMultiplexer($sanatisharifRecord->depid)) ;
                 $tags = array_merge($tags , $this->lessonMultiplexer($sanatisharifRecord->lessonid , $this->make_slug($sanatisharifRecord->lessonname))) ;
-                $teacherNameArray =  $this->determineTeacherName($sanatisharifRecord->teacherfirstname , $sanatisharifRecord->teacherlastname , $sanatisharifRecord->departmentlessonid , 1);
+                $teacherNameArray =  $this->determineTeacherName(
+                    $sanatisharifRecord->teacherfirstname ,
+                    $sanatisharifRecord->teacherlastname ,
+                    $sanatisharifRecord->departmentlessonid ,
+                    1);
                 $teacherName = $this->makeName($teacherNameArray["firstname"] , $teacherNameArray["lastname"]) ;
                 if(strlen($teacherName) > 0)
                 {
@@ -3148,12 +3138,12 @@ class SanatisharifmergeController extends Controller
                       $storeContentReuest->offsetSet("template_id" , $template_id);
                     $storeContentReuest->offsetSet("contenttype_id" , $contenttype_id);
 
-//                    if( isset($sanatisharifRecord->$nameColumn) && strlen($sanatisharifRecord->$nameColumn) > 0)
-//                    {
-//                        $storeContentReuest->offsetSet("name" , $sanatisharifRecord->$nameColumn);
+                    if( isset($sanatisharifRecord->$nameColumn) && strlen($sanatisharifRecord->$nameColumn) > 0)
+                    {
+                        $storeContentReuest->offsetSet("name" , $sanatisharifRecord->$nameColumn);
 //                        $metaTitle = strip_tags(htmlspecialchars(substr($sanatisharifRecord->$nameColumn ,0,55)));
 //                        $storeContentReuest->offsetSet("metaTitle" , $metaTitle );
-//                    }
+                    }
 
                     if(isset($sanatisharifRecord->$descriptionColumn) && strlen($sanatisharifRecord->$descriptionColumn) > 0)
                     {
@@ -3274,6 +3264,7 @@ class SanatisharifmergeController extends Controller
             $tag1 = [];
             $tag2 = [];
             $tag3 = [];
+            $tag4 = [];
             if(isset($lId) && isset($dId)){
                 $tag1 = $this->departmentMultiplexer($dId);
                 $oldContent = Sanatisharifmerge::where('lessonid','=',$lId)
@@ -3290,13 +3281,14 @@ class SanatisharifmergeController extends Controller
                     $tag3 = [$this->make_slug($tag3 , "_")];
                 else
                     $tag3 =[];
+                $tag4 = $this->deplessonMultiplexer($oldContent->departmentlessonid,1);
             }elseif (isset($lId)){
                 $oldContent = Sanatisharifmerge::where('lessonid','=',$lId)->first();
                 if (isset($oldContent)) {
                     $tag1 = $this->lessonMultiplexer($lId,$oldContent->lessonname);
                 }
             }
-            $tag = array_merge($tag1,$tag2,$tag3);
+            $tag = array_merge($tag1,$tag2,$tag3,$tag4);
             return $tag;
         });
     }

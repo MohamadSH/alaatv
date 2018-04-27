@@ -154,7 +154,7 @@
                         <div class="col-md-4">
                             <div class="tile-container">
                                 <div class="tile-thumbnail">
-                                    <a href="{{action("EducationalContentController@show", $lesson["content_id"])}}">
+                                    <a href="{{(isset($lesson["content_id"]) && $lesson["content_id"]>0)?action("EducationalContentController@show", $lesson["content_id"]):""}}">
                                         <img src="
                                         @if(isset($lesson["pic"]) && strlen($lesson["pic"])>0)
                                                 {{$lesson["pic"]}}
@@ -165,7 +165,7 @@
                                 </div>
                                 <div class="tile-title" style="height: 145px;">
                                     <h5 class="bold">
-                                        <a href="{{action("EducationalContentController@show", $lesson["content_id"])}}">{{$lesson["displayName"]}}</a>
+                                        <a href="{{(isset($lesson["content_id"]) && $lesson["content_id"]>0)?action("EducationalContentController@show", $lesson["content_id"]):""}}">{{$lesson["displayName"]}}</a>
                                     </h5>
                                     {{--<a href="javascript:;">--}}
                                         {{--<i class="icon-question font-blue"></i>--}}
