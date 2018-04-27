@@ -43,6 +43,7 @@ class Sanatisharifmerge extends Model
         'depname',
         'depyear',
         'departmentlessonid',
+        'pic',
         'departmentlessonTransferred',
         'departmentlessonEnable',
         'teacherfirstname',

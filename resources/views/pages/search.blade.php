@@ -217,6 +217,8 @@
 
 @section("extraJS")
     <script src="{{ mix('/js/Page_Level_Script_all.js') }}" type="text/javascript"></script>
+    <script src="/assets/global/plugins/fancybox/source/jquery.fancybox.pack.js" type="text/javascript"></script>
+    <script src="/assets/pages/scripts/search.min.js" type="text/javascript"></script>
     <script src="/assets/extra/slick/slick/slick.min.js" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript">
         $(document).ready(function(){
