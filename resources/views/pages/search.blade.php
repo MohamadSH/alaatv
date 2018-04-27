@@ -151,7 +151,7 @@
                 </div>
                 <div class="portlet-body" id="productDiv">
                     <div class="row">
-                        <section class="regular slider" style="width: 95%;margin-top: 0px ; margin-bottom: 15px;">
+                        <section class="productSlider slider" style="width: 95%;margin-top: 0px ; margin-bottom: 15px;">
                             {!!  $items->where("type" , "product")->first()["view"]  !!}
                         </section>
                     </div>
@@ -220,7 +220,7 @@
     <script src="/assets/extra/slick/slick/slick.min.js" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript">
         $(document).ready(function(){
-            initialSlick($(".regular"));
+            initialSlick($(".productSlider"));
             initialVideoPortfolio();
             initialContentTypeSelect();
         });
@@ -408,9 +408,9 @@
                                         if(totalItems > 0)
                                         {
                                             $("#productPortlet").show();
-                                            var element = $(".regular");
+                                            var element = $(".productSlider");
                                             destroySlick(element) ;
-                                            $("#productDiv .row .regular").html(item.view);
+                                            $("#productDiv .row .productSlider").html(item.view);
                                             initialSlick(element);
                                         }
                                         else

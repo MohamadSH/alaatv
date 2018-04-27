@@ -452,24 +452,35 @@ class HomeController extends Controller
         Meta::set('keywords', substr($this->setting->site->seo->homepage->metaKeywords, 0, Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
         Meta::set('description', substr($this->setting->site->seo->homepage->metaDescription, 0, Config::get("constants.META_DESCRIPTION_LIMIT")));
         Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
-//        $assignmentstatus_active = Assignmentstatus::all()->where("name" , "active")->first();
-//        $assignments = Assignment::all()->sortByDesc('created_at')->where("assignmentstatus_id" , $assignmentstatus_active->id);
-        $consultationstatus_active = Consultationstatus::all()->where("name", "active")->first();
-        $consultingQuestionCount = Userupload::all()->count();
-        $consultations = Consultation::all()->sortByDesc("created_at")->where("consultationstatus_id", $consultationstatus_active->id);
-        $consultationCount = $consultations->count();
-        $userCount = User::count();
-        $pageName = "dashboard";
-        $todayDate = $this->convertDate(Carbon::now()->toDateTimeString(), "toJalali");
-        $todayDate = explode("/", $todayDate);
-        $currentDay = $todayDate[2];
-        $currentMonth = $todayDate[1];
-        $currentYear = $todayDate[0];
+//        $consultationstatus_active = Consultationstatus::all()->where("name", "active")->first();
+//        $consultingQuestionCount = Userupload::all()->count();
+//        $consultations = Consultation::all()->sortByDesc("created_at")->where("consultationstatus_id", $consultationstatus_active->id);
+//        $consultationCount = $consultations->count();
+//        $userCount = User::count();
+
+//        $todayDate = $this->convertDate(Carbon::now()->toDateTimeString(), "toJalali");
+//        $todayDate = explode("/", $todayDate);
+//        $currentDay = $todayDate[2];
+//        $currentMonth = $todayDate[1];
+//        $currentYear = $todayDate[0];
+//        $educationalContents = Educationalcontent::enable()
+//            ->valid()
+//            ->orderBy("validSince", "DESC")
+//            ->take(10)
+//            ->get();
+//        $educationalContentCollection = collect();
+//        foreach ($educationalContents as $educationalContent) {
+//            $educationalContentCollection
+//                ->push([
+//                    "id" => $educationalContent->id,
+//                    "displayName" => $educationalContent->getDisplayName(),
+//                    "validSince_Jalali" => explode(" ", $educationalContent->validSince_Jalali())[0]
+//                ]);
+//        }
         $websitePageId = Websitepage::all()->where('url', "/home")->first()->id;
         $slides = Slideshow::all()->where("isEnable", 1)->where("websitepage_id", $websitePageId)->sortBy("order");
         $slideCounter = 1;
         $slideDisk = 9;
-        $ordooRegisteredCount = 0;
 
         if (Config::has("constants.HOME_EXCLUDED_PRODUCTS"))
             $excludedProducts = Config::get("constants.HOME_EXCLUDED_PRODUCTS");
@@ -509,22 +520,92 @@ class HomeController extends Controller
          *  end of code
          */
 
-        $educationalContents = Educationalcontent::enable()
-            ->valid()
-            ->orderBy("validSince", "DESC")
-            ->take(10)
-            ->get();
-        $educationalContentCollection = collect();
-        foreach ($educationalContents as $educationalContent) {
-            $educationalContentCollection
-                ->push([
-                    "id" => $educationalContent->id,
-                    "displayName" => $educationalContent->getDisplayName(),
-                    "validSince_Jalali" => explode(" ", $educationalContent->validSince_Jalali())[0]
-                ]);
+        /**
+         *  lessons
+         */
+        $totalLessons = collect();
+        $sectionArray = [
+            "konkoor" ,
+            "dahom" ,
+            "yazdahom",
+        ];
+        $sections = collect();
+        foreach ($sectionArray as $section)
+        {
+            switch ($section)
+            {
+                case "konkoor" :
+                    $lessons = collect([
+                        [
+                            "name" => "زیست کنکور" ,
+                            "author" => "ابوالفضل جعفری",
+                            "tags" => [
+                                "کنکور" ,
+                                "زیست_شناسی" ,
+                                "ابوالقضل_جعفری",
+                            ]
+                        ],
+                        [
+                            "name" => "آرایه های ادبی" ,
+                            "author" => "هامون سبطی",
+                            "tags" => [
+                                "کنکور" ,
+                                "آرایه_های_ادبی_کنکور" ,
+                                "هامون_سبطی",
+                            ]
+                        ],
+                        [
+                            "name" => "مشاوره" ,
+                            "author" => "محمد علی امینی راد",
+                            "tags" => [
+                                "مشاوره" ,
+                                "محمد_علی_امینی_راد",
+                            ]
+                        ] ,
+                        [
+                            "name" => "شیمی شب کنکور" ,
+                            "author" => "مهدی صنیعی تهرانی",
+                            "tags" => [
+                                "شب_کنکور" ,
+                                "مهدی_صنیعی_تهرانی",
+                            ]
+                        ]
+                    ]);
+                    $sections->push(
+                      [
+                          "name"=>$section,
+                          "displayName" => "کنکور",
+                          "lessons" => $lessons ,
+                           "tags" => [
+                               "کنکور"
+                           ]
+                      ]
+                    );
+                    break;
+                case "dahom" :
+                    $lessons = [
+                        ""
+                    ];
+                    break;
+                case "yazdahom" :
+                    $lessons = [
+                        ""
+                    ];
+                    break;
+                default:
+                    break ;
+            }
         }
-
-        return view('pages.dashboard1', compact('consultations', 'consultationCount', 'consultingQuestionCount', 'pageName', 'userCount', 'currentDay', 'currentMonth', 'currentYear', 'ordooRegisteredCount', 'girlsOrdooRegisteredCount', 'boysOrdooRegisteredCount', 'boysBlocks', 'girlsBlocks', 'slides', 'slideCounter', 'products', 'costCollection', 'slideDisk', 'educationalContents', 'educationalContentCollection'));
+        $pageName = "dashboard";
+        return view('pages.dashboard1', compact(
+            'pageName',
+            'slides',
+            'slideCounter',
+            'products',
+            'costCollection',
+            'slideDisk' ,
+            'sections'
+        ));
     }
 
     /**
