@@ -198,7 +198,7 @@
                                     @foreach($chunk as $item)
                                         <div class="m-grid-col m-grid-col-middle m-grid-col-center">
 
-                                            <img width="80" alt="{{$item["content"]->name}}" src="{{( ( isset($item["thumbnail"]) && ( strlen($item["thumbnail"]) > 0 ) ) ? $item["thumbnail"] : '' )}}"/>
+                                            <img width="80" alt="{{$item["content"]->name}}" src="{{( ( isset($item["thumbnail"]) && ( strlen($item["thumbnail"]) > 0 ) ) ? $item["thumbnail"] : 'https://www.freeiconspng.com/uploads/orange-pdf-icon-32.png' )}}"/>
                                             <br/>
                                             <a href="{{action("EducationalContentController@show" , $item["content"])}}">
                                                     <i class="fa fa-angle-left"></i>

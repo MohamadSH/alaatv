@@ -3144,15 +3144,15 @@ class SanatisharifmergeController extends Controller
                             break;
                     }
 
-                    $storeContentReuest->offsetSet("template_id" , $template_id);
+                      $storeContentReuest->offsetSet("template_id" , $template_id);
                     $storeContentReuest->offsetSet("contenttype_id" , $contenttype_id);
 
-                    if( isset($sanatisharifRecord->$nameColumn) && strlen($sanatisharifRecord->$nameColumn) > 0)
-                    {
-                        $storeContentReuest->offsetSet("name" , $sanatisharifRecord->$nameColumn);
-                        $metaTitle = strip_tags(htmlspecialchars(substr($sanatisharifRecord->$nameColumn ,0,55)));
-                        $storeContentReuest->offsetSet("metaTitle" , $metaTitle );
-                    }
+//                    if( isset($sanatisharifRecord->$nameColumn) && strlen($sanatisharifRecord->$nameColumn) > 0)
+//                    {
+//                        $storeContentReuest->offsetSet("name" , $sanatisharifRecord->$nameColumn);
+//                        $metaTitle = strip_tags(htmlspecialchars(substr($sanatisharifRecord->$nameColumn ,0,55)));
+//                        $storeContentReuest->offsetSet("metaTitle" , $metaTitle );
+//                    }
 
                     if(isset($sanatisharifRecord->$descriptionColumn) && strlen($sanatisharifRecord->$descriptionColumn) > 0)
                     {
