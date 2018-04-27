@@ -63,7 +63,8 @@ class Product extends Model
         'attributeset',
         'validProductfiles',
         'bons',
-        'attributevalues'
+        'attributevalues',
+        'gifts'
     ];
 
 
@@ -313,7 +314,7 @@ class Product extends Model
 
     public function BoneName($bonName){
         $key="product:BoneName:".$this->cacheKey()."-bone:".$bonName;
-        return Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($bonName){
+        return Cache::remember($key,Config::get("constants.CACHE_600"),function () use ($bonName){
             return $this->bons->where("name", $bonName)->where("isEnable", 1);
         });
 
@@ -322,7 +323,7 @@ class Product extends Model
     public function calculateBonPlus($bonId)
     {
         $key="product:calculateBonPlus:".$bonId.$this->cacheKey();
-        return Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($bonId){
+        return Cache::remember($key,Config::get("constants.CACHE_600"),function () use ($bonId){
             $bonPlus = 0;
             $bonPlus += $this->bons->where("id", $bonId)->sum("pivot.bonPlus");
             if ($bonPlus == 0) {
@@ -370,7 +371,7 @@ class Product extends Model
     public function hasComplimentaries()
     {
         $key="product:hasComplimentaries:".$this->cacheKey();
-        return Cache::remember($key,Config::get("constants.CACHE_60"),function () {
+        return Cache::remember($key,Config::get("constants.CACHE_600"),function () {
             return !$this->complimentaryproducts()->get()->isEmpty();
         });
 
@@ -408,9 +409,12 @@ class Product extends Model
         else
             $user = null;
 
-        $key="product:obtainProductCost:".$this->cacheKey()."-user:".(isset($user) ? $user->cacheKey() : "");
+        $key = "product:obtainProductCost:"
+            .$this->cacheKey()
+            ."-user:"
+            .(isset($user) ? $user->cacheKey() : "");
 
-        return Cache::remember($key,Config::get("constants.CACHE_3"),function () use($user)  {
+        return Cache::tags('bon')->remember($key,Config::get("constants.CACHE_60"),function () use($user) {
             // Obtaining discount
             $bonDiscount = 0;
             $productDiscount = 0;
@@ -499,7 +503,7 @@ class Product extends Model
     public function hasChildren($depth = 1)
     {
         $key="product:hasChildren:".$depth.$this->cacheKey();
-        return Cache::remember($key,Config::get("constants.CACHE_60"),function () use($depth){
+        return Cache::remember($key,Config::get("constants.CACHE_600"),function () use($depth){
             $counter = 0;
             $myProduct = $this;
             while ($myProduct->children->isNotEmpty()) {
@@ -519,7 +523,6 @@ class Product extends Model
     {
         if (isset($attributeType)) {
             $attributeType = Attributetype::all()->where("name", $attributeType)->first();
-            $attributesArray = array();
             $attributesArray = array();
             foreach ($this->attributeset->attributes()->where("attributetype_id", $attributeType->id) as $attribute) {
                 array_push($attributesArray, $attribute->id);
@@ -647,7 +650,7 @@ class Product extends Model
         $product = $this;
         $key = 'product:'."getAllAttributes:".$product->id;
 
-        return Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($product){
+        return Cache::remember($key,Config::get("constants.CACHE_600"),function () use ($product){
 
             $selectCollection = collect();
             $groupedCheckboxCollection = collect();
@@ -774,7 +777,7 @@ class Product extends Model
     public function getRootImage()
     {
         $key="product:getRootImage:".$this->cacheKey();
-        return Cache::remember($key,Config::get("constants.CACHE_60"),function (){
+        return Cache::remember($key,Config::get("constants.CACHE_600"),function (){
             $image = "";
             $grandParent = $this->getGrandParent();
             if ($grandParent !== false) {
@@ -809,7 +812,7 @@ class Product extends Model
     public function isEnableToPurchase()
     {
         $key="product:isEnableToPurchase:".$this->cacheKey();
-        return Cache::remember($key,Config::get("constants.CACHE_60"),function () {
+        return Cache::remember($key,Config::get("constants.CACHE_600"),function () {
 
             //ToDo : should be removed in future
             if (in_array($this->id, Config::get("constants.DONATE_PRODUCT")))

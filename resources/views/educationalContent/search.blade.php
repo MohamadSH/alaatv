@@ -11,7 +11,7 @@
 @endsection
 
 @section("title")
-    <title>تخته خاک|محتوای آموزشی|جزوه|آزمون</title>
+    <title>آلاء|محتوای آموزشی|جزوه|آزمون</title>
 @endsection
 
 @section("pageBar")

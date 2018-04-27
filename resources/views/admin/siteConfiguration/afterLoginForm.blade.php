@@ -9,7 +9,7 @@
 @endsection
 
 @section("title")
-    <title>تخته خاک|پیکربندی فرم لاگین</title>
+    <title>آلاء|پیکربندی فرم لاگین</title>
 @endsection
 
 @section("pageBar")

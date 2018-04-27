@@ -26,9 +26,9 @@
             <div class="col-md-6 login-container bs-reset">
                 {{--<div class="col-md-12">--}}
                     {{--<div class="m-heading-1 border-blue m-bordered margin-top-40">--}}
-                        {{--<h3>به سایت تخته خاک خوش آمدید</h3>--}}
+                        {{--<h3>به سایت آلاء خوش آمدید</h3>--}}
                         {{--<p>--}}
-                    {{--ثبت نام در سایت تخته خاک به معنی ثبت نام در اردو نیستا!--}}
+                    {{--ثبت نام در سایت آلاء به معنی ثبت نام در اردو نیستا!--}}
                         {{--</p>--}}
                         {{--<p>--}}
                         {{--برای دیدن انواع اردو ها و خدمات سایت ما مثل مشاوره ی فردی که به سفارش آلاء راه انداختیم باید اول تو سایتمون عضو شید.--}}
@@ -37,7 +37,7 @@
                 {{--</div>--}}
                 <div class="col-md-12 margin-top-40">
                     <div class="note note-info bg-font-dark bg-green-sharp" >
-                        <h4 class="block bold">به سایت تخته خاک خوش آمدید</h4>
+                        <h4 class="block bold">به سایت آلاء خوش آمدید</h4>
                         <h5 class="bold" style="line-height: normal;">نیازی به ثبت نام نیست .برای ورود تنها کافی است شماره موبایل و کد ملی خود را وارد کنید</h5>
                     </div>
                 </div>
@@ -61,7 +61,7 @@
                         </div>
                         <div class="col-xs-7 bs-reset">
                             <div class="login-copyright text-right">
-                                <p>Copyright &copy; Alaa 2016</p>
+                                <p>Copyright &copy; Alaa 2017</p>
                             </div>
                         </div>
                     </div>

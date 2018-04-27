@@ -118,13 +118,15 @@ class ArticleController extends Controller
      * @param  \App\Article  $article
      * @return \Illuminate\Http\Response
      */
-    public function show($article)
+    public function show(Request $request, $article)
     {
-        Meta::set('title', substr($article->title, 0 , Config::get("constants.META_TITLE_LIMIT")));
+        $url = $request->url();
+        Meta::set('canonical',$url);
+        Meta::set('title', $article->title);
         Meta::set('image',  route('image', ['category'=>'8','w'=>'608' , 'h'=>'608' ,  'filename' =>  $article->image ]));
-        if(isset($article->keyword) && strlen($article->keyword)>0) Meta::set('keywords', substr($article->keyword, 0 , Config::get("constants.META_KEYWORDS_LIMIT")));
-        else Meta::set('keywords', substr($article->title, 0 , Config::get("constants.META_KEYWORDS_LIMIT")));
-        Meta::set('description', substr($article->brief, 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
+        if(isset($article->keyword) && strlen($article->keyword)>0)
+            Meta::set('keywords', $article->keyword);
+        Meta::set('description', $article->brief);
 
         $articlecategories = Articlecategory::where('enable', 1)->get();
 

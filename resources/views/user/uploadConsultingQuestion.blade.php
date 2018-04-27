@@ -5,7 +5,7 @@
 @endsection
 
 @section("title")
-    <title>تخته خاک|آپلود سؤال مشاوره ای</title>
+    <title>آلاء|آپلود سؤال مشاوره ای</title>
 @endsection
 
 @section("pageBar")

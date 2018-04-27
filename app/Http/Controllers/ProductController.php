@@ -553,7 +553,6 @@ class ProductController extends Controller
         elseif(Auth::check())
             $user = Auth::user();
 
-
         $key="product:refreshPrice:Type"
             .$inputType
             ."\\"
@@ -564,8 +563,8 @@ class ProductController extends Controller
             ."products:"
             .( isset($productIds) ? implode("",$productIds) : "");
 
-        return Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($inputType,$attributevalues,$user,$product,$productIds) {
 
+        return Cache::tags('bon')->remember($key,  Config::get("constants.CACHE_60") , function () use($inputType,$attributevalues,$user,$product,$productIds){
             switch ($inputType)
             {
                 case  "extraAttribute":
@@ -1092,9 +1091,9 @@ class ProductController extends Controller
      */
     public function landing1()
     {
-        Meta::set('title', "تخته خاک|همایش ویژه دی");
-        Meta::set('keywords', substr("همایش ویژه دی ماه تخته خاک حمع بندی کنکور اساتید آلاء تست درسنامه تخفیف", 0 , Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
-        Meta::set('description', substr("همایش ویژه دی ماه تخته خاک حمع بندی کنکور اساتید آلاء تست درسنامه تخفیف" , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
+        Meta::set('title', "آلاء|همایش ویژه دی");
+        Meta::set('keywords', substr("همایش ویژه دی ماه آلاء حمع بندی کنکور اساتید آلاء تست درسنامه تخفیف", 0 , Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
+        Meta::set('description', substr("همایش ویژه دی ماه آلاء حمع بندی کنکور اساتید آلاء تست درسنامه تخفیف" , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
         $productIds = Config::get("constants.HAMAYESH_PRODUCT");
         $products = Product::whereIn("id" , $productIds)->orderBy("order")->where("enable" , 1)->get();
         $attribute = Attribute::where("name" , "major")->get()->first();
@@ -1139,7 +1138,7 @@ class ProductController extends Controller
                     break;
             }
         }
-        Meta::set('title', "تخته خاک|اردوی طلایی نوروز ۹۷");
+        Meta::set('title', "آلاء|اردوی طلایی نوروز ۹۷");
         Meta::set('keywords', substr("اردوی حضوری دختران و پسران اردوی غیر حضوری نوروز ۹۷", 0 , Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
         Meta::set('description', substr("اردوی حضوری دختران و پسران اردوی غیر حضوری نوروز ۹۷" , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
 

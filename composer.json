@@ -25,7 +25,8 @@
         "webpatser/laravel-uuid": "^3.0",
         "cloned/luckybox": "^0.9.0",
         "zarinpal/zarinpal": "^1.3",
-        "laravel/horizon": "^1.2"
+        "laravel/horizon": "^1.2",
+        "paulvl/backup": "3.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

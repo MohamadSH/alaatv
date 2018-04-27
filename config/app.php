@@ -12,7 +12,7 @@ return [
     | any other location as required by the application or its packages.
     */
 
-    'name' => 'Laravel',
+    'name' => 'alaaTv',
 
     /*
     |--------------------------------------------------------------------------
@@ -190,6 +190,7 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         App\Providers\MedianaServiceProvider::class,
+        Backup\BackupServiceProvider::class,
 
     ],
     'development-providers' => [

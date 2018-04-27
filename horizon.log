@@ -8,3 +8,5 @@ Horizon started successfully.
 [2018-04-24 15:08:47][19] Processed:  App\Notifications\UserRegisterd
 [2018-04-24 15:10:50][20] Processing: App\Notifications\UserRegisterd
 [2018-04-24 15:10:50][20] Processed:  App\Notifications\UserRegisterd
+[2018-04-25 22:42:59][22] Processing: App\Notifications\UserRegisterd
+[2018-04-25 22:42:59][22] Failed:     App\Notifications\UserRegisterd

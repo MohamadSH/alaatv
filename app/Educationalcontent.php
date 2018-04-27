@@ -45,7 +45,17 @@ class Educationalcontent extends Model
 
     public function files()
     {
-        return $this->belongsToMany('App\File', 'educationalcontent_file', 'content_id', 'file_id')->withPivot("caption", "label");
+        return $this->belongsToMany(
+            'App\File',
+            'educationalcontent_file',
+            'content_id',
+            'file_id')->withPivot("caption", "label");
+    }
+    public function thumbnails(){
+        return $this->files()->where('label','=','thumbnail');
+    }
+    public function sources(){
+        return $this->files()->where('label','<>','thumbnail');
     }
 
     public function contentsets()
@@ -257,5 +267,6 @@ class Educationalcontent extends Model
 //    {
 //        return json_encode($value);
 //    }
+
 
 }

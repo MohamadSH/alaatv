@@ -31,6 +31,11 @@ class Attributeset extends Model
         'name',
         'description',
     ];
+
+    protected $touches = [
+        'attributegroups'
+    ];
+
     public function cacheKey()
     {
         $key = $this->getKey();

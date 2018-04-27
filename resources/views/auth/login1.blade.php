@@ -65,7 +65,7 @@
                         </div>
                         <div class="col-xs-7 bs-reset">
                             <div class="login-copyright text-right">
-                                <p>Copyright &copy; Alaa 2016   </p>
+                                <p>Copyright &copy; Alaa 2017   </p>
                             </div>
                         </div>
                     </div>
@@ -85,7 +85,7 @@
                             </div>
                             <div class="portlet-body">
                                <p>
-                                   ثبت نام در سایت تخته خاک به معنی ثبت نام در اردو نیستا!
+                                   ثبت نام در سایت آلاء به معنی ثبت نام در اردو نیستا!
                                 </p><p>
                                    برای دیدن انواع اردو ها و خدمات سایت ما مثل مشاوره ی فردی که به سفارش آلاء راه انداختیم باید اول تو سایتمون عضو شید.
                                 </p>

@@ -54,8 +54,8 @@
 @endsection
 
 @section("content")
-    <h1 class="hidden">همایش اردو فیلم جزوه تخته خاک سؤال مشاوره ریاضی فیزیک دیفرانسیل شیمی</h1>
-    <h2 class="hidden">همایش اردو فیلم جزوه تخته خاک سؤال مشاوره ریاضی فیزیک دیفرانسیل شیمی</h2>
+    <h1 class="hidden">همایش اردو فیلم جزوه آلاء سؤال مشاوره ریاضی فیزیک دیفرانسیل شیمی</h1>
+    <h2 class="hidden">همایش اردو فیلم جزوه آلاء سؤال مشاوره ریاضی فیزیک دیفرانسیل شیمی</h2>
     @include("partials.slideShow1" ,["marginBottom"=>"25"])
     <div class="clearfix"></div>
     {{--<div class="row">--}}
@@ -208,7 +208,7 @@
                 {{--<div class="portlet-title">--}}
                     {{--<div class="caption">--}}
                         {{--<i class="icon-microphone font-dark hide"></i>--}}
-                        {{--<span class="caption-subject bold font-yellow uppercase"> همایش های نوروز ۹۵ تخته خاک</span>--}}
+                        {{--<span class="caption-subject bold font-yellow uppercase"> همایش های نوروز ۹۵ آلاء</span>--}}
                         {{--<span class="caption-helper">برای تماشای فیلم ها بر روی دروس کلیک کنید</span>--}}
                     {{--</div>--}}
                 {{--</div>--}}
