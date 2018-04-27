@@ -167,7 +167,6 @@ return [
         Greggilbert\Recaptcha\RecaptchaServiceProvider::class,
         Jenssegers\Agent\AgentServiceProvider::class,
         Laratrust\LaratrustServiceProvider::class,
-        Eusonlito\LaravelMeta\MetaServiceProvider::class,
         Watson\Sitemap\SitemapServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
         Neoxia\Filesystem\SftpServiceProvider::class,
@@ -191,6 +190,7 @@ return [
 
         App\Providers\MedianaServiceProvider::class,
         Backup\BackupServiceProvider::class,
+        Artesaos\SEOTools\Providers\SEOToolsServiceProvider::class,
 
     ],
     'development-providers' => [
@@ -251,10 +251,10 @@ return [
         'Recaptcha' => Greggilbert\Recaptcha\Facades\Recaptcha::class,
         'Agent' => Jenssegers\Agent\Facades\Agent::class,
         'Laratrust'   => Laratrust\LaratrustFacade::class,
-        'Meta'    => Eusonlito\LaravelMeta\Facade::class,
         'Sitemap' => Watson\Sitemap\Facades\Sitemap::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
+        'SEO' => Artesaos\SEOTools\Facades\SEOTools::class,
     ],
 
 ];

@@ -100,7 +100,7 @@
                             @if(isset($educationalContent->author_id))
                                 <hr>
                                 <ul class="list-inline">
-                                    <li><i class="fa fa-user"></i>مدرس : {{$educationalContent->user->getfullName()}}</li>&nbsp;
+                                    <li><i class="fa fa-user"></i>مدرس : {{$author}}</li>&nbsp;
                                 </ul>
                             @endif
                             <div class="row">
@@ -147,7 +147,7 @@
                             <div class="list-count pull-right bg-yellow-saffron"></div>
                         </div>
                         <div class="mt-list-container list-news ext-2">
-                            <div class="scroller" style="min-height: 50px; max-height:650px" data-always-visible="1" data-rail-visible="1"
+                            <div class="scroller" style="min-height: 50px; max-height:600px" data-always-visible="1" data-rail-visible="1"
                                  data-rail-color="red" data-handle-color="green">
                                 <ul>
 

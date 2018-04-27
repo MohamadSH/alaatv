@@ -10,9 +10,7 @@
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta content="width=device-width, initial-scale=1" name="viewport" />
-        @section("metadata")
-            @include("partials.headMeta")
-        @show
+        {!! SEO::generate(true) !!}
         <!-- BEGIN GLOBAL MANDATORY STYLES -->
         {{--<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />--}}
 

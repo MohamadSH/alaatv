@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "81154f033f6ef86b207dc74fa20041e1",
+    "content-hash": "6b59347ff5f92f520308802c59fe3170",
     "packages": [
         {
             "name": "algolia/algoliasearch-client-php",
@@ -57,17 +57,83 @@
             "time": "2018-03-02T13:24:10+00:00"
         },
         {
-            "name": "aws/aws-sdk-php",
-            "version": "3.55.1",
+            "name": "artesaos/seotools",
+            "version": "v0.12.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "42fd0afe654b549d3353e82fe05bed1cd8c70b49"
+                "url": "https://github.com/artesaos/seotools.git",
+                "reference": "8f3691fb88f46087e36e22ffe65caf19ad2182e4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/42fd0afe654b549d3353e82fe05bed1cd8c70b49",
-                "reference": "42fd0afe654b549d3353e82fe05bed1cd8c70b49",
+                "url": "https://api.github.com/repos/artesaos/seotools/zipball/8f3691fb88f46087e36e22ffe65caf19ad2182e4",
+                "reference": "8f3691fb88f46087e36e22ffe65caf19ad2182e4",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/config": "5.0.* || 5.1.* || 5.2.* || 5.3.* || 5.4.* || 5.5.* || 5.6.*",
+                "illuminate/support": "5.0.* || 5.1.* || 5.2.* || 5.3.* || 5.4.* || 5.5.* || 5.6.*",
+                "php": ">=7.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "~1.0",
+                "orchestra/testbench": "~3.0",
+                "phpspec/phpspec": "~4.0",
+                "phpunit/phpunit": "~6.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Artesaos\\SEOTools\\Providers\\SEOToolsServiceProvider"
+                    ],
+                    "aliases": {
+                        "SEOMeta": "Artesaos\\SEOTools\\Facades\\SEOMeta",
+                        "OpenGraph": "Artesaos\\SEOTools\\Facades\\OpenGraph",
+                        "Twitter": "Artesaos\\SEOTools\\Facades\\TwitterCard",
+                        "SEO": "Artesaos\\SEOTools\\Facades\\SEOTools"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Artesaos\\SEOTools\\": "src/SEOTools/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Vinicius",
+                    "email": "luiz.vinicius73@gmail.com"
+                }
+            ],
+            "description": "SEO Tools for Laravel and Lumen",
+            "keywords": [
+                "laravel5",
+                "lumen",
+                "metatags",
+                "opengraph",
+                "seo",
+                "seotools",
+                "webmaster"
+            ],
+            "time": "2018-04-19T20:48:13+00:00"
+        },
+        {
+            "name": "aws/aws-sdk-php",
+            "version": "3.55.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/aws/aws-sdk-php.git",
+                "reference": "28a1828814ce34d056492fa494f1e4bbaddaf33e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/28a1828814ce34d056492fa494f1e4bbaddaf33e",
+                "reference": "28a1828814ce34d056492fa494f1e4bbaddaf33e",
                 "shasum": ""
             },
             "require": {
@@ -134,7 +200,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2018-04-24T19:18:36+00:00"
+            "time": "2018-04-26T21:09:13+00:00"
         },
         {
             "name": "cakephp/chronos",
@@ -909,61 +975,6 @@
             "time": "2018-03-08T01:11:30+00:00"
         },
         {
-            "name": "eusonlito/laravel-meta",
-            "version": "v3.1.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/eusonlito/laravel-Meta.git",
-                "reference": "51f0b44979d700035eba9c9cd318f33411ba014e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/eusonlito/laravel-Meta/zipball/51f0b44979d700035eba9c9cd318f33411ba014e",
-                "reference": "51f0b44979d700035eba9c9cd318f33411ba014e",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "*"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Eusonlito\\LaravelMeta\\MetaServiceProvider"
-                    ],
-                    "aliases": {
-                        "Meta": "Eusonlito\\LaravelMeta\\Facade"
-                    }
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Eusonlito\\LaravelMeta\\": "src/Eusonlito/LaravelMeta/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Lito",
-                    "email": "lito@eordes.com"
-                }
-            ],
-            "description": "A package to manage Header Meta Tags",
-            "keywords": [
-                "head",
-                "laravel",
-                "meta",
-                "tags"
-            ],
-            "time": "2017-10-02T07:56:18+00:00"
-        },
-        {
             "name": "greggilbert/recaptcha",
             "version": "2.2.0",
             "source": {
@@ -1581,16 +1592,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v5.6.17",
+            "version": "v5.6.18",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "0f787c763ae8fb9fae0c8c809830ba4fa81e2d9d"
+                "reference": "088f286d0b5145275ced93799e23980a81898d10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/0f787c763ae8fb9fae0c8c809830ba4fa81e2d9d",
-                "reference": "0f787c763ae8fb9fae0c8c809830ba4fa81e2d9d",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/088f286d0b5145275ced93799e23980a81898d10",
+                "reference": "088f286d0b5145275ced93799e23980a81898d10",
                 "shasum": ""
             },
             "require": {
@@ -1716,7 +1727,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2018-04-17T12:51:04+00:00"
+            "time": "2018-04-26T13:25:23+00:00"
         },
         {
             "name": "laravel/horizon",
@@ -1853,16 +1864,16 @@
         },
         {
             "name": "laravelcollective/html",
-            "version": "v5.6.6",
+            "version": "v5.6.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/LaravelCollective/html.git",
-                "reference": "b3a10245c791a211e5f8ec37117f4549cd22aabe"
+                "reference": "38f2c6ff0d3dfc497175a5cff5e24b3937f6e2c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/LaravelCollective/html/zipball/b3a10245c791a211e5f8ec37117f4549cd22aabe",
-                "reference": "b3a10245c791a211e5f8ec37117f4549cd22aabe",
+                "url": "https://api.github.com/repos/LaravelCollective/html/zipball/38f2c6ff0d3dfc497175a5cff5e24b3937f6e2c9",
+                "reference": "38f2c6ff0d3dfc497175a5cff5e24b3937f6e2c9",
                 "shasum": ""
             },
             "require": {
@@ -1876,7 +1887,7 @@
             "require-dev": {
                 "illuminate/database": "5.6.*",
                 "mockery/mockery": "~1.0",
-                "phpunit/phpunit": "~5.4"
+                "phpunit/phpunit": "~7.1"
             },
             "type": "library",
             "extra": {
@@ -1917,7 +1928,7 @@
             ],
             "description": "HTML and Form Builders for the Laravel Framework",
             "homepage": "https://laravelcollective.com",
-            "time": "2018-04-09T14:09:32+00:00"
+            "time": "2018-04-26T16:09:18+00:00"
         },
         {
             "name": "league/flysystem",

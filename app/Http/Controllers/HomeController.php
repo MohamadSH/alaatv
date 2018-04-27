@@ -448,15 +448,20 @@ class HomeController extends Controller
     /**
      * Show the application dashboard.
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-
-        Meta::set('title', substr($this->setting->site->seo->homepage->metaTitle, 0, Config::get("constants.META_TITLE_LIMIT")));
-        Meta::set('keywords', substr($this->setting->site->seo->homepage->metaKeywords, 0, Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
-        Meta::set('description', substr($this->setting->site->seo->homepage->metaDescription, 0, Config::get("constants.META_DESCRIPTION_LIMIT")));
-        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
+        $url = $request->url();
+        $title = $this->setting->site->seo->homepage->metaTitle;
+        SEO::setTitle($title);
+        SEO::opengraph()->setUrl($url);
+        SEO::setCanonical($url);
+        SEO::twitter()->setSite("آلاء");
+        SEO::setDescription($this->setting->site->seo->homepage->metaDescription);
+        SEO::opengraph()->addImage(route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]), ['height' => 100, 'width' => 100]);
+      
 //        $consultationstatus_active = Consultationstatus::all()->where("name", "active")->first();
 //        $consultingQuestionCount = Userupload::all()->count();
 //        $consultations = Consultation::all()->sortByDesc("created_at")->where("consultationstatus_id", $consultationstatus_active->id);
@@ -936,8 +941,6 @@ class HomeController extends Controller
 
         $pageName = "admin";
 
-        Meta::set('title', substr("آلاء|مدیریت کاربران", 0, Config::get("constants.META_TITLE_LIMIT")));
-        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
 
         return view("admin.index", compact("pageName", "majors", "userStatuses", "permissions", "roles", "limitStatus", "orderstatuses", "paymentstatuses", "enableStatus", "genders", "hasOrder", "products",
             "lockProfileStatus", "mobileNumberVerification", "tableDefaultColumns", "sortBy", "sortType", "coupons", "addressSpecialFilter", "checkoutStatuses"));
@@ -968,8 +971,6 @@ class HomeController extends Controller
             $defaultProductOrder = 1;
         }
 
-        Meta::set('title', substr("آلاء|مدیریت محصولات", 0, Config::get("constants.META_TITLE_LIMIT")));
-        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
         $pageName = "admin";
         return view("admin.indexProduct", compact("pageName", "attributecontrols", "enableStatus", "attributesets", "limitStatus", "products", "coupontype", "productTypes", "defaultProductOrder"));
     }
@@ -1035,8 +1036,6 @@ class HomeController extends Controller
         $userBonTableDefaultColumns = ["نام کاربر", "تعداد بن تخصیص داده شده", "وضعیت بن", "نام کالایی که از خرید آن بن دریافت کرده است", "تاریخ درج", "عملیات"];
         $addressSpecialFilter = ["بدون فیلتر خاص", "بدون آدرس ها", "آدرس دارها"];
 
-        Meta::set('title', substr("آلاء|مدیریت سفارش ها", 0, Config::get("constants.META_TITLE_LIMIT")));
-        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
 
         return view("admin.indexOrder", compact("pageName", "orderstatuses", "products", "paymentMethods", "majors", "paymentstatuses", "sortBy", "sortType", "transactionTypes", "orderTableDefaultColumns", "coupons", "transactionStatuses", "transactionTableDefaultColumns", "userBonTableDefaultColumns", "userBonStatuses", "attributevalueCollection", "addressSpecialFilter", "checkoutStatuses"));
     }
@@ -1055,8 +1054,6 @@ class HomeController extends Controller
         $consultationStatuses->prepend("انتخاب وضعیت");
 
 
-        Meta::set('title', substr("آلاء|مدیریت محتوا", 0, Config::get("constants.META_TITLE_LIMIT")));
-        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
 
         $pageName = "admin";
         return view("admin.indexContent", compact("pageName", "assignmentStatuses", "consultationStatuses", "majors"));
@@ -1077,8 +1074,6 @@ class HomeController extends Controller
         $counter = 0;
 
 
-        Meta::set('title', substr("آلاء|پنل مشاور", 0, Config::get("constants.META_TITLE_LIMIT")));
-        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
         $pageName = "consultantAdmin";
         return view("admin.consultant.consultantAdmin", compact("questions", "counter", "pageName", "newQuestionsCount", "answeredQuestionsCount"));
     }
@@ -1133,8 +1128,8 @@ class HomeController extends Controller
         }
 
 
-        Meta::set('title', substr("آلاء|پنل انتخاب رشته", 0, Config::get("constants.META_TITLE_LIMIT")));
-        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
+//        Meta::set('title', substr("آلاء|پنل انتخاب رشته", 0, Config::get("constants.META_TITLE_LIMIT")));
+//        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
 
         return view("admin.consultant.consultantEntekhabReshte", compact("user", "storedMajors", "selectedMajors", "userSurveyAnswers"));
     }
@@ -1151,8 +1146,8 @@ class HomeController extends Controller
         $usersurveyanswers = Usersurveyanswer::where("event_id", $eventId)->where("survey_id", $surveyId)->get()->groupBy("user_id");
 
 
-        Meta::set('title', substr("آلاء|لیست انتخاب رشته", 0, Config::get("constants.META_TITLE_LIMIT")));
-        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
+//        Meta::set('title', substr("آلاء|لیست انتخاب رشته", 0, Config::get("constants.META_TITLE_LIMIT")));
+//        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
 
         return view("admin.consultant.consultantEntekhabReshteList", compact("usersurveyanswers"));
     }
@@ -1220,8 +1215,8 @@ class HomeController extends Controller
         $coupons = array_sort_recursive($coupons);
 
 
-        Meta::set('title', substr("آلاء|پنل پیامک", 0, Config::get("constants.META_TITLE_LIMIT")));
-        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
+//        Meta::set('title', substr("آلاء|پنل پیامک", 0, Config::get("constants.META_TITLE_LIMIT")));
+//        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
 
         return view("admin.indexSMS", compact("pageName", "majors", "userStatuses",
             "roles", "relatives", "orderstatuses", "paymentstatuses", "genders", "products", "allRootProducts", "lockProfileStatus",
@@ -1244,8 +1239,6 @@ class HomeController extends Controller
         $section = "slideShow";
 
 
-        Meta::set('title', substr("آلاء|مدیریت اسلاید شو", 0, Config::get("constants.META_TITLE_LIMIT")));
-        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
 
         return view("admin.siteConfiguration.slideShow", compact("slides", "sideBarMode", "section", "slideDisk", "slideContentName", "slideWebsitepageId"));
     }
@@ -1273,7 +1266,6 @@ class HomeController extends Controller
     {
         $this->setting = Websitesetting::where("version", 1)->get()->first();
 
-        Meta::set('title', substr("آلاء|پیکربندی سایت", 0, Config::get("constants.META_TITLE_LIMIT")));
         return redirect(action('WebsiteSettingController@show', $this->setting));
     }
 
@@ -1289,8 +1281,6 @@ class HomeController extends Controller
             $q->where("major1_id", $parentMajor->id);
         })->get();
 
-        Meta::set('title', substr("آلاء|مدیریت رشته", 0, Config::get("constants.META_TITLE_LIMIT")));
-        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
 
         return view("admin.indexMajor", compact("parentMajor", "majors"));
     }
@@ -1340,8 +1330,6 @@ class HomeController extends Controller
         $pageName = "admin";
 
 
-        Meta::set('title', substr("آلاء|پنل گزارش", 0, Config::get("constants.META_TITLE_LIMIT")));
-        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
 
         $checkoutStatuses = Checkoutstatus::pluck('displayName', 'id')->toArray();
         $checkoutStatuses[0] = "نامشخص";
@@ -1360,8 +1348,6 @@ class HomeController extends Controller
         $userlotteries = $lottery->users->where("pivot.rank", ">", 0)->sortBy("pivot.rank");
 
 
-        Meta::set('title', substr("آلاء|پنل قرعه کشی", 0, Config::get("constants.META_TITLE_LIMIT")));
-        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
         $pageName = "admin";
         return view("admin.indexLottery", compact("userlotteries", "pageName"));
     }
@@ -1790,24 +1776,31 @@ class HomeController extends Controller
         return redirect(action("HomeController@error404"));
     }
 
-    function aboutUs()
+    function aboutUs(Request $request)
     {
-
-        Meta::set('keywords', substr($this->setting->site->seo->homepage->metaKeywords, 0, Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
-        Meta::set('description', substr($this->setting->site->seo->homepage->metaDescription, 0, Config::get("constants.META_DESCRIPTION_LIMIT")));
-        Meta::set('title', "آلاء|درباره ما");
-        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
+        $url = $request->url();
+        $title ="آلاء|درباره ما";
+        SEO::setTitle($title);
+        SEO::opengraph()->setUrl($url);
+        SEO::setCanonical($url);
+        SEO::twitter()->setSite("آلاء");
+        SEO::setDescription($this->setting->site->seo->homepage->metaDescription);
+        SEO::opengraph()->addImage(route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]), ['height' => 100, 'width' => 100]);
 
         return view("pages.aboutUs");
     }
 
-    function contactUs()
+    function contactUs(Request $request)
     {
+        $url = $request->url();
+        $title ="آلاء|تماس با ما";
+        SEO::setTitle($title);
+        SEO::opengraph()->setUrl($url);
+        SEO::setCanonical($url);
+        SEO::twitter()->setSite("آلاء");
+        SEO::setDescription($this->setting->site->seo->homepage->metaDescription);
+        SEO::opengraph()->addImage(route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]), ['height' => 100, 'width' => 100]);
 
-        Meta::set('keywords', substr($this->setting->site->seo->homepage->metaKeywords, 0, Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
-        Meta::set('description', substr($this->setting->site->seo->homepage->metaDescription, 0, Config::get("constants.META_DESCRIPTION_LIMIT")));
-        Meta::set('title', "آلاء|تماس با ما");
-        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
         $emergencyContacts = collect();
         foreach ($this->setting->branches->main->emergencyContacts as $emergencyContact)
         {
@@ -1823,23 +1816,32 @@ class HomeController extends Controller
         return view("pages.contactUs" , compact("emergencyContacts"));
     }
 
-    function rules()
+    function rules(Request $request)
     {
+        $url = $request->url();
+        $title ="آلاء|قوانین";
+        SEO::setTitle($title);
+        SEO::opengraph()->setUrl($url);
+        SEO::setCanonical($url);
+        SEO::twitter()->setSite("آلاء");
+        SEO::setDescription($this->setting->site->seo->homepage->metaDescription);
+        SEO::opengraph()->addImage(route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]), ['height' => 100, 'width' => 100]);
 
-        Meta::set('title', "آلاء|قوانین");
-        Meta::set('keywords', substr($this->setting->site->seo->homepage->metaKeywords, 0, Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
-        Meta::set('description', substr($this->setting->site->seo->homepage->metaDescription, 0, Config::get("constants.META_DESCRIPTION_LIMIT")));
-        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
         return view("pages.rules");
     }
 
-    function siteMap()
+    function siteMap(Request $request)
     {
 
-        Meta::set('title', 'آلاء|نقشه سایت');
-        Meta::set('keywords', substr($this->setting->site->seo->homepage->metaKeywords, 0, Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
-        Meta::set('description', substr($this->setting->site->seo->homepage->metaDescription, 0, Config::get("constants.META_DESCRIPTION_LIMIT")));
-        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
+        $url = $request->url();
+        $title ='آلاء|نقشه سایت';
+        SEO::setTitle($title);
+        SEO::opengraph()->setUrl($url);
+        SEO::setCanonical($url);
+        SEO::twitter()->setSite("آلاء");
+        SEO::setDescription($this->setting->site->seo->homepage->metaDescription);
+        SEO::opengraph()->addImage(route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]), ['height' => 100, 'width' => 100]);
+
         $products = Product::getProducts(0, 1)->orderBy("order")->get();
         $articlecategories = Articlecategory::where('enable', 1)->orderBy('order')->get();
         $articlesWithoutCategory = Article::where('articlecategory_id', null)->get();
@@ -1871,8 +1873,8 @@ class HomeController extends Controller
 //
 //        }
 
-        Sitemap::addTag(action("HomeController@contactUs"), '', 'daily', '0.8');
-        Sitemap::addTag(action("HomeController@aboutUs"), '', 'daily', '0.8');
+//        Sitemap::addTag(action("HomeController@contactUs"), '', 'daily', '0.8');
+//        Sitemap::addTag(action("HomeController@aboutUs"), '', 'daily', '0.8');
 //        Sitemap::addTag(action("HomeController@certificates"), '', 'daily', '0.8');
         return Sitemap::render();
     }
