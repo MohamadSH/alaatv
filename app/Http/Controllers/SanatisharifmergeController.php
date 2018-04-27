@@ -2935,6 +2935,7 @@ class SanatisharifmergeController extends Controller
                 $request->offsetSet("id" , $sanatisharifRecord->departmentlessonid);
                 $request->offsetSet("enable" , $sanatisharifRecord->departmentlessonEnable);
                 $request->offsetSet("display" , $sanatisharifRecord->departmentlessonEnable);
+                $request->offsetSet("photo" , "http://cdn.alaatv.com/upload/contentset/".$sanatisharifRecord->pic);
 
                 $tags = [
                     "دوره_آموزشی"
