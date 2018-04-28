@@ -305,7 +305,7 @@
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/alaa.gif" alt="1" title="1">
+                                <img src="assets/images/professors/1.png" alt="1" title="1">
                             </a>
                             <figcaption>
                                 <header>
@@ -317,35 +317,7 @@
                             </figcaption>
                         </figure>
                         <p>
-
-                        </p>
-                        <div class="info-professors">
-                            <header>
-                                <h4> 40 دقیقه ویدیوی آموزشی شامل :</h4>
-                            </header>
-                            <span>ا  دبیات و زبان فارسی سال اول</span>
-                            <span>ادبیات و زبان فارسی سال دوم</span>
-                            <span>ادبیات و زبان فارسی سال سوم</span>
-                            <span>ادبیات و زبان فارسی پیش دانشگاهی </span>
-                            <a href="javascript:void(0)" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
-                        </div>
-                    </article>
-                    <article class="art-professors">
-                        <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/alaa.gif" alt="1" title="1">
-                            </a>
-                            <figcaption>
-                                <header>
-                                    <a href="javascript:void(0)" title="">
-                                        <h1>دکتر هامون سطبی</h1>
-                                    </a>
-                                    <span>فارسی را با فاخته ادبیات ایران تجربه کنید.</span>
-                                </header>
-                            </figcaption>
-                        </figure>
-                        <p>
-                            مولف کتاب های توصیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
+                            مولف کتاب های توضیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
                             در آموزش و پرورش
                         </p>
                         <div class="info-professors">
@@ -362,7 +334,7 @@
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/alaa.gif" alt="1" title="1">
+                                <img src="assets/images/professors/1.png" alt="1" title="1">
                             </a>
                             <figcaption>
                                 <header>
@@ -374,7 +346,7 @@
                             </figcaption>
                         </figure>
                         <p>
-                            مولف کتاب های توصیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
+                            مولف کتاب های توضیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
                             در آموزش و پرورش
                         </p>
                         <div class="info-professors">
@@ -391,7 +363,7 @@
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/alaa.gif" alt="1" title="1">
+                                <img src="assets/images/professors/1.png" alt="1" title="1">
                             </a>
                             <figcaption>
                                 <header>
@@ -403,38 +375,7 @@
                             </figcaption>
                         </figure>
                         <p>
-                            مولف کتاب های توصیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
-                            در آموزش و پرورش
-                        </p>
-                        <div class="info-professors">
-                            <header>
-                                <h4> 40 دقیقه ویدیوی آموزشی شامل :</h4>
-                            </header>
-                            <span>ادبیات و زبان فارسی سال اول</span>
-                            <span>ادبیات و زبان فارسی سال دوم</span>
-                            <span>ادبیات و زبان فارسی سال سوم</span>
-                            <span>ادبیات و زبان فارسی پیش دانشگاهی </span>
-                            <a href="javascript:void(0)" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
-                        </div>
-                    </article>
-                </section>
-                <section class="sec-professors">
-                    <article class="art-professors">
-                        <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/alaa.gif" alt="1" title="1">
-                            </a>
-                            <figcaption>
-                                <header>
-                                    <a href="javascript:void(0)" title="">
-                                        <h1>محسن آهویی</h1>
-                                    </a>
-                                    <span>فارسی را با فاخته ادبیات ایران تجربه کنید.</span>
-                                </header>
-                            </figcaption>
-                        </figure>
-                        <p>
-                            مولف کتاب های توصیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
+                            مولف کتاب های توضیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
                             در آموزش و پرورش
                         </p>
                         <div class="info-professors">
@@ -451,7 +392,7 @@
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/alaa.gif" alt="1" title="1">
+                                <img src="assets/images/professors/1.png" alt="1" title="1">
                             </a>
                             <figcaption>
                                 <header>
@@ -463,419 +404,7 @@
                             </figcaption>
                         </figure>
                         <p>
-                            مولف کتاب های توصیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
-                            در آموزش و پرورش
-                        </p>
-                        <div class="info-professors">
-                            <header>
-                                <h4> 40 دقیقه ویدیوی آموزشی شامل :</h4>
-                            </header>
-                            <span>ادبیات و زبان فارسی سال اول</span>
-                            <span>ادبیات و زبان فارسی سال دوم</span>
-                            <span>ادبیات و زبان فارسی سال سوم</span>
-                            <span>ادبیات و زبان فارسی پیش دانشگاهی </span>
-                            <a href="javascript:void(0)" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
-                        </div>
-                    </article>
-                    <article class="art-professors">
-                        <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/alaa.gif" alt="1" title="1">
-                            </a>
-                            <figcaption>
-                                <header>
-                                    <a href="javascript:void(0)" title="">
-                                        <h1>دکتر هامون سطبی</h1>
-                                    </a>
-                                    <span>فارسی را با فاخته ادبیات ایران تجربه کنید.</span>
-                                </header>
-                            </figcaption>
-                        </figure>
-                        <p>
-                            مولف کتاب های توصیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
-                            در آموزش و پرورش
-                        </p>
-                        <div class="info-professors">
-                            <header>
-                                <h4> 40 دقیقه ویدیوی آموزشی شامل :</h4>
-                            </header>
-                            <span>ادبیات و زبان فارسی سال اول</span>
-                            <span>ادبیات و زبان فارسی سال دوم</span>
-                            <span>ادبیات و زبان فارسی سال سوم</span>
-                            <span>ادبیات و زبان فارسی پیش دانشگاهی </span>
-                            <a href="javascript:void(0)" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
-                        </div>
-                    </article>
-                    <article class="art-professors">
-                        <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/alaa.gif" alt="1" title="1">
-                            </a>
-                            <figcaption>
-                                <header>
-                                    <a href="javascript:void(0)" title="">
-                                        <h1>دکتر هامون سطبی</h1>
-                                    </a>
-                                    <span>عربی مثل آب خوردن</span>
-                                </header>
-                            </figcaption>
-                        </figure>
-                        <p>
-                            مولف کتاب های توصیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
-                            در آموزش و پرورش
-                        </p>
-                        <div class="info-professors">
-                            <header>
-                                <h4> 40 دقیقه ویدیوی آموزشی شامل :</h4>
-                            </header>
-                            <span>ادبیات و زبان فارسی سال اول</span>
-                            <span>ادبیات و زبان فارسی سال دوم</span>
-                            <span>ادبیات و زبان فارسی سال سوم</span>
-                            <span>ادبیات و زبان فارسی پیش دانشگاهی </span>
-                            <a href="javascript:void(0)" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
-                        </div>
-                    </article>
-                </section>
-                <section class="sec-professors">
-                    <article class="art-professors">
-                        <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/alaa.gif" alt="1" title="1">
-                            </a>
-                            <figcaption>
-                                <header>
-                                    <a href="javascript:void(0)" title="">
-                                        <h1>دکتر هامون سطبی</h1>
-                                    </a>
-                                    <span>فارسی را با فاخته ادبیات ایران تجربه کنید.</span>
-                                </header>
-                            </figcaption>
-                        </figure>
-                        <p>
-                            مولف کتاب های توصیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
-                            در آموزش و پرورش
-                        </p>
-                        <div class="info-professors">
-                            <header>
-                                <h4> 40 دقیقه ویدیوی آموزشی شامل :</h4>
-                            </header>
-                            <span>ادبیات و زبان فارسی سال اول</span>
-                            <span>ادبیات و زبان فارسی سال دوم</span>
-                            <span>ادبیات و زبان فارسی سال سوم</span>
-                            <span>ادبیات و زبان فارسی پیش دانشگاهی </span>
-                            <a href="javascript:void(0)" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
-                        </div>
-                    </article>
-                    <article class="art-professors">
-                        <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/alaa.gif" alt="1" title="1">
-                            </a>
-                            <figcaption>
-                                <header>
-                                    <a href="javascript:void(0)" title="">
-                                        <h1>دکتر هامون سطبی</h1>
-                                    </a>
-                                    <span>فارسی را با فاخته ادبیات ایران تجربه کنید.</span>
-                                </header>
-                            </figcaption>
-                        </figure>
-                        <p>
-                            مولف کتاب های توصیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
-                            در آموزش و پرورش
-                        </p>
-                        <div class="info-professors">
-                            <header>
-                                <h4> 40 دقیقه ویدیوی آموزشی شامل :</h4>
-                            </header>
-                            <span>ادبیات و زبان فارسی سال اول</span>
-                            <span>ادبیات و زبان فارسی سال دوم</span>
-                            <span>ادبیات و زبان فارسی سال سوم</span>
-                            <span>ادبیات و زبان فارسی پیش دانشگاهی </span>
-                            <a href="javascript:void(0)" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
-                        </div>
-                    </article>
-                    <article class="art-professors">
-                        <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/alaa.gif" alt="1" title="1">
-                            </a>
-                            <figcaption>
-                                <header>
-                                    <a href="javascript:void(0)" title="">
-                                        <h1>دکتر هامون سطبی</h1>
-                                    </a>
-                                    <span>فارسی را با فاخته ادبیات ایران تجربه کنید.</span>
-                                </header>
-                            </figcaption>
-                        </figure>
-                        <p>
-                            مولف کتاب های توصیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
-                            در آموزش و پرورش
-                        </p>
-                        <div class="info-professors">
-                            <header>
-                                <h4> 40 دقیقه ویدیوی آموزشی شامل :</h4>
-                            </header>
-                            <span>ادبیات و زبان فارسی سال اول</span>
-                            <span>ادبیات و زبان فارسی سال دوم</span>
-                            <span>ادبیات و زبان فارسی سال سوم</span>
-                            <span>ادبیات و زبان فارسی پیش دانشگاهی </span>
-                            <a href="javascript:void(0)" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
-                        </div>
-                    </article>
-                    <article class="art-professors">
-                        <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/alaa.gif" alt="1" title="1">
-                            </a>
-                            <figcaption>
-                                <header>
-                                    <a href="javascript:void(0)" title="">
-                                        <h1>دکتر هامون سطبی</h1>
-                                    </a>
-                                    <span>فارسی را با فاخته ادبیات ایران تجربه کنید.</span>
-                                </header>
-                            </figcaption>
-                        </figure>
-                        <p>
-                            مولف کتاب های توصیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
-                            در آموزش و پرورش
-                        </p>
-                        <div class="info-professors">
-                            <header>
-                                <h4> 40 دقیقه ویدیوی آموزشی شامل :</h4>
-                            </header>
-                            <span>ادبیات و زبان فارسی سال اول</span>
-                            <span>ادبیات و زبان فارسی سال دوم</span>
-                            <span>ادبیات و زبان فارسی سال سوم</span>
-                            <span>ادبیات و زبان فارسی پیش دانشگاهی </span>
-                            <a href="javascript:void(0)" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
-                        </div>
-                    </article>
-                </section>
-                <section class="sec-professors">
-                    <article class="art-professors">
-                        <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/alaa.gif" alt="1" title="1">
-                            </a>
-                            <figcaption>
-                                <header>
-                                    <a href="javascript:void(0)" title="">
-                                        <h1>دکتر هامون سطبی</h1>
-                                    </a>
-                                    <span>فارسی را با فاخته ادبیات ایران تجربه کنید.</span>
-                                </header>
-                            </figcaption>
-                        </figure>
-                        <p>
-                            مولف کتاب های توصیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
-                            در آموزش و پرورش
-                        </p>
-                        <div class="info-professors">
-                            <header>
-                                <h4> 40 دقیقه ویدیوی آموزشی شامل :</h4>
-                            </header>
-                            <span>ادبیات و زبان فارسی سال اول</span>
-                            <span>ادبیات و زبان فارسی سال دوم</span>
-                            <span>ادبیات و زبان فارسی سال سوم</span>
-                            <span>ادبیات و زبان فارسی پیش دانشگاهی </span>
-                            <a href="javascript:void(0)" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
-                        </div>
-                    </article>
-                    <article class="art-professors">
-                        <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/alaa.gif" alt="1" title="1">
-                            </a>
-                            <figcaption>
-                                <header>
-                                    <a href="javascript:void(0)" title="">
-                                        <h1>دکتر هامون سطبی</h1>
-                                    </a>
-                                    <span>فارسی را با فاخته ادبیات ایران تجربه کنید.</span>
-                                </header>
-                            </figcaption>
-                        </figure>
-                        <p>
-                            مولف کتاب های توصیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
-                            در آموزش و پرورش
-                        </p>
-                        <div class="info-professors">
-                            <header>
-                                <h4> 40 دقیقه ویدیوی آموزشی شامل :</h4>
-                            </header>
-                            <span>ادبیات و زبان فارسی سال اول</span>
-                            <span>ادبیات و زبان فارسی سال دوم</span>
-                            <span>ادبیات و زبان فارسی سال سوم</span>
-                            <span>ادبیات و زبان فارسی پیش دانشگاهی </span>
-                            <a href="javascript:void(0)" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
-                        </div>
-                    </article>
-                    <article class="art-professors">
-                        <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/alaa.gif" alt="1" title="1">
-                            </a>
-                            <figcaption>
-                                <header>
-                                    <a href="javascript:void(0)" title="">
-                                        <h1>دکتر هامون سطبی</h1>
-                                    </a>
-                                    <span>فارسی را با فاخته ادبیات ایران تجربه کنید.</span>
-                                </header>
-                            </figcaption>
-                        </figure>
-                        <p>
-                            مولف کتاب های توصیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
-                            در آموزش و پرورش
-                        </p>
-                        <div class="info-professors">
-                            <header>
-                                <h4> 40 دقیقه ویدیوی آموزشی شامل :</h4>
-                            </header>
-                            <span>ادبیات و زبان فارسی سال اول</span>
-                            <span>ادبیات و زبان فارسی سال دوم</span>
-                            <span>ادبیات و زبان فارسی سال سوم</span>
-                            <span>ادبیات و زبان فارسی پیش دانشگاهی </span>
-                            <a href="javascript:void(0)" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
-                        </div>
-                    </article>
-                    <article class="art-professors">
-                        <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/alaa.gif" alt="1" title="1">
-                            </a>
-                            <figcaption>
-                                <header>
-                                    <a href="javascript:void(0)" title="">
-                                        <h1>دکتر هامون سطبی</h1>
-                                    </a>
-                                    <span>فارسی را با فاخته ادبیات ایران تجربه کنید.</span>
-                                </header>
-                            </figcaption>
-                        </figure>
-                        <p>
-                            مولف کتاب های توصیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
-                            در آموزش و پرورش
-                        </p>
-                        <div class="info-professors">
-                            <header>
-                                <h4> 40 دقیقه ویدیوی آموزشی شامل :</h4>
-                            </header>
-                            <span>ادبیات و زبان فارسی سال اول</span>
-                            <span>ادبیات و زبان فارسی سال دوم</span>
-                            <span>ادبیات و زبان فارسی سال سوم</span>
-                            <span>ادبیات و زبان فارسی پیش دانشگاهی </span>
-                            <a href="javascript:void(0)" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
-                        </div>
-                    </article>
-                </section>
-                <section class="sec-professors">
-                    <article class="art-professors">
-                        <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/alaa.gif" alt="1" title="1">
-                            </a>
-                            <figcaption>
-                                <header>
-                                    <a href="javascript:void(0)" title="">
-                                        <h1>دکتر هامون سطبی</h1>
-                                    </a>
-                                    <span>فارسی را با فاخته ادبیات ایران تجربه کنید.</span>
-                                </header>
-                            </figcaption>
-                        </figure>
-                        <p>
-                            مولف کتاب های توصیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
-                            در آموزش و پرورش
-                        </p>
-                        <div class="info-professors">
-                            <header>
-                                <h4> 40 دقیقه ویدیوی آموزشی شامل :</h4>
-                            </header>
-                            <span>ادبیات و زبان فارسی سال اول</span>
-                            <span>ادبیات و زبان فارسی سال دوم</span>
-                            <span>ادبیات و زبان فارسی سال سوم</span>
-                            <span>ادبیات و زبان فارسی پیش دانشگاهی </span>
-                            <a href="javascript:void(0)" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
-                        </div>
-                    </article>
-                    <article class="art-professors">
-                        <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/alaa.gif" alt="1" title="1">
-                            </a>
-                            <figcaption>
-                                <header>
-                                    <a href="javascript:void(0)" title="">
-                                        <h1>دکتر هامون سطبی</h1>
-                                    </a>
-                                    <span>فارسی را با فاخته ادبیات ایران تجربه کنید.</span>
-                                </header>
-                            </figcaption>
-                        </figure>
-                        <p>
-                            مولف کتاب های توصیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
-                            در آموزش و پرورش
-                        </p>
-                        <div class="info-professors">
-                            <header>
-                                <h4> 40 دقیقه ویدیوی آموزشی شامل :</h4>
-                            </header>
-                            <span>ادبیات و زبان فارسی سال اول</span>
-                            <span>ادبیات و زبان فارسی سال دوم</span>
-                            <span>ادبیات و زبان فارسی سال سوم</span>
-                            <span>ادبیات و زبان فارسی پیش دانشگاهی </span>
-                            <a href="javascript:void(0)" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
-                        </div>
-                    </article>
-                    <article class="art-professors">
-                        <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/alaa.gif" alt="1" title="1">
-                            </a>
-                            <figcaption>
-                                <header>
-                                    <a href="javascript:void(0)" title="">
-                                        <h1>دکتر هامون سطبی</h1>
-                                    </a>
-                                    <span>فارسی را با فاخته ادبیات ایران تجربه کنید.</span>
-                                </header>
-                            </figcaption>
-                        </figure>
-                        <p>
-                            مولف کتاب های توصیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
-                            در آموزش و پرورش
-                        </p>
-                        <div class="info-professors">
-                            <header>
-                                <h4> 40 دقیقه ویدیوی آموزشی شامل :</h4>
-                            </header>
-                            <span>ادبیات و زبان فارسی سال اول</span>
-                            <span>ادبیات و زبان فارسی سال دوم</span>
-                            <span>ادبیات و زبان فارسی سال سوم</span>
-                            <span>ادبیات و زبان فارسی پیش دانشگاهی </span>
-                            <a href="javascript:void(0)" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
-                        </div>
-                    </article>
-                    <article class="art-professors">
-                        <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/alaa.gif" alt="1" title="1">
-                            </a>
-                            <figcaption>
-                                <header>
-                                    <a href="javascript:void(0)" title="">
-                                        <h1>دکتر هامون سطبی</h1>
-                                    </a>
-                                    <span>فارسی را با فاخته ادبیات ایران تجربه کنید.</span>
-                                </header>
-                            </figcaption>
-                        </figure>
-                        <p>
-                            مولف کتاب های توصیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
+                            مولف کتاب های توضیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
                             در آموزش و پرورش
                         </p>
                         <div class="info-professors">
@@ -897,7 +426,7 @@
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/alaa.gif" alt="1" title="1">
+                                <img src="assets/images/professors/1.png" alt="1" title="1">
                             </a>
                             <figcaption>
                                 <header>
@@ -909,7 +438,7 @@
                             </figcaption>
                         </figure>
                         <p>
-                            مولف کتاب های توصیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
+                            مولف کتاب های توضیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
                             در آموزش و پرورش
                         </p>
                         <div class="info-professors">
@@ -931,7 +460,7 @@
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/alaa.gif" alt="1" title="1">
+                                <img src="assets/images/professors/1.png" alt="1" title="1">
                             </a>
                             <figcaption>
                                 <header>
@@ -943,7 +472,7 @@
                             </figcaption>
                         </figure>
                         <p>
-                            مولف کتاب های توصیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
+                            مولف کتاب های توضیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
                             در آموزش و پرورش
                         </p>
                         <div class="info-professors">
@@ -960,7 +489,7 @@
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/alaa.gif" alt="1" title="1">
+                                <img src="assets/images/professors/1.png" alt="1" title="1">
                             </a>
                             <figcaption>
                                 <header>
@@ -972,7 +501,7 @@
                             </figcaption>
                         </figure>
                         <p>
-                            مولف کتاب های توصیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
+                            مولف کتاب های توضیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
                             در آموزش و پرورش
                         </p>
                         <div class="info-professors">
@@ -990,7 +519,7 @@
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/alaa.gif" alt="1" title="1">
+                                <img src="assets/images/professors/1.png" alt="1" title="1">
                             </a>
                             <figcaption>
                                 <header>
@@ -1002,7 +531,7 @@
                             </figcaption>
                         </figure>
                         <p>
-                            مولف کتاب های توصیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
+                            مولف کتاب های توضیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
                             در آموزش و پرورش
                         </p>
                         <div class="info-professors">
