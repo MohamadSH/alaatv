@@ -56,6 +56,8 @@ use App\Websitepage;
 use App\Http\Requests\Request;
 use Carbon\Carbon;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -94,10 +96,8 @@ class HomeController extends Controller
 
     private static $TAG = HomeController::class;
 
-
     public function debug(Request $request){
-        return view("educationalContent.embed",compact('video','files'));
-
+      abort(404);
     }
     public function __construct()
     {
@@ -106,7 +106,7 @@ class HomeController extends Controller
 //        {
 //            $authException = ['index' , 'getImage' , 'error404' , 'error403' , 'error500' , 'errorPage' , 'siteMapXML', 'download' ];
 //        }else{
-        $authException = ['index', 'getImage', 'error404', 'error403', 'error500', 'errorPage', 'aboutUs', 'contactUs', 'sendMail', 'rules', 'siteMapXML', 'uploadFile'];
+        $authException = ['index', 'getImage', 'error404', 'error403', 'error500', 'errorPage', 'aboutUs', 'contactUs', 'sendMail', 'rules', 'siteMapXML', 'uploadFile' , 'search'];
 //        }
         $this->middleware('auth', ['except' => $authException]);
         $this->middleware('ability:' . Config::get("constants.ROLE_ADMIN") . ',' . Config::get("constants.USER_ADMIN_PANEL_ACCESS"), ['only' => 'admin']);
@@ -121,323 +121,364 @@ class HomeController extends Controller
 
     }
 
+    private function getRedisRequestSubPath(Request $request, $itemType , $paginationSetting){
+
+        $requestSubPath = "&withscores=1";
+        $bucket = "content";
+        switch ($itemType)
+        {
+            case "video":
+                $perPage = $paginationSetting->where("itemType" , "video")->first()["itemPerPage"];
+                $pageName = $paginationSetting->where("itemType" , "video")->first()["pageName"];
+                $itemTypeTag = "فیلم";
+                break;
+            case "pamphlet":
+                $perPage = $paginationSetting->where("itemType" , "pamphlet")->first()["itemPerPage"];
+                $pageName = $paginationSetting->where("itemType" , "pamphlet")->first()["pageName"];
+                $itemTypeTag = "جزوه";
+                break;
+            case "article":
+                $perPage = $paginationSetting->where("itemType" , "article")->first()["itemPerPage"];
+                $pageName = $paginationSetting->where("itemType" , "article")->first()["pageName"];
+                $itemTypeTag = "مقاله";
+                $pageNum = $request->get($pageName);
+                break;
+            case "contentset":
+                $perPage = $paginationSetting->where("itemType" , "contentset")->first()["itemPerPage"];
+                $pageName = $paginationSetting->where("itemType" , "contentset")->first()["pageName"];
+                $bucket = "contentset";
+                $itemTypeTag = "دوره_آموزشی";
+                break;
+            case "product":
+                $perPage = 16;
+                $bucket = "product";
+                $itemTypeTag = "محصول";
+                $pageName = "other";
+                break;
+            default:
+                $perPage = 16;
+                $bucket = $itemType;
+                $itemTypeTag = "other";
+                $pageName = "other";
+                break;
+        }
+        $requestSubPath .= "&limit=".(int)$perPage;
+
+        if(isset($pageName))
+        {
+            $pageNum = $request->get($pageName);
+            if(!isset($pageNum))
+                $pageNum = 1;
+            $offset = $perPage * ($pageNum - 1);
+            $requestSubPath .= "&offset=".$offset;
+        }
+        else
+        {
+
+            $requestSubPath .= "&offset=0";
+            $pageName = "other";
+        }
+        return [
+            $requestSubPath,
+            $bucket,
+            $itemTypeTag,
+            $perPage,
+            $pageName
+        ];
+    }
+
+    private function getIdFromRedis(string  $bucket , array  $bucketTags, string $requestSubPath){
+
+        $strTags = implode("\",\"",$bucketTags);
+        $strTags = "[\"$strTags\"]";
+        $requestBasePath = env("TAG_API_URL") . "tags/";
+        $bucketRequestPath = $requestBasePath . $bucket . "?tags=".$strTags. $requestSubPath;
+        $response = $this->sendRequest($bucketRequestPath, "GET");
+        if ($response["statusCode"] == 200) {
+            $result = json_decode($response["result"]);
+            $total_items_db = $result->data->total_items_db;
+            $arrayOfId = [];
+            foreach ($result->data->items as $item) {
+                array_push($arrayOfId, $item->id);
+            }
+            return [
+                $total_items_db,
+                $arrayOfId
+            ];
+        }
+
+
+    }
+
+    private function getPartialSearchFromIds(Request $request, $query, string $itemType, int $perPage, int $total_items_db,string $pageName){
+        $options = [
+            "pageName" => $pageName
+        ];
+        $query = new LengthAwarePaginator(
+            $query,
+            $total_items_db,
+            $perPage,
+            null  ,
+            $options
+        );
+        switch ($itemType)
+        {
+            case "video":
+                $query->load('files');
+                break;
+            case "pamphlet":
+            case "article":
+                break;
+            case "contentset":
+                $query->load('educationalcontents');
+                break;
+            case "product":
+                break;
+        }
+        $partialSearch = View::make(
+            'partials.search.'.$itemType,
+            [
+                'items' => $query
+            ]
+        )->render();
+        return $partialSearch;
+    }
+    private function getJsonFromIds(Request $request, $query){
+        return $query;
+    }
+    private function makeJsonForAndroidApp(Collection $items){
+        $items = $items->pop();
+        $key = md5($items->implode(","));
+        $response = Cache::remember($key,Config::get("constants.CACHE_60"),function () use($items){
+            $response = collect();
+            $items->load('files');
+            foreach ($items as $item){
+                $hq = "";
+                $h240 ="" ;
+                if (isset($item->files)) {
+                    $hq= $item->files->where('pivot.label','hq')->first();
+
+                    if (isset($hq)) {
+                        $hq = $hq->name;
+                        $h240 = $hq;
+                    }
+                }
+
+                if (isset($item->files)) {
+                    $temp = $item->files->where('pivot.label','240p')->first();
+                    if (isset($temp)) {
+                        $h240 = $temp->name;
+                    }
+                }
+
+                $thumbnail = $item->files->where('pivot.label','thumbnail')->first();
+                $contenSets = $item->contentsets->where("pivot.isDefault" , 1)->first();
+                $sessionNumber = $contenSets->pivot->order;
+                $response->push(
+                    [
+                        "videoId" => $item->id,
+                        "name" => $item->getDisplayName(),
+                        "videoDescribe" => $item->description,
+                        "url" => action('EducationalContentController@show',$item),
+                        "videoLink480" => $hq,
+                        "videoLink240" => $h240,
+                        "videoviewcounter" =>"0",
+                        "videoDuration" => 0,
+                        "session" => $sessionNumber."",
+                        "thumbnail" => $thumbnail->name
+                    ]
+                );
+                //dd($response);
+                //return response()->make("ok");
+            }
+            $response->push(json_decode("{}"));
+            return $response;
+        });
+        return $response;
+    }
+
     public function search( Request $request )
     {
-        //ToDo : load ha : file haye thumbnail mahsoolat , code mojood dar partial/search/contetnset.blade
-        try {
-            if(Input::has("itemTypes"))
-            {
-                $itemTypes = Input::get("itemTypes");
-                if(!is_array($itemTypes)) return $this->response->setStatusCode(422)->setContent(["message"=>"bad input: itemTypes"]) ;
+        $itemTypes = $request->get('itemTypes');
+        $tagInput  = $request->get('tags');
+
+        if(isset($itemTypes))
+        {
+            if(!is_array($itemTypes))
+                return $this->response
+                    ->setStatusCode(422)
+                    ->setContent(["message"=>"bad input: itemTypes"]) ;
+            $itemTypes = array_filter($itemTypes);
+        }
+        else
+        {
+            $itemTypes = ["video" , "pamphlet" , "contentset", "product" , "article"];
+        }
+
+        //ToDo: Appropriate error page
+        if (isset($tagInput)) {
+            if(!is_array($tagInput)){
+                return $this->response
+                    ->setStatusCode(422)
+                    ->setContent([
+                        "message"=>"bad input: tags"
+                    ]) ;
             }
-            else
-            {
-                $itemTypes = array("video" , "pamphlet" , "contentset", "product" , "article");
+            $tagInput = array_filter($tagInput);
+        }else{
+            $tagInput = [];
+        }
+
+        $items = collect();
+        $paginationSetting = collect([
+            [
+                "itemType"=>"video" ,
+                "pageName" => "videopage",
+                "itemPerPage" => "12"
+            ],
+            [
+                "itemType"=>"pamphlet" ,
+                "pageName" => "pamphletpage",
+                "itemPerPage" => "10"
+            ],
+            [
+                "itemType"=>"article" ,
+                "pageName" => "articlepage",
+                "itemPerPage" => "10"
+            ],
+            [
+                "itemType"=>"contentset" ,
+                "pageName" => "contentsetpage",
+                "itemPerPage" => "10"
+            ]
+        ]);
+        $isApp = ( strlen(strstr($request->header('User-Agent'),"Alaa")) > 0 )? true : false ;
+        foreach ($itemTypes as $itemType)
+        {
+            [
+                $requestSubPath,
+                $bucket,
+                $itemTypeTag,
+                $perPage,
+                $pageName
+            ] = $this->getRedisRequestSubPath($request,$itemType,$paginationSetting);
+
+            $bucketTags = $tagInput ;
+            try {
+                if(!in_array($itemTypeTag , $tagInput)){
+                    array_push($bucketTags, $itemTypeTag);
+                }
+                [
+                    $total_items_db,
+                    $arrayOfId
+                ] = $this->getIdFromRedis($bucket,$bucketTags,$requestSubPath);
+            }
+            catch (\Exception    $e) {
+                $message = "unexpected error";
+                return $this->response
+                    ->setStatusCode(503)
+                    ->setContent([
+                        "message"=>$message ,
+                        "error"=>$e->getMessage() ,
+                        "line"=>$e->getLine() ,
+                        "file"=>$e->getFile()
+                    ]);
             }
 
-            $tagFlag = false;
-            $tagInput = array();
-            if(Input::has("tags"))
+            switch ($itemType)
             {
-                $tagFlag = true;
-                $tagInput = Input::get("tags");
-                //ToDo: Appropriate error page
-                if(!is_array($tagInput)) return $this->response->setStatusCode(422)->setContent(["message"=>"bad input: tags"]) ;
-                $tags = "";
-                foreach ($tagInput as $key => $tag)
-                {
-                    if(strlen($tag)<=0)
-                        continue;
-                    $tags .= "\"$tag\"";
-                }
-                if(strlen($tags) <= 0 )
-                    $tagFlag = false;
-
+                case "video":
+                case "pamphlet":
+                case "article":
+                    $query = Educationalcontent::whereIn("id",$arrayOfId)->orderBy("created_at" , "desc")->get();
+                    break;
+                case "contentset":
+                    $query = Contentset::whereIn("id",$arrayOfId)->orderBy("created_at" , "desc")->get();
+                    break;
+                case "product":
+                    $query = Product::getProducts(0,1)->whereIn("id" , $arrayOfId)
+                        ->orderBy("order")->get();
+                    break;
+                default:
+                    continue 2;
+                    break;
             }
-            $items = collect();
-            $paginationSetting = collect([
-                [
-                    "itemType"=>"video" ,
-                    "pageName" => "videopage",
-                    "itemPerPage" => "12"
-                ],
-                [
-                    "itemType"=>"pamphlet" ,
-                    "pageName" => "pamphletpage",
-                    "itemPerPage" => "10"
-                ],
-                [
-                    "itemType"=>"article" ,
-                    "pageName" => "articlepage",
-                    "itemPerPage" => "10"
-                ],
-                [
-                    "itemType"=>"contentset" ,
-                    "pageName" => "contentsetpage",
-                    "itemPerPage" => "10"
-                ]
-            ]);
-            foreach ($itemTypes as $itemType)
-            {
-                $bucketTags = "";
-                $requestSubPath = "&withscores=1";
-                if($tagFlag)
-                {
-                    $requestBasePath = env("TAG_API_URL")."tags/";
-                    switch ($itemType)
-                    {
-                        case "video":
-                            $perPage = $paginationSetting->where("itemType" , "video")->first()["itemPerPage"];
-                            $pageName = $paginationSetting->where("itemType" , "video")->first()["pageName"];
-                            $requestSubPath .= "&limit=".(int)$perPage;
-                            if(Input::has($pageName))
-                            {
-                                $pageNum = Input::get($pageName);
-                                $offset = $perPage * ($pageNum - 1);
-                                $requestSubPath .= "&offset=".$offset;
-                            }
-                            else
-                            {
-                                $requestSubPath .= "&offset=0";
-                            }
-                            $bucket = "content";
-                            $itemTypeTag = "فیلم";
-                            break;
-                        case "pamphlet":
-                            $perPage = $paginationSetting->where("itemType" , "pamphlet")->first()["itemPerPage"];
-                            $pageName = $paginationSetting->where("itemType" , "pamphlet")->first()["pageName"];
-                            $requestSubPath .= "&limit=".(int)$perPage;
-                            if(Input::has($pageName))
-                            {
-                                $pageNum = Input::get($pageName);
-                                $offset = $perPage * ($pageNum - 1);
-                                $requestSubPath .= "&offset=".$offset;
-                            }
-                            else
-                            {
-                                $requestSubPath .= "&offset=0";
-                            }
-                            $bucket = "content";
-                            $itemTypeTag = "جزوه";
-                            break;
-                        case "article":
-                            $perPage = $paginationSetting->where("itemType" , "article")->first()["itemPerPage"];
-                            $pageName = $paginationSetting->where("itemType" , "article")->first()["pageName"];
-                            $requestSubPath .= "&limit=".(int)$perPage;
-                            if(Input::has($pageName))
-                            {
-                                $pageNum = Input::get($pageName);
-                                $offset = $perPage * ($pageNum - 1);
-                                $requestSubPath .= "&offset=".$offset;
-                            }
-                            else
-                            {
-                                $requestSubPath .= "&offset=0";
-                            }
-                            $bucket = "content";
-                            $itemTypeTag = "مقاله";
-                            break;
-                        case "contentset":
-                            $perPage = $paginationSetting->where("itemType" , "contentset")->first()["itemPerPage"];
-                            $pageName = $paginationSetting->where("itemType" , "contentset")->first()["pageName"];
-                            $requestSubPath .= "&limit=".(int)$perPage;
-                            if(Input::has($pageName))
-                            {
-                                $pageNum = Input::get($pageName);
-                                $offset = $perPage * ($pageNum - 1);
-                                $requestSubPath .= "&offset=".$offset;
-                            }
-                            else
-                            {
-                                $requestSubPath .= "&offset=0";
-                            }
-                            $bucket = "contentset";
-                            $itemTypeTag = "دوره_آموزشی";
-                            break;
-                        case "product":
-                            $bucket = "product";
-                            $itemTypeTag = "محصول";
-                            break;
-                        default:
-                            $bucket = $itemType;
-                            break;
-                    }
-
-                    $bucketTags = $tags ;
-                    if(!in_array($itemTypeTag , $tagInput))
-                        $bucketTags .= "\"$itemTypeTag\"";
-                    $bucketTags = str_replace("\"\"" , "\",\"" , $bucketTags);
-                    $bucketTags = "[".$bucketTags."]";
-                    $bucketRequestPath = $requestBasePath.$bucket."?tags=$bucketTags".$requestSubPath;
-                    $response = $this->sendRequest($bucketRequestPath,"GET" );
-                    if($response["statusCode"] == 200){
-                        $result = json_decode($response["result"]);
-                        $total_items_db = $result->data->total_items_db ;
-                        $arrayOfId = array();
-                        foreach ($result->data->items as $item)
-                        {
-                            array_push($arrayOfId , $item->id);
-                        }
-                    }
-                }
-                switch ($itemType)
-                {
-                    case "video":
-                        $query = Educationalcontent::select()->whereHas("contenttypes" , function ($q){
-                            $q->where("name" , "video");
-                        })->orderBy("created_at" , "desc");
-                        if(isset($arrayOfId))
-                        {
-                            //Todo: mishe in query nakhore ba ye if rooye arrayOfId
-                            $query->whereIn("id" , $arrayOfId);
-                            $query = $query->get();
-                            $options = [
-                                "pageName" => $paginationSetting->where("itemType" , "video")->first()["pageName"]
-                            ];
-                            $query = new LengthAwarePaginator($query,(isset($total_items_db))?$total_items_db:0,$paginationSetting->where("itemType" , "video")->first()["itemPerPage"],null  , $options);
-                        }else
-                        {
-                            $query = $query->paginate($paginationSetting->where("itemType" , "video")->first()["itemPerPage"] , ['*'] , $paginationSetting->where("itemType" , "video")->first()["pageName"]);
-                        }
-                        //Sample Code For Text Search
-//                        $text = Input::get("searchText");
-//                        $this->QueryCommin($text , ["name" , "description" , $query]);
-                        break;
-                    case "pamphlet":
-                        $query = Educationalcontent::select()->whereHas("contenttypes" , function ($q){
-                            $q->where("name" , "pamphlet");
-                        })->orderBy("created_at" , "desc");
-                        if(isset($arrayOfId))
-                        {
-                            $query->whereIn("id" , $arrayOfId);
-                            $query = $query->get();
-                            $options = [
-                                "pageName" => $paginationSetting->where("itemType" , "pamphlet")->first()["pageName"]
-                            ];
-                            $query = new LengthAwarePaginator($query,(isset($total_items_db))?$total_items_db:0,$paginationSetting->where("itemType" , "pamphlet")->first()["itemPerPage"],null  , $options);
-                        }else
-                        {
-                            $query = $query->paginate($paginationSetting->where("itemType" , "pamphlet")->first()["itemPerPage"] , ['*'] , $paginationSetting->where("itemType" , "pamphlet")->first()["pageName"]);
-                        }
-                        break;
-                    case "article":
-                        $query = Educationalcontent::select()->whereHas("contenttypes" , function ($q){
-                            $q->where("name" , "article");
-                        })->orderBy("created_at" , "desc");
-                        if(isset($arrayOfId))
-                        {
-                            $query->whereIn("id" , $arrayOfId);
-                            $query = $query->get();
-                            $options = [
-                                "pageName" => $paginationSetting->where("itemType" , "article")->first()["pageName"]
-                            ];
-                            $query = new LengthAwarePaginator($query,(isset($total_items_db))?$total_items_db:0,$paginationSetting->where("itemType" , "article")->first()["itemPerPage"],null  , $options);
-                        }else
-                        {
-                            $query = $query->paginate($paginationSetting->where("itemType" , "article")->first()["itemPerPage"] , ['*'] , $paginationSetting->where("itemType" , "article")->first()["pageName"]);
-                        }
-                        break;
-                    case "contentset":
-                        $query = Contentset::select()->orderBy("created_at" , "desc");
-                        if(isset($arrayOfId))
-                        {
-                            $query->whereIn("id" , $arrayOfId);
-                            $query = $query->get();
-                            $options = [
-                                "pageName" => $paginationSetting->where("itemType" , "contentset")->first()["pageName"]
-                            ];
-                            $query = new LengthAwarePaginator($query,(isset($total_items_db))?$total_items_db:0,$paginationSetting->where("itemType" , "contentset")->first()["itemPerPage"],null  , $options);
-                        }else
-                        {
-                            $query = $query->paginate($paginationSetting->where("itemType" , "contentset")->first()["itemPerPage"] , ['*'] , $paginationSetting->where("itemType" , "contentset")->first()["pageName"]);
-                        }
-                        break;
-                    case "product":
-                        $query = Product::getProducts(0,1)->orderBy("order");
-                        if(isset($arrayOfId))
-                        {
-                            $query->whereIn("id" , $arrayOfId);
-                        }
-                        $query = $query->get();
-                        break;
-                    default:
-                        continue 2;
-                        break;
-                }
-                if(isset($total_items_db)) $totalObjectsCount = $total_items_db;
-                else $totalObjectsCount = $query->count();
-                $partialSearch = View::make('partials.search.'.$itemType, array('items' => $query))->render();
+            if($isApp){
+                $items->push($this->getJsonFromIds($request, $query));
+            }else {
+                if ($total_items_db > 0)
+                    $partialSearch = $this->getPartialSearchFromIds($request, $query, $itemType, $perPage, $total_items_db, $pageName);
+                else
+                    $partialSearch = null;
                 $items->push([
                     "type"=>$itemType,
-                    "totalitems"=> (isset($totalObjectsCount))?$totalObjectsCount:0,
+                    "totalitems"=> $total_items_db,
                     "view"=>$partialSearch,
                 ]);
             }
-            $totalTags = array();
-//            $majorCollection = collect([
-//                ["description"=>"رشته_ریاضی", "name"=>"ریاضی"] ,
-//                ["description"=>"رشته_تجربی", "name"=>"تجربی" ],
-//                ["description"=>"رشته_انسانی", "name"=>"انسانی" ]
-//            ]);
-            $majorCollection = Major::all();
-            $totalTags = array_merge($totalTags , $majorCollection->pluck("description")->toArray()) ;
-            $majors = $majorCollection->pluck(  "name" , "description")->toArray();
 
-            $gradeCollection = Grade::where("name" ,'<>' , 'graduated' )->get();
-            $gradeCollection->push(["displayName"=>"اول دبیرستان" , "description"=>"اول_دبیرستان"]);
-            $gradeCollection->push(["displayName"=>"دوم دبیرستان" , "description"=>"دوم_دبیرستان"]);
-            $gradeCollection->push(["displayName"=>"سوم دبیرستان" , "description"=>"سوم_دبیرستان"]);
-            $gradeCollection->push(["displayName"=>"چهارم دبیرستان" , "description"=>"چهارم_دبیرستان"]);
-            $totalTags = array_merge($totalTags , $gradeCollection->pluck("description")->toArray()) ;
-            $grades = $gradeCollection->pluck('displayName' , 'description')->toArray() ;
+        }
+        if($isApp){
+            $response = $this->makeJsonForAndroidApp($items);
+            return response()->json($response,200);
+        }
+        $totalTags = array();
+        $majorCollection = Major::all();
+        $totalTags = array_merge($totalTags , $majorCollection->pluck("description")->toArray()) ;
+        $majors = $majorCollection->pluck(  "name" , "description")->toArray();
+
+        $gradeCollection = Grade::where("name" ,'<>' , 'graduated' )->get();
+        $gradeCollection->push(["displayName"=>"اول دبیرستان" , "description"=>"اول_دبیرستان"]);
+        $gradeCollection->push(["displayName"=>"دوم دبیرستان" , "description"=>"دوم_دبیرستان"]);
+        $gradeCollection->push(["displayName"=>"سوم دبیرستان" , "description"=>"سوم_دبیرستان"]);
+        $gradeCollection->push(["displayName"=>"چهارم دبیرستان" , "description"=>"چهارم_دبیرستان"]);
+        $totalTags = array_merge($totalTags , $gradeCollection->pluck("description")->toArray()) ;
+        $grades = $gradeCollection->pluck('displayName' , 'description')->toArray() ;
 //            $grades = array_sort_recursive($grades);
 
-            $lessonCollection = collect([
-                ["value"=>"" , "index"=>"همه دروس"],
-                ["value"=>"مشاوره", "index"=>"مشاوره"] ,
-                ["value"=>"فیزیک", "index"=>"فیزیک"] ,
-                ["value"=>"شیمی", "index"=>"شیمی" ],
-                ["value"=>"عربی", "index"=>"عربی" ],
-                ["value"=>"زبان_و_ادبیات_فارسی", "index"=>"زبان و ادبیات فارسی" ],
-                ["value"=>"دین_و_زندگی", "index"=>"دین و زندگی" ],
-                ["value"=>"زبان_انگلیسی", "index"=>"زبان انگلیسی" ],
-                ["value"=>"دیفرانسیل", "index"=>"دیفرانسیل"] ,
-                ["value"=>"تحلیلی", "index"=>"تحلیلی"] ,
-                ["value"=>"گسسته", "index"=>"گسسته"] ,
-                ["value"=>"حسابان", "index"=>"حسابان"] ,
-                ["value"=>"جبر_و_احتمال", "index"=>"جبر و احتمال"] ,
-                ["value"=>"ریاضی_پایه", "index"=>"ریاضی پایه"] ,
-                ["value"=>"هندسه_پایه", "index"=>"هندسه پایه"] ,
-                ["value"=>"ریاضی_تجربی", "index"=>"ریاضی تجربی"] ,
-                ["value"=>"ریاضی_انسانی", "index"=>"ریاضی انسانی"] ,
-                ["value"=>"زیست_شناسی", "index"=>"زیست شناسی"] ,
-                ["value"=>"آمار_و_مدلسازی", "index"=>"آمار و مدلسازی"] ,
-                ["value"=>"ریاضی_و_آمار", "index"=>"ریاضی و آمار"] ,
-                ["value"=>"منطق", "index"=>"منطق"] ,
-                ["value"=>"اخلاق", "index"=>"اخلاق"] ,
-                ["value"=>"المپیاد_نجوم", "index"=>"المپیاد نجوم"] ,
-            ]);
-            $totalTags = array_merge($totalTags , $lessonCollection->pluck("value")->toArray()) ;
-            $lessons = $lessonCollection->pluck("index" , "value")->toArray();
+        $lessonCollection = collect([
+            ["value"=>"" , "index"=>"همه دروس"],
+            ["value"=>"مشاوره", "index"=>"مشاوره"] ,
+            ["value"=>"فیزیک", "index"=>"فیزیک"] ,
+            ["value"=>"شیمی", "index"=>"شیمی" ],
+            ["value"=>"عربی", "index"=>"عربی" ],
+            ["value"=>"زبان_و_ادبیات_فارسی", "index"=>"زبان و ادبیات فارسی" ],
+            ["value"=>"دین_و_زندگی", "index"=>"دین و زندگی" ],
+            ["value"=>"زبان_انگلیسی", "index"=>"زبان انگلیسی" ],
+            ["value"=>"دیفرانسیل", "index"=>"دیفرانسیل"] ,
+            ["value"=>"تحلیلی", "index"=>"تحلیلی"] ,
+            ["value"=>"گسسته", "index"=>"گسسته"] ,
+            ["value"=>"حسابان", "index"=>"حسابان"] ,
+            ["value"=>"جبر_و_احتمال", "index"=>"جبر و احتمال"] ,
+            ["value"=>"ریاضی_پایه", "index"=>"ریاضی پایه"] ,
+            ["value"=>"هندسه_پایه", "index"=>"هندسه پایه"] ,
+            ["value"=>"ریاضی_تجربی", "index"=>"ریاضی تجربی"] ,
+            ["value"=>"ریاضی_انسانی", "index"=>"ریاضی انسانی"] ,
+            ["value"=>"زیست_شناسی", "index"=>"زیست شناسی"] ,
+            ["value"=>"آمار_و_مدلسازی", "index"=>"آمار و مدلسازی"] ,
+            ["value"=>"ریاضی_و_آمار", "index"=>"ریاضی و آمار"] ,
+            ["value"=>"منطق", "index"=>"منطق"] ,
+            ["value"=>"اخلاق", "index"=>"اخلاق"] ,
+            ["value"=>"المپیاد_نجوم", "index"=>"المپیاد نجوم"] ,
+        ]);
+        $totalTags = array_merge($totalTags , $lessonCollection->pluck("value")->toArray()) ;
+        $lessons = $lessonCollection->pluck("index" , "value")->toArray();
 
-            $extraTagArray  = array_diff($tagInput , $totalTags );
+        $extraTagArray  = array_diff($tagInput , $totalTags );
 
-//            $rootContentTypes = Contenttype::where("enable", 1)->whereDoesntHave("parents")->pluck("displayName" , "displayName")->toArray() ;
-//            $childContentTypes = Contenttype::whereHas("parents" , function ($q) {
-//                $q->where("name" , "exam") ;
-//            })->pluck("displayName" , "displayName")->toArray() ;
-            if(request()->ajax())
-            {
-                return $this->response->setStatusCode(200)->setContent(["items"=>$items , "itemTypes"=>$itemTypes]);
-            }
-            else
-            {
-                $sideBarMode = "closed";
-                return view("pages.search" , compact("items"  ,"itemTypes" ,"tagArray" , "extraTagArray", "majors" , "grades" , "rootContentTypes", "childContentTypes" , "lessons" , "sideBarMode" ));
-            }
-        }catch (\Exception    $e) {
-            $message = "unexpected error";
-            return $this->response->setStatusCode(503)->setContent(["message"=>$message , "error"=>$e->getMessage() , "line"=>$e->getLine() , "file"=>$e->getFile()]);
+        if(request()->ajax())
+        {
+            return $this->response
+                ->setStatusCode(200)
+                ->setContent([
+                    "items"=>$items ,
+                    "itemTypes"=>$itemTypes
+                ]);
+        }
+        else
+        {
+            $sideBarMode = "closed";
+            return view("pages.search" , compact("items"  ,"itemTypes" ,"tagArray" , "extraTagArray", "majors" , "grades" , "rootContentTypes", "childContentTypes" , "lessons" , "sideBarMode" ));
         }
     }
 
