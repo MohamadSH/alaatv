@@ -1,0 +1,58 @@
+/* IRANSans fonts are used in this project under the license: ..... */
+
+@font-face {
+  font-family: mayraid;
+  font-style: normal;
+  font-weight: 400;
+  src: url('../fonts/mayraid.otf');
+  src: url('../fonts/mayraid.otf?#iefix') format("embedded-opentype"), url('../fonts/mayraid.woff') format("woff");
+}
+
+@font-face {
+  font-family: "icomoon";
+  src: url("../fonts/icons/ivahid.eot?pu1ije");
+  src: url("../fonts/icons/ivahid.eot?pu1ije#iefix") format("embedded-opentype"), url("../fonts/icons/ivahid.ttf?pu1ije") format("truetype"), url("../fonts/icons/ivahid.woff?pu1ije") format("woff"), url("../fonts/icons/ivahid.svg?pu1ije#ivahid") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"],
+[class*=" icon-"] {
+  font-family: "icomoon" !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-light-bulb:before {
+  content: "\e906";
+}
+
+.icon-document:before {
+  content: "\e900";
+}
+
+.icon-transport:before {
+  content: "\e901";
+}
+
+.icon-brain-and-head:before {
+  content: "\e902";
+}
+
+.icon-left-arrow:before {
+  content: "\e903";
+}
+
+.icon-right-arrow:before {
+  content: "\e904";
+}
+
+.icon-social-1:before {
+  content: "\e905";
+}
