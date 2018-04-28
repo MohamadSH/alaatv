@@ -25,7 +25,7 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="Site Name" />
+    <meta name="apple-mobile-web-app-title" content="AlaaTv" />
     <meta name="msapplication-tooltip" content="" />
     <meta name="msapplication-starturl" content="" />
     <meta name="msapplication-navbutton-color" content="" />
@@ -35,9 +35,10 @@
     <meta name="imagemode" content="force" />
     <meta name="layoutmode" content="fitscreen" />
     <meta name="wap-font-scale" content="no" />
+    {!! SEO::generate(true) !!}
     <link rel="index" href="javascript:void(0)" />
 
-    <title>Ala | Ala</title>
+    <title></title>
 
     <link rel="stylesheet" href="/assets/extra/landing4/css/stylesheet.css" />
     <!--[if lt IE 10]>

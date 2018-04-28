@@ -25,7 +25,7 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="Site Name" />
+    <meta name="apple-mobile-web-app-title" content="AlaaTV" />
     <meta name="msapplication-tooltip" content="" />
     <meta name="msapplication-starturl" content="" />
     <meta name="msapplication-navbutton-color" content="" />
@@ -35,9 +35,11 @@
     <meta name="imagemode" content="force" />
     <meta name="layoutmode" content="fitscreen" />
     <meta name="wap-font-scale" content="no" />
+
+    {!! SEO::generate(true) !!}
     <link rel="index" href="javascript:void(0)" />
 
-    <title>Ala | Ala</title>
+    <title></title>
 
     <link rel="stylesheet" href="/assets/extra/landing3/css/stylesheet.css" />
     <!--[if lt IE 10]>
@@ -47,65 +49,70 @@
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <style>
+        .primary-menu>li>a{
+            font-size: 2rem !important;
+        }
+    </style>
 </head>
 
 <body>
 <div class="wrapper" id="main-page">
     <header class="site-header">
         <section class="header-top">
-            <article class="sigin-login">
-                <a href="javascript:void(0)" title="ورود">
-                    <bdi class="bdi-sig-log">
-                        <i class="icon-social-1"></i>
-                    </bdi>
-                </a>
-                <a href="javascript:void(0)" class="a-login" title="ورود">
-                    ورود
-                </a>
-                <a href="javascript:void(0)" class="a-sigin" title="ثبت نام">
-                    ثبت نام
-                </a>
-            </article>
+            {{--<article class="sigin-login">--}}
+                {{--<a href="javascript:void(0)" title="ورود">--}}
+                    {{--<bdi class="bdi-sig-log">--}}
+                        {{--<i class="icon-social-1"></i>--}}
+                    {{--</bdi>--}}
+                {{--</a>--}}
+                {{--<a href="javascript:void(0)" class="a-login" title="ورود">--}}
+                    {{--ورود--}}
+                {{--</a>--}}
+                {{--<a href="javascript:void(0)" class="a-sigin" title="ثبت نام">--}}
+                    {{--ثبت نام--}}
+                {{--</a>--}}
+            {{--</article>--}}
             <nav class="nav-primary-menu" role="navigation">
                 <ul class="primary-menu">
                     <li>
-                        <a href="javascript:void(0)" title="صفحه اصلی">صفحه اصلی</a>
+                        <a href="{{action("HomeController@index")}}" title="صفحه اصلی">صفحه اصلی</a>
                     </li>
                     <li>
-                        <a href="javascript:void(0)" title="جزوه و آزمون">جزوه و آزمون </a>
+                        <a href="{{action("ProductController@show" , 210)}}" title="جزوه و آزمون">همایش ادبیات دکتر سبطی </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0)" title="صفحه اصلی">صفحه اصلی</a>
+                        <a href="{{action("ProductController@show" , 211)}}" title="صفحه اصلی">همایش دین و زندگی دکتر کاغذی</a>
                     </li>
                     <li>
-                        <a href="javascript:void(0)" title="درباره ما">درباره ما</a>
+                        <a href="{{action("ProductController@show" , 212)}}" title="درباره ما">همایش زیست شناسی دکتر چلاجور</a>
                     </li>
                     <li>
-                        <a href="javascript:void(0)" title="تماس با ما">تماس با ما</a>
+                        <a href="{{action("ProductController@show" , 213)}}" title="قوانین و مقررات">همایش زمین شناسی دکتر چلاجور</a>
                     </li>
                     <li>
-                        <a href="javascript:void(0)" title="قوانین و مقررات">قوانین و مقررات</a>
+                        <a href="{{action("HomeController@contactUs")}}" title="تماس با ما">تماس با ما</a>
                     </li>
                 </ul>
                 <div class="swiper-container menu-res">
                     <div class="swiper-wrapper">
                         <div class="swiper-slide">
-                            <a href="javascript:void(0)" class="a-menu-res" title="صفحه اصلی">صفحه اصلی</a>
+                            <a href="{{action("HomeController@index")}}" title="صفحه اصلی">صفحه اصلی</a>
                         </div>
                         <div class="swiper-slide">
-                            <a href="javascript:void(0)" class="a-menu-res" title="جزوه و آزمون">جزوه و آزمون </a>
+                            <a href="{{action("ProductController@show" , 210)}}" title="جزوه و آزمون">همایش ادبیات دکتر سبطی </a>
                         </div>
                         <div class="swiper-slide">
-                            <a href="javascript:void(0)" class="a-menu-res" title="صفحه اصلی">صفحه اصلی</a>
+                            <a href="{{action("ProductController@show" , 211)}}" title="صفحه اصلی">همایش دین و زندگی دکتر کاغذی</a>
                         </div>
                         <div class="swiper-slide">
-                            <a href="javascript:void(0)" class="a-menu-res" title="درباره ما">درباره ما</a>
+                            <a href="{{action("ProductController@show" , 212)}}" title="درباره ما">همایش زیست شناسی دکتر چلاجور</a>
                         </div>
                         <div class="swiper-slide">
-                            <a href="javascript:void(0)" class="a-menu-res" title="تماس با ما">تماس با ما</a>
+                            <a href="{{action("ProductController@show" , 213)}}" title="قوانین و مقررات">همایش زمین شناسی دکتر چلاجور</a>
                         </div>
                         <div class="swiper-slide">
-                            <a href="javascript:void(0)" class="a-menu-res" title="قوانین و مقررات">قوانین و مقررات</a>
+                            <a href="{{action("HomeController@contactUs")}}" title="تماس با ما">تماس با ما</a>
                         </div>
                     </div>
                     <!-- <div class="swiper-button-next"></div>
@@ -160,12 +167,74 @@
                                                 <em>مشترک</em>
                                             </bdi>
                                             <figure>
-                                                <a href="javascript:void(0)" title="">
+                                                <a href="{{action("ProductController@show" , 210)}}" title="">
+                                                    <img src="/assets/extra/landing3/images/professors/G9.png" alt="" title="">
+                                                </a>
+                                                <figcaption>
+                                                    <header>
+                                                        <a href="{{action("ProductController@show" , 210)}}" title="">
+                                                            <h1>
+                                                                <span>ادبیات</span>
+                                                                <em>سبطی</em>
+                                                            </h1>
+                                                        </a>
+                                                    </header>
+                                                    <strong>
+                                                            <span class="span-gold">
+                                                                همایش طـــلایی
+                                                            </span>
+                                                        <bdi class="prsent">
+                                                            <i>80%</i>
+                                                            <em> کــــنـکور</em>
+                                                        </bdi>
+                                                    </strong>
+                                                </figcaption>
+                                            </figure>
+                                        </article>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <article class="item-content-field">
+                                            <bdi class="bdi-title all">
+                                                <em>مشترک</em>
+                                            </bdi>
+                                            <figure>
+                                                <a href="{{action("ProductController@show" , 211)}}" title="">
+                                                    <img src="/assets/extra/landing3/images/professors/G10.png" alt="" title="">
+                                                </a>
+                                                <figcaption>
+                                                    <header>
+                                                        <a href="{{action("ProductController@show" , 211)}}" title="">
+                                                            <h1>
+                                                                <span>دین و زندگی</span>
+                                                                <em>کاغذی</em>
+                                                            </h1>
+                                                        </a>
+                                                    </header>
+                                                    <strong>
+                                                            <span class="span-gold">
+                                                                همایش طـــلایی
+                                                            </span>
+                                                        <bdi class="prsent">
+                                                            <i>80%</i>
+                                                            <em> کــــنـکور</em>
+                                                        </bdi>
+                                                    </strong>
+                                                </figcaption>
+                                            </figure>
+                                        </article>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <article class="item-content-field">
+                                            <bdi class="bdi-title all">
+                                                <em>مشترک</em>
+                                            </bdi>
+                                            <figure>
+                                                <a href="{{action("ProductController@show" , 216)}}" title="">
                                                     <img src="/assets/extra/landing3/images/professors/1.png" alt="" title="">
                                                 </a>
                                                 <figcaption>
                                                     <header>
-                                                        <a href="javascript:void(0)" title="">
+                                                        <a href="{{action("ProductController@show" , 216)}}" title="">
                                                             <h1>
                                                                 <span>فیزیک</span>
                                                                 <em>طلوعی</em>
@@ -191,15 +260,15 @@
                                                 <em>مشترک</em>
                                             </bdi>
                                             <figure>
-                                                <a href="javascript:void(0)" title="">
-                                                    <img src="/assets/extra/landing3/images/professors/1.png" alt="" title="">
+                                                <a href="{{action("ProductController@show" , 217)}}" title="">
+                                                    <img src="/assets/extra/landing3/images/professors/G7.png" alt="" title="">
                                                 </a>
                                                 <figcaption>
                                                     <header>
-                                                        <a href="javascript:void(0)" title="">
+                                                        <a href="{{action("ProductController@show" , 217)}}" title="">
                                                             <h1>
-                                                                <span>فیزیک</span>
-                                                                <em>طلوعی</em>
+                                                                <span>شیمی</span>
+                                                                <em>صنیعی</em>
                                                             </h1>
                                                         </a>
                                                     </header>
@@ -222,15 +291,15 @@
                                                 <em>مشترک</em>
                                             </bdi>
                                             <figure>
-                                                <a href="javascript:void(0)" title="">
-                                                    <img src="/assets/extra/landing3/images/professors/1.png" alt="" title="">
+                                                <a href="{{action("ProductController@show" , 214)}}" title="">
+                                                    <img src="/assets/extra/landing3/images/professors/G2.png" alt="" title="">
                                                 </a>
                                                 <figcaption>
                                                     <header>
-                                                        <a href="javascript:void(0)" title="">
+                                                        <a href="{{action("ProductController@show" , 214)}}" title="">
                                                             <h1>
-                                                                <span>فیزیک</span>
-                                                                <em>طلوعی</em>
+                                                                <span>عربی</span>
+                                                                <em>ناصح زاده</em>
                                                             </h1>
                                                         </a>
                                                     </header>
@@ -253,15 +322,15 @@
                                                 <em>مشترک</em>
                                             </bdi>
                                             <figure>
-                                                <a href="javascript:void(0)" title="">
-                                                    <img src="/assets/extra/landing3/images/professors/1.png" alt="" title="">
+                                                <a href="{{action("ProductController@show" , 215)}}" title="">
+                                                    <img src="/assets/extra/landing3/images/professors/G8.png" alt="" title="">
                                                 </a>
                                                 <figcaption>
                                                     <header>
-                                                        <a href="javascript:void(0)" title="">
+                                                        <a href="{{action("ProductController@show" , 215)}}" title="">
                                                             <h1>
-                                                                <span>فیزیک</span>
-                                                                <em>طلوعی</em>
+                                                                <span>عربی</span>
+                                                                <em>آهویی</em>
                                                             </h1>
                                                         </a>
                                                     </header>
@@ -300,19 +369,19 @@
                     <div class="col-md-9">
                         <article class="art-img-content-field">
                             <header class="header-main">
-                                <a href="javascript:void(0)" title="همه رشته ها">
+                                <a href="javascript:void(0)" title="رشته تجربی">
                                     <h1>
                                         <figure class="fig-img-content-field">
-                                            <img src="/assets/extra/landing3/images/tablighat/2.png" alt="همه رشته ها" title="همه رشته ها">
+                                            <img src="/assets/extra/landing3/images/tablighat/2.png" alt="رشته تجربی" title="رشته تجربی">
                                         </figure>
                                     </h1>
                                 </a>
                             </header>
                             <header class="header-res">
-                                <a href="javascript:void(0)" title="همه رشته ها">
+                                <a href="javascript:void(0)" title="رشته تجربی">
                                     <h1>
                                         <figure class="fig-img-content-field">
-                                            <img src="/assets/extra/landing3/images/sample/res-experiential.png" alt="همه رشته ها" title="همه رشته ها">
+                                            <img src="/assets/extra/landing3/images/sample/res-experiential.png" alt="رشته تجربی" title="رشته تجربی">
                                         </figure>
                                     </h1>
                                 </a>
@@ -325,19 +394,19 @@
                                 <div class="swiper-wrapper">
                                     <div class="swiper-slide">
                                         <article class="item-content-field">
-                                            <bdi class="bdi-title experiential">
-                                                <em>مشترک</em>
+                                            <bdi class="bdi-title math">
+                                                <em>تجربی</em>
                                             </bdi>
                                             <figure>
-                                                <a href="javascript:void(0)" title="">
-                                                    <img src="/assets/extra/landing3/images/professors/1.png" alt="" title="">
+                                                <a href="{{action("ProductController@show" , 212)}}" title="">
+                                                    <img src="/assets/extra/landing3/images/professors/G1.png" alt="" title="">
                                                 </a>
                                                 <figcaption>
                                                     <header>
-                                                        <a href="javascript:void(0)" title="">
+                                                        <a href="{{action("ProductController@show" , 212)}}" title="">
                                                             <h1>
-                                                                <span>فیزیک</span>
-                                                                <em>طلوعی</em>
+                                                                <span>زیست گیاهی</span>
+                                                                <em>چلاجور</em>
                                                             </h1>
                                                         </a>
                                                     </header>
@@ -356,19 +425,19 @@
                                     </div>
                                     <div class="swiper-slide">
                                         <article class="item-content-field">
-                                            <bdi class="bdi-title experiential">
-                                                <em>مشترک</em>
+                                            <bdi class="bdi-title math">
+                                                <em>تجربی</em>
                                             </bdi>
                                             <figure>
-                                                <a href="javascript:void(0)" title="">
-                                                    <img src="/assets/extra/landing3/images/professors/1.png" alt="" title="">
+                                                <a href="{{action("ProductController@show" , 213)}}" title="">
+                                                    <img src="/assets/extra/landing3/images/professors/G1.png" alt="" title="">
                                                 </a>
                                                 <figcaption>
                                                     <header>
-                                                        <a href="javascript:void(0)" title="">
+                                                        <a href="{{action("ProductController@show" , 213)}}" title="">
                                                             <h1>
-                                                                <span>فیزیک</span>
-                                                                <em>طلوعی</em>
+                                                                <span>زمین شناسی</span>
+                                                                <em>چلاجور</em>
                                                             </h1>
                                                         </a>
                                                     </header>
@@ -387,19 +456,19 @@
                                     </div>
                                     <div class="swiper-slide">
                                         <article class="item-content-field">
-                                            <bdi class="bdi-title experiential">
-                                                <em>مشترک</em>
+                                            <bdi class="bdi-title math">
+                                                <em>تجربی</em>
                                             </bdi>
                                             <figure>
-                                                <a href="javascript:void(0)" title="">
-                                                    <img src="/assets/extra/landing3/images/professors/1.png" alt="" title="">
+                                                <a href="{{action("ProductController@show" , 219)}}" title="">
+                                                    <img src="/assets/extra/landing3/images/professors/G5.png" alt="" title="">
                                                 </a>
                                                 <figcaption>
                                                     <header>
-                                                        <a href="javascript:void(0)" title="">
+                                                        <a href="{{action("ProductController@show" , 219)}}" title="">
                                                             <h1>
-                                                                <span>فیزیک</span>
-                                                                <em>طلوعی</em>
+                                                                <span>ریاضی تجربی</span>
+                                                                <em>امینی</em>
                                                             </h1>
                                                         </a>
                                                     </header>
@@ -418,19 +487,19 @@
                                     </div>
                                     <div class="swiper-slide">
                                         <article class="item-content-field">
-                                            <bdi class="bdi-title experiential">
-                                                <em>مشترک</em>
+                                            <bdi class="bdi-title math">
+                                                <em>تجربی</em>
                                             </bdi>
                                             <figure>
-                                                <a href="javascript:void(0)" title="">
-                                                    <img src="/assets/extra/landing3/images/professors/1.png" alt="" title="">
+                                                <a href="{{action("ProductController@show" , 220)}}" title="">
+                                                    <img src="/assets/extra/landing3/images/professors/G3.png" alt="" title="">
                                                 </a>
                                                 <figcaption>
                                                     <header>
-                                                        <a href="javascript:void(0)" title="">
+                                                        <a href="{{action("ProductController@show" , 220)}}" title="">
                                                             <h1>
-                                                                <span>فیزیک</span>
-                                                                <em>طلوعی</em>
+                                                                <span>ریاضی تجربی</span>
+                                                                <em>نباخته</em>
                                                             </h1>
                                                         </a>
                                                     </header>
@@ -473,19 +542,19 @@
                     <div class="col-md-9">
                         <article class="art-img-content-field">
                             <header class="header-main">
-                                <a href="javascript:void(0)" title="همه رشته ها">
+                                <a href="javascript:void(0)" title="رشته ریاضی">
                                     <h1>
                                         <figure class="fig-img-content-field">
-                                            <img src="/assets/extra/landing3/images/tablighat/3.png" alt="همه رشته ها" title="همه رشته ها">
+                                            <img src="/assets/extra/landing3/images/tablighat/3.png" alt="رشته ریاضی" title="رشته ریاضی">
                                         </figure>
                                     </h1>
                                 </a>
                             </header>
                             <header class="header-res">
-                                <a href="javascript:void(0)" title="همه رشته ها">
+                                <a href="javascript:void(0)" title="رشته ریاضی">
                                     <h1>
                                         <figure class="fig-img-content-field">
-                                            <img src="/assets/extra/landing3/images/sample/res-math.png" alt="همه رشته ها" title="همه رشته ها">
+                                            <img src="/assets/extra/landing3/images/sample/res-math.png" alt="رشته ریاضی" title="رشته ریاضی">
                                         </figure>
                                     </h1>
                                 </a>
@@ -499,142 +568,18 @@
                                     <div class="swiper-slide">
                                         <article class="item-content-field">
                                             <bdi class="bdi-title math">
-                                                <em>مشترک</em>
+                                                <em>ریاضی</em>
                                             </bdi>
                                             <figure>
-                                                <a href="javascript:void(0)" title="">
-                                                    <img src="/assets/extra/landing3/images/professors/1.png" alt="" title="">
+                                                <a href="{{action("ProductController@show" , 218)}}" title="">
+                                                    <img src="/assets/extra/landing3/images/professors/G6.png" alt="" title="">
                                                 </a>
                                                 <figcaption>
                                                     <header>
-                                                        <a href="javascript:void(0)" title="">
+                                                        <a href="{{action("ProductController@show" , 218)}}" title="">
                                                             <h1>
-                                                                <span>فیزیک</span>
-                                                                <em>طلوعی</em>
-                                                            </h1>
-                                                        </a>
-                                                    </header>
-                                                    <strong>
-                                                            <span class="span-gold">
-                                                                همایش طـــلایی
-                                                            </span>
-                                                        <bdi class="prsent">
-                                                            <i>80%</i>
-                                                            <em> کــــنـکور</em>
-                                                        </bdi>
-                                                    </strong>
-                                                </figcaption>
-                                            </figure>
-                                        </article>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <article class="item-content-field">
-                                            <bdi class="bdi-title math">
-                                                <em>مشترک</em>
-                                            </bdi>
-                                            <figure>
-                                                <a href="javascript:void(0)" title="">
-                                                    <img src="/assets/extra/landing3/images/professors/1.png" alt="" title="">
-                                                </a>
-                                                <figcaption>
-                                                    <header>
-                                                        <a href="javascript:void(0)" title="">
-                                                            <h1>
-                                                                <span>فیزیک</span>
-                                                                <em>طلوعی</em>
-                                                            </h1>
-                                                        </a>
-                                                    </header>
-                                                    <strong>
-                                                            <span class="span-gold">
-                                                                همایش طـــلایی
-                                                            </span>
-                                                        <bdi class="prsent">
-                                                            <i>80%</i>
-                                                            <em> کــــنـکور</em>
-                                                        </bdi>
-                                                    </strong>
-                                                </figcaption>
-                                            </figure>
-                                        </article>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <article class="item-content-field">
-                                            <bdi class="bdi-title math">
-                                                <em>مشترک</em>
-                                            </bdi>
-                                            <figure>
-                                                <a href="javascript:void(0)" title="">
-                                                    <img src="/assets/extra/landing3/images/professors/1.png" alt="" title="">
-                                                </a>
-                                                <figcaption>
-                                                    <header>
-                                                        <a href="javascript:void(0)" title="">
-                                                            <h1>
-                                                                <span>فیزیک</span>
-                                                                <em>طلوعی</em>
-                                                            </h1>
-                                                        </a>
-                                                    </header>
-                                                    <strong>
-                                                            <span class="span-gold">
-                                                                همایش طـــلایی
-                                                            </span>
-                                                        <bdi class="prsent">
-                                                            <i>80%</i>
-                                                            <em> کــــنـکور</em>
-                                                        </bdi>
-                                                    </strong>
-                                                </figcaption>
-                                            </figure>
-                                        </article>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <article class="item-content-field">
-                                            <bdi class="bdi-title math">
-                                                <em>مشترک</em>
-                                            </bdi>
-                                            <figure>
-                                                <a href="javascript:void(0)" title="">
-                                                    <img src="/assets/extra/landing3/images/professors/1.png" alt="" title="">
-                                                </a>
-                                                <figcaption>
-                                                    <header>
-                                                        <a href="javascript:void(0)" title="">
-                                                            <h1>
-                                                                <span>فیزیک</span>
-                                                                <em>طلوعی</em>
-                                                            </h1>
-                                                        </a>
-                                                    </header>
-                                                    <strong>
-                                                            <span class="span-gold">
-                                                                همایش طـــلایی
-                                                            </span>
-                                                        <bdi class="prsent">
-                                                            <i>80%</i>
-                                                            <em> کــــنـکور</em>
-                                                        </bdi>
-                                                    </strong>
-                                                </figcaption>
-                                            </figure>
-                                        </article>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <article class="item-content-field">
-                                            <bdi class="bdi-title math">
-                                                <em>مشترک</em>
-                                            </bdi>
-                                            <figure>
-                                                <a href="javascript:void(0)" title="">
-                                                    <img src="/assets/extra/landing3/images/professors/1.png" alt="" title="">
-                                                </a>
-                                                <figcaption>
-                                                    <header>
-                                                        <a href="javascript:void(0)" title="">
-                                                            <h1>
-                                                                <span>فیزیک</span>
-                                                                <em>طلوعی</em>
+                                                                <span>دیفرانیل</span>
+                                                                <em>ثابتی</em>
                                                             </h1>
                                                         </a>
                                                     </header>
