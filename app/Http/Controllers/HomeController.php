@@ -97,7 +97,7 @@ class HomeController extends Controller
     private static $TAG = HomeController::class;
 
     public function debug(Request $request){
-      abort(404);
+        abort(404);
     }
     public function __construct()
     {
@@ -498,7 +498,7 @@ class HomeController extends Controller
         SEO::twitter()->setSite("آلاء");
         SEO::setDescription($this->setting->site->seo->homepage->metaDescription);
         SEO::opengraph()->addImage(route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]), ['height' => 100, 'width' => 100]);
-      
+
 //        $consultationstatus_active = Consultationstatus::all()->where("name", "active")->first();
 //        $consultingQuestionCount = Userupload::all()->count();
 //        $consultations = Consultation::all()->sortByDesc("created_at")->where("consultationstatus_id", $consultationstatus_active->id);
@@ -578,7 +578,7 @@ class HomeController extends Controller
         ];
 
         $contentsets = Contentset::
-            whereIn("id" , $contentsetArary)->get();
+        whereIn("id" , $contentsetArary)->get();
         $contentsets->load('educationalcontents');
         $sectionArray = [
             "konkoor" ,
@@ -703,14 +703,14 @@ class HomeController extends Controller
                         ],
                     ]);
                     $sections->push(
-                      [
-                          "name"=>$section,
-                          "displayName" => "کلاس کنکور",
-                          "lessons" => $lessons ,
-                           "tags" => [
-                               "کنکور"
-                           ]
-                      ]
+                        [
+                            "name"=>$section,
+                            "displayName" => "کلاس کنکور",
+                            "lessons" => $lessons ,
+                            "tags" => [
+                                "کنکور"
+                            ]
+                        ]
                     );
                     break;
                 case "yazdahom" :
@@ -1461,52 +1461,52 @@ class HomeController extends Controller
          *  for customized message to every user
 
         foreach ($users as $user) {
-            $customizedMessage = "";
-            $mobiles = [];
-            if (in_array(0, $relatives))
-                array_push($mobiles, ltrim($user->mobile, '0'));
-            if (in_array(1, $relatives)) {
-                if (!$user->contacts->isEmpty()) {
-                    $fatherMobiles = $user->contacts->where("relative_id", 1)->first()->phones->where("phonetype_id", 1)->sortBy("priority");
-                    if (!$fatherMobiles->isEmpty())
-                        foreach ($fatherMobiles as $fatherMobile) {
-                            array_push($mobiles, ltrim($fatherMobile->phoneNumber, '0'));
-                        }
+        $customizedMessage = "";
+        $mobiles = [];
+        if (in_array(0, $relatives))
+        array_push($mobiles, ltrim($user->mobile, '0'));
+        if (in_array(1, $relatives)) {
+        if (!$user->contacts->isEmpty()) {
+        $fatherMobiles = $user->contacts->where("relative_id", 1)->first()->phones->where("phonetype_id", 1)->sortBy("priority");
+        if (!$fatherMobiles->isEmpty())
+        foreach ($fatherMobiles as $fatherMobile) {
+        array_push($mobiles, ltrim($fatherMobile->phoneNumber, '0'));
+        }
 
-                }
-            }
-            if (in_array(2, $relatives)) {
-                if (!$user->contacts->isEmpty()) {
-                    $motherMobiles = $user->contacts->where("relative_id", 2)->first()->phones->where("phonetype_id", 1)->sortBy("priority");
-                    if (!$motherMobiles->isEmpty())
-                        foreach ($motherMobiles as $motherMobile) {
-                            array_push($mobiles, ltrim($motherMobile->phoneNumber, '0'));
-                        }
-                }
-            }
-            $smsInfo = array();
-            $gender = "";
-            if(isset($user->gender_id))
-            {
-                if($user->gender->name=="خانم")
-                    $gender = "خانم ";
-                elseif($user->gender->name=="آقا")
-                    $gender = "آقای ";
-                else
-                    $gender = "";
-            }else{
-                $gender = "";
-            }
-            $customizedMessage = "سلام ".$gender.$user->getfullName()."\n".$message;
-            $smsInfo["message"] = $customizedMessage;
-            $smsInfo["to"] = $mobiles;
-            $smsInfo["from"] = "+985000145";
-            $response = $this->medianaSendSMS($smsInfo);
-            if (!$response["error"]) {
+        }
+        }
+        if (in_array(2, $relatives)) {
+        if (!$user->contacts->isEmpty()) {
+        $motherMobiles = $user->contacts->where("relative_id", 2)->first()->phones->where("phonetype_id", 1)->sortBy("priority");
+        if (!$motherMobiles->isEmpty())
+        foreach ($motherMobiles as $motherMobile) {
+        array_push($mobiles, ltrim($motherMobile->phoneNumber, '0'));
+        }
+        }
+        }
+        $smsInfo = array();
+        $gender = "";
+        if(isset($user->gender_id))
+        {
+        if($user->gender->name=="خانم")
+        $gender = "خانم ";
+        elseif($user->gender->name=="آقا")
+        $gender = "آقای ";
+        else
+        $gender = "";
+        }else{
+        $gender = "";
+        }
+        $customizedMessage = "سلام ".$gender.$user->getfullName()."\n".$message;
+        $smsInfo["message"] = $customizedMessage;
+        $smsInfo["to"] = $mobiles;
+        $smsInfo["from"] = "+985000145";
+        $response = $this->medianaSendSMS($smsInfo);
+        if (!$response["error"]) {
 
-            } else {
-                dump("SMS was not sent to user: ".$user->id) ;
-            }
+        } else {
+        dump("SMS was not sent to user: ".$user->id) ;
+        }
         }
         dd("done");
 
@@ -2173,15 +2173,15 @@ class HomeController extends Controller
 
         $counter = 0;
         foreach ($userlotteries as $userlottery) {
-            $counter++;
-            $smsInfo = array();
-            $smsInfo["to"] = array(ltrim($userlottery->mobile, '0'));
-            $smsInfo["from"] = getenv("SMS_PROVIDER_DEFAULT_NUMBER");
-//
-//            $prize = json_decode($userlottery->pivot->prizes)->items[0]->name ;
-            $smsInfo["message"] = "سلام ، کاربر گرامی نتیجه قرعه کشی در پروفایل شما قرار داده شد - آلاء";
-            $response = $this->medianaSendSMS($smsInfo);
-            dump($response);
+        $counter++;
+        $smsInfo = array();
+        $smsInfo["to"] = array(ltrim($userlottery->mobile, '0'));
+        $smsInfo["from"] = getenv("SMS_PROVIDER_DEFAULT_NUMBER");
+        //
+        //            $prize = json_decode($userlottery->pivot->prizes)->items[0]->name ;
+        $smsInfo["message"] = "سلام ، کاربر گرامی نتیجه قرعه کشی در پروفایل شما قرار داده شد - آلاء";
+        $response = $this->medianaSendSMS($smsInfo);
+        dump($response);
 
         }
         dd($counter);
@@ -2222,31 +2222,31 @@ class HomeController extends Controller
         $carbon = new Carbon("2018-02-20 00:00:00");
         $orderproducts = Orderproduct::whereIn("product_id" ,[ 100] )->whereHas("order" , function ($q) use ($carbon)
         {
-//           $q->where("orderstatus_id" , 1)->where("created_at" ,">" , $carbon);
-           $q->where("orderstatus_id" , 2)->whereIn("paymentstatus_id" , [2,3])->where("completed_at" ,">" , $carbon);
+        //           $q->where("orderstatus_id" , 1)->where("created_at" ,">" , $carbon);
+        $q->where("orderstatus_id" , 2)->whereIn("paymentstatus_id" , [2,3])->where("completed_at" ,">" , $carbon);
         })->get();
         dump("تعداد سفارش ها" . $orderproducts->count());
         $users = array();
         $counter = 0;
         foreach ($orderproducts as $orderproduct)
         {
-            $order = $orderproduct->order;
-            if($order->orderproducts->where("product_id" , 107)->isNotEmpty()) continue ;
+        $order = $orderproduct->order;
+        if($order->orderproducts->where("product_id" , 107)->isNotEmpty()) continue ;
 
-            $giftOrderproduct = new Orderproduct();
-            $giftOrderproduct->orderproducttype_id = Config::get("constants.ORDER_PRODUCT_GIFT");
-            $giftOrderproduct->order_id = $order->id ;
-            $giftOrderproduct->product_id = 107 ;
-            $giftOrderproduct->cost = 24000 ;
-            $giftOrderproduct->discountPercentage = 100 ;
-            $giftOrderproduct->save() ;
+        $giftOrderproduct = new Orderproduct();
+        $giftOrderproduct->orderproducttype_id = Config::get("constants.ORDER_PRODUCT_GIFT");
+        $giftOrderproduct->order_id = $order->id ;
+        $giftOrderproduct->product_id = 107 ;
+        $giftOrderproduct->cost = 24000 ;
+        $giftOrderproduct->discountPercentage = 100 ;
+        $giftOrderproduct->save() ;
 
-            $giftOrderproduct->parents()->attach($orderproduct->id , ["relationtype_id"=>Config::get("constants.ORDER_PRODUCT_INTERRELATION_PARENT_CHILD")]);
-            $counter++;
-            if(isset($order->user->id))
-                array_push($users , $order->user->id);
-            else
-                array_push($users , 0);
+        $giftOrderproduct->parents()->attach($orderproduct->id , ["relationtype_id"=>Config::get("constants.ORDER_PRODUCT_INTERRELATION_PARENT_CHILD")]);
+        $counter++;
+        if(isset($order->user->id))
+        array_push($users , $order->user->id);
+        else
+        array_push($users , 0);
         }
         dump($counter." done");
         dd($users);
@@ -2257,7 +2257,7 @@ class HomeController extends Controller
 
         $productsArray = [164, 160, 156, 152, 148, 144, 140, 136, 132, 128, 124, 120];
         $orders = Order::whereHas("orderproducts", function ($q) use ($productsArray) {
-            $q->whereIn("product_id", $productsArray);
+        $q->whereIn("product_id", $productsArray);
         })->whereIn("orderstatus_id", [Config::get("constants.ORDER_STATUS_CLOSED"), Config::set("constants.ORDER_STATUS_POSTED")])->whereIn("paymentstatus_id", [Config::get("constants.PAYMENT_STATUS_PAID"), Config::get("constants.PAYMENT_STATUS_INDEBTED")])->get();
 
 
@@ -2265,93 +2265,93 @@ class HomeController extends Controller
         $counter = 0;
         foreach ($orders as $order)
         {
-            if($order->successfulTransactions->isEmpty()) continue ;
-            $totalRefund = 0;
-            foreach ($order->orderproducts->whereIn("product_id", $productsArray) as $orderproduct)
-            {
-                $orderproductTotalRefund = 0 ;
-                $orderproductRefund = (int)((($orderproduct->cost / 88000) * 9000))  ;
-                $orderproductRefundWithBon = $orderproductRefund * (1 - ($orderproduct->getTotalBonNumber() / 100)) ;
-                if($order->couponDiscount>0 && $orderproduct->includedInCoupon)
-                    $orderproductTotalRefund += $orderproductRefundWithBon * (1 - ($order->couponDiscount / 100)) ;
-                else
-                    $orderproductTotalRefund += $orderproductRefundWithBon ;
+        if($order->successfulTransactions->isEmpty()) continue ;
+        $totalRefund = 0;
+        foreach ($order->orderproducts->whereIn("product_id", $productsArray) as $orderproduct)
+        {
+        $orderproductTotalRefund = 0 ;
+        $orderproductRefund = (int)((($orderproduct->cost / 88000) * 9000))  ;
+        $orderproductRefundWithBon = $orderproductRefund * (1 - ($orderproduct->getTotalBonNumber() / 100)) ;
+        if($order->couponDiscount>0 && $orderproduct->includedInCoupon)
+        $orderproductTotalRefund += $orderproductRefundWithBon * (1 - ($order->couponDiscount / 100)) ;
+        else
+        $orderproductTotalRefund += $orderproductRefundWithBon ;
 
-                $totalRefund += $orderproductTotalRefund ;
-                $orderproduct->cost = $orderproduct->cost - $orderproductRefund ;
-                switch ($orderproduct->product_id)
-                {
-                    case 164:
-                        $orderproduct->product_id = 165 ;
-                        break;
-                    case 160:
-                        $orderproduct->product_id = 161 ;
-                        break;
-                    case 156:
-                        $orderproduct->product_id = 157 ;
-                        break;
-                    case 152:
-                        $orderproduct->product_id = 153 ;
-                        break;
-                    case 148:
-                        $orderproduct->product_id = 149 ;
-                        break;
-                    case 144:
-                        $orderproduct->product_id = 145 ;
-                        break;
-                    case 140:
-                        $orderproduct->product_id = 141 ;
-                        break;
-                    case 136:
-                        $orderproduct->product_id = 137 ;
-                        break;
-                    case 132:
-                        $orderproduct->product_id = 133 ;
-                        break;
-                    case 128:
-                        $orderproduct->product_id = 129 ;
-                        break;
-                    case 124:
-                        $orderproduct->product_id = 125 ;
-                        break;
-                    case 120:
-                        $orderproduct->product_id = 121 ;
-                        break;
-                    default:
-                        break;
-                }
-                if(!$orderproduct->update()) dump("orderproduct ".$orderproduct->id." wasn't saved");
-            }
-            $newOrder = Order::where("id" , $order->id)->get()->first();
-            $orderCostArray = $newOrder->obtainOrderCost(true , false , "REOBTAIN");
-            $newOrder->cost = $orderCostArray["rawCostWithDiscount"] ;
-            $newOrder->costwithoutcoupon = $orderCostArray["rawCostWithoutDiscount"];
-            $newOrder->update();
+        $totalRefund += $orderproductTotalRefund ;
+        $orderproduct->cost = $orderproduct->cost - $orderproductRefund ;
+        switch ($orderproduct->product_id)
+        {
+        case 164:
+        $orderproduct->product_id = 165 ;
+        break;
+        case 160:
+        $orderproduct->product_id = 161 ;
+        break;
+        case 156:
+        $orderproduct->product_id = 157 ;
+        break;
+        case 152:
+        $orderproduct->product_id = 153 ;
+        break;
+        case 148:
+        $orderproduct->product_id = 149 ;
+        break;
+        case 144:
+        $orderproduct->product_id = 145 ;
+        break;
+        case 140:
+        $orderproduct->product_id = 141 ;
+        break;
+        case 136:
+        $orderproduct->product_id = 137 ;
+        break;
+        case 132:
+        $orderproduct->product_id = 133 ;
+        break;
+        case 128:
+        $orderproduct->product_id = 129 ;
+        break;
+        case 124:
+        $orderproduct->product_id = 125 ;
+        break;
+        case 120:
+        $orderproduct->product_id = 121 ;
+        break;
+        default:
+        break;
+        }
+        if(!$orderproduct->update()) dump("orderproduct ".$orderproduct->id." wasn't saved");
+        }
+        $newOrder = Order::where("id" , $order->id)->get()->first();
+        $orderCostArray = $newOrder->obtainOrderCost(true , false , "REOBTAIN");
+        $newOrder->cost = $orderCostArray["rawCostWithDiscount"] ;
+        $newOrder->costwithoutcoupon = $orderCostArray["rawCostWithoutDiscount"];
+        $newOrder->update();
 
-            if($totalRefund > 0 )
-            {
-                $transactionRequest =  new \App\Http\Requests\InsertTransactionRequest();
-                $transactionRequest->offsetSet("comesFromAdmin" , true);
-                $transactionRequest->offsetSet("order_id" , $order->id);
-                $transactionRequest->offsetSet("cost" , -$totalRefund);
-                $transactionRequest->offsetSet("managerComment" , "ثبت سیستمی بازگشت هزینه پشتیبانی همایش 1+5");
-                $transactionRequest->offsetSet("destinationBankAccount_id" , 1);
-                $transactionRequest->offsetSet("paymentmethod_id" , Config::get("constants.PAYMENT_METHOD_ATM"));
-                $transactionRequest->offsetSet("transactionstatus_id" ,  Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL"));
-                $transactionController = new TransactionController();
-                $transactionController->store($transactionRequest);
+        if($totalRefund > 0 )
+        {
+        $transactionRequest =  new \App\Http\Requests\InsertTransactionRequest();
+        $transactionRequest->offsetSet("comesFromAdmin" , true);
+        $transactionRequest->offsetSet("order_id" , $order->id);
+        $transactionRequest->offsetSet("cost" , -$totalRefund);
+        $transactionRequest->offsetSet("managerComment" , "ثبت سیستمی بازگشت هزینه پشتیبانی همایش 1+5");
+        $transactionRequest->offsetSet("destinationBankAccount_id" , 1);
+        $transactionRequest->offsetSet("paymentmethod_id" , Config::get("constants.PAYMENT_METHOD_ATM"));
+        $transactionRequest->offsetSet("transactionstatus_id" ,  Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL"));
+        $transactionController = new TransactionController();
+        $transactionController->store($transactionRequest);
 
-                if(session()->has("success")) {
-                    session()->forget("success");
-                }elseif(session()->has("error")){
-                    dump("Transaction wasn't saved ,Order: ".$order->id);
-                    session()->forget("error");
-                }
-                $counter++;
-            }
+        if(session()->has("success")) {
+        session()->forget("success");
+        }elseif(session()->has("error")){
+        dump("Transaction wasn't saved ,Order: ".$order->id);
+        session()->forget("error");
+        }
+        $counter++;
+        }
         }
         dump("Processed: ".$counter) ;
-        */
+         */
         /**
          *  Fixing complementary products
          *
@@ -2359,51 +2359,51 @@ class HomeController extends Controller
         $counter = 0 ;
         foreach ($products as $product)
         {
-            $orders = \App\Order::whereHas("orderproducts" , function ($q2) use ($product){
-                $q2->where("product_id" , $product->id)->whereNull("orderproducttype_id");
-            })->whereIn("orderstatus_id" , [Config::get("constants.ORDER_STATUS_CLOSED") , Config::get("constants.ORDER_STATUS_POSTED") , Config::get("constants.ORDER_STATUS_READY_TO_POST")])
-                ->whereIn("paymentstatus_id" , [Config::get("constants.PAYMENT_STATUS_INDEBTED") , Config::get("constants.PAYMENT_STATUS_PAID")])->get();
+        $orders = \App\Order::whereHas("orderproducts" , function ($q2) use ($product){
+        $q2->where("product_id" , $product->id)->whereNull("orderproducttype_id");
+        })->whereIn("orderstatus_id" , [Config::get("constants.ORDER_STATUS_CLOSED") , Config::get("constants.ORDER_STATUS_POSTED") , Config::get("constants.ORDER_STATUS_READY_TO_POST")])
+        ->whereIn("paymentstatus_id" , [Config::get("constants.PAYMENT_STATUS_INDEBTED") , Config::get("constants.PAYMENT_STATUS_PAID")])->get();
 
-            dump("Number of orders: ".$orders->count());
-            foreach ($orders as $order)
-            {
-                if ($product->hasGifts())
-                {
-                    foreach ($product->gifts as $gift)
-                    {
-                        if($order->orderproducts->where("product_id" , $gift->id)->isEmpty())
-                        {
-                            $orderproduct = new \App\Orderproduct();
-                            $orderproduct->orderproducttype_id = 2;
-                            $orderproduct->order_id = $order->id;
-                            $orderproduct->product_id = $gift->id;
-                            $orderproduct->cost = $gift->basePrice;
-                            $orderproduct->discountPercentage = 100;
-                            if ($orderproduct->save()) $counter++;
-                            else dump("orderproduct was not saved! order: " . $order->id . " ,product: " . $gift->id);
-                        }
-                    }
-                }
-                //$parentsArray = $product->parents;
-                $parentsArray = $this->makeParentArray($product);
-                if (!empty($parentsArray)) {
-                    foreach ($parentsArray as $parent) {
-                        foreach ($parent->gifts as $gift) {
-                            if($order->orderproducts->where("product_id" , $gift->id)->isEmpty())
-                            {
-                                $orderproduct = new \App\Orderproduct();
-                                $orderproduct->orderproducttype_id = 2;
-                                $orderproduct->order_id = $order->id;
-                                $orderproduct->product_id = $gift->id;
-                                $orderproduct->cost = $gift->basePrice;
-                                $orderproduct->discountPercentage = 100;
-                                if ($orderproduct->save()) $counter++;
-                                else dump("orderproduct was not saved! order: " . $order->id . " ,product: " . $gift->id);
-                            }
-                        }
-                    }
-                }
-            }
+        dump("Number of orders: ".$orders->count());
+        foreach ($orders as $order)
+        {
+        if ($product->hasGifts())
+        {
+        foreach ($product->gifts as $gift)
+        {
+        if($order->orderproducts->where("product_id" , $gift->id)->isEmpty())
+        {
+        $orderproduct = new \App\Orderproduct();
+        $orderproduct->orderproducttype_id = 2;
+        $orderproduct->order_id = $order->id;
+        $orderproduct->product_id = $gift->id;
+        $orderproduct->cost = $gift->basePrice;
+        $orderproduct->discountPercentage = 100;
+        if ($orderproduct->save()) $counter++;
+        else dump("orderproduct was not saved! order: " . $order->id . " ,product: " . $gift->id);
+        }
+        }
+        }
+        //$parentsArray = $product->parents;
+        $parentsArray = $this->makeParentArray($product);
+        if (!empty($parentsArray)) {
+        foreach ($parentsArray as $parent) {
+        foreach ($parent->gifts as $gift) {
+        if($order->orderproducts->where("product_id" , $gift->id)->isEmpty())
+        {
+        $orderproduct = new \App\Orderproduct();
+        $orderproduct->orderproducttype_id = 2;
+        $orderproduct->order_id = $order->id;
+        $orderproduct->product_id = $gift->id;
+        $orderproduct->cost = $gift->basePrice;
+        $orderproduct->discountPercentage = 100;
+        if ($orderproduct->save()) $counter++;
+        else dump("orderproduct was not saved! order: " . $order->id . " ,product: " . $gift->id);
+        }
+        }
+        }
+        }
+        }
         }
         dump("Number of processed : ".$counter);
         dd("finish");
@@ -2573,7 +2573,7 @@ class HomeController extends Controller
                                     "آمار_و_مدلسازی",
                                     "پیش",
                                     "نظام_آموزشی_قدیم" ,
-                                    ]);
+                                ]);
                                 break;
                             case 133:
                                 $myTags = array_merge($myTags , [
@@ -2768,7 +2768,7 @@ class HomeController extends Controller
                     {
                         $myTags = [
                             "مقاله"
-                            ];
+                        ];
                         $majors = $item->majors->pluck("description")->toArray() ;
                         if(!empty($majors))
                             $myTags = array_merge($myTags ,  $majors);
