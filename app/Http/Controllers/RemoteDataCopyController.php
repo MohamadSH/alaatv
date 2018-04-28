@@ -13,7 +13,7 @@ class RemoteDataCopyController extends Controller
     protected $response;
     public function __construct()
     {
-        $this->connection =  DB::connection('mysql_remote_sanatisharif');
+        $this->connection =  DB::connection('mysql_sanatisharif');
         $this->response = new Response();
     }
 
