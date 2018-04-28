@@ -813,7 +813,12 @@
             event.preventDefault();
             $.post('/orderproduct', {product_id: this.data}, function(data) {
                 // data is what your server returns
-                console.log(data);
+                data = $.parseJSON(data);
+                if(data.status === 200 || data.status === "200"){
+                    // similar behavior as an HTTP redirect
+                    window.location.replace(data.url);
+                }
+
             });
             // prevent the link's default behavior
             return false;
