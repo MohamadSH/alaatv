@@ -571,9 +571,10 @@ class HomeController extends Controller
          *  lessons
          */
         $contentsetArary = [
-            195 , 170 , 37 , 179 , 187 ,22,189,186,188,180,191,114,112,137,121,175,50,152,
+            195 , 170 , 37 , 179 , 187 ,183,189,186,188,180,191,114,112,137,121,175,50,152,
             194 , 193 , 171 , 178 , 182 , 169 , 170 , 192,
-            185 , 190 , 153 , 172 , 137 , 177 , 173 , 170 , 168 , 184 , 174
+            185 , 190 , 153 , 172 , 137 , 177 , 173 , 170 , 168 , 184 , 174,
+            163 , 157 , 159 , 160 , 162 , 164 , 155 , 158
         ];
 
         $contentsets = Contentset::
@@ -583,6 +584,7 @@ class HomeController extends Controller
             "konkoor" ,
             "dahom" ,
             "yazdahom",
+            "hamayesh"
         ];
         $sections = collect();
         foreach ($sectionArray as $section)
@@ -601,103 +603,103 @@ class HomeController extends Controller
                             "displayName" => "آرایه های ادبی" ,
                             "author" => "هامون سبطی",
                             "pic" => $contentsets->where("id" , 170)->first()->photo,
-                            "content_id"=>($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 170)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=>($contentsets->where("id" , 170)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 170)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                         [
                             "displayName" => "مشاوره" ,
                             "author" => "محمد علی امینی راد",
                             "pic" => $contentsets->where("id" , 37)->first()->photo,
-                            "content_id"=>($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 37)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=>($contentsets->where("id" , 37)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 37)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ] ,
                         [
                             "displayName" => "شیمی شب کنکور" ,
                             "author" => "مهدی صنیعی تهرانی",
                             "pic" => $contentsets->where("id" , 179)->first()->photo,
-                            "content_id"=>($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 179)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=>($contentsets->where("id" , 179)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 179)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                         [
                             "displayName" => "نکته و تست فیزیک" ,
                             "author" => "پیمان طلوعی",
                             "pic" => $contentsets->where("id" , 187)->first()->photo,
-                            "content_id"=>($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 187)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=>($contentsets->where("id" , 187)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 187)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                         [
                             "displayName" => "فیزیک 4 - کنکور" ,
                             "author" => "حمید فدایی فرد",
-                            "pic" => $contentsets->where("id" , 22)->first()->photo,
-                            "content_id"=>($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 22)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "pic" => $contentsets->where("id" , 183)->first()->photo,
+                            "content_id"=>($contentsets->where("id" , 183)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 183)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                         [
                             "displayName" => "نکته و تست ریاضی تجربی" ,
                             "author" => "مهدی امینی راد",
                             "pic" => $contentsets->where("id" , 189)->first()->photo,
-                            "content_id"=>($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 189)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=>($contentsets->where("id" , 189)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 189)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                         [
                             "displayName" => "ریاضی تجربی کنکور" ,
                             "author" => "محمد امین نباحته",
                             "pic" => $contentsets->where("id" , 186)->first()->photo,
-                            "content_id"=>($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 186)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=>($contentsets->where("id" , 186)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 186)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                         [
                             "displayName" => "نکته و تست دیفرانسیل کنکور" ,
                             "author" => "محمد صادق ثابتی",
                             "pic" => $contentsets->where("id" , 188)->first()->photo,
-                            "content_id"=>($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 188)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=>($contentsets->where("id" , 188)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 188)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                         [
                             "displayName" => "هندسه تحلیل کنکور" ,
                             "author" => "محمد صادق ثابتی",
                             "pic" => $contentsets->where("id" , 180)->first()->photo,
-                            "content_id"=>($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 180)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=>($contentsets->where("id" , 180)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 180)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                         [
                             "displayName" => "فلسفه و منطق کنکور" ,
                             "author" => "سید حسام الدین جلالی",
                             "pic" => $contentsets->where("id" , 191)->first()->photo,
-                            "content_id"=>($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 191)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=>($contentsets->where("id" , 191)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 191)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                         [
                             "displayName" => "تحلیلی کنکور" ,
                             "author" => "رضا شامیزاده",
                             "pic" => $contentsets->where("id" , 114)->first()->photo,
-                            "content_id"=>($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 114)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=>($contentsets->where("id" , 114)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 114)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                         [
                             "displayName" => "گسسته کنکور" ,
                             "author" => "رضا شامیزاده",
                             "pic" => $contentsets->where("id" , 112)->first()->photo,
-                            "content_id"=>($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 112)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=>($contentsets->where("id" , 112)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 112)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                         [
                             "displayName" => "هندسه پایه کنکور" ,
                             "author" => "وحید کبریایی",
                             "pic" => $contentsets->where("id" , 137)->first()->photo,
-                            "content_id"=>($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 137)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=>($contentsets->where("id" , 137)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 137)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                         [
                             "displayName" => "ریاضی تجربی کنکور" ,
                             "author" => "محمد رضا حسینی فرد",
                             "pic" => $contentsets->where("id" , 121)->first()->photo,
-                            "content_id"=>($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 121)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=>($contentsets->where("id" , 121)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 121)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                         [
                             "displayName" => "عربی کنکور" ,
                             "author" => "محسن آهویی",
                             "pic" => $contentsets->where("id" , 175)->first()->photo,
-                            "content_id"=>($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 175)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=>($contentsets->where("id" , 175)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 175)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                         [
                             "displayName" => "زیست کنکور" ,
                             "author" => "محمد پازوکی",
                             "pic" => $contentsets->where("id" , 50)->first()->photo,
-                            "content_id"=>($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 50)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=>($contentsets->where("id" , 50)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 50)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                         [
                             "displayName" => "آمار و مدلسازی کنکور" ,
                             "author" => "مهدی امینی راد",
                             "pic" => $contentsets->where("id" , 152)->first()->photo,
-                            "content_id"=>($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 152)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=>($contentsets->where("id" , 152)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 152)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                     ]);
                     $sections->push(
@@ -717,49 +719,49 @@ class HomeController extends Controller
                             "displayName" => "زیست یازدهم" ,
                             "author" => "عباس راستی بروجنی",
                             "pic" => $contentsets->where("id" , 194)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 194)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=> ($contentsets->where("id" , 194)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 194)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                         [
                             "displayName" => "فیزیک یازدهم" ,
                             "author" => "پیمان طلوعی",
                             "pic" => $contentsets->where("id" , 193)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 193)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=> ($contentsets->where("id" , 193)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 193)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                         [
                             "displayName" => "حسابان یازدهم" ,
                             "author" => "صادق ثابتی",
                             "pic" => $contentsets->where("id" , 171)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 171)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=> ($contentsets->where("id" , 171)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 171)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                         [
                             "displayName" => "حسابان یازدهم" ,
                             "author" => "محمد رضا مقصودی",
                             "pic" => $contentsets->where("id" , 178)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 178)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=> ($contentsets->where("id" , 178)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 178)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                         [
                             "displayName" => "شیمی یازدهم" ,
                             "author" => "مهدی صنیعی تهرانی",
                             "pic" => $contentsets->where("id" , 182)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 182)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=> ($contentsets->where("id" , 182)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 182)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                         [
                             "displayName" => "ریاضی تجربی یازدهم" ,
                             "author" => "علی صدری",
                             "pic" => $contentsets->where("id" , 169)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 169)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=> ($contentsets->where("id" , 169)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 169)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                         [
                             "displayName" => "آرایه های ادبی" ,
                             "author" => "هامون سبطی",
                             "pic" => $contentsets->where("id" , 170)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 170)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=> ($contentsets->where("id" , 170)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 170)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                         [
                             "displayName" => "عربی یازدهم" ,
-                            "author" => "ناصر_حشمتی",
+                            "author" => "ناصر حشمتی",
                             "pic" => $contentsets->where("id" , 192)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 192)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=> ($contentsets->where("id" , 192)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 192)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                     ]);
                     $sections->push(
@@ -779,67 +781,67 @@ class HomeController extends Controller
                             "displayName" => "متن خوانی عربی دهم" ,
                             "author" => "مهدی ناصر شریعت",
                             "pic" => $contentsets->where("id" , 185)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 185)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=> ($contentsets->where("id" , 185)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 185)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                         [
                             "displayName" => "ریاضی دهم" ,
                             "author" => "مهدی امینی راد",
                             "pic" => $contentsets->where("id" , 190)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 190)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=> ($contentsets->where("id" , 190)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 190)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                         [
                             "displayName" => "ریاضی دهم" ,
                             "author" => "محمد جواد نایب کبیر",
                             "pic" => $contentsets->where("id" , 153)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 153)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=> ($contentsets->where("id" , 153)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 153)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                         [
                             "displayName" => "شیمی دهم" ,
                             "author" => "حامد پویان نظر",
                             "pic" => $contentsets->where("id" , 172)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 172)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=> ($contentsets->where("id" , 172)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 172)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                         [
                             "displayName" => "هندسه 1 (دهم)" ,
                             "author" => "وحید کبریایی",
                             "pic" => $contentsets->where("id" , 137)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 137)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=> ($contentsets->where("id" , 137)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 137)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                         [
                             "displayName" => "زیست 1 (دهم)" ,
                             "author" => "جلال موقاری",
                             "pic" => $contentsets->where("id" , 177)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 177)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=> ($contentsets->where("id" , 177)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 177)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                         [
                             "displayName" => "فیزیک دهم" ,
                             "author" => "فرشید داداشی",
                             "pic" => $contentsets->where("id" , 173)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 173)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=> ($contentsets->where("id" , 173)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 173)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                         [
                             "displayName" => "آرایه های ادبی" ,
                             "author" => "هامون سبطی",
                             "pic" => $contentsets->where("id" , 170)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 170)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=> ($contentsets->where("id" , 170)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 170)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                         [
                             "displayName" => "زبان انگلیسی" ,
                             "author" => "علی اکبر عزتی",
                             "pic" => $contentsets->where("id" , 168)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 168)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=> ($contentsets->where("id" , 168)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 168)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                         [
                             "displayName" => "ریاضی و آمار دهم" ,
                             "author" => "مهدی امینی راد",
                             "pic" => $contentsets->where("id" , 184)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 184)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=> ($contentsets->where("id" , 184)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 184)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                         [
                             "displayName" => "عربی" ,
                             "author" => "ناصر حشمتی",
                             "pic" => $contentsets->where("id" , 174)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 174)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=> ($contentsets->where("id" , 174)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 174)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                     ]);
                     $sections->push(
@@ -859,49 +861,49 @@ class HomeController extends Controller
                             "displayName" => "ریاضی انسانی" ,
                             "author" => "خسرو محمد زاده",
                             "pic" => $contentsets->where("id" , 163)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 163)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=> ($contentsets->where("id" , 163)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 163)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                         [
                             "displayName" => "گسسته" ,
                             "author" => "سروش معینی",
                             "pic" => $contentsets->where("id" , 157)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 157)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=> ($contentsets->where("id" , 157)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 157)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                         [
                             "displayName" => "فیزیک" ,
                             "author" => "نادریان",
                             "pic" => $contentsets->where("id" , 159)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 159)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=> ($contentsets->where("id" , 159)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 159)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                         [
                             "displayName" => "زیست شناسی" ,
                             "author" => "مسعود حدادی",
                             "pic" => $contentsets->where("id" , 160)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 160)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=> ($contentsets->where("id" , 160)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 160)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                         [
                             "displayName" => "دیفرانسیل" ,
                             "author" => "سیروس نصیری",
                             "pic" => $contentsets->where("id" , 162)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 162)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=> ($contentsets->where("id" , 162)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 162)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                         [
                             "displayName" => "ریاضی تجربی" ,
                             "author" => "سیروس نصیری",
                             "pic" => $contentsets->where("id" , 164)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 164)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=> ($contentsets->where("id" , 164)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 164)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                         [
                             "displayName" => "عربی" ,
                             "author" => "عمار تاج بخش",
                             "pic" => $contentsets->where("id" , 155)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 155)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=> ($contentsets->where("id" , 155)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 155)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                         [
                             "displayName" => "شیمی" ,
                             "author" => "محمد حسین انوشه",
                             "pic" => $contentsets->where("id" , 158)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 158)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "content_id"=> ($contentsets->where("id" , 158)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 158)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                     ]);
                     $sections->push(
@@ -2884,6 +2886,42 @@ class HomeController extends Controller
                                 break;
                             case 183:
                                 $myTags = array_merge($myTags , ["رشته_ریاضی" , "رشته_تجربی" , "رشته_انسانی" ,"کنکور" , "عربی" , 'میلاد_ناصح_زاده' ]);
+                                break;
+                            case 210:
+                                $myTags = array_merge($myTags , ["رشته_ریاضی" , "رشته_تجربی" , "رشته_انسانی" ,"کنکور" , "همایش_طلایی" , "ادبیات_و_زبان_فارسی" , 'هامون_سبطی' ]);
+                                break;
+                            case 211:
+                                $myTags = array_merge($myTags , ["رشته_ریاضی" , "رشته_تجربی" , "رشته_انسانی" ,"کنکور" , "همایش_طلایی" , "دین_و_زندگی" , 'وحیده_کاعذی' ]);
+                                break;
+                            case 212:
+                                $myTags = array_merge($myTags , [ "رشته_تجربی"  ,"کنکور" , "همایش_طلایی" , "زیست_شناسی" , 'محمد_چلاجور' ]);
+                                break;
+                            case 213:
+                                $myTags = array_merge($myTags , ["رشته_تجربی"  ,"کنکور" , "همایش_طلایی" , "زمین_شناسی" , 'محمد_چلاجور' ]);
+                                break;
+                            case 214:
+                                $myTags = array_merge($myTags , ["رشته_ریاضی" , "رشته_تجربی" , "رشته_انسانی" ,"کنکور" , "همایش_طلایی" , "عربی" , 'میلاد_ناصح_زاده' ]);
+                                break;
+                            case 215:
+                                $myTags = array_merge($myTags , ["رشته_ریاضی" , "رشته_تجربی" , "رشته_انسانی" ,"کنکور" , "همایش_طلایی" , "عربی" , 'محسن_آهویی' ]);
+                                break;
+                            case 216:
+                                $myTags = array_merge($myTags , ["رشته_ریاضی" , "رشته_تجربی" , "رشته_انسانی" ,"کنکور" , "همایش_طلایی" , "فیزیک" , 'پیمان_طلوعی' ]);
+                                break;
+                            case 217:
+                                $myTags = array_merge($myTags , ["رشته_ریاضی" , "رشته_تجربی" , "رشته_انسانی" ,"کنکور" , "همایش_طلایی" , "شیمی" , 'مهدی_صنیعی_طهرانی' ]);
+                                break;
+                            case 218:
+                                $myTags = array_merge($myTags , ["رشته_ریاضی"  ,"کنکور" , "همایش_طلایی" , "دیفرانسیل" , 'محمد_صادق_ثابتی' ]);
+                                break;
+                            case 219:
+                                $myTags = array_merge($myTags , [ "رشته_تجربی"  ,"کنکور" , "همایش_طلایی" , "ریاضی_تجربی" , 'مهدی_امینی_راد' ]);
+                                break;
+                            case 220:
+                                $myTags = array_merge($myTags , [ "رشته_تجربی"  ,"کنکور" , "همایش_طلایی" , "ریاضی_تجربی" , 'محمد_امین_نباخته' ]);
+                                break;
+                            case 221:
+                                $myTags = array_merge($myTags , [ "رشته_تجربی"  ,"کنکور" , "همایش_طلایی" , "زیست_شناسی" , 'آل_علی' ]);
                                 break;
                             default:
                                 break;
