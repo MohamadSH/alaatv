@@ -2,9 +2,10 @@
 namespace App\Traits;
 
 
+use App\Websitepage;
 use Carbon\Carbon;
 use Illuminate\Http\Response;
-
+use Auth;
 trait Helper
 {
     protected $response;
@@ -264,5 +265,25 @@ trait Helper
         $str = str_replace("/","_",$str);
         $str = str_replace("=","",$str);
         return $str;
+    }
+
+    public function userSeen(string $path){
+        $websitepage = Websitepage::firstOrNew(["url"=>$path ]);
+        $productSeenCount = 0 ;
+        if(!isset($websitepage->id))
+        {
+            $websitepage->save();
+        }
+        if(isset($websitepage->id))
+        {
+            if(!Auth::user()->seensitepages->contains($websitepage->id))
+                Auth::user()->seensitepages()->attach($websitepage->id );
+            else
+            {
+                Auth::user()->seensitepages()->updateExistingPivot($websitepage->id, ["numberOfVisit"=> Auth::user()->seensitepages()->where("id" , $websitepage->id)->first()->pivot->numberOfVisit+1 , "updated_at"=>Carbon::now()]);
+            }
+            $productSeenCount = $websitepage->userschecked()->count();
+        }
+        return $productSeenCount;
     }
 }

@@ -252,26 +252,10 @@ class ProductController extends Controller
         if(Auth::check())
         {
             $baseUrl = url("/");
-            $productPath = str_replace($baseUrl , "" , action("ProductController@show" , $product->id));
-            $websitepage = Websitepage::firstOrNew(["url"=>$productPath ]);
-            $productSeenCount = 0 ;
-            if(!isset($websitepage->id))
-            {
-                $websitepage->save();
-            }
-            if(isset($websitepage->id))
-            {
-                if(!Auth::user()->seensitepages->contains($websitepage->id))
-                     Auth::user()->seensitepages()->attach($websitepage->id );
-                else
-                {
-                    Auth::user()->seensitepages()->updateExistingPivot($websitepage->id, ["numberOfVisit"=> Auth::user()->seensitepages()->where("id" , $websitepage->id)->first()->pivot->numberOfVisit+1 , "updated_at"=>Carbon::now()]);
-                }
-                $productSeenCount = $websitepage->userschecked()->count();
-            }
-        }
+            $productPath = str_replace($baseUrl , "" , action("ProductController@show" , $product));
+            $productSeenCount = $this->userSeen($productPath);
 
-//            if(file_exists($product->introVideo)) $productIntroVideo = $product->introVideo ;
+        }
         if(isset($product->introVideo) && strlen($product->introVideo) > 0)
              $productIntroVideo = $product->introVideo;
 
