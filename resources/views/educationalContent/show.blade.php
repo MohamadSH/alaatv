@@ -2,6 +2,7 @@
 
 @section("css")
     <link rel="stylesheet" href="{{ mix('/css/all.css') }}">
+    <link rel="stylesheet" href="/videojs/video.js/dist/video-js.min.css">
     <style>
         @media screen and (max-width: 480px) {
             .google-docs {
@@ -14,10 +15,6 @@
         }
 
     </style>
-    <link href='https://sanatisharif.ir/package/video-js-5.11.3/video-js.css' rel="stylesheet">
-    <link href='https://sanatisharif.ir/package/video-js-5.11.3/videojs-resolution-switcher-0.4.2/lib/videojs-resolution-switcher.css'
-          rel="stylesheet">
-    {{--<link href="http://vjs.zencdn.net/6.6.3/video-js.css" rel="stylesheet">--}}
 @endsection
 
 @section("pageBar")
@@ -56,7 +53,7 @@
                         <div class="portlet-title">
                             <div class="caption">
                                 <i class="fa fa-video-camera" aria-hidden="true"></i>
-                                {{ isset($title) ? $title : '' }}
+                                {{ isset($educationalContentDisplayName) ? $educationalContentDisplayName : '' }}
                             </div>
                             <div class="actions">
                                 @if($educationalContent->files->where("pivot.label" ,"<>" , "thumbnail")->count() == 1)
@@ -84,18 +81,38 @@
                             </div>
                         </div>
                         <div class="portlet-body">
-                            <div class="video">
-                                <video id='{{$educationalContent->id}}' class='video-js vjs-default-skin' controls
-                                       preload='auto'
-                                       poster='@if(isset($files["thumbnail"])){{$files["thumbnail"]}}@endif'
-                                       width='100%' height='400px'>
+                            <div data-vjs-player>
+                                <video
+                                        id="video-{{$educationalContent->id}}"
+                                        poster='@if(isset($files["thumbnail"])){{$files["thumbnail"]}}@endif'
+                                        width='100%'
+                                        height='400px'
+                                        style="width: 100%"
+                                        class="video-js vjs-default-skin" controls>
+
                                     @foreach($files["videoSource"] as $source)
-                                        <source label='{{$source["caption"]}}' src='{{$source["src"]}}'
-                                                type='video/mp4'/>
+                                        <source label="{{ $source["caption"] }}" src="{{ $source["src"] }}" type='video/mp4'>
                                     @endforeach
                                     <p class="vjs-no-js">جهت پخش آنلاین فیلم، ابتدا مطمئن شوید که جاوا اسکریپت در مرور
                                         گر شما فعال است و از آخرین نسخه ی مرورگر استفاده می کنید.</p>
                                 </video>
+                                <script>
+                                    $(document).ready(function(){
+                                        console.log( "ready!" );
+                                        options = {
+                                            controlBar: {
+                                                children: [
+                                                    'playToggle',
+                                                    'progressControl',
+                                                    'volumePanel',
+                                                    'fullscreenToggle',
+                                                ],
+                                            },
+                                        };
+                                        var player = videojs('video-{{$educationalContent->id}}',options);
+
+                                    });
+                                </script>
                             </div>
                             @if(isset($educationalContent->author_id))
                                 <hr>
@@ -164,7 +181,7 @@
                                                          src="{{(isset($item["thumbnail"]))?$item["thumbnail"]:''}}"/>
                                                 </a>
                                             </div>
-                                            <div class="list-datetime bold uppercase font-yellow-casablanca"> {{(isset($item["content"]->name))?$item["content"]->name." - ":""}}{{(isset($sessionNumber))?" جلسه ".$item["session"]:""}} </div>
+                                            <div class="list-datetime bold uppercase font-yellow-casablanca"> {{($item["content"]->getDisplayName())}} </div>
                                             <div class="list-item-content">
                                                 <h3 class="uppercase bold">
                                                     <a href="javascript:;">&nbsp;</a>
@@ -285,7 +302,7 @@
                         <div class="portlet-title">
                             <div class="caption">
                                 <i class="fa fa-file-text-o" aria-hidden="true"></i>
-                                    {{$educationalContentDisplayName}}
+                                    {{isset($educationalContentDisplayName) ? $educationalContentDisplayName : "" }}
                             </div>
                             <div class="actions">
                                 @if($files->count() == 1)
@@ -351,37 +368,37 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    @if($contentsWithSameType->isNotEmpty())
-                        <div class="mt-element-list">
-                            <div class="mt-list-head list-simple ext-1 font-white bg-green-sharp">
-                                <div class="list-head-title-container">
+                {{--<div class="col-md-4">--}}
+                    {{--@if($contentsWithSameType->isNotEmpty())--}}
+                        {{--<div class="mt-element-list">--}}
+                            {{--<div class="mt-list-head list-simple ext-1 font-white bg-green-sharp">--}}
+                                {{--<div class="list-head-title-container">--}}
                                     {{--<div class="list-date">Nov 8, 2015</div>--}}
-                                    <h3 class="list-title">@if(isset($rootContentType->displayName[0])){{$rootContentType->displayName}}@endif
-                                        های @if(isset($childContentType->displayName[0])){{$childContentType->displayName}}@endif
-                                        دیگر</h3>
-                                </div>
-                            </div>
-                            <div class="mt-list-container list-simple ext-1">
-                                <ul>
-                                    @foreach($contentsWithSameType as $content)
-                                        <li class="mt-list-item">
-                                            <div class="list-icon-container">
-                                                <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-                                            </div>
-                                            <div class="list-datetime"> @if($content->grades->isNotEmpty()){{$content->grades->first()->displayName}}@endif</div>
-                                            <div class="list-item-content">
-                                                <h5 class="uppercase">
-                                                    <a href="{{action("EducationalContentController@show" , $content)}}">{{$content->getDisplayName()}}</a>
-                                                </h5>
-                                            </div>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        </div>
-                    @endif
-                </div>
+                                    {{--<h3 class="list-title">@if(isset($rootContentType->displayName[0])){{$rootContentType->displayName}}@endif--}}
+                                        {{--های @if(isset($childContentType->displayName[0])){{$childContentType->displayName}}@endif--}}
+                                        {{--دیگر</h3>--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+                            {{--<div class="mt-list-container list-simple ext-1">--}}
+                                {{--<ul>--}}
+                                    {{--@foreach($contentsWithSameType as $content)--}}
+                                        {{--<li class="mt-list-item">--}}
+                                            {{--<div class="list-icon-container">--}}
+                                                {{--<i class="fa fa-file-pdf-o" aria-hidden="true"></i>--}}
+                                            {{--</div>--}}
+                                            {{--<div class="list-datetime"> @if($content->grades->isNotEmpty()){{$content->grades->first()->displayName}}@endif</div>--}}
+                                            {{--<div class="list-item-content">--}}
+                                                {{--<h5 class="uppercase">--}}
+                                                    {{--<a href="{{action("EducationalContentController@show" , $content)}}">{{$content->getDisplayName()}}</a>--}}
+                                                {{--</h5>--}}
+                                            {{--</div>--}}
+                                        {{--</li>--}}
+                                    {{--@endforeach--}}
+                                {{--</ul>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                    {{--@endif--}}
+                {{--</div>--}}
             </div>
         @elseif($educationalContent->template->name == "article1")
             <div class="row">
@@ -460,13 +477,6 @@
     @else
         قالب محتوا تنظیم نشده است
     @endif
-
-    {{--RELATED CONTENT COMMING SOON   --}}
-    {{--<div class="row">--}}
-        {{--<div class="col-md-6">--}}
-            {{--@include("educationalContent.partials.similarContent")--}}
-        {{--</div>--}}
-    {{--</div>--}}
 @endsection
 
 @section("footerPageLevelPlugin")
@@ -485,41 +495,4 @@
 @endsection
 
 @section("extraJS")
-    {{--<script src="http://vjs.zencdn.net/6.6.3/video.js"></script>--}}
-    <!-- If you'd like to support IE8 -->
-    <script type="text/javascript"
-            src="https://sanatisharif.ir/package/video-js-5.11.3/ie8/videojs-ie8.min.js"></script>
-    <script type="text/javascript" src="https://sanatisharif.ir/package/video-js-5.11.3/video.min.js"></script>
-
-    <script type="text/javascript"
-            src="https://sanatisharif.ir/package/video-js-5.11.3/videojs-resolution-switcher-0.4.2/lib/videojs-resolution-switcher.js"></script>
-    <script>videojs.options.flash.swf = "https://sanatisharif.ir/package/video-js-5.11.3/video-js.swf";</script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            videojs('{{$educationalContent->id}}', {
-                fluid: true,
-                plugins: {
-                    videoJsResolutionSwitcher: {
-                        default: 'low',
-                        dynamicLabel: true
-                    }
-                }
-            }, function () {
-
-                var myPlayer = this;
-
-                myPlayer.dimensions('100%', '400px');
-                myPlayer.videoJsResolutionSwitcher();
-
-                myPlayer.on('resolutionchange', function () {
-                    console.info('Source changed to %s', myPlayer.src())
-                });
-            });
-            $('.switch').hover(function () {
-                $(this).fadeTo('fast', 0.5);
-            }, function () {
-                $(this).fadeTo('fast', 1);
-            });
-        });
-    </script>
 @endsection

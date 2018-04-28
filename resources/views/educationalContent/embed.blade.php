@@ -41,7 +41,7 @@
                         },
                     };
                     var player = videojs('video-{{$video->id}}',options);
-                    player.qualityLevels();
+
                 });
             </script>
         </div>
