@@ -8,6 +8,9 @@
     <link href="/assets/global/plugins/cubeportfolio/css/cubeportfolio.css" rel="stylesheet" type="text/css" />
 @endsection
 
+@section('gtagJs')
+
+@endsection
 @section("headPageLevelStyle")
     <link rel="stylesheet" href="{{ mix('/css/page_level_style_all.css') }}">
     <link href="/assets/pages/css/portfolio-rtl.min.css" rel="stylesheet" type="text/css" />

@@ -32,11 +32,18 @@
         <script>
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
+            var dimensionValue = '{{ request()->ip() }}';
+
             gtag('js', new Date());
             gtag('config', "{{Config('constants.google.analytics')}}");
             @if(Auth::check())
                 gtag('set', {'user_id': '{{ Auth::user() ->id }}'}); // Set the user ID using signed-in user_id.
             @endif
+            gtag('config', "{{Config('constants.google.analytics')}}", {
+                'custom_map': {'dimension2': 'dimension2'}
+            });
+            // Sends the custom dimension to Google Analytics.
+            gtag('event', 'hit', {'dimension2': dimensionValue});
         </script>
 
         <script>
@@ -47,6 +54,7 @@
 
             var dimensionValue = '{{ request()->ip() }}';
             ga('set', 'dimension2', dimensionValue);
+
             ga('create', '{{ Config('constants.google.analytics') }}', 'auto');
             ga('require', 'displayfeatures');
             ga('send', 'pageview');
@@ -54,6 +62,9 @@
                 ga('set', 'userId', '{{ Auth::user() ->id }}' ); // Set the user ID using signed-in user_id.
             @endif
         </script>
+        @section("gtagJs")
+
+        @show
         <style >
             .margin-bottom-20{
                 margin-bottom: 20px;
