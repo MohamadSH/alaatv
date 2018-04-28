@@ -18,7 +18,7 @@ use App\Traits\ProductCommon;
 use App\Websitesetting;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
-use Meta;
+use SEO;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\Input;
 use Auth;
 use Jenssegers\Agent\Agent;
 use SSH;
-use SEO;
+
 
 class EducationalContentController extends Controller
 {
