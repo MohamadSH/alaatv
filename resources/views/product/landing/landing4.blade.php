@@ -337,7 +337,7 @@
                             <span>ادبیات و زبان فارسی سال دوم</span>
                             <span>ادبیات و زبان فارسی سال سوم</span>
                             <span>ادبیات و زبان فارسی پیش دانشگاهی </span>
-                            <a href="#" data="210" class="link" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                            <a href="#" id="210" class="link" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
                     <article class="art-professors">
@@ -366,7 +366,7 @@
                             <span></span>
                             <span></span>
                             <span></span>
-                            <a href="#"  class="link" data="211" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                            <a href="#"  class="link" id="211" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
 
@@ -396,7 +396,7 @@
                             <span></span>
                             <span></span>
                             <span></span>
-                            <a href="#" class="link" data="216" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                            <a href="#" class="link" id="216" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
                     <article class="art-professors">
@@ -425,7 +425,7 @@
                             <span></span>
                             <span></span>
                             <span></span>
-                            <a href="#" class="link" data="217" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                            <a href="#" class="link" id="217" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
                     <article class="art-professors">
@@ -454,7 +454,7 @@
                             <span></span>
                             <span></span>
                             <span></span>
-                            <a href="#" class="link" data="214" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                            <a href="#" class="link" id="214" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
                     <article class="art-professors">
@@ -483,7 +483,7 @@
                             <span></span>
                             <span></span>
                             <span></span>
-                            <a href="#" class="link" data="215" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                            <a href="#" class="link" id="215" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
                 </section>
@@ -516,7 +516,7 @@
                             <span></span>
                             <span></span>
                             <span></span>
-                            <a href="#" class="link" data="218" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                            <a href="#" class="link" id="218" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
 
@@ -642,7 +642,7 @@
                             <span></span>
                             <span></span>
                             <span> </span>
-                            <a href="#" class="link" data="221" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                            <a href="#" class="link" id="221" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
                     <article class="art-professors">
@@ -671,7 +671,7 @@
                             <span></span>
                             <span></span>
                             <span></span>
-                            <a href="#"  class="link" data="213" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                            <a href="#"  class="link" id="213" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
                     <article class="art-professors">
@@ -729,7 +729,7 @@
                             <span></span>
                             <span></span>
                             <span></span>
-                            <a href="#" class="link" data="220" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                            <a href="#" class="link" id="220" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
 
@@ -811,7 +811,7 @@
             // use jQuery's $.post, to send the request
             // the second argument is the request data
             event.preventDefault();
-            $.post('/orderproduct', {product_id: this.data}, function(data) {
+            $.post('/orderproduct', {product_id: parseInt(this.id)}, function(data) {
                 // data is what your server returns
                 data = $.parseJSON(data);
                 if(data.status === 200 || data.status === "200"){
