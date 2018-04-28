@@ -8,6 +8,7 @@
 
     <head>
         <meta charset="utf-8" />
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta content="width=device-width, initial-scale=1" name="viewport" />
         {!! SEO::generate(true) !!}
@@ -44,23 +45,6 @@
             });
             // Sends the custom dimension to Google Analytics.
             gtag('event', 'hit', {'dimension2': dimensionValue});
-        </script>
-
-        <script>
-            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-            var dimensionValue = '{{ request()->ip() }}';
-            ga('set', 'dimension2', dimensionValue);
-
-            ga('create', '{{ Config('constants.google.analytics') }}', 'auto');
-            ga('require', 'displayfeatures');
-            ga('send', 'pageview');
-            @if(Auth::check())
-                ga('set', 'userId', '{{ Auth::user() ->id }}' ); // Set the user ID using signed-in user_id.
-            @endif
         </script>
         @section("gtagJs")
 
