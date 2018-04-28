@@ -27,17 +27,28 @@
         <!-- END THEME LAYOUT STYLES -->
         <link rel="shortcut icon" href="@if(isset($wSetting->site->favicon)) {{route('image', ['category'=>'11','w'=>'150' , 'h'=>'150' ,  'filename' =>  $wSetting->site->favicon ])}} @endif" />
 
-        <!-- Document Title============================================= -->
-        {{--@section('title')--}}
-            {{--<title>@if(isset($wSetting->site->titleBar)) {{$wSetting->site->titleBar}} @else "نام سایت" @endif</title>--}}
-        {{--@show--}}
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{Config('constants.google.analytics')}}"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', "{{Config('constants.google.analytics')}}");
+            @if(Auth::check())
+                gtag('set', {'user_id': '{{ Auth::user() ->id }}'}); // Set the user ID using signed-in user_id.
+            @endif
+        </script>
+
         <script>
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
                     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
                 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
             })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
+            var dimensionValue = '{{ request()->ip() }}';
+            ga('set', 'dimension2', dimensionValue);
             ga('create', '{{ Config('constants.google.analytics') }}', 'auto');
+            ga('require', 'displayfeatures');
             ga('send', 'pageview');
             @if(Auth::check())
                 ga('set', 'userId', '{{ Auth::user() ->id }}' ); // Set the user ID using signed-in user_id.

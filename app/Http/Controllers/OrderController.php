@@ -45,7 +45,7 @@ use Zarinpal\Drivers\SoapDriver;
 use Zarinpal\Zarinpal;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
-use Meta;
+use SEO;
 
 class OrderController extends Controller
 {
