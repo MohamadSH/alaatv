@@ -54,3 +54,10 @@ sudo supervisorctl update
 
 sudo supervisorctl start laravel-worker:*
 ```
+
+**Nginx Config**
+```$xslt
+        merge_slashes off;
+        rewrite ^(.*?)//+(.*?)$ $1/$2 permanent;
+        rewrite ^/(.*)/$ /$1 permanent;
+```

@@ -2,9 +2,12 @@
 
 namespace App;
 
+use App\Traits\Helper;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Auth;
 use Illuminate\Support\Facades\Storage;
@@ -12,6 +15,7 @@ use Illuminate\Support\Facades\Storage;
 class Educationalcontent extends Model
 {
     use SoftDeletes;
+    use Helper;
 
     /**      * The attributes that should be mutated to dates.        */
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
@@ -27,7 +31,8 @@ class Educationalcontent extends Model
         'metaDescription',
         'metaKeywords',
         'tags',
-        'author_id'
+        'author_id',
+        'contenttype_id'
     ];
 
     public function grades()
@@ -42,7 +47,17 @@ class Educationalcontent extends Model
 
     public function files()
     {
-        return $this->belongsToMany('App\File', 'educationalcontent_file', 'content_id', 'file_id')->withPivot("caption", "label");
+        return $this->belongsToMany(
+            'App\File',
+            'educationalcontent_file',
+            'content_id',
+            'file_id')->withPivot("caption", "label");
+    }
+    public function thumbnails(){
+        return $this->files()->where('label','=','thumbnail');
+    }
+    public function sources(){
+        return $this->files()->where('label','<>','thumbnail');
     }
 
     public function contentsets()
@@ -191,27 +206,42 @@ class Educationalcontent extends Model
         return $contentsWithSameType;
     }
 
+    /**
+     * @return mixed
+     * @throws Exception
+     */
     public function getDisplayName()
     {
         try {
-            $displayName = "";
-            $rootContentType = $this->contenttypes()->whereDoesntHave("parents")->get()->first();
-            $childContentType = $this->contenttypes()->whereHas("parents", function ($q) use ($rootContentType) {
-                $q->where("id", $rootContentType->id);
-            })->get()->first();
-            if (isset($rootContentType->displayName[0])) $displayName .= $rootContentType->displayName . " ";
-            if (isset($this->name[0])) $displayName .= $this->name . " ";
-            if (isset($childContentType->displayName[0])) $displayName .= $childContentType->displayName . " ";
-            $displayName .= $this->displayMajors();
-        } catch (\Exception $e) {
-            return $e->getMessage();
+            $key = "content:getDisplayName"
+                .$this->cacheKey();
+            $c = $this;
+            return Cache::remember($key,Config::get("constants.CACHE_60"),function () use($c) {
+                $displayName = "";
+                $contenSets = $c->contentsets->where("pivot.isDefault" , 1)->first();
+                if(isset($contenSets))
+                {
+                    $sessionNumber = $contenSets->pivot->order;
+                }
+                if (isset($c->contenttype)) {
+                    $displayName .=$c->contenttype->displayName." ";
+                }
+                $displayName .= ( isset($sessionNumber)? "جلسه ".$sessionNumber." - ":"" )." ".(isset($c->name) ? $c->name : $c->user->name);
+                return $displayName;
+            });
+
+        } catch (Exception $e) {
+            throw $e;
         }
-        return $displayName;
     }
 
     public function contenttypes()
     {
         return $this->belongsToMany('App\Contenttype', 'educationalcontent_contenttype', 'content_id', 'contenttype_id');
+    }
+    public function contenttype()
+    {
+        return $this->belongsTo('App\Contenttype');
     }
 
     public function displayMajors()
@@ -244,5 +274,28 @@ class Educationalcontent extends Model
         }
         return $links;
     }
+
+    public function getTagsAttribute($value)
+    {
+        return json_decode($value);
+    }
+
+    public function cacheKey()
+    {
+        $key = $this->getKey();
+        $time= isset($this->update) ? $this->updated_at->timestamp : $this->created_at->timestamp;
+        return sprintf(
+            "%s-%s",
+            //$this->getTable(),
+            $key,
+            $time
+        );
+    }
+
+//    public function setTagsAttribute($value)
+//    {
+//        return json_encode($value);
+//    }
+
 
 }

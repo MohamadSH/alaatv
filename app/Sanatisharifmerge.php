@@ -43,6 +43,7 @@ class Sanatisharifmerge extends Model
         'depname',
         'depyear',
         'departmentlessonid',
+        'pic',
         'departmentlessonTransferred',
         'departmentlessonEnable',
         'teacherfirstname',
@@ -51,4 +52,8 @@ class Sanatisharifmerge extends Model
         'pageNewAddress',
         'educationalcontent_id',
     ];
+
+    public function  educationalcontent(){
+        return $this->belongsTo('App\Educationalcontent');
+    }
 }

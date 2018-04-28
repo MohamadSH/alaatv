@@ -8,11 +8,10 @@
 
     <head>
         <meta charset="utf-8" />
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta content="width=device-width, initial-scale=1" name="viewport" />
-        @section("metadata")
-            @include("partials.headMeta")
-        @show
+        {!! SEO::generate(true) !!}
         <!-- BEGIN GLOBAL MANDATORY STYLES -->
         {{--<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />--}}
 
@@ -29,22 +28,27 @@
         <!-- END THEME LAYOUT STYLES -->
         <link rel="shortcut icon" href="@if(isset($wSetting->site->favicon)) {{route('image', ['category'=>'11','w'=>'150' , 'h'=>'150' ,  'filename' =>  $wSetting->site->favicon ])}} @endif" />
 
-        <!-- Document Title============================================= -->
-        {{--@section('title')--}}
-            {{--<title>@if(isset($wSetting->site->titleBar)) {{$wSetting->site->titleBar}} @else "نام سایت" @endif</title>--}}
-        {{--@show--}}
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{Config('constants.google.analytics')}}"></script>
         <script>
-            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            var dimensionValue = '{{ request()->ip() }}';
 
-            ga('create', '{{ Config('constants.google.analytics') }}', 'auto');
-            ga('send', 'pageview');
+            gtag('js', new Date());
+            gtag('config', "{{Config('constants.google.analytics')}}");
             @if(Auth::check())
-                ga('set', 'userId', '{{ Auth::user() ->id }}' ); // Set the user ID using signed-in user_id.
+                gtag('set', {'user_id': '{{ Auth::user() ->id }}'}); // Set the user ID using signed-in user_id.
             @endif
+            gtag('config', "{{Config('constants.google.analytics')}}", {
+                'custom_map': {'dimension2': 'dimension2'}
+            });
+            // Sends the custom dimension to Google Analytics.
+            gtag('event', 'hit', {'dimension2': dimensionValue});
         </script>
+        @section("gtagJs")
+
+        @show
         <style >
             .margin-bottom-20{
                 margin-bottom: 20px;

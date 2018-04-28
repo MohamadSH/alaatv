@@ -7,10 +7,11 @@ use App\Sanatisharifmerge;
 use App\Traits\CharacterCommon;
 use App\Traits\MetaCommon;
 use App\Traits\RequestCommon;
+use App\User;
 use Carbon\Carbon;
-use function GuzzleHttp\Psr7\try_fopen;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Input;
 
 class SanatisharifmergeController extends Controller
@@ -24,95 +25,610 @@ class SanatisharifmergeController extends Controller
     function __construct()
     {
         $this->teachers = collect([
-            ['userid' => '2','userfirstname' => 'رضا','userlastname' => 'شامیزاده'],
-            ['userid' => '3','userfirstname' => 'روح الله','userlastname' => 'حاجی سلیمانی'],
-            ['userid' => '4','userfirstname' => 'محسن','userlastname' => 'شهریان'],
-            ['userid' => '5','userfirstname' => 'علیرضا','userlastname' => 'رمضانی'],
-            ['userid' => '6','userfirstname' => 'پدرام','userlastname' => 'علیمرادی'],
-            ['userid' => '7','userfirstname' => 'عبدالرضا','userlastname' => 'مرادی'],
-            ['userid' => '8','userfirstname' => 'علی اکبر','userlastname' => 'عزتی'],
-            ['userid' => '9','userfirstname' => 'مسعود','userlastname' => 'حدادی'],
-            ['userid' => '20','userfirstname' => 'محمدرضا','userlastname' => 'مقصودی'],
-            ['userid' => '97','userfirstname' => 'محمد علی','userlastname' => 'امینی راد'],
-            ['userid' => '103','userfirstname' => 'مهدی','userlastname' => 'تفتی'],
-            ['userid' => '246','userfirstname' => '','userlastname' => 'جعفری'],
-            ['userid' => '274','userfirstname' => 'گروه آموزشی','userlastname' => ' '],
-            ['userid' => '307','userfirstname' => 'حمید','userlastname' => 'فدایی فرد'],
-            ['userid' => '308','userfirstname' => 'کیاوش','userlastname' => 'فراهانی'],
-            ['userid' => '310','userfirstname' => 'مصطفی','userlastname' => 'جعفری نژاد'],
-            ['userid' => '311','userfirstname' => 'رفیع','userlastname' => 'رفیعی'],
-            ['userid' => '313','userfirstname' => 'علی','userlastname' => 'صدری'],
-            ['userid' => '314','userfirstname' => 'امید','userlastname' => 'زاهدی'],
-            ['userid' => '315','userfirstname' => 'مشاوران دبیرستان','userlastname' => ''],
-            ['userid' => '318','userfirstname' => 'محسن','userlastname' => 'معینی'],
-            ['userid' => '319','userfirstname' => 'میلاد','userlastname' => 'ناصح زاده'],
-            ['userid' => '320','userfirstname' => 'محمد','userlastname' => 'پازوکی'],
-            ['userid' => '321','userfirstname' => '','userlastname' => 'جهانبخش'],
-            ['userid' => '322','userfirstname' => 'حسن','userlastname' => 'مرصعی'],
-            ['userid' => '323','userfirstname' => '','userlastname' => 'بختیاری'],
-            ['userid' => '324','userfirstname' => 'علی نقی','userlastname' => 'طباطبایی'],
-            ['userid' => '325','userfirstname' => 'وحید','userlastname' => 'کبریایی'],
-            ['userid' => '326','userfirstname' => '','userlastname' => 'درویش'],
-            ['userid' => '363','userfirstname' => '','userlastname' => 'صابری'],
-            ['userid' => '364','userfirstname' => 'دکتر','userlastname' => 'ارشی'],
-            ['userid' => '366','userfirstname' => 'جعفر','userlastname' => 'رنجبرزاده'],
-            ['userid' => '367','userfirstname' => 'محمد رضا','userlastname' => 'آقاجانی'],
-            ['userid' => '478','userfirstname' => 'محمد رضا ','userlastname' => 'حسینی فرد'],
-            ['userid' => '533','userfirstname' => 'محمد','userlastname' => 'صادقی'],
-            ['userid' => '534','userfirstname' => 'باقر','userlastname' => 'رضا خانی'],
-            ['userid' => '535','userfirstname' => 'معین','userlastname' => 'کریمی'],
-            ['userid' => '536','userfirstname' => 'حسین','userlastname' => 'کرد'],
-            ['userid' => '537','userfirstname' => '','userlastname' => 'دورانی'],
-            ['userid' => '965','userfirstname' => 'کاظم','userlastname' => 'کاظمی'],
-            ['userid' => '1427','userfirstname' => '','userlastname' => 'کازرانیان'],
-            ['userid' => '1428','userfirstname' => '','userlastname' => 'شاه محمدی'],
-            ['userid' => '1431','userfirstname' => 'محمد حسین','userlastname' => 'شکیباییان'],
-            ['userid' => '2875','userfirstname' => 'یاشار','userlastname' => 'بهمند'],
-            ['userid' => '3172','userfirstname' => 'خسرو','userlastname' => 'محمد زاده'],
-            ['userid' => '3895','userfirstname' => 'میثم','userlastname' => 'حسین خانی'],
-            ['userid' => '3906','userfirstname' => 'پوریا','userlastname' => 'رحیمی'],
-            ['userid' => '3971','userfirstname' => '','userlastname' => 'نوری'],
-            ['userid' => '3972','userfirstname' => 'رضا','userlastname' => 'آقاجانی'],
-            ['userid' => '3973','userfirstname' => 'مهدی','userlastname' => 'امینی راد'],
-            ['userid' => '3974','userfirstname' => 'سید حسین','userlastname' => 'رخ صفت'],
-            ['userid' => '3975','userfirstname' => 'بهمن','userlastname' => 'مؤذنی پور'],
-            ['userid' => '3976','userfirstname' => 'محمد صادق','userlastname' => 'ثابتی'],
-            ['userid' => '3977','userfirstname' => 'مهدی','userlastname' => 'جلادتی'],
-            ['userid' => '3979','userfirstname' => 'داریوش','userlastname' => 'راوش'],
-            ['userid' => '3980','userfirstname' => 'پیمان','userlastname' => 'طلوعی'],
-            ['userid' => '3993','userfirstname' => 'محمد حسین','userlastname' => 'انوشه'],
-            ['userid' => '3998','userfirstname' => 'عباس','userlastname' => 'راستی بروجنی'],
-            ['userid' => '4012','userfirstname' => 'جواد','userlastname' => 'نایب کبیر'],
-            ['userid' => '4019','userfirstname' => 'عمار','userlastname' => ' تاج بخش'],
-            ['userid' => '4020','userfirstname' => 'سروش','userlastname' => 'معینی'],
-            ['userid' => '4021','userfirstname' => '','userlastname' => 'نادریان'],
-            ['userid' => '4022','userfirstname' => 'شهروز','userlastname' => 'رحیمی'],
-            ['userid' => '4023','userfirstname' => 'سیروس','userlastname' => 'نصیری'],
-            ['userid' => '4030','userfirstname' => 'مهدی','userlastname' => 'صنیعی طهرانی'],
-            ['userid' => '4034','userfirstname' => 'هامون','userlastname' => 'سبطی'],
-            ['userid' => '4035','userfirstname' => 'حامد','userlastname' => 'پویان نظر'],
-            ['userid' => '4036','userfirstname' => 'فرشید','userlastname' => 'داداشی'],
-            ['userid' => '4037','userfirstname' => 'ناصر','userlastname' => 'حشمتی'],
-            ['userid' => '4038','userfirstname' => 'محمدامین','userlastname' => 'نباخته'],
-            ['userid' => '4039','userfirstname' => 'جلال','userlastname' => 'موقاری'],
-            ['userid' => '4040','userfirstname' => 'محسن','userlastname' => ' آهویی'],
-            ['userid' => '4041','userfirstname' => 'مهدی','userlastname' => 'ناصر شریعت'],
-            ['userid' => '4043','userfirstname' => 'سید حسام الدین','userlastname' => 'جلالی'],
-            ['userid' => '4046','userfirstname' => 'ابوالفضل','userlastname' => 'جعفری'] ,
-            ['userid' => '4047','userfirstname' => 'سهراب','userlastname' => 'ابوذرخانی فرد'] ,
-            ['userid' => '4048','userfirstname' => 'سید حبیب','userlastname' => 'میرانی'] ,
-            ['userid' => '4049','userfirstname' => 'حامد','userlastname' =>'امیراللهی' ],
-            ['userid' => '4050','userfirstname' => 'سید حمید رضا' ,'userlastname' => 'مداح حسینی' ],
-            ['userid' => '4051','userfirstname' => 'علی اصغر','userlastname' => 'ترجانی'],
-            ['userid' => '4052','userfirstname' => 'مهدی','userlastname' => 'صفری'],
-            ['userid' => '4053','userfirstname' => 'نیما','userlastname' => 'صدفی'],
-            ['userid' => '4054','userfirstname' => 'رضا','userlastname' => 'تهرانی'],
-            ['userid' => '4055','userfirstname' => 'بهمن','userlastname' => 'منصوری'],
-            ['userid' => '4056','userfirstname' => 'علیرضا','userlastname' => 'محمد زاده'],
-            ['userid' => '4057','userfirstname' => 'امیر حسین','userlastname' => 'دلال شریفی'],
-            ['userid' => '4058','userfirstname' => 'امید','userlastname' => 'احدیان'],
-            ['userid' => '4059','userfirstname' => 'علی','userlastname' => 'محمدی'],
+            [
+                "userid" => "2",
+    "userfirstname" => "رضا",
+    "userlastname" => "شامیزاده",
+    "mobile" => "09991550613",
+    "password" => "9651550613",
+  ]
+   , [
+        "userid" => "3",
+    "userfirstname" => "روح الله",
+    "userlastname" => "حاجی سلیمانی",
+    "mobile" => "09997336794",
+    "password" => "7337336794"
+  ]
+   , [
+        "userid" => "4",
+    "userfirstname" => "محسن",
+    "userlastname" => "شهریان",
+    "mobile" => "09999692882",
+    "password" => "4699692882",
+  ]
+   , [
+        "userid" => "5",
+    "userfirstname" => "علیرضا",
+    "userlastname" => "رمضانی",
+    "mobile" => "09997912437",
+    "password" => "4957912437",
+  ]
+   , [
+        "userid" => "6",
+    "userfirstname" => "پدرام",
+    "userlastname" => "علیمرادی",
+    "mobile" => "09997985109",
+    "password" => "5397985109",
+  ]
+   , [
+        "userid" => "7",
+    "userfirstname" => "عبدالرضا",
+    "userlastname" => "مرادی",
+    "mobile" => "09993707484",
+    "password" => "8283707484",
+  ]
+   , [
+        "userid" => "8",
+    "userfirstname" => "علی اکبر",
+    "userlastname" => "عزتی",
+    "mobile" => "09994687166",
+    "password" => "1014687166",
+  ]
+   , [
+        "userid" => "9",
+    "userfirstname" => "مسعود",
+    "userlastname" => "حدادی",
+    "mobile" => "09995776510",
+    "password" => "9445776510",
+  ]
+   , [
+        "userid" => "20",
+    "userfirstname" => "محمدرضا",
+    "userlastname" => "مقصودی",
+    "mobile" => "09997835481",
+    "password" => "1637835481",
+  ]
+   , [
+        "userid" => "97",
+    "userfirstname" => "محمد علی",
+    "userlastname" => "امینی راد",
+    "mobile" => "09992250618",
+    "password" => "9322250618",
+  ]
+   , [
+        "userid" => "103",
+    "userfirstname" => "مهدی",
+    "userlastname" => "تفتی",
+    "mobile" => "09998520269",
+    "password" => "5558520269",
+  ]
+   , [
+        "userid" => "246",
+    "userfirstname" => "",
+    "userlastname" => "جعفری",
+    "mobile" => "09992042338",
+    "password" => "8912042338",
+  ]
+   , [
+        "userid" => "307",
+    "userfirstname" => "حمید",
+    "userlastname" => "فدایی فرد",
+    "mobile" => "09993694022",
+    "password" => "6783694022",
+  ]
+   , [
+        "userid" => "308",
+    "userfirstname" => "کیاوش",
+    "userlastname" => "فراهانی",
+    "mobile" => "09993056881",
+    "password" => "3623056881",
+  ]
+   , [
+        "userid" => "310",
+    "userfirstname" => "مصطفی",
+    "userlastname" => "جعفری نژاد",
+    "mobile" => "09993231211",
+    "password" => "9873231211",
+  ]
+   , [
+        "userid" => "311",
+    "userfirstname" => "رفیع",
+    "userlastname" => "رفیعی",
+    "mobile" => "09998208012",
+    "password" => "1928208012",
+  ]
+   , [
+        "userid" => "313",
+    "userfirstname" => "علی",
+    "userlastname" => "صدری",
+    "mobile" => "09995783188",
+    "password" => "9255783188",
+  ]
+   , [
+        "userid" => "314",
+    "userfirstname" => "امید",
+    "userlastname" => "زاهدی",
+    "mobile" => "09998374076",
+    "password" => "1978374076",
+  ]
+   , [
+        "userid" => "318",
+    "userfirstname" => "محسن",
+    "userlastname" => "معینی",
+    "mobile" => "09994478111",
+    "password" => "8224478111",
+  ]
+   , [
+        "userid" => "319",
+    "userfirstname" => "میلاد",
+    "userlastname" => "ناصح زاده",
+    "mobile" => "09997447782",
+    "password" => "1577447782",
+  ]
+   , [
+        "userid" => "320",
+    "userfirstname" => "محمد",
+    "userlastname" => "پازوکی",
+    "mobile" => "09996582414",
+    "password" => "2046582414",
+  ]
+   , [
+        "userid" => "321",
+    "userfirstname" => "",
+    "userlastname" => "جهانبخش",
+    "mobile" => "09996194956",
+    "password" => "4876194956",
+  ]
+   , [
+        "userid" => "322",
+    "userfirstname" => "حسن",
+    "userlastname" => "مرصعی",
+    "mobile" => "09991730235",
+    "password" => "7661730235",
+  ]
+   , [
+        "userid" => "323",
+    "userfirstname" => "",
+    "userlastname" => "بختیاری",
+    "mobile" => "09993001622",
+    "password" => "1943001622",
+  ]
+   , [
+        "userid" => "324",
+    "userfirstname" => "علی نقی",
+    "userlastname" => "طباطبایی",
+    "mobile" => "09999943651",
+    "password" => "3939943651",
+  ]
+   , [
+        "userid" => "325",
+    "userfirstname" => "وحید",
+    "userlastname" => "کبریایی",
+    "mobile" => "09999304447",
+    "password" => "4409304447",
+  ]
+   , [
+        "userid" => "326",
+    "userfirstname" => "",
+    "userlastname" => "درویش",
+    "mobile" => "09992097117",
+    "password" => "6332097117",
+  ]
+   , [
+        "userid" => "363",
+    "userfirstname" => "",
+    "userlastname" => "صابری",
+    "mobile" => "09997208997",
+    "password" => "8467208997",
+  ]
+   , [
+        "userid" => "364",
+    "userfirstname" => "",
+    "userlastname" => "ارشی",
+    "mobile" => "09999062941",
+    "password" => "8279062941",
+  ]
+   , [
+        "userid" => "366",
+    "userfirstname" => "جعفر",
+    "userlastname" => "رنجبرزاده",
+    "mobile" => "09990856015",
+    "password" => "5380856015",
+  ]
+   , [
+        "userid" => "367",
+    "userfirstname" => "محمد رضا",
+    "userlastname" => "آقاجانی",
+    "mobile" => "09996370036",
+    "password" => "2836370036",
+  ]
+   , [
+        "userid" => "478",
+    "userfirstname" => "محمد رضا ",
+    "userlastname" => "حسینی فرد",
+    "mobile" => "09996503218",
+    "password" => "6396503218",
+  ]
+   , [
+        "userid" => "533",
+    "userfirstname" => "محمد",
+    "userlastname" => "صادقی",
+    "mobile" => "09990300629",
+    "password" => "2240300629",
+  ]
+   , [
+        "userid" => "534",
+    "userfirstname" => "باقر",
+    "userlastname" => "رضا خانی",
+    "mobile" => "09995186011",
+    "password" => "9255186011",
+  ]
+   , [
+        "userid" => "535",
+    "userfirstname" => "معین",
+    "userlastname" => "کریمی",
+    "mobile" => "09998086488",
+    "password" => "2358086488",
+  ]
+   , [
+        "userid" => "536",
+    "userfirstname" => "حسین",
+    "userlastname" => "کرد",
+    "mobile" => "09994947848",
+    "password" => "5954947848",
+  ]
+   , [
+        "userid" => "537",
+    "userfirstname" => "",
+    "userlastname" => "دورانی",
+    "mobile" => "09994869634",
+    "password" => "8704869634",
+  ]
+   , [
+        "userid" => "965",
+    "userfirstname" => "کاظم",
+    "userlastname" => "کاظمی",
+    "mobile" => "09992807002",
+    "password" => "6032807002",
+  ]
+   , [
+        "userid" => "1427",
+    "userfirstname" => "",
+    "userlastname" => "کازرانیان",
+    "mobile" => "09996246380",
+    "password" => "5926246380",
+  ]
+   , [
+        "userid" => "1428",
+    "userfirstname" => "",
+    "userlastname" => "شاه محمدی",
+    "mobile" => "09999223623",
+    "password" => "5819223623",
+  ]
+   , [
+        "userid" => "1431",
+    "userfirstname" => "محمد حسین",
+    "userlastname" => "شکیباییان",
+    "mobile" => "09999582008",
+    "password" => "8499582008",
+  ]
+   , [
+        "userid" => "2875",
+    "userfirstname" => "یاشار",
+    "userlastname" => "بهمند",
+    "mobile" => "09999472085",
+    "password" => "6369472085",
+  ]
+   , [
+        "userid" => "3172",
+    "userfirstname" => "خسرو",
+    "userlastname" => "محمد زاده",
+    "mobile" => "09992289718",
+    "password" => "6482289718",
+  ]
+   , [
+        "userid" => "3895",
+    "userfirstname" => "میثم",
+    "userlastname" => "حسین خانی",
+    "mobile" => "09997301087",
+    "password" => "5227301087",
+  ]
+   , [
+        "userid" => "3906",
+    "userfirstname" => "پوریا",
+    "userlastname" => "رحیمی",
+    "mobile" => "09992800416",
+    "password" => "3832800416",
+  ]
+   , [
+        "userid" => "3971",
+    "userfirstname" => "",
+    "userlastname" => "نوری",
+    "mobile" => "09993883868",
+    "password" => "6193883868",
+  ]
+   , [
+        "userid" => "3972",
+    "userfirstname" => "رضا",
+    "userlastname" => "آقاجانی",
+    "mobile" => "09994582836",
+    "password" => "2914582836",
+  ]
+   , [
+        "userid" => "3973",
+    "userfirstname" => "مهدی",
+    "userlastname" => "امینی راد",
+    "mobile" => "09993368407",
+    "password" => "7253368407",
+  ]
+   , [
+        "userid" => "3974",
+    "userfirstname" => "سید حسین",
+    "userlastname" => "رخ صفت",
+    "mobile" => "09993610514",
+    "password" => "8013610514",
+  ]
+   , [
+        "userid" => "3975",
+    "userfirstname" => "بهمن",
+    "userlastname" => "مؤذنی پور",
+    "mobile" => "09993294993",
+    "password" => "5233294993",
+  ]
+   , [
+        "userid" => "3976",
+    "userfirstname" => "محمد صادق",
+    "userlastname" => "ثابتی",
+    "mobile" => "09993195124",
+    "password" => "8163195124",
+  ]
+  , [
+        "userid" => "3977",
+    "userfirstname" => "مهدی",
+    "userlastname" => "جلادتی",
+    "mobile" => "09995290087",
+    "password" => "8715290087",
+  ]
+   , [
+        "userid" => "3979",
+    "userfirstname" => "داریوش",
+    "userlastname" => "راوش",
+    "mobile" => "09995411768",
+    "password" => "5945411768",
+  ]
+   , [
+        "userid" => "3980",
+    "userfirstname" => "پیمان",
+    "userlastname" => "طلوعی",
+    "mobile" => "09990634879",
+    "password" => "9810634879",
+  ]
+   , [
+        "userid" => "3993",
+    "userfirstname" => "محمد حسین",
+    "userlastname" => "انوشه",
+    "mobile" => "09994536894",
+    "password" => "1654536894",
+  ]
+   , [
+        "userid" => "3998",
+    "userfirstname" => "عباس",
+    "userlastname" => "راستی بروجنی",
+    "mobile" => "09993648802",
+    "password" => "5303648802",
+  ]
+   , [
+        "userid" => "4012",
+    "userfirstname" => "جواد",
+    "userlastname" => "نایب کبیر",
+    "mobile" => "09991738525",
+    "password" => "9231738525",
+  ]
+   , [
+        "userid" => "4019",
+    "userfirstname" => "عمار",
+    "userlastname" => " تاج بخش",
+    "mobile" => "09991494536",
+    "password" => "5661494536",
+  ]
+   , [
+        "userid" => "4020",
+    "userfirstname" => "سروش",
+    "userlastname" => "معینی",
+    "mobile" => "09991369930",
+    "password" => "2301369930",
+  ]
+   , [
+        "userid" => "4021",
+    "userfirstname" => "",
+    "userlastname" => "نادریان",
+    "mobile" => "09995323369",
+    "password" => "8755323369",
+  ]
+   , [
+        "userid" => "4022",
+    "userfirstname" => "شهروز",
+    "userlastname" => "رحیمی",
+    "mobile" => "09998327816",
+    "password" => "2148327816",
+  ]
+   , [
+        "userid" => "4023",
+    "userfirstname" => "سیروس",
+    "userlastname" => "نصیری",
+    "mobile" => "09992983588",
+    "password" => "2872983588",
+  ]
+  , [
+        "userid" => "4030",
+    "userfirstname" => "مهدی",
+    "userlastname" => "صنیعی طهرانی",
+    "mobile" => "09991357099",
+    "password" => "8431357099",
+  ]
+   , [
+        "userid" => "4034",
+    "userfirstname" => "هامون",
+    "userlastname" => "سبطی",
+    "mobile" => "09999865115",
+    "password" => "5899865115",
+  ]
+   , [
+        "userid" => "4035",
+    "userfirstname" => "حامد",
+    "userlastname" => "پویان نظر",
+    "mobile" => "09991085599",
+    "password" => "8131085599",
+  ]
+   , [
+        "userid" => "4036",
+    "userfirstname" => "فرشید",
+    "userlastname" => "داداشی",
+    "mobile" => "09996947115",
+    "password" => "9556947115",
+  ]
+   , [
+        "userid" => "4037",
+    "userfirstname" => "ناصر",
+    "userlastname" => "حشمتی",
+    "mobile" => "09993403835",
+    "password" => "3463403835",
+  ]
+   , [
+        "userid" => "4038",
+    "userfirstname" => "محمدامین",
+    "userlastname" => "نباخته",
+    "mobile" => "09992595909",
+    "password" => "6592595909",
+  ]
+   , [
+        "userid" => "4039",
+    "userfirstname" => "جلال",
+    "userlastname" => "موقاری",
+    "mobile" => "09997805308",
+    "password" => "7187805308",
+  ]
+  , [
+        "userid" => "4040",
+    "userfirstname" => "محسن",
+    "userlastname" => " آهویی",
+    "mobile" => "09996710139",
+    "password" => "1646710139",
+  ]
+   , [
+        "userid" => "4041",
+    "userfirstname" => "مهدی",
+    "userlastname" => "ناصر شریعت",
+    "mobile" => "09994935716",
+    "password" => "4554935716",
+  ]
+   , [
+        "userid" => "4043",
+    "userfirstname" => "سید حسام الدین",
+    "userlastname" => "جلالی",
+    "mobile" => "09999934699",
+    "password" => "1849934699",
+  ]
+   , [
+        "userid" => "4046",
+    "userfirstname" => "ابوالفضل",
+    "userlastname" => "جعفری",
+    "mobile" => "09997858374",
+    "password" => "8947858374",
+  ]
+   , [
+        "userid" => "4047",
+    "userfirstname" => "سهراب",
+    "userlastname" => "ابوذرخانی فرد",
+    "mobile" => "09991774103",
+    "password" => "9271774103",
+  ]
+   , [
+        "userid" => "4048",
+    "userfirstname" => "سید حبیب",
+    "userlastname" => "میرانی",
+    "mobile" => "09992431052",
+    "password" => "4642431052",
+  ]
+   , [
+        "userid" => "4049",
+    "userfirstname" => "حامد",
+    "userlastname" => "امیراللهی",
+    "mobile" => "09993704294",
+    "password" => "4903704294",
+  ]
+   , [
+        "userid" => "4050",
+    "userfirstname" => "سید حمید رضا",
+    "userlastname" => "مداح حسینی",
+    "mobile" => "09991968225",
+    "password" => "3201968225",
+  ]
+   , [
+        "userid" => "4051",
+    "userfirstname" => "علی اصغر",
+    "userlastname" => "ترجانی",
+    "mobile" => "09993094760",
+    "password" => "2693094760",
+  ]
+   , [
+        "userid" => "4052",
+    "userfirstname" => "مهدی",
+    "userlastname" => "صفری",
+    "mobile" => "09990789285",
+    "password" => "1420789285",
+  ]
+   , [
+        "userid" => "4053",
+    "userfirstname" => "نیما",
+    "userlastname" => "صدفی",
+    "mobile" => "09996362893",
+    "password" => "6116362893",
+  ]
+   , [
+        "userid" => "4054",
+    "userfirstname" => "رضا",
+    "userlastname" => "تهرانی",
+    "mobile" => "09999837820",
+    "password" => "4119837820",
+  ]
+   , [
+        "userid" => "4055",
+    "userfirstname" => "بهمن",
+    "userlastname" => "منصوری",
+    "mobile" => "09995329266",
+    "password" => "6905329266",
+  ]
+   , [
+        "userid" => "4056",
+    "userfirstname" => "علیرضا",
+    "userlastname" => "محمد زاده",
+    "mobile" => "09993198122",
+    "password" => "9933198122",
+  ]
+   , [
+        "userid" => "4057",
+    "userfirstname" => "امیر حسین",
+    "userlastname" => "دلال شریفی",
+    "mobile" => "09994849196",
+    "password" => "6514849196",
+  ]
+   , [
+        "userid" => "4058",
+    "userfirstname" => "امید",
+    "userlastname" => "احدیان",
+    "mobile" => "09993959187",
+    "password" => "3933959187",
+  ]
+   , [
+        "userid" => "4059",
+    "userfirstname" => "علی",
+    "userlastname" => "محمدی",
+    "mobile" => "09992359493",
+    "password" => "7562359493",
+  ]
         ]);
+        $this->response = new Response();
     }
 
     private function deplessonMultiplexer($deplessonid , $mod = 1){
@@ -1202,55 +1718,55 @@ class SanatisharifmergeController extends Controller
         switch ($depid) {
             case 1 :
                 if ($mod == 1)
-                    array_merge($c , [
+                    $c = array_merge($c , [
                         "اول_دبیرستان" ,
                         "ضبط_کلاس_درس" ,
                         "نظام_آموزشی_قدیم" ,
                         "پایه" ,
-                        "شبیه_سار_کلاس_درس"
+                        "شبیه_ساز_کلاس_درس"
                     ]);
                 else
                     $c = "";
                 break;
             case 2 :
                 if ($mod == 1)
-                    array_merge($c , [
+                    $c = array_merge($c , [
                         "دوم_دبیرستان" ,
                         "ضبط_کلاس_درس" ,
                         "نظام_آموزشی_قدیم" ,
                         "پایه",
-                        "شبیه_سار_کلاس_درس"
+                        "شبیه_ساز_کلاس_درس"
                             ]);
                 else
                     $c = "";
                 break;
             case 3 :
                 if ($mod == 1)
-                    array_merge($c , [
+                    $c = array_merge($c , [
                                 "سوم_دبیرستان" ,
                                 "ضبط_کلاس_درس" ,
                                 "نظام_آموزشی_قدیم" ,
                                 "پایه",
-                                "شبیه_سار_کلاس_درس"
+                                "شبیه_ساز_کلاس_درس"
                                 ]);
                 else
                     $c = "";
                 break;
             case 4 :
                 if ($mod == 1)
-                    array_merge($c , [
+                    $c = array_merge($c , [
                                 "کنکور" ,
                                 "ضبط_کلاس_درس" ,
                                 "نظام_آموزشی_قدیم" ,
                                 "پیش",
-                                "شبیه_سار_کلاس_درس"
+                                "شبیه_ساز_کلاس_درس"
                                 ]);
                 else
                     $c = "";
                 break;
             case 7 :
                 if ($mod == 1)
-                    array_merge($c , [
+                    $c = array_merge($c , [
                                 "کنکور" ,
                                 "ضبط_استودیویی" ,
                                 "نظام_آموزشی_قدیم" ,
@@ -1263,7 +1779,7 @@ class SanatisharifmergeController extends Controller
                 break;
             case 8 :
                 if ($mod == 1)
-                    array_merge($c , [
+                    $c = array_merge($c , [
                                 "سوم_دبیرستان" ,
                                 "ضبط_استودیویی" ,
                                 "نظام_آموزشی_قدیم" ,
@@ -1275,7 +1791,7 @@ class SanatisharifmergeController extends Controller
                 break;
             case 9 :
                 if ($mod == 1)
-                    array_merge($c , [
+                    $c = array_merge($c , [
                                 "المپیاد_علمی" ,
                                 "ضبط_استودیویی" ,
                                 "نظام_آموزشی_قدیم" ,
@@ -1286,19 +1802,19 @@ class SanatisharifmergeController extends Controller
                 break;
             case 10 :
                 if ($mod == 1)
-                    array_merge($c , [
+                    $c = array_merge($c , [
                                 "کنکور" ,
                                 "ضبط_کلاس_درس" ,
                                 "نظام_آموزشی_قدیم" ,
                                 "پیش" ,
-                                "شبیه_سار_کلاس_درس"
+                                "شبیه_ساز_کلاس_درس"
                                 ]);
                 else
                     $c = "";
                 break;
             case 11 :
                 if ($mod == 1)
-                    array_merge($c , [
+                    $c = array_merge($c , [
                                 "کنکور" ,
                                 "دهم",
                                 "یازدهم",
@@ -1318,12 +1834,12 @@ class SanatisharifmergeController extends Controller
                 break;
             case 12 :
                 if ($mod == 1)
-                    array_merge($c , [
+                    $c = array_merge($c , [
                                 "کنکور" ,
                                 "ضبط_کلاس_درس" ,
                                 "نظام_آموزشی_قدیم" ,
                                 "پیش",
-                                "شبیه_سار_کلاس_درس"
+                                "شبیه_ساز_کلاس_درس"
                                                 ]);
                 else
                     $c = "";
@@ -1336,7 +1852,7 @@ class SanatisharifmergeController extends Controller
                 break;
             case 14 :
                 if ($mod == 1)
-                    array_merge($c , [
+                    $c = array_merge($c , [
                         "سوم_دبیرستان" ,
                         "ضبط_استودیویی" ,
                         "نظام_آموزشی_قدیم" ,
@@ -1348,7 +1864,7 @@ class SanatisharifmergeController extends Controller
                 break;
             case 15 :
                 if ($mod == 1)
-                    array_merge($c , [
+                    $c = array_merge($c , [
                         "کنکور" ,
                         "ضبط_کلاس_درس" ,
                         "نظام_آموزشی_قدیم" ,
@@ -1361,7 +1877,7 @@ class SanatisharifmergeController extends Controller
                 break;
             case 16 :
                 if ($mod == 1)
-                    array_merge($c , [
+                    $c = array_merge($c , [
                         "دوم_دبیرستان" ,
                         "ضبط_کلاس_درس" ,
                         "نظام_آموزشی_قدیم" ,
@@ -1373,7 +1889,7 @@ class SanatisharifmergeController extends Controller
                 break;
             case 17 :
                 if ($mod == 1)
-                    array_merge($c , [
+                    $c = array_merge($c , [
                         "کنکور" ,
                         "ضبط_استودیویی" ,
                         "نظام_آموزشی_قدیم" ,
@@ -1385,7 +1901,7 @@ class SanatisharifmergeController extends Controller
                 break;
             case 18 :
                 if ($mod == 1)
-                    array_merge($c , [
+                    $c = array_merge($c , [
                         "سوم_دبیرستان" ,
                         "ضبط_استودیویی" ,
                         "نظام_آموزشی_قدیم" ,
@@ -1397,7 +1913,7 @@ class SanatisharifmergeController extends Controller
                 break;
             case 19 :
                 if ($mod == 1)
-                    array_merge($c , [
+                    $c = array_merge($c , [
                         "کنکور" ,
                         "ضبط_استودیویی" ,
                         "نظام_آموزشی_قدیم" ,
@@ -1410,31 +1926,31 @@ class SanatisharifmergeController extends Controller
                 break;
             case 20 :
                 if ($mod == 1)
-                    array_merge($c , [
+                    $c = array_merge($c , [
                         "کنکور" ,
                         "ضبط_کلاس_درس" ,
                         "نظام_آموزشی_قدیم" ,
                         "پیش" ,
-                        "شبیه_سار_کلاس_درس"
+                        "شبیه_ساز_کلاس_درس"
                     ]);
                 else
                     $c = "";
                 break;
             case 21 :
                 if ($mod == 1)
-                    array_merge($c , [
+                    $c = array_merge($c , [
                         "کنکور" ,
                         "ضبط_کلاس_درس" ,
                         "نظام_آموزشی_قدیم" ,
                         "پیش" ,
-                        "شبیه_سار_کلاس_درس"
+                        "شبیه_ساز_کلاس_درس"
                     ]);
                 else
                     $c = "";
                 break;
             case 22 :
                 if ($mod == 1)
-                    array_merge($c , [
+                    $c = array_merge($c , [
                         "کنکور" ,
                         "اول_دبیرستان",
                         "دوم_دبیرستان",
@@ -1450,7 +1966,7 @@ class SanatisharifmergeController extends Controller
                 break;
             case 23 :
                 if ($mod == 1)
-                    array_merge($c , [
+                    $c = array_merge($c , [
                         "المپیاد_علمی" ,
                         "ضبط_استودیویی" ,
                         "نظام_آموزشی_قدیم" ,
@@ -1473,7 +1989,7 @@ class SanatisharifmergeController extends Controller
                 break;
             case 25 :
                 if ($mod == 1)
-                    array_merge($c , [
+                    $c = array_merge($c , [
                         "کنکور" ,
                         "ضبط_استودیویی" ,
                         "نظام_آموزشی_قدیم" ,
@@ -1485,7 +2001,7 @@ class SanatisharifmergeController extends Controller
                 break;
             case 26 :
                 if ($mod == 1)
-                    array_merge($c , [
+                    $c = array_merge($c , [
                         "کنکور" ,
                         "ضبط_استودیویی" ,
                         "نظام_آموزشی_قدیم" ,
@@ -1497,7 +2013,7 @@ class SanatisharifmergeController extends Controller
                 break;
             case 27 :
                 if ($mod == 1)
-                    array_merge($c , [
+                    $c = array_merge($c , [
                         "دهم" ,
                         "ضبط_استودیو" ,
                         "نظام_آموزشی_جدید" ,
@@ -1508,7 +2024,7 @@ class SanatisharifmergeController extends Controller
                 break;
             case 28 :
                 if ($mod == 1)
-                    array_merge($c , [
+                    $c = array_merge($c , [
                         "کنکور" ,
                         "دهم",
                         "یازدهم",
@@ -1529,7 +2045,7 @@ class SanatisharifmergeController extends Controller
                 break;
             case 29 :
                 if ($mod == 1)
-                    array_merge($c , [
+                    $c = array_merge($c , [
                         "کنکور" ,
                         "ضبط_استودیویی" ,
                         "نظام_آموزشی_قدیم" ,
@@ -1541,7 +2057,7 @@ class SanatisharifmergeController extends Controller
                 break;
             case 30 :
                 if ($mod == 1)
-                    array_merge($c , [
+                    $c = array_merge($c , [
                         "سوم_دبیرستان" ,
                         "ضبط_استودیویی" ,
                         "نظام_آموزشی_قدیم" ,
@@ -1553,7 +2069,7 @@ class SanatisharifmergeController extends Controller
                 break;
             case 31 :
                 if ($mod == 1)
-                    array_merge($c , [
+                    $c = array_merge($c , [
                         "چهارم_دبیرستان" ,
                         "ضبط_استودیویی" ,
                         "نظام_آموزشی_قدیم" ,
@@ -1565,7 +2081,7 @@ class SanatisharifmergeController extends Controller
                 break;
             case 32 :
                 if ($mod == 1)
-                    array_merge($c , [
+                    $c = array_merge($c , [
                         "کنکور" ,
                         "ضبط_استودیویی" ,
                         "نظام_آموزشی_قدیم" ,
@@ -1584,7 +2100,7 @@ class SanatisharifmergeController extends Controller
                 break;
             case 35 :
                 if ($mod == 1)
-                    array_merge($c , [
+                    $c = array_merge($c , [
                         "کنکور" ,
                         "ضبط_استودیویی" ,
                         "نظام_آموزشی_قدیم" ,
@@ -1596,7 +2112,7 @@ class SanatisharifmergeController extends Controller
                 break;
             case 36 :
                 if ($mod == 1)
-                    array_merge($c , [
+                    $c = array_merge($c , [
                         "کنکور" ,
                         "ضبط_استودیویی" ,
                         "نظام_آموزشی_قدیم" ,
@@ -1608,7 +2124,7 @@ class SanatisharifmergeController extends Controller
                 break;
             case 37 :
                 if ($mod == 1)
-                    array_merge($c , [
+                    $c = array_merge($c , [
                         "دهم" ,
                         "ضبط_استودیو" ,
                         "نظام_آموزشی_جدید" ,
@@ -1619,7 +2135,7 @@ class SanatisharifmergeController extends Controller
                 break;
             case 38 :
                 if ($mod == 1)
-                    array_merge($c , [
+                    $c = array_merge($c , [
                         "یازدهم" ,
                         "ضبط_استودیو" ,
                         "نظام_آموزشی_جدید" ,
@@ -1630,7 +2146,7 @@ class SanatisharifmergeController extends Controller
                 break;
             case 39 :
                 if ($mod == 1)
-                    array_merge($c , [
+                    $c = array_merge($c , [
                         "کنکور" ,
                         "دهم",
                         "یازدهم",
@@ -1650,7 +2166,7 @@ class SanatisharifmergeController extends Controller
                 break;
             case 40 :
                 if ($mod == 1)
-                    array_merge($c , [
+                    $c = array_merge($c , [
                         "یازدهم" ,
                         "ضبط_استودیو" ,
                         "نظام_آموزشی_جدید" ,
@@ -1661,7 +2177,7 @@ class SanatisharifmergeController extends Controller
                 break;
             case 41 :
                 if ($mod == 1)
-                    array_merge($c , [
+                    $c = array_merge($c , [
                         "کنکور" ,
                         "ضبط_استودیویی" ,
                         "نظام_آموزشی_قدیم" ,
@@ -1673,7 +2189,7 @@ class SanatisharifmergeController extends Controller
                 break;
             case 42 :
                 if ($mod == 1)
-                    array_merge($c , [
+                    $c = array_merge($c , [
                         "چهارم_دبیرستان" ,
                         "ضبط_استودیویی" ,
                         "نظام_آموزشی_قدیم" ,
@@ -1685,7 +2201,7 @@ class SanatisharifmergeController extends Controller
                 break;
             case 43 :
                 if ($mod == 1)
-                    array_merge($c , [
+                    $c = array_merge($c , [
                         "دهم" ,
                         "ضبط_استودیو" ,
                         "نظام_آموزشی_جدید" ,
@@ -1696,7 +2212,7 @@ class SanatisharifmergeController extends Controller
                 break;
             case 44 :
                 if ($mod == 1)
-                    array_merge($c , [
+                    $c = array_merge($c , [
                         "کنکور" ,
                         "ضبط_استودیویی" ,
                         "نظام_آموزشی_قدیم" ,
@@ -1708,7 +2224,7 @@ class SanatisharifmergeController extends Controller
                 break;
             case 45 :
                 if ($mod == 1)
-                    array_merge($c , [
+                    $c = array_merge($c , [
                         "کنکور" ,
                         "ضبط_استودیویی" ,
                         "نظام_آموزشی_قدیم" ,
@@ -1720,7 +2236,7 @@ class SanatisharifmergeController extends Controller
                 break;
             case 46 :
                 if ($mod == 1)
-                    array_merge($c , [
+                    $c = array_merge($c , [
                         "کنکور" ,
                         "ضبط_استودیویی" ,
                         "نظام_آموزشی_قدیم" ,
@@ -2043,7 +2559,7 @@ class SanatisharifmergeController extends Controller
         if(isset($depyear))
         {
             $year_plus_remainder = (int)$depyear % 100 +1 ;
-            $yearLabel = " ($depyear-$year_plus_remainder)" ;
+            $yearLabel = " ($year_plus_remainder-$depyear)" ;
         }
         else
         {
@@ -2071,6 +2587,9 @@ class SanatisharifmergeController extends Controller
                     break;
                 case 23:
                     $userid = 318;
+                    break;
+                case 28:
+                    $userid = 0 ;
                     break;
                 case 34 :
                     $userid = 0;
@@ -2198,86 +2717,81 @@ class SanatisharifmergeController extends Controller
         {
             if($userid == 0)
             {
-                return "";
+                $userfirstname = "";
+                $userlastname = "" ;
             }
             else
             {
-                $userfirstname = $this->teachers->where("userid" , $userid)->first()->userfirstname ;
-                $userlastname = $this->teachers->where("userid" , $userid)->first()->userlastname ;
+                $user = $this->teachers->where("userid" , $userid)->first() ;
+                if(isset($user))
+                {
+                    $userfirstname = $user["userfirstname"] ;
+                    $userlastname = $user["userlastname"] ;
+                }
+                else
+                {
+                    dump("warning : teacher with userid ".$user." was not found!");
+                }
             }
         }
 
-        $fullName = "";
-        if(strlen($userfirstname) > 0)
-            $fullName .= $userfirstname;
-        if(strlen($userlastname) > 0)
-            if(strlen($fullName) > 0 )
-                $fullName .= " ".$userlastname;
-            else
-                $fullName .= $userfirstname;
-        return $fullName;
+        if(!isset($userfirstname))
+            $userfirstname = "";
+        if(!isset($userlastname))
+            $userlastname = "";
+
+        if($userfirstname == "گروه آموزشی" || $userfirstname == "مشاوران دبیرستان")
+            $userfirstname = "";
+
+        return [
+            "firstname" =>$userfirstname ,
+            "lastname" => $userlastname
+        ];
     }
 
-    private function determineAuthor($userFullName)
+    private function makeName($firstname , $lastname){
+        $fullName = "";
+        if(isset($firstname) && strlen($firstname) > 0)
+            $fullName .= $firstname;
+        if(isset($lastname) &&  strlen($lastname) > 0)
+            if(strlen($fullName) > 0 )
+                $fullName .= " ".$lastname;
+            else
+                $fullName .= $firstname;
+
+        return $fullName ;
+    }
+
+    private function determineAuthor($frstname , $lastname)
     {
-        $userId = 0 ;
-        switch ($userFullName)
+        $author = $this->teachers->where("userfirstname" , $frstname)->where("userlastname" , $lastname)->first();
+        if(isset($author))
         {
-            case "رضاشامیزاده":
-                $userId = 1;
-                break;
-            case "روحاللهحاجیسلیمانی":
-                $userId = 2;
-                break;
-            case "محسنشهریان":
-                break;
-            case "علیرضارمضانی":
-                break;
-            case "پدرامعلیمرادی":
-                break;
-            case "عبدالرضامرادی":
-                break;
-            case "علیاکبرعزتی":
-                break;
-            case "مسعودحدادی":
-                break;
-            case "محسنکریمی":
-                break;
-            case "محمدرضامقصوری":
-                break;
-            case "امینیرادامینیراد":
-                break;
-            case "مهدیتفتی":
-                break;
-            case "جعفری":
-                break;
-            case "حمیدفداییفرد":
-                break;
-            case "کیاوشفراهانی":
-                break;
-            case "مصطفیجعفرینژاد":
-                break;
-            case "رفیعرفیعی":
-                break;
-            case "علیصدری":
-                break;
-            case "امیدزاهدی":
-                break;
-            case "محسنمعینی":
-                break;
-            case "ناصحزاده":
-                break;
-            case "محسنآهویی":
-                break;
-            case "مهدیشریعت":
-                break;
-            case "سیدحسامالدینجلالی":
-                break;
-            case "ابوالفضلجعفری":
-                break;
-            default:
-                break ;
+            $info = [];
+            if (strlen($frstname) > 0)
+                $info["firstName"] = $frstname;
+            if (strlen($lastname) > 0)
+                $info["lastName"] = $lastname;
+            $info["mobile"] = $author["mobile"];
+            $info["nationalCode"] = "0000000000";
+            $password = $author["password"];
+            $info["password"] = bcrypt($password);
+            $info["userstatus_id"] = 1;
+            $authorAccount = User::firstOrCreate([
+                "mobile" => $info["mobile"] ,
+                "nationalCode" => $info["nationalCode"]
+            ], $info);
+
+            if(isset($authorAccount))
+            {
+                $userId = $authorAccount->id;
+            }
         }
+        else
+        {
+            $userId = 0;
+        }
+
         return $userId ;
     }
 
@@ -2380,7 +2894,11 @@ class SanatisharifmergeController extends Controller
     public function copyDepartmentlesson()
     {
         try {
-            $sanatisharifRecords = Sanatisharifmerge::whereNull("videoid")->whereNull("pamphletid")->whereNotNull("departmentlessonid")->where("departmentlessonTransferred" , 0)->get();
+            $sanatisharifRecords = Sanatisharifmerge::whereNull("videoid")
+                ->whereNull("pamphletid")
+                ->whereNotNull("departmentlessonid")
+                ->where("departmentlessonTransferred" , 0)
+                ->get();
 //        $sanatisharifRecords = Sanatisharifmerge::groupBy('departmentlessonid')->where("departmentlessonTransferred" , 0);
             //Bug: farze kon ye deplesson ham khodesh vared shode ham video barayash vared shode. man chon bar asase sotoone departmentlessonTransferred filter mikonam
             // var recordi ke deplessonid va videoid darad dataye departmentlessonTransferred sefr ast kare filtere man ra kharab mikonad
@@ -2392,34 +2910,46 @@ class SanatisharifmergeController extends Controller
             $excludedDeplessons = [34 , 15 ,24 , 67 , 70];
             foreach ($sanatisharifRecords as $sanatisharifRecord)
             {
-                if(in_array( $sanatisharifRecord->departmentlessonid , $excludedDeplessons)) // Azmoone Haftegi ke nabayad montaghel shavad
+                if(in_array( $sanatisharifRecord->departmentlessonid , $excludedDeplessons))
                 {
                     $skippedCounter++;
                     continue;
                 }
                 $request = new Request();
 
-                $name = $this->determineContentSetName($sanatisharifRecord->departmentlessonid , $sanatisharifRecord->lessonname , $sanatisharifRecord->depname,$sanatisharifRecord->depyear) ;
+
                 $request->offsetSet("id" , $sanatisharifRecord->departmentlessonid);
-                $request->offsetSet("name" , $name);
                 $request->offsetSet("enable" , $sanatisharifRecord->departmentlessonEnable);
                 $request->offsetSet("display" , $sanatisharifRecord->departmentlessonEnable);
+                $request->offsetSet("photo" , "http://cdn.alaatv.com/upload/contentset/".$sanatisharifRecord->pic);
 
                 $tags = [
-                    "دسته_محتوا"  //ToDo : be sohrab begoo
+                    "دوره_آموزشی"
                 ];
+                $name = $this->determineContentSetName($sanatisharifRecord->departmentlessonid , $sanatisharifRecord->lessonname , $sanatisharifRecord->depname,$sanatisharifRecord->depyear) ;
                 $tags = array_merge($tags ,$this->deplessonMultiplexer($sanatisharifRecord->departmentlessonid,1));
                 $tags = array_merge($tags , $this->departmentMultiplexer($sanatisharifRecord->depid)) ;
                 $tags = array_merge($tags , $this->lessonMultiplexer($sanatisharifRecord->lessonid , $this->make_slug($sanatisharifRecord->lessonname))) ;
-                $teacherName =  $this->determineTeacherName($sanatisharifRecord->teacherfirstname , $sanatisharifRecord->teacherlastname , $sanatisharifRecord->departmentlessonid , 1);
-                array_push($tags , $this->make_slug($teacherName , "_") );
+                $teacherNameArray =  $this->determineTeacherName(
+                    $sanatisharifRecord->teacherfirstname ,
+                    $sanatisharifRecord->teacherlastname ,
+                    $sanatisharifRecord->departmentlessonid ,
+                    1);
+                $teacherName = $this->makeName($teacherNameArray["firstname"] , $teacherNameArray["lastname"]) ;
+                if(strlen($teacherName) > 0)
+                {
+                    array_push($tags , $this->make_slug($teacherName , "_") );
+                    $name .= " " .$teacherName;
+                }
+
                 $tagsJson = [
                     "bucket" => "contentset",
                     "tags" => $tags
                 ];
                 $request->offsetSet("tags" , json_encode($tagsJson));
-
                 dump($tags);
+
+                $request->offsetSet("name" , $name);
                 $controller = new ContentsetController();
                 $response = $controller->store($request);
                 if($response->getStatusCode() == 200)
@@ -2449,38 +2979,53 @@ class SanatisharifmergeController extends Controller
 
         } catch (\Exception    $e) {
             $message = "unexpected error";
-            return $this->response->setStatusCode(503)->setContent(["message" => $message, "error" => $e->getMessage(), "line" => $e->getLine()]);
+            return $this->response->setStatusCode(503)
+                ->setContent([
+                    "message" => $message,
+                    "error" => $e->getMessage(),
+                    "line" => $e->getLine(),
+                    "file" => $e->getFile()
+                ]);
         }
     }
+
     public function copyContent()
     {
         try{
-            if(!Input::has("type")) return $this->response->setStatusCode(422)->setContent(["message"=>"Wrong inputs: Please pass parameter t. Available values: p , v"]);
-            else $contentType = Input::get("type");
+            if(!Input::has("t")) return $this->response->setStatusCode(422)->setContent(["message"=>"Wrong inputs: Please pass parameter t. Available values: p , v"]);
+            else $contentType = Input::get("t");
 
             switch ($contentType)
             {
                 case "v" :
+                    $threshold = 300;
                     $contentTypeLable = "video";
                     $contentTypePersianLable = "فیلم";
                     break;
                 case "p" :
+                    $threshold = 500;
                     $contentTypeLable = "pamphlet";
                     $contentTypePersianLable = "جزوه";
                     $contentTypePersianLable2 = "PDF";
                     break;
                 default:
+                    return $this->response->setStatusCode(422)->setContent(["message"=>"Wrong inputs: Please pass parameter t. Available values: p , v"]);
                     break;
             }
-            dump( "start time (sending request to remote):". Carbon::now("asia/tehran"));
-            $sanatisharifRecords = Sanatisharifmerge::whereNotNull($contentTypeLable."id")->where($contentTypeLable."Transferred" , 0)->get();
-//            dd(count($sanatisharifRecords));
             $idColumn = $contentTypeLable."id";
             $nameColumn = $contentTypeLable."name";
             $descriptionColumn = $contentTypeLable."descrip";
             $enableColumn = $contentTypeLable."Enable";
             $sessionColumn = $contentTypeLable."session";
-            $threshold = 500;
+
+            $sanatisharifRecords = Sanatisharifmerge::whereNotNull($contentTypeLable."id")->where($contentTypeLable."Transferred" , 0);
+            if(Input::has("id"))
+            {
+                $id = Input::get("id");
+                $sanatisharifRecords->where($idColumn ,$id );
+            }
+            $sanatisharifRecords = $sanatisharifRecords->get();
+
             $counter = 0 ;
             $successCounter = 0 ;
             $failCounter = 0;
@@ -2493,7 +3038,7 @@ class SanatisharifmergeController extends Controller
             {
                 if($counter >= $threshold) break;
                 try{
-                    if(in_array($sanatisharifRecord->deplessonid , $excludedVideos)) // Azmoone Haftegi ke nabayad montaghel shavad
+                    if(in_array($sanatisharifRecord->departmentlessonid , $excludedVideos))
                     {
                         $counter++;
                         $skippedCounter++;
@@ -2523,53 +3068,92 @@ class SanatisharifmergeController extends Controller
                                 $response = $this->update($request , $sanatisharifRecord);
                                 if($response->getStatusCode() == 200)
                                 {
-
+                                    $skippedCounter++ ;
                                 }elseif($response->getStatusCode() == 503)
                                 {
-                                    $skippedCounter++ ;
+                                    $failCounter++ ;
                                     dump("Skipped status wasn't saved for video: ".$sanatisharifRecord->videoid);
                                 }
-                                continue;
+                                continue 2;
                             }
 
                             $files = array();
-                            if(isset($sanatisharifRecord->videolink)) array_push($files ,["name"=>$sanatisharifRecord->videolink , "caption"=>"کیفیت عالی" , "label"=>"hd" ]);
-                            if(isset($sanatisharifRecord->videolinkhq)) array_push($files ,["name"=>$sanatisharifRecord->videolinkhq , "caption"=>"کیفیت بالا" , "label"=>"hq" ]);
-                            if(isset($sanatisharifRecord->videolink240p)) array_push($files ,["name"=>$sanatisharifRecord->videolink240p , "caption"=>"کیفیت متوسط" , "label"=>"240p" ]);
-                            if(isset($sanatisharifRecord->thumbnail)) array_push($files ,["name"=>$sanatisharifRecord->thumbnail , "caption"=>"تامبنیل" , "label"=>"thumbnail" ]);
+                            if(isset($sanatisharifRecord->videolink) && strlen($sanatisharifRecord->videolink)>0) array_push($files ,
+                                [
+                                   "name"=>$sanatisharifRecord->videolink,
+                                    "caption"=>"کیفیت عالی" , "label"=>"hd"
+                            ]);
+                            if(isset($sanatisharifRecord->videolinkhq) && strlen($sanatisharifRecord->videolinkhq)>0) array_push($files ,
+                                [
+                                "name"=>$sanatisharifRecord->videolinkhq ,
+                                "caption"=>"کیفیت بالا" , "label"=>"hq"
+                            ]);
+                            if(isset($sanatisharifRecord->videolink240p) && strlen($sanatisharifRecord->videolink240p)>0) array_push($files ,
+                                ["name"=>$sanatisharifRecord->videolink240p ,
+                                    "caption"=>"کیفیت متوسط" , "label"=>"240p"
+                                ]);
+                            if(isset($sanatisharifRecord->thumbnail) && strlen($sanatisharifRecord->thumbnail)>0)
+                            {
+                                $thumbnailFile = $sanatisharifRecord->thumbnail ;
+                            }
+                            else
+                            {
+                                if(isset($sanatisharifRecord->videolink) && strlen($sanatisharifRecord->videolink)>0)
+                                    $filePath = $sanatisharifRecord->videolink;
+                                elseif(isset($sanatisharifRecord->videolinkhq) && strlen($sanatisharifRecord->videolinkhq)>0)
+                                    $filePath = $sanatisharifRecord->videolinkhq;
+                                elseif(isset($sanatisharifRecord->videolink240p) && strlen($sanatisharifRecord->videolink240p)>0)
+                                    $filePath = $sanatisharifRecord->videolink240p;
+
+                                if(isset($filePath))
+                                {
+                                    $pathInfoArray = pathinfo($filePath);
+                                    $thumbnailFile = "https://cdn.sanatisharif.ir/media/thumbnails/".$sanatisharifRecord->departmentlessonid."/". $pathInfoArray["filename"] . ".jpg"  ;
+                                }
+                            }
+                            array_push($files , [
+                                "name"=>$thumbnailFile ,
+                                "caption"=>"تامبنیل" , "label"=>"thumbnail"
+                            ] );
                             if(!empty($files)) $storeContentReuest->offsetSet("files" , $files );
                             $template_id = 1;
+                            $contenttype_id = 8;
                             $contentTypeId = [8];
                             break;
                         case "p":
                             $files = array();
-                            $domain = "http://sanatisharif.ir/";
-                            if(isset($sanatisharifRecord->pamphletaddress)) array_push($files ,["name"=>$domain.$sanatisharifRecord->pamphletaddress  ]);
-                            if(!empty($files)) $storeContentReuest->offsetSet("files" , $files );
+                            $pamphletFileName  = str_replace("pamphlet","sanatish" , $sanatisharifRecord->pamphletaddress);
+                            if(isset($sanatisharifRecord->pamphletaddress) && strlen($sanatisharifRecord->pamphletaddress)>0)
+                                array_push($files ,["name"=>$pamphletFileName  , "disk_id" => 4 ]);
+                            if(!empty($files))
+                                $storeContentReuest->offsetSet("files" , $files );
                             $template_id = 2;
+                            $contenttype_id = 1;
                             $contentTypeId = [1];
                             break;
                         default:
                             break;
                     }
 
-                    $storeContentReuest->offsetSet("template_id" , $template_id);
+                      $storeContentReuest->offsetSet("template_id" , $template_id);
+                    $storeContentReuest->offsetSet("contenttype_id" , $contenttype_id);
 
-                    if(strlen($sanatisharifRecord->$nameColumn) > 0)
+                    if( isset($sanatisharifRecord->$nameColumn) && strlen($sanatisharifRecord->$nameColumn) > 0)
                     {
                         $storeContentReuest->offsetSet("name" , $sanatisharifRecord->$nameColumn);
-                        $metaTitle = strip_tags(htmlspecialchars(substr($sanatisharifRecord->$nameColumn ,0,55)));
-                        $storeContentReuest->offsetSet("metaTitle" , $metaTitle );
+//                        $metaTitle = strip_tags(htmlspecialchars(substr($sanatisharifRecord->$nameColumn ,0,55)));
+//                        $storeContentReuest->offsetSet("metaTitle" , $metaTitle );
                     }
 
-                    if(strlen($sanatisharifRecord->$descriptionColumn) > 0)
+                    if(isset($sanatisharifRecord->$descriptionColumn) && strlen($sanatisharifRecord->$descriptionColumn) > 0)
                     {
                         $storeContentReuest->offsetSet("description" , $sanatisharifRecord->$descriptionColumn);
                         $metaDescription =  htmlspecialchars(strip_tags(substr($sanatisharifRecord->$descriptionColumn, 0 , 155)));
                         $storeContentReuest->offsetSet("metaDescription" , $metaDescription);
                     }
 
-                    if(strlen($sanatisharifRecord->$nameColumn)>0 || strlen($sanatisharifRecord->$descriptionColumn)>0)
+                    if( (isset($sanatisharifRecord->$nameColumn) && strlen($sanatisharifRecord->$nameColumn)>0)
+                        || (isset($sanatisharifRecord->$descriptionColumn) && strlen($sanatisharifRecord->$descriptionColumn)>0) )
                     {
                         $text = strip_tags($sanatisharifRecord->$nameColumn) . " " . strip_tags($sanatisharifRecord->$descriptionColumn);
                         $text = preg_replace('/[^\p{L}|\p{N}]+/u', ' ', $text);
@@ -2581,16 +3165,31 @@ class SanatisharifmergeController extends Controller
                         $storeContentReuest->offsetSet("metaKeywords" , $metaKeywords);
                     }
 
-                    $authorId = $this->determineAuthor(preg_replace('/\s+/', '', $sanatisharifRecord->teacherfirstname).preg_replace('/\s+/', '', $sanatisharifRecord->teacherlastname) );
-                    if($authorId > 0 ) $storeContentReuest->offsetSet("author_id" , $authorId);
+                    $teacherNameArray =  $this->determineTeacherName($sanatisharifRecord->teacherfirstname , $sanatisharifRecord->teacherlastname , $sanatisharifRecord->videoid , 2);
 
-                    if(strlen($contentTypePersianLable)>0) $tags = [$this->make_slug($contentTypePersianLable,"_")];
-                    if(strlen($contentTypePersianLable2)>0) $tags = [$this->make_slug($contentTypePersianLable2,"_")];
+                    $authorId = $this->determineAuthor($teacherNameArray['firstname'] , $teacherNameArray["lastname"]) ;
+                    if($authorId == 0)
+                    {
+                        $warningCounter++;
+                        dump("warning could not find the teacher for ".$contentTypeLable . " " .$sanatisharifRecord->$idColumn) ;
+                        dump("teacher name: ".$sanatisharifRecord->teacherfirstname." ".$sanatisharifRecord->teacherlastname) ;
+                    }
+                    else
+                    {
+                        $storeContentReuest->offsetSet("author_id" , $authorId);
+                    }
+
+
+                    $tags = [$this->make_slug($contentTypePersianLable,"_")];
+
+                    if(isset($contentTypePersianLable2) && strlen($contentTypePersianLable2)>0)
+                        $tags = array_merge ( $tags , [$this->make_slug($contentTypePersianLable2,"_")]);
                     $tags = array_merge($tags , $this->deplessonMultiplexer($sanatisharifRecord->departmentlessonid));
                     $tags = array_merge($tags , $this->departmentMultiplexer($sanatisharifRecord->depid)) ;
                     $tags = array_merge($tags , $this->lessonMultiplexer($sanatisharifRecord->lessonid , $this->make_slug($sanatisharifRecord->lessonname))) ;
-                    $teacherName =  $this->determineTeacherName($sanatisharifRecord->teacherfirstname , $sanatisharifRecord->teacherlastname , $sanatisharifRecord->videoid , 2);
-                    array_push($tags , $this->make_slug($teacherName , "_") );
+                    $teacherName = $this->makeName($teacherNameArray["firstname"] , $teacherNameArray["lastname"]) ;
+                    if(strlen($teacherName) > 0)
+                        array_push($tags , $this->make_slug($teacherName , "_") );
                     $tagsJson = [
                       "bucket" => "content",
                       "tags" => $tags
@@ -2640,20 +3239,999 @@ class SanatisharifmergeController extends Controller
                     dump($contentTypeLable."id ".$sanatisharifRecord->$idColumn." done");
                 }catch(\Exception $e){
                     $failCounter++;
-                    dump($e->getMessage());
-                    dump("Error on processing $contentTypeLable ID: ".$sanatisharifRecord->$idColumn);
+                    dump($e->getMessage()." ".$e->getLine()." ".$e->getFile());
+                    dump("failed on processing $contentTypeLable ID: ".$sanatisharifRecord->$idColumn);
                 }
             }
             dump($successCounter." records transferred successfully");
             dump($skippedCounter." records skipped");
             dump($failCounter." records failed");
             dump($warningCounter." warnings");
+            dump( "finish time:". Carbon::now("asia/tehran"));
             return $this->response->setStatusCode(200)->setContent(["message"=>"Transfer Done Successfully"]);
-        }catch (\Exception    $e) {
+        }
+        catch (\Exception    $e) {
             $message = "unexpected error";
             return $this->response->setStatusCode(503)->setContent(["message"=>$message , "error"=>$e->getMessage() , "line"=>$e->getLine()]);
         }
 
     }
 
+
+    private function getDepLessonTags($lId = null , $dId = null ){
+        $key = "getDepLessonTags:".$lId."-".$dId;
+        return Cache::rememberForever ($key,function () use ($lId,$dId) {
+            $tag1 = [];
+            $tag2 = [];
+            $tag3 = [];
+            $tag4 = [];
+            if(isset($lId) && isset($dId)){
+                $tag1 = $this->departmentMultiplexer($dId);
+                $oldContent = Sanatisharifmerge::where('lessonid','=',$lId)
+                    ->where('depid','=',$dId)
+                    ->first();
+                $tag2 = $this->lessonMultiplexer($lId,$oldContent->lessonname);
+                $tag3 = $this->determineTeacherName(
+                    $oldContent->teacherfirstname,
+                    $oldContent->teacherlastname,
+                    $oldContent->departmentlessonid,
+                    1);
+                $tag3 = $this->makeName($tag3["firstname"],$tag3["lastname"]);
+                if(strlen($tag3) > 0)
+                    $tag3 = [$this->make_slug($tag3 , "_")];
+                else
+                    $tag3 =[];
+                $tag4 = $this->deplessonMultiplexer($oldContent->departmentlessonid,1);
+            }elseif (isset($lId)){
+                $oldContent = Sanatisharifmerge::where('lessonid','=',$lId)->first();
+                if (isset($oldContent)) {
+                    $tag1 = $this->lessonMultiplexer($lId,$oldContent->lessonname);
+                }
+            }
+            $tag = array_merge($tag1,$tag2,$tag3,$tag4);
+            return $tag;
+        });
+    }
+
+    public function redirectLesson(Request $request , $lId = null , $dId = null){
+        $tag = $this->getDepLessonTags($request, $lId, $dId);
+        $newUri = urldecode(action("HomeController@search" , ["tags"=>$tag]));
+        $isApp = ( strlen(strstr($request->header('User-Agent'),"Alaa")) > 0 )? true : false ;
+        $app = null;
+        if($isApp)
+            $app ="&itemTypes[]=video";
+        return redirect($newUri.$app,301);
+    }
+
+    public function redirectVideo(Request $request , $lId = null , $dId = null, $vId = null){
+        $key = "Url:".$lId."-".$dId."-".$vId;
+        $newUri = Cache::rememberForever ($key,function () use ($lId,$dId,$vId,$request) {
+            if( isset($vId) ) {
+                $v = Sanatisharifmerge::where('videoid','=',$vId)->first();
+                if (isset($v)) {
+                    if (isset($v->educationalcontent)) {
+                        return action('EducationalContentController@show',$v->educationalcontent);
+                    }
+                }
+            }
+            $tag = $this->getDepLessonTags( $lId, $dId);
+
+            return action("HomeController@search" , ["tags"=>$tag]);
+
+        });
+        $app = null;
+        $isApp = ( strlen(strstr($request->header('User-Agent'),"Alaa")) > 0 )? true : false ;
+        if($isApp)
+            $app ="&itemTypes[]=video";
+        $newUri .= $app;
+        $newUri = urldecode($newUri);
+        return redirect($newUri,301);
+
+    }
+    public function redirectEmbedVideo(Request $request , $lId = null , $dId = null, $vId = null){
+        $key = "Url:".$lId."-".$dId."-".$vId;
+        $newUri = Cache::rememberForever ($key,function () use ($lId,$dId,$vId,$request) {
+            if( isset($vId) ) {
+                $v = Sanatisharifmerge::where('videoid','=',$vId)->first();
+                if (isset($v)) {
+                    if (isset($v->educationalcontent)) {
+                        return action('EducationalContentController@embed',$v->educationalcontent);
+                    }
+                }
+            }
+            $tag = $this->getDepLessonTags($request, $lId, $dId);
+            return urldecode(action("HomeController@search" , ["tags"=>$tag]));
+
+        });
+        return redirect($newUri,301);
+    }
+
+    public function redirectPamphlet(Request $request , $lId = null , $dId = null, $pId = null){
+        $key = "Url:".$lId."-".$dId."-".$pId;
+        $newUri = Cache::rememberForever ($key,function () use ($lId,$dId,$pId) {
+            if( isset($pId) ) {
+                $p = Sanatisharifmerge::where('pamphletid','=',$pId)->first();
+                if (isset($p)) {
+                    if (isset($p->educationalcontent)) {
+                        return action('EducationalContentController@show',$p->educationalcontent);
+                    }
+                }
+            }
+            $tag = $this->getDepLessonTags($lId, $dId);
+            return urldecode(action("HomeController@search" , ["tags"=>$tag]));
+
+        });
+        return redirect($newUri,301);
+    }
+
+
+    public function AlaaApp(Request $request, $mod){
+        $json = null;
+        switch ($mod){
+            case "main":
+                $json = '[
+                            {
+                                "title" : "تخته خاک با نظارت آلاء",
+                                "url": "",
+                                "type": 1,
+                                "slideShows" :[
+                                    {
+                                        "title" : "جمع بندی فیزیک و شیمی پایه",
+                                        "image_url" : "http://takhtekhak.com/image/9/1280/500/slide1_20170521212318.jpg",
+                                        "link" : "http://takhtekhak.com/product/search"
+                                    }
+                                ]
+                            },
+                        {
+                            "title" : "آمادگی اردوطلایی نوروز",
+                            "url" : "https://sanatisharif.ir/ordu.php",
+                            "type": 0,
+                            "courses" : [
+                                    {
+                                        "title" : "جمع‌بندی آمار و مدلسازی",
+                                        "teacher" : "وحید کبریایی",
+                                        "image_url": "https://sanatisharif.ir/departmentlesson/180204101956.jpg?w=280&h=150",
+                                        "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/20/46/"
+                                    },
+                                    {
+                                        "title" : "جمعبندی زبان کنکور",
+                                        "teacher" : "کیاوش فراهانی",
+                                        "image_url": "https://sanatisharif.ir/lesson/140327081735.jpg?w=280&h=150",
+                                        "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/24/7/"
+                                    }
+                            ]
+                        },
+                            {
+                                "title" : "کلاس کنکور 97",
+                                "url" : "https://sanatisharif.ir/konkur96.php",
+                                "type": 0,
+                                "courses" : [
+                                    {
+                                        "title" : "زیست کنکور",
+                                        "teacher" : "ابوالفضل جعفری",
+                                        "image_url": "https://sanatisharif.ir/departmentlesson/171125105021.jpg?w=280&h=150",
+                                        "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/15/45/"
+                                    },
+                                    {
+                                        "title" : "آرایه های ادبی",
+                                        "teacher" : " هامون سبطی",
+                                        "image_url": "https://sanatisharif.ir/departmentlesson/170917011741.jpg?w=280&h=150 ",
+                                        "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/45/39/"
+                                    },
+                                    {
+                                        "title" : "مشاوره",
+                                        "teacher" : "محمدعلی امینی راد",
+                                        "image_url": "https://sanatisharif.ir/lesson/moshavere-lesson.jpg?w=280&h=150",
+                                        "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/33/11/"
+                                    },
+                                    {
+                                        "title" : "شیمی کنکور",
+                                        "teacher" : "مهدی صنیعی طهرانی",
+                                        "image_url": "https://sanatisharif.ir/departmentlesson/170920034146.jpg?w=280&h=150",
+                                        "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/10/41/"
+                                    },
+                                    {
+                                        "title" : "نکته و تست فیزیک کنکور",
+                                        "teacher" : "پیمان طلوعی",
+                                        "image_url": "https://sanatisharif.ir/departmentlesson/170925055613.jpg?w=280&h=150 ",
+                                        "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/11/44/"
+                                    },
+                                    {
+                                        "title" : "فیزیک 4 - کنکور",
+                                        "teacher" : "حمید فدایی فرد",
+                                        "image_url": "https://sanatisharif.ir/departmentlesson/170920042821.jpg?w=280&h=150 ",
+                                        "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/11/42/"
+                                    },
+                                    {
+                                        "title" : "نکته و تست ریاضی تجربی کنکور",
+                                        "teacher" : " مهدی امینی راد",
+                                        "image_url": "https://sanatisharif.ir/departmentlesson/170925061125.jpg?w=280&h=150 ",
+                                        "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/32/44/"
+                                    },
+                                    {
+                                        "title" : "ریاضی تجربی کنکور",
+                                        "teacher" : "محمد امین نباخته",
+                                        "image_url": "https://sanatisharif.ir/departmentlesson/170925061125.jpg?w=280&h=150",
+                                        "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/32/41/"
+                                    },
+                                    {
+                                        "title" : "نکته و تست دیفرانسیل کنکور",
+                                        "teacher" : "محمد صادق ثابتی",
+                                        "image_url": "https://sanatisharif.ir/departmentlesson/170925061008.jpg?w=280&h=150",
+                                        "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/4/44/"
+                                    },
+                                    {
+                                        "title" : "هندسه تحلیلی کنکور",
+                                        "teacher" : "محمد صادق ثابتی",
+                                        "image_url": "/departmentlesson/170920034810.jpg?w=280&h=150",
+                                        "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/3/41/"
+                                    },
+                                    {
+                                        "title" : "فلسفه و منطق کنکور",
+                                        "teacher" : " سید حسام الدین جلالی",
+                                        "image_url": "https://sanatisharif.ir/departmentlesson/171005032754.jpg?w=280&h=150",
+                                        "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/46/41/"
+                                    },
+                                    {
+                                        "title" : "تحلیلی کنکور",
+                                        "teacher" : " رضا شامیزاده",
+                                        "image_url": "https://sanatisharif.ir/lesson/geometry.jpg?w=280&h=150",
+                                        "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/3/20/"
+                                    },
+                                    {
+                                        "title" : "گسسته کنکور",
+                                        "teacher" : " رضا شامیزاده",
+                                        "image_url": "https://sanatisharif.ir/lesson/gosaste.jpg?w=280&h=150",
+                                        "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/1/20/"
+                                    },
+                                    {
+                                        "title" : "هندسه پایه کنکور",
+                                        "teacher" : "وحید کبریایی",
+                                        "image_url": "https://sanatisharif.ir/departmentlesson/160814054658.jpg?w=280&h=150",
+                                        "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/9/27/"
+                                    },
+                                    {
+                                        "title" : "ریاضی تجربی کنکور",
+                                        "teacher" : "محمد رضا حسینی فرد",
+                                        "image_url": "https://sanatisharif.ir/departmentlesson/151121032001.jpeg?w=280&h=150",
+                                        "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/32/20/"
+                                    },
+                                    {
+                                        "title" : "عربی کنکور",
+                                        "teacher" : "محسن آهویی",
+                                        "image_url": "https://sanatisharif.ir/departmentlesson/arabi2.jpg?w=280&h=150",
+                                        "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/5/41/"
+                                    },
+                                    {
+                                        "title" : "زیست کنکور",
+                                        "teacher" : "محمد پازوکی",
+                                        "image_url": "https://sanatisharif.ir/lesson/131001125425.jpg?w=280&h=150",
+                                        "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/15/12/"
+                                    },
+                                    {
+                                        "title" : "آمار و مدل سازی کنکور",
+                                        "teacher" : "مهدی امینی راد",
+                                        "image_url": "https://sanatisharif.ir/departmentlesson/161231013618.jpg ?w=280&h=150",
+                                        "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/20/26/"
+                                    }
+                                ]
+                            },
+                            {
+                                "title" : "مقطع یازدهم",
+                                "url" : "https://sanatisharif.ir/11.php",
+                                "type": 0,
+                                "courses" : [
+                                {
+                                    "title" : "زیست یازدهم",
+                                    "teacher" : "عباس راستی بروجنی",
+                                    "image_url": "https://sanatisharif.ir/departmentlesson/171019113948.jpg?w=280&h=150",
+                                    "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/15/38/"
+                                },
+                                {
+                                        "title" : "فیزیک یازدهم",
+                                        "teacher" : "پیمان طلوعی",
+                                        "image_url": "https://sanatisharif.ir/departmentlesson/171017054931.jpg?w=280&h=150 ",
+                                        "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/11/40/"
+                                    },
+                                    {
+                                        "title" : "حسابان یازدهم",
+                                        "teacher" : "صادق ثابتی",
+                                        "image_url": "https://sanatisharif.ir/departmentlesson/170920123654.jpg?w=280&h=150 ",
+                                        "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/13/38/"
+                                    },
+                                    {
+                                        "title" : "حسابان یازدهم",
+                                        "teacher" : "محمد رضا مقصودی",
+                                        "image_url": "https://sanatisharif.ir/departmentlesson/170920033407.jpg?w=280&h=150 ",
+                                        "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/13/40/"
+                                    },
+                                    {
+                                        "title" : "شیمی یازدهم",
+                                        "teacher" : "مهدی صنیعی طهرانی",
+                                        "image_url": "https://sanatisharif.ir/departmentlesson/170920034146.jpg?w=280&h=150",
+                                        "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/10/38/"
+                                    },
+                                    {
+                                        "title" : "ریاضی تجربی یازدهم",
+                                        "teacher" : "علی صدری",
+                                        "image_url": "https://sanatisharif.ir/departmentlesson/170917010549.jpg?w=280&h=150",
+                                        "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/32/38/"
+                                    },
+                                    {
+                                        "title" : "آرایه های ادبی",
+                                        "teacher" : " هامون سبطی",
+                                        "image_url": "https://sanatisharif.ir/departmentlesson/170917011741.jpg?w=280&h=150 ",
+                                        "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/45/39/"
+                                    },
+                                    {
+                                        "title" : "عربی یازدهم",
+                                        "teacher" : " ناصر حشمتی",
+                                        "image_url": "https://sanatisharif.ir/departmentlesson/171005033219.jpg?w=280&h=150",
+                                        "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/5/38/"
+                                    }
+                                ]
+                            },
+                            {
+                                "title" : "مقطع دهم",
+                                "url" : "https://sanatisharif.ir/10.php",
+                                "type": 0,
+                                "courses" : [
+                                
+                                    {
+                                        "title" : "متن خوانی عربی دهم",
+                                        "teacher" : "مهدی ناصر شریعت",
+                                        "image_url" : "https://sanatisharif.ir/departmentlesson/170920050758.jpg?w=280&h=150",
+                                        "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/5/43/"
+                                    },
+                                    {
+                                        "title" : "ریاضی دهم",
+                                        "teacher" : "مهدی امینی راد",
+                                        "image_url": "https://sanatisharif.ir/departmentlesson/171003105152.jpg?w=280&h=150 ",
+                                        "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/12/37/"
+                                    },
+                                    {
+                                        "title" : "ریاضی دهم",
+                                        "teacher" : "محمد جواد نایب کبیر",
+                                        "image_url": "https://sanatisharif.ir/departmentlesson/161231015030.jpg?w=280&h=150 ",
+                                        "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/12/27/"
+                                    },
+                                    {
+                                        "title" : "شیمی دهم",
+                                        "teacher" : "حامد پویان نظر",
+                                        "image_url": "https://sanatisharif.ir/departmentlesson/170920125924.jpg?w=280&h=150 ",
+                                        "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/10/37/"
+                                    },
+                                    {
+                                        "title" : "هندسه 1 (دهم)",
+                                        "teacher" : "وحید کبریایی",
+                                        "image_url": "https://sanatisharif.ir/departmentlesson/160814054658.jpg?w=280&h=150 ",
+                                        "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/9/27/"
+                                    },
+                                    {
+                                        "title" : "زیست 1 (دهم)",
+                                        "teacher" : "جلال موقاری",
+                                        "image_url": "https://sanatisharif.ir/departmentlesson/170920031050.jpg?w=280&h=150 ",
+                                        "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/15/37/"
+                                    },
+                                    {
+                                        "title" : "فیزیک دهم",
+                                        "teacher" : "فرشید داداشی",
+                                        "image_url" : "https://sanatisharif.ir/departmentlesson/170920011342.jpg?w=280&h=150",
+                                        "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/11/37/"
+                                    },
+                                    {
+                                        "title" : "آرایه های ادبی",
+                                        "teacher" : " هامون سبطی",
+                                        "image_url": "https://sanatisharif.ir/departmentlesson/170917011741.jpg?w=280&h=150 ",
+                                        "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/45/39/"
+                                    },
+                                    {
+                                        "title" : "زبان انگلیسی دهم",
+                                        "teacher" : "علی اکبر عزتی",
+                                        "image_url" : "https://sanatisharif.ir/departmentlesson/170917125730.jpg?w=280&h=150",
+                                        "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/8/37/"
+                                    },
+                                    {
+                                        "title" : "ریاضی و آمار دهم",
+                                        "teacher" : "مهدی امینی راد",
+                                        "image_url" : "https://sanatisharif.ir/departmentlesson/170920045708.jpg?w=280&h=150",
+                                        "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/47/37/"
+                                    },
+                                    {
+                                        "title" : "عربی دهم",
+                                        "teacher" : "ناصر حشمتی",
+                                        "image_url" : "https://sanatisharif.ir/departmentlesson/170920012145.jpg?w=280&h=150",
+                                        "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/5/37/"
+                                    }
+                                ]
+                            
+                            },
+                            {
+                                "title" : "همایش و جمع بندی",
+                                "url" : "https://sanatisharif.ir/hamayesh.php",
+                                "type": 0,
+                                "courses" : [
+                                {
+                                    "title" : "ریاضی انسانی",
+                                    "teacher" : "خسرو محمدزاده",
+                                    "image_url": "https://sanatisharif.ir/departmentlesson/170408122003.jpg?w=280&h=150",
+                                    "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/43/32/"
+                                },
+                                {
+                                    "title" : "گسسته",
+                                    "teacher" : "سروش مویینی",
+                                    "image_url": "https://sanatisharif.ir/departmentlesson/170330105321.jpg?w=280&h=150 ",
+                                    "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/1/32/"
+                                },
+                                {
+                                    "title" : "فیزیک",
+                                    "teacher" : "نادریان",
+                                    "image_url": "https://sanatisharif.ir/departmentlesson/170405034314.jpg?w=280&h=150",
+                                    "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/11/32/"
+                                },
+                                {
+                                    "title" : "زیست شناسی",
+                                    "teacher" : "مسعود حدادی",
+                                    "image_url": "https://sanatisharif.ir/departmentlesson/170405035409.jpg?w=280&h=150",
+                                    "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/15/32/"
+                                },
+                                {
+                                    "title" : "دیفرانسیل",
+                                    "teacher" : "سیروس نصیری",
+                                    "image_url": "https://sanatisharif.ir/departmentlesson/170408112610.jpg?w=280&h=150 ",
+                                    "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/4/32/"
+                                },
+                                {
+                                    "title" : "ریاضی تجربی",
+                                    "teacher" : "سیروس نصیری",
+                                    "image_url": "https://sanatisharif.ir/departmentlesson/170415024503.gif?w=280&h=150 ",
+                                    "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/32/32/"
+                                },
+                                {
+                                    "title" : "عربی",
+                                    "teacher" : "عمار تاج بخش",
+                                    "image_url": "https://sanatisharif.ir/departmentlesson/170327102702.jpeg?w=280&h=150 ",
+                                    "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/5/32/"
+                                },
+                                {
+                                    "title" : "شیمی",
+                                    "teacher" : "محمد حسین انوشه",
+                                    "image_url": "https://sanatisharif.ir/departmentlesson/170405030131.jpg?w=280&h=150 ",
+                                    "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/10/32/"
+                                }
+                                ]
+                            }
+                        ]
+                    ';
+                break;
+            case "ordu":
+                $json ='
+                {
+                    "items" : [
+                     {                                                                                        
+                         "title" : "جمع‌بندی آمار و مدلسازی",                                                          
+                         "teacher" : "وحید کبریایی",                                                          
+                         "image_url": "https://sanatisharif.ir/departmentlesson/180204101956.jpg?w=280&h=150",
+                         "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/20/46/"              
+                                    },
+                                    {
+                                        "title" : "جمعبندی زبان کنکور",
+                                        "teacher" : "کیاوش فراهانی",
+                                        "image_url": "https://sanatisharif.ir/lesson/140327081735.jpg?w=280&h=150",
+                                        "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/24/7/"
+                                    }
+                        ]
+                }
+                ';
+                break;
+            case "konkur96":
+                $json ='
+                        {
+                        "items" : [
+                            {
+                                "title" : "زیست کنکور",
+                                "teacher" : "ابوالفضل جعفری",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/171125105021.jpg?w=280&h=150",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/15/45/"
+                            },
+                            {
+                                "title" : "آرایه های ادبی",
+                                "teacher" : " هامون سبطی",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/170917011741.jpg?w=280&h=150 ",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/45/39/"
+                            },
+                            {
+                                "title" : "شیمی کنکور",
+                                "teacher" : "مهدی صنیعی طهرانی",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/170920034146.jpg?w=280&h=150",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/10/41/"
+                            },
+                            {
+                                "title" : "نکته و تست فیزیک کنکور",
+                                "teacher" : "پیمان طلوعی",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/170925055613.jpg?w=280&h=150 ",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/11/44/"
+                            },
+                            {
+                                "title" : "فیزیک 4 - کنکور",
+                                "teacher" : "حمید فدایی فرد",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/170920042821.jpg?w=280&h=150 ",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/11/42/"
+                            },
+                            {
+                                "title" : "نکته و تست ریاضی تجربی کنکور",
+                                "teacher" : " مهدی امینی راد",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/170925061125.jpg?w=280&h=150 ",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/32/44/"
+                            },
+                            {
+                                "title" : "ریاضی تجربی کنکور",
+                                "teacher" : "محمد امین نباخته",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/170925061125.jpg?w=280&h=150",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/32/41/"
+                            },
+                            {
+                                "title" : "نکته و تست دیفرانسیل کنکور",
+                                "teacher" : "محمد صادق ثابتی",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/170925061008.jpg?w=280&h=150",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/4/44/"
+                            },
+                            {
+                                "title" : "هندسه تحلیلی کنکور",
+                                "teacher" : "محمد صادق ثابتی",
+                                "image_url": "/departmentlesson/170920034810.jpg?w=280&h=150",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/3/41/"
+                            },
+                            {
+                                "title" : "فلسفه و منطق کنکور",
+                                "teacher" : " سید حسام الدین جلالی",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/171005032754.jpg?w=280&h=150",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/46/41/"
+                            },
+                            {
+                                "title" : "مشاوره",
+                                "teacher" : "محمدعلی امینی راد",
+                                "image_url": "https://sanatisharif.ir/lesson/moshavere-lesson.jpg?w=280&h=150",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/33/11/"
+                            },
+                            {
+                                "title" : "آمار و مدلسازی",
+                                "teacher" : "مهدی امینی راد",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/161231013618.jpg?w=280&h=150",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/20/26/"
+                            },
+                            {
+                                "title" : "0 تا 100 کنکور شیمی",
+                                "teacher" : "محمدرضا آقاجانی",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/160815115032.jpg?w=280&h=150",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/10/26/"
+                            },
+                            {
+                                "title" : "0 تا 100 کنکور فیزیک",
+                                "teacher" : "دکتر طلوعی",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/160815114117.jpg?w=280&h=150",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/11/26/"
+                            },
+                            {
+                                "title" : "0 تا 100 کنکور دیفرانسیل",
+                                "teacher" : "محمد صادق ثابتی",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/160814052123.jpg?w=280&h=150",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/4/26/"
+                            },
+                            {
+                                "title" : "0 تا صد کنکور ریاضی تجربی",
+                                "teacher" : "مهدی امینی راد",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/160814044847.jpg?w=280&h=150",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/32/26/"
+                            },
+                            {
+                                "title" : "نکته و تست ریاضی تجربی",
+                                "teacher" : "محمدرضا حسینی فرد",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/151121032001.jpeg",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/32/20/"
+                            },
+                            {
+                                "title" : "0 تا 100 ریاضی انسانی",
+                                "teacher" : "مهدی امینی راد",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/160814051657.jpg?w=280&h=150",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/43/26/"
+                            },
+                            {
+                                "title" : "0 تا 100 ریاضی انسانی",
+                                "teacher" : "خسرو محمدزاده",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/151008024810.jpeg",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/43/22/"
+                            },
+                            {
+                                "title" : "0 تا 100 کنکور گسسته",
+                                "teacher" : "بهمن موذنی پور",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/160815113247.gif",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/1/26/"
+                            },
+                            {
+                                "title" : "0 تا صد کنکور فلسفه و منطق",
+                                "teacher" : "رضا آقاجانی",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/160814052928.jpg?w=280&h=150",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/46/26/"
+                            },
+                            {
+                                "title" : "0 تا 100 زیست سوم",
+                                "teacher" : "محمد علی امینی راد",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/161016023718.jpg?w=280&h=150",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/15/30/"
+                            },
+                            {
+                                "title" : "زیست کنکور",
+                                "teacher" : "پوریا رحیمی",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/160331100335.jpeg",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/15/19/"
+                            },
+                            {
+                                "title" : "0 تا صد زیست پیش دانشگاهی",
+                                "teacher" : "عباس راستی بروجنی",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/161112090753.jpg?w=280&h=150",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/15/31/"
+                            },
+                            {
+                                "title" : "0 تا 100 کنکور عربی",
+                                "teacher" : "مهدی جلادتی",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/160814035839.jpg?w=280&h=150",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/5/26/"
+                            },
+                            {
+                                "title" : "0 تا 100 کنکور زبان و ادبیات فارسی",
+                                "teacher" : "داریوش راوش",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/160815111559.jpg?w=280&h=150",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/6/26/"
+                            },
+                            {
+                                "title" : "تحلیلی",
+                                "teacher" : " رضا شامیزاده",
+                                "image_url": "https://sanatisharif.ir/lesson/geometry.jpg?w=280&h=150",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/3/20/"
+                            },
+                            {
+                                "title" : "گسسته",
+                                "teacher" : " رضا شامیزاده",
+                                "image_url": "https://sanatisharif.ir/lesson/gosaste.jpg?w=280&h=150",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/1/20/"
+                            },
+                            {
+                                "title" : "هندسه پایه",
+                                "teacher" : "وحید کبریایی",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/160814054658.jpg?w=280&h=150",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/9/27/"
+                            },
+                            {
+                                "title" : "ریاضی تجربی",
+                                "teacher" : "محمد رضا حسینی فرد",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/151121032001.jpeg?w=280&h=150",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/32/20/"
+                            },
+                            {
+                                "title" : "عربی کنکور",
+                                "teacher" : "محسن آهویی",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/arabi2.jpg?w=280&h=150",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/5/41/"
+                            },
+                            {
+                                "title" : "دینی کنکور",
+                                "teacher" : "جعفر رنجبرزاده",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/141009032429.jpeg?w=280&h=150",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/16/21/"
+                            },
+                            {
+                                "title" : "زبان کنکور",
+                                "teacher" : "علی اکبر عزتی",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/zaban-4.jpg?w=280&h=150",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/8/20/"
+                            },
+                            {
+                                "title" : "زبان کنکور",
+                                "teacher" : "درویش",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/zaban-3.jpg?w=280&h=150",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/8/12/"
+                            },
+                            {
+                                "title" : "عربی کنکور",
+                                "teacher" : "ناصح زاده",
+                                "image_url": "https://sanatisharif.ir/lesson/arabi.jpg?w=280&h=150",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/5/21/"
+                            },
+                            {
+                                "title" : "زیست کنکور",
+                                "teacher" : "محمد پازوکی",
+                                "image_url": "https://sanatisharif.ir/lesson/131001125425.jpg?w=280&h=150",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/15/12/"
+                            },
+                            {
+                                "title" : "آمار و مدل سازی کنکور",
+                                "teacher" : "مهدی امینی راد",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/161231013618.jpg?w=280&h=150",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/20/26/"
+                            }
+                            ]
+                        }
+                ';
+                break;
+            case "11":
+                $json ='
+                        {
+                        "items" : [
+                            {
+                                "title" : "زیست یازدهم",
+                                "teacher" : "عباس راستی بروجنی",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/171019113948.jpg?w=280&h=150",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/15/38/"
+                            },
+                            {
+                                "title" : "فیزیک یازدهم",
+                                "teacher" : "پیمان طلوعی",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/171017054931.jpg?w=280&h=150 ",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/11/40/"
+                            },
+                            {
+                                "title" : "حسابان یازدهم",
+                                "teacher" : "صادق ثابتی",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/170920123654.jpg?w=280&h=150 ",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/13/38/"
+                            },
+                            {
+                                "title" : "حسابان یازدهم",
+                                "teacher" : "محمد رضا مقصودی",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/170920033407.jpg?w=280&h=150 ",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/13/40/"
+                            },
+                            {
+                                "title" : "شیمی یازدهم",
+                                "teacher" : "مهدی صنیعی طهرانی",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/170920034146.jpg?w=280&h=150",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/10/38/"
+                            },
+                            {
+                                "title" : "ریاضی تجربی یازدهم",
+                                "teacher" : "علی صدری",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/170917010549.jpg?w=280&h=150",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/32/38/"
+                            },
+                            {
+                                "title" : "آرایه های ادبی",
+                                "teacher" : " هامون سبطی",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/170917011741.jpg?w=280&h=150 ",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/45/39/"
+                            },
+                            {
+                                            "title" : "عربی یازدهم",
+                                            "teacher" : " ناصر حشمتی",
+                                            "image_url": "https://sanatisharif.ir/departmentlesson/171005033219.jpg?w=280&h=150",
+                                            "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/5/38/"
+                                        }
+                            ]
+                        }
+                ';
+                break;
+            case '10':
+                $json ='
+                        {
+                        "items" : [
+                            {
+                                "title" : "متن خوانی عربی دهم",
+                                "teacher" : "مهدی ناصر شریعت",
+                                "image_url" : "https://sanatisharif.ir/departmentlesson/170920050758.jpg?w=280&h=150",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/5/43/"
+                            },
+                            {
+                                "title" : "ریاضی و آمار دهم",
+                                "teacher" : "مهدی امینی راد",
+                                "image_url" : "https://sanatisharif.ir/departmentlesson/170920045708.jpg?w=280&h=150",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/47/37/"
+                            },
+                            {
+                                "title" : "شیمی دهم",
+                                "teacher" : "حامد پویان نظر",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/170920125924.jpg?w=280&h=150 ",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/10/37/"
+                            },
+                            {
+                                "title" : "هندسه 1 (دهم)",
+                                "teacher" : "وحید کبریایی",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/160814054658.jpg?w=280&h=150 ",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/9/27/"
+                            },
+                            {
+                                "title" : "زیست 1 (دهم)",
+                                "teacher" : "جلال موقاری",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/170920031050.jpg?w=280&h=150 ",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/15/37/"
+                            },
+                            {
+                                "title" : "فیزیک دهم",
+                                "teacher" : "فرشید داداشی",
+                                "image_url" : "https://sanatisharif.ir/departmentlesson/170920011342.jpg?w=280&h=150",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/11/37/"
+                            },
+                            {
+                                "title" : "آرایه های ادبی",
+                                "teacher" : " هامون سبطی",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/170917011741.jpg?w=280&h=150 ",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/45/39/"
+                            },
+                            {
+                                "title" : "زبان انگلیسی دهم",
+                                "teacher" : "علی اکبر عزتی",
+                                "image_url" : "https://sanatisharif.ir/departmentlesson/170917125730.jpg?w=280&h=150",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/8/37/"
+                            },
+                            {
+                                "title" : "عربی دهم",
+                                "teacher" : "ناصر حشمتی",  
+                                "image_url" : "https://sanatisharif.ir/departmentlesson/170920012145.jpg?w=280&h=150",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/5/37/"
+                            },
+                            {
+                                "title" : "ریاضی دهم",
+                                "teacher" : "محمد جواد نایب کبیر",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/161231015030.jpg?w=280&h=150 ",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/12/27/"
+                            },
+                            {
+                                "title" : "شیمی 1( دهم )",
+                                "teacher" : "محمد حسین انوشه",
+                                "image_url": "https://sanatisharif.ir/uploads/photo_2016-09-25_00-10-07.jpg?w=280&h=150",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/10/27/"
+                            },
+                            {
+                                "title" : "هندسه 1 (دهم)",
+                                "teacher" : "وحید کبریایی",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/160814054658.jpg?w=280&h=150 ",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/9/27/"
+                            },
+                            {
+                                "title" : "زیست 1 (دهم)",
+                                "teacher" : "عباس راستی بروجنی",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/zist.jpg?w=280&h=150",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/15/27/"
+                            }
+                            ]
+                        }
+                ';
+                break;
+            case "hamayesh":
+                $json ='
+                        {
+                        "items" : [
+                            {
+                                "title" : "ریاضی انسانی",
+                                "teacher" : "خسرو محمدزاده",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/170408122003.jpg?w=280&h=150",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/43/32/"
+                            },
+                            {
+                                "title" : "گسسته",
+                                "teacher" : "سروش مویینی",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/170330105321.jpg?w=280&h=150 ",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/1/32/"
+                            },
+                            {
+                                "title" : "فیزیک",
+                                "teacher" : "نادریان",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/170405034314.jpg?w=280&h=150",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/11/32/"
+                            },
+                            {
+                                "title" : "زیست شناسی",
+                                "teacher" : "مسعود حدادی",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/170405035409.jpg?w=280&h=150",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/15/32/"
+                            },
+                            {
+                                "title" : "دیفرانسیل",
+                                "teacher" : "سیروس نصیری",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/170408112610.jpg?w=280&h=150 ",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/4/32/"
+                            },
+                            {
+                                "title" : "ریاضی تجربی",
+                                "teacher" : "سیروس نصیری",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/170415024503.gif?w=280&h=150 ",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/32/32/"
+                            },
+                            {
+                                "title" : "عربی",
+                                "teacher" : "عمار تاج بخش",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/170327102702.jpeg?w=280&h=150 ",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/5/32/"
+                            },
+                            {
+                                "title" : "شیمی",
+                                "teacher" : "محمد حسین انوشه",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/170405030131.jpg?w=280&h=150 ",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/10/32/"
+                            },
+                            {
+                                "title" : "همایش فیزیک پایه",
+                                "teacher" : "کازرانیان",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/160410120714.jpeg",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/11/19/"
+                            },
+                            {
+                                "title" : "همایش زیست شناسی",
+                                "teacher" : "رحیمی",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/160331100335.jpeg",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/15/19/"
+                            },
+                            {
+                                "title" : "همایش جبر و احتمال",
+                                "teacher" : "حسین کرد",
+                                "image_url": "https://sanatisharif.ir/departmentlesson/jabr.jpg",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/19/19/"
+                            },
+                            {
+                                "title" : "همایش شیمی کنکور(پیش دانشگاهی)",
+                                "teacher" : "آقاجانی",
+                                "image_url" :"https://sanatisharif.ir/departmentlesson/160525024322.jpg",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/10/25/"
+                            },
+                            {
+                                "title" : "همایش شیمی پایه(شیمی 2و3)",
+                                "teacher" : "آقاجانی",
+                                "image_url" : "https://sanatisharif.ir/departmentlesson/shimi-126.jpg",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/10/19/"
+                            },
+                            {
+                                "title" : "همایش عربی ( 70 درصد کنکور )",
+                                "teacher" : "ناصح زاده",
+                                "image_url" : "https://sanatisharif.ir/departmentlesson/arabi-124.jpg",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/5/19/"
+                            },
+                            {
+                                "title" : "جمع بندی آرایه های ادبی",
+                                "teacher" : "حسین خانی",
+                                "image_url" : "https://sanatisharif.ir/departmentlesson/160317013234.jpeg",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/45/19/"
+                            },
+                            {
+                                "title" : "جمع بندی ادبیات با 124 تست",
+                                "teacher" : "صادقی",
+                                "image_url" : "https://sanatisharif.ir/departmentlesson/adabiat.jpg",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/6/19/"
+                            },
+                            {
+                                "title" : "زبان و ادبیات فارسی",
+                                "teacher":"کاظمی",
+                                "image_url": "https://sanatisharif.ir/lesson/adab.jpg",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/6/7/"
+                            },
+                            {
+                                "title" : "همایش گسسته ی کنکور",
+                                "teacher" : "شامی زاده",
+                                "image_url" : "https://sanatisharif.ir/lesson/140420082242.jpg",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/28/7/"
+                            },
+                            {
+                                "title" : "جمع بندی 3 ساعته زبان کنکور",
+                                "teacher" : "فراهانی",
+                                "image_url" : "https://sanatisharif.ir/lesson/140327081735.jpg",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/24/7/"
+                            },
+                            {
+                                "title" : "همایش دین و زندگی کنکور",
+                                "teacher" : "رنجبرزاده",
+                                "image_url" : "https://sanatisharif.ir/departmentlesson/141009032429.jpeg",
+                                "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/16/7/"
+                            }
+                            ]
+                        }
+                ';
+                break;
+        }
+
+
+        return response()->json(json_decode($json,true),200);
+    }
+
+
+
+
+//    public function redirectVideo
 }

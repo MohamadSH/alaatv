@@ -106,24 +106,6 @@ return [
     'key' => env('APP_KEY'),
 
     'cipher' => 'AES-256-CBC',
-
-    /*
-    |--------------------------------------------------------------------------
-    | Logging Configuration
-    |--------------------------------------------------------------------------
-    |
-    | Here you may configure the log settings for your application. Out of
-    | the box, Laravel uses the Monolog PHP logging library. This gives
-    | you a variety of powerful log handlers / formatters to utilize.
-    |
-    | Available Settings: "single", "daily", "syslog", "errorlog"
-    |
-    */
-
-    'log' => env('APP_LOG', 'single'),
-
-    'log_level' => env('APP_LOG_LEVEL', 'debug'),
-
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers
@@ -167,7 +149,6 @@ return [
         Greggilbert\Recaptcha\RecaptchaServiceProvider::class,
         Jenssegers\Agent\AgentServiceProvider::class,
         Laratrust\LaratrustServiceProvider::class,
-        Eusonlito\LaravelMeta\MetaServiceProvider::class,
         Watson\Sitemap\SitemapServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
         Neoxia\Filesystem\SftpServiceProvider::class,
@@ -190,14 +171,11 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         App\Providers\MedianaServiceProvider::class,
+        Backup\BackupServiceProvider::class,
+        Artesaos\SEOTools\Providers\SEOToolsServiceProvider::class,
 
     ],
     'development-providers' => [
-        Barryvdh\Debugbar\ServiceProvider::class,
-    ],
-
-    'deployment-providers'=>
-    [
         Barryvdh\Debugbar\ServiceProvider::class,
     ],
     /*
@@ -250,10 +228,10 @@ return [
         'Recaptcha' => Greggilbert\Recaptcha\Facades\Recaptcha::class,
         'Agent' => Jenssegers\Agent\Facades\Agent::class,
         'Laratrust'   => Laratrust\LaratrustFacade::class,
-        'Meta'    => Eusonlito\LaravelMeta\Facade::class,
         'Sitemap' => Watson\Sitemap\Facades\Sitemap::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
+        'SEO' => Artesaos\SEOTools\Facades\SEOTools::class,
     ],
 
 ];

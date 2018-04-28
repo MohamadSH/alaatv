@@ -1,7 +1,7 @@
 @extends("app")
 
 @section("title")
-    <title>تخته خاک|پرداخت</title>
+    <title>آلاء|پرداخت</title>
 @endsection
 
 @section("metadata")

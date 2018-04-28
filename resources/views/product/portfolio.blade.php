@@ -29,7 +29,7 @@
 @endsection
 
 @section("title")
-    <title>محصولات|تخته خاک</title>
+    <title>محصولات|آلاء</title>
 @endsection
 
 @section("content")
@@ -59,7 +59,7 @@
             {{--<div class="modal-content">--}}
                 {{--<div class="modal-header">--}}
                     {{--<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>--}}
-                    {{--<h4 class="modal-title font-green">به تخته خاک خوش آمدید</h4>--}}
+                    {{--<h4 class="modal-title font-green">به آلاء خوش آمدید</h4>--}}
                 {{--</div>--}}
                 {{--<div class="modal-body bold">--}}
                     {{--@if(Session::has('welcomePasswordMessage'))--}}

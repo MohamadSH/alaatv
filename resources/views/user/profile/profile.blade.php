@@ -42,7 +42,7 @@
                 {{--<div class="alert alert-block bg-purple bg-font-purple fade in">--}}
                     {{--<button type="button" class="close" data-dismiss="alert"></button>--}}
                     {{--<h4 class="alert-heading text-center" style="line-height: normal;">برای انصرف از قرعه کشی همایش 1 + 5 ، روی دکمه زیر کلیک کنید</h4>--}}
-                    {{--<h4 class="alert-heading text-center" style="line-height: normal;">در صورت انصراف کد تخفیف " {{Config::get("constants.HAMAYESH_LOTTERY_EXCHANGE_DISCOUNT")}}% تخته خاک"(2 روز اعتبار) به رسم یاد بود به شما اهدا خواهد شد.</h4>--}}
+                    {{--<h4 class="alert-heading text-center" style="line-height: normal;">در صورت انصراف کد تخفیف " {{Config::get("constants.HAMAYESH_LOTTERY_EXCHANGE_DISCOUNT")}}% آلاء"(2 روز اعتبار) به رسم یاد بود به شما اهدا خواهد شد.</h4>--}}
                     {{--<p style="text-align: center;">--}}
                         {{--<button class="btn mt-sweetalert" data-title="آیا از انصراف خود مطمئنید؟" data-type="warning" data-allow-outside-click="true" data-show-confirm-button="true" data-show-cancel-button="true" data-cancel-button-class="btn-danger" data-cancel-button-text="خیر انصراف نمی دهم" data-confirm-button-text="بله انصراف می دهم" data-confirm-button-class="btn-info" style="background: #d6af18;">انصراف از قرعه کشی و دریافت کد تخفیف</button>--}}
                     {{--</p>--}}
@@ -54,7 +54,7 @@
                     {{--@foreach(json_decode($userLottery->pivot->prizes)->items as $item )--}}
                         {{--<h5 class="text-center bold" style="font-size: large">{{$item->name}}</h5>--}}
                     {{--@endforeach--}}
-                    {{--<h4 class="alert-heading text-center" style="line-height: normal;">هدیه تخته خاک به شماست . به امید موفقیت شما .</h4>--}}
+                    {{--<h4 class="alert-heading text-center" style="line-height: normal;">هدیه آلاء به شماست . به امید موفقیت شما .</h4>--}}
                 {{--</div>--}}
             {{--@endif--}}
         {{--</div>--}}
@@ -81,7 +81,7 @@
                                     {{--@foreach($prizeCollection as $prize )--}}
                                         {{--<h5 class="bold text-center" style="font-size:larger">{{$prize["name"]}}@if(isset($prize["validUntil"]))( معتبر تا بامداد {{$prize["validUntil"]}} )@endif</h5>--}}
                                     {{--@endforeach--}}
-                                    {{--<h4 class="alert-heading text-center" style="line-height: normal;">هدیه تخته خاک به شماست . به امید موفقیت شما .</h4>--}}
+                                    {{--<h4 class="alert-heading text-center" style="line-height: normal;">هدیه آلاء به شماست . به امید موفقیت شما .</h4>--}}
                             {{--@endif--}}
                         {{--@endif--}}
                     {{--</div>--}}

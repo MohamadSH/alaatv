@@ -17,12 +17,27 @@ class Contentset extends Model
     protected $fillable = [
         'name',
         'description',
-        'tags'
+        'tags',
+        'photo'
     ];
 
 
     public function educationalcontents()
     {
-        return $this->belongsToMany("\App\Educationalcontent", "contentset_educationalcontent", "contentset_id", "edc_id")->withPivot("order", "isDefault");
+        return $this->belongsToMany(
+            "\App\Educationalcontent",
+            "contentset_educationalcontent",
+            "contentset_id",
+            "edc_id")
+            ->withPivot("order", "isDefault");
     }
+    public function getTagsAttribute($value)
+    {
+        return json_decode($value);
+    }
+
+//    public function setTagsAttribute($value)
+//    {
+//        return json_encode($value);
+//    }
 }

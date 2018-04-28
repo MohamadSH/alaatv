@@ -31,7 +31,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
-use Meta;
+use SEO;
 
 class ProductController extends Controller
 {
@@ -49,7 +49,7 @@ class ProductController extends Controller
         $this->middleware('permission:'.Config::get('constants.EDIT_PRODUCT_ACCESS'),['only'=>'update']);
         $this->middleware('permission:'.Config::get('constants.EDIT_CONFIGURE_PRODUCT_ACCESS'),['only'=> ['childProductEnable' , 'completeEachChildPivot']]);
         $this->middleware('permission:'.Config::get('constants.INSERT_CONFIGURE_PRODUCT_ACCESS'),['only'=>'makeConfiguration' , 'createConfiguration']);
-        $this->middleware('auth', ['except' => ['show' , 'refreshPrice' , 'search' , 'showPartial' , 'landing1' , 'landing2' ]]);
+        $this->middleware('auth', ['except' => ['show' , 'refreshPrice' , 'search' , 'showPartial' , 'landing1' , 'landing2' , 'landing3' , 'landing4' ]]);
 
         $this->response = new Response();
         $this->setting = json_decode(app('setting')->setting);
@@ -187,10 +187,18 @@ class ProductController extends Controller
         if(in_array($product->id , [193,194,195]))
             return redirect(action("ProductController@show" , 184), 301);
 
-        Meta::set('title', substr($product->name, 0 , Config::get("constants.META_TITLE_LIMIT")));
-        Meta::set('image', route('image', ['category'=>'4','w'=>'338' , 'h'=>'338' ,  'filename' =>  $product->image ]));
-        Meta::set('keywords', substr($product->name , 0 , Config::get("constants.META_KEYWORDS_LIMIT")));
-        Meta::set('description', substr($product->shortDescription, 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
+        $url = $request->url();
+        SEO::opengraph()->setUrl($url);
+        SEO::setCanonical($url);
+        SEO::twitter()->setSite("آلاء");
+        SEO::setTitle($product->name);
+        SEO::setDescription($product->shortDescription);
+        if(isset($files['thumbnail']))
+            SEO::opengraph()->addImage(route('image', ['category'=>'4','w'=>'338' , 'h'=>'338' ,  'filename' =>  $product->image ]), ['height' => 338, 'width' => 338]);
+        else
+            SEO::opengraph()->addImage(route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]), ['height' => 100, 'width' => 100]);
+        SEO::opengraph()->setType('website');
+
 
         $descriptionIframe = $request->partial;
         $productType = $product->producttype->id;
@@ -553,7 +561,6 @@ class ProductController extends Controller
         elseif(Auth::check())
             $user = Auth::user();
 
-
         $key="product:refreshPrice:Type"
             .$inputType
             ."\\"
@@ -564,8 +571,8 @@ class ProductController extends Controller
             ."products:"
             .( isset($productIds) ? implode("",$productIds) : "");
 
-        return Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($inputType,$attributevalues,$user,$product,$productIds) {
 
+        return Cache::tags('bon')->remember($key,  Config::get("constants.CACHE_60") , function () use($inputType,$attributevalues,$user,$product,$productIds){
             switch ($inputType)
             {
                 case  "extraAttribute":
@@ -694,7 +701,7 @@ class ProductController extends Controller
      * @param
      * @return \Illuminate\Http\Response
      */
-    public function search()
+    public function search(Request $request)
     {
         if (session()->has("adminOrder_id")) {
             $adminOrder = true;
@@ -723,10 +730,14 @@ class ProductController extends Controller
             $metaKeywords .= $product->name."-";
             $metaDescription .= $product->name."-" ;
         }
-        Meta::set('keywords', substr($metaKeywords , 0 , Config::get("constants.META_KEYWORDS_LIMIT")));
-        Meta::set('description', substr($metaDescription , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
-        Meta::set('title', substr("خدمات ".$this->setting->site->name, 0 , Config::get("constants.META_TITLE_LIMIT")));
-        Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
+        $url = $request->url();
+        SEO::opengraph()->setUrl($url);
+        SEO::setCanonical($url);
+        SEO::twitter()->setSite("آلاء");
+        SEO::setTitle("محصولات ".$this->setting->site->name);
+        SEO::setDescription($metaDescription);
+        SEO::opengraph()->addImage(route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]), ['height' => 100, 'width' => 100]);
+        SEO::opengraph()->setType('website');
 
         return view("product.portfolio" , compact("products" , "costCollection")) ;
     }
@@ -1088,13 +1099,20 @@ class ProductController extends Controller
     /**
      * Products Special Landing Page
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function landing1()
+    public function landing1(Request $request)
     {
-        Meta::set('title', "تخته خاک|همایش ویژه دی");
-        Meta::set('keywords', substr("همایش ویژه دی ماه تخته خاک حمع بندی کنکور اساتید آلاء تست درسنامه تخفیف", 0 , Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
-        Meta::set('description', substr("همایش ویژه دی ماه تخته خاک حمع بندی کنکور اساتید آلاء تست درسنامه تخفیف" , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
+        $url = $request->url();
+        SEO::opengraph()->setUrl($url);
+        SEO::setCanonical($url);
+        SEO::twitter()->setSite("آلاء");
+        SEO::setTitle("آلاء| جمع بندی نیم سال اول");
+        SEO::setDescription("همایش ویژه دی ماه آلاء حمع بندی کنکور اساتید آلاء تست درسنامه تخفیف");
+        SEO::opengraph()->addImage(route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]), ['height' => 100, 'width' => 100]);
+        SEO::opengraph()->setType('website');
+
         $productIds = Config::get("constants.HAMAYESH_PRODUCT");
         $products = Product::whereIn("id" , $productIds)->orderBy("order")->where("enable" , 1)->get();
         $attribute = Attribute::where("name" , "major")->get()->first();
@@ -1123,6 +1141,7 @@ class ProductController extends Controller
     */
     public function landing2()
     {
+        return redirect("/landing/3",302);
         $gheireHozoori = Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_ALLTOGHETHER") ;
         if(Input::has("utm_term"))
         {
@@ -1139,9 +1158,6 @@ class ProductController extends Controller
                     break;
             }
         }
-        Meta::set('title', "تخته خاک|اردوی طلایی نوروز ۹۷");
-        Meta::set('keywords', substr("اردوی حضوری دختران و پسران اردوی غیر حضوری نوروز ۹۷", 0 , Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
-        Meta::set('description', substr("اردوی حضوری دختران و پسران اردوی غیر حضوری نوروز ۹۷" , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
 
         $products = Product::whereIn("id" , Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT"))->orwhereIn("id" , Config::get("constants.ORDOO_HOZOORI_NOROOZ_97_PRODUCT"))->orderBy("order")->where("enable" , 1)->get();
 
@@ -1154,6 +1170,44 @@ class ProductController extends Controller
         return view("product.landing2" , compact("landingProducts" , "costCollection" , "utm_term" , "gheireHozoori" ));
     }
 
+    /**
+     * Products Special Landing Page
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function landing3(Request $request)
+    {
+        $url = $request->url();
+        SEO::opengraph()->setUrl($url);
+        SEO::setCanonical($url);
+        SEO::twitter()->setSite("آلاء");
+        SEO::setTitle("آلاء | همایش های طلایی کنکور 97");
+        SEO::setDescription("وقتی همه کنکوری ها گیج و سرگردانند، شما مرور کنید. چالشی ترین نکات کنکوری در همایش های آلاء");
+        SEO::opengraph()->addImage(route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]), ['height' => 100, 'width' => 100]);
+        SEO::opengraph()->setType('website');
+        return view("product.landing.landing3" );
+    }
+
+    /**
+     * Products Special Landing Page
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function landing4(Request $request)
+    {
+        $url = $request->url();
+        SEO::opengraph()->setUrl($url);
+        SEO::setCanonical($url);
+        SEO::twitter()->setSite("آلاء");
+        SEO::setTitle("آلاء | همایش های طلایی کنکور 97");
+        SEO::setDescription("وقتی همه کنکوری ها گیج و سرگردانند، شما مرور کنید. چالشی ترین نکات کنکوری در همایش های آلاء");
+        SEO::opengraph()->addImage(route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]), ['height' => 100, 'width' => 100]);
+        SEO::opengraph()->setType('website');
+
+        return view("product.landing.landing4" );
+    }
 
     /**
      * Copy a product completely

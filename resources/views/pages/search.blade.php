@@ -101,7 +101,7 @@
                     @if(!empty($extraTagArray))
                         <div class="row">
                             <div class="col-md-12">
-                                @include("partials.search.tagLabel" , ["tags"=>$extraTagArray])
+                                @include("partials.search.tagLabel" , ["tags"=>$extraTagArray , "withCloseIcon"=>true  , "withInput"=>true])
                             </div>
                         </div>
                     @endif
@@ -138,10 +138,11 @@
             {{--</div>--}}
         {{--</div>--}}
     {{--</div>--}}
-    <div class="row">
+    <div class="row" >
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
+        @if($items->where("type" , "product")->first()["totalitems"] > 0)
             <!-- BEGIN PORTLET-->
-            <div class="portlet light ">
+            <div class="portlet light " id="productPortlet">
                 <div class="portlet-title tabbable-line">
                     <div class="caption">
                         <i class="icon-globe font-dark hide"></i>
@@ -150,13 +151,14 @@
                 </div>
                 <div class="portlet-body" id="productDiv">
                     <div class="row">
-                        <section class="regular slider" style="width: 95%;margin-top: 0px ; margin-bottom: 15px;">
+                        <section class="productSlider slider" style="width: 95%;margin-top: 0px ; margin-bottom: 15px;">
                             {!!  $items->where("type" , "product")->first()["view"]  !!}
                         </section>
                     </div>
                 </div>
             </div>
             <!-- END PORTLET-->
+        @endif
             <!-- BEGIN PORTLET-->
             <div class="portlet light ">
                 <div class="portlet-title tabbable-line">
@@ -167,32 +169,32 @@
                     <ul class="nav nav-tabs">
                         @if($items->where("type" , "article")->first()["totalitems"] > 0)
                         <li>
-                            <a href="#tab_article" data-toggle="tab"> Article </a>
+                            <a href="#tab_content_article" data-toggle="tab"> Article </a>
                         </li>
                         @endif
                         <li>
                             <a href="#tab_content_pamphlet" data-toggle="tab"> PDF </a>
                         </li>
-                        <li>
-                            <a href="#tab_content_video"   data-toggle="tab">Video</a>
-                        </li>
                         <li class="active">
+                            <a href="#tab_content_video"  data-toggle="tab">Video</a>
+                        </li>
+                        <li >
                             <a href="#tab_contentset" data-toggle="tab"> Playlist </a>
                         </li>
                     </ul>
                 </div>
                 <div class="portlet-body " >
                     <div class="tab-content">
-                        <div class="tab-pane" id="tab_content_video">
+                        <div class="tab-pane active" id="tab_content_video">
                             {!!  $items->where("type" , "video")->first()["view"] !!}
                         </div>
                         <div class="tab-pane text-center" id="tab_content_pamphlet">
                             {!! $items->where("type" , "pamphlet")->first()["view"]  !!}
                         </div>
-                        <div class="tab-pane active text-center" id="tab_contentset">
+                        <div class="tab-pane text-center" id="tab_contentset">
                             {!! $items->where("type" , "contentset")->first()["view"]  !!}
                         </div>
-                        <div class="tab-pane text-center" id="tab_article">
+                        <div class="tab-pane text-center" id="tab_content_article">
                             {!! $items->where("type" , "article")->first()["view"]  !!}
                         </div>
                     </div>
@@ -215,10 +217,12 @@
 
 @section("extraJS")
     <script src="{{ mix('/js/Page_Level_Script_all.js') }}" type="text/javascript"></script>
+    <script src="/assets/global/plugins/fancybox/source/jquery.fancybox.pack.js" type="text/javascript"></script>
+    <script src="/assets/pages/scripts/search.min.js" type="text/javascript"></script>
     <script src="/assets/extra/slick/slick/slick.min.js" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript">
         $(document).ready(function(){
-            initialSlick($(".regular"));
+            initialSlick($(".productSlider"));
             initialVideoPortfolio();
             initialContentTypeSelect();
         });
@@ -232,8 +236,8 @@
             e.preventDefault();
         });
         
-        function reloadSlick(element) {
-            element[0].slick.refresh();
+        function destroySlick(element) {
+            element.slick('unslick');
         }
         
         function initialSlick(element) {
@@ -283,9 +287,9 @@
 
                 // init cubeportfolio
                 $('#js-grid-juicy-projects').cubeportfolio({
-                    filters: '#js-filters-juicy-projects',
-                    loadMore: '#js-loadMore-juicy-projects',
-                    loadMoreAction: 'click',
+                    // filters: '#js-filters-juicy-projects',
+                    // loadMore: '#js-loadMore-juicy-projects',
+                    // loadMoreAction: 'click',
                     layoutMode: 'grid',
                     defaultFilter: '*',
                     animationType: 'quicksand',
@@ -351,7 +355,7 @@
             var formData = $("#itemFilterForm").find(':not(input[name=_token])').filter(function(index, element) {
                 return $(element).val() != '';
             }).serialize();
-
+            formData =  decodeURIComponent(formData);
             if( pageNumber != undefined && pageNumber > 0 )
             {
                 var numberQuery  ;
@@ -369,15 +373,14 @@
                 $("#content-search-loading").show();
             }
 
-            if(formData.length > 0) changeUrl(formData);
+            changeUrl(formData);
 
             if( itemType != undefined &&  itemType.length > 0 )
             {
                 var typesQuery = [ "itemTypes[]="+itemType ] ;
                 formData = formData + "&" + typesQuery.join('&') ;
             }
-
-            console.log(formData);
+            // console.log(formData);
             $.ajax({
                 type: "GET",
                 url: "{{action("HomeController@search")}}" ,
@@ -390,6 +393,7 @@
                             // var itemTypes = response.itemTypes;
                             // location.hash = page;
                             $.each(items , function (key , item) {
+                                var totalItems = item.totalitems;
                                 switch(item.type) {
                                     case "contentset":
                                         $("#tab_contentset").html(item.view);
@@ -403,10 +407,32 @@
                                         $("#tab_content_pamphlet").html(item.view);
                                         break;
                                     case "product":
-                                        var element = $(".regular");
-                                        $(".regular").slick('unslick');
-                                        $("#productDiv .row .regular").html(item.view);
-                                        initialSlick(element);
+                                        if(totalItems > 0)
+                                        {
+                                            $("#productPortlet").show();
+                                            var element = $(".productSlider");
+                                            destroySlick(element) ;
+                                            $("#productDiv .row .productSlider").html(item.view);
+                                            initialSlick(element);
+                                        }
+                                        else
+                                        {
+                                            $("#productPortlet").hide();
+                                        }
+
+                                        break;
+                                    case "article":
+                                        if(totalItems > 0)
+                                        {
+                                            $("#tab_content_article").html(item.view);
+                                            $("#tab_content_article").show();
+                                            $('a[href^="#tab_content_article]').show();
+                                        }
+                                        else
+                                        {
+                                            $("#tab_content_article").hide();
+                                            $('a[href^="#tab_content_article]').hide();
+                                        }
                                         break;
                                     default:
                                         break;
@@ -439,7 +465,7 @@
 
         function changeUrl(appendUrl)
         {
-            var newUrl="{{action("HomeController@search")}}"+"?"+appendUrl;
+            var newUrl = "{{action("HomeController@search")}}"+"?"+appendUrl;
             window.history.pushState("data","Title",newUrl);
             document.title=newUrl;
         }
@@ -460,6 +486,12 @@
         });
 
         $(document).on("click", ".itemType", function (){
+            contentLoad();
+        });
+
+        $(document).on("click", ".removeTagLabel", function (){
+            var id = $(this).data("role");
+            $("#tag_"+id).remove();
             contentLoad();
         });
 

@@ -13,7 +13,7 @@
 @endsection
 
 @section("title")
-    <title>تخته خاک|فایل های من</title>
+    <title>آلاء|فایل های من</title>
 @endsection
 
 @section("pageBar")

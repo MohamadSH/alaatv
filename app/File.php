@@ -47,12 +47,10 @@ class File extends Model
         $diskType = class_basename($diskAdapter);
         switch ($diskType) {
             case "SftpAdapter" :
-                $fileHost = $diskAdapter->getHost();
-                if (isset($fileHost)) {
-                    $fileRoot = $diskAdapter->getRoot();
-                    $fileRemotePath = env("DOWNLOAD_SERVER_PROTOCOL") . $fileHost . ":" . env("DOWNLOAD_SERVER_PORT") . "/" . env("DOWNLOAD_SERVER_PARTIAL_PATH") . explode("public", $fileRoot)[1];
-                    $fileRemotePath .= $this->name;
-                }
+//                $fileHost = $diskAdapter->getHost();
+                $fileRoot = $diskAdapter->getRoot();
+                $fileRemotePath = str_replace(env("SFTP_ROOT") , env("DOWNLOAD_HOST_PROTOCOL").env("DOWNLOAD_HOST_NAME") ,$fileRoot );
+                $fileRemotePath .= $this->name;
                 break;
         }
         return $fileRemotePath;

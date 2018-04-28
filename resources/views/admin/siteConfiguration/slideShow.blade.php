@@ -10,7 +10,7 @@
 @endsection
 
 @section("title")
-    <title>تخته خاک|پیکربندی اسلاید شو</title>
+    <title>آلاء|پیکربندی اسلاید شو</title>
 @endsection
 
 @section("pageBar")

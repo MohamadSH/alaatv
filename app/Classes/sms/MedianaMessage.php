@@ -18,6 +18,10 @@ class MedianaMessage
     public $from = null;
 
     public $op = null;
+
+    public $pattern_code;
+
+    public $input_data = [];
     /**
      * Create a new message instance.
      *
@@ -50,6 +54,11 @@ class MedianaMessage
         return $this;
     }
 
+    public function setInputData(array $input_data){
+        $this->input_data = $input_data;
+        return $this;
+    }
+
     public function setFrom($from){
         $this->from = $from;
         return $this;
@@ -70,6 +79,11 @@ class MedianaMessage
     public function sendAt($sendAt)
     {
         $this->sendAt = $sendAt;
+        return $this;
+    }
+
+    public function setPatternCode($pattern_code){
+        $this->pattern_code = $pattern_code;
         return $this;
     }
 }

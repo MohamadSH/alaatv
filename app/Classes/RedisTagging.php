@@ -37,7 +37,10 @@ class RedisTagging extends Singleton
     public function get($bucket, $id , $cb)
     {
         $redis = Redis::connection("redisDB");
-        if(!$this->validation($bucket)) return [ "error" => ""];
+        if(!$this->validation($bucket))
+            return [
+                "error" => ""
+            ];
 
         $ns = $this->prefix .":" .$bucket ;
         $id_index = $ns . ":ID:" . $id;
@@ -71,7 +74,8 @@ class RedisTagging extends Singleton
     public function set($bucket, $id, $tags, $score = 0 , $cb)
     {
         $redis = Redis::connection("redisDB");
-        if(!$this->validation($bucket)) return false;
+        if(!$this->validation($bucket))
+            return false;
 
         $ns = $this->prefix .":" .$bucket ;
         $id_index = $ns . ":ID:" . $id;

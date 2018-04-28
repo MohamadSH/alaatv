@@ -10,7 +10,7 @@
 @endsection
 
 @section("title")
-    <title>تخته خاک|پنل مشاور</title>
+    <title>آلاء|پنل مشاور</title>
 @endsection
 
 @section("pageBar")

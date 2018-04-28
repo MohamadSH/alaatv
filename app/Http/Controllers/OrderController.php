@@ -35,6 +35,7 @@ use App\Http\Requests\EditOrderRequest;
 use App\Http\Requests;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
@@ -44,7 +45,7 @@ use Zarinpal\Drivers\SoapDriver;
 use Zarinpal\Zarinpal;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
-use Meta;
+use SEO;
 
 class OrderController extends Controller
 {
@@ -768,7 +769,7 @@ class OrderController extends Controller
                     $smsRequest["message"] = $fullName;
                 else
                     $smsRequest["message"] = "کاربر گرامی";
-                $smsRequest["message"]  .= " سلام، وضعیت سفارش شما در تخته خاک به ".$order->orderstatus->displayName." تغییر کرد";
+                $smsRequest["message"]  .= " سلام، وضعیت سفارش شما در آلاء به ".$order->orderstatus->displayName." تغییر کرد";
                 $smsRequest["users"] = $order->user_id;
                 $controller->sendSMS($smsRequest);
             }
@@ -812,8 +813,8 @@ class OrderController extends Controller
                             $smsRequest["message"] = $fullName;
                         else
                             $smsRequest["message"] = "کاربر گرامی";
-                        $smsRequest["message"]  .= " شماره مرسوله پستی ".$productName." ".$request->get('postCode')." می باشد - تخته خاک";
-//                        $smsRequest["message"]  .= " برنامه و دفترچه عید نوروز برای شما پست شد"."\n"."کد رهگیری مرسوله: ".$request->get('postCode')."\n"."تخته خاک - K96.IR";
+                        $smsRequest["message"]  .= " شماره مرسوله پستی ".$productName." ".$request->get('postCode')." می باشد - آلاء";
+//                        $smsRequest["message"]  .= " برنامه و دفترچه عید نوروز برای شما پست شد"."\n"."کد رهگیری مرسوله: ".$request->get('postCode')."\n"."آلاء - K96.IR";
                         $smsRequest["users"] = $order->user_id;
                         $response = $controller->sendSMS($smsRequest);
                         if($response->getStatusCode() == 200)
@@ -914,9 +915,6 @@ class OrderController extends Controller
     }
 
     private function getUserOrder(){
-        if(!Auth::check())
-            return redirect(action("OrderController@checkoutAuth"));
-
         $user = Auth::user();
         if(session()->has("adminOrder_id"))
         {
@@ -931,13 +929,9 @@ class OrderController extends Controller
         }
 
         $order = $user->orders->where("orderstatus_id" , $orderstatus_id)->first();
-        $orderproducts = $order->orderproducts->sortByDesc("created_at");
 
-        return [
-            $user,
-            $order ,
-            $orderproducts
-        ];
+        $orderproducts = $order->orderproducts->sortByDesc("created_at");
+        return [$user, $order , $orderproducts ] ;
     }
     /**
      * Showing authentication step in the checkout process
@@ -945,40 +939,44 @@ class OrderController extends Controller
      * @param
      * @return \Illuminate\Http\Response
      */
-    public function checkoutReview()
+    public function checkoutReview(Request $request)
     {
+        if(!Auth::check())
+            return redirect(action("OrderController@checkoutAuth"));
 
+        $url = $request->url();
+        $title = "آلاء|بازبینی سفارش";
+        SEO::setTitle($title);
+        SEO::opengraph()->setUrl($url);
+        SEO::setCanonical($url);
+        SEO::twitter()->setSite("آلاء");
+        SEO::setDescription($this->setting->site->seo->homepage->metaDescription);
+        SEO::opengraph()->addImage(route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]), ['height' => 100, 'width' => 100]);
 
-        Meta::set('title', substr("تخته خاک|بازبینی سفارش" , 0 , Config::get("constants.META_TITLE_LIMIT")));
-        Meta::set('keywords', substr($this->setting->site->seo->homepage->metaKeywords, 0 , Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
-        Meta::set('description', substr($this->setting->site->seo->homepage->metaDescription , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
-        Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
+        [$user, $order , $orderproducts ] = $this->getUserOrder();
 
-        [$user, $order , $orderproducts] = $this->getUserOrder();
-
-        $renewedOrderproducts = $this->renewOrderproducs($orderproducts);
-        $orderproductsRawCost = (int)$renewedOrderproducts["rawCost"];
-        $orderproducts = $renewedOrderproducts["orderproducts"];
-
-        $costCollection = collect();
-        $orderproductLinks = collect();
-        foreach ($orderproducts as $orderproduct)
-        {
-            $costArray  = $orderproduct->obtainOrderproductCost(false);
-            $costCollection->put( $orderproduct->id , ["cost"=>$costArray["cost"] , 'extraCost'=>$costArray["extraCost"] , 'bonDiscount'=>$costArray['bonDiscount'] , "productDiscount"=>$costArray['productDiscount'] , "productDiscountAmount"=>$costArray['productDiscountAmount']]);
-            $orderproductLink = $this->makeProductLink($orderproduct->product);
-            if(strlen($orderproductLink) > 0)
-                $orderproductLinks->put($orderproduct->id , $orderproductLink);
-        }
-
-        $renewedOrder = Order::where("id" , $order->id)->get()->first() ;
-        $orderCostArray = $renewedOrder->obtainOrderCost(true);
-        $orderCost = $orderCostArray["rawCostWithDiscount"] + $orderCostArray["rawCostWithoutDiscount"];
-
+            $renewedOrderproducts = $this->renewOrderproducs($orderproducts);
+            $orderproductsRawCost = (int)$renewedOrderproducts["rawCost"];
+            $orderproducts = $renewedOrderproducts["orderproducts"];
+            $costCollection = collect();
+            $orderproductLinks = collect();
+            foreach ($orderproducts as $orderproduct)
+            {
+                $costArray  = $orderproduct->obtainOrderproductCost(false);
+                $costCollection->put( $orderproduct->id , ["cost"=>$costArray["cost"] , 'extraCost'=>$costArray["extraCost"] , 'bonDiscount'=>$costArray['bonDiscount'] , "productDiscount"=>$costArray['productDiscount'] , "productDiscountAmount"=>$costArray['productDiscountAmount']]);
+                $orderproductLink = $this->makeProductLink($orderproduct->product);
+                if(strlen($orderproductLink) > 0)
+                    $orderproductLinks->put($orderproduct->id , $orderproductLink);
+            }
+            $renewedOrder = Order::where("id" , $order->id)->get()->first() ;
+            $orderCostArray = $renewedOrder->obtainOrderCost(true);
+            $orderCost = $orderCostArray["rawCostWithDiscount"] + $orderCostArray["rawCostWithoutDiscount"];
         $orderHasOrdrooGheireHozoori = $order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
-            ->whereIn("product_id" , Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_NOT_DEFAULT"))->get()->isNotEmpty();
+            ->whereIn("product_id" , Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_NOT_DEFAULT"))
+            ->get()
+            ->isNotEmpty();
 
-        return view("order.checkout.review" , compact("orderproducts" , "orderCost" , "orderproductsRawCost" , 'costCollection' ,'orderproductLinks' , 'orderHasOrdrooGheireHozoori'));
+        return view("order.checkout.review" , compact("user","orderproducts" , "orderCost" , "orderproductsRawCost" , 'costCollection' ,'orderproductLinks' , 'orderHasOrdrooGheireHozoori'));
     }
 
     /**
@@ -989,9 +987,10 @@ class OrderController extends Controller
      */
     public function checkoutInvoice()
     {
+        if(!Auth::check())
+            return redirect(action("OrderController@checkoutAuth"));
 
-        [$user, $order , $orderproducts] = $this->getUserOrder();
-
+        [$user, $order , $orderproducts ] = $this->getUserOrder();
         $costCollection = collect();
         foreach ($orderproducts as $orderproduct)
         {
@@ -1015,13 +1014,20 @@ class OrderController extends Controller
      * @param $request
      * @return \Illuminate\Http\Response
      */
-    public function checkoutPayment()
+    public function checkoutPayment(Request $request)
     {
+        if(!Auth::check())
+            return redirect(action("OrderController@checkoutAuth"));
 
-        Meta::set('title', substr("تخته خاک|پرداخت" , 0 , Config::get("constants.META_TITLE_LIMIT")));
-        Meta::set('keywords', substr($this->setting->site->seo->homepage->metaKeywords, 0 , Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
-        Meta::set('description', substr($this->setting->site->seo->homepage->metaDescription , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
-        Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
+
+        $url = $request->url();
+        $title = "آلاء | پرداخت";
+        SEO::setTitle($title);
+        SEO::opengraph()->setUrl($url);
+        SEO::setCanonical($url);
+        SEO::twitter()->setSite("آلاء");
+        SEO::setDescription($this->setting->site->seo->homepage->metaDescription);
+        SEO::opengraph()->addImage(route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]), ['height' => 100, 'width' => 100]);
 
         if(session()->has("couponMessageSuccess"))
             session()->flash('success', session()->pull("couponMessageSuccess"));
@@ -1034,11 +1040,7 @@ class OrderController extends Controller
         if(strcmp($previousPath , action("OrderController@checkoutReview"))==0
             || strcmp($previousPath , action("OrderController@checkoutPayment"))==0)
         {
-            if(!Auth::check())
-                return redirect(action("OrderController@checkoutAuth"));
-
-            //read OrderController@checkoutReview
-            [$user, $order , $orderproducts] = $this->getUserOrder();
+            [$user, $order , $orderproducts ] = $this->getUserOrder();
 
             if($orderproducts->isNotEmpty())
             {
@@ -1095,6 +1097,16 @@ class OrderController extends Controller
      */
     public function verifyPayment(Request $request)
     {
+
+        $result = [
+            "Status" => "error",
+            "error" => '-21',
+//            "saveBon" => 0
+        ];
+//        return redirect(action("OrderController@successfulPayment" , [
+//            "result" => $result
+//        ]));
+
         $sendSMS = true;
         $user = Auth::user();
         if(Input::has('Authority') && Input::has('Status') )
@@ -1106,11 +1118,11 @@ class OrderController extends Controller
             $transaction = Transaction::where('authority' ,$authority)->firstOrFail() ;
             $order = Order::FindorFail($transaction->order_id);
             if(isset($order->coupon->id )){
-				if($order->coupon->coupontype->id == 2)
-				{
-					$flag = false;
-					foreach ($order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->get() as $orderproduct)
-					{
+                if($order->coupon->coupontype->id == 2)
+                {
+                    $flag = false;
+                    foreach ($order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->get() as $orderproduct)
+                    {
                         $hasCoupon = true;
                         if(!in_array($order->coupon->id, $orderproduct->product->coupons->pluck('id')->toArray()))
                         {
@@ -1126,20 +1138,20 @@ class OrderController extends Controller
                             }
                         }
 
-						if($hasCoupon)
-						{
-							$flag = true;
-						}
-					}
-					if(!$flag)
-					{
-						$order->coupon->usageNumber = $order->coupon->usageNumber - 1;
-						$order->coupon->update();
-						$order->coupon_id = null;
-						$order->couponDiscount = 0 ;
-						$order->couponDiscountAmount = 0 ;
-					}
-				}
+                        if($hasCoupon)
+                        {
+                            $flag = true;
+                        }
+                    }
+                    if(!$flag)
+                    {
+                        $order->coupon->usageNumber = $order->coupon->usageNumber - 1;
+                        $order->coupon->update();
+                        $order->coupon_id = null;
+                        $order->couponDiscount = 0 ;
+                        $order->couponDiscountAmount = 0 ;
+                    }
+                }
             }
 
             $zarinPal = new Zarinpal($transaction->transactiongateway->merchantNumber,new SoapDriver());
@@ -1151,7 +1163,7 @@ class OrderController extends Controller
 //                $result["RefID"] = "mohamad2";
 //            }
             if(!isset($result))
-                exit("پاسخی از سایت درگاه پرداخت دریافت نشد!") ;
+                abort(404) ;
             if(strcmp(array_get($result,"Status"),'success')==0)
             {
                 if($order->orderstatus_id == Config::get("constants.ORDER_STATUS_OPEN"))
@@ -1251,8 +1263,8 @@ class OrderController extends Controller
                         $request->offsetSet("orderstatus_id", Config::get("constants.ORDER_STATUS_OPEN"));
                         $request->offsetSet("user_id", $order->user_id);
                         $request->offsetSet("coupon_id", $order->coupon_id);
-						$request->offsetSet("couponDiscount", $order->couponDiscount);
-						$request->offsetSet("couponDiscountAmount", $order->couponDiscountAmount);
+                        $request->offsetSet("couponDiscount", $order->couponDiscount);
+                        $request->offsetSet("couponDiscountAmount", $order->couponDiscountAmount);
                         $request->offsetSet("checkOutDateTime", $order->checkOutDateTime);
                         $controller = new OrderController();
                         $newOrder = $controller->store($request);
@@ -1569,12 +1581,12 @@ class OrderController extends Controller
             {
                 $paymentMethod = Input::get('paymentmethod');
                 if(isset($order->coupon->id))
-				{
-					if($order->coupon->coupontype_id == 2)
-					{
-						$flag = false;
-						foreach ($order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->get() as $orderproduct)
-						{
+                {
+                    if($order->coupon->coupontype_id == 2)
+                    {
+                        $flag = false;
+                        foreach ($order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->get() as $orderproduct)
+                        {
                             $hasCoupon = true;
                             if(!in_array($order->coupon->id, $orderproduct->product->coupons->pluck('id')->toArray()))
                             {
@@ -1595,16 +1607,16 @@ class OrderController extends Controller
                                 $flag = true;
                             }
 
-						}
-						if(!$flag)
-						{
-							$order->coupon->usageNumber = $order->coupon->usageNumber - 1;
-							$order->coupon->update();
-							$order->coupon_id = null;
+                        }
+                        if(!$flag)
+                        {
+                            $order->coupon->usageNumber = $order->coupon->usageNumber - 1;
+                            $order->coupon->update();
+                            $order->coupon_id = null;
                             $order->couponDiscount = 0 ;
                             $order->couponDiscountAmount = 0 ;
-						}
-					}
+                        }
+                    }
                 }
                 $debitCard = Bankaccount::all()->where("user_id" , 2)->first();
                 if(isset($debitCard))
@@ -1682,11 +1694,97 @@ class OrderController extends Controller
         {
             $user = $order->user;
             $user->notify(new InvoicePaid($order));
+            Cache::tags('bon')->flush();
         }
 
-        return view('order.checkout.verification',compact('result')) ;
+
+        if(isset($result["Status"]))
+        {
+            if(isset($result["RefID"]))
+            {
+                return redirect(action("OrderController@successfulPayment" , [
+                    "result" => $result
+                ]));
+            }elseif(strcmp($result["Status"],'canceled')==0 || (strcmp($result["Status"],'error')==0 && isset($result["error"]) && strcmp($result["error"],'-22')==0))
+            {
+                if(isset($result["tryAgain"]) && !$result["tryAgain"])
+                    return redirect(action("OrderController@failedPayment" , [
+                        "result" => $result
+                    ]));
+            }
+        }
+
+        return redirect(action("OrderController@otherPayment" , [
+            "result" => $result
+        ]));
+
+//        return view('order.checkout.verification',compact('result')) ;
         //'Status'(index) going to be 'success', 'error' or 'canceled'
     }
+
+    /**
+     * Successful payments
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+     function successfulPayment(Request $request)
+     {
+         $previousUrl = url()->previous();
+         if(!isset($previousUrl) || strcmp($previousUrl , env("SERVER")."/checkout/verifyPayment") != 0)
+             abort(404);
+         if($request->has("result"))
+         {
+             $result = $request->get("result");
+             return view('order.checkout.verification',compact('result')) ;
+         }
+         else
+         {
+             abort(404);
+         }
+     }
+
+    /**
+     *  repeat an old payment
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    function failedPayment(Request $request)
+    {
+        $previousUrl = url()->previous();
+        if(!isset($previousUrl) || strcmp($previousUrl , env("SERVER")."/checkout/verifyPayment") != 0)
+            abort(404);
+        if($request->has("result"))
+        {
+            $result = $request->get("result");
+            return view('order.checkout.verification',compact('result')) ;
+        }
+        else
+        {
+            abort(404);
+        }
+    }
+
+    /**
+     *  Payments other than successful and failed
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    function otherPayment(Request $request)
+    {
+        if($request->has("result"))
+        {
+            $result = $request->get("result");
+            return view('order.checkout.verification',compact('result')) ;
+        }
+        else
+        {
+            abort(404);
+        }
+    }
+
 
     /**
      * Submits a coupon for the order

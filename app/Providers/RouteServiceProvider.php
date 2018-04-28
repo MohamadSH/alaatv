@@ -247,10 +247,35 @@ class RouteServiceProvider extends ServiceProvider
             });
 
         });
+        Route::bind('educationalContent', function($value){
+            $key = "Educationalcontent:".$value;
+           return Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($value){
+               $c = Educationalcontent::where('id', $value)->first();
+               if (isset($c)) {
+                   if (!$c->relationLoaded('template'))
+                       $c->load("template");
+                   if (!$c->relationLoaded('contentsets'))
+                       $c->load("contentsets");
+                   if (!$c->relationLoaded('files'))
+                       $c->load("files");
+               }
+                return  $c ?? abort(404);
+            });
+
+        });
         Route::bind('c', function($value){
             $key = "Educationalcontent:".$value;
-           return Cache::remember($key,Config::get("constants.CACHE_5"),function () use ($value){
-                return Educationalcontent::where('id', $value)->first() ?? abort(404);
+            return Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($value){
+                $c = Educationalcontent::where('id', $value)->first();
+                if (isset($c)) {
+                    if (!$c->relationLoaded('template'))
+                        $c->load("template");
+                    if (!$c->relationLoaded('contentsets'))
+                        $c->load("contentsets");
+                    if (!$c->relationLoaded('files'))
+                        $c->load("files");
+                }
+                return  $c ?? abort(404);
             });
 
         });

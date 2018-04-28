@@ -26,7 +26,7 @@
                 <div class="portlet-title">
                     <div class="caption">
                         <i class="fa fa-sitemap" aria-hidden="true" ></i>
-                        <span class="caption-subject font-blue-sharp bold uppercase">وب سایت تخته خاک در یک نگاه</span>
+                        <span class="caption-subject font-blue-sharp bold uppercase">وب سایت آلاء در یک نگاه</span>
                     </div>
                     {{--<div class="actions">--}}
                         {{--<a class="btn btn-circle btn-icon-only btn-default" href="javascript:;">--}}
@@ -57,7 +57,7 @@
                                         </ul>
                                     </li>
                                     <li data-jstree='{ "icon" : "fa fa-warning icon-state-danger" }'>
-                                        <a href="/">استعلام تکنسین های تخته خاک</a>
+                                        <a href="/">استعلام تکنسین های آلاء</a>
                                     </li>
                                 </ul>
                             </li>
@@ -111,7 +111,7 @@
                 <div class="portlet-title">
                     <div class="caption">
                         <i class="icon-social-dribbble font-blue-sharp"></i>
-                        <span class="caption-subject font-blue-sharp bold uppercase">ثبت سفارش در تخته خاک</span>
+                        <span class="caption-subject font-blue-sharp bold uppercase">ثبت سفارش در آلاء</span>
                     </div>
                     {{--<div class="actions">--}}
                     {{--<a class="btn btn-circle btn-icon-only btn-default" href="javascript:;">--}}
@@ -130,7 +130,7 @@
                         ابتدا از صفحه اصلی وب سایت یکی از خدمات را انتخاب نمایید
                     </p>
                     <p>
-                        بدین ترتیب شما وارد صفحه ی نمایش خدمت تخته خاک می شوید که در این صفحه می توانید جزئیات خدمت مورد نظر خود را تعیین بفرمایید
+                        بدین ترتیب شما وارد صفحه ی نمایش خدمت آلاء می شوید که در این صفحه می توانید جزئیات خدمت مورد نظر خود را تعیین بفرمایید
                     </p>
                     <p>
                         سپس بر روی سفارش کلیک بفرمایید، بعد از وارد نمودن اطلاعات خود به صفحه ی بازبینی سفارش وارد می شوید
@@ -142,10 +142,10 @@
                         در مرحله بعد وارد صفحه ای می شوید که می توانید نوع پرداخت را تعیین بفرمایید و در صورت انتخاب پرداخت آنلاین می توانید درگاه بانک مورد نظر خود را انتخاب بفرمایید
                     </p>
                     <p>
-                        همچنین در این قسمت در صورت داشتن کد تخفیف tecs می توانید آن را وارد نمایید تا از تخفیف های دوره ای و مناسبتی تخته خاک برخوردار شوید
+                        همچنین در این قسمت در صورت داشتن کد تخفیف tecs می توانید آن را وارد نمایید تا از تخفیف های دوره ای و مناسبتی آلاء برخوردار شوید
                     </p>
                     <p>
-                        در نهایت بر روی ثبت سفارش کلیک نمایید تا کارشناسان تخته خاک کار شما را با نهایت سرعت و دقت پی گیری نمایند.
+                        در نهایت بر روی ثبت سفارش کلیک نمایید تا کارشناسان آلاء کار شما را با نهایت سرعت و دقت پی گیری نمایند.
                     </p>
                 </div>
             </div>

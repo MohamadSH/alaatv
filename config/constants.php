@@ -234,7 +234,7 @@ return [
         ]
     ],
     'google' => [
-        'analytics' => env('GOOGLE_ANALYTICS','UA-43695756-3'),
+        'analytics' => env('GOOGLE_ANALYTICS','UA-43695756-1'),
     ],
 
 
@@ -271,6 +271,7 @@ return [
     'CACHE_10' => 10,
     'CACHE_5' => 5,
     'CACHE_3' => 3,
+    'CACHE_1' =>1 ,
 
 
 ];

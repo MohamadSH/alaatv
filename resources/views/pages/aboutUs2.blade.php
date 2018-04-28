@@ -20,7 +20,7 @@
 @endsection
 
 @section('title')
-    <title>تخته خاک|درباره ما</title>
+    <title>آلاء|درباره ما</title>
 @endsection
 
 @section("content")
