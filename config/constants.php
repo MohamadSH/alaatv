@@ -234,7 +234,7 @@ return [
         ]
     ],
     'google' => [
-        'analytics' => env('GOOGLE_ANALYTICS','UA-43695756-3'),
+        'analytics' => env('GOOGLE_ANALYTICS','UA-43695756-1'),
     ],
 
 

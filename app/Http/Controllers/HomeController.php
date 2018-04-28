@@ -71,8 +71,8 @@ use League\Flysystem\Sftp\SftpAdapter;
 
 use SSH;
 use Auth;
-use Meta;
 use SEO;
+
 use Watson\Sitemap\Facades\Sitemap;
 
 //use Jenssegers\Agent\Agent;

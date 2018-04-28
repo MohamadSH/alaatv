@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\Facades\Image;
-use Meta;
+use SEO;
 
 class ArticleController extends Controller
 {
