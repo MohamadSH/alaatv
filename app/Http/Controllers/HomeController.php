@@ -390,10 +390,10 @@ class HomeController extends Controller
                 case "video":
                 case "pamphlet":
                 case "article":
-                    $query = Educationalcontent::whereIn("id",$arrayOfId)->orderBy("created_at" , "desc")->get();
+                    $query = Educationalcontent::whereIn("id",$arrayOfId)->where("enable" , 1)->orderBy("created_at" , "desc")->get();
                     break;
                 case "contentset":
-                    $query = Contentset::whereIn("id",$arrayOfId)->orderBy("created_at" , "desc")->get();
+                    $query = Contentset::whereIn("id",$arrayOfId)->where("enable" , 1)->orderBy("created_at" , "desc")->get();
                     break;
                 case "product":
                     $query = Product::getProducts(0,1)->whereIn("id" , $arrayOfId)
@@ -2194,6 +2194,39 @@ class HomeController extends Controller
 
     public function bot()
     {
+        /***
+        $contents = Educationalcontent::where("contenttype_id" , 8);
+        $contentArray = $contents->pluck("id")->toArray();
+        $sanatishRecords = Sanatisharifmerge::whereIn("educationalcontent_id" , $contentArray)->get();
+        $contents = $contents->get();
+        $successCounter = 0 ;
+        $failedCounter = 0 ;
+        dump("number of contents: ".$contents->count());
+        foreach ($contents as $content)
+        {
+        $myRecord =  $sanatishRecords->where("educationalcontent_id" , $content->id)->first();
+        if(isset($myRecord))
+        if(isset($myRecord->videoEnable))
+        {
+        if($myRecord->isEnable)
+        $content->enable = 1;
+        else
+        $content->enable = 0 ;
+        if($content->update())
+        $successCounter++;
+        else
+        $failedCounter++;
+        }
+
+
+        }
+        dump("success counter: ".$successCounter);
+        dump("fail counter: ".$failedCounter);
+
+        dd("finish");
+         */
+
+        /**
         $contents =  Educationalcontent::where("id" , "<" , 158)->get();
         dump("number of contents: ".$contents->count());
         $successCounter= 0 ;
@@ -2215,7 +2248,7 @@ class HomeController extends Controller
         dump("successful : ".$successCounter);
         dump("failed: ".$failedCounter) ;
         dd("finish");
-
+        **/
         /**
          * Giving gift to users
 
@@ -2421,9 +2454,7 @@ class HomeController extends Controller
             {
                 case "v": //Video
                     $bucket = "content";
-                    $items = Educationalcontent::whereHas("contenttypes" , function ($q){
-                        $q->where("name" , "video");
-                    });
+                    $items = Educationalcontent::where("contenttype_id" , 8);
                     if(Input::has("id"))
                     {
                         $contentId = Input::get("id");
@@ -2515,6 +2546,102 @@ class HomeController extends Controller
                                     "نظام_آموزشی_جدید" ,
                                 ] );
                                 break;
+                            case 158:
+                                $myTags = array_merge($myTags , [
+                                    "عربی" ,
+                                    "ضبط_استودیویی",
+                                    "جمع_بندی",
+                                    "میلاد_ناصح_زاده",
+                                    "پیش",
+                                    "پایه",
+                                    "نظام_آموزشی_قدیم" ,
+                                    "نظام_آموزشی_جدید" ,
+                                ] );
+                                break;
+                            case 159:
+                                $myTags = array_merge($myTags , [
+                                    "عربی" ,
+                                    "ضبط_استودیویی",
+                                    "جمع_بندی",
+                                    "میلاد_ناصح_زاده",
+                                    "پیش",
+                                    "پایه",
+                                    "نظام_آموزشی_قدیم" ,
+                                    "نظام_آموزشی_جدید" ,
+                                ] );
+                                break;
+                            case 160:
+                                $myTags = array_merge($myTags , [
+                                    "عربی" ,
+                                    "ضبط_استودیویی",
+                                    "جمع_بندی",
+                                    "میلاد_ناصح_زاده",
+                                    "پیش",
+                                    "پایه",
+                                    "نظام_آموزشی_قدیم" ,
+                                    "نظام_آموزشی_جدید" ,
+                                ] );
+                                break;
+                            case 161:
+                                $myTags = array_merge($myTags , [
+                                    "عربی" ,
+                                    "ضبط_استودیویی",
+                                    "جمع_بندی",
+                                    "میلاد_ناصح_زاده",
+                                    "پیش",
+                                    "پایه",
+                                    "نظام_آموزشی_قدیم" ,
+                                    "نظام_آموزشی_جدید" ,
+                                ] );
+                                break;
+                            case 162:
+                                $myTags = array_merge($myTags , [
+                                    "عربی" ,
+                                    "ضبط_استودیویی",
+                                    "جمع_بندی",
+                                    "میلاد_ناصح_زاده",
+                                    "پیش",
+                                    "پایه",
+                                    "نظام_آموزشی_قدیم" ,
+                                    "نظام_آموزشی_جدید" ,
+                                ] );
+                                break;
+                            case 163:
+                                $myTags = array_merge($myTags , [
+                                    "عربی" ,
+                                    "ضبط_استودیویی",
+                                    "جمع_بندی",
+                                    "میلاد_ناصح_زاده",
+                                    "پیش",
+                                    "پایه",
+                                    "نظام_آموزشی_قدیم" ,
+                                    "نظام_آموزشی_جدید" ,
+                                ] );
+                                break;
+                            case 164:
+                                $myTags = array_merge($myTags , [
+                                    "عربی" ,
+                                    "ضبط_استودیویی",
+                                    "جمع_بندی",
+                                    "میلاد_ناصح_زاده",
+                                    "پیش",
+                                    "پایه",
+                                    "نظام_آموزشی_قدیم" ,
+                                    "نظام_آموزشی_جدید" ,
+                                ] );
+                                break;
+                            case 165:
+                                $myTags = array_merge($myTags , [
+                                    "عربی" ,
+                                    "ضبط_استودیویی",
+                                    "جمع_بندی",
+                                    "میلاد_ناصح_زاده",
+                                    "پیش",
+                                    "پایه",
+                                    "نظام_آموزشی_قدیم" ,
+                                    "نظام_آموزشی_جدید" ,
+                                ] );
+                                break;
                             default :
                                 break;
                         }
@@ -2529,9 +2656,7 @@ class HomeController extends Controller
                     break;
                 case "p": //Pamphlet
                     $bucket = "content";
-                    $items = Educationalcontent::whereHas("contenttypes" , function ($q){
-                        $q->where("name" , "pamphlet");
-                    });
+                    $items = Educationalcontent::where("contenttype_id" , 1);
                     if(Input::has("id"))
                     {
                         $contentId = Input::get("id");
@@ -2668,9 +2793,7 @@ class HomeController extends Controller
                     break;
                 case "b": //Book
                     $bucket = "content";
-                    $items = Educationalcontent::whereHas("contenttypes" , function ($q){
-                        $q->where("name" , "book");
-                    });
+                    $items = Educationalcontent::where("contenttype_id" , 7);
                     $items = $items->get();
                     foreach ($items->where("tags" , null) as $item)
                     {
@@ -2697,9 +2820,7 @@ class HomeController extends Controller
                     break;
                 case "e": //Exam
                     $bucket = "content";
-                    $items = Educationalcontent::whereHas("contenttypes" , function ($q){
-                        $q->where("name" , "exam");
-                    });
+                    $items = Educationalcontent::where("contenttype_id" , 2);
                     $items = $items->get();
                     foreach ($items->where("tags" , null) as $item)
                     {
@@ -2760,9 +2881,7 @@ class HomeController extends Controller
                     break;
                 case "a": //Article
                     $bucket = "content";
-                    $items = Educationalcontent::whereHas("contenttypes" , function ($q){
-                        $q->where("name" , "article");
-                    });
+                    $items = Educationalcontent::where("contenttype_id" , 9);
                     $items = $items->get();
                     foreach ($items->where("tags" , null) as $item)
                     {
@@ -2817,7 +2936,8 @@ class HomeController extends Controller
                         $productIds = [$id];
                     }else
                     {
-                        $productIds = [99 , 104 , 92 , 91 , 181 , 107 , 69 , 65 , 61 , 163 , 135 , 131 , 139 , 143 , 147 , 155 , 119 , 123 , 183];
+                        $productIds = [99 , 104 , 92 , 91 , 181 , 107 , 69 , 65 , 61 , 163 , 135 , 131 , 139 , 143 , 147 , 155 , 119 , 123 , 183
+                            ,210 , 211 , 212 , 213 , 214 , 215 , 216 , 217 , 218 , 219 ,220 ,221];
                     }
                     $items = Product::whereIn("id" , $productIds) ;
                     $items = $items->get();

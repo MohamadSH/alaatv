@@ -2998,7 +2998,7 @@ class SanatisharifmergeController extends Controller
             switch ($contentType)
             {
                 case "v" :
-                    $threshold = 300;
+                    $threshold = 2000;
                     $contentTypeLable = "video";
                     $contentTypePersianLable = "فیلم";
                     break;
