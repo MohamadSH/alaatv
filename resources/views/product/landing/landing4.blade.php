@@ -65,26 +65,34 @@
             <nav role="navigation">
                 <ul class="primary-menu" itemscope itemtype="http://www.schema.org/SiteNavigationElement">
                     <li itemprop="name">
-                        <a itemprop="url" href="javascript:void(0)" title="">
+                        <a itemprop="url" href="javascript:void(0)"
+                           onclick="$('html, body').animate({scrollTop: $('#section-5').offset().top}, 2000);"
+                           title="">
                         </a>
                         <i class="icon-business"></i>
                         <span>با پکیج مرور طلایی آلا</span>
                     </li>
                     <li itemprop="name">
-                        <a itemprop="url" href="javascript:void(0)" title="">
+                        <a itemprop="url" href="javascript:void(0)"
+                           onclick="$('html, body').animate({scrollTop: $('#section-3').offset().top}, 2000);"
+                           title="">
                         </a>
                         <i class="icon-teacher"></i>
                         <span>با اساتید دبیرستان دانشگاه شریف</span>
                     </li>
                     <li itemprop="name">
-                        <a itemprop="url" href="javascript:void(0)" title="">
+                        <a itemprop="url" href="javascript:void(0)"
+                           onclick="$('html, body').animate({scrollTop: $('#section-4').offset().top}, 2000);"
+                           title="">
                         </a>
                         <i class="icon-calendar"></i>
                         <span>در بهترین زمان</span>
 
                     </li>
                     <li itemprop="name">
-                        <a itemprop="url" href="javascript:void(0)" title="">
+                        <a itemprop="url" href="javascript:void(0)"
+                           onclick="$('html, body').animate({scrollTop: $('#section-footer').offset().top}, 2000);"
+                           title="">
                         </a>
                         <i class="icon-square"></i>
                         <span>محتوای پکیج طلایی آلا را مقایسه کنید</span>
@@ -105,14 +113,15 @@
                         </a>
                     </h2>
                     <p>
-                        لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه
-                        و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع
-                        با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت وراا سه درصد گذشته، حال و آینده شناخت
-                        فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت تورا کرد. در این صورت می توان امید
-                        داشت که تمام و دشواری درا موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز
-                        شامل حروفچینی دستاوردهای اصلی وبا و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده
-                        قرار گیرد.
+                         مهمترین راند یک رالی، دور آخره! شما دور آخر کنکور خود را چطور می‌گذرانید؟
                     </p>
+                    <p style="text-align: justify">
+                        در پکیج طلایی آلا ابتدا طی ۵ ساعت کل مفاهیم یک درس را مرور می‌کنیم. طی این مرور، نکات مهم‌ترین تست‌های کنکور، قلم‌چی و گزینه ۲ نیز بررسی می‌شود. در آخر نوبت به یک آزمون با تست‌های پلاس می‌رسد؛ تست‌هایی ترکیبی و پیچیده که فهم آن‌ها می‌تواند شما را در دور آخر از رقبایتان جلو بیندازد.
+                    </p>
+                    <p style="text-align: justify">
+                        علاوه بر این‌ها، ۲ آزمون جداگانه به همراه تشریح کامل جواب‌ها هم هدیه آلا برای شماست.
+                    </p>
+
                 </header>
                 <figure>
                     <a href="javascript:void(0)" title="">
@@ -120,7 +129,7 @@
                     </a>
                 </figure>
             </article>
-            <article class="art-slider-main">
+            <article class="art-slider-main" id="section-3">
                 <div class="container">
                     <article class="art-proposal art-proposal-main">
                         <a href="javascript:void(0)" class="a-proposal" title="">
@@ -140,7 +149,7 @@
                                             </h1>
                                             <span>فارسی را با فاخته ادبیات ایران تجربه کنید.</span>
                                         </header>
-                                        <p> مولف کتاب های توصیه شده توسط آموزش و پرورش</p>
+                                        <p> مولف کتاب های توضیه شده توسط آموزش و پرورش</p>
                                         <p>دبیر برتر آموزشگاه های هدف ، صائب و ...</p>
                                         <p>عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی در سازمان پژوهش آموزش و
                                             پرورش
@@ -148,7 +157,7 @@
                                     </strong>
                                     <figure>
                                         <a href="javascript:void(0)" title="">
-                                            <img src="/assets/extra/landing4/images/slider/alaa.gif" alt="" title="">
+                                            <img src="/assets/extra/landing4/images/slider/1.png" alt="" title="">
                                         </a>
                                     </figure>
                                 </article>
@@ -159,92 +168,20 @@
                                         <header>
                                             <h1>
                                                 <a href="javascript:void(0)" title="">
-                                                    میلاد ناصح زاده
+                                                    دکتر هامون سطبی
                                                 </a>
                                             </h1>
-                                            <span>عربی را نقطه قوت خود کنید</span>
+                                            <span>فارسی را با فاخته ادبیات ایران تجربه کنید.</span>
                                         </header>
-                                        <p> دبیر برتر عربی آموزشگاه‌های دانشگاه شریف، کانون فرهنگی آموزش و...</p>
-                                        <p>نویسنده کتاب دبیران پرمخاطب، نشر کانون، ...</p>
-                                        <p>
-                                            مشاور برنامه‌های تلویزیونی و آموزشگاه‌ها
+                                        <p> مولف کتاب های توضیه شده توسط آموزش و پرورش</p>
+                                        <p>دبیر برتر آموزشگاه های هدف ، صائب و ...</p>
+                                        <p>عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی در سازمان پژوهش آموزش و
+                                            پرورش
                                         </p>
                                     </strong>
                                     <figure>
                                         <a href="javascript:void(0)" title="">
-                                            <img src="/assets/extra/landing4/images/slider/alaa.gif" alt="" title="">
-                                        </a>
-                                    </figure>
-                                </article>
-                            </div>
-                            <div class="swiper-slide">
-                                <article class="slider-content-main">
-                                    <strong>
-                                        <header>
-                                            <h1>
-                                                <a href="javascript:void(0)" title="">
-                                                    محسن آهویی
-                                                </a>
-                                            </h1>
-                                            <span>عربی مثل آب خوردن</span>
-                                        </header>
-                                        <p> سابقه بیش از ۲ دهه تدریس عربی در مدارسِ شهدا، ابوریحان، کمال، امام رضا، سادات موسوی، مدرس، شریف، فلسفی، سلام</p>
-                                        <p>کسب عنوان معلم نمونه</p>
-                                        <p>
-                                            کسب رتبه‌های برتر آموزشی در آزمون‌های هماهنگ «مرآت» «قلم‌چی» و کسب عنوان اول در امتحانات نهایی منطقه‌ای(؟ حاجی این ینی چی؟!)
-                                        </p>
-                                    </strong>
-                                    <figure>
-                                        <a href="javascript:void(0)" title="">
-                                            <img src="/assets/extra/landing4/images/slider/alaa.gif" alt="" title="">
-                                        </a>
-                                    </figure>
-                                </article>
-                            </div>
-                            <div class="swiper-slide">
-                                <article class="slider-content-main">
-                                    <strong>
-                                        <header>
-                                            <h1>
-                                                <a href="javascript:void(0)" title="">
-                                                    محمد صادق ثابتی
-                                                </a>
-                                            </h1>
-                                            <span>لذت یادگیری ریاضی</span>
-                                        </header>
-                                        <p> مدرس دبیرستان دانشگاه صنعتی شریف</p>
-                                        <p>مؤلف درسنامه جامع دیفرانسیل</p>
-                                        <p>
-                                            مدرس دیفرانسیل، تحلیلی،گسسته،هندسه پایه
-                                        </p>
-                                    </strong>
-                                    <figure>
-                                        <a href="javascript:void(0)" title="">
-                                            <img src="/assets/extra/landing4/images/slider/alaa.gif" alt="" title="">
-                                        </a>
-                                    </figure>
-                                </article>
-                            </div>
-                            <div class="swiper-slide">
-                                <article class="slider-content-main">
-                                    <strong>
-                                        <header>
-                                            <h1>
-                                                <a href="javascript:void(0)" title="">
-                                                    محمد امین نباخته
-                                                </a>
-                                            </h1>
-                                            <span>ریاضیات را مفهومی یاد بگیرید</span>
-                                        </header>
-                                        <p> مدرس دبیرستان دانشگاه صنعتی شریف</p>
-                                        <p>مؤلف کتاب ریاضیات جامع تجربی</p>
-                                        <p>
-                                            مؤلف ریاضی تجربی کنکور، انتشارات خوشخوان
-                                        </p>
-                                    </strong>
-                                    <figure>
-                                        <a href="javascript:void(0)" title="">
-                                            <img src="/assets/extra/landing4/images/slider/alaa.gif" alt="" title="">
+                                            <img src="/assets/extra/landing4/images/slider/1.png" alt="" title="">
                                         </a>
                                     </figure>
                                 </article>
@@ -258,7 +195,7 @@
             </article>
 
         </section>
-        <section class="forget-stress">
+        <section class="forget-stress" id="section-4">
             <div class="container">
                 <article class="art-proposal art-proposal-forget-stress">
                     <a href="javascript:void(0)" class="a-proposal" title="">
@@ -276,7 +213,7 @@
                 </p>
             </div>
         </section>
-        <div class="div-tab-lesson" data-tabindex="most-product">
+        <div class="div-tab-lesson" data-tabindex="most-product" id="section-5">
             <section class="suprise-all-field">
                 <div class="container">
                     <article class="art-proposal art-proposal-suprise-all-field">
@@ -286,7 +223,7 @@
                     </article>
                     <ul class="tab-title tab-lesson">
                         <li data-tab="1">
-                            <a href="javascript:void(0)" title="همه دروس">مشترک</a>
+                            <a href="javascript:void(0)" title="همه دروس">همه دروس</a>
                         </li>
                         <li data-tab="2">
                             <a href="javascript:void(0)" title="ریاضی">ریاضی</a>
@@ -294,9 +231,9 @@
                         <li data-tab="3">
                             <a href="javascript:void(0)" title="تجربی">تجربی</a>
                         </li>
-                        {{--<li data-tab="4">--}}
-                            {{--<a href="javascript:void(0)" title="انسانی">انسانی</a>--}}
-                        {{--</li>--}}
+                        <li data-tab="4">
+                            <a href="javascript:void(0)" title="انسانی">انسانی</a>
+                        </li>
                     </ul>
                 </div>
             </section>
@@ -305,7 +242,7 @@
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
-                                <img src="assets/images/professors/1.png" alt="1" title="1">
+                                <img src="/assets/extra/landing4/images/professors/1.png" alt="1" title="1">
                             </a>
                             <figcaption>
                                 <header>
@@ -334,7 +271,7 @@
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
-                                <img src="assets/images/professors/1.png" alt="1" title="1">
+                                <img src="/assets/extra/landing4/images/professors/1.png" alt="1" title="1">
                             </a>
                             <figcaption>
                                 <header>
@@ -363,7 +300,7 @@
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
-                                <img src="assets/images/professors/1.png" alt="1" title="1">
+                                <img src="/assets/extra/landing4/images/professors/1.png" alt="1" title="1">
                             </a>
                             <figcaption>
                                 <header>
@@ -392,7 +329,7 @@
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
-                                <img src="assets/images/professors/1.png" alt="1" title="1">
+                                <img src="/assets/extra/landing4/images/professors/1.png" alt="1" title="1">
                             </a>
                             <figcaption>
                                 <header>
@@ -426,7 +363,7 @@
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
-                                <img src="assets/images/professors/1.png" alt="1" title="1">
+                                <img src="/assets/extra/landing4/images/professors/1.png" alt="1" title="1">
                             </a>
                             <figcaption>
                                 <header>
@@ -460,7 +397,7 @@
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
-                                <img src="assets/images/professors/1.png" alt="1" title="1">
+                                <img src="/assets/extra/landing4/images/professors/1.png" alt="1" title="1">
                             </a>
                             <figcaption>
                                 <header>
@@ -489,7 +426,7 @@
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
-                                <img src="assets/images/professors/1.png" alt="1" title="1">
+                                <img src="/assets/extra/landing4/images/professors/1.png" alt="1" title="1">
                             </a>
                             <figcaption>
                                 <header>
@@ -519,7 +456,7 @@
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
-                                <img src="assets/images/professors/1.png" alt="1" title="1">
+                                <img src="/assets/extra/landing4/images/professors/1.png" alt="1" title="1">
                             </a>
                             <figcaption>
                                 <header>
@@ -547,73 +484,73 @@
                     </article>
                 </section>
             </div>
-            {{--<div class="content-tab-lesson" data-tabc="4">--}}
-                {{--<section class="sec-professors">--}}
+            <div class="content-tab-lesson" data-tabc="4">
+                <section class="sec-professors">
 
 
-                    {{--<article class="art-professors">--}}
-                        {{--<figure>--}}
-                            {{--<a href="javascript2:void(0)" title="">--}}
-                                {{--<img src="/assets/extra/landing4/images/professors/alaa.gif" alt="1" title="1">--}}
-                            {{--</a>--}}
-                            {{--<figcaption>--}}
-                                {{--<header>--}}
-                                    {{--<a href="javascript:void(0)" title="">--}}
-                                        {{--<h1>دکتر هامون سطبی</h1>--}}
-                                    {{--</a>--}}
-                                    {{--<span>فارسی را با فاخته ادبیات ایران تجربه کنید.</span>--}}
-                                {{--</header>--}}
-                            {{--</figcaption>--}}
-                        {{--</figure>--}}
-                        {{--<p>--}}
-                            {{--مولف کتاب های توصیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی--}}
-                            {{--در آموزش و پرورش--}}
-                        {{--</p>--}}
-                        {{--<div class="info-professors">--}}
-                            {{--<header>--}}
-                                {{--<h4> 40 دقیقه ویدیوی آموزشی شامل :</h4>--}}
-                            {{--</header>--}}
-                            {{--<span>ادبیات و زبان فارسی سال اول</span>--}}
-                            {{--<span>ادبیات و زبان فارسی سال دوم</span>--}}
-                            {{--<span>ادبیات و زبان فارسی سال سوم</span>--}}
-                            {{--<span>ادبیات و زبان فارسی پیش دانشگاهی </span>--}}
-                            {{--<a href="javascript:void(0)" title="خرید بسته آموزشی">خرید بسته آموزشی</a>--}}
-                        {{--</div>--}}
-                    {{--</article>--}}
-                    {{--<article class="art-professors">--}}
-                        {{--<figure>--}}
-                            {{--<a href="javascript2:void(0)" title="">--}}
-                                {{--<img src="/assets/extra/landing4/images/professors/alaa.gif" alt="1" title="1">--}}
-                            {{--</a>--}}
-                            {{--<figcaption>--}}
-                                {{--<header>--}}
-                                    {{--<a href="javascript:void(0)" title="">--}}
-                                        {{--<h1>دکتر هامون سطبی</h1>--}}
-                                    {{--</a>--}}
-                                    {{--<span>فارسی را با فاخته ادبیات ایران تجربه کنید.</span>--}}
-                                {{--</header>--}}
-                            {{--</figcaption>--}}
-                        {{--</figure>--}}
-                        {{--<p>--}}
-                            {{--مولف کتاب های توصیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی--}}
-                            {{--در آموزش و پرورش--}}
-                        {{--</p>--}}
-                        {{--<div class="info-professors">--}}
-                            {{--<header>--}}
-                                {{--<h4> 40 دقیقه ویدیوی آموزشی شامل :</h4>--}}
-                            {{--</header>--}}
-                            {{--<span>ادبیات و زبان فارسی سال اول</span>--}}
-                            {{--<span>ادبیات و زبان فارسی سال دوم</span>--}}
-                            {{--<span>ادبیات و زبان فارسی سال سوم</span>--}}
-                            {{--<span>ادبیات و زبان فارسی پیش دانشگاهی </span>--}}
-                            {{--<a href="javascript:void(0)" title="خرید بسته آموزشی">خرید بسته آموزشی</a>--}}
-                        {{--</div>--}}
-                    {{--</article>--}}
-                {{--</section>--}}
-            {{--</div>--}}
+                    <article class="art-professors">
+                        <figure>
+                            <a href="javascript2:void(0)" title="">
+                                <img src="/assets/extra/landing4/images/professors/1.png" alt="1" title="1">
+                            </a>
+                            <figcaption>
+                                <header>
+                                    <a href="javascript:void(0)" title="">
+                                        <h1>دکتر هامون سطبی</h1>
+                                    </a>
+                                    <span>فارسی را با فاخته ادبیات ایران تجربه کنید.</span>
+                                </header>
+                            </figcaption>
+                        </figure>
+                        <p>
+                            مولف کتاب های توضیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
+                            در آموزش و پرورش
+                        </p>
+                        <div class="info-professors">
+                            <header>
+                                <h4> 40 دقیقه ویدیوی آموزشی شامل :</h4>
+                            </header>
+                            <span>ادبیات و زبان فارسی سال اول</span>
+                            <span>ادبیات و زبان فارسی سال دوم</span>
+                            <span>ادبیات و زبان فارسی سال سوم</span>
+                            <span>ادبیات و زبان فارسی پیش دانشگاهی </span>
+                            <a href="javascript:void(0)" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                        </div>
+                    </article>
+                    <article class="art-professors">
+                        <figure>
+                            <a href="javascript2:void(0)" title="">
+                                <img src="/assets/extra/landing4/images/professors/1.png" alt="1" title="1">
+                            </a>
+                            <figcaption>
+                                <header>
+                                    <a href="javascript:void(0)" title="">
+                                        <h1>دکتر هامون سطبی</h1>
+                                    </a>
+                                    <span>فارسی را با فاخته ادبیات ایران تجربه کنید.</span>
+                                </header>
+                            </figcaption>
+                        </figure>
+                        <p>
+                            مولف کتاب های توضیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
+                            در آموزش و پرورش
+                        </p>
+                        <div class="info-professors">
+                            <header>
+                                <h4> 40 دقیقه ویدیوی آموزشی شامل :</h4>
+                            </header>
+                            <span>ادبیات و زبان فارسی سال اول</span>
+                            <span>ادبیات و زبان فارسی سال دوم</span>
+                            <span>ادبیات و زبان فارسی سال سوم</span>
+                            <span>ادبیات و زبان فارسی پیش دانشگاهی </span>
+                            <a href="javascript:void(0)" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                        </div>
+                    </article>
+                </section>
+            </div>
         </div>
     </main>
-    <footer class="site-footer site-footer-lading" role="contentinfo">
+    <footer class="site-footer site-footer-lading" role="contentinfo" id="section-footer">
         <div class="container">
             <article class="art-footer">
                 <p>

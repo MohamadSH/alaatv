@@ -571,9 +571,10 @@ class HomeController extends Controller
          *  lessons
          */
         $contentsetArary = [
-            195 , 170 , 37 , 179 , 187 ,22,189,186,188,180,191,114,112,137,121,175,50,152,
+            195 , 170 , 37 , 179 , 187 ,183,189,186,188,180,191,114,112,137,121,175,50,152,
             194 , 193 , 171 , 178 , 182 , 169 , 170 , 192,
-            185 , 190 , 153 , 172 , 137 , 177 , 173 , 170 , 168 , 184 , 174
+            185 , 190 , 153 , 172 , 137 , 177 , 173 , 170 , 168 , 184 , 174,
+            163 , 157 , 159 , 160 , 162 , 164 , 155 , 158
         ];
 
         $contentsets = Contentset::
@@ -583,6 +584,7 @@ class HomeController extends Controller
             "konkoor" ,
             "dahom" ,
             "yazdahom",
+            "hamayesh"
         ];
         $sections = collect();
         foreach ($sectionArray as $section)
@@ -624,8 +626,8 @@ class HomeController extends Controller
                         [
                             "displayName" => "فیزیک 4 - کنکور" ,
                             "author" => "حمید فدایی فرد",
-                            "pic" => $contentsets->where("id" , 22)->first()->photo,
-                            "content_id"=>($contentsets->where("id" , 22)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 22)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
+                            "pic" => $contentsets->where("id" , 183)->first()->photo,
+                            "content_id"=>($contentsets->where("id" , 183)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 183)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
                         [
                             "displayName" => "نکته و تست ریاضی تجربی" ,
@@ -757,7 +759,7 @@ class HomeController extends Controller
                         ],
                         [
                             "displayName" => "عربی یازدهم" ,
-                            "author" => "ناصر_حشمتی",
+                            "author" => "ناصر حشمتی",
                             "pic" => $contentsets->where("id" , 192)->first()->photo,
                             "content_id"=> ($contentsets->where("id" , 192)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 192)->first()->educationalcontents->sortBy("pivot.order")->last()->id:0
                         ],
