@@ -3122,7 +3122,7 @@ class SanatisharifmergeController extends Controller
                             break;
                         case "p":
                             $files = array();
-                            $pamphletFileName = basename($sanatisharifRecord->pamphletaddress);
+                            $pamphletFileName  = str_replace("pamphlet","sanatish" , $sanatisharifRecord->pamphletaddress);
                             if(isset($sanatisharifRecord->pamphletaddress) && strlen($sanatisharifRecord->pamphletaddress)>0)
                                 array_push($files ,["name"=>$pamphletFileName  , "disk_id" => 4 ]);
                             if(!empty($files))

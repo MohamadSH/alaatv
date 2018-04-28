@@ -49,7 +49,7 @@ class ProductController extends Controller
         $this->middleware('permission:'.Config::get('constants.EDIT_PRODUCT_ACCESS'),['only'=>'update']);
         $this->middleware('permission:'.Config::get('constants.EDIT_CONFIGURE_PRODUCT_ACCESS'),['only'=> ['childProductEnable' , 'completeEachChildPivot']]);
         $this->middleware('permission:'.Config::get('constants.INSERT_CONFIGURE_PRODUCT_ACCESS'),['only'=>'makeConfiguration' , 'createConfiguration']);
-        $this->middleware('auth', ['except' => ['show' , 'refreshPrice' , 'search' , 'showPartial' , 'landing1' , 'landing2' ]]);
+        $this->middleware('auth', ['except' => ['show' , 'refreshPrice' , 'search' , 'showPartial' , 'landing1' , 'landing2' , 'landing3' , 'landing4' ]]);
 
         $this->response = new Response();
         $this->setting = json_decode(app('setting')->setting);
@@ -1153,6 +1153,25 @@ class ProductController extends Controller
         return view("product.landing2" , compact("landingProducts" , "costCollection" , "utm_term" , "gheireHozoori" ));
     }
 
+    /**
+     * Products Special Landing Page
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function landing3()
+    {
+        return view("product.landing.landing3" );
+    }
+
+    /**
+     * Products Special Landing Page
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function landing4()
+    {
+        return view("product.landing.landing4" );
+    }
 
     /**
      * Copy a product completely

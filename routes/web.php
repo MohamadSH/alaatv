@@ -207,9 +207,12 @@ Route::group(['prefix' => 'content'], function () {
     Route::get('create2', 'EducationalContentController@create2');
 });
 
+
 Route::group(['prefix' => 'landing'], function () {
     Route::get('1' , 'ProductController@landing1') ;
     Route::get('2' , 'ProductController@landing2') ;
+    Route::get('3' , 'ProductController@landing3') ;
+    Route::get('4' , 'ProductController@landing4') ;
 });
 
 /**

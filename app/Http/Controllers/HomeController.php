@@ -97,12 +97,7 @@ class HomeController extends Controller
     private static $TAG = HomeController::class;
 
     public function debug(Request $request){
-//        $url = $request->url();
-//        dd($url);
-        $c = $request->get('itemTypes');
-        dd($c);
-        return view("educationalContent.embed",compact('video','files'));
-
+      abort(404);
     }
     public function __construct()
     {
@@ -1780,14 +1775,18 @@ class HomeController extends Controller
                 //TODO: baraye chie ?
                 switch ($diskType) {
                     case "SftpAdapter" :
-                        /** GET THE FILE
-                        if (isset($file)) {
+                        if (isset($file))
+                        {
                             $url = $file->getUrl();
-                            if (isset($url[0])) {
+                            if (isset($url[0]))
+                            {
                                 return response()->redirectTo($url);
-                            } else {
+                            }
+                            else
+                            {
                                 $fs = Storage::disk($diskName)->getDriver();
                                 $stream = $fs->readStream($fileName);
+
                                 return \Illuminate\Support\Facades\Response::stream(function () use ($stream) {
                                     fpassthru($stream);
                                 }, 200, [
@@ -1797,8 +1796,7 @@ class HomeController extends Controller
                                 ]);
                             }
                         }
-                         * */
-                        return redirect($rootPath.basename($fileName));
+
                         break;
                     case "Local" :
                         $fs = Storage::disk($diskName)->getDriver();
