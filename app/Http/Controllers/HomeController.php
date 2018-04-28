@@ -390,10 +390,10 @@ class HomeController extends Controller
                 case "video":
                 case "pamphlet":
                 case "article":
-                    $query = Educationalcontent::whereIn("id",$arrayOfId)->orderBy("created_at" , "desc")->get();
+                    $query = Educationalcontent::whereIn("id",$arrayOfId)->where("enable" , 1)->orderBy("created_at" , "desc")->get();
                     break;
                 case "contentset":
-                    $query = Contentset::whereIn("id",$arrayOfId)->orderBy("created_at" , "desc")->get();
+                    $query = Contentset::whereIn("id",$arrayOfId)->where("enable" , 1)->orderBy("created_at" , "desc")->get();
                     break;
                 case "product":
                     $query = Product::getProducts(0,1)->whereIn("id" , $arrayOfId)
@@ -2194,6 +2194,39 @@ class HomeController extends Controller
 
     public function bot()
     {
+        /***
+        $contents = Educationalcontent::where("contenttype_id" , 8);
+        $contentArray = $contents->pluck("id")->toArray();
+        $sanatishRecords = Sanatisharifmerge::whereIn("educationalcontent_id" , $contentArray)->get();
+        $contents = $contents->get();
+        $successCounter = 0 ;
+        $failedCounter = 0 ;
+        dump("number of contents: ".$contents->count());
+        foreach ($contents as $content)
+        {
+        $myRecord =  $sanatishRecords->where("educationalcontent_id" , $content->id)->first();
+        if(isset($myRecord))
+        if(isset($myRecord->videoEnable))
+        {
+        if($myRecord->isEnable)
+        $content->enable = 1;
+        else
+        $content->enable = 0 ;
+        if($content->update())
+        $successCounter++;
+        else
+        $failedCounter++;
+        }
+
+
+        }
+        dump("success counter: ".$successCounter);
+        dump("fail counter: ".$failedCounter);
+
+        dd("finish");
+         */
+
+        /**
         $contents =  Educationalcontent::where("id" , "<" , 158)->get();
         dump("number of contents: ".$contents->count());
         $successCounter= 0 ;
@@ -2215,7 +2248,7 @@ class HomeController extends Controller
         dump("successful : ".$successCounter);
         dump("failed: ".$failedCounter) ;
         dd("finish");
-
+        **/
         /**
          * Giving gift to users
 
