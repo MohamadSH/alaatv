@@ -56,7 +56,6 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\View;
-use Meta ;
 use Monolog\Handler\ElasticSearchHandler;
 use stdClass;
 
@@ -603,11 +602,6 @@ class UserController extends Controller
     public function show($user)
     {
 
-        
-        Meta::set('title', "آلاء|پروفایل");
-        Meta::set('keywords', substr($this->setting->site->seo->homepage->metaKeywords, 0 , Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
-        Meta::set('description', substr($this->setting->site->seo->homepage->metaDescription , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
-        Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
         if(
             ( $user->id === Auth::id() ) ||
             ( Auth::user()->hasRole(Config::get('constants.ROLE_ADMIN') ) ) ||
@@ -658,8 +652,8 @@ class UserController extends Controller
             {
                 $q->whereIn("product_id" , Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT"))->orwhereIn("product_id" , Config::get("constants.ORDOO_HOZOORI_NOROOZ_97_PRODUCT"));
             })->whereIn("orderstatus_id" , [Config::get("constants.ORDER_STATUS_CLOSED")])->get()->isNotEmpty();
-
-            return view("user.profile.profile", compact("genders", "majors", "sideBarMode", "user" , "userPoints" , "userlottery" ,"prizeCollection" , "hasCompleteProfile"));
+            $userCompletion = (int)$user->completion();
+            return view("user.profile.profile", compact("genders", "majors", "sideBarMode", "user" , "userPoints" , "userlottery" ,"prizeCollection" , "hasCompleteProfile" , "userCompletion"));
         } else {
             abort(403);
         }
@@ -907,11 +901,6 @@ class UserController extends Controller
 //            return redirect(action("UserController@showProfile"));
 //        }
 
-        
-        Meta::set('title', "آلاء|سفارش ها");
-        Meta::set('keywords', substr($this->setting->site->seo->homepage->metaKeywords, 0 , Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
-        Meta::set('description', substr($this->setting->site->seo->homepage->metaDescription , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
-        Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
         $debitCard = Bankaccount::all()->where("user_id" , 2)->first();
         $orders = Auth::user()->orders->where("orderstatus_id","<>",Config::get("constants.ORDER_STATUS_OPEN"))->where("orderstatus_id","<>",Config::get("constants.ORDER_STATUS_OPEN_BY_ADMIN"))->sortByDesc("completed_at");
 
@@ -952,11 +941,6 @@ class UserController extends Controller
     public function uploadConsultingQuestion()
     {
 
-        
-        Meta::set('title', "آلاء|آپلود سؤال آموزشی");
-        Meta::set('keywords', "سؤال مشاوره ای مشاور رایگان صوتی مشاوره پاسخ");
-        Meta::set('description', "پرسیدن سؤال آموزشی رایگان به صورت فایل صوتی از مشاور کاملا رابگان");
-        Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
         return view("user.uploadConsultingQuestion");
     }
 
@@ -967,11 +951,6 @@ class UserController extends Controller
      */
     public function uploads(){
 
-        
-        Meta::set('title', "آلاء|لیست سؤالات مشاوره ای");
-        Meta::set('keywords', "سؤال مشاوره ای مشاور رایگان صوتی مشاوره پاسخ");
-        Meta::set('description', "پرسیدن سؤال آموزشی رایگان به صورت فایل صوتی از مشاور کاملا رابگان");
-        Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
         $questions = Auth::user()->useruploads->where("isEnable","1");
         $counter = 1;
         return view("user.consultingQuestions" , compact("questions" , "counter"));
@@ -1325,17 +1304,9 @@ class UserController extends Controller
     public function userProductFiles()
     {
 
-
-
-        Meta::set('title', "آلاء|فایل ها");
-        Meta::set('keywords', substr("صفحه فایل های کاربر\n".$this->setting->site->seo->homepage->metaKeywords, 0 , Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
-        Meta::set('description', substr("صفحه فایل های کاربر\n".$this->setting->site->seo->homepage->metaDescription , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
-        Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
         $sideBarMode = "closed";
         $user = Auth::user();
         $products = $user->products();
-
-
 
 
 
@@ -1534,11 +1505,6 @@ class UserController extends Controller
     public function submitKonkurResult()
     {
 
-        
-        Meta::set('title', "آلاء|رتبه کنکور 96");
-        Meta::set('keywords', substr($this->setting->site->seo->homepage->metaKeywords, 0 , Config::get("META_KEYWORDS_LIMIT.META_KEYWORDS_LIMIT")));
-        Meta::set('description', substr($this->setting->site->seo->homepage->metaDescription , 0 , Config::get("constants.META_DESCRIPTION_LIMIT")));
-        Meta::set('image',  route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]));
         $majors = Major::where("majortype_id" ,1)->get()->pluck("name" , "id")->toArray();
         $majors = array_add($majors , 0 , "انتخاب رشته");
         $majors = array_sort_recursive($majors);

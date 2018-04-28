@@ -1707,7 +1707,7 @@ class OrderController extends Controller
                 ]));
             }elseif(strcmp($result["Status"],'canceled')==0 || (strcmp($result["Status"],'error')==0 && isset($result["error"]) && strcmp($result["error"],'-22')==0))
             {
-                if(isset($result["tryAgain"]) && !$result["tryAgain"])
+                if(isset($result["tryAgain"]) && $result["tryAgain"])
                     return redirect(action("OrderController@failedPayment" , [
                         "result" => $result
                     ]));
