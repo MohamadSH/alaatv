@@ -71,7 +71,8 @@
                            title="">
                         </a>
                         <i class="icon-business"></i>
-                        <span>با پکیج مرور طلایی آلا</span>
+                        <span>با پکیج مرور طلایی آلاء</span>
+                        <span>دوره کامل همه نکته های خاص وهم</span>
                     </li>
                     <li itemprop="name">
                         <a itemprop="url" href="javascript:void(0)"
@@ -79,7 +80,8 @@
                            title="">
                         </a>
                         <i class="icon-teacher"></i>
-                        <span>با اساتید دبیرستان دانشگاه شریف</span>
+                        <span>با بهترین اساتید کشور</span>
+                        <span>برای همه دانش آموزان ایران</span>
                     </li>
                     <li itemprop="name">
                         <a itemprop="url" href="javascript:void(0)"
@@ -87,7 +89,7 @@
                            title="">
                         </a>
                         <i class="icon-calendar"></i>
-                        <span>در بهترین زمان</span>
+                        <span style="display: block">در بهترین زمان</span>
 
                     </li>
                     <li itemprop="name">
@@ -96,7 +98,7 @@
                            title="">
                         </a>
                         <i class="icon-square"></i>
-                        <span>محتوای پکیج طلایی آلا را مقایسه کنید</span>
+                        <span>محتوای پکیج طلایی آلاء را مقایسه کنید</span>
 
                     </li>
                 </ul>
@@ -117,10 +119,10 @@
                          مهمترین راند یک رالی، دور آخره! شما دور آخر کنکور خود را چطور می‌گذرانید؟
                     </p>
                     <p style="text-align: justify">
-                        در پکیج طلایی آلا ابتدا طی ۵ ساعت کل مفاهیم یک درس را مرور می‌کنیم. طی این مرور، نکات مهم‌ترین تست‌های کنکور، قلم‌چی و گزینه ۲ نیز بررسی می‌شود. در آخر نوبت به یک آزمون با تست‌های پلاس می‌رسد؛ تست‌هایی ترکیبی و پیچیده که فهم آن‌ها می‌تواند شما را در دور آخر از رقبایتان جلو بیندازد.
+                        در پکیج طلایی آلاء ابتدا طی ۵ ساعت کل مفاهیم یک درس را مرور می‌کنیم. طی این مرور، نکات مهم‌ترین تست‌های کنکور، قلم‌چی و گزینه ۲ نیز بررسی می‌شود. در آخر نوبت به یک آزمون با تست‌های پلاس می‌رسد؛ تست‌هایی ترکیبی و پیچیده که فهم آن‌ها می‌تواند شما را در دور آخر از رقبایتان جلو بیندازد.
                     </p>
                     <p style="text-align: justify">
-                        علاوه بر این‌ها، ۲ آزمون جداگانه به همراه تشریح کامل جواب‌ها هم هدیه آلا برای شماست.
+                        علاوه بر این‌ها، ۲ آزمون جداگانه به همراه تشریح کامل جواب‌ها هم هدیه آلاء برای شماست.
                     </p>
 
                 </header>
@@ -139,40 +141,16 @@
                     </article>
                     <div class="swiper-container swiper-content-main">
                         <div class="swiper-wrapper">
-                            {{--<div class="swiper-slide">--}}
-                                {{--<article class="slider-content-main">--}}
-                                    {{--<strong>--}}
-                                        {{--<header>--}}
-                                            {{--<h1>--}}
-                                                {{--<a href="javascript:void(0)" title="">--}}
-                                                    {{--دکتر هامون سطبی--}}
-                                                {{--</a>--}}
-                                            {{--</h1>--}}
-                                            {{--<span>فارسی را با فاخته ادبیات ایران تجربه کنید.</span>--}}
-                                        {{--</header>--}}
-                                        {{--<p> مولف کتاب های توصیه شده توسط آموزش و پرورش</p>--}}
-                                        {{--<p>دبیر برتر آموزشگاه های هدف ، صائب و ...</p>--}}
-                                        {{--<p>عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی در سازمان پژوهش آموزش و--}}
-                                            {{--پرورش--}}
-                                        {{--</p>--}}
-                                    {{--</strong>--}}
-                                    {{--<figure>--}}
-                                        {{--<a href="javascript:void(0)" title="">--}}
-                                            {{--<img src="/assets/extra/landing4/images/slider/1.png" alt="" title="">--}}
-                                        {{--</a>--}}
-                                    {{--</figure>--}}
-                                {{--</article>--}}
-                            {{--</div>--}}
                             <div class="swiper-slide">
                                 <article class="slider-content-main">
-                                    <strong>
+                                    <strong style="margin-right: 10% ;">
                                         <header>
                                             <h1>
                                                 <a href="javascript:void(0)" title="">
                                                     دکتر هامون سطبی
                                                 </a>
                                             </h1>
-                                            <span>فارسی را با فاخته ادبیات ایران تجربه کنید.</span>
+                                            <span>فارسی را با استاد ادبیات ایران تجربه کنید.</span>
                                         </header>
                                         <p> مولف کتاب های توصیه شده توسط آموزش و پرورش</p>
                                         <p>دبیر برتر آموزشگاه های هدف ، صائب و ...</p>
@@ -189,7 +167,7 @@
                             </div>
                             <div class="swiper-slide">
                                 <article class="slider-content-main">
-                                    <strong>
+                                    <strong  style="margin-right: 10% ;">
                                         <header>
                                             <h1>
                                                 <a href="javascript:void(0)" title="">
@@ -212,8 +190,8 @@
                                 </article>
                             </div>
                             <div class="swiper-slide">
-                                <article class="slider-content-main">
-                                    <strong>
+                                <article class="slider-content-main" >
+                                    <strong  style="margin-right: 10% ;">
                                         <header>
                                             <h1>
                                                 <a href="javascript:void(0)" title="">
@@ -237,7 +215,7 @@
                             </div>
                             <div class="swiper-slide">
                                 <article class="slider-content-main">
-                                    <strong>
+                                    <strong  style="margin-right: 10% ;">
                                         <header>
                                             <h1>
                                                 <a href="javascript:void(0)" title="">
@@ -261,7 +239,7 @@
                             </div>
                             <div class="swiper-slide">
                                 <article class="slider-content-main">
-                                    <strong>
+                                    <strong  style="margin-right: 10% ;">
                                         <header>
                                             <h1>
                                                 <a href="javascript:void(0)" title="">
@@ -320,13 +298,13 @@
                             <a href="javascript:void(0)" title="همه دروس">دروس مشترک</a>
                         </li>
                         <li data-tab="2">
-                            <a href="javascript:void(0)" title="ریاضی">ریاضی</a>
+                            <a href="javascript:void(0)" title="ریاضی">اختصاصی ریاضی</a>
                         </li>
                         {{--<li data-tab="3">--}}
                             {{--<a href="javascript:void(0)" title="تجربی">تجربی</a>--}}
                         {{--</li>--}}
                         <li data-tab="4">
-                            <a href="javascript:void(0)" title="انسانی">تجربی</a>
+                            <a href="javascript:void(0)" title="تجربی">اختصاصی تجربی</a>
                         </li>
                     </ul>
                 </div>
@@ -359,7 +337,7 @@
                             <span>ادبیات و زبان فارسی سال دوم</span>
                             <span>ادبیات و زبان فارسی سال سوم</span>
                             <span>ادبیات و زبان فارسی پیش دانشگاهی </span>
-                            <a href="{{action("ProductController@show" , 210)}}" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                            <a href="#" data="210" class="link" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
                     <article class="art-professors">
@@ -388,67 +366,10 @@
                             <span></span>
                             <span></span>
                             <span></span>
-                            <a href="{{action("ProductController@show" , 211)}}" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                            <a href="#"  class="link" data="211" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
-                    <article class="art-professors">
-                        <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/S1.png" alt="1" title="1">
-                            </a>
-                            <figcaption>
-                                <header>
-                                    <a href="javascript:void(0)" title="">
-                                        <h1>میلاد ناصح زاده</h1>
-                                    </a>
-                                    <span>همایش 200 تست طلایی کنکور عربی</span>
-                                </header>
-                            </figcaption>
-                        </figure>
-                        <p>
-                            مولف کتاب های توضیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
-                            در آموزش و پرورش
-                        </p>
-                        <div class="info-professors">
-                            <header>
-                                <h4> </h4>
-                            </header>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <a href="{{action("ProductController@show" , 214)}}" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
-                        </div>
-                    </article>
-                    <article class="art-professors">
-                        <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/S7.png" alt="1" title="1">
-                            </a>
-                            <figcaption>
-                                <header>
-                                    <a href="javascript:void(0)" title="">
-                                        <h1>محسن آهویی</h1>
-                                    </a>
-                                    <span>همایش طلایی عربی کنکور</span>
-                                </header>
-                            </figcaption>
-                        </figure>
-                        <p>
-                            مولف کتاب های توضیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
-                            در آموزش و پرورش
-                        </p>
-                        <div class="info-professors">
-                            <header>
-                                <h4> </h4>
-                            </header>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <a href="{{action("ProductController@show" , 215)}}" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
-                        </div>
-                    </article>
+
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
@@ -475,7 +396,7 @@
                             <span></span>
                             <span></span>
                             <span></span>
-                            <a href="{{action("ProductController@show" , 216)}}" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                            <a href="#" class="link" data="216" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
                     <article class="art-professors">
@@ -504,7 +425,65 @@
                             <span></span>
                             <span></span>
                             <span></span>
-                            <a href="{{action("ProductController@show" , 217)}}" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                            <a href="#" class="link" data="217" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                        </div>
+                    </article>
+                    <article class="art-professors">
+                        <figure>
+                            <a href="javascript2:void(0)" title="">
+                                <img src="/assets/extra/landing4/images/professors/S1.png" alt="1" title="1">
+                            </a>
+                            <figcaption>
+                                <header>
+                                    <a href="javascript:void(0)" title="">
+                                        <h1>میلاد ناصح زاده</h1>
+                                    </a>
+                                    <span>همایش 200 تست طلایی کنکور عربی</span>
+                                </header>
+                            </figcaption>
+                        </figure>
+                        <p>
+                            مولف کتاب های توضیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
+                            در آموزش و پرورش
+                        </p>
+                        <div class="info-professors">
+                            <header>
+                                <h4> </h4>
+                            </header>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <a href="#" class="link" data="214" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                        </div>
+                    </article>
+                    <article class="art-professors">
+                        <figure>
+                            <a href="javascript2:void(0)" title="">
+                                <img src="/assets/extra/landing4/images/professors/S7.png" alt="1" title="1">
+                            </a>
+                            <figcaption>
+                                <header>
+                                    <a href="javascript:void(0)" title="">
+                                        <h1>محسن آهویی</h1>
+                                    </a>
+                                    <span>همایش طلایی عربی کنکور</span>
+                                </header>
+                            </figcaption>
+                        </figure>
+                        <p>
+                            مولف کتاب های توضیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
+                            در آموزش و پرورش
+                        </p>
+                        <div class="info-professors">
+                            <header>
+                                <h4> </h4>
+                            </header>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <a href="#" class="link" data="215" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
                 </section>
@@ -537,7 +516,7 @@
                             <span></span>
                             <span></span>
                             <span></span>
-                            <a href="{{action("ProductController@show" , 218)}}" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                            <a href="#" class="link" data="218" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
 
@@ -637,6 +616,64 @@
             </div>
             <div class="content-tab-lesson" data-tabc="4">
                 <section class="sec-professors">
+                    <article class="art-professors" >
+                        <figure>
+                            <a href="javascript2:void(0)" title="">
+                                <img src="/assets/extra/landing4/images/professors/S10.png" alt="1" title="1">
+                            </a>
+                            <figcaption>
+                                <header>
+                                    <a href="javascript:void(0)" title="">
+                                        <h1>دکتر محمد چلاجور</h1>
+                                    </a>
+                                    <span>همایش طلایی زیست گیاهی کنکور</span>
+                                </header>
+                            </figcaption>
+                        </figure>
+                        <p>
+                            مولف کتاب های توضیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
+                            در آموزش و پرورش
+                        </p>
+                        <div class="info-professors">
+                            <header>
+                                <h4> </h4>
+                            </header>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span> </span>
+                            <a href="#" class="link" data="221" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                        </div>
+                    </article>
+                    <article class="art-professors">
+                        <figure>
+                            <a href="javascript2:void(0)" title="">
+                                <img src="/assets/extra/landing4/images/professors/S10.png" alt="1" title="1">
+                            </a>
+                            <figcaption>
+                                <header>
+                                    <a href="javascript:void(0)" title="">
+                                        <h1>دکتر محمد چلاجور</h1>
+                                    </a>
+                                    <span>همایش طلایی زمین شناسی کنکور</span>
+                                </header>
+                            </figcaption>
+                        </figure>
+                        <p>
+                            مولف کتاب های توضیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
+                            در آموزش و پرورش
+                        </p>
+                        <div class="info-professors">
+                            <header>
+                                <h4></h4>
+                            </header>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <a href="#"  class="link" data="213" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                        </div>
+                    </article>
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
@@ -692,82 +729,29 @@
                             <span></span>
                             <span></span>
                             <span></span>
-                            <a href="{{action("ProductController@show" ,220)}}" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                            <a href="#" class="link" data="220" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
-                    <article class="art-professors">
-                        <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/S10.png" alt="1" title="1">
-                            </a>
-                            <figcaption>
-                                <header>
-                                    <a href="javascript:void(0)" title="">
-                                        <h1>محمد چلارجو</h1>
-                                    </a>
-                                    <span>همایش طلایی زیست گیاهی کنکور</span>
-                                </header>
-                            </figcaption>
-                        </figure>
-                        <p>
-                            مولف کتاب های توضیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
-                            در آموزش و پرورش
-                        </p>
-                        <div class="info-professors">
-                            <header>
-                                <h4> </h4>
-                            </header>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span> </span>
-                            <a href="{{action("ProductController@show" , 221)}}" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
-                        </div>
-                    </article>
-                    <article class="art-professors">
-                        <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/S10.png" alt="1" title="1">
-                            </a>
-                            <figcaption>
-                                <header>
-                                    <a href="javascript:void(0)" title="">
-                                        <h1>محمد چلارجو</h1>
-                                    </a>
-                                    <span>همایش طلایی زمین شناسی کنکور</span>
-                                </header>
-                            </figcaption>
-                        </figure>
-                        <p>
-                            مولف کتاب های توضیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
-                            در آموزش و پرورش
-                        </p>
-                        <div class="info-professors">
-                            <header>
-                                <h4></h4>
-                            </header>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <a href="{{action("ProductController@show" ,213)}}" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
-                        </div>
-                    </article>
+
                 </section>
             </div>
         </div>
     </main>
     <footer class="site-footer site-footer-lading" role="contentinfo" id="section-footer">
         <div class="container">
+            <h1 style="text-align: center">
+                با ارسال کد 333 به شماره
+                500010409232
+            </h1>
             <article class="art-footer">
                 <p>
                     نمونه جزوات
                     <em>
                         <i>پکیج طلایی آ</i>
                     </em>
-                    لا را
+                    لاء را
                     <a href="javascript:void(0)" class="" title="">
-                        دانــلود
+                        دریافت
                         <i class="icon-download-to-storage-drive"></i>
                     </a>
                     کنید
@@ -819,7 +803,31 @@
         </li>
     </ul>
 </nav>
-<script src="/assets/extra/landing4/js/jquery-1.12.4.min.js" defer="defer"></script>
+<script src="/assets/extra/landing4/js/jquery-1.12.4.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // attach a click handler for all links with class "like"
+        $('a.link').click(function() {
+            // use jQuery's $.post, to send the request
+            // the second argument is the request data
+            event.preventDefault();
+            $.post('/orderproduct', {product_id: this.data}, function(data) {
+                // data is what your server returns
+                data = $.parseJSON(data);
+                if(data.status === 200 || data.status === "200"){
+                    // similar behavior as an HTTP redirect
+                    window.location.replace(data.url);
+                }
+
+            });
+            // prevent the link's default behavior
+            return false;
+        });
+
+    });
+
+</script>
+
 <script src="/assets/extra/landing4/js/swiper.jquery.min.js" defer="defer"></script>
 <script src="/assets/extra/landing4/js/menu.min.js" defer="defer"></script>
 <script src="/assets/extra/landing4/js/script.js" defer="defer"></script>
