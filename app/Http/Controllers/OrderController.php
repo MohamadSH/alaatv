@@ -915,9 +915,6 @@ class OrderController extends Controller
     }
 
     private function getUserOrder(){
-        if(!Auth::check())
-            return redirect(action("OrderController@checkoutAuth"));
-
         $user = Auth::user();
         if(session()->has("adminOrder_id"))
         {
@@ -932,13 +929,9 @@ class OrderController extends Controller
         }
 
         $order = $user->orders->where("orderstatus_id" , $orderstatus_id)->first();
-        $orderproducts = $order->orderproducts->sortByDesc("created_at");
 
-        return [
-            $user,
-            $order ,
-            $orderproducts
-        ];
+        $orderproducts = $order->orderproducts->sortByDesc("created_at");
+        return [$user, $order , $orderproducts ] ;
     }
     /**
      * Showing authentication step in the checkout process
@@ -948,7 +941,8 @@ class OrderController extends Controller
      */
     public function checkoutReview(Request $request)
     {
-
+        if(!Auth::check())
+            return redirect(action("OrderController@checkoutAuth"));
 
         $url = $request->url();
         $title = "آلاء|بازبینی سفارش";
@@ -959,29 +953,28 @@ class OrderController extends Controller
         SEO::setDescription($this->setting->site->seo->homepage->metaDescription);
         SEO::opengraph()->addImage(route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]), ['height' => 100, 'width' => 100]);
 
-        [$user, $order , $orderproducts] = $this->getUserOrder();
+        [$user, $order , $orderproducts ] = $this->getUserOrder();
 
-        $renewedOrderproducts = $this->renewOrderproducs($orderproducts);
-        $orderproductsRawCost = (int)$renewedOrderproducts["rawCost"];
-        $orderproducts = $renewedOrderproducts["orderproducts"];
-
-        $costCollection = collect();
-        $orderproductLinks = collect();
-        foreach ($orderproducts as $orderproduct)
-        {
-            $costArray  = $orderproduct->obtainOrderproductCost(false);
-            $costCollection->put( $orderproduct->id , ["cost"=>$costArray["cost"] , 'extraCost'=>$costArray["extraCost"] , 'bonDiscount'=>$costArray['bonDiscount'] , "productDiscount"=>$costArray['productDiscount'] , "productDiscountAmount"=>$costArray['productDiscountAmount']]);
-            $orderproductLink = $this->makeProductLink($orderproduct->product);
-            if(strlen($orderproductLink) > 0)
-                $orderproductLinks->put($orderproduct->id , $orderproductLink);
-        }
-
-        $renewedOrder = Order::where("id" , $order->id)->get()->first() ;
-        $orderCostArray = $renewedOrder->obtainOrderCost(true);
-        $orderCost = $orderCostArray["rawCostWithDiscount"] + $orderCostArray["rawCostWithoutDiscount"];
-
+            $renewedOrderproducts = $this->renewOrderproducs($orderproducts);
+            $orderproductsRawCost = (int)$renewedOrderproducts["rawCost"];
+            $orderproducts = $renewedOrderproducts["orderproducts"];
+            $costCollection = collect();
+            $orderproductLinks = collect();
+            foreach ($orderproducts as $orderproduct)
+            {
+                $costArray  = $orderproduct->obtainOrderproductCost(false);
+                $costCollection->put( $orderproduct->id , ["cost"=>$costArray["cost"] , 'extraCost'=>$costArray["extraCost"] , 'bonDiscount'=>$costArray['bonDiscount'] , "productDiscount"=>$costArray['productDiscount'] , "productDiscountAmount"=>$costArray['productDiscountAmount']]);
+                $orderproductLink = $this->makeProductLink($orderproduct->product);
+                if(strlen($orderproductLink) > 0)
+                    $orderproductLinks->put($orderproduct->id , $orderproductLink);
+            }
+            $renewedOrder = Order::where("id" , $order->id)->get()->first() ;
+            $orderCostArray = $renewedOrder->obtainOrderCost(true);
+            $orderCost = $orderCostArray["rawCostWithDiscount"] + $orderCostArray["rawCostWithoutDiscount"];
         $orderHasOrdrooGheireHozoori = $order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
-            ->whereIn("product_id" , Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_NOT_DEFAULT"))->get()->isNotEmpty();
+            ->whereIn("product_id" , Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_NOT_DEFAULT"))
+            ->get()
+            ->isNotEmpty();
 
         return view("order.checkout.review" , compact("user","orderproducts" , "orderCost" , "orderproductsRawCost" , 'costCollection' ,'orderproductLinks' , 'orderHasOrdrooGheireHozoori'));
     }
@@ -994,9 +987,10 @@ class OrderController extends Controller
      */
     public function checkoutInvoice()
     {
+        if(!Auth::check())
+            return redirect(action("OrderController@checkoutAuth"));
 
-        [$user, $order , $orderproducts] = $this->getUserOrder();
-
+        [$user, $order , $orderproducts ] = $this->getUserOrder();
         $costCollection = collect();
         foreach ($orderproducts as $orderproduct)
         {
@@ -1022,6 +1016,9 @@ class OrderController extends Controller
      */
     public function checkoutPayment(Request $request)
     {
+        if(!Auth::check())
+            return redirect(action("OrderController@checkoutAuth"));
+
 
         $url = $request->url();
         $title = "آلاء | پرداخت";
@@ -1043,11 +1040,7 @@ class OrderController extends Controller
         if(strcmp($previousPath , action("OrderController@checkoutReview"))==0
             || strcmp($previousPath , action("OrderController@checkoutPayment"))==0)
         {
-            if(!Auth::check())
-                return redirect(action("OrderController@checkoutAuth"));
-
-            //read OrderController@checkoutReview
-            [$user, $order , $orderproducts] = $this->getUserOrder();
+            [$user, $order , $orderproducts ] = $this->getUserOrder();
 
             if($orderproducts->isNotEmpty())
             {
