@@ -14,6 +14,7 @@ use App\Major;
 use App\Majortype;
 use App\Product;
 use App\Traits\APIRequestCommon;
+use App\Traits\Helper;
 use App\Traits\ProductCommon;
 use App\Websitesetting;
 use Carbon\Carbon;
@@ -29,12 +30,14 @@ use Jenssegers\Agent\Agent;
 use SSH;
 
 
+
 class EducationalContentController extends Controller
 {
     use APIRequestCommon;
     protected $response ;
     protected $setting ;
     use ProductCommon ;
+    use Helper;
 
     public function __construct()
     {
@@ -573,9 +576,17 @@ class EducationalContentController extends Controller
                     break;
             }
 
+            if(Auth::check())
+            {
+                $baseUrl = url("/");
+                $contentPath = str_replace($baseUrl , "" , action("EducationalContentController@show" , $educationalContent));
+                $productSeenCount = $this->userSeen($contentPath);
+
+            }
+
             $sideBarMode = "closed";
 
-            return view("educationalContent.show", compact("author","educationalContent", "rootContentType", "childContentType", "contentsWithSameType" , "soonContentsWithSameType" , "educationalContentSet" , "contentsWithSameSet" , "videoSources" , "files" , "tags" , "sideBarMode" , "educationalContentDisplayName" , "sessionNumber" , "fileToShow"));
+            return view("educationalContent.show", compact("productSeenCount","author","educationalContent", "rootContentType", "childContentType", "contentsWithSameType" , "soonContentsWithSameType" , "educationalContentSet" , "contentsWithSameSet" , "videoSources" , "files" , "tags" , "sideBarMode" , "educationalContentDisplayName" , "sessionNumber" , "fileToShow"));
         }
         else
             abort(404);
