@@ -652,8 +652,8 @@ class UserController extends Controller
             {
                 $q->whereIn("product_id" , Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT"))->orwhereIn("product_id" , Config::get("constants.ORDOO_HOZOORI_NOROOZ_97_PRODUCT"));
             })->whereIn("orderstatus_id" , [Config::get("constants.ORDER_STATUS_CLOSED")])->get()->isNotEmpty();
-
-            return view("user.profile.profile", compact("genders", "majors", "sideBarMode", "user" , "userPoints" , "userlottery" ,"prizeCollection" , "hasCompleteProfile"));
+            $userCompletion = (int)$user->completion();
+            return view("user.profile.profile", compact("genders", "majors", "sideBarMode", "user" , "userPoints" , "userlottery" ,"prizeCollection" , "hasCompleteProfile" , "userCompletion"));
         } else {
             abort(403);
         }
