@@ -390,10 +390,10 @@ class HomeController extends Controller
                 case "video":
                 case "pamphlet":
                 case "article":
-                    $query = Educationalcontent::whereIn("id",$arrayOfId)->where("enable" , 1)->orderBy("created_at" , "desc")->get();
+                    $query = Educationalcontent::whereIn("id",$arrayOfId)->orderBy("created_at" , "desc")->get();
                     break;
                 case "contentset":
-                    $query = Contentset::whereIn("id",$arrayOfId)->where("enable" , 1)->orderBy("created_at" , "desc")->get();
+                    $query = Contentset::whereIn("id",$arrayOfId)->orderBy("created_at" , "desc")->get();
                     break;
                 case "product":
                     $query = Product::getProducts(0,1)->whereIn("id" , $arrayOfId)
@@ -2454,7 +2454,7 @@ class HomeController extends Controller
             {
                 case "v": //Video
                     $bucket = "content";
-                    $items = Educationalcontent::where("contenttype_id" , 8);
+                    $items = Educationalcontent::where("contenttype_id" , 8)->where("enable" , 1);
                     if(Input::has("id"))
                     {
                         $contentId = Input::get("id");
@@ -2656,7 +2656,7 @@ class HomeController extends Controller
                     break;
                 case "p": //Pamphlet
                     $bucket = "content";
-                    $items = Educationalcontent::where("contenttype_id" , 1);
+                    $items = Educationalcontent::where("contenttype_id" , 1)->where("enable" , 1);
                     if(Input::has("id"))
                     {
                         $contentId = Input::get("id");
@@ -2793,7 +2793,7 @@ class HomeController extends Controller
                     break;
                 case "b": //Book
                     $bucket = "content";
-                    $items = Educationalcontent::where("contenttype_id" , 7);
+                    $items = Educationalcontent::where("contenttype_id" , 7)->where("enable" , 1);
                     $items = $items->get();
                     foreach ($items->where("tags" , null) as $item)
                     {
@@ -2820,7 +2820,7 @@ class HomeController extends Controller
                     break;
                 case "e": //Exam
                     $bucket = "content";
-                    $items = Educationalcontent::where("contenttype_id" , 2);
+                    $items = Educationalcontent::where("contenttype_id" , 2)->where("enable" , 1);
                     $items = $items->get();
                     foreach ($items->where("tags" , null) as $item)
                     {
@@ -2881,7 +2881,7 @@ class HomeController extends Controller
                     break;
                 case "a": //Article
                     $bucket = "content";
-                    $items = Educationalcontent::where("contenttype_id" , 9);
+                    $items = Educationalcontent::where("contenttype_id" , 9)->where("enable" , 1);
                     $items = $items->get();
                     foreach ($items->where("tags" , null) as $item)
                     {
@@ -2919,7 +2919,7 @@ class HomeController extends Controller
                     break;
                 case "cs": //Contentset
                     $bucket = "contentset";
-                    $items = Contentset::orderBy("id");
+                    $items = Contentset::orderBy("id")->where("enable" , 1);
                     if(Input::has("id"))
                     {
                         $id = Input::get("id");
