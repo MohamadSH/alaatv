@@ -2,7 +2,6 @@
 
 namespace App;
 
-use App\Http\Controllers\OrderController;
 use App\Traits\Helper;
 use App\Traits\ProductCommon;
 use Iatstuti\Database\Support\CascadeSoftDeletes;
