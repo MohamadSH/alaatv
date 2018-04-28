@@ -1731,6 +1731,7 @@ class OrderController extends Controller
      function successfulPayment(Request $request)
      {
          $previousUrl = url()->previous();
+         $previousUrl = substr($previousUrl, 0, strpos($previousUrl, "?"));
          if(!isset($previousUrl) || strcmp($previousUrl , env("SERVER")."/checkout/verifyPayment") != 0)
              abort(404);
          if($request->has("result"))
@@ -1753,6 +1754,7 @@ class OrderController extends Controller
     function failedPayment(Request $request)
     {
         $previousUrl = url()->previous();
+        $previousUrl = substr($previousUrl, 0, strpos($previousUrl, "?"));
         if(!isset($previousUrl) || strcmp($previousUrl , env("SERVER")."/checkout/verifyPayment") != 0)
             abort(404);
         if($request->has("result"))
