@@ -14,6 +14,7 @@ use App\Major;
 use App\Majortype;
 use App\Product;
 use App\Traits\APIRequestCommon;
+use App\Traits\FileCommon;
 use App\Traits\Helper;
 use App\Traits\ProductCommon;
 use App\Websitesetting;
@@ -38,6 +39,7 @@ class EducationalContentController extends Controller
     protected $setting ;
     use ProductCommon ;
     use Helper;
+    use FileCommon ;
 
     public function __construct()
     {
@@ -429,19 +431,22 @@ class EducationalContentController extends Controller
                             $file = $educationalContent->files->where("pivot.label" , "hd")->first() ;
                             if(isset($file))
                             {
-                                $videoSources->put( "hd" , ["src"=>$file->name , "caption"=>$file->pivot->caption]) ;
+                                $size = $this->curlGetFileSize($file->name);
+                                $videoSources->put( "hd" , ["src"=>$file->name , "caption"=>$file->pivot->caption , "size"=>$size]) ;
                             }
 
                             $file = $educationalContent->files->where("pivot.label" , "hq")->first() ;
                             if(isset($file))
                             {
-                                $videoSources->put( "hq" , ["src"=>$file->name , "caption"=>$file->pivot->caption]) ;
+                                $size = $this->curlGetFileSize($file->name);
+                                $videoSources->put( "hq" , ["src"=>$file->name , "caption"=>$file->pivot->caption, "size"=>$size]) ;
                             }
 
                             $file = $educationalContent->files->where("pivot.label" , "240p")->first() ;
                             if(isset($file))
                             {
-                                $videoSources->put( "240p" , ["src"=>$file->name ,  "caption"=>$file->pivot->caption]) ;
+                                $size = $this->curlGetFileSize($file->name);
+                                $videoSources->put( "240p" , ["src"=>$file->name ,  "caption"=>$file->pivot->caption, "size"=>$size]) ;
                             }
                             $file = $educationalContent->files->where("pivot.label" , "thumbnail")->first();
                             if(isset($file))
