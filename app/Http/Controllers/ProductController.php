@@ -1115,7 +1115,7 @@ class ProductController extends Controller
         }
 
         $costCollection = $this->makeCostCollection($products) ;
-        return view("product.landing1" , compact("landingProducts" , "costCollection" , "withFilter" ));
+        return view("product.landing.landing1" , compact("landingProducts" , "costCollection" , "withFilter" ));
     }
 
     /**
@@ -1151,7 +1151,7 @@ class ProductController extends Controller
             $landingProducts->push(["product"=>$product]);
         }
         $costCollection = $this->makeCostCollection($products) ;
-        return view("product.landing2" , compact("landingProducts" , "costCollection" , "utm_term" , "gheireHozoori" ));
+        return view("product.landing.landing2" , compact("landingProducts" , "costCollection" , "utm_term" , "gheireHozoori" ));
     }
 
     /**
