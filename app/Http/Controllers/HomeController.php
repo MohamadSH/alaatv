@@ -705,10 +705,14 @@ class HomeController extends Controller
                     $sections->push(
                         [
                             "name"=>$section,
-                            "displayName" => "کلاس کنکور",
+                            "displayName" => "کلاس های کنکور آلاء",
                             "lessons" => $lessons ,
                             "tags" => [
                                 "کنکور"
+                            ],
+                            'ads' => [
+                                //SEBTI
+                                'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-1.jpg' => 'https://sanatisharif.ir/landing/4?utm_source=sanatisharif&utm_medium=banner&utm_campaign=khordad_sale&utm_content=small-slide-1-1',
                             ]
                         ]
                     );
@@ -771,6 +775,10 @@ class HomeController extends Controller
                             "lessons" => $lessons ,
                             "tags" => [
                                 "کنکور"
+                            ],
+                            'ads' => [
+                                //ZIST GIAHI
+                                'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-2.jpg' => 'https://sanatisharif.ir/landing/4?utm_source=sanatisharif&utm_medium=banner&utm_campaign=khordad_sale&utm_content=small-slide-2',
                             ]
                         ]
                     );
@@ -851,6 +859,10 @@ class HomeController extends Controller
                             "lessons" => $lessons ,
                             "tags" => [
                                 "کنکور"
+                            ],
+                            'ads' => [
+                                //DINI KAGHAZI
+                                'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-3.jpg' => 'https://sanatisharif.ir/landing/4?utm_source=sanatisharif&utm_medium=banner&utm_campaign=khordad_sale&utm_content=small-slide-3',
                             ]
                         ]
                     );
@@ -913,6 +925,10 @@ class HomeController extends Controller
                             "lessons" => $lessons ,
                             "tags" => [
                                 "کنکور"
+                            ],
+                            'ads' => [
+                                //DINI KAGHAZI
+                                'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-1.jpg' => 'https://sanatisharif.ir/landing/4?utm_source=sanatisharif&utm_medium=banner&utm_campaign=khordad_sale&utm_content=small-slide-1-1',
                             ]
                         ]
                     );
