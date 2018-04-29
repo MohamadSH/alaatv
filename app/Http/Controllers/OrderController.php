@@ -1702,15 +1702,19 @@ class OrderController extends Controller
         {
             if(isset($result["RefID"]))
             {
+                session()->put("verifyPayment" , 1) ;
                 return redirect(action("OrderController@successfulPayment" , [
                     "result" => $result
                 ]));
             }elseif(strcmp($result["Status"],'canceled')==0 || (strcmp($result["Status"],'error')==0 && isset($result["error"]) && strcmp($result["error"],'-22')==0))
             {
                 if(isset($result["tryAgain"]) && $result["tryAgain"])
+                {
+                    session()->put("verifyPayment" , 1) ;
                     return redirect(action("OrderController@failedPayment" , [
                         "result" => $result
                     ]));
+                }
             }
         }
 
@@ -1730,10 +1734,18 @@ class OrderController extends Controller
      */
      function successfulPayment(Request $request)
      {
-         $previousUrl = url()->previous();
-         $previousUrl = substr($previousUrl, 0, strpos($previousUrl, "?"));
-         if(!isset($previousUrl) || strcmp($previousUrl , env("SERVER")."/checkout/verifyPayment") != 0)
-             abort(404);
+         if(session()->has("verifyPayment"))
+         {
+             $flag = true;
+             session()->forget("verifyPayment") ;
+         }
+         else
+         {
+             $flag = false;
+         }
+
+         if(!$flag)
+             return redirect(action("HomeController@error403"));
          if($request->has("result"))
          {
              $result = $request->get("result");
@@ -1741,7 +1753,7 @@ class OrderController extends Controller
          }
          else
          {
-             abort(404);
+             return redirect(action("HomeController@error403"));
          }
      }
 
@@ -1753,10 +1765,18 @@ class OrderController extends Controller
      */
     function failedPayment(Request $request)
     {
-        $previousUrl = url()->previous();
-        $previousUrl = substr($previousUrl, 0, strpos($previousUrl, "?"));
-        if(!isset($previousUrl) || strcmp($previousUrl , env("SERVER")."/checkout/verifyPayment") != 0)
-            abort(404);
+        if(session()->has("verifyPayment"))
+        {
+            $flag = true;
+            session()->forget("verifyPayment") ;
+        }
+        else
+        {
+            $flag = false;
+        }
+
+        if(!$flag)
+            return redirect(action("HomeController@error403"));
         if($request->has("result"))
         {
             $result = $request->get("result");
@@ -1764,7 +1784,7 @@ class OrderController extends Controller
         }
         else
         {
-            abort(404);
+            return redirect(action("HomeController@error403"));
         }
     }
 
