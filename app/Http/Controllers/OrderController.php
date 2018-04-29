@@ -1160,7 +1160,7 @@ class OrderController extends Controller
             //return $result["status"] = success / canceled
 //            if(Auth::user()->hasRole("admin")){
 //                $result["Status"]="success";
-//                $result["RefID"] = "mohamad2";
+//                $result["RefID"] = "mohamad";
 //            }
             if(!isset($result))
                 abort(404) ;
