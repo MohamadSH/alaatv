@@ -256,16 +256,16 @@
             {{--</a>--}}
             {{--</li>--}}
 
-            <li class="nav-item @if(isset($pageName) && strcmp($pageName , "aboutUs")==0)start active open @endif">
-                <a href="{{action("HomeController@aboutUs")}}" class="nav-link nav-toggle">
+            {{--<li class="nav-item @if(isset($pageName) && strcmp($pageName , "aboutUs")==0)start active open @endif">--}}
+                {{--<a href="{{action("HomeController@aboutUs")}}" class="nav-link nav-toggle">--}}
                     {{--<i class="icon-info"></i>--}}
                     {{--<i class="icon-info"></i>--}}
-                    <i class="fa fa-info-circle" aria-hidden="true"></i>
-                    <span class="title">درباره ما</span>
-                    @if(isset($pageName) && strcmp($pageName , "aboutUs")==0)<span class="selected"></span> @endif
-                    <span class="arrow "></span>
-                </a>
-            </li>
+                    {{--<i class="fa fa-info-circle" aria-hidden="true"></i>--}}
+                    {{--<span class="title">درباره ما</span>--}}
+                    {{--@if(isset($pageName) && strcmp($pageName , "aboutUs")==0)<span class="selected"></span> @endif--}}
+                    {{--<span class="arrow "></span>--}}
+                {{--</a>--}}
+            {{--</li>--}}
             <li class="nav-item @if(isset($pageName) && strcmp($pageName , "contactUs")==0)start active open @endif">
                 <a href="{{action("HomeController@contactUs")}}" class="nav-link nav-toggle">
                     <i class="icon-call-end"></i>
