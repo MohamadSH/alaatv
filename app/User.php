@@ -4,6 +4,7 @@ namespace App;
 
 use App\Traits\Helper;
 use Carbon\Carbon;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Iatstuti\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
@@ -126,17 +127,12 @@ class User extends Authenticatable
         );
     }
 
-    public static function roleFilter(Collection $users, $rolesId)
+    public static function roleFilter( $users,  $rolesId)
     {
-        $key="user:roleFilter:".implode($users->pluck('id')->toArray())."-".$rolesId;
-
-        return Cache::remember($key,Config::get("constants.CACHE_60"),function () use($users, $rolesId) {
-
             $users = $users->whereHas('roles', function ($q) use ($rolesId) {
                 $q->whereIn("id", $rolesId);
             });
             return $users;
-        });
     }
 
     public static function majorFilter($users, $majorsId)

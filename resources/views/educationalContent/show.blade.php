@@ -429,35 +429,35 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    @if($contentsWithSameType->isNotEmpty())
-                        <div class="mt-element-list">
-                            <div class="mt-list-head list-simple ext-1 font-white bg-green-sharp">
-                                <div class="list-head-title-container">
+                    {{--@if($contentsWithSameType->isNotEmpty())--}}
+                        {{--<div class="mt-element-list">--}}
+                            {{--<div class="mt-list-head list-simple ext-1 font-white bg-green-sharp">--}}
+                                {{--<div class="list-head-title-container">--}}
                                     {{--<div class="list-date">Nov 8, 2015</div>--}}
-                                    <h3 class="list-title">@if(isset($rootContentType->displayName[0])){{$rootContentType->displayName}}@endif
-                                        های @if(isset($childContentType->displayName[0])){{$childContentType->displayName}}@endif
-                                        دیگر</h3>
-                                </div>
-                            </div>
-                            <div class="mt-list-container list-simple ext-1">
-                                <ul>
-                                    @foreach($contentsWithSameType as $content)
-                                        <li class="mt-list-item">
-                                            <div class="list-icon-container">
-                                                <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-                                            </div>
-                                            <div class="list-datetime"> @if($content->grades->isNotEmpty()){{$content->grades->first()->displayName}}@endif</div>
-                                            <div class="list-item-content">
-                                                <h5 class="uppercase">
-                                                    <a href="{{action("EducationalContentController@show" , $content)}}">{{$content->getDisplayName()}}</a>
-                                                </h5>
-                                            </div>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        </div>
-                    @endif
+                                    {{--<h3 class="list-title">@if(isset($rootContentType->displayName[0])){{$rootContentType->displayName}}@endif--}}
+                                        {{--های @if(isset($childContentType->displayName[0])){{$childContentType->displayName}}@endif--}}
+                                        {{--دیگر</h3>--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+                            {{--<div class="mt-list-container list-simple ext-1">--}}
+                                {{--<ul>--}}
+                                    {{--@foreach($contentsWithSameType as $content)--}}
+                                        {{--<li class="mt-list-item">--}}
+                                            {{--<div class="list-icon-container">--}}
+                                                {{--<i class="fa fa-file-pdf-o" aria-hidden="true"></i>--}}
+                                            {{--</div>--}}
+                                            {{--<div class="list-datetime"> @if($content->grades->isNotEmpty()){{$content->grades->first()->displayName}}@endif</div>--}}
+                                            {{--<div class="list-item-content">--}}
+                                                {{--<h5 class="uppercase">--}}
+                                                    {{--<a href="{{action("EducationalContentController@show" , $content)}}">{{$content->getDisplayName()}}</a>--}}
+                                                {{--</h5>--}}
+                                            {{--</div>--}}
+                                        {{--</li>--}}
+                                    {{--@endforeach--}}
+                                {{--</ul>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                    {{--@endif--}}
                 </div>
             </div>
         @endif
