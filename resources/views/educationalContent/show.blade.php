@@ -55,30 +55,6 @@
                                 <i class="fa fa-video-camera" aria-hidden="true"></i>
                                 {{ isset($educationalContentDisplayName) ? $educationalContentDisplayName : '' }}
                             </div>
-                            <div class="actions">
-                                @if($educationalContent->files->where("pivot.label" ,"<>" , "thumbnail")->count() == 1)
-                                    <a target="_blank"
-                                       href="{{$educationalContent->files->where("pivot.label" ,"<>" , "thumbnail")->first()->name}}"
-                                       class="btn btn-circle green btn-outline btn-sm"><i class="fa fa-download"></i>
-                                        دانلود </a>
-                                @else
-                                    <div class="btn-group">
-                                        <button class="btn btn-circle green btn-outline btn-sm" data-toggle="dropdown"
-                                                aria-expanded="true">دانلود
-                                            <i class="fa fa-angle-down"></i>
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            @foreach($files["videoSource"] as $source)
-                                                <li>
-                                                    <a target="_blank"
-                                                       href="{{$source["src"]}}">
-                                                        فایل {{$source["caption"]}}</a>
-                                                </li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                @endif
-                            </div>
                         </div>
                         <div class="portlet-body">
                             <div data-vjs-player>
@@ -114,12 +90,23 @@
                                     });
                                 </script>
                             </div>
-                            @if(isset($educationalContent->author_id))
-                                <hr>
-                                <ul class="list-inline">
-                                    <li><i class="fa fa-user"></i>مدرس : {{$author}}</li>&nbsp;
-                                </ul>
-                            @endif
+                            <div class="row">
+                                @if(isset($educationalContent->author_id))
+                                    <hr>
+                                    <div class="col-md-12">
+                                        <ul class="list-inline">
+                                            <li><i class="fa fa-user"></i>مدرس : {{$author}}</li>&nbsp;
+                                        </ul>
+                                    </div>
+                                        @foreach($files["videoSource"] as $key => $source)
+                                            <div class="col-md-4">
+                                                <a href="{{$source["src"]}}" class="btn red margin-bottom-5" style="width: 250px;">
+                                                    فایل {{$source["caption"]}}{{ (isset($source["size"]))?"(".$source["size"]. "مگ)":""  }}
+                                                </a>
+                                            </div>
+                                        @endforeach
+                                @endif
+                            </div>
                             <div class="row">
                                 <div class="col-md-12">
                                     @if(!empty($tags))

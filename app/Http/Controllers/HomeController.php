@@ -97,9 +97,6 @@ class HomeController extends Controller
     private static $TAG = HomeController::class;
 
     public function debug(Request $request){
-        $variable = "http://185.49.84.186:8090/checkout/verifyPayment?Authority=000000000000000000000000000072962651&Status=NOK" ;
-        $sub =  substr($variable, 0, strpos($variable, "?"));
-        dd($sub);
         abort(404);
     }
     public function __construct()
