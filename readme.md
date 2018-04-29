@@ -34,7 +34,7 @@ autorestart=true
 user=alaa
 numprocs=8
 redirect_stderr=true
-stdout_logfile=/home/alaa/project/sohrab/alaaTv/worker.log
+stdout_logfile=/home/alaatv/worker.log
 ```
 ```$xslt
 [program:horizon]
@@ -44,7 +44,7 @@ autostart=true
 autorestart=true
 user=forge
 redirect_stderr=true
-stdout_logfile=/home/alaa/project/sohrab/alaaTv/horizon.log
+stdout_logfile=/home/alaatv/horizon.log
 ```
 
 ```

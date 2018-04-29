@@ -36,6 +36,7 @@
     <meta name="layoutmode" content="fitscreen" />
     <meta name="wap-font-scale" content="no" />
     {!! SEO::generate(true) !!}
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <link rel="index" href="javascript:void(0)" />
 
     <title></title>
@@ -729,7 +730,7 @@
                             <span></span>
                             <span></span>
                             <span></span>
-                            <a href="#" class="link" id="220" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                            <a href="#" class="link" id="104" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
 
@@ -807,25 +808,28 @@
 <script>
     $(document).ready(function() {
         // attach a click handler for all links with class "like"
-        $('a.link').click(function() {
-            // use jQuery's $.post, to send the request
-            // the second argument is the request data
+        $('.sohrablink').click(function() {
             event.preventDefault();
-            $.post('/orderproduct', {product_id: parseInt(this.id)}, function(data) {
-                // data is what your server returns
-                data = $.parseJSON(data);
-                if(data.status === 200 || data.status === "200"){
-                    // similar behavior as an HTTP redirect
-                    window.location.replace(data.url);
+            $.ajax({
+                url: '{{ action('OrderproductController@store') }}',
+                type: 'POST',
+                // contentType: 'application/json; charset=UTF-8',
+                dataType: 'json',
+                timeout: 10000,
+                data: {
+                     product_id: '181'
                 }
+            }).done(function(result) {
+                    console.log($.parseJSON(result).url);
 
-            });
-            // prevent the link's default behavior
+                })
+                .fail(function() {
+                    console.log("here");
+                });
             return false;
         });
 
     });
-
 </script>
 
 <script src="/assets/extra/landing4/js/swiper.jquery.min.js" defer="defer"></script>
