@@ -143,7 +143,7 @@
                         <div class="swiper-wrapper">
                             <div class="swiper-slide">
                                 <article class="slider-content-main">
-                                    <strong style="margin-right: 10% ;">
+                                    <strong>
                                         <header>
                                             <h1>
                                                 <a href="javascript:void(0)" title="">
@@ -167,7 +167,7 @@
                             </div>
                             <div class="swiper-slide">
                                 <article class="slider-content-main">
-                                    <strong  style="margin-right: 10% ;">
+                                    <strong>
                                         <header>
                                             <h1>
                                                 <a href="javascript:void(0)" title="">
@@ -215,7 +215,7 @@
                             </div>
                             <div class="swiper-slide">
                                 <article class="slider-content-main">
-                                    <strong  style="margin-right: 10% ;">
+                                    <strong>
                                         <header>
                                             <h1>
                                                 <a href="javascript:void(0)" title="">
@@ -239,7 +239,7 @@
                             </div>
                             <div class="swiper-slide">
                                 <article class="slider-content-main">
-                                    <strong  style="margin-right: 10% ;">
+                                    <strong>
                                         <header>
                                             <h1>
                                                 <a href="javascript:void(0)" title="">
