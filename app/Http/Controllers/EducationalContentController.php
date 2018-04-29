@@ -379,9 +379,7 @@ class EducationalContentController extends Controller
      */
     public function show(Request $request, Educationalcontent $educationalContent)
     {
-
-        $pass=true;
-        if($pass || $educationalContent->isValid() && $educationalContent->isEnable())
+        if($educationalContent->isValid() && $educationalContent->isEnable())
         {
 
             $educationalContentDisplayName = $educationalContent->getDisplayName();
@@ -454,7 +452,7 @@ class EducationalContentController extends Controller
                             if($contenSets->isNotEmpty())
                             {
                                 $contentSet = $contenSets->first();
-                                $sameContents =  $contentSet->educationalcontents ;
+                                $sameContents =  $contentSet->educationalcontents->where("enable" , 1) ;
                                 $contentsWithSameSet = collect();
                                 $sameContents->load('files');
                                 $sameContents->load('contenttype');
