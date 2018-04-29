@@ -171,51 +171,54 @@
     {{--End of Product Portfolio--}}
     @foreach($sections as $section)
         <div class="row">
-        <div class="col-md-12">
-            <h3 class="text-center">
-                {{$section["displayName"]}}
-                <a href="{{urldecode(action("HomeController@search" , ["tags" => $section["tags"]]))}}" class="btn btn-success">بیشتر</a>
-            </h3>
-            <hr style="border-color: #0c203a">
-            <div class="search-page search-content-3">
-                <section class="lessonSlider1 slider" style="width: 95%;margin-top: 0px ; margin-bottom: 15px;">
-                    @foreach($section["lessons"] as $lesson)
-                        <div class="col-md-4">
-                            <div class="tile-container">
-                                <div class="tile-thumbnail">
-                                    <a href="{{(isset($lesson["content_id"]) && $lesson["content_id"]>0)?action("EducationalContentController@show", $lesson["content_id"]):""}}">
-                                        <img src="
-                                        @if(isset($lesson["pic"]) && strlen($lesson["pic"])>0)
-                                                {{$lesson["pic"]}}
-                                        @else
-                                                http://via.placeholder.com/195x195
-                                        @endif " />
-                                    </a>
-                                </div>
-                                <div class="tile-title" style="height: 145px;">
-                                    <h5 class="bold">
-                                        <a href="{{(isset($lesson["content_id"]) && $lesson["content_id"]>0)?action("EducationalContentController@show", $lesson["content_id"]):""}}">{{$lesson["displayName"]}}</a>
-                                    </h5>
-                                    {{--<a href="javascript:;">--}}
-                                        {{--<i class="icon-question font-blue"></i>--}}
-                                    {{--</a>--}}
-                                    {{--<a href="javascript:;">--}}
-                                        {{--<i class="icon-plus font-green-meadow"></i>--}}
-                                    {{--</a>--}}
-                                    <div class="tile-desc">
-                                        <p>مدرس:
-                                            <span class="font-blue">{{$lesson["author"]}}</span>
-                                            {{--<span class="font-grey-salt">25 mins ago</span>--}}
-                                        </p>
+            <div class="col-md-12">
+                <h3 class="text-center">
+                    {{$section["displayName"]}}
+                    <a href="{{urldecode(action("HomeController@search" , ["tags" => $section["tags"]]))}}" class="btn btn-success">بیشتر</a>
+                </h3>
+                <hr style="border-color: #0c203a">
+                <div class="search-page search-content-3">
+                    <section class="lessonSlider1 slider" style="width: 95%;margin-top: 0px ; margin-bottom: 15px;">
+                        @foreach($section["lessons"] as $lesson)
+                            <div class="col-md-4">
+                                <div class="tile-container">
+                                    <div class="tile-thumbnail">
+                                        <a href="{{(isset($lesson["content_id"]) && $lesson["content_id"]>0)?action("EducationalContentController@show", $lesson["content_id"]):""}}">
+                                            <img src="
+                                            @if(isset($lesson["pic"]) && strlen($lesson["pic"])>0)
+                                                    {{$lesson["pic"]}}
+                                            @else
+                                                    http://via.placeholder.com/195x195
+                                            @endif " />
+                                        </a>
+                                    </div>
+                                    <div class="tile-title" style="height: 145px;">
+                                        <h5 class="bold">
+                                            <a href="{{(isset($lesson["content_id"]) && $lesson["content_id"]>0)?action("EducationalContentController@show", $lesson["content_id"]):""}}">{{$lesson["displayName"]}}</a>
+                                        </h5>
+                                        {{--<a href="javascript:;">--}}
+                                            {{--<i class="icon-question font-blue"></i>--}}
+                                        {{--</a>--}}
+                                        {{--<a href="javascript:;">--}}
+                                            {{--<i class="icon-plus font-green-meadow"></i>--}}
+                                        {{--</a>--}}
+                                        <div class="tile-desc">
+                                            <p>مدرس:
+                                                <span class="font-blue">{{$lesson["author"]}}</span>
+                                                {{--<span class="font-grey-salt">25 mins ago</span>--}}
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
-                </section>
+                        @endforeach
+                    </section>
+                </div>
             </div>
+            @foreach($section["ads"] as $image => $link)
+                @include('partials.bannerAds', ['img'=>$image , 'link'=>$link])
+            @endforeach
         </div>
-    </div>
     @endforeach
     {{--<div class="row">--}}
     {{--<div class="col-md-6" id="consultationColumn" >--}}
