@@ -21,9 +21,9 @@
                 </a>
             </li>
             <li class="nav-item @if(isset($pageName) && strcmp($pageName , "educationalContent")==0)start active open @endif">
-                <a href="{{action("EducationalContentController@search")}}" class="nav-link nav-toggle font-red bold">
-                    <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-                    <span class="title">جزوه/آزمون</span>
+                <a href="{{action("EducationalContentController@search")}}" class="nav-link nav-toggle font-yellow bold">
+                    <i class="fa fa-video-camera" aria-hidden="true"></i>
+                    <span class="title">فیلم های آلاء</span>
                     @if(isset($pageName) && strcmp($pageName , "educationalContent")==0)<span class="selected"></span> @endif
                     <span class="arrow "></span>
                 </a>
@@ -39,14 +39,6 @@
                     {{--</a>--}}
                 {{--</li>--}}
 
-                <li class="nav-item @if(isset($pageName) && strcmp($pageName , "submitKonkurResult")==0)start active open @endif">
-                    <a href="{{action("UserController@submitKonkurResult")}}" class="nav-link nav-toggle  bold">
-                        <i class="fa fa-graduation-cap" aria-hidden="true"></i>
-                        <span class="title">ثبت رتبه 96</span>
-                        @if(isset($pageName) && strcmp($pageName , "submitKonkurResult")==0)<span class="selected"></span> @endif
-                        <span class="arrow "></span>
-                    </a>
-                </li>
                 @ability(Config::get("constants.EMPLOYEE_ROLE"),Config::get("constants.LIST_EMPLOPYEE_WORK_SHEET"),Config::get("constants.INSERT_EMPLOPYEE_WORK_SHEET"))
                 <li class="nav-item  @if(strcmp(url()->current() , action("EmployeetimesheetController@create")) == 0)start active open @endif">
                     <a href="{{action("EmployeetimesheetController@create")}}" class="nav-link ">
@@ -264,16 +256,16 @@
             {{--</a>--}}
             {{--</li>--}}
 
-            <li class="nav-item @if(isset($pageName) && strcmp($pageName , "aboutUs")==0)start active open @endif">
-                <a href="{{action("HomeController@aboutUs")}}" class="nav-link nav-toggle">
+            {{--<li class="nav-item @if(isset($pageName) && strcmp($pageName , "aboutUs")==0)start active open @endif">--}}
+                {{--<a href="{{action("HomeController@aboutUs")}}" class="nav-link nav-toggle">--}}
                     {{--<i class="icon-info"></i>--}}
                     {{--<i class="icon-info"></i>--}}
-                    <i class="fa fa-info-circle" aria-hidden="true"></i>
-                    <span class="title">درباره ما</span>
-                    @if(isset($pageName) && strcmp($pageName , "aboutUs")==0)<span class="selected"></span> @endif
-                    <span class="arrow "></span>
-                </a>
-            </li>
+                    {{--<i class="fa fa-info-circle" aria-hidden="true"></i>--}}
+                    {{--<span class="title">درباره ما</span>--}}
+                    {{--@if(isset($pageName) && strcmp($pageName , "aboutUs")==0)<span class="selected"></span> @endif--}}
+                    {{--<span class="arrow "></span>--}}
+                {{--</a>--}}
+            {{--</li>--}}
             <li class="nav-item @if(isset($pageName) && strcmp($pageName , "contactUs")==0)start active open @endif">
                 <a href="{{action("HomeController@contactUs")}}" class="nav-link nav-toggle">
                     <i class="icon-call-end"></i>
@@ -282,6 +274,16 @@
                     <span class="arrow "></span>
                 </a>
             </li>
+            @if(Auth::check())
+                <li class="nav-item @if(isset($pageName) && strcmp($pageName , "submitKonkurResult")==0)start active open @endif">
+                    <a href="{{action("UserController@submitKonkurResult")}}" class="nav-link nav-toggle  bold">
+                        <i class="fa fa-graduation-cap" aria-hidden="true"></i>
+                        <span class="title">ثبت رتبه 96</span>
+                        @if(isset($pageName) && strcmp($pageName , "submitKonkurResult")==0)<span class="selected"></span> @endif
+                        <span class="arrow "></span>
+                    </a>
+                </li>
+            @endif
             <li class="nav-item @if(isset($pageName) && strcmp($pageName , "rules")==0)start active open @endif">
                 <a href="{{action("HomeController@rules")}}" class="nav-link nav-toggle">
                     <i class="fa fa-server" aria-hidden="true"></i>

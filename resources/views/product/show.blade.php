@@ -39,55 +39,55 @@
 
         @if(!isset($descriptionIframe) || !$descriptionIframe)
             @if(isset($isLive) && $isLive !== false)
-                <div class="row">
-                    <div class="col-md-12">
-                            <div class="portlet light profile">
-                            <div class="portlet-title">
-                                <div class="caption">
-                                    @if($isLive == 0)
-                                    <span class="caption-subject bold font-green uppercase"><img src="/img/extra/live-rs.png" height="50px"></span>
-                                    <span class="caption-helper">پخش زنده</span>
-                                    @elseif($isLive > 0 )
-                                        <span class="caption-helper">پخش زنده هنوز شروع نشده است</span>
-                                    @else
-                                        <span class="caption-helper">باز پخش آخرین جلسه</span>
-                                    @endif
-                                </div>
-                                @if(Auth::check() && $isLive <= 0)
-                                <div class="actions">
-                                    <a href="/download?fileName=8f81bfae-d7de-410d-abb1-9d475fb25bbb" class="btn btn-lg yellow ">
-                                        <i class="fa fa-download"></i> دانلود جزوه این جلسه </a>
-                                </div>
-                                @endif
-                            </div>
-                            <div class="portlet-body">
-                                <div class="clearfix text-center">
-                                    @if(Auth::check())
-                                        @if($isLive <= 0)
-                                            <div  class="chooseServer clearfix">
-                                                <h3 class="font-blue bold">
-                                                    لطفا برای تماشا @if($isLive == 0)ی پخش زنده@endif یکی از گزینه های زیر را انتخاب نمایید
-                                                </h3>
-                                                <p>
-                                                    <button type="button" class="btn purple btn-lg chooseServerButton" id="nationalServer">سرور داخلی</button>
-                                                    <button type="button" class="btn red btn-lg chooseServerButton" id="youtubeServer">یوتیوب(نیاز به قندشکن😉)</button>
-                                                </p>
-                                            </div>
-                                            <iframe frameborder="0" allowfullscreen id="liveFrame" src="" width="100%" height="500"></iframe>
-                                        @elseif($isLive > 0 )
-                                            <h3>جلسه چهارم بخش زنده اطلاع داده خواهد شد  </h3>
-                                        @endif
-                                            <button type="button" onclick="$('html, body').animate({scrollTop: $('#replayPrevious').offset().top}, 2000);" class="btn dark btn">تماشای جلسات دیگر</button>
-                                            <button type="button" onclick="$('html, body').animate({scrollTop: $('#attributesPortlet').offset().top}, 2000);" class="btn blue btn">دانلود جزوات</button>
-                                    @else
-                                        <h4>برای تماشا وارد شوید</h4>
-                                        <a class="btn green btn-lg" href="{{route("login")}}">ورود</a>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {{--<div class="row">--}}
+                    {{--<div class="col-md-12">--}}
+                            {{--<div class="portlet light profile">--}}
+                            {{--<div class="portlet-title">--}}
+                                {{--<div class="caption">--}}
+                                    {{--@if($isLive == 0)--}}
+                                    {{--<span class="caption-subject bold font-green uppercase"><img src="/img/extra/live-rs.png" height="50px"></span>--}}
+                                    {{--<span class="caption-helper">پخش زنده</span>--}}
+                                    {{--@elseif($isLive > 0 )--}}
+                                        {{--<span class="caption-helper">پخش زنده هنوز شروع نشده است</span>--}}
+                                    {{--@else--}}
+                                        {{--<span class="caption-helper">باز پخش آخرین جلسه</span>--}}
+                                    {{--@endif--}}
+                                {{--</div>--}}
+                                {{--@if(Auth::check() && $isLive <= 0)--}}
+                                {{--<div class="actions">--}}
+                                    {{--<a href="/download?fileName=8f81bfae-d7de-410d-abb1-9d475fb25bbb" class="btn btn-lg yellow ">--}}
+                                        {{--<i class="fa fa-download"></i> دانلود جزوه این جلسه </a>--}}
+                                {{--</div>--}}
+                                {{--@endif--}}
+                            {{--</div>--}}
+                            {{--<div class="portlet-body">--}}
+                                {{--<div class="clearfix text-center">--}}
+                                    {{--@if(Auth::check())--}}
+                                        {{--@if($isLive <= 0)--}}
+                                            {{--<div  class="chooseServer clearfix">--}}
+                                                {{--<h3 class="font-blue bold">--}}
+                                                    {{--لطفا برای تماشا @if($isLive == 0)ی پخش زنده@endif یکی از گزینه های زیر را انتخاب نمایید--}}
+                                                {{--</h3>--}}
+                                                {{--<p>--}}
+                                                    {{--<button type="button" class="btn purple btn-lg chooseServerButton" id="nationalServer">سرور داخلی</button>--}}
+                                                    {{--<button type="button" class="btn red btn-lg chooseServerButton" id="youtubeServer">یوتیوب(نیاز به قندشکن😉)</button>--}}
+                                                {{--</p>--}}
+                                            {{--</div>--}}
+                                            {{--<iframe frameborder="0" allowfullscreen id="liveFrame" src="" width="100%" height="500"></iframe>--}}
+                                        {{--@elseif($isLive > 0 )--}}
+                                            {{--<h3>جلسه چهارم بخش زنده اطلاع داده خواهد شد  </h3>--}}
+                                        {{--@endif--}}
+                                            {{--<button type="button" onclick="$('html, body').animate({scrollTop: $('#replayPrevious').offset().top}, 2000);" class="btn dark btn">تماشای جلسات دیگر</button>--}}
+                                            {{--<button type="button" onclick="$('html, body').animate({scrollTop: $('#attributesPortlet').offset().top}, 2000);" class="btn blue btn">دانلود جزوات</button>--}}
+                                    {{--@else--}}
+                                        {{--<h4>برای تماشا وارد شوید</h4>--}}
+                                        {{--<a class="btn green btn-lg" href="{{route("login")}}">ورود</a>--}}
+                                    {{--@endif--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
             @endif
             <div class="row">
                 <div class="col-md-12">

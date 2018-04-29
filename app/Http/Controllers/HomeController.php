@@ -770,7 +770,7 @@ class HomeController extends Controller
                             "displayName" => "مقطع یازدهم",
                             "lessons" => $lessons ,
                             "tags" => [
-                                "کنکور"
+                                "یازدهم"
                             ]
                         ]
                     );
@@ -850,7 +850,7 @@ class HomeController extends Controller
                             "displayName" => "مقطع دهم",
                             "lessons" => $lessons ,
                             "tags" => [
-                                "کنکور"
+                                "دهم"
                             ]
                         ]
                     );
@@ -912,7 +912,7 @@ class HomeController extends Controller
                             "displayName" => "همایش و جمع بندی",
                             "lessons" => $lessons ,
                             "tags" => [
-                                "کنکور"
+                                "همایش"
                             ]
                         ]
                     );

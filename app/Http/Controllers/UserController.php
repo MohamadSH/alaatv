@@ -1515,7 +1515,8 @@ class UserController extends Controller
 
         $pageName = "submitKonkurResult";
         $user = Auth::user();
-        return view("user.submitEventResultReport" , compact("majors" , "event" , "sideBarMode" , "userEventReport" , "pageName"  , "user"));
+        $userCompletion = (int)$user->completion();
+        return view("user.submitEventResultReport" , compact("majors" , "event" , "sideBarMode" , "userEventReport" , "pageName"  , "user" , "userCompletion"));
     }
 
     /**
