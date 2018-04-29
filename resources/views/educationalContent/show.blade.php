@@ -98,14 +98,14 @@
                                             <li><i class="fa fa-user"></i>مدرس : {{$author}}</li>&nbsp;
                                         </ul>
                                     </div>
-                                        @foreach($files["videoSource"] as $key => $source)
-                                            <div class="col-md-4">
-                                                <a href="{{$source["src"]}}" class="btn red margin-bottom-5" style="width: 250px;">
-                                                    فایل {{$source["caption"]}}{{ (isset($source["size"]))?"(".$source["size"]. "مگ)":""  }}
-                                                </a>
-                                            </div>
-                                        @endforeach
                                 @endif
+                                @foreach($files["videoSource"] as $key => $source)
+                                    <div class="col-md-4">
+                                        <a href="{{$source["src"]}}" class="btn red margin-bottom-5" style="width: 250px;">
+                                            فایل {{$source["caption"]}}{{ (isset($source["size"]))?"(".$source["size"]. "مگ)":""  }}
+                                        </a>
+                                    </div>
+                                @endforeach
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
