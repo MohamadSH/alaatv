@@ -774,7 +774,7 @@ class HomeController extends Controller
                             "displayName" => "مقطع یازدهم",
                             "lessons" => $lessons ,
                             "tags" => [
-                                "کنکور"
+                                "یازدهم"
                             ],
                             'ads' => [
                                 //ZIST GIAHI
@@ -858,7 +858,7 @@ class HomeController extends Controller
                             "displayName" => "مقطع دهم",
                             "lessons" => $lessons ,
                             "tags" => [
-                                "کنکور"
+                                "دهم"
                             ],
                             'ads' => [
                                 //DINI KAGHAZI
@@ -924,7 +924,7 @@ class HomeController extends Controller
                             "displayName" => "همایش و جمع بندی",
                             "lessons" => $lessons ,
                             "tags" => [
-                                "کنکور"
+                                "همایش"
                             ],
                             'ads' => [
                                 //DINI KAGHAZI
