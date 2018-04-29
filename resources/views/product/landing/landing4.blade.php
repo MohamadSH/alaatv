@@ -940,34 +940,11 @@
     </ul>
 </nav>
 <script src="/assets/extra/landing4/js/jquery-1.12.4.min.js"></script>
-<script>
-    $(document).ready(function() {
-        // attach a click handler for all links with class "like"
-        $('a.link').click(function() {
-            // use jQuery's $.post, to send the request
-            // the second argument is the request data
-            event.preventDefault();
-            $.post('/orderproduct', {product_id: parseInt(this.id)}, function(data) {
-                // data is what your server returns
-                data = $.parseJSON(data);
-                if(data.status === 200 || data.status === "200"){
-                    // similar behavior as an HTTP redirect
-                    window.location.replace(data.url);
-                }
-
-            });
-            // prevent the link's default behavior
-            return false;
-        });
-
-    });
-
-</script>
 
 <script src="/assets/extra/landing4/js/swiper.jquery.min.js" defer="defer"></script>
 <script src="/assets/extra/landing4/js/menu.min.js" defer="defer"></script>
 <script src="/assets/extra/landing4/js/script.js" defer="defer"></script>
-<script>
+{{--<script>--}}
     {{--$(document).ready(function() {--}}
         {{--// attach a click handler for all links with class "like"--}}
         {{--$('.sohrablink').click(function() {--}}
@@ -992,7 +969,7 @@
         {{--});--}}
 
     {{--});--}}
-</script>
+{{--</script>--}}
 </body>
 <!-- <nav role="navigation">
     <ul itemscope itemtype="http://www.schema.org/SiteNavigationElement">
