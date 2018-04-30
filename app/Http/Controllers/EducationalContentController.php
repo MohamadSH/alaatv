@@ -453,11 +453,11 @@ class EducationalContentController extends Controller
                                 $files->put("thumbnail" , $file->name);
                             $files->put("videoSource" , $videoSources);
 
-                            $contenSets = $educationalContent->contentsets->where("pivot.isDefault" , 1);
-                            if($contenSets->isNotEmpty())
+                            $contentSets = $educationalContent->contentsets->where("pivot.isDefault" , 1);
+                            if($contentSets->isNotEmpty())
                             {
-                                $contentSet = $contenSets->first();
-                                $sameContents =  $contentSet->educationalcontents->where("enable" , 1) ;
+                                $contentSet = $contentSets->first();
+                                $sameContents =  $contentSet->educationalcontents->where("enable" , 1)->sortBy("pivot.order") ;
                                 $contentsWithSameSet = collect();
                                 $sameContents->load('files');
                                 $sameContents->load('contenttype');
