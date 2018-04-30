@@ -9,6 +9,8 @@
 `QUEUE_DRIVER=redis`
 
 `LOG_LEVEL=error`
+
+`SESSION_DRIVER=redis`
  
 **Install Horizon:**
 

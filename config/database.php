@@ -184,7 +184,14 @@ return [
             'port' => env('REDIS_PORT', 6379),
             'database' => 3,
             'read_timeout' => 60,
-        ]
+        ],
+        'session' => [
+            'host' => env('REDIS_HOST', 'localhost'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', 6379),
+            'database' => 4,
+            'read_timeout' => 60,
+        ],
 
     ],
 

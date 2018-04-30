@@ -1097,16 +1097,6 @@ class OrderController extends Controller
      */
     public function verifyPayment(Request $request)
     {
-
-        $result = [
-            "Status" => "error",
-            "error" => '-21',
-//            "saveBon" => 0
-        ];
-//        return redirect(action("OrderController@successfulPayment" , [
-//            "result" => $result
-//        ]));
-
         $sendSMS = true;
         $user = Auth::user();
         if(Input::has('Authority') && Input::has('Status') )
