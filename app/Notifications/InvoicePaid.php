@@ -81,9 +81,9 @@ class InvoicePaid extends Notification implements ShouldQueue
             ."\n"
             .$this->invoice->id
             ."\n"
-            ."آیدی تلگرام جهت پشتیبانی:"
+            ."پشتیبانی:"
             ."\n"
-            ."https://t.me/sanati_sharif";
+            ."https://goo.gl/jme5VU";
         $message = "سلام ".$gender.$user->getfullName()."\n".$messageCore;
 
         return $message;
