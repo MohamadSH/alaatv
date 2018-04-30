@@ -136,7 +136,7 @@
                 <div class="container">
                     <article class="art-proposal art-proposal-main">
                         <a href="javascript:void(0)" class="a-proposal" title="">
-                            دور آخر را با دست فرمون برترین استاتید کشور تجربه کنید.
+                            دور آخر را با دست فرمون برترین اساتید کشور تجربه کنید.
                         </a>
                     </article>
                     <div class="swiper-container swiper-content-main">
@@ -195,8 +195,8 @@
                                             </h1>
                                             <span>جمع بندی مبحثی زیست شناسی کنکور</span>
                                         </header>
-                                        <p>زیست شناسی اصلی ترین درس رشته تجربی می باشد و در ارتباط با اهمیت آن هر چه گفته شود کم است</p>
-                                        <p>در کنکور سراسری در درس زیست هر مبحثی برای خودش اهمیت دارد و قرار نیست فصلی را حذف کنید چون ممکن است مثل کنکور پارسال، همون سوالاتی که شما فکر می کردید سخته، سوالات آسون از آن ها مطرح شود</p>
+                                        <p>زیست شناسی اصلی ترین درس رشته تجربی می باشد و در ارتباط با اهمیت آن هر چه گفته شود کم است.</p>
+                                        <p>در کنکور سراسری در درس زیست هر مبحثی برای خودش اهمیت دارد و قرار نیست فصلی را حذف کنید چون ممکن است مثل کنکور پارسال، همون سوالاتی که شما فکر می کردید سخته، سوالات آسون از آن ها مطرح شود.</p>
                                     </strong>
                                     <figure>
                                         <a href="javascript:void(0)" title="">
@@ -238,7 +238,7 @@
                                             <span>عربی را نقطه قوت خود کنید</span>
                                         </header>
                                         <p>پوشش ۹۲ درصد مباحث کنکور عربی با آنالیز کاربردی تست های کنکور ۵ سال اخیر؛</p>
-                                        <p>با آنالیز جز به جز تست های کنکور که شامل ۳۲ درصد ترجمه، ۸ درصد شکّل، ۱۲ درصد تحلیل صرفی و ۱۴ درصد متن و ۳۲ درصد قواعد می شود، عربی کنکور خود را به ما پسپارید</p>
+                                        <p>با آنالیز جز به جز تست های کنکور که شامل ۳۲ درصد ترجمه، ۸ درصد شکّل، ۱۲ درصد تحلیل صرفی و ۱۴ درصد متن و ۳۲ درصد قواعد می شود، عربی کنکور خود را به ما بسپارید.</p>
                                     </strong>
                                     <figure>
                                         <a href="javascript:void(0)" title="">
@@ -770,14 +770,14 @@
                                 </header>
                             </figcaption>
                         </figure>
-                        <p style="text-align: justify">زیست شناسی اصلی ترین درس رشته تجربی می باشد و در ارتباط با اهمیت آن هر چه گفته شود کم است</p>
-                        <p style="text-align: justify">در کنکور سراسری در درس زیست هر مبحثی برای خودش اهمیت دارد و قرار نیست فصلی را حذف کنید چون ممکن است مثل کنکور پارسال، همون سوالاتی که شما فکر می کردید سخته، سوالات آسون از آن ها مطرح شود</p>
+                        <p style="text-align: justify">زیست شناسی اصلی ترین درس رشته تجربی می باشد و در ارتباط با اهمیت آن هر چه گفته شود کم است.</p>
+                        <p style="text-align: justify">در کنکور سراسری در درس زیست هر مبحثی برای خودش اهمیت دارد و قرار نیست فصلی را حذف کنید چون ممکن است مثل کنکور پارسال، همون سوالاتی که شما فکر می کردید سخته، سوالات آسون از آن ها مطرح شود.</p>
                         <div class="info-professors">
                             <header>
                                 <h4>دورنمای مباجث همایش و اهمیت آن ها در کنکور:</h4>
                             </header>
                             <span>جانوران، بدن انسانی، گیاهی و... </span>
-                            <span>کل زیست به جز ژنتیکش رو قراره جمع بندی کنیم</span>
+                            <span>کل زیست به جز ژنتیکش رو قراره جمع بندی کنیم.</span>
                             <span>همچنین قراره تست های خاص گیاهی دکتر چلاجور رو تو این همایش داشته باشیم.</span>
                             <a href="javascript:void(0)" class="link" data-role="221" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
@@ -944,55 +944,51 @@
 <script src="/assets/extra/landing4/js/menu.min.js" defer="defer"></script>
 <script src="/assets/extra/landing4/js/script.js" defer="defer"></script>
 <script>
-    $(document).ready(function() {
-        // attach a click handler for all links with class "like"
-        $('a.link').click(function() {
-            var id = $(this).data('role');
-            $.ajax({
-                url: '{{ action('OrderproductController@store') }}',
-                type: 'POST',
-                // contentType: 'application/json; charset=UTF-8',
-                // dataType: 'json',
-                // timeout: 10000,
-                data: {
-                    product_id: id
+    $('a.link').click(function() {
+        var id = $(this).data('role');
+        $.ajax({
+            url: '{{ action('OrderproductController@store') }}',
+            type: 'POST',
+            // contentType: 'application/json; charset=UTF-8',
+            // dataType: 'json',
+            // timeout: 10000,
+            data: {
+                product_id: id
+            },
+            statusCode: {
+                //The status for when action was successful
+                200: function (response) {
+                    if(response.redirectUrl!= null && response.redirectUrl!="undefined")
+                        window.location.replace(response.redirectUrl);
                 },
-                statusCode: {
-                    //The status for when action was successful
-                    200: function (response) {
-                        if(response.redirectUrl!= null && response.redirectUrl!="undefined")
-                            window.location.replace(response.redirectUrl);
-                    },
-                    //The status for when the user is not authorized for making the request
-                    403: function (response) {
-                        console.log("response 403");
-                    },
-                    //The status for when the user is not authorized for making the request
-                    401: function (response) {
-                        console.log("response 401");
-                    },
-                    404: function (response) {
-                        console.log("response 404");
-                    },
-                    //The status for when form data is not valid
-                    422: function (response) {
-                        console.log(response);
-                    },
-                    //The status for when there is error php code
-                    500: function (response) {
-                        console.log("response 500");
-                        console.log(response.responseText);
-                    },
-                    //The status for when there is error php code
-                    503: function (response) {
-                        response = $.parseJSON(response.responseText);
-                        console.log(response.message);
-                    }
+                //The status for when the user is not authorized for making the request
+                403: function (response) {
+                    console.log("response 403");
+                },
+                //The status for when the user is not authorized for making the request
+                401: function (response) {
+                    console.log("response 401");
+                },
+                404: function (response) {
+                    console.log("response 404");
+                },
+                //The status for when form data is not valid
+                422: function (response) {
+                    console.log(response);
+                },
+                //The status for when there is error php code
+                500: function (response) {
+                    console.log("response 500");
+                    console.log(response.responseText);
+                },
+                //The status for when there is error php code
+                503: function (response) {
+                    response = $.parseJSON(response.responseText);
+                    console.log(response.message);
                 }
-            });
-            return false;
+            }
         });
-
+        return false;
     });
 </script>
 </body>
