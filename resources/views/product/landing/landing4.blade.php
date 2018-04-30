@@ -454,7 +454,7 @@
                             <span>تاریخ ادبیات</span>
                             <span>املا و لغت</span>
                             <span>تناسب مفهومی و قرابت معنایی</span>
-                            <a href="{{action("ProductController@show" , 210)}}" id="210" class="link" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                            <a href="javascript:void(0)" data-role="210" class="link" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
                     <article class="art-professors">
@@ -489,7 +489,7 @@
                                 از آنجایی که عمده تست ها را آیات و احایث تشکیل می دهند تاکید بر این موارد بیشتر انجام خواهد شد.
                                 بعد از بیان نکات مهم و کلیدی هر درس، تست های پر چالش از کنکور سراسری همراه با تحلیلی جذاب ارائه می گردد.
                             </p>
-                            <a href="{{action("ProductController@show" , 211)}}"  class="link" id="211" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                            <a href="javascript:void(0)"  class="link" data-role="211" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
 
@@ -526,7 +526,7 @@
                                 در این همایش با حل ۲۰۰ تست و دوره تمام نکات و مباحث اساسی فیزیک کنکور شما دیگر استرسی برای یک جمع بندی خوب و حرفه ای نخواهید داشت.
                                 امسال با همایشی بی نظیر و طلایی در درس فیزیک در کنار شما هستیم.
                             </p>
-                            <a href="{{action("ProductController@show" , 216)}}" class="link" id="216" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                            <a href="javascript:void(0)" class="link" data-role="216" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
                     <article class="art-professors">
@@ -559,7 +559,7 @@
                                 در این همایش با حل مسائل ترکیبی به سطحی بالاتر در مواجهه با سوالات کنکور می رسیم.
                                 پس از این همایش سوالات با ساده ترین حالت خود در برابر ما قرار خواهد گرفت.
                             </p>
-                            <a href="{{action("ProductController@show" , 217)}}" class="link" id="217" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                            <a href="javascript:void(0)" class="link" data-role="217" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
                     <article class="art-professors">
@@ -589,7 +589,7 @@
                             <p style="text-align: justify; font-size: medium">
                             با حل ۲۰۰ تست حاوی تمام نکات و مباحث، از صد در صد کنکور سراسری ۹۲ درصد آن را (به جز ۴ درصد معتلات، ۴ درصد معلوم و مجهول) کامل جمع بندی و تحلیل می کنیم.
                             </p>
-                            <a href="{{action("ProductController@show" , 214)}}" class="link" id="214" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                            <a href="javascript:void(0)" class="link" data-role="214" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
                     <article class="art-professors">
@@ -621,7 +621,7 @@
                             <p style="font-size: 13px">۲.درک مطلب که ۴ سوال مفهوم عبارت و ۳ سوال تحلیل صرفی
                              و ۲ سوال تشکیل تو کنکور داره</p>
                             <p style="font-size: 13px">۳.قواعد که غالبا ۴ سوال عربی سال دوم و ۴ سوال عربی سال سوم تو کنکور میاد</p>
-                            <a href="{{action("ProductController@show" , 215)}}" class="link" id="215" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                            <a href="javascript:void(0)" class="link" data-role="215" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
                 </section>
@@ -656,7 +656,7 @@
                             در این همایش نمونه تست های پیش بینی شده از طرف استاد ارائه شده و در کنار حل این مجموعه، تحلیل و بررسی دو سری سوالات کنکور انجام می شود.
                             همراه درسنامه مختصر از موضوعات مهم و با این همایش شما با توانی بالا به استقبال کنکور ۹۷ می روید. با ما در این مسیر به درکی از سوالات ریاضی می رسید که می توانید بدون نگرانی از سختی ظاهری سوالات از پس آن ها برآیید.
                             </p>
-                            <a href="{{action("ProductController@show" , 218)}}" class="link" id="218" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                            <a href="javascript:void(0)" class="link" data-role="218" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
 
@@ -779,7 +779,7 @@
                             <span>جانوران، بدن انسانی، گیاهی و... </span>
                             <span>کل زیست به جز ژنتیکش رو قراره جمع بندی کنیم</span>
                             <span>همچنین قراره تست های خاص گیاهی دکتر چلاجور رو تو این همایش داشته باشیم.</span>
-                            <a href="{{action("ProductController@show" , 212)}}" class="link" id="221" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                            <a href="javascript:void(0)" class="link" data-role="221" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
                     <article class="art-professors">
@@ -807,7 +807,7 @@
                             <span>در کمترین زمان</span>
                             <span>و با بهترین راندمان</span>
                             <span>دست پیدا کنید</span>
-                            <a href="{{action("ProductController@show" , 213)}}"  class="link" id="213" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                            <a href="javascript:void(0)"  class="link" data-role="213" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
                     <article class="art-professors">
@@ -834,7 +834,7 @@
                             <span>صرفه جویی در زمان برای جمع بندی کنکور</span>
                             <span>فراگیری روش های جدید تست زنی</span>
                             <span>به همراه حل سوالات کنکور های گذشته و برخی سوالات تالیفی</span>
-                            <a href="{{action("ProductController@show" , 219)}}" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                            <a href="javascript:void(0)" title="خرید بسته آموزشی" data-role="219">خرید بسته آموزشی</a>
                         </div>
                     </article>
                     <article class="art-professors">
@@ -864,7 +864,7 @@
                             <p style="text-align: justify; font-size: medium">
                                 با بررسی موضوعی سوالات ریاضی تجربی کنکور داخل و خارج  ۹۵،۹۴ و ۹۶ از هم اکنون جای پای خود را در کنکور ۹۷ محکم می کنیم. با این همایش شما دانسته هایتان را با سلیقه طراحان کنکور طبقه بندی می کنید و برای به دست آوردن درصد بالایی از این درس خود را آماده می کنید.
                             </p>
-                            <a href="{{action("ProductController@show" , 220)}}" class="link" id="220" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                            <a href="javascript:void(0)" class="link" data-role="220" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
 
@@ -943,32 +943,58 @@
 <script src="/assets/extra/landing4/js/swiper.jquery.min.js" defer="defer"></script>
 <script src="/assets/extra/landing4/js/menu.min.js" defer="defer"></script>
 <script src="/assets/extra/landing4/js/script.js" defer="defer"></script>
-{{--<script>--}}
-    {{--$(document).ready(function() {--}}
-        {{--// attach a click handler for all links with class "like"--}}
-        {{--$('.sohrablink').click(function() {--}}
-            {{--event.preventDefault();--}}
-            {{--$.ajax({--}}
-                {{--url: '{{ action('OrderproductController@store') }}',--}}
-                {{--type: 'POST',--}}
-                {{--// contentType: 'application/json; charset=UTF-8',--}}
-                {{--dataType: 'json',--}}
-                {{--timeout: 10000,--}}
-                {{--data: {--}}
-                    {{--product_id: '181'--}}
-                {{--}--}}
-            {{--}).done(function(result) {--}}
-                {{--console.log($.parseJSON(result).url);--}}
+<script>
+    $(document).ready(function() {
+        // attach a click handler for all links with class "like"
+        $('a.link').click(function() {
+            var id = $(this).data('role');
+            $.ajax({
+                url: '{{ action('OrderproductController@store') }}',
+                type: 'POST',
+                // contentType: 'application/json; charset=UTF-8',
+                // dataType: 'json',
+                // timeout: 10000,
+                data: {
+                    product_id: id
+                },
+                statusCode: {
+                    //The status for when action was successful
+                    200: function (response) {
+                        if(response.redirectUrl!= null && response.redirectUrl!="undefined")
+                            window.location.replace(response.redirectUrl);
+                    },
+                    //The status for when the user is not authorized for making the request
+                    403: function (response) {
+                        console.log("response 403");
+                    },
+                    //The status for when the user is not authorized for making the request
+                    401: function (response) {
+                        console.log("response 401");
+                    },
+                    404: function (response) {
+                        console.log("response 404");
+                    },
+                    //The status for when form data is not valid
+                    422: function (response) {
+                        console.log(response);
+                    },
+                    //The status for when there is error php code
+                    500: function (response) {
+                        console.log("response 500");
+                        console.log(response.responseText);
+                    },
+                    //The status for when there is error php code
+                    503: function (response) {
+                        response = $.parseJSON(response.responseText);
+                        console.log(response.message);
+                    }
+                }
+            });
+            return false;
+        });
 
-            {{--})--}}
-                {{--.fail(function() {--}}
-                    {{--console.log("here");--}}
-                {{--});--}}
-            {{--return false;--}}
-        {{--});--}}
-
-    {{--});--}}
-{{--</script>--}}
+    });
+</script>
 </body>
 <!-- <nav role="navigation">
     <ul itemscope itemtype="http://www.schema.org/SiteNavigationElement">
