@@ -83,9 +83,9 @@ class UserRegisterd extends Notification  implements ShouldQueue
             ."\n"
             .$this->user->nationalCode
             ."\n"
-            ."آیدی تلگرام جهت پشتیبانی:"
+            ."پشتیبانی:"
             ."\n"
-            ."https://t.me/sanati_sharif";
+            ."https://goo.gl/jme5VU";
         $message = "سلام ".$gender.$this->user->getfullName()."\n".$messageCore;
 
         return $message;

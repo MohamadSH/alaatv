@@ -8,6 +8,8 @@
 
 `QUEUE_DRIVER=redis`
 
+`LOG_LEVEL=error`
+ 
 **Install Horizon:**
 
 Due to its usage of async process signals, Horizon requires PHP 7.1+.
