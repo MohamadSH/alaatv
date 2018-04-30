@@ -5,6 +5,10 @@
 
 @endsection
 
+@section("bodyClass")
+    class="page-header-fixed page-sidebar-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-md"
+@endsection
+
 @section("css")
     <link rel="stylesheet" href="{{ mix('/css/all.css') }}">
     <link rel="stylesheet" type="text/css" href="/assets/extra/slick/slick/slick.css">
@@ -135,10 +139,10 @@
             <div class="portlet light">
                 <div class="portlet-body">
                     <div class="row">
-                        <div class="col-lg-2 col-md-2 col-sd-2 col-xs-12 text-center">
-                            <img src="/assets/extra/Alaa-logo.gif" style="width: 70%;">
+                        <div class="col-lg-3 col-md-2 col-sd-2 col-xs-12 text-center">
+                            <img src="/assets/extra/Alaa-logo.gif" style="width: 50%;">
                         </div>
-                        <div class="col-lg-10 col-md-10 col-sd-10 col-xs-12">
+                        <div class="col-lg-9 col-md-10 col-sd-10 col-xs-12">
                             <h4></h4>
                             <p class="text-justify" style="line-height:normal">
                                 آلاء پنجره ای است رو به دور نمای آموزش کشور که می کوشد با اساتید کار بلد و مخاطبان پر تعداد و متعهد خود آموزش همگانی را
@@ -215,10 +219,10 @@
                     </section>
                 </div>
             </div>
-            @foreach($section["ads"] as $image => $link)
-                @include('partials.bannerAds', ['img'=>$image , 'link'=>$link])
-            @endforeach
         </div>
+        @foreach($section["ads"] as $image => $link)
+            @include('partials.bannerAds', ['img'=>$image , 'link'=>$link])
+        @endforeach
     @endforeach
     {{--<div class="row">--}}
     {{--<div class="col-md-6" id="consultationColumn" >--}}

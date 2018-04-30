@@ -67,8 +67,9 @@
                     <div class="cbp-l-caption-alignCenter">
                         <div class="cbp-l-caption-body">
                             {{--ToDo : add get parameter to action--}}
-                            <a href="{{action("ProductController@showPartial" , $product)}}" class="cbp-singlePage cbp-l-caption-buttonLeft btn red uppercase" >اطلاعات بیشتر</a>
-                            <a href="{{action("ProductController@show" , $product)}}" class="btn green uppercase"><i class="fa fa-shopping-cart"></i>سفارش</a>
+{{--                            <a href="{{action("ProductController@showPartial" , $product)}}" class="cbp-singlePage cbp-l-caption-buttonLeft btn red uppercase" >اطلاعات بیشتر</a>--}}
+                            <a href="{{action("ProductController@show" , $product)}}" class="btn red uppercase" >اطلاعات بیشتر</a>
+                            {{--<a href="{{action("ProductController@show" , $product)}}" class="btn green uppercase"><i class="fa fa-shopping-cart"></i>سفارش</a>--}}
                         </div>
                     </div>
                 </div>
