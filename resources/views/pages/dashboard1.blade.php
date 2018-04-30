@@ -5,6 +5,10 @@
 
 @endsection
 
+@section("bodyClass")
+    class="page-header-fixed page-sidebar-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-md"
+@endsection
+
 @section("css")
     <link rel="stylesheet" href="{{ mix('/css/all.css') }}">
     <link rel="stylesheet" type="text/css" href="/assets/extra/slick/slick/slick.css">
@@ -215,10 +219,10 @@
                     </section>
                 </div>
             </div>
-            @foreach($section["ads"] as $image => $link)
-                @include('partials.bannerAds', ['img'=>$image , 'link'=>$link])
-            @endforeach
         </div>
+        @foreach($section["ads"] as $image => $link)
+            @include('partials.bannerAds', ['img'=>$image , 'link'=>$link])
+        @endforeach
     @endforeach
     {{--<div class="row">--}}
     {{--<div class="col-md-6" id="consultationColumn" >--}}
