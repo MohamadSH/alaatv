@@ -3294,7 +3294,7 @@ class SanatisharifmergeController extends Controller
     }
 
     public function redirectLesson(Request $request , $lId = null , $dId = null){
-        $tag = $this->getDepLessonTags($request, $lId, $dId);
+        $tag = $this->getDepLessonTags($lId, $dId);
         $newUri = urldecode(action("HomeController@search" , ["tags"=>$tag]));
         $isApp = ( strlen(strstr($request->header('User-Agent'),"Alaa")) > 0 )? true : false ;
         $app = null;
@@ -3339,7 +3339,7 @@ class SanatisharifmergeController extends Controller
                     }
                 }
             }
-            $tag = $this->getDepLessonTags($request, $lId, $dId);
+            $tag = $this->getDepLessonTags($lId, $dId);
             return urldecode(action("HomeController@search" , ["tags"=>$tag]));
 
         });
