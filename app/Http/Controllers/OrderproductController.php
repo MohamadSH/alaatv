@@ -334,8 +334,8 @@ class OrderproductController extends Controller
             session()->save();
             if($request->ajax())
                 return response()->json(
-                json_decode(["status" => 200,'url'  => action("OrderController@checkoutAuth")]),
-                200);
+                    json_encode(["status" => 200,'url'  => action("OrderController@checkoutAuth")]),
+                    200);
             return redirect(action("OrderController@checkoutAuth"));
         }
     }
