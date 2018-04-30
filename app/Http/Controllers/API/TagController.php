@@ -175,10 +175,12 @@ class TagController extends Controller
                     'error' => "msg",
                 ], 410);
             }
-            $header = array (
+          
+            $header = [
                 'Content-Type' => 'application/json; charset=UTF-8',
                 'charset' => 'utf-8'
-            );
+            ];
+
             $response = response()->json([
                 'data' => $result,
             ], 200,$header,JSON_UNESCAPED_UNICODE);
