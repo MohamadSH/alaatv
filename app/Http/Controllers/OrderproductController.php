@@ -60,12 +60,22 @@ class OrderproductController extends Controller
         $product_id = $request->get("product_id");
         $product = Product::FindorFail($product_id) ;
         $user = Auth::user();
+        $ajax = request()->ajax();
+
         if( ( Auth::check() && !$user->can(Config::get('constants.ORDER_ANY_THING')) ) && !session()->has("adminOrder_id"))
         {
             $validateProduct = $product->validateProduct();
             if (strlen($validateProduct) != 0) {
-                session()->put("error", $validateProduct);
-                return redirect()->back();
+                if($ajax)
+                {
+                    return $this->response->setStatusCode(503)->setContent(["message"=>$validateProduct]);
+                }
+               else
+               {
+                    session()->put("error", $validateProduct);
+                    return redirect()->back();
+               }
+
             }
         }
         if($request->has("attribute") || $product->producttype_id == Config::get("constants.PRODUCT_TYPE_SIMPLE"))
@@ -124,8 +134,16 @@ class OrderproductController extends Controller
                     array_push($simpleProducts , $simpleProduct);
             }
         }else{
-            session()->put("error" , "لطفا ابتدا در قسمت \"انتخاب محصول\" تیک محصولات مورد نظرتون رو بزنید(انتخاب کنید)");
-            return redirect()->back();
+            $message = "لطفا ابتدا در قسمت \"انتخاب محصول\" تیک محصولات مورد نظرتون رو بزنید(انتخاب کنید)";
+            if($ajax)
+            {
+                return $this->response->setStatusCode(503)->setContent(["message"=>$message]);
+            }
+            else
+            {
+                session()->put("error" , $message);
+                return redirect()->back();
+            }
         }
         if(isset($simpleProducts))
         {
@@ -138,8 +156,16 @@ class OrderproductController extends Controller
             }
         }
         else{
-            session()->put("warning" , "محصول مورد نظر شما غیر فعال شده است");
-            return redirect()->back();
+            $message = "محصول مورد نظر شما غیر فعال شده است";
+            if($ajax)
+            {
+                return $this->response->setStatusCode(503)->setContent(["message"=>$message]);
+            }
+            else
+            {
+                session()->put("warning" ,$message );
+                return redirect()->back();
+            }
         }
         if(Auth::check()){
             /**
@@ -148,7 +174,17 @@ class OrderproductController extends Controller
             if(session()->has("adminOrder_id"))
             {
                 if(!$user->can(Config::get('constants.INSERT_ORDER_ACCESS')))
-                    return redirect(action("HomeController@error403"));
+                {
+                    if($ajax)
+                    {
+                        return $this->response->setStatusCode(403);
+                    }
+                    else
+                    {
+                        return redirect(action("HomeController@error403"));
+                    }
+                }
+
                 $order_id = session()->get("adminOrder_id");
                 $user_id = session()->get("customer_id");
                 $user = User::FindOrFail($user_id);
@@ -158,7 +194,16 @@ class OrderproductController extends Controller
                 $order_id = session()->get("order_id");
                 $order = Order::FindorFail($order_id);
                 if($order->user->id != $user->id)
-                    return redirect(action("HomeController@error403"));
+                {
+                    if($ajax)
+                    {
+                        return $this->response->setStatusCode(403);
+                    }
+                    else
+                    {
+                        return redirect(action("HomeController@error403"));
+                    }
+                }
             }
             /**
              * end
@@ -291,7 +336,6 @@ class OrderproductController extends Controller
                     //ToDo : replace with appropriate error page
 //                    else exit("خطای پایگاه داده");
                 }
-                return redirect(action("OrderController@checkoutAuth"));
 
         }
         else
@@ -332,10 +376,14 @@ class OrderproductController extends Controller
             session()->put("orderproducts" , $products);
 
             session()->save();
-            if($request->ajax())
-                return response()->json(
-                    json_encode(["status" => 200,'url'  => action("OrderController@checkoutAuth")]),
-                    200);
+        }
+
+        if($ajax)
+        {
+            return $this->response->setStatusCode(200)->setContent(["redirectUrl"=>action("OrderController@checkoutAuth")]);
+        }
+        else
+        {
             return redirect(action("OrderController@checkoutAuth"));
         }
     }

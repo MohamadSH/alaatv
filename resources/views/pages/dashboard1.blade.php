@@ -139,10 +139,10 @@
             <div class="portlet light">
                 <div class="portlet-body">
                     <div class="row">
-                        <div class="col-lg-2 col-md-2 col-sd-2 col-xs-12 text-center">
-                            <img src="/assets/extra/Alaa-logo.gif" style="width: 70%;">
+                        <div class="col-lg-3 col-md-2 col-sd-2 col-xs-12 text-center">
+                            <img src="/assets/extra/Alaa-logo.gif" style="width: 50%;">
                         </div>
-                        <div class="col-lg-10 col-md-10 col-sd-10 col-xs-12">
+                        <div class="col-lg-9 col-md-10 col-sd-10 col-xs-12">
                             <h4></h4>
                             <p class="text-justify" style="line-height:normal">
                                 آلاء پنجره ای است رو به دور نمای آموزش کشور که می کوشد با اساتید کار بلد و مخاطبان پر تعداد و متعهد خود آموزش همگانی را
