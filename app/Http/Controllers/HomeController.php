@@ -97,6 +97,10 @@ class HomeController extends Controller
     private static $TAG = HomeController::class;
 
     public function debug(Request $request){
+        $collection = collect([collect([1])]);
+        dump($collection);
+
+        dd($collection->pop());
         abort(404);
     }
     public function __construct()
@@ -248,7 +252,7 @@ class HomeController extends Controller
     }
     private function makeJsonForAndroidApp(Collection $items){
         $items = $items->pop();
-        $key = md5($items->implode(","));
+        $key = md5($items->pluck("id")->implode(","));
         $response = Cache::remember($key,Config::get("constants.CACHE_60"),function () use($items){
             $response = collect();
             $items->load('files');
@@ -478,7 +482,7 @@ class HomeController extends Controller
         else
         {
             $sideBarMode = "closed";
-            return view("pages.search" , compact("items"  ,"itemTypes" ,"tagArray" , "extraTagArray", "majors" , "grades" , "rootContentTypes", "childContentTypes" , "lessons" , "sideBarMode" ));
+            return view("pages.search" , compact("items"  ,"itemTypes" ,"tagArray" , "extraTagArray", "majors" , "grades"  , "lessons" , "sideBarMode" ));
         }
     }
 
