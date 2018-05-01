@@ -28,6 +28,14 @@
                     <span class="arrow "></span>
                 </a>
             </li>
+            <li class="nav-item @if(isset($pageName) && strcmp($pageName , "productsPortfolio")==0)start active open @endif">
+                <a href="{{action("ProductController@search")}}" class="nav-link nav-toggle font-yellow bold">
+                    <i class="icon-basket"></i>
+                    <span class="title">همایش های آلاء</span>
+                    @if(isset($pageName) && strcmp($pageName , "productsPortfolio")==0)<span class="selected"></span> @endif
+                    <span class="arrow "></span>
+                </a>
+            </li>
             @if(Auth::check())
 
                 {{--<li class="nav-item @if(isset($pageName) && strcmp($pageName , "certificates")==0)start active open @endif">--}}
@@ -101,7 +109,8 @@
                         @endpermission
                         @permission((Config::get('constants.SITE_CONFIG_ADMIN_PANEL_ACCESS')))
                         <li class="nav-item  ">
-                            <a href="#" class="nav-link ">
+                            <a href="#" class="nav-link  nav-toggle">
+                                <i class="fa fa-cogs"></i>
                                 <span class="title">پیکربندی سایت</span>
                             </a>
                             <ul class="sub-menu">
@@ -231,14 +240,7 @@
                     </li>
                 @endif
             @endif
-            <li class="nav-item @if(isset($pageName) && strcmp($pageName , "productsPortfolio")==0)start active open @endif">
-                <a href="{{action("ProductController@search")}}" class="nav-link nav-toggle">
-                    <i class="icon-basket"></i>
-                    <span class="title">همایش های آلاء</span>
-                    @if(isset($pageName) && strcmp($pageName , "productsPortfolio")==0)<span class="selected"></span> @endif
-                    <span class="arrow "></span>
-                </a>
-            </li>
+
             {{--<li class="nav-item @if(isset($pageName) && strcmp($pageName , "articles")==0)start active open @endif">--}}
                 {{--<a href="{{action("ArticleController@showList")}}" class="nav-link nav-toggle">--}}
                     {{--<i class="fa fa-book" aria-hidden="true"></i>--}}
