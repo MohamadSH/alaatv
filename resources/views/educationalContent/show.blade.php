@@ -73,21 +73,21 @@
                                         گر شما فعال است و از آخرین نسخه ی مرورگر استفاده می کنید.</p>
                                 </video>
                                 <script>
-                                    $(document).ready(function(){
-                                        console.log( "ready!" );
-                                        options = {
-                                            controlBar: {
-                                                children: [
-                                                    'playToggle',
-                                                    'progressControl',
-                                                    'volumePanel',
-                                                    'fullscreenToggle',
-                                                ],
-                                            },
-                                        };
-                                        var player = videojs('video-{{$educationalContent->id}}',options);
+                                    {{--$(document).ready(function(){--}}
+                                        {{--console.log( "ready!" );--}}
+                                        {{--options = {--}}
+                                            {{--controlBar: {--}}
+                                                {{--children: [--}}
+                                                    {{--'playToggle',--}}
+                                                    {{--'progressControl',--}}
+                                                    {{--'volumePanel',--}}
+                                                    {{--'fullscreenToggle',--}}
+                                                {{--],--}}
+                                            {{--},--}}
+                                        {{--};--}}
+                                        {{--var player = videojs('video-{{$educationalContent->id}}',options);--}}
 
-                                    });
+                                    {{--});--}}
                                 </script>
                             </div>
                             <div class="row">
@@ -156,7 +156,7 @@
                                 <ul>
 
                                     @foreach($contentsWithSameSet->whereIn("type" , "video" ) as $item)
-                                        <li class="mt-list-item @if($item["content"]->id == $educationalContent->id) bg-grey-mint @endif ">
+                                        <li class="mt-list-item @if($item["content"]->id == $educationalContent->id) bg-grey-mint @endif " id="playlistItem_{{$item["content"]->id}}">
                                             <div class="list-icon-container">
                                                 <a href="{{action("EducationalContentController@show" , $item["content"])}}">
                                                     <i class="fa fa-angle-left"></i>
@@ -482,4 +482,11 @@
 @endsection
 
 @section("extraJS")
+    <script>
+            var container = $('.scroller'),
+                scrollTo = $("#playlistItem_"+"{{$educationalContent->id}}");
+            container.animate({
+                scrollTop: scrollTo.offset().top - container.offset().top + container.scrollTop()
+            });​
+    </script>
 @endsection

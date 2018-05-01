@@ -98,6 +98,13 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sd-4 col-xs-12">
+                            <div class="form-group form-md-line-input form-md-floating-label has-info">
+                                {!! Form::select('tags[]',$grades,(isset($tagArray))?$tagArray:null,['class' => 'form-control itemFilter' , 'placeholder'=>'انتخاب دبیر' ]) !!}
+                            </div>
+                        </div>
+                    </div>
                     @if(!empty($extraTagArray))
                         <div class="row">
                             <div class="col-md-12">

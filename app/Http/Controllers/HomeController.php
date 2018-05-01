@@ -426,10 +426,46 @@ class HomeController extends Controller
             $response = $this->makeJsonForAndroidApp($items);
             return response()->json($response,200);
         }
+
+        /**
+         * Page inputs
+         */
         $totalTags = array();
         $majorCollection = Major::all();
+        $majors2 = collect();
+        foreach ($majorCollection as $major)
+        {
+            $lessons = [];
+            switch ($major->description)
+            {
+                case "رشته_ریاضی":
+                    $lessons=[
+                        "دیفرانسیل",
+                        "تحلیلی",
+                        "گسسته"
+                    ];
+                    break;
+                case "رشته_تجربی":
+                    $lessons=[
+                        "زیست شناسی",
+                        "ریاضی تجربی",
+                        "زمین شناسی"
+                    ];
+                    break;
+                case "رشته_انسانی":
+                    $lessons=[
+                        "ریاضی_انسانی",
+                        "منطق",
+                    ];
+                    break;
+                default:
+                    break;
+            }
+            $majors2->push(["name"=>$major->name , "lessons"=>$lessons]);
+        }
         $totalTags = array_merge($totalTags , $majorCollection->pluck("description")->toArray()) ;
         $majors = $majorCollection->pluck(  "name" , "description")->toArray();
+
 
         $gradeCollection = Grade::where("name" ,'<>' , 'graduated' )->get();
         $gradeCollection->push(["displayName"=>"اول دبیرستان" , "description"=>"اول_دبیرستان"]);
@@ -470,6 +506,9 @@ class HomeController extends Controller
 
         $extraTagArray  = array_diff($tagInput , $totalTags );
 
+        /**
+         * End of page inputs
+         */
         if(request()->ajax())
         {
             return $this->response
