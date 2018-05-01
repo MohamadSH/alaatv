@@ -172,7 +172,7 @@
                                                 </a>
                                                 <figcaption>
                                                     <header>
-                                                        <a href="{{action("ProductController@show" , 210)}}" title="">
+                                                        <a href="javascript:void(0)" data-role="210" class="checkout" title="">
                                                             <h1>
                                                                 <span>ادبیات</span>
                                                                 <em>سبطی</em>
@@ -203,7 +203,7 @@
                                                 </a>
                                                 <figcaption>
                                                     <header>
-                                                        <a href="{{action("ProductController@show" , 211)}}" title="">
+                                                        <a href="javascript:void(0)" data-role="211" class="checkout" title="">
                                                             <h1>
                                                                 <span>دین و زندگی</span>
                                                                 <em>کاغذی</em>
@@ -234,7 +234,7 @@
                                                 </a>
                                                 <figcaption>
                                                     <header>
-                                                        <a href="{{action("ProductController@show" , 216)}}" title="">
+                                                        <a href="javascript:void(0)" data-role="216" class="checkout" title="">
                                                             <h1>
                                                                 <span>فیزیک</span>
                                                                 <em>طلوعی</em>
@@ -265,7 +265,7 @@
                                                 </a>
                                                 <figcaption>
                                                     <header>
-                                                        <a href="{{action("ProductController@show" , 217)}}" title="">
+                                                        <a href="javascript:void(0)" data-role="217" class="checkout" title="">
                                                             <h1>
                                                                 <span>شیمی</span>
                                                                 <em>صنیعی</em>
@@ -291,12 +291,12 @@
                                                 <em>مشترک</em>
                                             </bdi>
                                             <figure>
-                                                <a href="{{action("ProductController@show" , 214)}}" title="">
+                                                <a href="javascript:void(0)" data-role="214" class="checkout" title="">
                                                     <img src="/assets/extra/landing3/images/professors/G2.png" alt="" title="">
                                                 </a>
                                                 <figcaption>
                                                     <header>
-                                                        <a href="{{action("ProductController@show" , 214)}}" title="">
+                                                        <a href="javascript:void(0)" data-role="214" class="checkout" title="">
                                                             <h1>
                                                                 <span>عربی</span>
                                                                 <em>ناصح زاده</em>
@@ -322,12 +322,12 @@
                                                 <em>مشترک</em>
                                             </bdi>
                                             <figure>
-                                                <a href="{{action("ProductController@show" , 215)}}" title="">
+                                                <a href="javascript:void(0)" data-role="215" class="checkout" title="">
                                                     <img src="/assets/extra/landing3/images/professors/G8.png" alt="" title="">
                                                 </a>
                                                 <figcaption>
                                                     <header>
-                                                        <a href="{{action("ProductController@show" , 215)}}" title="">
+                                                        <a href="javascript:void(0)" data-role="215" class="checkout" title="">
                                                             <h1>
                                                                 <span>عربی</span>
                                                                 <em>آهویی</em>
@@ -398,12 +398,12 @@
                                                 <em>تجربی</em>
                                             </bdi>
                                             <figure>
-                                                <a href="{{action("ProductController@show" , 212)}}" title="">
+                                                <a href="javascript:void(0)" data-role="212" class="checkout" title="">
                                                     <img src="/assets/extra/landing3/images/professors/G1.png" alt="" title="">
                                                 </a>
                                                 <figcaption>
                                                     <header>
-                                                        <a href="{{action("ProductController@show" , 212)}}" title="">
+                                                        <a href="javascript:void(0)" data-role="212" class="checkout" title="">
                                                             <h1>
                                                                 <span>زیست گیاهی</span>
                                                                 <em>چلاجور</em>
@@ -429,12 +429,12 @@
                                                 <em>تجربی</em>
                                             </bdi>
                                             <figure>
-                                                <a href="{{action("ProductController@show" , 213)}}" title="">
+                                                <a href="javascript:void(0)" data-role="213" class="checkout" title="">
                                                     <img src="/assets/extra/landing3/images/professors/G1.png" alt="" title="">
                                                 </a>
                                                 <figcaption>
                                                     <header>
-                                                        <a href="{{action("ProductController@show" , 213)}}" title="">
+                                                        <a href="javascript:void(0)" data-role="213" class="checkout" title="">
                                                             <h1>
                                                                 <span>زمین شناسی</span>
                                                                 <em>چلاجور</em>
@@ -460,12 +460,12 @@
                                                 <em>تجربی</em>
                                             </bdi>
                                             <figure>
-                                                <a href="{{action("ProductController@show" , 219)}}" title="">
+                                                <a href="javascript:void(0)" data-role="219" class="checkout" title="">
                                                     <img src="/assets/extra/landing3/images/professors/G5.png" alt="" title="">
                                                 </a>
                                                 <figcaption>
                                                     <header>
-                                                        <a href="{{action("ProductController@show" , 219)}}" title="">
+                                                        <a href="javascript:void(0)" data-role="219" class="checkout" title="">
                                                             <h1>
                                                                 <span>ریاضی تجربی</span>
                                                                 <em>امینی</em>
@@ -491,12 +491,12 @@
                                                 <em>تجربی</em>
                                             </bdi>
                                             <figure>
-                                                <a href="{{action("ProductController@show" , 220)}}" title="">
+                                                <a href="javascript:void(0)" data-role="220" class="checkout" title="">
                                                     <img src="/assets/extra/landing3/images/professors/G3.png" alt="" title="">
                                                 </a>
                                                 <figcaption>
                                                     <header>
-                                                        <a href="{{action("ProductController@show" , 220)}}" title="">
+                                                        <a href="javascript:void(0)" data-role="220" class="checkout" title="">
                                                             <h1>
                                                                 <span>ریاضی تجربی</span>
                                                                 <em>نباخته</em>
@@ -571,12 +571,12 @@
                                                 <em>ریاضی</em>
                                             </bdi>
                                             <figure>
-                                                <a href="{{action("ProductController@show" , 218)}}" title="">
+                                                <a href="javascript:void(0)" data-role="218" class="checkout" title="">
                                                     <img src="/assets/extra/landing3/images/professors/G6.png" alt="" title="">
                                                 </a>
                                                 <figcaption>
                                                     <header>
-                                                        <a href="{{action("ProductController@show" , 218)}}" title="">
+                                                        <a href="javascript:void(0)" data-role="218" class="checkout" title="">
                                                             <h1>
                                                                 <span>دیفرانیل</span>
                                                                 <em>ثابتی</em>
@@ -658,52 +658,53 @@
 <script src="/assets/extra/landing3/js/menu.min.js" defer="defer"></script>
 <script src="/assets/extra/landing3/js/script.js" defer="defer"></script>
 <script>
-    $('a.link').click(function() {
-        var id = $(this).data('role');
-        $.ajax({
-            url: '{{ action('OrderproductController@store') }}',
-            type: 'POST',
-            // contentType: 'application/json; charset=UTF-8',
-            // dataType: 'json',
-            // timeout: 10000,
-            data: {
-                product_id: id
-            },
-            statusCode: {
-                //The status for when action was successful
-                200: function (response) {
-                    if(response.redirectUrl!= null && response.redirectUrl!="undefined")
-                        window.location.replace(response.redirectUrl);
-                },
-                //The status for when the user is not authorized for making the request
-                403: function (response) {
-                    console.log("response 403");
-                },
-                //The status for when the user is not authorized for making the request
-                401: function (response) {
-                    console.log("response 401");
-                },
-                404: function (response) {
-                    console.log("response 404");
-                },
-                //The status for when form data is not valid
-                422: function (response) {
-                    console.log(response);
-                },
-                //The status for when there is error php code
-                500: function (response) {
-                    console.log("response 500");
-                    console.log(response.responseText);
-                },
-                //The status for when there is error php code
-                503: function (response) {
-                    response = $.parseJSON(response.responseText);
-                    console.log(response.message);
-                }
-            }
-        });
-        return false;
-    });
+    {{--$('a.checkout').click(function() {--}}
+        {{--console.log("clcked");--}}
+        {{--var id = $(this).data('role');--}}
+        {{--$.ajax({--}}
+            {{--url: '{{ action('OrderproductController@store') }}',--}}
+            {{--type: 'POST',--}}
+            {{--// contentType: 'application/json; charset=UTF-8',--}}
+            {{--// dataType: 'json',--}}
+            {{--// timeout: 10000,--}}
+            {{--data: {--}}
+                {{--product_id: id--}}
+            {{--},--}}
+            {{--statusCode: {--}}
+                {{--//The status for when action was successful--}}
+                {{--200: function (response) {--}}
+                    {{--if(response.redirectUrl!= null && response.redirectUrl!="undefined")--}}
+                        {{--window.location.replace(response.redirectUrl);--}}
+                {{--},--}}
+                {{--//The status for when the user is not authorized for making the request--}}
+                {{--403: function (response) {--}}
+                    {{--console.log("response 403");--}}
+                {{--},--}}
+                {{--//The status for when the user is not authorized for making the request--}}
+                {{--401: function (response) {--}}
+                    {{--console.log("response 401");--}}
+                {{--},--}}
+                {{--404: function (response) {--}}
+                    {{--console.log("response 404");--}}
+                {{--},--}}
+                {{--//The status for when form data is not valid--}}
+                {{--422: function (response) {--}}
+                    {{--console.log(response);--}}
+                {{--},--}}
+                {{--//The status for when there is error php code--}}
+                {{--500: function (response) {--}}
+                    {{--console.log("response 500");--}}
+                    {{--console.log(response.responseText);--}}
+                {{--},--}}
+                {{--//The status for when there is error php code--}}
+                {{--503: function (response) {--}}
+                    {{--response = $.parseJSON(response.responseText);--}}
+                    {{--console.log(response.message);--}}
+                {{--}--}}
+            {{--}--}}
+        {{--});--}}
+        {{--return false;--}}
+    {{--});--}}
 </script>
 </body>
 </html>
