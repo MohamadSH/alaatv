@@ -234,7 +234,7 @@
             <li class="nav-item @if(isset($pageName) && strcmp($pageName , "productsPortfolio")==0)start active open @endif">
                 <a href="{{action("ProductController@search")}}" class="nav-link nav-toggle">
                     <i class="icon-basket"></i>
-                    <span class="title">اردوها و همایش ها</span>
+                    <span class="title">همایش های آلاء</span>
                     @if(isset($pageName) && strcmp($pageName , "productsPortfolio")==0)<span class="selected"></span> @endif
                     <span class="arrow "></span>
                 </a>
