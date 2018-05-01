@@ -414,7 +414,7 @@
                     </article>
                     <ul class="tab-title tab-lesson">
                         <li data-tab="1">
-                            <a href="javascript:void(0)" title="همه دروس">دروس مشترک</a>
+                            <a href="javascript:void(0)" title="همه دروس">همه دروس(اختصاصی و عمومی)</a>
                         </li>
                         <li data-tab="2">
                             <a href="javascript:void(0)" title="ریاضی">اختصاصی ریاضی</a>
@@ -492,7 +492,6 @@
                             <a href="javascript:void(0)"  class="link" data-role="211" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
-
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
@@ -624,6 +623,151 @@
                             <a href="javascript:void(0)" class="link" data-role="215" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
+
+                    <article class="art-professors">
+                        <figure>
+                            <a href="javascript2:void(0)" title="">
+                                <img src="/assets/extra/landing4/images/professors/S5.png" alt="1" title="1">
+                            </a>
+                            <figcaption>
+                                <header>
+                                    <a href="javascript:void(0)" title="">
+                                        <h1>محمد صادق ثابتی</h1>
+                                    </a>
+                                    <span>همایش طلایی 48 تست کنکور ریاضی</span>
+                                </header>
+                            </figcaption>
+                        </figure>
+                        <p style="text-align: justify">این همایش به تحلیل موضوعات درس ریاضیات شامل دیفرانسیل، تحلیلی، گسسته، ریاضیات پایه، جبر و احتمال و آمار می پردازد.</p>
+                        هدف ما زدن تست ها با حداقل اطلاعات ممکن است
+                        <div class="info-professors">
+                            <header>
+                                <h4>عبور از کنکور با حداقل ها</h4>
+                            </header>
+                            {{--<span></span>--}}
+                            {{--<span></span>--}}
+                            {{--<span></span>--}}
+                            {{--<span></span>--}}
+                            <p style="text-align: justify; font-size: medium">
+                                در این همایش نمونه تست های پیش بینی شده از طرف استاد ارائه شده و در کنار حل این مجموعه، تحلیل و بررسی دو سری سوالات کنکور انجام می شود.
+                                همراه درسنامه مختصر از موضوعات مهم و با این همایش شما با توانی بالا به استقبال کنکور ۹۷ می روید. با ما در این مسیر به درکی از سوالات ریاضی می رسید که می توانید بدون نگرانی از سختی ظاهری سوالات از پس آن ها برآیید.
+                            </p>
+                            <a href="javascript:void(0)" class="link" data-role="218" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                        </div>
+                    </article>
+
+                    <article class="art-professors" >
+                        <figure>
+                            <a href="javascript2:void(0)" title="">
+                                <img src="/assets/extra/landing4/images/professors/S10.png" alt="1" title="1">
+                            </a>
+                            <figcaption>
+                                <header>
+                                    <a href="javascript:void(0)" title="">
+                                        <h1>دکتر محمد چلاجور</h1>
+                                    </a>
+                                    <span>همایش طلایی زیست شناسی کنکور</span>
+                                </header>
+                            </figcaption>
+                        </figure>
+                        <p style="text-align: justify">زیست شناسی اصلی ترین درس رشته تجربی می باشد و در ارتباط با اهمیت آن هر چه گفته شود کم است.</p>
+                        <p style="text-align: justify">در کنکور سراسری در درس زیست هر مبحثی برای خودش اهمیت دارد و قرار نیست فصلی را حذف کنید چون ممکن است مثل کنکور پارسال، همون سوالاتی که شما فکر می کردید سخته، سوالات آسون از آن ها مطرح شود.</p>
+                        <div class="info-professors">
+                            <header>
+                                <h4>دورنمای مباجث همایش و اهمیت آن ها در کنکور:</h4>
+                            </header>
+                            <span>جانوران، بدن انسانی، گیاهی و... </span>
+                            <span>کل زیست به جز ژنتیکش رو قراره جمع بندی کنیم.</span>
+                            <span>همچنین قراره تست های خاص گیاهی دکتر چلاجور رو تو این همایش داشته باشیم.</span>
+                            <a href="javascript:void(0)" class="link" data-role="221" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                        </div>
+                    </article>
+                    <article class="art-professors">
+                        <figure>
+                            <a href="javascript2:void(0)" title="">
+                                <img src="/assets/extra/landing4/images/professors/S10.png" alt="1" title="1">
+                            </a>
+                            <figcaption>
+                                <header>
+                                    <a href="javascript:void(0)" title="">
+                                        <h1>دکتر محمد چلاجور</h1>
+                                    </a>
+                                    <span>همایش طلایی زمین شناسی کنکور</span>
+                                </header>
+                            </figcaption>
+                        </figure>
+                        <p style="text-align: justify">
+                            قرار است مطالبی رو که هر سال سوال می آید و یا تست های مهم زمین شناسی را با شما بررسی کنیم
+                        </p>
+                        <div class="info-professors">
+                            <header>
+                                <h4>در عرض ۵ ساعت شما می توانید:</h4>
+                            </header>
+                            <span>به حداقل درصدتون</span>
+                            <span>در کمترین زمان</span>
+                            <span>و با بهترین راندمان</span>
+                            <span>دست پیدا کنید</span>
+                            <a href="javascript:void(0)"  class="link" data-role="213" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                        </div>
+                    </article>
+                    <article class="art-professors">
+                        <figure>
+                            <a href="javascript2:void(0)" title="">
+                                <img src="/assets/extra/landing4/images/professors/S4.png" alt="1" title="1">
+                            </a>
+                            <figcaption>
+                                <header>
+                                    <a href="javascript:void(0)" title="">
+                                        <h1>مهدی امینی راد</h1>
+                                    </a>
+                                    <span>همایش طلایی ریاضی تجربی کنکور</span>
+                                </header>
+                            </figcaption>
+                        </figure>
+                        <p style="text-align: justify">در این همایش ریاضی تجربی به صورت خلاصه، منظم، الگوبندی شده و در قالبی روان و دلپذیر جمع بندی و ارائه می شود.
+                            شما با این همایش مهارت در پاسخگویی به سوالات در هر سه سطح ساده، متوسط و دشوار کسب می کنید.</p>
+                        <div class="info-professors">
+                            <header>
+                                <h4>مهارت در ریاضی تجربی</h4>
+                            </header>
+                            <span>کسب مهارت در پاسخگویی به سوالات با هر درجه سختی</span>
+                            <span>صرفه جویی در زمان برای جمع بندی کنکور</span>
+                            <span>فراگیری روش های جدید تست زنی</span>
+                            <span>به همراه حل سوالات کنکور های گذشته و برخی سوالات تالیفی</span>
+                            <a href="javascript:void(0)" class="link" title="خرید بسته آموزشی" data-role="219">خرید بسته آموزشی</a>
+                        </div>
+                    </article>
+                    <article class="art-professors">
+                        <figure>
+                            <a href="javascript2:void(0)" title="">
+                                <img src="/assets/extra/landing4/images/professors/S2.png" alt="1" title="1">
+                            </a>
+                            <figcaption>
+                                <header>
+                                    <a href="javascript:void(0)" title="">
+                                        <h1>محمد امین نباخته</h1>
+                                    </a>
+                                    <span>همایش طلایی ریاضی تجربی کنکور</span>
+                                </header>
+                            </figcaption>
+                        </figure>
+                        <p style="text-align: justify">در این همایش موضوع به موضوع سوالات کنکور ۹۴ تا ۹۶ را بررسی می کنیم.
+                            الگوهای طراحان در این همایش معرفی شده و نکات را تشریح می کنیم.</p>
+                        <div class="info-professors">
+                            <header>
+                                <h4>جمع بندی روشمند و جامع ریاضی کنکور تجربی</h4>
+                            </header>
+                            {{--<span></span>--}}
+                            {{--<span></span>--}}
+                            {{--<span></span>--}}
+                            {{--<span></span>--}}
+                            <p style="text-align: justify; font-size: medium">
+                                با بررسی موضوعی سوالات ریاضی تجربی کنکور داخل و خارج  ۹۵،۹۴ و ۹۶ از هم اکنون جای پای خود را در کنکور ۹۷ محکم می کنیم. با این همایش شما دانسته هایتان را با سلیقه طراحان کنکور طبقه بندی می کنید و برای به دست آوردن درصد بالایی از این درس خود را آماده می کنید.
+                            </p>
+                            <a href="javascript:void(0)" class="link" data-role="220" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                        </div>
+                    </article>
+
                 </section>
             </div>
             <div class="content-tab-lesson" data-tabc="2">
@@ -659,7 +803,75 @@
                             <a href="javascript:void(0)" class="link" data-role="218" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
+                    <article class="art-professors">
+                        <figure>
+                            <a href="javascript2:void(0)" title="">
+                                <img src="/assets/extra/landing4/images/professors/S3.png" alt="1" title="1">
+                            </a>
+                            <figcaption>
+                                <header>
+                                    <a href="javascript:void(0)" title="">
+                                        <h1>پیمان طلوعی</h1>
+                                    </a>
+                                    <span>همایش طلایی فیزیک کنکور</span>
+                                </header>
+                            </figcaption>
+                        </figure>
+                        <p style="text-align: justify">
+                            تحلیل فیزیک کنکور در ۲۰۰ تست پر نکته؛
+                            حلاجی و شرح نکات ریز و حل خلاقانه تست ها؛
 
+                            بعد از این همایش نظر شما نسبت به کنکور عوض خواهد شد.
+
+                        </p>
+                        <div class="info-professors">
+                            <header>
+                                <h4>جمع بندی مطمئن کنکور</h4>
+                            </header>
+                            {{--<span></span>--}}
+                            {{--<span></span>--}}
+                            {{--<span></span>--}}
+                            {{--<span></span>--}}
+                            <p style="text-align: justify; font-size: medium">
+                                در این همایش با حل ۲۰۰ تست و دوره تمام نکات و مباحث اساسی فیزیک کنکور شما دیگر استرسی برای یک جمع بندی خوب و حرفه ای نخواهید داشت.
+                                امسال با همایشی بی نظیر و طلایی در درس فیزیک در کنار شما هستیم.
+                            </p>
+                            <a href="javascript:void(0)" class="link" data-role="216" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                        </div>
+                    </article>
+                    <article class="art-professors">
+                        <figure>
+                            <a href="javascript2:void(0)" title="">
+                                <img src="/assets/extra/landing4/images/professors/S6.png" alt="1" title="1">
+                            </a>
+                            <figcaption>
+                                <header>
+                                    <a href="javascript:void(0)" title="">
+                                        <h1>مهدی صنیعی تهرانی</h1>
+                                    </a>
+                                    <span>همایش طلایی شیمی کنکور</span>
+                                </header>
+                            </figcaption>
+                        </figure>
+                        <p style="text-align: justify">با حل و تحلیل ۱۱۰ مسئله ترکیبی و فوق العاده کنکور با توانی مضاعف سوالات شیمی کنکور را به چالش می کشیم.
+                            با این همایش قضاوت ما نسبت به مسائل شیمی تغییر می کند و ترازی تضمین شده از شیمی را برداشت خواهیم کرد.</p>
+                        <div class="info-professors">
+                            <header>
+                                <h4>حل مسائل ترکیبی؛ قدمی بلند در شیمی کنکور</h4>
+                            </header>
+                            {{--<span></span>--}}
+                            {{--<span></span>--}}
+                            {{--<span></span>--}}
+                            {{--<span></span>--}}
+                            <p style="text-align: justify; font-size: medium">
+                                در همایش شیمی سال ۹۶ با نحوه حل تک تک انواع مسائل آشنا شدیم؛
+                                با کمترین فرمول، کمترین محاسبه و کمترین زمان.
+                                در این همایش با حل مسائل ترکیبی به سطحی بالاتر در مواجهه با سوالات کنکور می رسیم.
+                                پس از این همایش سوالات با ساده ترین حالت خود در برابر ما قرار خواهد گرفت.
+                            </p>
+                            <a href="javascript:void(0)" class="link" data-role="217" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                        </div>
+                    </article>
                 </section>
             </div>
             <div class="content-tab-lesson" data-tabc="3">
@@ -722,7 +934,6 @@
                             <a href="javascript:void(0)" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
-
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
@@ -867,7 +1078,75 @@
                             <a href="javascript:void(0)" class="link" data-role="220" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
+                    <article class="art-professors">
+                        <figure>
+                            <a href="javascript2:void(0)" title="">
+                                <img src="/assets/extra/landing4/images/professors/S3.png" alt="1" title="1">
+                            </a>
+                            <figcaption>
+                                <header>
+                                    <a href="javascript:void(0)" title="">
+                                        <h1>پیمان طلوعی</h1>
+                                    </a>
+                                    <span>همایش طلایی فیزیک کنکور</span>
+                                </header>
+                            </figcaption>
+                        </figure>
+                        <p style="text-align: justify">
+                            تحلیل فیزیک کنکور در ۲۰۰ تست پر نکته؛
+                            حلاجی و شرح نکات ریز و حل خلاقانه تست ها؛
 
+                            بعد از این همایش نظر شما نسبت به کنکور عوض خواهد شد.
+
+                        </p>
+                        <div class="info-professors">
+                            <header>
+                                <h4>جمع بندی مطمئن کنکور</h4>
+                            </header>
+                            {{--<span></span>--}}
+                            {{--<span></span>--}}
+                            {{--<span></span>--}}
+                            {{--<span></span>--}}
+                            <p style="text-align: justify; font-size: medium">
+                                در این همایش با حل ۲۰۰ تست و دوره تمام نکات و مباحث اساسی فیزیک کنکور شما دیگر استرسی برای یک جمع بندی خوب و حرفه ای نخواهید داشت.
+                                امسال با همایشی بی نظیر و طلایی در درس فیزیک در کنار شما هستیم.
+                            </p>
+                            <a href="javascript:void(0)" class="link" data-role="216" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                        </div>
+                    </article>
+                    <article class="art-professors">
+                        <figure>
+                            <a href="javascript2:void(0)" title="">
+                                <img src="/assets/extra/landing4/images/professors/S6.png" alt="1" title="1">
+                            </a>
+                            <figcaption>
+                                <header>
+                                    <a href="javascript:void(0)" title="">
+                                        <h1>مهدی صنیعی تهرانی</h1>
+                                    </a>
+                                    <span>همایش طلایی شیمی کنکور</span>
+                                </header>
+                            </figcaption>
+                        </figure>
+                        <p style="text-align: justify">با حل و تحلیل ۱۱۰ مسئله ترکیبی و فوق العاده کنکور با توانی مضاعف سوالات شیمی کنکور را به چالش می کشیم.
+                            با این همایش قضاوت ما نسبت به مسائل شیمی تغییر می کند و ترازی تضمین شده از شیمی را برداشت خواهیم کرد.</p>
+                        <div class="info-professors">
+                            <header>
+                                <h4>حل مسائل ترکیبی؛ قدمی بلند در شیمی کنکور</h4>
+                            </header>
+                            {{--<span></span>--}}
+                            {{--<span></span>--}}
+                            {{--<span></span>--}}
+                            {{--<span></span>--}}
+                            <p style="text-align: justify; font-size: medium">
+                                در همایش شیمی سال ۹۶ با نحوه حل تک تک انواع مسائل آشنا شدیم؛
+                                با کمترین فرمول، کمترین محاسبه و کمترین زمان.
+                                در این همایش با حل مسائل ترکیبی به سطحی بالاتر در مواجهه با سوالات کنکور می رسیم.
+                                پس از این همایش سوالات با ساده ترین حالت خود در برابر ما قرار خواهد گرفت.
+                            </p>
+                            <a href="javascript:void(0)" class="link" data-role="217" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                        </div>
+                    </article>
                 </section>
             </div>
         </div>
