@@ -114,7 +114,6 @@
             <!-- BEGIN CONTENT -->
             <div class="page-content-wrapper" xmlns="http://www.w3.org/1999/xhtml">
                 <!-- BEGIN CONTENT BODY -->
-
                     <div
                             @section("contentClass")
                                 class="page-content"

@@ -118,30 +118,30 @@
             </div>
             {{--TEXT SEARCH--}}
             {{--<div class="row">--}}
-            {{--<div class="col-md-12">--}}
-            {{--<div class="input-group " >--}}
-            {{--<input type="text" class="form-control" placeholder="اینجا بنویسید . . . ">--}}
-            {{--<span class="input-group-btn">--}}
-            {{--<button class="btn blue uppercase bold" type="button">بگرد</button>--}}
-            {{--</span>--}}
-            {{--</div>--}}
-            {{--</div>--}}
+                {{--<div class="col-md-12">--}}
+                    {{--<div class="input-group " >--}}
+                        {{--<input type="text" class="form-control" placeholder="اینجا بنویسید . . . ">--}}
+                        {{--<span class="input-group-btn">--}}
+                            {{--<button class="btn blue uppercase bold" type="button">بگرد</button>--}}
+                        {{--</span>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
             {{--</div>--}}
         </div>
     </div>
     {{--<div class="search-page search-content-2">--}}
-    {{--<div class="search-bar ">--}}
-    {{--<div class="row">--}}
-    {{--<div class="col-md-12">--}}
-    {{--<div class="input-group">--}}
-    {{--<input type="text" class="form-control" placeholder="Search for...">--}}
-    {{--<span class="input-group-btn">--}}
-    {{--<button class="btn blue uppercase bold" type="button">Search</button>--}}
-    {{--</span>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--</div>--}}
+        {{--<div class="search-bar ">--}}
+            {{--<div class="row">--}}
+                {{--<div class="col-md-12">--}}
+                    {{--<div class="input-group">--}}
+                        {{--<input type="text" class="form-control" placeholder="Search for...">--}}
+                        {{--<span class="input-group-btn">--}}
+                                            {{--<button class="btn blue uppercase bold" type="button">Search</button>--}}
+                                        {{--</span>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+            {{--</div>--}}
+        {{--</div>--}}
     {{--</div>--}}
     <div class="row" >
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
@@ -164,7 +164,23 @@
                 </div>
                 <!-- END PORTLET-->
         @endif
-        <!-- BEGIN PORTLET-->
+        @if($items->where("type" , "contentset")->first()["totalitems"] > 0)
+                <div class="portlet light ">
+                    <div class="portlet-title tabbable-line">
+                        <div class="caption">
+                            <i class="icon-globe font-dark hide"></i>
+                            <span class="caption-subject font-dark bold uppercase">دوره های آموزشی آلاء</span>
+                        </div>
+                    </div>
+                    <div class="portlet-body " id="tab_contentset" >
+                        {!! $items->where("type" , "contentset")->first()["view"]  !!}
+                    </div>
+                </div>
+        @endif
+        @foreach($ads1 as $image => $link)
+            @include('partials.bannerAds', ['img'=>$image , 'link'=>$link])
+        @endforeach
+            <!-- BEGIN PORTLET-->
             <div class="portlet light ">
                 <div class="portlet-title tabbable-line">
                     <div class="caption">
@@ -183,9 +199,6 @@
                         <li class="active">
                             <a href="#tab_content_video"  data-toggle="tab">Video</a>
                         </li>
-                        <li >
-                            <a href="#tab_contentset" data-toggle="tab"> Playlist </a>
-                        </li>
                     </ul>
                 </div>
                 <div class="portlet-body " >
@@ -196,9 +209,6 @@
                         <div class="tab-pane text-center" id="tab_content_pamphlet">
                             {!! $items->where("type" , "pamphlet")->first()["view"]  !!}
                         </div>
-                        <div class="tab-pane text-center" id="tab_contentset">
-                            {!! $items->where("type" , "contentset")->first()["view"]  !!}
-                        </div>
                         <div class="tab-pane text-center" id="tab_content_article">
                             {!! $items->where("type" , "article")->first()["view"]  !!}
                         </div>
@@ -207,6 +217,9 @@
                 </div>
             </div>
             <!-- END PORTLET-->
+            @foreach($ads2 as $image => $link)
+                @include('partials.bannerAds', ['img'=>$image , 'link'=>$link])
+            @endforeach
         </div>
     </div>
 @endsection
