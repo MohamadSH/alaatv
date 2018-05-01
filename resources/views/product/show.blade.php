@@ -38,7 +38,7 @@
     @include("systemMessage.flash")
 
         @if(!isset($descriptionIframe) || !$descriptionIframe)
-            @if(isset($isLive) && $isLive !== false)
+            {{--@if(isset($isLive) && $isLive !== false)--}}
                 {{--<div class="row">--}}
                     {{--<div class="col-md-12">--}}
                             {{--<div class="portlet light profile">--}}
@@ -88,7 +88,7 @@
                         {{--</div>--}}
                     {{--</div>--}}
                 {{--</div>--}}
-            @endif
+            {{--@endif--}}
             <div class="row">
                 <div class="col-md-12">
                     <!-- BEGIN Portlet PORTLET-->
@@ -592,216 +592,235 @@
         @endif
 
         @endif
-        @if( isset($product->longDescription[0]) || ($productsWithVideo->isNotEmpty() || $productsWithPamphlet->isNotEmpty()))
+        @if( isset($product->longDescription[0] ) || ($productsWithVideo->isNotEmpty() || $productsWithPamphlet->isNotEmpty()))
             <div class="row">
-            <div class="col-md-12">
-            <div class="portlet box yellow">
-            <div class="portlet-body">
-                <div class="tabbable-line">
-                    <ul class="nav nav-tabs ">
-                        @if(isset($product->longDescription) && strlen($product->longDescription) >0)
-                        <li class="active">
-                            <a href="#tab_15_1" data-toggle="tab" class="bold  uppercase"> توضیحات اجمالی @if(isset($descriptionIframe) && $descriptionIframe) {{$product->name}} @endif</a>
-                        </li>
-                        @endif
-                        @if(!isset($descriptionIframe) || !$descriptionIframe)
-                        {{--@role((Config::get('constants.ROLE_ADMIN')))--}}
-                                {{--@if(strcmp(getenv('SERVER'),"http://orduetalaee.ir")==0)--}}
-                                    {{--<li>--}}
+                <div class="col-md-12">
+                    <div class="portlet box yellow">
+                        <div class="portlet-body">
+                            <div class="tabbable-line">
+                                <ul class="nav nav-tabs ">
+                                    @if(isset($product->longDescription) && strlen($product->longDescription) >0)
+                                        <li class="active">
+                                            <a href="#tab_15_1" data-toggle="tab" class="bold  uppercase"> توضیحات
+                                                اجمالی @if(isset($descriptionIframe) && $descriptionIframe) {{$product->name}} @endif</a>
+                                        </li>
+                                    @endif
+                                    @if(!isset($descriptionIframe) || !$descriptionIframe)
+                                        {{--@role((Config::get('constants.ROLE_ADMIN')))--}}
+                                        {{--@if(strcmp(getenv('SERVER'),"http://orduetalaee.ir")==0)--}}
+                                        {{--<li>--}}
                                         {{--<a href="#tab_15_2" data-toggle="tab" class="bold  uppercase"> نظرات و پرسشهای شما </a>--}}
-                                    {{--</li>--}}
-                                {{--@endif--}}
-                        {{--@endrole--}}
+                                        {{--</li>--}}
+                                        {{--@endif--}}
+                                        {{--@endrole--}}
 
-                        @endif
-                            @if($productsWithVideo->isNotEmpty() || $productsWithPamphlet->isNotEmpty())
-                                <li>
-                                    <a href="#tab_15_3" data-toggle="tab" class="bold  uppercase">دانلود فیلم ها و جزوات</a>
-                                </li>
-                            @endif
-                        @if(isset($descriptionIframe) && $descriptionIframe)
-                            <a href="{{action("ProductController@show" , $product)}}" class="btn green uppercase"><i class="fa fa-cart-plus"></i>سفارش</a>
-                        @endif
-                    </ul>
-                    <div class="tab-content">
-                        <div class="tab-pane active" id="tab_15_1">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <!-- BEGIN Portlet PORTLET-->
-                                    <div class="portlet light">
-                                        {{--<div class="portlet-title">--}}
-                                            {{--<div class="caption">--}}
-                                                {{--<span class="caption-subject bold font-red uppercase">توضیحات اجمالی</span>--}}
-                                            {{--</div>--}}
-                                                {{--<div class="inputs">--}}
-                                                    {{--<div class="portlet-input input-inline input-medium">--}}
-                                                        {{--<a href="{{action("ProductController@show" , $product)}}" class="btn green uppercase"><i class="fa fa-cart-plus"></i>سفارش</a>--}}
+                                    @endif
+                                    @if($productsWithVideo->isNotEmpty() || $productsWithPamphlet->isNotEmpty())
+                                        <li>
+                                            <a href="#tab_15_3" data-toggle="tab" class="bold  uppercase">دانلود فیلم ها
+                                                و جزوات</a>
+                                        </li>
+                                    @endif
+                                    @if(isset($descriptionIframe) && $descriptionIframe)
+                                        <a href="{{action("ProductController@show" , $product)}}"
+                                           class="btn green uppercase"><i class="fa fa-cart-plus"></i>سفارش</a>
+                                    @endif
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="tab_15_1">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <!-- BEGIN Portlet PORTLET-->
+                                                <div class="portlet light">
+                                                    {{--<div class="portlet-title">--}}
+                                                    {{--<div class="caption">--}}
+                                                    {{--<span class="caption-subject bold font-red uppercase">توضیحات اجمالی</span>--}}
                                                     {{--</div>--}}
-                                                {{--</div>--}}
-                                        {{--</div>--}}
-                                        <div class="portlet-body profile">
-                                            @if(isset($descriptionIframe) && $descriptionIframe)
-                                                <div class="row">
-                                                    <div class="col-md-8">
-                                                        @if(isset($attributes) && !empty($attributes))
-                                                            <div class="portlet sale-summary">
-                                                                <div class="portlet-title">
-                                                                    <div class="caption font-red sbold">ویژگی ها</div>
-                                                                </div>
-                                                                <div class="portlet-body">
-                                                                    <ul class="list-unstyled">
-                                                                        @foreach($attributes as $attribute)
-                                                                            <li>
+                                                    {{--<div class="inputs">--}}
+                                                    {{--<div class="portlet-input input-inline input-medium">--}}
+                                                    {{--<a href="{{action("ProductController@show" , $product)}}" class="btn green uppercase"><i class="fa fa-cart-plus"></i>سفارش</a>--}}
+                                                    {{--</div>--}}
+                                                    {{--</div>--}}
+                                                    {{--</div>--}}
+                                                    <div class="portlet-body profile">
+                                                        @if(isset($descriptionIframe) && $descriptionIframe)
+                                                            <div class="row">
+                                                                <div class="col-md-8">
+                                                                    @if(isset($attributes) && !empty($attributes))
+                                                                        <div class="portlet sale-summary">
+                                                                            <div class="portlet-title">
+                                                                                <div class="caption font-red sbold">
+                                                                                    ویژگی ها
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="portlet-body">
+                                                                                <ul class="list-unstyled">
+                                                                                    @foreach($attributes as $attribute)
+                                                                                        <li>
                                                                                     <span class="sale-info"> {{$attribute["displayName"]}}
                                                                                         <i class="fa fa-img-up"></i>
                                                                                     </span>
-                                                                                <span class="sale-num bold"> {{$attribute["name"]}} </span>
-                                                                            </li>
-                                                                        @endforeach
-                                                                    </ul>
+                                                                                            <span class="sale-num bold"> {{$attribute["name"]}} </span>
+                                                                                        </li>
+                                                                                    @endforeach
+                                                                                </ul>
+                                                                            </div>
+                                                                        </div>
+                                                                @endif
+                                                                <!--end row-->
                                                                 </div>
                                                             </div>
                                                         @endif
-                                                    <!--end row-->
+                                                        <div class="row">
+                                                            <div class="col-md-12" style="text-align: right;"
+                                                                 id="productLongDescription">
+                                                                {!! $product->longDescription !!}
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            @endif
-                                            <div class="row">
-                                                <div class="col-md-12" style="text-align: right;" id="productLongDescription">
-                                                        {!! $product->longDescription !!}
-                                                </div>
+                                                <!-- END Portlet PORTLET-->
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- END Portlet PORTLET-->
-                                </div>
-                            </div>
-                        </div>
-                        @if(!isset($descriptionIframe) || !$descriptionIframe)
-                        {{--@role((Config::get('constants.ROLE_ADMIN')))--}}
-                            {{--@if(strcmp(getenv('SERVER'),"http://orduetalaee.ir")==0)--}}
-                                {{--<div class="tab-pane" id="tab_15_2">--}}
-                                    {{--@if(isset($disqusPayload))--}}
+                                    @if(!isset($descriptionIframe) || !$descriptionIframe)
+                                        {{--@role((Config::get('constants.ROLE_ADMIN')))--}}
+                                        {{--@if(strcmp(getenv('SERVER'),"http://orduetalaee.ir")==0)--}}
+                                        {{--<div class="tab-pane" id="tab_15_2">--}}
+                                        {{--@if(isset($disqusPayload))--}}
                                         {{--<div id="disqus_thread"></div>--}}
                                         {{--<script>--}}
-                                            {{--var disqus_config = function () {--}}
-                                                {{--this.page.remote_auth_s3 = "{{$disqusPayload}}";--}}
-                                                {{--this.page.api_key = "{{getenv('DISQUS_PUBLIC_KEY')}}";--}}
-                                                {{--this.page.url = getenv('SERVER')+"/product/{{$product->id}}";--}}
-                                                {{--this.page.identifier = "product/"+"{{$product->id}}";--}}
-                                            {{--};--}}
-                                            {{--(function() { // DON'T EDIT BELOW THIS LINE--}}
-                                                {{--var d = document, s = d.createElement('script');--}}
-                                                {{--s.src = '//orduetalaee.disqus.com/embed.js';--}}
-                                                {{--s.setAttribute('data-timestamp', +new Date());--}}
-                                                {{--(d.head || d.body).appendChild(s);--}}
-                                            {{--})();--}}
+                                        {{--var disqus_config = function () {--}}
+                                        {{--this.page.remote_auth_s3 = "{{$disqusPayload}}";--}}
+                                        {{--this.page.api_key = "{{getenv('DISQUS_PUBLIC_KEY')}}";--}}
+                                        {{--this.page.url = getenv('SERVER')+"/product/{{$product->id}}";--}}
+                                        {{--this.page.identifier = "product/"+"{{$product->id}}";--}}
+                                        {{--};--}}
+                                        {{--(function() { // DON'T EDIT BELOW THIS LINE--}}
+                                        {{--var d = document, s = d.createElement('script');--}}
+                                        {{--s.src = '//orduetalaee.disqus.com/embed.js';--}}
+                                        {{--s.setAttribute('data-timestamp', +new Date());--}}
+                                        {{--(d.head || d.body).appendChild(s);--}}
+                                        {{--})();--}}
                                         {{--</script>--}}
                                         {{--<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>--}}
-                                    {{--@endif--}}
+                                        {{--@endif--}}
 
-                            {{--</div>--}}
-                            {{--@endif--}}
-                        @endif
+                                        {{--</div>--}}
+                                        {{--@endif--}}
+                                    @endif
 
-                        <div class="tab-pane" id="tab_15_3">
-                            <div class="row">
-                                <style>
-                                    .videoList .slimScrollBar{
-                                        background : rgb(37, 108, 156) !important;
-                                        height: 30px;
-                                    }
-                                    .videoList .slimScrollRail{
-                                        display: inherit !important;
-                                        background-color: #5f5c5c !important;
-                                    }
-                                </style>
-                                    @foreach($productsWithVideo as $key => $productVideos)
-                                        <div class="col-md-6 videoList" style="margin-bottom: 10px" >
-                                            <div class="mt-element-list">
-                                                <div class="mt-list-head list-simple font-white bg-blue">
-                                                    <div class="list-head-title-container">
-                                                        <h4 class="list-title">فیلمهای {{$key}}</h4>
+                                    <div class="tab-pane" id="tab_15_3">
+                                        <div class="row">
+                                            <style>
+                                                .videoList .slimScrollBar {
+                                                    background: rgb(37, 108, 156) !important;
+                                                    height: 30px;
+                                                }
+
+                                                .videoList .slimScrollRail {
+                                                    display: inherit !important;
+                                                    background-color: #5f5c5c !important;
+                                                }
+                                            </style>
+                                            @foreach($productsWithVideo as $key => $productVideos)
+                                                <div class="col-md-6 videoList" style="margin-bottom: 10px">
+                                                    <div class="mt-element-list">
+                                                        <div class="mt-list-head list-simple font-white bg-blue">
+                                                            <div class="list-head-title-container">
+                                                                <h4 class="list-title">فیلمهای {{$key}}</h4>
+                                                            </div>
+                                                        </div>
+                                                        <div class="mt-list-container list-simple scroller"
+                                                             style="height: 200px">
+                                                            <ul>
+                                                                @foreach($productVideos as $video)
+                                                                    <li class="mt-list-item">
+                                                                        <div class="list-icon-container">
+                                                                            <i class="fa fa-download"></i>
+                                                                        </div>
+                                                                        <div class="list-item-content">
+                                                                            <p class="uppercase"
+                                                                               style="    font-size: 16px;">
+                                                                                <a href="{{action("HomeController@download" , ["content"=>"فایل محصول","fileName"=>$video["file"], "pId"=>$video["product_id"]  ])}}">دانلود {{$video["name"]}}</a>
+                                                                            </p>
+                                                                        </div>
+                                                                    </li>
+                                                                @endforeach
+                                                            </ul>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="mt-list-container list-simple scroller" style="height: 200px">
-                                                    <ul>
-                                                        @foreach($productVideos as $video)
-                                                            <li class="mt-list-item">
-                                                                <div class="list-icon-container">
-                                                                    <i class="fa fa-download"></i>
-                                                                </div>
-                                                                <div class="list-item-content">
-                                                                    <p class="uppercase" style="    font-size: 16px;">
-                                                                        <a href="{{action("HomeController@download" , ["content"=>"فایل محصول","fileName"=>$video["file"], "pId"=>$video["product_id"]  ])}}">دانلود {{$video["name"]}}</a>
-                                                                    </p>
-                                                                </div>
-                                                            </li>
-                                                        @endforeach
-                                                    </ul>
+                                            @endforeach
+                                            <style>
+                                                .pamphletList .slimScrollBar {
+                                                    background: rgb(181, 73, 61) !important;
+                                                    height: 30px;
+                                                }
+
+                                                .pamphletList .slimScrollRail {
+                                                    display: inherit !important;
+                                                    background-color: #5f5c5c !important;
+                                                }
+                                            </style>
+                                            @foreach($productsWithPamphlet as $key => $productPamphlets)
+                                                <div class="col-md-6 pamphletList" style="margin-bottom: 10px">
+                                                    <div class="mt-element-list">
+                                                        <div class="mt-list-head list-simple font-white bg-red-flamingo-opacity">
+                                                            <div class="list-head-title-container">
+                                                                <h4 class="list-title">جزوه های {{$key}}</h4>
+                                                            </div>
+                                                        </div>
+                                                        <div class="mt-list-container list-simple scroller"
+                                                             style="height: 100px">
+                                                            <ul>
+                                                                @foreach($productPamphlets as $pamphlet)
+                                                                    <li class="mt-list-item">
+                                                                        <div class="list-icon-container">
+                                                                            <i class="fa fa-download"></i>
+                                                                        </div>
+                                                                        <div class="list-item-content">
+                                                                            <p class="uppercase"
+                                                                               style="    font-size: 16px;">
+                                                                                <a href="{{action("HomeController@download" , ["content"=>"فایل محصول","fileName"=>$pamphlet["file"] , "pId"=>$pamphlet["product_id"] ])}}">دانلود {{$pamphlet["name"]}}</a>
+                                                                            </p>
+                                                                        </div>
+                                                                    </li>
+                                                                @endforeach
+                                                            </ul>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            @endforeach
                                         </div>
-                                    @endforeach
-                                    <style>
-                                        .pamphletList .slimScrollBar{
-                                            background : rgb(181, 73, 61) !important;
-                                            height: 30px;
-                                        }
-                                        .pamphletList .slimScrollRail{
-                                            display: inherit !important;
-                                            background-color: #5f5c5c !important;
-                                        }
-                                    </style>
-                                    @foreach($productsWithPamphlet as $key => $productPamphlets)
-                                        <div class="col-md-6 pamphletList" style="margin-bottom: 10px">
-                                            <div class="mt-element-list">
-                                                <div class="mt-list-head list-simple font-white bg-red-flamingo-opacity">
-                                                    <div class="list-head-title-container">
-                                                        <h4 class="list-title">جزوه های {{$key}}</h4>
-                                                    </div>
-                                                </div>
-                                                <div class="mt-list-container list-simple scroller" style="height: 100px">
-                                                    <ul>
-                                                        @foreach($productPamphlets as $pamphlet)
-                                                            <li class="mt-list-item">
-                                                                <div class="list-icon-container">
-                                                                    <i class="fa fa-download"></i>
-                                                                </div>
-                                                                <div class="list-item-content">
-                                                                    <p class="uppercase" style="    font-size: 16px;">
-                                                                        <a href="{{action("HomeController@download" , ["content"=>"فایل محصول","fileName"=>$pamphlet["file"] , "pId"=>$pamphlet["product_id"] ])}}">دانلود {{$pamphlet["name"]}}</a>
-                                                                    </p>
-                                                                </div>
-                                                            </li>
-                                                        @endforeach
-                                                    </ul>
-                                                </div>
-                                            </div>
+
                                     </div>
-                                    @endforeach
+                                    {{--@endrole--}}
+                                </div>
                             </div>
-
+                            @if(!isset($descriptionIframe) || !$descriptionIframe)
+                                @if($product->enable)
+                                    @if($product->isFree && isset($isProductExistInOrder) && $isProductExistInOrder)
+                                        <a href="javascript:;"
+                                           class="btn btn-lg default col-md-12 col-xs-12 col-sm-12 font-red">موجود در
+                                            سبد</a>
+                                    @else
+                                        <button type="button" id="orderButton2"
+                                                class="btn btn-lg green col-md-12 col-xs-12 col-sm-12"><i
+                                                    class="fa fa-cart-plus"></i>افزودن به سبد
+                                        </button>
+                                    @endif
+                                @else
+                                    <a href="javascript:;"
+                                       class="btn btn-lg default col-md-12 col-xs-12 col-sm-12 font-red"> این محصول غیر
+                                        فعال است</a>
+                                @endif
+                            @endif
                         </div>
-                        {{--@endrole--}}
                     </div>
-                </div>
-                @if(!isset($descriptionIframe) || !$descriptionIframe)
-                    @if($product->enable)
-                        @if($product->isFree && isset($isProductExistInOrder) && $isProductExistInOrder)
-                            <a href="javascript:;" class="btn btn-lg default col-md-12 col-xs-12 col-sm-12 font-red">موجود در سبد</a>
-                        @else
-                            <button type="button" id="orderButton2"  class="btn btn-lg green col-md-12 col-xs-12 col-sm-12"><i class="fa fa-cart-plus"></i>افزودن به سبد</button>
-                        @endif
-                    @else
-                        <a href="javascript:;" class="btn btn-lg default col-md-12 col-xs-12 col-sm-12 font-red"> این محصول غیر فعال است</a>
-                    @endif
-                @endif
-            </div>
-        </div>
 
-        </div>
-        </div>
+                </div>
+            </div>
         @endif
 
         @if(!isset($descriptionIframe) || !$descriptionIframe)

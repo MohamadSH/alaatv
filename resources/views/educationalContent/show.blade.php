@@ -73,21 +73,21 @@
                                         گر شما فعال است و از آخرین نسخه ی مرورگر استفاده می کنید.</p>
                                 </video>
                                 <script>
-                                    $(document).ready(function(){
-                                        console.log( "ready!" );
-                                        options = {
-                                            controlBar: {
-                                                children: [
-                                                    'playToggle',
-                                                    'progressControl',
-                                                    'volumePanel',
-                                                    'fullscreenToggle',
-                                                ],
-                                            },
-                                        };
-                                        var player = videojs('video-{{$educationalContent->id}}',options);
+                                    {{--$(document).ready(function(){--}}
+                                        {{--console.log( "ready!" );--}}
+                                        {{--options = {--}}
+                                            {{--controlBar: {--}}
+                                                {{--children: [--}}
+                                                    {{--'playToggle',--}}
+                                                    {{--'progressControl',--}}
+                                                    {{--'volumePanel',--}}
+                                                    {{--'fullscreenToggle',--}}
+                                                {{--],--}}
+                                            {{--},--}}
+                                        {{--};--}}
+                                        {{--var player = videojs('video-{{$educationalContent->id}}',options);--}}
 
-                                    });
+                                    {{--});--}}
                                 </script>
                             </div>
                             <div class="row">
@@ -150,13 +150,13 @@
                             </div>
                             <div class="list-count pull-right bg-yellow-saffron"></div>
                         </div>
-                        <div class="mt-list-container list-news ext-2">
-                            <div class="scroller" style="min-height: 50px; max-height:600px" data-always-visible="1" data-rail-visible="1"
+                        <div class="mt-list-container list-news ext-2" id="otherSessions">
+                            <div id="playListScroller" class="scroller" style="min-height: 50px; max-height:600px" data-always-visible="1" data-rail-visible="1"
                                  data-rail-color="red" data-handle-color="green">
                                 <ul>
 
                                     @foreach($contentsWithSameSet->whereIn("type" , "video" ) as $item)
-                                        <li class="mt-list-item @if($item["content"]->id == $educationalContent->id) bg-grey-mint @endif ">
+                                        <li class="mt-list-item @if($item["content"]->id == $educationalContent->id) bg-grey-mint @endif " id="playlistItem_{{$item["content"]->id}}">
                                             <div class="list-icon-container">
                                                 <a href="{{action("EducationalContentController@show" , $item["content"])}}">
                                                     <i class="fa fa-angle-left"></i>
@@ -467,19 +467,21 @@
 @endsection
 
 @section("footerPageLevelPlugin")
-    <script src="/assets/global/scripts/datatable.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/datatables/datatables.min.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js"
-            type="text/javascript"></script>
-    <script src="/assets/global/plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/bootstrap-modal/js/bootstrap-modal.js" type="text/javascript"></script>
 @endsection
 
 @section("footerPageLevelScript")
-    <script src="/assets/pages/scripts/table-datatables-responsive.min.js" type="text/javascript"></script>
-    <script src="/assets/pages/scripts/ui-extended-modals.min.js" type="text/javascript"></script>
-    <script src="/js/extraJS/jQueryNumberFormat/jquery.number.min.js" type="text/javascript"></script>
 @endsection
 
 @section("extraJS")
+    <script type="text/javascript">
+
+        $(document).ready(function (){
+            var container = $("#playListScroller"),
+                scrollTo = $("#playlistItem_"+"{{$educationalContent->id}}");
+            container.scrollTop(
+                scrollTo.offset().top - container.offset().top + container.scrollTop() - 100
+            );
+            $("#otherSessions").find(".slimScrollBar").css("top" , scrollTo.offset().top +"px");
+        });
+    </script>
 @endsection
