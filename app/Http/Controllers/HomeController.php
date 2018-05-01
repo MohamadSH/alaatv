@@ -706,7 +706,7 @@ class HomeController extends Controller
                 'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-3.jpg' => 'https://sanatisharif.ir/landing/4',
             ];
             return view("pages.search" , compact("items"  ,"itemTypes" ,"tagArray" , "extraTagArray",
-                "majors" , "grades"  , "defaultLesson" , "sideBarMode" , "majorLesson" , "lessonTeacher" , "defaultTeacher" , "adsl" , "ads2" ));
+                "majors" , "grades"  , "defaultLesson" , "sideBarMode" , "majorLesson" , "lessonTeacher" , "defaultTeacher" , "ads1" , "ads2" ));
         }
     }
 
