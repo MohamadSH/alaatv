@@ -6,7 +6,7 @@
         <div class="page-logo">
 
             <a href="{{action("HomeController@index")}}">
-                <img @if(isset($wSetting->site->siteLogo))src="{{route('image', ['category'=>'11','w'=>'135' , 'h'=>'67' ,  'filename' =>  $wSetting->site->siteLogo ])}}" @endif alt="لوگو سایت" class="logo-default margin-top-0" /> </a>
+                <img @if(isset($wSetting->site->siteLogo))src="{{route('image', ['category'=>'11','w'=>'135' , 'h'=>'67' ,  'filename' =>  $wSetting->site->siteLogo ])}}" @endif alt="لوگو سایت" class="logo-default img-responsive" style="width: 100%" /> </a>
             <div class="menu-toggler sidebar-toggler">
                 <!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
             </div>

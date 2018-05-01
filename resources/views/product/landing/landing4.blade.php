@@ -834,7 +834,7 @@
                             <span>صرفه جویی در زمان برای جمع بندی کنکور</span>
                             <span>فراگیری روش های جدید تست زنی</span>
                             <span>به همراه حل سوالات کنکور های گذشته و برخی سوالات تالیفی</span>
-                            <a href="javascript:void(0)" title="خرید بسته آموزشی" data-role="219">خرید بسته آموزشی</a>
+                            <a href="javascript:void(0)" class="link" title="خرید بسته آموزشی" data-role="219">خرید بسته آموزشی</a>
                         </div>
                     </article>
                     <article class="art-professors">
