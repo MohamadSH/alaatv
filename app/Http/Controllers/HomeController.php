@@ -428,40 +428,80 @@ class HomeController extends Controller
          */
         $totalTags = array();
         $majorCollection = Major::all();
-//        $majors2 = collect();
-//        foreach ($majorCollection as $major)
-//        {
-//            $lessons = [];
-//            switch ($major->description)
-//            {
-//                case "رشته_ریاضی":
-//                    $lessons=[
-//                        "دیفرانسیل",
-//                        "تحلیلی",
-//                        "گسسته"
-//                    ];
-//                    break;
-//                case "رشته_تجربی":
-//                    $lessons=[
-//                        "زیست شناسی",
-//                        "ریاضی تجربی",
-//                        "زمین شناسی"
-//                    ];
-//                    break;
-//                case "رشته_انسانی":
-//                    $lessons=[
-//                        "ریاضی_انسانی",
-//                        "منطق",
-//                    ];
-//                    break;
-//                default:
-//                    break;
-//            }
-//            $majors2->push(["name"=>$major->name , "lessons"=>$lessons]);
-//        }
+        $majorLesson = collect();
+        $defaultLesson = [];
+        foreach ($majorCollection as $major)
+        {
+            $lessons = collect([
+                ["value"=>"" , "index"=>"همه دروس"]
+            ]);
+            switch ($major->description)
+            {
+                case "رشته_ریاضی":
+                    $lessons= $lessons->merge(collect([
+                        ["value"=>"مشاوره", "index"=>"مشاوره"] ,
+                        ["value"=>"دیفرانسیل", "index"=>"دیفرانسیل"] ,
+                        ["value"=>"تحلیلی", "index"=>"تحلیلی"] ,
+                        ["value"=>"گسسته", "index"=>"گسسته"] ,
+                        ["value"=>"حسابان", "index"=>"حسابان"] ,
+                        ["value"=>"جبر_و_احتمال", "index"=>"جبر و احتمال"] ,
+                        ["value"=>"ریاضی_پایه", "index"=>"ریاضی پایه"] ,
+                        ["value"=>"هندسه_پایه", "index"=>"هندسه پایه"] ,
+                        ["value"=>"فیزیک", "index"=>"فیزیک"] ,
+                        ["value"=>"شیمی", "index"=>"شیمی" ],
+                        ["value"=>"عربی", "index"=>"عربی" ],
+                        ["value"=>"زبان_و_ادبیات_فارسی", "index"=>"زبان و ادبیات فارسی" ],
+                        ["value"=>"دین_و_زندگی", "index"=>"دین و زندگی" ],
+                        ["value"=>"زبان_انگلیسی", "index"=>"زبان انگلیسی" ],
+                        ["value"=>"آمار_و_مدلسازی", "index"=>"آمار و مدلسازی"] ,
+                        ])
+                    );
+                    $defaultLesson = array_merge($defaultLesson , array_intersect( $lessons->pluck("value")->toArray() , $tagInput ))  ;
+                    break;
+                case "رشته_تجربی":
+                    $lessons= $lessons->merge(collect([
+                        ["value"=>"مشاوره", "index"=>"مشاوره"] ,
+                        ["value"=>"زیست_شناسی", "index"=>"زیست شناسی"] ,
+                        ["value"=>"ریاضی_تجربی", "index"=>"ریاضی تجربی"] ,
+                        ["value"=>"ریاضی_پایه", "index"=>"ریاضی پایه"] ,
+                        ["value"=>"هندسه_پایه", "index"=>"هندسه پایه"] ,
+                        ["value"=>"فیزیک", "index"=>"فیزیک"] ,
+                        ["value"=>"شیمی", "index"=>"شیمی" ],
+                        ["value"=>"عربی", "index"=>"عربی" ],
+                        ["value"=>"زبان_و_ادبیات_فارسی", "index"=>"زبان و ادبیات فارسی" ],
+                        ["value"=>"دین_و_زندگی", "index"=>"دین و زندگی" ],
+                        ["value"=>"زبان_انگلیسی", "index"=>"زبان انگلیسی" ],
+                        ["value"=>"آمار_و_مدلسازی", "index"=>"آمار و مدلسازی"] ,
+                        ])
+                    );
+                    $defaultLesson = array_merge($defaultLesson , array_intersect( $lessons->pluck("value")->toArray() , $tagInput ))  ;
+                    break;
+                case "رشته_انسانی":
+                    $lessons= $lessons->merge(collect([
+                        ["value"=>"مشاوره", "index"=>"مشاوره"] ,
+                        ["value"=>"ریاضی_انسانی", "index"=>"ریاضی انسانی"] ,
+                        ["value"=>"ریاضی_و_آمار", "index"=>"ریاضی و آمار"] ,
+                        ["value"=>"منطق", "index"=>"منطق"] ,
+                        ["value"=>"اخلاق", "index"=>"اخلاق"] ,
+                        ["value"=>"فیزیک", "index"=>"فیزیک"] ,
+                        ["value"=>"شیمی", "index"=>"شیمی" ],
+                        ["value"=>"عربی", "index"=>"عربی" ],
+                        ["value"=>"زبان_و_ادبیات_فارسی", "index"=>"زبان و ادبیات فارسی" ],
+                        ["value"=>"دین_و_زندگی", "index"=>"دین و زندگی" ],
+                        ["value"=>"زبان_انگلیسی", "index"=>"زبان انگلیسی" ],
+                        ["value"=>"آمار_و_مدلسازی", "index"=>"آمار و مدلسازی"] ,
+                        ])
+                    );
+                    $defaultLesson = array_merge($defaultLesson , array_intersect( $lessons->pluck("value")->toArray() , $tagInput ))  ;
+                    break;
+                default:
+                    break;
+            }
+            $totalTags = array_merge($totalTags , $lessons->pluck("value")->toArray()) ;
+            $majorLesson->put( $major->description, $lessons);
+        }
         $totalTags = array_merge($totalTags , $majorCollection->pluck("description")->toArray()) ;
         $majors = $majorCollection->pluck(  "name" , "description")->toArray();
-
 
         $gradeCollection = Grade::where("name" ,'<>' , 'graduated' )->get();
         $gradeCollection->push(["displayName"=>"اول دبیرستان" , "description"=>"اول_دبیرستان"]);
@@ -472,36 +512,175 @@ class HomeController extends Controller
         $grades = $gradeCollection->pluck('displayName' , 'description')->toArray() ;
 //            $grades = array_sort_recursive($grades);
 
-        $lessonCollection = collect([
-            ["value"=>"" , "index"=>"همه دروس"],
-            ["value"=>"مشاوره", "index"=>"مشاوره"] ,
-            ["value"=>"فیزیک", "index"=>"فیزیک"] ,
-            ["value"=>"شیمی", "index"=>"شیمی" ],
-            ["value"=>"عربی", "index"=>"عربی" ],
-            ["value"=>"زبان_و_ادبیات_فارسی", "index"=>"زبان و ادبیات فارسی" ],
-            ["value"=>"دین_و_زندگی", "index"=>"دین و زندگی" ],
-            ["value"=>"زبان_انگلیسی", "index"=>"زبان انگلیسی" ],
-            ["value"=>"دیفرانسیل", "index"=>"دیفرانسیل"] ,
-            ["value"=>"تحلیلی", "index"=>"تحلیلی"] ,
-            ["value"=>"گسسته", "index"=>"گسسته"] ,
-            ["value"=>"حسابان", "index"=>"حسابان"] ,
-            ["value"=>"جبر_و_احتمال", "index"=>"جبر و احتمال"] ,
-            ["value"=>"ریاضی_پایه", "index"=>"ریاضی پایه"] ,
-            ["value"=>"هندسه_پایه", "index"=>"هندسه پایه"] ,
-            ["value"=>"ریاضی_تجربی", "index"=>"ریاضی تجربی"] ,
-            ["value"=>"ریاضی_انسانی", "index"=>"ریاضی انسانی"] ,
-            ["value"=>"زیست_شناسی", "index"=>"زیست شناسی"] ,
-            ["value"=>"آمار_و_مدلسازی", "index"=>"آمار و مدلسازی"] ,
-            ["value"=>"ریاضی_و_آمار", "index"=>"ریاضی و آمار"] ,
-            ["value"=>"منطق", "index"=>"منطق"] ,
-            ["value"=>"اخلاق", "index"=>"اخلاق"] ,
-            ["value"=>"المپیاد_نجوم", "index"=>"المپیاد نجوم"] ,
-        ]);
-        $totalTags = array_merge($totalTags , $lessonCollection->pluck("value")->toArray()) ;
-        $lessons = $lessonCollection->pluck("index" , "value")->toArray();
+        $lessonTeacher = collect(
+            [
+                "دیفرانسیل" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"محمد صادق ثابتی" , "value"=>"محمد_صادق_ثابتی"],
+                    ["index"=>"رضا شامیزاده" , "value"=>"رضا_شامیزاده"],
+                    ["index"=>"محسن شهریان" , "value"=>"محسن_شهریان"],
+                ],
+                "گسسته" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"رضا شامیزاده" , "value"=>"رضا_شامیزاده"],
+                    ["index"=>"بهمن مؤذنی پور" , "value"=>"بهمن_مؤذنی_پور"],
+                    ["index"=>"سروش معینی" , "value"=>"سروش_معینی"],
+                    ["index"=>"شاه محمدی" , "value"=>"شاه_محمدی"],
+                ],
+                "تحلیلی" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"رضا شامیزاده" , "value"=>"رضا_شامیزاده"],
+                    ["index"=>"محمد صادق ثابتی" , "value"=>"محمد_صادق_ثابتی"],
+                    ["index"=>"محمد رضا حسینی فرد" , "value"=>"محمد_رضا_حسینی_فرد"],
+                ],
+                "هندسه_پایه" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"وحید کبریایی" , "value"=>"وحید_کبریایی"],
+                    ["index"=>"رضا شامیزاده" , "value"=>"رضا_شامیزاده"],
+                    ["index"=>"محمد رضا حسینی فرد" , "value"=>"محمد_رضا_حسینی_فرد"],
+                    ["index"=>"حسن مرصعی" , "value"=>"حسن_مرصعی"],
+                ],
+                "حسابان" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"محمد صادق ثابتی" , "value"=>"محمد_صادق_ثابتی"],
+                    ["index"=>"محمدرضا مقصودی" , "value"=>"محمدرضا_مقصودی"],
+                    ["index"=>"شهروز رحیمی" , "value"=>"شهروز_رحیمی"],
+                ],
+                "جبر_و_احتمال" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"حسین کرد" , "value"=>"حسین_کرد"],
+                    ["index"=>"رضا شامیزاده" , "value"=>"رضا_شامیزاده"],
+//                    ["index"=>"بختیاری" , "value"=>"بختیاری"],
+                ],
+                "ریاضی_پایه" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"رضا شامیزاده" , "value"=>"رضا_شامیزاده"],
+                    ["index"=>"مهدی امینی راد" , "value"=>"مهدی_امینی_راد"],
+                    ["index"=>"جواد نایب کبیر" , "value"=>"جواد_نایب_کبیر"],
+                    ["index"=>"محسن شهریان" , "value"=>"محسن_شهریان"],
+                    ["index"=>"محمدرضا مقصودی" , "value"=>"محمدرضا_مقصودی"],
+                ],
+                "ریاضی_تجربی" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"رضا شامیزاده" , "value"=>"رضا_شامیزاده"],
+                    ["index"=>"مهدی امینی راد" , "value"=>"مهدی_امینی_راد"],
+                    ["index"=>"محمدامین نباخته" , "value"=>"محمدامین_نباخته"],
+                    ["index"=>"محمد رضا حسینی فرد" , "value"=>"محمد_رضا_حسینی_فرد"],
+                    ["index"=>"علی صدری" , "value"=>"علی_صدری"],
+                ],
+                "ریاضی_انسانی" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"خسرو_محمد_زاده" , "value"=>"خسرو_محمد_زاده"],
+                ]
+                ,
+                "عربی" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"میلاد ناصح زاده" , "value"=>"میلاد_ناصح_زاده"],
+                    ["index"=>"مهدی جلادتی" , "value"=>"مهدی_جلادتی"],
+                    ["index"=>"مهدی ناصر شریعت" , "value"=>"مهدی_ناصر_شریعت"],
+                    ["index"=>"عمار تاج بخش" , "value"=>"عمار_تاج_بخش"],
+                    ["index"=>"ناصر حشمتی" , "value"=>"ناصر_حشمتی"],
+                    ["index"=>"محسن آهویی" , "value"=>"محسن_آهویی"],
+                    ["index"=>"جعفر رنجبرزاده" , "value"=>"جعفر_رنجبرزاده"],
+//                    ["index"=>"بختیاری" , "value"=>"بختیاری"],
+                ],
+                "شیمی" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"محمد رضا آقاجانی" , "value"=>"محمد_رضا_آقاجانی"],
+                    ["index"=>"مهدی صنیعی طهرانی" , "value"=>"مهدی_صنیعی_طهرانی"],
+                    ["index"=>"محمد حسین انوشه" , "value"=>"محمد_حسین_انوشه"],
+                    ["index"=>"محمد حسین شکیباییان" , "value"=>"محمد_حسین_شکیباییان"],
+                    ["index"=>"حامد پویان نظر" , "value"=>"حامد_پویان_نظر"],
+                    ["index"=>"روح الله حاجی سلیمانی" , "value"=>"روح_الله_حاجی_سلیمانی"],
+                    ["index"=>"محسن معینی" , "value"=>"محسن_معینی"],
+                    ["index"=>"جعفری" , "value"=>"جعفری"],
+                ],
+                "فیزیک" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"پیمان طلوعی" , "value"=>"پیمان_طلوعی"],
+                    ["index"=>"حمید فدایی فرد" , "value"=>"حمید_فدایی_فرد"],
+                    ["index"=>"علیرضا رمضانی" , "value"=>"علیرضا_رمضانی"],
+                    ["index"=>"فرشید داداشی" , "value"=>"فرشید_داداشی"],
+                    ["index"=>"کازرانیان" , "value"=>"کازرانیان"],
+                    ["index"=>"جهانبخش" , "value"=>"جهانبخش"],
+                ],
+                "زیان_انگلیسی" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"علی اکبر عزتی" , "value"=>"علی_اکبر_عزتی"],
+                    ["index"=>"کیاوش فراهانی" , "value"=>"کیاوش_فراهانی"],
+                    ["index"=>"درویش" , "value"=>"درویش"],
+                ],
+                "دین_و_زندگی" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"مهدی تفتی" , "value"=>"مهدی_تفتی"],
+                    ["index"=>"جعفر رنجبرزاده" , "value"=>"جعفر_رنجبرزاده"],
+                ]
+                ,
+                "زبان_و_ادبیات_فارسی" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"هامون سبطی" , "value"=>"هامون_سبطی"],
+                    ["index"=>"داریوش داوش" , "value"=>"داریوش_راوش"],
+                    ["index"=>"عبدالرضا مرادی" , "value"=>"عبدالرضا_مرادی"],
+                    ["index"=>"محمد" , "value"=>"محمد_صادقی"],
+                    ["index"=>"کاظم کاظمی" , "value"=>"کاظم_کاظمی"],
+                    ["index"=>"میثم حسین خانی" , "value"=>"میثم__حسین_خانی"],
+                ],
+                "آمار_و_مدلسازی" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"رضا شامیزاده" , "value"=>"رضا_شامیزاده"],
+                    ["index"=>"وحید کبریایی" , "value"=>"وحید_کبریایی"],
+                    ["index"=>"مهدی امینی راد" , "value"=>"مهدی_امینی_راد"],
+                ],
+                "زیست_شناسی" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"محمد علی امینی راد" , "value"=>"محمد_علی_امینی_راد"],
+                    ["index"=>"محمد پازوکی" , "value"=>"محمد_پازوکی"],
+                    ["index"=>"عباس راستی بروجنی" , "value"=>"عباس_راستی_بروجنی"],
+                    ["index"=>"ابوالفضل جعفری" , "value"=>"ابوالفضل_جعری"],
+                    ["index"=>"جلال موقاری" , "value"=>"جلال_موقاری"],
+                    ["index"=>"مسعود حدادی" , "value"=>"مسعود_حدادی"],
+                    ["index"=>"ارشی" , "value"=>"ارشی"],
+                ],
+                "ریاضی_و_آمار" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"مهدی امینی راد" , "value"=>"مهدی_امینی_راد"],
+                ],
+                "منطق" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"رضا آقاجانی" , "value"=>"رضا_آقاجانی"],
+                    ["index"=>"سید حسام الدین جلالی" , "value"=>"سید_حسام_الدین_جلالی"],
+                ],
+                "مشاوره" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"محمد علی امینی راد" , "value"=>"محمد_علی_امینی_راد"],
+                    ["index"=>"امید زاهدی" , "value"=>"امید_زاهدی"],
+                ]
+            ]
+        );
+
+        $teacherTags =  [];
+        foreach ($lessonTeacher as $item)
+        {
+            foreach ($item as $value)
+            {
+                array_push($teacherTags , $value["value"]);
+            }
+        }
+        $totalTags = array_merge($totalTags , $teacherTags) ;
+        $defaultTeacher = array_intersect( $teacherTags , $tagInput )  ;
+
 
         $extraTagArray  = array_diff($tagInput , $totalTags );
 
+        if(!is_null(array_last($defaultLesson)))
+            $defaultLesson = array_last($defaultLesson);
+        else
+            $defaultLesson = "";
+
+        if(!is_null(array_last($defaultTeacher)))
+            $defaultTeacher = array_last($defaultTeacher);
+        else
+            $defaultTeacher = "";
         /**
          * End of page inputs
          */
@@ -517,7 +696,8 @@ class HomeController extends Controller
         else
         {
             $sideBarMode = "closed";
-            return view("pages.search" , compact("items"  ,"itemTypes" ,"tagArray" , "extraTagArray", "majors" , "grades"  , "lessons" , "sideBarMode" ));
+            return view("pages.search" , compact("items"  ,"itemTypes" ,"tagArray" , "extraTagArray",
+                "majors" , "grades"  , "defaultLesson" , "sideBarMode" , "majorLesson" , "lessonTeacher" , "defaultTeacher" ));
         }
     }
 
