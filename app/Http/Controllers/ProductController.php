@@ -1162,6 +1162,7 @@ class ProductController extends Controller
      */
     public function landing3(Request $request)
     {
+        abort(403);
         $url = $request->url();
         SEO::opengraph()->setUrl($url);
         SEO::setCanonical($url);

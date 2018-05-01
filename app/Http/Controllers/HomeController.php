@@ -97,10 +97,6 @@ class HomeController extends Controller
     private static $TAG = HomeController::class;
 
     public function debug(Request $request){
-        $collection = collect([collect([1])]);
-        dump($collection);
-
-        dd($collection->pop());
         abort(404);
     }
     public function __construct()
@@ -432,37 +428,37 @@ class HomeController extends Controller
          */
         $totalTags = array();
         $majorCollection = Major::all();
-        $majors2 = collect();
-        foreach ($majorCollection as $major)
-        {
-            $lessons = [];
-            switch ($major->description)
-            {
-                case "رشته_ریاضی":
-                    $lessons=[
-                        "دیفرانسیل",
-                        "تحلیلی",
-                        "گسسته"
-                    ];
-                    break;
-                case "رشته_تجربی":
-                    $lessons=[
-                        "زیست شناسی",
-                        "ریاضی تجربی",
-                        "زمین شناسی"
-                    ];
-                    break;
-                case "رشته_انسانی":
-                    $lessons=[
-                        "ریاضی_انسانی",
-                        "منطق",
-                    ];
-                    break;
-                default:
-                    break;
-            }
-            $majors2->push(["name"=>$major->name , "lessons"=>$lessons]);
-        }
+//        $majors2 = collect();
+//        foreach ($majorCollection as $major)
+//        {
+//            $lessons = [];
+//            switch ($major->description)
+//            {
+//                case "رشته_ریاضی":
+//                    $lessons=[
+//                        "دیفرانسیل",
+//                        "تحلیلی",
+//                        "گسسته"
+//                    ];
+//                    break;
+//                case "رشته_تجربی":
+//                    $lessons=[
+//                        "زیست شناسی",
+//                        "ریاضی تجربی",
+//                        "زمین شناسی"
+//                    ];
+//                    break;
+//                case "رشته_انسانی":
+//                    $lessons=[
+//                        "ریاضی_انسانی",
+//                        "منطق",
+//                    ];
+//                    break;
+//                default:
+//                    break;
+//            }
+//            $majors2->push(["name"=>$major->name , "lessons"=>$lessons]);
+//        }
         $totalTags = array_merge($totalTags , $majorCollection->pluck("description")->toArray()) ;
         $majors = $majorCollection->pluck(  "name" , "description")->toArray();
 
