@@ -404,6 +404,7 @@
                 </p>
             </div>
         </section>
+        <img src="https://cdn.sanatisharif.ir/upload/GhoreKeshi.jpg" class="img-responsive" style="width: 100%" />
         <div class="div-tab-lesson" data-tabindex="most-product" id="section-5">
             <section class="suprise-all-field">
                 <div class="container">
@@ -1217,6 +1218,7 @@
         </li>
     </ul>
 </nav>
+
 <script src="/assets/extra/landing4/js/jquery-1.12.4.min.js"></script>
 
 <script src="/assets/extra/landing4/js/swiper.jquery.min.js" defer="defer"></script>
