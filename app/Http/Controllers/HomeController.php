@@ -97,6 +97,17 @@ class HomeController extends Controller
     private static $TAG = HomeController::class;
 
     public function debug(Request $request){
+        $contentset = Contentset::FindOrFail(197);
+        $contents = $contentset->educationalContents;
+        foreach ($contents as $c)
+        {
+            $myTag = $c->tags->tags ;
+            array_push($myTag , "کازرانیان");
+            $c->tags = json_encode($myTag);
+            if(!$c->update()) dump("error on updating content:" . $c->id);
+
+        }
+        dd("finish");
         abort(404);
     }
     public function __construct()
@@ -328,31 +339,35 @@ class HomeController extends Controller
         }else{
             $tagInput = [];
         }
-
+        $isApp = ( strlen(strstr($request->header('User-Agent'),"Alaa")) > 0 )? true : false ;
         $items = collect();
+        if($isApp)
+            $itemPerPage = "200" ;
+        else
+            $itemPerPage = "12" ;
+
         $paginationSetting = collect([
             [
                 "itemType"=>"video" ,
                 "pageName" => "videopage",
-                "itemPerPage" => "12"
+                "itemPerPage" => $itemPerPage
             ],
             [
                 "itemType"=>"pamphlet" ,
                 "pageName" => "pamphletpage",
-                "itemPerPage" => "10"
+                "itemPerPage" => $itemPerPage
             ],
             [
                 "itemType"=>"article" ,
                 "pageName" => "articlepage",
-                "itemPerPage" => "10"
+                "itemPerPage" => $itemPerPage
             ],
             [
                 "itemType"=>"contentset" ,
                 "pageName" => "contentsetpage",
-                "itemPerPage" => "10"
+                "itemPerPage" => $itemPerPage
             ]
         ]);
-        $isApp = ( strlen(strstr($request->header('User-Agent'),"Alaa")) > 0 )? true : false ;
         foreach ($itemTypes as $itemType)
         {
             [
