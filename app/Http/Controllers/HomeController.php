@@ -3325,16 +3325,26 @@ class HomeController extends Controller
             $warningCounter = 0 ;
             foreach ($items as $item)
             {
-                if(!isset($item->tags))
+                if(!isset($item))
                 {
                     $warningCounter++;
-                    dump("no tags found for".$item->id);
+                    dump("invalid item at counter".$counter);
                     continue ;
                 }
                 else
                 {
-                    $itemTagsArray = $item->tags->tags;
+                    if(!isset($item->tags))
+                    {
+                        $warningCounter++;
+                        dump("no tags found for".$item->id);
+                        continue ;
+                    }
+                    else
+                    {
+                        $itemTagsArray = $item->tags->tags;
+                    }
                 }
+
                 if(is_array($itemTagsArray) && !empty($itemTagsArray) && isset($item["id"]))
                 {
                     $params = [
