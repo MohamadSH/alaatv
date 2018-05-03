@@ -3325,7 +3325,26 @@ class HomeController extends Controller
             $warningCounter = 0 ;
             foreach ($items as $item)
             {
-                $itemTagsArray = $item->tags->tags;
+                if(!isset($item))
+                {
+                    $warningCounter++;
+                    dump("invalid item at counter".$counter);
+                    continue ;
+                }
+                else
+                {
+                    if(!isset($item->tags))
+                    {
+                        $warningCounter++;
+                        dump("no tags found for".$item->id);
+                        continue ;
+                    }
+                    else
+                    {
+                        $itemTagsArray = $item->tags->tags;
+                    }
+                }
+
                 if(is_array($itemTagsArray) && !empty($itemTagsArray) && isset($item["id"]))
                 {
                     $params = [
@@ -3365,6 +3384,9 @@ class HomeController extends Controller
         catch(\Exception $e)
         {
             $message = "unexpected error";
+            dump($successCounter." items successfully done");
+            dump($failedCounter." items failed");
+            dump($warningCounter." warnings");
             return $this->response->setStatusCode(503)->setContent(["message" => $message,"number of successfully processed items"=>$counter, "error" => $e->getMessage(), "line" => $e->getLine()]);
         }
     }
