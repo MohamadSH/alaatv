@@ -320,7 +320,7 @@
                                         <header>
                                             <h1>
                                                 <a href="javascript:void(0)" title="">
-                                                    پیمان طلوعی
+                                                    دکتر پیمان طلوعی
                                                 </a>
                                             </h1>
                                             <span>معجزه فیزیک کنکور</span>
@@ -501,7 +501,7 @@
                             <figcaption>
                                 <header>
                                     <a href="javascript:void(0)" title="">
-                                        <h1>پیمان طلوعی</h1>
+                                        <h1>دکتر پیمان طلوعی</h1>
                                     </a>
                                     <span>همایش طلایی فیزیک کنکور</span>
                                 </header>
@@ -812,7 +812,7 @@
                             <figcaption>
                                 <header>
                                     <a href="javascript:void(0)" title="">
-                                        <h1>پیمان طلوعی</h1>
+                                        <h1>دکتر پیمان طلوعی</h1>
                                     </a>
                                     <span>همایش طلایی فیزیک کنکور</span>
                                 </header>
@@ -1087,7 +1087,7 @@
                             <figcaption>
                                 <header>
                                     <a href="javascript:void(0)" title="">
-                                        <h1>پیمان طلوعی</h1>
+                                        <h1>دکتر پیمان طلوعی</h1>
                                     </a>
                                     <span>همایش طلایی فیزیک کنکور</span>
                                 </header>
