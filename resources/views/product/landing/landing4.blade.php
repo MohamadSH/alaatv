@@ -146,7 +146,7 @@
                                     <strong>
                                         <header>
                                             <h1>
-                                                <a href="javascript:void(0)" title="">
+                                                <a href="javascript:void(0)" data-role="210" class="link" title="خرید بسته آموزشی" >
                                                     دکتر هامون سبطی
                                                 </a>
                                             </h1>
@@ -167,7 +167,7 @@
                                     <strong>
                                         <header>
                                             <h1>
-                                                <a href="javascript:void(0)" title="">
+                                                <a href="javascript:void(0)" data-role="211" class="link" title="خرید بسته آموزشی">
                                                     وحیده کاغذی
                                                 </a>
                                             </h1>
@@ -189,7 +189,7 @@
                                     <strong>
                                         <header>
                                             <h1>
-                                                <a href="javascript:void(0)" title="">
+                                                <a href="javascript:void(0)" data-role="212" class="link" title="خرید بسته آموزشی">
                                                     دکتر محمد چلاجور
                                                 </a>
                                             </h1>
@@ -210,7 +210,7 @@
                                     <strong>
                                         <header>
                                             <h1>
-                                                <a href="javascript:void(0)" title="">
+                                                <a href="javascript:void(0)" data-role="213" class="link" title="خرید بسته آموزشی">
                                                      دکتر محمد چلاجور
                                                 </a>
                                             </h1>
@@ -231,7 +231,7 @@
                                     <strong>
                                         <header>
                                             <h1>
-                                                <a href="javascript:void(0)" title="">
+                                                <a href="javascript:void(0)" data-role="214" class="link" title="خرید بسته آموزشی">
                                                     میلاد ناصح زاده
                                                 </a>
                                             </h1>
@@ -252,7 +252,7 @@
                                     <strong  style="margin-right: 10% ;">
                                         <header>
                                             <h1>
-                                                <a href="javascript:void(0)" title="">
+                                                <a href="javascript:void(0)" data-role="215" class="link" title="خرید بسته آموزشی">
                                                     محسن آهویی
                                                 </a>
                                             </h1>
@@ -273,7 +273,7 @@
                                     <strong>
                                         <header>
                                             <h1>
-                                                <a href="javascript:void(0)" title="">
+                                                <a href="javascript:void(0)" data-role="218" class="link" title="خرید بسته آموزشی">
                                                     محمد صادق ثابتی
                                                 </a>
                                             </h1>
@@ -296,7 +296,7 @@
                                     <strong>
                                         <header>
                                             <h1>
-                                                <a href="javascript:void(0)" title="">
+                                                <a href="javascript:void(0)" data-role="220" class="link" title="خرید بسته آموزشی">
                                                     محمد امین نباخته
                                                 </a>
                                             </h1>
@@ -319,7 +319,7 @@
                                     <strong>
                                         <header>
                                             <h1>
-                                                <a href="javascript:void(0)" title="">
+                                                <a href="javascript:void(0)" data-role="216" class="link" title="خرید بسته آموزشی">
                                                     دکتر پیمان طلوعی
                                                 </a>
                                             </h1>
@@ -343,7 +343,7 @@
                                     <strong>
                                         <header>
                                             <h1>
-                                                <a href="javascript:void(0)" title="">
+                                                <a href="javascript:void(0)" data-role="217" class="link" title="خرید بسته آموزشی">
                                                     مهدی صنیعی طهرانی
                                                 </a>
                                             </h1>
@@ -364,7 +364,7 @@
                                     <strong>
                                         <header>
                                             <h1>
-                                                <a href="javascript:void(0)" title="">
+                                                <a href="javascript:void(0)" data-role="219" class="link" title="خرید بسته آموزشی"  >
                                                     مهدی امینی راد
                                                 </a>
                                             </h1>
@@ -404,7 +404,60 @@
                 </p>
             </div>
         </section>
-        <img src="https://cdn.sanatisharif.ir/upload/GhoreKeshi.jpg" class="img-responsive" style="width: 100%" />
+        <section class="lottery-banner">
+            <div class="container clearfix">
+                <div class="ttla">هدیه خرید آلاء <span>برای کسانی که تا 26 اردیبهشت خرید می کنند</span></div>
+
+                <div class="bnra">
+                    <img class="banner" src="/assets/extra/landing4/images/banner.png" alt="banner">
+                    <img class="infinite animated pulse shadow" src="/assets/extra/landing4/images/shadow.png" alt="banner">
+                </div><!-- .bnra -->
+
+                <div class="gifts">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>نفر اول  :</th>
+                            <th>آیفون x</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr>
+                            <td>5 نفر دوم  : </td>
+                            <td>120 هزار تومان اعتبار هدیه</td>
+                        </tr>
+                        <tr>
+                            <td>5 نفر دوم  : </td>
+                            <td>120 هزار تومان اعتبار هدیه</td>
+                        </tr>
+
+                        <tr>
+                            <td>5 نفر دوم  : </td>
+                            <td>120 هزار تومان اعتبار هدیه</td>
+                        </tr>
+
+                        <tr>
+                            <td>5 نفر دوم  : </td>
+                            <td>120 هزار تومان اعتبار هدیه</td>
+                        </tr>
+
+                        <tr>
+                            <td>5 نفر دوم  : </td>
+                            <td>120 هزار تومان اعتبار هدیه</td>
+                        </tr>
+
+                        <tr>
+                            <td>5 نفر دوم  : </td>
+                            <td>120 هزار تومان اعتبار هدیه</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div><!-- .gifts -->
+
+            </div><!-- .container -->
+
+        </section>
         <div class="div-tab-lesson" data-tabindex="most-product" id="section-5">
             <section class="suprise-all-field">
                 <div class="container">
@@ -1152,6 +1205,62 @@
             </div>
         </div>
     </main>
+
+    <section class="lottery-banner">
+        <div class="container clearfix">
+            <div class="ttla">هدیه خرید آلاء <span>برای کسانی که تا 26 اردیبهشت خرید می کنند</span></div>
+
+            <div class="bnra">
+                <img class="banner" src="/assets/extra/landing4/images/banner.png" alt="banner">
+                <img class="infinite animated pulse shadow" src="/assets/extra/landing4/images/shadow.png" alt="banner">
+            </div><!-- .bnra -->
+
+            <div class="gifts">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>نفر اول  :</th>
+                        <th>آیفون x</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr>
+                        <td>5 نفر دوم  : </td>
+                        <td>120 هزار تومان اعتبار هدیه</td>
+                    </tr>
+                    <tr>
+                        <td>5 نفر دوم  : </td>
+                        <td>120 هزار تومان اعتبار هدیه</td>
+                    </tr>
+
+                    <tr>
+                        <td>5 نفر دوم  : </td>
+                        <td>120 هزار تومان اعتبار هدیه</td>
+                    </tr>
+
+                    <tr>
+                        <td>5 نفر دوم  : </td>
+                        <td>120 هزار تومان اعتبار هدیه</td>
+                    </tr>
+
+                    <tr>
+                        <td>5 نفر دوم  : </td>
+                        <td>120 هزار تومان اعتبار هدیه</td>
+                    </tr>
+
+                    <tr>
+                        <td>5 نفر دوم  : </td>
+                        <td>120 هزار تومان اعتبار هدیه</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div><!-- .gifts -->
+
+        </div><!-- .container -->
+
+    </section>
+
     <footer class="site-footer site-footer-lading" role="contentinfo" id="section-footer">
         <div class="container">
             <h1 style="text-align: center">
