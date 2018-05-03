@@ -404,7 +404,60 @@
                 </p>
             </div>
         </section>
-        <img src="https://cdn.sanatisharif.ir/upload/GhoreKeshi.jpg" class="img-responsive" style="width: 100%" />
+        <section class="lottery-banner">
+            <div class="container clearfix">
+                <div class="ttla">هدیه خرید آلاء <span>برای کسانی که تا 26 اردیبهشت خرید می کنند</span></div>
+
+                <div class="bnra">
+                    <img class="banner" src="/assets/extra/landing4/images/banner.png" alt="banner">
+                    <img class="infinite animated pulse shadow" src="/assets/extra/landing4/images/shadow.png" alt="banner">
+                </div><!-- .bnra -->
+
+                <div class="gifts">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>نفر اول  :</th>
+                            <th>آیفون x</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr>
+                            <td>5 نفر دوم  : </td>
+                            <td>120 هزار تومان اعتبار هدیه</td>
+                        </tr>
+                        <tr>
+                            <td>5 نفر دوم  : </td>
+                            <td>120 هزار تومان اعتبار هدیه</td>
+                        </tr>
+
+                        <tr>
+                            <td>5 نفر دوم  : </td>
+                            <td>120 هزار تومان اعتبار هدیه</td>
+                        </tr>
+
+                        <tr>
+                            <td>5 نفر دوم  : </td>
+                            <td>120 هزار تومان اعتبار هدیه</td>
+                        </tr>
+
+                        <tr>
+                            <td>5 نفر دوم  : </td>
+                            <td>120 هزار تومان اعتبار هدیه</td>
+                        </tr>
+
+                        <tr>
+                            <td>5 نفر دوم  : </td>
+                            <td>120 هزار تومان اعتبار هدیه</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div><!-- .gifts -->
+
+            </div><!-- .container -->
+
+        </section>
         <div class="div-tab-lesson" data-tabindex="most-product" id="section-5">
             <section class="suprise-all-field">
                 <div class="container">
@@ -1152,6 +1205,62 @@
             </div>
         </div>
     </main>
+
+    <section class="lottery-banner">
+        <div class="container clearfix">
+            <div class="ttla">هدیه خرید آلاء <span>برای کسانی که تا 26 اردیبهشت خرید می کنند</span></div>
+
+            <div class="bnra">
+                <img class="banner" src="/assets/extra/landing4/images/banner.png" alt="banner">
+                <img class="infinite animated pulse shadow" src="/assets/extra/landing4/images/shadow.png" alt="banner">
+            </div><!-- .bnra -->
+
+            <div class="gifts">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>نفر اول  :</th>
+                        <th>آیفون x</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr>
+                        <td>5 نفر دوم  : </td>
+                        <td>120 هزار تومان اعتبار هدیه</td>
+                    </tr>
+                    <tr>
+                        <td>5 نفر دوم  : </td>
+                        <td>120 هزار تومان اعتبار هدیه</td>
+                    </tr>
+
+                    <tr>
+                        <td>5 نفر دوم  : </td>
+                        <td>120 هزار تومان اعتبار هدیه</td>
+                    </tr>
+
+                    <tr>
+                        <td>5 نفر دوم  : </td>
+                        <td>120 هزار تومان اعتبار هدیه</td>
+                    </tr>
+
+                    <tr>
+                        <td>5 نفر دوم  : </td>
+                        <td>120 هزار تومان اعتبار هدیه</td>
+                    </tr>
+
+                    <tr>
+                        <td>5 نفر دوم  : </td>
+                        <td>120 هزار تومان اعتبار هدیه</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div><!-- .gifts -->
+
+        </div><!-- .container -->
+
+    </section>
+
     <footer class="site-footer site-footer-lading" role="contentinfo" id="section-footer">
         <div class="container">
             <h1 style="text-align: center">
