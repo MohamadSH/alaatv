@@ -501,7 +501,7 @@ class EducationalContentController extends Controller
                     }
 
                     $author = null;
-                    if (isset($educationalContent->user_id)) {
+                    if (isset($educationalContent->author_id)) {
                         $author = $educationalContent->user->getfullName();
                     }
 
