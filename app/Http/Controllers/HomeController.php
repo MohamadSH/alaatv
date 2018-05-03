@@ -97,25 +97,25 @@ class HomeController extends Controller
     private static $TAG = HomeController::class;
 
     public function debug(Request $request){
-        $contentset = Contentset::FindOrFail(101);
-        $contents = $contentset->educationalContents;
-        foreach ($contents as $c)
-        {
-            try{
-                $myTag = $c->tags ;
-                array_push($myTag , "کازرانیان");
-                $tagsJson = [
-                    "bucket" => "content",
-                    "tags" => $myTag
-                ];
-                $c->tags = json_encode($tagsJson);
-                if(!$c->update()) dump("error on updating content:" . $c->id);
-            }catch(\Exception $e)
-            {
-                return $this->response->setStatusCode(503)->setContent(["error" => $e->getMessage(), "line" => $e->getLine()]);
-            }
-        }
-        dd("finish");
+//        $contentset = Contentset::FindOrFail(101);
+//        $contents = $contentset->educationalContents;
+//        foreach ($contents as $c)
+//        {
+//            try{
+//                $myTag = $c->tags ;
+//                array_push($myTag , "کازرانیان");
+//                $tagsJson = [
+//                    "bucket" => "content",
+//                    "tags" => $myTag
+//                ];
+//                $c->tags = json_encode($tagsJson);
+//                if(!$c->update()) dump("error on updating content:" . $c->id);
+//            }catch(\Exception $e)
+//            {
+//                return $this->response->setStatusCode(503)->setContent(["error" => $e->getMessage(), "line" => $e->getLine()]);
+//            }
+//        }
+//        dd("finish");
         abort(404);
     }
     public function __construct()
