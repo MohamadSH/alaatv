@@ -514,14 +514,14 @@ class User extends Authenticatable
         $fullName = "";
         switch ($mode) {
             case "firstNameFirst":
-                if (isset($this->firstName[0]) || isset($user->lastName[0])) {
+                if (isset($this->firstName[0]) || isset($this->lastName[0])) {
                     if (isset($this->firstName[0])) $fullName .= $this->firstName . " ";
                     if (isset($this->lastName[0])) $fullName .= $this->lastName;
 
                 }
                 break;
             case "lastNameFirst":
-                if (isset($this->firstName[0]) || isset($user->lastName[0])) {
+                if (isset($this->firstName[0]) || isset($this->lastName[0])) {
                     if (isset($this->firstName[0])) $fullName .= $this->lastName . " ";
                     if (isset($this->lastName[0])) $fullName .= $this->firstName;
                 }
