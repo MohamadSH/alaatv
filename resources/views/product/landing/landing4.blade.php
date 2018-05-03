@@ -40,7 +40,7 @@
 
     <title></title>
 
-    <link rel="stylesheet" href="/assets/extra/landing4/css/stylesheet.css" />
+    <link rel="stylesheet" href="/assets/extra/landing4/css/stylesheet2.css" />
     <!--[if lt IE 10]>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flexibility/2.0.1/flexibility.js"></script>
     <![endif]-->
