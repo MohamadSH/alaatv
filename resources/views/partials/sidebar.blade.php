@@ -11,7 +11,7 @@
         <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
         <!-- DOC: Set data-keep-expand="true" to keep the submenues expanded -->
         <!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
-        <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-hover-submenu @if(isset($sideBarMode) && strcmp($sideBarMode,"closed") == 0) page-sidebar-menu-closed @endif" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+        <ul class="page-sidebar-menu @if(isset($sideBarMode) && strcmp($sideBarMode,"closed") == 0) page-sidebar-menu-closed @endif" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
             <li class="nav-item @if(isset($pageName) && strcmp($pageName , "dashboard")==0)start active open @endif">
                 <a href="{{action("HomeController@index")}}" class="nav-link nav-toggle">
                     <i class="icon-home"></i>
@@ -21,10 +21,18 @@
                 </a>
             </li>
             <li class="nav-item @if(isset($pageName) && strcmp($pageName , "educationalContent")==0)start active open @endif">
-                <a href="{{action("EducationalContentController@search")}}" class="nav-link nav-toggle font-red bold">
-                    <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-                    <span class="title">جزوه/آزمون</span>
+                <a href="{{action("EducationalContentController@search")}}" class="nav-link nav-toggle font-yellow bold">
+                    <i class="fa fa-video-camera" aria-hidden="true"></i>
+                    <span class="title">فیلم های آلاء</span>
                     @if(isset($pageName) && strcmp($pageName , "educationalContent")==0)<span class="selected"></span> @endif
+                    <span class="arrow "></span>
+                </a>
+            </li>
+            <li class="nav-item @if(isset($pageName) && strcmp($pageName , "productsPortfolio")==0)start active open @endif">
+                <a href="{{action("ProductController@search")}}" class="nav-link nav-toggle font-yellow bold">
+                    <i class="icon-basket"></i>
+                    <span class="title">همایش های آلاء</span>
+                    @if(isset($pageName) && strcmp($pageName , "productsPortfolio")==0)<span class="selected"></span> @endif
                     <span class="arrow "></span>
                 </a>
             </li>
@@ -39,14 +47,6 @@
                     {{--</a>--}}
                 {{--</li>--}}
 
-                <li class="nav-item @if(isset($pageName) && strcmp($pageName , "submitKonkurResult")==0)start active open @endif">
-                    <a href="{{action("UserController@submitKonkurResult")}}" class="nav-link nav-toggle  bold">
-                        <i class="fa fa-graduation-cap" aria-hidden="true"></i>
-                        <span class="title">ثبت رتبه 96</span>
-                        @if(isset($pageName) && strcmp($pageName , "submitKonkurResult")==0)<span class="selected"></span> @endif
-                        <span class="arrow "></span>
-                    </a>
-                </li>
                 @ability(Config::get("constants.EMPLOYEE_ROLE"),Config::get("constants.LIST_EMPLOPYEE_WORK_SHEET"),Config::get("constants.INSERT_EMPLOPYEE_WORK_SHEET"))
                 <li class="nav-item  @if(strcmp(url()->current() , action("EmployeetimesheetController@create")) == 0)start active open @endif">
                     <a href="{{action("EmployeetimesheetController@create")}}" class="nav-link ">
@@ -109,7 +109,8 @@
                         @endpermission
                         @permission((Config::get('constants.SITE_CONFIG_ADMIN_PANEL_ACCESS')))
                         <li class="nav-item  ">
-                            <a href="#" class="nav-link ">
+                            <a href="#" class="nav-link  nav-toggle">
+                                <i class="fa fa-cogs"></i>
                                 <span class="title">پیکربندی سایت</span>
                             </a>
                             <ul class="sub-menu">
@@ -239,14 +240,7 @@
                     </li>
                 @endif
             @endif
-            <li class="nav-item @if(isset($pageName) && strcmp($pageName , "productsPortfolio")==0)start active open @endif">
-                <a href="{{action("ProductController@search")}}" class="nav-link nav-toggle">
-                    <i class="icon-basket"></i>
-                    <span class="title">اردوها و همایش ها</span>
-                    @if(isset($pageName) && strcmp($pageName , "productsPortfolio")==0)<span class="selected"></span> @endif
-                    <span class="arrow "></span>
-                </a>
-            </li>
+
             {{--<li class="nav-item @if(isset($pageName) && strcmp($pageName , "articles")==0)start active open @endif">--}}
                 {{--<a href="{{action("ArticleController@showList")}}" class="nav-link nav-toggle">--}}
                     {{--<i class="fa fa-book" aria-hidden="true"></i>--}}
@@ -264,16 +258,16 @@
             {{--</a>--}}
             {{--</li>--}}
 
-            <li class="nav-item @if(isset($pageName) && strcmp($pageName , "aboutUs")==0)start active open @endif">
-                <a href="{{action("HomeController@aboutUs")}}" class="nav-link nav-toggle">
+            {{--<li class="nav-item @if(isset($pageName) && strcmp($pageName , "aboutUs")==0)start active open @endif">--}}
+                {{--<a href="{{action("HomeController@aboutUs")}}" class="nav-link nav-toggle">--}}
                     {{--<i class="icon-info"></i>--}}
                     {{--<i class="icon-info"></i>--}}
-                    <i class="fa fa-info-circle" aria-hidden="true"></i>
-                    <span class="title">درباره ما</span>
-                    @if(isset($pageName) && strcmp($pageName , "aboutUs")==0)<span class="selected"></span> @endif
-                    <span class="arrow "></span>
-                </a>
-            </li>
+                    {{--<i class="fa fa-info-circle" aria-hidden="true"></i>--}}
+                    {{--<span class="title">درباره ما</span>--}}
+                    {{--@if(isset($pageName) && strcmp($pageName , "aboutUs")==0)<span class="selected"></span> @endif--}}
+                    {{--<span class="arrow "></span>--}}
+                {{--</a>--}}
+            {{--</li>--}}
             <li class="nav-item @if(isset($pageName) && strcmp($pageName , "contactUs")==0)start active open @endif">
                 <a href="{{action("HomeController@contactUs")}}" class="nav-link nav-toggle">
                     <i class="icon-call-end"></i>
@@ -282,6 +276,16 @@
                     <span class="arrow "></span>
                 </a>
             </li>
+            @if(Auth::check())
+                <li class="nav-item @if(isset($pageName) && strcmp($pageName , "submitKonkurResult")==0)start active open @endif">
+                    <a href="{{action("UserController@submitKonkurResult")}}" class="nav-link nav-toggle  bold">
+                        <i class="fa fa-graduation-cap" aria-hidden="true"></i>
+                        <span class="title">ثبت رتبه 96</span>
+                        @if(isset($pageName) && strcmp($pageName , "submitKonkurResult")==0)<span class="selected"></span> @endif
+                        <span class="arrow "></span>
+                    </a>
+                </li>
+            @endif
             <li class="nav-item @if(isset($pageName) && strcmp($pageName , "rules")==0)start active open @endif">
                 <a href="{{action("HomeController@rules")}}" class="nav-link nav-toggle">
                     <i class="fa fa-server" aria-hidden="true"></i>

@@ -180,20 +180,18 @@
                                                     <div class="mt-list-container list-simple scroller" style="height: 200px">
                                                         <ul>
                                                             @foreach($productVideos["videos"] as $video)
+                                                                @if(isset($video["file"]))
                                                                 <li class="mt-list-item">
                                                                     <div class="list-icon-container">
                                                                         <i class="fa fa-download"></i>
                                                                     </div>
                                                                     <div class="list-item-content">
                                                                         <p class="uppercase" style="    font-size: 16px;">
-                                                                            @if(isset($video["file"]))
                                                                                 <a href="{{action("HomeController@download" , ["content"=>"فایل محصول","fileName"=>$video["file"] , "pId"=>$video["product_id"]  ])}}">دانلود {{$video["name"]}}</a>
-                                                                            @else
-                                                                                فایل این قسمت وجود ندارد
-                                                                            @endif
                                                                         </p>
                                                                     </div>
                                                                 </li>
+                                                                @endif
                                                             @endforeach
                                                         </ul>
                                                     </div>

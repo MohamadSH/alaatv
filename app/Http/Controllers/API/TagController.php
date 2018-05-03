@@ -24,9 +24,13 @@ class TagController extends Controller
                 'error' => "msg",
             ], 410);
         }
+        $header = array (
+            'Content-Type' => 'application/json; charset=UTF-8',
+            'charset' => 'utf-8'
+        );
         $response = response()->json([
-            'msg' => $result,
-        ], 200);
+            'data' => $result,
+        ], 200,$header,JSON_UNESCAPED_UNICODE);
     }
 
     /**
@@ -88,9 +92,13 @@ class TagController extends Controller
                     'error' => "msg",
                 ], 410);
             }
+            $header = array (
+                'Content-Type' => 'application/json; charset=UTF-8',
+                'charset' => 'utf-8'
+            );
             $response = response()->json([
                 'data' => $result,
-            ], 200);
+            ], 200,$header,JSON_UNESCAPED_UNICODE);
         });
 
         return $response;
@@ -167,9 +175,15 @@ class TagController extends Controller
                     'error' => "msg",
                 ], 410);
             }
+          
+            $header = [
+                'Content-Type' => 'application/json; charset=UTF-8',
+                'charset' => 'utf-8'
+            ];
+
             $response = response()->json([
                 'data' => $result,
-            ], 200);
+            ], 200,$header,JSON_UNESCAPED_UNICODE);
         });
 
         //dd($response);
@@ -177,6 +191,7 @@ class TagController extends Controller
     }
 
     public function flush(Request $request){
+        abort(404);
         $this->redis->flushDB(function($err , $result){
            return $result;
         });

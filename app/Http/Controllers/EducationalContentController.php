@@ -14,6 +14,8 @@ use App\Major;
 use App\Majortype;
 use App\Product;
 use App\Traits\APIRequestCommon;
+use App\Traits\FileCommon;
+use App\Traits\Helper;
 use App\Traits\ProductCommon;
 use App\Websitesetting;
 use Carbon\Carbon;
@@ -29,12 +31,15 @@ use Jenssegers\Agent\Agent;
 use SSH;
 
 
+
 class EducationalContentController extends Controller
 {
     use APIRequestCommon;
     protected $response ;
     protected $setting ;
     use ProductCommon ;
+    use Helper;
+    use FileCommon ;
 
     public function __construct()
     {
@@ -376,9 +381,7 @@ class EducationalContentController extends Controller
      */
     public function show(Request $request, Educationalcontent $educationalContent)
     {
-
-        $pass=true;
-        if($pass || $educationalContent->isValid() && $educationalContent->isEnable())
+        if($educationalContent->isValid() && $educationalContent->isEnable())
         {
 
             $educationalContentDisplayName = $educationalContent->getDisplayName();
@@ -428,30 +431,33 @@ class EducationalContentController extends Controller
                             $file = $educationalContent->files->where("pivot.label" , "hd")->first() ;
                             if(isset($file))
                             {
-                                $videoSources->put( "hd" , ["src"=>$file->name , "caption"=>$file->pivot->caption]) ;
+                                $size = $this->curlGetFileSize($file->name);
+                                $videoSources->put( "hd" , ["src"=>$file->name , "caption"=>$file->pivot->caption , "size"=>$size]) ;
                             }
 
                             $file = $educationalContent->files->where("pivot.label" , "hq")->first() ;
                             if(isset($file))
                             {
-                                $videoSources->put( "hq" , ["src"=>$file->name , "caption"=>$file->pivot->caption]) ;
+                                $size = $this->curlGetFileSize($file->name);
+                                $videoSources->put( "hq" , ["src"=>$file->name , "caption"=>$file->pivot->caption, "size"=>$size]) ;
                             }
 
                             $file = $educationalContent->files->where("pivot.label" , "240p")->first() ;
                             if(isset($file))
                             {
-                                $videoSources->put( "240p" , ["src"=>$file->name ,  "caption"=>$file->pivot->caption]) ;
+                                $size = $this->curlGetFileSize($file->name);
+                                $videoSources->put( "240p" , ["src"=>$file->name ,  "caption"=>$file->pivot->caption, "size"=>$size]) ;
                             }
                             $file = $educationalContent->files->where("pivot.label" , "thumbnail")->first();
                             if(isset($file))
                                 $files->put("thumbnail" , $file->name);
                             $files->put("videoSource" , $videoSources);
 
-                            $contenSets = $educationalContent->contentsets->where("pivot.isDefault" , 1);
-                            if($contenSets->isNotEmpty())
+                            $contentSets = $educationalContent->contentsets->where("pivot.isDefault" , 1);
+                            if($contentSets->isNotEmpty())
                             {
-                                $contentSet = $contenSets->first();
-                                $sameContents =  $contentSet->educationalcontents ;
+                                $contentSet = $contentSets->first();
+                                $sameContents =  $contentSet->educationalcontents->where("enable" , 1)->sortBy("pivot.order") ;
                                 $contentsWithSameSet = collect();
                                 $sameContents->load('files');
                                 $sameContents->load('contenttype');
@@ -495,7 +501,7 @@ class EducationalContentController extends Controller
                     }
 
                     $author = null;
-                    if (isset($educationalContent->user)) {
+                    if (isset($educationalContent->author_id)) {
                         $author = $educationalContent->user->getfullName();
                     }
 
@@ -573,9 +579,17 @@ class EducationalContentController extends Controller
                     break;
             }
 
+            if(Auth::check())
+            {
+                $baseUrl = url("/");
+                $contentPath = str_replace($baseUrl , "" , action("EducationalContentController@show" , $educationalContent));
+                $productSeenCount = $this->userSeen($contentPath);
+
+            }
+
             $sideBarMode = "closed";
 
-            return view("educationalContent.show", compact("author","educationalContent", "rootContentType", "childContentType", "contentsWithSameType" , "soonContentsWithSameType" , "educationalContentSet" , "contentsWithSameSet" , "videoSources" , "files" , "tags" , "sideBarMode" , "educationalContentDisplayName" , "sessionNumber" , "fileToShow"));
+            return view("educationalContent.show", compact("productSeenCount","author","educationalContent", "rootContentType", "childContentType", "contentsWithSameType" , "soonContentsWithSameType" , "educationalContentSet" , "contentsWithSameSet" , "videoSources" , "files" , "tags" , "sideBarMode" , "educationalContentDisplayName" , "sessionNumber" , "fileToShow"));
         }
         else
             abort(404);
