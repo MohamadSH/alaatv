@@ -409,7 +409,7 @@
                 <div class="ttla">هدیه خرید آلاء <span>برای کسانی که تا 26 اردیبهشت خرید می کنند</span></div>
 
                 <div class="bnra">
-                    <img class="banner" src="/assets/extra/landing4/images/banner.png" alt="banner">
+                    <img class="banner" src="/assets/extra/landing4/images/banner2.png" alt="banner">
                     <img class="infinite animated pulse shadow" src="/assets/extra/landing4/images/shadow.png" alt="banner">
                 </div><!-- .bnra -->
 
@@ -428,28 +428,28 @@
                             <td>120 هزار تومان اعتبار هدیه</td>
                         </tr>
                         <tr>
-                            <td>5 نفر دوم  : </td>
-                            <td>120 هزار تومان اعتبار هدیه</td>
+                            <td>7 نفر سوم :</td>
+                            <td>80 هزار تومان اعتبار هدیه</td>
                         </tr>
 
                         <tr>
-                            <td>5 نفر دوم  : </td>
-                            <td>120 هزار تومان اعتبار هدیه</td>
+                            <td>110 نفر چهارم : </td>
+                            <td>60 هزار تومان اعتبار هدیه</td>
                         </tr>
 
                         <tr>
-                            <td>5 نفر دوم  : </td>
-                            <td>120 هزار تومان اعتبار هدیه</td>
+                            <td>180 نفر پنجم :</td>
+                            <td>50 هزار تومان اعتبار هدیه</td>
                         </tr>
 
                         <tr>
-                            <td>5 نفر دوم  : </td>
-                            <td>120 هزار تومان اعتبار هدیه</td>
+                            <td>59 نفر ششم :</td>
+                            <td>40 هزار تومان اعتبار هدیه</td>
                         </tr>
 
                         <tr>
-                            <td>5 نفر دوم  : </td>
-                            <td>120 هزار تومان اعتبار هدیه</td>
+                            <td>313 نفر هفتم :</td>
+                            <td>313 هزار تومان اعتبار هدیه</td>
                         </tr>
                         </tbody>
                     </table>
@@ -1211,7 +1211,7 @@
             <div class="ttla">هدیه خرید آلاء <span>برای کسانی که تا 26 اردیبهشت خرید می کنند</span></div>
 
             <div class="bnra">
-                <img class="banner" src="/assets/extra/landing4/images/banner.png" alt="banner">
+                <img class="banner" src="/assets/extra/landing4/images/banner2.png" alt="banner">
                 <img class="infinite animated pulse shadow" src="/assets/extra/landing4/images/shadow.png" alt="banner">
             </div><!-- .bnra -->
 
@@ -1230,28 +1230,28 @@
                         <td>120 هزار تومان اعتبار هدیه</td>
                     </tr>
                     <tr>
-                        <td>5 نفر دوم  : </td>
-                        <td>120 هزار تومان اعتبار هدیه</td>
+                        <td>7 نفر سوم :</td>
+                        <td>80 هزار تومان اعتبار هدیه</td>
                     </tr>
 
                     <tr>
-                        <td>5 نفر دوم  : </td>
-                        <td>120 هزار تومان اعتبار هدیه</td>
+                        <td>110 نفر چهارم : </td>
+                        <td>60 هزار تومان اعتبار هدیه</td>
                     </tr>
 
                     <tr>
-                        <td>5 نفر دوم  : </td>
-                        <td>120 هزار تومان اعتبار هدیه</td>
+                        <td>180 نفر پنجم :</td>
+                        <td>50 هزار تومان اعتبار هدیه</td>
                     </tr>
 
                     <tr>
-                        <td>5 نفر دوم  : </td>
-                        <td>120 هزار تومان اعتبار هدیه</td>
+                        <td>59 نفر ششم :</td>
+                        <td>40 هزار تومان اعتبار هدیه</td>
                     </tr>
 
                     <tr>
-                        <td>5 نفر دوم  : </td>
-                        <td>120 هزار تومان اعتبار هدیه</td>
+                        <td>313 نفر هفتم :</td>
+                        <td>313 هزار تومان اعتبار هدیه</td>
                     </tr>
                     </tbody>
                 </table>
