@@ -48,6 +48,27 @@
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{Config('constants.google.analytics')}}"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        var dimensionValue = '{{ request()->ip() }}';
+
+        gtag('js', new Date());
+        gtag('config', "{{Config('constants.google.analytics')}}");
+        @if(Auth::check())
+        gtag('set', {'user_id': '{{ Auth::user() ->id }}'}); // Set the user ID using signed-in user_id.
+        @endif
+        gtag('config', "{{Config('constants.google.analytics')}}", {
+            'custom_map': {'dimension2': 'dimension2'}
+        });
+        // Sends the custom dimension to Google Analytics.
+        gtag('event', 'hit', {'dimension2': dimensionValue});
+    </script>
+    @section("gtagJs")
+
+    @show
 </head>
 
 <body>
