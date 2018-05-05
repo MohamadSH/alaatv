@@ -2557,6 +2557,60 @@ class HomeController extends Controller
 
     public function bot()
     {
+        if(Input::has("id"))
+            $contentsetId = Input::get("id");
+        else
+            dd("Wring inputs, Please pass id as input");
+        $contentsets = Contentset::where("id" , $contentsetId)->get();
+        dump("number of contentsets:".$contentsets->count());
+        $contentCounter = 0;
+        foreach ($contentsets as $contentset)
+        {
+            $baseTime = Carbon::createFromDate("2017" , "06" , "01" , "Asia/Tehran");
+            $contents = $contentset->educationalcontents->sortBy("pivot.order");
+            $contentCounter += $contents->count();
+            foreach ($contents as $content)
+            {
+                $content->created_at = $baseTime;
+                if($content->update())
+                {
+                    if(isset($content->tags))
+                    {
+                        $params = [
+                            "tags"=> json_encode($content->tags) ,
+                        ];
+                        if(isset($content->created_at) && strlen($content->created_at) > 0 )
+                            $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $content->created_at )->timestamp;
+
+                        $response =  $this->sendRequest(
+                            env("TAG_API_URL")."id/content/".$content->id ,
+                            "PUT",
+                            $params
+                        );
+
+                        if($response["statusCode"] == 200)
+                        {
+                        }
+                        else
+                        {
+                            dump("tag request for content id ".$content->id." failed. response : ".$response["statusCode"]);
+                        }
+                    }
+                    else
+                    {
+                        dump("content id ".$content->id."did not have ant tags!");
+                    }
+                }
+                 else
+                 {
+                     dump("content id ".$content->id." was not updated");
+                 }
+                $baseTime = $baseTime->addDay();
+            }
+
+        }
+        dump("number of total processed contents: ".$contentCounter);
+        dd("done!");
         /***
         $contents = Educationalcontent::where("contenttype_id" , 8);
         $contentArray = $contents->pluck("id")->toArray();
