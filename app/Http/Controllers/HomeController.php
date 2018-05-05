@@ -2561,7 +2561,10 @@ class HomeController extends Controller
             $contentsetId = Input::get("id");
         else
             dd("Wring inputs, Please pass id as input");
-        $contentsets = Contentset::where("id" , $contentsetId)->get();
+
+        if(!is_array($contentsetId))
+            dd("The id input must be an array!");
+        $contentsets = Contentset::whereIn("id" , $contentsetId)->get();
         dump("number of contentsets:".$contentsets->count());
         $contentCounter = 0;
         foreach ($contentsets as $contentset)
