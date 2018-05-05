@@ -54,16 +54,16 @@
 
 @section("pageBar")
     {{--<div class="page-bar">--}}
-        {{--<ul class="page-breadcrumb">--}}
-            {{--<li>--}}
-                {{--<i class="icon-home"></i>--}}
-                {{--<a href="{{action("HomeController@index")}}">خانه</a>--}}
-                {{--<i class="fa fa-angle-left"></i>--}}
-            {{--</li>--}}
-            {{--<li>--}}
-                {{--<span>جستجو</span>--}}
-            {{--</li>--}}
-        {{--</ul>--}}
+    {{--<ul class="page-breadcrumb">--}}
+    {{--<li>--}}
+    {{--<i class="icon-home"></i>--}}
+    {{--<a href="{{action("HomeController@index")}}">خانه</a>--}}
+    {{--<i class="fa fa-angle-left"></i>--}}
+    {{--</li>--}}
+    {{--<li>--}}
+    {{--<span>جستجو</span>--}}
+    {{--</li>--}}
+    {{--</ul>--}}
     {{--</div>--}}
 @endsection
 @section("content")
@@ -82,19 +82,24 @@
                     {{--</div>--}}
                     {{--</div>--}}
                     <div class="row">
-                        <div class="col-lg-4 col-md-4 col-sd-4 col-xs-12">
+                        <div class="col-lg-3 col-md-3 col-sd-3 col-xs-12">
                             <div class="form-group form-md-line-input form-md-floating-label has-info">
-                                {!! Form::select('tags[]',$grades,(isset($tagArray))?$tagArray:null,['class' => 'form-control itemFilter' , 'placeholder'=>'همه مقاطع' ]) !!}
+                                {!! Form::select('tags[]',$grades,null,['class' => 'form-control itemFilter' , 'placeholder'=>'همه مقاطع' ]) !!}
                             </div>
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sd-4 col-xs-12">
+                        <div class="col-lg-3 col-md-3 col-sd-3 col-xs-12">
                             <div class="form-group form-md-line-input form-md-floating-label has-info">
-                                {!! Form::select('tags[]',$majors,(isset($tagArray))?$tagArray:null,['class' => 'form-control itemFilter' , 'placeholder'=>'همه رشته ها' ]) !!}
+                                {!! Form::select('tags[]',$majors,null,['class' => 'form-control itemFilter' , 'id'=>'majorSelect' , 'placeholder'=>'همه رشته ها' ]) !!}
                             </div>
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sd-4 col-xs-12">
+                        <div class="col-lg-3 col-md-3 col-sd-3 col-xs-12">
                             <div class="form-group form-md-line-input form-md-floating-label has-info">
-                                {!! Form::select('tags[]',$lessons,(isset($tagArray))?$tagArray:null,['class' => 'form-control itemFilter' ]) !!}
+                                {!! Form::select('tags[]',[],null,['class' => 'form-control itemFilter' , 'disabled' , 'id'=> 'lessonSelect' , 'placeholder'=>'انتخاب درس' ]) !!}
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sd-3 col-xs-12">
+                            <div class="form-group form-md-line-input form-md-floating-label has-info">
+                                {!! Form::select('tags[]',[],null,['class' => 'form-control itemFilter' , 'disabled' , 'id'=> 'teacherSelect' , 'placeholder'=>'انتخاب دبیر' ]) !!}
                             </div>
                         </div>
                     </div>
@@ -142,23 +147,39 @@
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
         @if($items->where("type" , "product")->first()["totalitems"] > 0)
             <!-- BEGIN PORTLET-->
-            <div class="portlet light " id="productPortlet">
-                <div class="portlet-title tabbable-line">
-                    <div class="caption">
-                        <i class="icon-globe font-dark hide"></i>
-                        <span class="caption-subject font-dark bold uppercase">محصولات آلاء</span>
+                <div class="portlet light " id="productPortlet">
+                    <div class="portlet-title tabbable-line">
+                        <div class="caption">
+                            <i class="icon-globe font-dark hide"></i>
+                            <span class="caption-subject font-dark bold uppercase">محصولات آلاء</span>
+                        </div>
+                    </div>
+                    <div class="portlet-body" id="productDiv">
+                        <div class="row">
+                            <section class="productSlider slider" style="width: 95%;margin-top: 0px ; margin-bottom: 15px;">
+                                {!!  $items->where("type" , "product")->first()["view"]  !!}
+                            </section>
+                        </div>
                     </div>
                 </div>
-                <div class="portlet-body" id="productDiv">
-                    <div class="row">
-                        <section class="productSlider slider" style="width: 95%;margin-top: 0px ; margin-bottom: 15px;">
-                            {!!  $items->where("type" , "product")->first()["view"]  !!}
-                        </section>
-                    </div>
-                </div>
-            </div>
-            <!-- END PORTLET-->
+                <!-- END PORTLET-->
         @endif
+        @if($items->where("type" , "contentset")->first()["totalitems"] > 0)
+                <div class="portlet light ">
+                    <div class="portlet-title tabbable-line">
+                        <div class="caption">
+                            <i class="icon-globe font-dark hide"></i>
+                            <span class="caption-subject font-dark bold uppercase">دوره های آموزشی آلاء</span>
+                        </div>
+                    </div>
+                    <div class="portlet-body " id="tab_contentset" >
+                        {!! $items->where("type" , "contentset")->first()["view"]  !!}
+                    </div>
+                </div>
+        @endif
+        @foreach($ads1 as $image => $link)
+            @include('partials.bannerAds', ['img'=>$image , 'link'=>$link])
+        @endforeach
             <!-- BEGIN PORTLET-->
             <div class="portlet light ">
                 <div class="portlet-title tabbable-line">
@@ -168,18 +189,15 @@
                     </div>
                     <ul class="nav nav-tabs">
                         @if($items->where("type" , "article")->first()["totalitems"] > 0)
-                        <li>
-                            <a href="#tab_content_article" data-toggle="tab"> Article </a>
-                        </li>
+                            <li>
+                                <a href="#tab_content_article" data-toggle="tab"> Article </a>
+                            </li>
                         @endif
                         <li>
                             <a href="#tab_content_pamphlet" data-toggle="tab"> PDF </a>
                         </li>
                         <li class="active">
                             <a href="#tab_content_video"  data-toggle="tab">Video</a>
-                        </li>
-                        <li >
-                            <a href="#tab_contentset" data-toggle="tab"> Playlist </a>
                         </li>
                     </ul>
                 </div>
@@ -191,9 +209,6 @@
                         <div class="tab-pane text-center" id="tab_content_pamphlet">
                             {!! $items->where("type" , "pamphlet")->first()["view"]  !!}
                         </div>
-                        <div class="tab-pane text-center" id="tab_contentset">
-                            {!! $items->where("type" , "contentset")->first()["view"]  !!}
-                        </div>
                         <div class="tab-pane text-center" id="tab_content_article">
                             {!! $items->where("type" , "article")->first()["view"]  !!}
                         </div>
@@ -202,6 +217,9 @@
                 </div>
             </div>
             <!-- END PORTLET-->
+            @foreach($ads2 as $image => $link)
+                @include('partials.bannerAds', ['img'=>$image , 'link'=>$link])
+            @endforeach
         </div>
     </div>
 @endsection
@@ -221,25 +239,62 @@
     <script src="/assets/pages/scripts/search.min.js" type="text/javascript"></script>
     <script src="/assets/extra/slick/slick/slick.min.js" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript">
-        $(document).ready(function(){
+        var majorLesson = {!!  json_encode($majorLesson)!!};
+        var lessonTeacher = {!!  json_encode($lessonTeacher)!!};
+        var defaultLesson = "{!!$defaultLesson!!}";
+        var defaultTeacher = "{!!$defaultTeacher!!}";
+        $(document).ready(function()
+        {
             initialSlick($(".productSlider"));
             initialVideoPortfolio();
-            initialContentTypeSelect();
+            makeLessonSelect();
+            makeTeacherSelect();
         });
 
-        $(document).on('click', '.pagination a', function (e) {
-            var query = $(this).attr('href').split('?')[1];
-            var parameters = query.split('=');
-            var pageName = parameters[0];
-            var itemType = pageName.split('page');
-            contentLoad(parameters[0] , parameters[1] , itemType[0]);
-            e.preventDefault();
-        });
-        
+        function makeLessonSelect() {
+            var major = $("#majorSelect").val() ;
+            if(major == '')
+            {
+                $("#lessonSelect").prop("disabled" , true);
+            }
+            else
+            {
+                var lessons = majorLesson[major];
+                $("#lessonSelect").empty();
+                $.each(lessons , function (index , value)
+                {
+                    $("#lessonSelect").append($("<option></option>")
+                        .attr("value", value.value).text(value.index));
+                });
+                $("#lessonSelect").val(defaultLesson);
+                $("#lessonSelect").prop("disabled" , false);
+            }
+        }
+
+        function makeTeacherSelect() {
+            var lesson = $("#lessonSelect").val() ;
+            if(lesson == '')
+            {
+                $("#teacherSelect").prop("disabled" , true);
+            }
+            else
+            {
+                var teachers = lessonTeacher[lesson];
+                $("#teacherSelect").empty();
+                $.each(teachers , function (index , value)
+                {
+                    $("#teacherSelect").append($("<option></option>")
+                        .attr("value", value.value).text(value.index));
+                });
+                $("#teacherSelect").val(defaultTeacher);
+                $("#teacherSelect").prop("disabled" , false);
+            }
+        }
+
         function destroySlick(element) {
             element.slick('unslick');
         }
-        
+
         function initialSlick(element) {
             element.slick({
                 auto:true,
@@ -280,7 +335,7 @@
                 rtl:true
             });
         }
-        
+
         function initialVideoPortfolio() {
             (function($, window, document, undefined) {
                 'use strict';
@@ -374,7 +429,6 @@
             }
 
             changeUrl(formData);
-
             if( itemType != undefined &&  itemType.length > 0 )
             {
                 var typesQuery = [ "itemTypes[]="+itemType ] ;
@@ -452,17 +506,6 @@
             return false;
         }
 
-        function initialContentTypeSelect() {
-            var selected = $("#rootContentTypes option:selected").text();
-            if(selected == "آزمون")
-            {
-                $("#childContentTypes").prop("disabled" , false);
-            }else{
-                $("#childContentTypes").val("");
-                $("#childContentTypes").prop("disabled" , true);
-            }
-        }
-
         function changeUrl(appendUrl)
         {
             var newUrl = "{{action("HomeController@search")}}"+"?"+appendUrl;
@@ -481,6 +524,15 @@
         //     }
         // });
 
+        $(document).on('click', '.pagination a', function (e) {
+            var query = $(this).attr('href').split('?')[1];
+            var parameters = query.split('=');
+            var pageName = parameters[0];
+            var itemType = pageName.split('page');
+            contentLoad(parameters[0] , parameters[1] , itemType[0]);
+            e.preventDefault();
+        });
+
         $(document).on("change", ".itemFilter", function (){
             contentLoad();
         });
@@ -495,12 +547,13 @@
             contentLoad();
         });
 
-        $(document).on("click", "#goButton", function (){
-            contentLoad();
+        $(document).on("change", "#majorSelect", function (){
+            makeLessonSelect();
         });
 
-        $('#rootContentTypes').on('change', function() {
-            initialContentTypeSelect();
+        $(document).on("change", "#lessonSelect", function (){
+            makeTeacherSelect();
         });
+
     </script>
 @endsection

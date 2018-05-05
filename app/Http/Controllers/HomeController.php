@@ -97,7 +97,26 @@ class HomeController extends Controller
     private static $TAG = HomeController::class;
 
     public function debug(Request $request){
-      abort(404);
+//        $contentset = Contentset::FindOrFail(101);
+//        $contents = $contentset->educationalContents;
+//        foreach ($contents as $c)
+//        {
+//            try{
+//                $myTag = $c->tags ;
+//                array_push($myTag , "کازرانیان");
+//                $tagsJson = [
+//                    "bucket" => "content",
+//                    "tags" => $myTag
+//                ];
+//                $c->tags = json_encode($tagsJson);
+//                if(!$c->update()) dump("error on updating content:" . $c->id);
+//            }catch(\Exception $e)
+//            {
+//                return $this->response->setStatusCode(503)->setContent(["error" => $e->getMessage(), "line" => $e->getLine()]);
+//            }
+//        }
+//        dd("finish");
+        abort(404);
     }
     public function __construct()
     {
@@ -248,7 +267,7 @@ class HomeController extends Controller
     }
     private function makeJsonForAndroidApp(Collection $items){
         $items = $items->pop();
-        $key = md5($items->implode(","));
+        $key = md5($items->pluck("id")->implode(","));
         $response = Cache::remember($key,Config::get("constants.CACHE_60"),function () use($items){
             $response = collect();
             $items->load('files');
@@ -328,31 +347,35 @@ class HomeController extends Controller
         }else{
             $tagInput = [];
         }
-
+        $isApp = ( strlen(strstr($request->header('User-Agent'),"Alaa")) > 0 )? true : false ;
         $items = collect();
+        if($isApp)
+            $itemPerPage = "200" ;
+        else
+            $itemPerPage = "12" ;
+
         $paginationSetting = collect([
             [
                 "itemType"=>"video" ,
                 "pageName" => "videopage",
-                "itemPerPage" => "12"
+                "itemPerPage" => $itemPerPage
             ],
             [
                 "itemType"=>"pamphlet" ,
                 "pageName" => "pamphletpage",
-                "itemPerPage" => "10"
+                "itemPerPage" => $itemPerPage
             ],
             [
                 "itemType"=>"article" ,
                 "pageName" => "articlepage",
-                "itemPerPage" => "10"
+                "itemPerPage" => $itemPerPage
             ],
             [
                 "itemType"=>"contentset" ,
                 "pageName" => "contentsetpage",
-                "itemPerPage" => "10"
+                "itemPerPage" => $itemPerPage
             ]
         ]);
-        $isApp = ( strlen(strstr($request->header('User-Agent'),"Alaa")) > 0 )? true : false ;
         foreach ($itemTypes as $itemType)
         {
             [
@@ -422,8 +445,84 @@ class HomeController extends Controller
             $response = $this->makeJsonForAndroidApp($items);
             return response()->json($response,200);
         }
+
+        /**
+         * Page inputs
+         */
         $totalTags = array();
         $majorCollection = Major::all();
+        $majorLesson = collect();
+        $defaultLesson = [];
+        foreach ($majorCollection as $major)
+        {
+            $lessons = collect([
+                ["value"=>"" , "index"=>"همه دروس"]
+            ]);
+            switch ($major->description)
+            {
+                case "رشته_ریاضی":
+                    $lessons= $lessons->merge(collect([
+                        ["value"=>"مشاوره", "index"=>"مشاوره"] ,
+                        ["value"=>"دیفرانسیل", "index"=>"دیفرانسیل"] ,
+                        ["value"=>"تحلیلی", "index"=>"تحلیلی"] ,
+                        ["value"=>"گسسته", "index"=>"گسسته"] ,
+                        ["value"=>"حسابان", "index"=>"حسابان"] ,
+                        ["value"=>"جبر_و_احتمال", "index"=>"جبر و احتمال"] ,
+                        ["value"=>"ریاضی_پایه", "index"=>"ریاضی پایه"] ,
+                        ["value"=>"هندسه_پایه", "index"=>"هندسه پایه"] ,
+                        ["value"=>"فیزیک", "index"=>"فیزیک"] ,
+                        ["value"=>"شیمی", "index"=>"شیمی" ],
+                        ["value"=>"عربی", "index"=>"عربی" ],
+                        ["value"=>"زبان_و_ادبیات_فارسی", "index"=>"زبان و ادبیات فارسی" ],
+                        ["value"=>"دین_و_زندگی", "index"=>"دین و زندگی" ],
+                        ["value"=>"زبان_انگلیسی", "index"=>"زبان انگلیسی" ],
+                        ["value"=>"آمار_و_مدلسازی", "index"=>"آمار و مدلسازی"] ,
+                        ])
+                    );
+                    $defaultLesson = array_merge($defaultLesson , array_intersect( $lessons->pluck("value")->toArray() , $tagInput ))  ;
+                    break;
+                case "رشته_تجربی":
+                    $lessons= $lessons->merge(collect([
+                        ["value"=>"مشاوره", "index"=>"مشاوره"] ,
+                        ["value"=>"زیست_شناسی", "index"=>"زیست شناسی"] ,
+                        ["value"=>"ریاضی_تجربی", "index"=>"ریاضی تجربی"] ,
+                        ["value"=>"ریاضی_پایه", "index"=>"ریاضی پایه"] ,
+                        ["value"=>"هندسه_پایه", "index"=>"هندسه پایه"] ,
+                        ["value"=>"فیزیک", "index"=>"فیزیک"] ,
+                        ["value"=>"شیمی", "index"=>"شیمی" ],
+                        ["value"=>"عربی", "index"=>"عربی" ],
+                        ["value"=>"زبان_و_ادبیات_فارسی", "index"=>"زبان و ادبیات فارسی" ],
+                        ["value"=>"دین_و_زندگی", "index"=>"دین و زندگی" ],
+                        ["value"=>"زبان_انگلیسی", "index"=>"زبان انگلیسی" ],
+                        ["value"=>"آمار_و_مدلسازی", "index"=>"آمار و مدلسازی"] ,
+                        ])
+                    );
+                    $defaultLesson = array_merge($defaultLesson , array_intersect( $lessons->pluck("value")->toArray() , $tagInput ))  ;
+                    break;
+                case "رشته_انسانی":
+                    $lessons= $lessons->merge(collect([
+                        ["value"=>"مشاوره", "index"=>"مشاوره"] ,
+                        ["value"=>"ریاضی_انسانی", "index"=>"ریاضی انسانی"] ,
+                        ["value"=>"ریاضی_و_آمار", "index"=>"ریاضی و آمار"] ,
+                        ["value"=>"منطق", "index"=>"منطق"] ,
+                        ["value"=>"اخلاق", "index"=>"اخلاق"] ,
+                        ["value"=>"فیزیک", "index"=>"فیزیک"] ,
+                        ["value"=>"شیمی", "index"=>"شیمی" ],
+                        ["value"=>"عربی", "index"=>"عربی" ],
+                        ["value"=>"زبان_و_ادبیات_فارسی", "index"=>"زبان و ادبیات فارسی" ],
+                        ["value"=>"دین_و_زندگی", "index"=>"دین و زندگی" ],
+                        ["value"=>"زبان_انگلیسی", "index"=>"زبان انگلیسی" ],
+                        ["value"=>"آمار_و_مدلسازی", "index"=>"آمار و مدلسازی"] ,
+                        ])
+                    );
+                    $defaultLesson = array_merge($defaultLesson , array_intersect( $lessons->pluck("value")->toArray() , $tagInput ))  ;
+                    break;
+                default:
+                    break;
+            }
+            $totalTags = array_merge($totalTags , $lessons->pluck("value")->toArray()) ;
+            $majorLesson->put( $major->description, $lessons);
+        }
         $totalTags = array_merge($totalTags , $majorCollection->pluck("description")->toArray()) ;
         $majors = $majorCollection->pluck(  "name" , "description")->toArray();
 
@@ -436,36 +535,178 @@ class HomeController extends Controller
         $grades = $gradeCollection->pluck('displayName' , 'description')->toArray() ;
 //            $grades = array_sort_recursive($grades);
 
-        $lessonCollection = collect([
-            ["value"=>"" , "index"=>"همه دروس"],
-            ["value"=>"مشاوره", "index"=>"مشاوره"] ,
-            ["value"=>"فیزیک", "index"=>"فیزیک"] ,
-            ["value"=>"شیمی", "index"=>"شیمی" ],
-            ["value"=>"عربی", "index"=>"عربی" ],
-            ["value"=>"زبان_و_ادبیات_فارسی", "index"=>"زبان و ادبیات فارسی" ],
-            ["value"=>"دین_و_زندگی", "index"=>"دین و زندگی" ],
-            ["value"=>"زبان_انگلیسی", "index"=>"زبان انگلیسی" ],
-            ["value"=>"دیفرانسیل", "index"=>"دیفرانسیل"] ,
-            ["value"=>"تحلیلی", "index"=>"تحلیلی"] ,
-            ["value"=>"گسسته", "index"=>"گسسته"] ,
-            ["value"=>"حسابان", "index"=>"حسابان"] ,
-            ["value"=>"جبر_و_احتمال", "index"=>"جبر و احتمال"] ,
-            ["value"=>"ریاضی_پایه", "index"=>"ریاضی پایه"] ,
-            ["value"=>"هندسه_پایه", "index"=>"هندسه پایه"] ,
-            ["value"=>"ریاضی_تجربی", "index"=>"ریاضی تجربی"] ,
-            ["value"=>"ریاضی_انسانی", "index"=>"ریاضی انسانی"] ,
-            ["value"=>"زیست_شناسی", "index"=>"زیست شناسی"] ,
-            ["value"=>"آمار_و_مدلسازی", "index"=>"آمار و مدلسازی"] ,
-            ["value"=>"ریاضی_و_آمار", "index"=>"ریاضی و آمار"] ,
-            ["value"=>"منطق", "index"=>"منطق"] ,
-            ["value"=>"اخلاق", "index"=>"اخلاق"] ,
-            ["value"=>"المپیاد_نجوم", "index"=>"المپیاد نجوم"] ,
-        ]);
-        $totalTags = array_merge($totalTags , $lessonCollection->pluck("value")->toArray()) ;
-        $lessons = $lessonCollection->pluck("index" , "value")->toArray();
+        $lessonTeacher = collect(
+            [
+                "دیفرانسیل" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"محمد صادق ثابتی" , "value"=>"محمد_صادق_ثابتی"],
+                    ["index"=>"رضا شامیزاده" , "value"=>"رضا_شامیزاده"],
+                    ["index"=>"محسن شهریان" , "value"=>"محسن_شهریان"],
+                ],
+                "گسسته" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"رضا شامیزاده" , "value"=>"رضا_شامیزاده"],
+                    ["index"=>"بهمن مؤذنی پور" , "value"=>"بهمن_مؤذنی_پور"],
+                    ["index"=>"سروش معینی" , "value"=>"سروش_معینی"],
+                    ["index"=>"شاه محمدی" , "value"=>"شاه_محمدی"],
+                ],
+                "تحلیلی" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"رضا شامیزاده" , "value"=>"رضا_شامیزاده"],
+                    ["index"=>"محمد صادق ثابتی" , "value"=>"محمد_صادق_ثابتی"],
+                    ["index"=>"محمد رضا حسینی فرد" , "value"=>"محمد_رضا_حسینی_فرد"],
+                ],
+                "هندسه_پایه" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"وحید کبریایی" , "value"=>"وحید_کبریایی"],
+                    ["index"=>"رضا شامیزاده" , "value"=>"رضا_شامیزاده"],
+                    ["index"=>"محمد رضا حسینی فرد" , "value"=>"محمد_رضا_حسینی_فرد"],
+                    ["index"=>"حسن مرصعی" , "value"=>"حسن_مرصعی"],
+                ],
+                "حسابان" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"محمد صادق ثابتی" , "value"=>"محمد_صادق_ثابتی"],
+                    ["index"=>"محمدرضا مقصودی" , "value"=>"محمدرضا_مقصودی"],
+                    ["index"=>"شهروز رحیمی" , "value"=>"شهروز_رحیمی"],
+                ],
+                "جبر_و_احتمال" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"حسین کرد" , "value"=>"حسین_کرد"],
+                    ["index"=>"رضا شامیزاده" , "value"=>"رضا_شامیزاده"],
+//                    ["index"=>"بختیاری" , "value"=>"بختیاری"],
+                ],
+                "ریاضی_پایه" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"رضا شامیزاده" , "value"=>"رضا_شامیزاده"],
+                    ["index"=>"مهدی امینی راد" , "value"=>"مهدی_امینی_راد"],
+                    ["index"=>"جواد نایب کبیر" , "value"=>"جواد_نایب_کبیر"],
+                    ["index"=>"محسن شهریان" , "value"=>"محسن_شهریان"],
+                    ["index"=>"محمدرضا مقصودی" , "value"=>"محمدرضا_مقصودی"],
+                ],
+                "ریاضی_تجربی" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"رضا شامیزاده" , "value"=>"رضا_شامیزاده"],
+                    ["index"=>"مهدی امینی راد" , "value"=>"مهدی_امینی_راد"],
+                    ["index"=>"محمدامین نباخته" , "value"=>"محمدامین_نباخته"],
+                    ["index"=>"محمد رضا حسینی فرد" , "value"=>"محمد_رضا_حسینی_فرد"],
+                    ["index"=>"علی صدری" , "value"=>"علی_صدری"],
+                ],
+                "ریاضی_انسانی" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"خسرو_محمد_زاده" , "value"=>"خسرو_محمد_زاده"],
+                ]
+                ,
+                "عربی" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"میلاد ناصح زاده" , "value"=>"میلاد_ناصح_زاده"],
+                    ["index"=>"مهدی جلادتی" , "value"=>"مهدی_جلادتی"],
+                    ["index"=>"مهدی ناصر شریعت" , "value"=>"مهدی_ناصر_شریعت"],
+                    ["index"=>"عمار تاج بخش" , "value"=>"عمار_تاج_بخش"],
+                    ["index"=>"ناصر حشمتی" , "value"=>"ناصر_حشمتی"],
+                    ["index"=>"محسن آهویی" , "value"=>"محسن_آهویی"],
+                    ["index"=>"جعفر رنجبرزاده" , "value"=>"جعفر_رنجبرزاده"],
+//                    ["index"=>"بختیاری" , "value"=>"بختیاری"],
+                ],
+                "شیمی" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"محمد رضا آقاجانی" , "value"=>"محمد_رضا_آقاجانی"],
+                    ["index"=>"مهدی صنیعی طهرانی" , "value"=>"مهدی_صنیعی_طهرانی"],
+                    ["index"=>"محمد حسین انوشه" , "value"=>"محمد_حسین_انوشه"],
+                    ["index"=>"محمد حسین شکیباییان" , "value"=>"محمد_حسین_شکیباییان"],
+                    ["index"=>"حامد پویان نظر" , "value"=>"حامد_پویان_نظر"],
+                    ["index"=>"روح الله حاجی سلیمانی" , "value"=>"روح_الله_حاجی_سلیمانی"],
+                    ["index"=>"محسن معینی" , "value"=>"محسن_معینی"],
+                    ["index"=>"جعفری" , "value"=>"جعفری"],
+                ],
+                "فیزیک" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"پیمان طلوعی" , "value"=>"پیمان_طلوعی"],
+                    ["index"=>"حمید فدایی فرد" , "value"=>"حمید_فدایی_فرد"],
+                    ["index"=>"علیرضا رمضانی" , "value"=>"علیرضا_رمضانی"],
+                    ["index"=>"فرشید داداشی" , "value"=>"فرشید_داداشی"],
+                    ["index"=>"کازرانیان" , "value"=>"کازرانیان"],
+                    ["index"=>"جهانبخش" , "value"=>"جهانبخش"],
+                ],
+                "زیان_انگلیسی" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"علی اکبر عزتی" , "value"=>"علی_اکبر_عزتی"],
+                    ["index"=>"کیاوش فراهانی" , "value"=>"کیاوش_فراهانی"],
+                    ["index"=>"درویش" , "value"=>"درویش"],
+                ],
+                "دین_و_زندگی" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"مهدی تفتی" , "value"=>"مهدی_تفتی"],
+                    ["index"=>"جعفر رنجبرزاده" , "value"=>"جعفر_رنجبرزاده"],
+                ]
+                ,
+                "زبان_و_ادبیات_فارسی" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"هامون سبطی" , "value"=>"هامون_سبطی"],
+                    ["index"=>"داریوش داوش" , "value"=>"داریوش_راوش"],
+                    ["index"=>"عبدالرضا مرادی" , "value"=>"عبدالرضا_مرادی"],
+                    ["index"=>"محمد" , "value"=>"محمد_صادقی"],
+                    ["index"=>"کاظم کاظمی" , "value"=>"کاظم_کاظمی"],
+                    ["index"=>"میثم حسین خانی" , "value"=>"میثم__حسین_خانی"],
+                ],
+                "آمار_و_مدلسازی" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"رضا شامیزاده" , "value"=>"رضا_شامیزاده"],
+                    ["index"=>"وحید کبریایی" , "value"=>"وحید_کبریایی"],
+                    ["index"=>"مهدی امینی راد" , "value"=>"مهدی_امینی_راد"],
+                ],
+                "زیست_شناسی" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"محمد علی امینی راد" , "value"=>"محمد_علی_امینی_راد"],
+                    ["index"=>"محمد پازوکی" , "value"=>"محمد_پازوکی"],
+                    ["index"=>"عباس راستی بروجنی" , "value"=>"عباس_راستی_بروجنی"],
+                    ["index"=>"ابوالفضل جعفری" , "value"=>"ابوالفضل_جعری"],
+                    ["index"=>"جلال موقاری" , "value"=>"جلال_موقاری"],
+                    ["index"=>"مسعود حدادی" , "value"=>"مسعود_حدادی"],
+                    ["index"=>"ارشی" , "value"=>"ارشی"],
+                ],
+                "ریاضی_و_آمار" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"مهدی امینی راد" , "value"=>"مهدی_امینی_راد"],
+                ],
+                "منطق" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"رضا آقاجانی" , "value"=>"رضا_آقاجانی"],
+                    ["index"=>"سید حسام الدین جلالی" , "value"=>"سید_حسام_الدین_جلالی"],
+                ],
+                "مشاوره" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"محمد علی امینی راد" , "value"=>"محمد_علی_امینی_راد"],
+                    ["index"=>"امید زاهدی" , "value"=>"امید_زاهدی"],
+                ]
+            ]
+        );
+
+        $teacherTags =  [];
+        foreach ($lessonTeacher as $item)
+        {
+            foreach ($item as $value)
+            {
+                array_push($teacherTags , $value["value"]);
+            }
+        }
+        $totalTags = array_merge($totalTags , $teacherTags) ;
+        $defaultTeacher = array_intersect( $teacherTags , $tagInput )  ;
+
 
         $extraTagArray  = array_diff($tagInput , $totalTags );
 
+        if(!is_null(array_last($defaultLesson)))
+            $defaultLesson = array_last($defaultLesson);
+        else
+            $defaultLesson = "";
+
+        if(!is_null(array_last($defaultTeacher)))
+            $defaultTeacher = array_last($defaultTeacher);
+        else
+            $defaultTeacher = "";
+        /**
+         * End of page inputs
+         */
         if(request()->ajax())
         {
             return $this->response
@@ -478,7 +719,17 @@ class HomeController extends Controller
         else
         {
             $sideBarMode = "closed";
-            return view("pages.search" , compact("items"  ,"itemTypes" ,"tagArray" , "extraTagArray", "majors" , "grades" , "rootContentTypes", "childContentTypes" , "lessons" , "sideBarMode" ));
+            $ads1 = [
+            //DINI SEBTI
+                 'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-1.jpg' => 'https://sanatisharif.ir/landing/4',
+            ];
+            $ads2 = [
+                //DINI SEBTI
+                'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-2.jpg' => 'https://sanatisharif.ir/landing/4',
+                'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-3.jpg' => 'https://sanatisharif.ir/landing/4',
+            ];
+            return view("pages.search" , compact("items"  ,"itemTypes" ,"tagArray" , "extraTagArray",
+                "majors" , "grades"  , "defaultLesson" , "sideBarMode" , "majorLesson" , "lessonTeacher" , "defaultTeacher" , "ads1" , "ads2" ));
         }
     }
 
@@ -498,7 +749,7 @@ class HomeController extends Controller
         SEO::twitter()->setSite("آلاء");
         SEO::setDescription($this->setting->site->seo->homepage->metaDescription);
         SEO::opengraph()->addImage(route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]), ['height' => 100, 'width' => 100]);
-      
+
 //        $consultationstatus_active = Consultationstatus::all()->where("name", "active")->first();
 //        $consultingQuestionCount = Userupload::all()->count();
 //        $consultations = Consultation::all()->sortByDesc("created_at")->where("consultationstatus_id", $consultationstatus_active->id);
@@ -578,7 +829,7 @@ class HomeController extends Controller
         ];
 
         $contentsets = Contentset::
-            whereIn("id" , $contentsetArary)->get();
+        whereIn("id" , $contentsetArary)->get();
         $contentsets->load('educationalcontents');
         $sectionArray = [
             "konkoor" ,
@@ -703,14 +954,18 @@ class HomeController extends Controller
                         ],
                     ]);
                     $sections->push(
-                      [
-                          "name"=>$section,
-                          "displayName" => "کلاس کنکور",
-                          "lessons" => $lessons ,
-                           "tags" => [
-                               "کنکور"
-                           ]
-                      ]
+                        [
+                            "name"=>$section,
+                            "displayName" => "کلاس های کنکور آلاء",
+                            "lessons" => $lessons ,
+                            "tags" => [
+                                "کنکور"
+                            ],
+                            'ads' => [
+                                //SEBTI
+                                'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-1.jpg' => 'https://sanatisharif.ir/landing/4?utm_source=sanatisharif&utm_medium=banner&utm_campaign=khordad_sale&utm_content=small-slide-1-1',
+                            ]
+                        ]
                     );
                     break;
                 case "yazdahom" :
@@ -770,7 +1025,11 @@ class HomeController extends Controller
                             "displayName" => "مقطع یازدهم",
                             "lessons" => $lessons ,
                             "tags" => [
-                                "کنکور"
+                                "یازدهم"
+                            ],
+                            'ads' => [
+                                //ZIST GIAHI
+                                'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-2.jpg' => 'https://sanatisharif.ir/landing/4?utm_source=sanatisharif&utm_medium=banner&utm_campaign=khordad_sale&utm_content=small-slide-2',
                             ]
                         ]
                     );
@@ -850,7 +1109,11 @@ class HomeController extends Controller
                             "displayName" => "مقطع دهم",
                             "lessons" => $lessons ,
                             "tags" => [
-                                "کنکور"
+                                "دهم"
+                            ],
+                            'ads' => [
+                                //DINI KAGHAZI
+                                'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-3.jpg' => 'https://sanatisharif.ir/landing/4?utm_source=sanatisharif&utm_medium=banner&utm_campaign=khordad_sale&utm_content=small-slide-3',
                             ]
                         ]
                     );
@@ -912,7 +1175,11 @@ class HomeController extends Controller
                             "displayName" => "همایش و جمع بندی",
                             "lessons" => $lessons ,
                             "tags" => [
-                                "کنکور"
+                                "همایش"
+                            ],
+                            'ads' => [
+                                //DINI KAGHAZI
+                                'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-1.jpg' => 'https://sanatisharif.ir/landing/4?utm_source=sanatisharif&utm_medium=banner&utm_campaign=khordad_sale&utm_content=small-slide-1-1',
                             ]
                         ]
                     );
@@ -1461,52 +1728,52 @@ class HomeController extends Controller
          *  for customized message to every user
 
         foreach ($users as $user) {
-            $customizedMessage = "";
-            $mobiles = [];
-            if (in_array(0, $relatives))
-                array_push($mobiles, ltrim($user->mobile, '0'));
-            if (in_array(1, $relatives)) {
-                if (!$user->contacts->isEmpty()) {
-                    $fatherMobiles = $user->contacts->where("relative_id", 1)->first()->phones->where("phonetype_id", 1)->sortBy("priority");
-                    if (!$fatherMobiles->isEmpty())
-                        foreach ($fatherMobiles as $fatherMobile) {
-                            array_push($mobiles, ltrim($fatherMobile->phoneNumber, '0'));
-                        }
+        $customizedMessage = "";
+        $mobiles = [];
+        if (in_array(0, $relatives))
+        array_push($mobiles, ltrim($user->mobile, '0'));
+        if (in_array(1, $relatives)) {
+        if (!$user->contacts->isEmpty()) {
+        $fatherMobiles = $user->contacts->where("relative_id", 1)->first()->phones->where("phonetype_id", 1)->sortBy("priority");
+        if (!$fatherMobiles->isEmpty())
+        foreach ($fatherMobiles as $fatherMobile) {
+        array_push($mobiles, ltrim($fatherMobile->phoneNumber, '0'));
+        }
 
-                }
-            }
-            if (in_array(2, $relatives)) {
-                if (!$user->contacts->isEmpty()) {
-                    $motherMobiles = $user->contacts->where("relative_id", 2)->first()->phones->where("phonetype_id", 1)->sortBy("priority");
-                    if (!$motherMobiles->isEmpty())
-                        foreach ($motherMobiles as $motherMobile) {
-                            array_push($mobiles, ltrim($motherMobile->phoneNumber, '0'));
-                        }
-                }
-            }
-            $smsInfo = array();
-            $gender = "";
-            if(isset($user->gender_id))
-            {
-                if($user->gender->name=="خانم")
-                    $gender = "خانم ";
-                elseif($user->gender->name=="آقا")
-                    $gender = "آقای ";
-                else
-                    $gender = "";
-            }else{
-                $gender = "";
-            }
-            $customizedMessage = "سلام ".$gender.$user->getfullName()."\n".$message;
-            $smsInfo["message"] = $customizedMessage;
-            $smsInfo["to"] = $mobiles;
-            $smsInfo["from"] = "+985000145";
-            $response = $this->medianaSendSMS($smsInfo);
-            if (!$response["error"]) {
+        }
+        }
+        if (in_array(2, $relatives)) {
+        if (!$user->contacts->isEmpty()) {
+        $motherMobiles = $user->contacts->where("relative_id", 2)->first()->phones->where("phonetype_id", 1)->sortBy("priority");
+        if (!$motherMobiles->isEmpty())
+        foreach ($motherMobiles as $motherMobile) {
+        array_push($mobiles, ltrim($motherMobile->phoneNumber, '0'));
+        }
+        }
+        }
+        $smsInfo = array();
+        $gender = "";
+        if(isset($user->gender_id))
+        {
+        if($user->gender->name=="خانم")
+        $gender = "خانم ";
+        elseif($user->gender->name=="آقا")
+        $gender = "آقای ";
+        else
+        $gender = "";
+        }else{
+        $gender = "";
+        }
+        $customizedMessage = "سلام ".$gender.$user->getfullName()."\n".$message;
+        $smsInfo["message"] = $customizedMessage;
+        $smsInfo["to"] = $mobiles;
+        $smsInfo["from"] = "+985000145";
+        $response = $this->medianaSendSMS($smsInfo);
+        if (!$response["error"]) {
 
-            } else {
-                dump("SMS was not sent to user: ".$user->id) ;
-            }
+        } else {
+        dump("SMS was not sent to user: ".$user->id) ;
+        }
         }
         dd("done");
 
@@ -2173,15 +2440,15 @@ class HomeController extends Controller
 
         $counter = 0;
         foreach ($userlotteries as $userlottery) {
-            $counter++;
-            $smsInfo = array();
-            $smsInfo["to"] = array(ltrim($userlottery->mobile, '0'));
-            $smsInfo["from"] = getenv("SMS_PROVIDER_DEFAULT_NUMBER");
-//
-//            $prize = json_decode($userlottery->pivot->prizes)->items[0]->name ;
-            $smsInfo["message"] = "سلام ، کاربر گرامی نتیجه قرعه کشی در پروفایل شما قرار داده شد - آلاء";
-            $response = $this->medianaSendSMS($smsInfo);
-            dump($response);
+        $counter++;
+        $smsInfo = array();
+        $smsInfo["to"] = array(ltrim($userlottery->mobile, '0'));
+        $smsInfo["from"] = getenv("SMS_PROVIDER_DEFAULT_NUMBER");
+        //
+        //            $prize = json_decode($userlottery->pivot->prizes)->items[0]->name ;
+        $smsInfo["message"] = "سلام ، کاربر گرامی نتیجه قرعه کشی در پروفایل شما قرار داده شد - آلاء";
+        $response = $this->medianaSendSMS($smsInfo);
+        dump($response);
 
         }
         dd($counter);
@@ -2194,6 +2461,39 @@ class HomeController extends Controller
 
     public function bot()
     {
+        /***
+        $contents = Educationalcontent::where("contenttype_id" , 8);
+        $contentArray = $contents->pluck("id")->toArray();
+        $sanatishRecords = Sanatisharifmerge::whereIn("educationalcontent_id" , $contentArray)->get();
+        $contents = $contents->get();
+        $successCounter = 0 ;
+        $failedCounter = 0 ;
+        dump("number of contents: ".$contents->count());
+        foreach ($contents as $content)
+        {
+        $myRecord =  $sanatishRecords->where("educationalcontent_id" , $content->id)->first();
+        if(isset($myRecord))
+        if(isset($myRecord->videoEnable))
+        {
+        if($myRecord->isEnable)
+        $content->enable = 1;
+        else
+        $content->enable = 0 ;
+        if($content->update())
+        $successCounter++;
+        else
+        $failedCounter++;
+        }
+
+
+        }
+        dump("success counter: ".$successCounter);
+        dump("fail counter: ".$failedCounter);
+
+        dd("finish");
+         */
+
+        /**
         $contents =  Educationalcontent::where("id" , "<" , 158)->get();
         dump("number of contents: ".$contents->count());
         $successCounter= 0 ;
@@ -2215,38 +2515,38 @@ class HomeController extends Controller
         dump("successful : ".$successCounter);
         dump("failed: ".$failedCounter) ;
         dd("finish");
-
+        **/
         /**
          * Giving gift to users
 
         $carbon = new Carbon("2018-02-20 00:00:00");
         $orderproducts = Orderproduct::whereIn("product_id" ,[ 100] )->whereHas("order" , function ($q) use ($carbon)
         {
-//           $q->where("orderstatus_id" , 1)->where("created_at" ,">" , $carbon);
-           $q->where("orderstatus_id" , 2)->whereIn("paymentstatus_id" , [2,3])->where("completed_at" ,">" , $carbon);
+        //           $q->where("orderstatus_id" , 1)->where("created_at" ,">" , $carbon);
+        $q->where("orderstatus_id" , 2)->whereIn("paymentstatus_id" , [2,3])->where("completed_at" ,">" , $carbon);
         })->get();
         dump("تعداد سفارش ها" . $orderproducts->count());
         $users = array();
         $counter = 0;
         foreach ($orderproducts as $orderproduct)
         {
-            $order = $orderproduct->order;
-            if($order->orderproducts->where("product_id" , 107)->isNotEmpty()) continue ;
+        $order = $orderproduct->order;
+        if($order->orderproducts->where("product_id" , 107)->isNotEmpty()) continue ;
 
-            $giftOrderproduct = new Orderproduct();
-            $giftOrderproduct->orderproducttype_id = Config::get("constants.ORDER_PRODUCT_GIFT");
-            $giftOrderproduct->order_id = $order->id ;
-            $giftOrderproduct->product_id = 107 ;
-            $giftOrderproduct->cost = 24000 ;
-            $giftOrderproduct->discountPercentage = 100 ;
-            $giftOrderproduct->save() ;
+        $giftOrderproduct = new Orderproduct();
+        $giftOrderproduct->orderproducttype_id = Config::get("constants.ORDER_PRODUCT_GIFT");
+        $giftOrderproduct->order_id = $order->id ;
+        $giftOrderproduct->product_id = 107 ;
+        $giftOrderproduct->cost = 24000 ;
+        $giftOrderproduct->discountPercentage = 100 ;
+        $giftOrderproduct->save() ;
 
-            $giftOrderproduct->parents()->attach($orderproduct->id , ["relationtype_id"=>Config::get("constants.ORDER_PRODUCT_INTERRELATION_PARENT_CHILD")]);
-            $counter++;
-            if(isset($order->user->id))
-                array_push($users , $order->user->id);
-            else
-                array_push($users , 0);
+        $giftOrderproduct->parents()->attach($orderproduct->id , ["relationtype_id"=>Config::get("constants.ORDER_PRODUCT_INTERRELATION_PARENT_CHILD")]);
+        $counter++;
+        if(isset($order->user->id))
+        array_push($users , $order->user->id);
+        else
+        array_push($users , 0);
         }
         dump($counter." done");
         dd($users);
@@ -2257,7 +2557,7 @@ class HomeController extends Controller
 
         $productsArray = [164, 160, 156, 152, 148, 144, 140, 136, 132, 128, 124, 120];
         $orders = Order::whereHas("orderproducts", function ($q) use ($productsArray) {
-            $q->whereIn("product_id", $productsArray);
+        $q->whereIn("product_id", $productsArray);
         })->whereIn("orderstatus_id", [Config::get("constants.ORDER_STATUS_CLOSED"), Config::set("constants.ORDER_STATUS_POSTED")])->whereIn("paymentstatus_id", [Config::get("constants.PAYMENT_STATUS_PAID"), Config::get("constants.PAYMENT_STATUS_INDEBTED")])->get();
 
 
@@ -2265,93 +2565,93 @@ class HomeController extends Controller
         $counter = 0;
         foreach ($orders as $order)
         {
-            if($order->successfulTransactions->isEmpty()) continue ;
-            $totalRefund = 0;
-            foreach ($order->orderproducts->whereIn("product_id", $productsArray) as $orderproduct)
-            {
-                $orderproductTotalRefund = 0 ;
-                $orderproductRefund = (int)((($orderproduct->cost / 88000) * 9000))  ;
-                $orderproductRefundWithBon = $orderproductRefund * (1 - ($orderproduct->getTotalBonNumber() / 100)) ;
-                if($order->couponDiscount>0 && $orderproduct->includedInCoupon)
-                    $orderproductTotalRefund += $orderproductRefundWithBon * (1 - ($order->couponDiscount / 100)) ;
-                else
-                    $orderproductTotalRefund += $orderproductRefundWithBon ;
+        if($order->successfulTransactions->isEmpty()) continue ;
+        $totalRefund = 0;
+        foreach ($order->orderproducts->whereIn("product_id", $productsArray) as $orderproduct)
+        {
+        $orderproductTotalRefund = 0 ;
+        $orderproductRefund = (int)((($orderproduct->cost / 88000) * 9000))  ;
+        $orderproductRefundWithBon = $orderproductRefund * (1 - ($orderproduct->getTotalBonNumber() / 100)) ;
+        if($order->couponDiscount>0 && $orderproduct->includedInCoupon)
+        $orderproductTotalRefund += $orderproductRefundWithBon * (1 - ($order->couponDiscount / 100)) ;
+        else
+        $orderproductTotalRefund += $orderproductRefundWithBon ;
 
-                $totalRefund += $orderproductTotalRefund ;
-                $orderproduct->cost = $orderproduct->cost - $orderproductRefund ;
-                switch ($orderproduct->product_id)
-                {
-                    case 164:
-                        $orderproduct->product_id = 165 ;
-                        break;
-                    case 160:
-                        $orderproduct->product_id = 161 ;
-                        break;
-                    case 156:
-                        $orderproduct->product_id = 157 ;
-                        break;
-                    case 152:
-                        $orderproduct->product_id = 153 ;
-                        break;
-                    case 148:
-                        $orderproduct->product_id = 149 ;
-                        break;
-                    case 144:
-                        $orderproduct->product_id = 145 ;
-                        break;
-                    case 140:
-                        $orderproduct->product_id = 141 ;
-                        break;
-                    case 136:
-                        $orderproduct->product_id = 137 ;
-                        break;
-                    case 132:
-                        $orderproduct->product_id = 133 ;
-                        break;
-                    case 128:
-                        $orderproduct->product_id = 129 ;
-                        break;
-                    case 124:
-                        $orderproduct->product_id = 125 ;
-                        break;
-                    case 120:
-                        $orderproduct->product_id = 121 ;
-                        break;
-                    default:
-                        break;
-                }
-                if(!$orderproduct->update()) dump("orderproduct ".$orderproduct->id." wasn't saved");
-            }
-            $newOrder = Order::where("id" , $order->id)->get()->first();
-            $orderCostArray = $newOrder->obtainOrderCost(true , false , "REOBTAIN");
-            $newOrder->cost = $orderCostArray["rawCostWithDiscount"] ;
-            $newOrder->costwithoutcoupon = $orderCostArray["rawCostWithoutDiscount"];
-            $newOrder->update();
+        $totalRefund += $orderproductTotalRefund ;
+        $orderproduct->cost = $orderproduct->cost - $orderproductRefund ;
+        switch ($orderproduct->product_id)
+        {
+        case 164:
+        $orderproduct->product_id = 165 ;
+        break;
+        case 160:
+        $orderproduct->product_id = 161 ;
+        break;
+        case 156:
+        $orderproduct->product_id = 157 ;
+        break;
+        case 152:
+        $orderproduct->product_id = 153 ;
+        break;
+        case 148:
+        $orderproduct->product_id = 149 ;
+        break;
+        case 144:
+        $orderproduct->product_id = 145 ;
+        break;
+        case 140:
+        $orderproduct->product_id = 141 ;
+        break;
+        case 136:
+        $orderproduct->product_id = 137 ;
+        break;
+        case 132:
+        $orderproduct->product_id = 133 ;
+        break;
+        case 128:
+        $orderproduct->product_id = 129 ;
+        break;
+        case 124:
+        $orderproduct->product_id = 125 ;
+        break;
+        case 120:
+        $orderproduct->product_id = 121 ;
+        break;
+        default:
+        break;
+        }
+        if(!$orderproduct->update()) dump("orderproduct ".$orderproduct->id." wasn't saved");
+        }
+        $newOrder = Order::where("id" , $order->id)->get()->first();
+        $orderCostArray = $newOrder->obtainOrderCost(true , false , "REOBTAIN");
+        $newOrder->cost = $orderCostArray["rawCostWithDiscount"] ;
+        $newOrder->costwithoutcoupon = $orderCostArray["rawCostWithoutDiscount"];
+        $newOrder->update();
 
-            if($totalRefund > 0 )
-            {
-                $transactionRequest =  new \App\Http\Requests\InsertTransactionRequest();
-                $transactionRequest->offsetSet("comesFromAdmin" , true);
-                $transactionRequest->offsetSet("order_id" , $order->id);
-                $transactionRequest->offsetSet("cost" , -$totalRefund);
-                $transactionRequest->offsetSet("managerComment" , "ثبت سیستمی بازگشت هزینه پشتیبانی همایش 1+5");
-                $transactionRequest->offsetSet("destinationBankAccount_id" , 1);
-                $transactionRequest->offsetSet("paymentmethod_id" , Config::get("constants.PAYMENT_METHOD_ATM"));
-                $transactionRequest->offsetSet("transactionstatus_id" ,  Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL"));
-                $transactionController = new TransactionController();
-                $transactionController->store($transactionRequest);
+        if($totalRefund > 0 )
+        {
+        $transactionRequest =  new \App\Http\Requests\InsertTransactionRequest();
+        $transactionRequest->offsetSet("comesFromAdmin" , true);
+        $transactionRequest->offsetSet("order_id" , $order->id);
+        $transactionRequest->offsetSet("cost" , -$totalRefund);
+        $transactionRequest->offsetSet("managerComment" , "ثبت سیستمی بازگشت هزینه پشتیبانی همایش 1+5");
+        $transactionRequest->offsetSet("destinationBankAccount_id" , 1);
+        $transactionRequest->offsetSet("paymentmethod_id" , Config::get("constants.PAYMENT_METHOD_ATM"));
+        $transactionRequest->offsetSet("transactionstatus_id" ,  Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL"));
+        $transactionController = new TransactionController();
+        $transactionController->store($transactionRequest);
 
-                if(session()->has("success")) {
-                    session()->forget("success");
-                }elseif(session()->has("error")){
-                    dump("Transaction wasn't saved ,Order: ".$order->id);
-                    session()->forget("error");
-                }
-                $counter++;
-            }
+        if(session()->has("success")) {
+        session()->forget("success");
+        }elseif(session()->has("error")){
+        dump("Transaction wasn't saved ,Order: ".$order->id);
+        session()->forget("error");
+        }
+        $counter++;
+        }
         }
         dump("Processed: ".$counter) ;
-        */
+         */
         /**
          *  Fixing complementary products
          *
@@ -2359,51 +2659,51 @@ class HomeController extends Controller
         $counter = 0 ;
         foreach ($products as $product)
         {
-            $orders = \App\Order::whereHas("orderproducts" , function ($q2) use ($product){
-                $q2->where("product_id" , $product->id)->whereNull("orderproducttype_id");
-            })->whereIn("orderstatus_id" , [Config::get("constants.ORDER_STATUS_CLOSED") , Config::get("constants.ORDER_STATUS_POSTED") , Config::get("constants.ORDER_STATUS_READY_TO_POST")])
-                ->whereIn("paymentstatus_id" , [Config::get("constants.PAYMENT_STATUS_INDEBTED") , Config::get("constants.PAYMENT_STATUS_PAID")])->get();
+        $orders = \App\Order::whereHas("orderproducts" , function ($q2) use ($product){
+        $q2->where("product_id" , $product->id)->whereNull("orderproducttype_id");
+        })->whereIn("orderstatus_id" , [Config::get("constants.ORDER_STATUS_CLOSED") , Config::get("constants.ORDER_STATUS_POSTED") , Config::get("constants.ORDER_STATUS_READY_TO_POST")])
+        ->whereIn("paymentstatus_id" , [Config::get("constants.PAYMENT_STATUS_INDEBTED") , Config::get("constants.PAYMENT_STATUS_PAID")])->get();
 
-            dump("Number of orders: ".$orders->count());
-            foreach ($orders as $order)
-            {
-                if ($product->hasGifts())
-                {
-                    foreach ($product->gifts as $gift)
-                    {
-                        if($order->orderproducts->where("product_id" , $gift->id)->isEmpty())
-                        {
-                            $orderproduct = new \App\Orderproduct();
-                            $orderproduct->orderproducttype_id = 2;
-                            $orderproduct->order_id = $order->id;
-                            $orderproduct->product_id = $gift->id;
-                            $orderproduct->cost = $gift->basePrice;
-                            $orderproduct->discountPercentage = 100;
-                            if ($orderproduct->save()) $counter++;
-                            else dump("orderproduct was not saved! order: " . $order->id . " ,product: " . $gift->id);
-                        }
-                    }
-                }
-                //$parentsArray = $product->parents;
-                $parentsArray = $this->makeParentArray($product);
-                if (!empty($parentsArray)) {
-                    foreach ($parentsArray as $parent) {
-                        foreach ($parent->gifts as $gift) {
-                            if($order->orderproducts->where("product_id" , $gift->id)->isEmpty())
-                            {
-                                $orderproduct = new \App\Orderproduct();
-                                $orderproduct->orderproducttype_id = 2;
-                                $orderproduct->order_id = $order->id;
-                                $orderproduct->product_id = $gift->id;
-                                $orderproduct->cost = $gift->basePrice;
-                                $orderproduct->discountPercentage = 100;
-                                if ($orderproduct->save()) $counter++;
-                                else dump("orderproduct was not saved! order: " . $order->id . " ,product: " . $gift->id);
-                            }
-                        }
-                    }
-                }
-            }
+        dump("Number of orders: ".$orders->count());
+        foreach ($orders as $order)
+        {
+        if ($product->hasGifts())
+        {
+        foreach ($product->gifts as $gift)
+        {
+        if($order->orderproducts->where("product_id" , $gift->id)->isEmpty())
+        {
+        $orderproduct = new \App\Orderproduct();
+        $orderproduct->orderproducttype_id = 2;
+        $orderproduct->order_id = $order->id;
+        $orderproduct->product_id = $gift->id;
+        $orderproduct->cost = $gift->basePrice;
+        $orderproduct->discountPercentage = 100;
+        if ($orderproduct->save()) $counter++;
+        else dump("orderproduct was not saved! order: " . $order->id . " ,product: " . $gift->id);
+        }
+        }
+        }
+        //$parentsArray = $product->parents;
+        $parentsArray = $this->makeParentArray($product);
+        if (!empty($parentsArray)) {
+        foreach ($parentsArray as $parent) {
+        foreach ($parent->gifts as $gift) {
+        if($order->orderproducts->where("product_id" , $gift->id)->isEmpty())
+        {
+        $orderproduct = new \App\Orderproduct();
+        $orderproduct->orderproducttype_id = 2;
+        $orderproduct->order_id = $order->id;
+        $orderproduct->product_id = $gift->id;
+        $orderproduct->cost = $gift->basePrice;
+        $orderproduct->discountPercentage = 100;
+        if ($orderproduct->save()) $counter++;
+        else dump("orderproduct was not saved! order: " . $order->id . " ,product: " . $gift->id);
+        }
+        }
+        }
+        }
+        }
         }
         dump("Number of processed : ".$counter);
         dd("finish");
@@ -2421,9 +2721,7 @@ class HomeController extends Controller
             {
                 case "v": //Video
                     $bucket = "content";
-                    $items = Educationalcontent::whereHas("contenttypes" , function ($q){
-                        $q->where("name" , "video");
-                    });
+                    $items = Educationalcontent::where("contenttype_id" , 8)->where("enable" , 1);
                     if(Input::has("id"))
                     {
                         $contentId = Input::get("id");
@@ -2515,6 +2813,102 @@ class HomeController extends Controller
                                     "نظام_آموزشی_جدید" ,
                                 ] );
                                 break;
+                            case 158:
+                                $myTags = array_merge($myTags , [
+                                    "عربی" ,
+                                    "ضبط_استودیویی",
+                                    "جمع_بندی",
+                                    "میلاد_ناصح_زاده",
+                                    "پیش",
+                                    "پایه",
+                                    "نظام_آموزشی_قدیم" ,
+                                    "نظام_آموزشی_جدید" ,
+                                ] );
+                                break;
+                            case 159:
+                                $myTags = array_merge($myTags , [
+                                    "عربی" ,
+                                    "ضبط_استودیویی",
+                                    "جمع_بندی",
+                                    "میلاد_ناصح_زاده",
+                                    "پیش",
+                                    "پایه",
+                                    "نظام_آموزشی_قدیم" ,
+                                    "نظام_آموزشی_جدید" ,
+                                ] );
+                                break;
+                            case 160:
+                                $myTags = array_merge($myTags , [
+                                    "عربی" ,
+                                    "ضبط_استودیویی",
+                                    "جمع_بندی",
+                                    "میلاد_ناصح_زاده",
+                                    "پیش",
+                                    "پایه",
+                                    "نظام_آموزشی_قدیم" ,
+                                    "نظام_آموزشی_جدید" ,
+                                ] );
+                                break;
+                            case 161:
+                                $myTags = array_merge($myTags , [
+                                    "عربی" ,
+                                    "ضبط_استودیویی",
+                                    "جمع_بندی",
+                                    "میلاد_ناصح_زاده",
+                                    "پیش",
+                                    "پایه",
+                                    "نظام_آموزشی_قدیم" ,
+                                    "نظام_آموزشی_جدید" ,
+                                ] );
+                                break;
+                            case 162:
+                                $myTags = array_merge($myTags , [
+                                    "عربی" ,
+                                    "ضبط_استودیویی",
+                                    "جمع_بندی",
+                                    "میلاد_ناصح_زاده",
+                                    "پیش",
+                                    "پایه",
+                                    "نظام_آموزشی_قدیم" ,
+                                    "نظام_آموزشی_جدید" ,
+                                ] );
+                                break;
+                            case 163:
+                                $myTags = array_merge($myTags , [
+                                    "عربی" ,
+                                    "ضبط_استودیویی",
+                                    "جمع_بندی",
+                                    "میلاد_ناصح_زاده",
+                                    "پیش",
+                                    "پایه",
+                                    "نظام_آموزشی_قدیم" ,
+                                    "نظام_آموزشی_جدید" ,
+                                ] );
+                                break;
+                            case 164:
+                                $myTags = array_merge($myTags , [
+                                    "عربی" ,
+                                    "ضبط_استودیویی",
+                                    "جمع_بندی",
+                                    "میلاد_ناصح_زاده",
+                                    "پیش",
+                                    "پایه",
+                                    "نظام_آموزشی_قدیم" ,
+                                    "نظام_آموزشی_جدید" ,
+                                ] );
+                                break;
+                            case 165:
+                                $myTags = array_merge($myTags , [
+                                    "عربی" ,
+                                    "ضبط_استودیویی",
+                                    "جمع_بندی",
+                                    "میلاد_ناصح_زاده",
+                                    "پیش",
+                                    "پایه",
+                                    "نظام_آموزشی_قدیم" ,
+                                    "نظام_آموزشی_جدید" ,
+                                ] );
+                                break;
                             default :
                                 break;
                         }
@@ -2529,9 +2923,7 @@ class HomeController extends Controller
                     break;
                 case "p": //Pamphlet
                     $bucket = "content";
-                    $items = Educationalcontent::whereHas("contenttypes" , function ($q){
-                        $q->where("name" , "pamphlet");
-                    });
+                    $items = Educationalcontent::where("contenttype_id" , 1)->where("enable" , 1);
                     if(Input::has("id"))
                     {
                         $contentId = Input::get("id");
@@ -2573,7 +2965,7 @@ class HomeController extends Controller
                                     "آمار_و_مدلسازی",
                                     "پیش",
                                     "نظام_آموزشی_قدیم" ,
-                                    ]);
+                                ]);
                                 break;
                             case 133:
                                 $myTags = array_merge($myTags , [
@@ -2668,9 +3060,7 @@ class HomeController extends Controller
                     break;
                 case "b": //Book
                     $bucket = "content";
-                    $items = Educationalcontent::whereHas("contenttypes" , function ($q){
-                        $q->where("name" , "book");
-                    });
+                    $items = Educationalcontent::where("contenttype_id" , 7)->where("enable" , 1);
                     $items = $items->get();
                     foreach ($items->where("tags" , null) as $item)
                     {
@@ -2697,9 +3087,7 @@ class HomeController extends Controller
                     break;
                 case "e": //Exam
                     $bucket = "content";
-                    $items = Educationalcontent::whereHas("contenttypes" , function ($q){
-                        $q->where("name" , "exam");
-                    });
+                    $items = Educationalcontent::where("contenttype_id" , 2)->where("enable" , 1);
                     $items = $items->get();
                     foreach ($items->where("tags" , null) as $item)
                     {
@@ -2760,15 +3148,13 @@ class HomeController extends Controller
                     break;
                 case "a": //Article
                     $bucket = "content";
-                    $items = Educationalcontent::whereHas("contenttypes" , function ($q){
-                        $q->where("name" , "article");
-                    });
+                    $items = Educationalcontent::where("contenttype_id" , 9)->where("enable" , 1);
                     $items = $items->get();
                     foreach ($items->where("tags" , null) as $item)
                     {
                         $myTags = [
                             "مقاله"
-                            ];
+                        ];
                         $majors = $item->majors->pluck("description")->toArray() ;
                         if(!empty($majors))
                             $myTags = array_merge($myTags ,  $majors);
@@ -2800,7 +3186,7 @@ class HomeController extends Controller
                     break;
                 case "cs": //Contentset
                     $bucket = "contentset";
-                    $items = Contentset::orderBy("id");
+                    $items = Contentset::orderBy("id")->where("enable" , 1);
                     if(Input::has("id"))
                     {
                         $id = Input::get("id");
@@ -2817,7 +3203,8 @@ class HomeController extends Controller
                         $productIds = [$id];
                     }else
                     {
-                        $productIds = [99 , 104 , 92 , 91 , 181 , 107 , 69 , 65 , 61 , 163 , 135 , 131 , 139 , 143 , 147 , 155 , 119 , 123 , 183];
+                        $productIds = [99 , 104 , 92 , 91 , 181 , 107 , 69 , 65 , 61 , 163 , 135 , 131 , 139 , 143 , 147 , 155 , 119 , 123 , 183
+                            ,210 , 211 , 212 , 213 , 214 , 215 , 216 , 217 , 218 , 219 ,220 ,221];
                     }
                     $items = Product::whereIn("id" , $productIds) ;
                     $items = $items->get();
@@ -2946,7 +3333,26 @@ class HomeController extends Controller
             $warningCounter = 0 ;
             foreach ($items as $item)
             {
-                $itemTagsArray = $item->tags->tags;
+                if(!isset($item))
+                {
+                    $warningCounter++;
+                    dump("invalid item at counter".$counter);
+                    continue ;
+                }
+                else
+                {
+                    if(!isset($item->tags))
+                    {
+                        $warningCounter++;
+                        dump("no tags found for".$item->id);
+                        continue ;
+                    }
+                    else
+                    {
+                        $itemTagsArray = $item->tags->tags;
+                    }
+                }
+
                 if(is_array($itemTagsArray) && !empty($itemTagsArray) && isset($item["id"]))
                 {
                     $params = [
@@ -2986,6 +3392,9 @@ class HomeController extends Controller
         catch(\Exception $e)
         {
             $message = "unexpected error";
+            dump($successCounter." items successfully done");
+            dump($failedCounter." items failed");
+            dump($warningCounter." warnings");
             return $this->response->setStatusCode(503)->setContent(["message" => $message,"number of successfully processed items"=>$counter, "error" => $e->getMessage(), "line" => $e->getLine()]);
         }
     }

@@ -5,6 +5,10 @@
 
 @endsection
 
+@section("bodyClass")
+    class="page-header-fixed page-sidebar-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-md"
+@endsection
+
 @section("css")
     <link rel="stylesheet" href="{{ mix('/css/all.css') }}">
     <link rel="stylesheet" type="text/css" href="/assets/extra/slick/slick/slick.css">
@@ -127,66 +131,98 @@
     {{--</div>--}}
     {{--</div>--}}
     <!-- END DASHBOARD STATS 1-->
+
+    {{--Product Portfolio--}}
     <div class="row">
         <div class="col-md-12">
-            <div class="portfolio-content portfolio-1" >
-                @if($products->isEmpty())
-                    <div class="note " style="background-color: #00d4db;">
-                        <h4 class="block bold" style="text-align: center">کاربر گرامی در حال حاضر موردی برای ثبت نام وجود ندارد. همایشها و اردوهای بعدی به زودی اعلام خواهند شد.</h4>
+            <!-- BEGIN Portlet PORTLET-->
+            <div class="portlet light">
+                <div class="portlet-body">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-2 col-sd-2 col-xs-12 text-center">
+                            <img src="/assets/extra/Alaa-logo.gif" style="width: 50%;">
+                        </div>
+                        <div class="col-lg-9 col-md-10 col-sd-10 col-xs-12">
+                            <h4></h4>
+                            <p class="text-justify" style="line-height:normal">
+                                آلاء پنجره ای است رو به دور نمای آموزش کشور که می کوشد با اساتید کار بلد و مخاطبان پر تعداد و متعهد خود آموزش همگانی را
+                                در چهار گوشه ی این سرزمین در دسترس فرزندان ایران قرار دهد.
+                            </p>
+                            <p class="text-justify" style="line-height:normal">
+                                خدمات اصلی آموزش در آلاء کاملا رایگان بوده و درآمد خدمات جانبی آن صرف برپا نگه داشتن و دوام این مجموعه عام المنفعه می شود. محصولات ما پیش تر با نام های آلاء و تخته خاک در اختیار مخاطبان قرار می گرفت که
+                                برای سهولت در مدیریت و دسترسی کاربران اکنون انحصارا با نام آلاء منتشر می شود.
+                            </p>
+                        </div>
                     </div>
-                @else
-                    @include("partials.portfolioGrid" , ["withFilterButton" => false , "withAd"=>true])
-                @endif
+                </div>
             </div>
+            <!-- END Portlet PORTLET-->
         </div>
     </div>
+    {{--<div class="row">--}}
+        {{--<div class="col-md-12">--}}
+            {{--<div class="portfolio-content portfolio-1" >--}}
+                {{--@if($products->isEmpty())--}}
+                    {{--<div class="note " style="background-color: #00d4db;">--}}
+                        {{--<h4 class="block bold" style="text-align: center">کاربر گرامی در حال حاضر موردی برای ثبت نام وجود ندارد. همایشها و اردوهای بعدی به زودی اعلام خواهند شد.</h4>--}}
+                    {{--</div>--}}
+                {{--@else--}}
+                    {{--@include("partials.portfolioGrid" , ["withFilterButton" => false , "withAd"=>true])--}}
+                {{--@endif--}}
+            {{--</div>--}}
+        {{--</div>--}}
+    {{--</div>--}}
+    {{--End of Product Portfolio--}}
     @foreach($sections as $section)
         <div class="row">
-        <div class="col-md-12">
-            <h3 class="text-center">
-                {{$section["displayName"]}}
-                <a href="{{action("HomeController@search" , ["tags" => $section["tags"]])}}" class="btn btn-success">بیشتر</a>
-            </h3>
-            <hr style="border-color: #0c203a">
-            <div class="search-page search-content-3">
-                <section class="lessonSlider1 slider" style="width: 95%;margin-top: 0px ; margin-bottom: 15px;">
-                    @foreach($section["lessons"] as $lesson)
-                        <div class="col-md-4">
-                            <div class="tile-container">
-                                <div class="tile-thumbnail">
-                                    <a href="{{(isset($lesson["content_id"]) && $lesson["content_id"]>0)?action("EducationalContentController@show", $lesson["content_id"]):""}}">
-                                        <img src="
-                                        @if(isset($lesson["pic"]) && strlen($lesson["pic"])>0)
-                                                {{$lesson["pic"]}}
-                                        @else
-                                                http://via.placeholder.com/195x195
-                                        @endif " />
-                                    </a>
-                                </div>
-                                <div class="tile-title" style="height: 145px;">
-                                    <h5 class="bold">
-                                        <a href="{{(isset($lesson["content_id"]) && $lesson["content_id"]>0)?action("EducationalContentController@show", $lesson["content_id"]):""}}">{{$lesson["displayName"]}}</a>
-                                    </h5>
-                                    {{--<a href="javascript:;">--}}
-                                        {{--<i class="icon-question font-blue"></i>--}}
-                                    {{--</a>--}}
-                                    {{--<a href="javascript:;">--}}
-                                        {{--<i class="icon-plus font-green-meadow"></i>--}}
-                                    {{--</a>--}}
-                                    <div class="tile-desc">
-                                        <p>مدرس:
-                                            <span class="font-blue">{{$lesson["author"]}}</span>
-                                            {{--<span class="font-grey-salt">25 mins ago</span>--}}
-                                        </p>
+            <div class="col-md-12">
+                <h3 class="text-center">
+                    {{$section["displayName"]}}
+                    <a href="{{urldecode(action("HomeController@search" , ["tags" => $section["tags"]]))}}" class="btn btn-success">بیشتر</a>
+                </h3>
+                <hr style="border-color: #0c203a">
+                <div class="search-page search-content-3">
+                    <section class="lessonSlider1 slider" style="width: 95%;margin-top: 0px ; margin-bottom: 15px;">
+                        @foreach($section["lessons"] as $lesson)
+                            <div class="col-md-4">
+                                <div class="tile-container">
+                                    <div class="tile-thumbnail">
+                                        <a href="{{(isset($lesson["content_id"]) && $lesson["content_id"]>0)?action("EducationalContentController@show", $lesson["content_id"]):""}}">
+                                            <img src="
+                                            @if(isset($lesson["pic"]) && strlen($lesson["pic"])>0)
+                                                    {{$lesson["pic"]}}
+                                            @else
+                                                    http://via.placeholder.com/195x195
+                                            @endif " />
+                                        </a>
+                                    </div>
+                                    <div class="tile-title" style="height: 145px;">
+                                        <h5 class="bold">
+                                            <a href="{{(isset($lesson["content_id"]) && $lesson["content_id"]>0)?action("EducationalContentController@show", $lesson["content_id"]):""}}">{{$lesson["displayName"]}}</a>
+                                        </h5>
+                                        {{--<a href="javascript:;">--}}
+                                            {{--<i class="icon-question font-blue"></i>--}}
+                                        {{--</a>--}}
+                                        {{--<a href="javascript:;">--}}
+                                            {{--<i class="icon-plus font-green-meadow"></i>--}}
+                                        {{--</a>--}}
+                                        <div class="tile-desc">
+                                            <p>مدرس:
+                                                <span class="font-blue">{{$lesson["author"]}}</span>
+                                                {{--<span class="font-grey-salt">25 mins ago</span>--}}
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
-                </section>
+                        @endforeach
+                    </section>
+                </div>
             </div>
         </div>
-    </div>
+        @foreach($section["ads"] as $image => $link)
+            @include('partials.bannerAds', ['img'=>$image , 'link'=>$link])
+        @endforeach
     @endforeach
     {{--<div class="row">--}}
     {{--<div class="col-md-6" id="consultationColumn" >--}}

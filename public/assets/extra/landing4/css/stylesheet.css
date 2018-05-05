@@ -374,7 +374,7 @@ body {
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  margin-bottom: 9rem;
+  margin-bottom: 4.8rem;
 }
 
 .sec-professors>.art-professors {
@@ -396,8 +396,7 @@ body {
   margin-left: 4.2rem
 }
 
-.sec-professors>.art-professors:nth-child(1),
-.sec-professors>.art-professors:nth-child(2) {
+.sec-professors>.art-professors {
   margin-bottom: 4.2rem
 }
 
@@ -801,6 +800,149 @@ body {
   }
 }
 
-/* Start Responsive */
+.animated {
+  animation-duration: 1s;
+  animation-fill-mode: both;
+}
 
+.animated.infinite {
+  animation-iteration-count: infinite;
+}
+
+@keyframes pulse {
+  from {
+    transform: scale3d(1, 1, 1);
+  }
+
+  50% {
+    transform: scale3d(1.2, 1.2, 1.2);
+  }
+
+  to {
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+.pulse {
+  animation-name: pulse;
+}
+
+.lottery-banner{
+  background: url(../images/gradient.jpg) no-repeat;
+  background-size: cover;
+  padding: 152px 10px 77px;
+  margin-bottom: 65px;
+}
+
+.lottery-banner .container{
+  display: -ms-flexbox;
+  display: box;
+  display: flex;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+
+.lottery-banner .container .ttla{
+  color: #ffffff;
+  font-family: irsans;
+  font-size: 61px;
+  font-weight: 700;
+  text-align: left;
+  width: 30%;
+  white-space: nowrap;
+  z-index: 2;
+}
+
+.lottery-banner .container .ttla span{
+  display: block;
+  font-size: 26px;
+  margin-right: 0;
+}
+
+.lottery-banner .container .bnra{
+  text-align: center;
+  margin-right: -113px;
+}
+
+.lottery-banner .container .bnra img.banner{
+  display: block;
+  margin: 0 auto;
+}
+
+.lottery-banner .container .bnra img.shadow{
+  display: inline-block;
+  margin-top: 40px;
+}
+
+.lottery-banner .container .gifts{
+  box-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  -ms-flex-item-align: center;
+  align-self: center;
+  margin-right: 20px;
+}
+
+.lottery-banner .container .gifts table{
+  color: #fff;
+  width: 100%;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.lottery-banner .container .gifts table td,
+.lottery-banner .container .gifts table th{
+  padding: 8px 0;
+}
+
+@media( max-width: 1200px ){
+  .lottery-banner .container .ttla{
+    font-size: 50px;
+  }
+
+  .lottery-banner .container .ttla span{
+    font-size: 16px;
+  }
+}
+
+@media( max-width: 992px ){
+  .lottery-banner .container .ttla{
+    width: 100%;
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .lottery-banner .container .bnra{
+    margin-right: 0
+  }
+
+  .lottery-banner .container .gifts table{
+    font-size: 13px;
+  }
+}
+
+@media( max-width: 768px ){
+  .lottery-banner .container .gifts table{
+    font-size: 16px;
+  }
+
+  .lottery-banner .container .gifts,
+  .lottery-banner .container .bnra{
+    width: 100%;
+    box-flex: 0 0 100%;
+    -ms-flex: 0 0 100%;
+    flex: 0 0 100%;
+  }
+
+  .lottery-banner .container .gifts{
+    margin-top: 30px;
+  }
+
+  .lottery-banner .container .gifts table td,
+  .lottery-banner .container .gifts table th{
+    text-align: center;
+  }
+}
 /*# sourceMappingURL=stylesheet.css.map */

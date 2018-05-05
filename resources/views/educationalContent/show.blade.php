@@ -55,30 +55,6 @@
                                 <i class="fa fa-video-camera" aria-hidden="true"></i>
                                 {{ isset($educationalContentDisplayName) ? $educationalContentDisplayName : '' }}
                             </div>
-                            <div class="actions">
-                                @if($educationalContent->files->where("pivot.label" ,"<>" , "thumbnail")->count() == 1)
-                                    <a target="_blank"
-                                       href="{{$educationalContent->files->where("pivot.label" ,"<>" , "thumbnail")->first()->name}}"
-                                       class="btn btn-circle green btn-outline btn-sm"><i class="fa fa-download"></i>
-                                        دانلود </a>
-                                @else
-                                    <div class="btn-group">
-                                        <button class="btn btn-circle green btn-outline btn-sm" data-toggle="dropdown"
-                                                aria-expanded="true">دانلود
-                                            <i class="fa fa-angle-down"></i>
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            @foreach($files["videoSource"] as $source)
-                                                <li>
-                                                    <a target="_blank"
-                                                       href="{{$source["src"]}}">
-                                                        فایل {{$source["caption"]}}</a>
-                                                </li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                @endif
-                            </div>
                         </div>
                         <div class="portlet-body">
                             <div data-vjs-player>
@@ -97,29 +73,40 @@
                                         گر شما فعال است و از آخرین نسخه ی مرورگر استفاده می کنید.</p>
                                 </video>
                                 <script>
-                                    $(document).ready(function(){
-                                        console.log( "ready!" );
-                                        options = {
-                                            controlBar: {
-                                                children: [
-                                                    'playToggle',
-                                                    'progressControl',
-                                                    'volumePanel',
-                                                    'fullscreenToggle',
-                                                ],
-                                            },
-                                        };
-                                        var player = videojs('video-{{$educationalContent->id}}',options);
+                                    {{--$(document).ready(function(){--}}
+                                        {{--console.log( "ready!" );--}}
+                                        {{--options = {--}}
+                                            {{--controlBar: {--}}
+                                                {{--children: [--}}
+                                                    {{--'playToggle',--}}
+                                                    {{--'progressControl',--}}
+                                                    {{--'volumePanel',--}}
+                                                    {{--'fullscreenToggle',--}}
+                                                {{--],--}}
+                                            {{--},--}}
+                                        {{--};--}}
+                                        {{--var player = videojs('video-{{$educationalContent->id}}',options);--}}
 
-                                    });
+                                    {{--});--}}
                                 </script>
                             </div>
-                            @if(isset($educationalContent->author_id))
-                                <hr>
-                                <ul class="list-inline">
-                                    <li><i class="fa fa-user"></i>مدرس : {{$author}}</li>&nbsp;
-                                </ul>
-                            @endif
+                            <div class="row">
+                                @if(isset($educationalContent->author_id))
+                                    <hr>
+                                    <div class="col-md-12">
+                                        <ul class="list-inline">
+                                            <li><i class="fa fa-user"></i>مدرس : {{$author}}</li>&nbsp;
+                                        </ul>
+                                    </div>
+                                @endif
+                                @foreach($files["videoSource"] as $key => $source)
+                                    <div class="col-md-4">
+                                        <a href="{{$source["src"]}}?download=1" class="btn red margin-bottom-5" style="width: 250px;">
+                                            فایل {{$source["caption"]}}{{ (isset($source["size"]))?"(".$source["size"]. "مگ)":""  }}
+                                        </a>
+                                    </div>
+                                @endforeach
+                            </div>
                             <div class="row">
                                 <div class="col-md-12">
                                     @if(!empty($tags))
@@ -163,13 +150,13 @@
                             </div>
                             <div class="list-count pull-right bg-yellow-saffron"></div>
                         </div>
-                        <div class="mt-list-container list-news ext-2">
-                            <div class="scroller" style="min-height: 50px; max-height:600px" data-always-visible="1" data-rail-visible="1"
+                        <div class="mt-list-container list-news ext-2" id="otherSessions">
+                            <div id="playListScroller" class="scroller" style="min-height: 50px; max-height:600px" data-always-visible="1" data-rail-visible="1"
                                  data-rail-color="red" data-handle-color="green">
                                 <ul>
 
                                     @foreach($contentsWithSameSet->whereIn("type" , "video" ) as $item)
-                                        <li class="mt-list-item @if($item["content"]->id == $educationalContent->id) bg-grey-mint @endif ">
+                                        <li class="mt-list-item @if($item["content"]->id == $educationalContent->id) bg-grey-mint @endif " id="playlistItem_{{$item["content"]->id}}">
                                             <div class="list-icon-container">
                                                 <a href="{{action("EducationalContentController@show" , $item["content"])}}">
                                                     <i class="fa fa-angle-left"></i>
@@ -442,35 +429,35 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    @if($contentsWithSameType->isNotEmpty())
-                        <div class="mt-element-list">
-                            <div class="mt-list-head list-simple ext-1 font-white bg-green-sharp">
-                                <div class="list-head-title-container">
+                    {{--@if($contentsWithSameType->isNotEmpty())--}}
+                        {{--<div class="mt-element-list">--}}
+                            {{--<div class="mt-list-head list-simple ext-1 font-white bg-green-sharp">--}}
+                                {{--<div class="list-head-title-container">--}}
                                     {{--<div class="list-date">Nov 8, 2015</div>--}}
-                                    <h3 class="list-title">@if(isset($rootContentType->displayName[0])){{$rootContentType->displayName}}@endif
-                                        های @if(isset($childContentType->displayName[0])){{$childContentType->displayName}}@endif
-                                        دیگر</h3>
-                                </div>
-                            </div>
-                            <div class="mt-list-container list-simple ext-1">
-                                <ul>
-                                    @foreach($contentsWithSameType as $content)
-                                        <li class="mt-list-item">
-                                            <div class="list-icon-container">
-                                                <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-                                            </div>
-                                            <div class="list-datetime"> @if($content->grades->isNotEmpty()){{$content->grades->first()->displayName}}@endif</div>
-                                            <div class="list-item-content">
-                                                <h5 class="uppercase">
-                                                    <a href="{{action("EducationalContentController@show" , $content)}}">{{$content->getDisplayName()}}</a>
-                                                </h5>
-                                            </div>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        </div>
-                    @endif
+                                    {{--<h3 class="list-title">@if(isset($rootContentType->displayName[0])){{$rootContentType->displayName}}@endif--}}
+                                        {{--های @if(isset($childContentType->displayName[0])){{$childContentType->displayName}}@endif--}}
+                                        {{--دیگر</h3>--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+                            {{--<div class="mt-list-container list-simple ext-1">--}}
+                                {{--<ul>--}}
+                                    {{--@foreach($contentsWithSameType as $content)--}}
+                                        {{--<li class="mt-list-item">--}}
+                                            {{--<div class="list-icon-container">--}}
+                                                {{--<i class="fa fa-file-pdf-o" aria-hidden="true"></i>--}}
+                                            {{--</div>--}}
+                                            {{--<div class="list-datetime"> @if($content->grades->isNotEmpty()){{$content->grades->first()->displayName}}@endif</div>--}}
+                                            {{--<div class="list-item-content">--}}
+                                                {{--<h5 class="uppercase">--}}
+                                                    {{--<a href="{{action("EducationalContentController@show" , $content)}}">{{$content->getDisplayName()}}</a>--}}
+                                                {{--</h5>--}}
+                                            {{--</div>--}}
+                                        {{--</li>--}}
+                                    {{--@endforeach--}}
+                                {{--</ul>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                    {{--@endif--}}
                 </div>
             </div>
         @endif
@@ -480,19 +467,21 @@
 @endsection
 
 @section("footerPageLevelPlugin")
-    <script src="/assets/global/scripts/datatable.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/datatables/datatables.min.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js"
-            type="text/javascript"></script>
-    <script src="/assets/global/plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/bootstrap-modal/js/bootstrap-modal.js" type="text/javascript"></script>
 @endsection
 
 @section("footerPageLevelScript")
-    <script src="/assets/pages/scripts/table-datatables-responsive.min.js" type="text/javascript"></script>
-    <script src="/assets/pages/scripts/ui-extended-modals.min.js" type="text/javascript"></script>
-    <script src="/js/extraJS/jQueryNumberFormat/jquery.number.min.js" type="text/javascript"></script>
 @endsection
 
 @section("extraJS")
+    <script type="text/javascript">
+
+        $(document).ready(function (){
+            var container = $("#playListScroller"),
+                scrollTo = $("#playlistItem_"+"{{$educationalContent->id}}");
+            container.scrollTop(
+                scrollTo.offset().top - container.offset().top + container.scrollTop() - 100
+            );
+            $("#otherSessions").find(".slimScrollBar").css("top" , scrollTo.offset().top +"px");
+        });
+    </script>
 @endsection

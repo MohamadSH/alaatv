@@ -95,6 +95,21 @@ return [
             'engine' => null,
         ],
 
+        'mysql_sanatisharif' => [
+            'driver' => 'mysql',
+            'host' => "127.0.0.1",
+            'port' => "3306",
+            'database' => "sanatish_forat",
+            'username' => "foratuser",
+
+            'password' => "GWxNU76nY6C5zUqS",
+            'charset' => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => null,
+        ],
+
         'pgsql' => [
             'driver' => 'pgsql',
             'host' => env('DB_HOST', 'localhost'),
@@ -169,7 +184,14 @@ return [
             'port' => env('REDIS_PORT', 6379),
             'database' => 3,
             'read_timeout' => 60,
-        ]
+        ],
+        'session' => [
+            'host' => env('REDIS_HOST', 'localhost'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', 6379),
+            'database' => 4,
+            'read_timeout' => 60,
+        ],
 
     ],
 

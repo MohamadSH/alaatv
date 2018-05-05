@@ -4,6 +4,7 @@ namespace App;
 
 use App\Traits\Helper;
 use Carbon\Carbon;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Iatstuti\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
@@ -126,17 +127,12 @@ class User extends Authenticatable
         );
     }
 
-    public static function roleFilter(Collection $users, $rolesId)
+    public static function roleFilter( $users,  $rolesId)
     {
-        $key="user:roleFilter:".implode($users->pluck('id')->toArray())."-".$rolesId;
-
-        return Cache::remember($key,Config::get("constants.CACHE_60"),function () use($users, $rolesId) {
-
             $users = $users->whereHas('roles', function ($q) use ($rolesId) {
                 $q->whereIn("id", $rolesId);
             });
             return $users;
-        });
     }
 
     public static function majorFilter($users, $majorsId)
@@ -518,14 +514,14 @@ class User extends Authenticatable
         $fullName = "";
         switch ($mode) {
             case "firstNameFirst":
-                if (isset($this->firstName[0]) || isset($user->lastName[0])) {
+                if (isset($this->firstName[0]) || isset($this->lastName[0])) {
                     if (isset($this->firstName[0])) $fullName .= $this->firstName . " ";
                     if (isset($this->lastName[0])) $fullName .= $this->lastName;
 
                 }
                 break;
             case "lastNameFirst":
-                if (isset($this->firstName[0]) || isset($user->lastName[0])) {
+                if (isset($this->firstName[0]) || isset($this->lastName[0])) {
                     if (isset($this->firstName[0])) $fullName .= $this->lastName . " ";
                     if (isset($this->lastName[0])) $fullName .= $this->firstName;
                 }
