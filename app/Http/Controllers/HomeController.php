@@ -450,18 +450,51 @@ class HomeController extends Controller
          * Page inputs
          */
         $totalTags = array();
-        $majorCollection = Major::all();
+        $majorCollection = collect([
+            [
+                "name"=>"همه رشته ها" ,
+                "description"=>"همه_رشته_ها"
+            ]
+        ]);
+        $majorCollection = $majorCollection->merge(Major::all());
         $majorLesson = collect();
         $defaultLesson = [];
         foreach ($majorCollection as $major)
         {
-            $lessons = collect([
-                ["value"=>"" , "index"=>"همه دروس"]
-            ]);
-            switch ($major->description)
+            $lessons = collect([]);
+            switch ($major["description"])
             {
+                case "همه_رشته_ها":
+                    $lessons= $lessons->merge(collect([
+                            ["value"=>"همه_دروس", "index"=>"همه دروس"] ,
+                            ["value"=>"مشاوره", "index"=>"مشاوره"] ,
+                            ["value"=>"دیفرانسیل", "index"=>"دیفرانسیل"] ,
+                            ["value"=>"تحلیلی", "index"=>"تحلیلی"] ,
+                            ["value"=>"گسسته", "index"=>"گسسته"] ,
+                            ["value"=>"حسابان", "index"=>"حسابان"] ,
+                            ["value"=>"جبر_و_احتمال", "index"=>"جبر و احتمال"] ,
+                            ["value"=>"ریاضی_پایه", "index"=>"ریاضی پایه"] ,
+                            ["value"=>"هندسه_پایه", "index"=>"هندسه پایه"] ,
+                            ["value"=>"فیزیک", "index"=>"فیزیک"] ,
+                            ["value"=>"شیمی", "index"=>"شیمی" ],
+                            ["value"=>"عربی", "index"=>"عربی" ],
+                            ["value"=>"زبان_و_ادبیات_فارسی", "index"=>"زبان و ادبیات فارسی" ],
+                            ["value"=>"دین_و_زندگی", "index"=>"دین و زندگی" ],
+                            ["value"=>"زبان_انگلیسی", "index"=>"زبان انگلیسی" ],
+                            ["value"=>"آمار_و_مدلسازی", "index"=>"آمار و مدلسازی"] ,
+                            ["value"=>"زیست_شناسی", "index"=>"زیست شناسی"] ,
+                            ["value"=>"ریاضی_تجربی", "index"=>"ریاضی تجربی"] ,
+                            ["value"=>"ریاضی_انسانی", "index"=>"ریاضی انسانی"] ,
+                            ["value"=>"ریاضی_و_آمار", "index"=>"ریاضی و آمار"] ,
+                            ["value"=>"منطق", "index"=>"منطق"] ,
+                            ["value"=>"اخلاق", "index"=>"اخلاق"] ,
+                        ])
+                    );
+                    $defaultLesson = array_merge($defaultLesson , array_intersect( $lessons->pluck("value")->toArray() , $tagInput ))  ;
+                    break ;
                 case "رشته_ریاضی":
                     $lessons= $lessons->merge(collect([
+                        ["value"=>"همه_دروس", "index"=>"همه دروس"] ,
                         ["value"=>"مشاوره", "index"=>"مشاوره"] ,
                         ["value"=>"دیفرانسیل", "index"=>"دیفرانسیل"] ,
                         ["value"=>"تحلیلی", "index"=>"تحلیلی"] ,
@@ -483,6 +516,7 @@ class HomeController extends Controller
                     break;
                 case "رشته_تجربی":
                     $lessons= $lessons->merge(collect([
+                        ["value"=>"همه_دروس", "index"=>"همه دروس"] ,
                         ["value"=>"مشاوره", "index"=>"مشاوره"] ,
                         ["value"=>"زیست_شناسی", "index"=>"زیست شناسی"] ,
                         ["value"=>"ریاضی_تجربی", "index"=>"ریاضی تجربی"] ,
@@ -501,6 +535,7 @@ class HomeController extends Controller
                     break;
                 case "رشته_انسانی":
                     $lessons= $lessons->merge(collect([
+                        ["value"=>"همه_دروس", "index"=>"همه دروس"] ,
                         ["value"=>"مشاوره", "index"=>"مشاوره"] ,
                         ["value"=>"ریاضی_انسانی", "index"=>"ریاضی انسانی"] ,
                         ["value"=>"ریاضی_و_آمار", "index"=>"ریاضی و آمار"] ,
@@ -521,7 +556,7 @@ class HomeController extends Controller
                     break;
             }
             $totalTags = array_merge($totalTags , $lessons->pluck("value")->toArray()) ;
-            $majorLesson->put( $major->description, $lessons);
+            $majorLesson->put( $major["description"], $lessons);
         }
         $totalTags = array_merge($totalTags , $majorCollection->pluck("description")->toArray()) ;
         $majors = $majorCollection->pluck(  "name" , "description")->toArray();
@@ -537,6 +572,67 @@ class HomeController extends Controller
 
         $lessonTeacher = collect(
             [
+                "همه_دروس" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"محمد صادق ثابتی" , "value"=>"محمد_صادق_ثابتی"],
+                    ["index"=>"رضا شامیزاده" , "value"=>"رضا_شامیزاده"],
+                    ["index"=>"محسن شهریان" , "value"=>"محسن_شهریان"],
+                    ["index"=>"بهمن مؤذنی پور" , "value"=>"بهمن_مؤذنی_پور"],
+                    ["index"=>"سروش معینی" , "value"=>"سروش_معینی"],
+                    ["index"=>"شاه محمدی" , "value"=>"شاه_محمدی"],
+                    ["index"=>"محمد رضا حسینی فرد" , "value"=>"محمد_رضا_حسینی_فرد"],
+                    ["index"=>"وحید کبریایی" , "value"=>"وحید_کبریایی"],
+                    ["index"=>"حسن مرصعی" , "value"=>"حسن_مرصعی"],
+                    ["index"=>"محمدرضا مقصودی" , "value"=>"محمدرضا_مقصودی"],
+                    ["index"=>"شهروز رحیمی" , "value"=>"شهروز_رحیمی"],
+                    ["index"=>"حسین کرد" , "value"=>"حسین_کرد"],
+                    ["index"=>"مهدی امینی راد" , "value"=>"مهدی_امینی_راد"],
+                    ["index"=>"جواد نایب کبیر" , "value"=>"جواد_نایب_کبیر"],
+                    ["index"=>"محمدامین نباخته" , "value"=>"محمدامین_نباخته"],
+                    ["index"=>"علی صدری" , "value"=>"علی_صدری"],
+                    ["index"=>"خسرو محمد زاده" , "value"=>"خسرو_محمد_زاده"],
+                    ["index"=>"میلاد ناصح زاده" , "value"=>"میلاد_ناصح_زاده"],
+                    ["index"=>"مهدی جلادتی" , "value"=>"مهدی_جلادتی"],
+                    ["index"=>"مهدی ناصر شریعت" , "value"=>"مهدی_ناصر_شریعت"],
+                    ["index"=>"عمار تاج بخش" , "value"=>"عمار_تاج_بخش"],
+                    ["index"=>"ناصر حشمتی" , "value"=>"ناصر_حشمتی"],
+                    ["index"=>"محسن آهویی" , "value"=>"محسن_آهویی"],
+                    ["index"=>"جعفر رنجبرزاده" , "value"=>"جعفر_رنجبرزاده"],
+                    ["index"=>"محمد رضا آقاجانی" , "value"=>"محمد_رضا_آقاجانی"],
+                    ["index"=>"مهدی صنیعی طهرانی" , "value"=>"مهدی_صنیعی_طهرانی"],
+                    ["index"=>"محمد حسین انوشه" , "value"=>"محمد_حسین_انوشه"],
+                    ["index"=>"محمد حسین شکیباییان" , "value"=>"محمد_حسین_شکیباییان"],
+                    ["index"=>"حامد پویان نظر" , "value"=>"حامد_پویان_نظر"],
+                    ["index"=>"روح الله حاجی سلیمانی" , "value"=>"روح_الله_حاجی_سلیمانی"],
+                    ["index"=>"محسن معینی" , "value"=>"محسن_معینی"],
+                    ["index"=>"جعفری" , "value"=>"جعفری"],
+                    ["index"=>"پیمان طلوعی" , "value"=>"پیمان_طلوعی"],
+                    ["index"=>"حمید فدایی فرد" , "value"=>"حمید_فدایی_فرد"],
+                    ["index"=>"علیرضا رمضانی" , "value"=>"علیرضا_رمضانی"],
+                    ["index"=>"فرشید داداشی" , "value"=>"فرشید_داداشی"],
+                    ["index"=>"کازرانیان" , "value"=>"کازرانیان"],
+                    ["index"=>"جهانبخش" , "value"=>"جهانبخش"],
+                    ["index"=>"علی اکبر عزتی" , "value"=>"علی_اکبر_عزتی"],
+                    ["index"=>"کیاوش فراهانی" , "value"=>"کیاوش_فراهانی"],
+                    ["index"=>"درویش" , "value"=>"درویش"],
+                    ["index"=>"مهدی تفتی" , "value"=>"مهدی_تفتی"],
+                    ["index"=>"هامون سبطی" , "value"=>"هامون_سبطی"],
+                    ["index"=>"داریوش داوش" , "value"=>"داریوش_راوش"],
+                    ["index"=>"عبدالرضا مرادی" , "value"=>"عبدالرضا_مرادی"],
+                    ["index"=>"محمد صادقی" , "value"=>"محمد_صادقی"],
+                    ["index"=>"کاظم کاظمی" , "value"=>"کاظم_کاظمی"],
+                    ["index"=>"میثم حسین خانی" , "value"=>"میثم__حسین_خانی"],
+                    ["index"=>"محمد علی امینی راد" , "value"=>"محمد_علی_امینی_راد"],
+                    ["index"=>"محمد پازوکی" , "value"=>"محمد_پازوکی"],
+                    ["index"=>"عباس راستی بروجنی" , "value"=>"عباس_راستی_بروجنی"],
+                    ["index"=>"ابوالفضل جعفری" , "value"=>"ابوالفضل_جعری"],
+                    ["index"=>"جلال موقاری" , "value"=>"جلال_موقاری"],
+                    ["index"=>"مسعود حدادی" , "value"=>"مسعود_حدادی"],
+                    ["index"=>"ارشی" , "value"=>"ارشی"],
+                    ["index"=>"رضا آقاجانی" , "value"=>"رضا_آقاجانی"],
+                    ["index"=>"سید حسام الدین جلالی" , "value"=>"سید_حسام_الدین_جلالی"],
+                    ["index"=>"امید زاهدی" , "value"=>"امید_زاهدی"],
+                ],
                 "دیفرانسیل" => [
                     ["index"=>"همه دبیرها" , "value"=>""],
                     ["index"=>"محمد صادق ثابتی" , "value"=>"محمد_صادق_ثابتی"],
@@ -593,7 +689,7 @@ class HomeController extends Controller
                 ],
                 "ریاضی_انسانی" => [
                     ["index"=>"همه دبیرها" , "value"=>""],
-                    ["index"=>"خسرو_محمد_زاده" , "value"=>"خسرو_محمد_زاده"],
+                    ["index"=>"خسرو محمد زاده" , "value"=>"خسرو_محمد_زاده"],
                 ]
                 ,
                 "عربی" => [
@@ -644,7 +740,7 @@ class HomeController extends Controller
                     ["index"=>"هامون سبطی" , "value"=>"هامون_سبطی"],
                     ["index"=>"داریوش داوش" , "value"=>"داریوش_راوش"],
                     ["index"=>"عبدالرضا مرادی" , "value"=>"عبدالرضا_مرادی"],
-                    ["index"=>"محمد" , "value"=>"محمد_صادقی"],
+                    ["index"=>"محمد صادقی" , "value"=>"محمد_صادقی"],
                     ["index"=>"کاظم کاظمی" , "value"=>"کاظم_کاظمی"],
                     ["index"=>"میثم حسین خانی" , "value"=>"میثم__حسین_خانی"],
                 ],
@@ -2461,6 +2557,60 @@ class HomeController extends Controller
 
     public function bot()
     {
+        if(Input::has("id"))
+            $contentsetId = Input::get("id");
+        else
+            dd("Wring inputs, Please pass id as input");
+        $contentsets = Contentset::where("id" , $contentsetId)->get();
+        dump("number of contentsets:".$contentsets->count());
+        $contentCounter = 0;
+        foreach ($contentsets as $contentset)
+        {
+            $baseTime = Carbon::createFromDate("2017" , "06" , "01" , "Asia/Tehran");
+            $contents = $contentset->educationalcontents->sortBy("pivot.order");
+            $contentCounter += $contents->count();
+            foreach ($contents as $content)
+            {
+                $content->created_at = $baseTime;
+                if($content->update())
+                {
+                    if(isset($content->tags))
+                    {
+                        $params = [
+                            "tags"=> json_encode($content->tags) ,
+                        ];
+                        if(isset($content->created_at) && strlen($content->created_at) > 0 )
+                            $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $content->created_at )->timestamp;
+
+                        $response =  $this->sendRequest(
+                            env("TAG_API_URL")."id/content/".$content->id ,
+                            "PUT",
+                            $params
+                        );
+
+                        if($response["statusCode"] == 200)
+                        {
+                        }
+                        else
+                        {
+                            dump("tag request for content id ".$content->id." failed. response : ".$response["statusCode"]);
+                        }
+                    }
+                    else
+                    {
+                        dump("content id ".$content->id."did not have ant tags!");
+                    }
+                }
+                 else
+                 {
+                     dump("content id ".$content->id." was not updated");
+                 }
+                $baseTime = $baseTime->addDay();
+            }
+
+        }
+        dump("number of total processed contents: ".$contentCounter);
+        dd("done!");
         /***
         $contents = Educationalcontent::where("contenttype_id" , 8);
         $contentArray = $contents->pluck("id")->toArray();
