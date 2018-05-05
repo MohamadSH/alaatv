@@ -143,7 +143,7 @@ class RegisterController extends Controller
             'userstatus_id' => $data["userstatus_id"],
             'email'=>$data['email'],
         ]);
-        $user->notify(new UserRegisterd());
+//        $user->notify(new UserRegisterd());
         return $user;
     }
 
