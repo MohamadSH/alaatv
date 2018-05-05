@@ -36,6 +36,13 @@
                     <span class="arrow "></span>
                 </a>
             </li>
+            <li class="nav-item ">
+                <a target="_blank" href="https://forum.sanatisharif.ir" class="nav-link nav-toggle bold">
+                    <i class="fa fa-comment"></i>
+                    <span class="title">انجمن آلاء</span>
+                    <span class="arrow "></span>
+                </a>
+            </li>
             @if(Auth::check())
 
                 {{--<li class="nav-item @if(isset($pageName) && strcmp($pageName , "certificates")==0)start active open @endif">--}}
