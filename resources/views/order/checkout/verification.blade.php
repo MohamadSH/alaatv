@@ -19,7 +19,7 @@
         <script>
             gtag('event', 'conversion', {
                 'send_to': 'AW-927952751/0L57COfS9YEBEO_evboD',
-                'transaction_id': '{{array_get($result,"RefID")}}'
+                'transaction_id': ''
             });
         </script>
     @endif
