@@ -89,17 +89,17 @@
                         </div>
                         <div class="col-lg-3 col-md-3 col-sd-3 col-xs-12">
                             <div class="form-group form-md-line-input form-md-floating-label has-info">
-                                {!! Form::select('tags[]',$majors,null,['class' => 'form-control itemFilter' , 'id'=>'majorSelect' , 'placeholder'=>'همه رشته ها' ]) !!}
+                                {!! Form::select('tags[]',$majors,null,['class' => 'form-control itemFilter' , 'id'=>'majorSelect' ]) !!}
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sd-3 col-xs-12">
                             <div class="form-group form-md-line-input form-md-floating-label has-info">
-                                {!! Form::select('tags[]',[],null,['class' => 'form-control itemFilter' , 'disabled' , 'id'=> 'lessonSelect' , 'placeholder'=>'انتخاب درس' ]) !!}
+                                {!! Form::select('tags[]',["همه دروس"],null,['class' => 'form-control itemFilter'  , 'id'=> 'lessonSelect'  ]) !!}
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sd-3 col-xs-12">
                             <div class="form-group form-md-line-input form-md-floating-label has-info">
-                                {!! Form::select('tags[]',[],null,['class' => 'form-control itemFilter' , 'disabled' , 'id'=> 'teacherSelect' , 'placeholder'=>'انتخاب دبیر' ]) !!}
+                                {!! Form::select('tags[]',["همه دبیرها"],null,['class' => 'form-control itemFilter' , 'id'=> 'teacherSelect' ]) !!}
                             </div>
                         </div>
                     </div>
@@ -253,42 +253,30 @@
 
         function makeLessonSelect() {
             var major = $("#majorSelect").val() ;
-            if(major == '')
+            var lessons = majorLesson[major];
+            $("#lessonSelect").empty();
+            $.each(lessons , function (index , value)
             {
-                $("#lessonSelect").prop("disabled" , true);
-            }
-            else
-            {
-                var lessons = majorLesson[major];
-                $("#lessonSelect").empty();
-                $.each(lessons , function (index , value)
-                {
-                    $("#lessonSelect").append($("<option></option>")
-                        .attr("value", value.value).text(value.index));
-                });
+                $("#lessonSelect").append($("<option></option>")
+                    .attr("value", value.value).text(value.index));
+            });
+            if(defaultLesson.length > 0)
                 $("#lessonSelect").val(defaultLesson);
-                $("#lessonSelect").prop("disabled" , false);
-            }
         }
 
         function makeTeacherSelect() {
             var lesson = $("#lessonSelect").val() ;
-            if(lesson == '')
+            console.log(lesson);
+            var teachers = lessonTeacher[lesson];
+            console.log(teachers);
+            $("#teacherSelect").empty();
+            $.each(teachers , function (index , value)
             {
-                $("#teacherSelect").prop("disabled" , true);
-            }
-            else
-            {
-                var teachers = lessonTeacher[lesson];
-                $("#teacherSelect").empty();
-                $.each(teachers , function (index , value)
-                {
-                    $("#teacherSelect").append($("<option></option>")
-                        .attr("value", value.value).text(value.index));
-                });
+                $("#teacherSelect").append($("<option></option>")
+                    .attr("value", value.value).text(value.index));
+            });
+            if(defaultTeacher.length > 0)
                 $("#teacherSelect").val(defaultTeacher);
-                $("#teacherSelect").prop("disabled" , false);
-            }
         }
 
         function destroySlick(element) {
