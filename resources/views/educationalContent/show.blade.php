@@ -144,143 +144,143 @@
                 @if(isset($contentsWithSameSet))
                     <div class="col-md-4 margin-bottom-15">
                         <div class="mt-element-list">
-                        <div class="mt-list-head list-news ext-1 font-white bg-yellow-crusta">
-                            <div class="list-head-title-container">
-                                <h3 class="list-title">جلسات دیگر</h3>
+                            <div class="mt-list-head list-news ext-1 font-white bg-yellow-crusta">
+                                <div class="list-head-title-container">
+                                    <h3 class="list-title">جلسات دیگر</h3>
+                                </div>
+                                <div class="list-count pull-right bg-yellow-saffron"></div>
                             </div>
-                            <div class="list-count pull-right bg-yellow-saffron"></div>
-                        </div>
-                        <div class="mt-list-container list-news ext-2" id="otherSessions">
-                            <div id="playListScroller" class="scroller" style="min-height: 50px; max-height:600px" data-always-visible="1" data-rail-visible="1"
-                                 data-rail-color="red" data-handle-color="green">
-                                <ul>
+                            <div class="mt-list-container list-news ext-2" id="otherSessions">
+                                <div id="playListScroller" class="scroller" style="min-height: 50px; max-height:600px" data-always-visible="1" data-rail-visible="1"
+                                     data-rail-color="red" data-handle-color="green">
+                                    <ul>
 
-                                    @foreach($contentsWithSameSet->whereIn("type" , "video" ) as $item)
-                                        <li class="mt-list-item @if($item["content"]->id == $educationalContent->id) bg-grey-mint @endif " id="playlistItem_{{$item["content"]->id}}">
-                                            <div class="list-icon-container">
-                                                <a href="{{action("EducationalContentController@show" , $item["content"])}}">
-                                                    <i class="fa fa-angle-left"></i>
-                                                </a>
-                                            </div>
-                                            <div class="list-thumb">
-                                                <a href="{{action("EducationalContentController@show" , $item["content"])}}">
-                                                    <img alt="{{$item["content"]->name}}"
-                                                         src="{{(isset($item["thumbnail"]))?$item["thumbnail"]:''}}"/>
-                                                </a>
-                                            </div>
-                                            <div class="list-datetime bold uppercase font-yellow-casablanca"> {{($item["content"]->getDisplayName())}} </div>
-                                            <div class="list-item-content">
-                                                <h3 class="uppercase bold">
-                                                    <a href="javascript:;">&nbsp;</a>
-                                                </h3>
-                                            </div>
-                                        </li>
-                                    @endforeach
+                                        @foreach($contentsWithSameSet->whereIn("type" , "video" ) as $item)
+                                            <li class="mt-list-item @if($item["content"]->id == $educationalContent->id) bg-grey-mint @endif " id="playlistItem_{{$item["content"]->id}}">
+                                                <div class="list-icon-container">
+                                                    <a href="{{action("EducationalContentController@show" , $item["content"])}}">
+                                                        <i class="fa fa-angle-left"></i>
+                                                    </a>
+                                                </div>
+                                                <div class="list-thumb">
+                                                    <a href="{{action("EducationalContentController@show" , $item["content"])}}">
+                                                        <img alt="{{$item["content"]->name}}"
+                                                             src="{{(isset($item["thumbnail"]))?$item["thumbnail"]:''}}"/>
+                                                    </a>
+                                                </div>
+                                                <div class="list-datetime bold uppercase font-yellow-casablanca"> {{($item["content"]->getDisplayName())}} </div>
+                                                <div class="list-item-content">
+                                                    <h3 class="uppercase bold">
+                                                        <a href="javascript:;">&nbsp;</a>
+                                                    </h3>
+                                                </div>
+                                            </li>
+                                        @endforeach
 
-                                </ul>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
-                    </div>
                     </div>
                 @endif
             </div>
 
             @if(isset($contentsWithSameSet) && $contentsWithSameSet->whereIn("type" , "pamphlet" )->isNotEmpty())
                 <div class="row">
-                <div class="col-md-12">
-                    <div class="portlet light ">
-                        <div class="portlet-title">
-                            <div class="caption">
-                                <i class="fa fa-comment-o" aria-hidden="true"></i>
-                                جزوات این درس
-                            </div>
-                        </div>
-                        <div class="portlet-body text-justify">
-                            <div class="m-grid m-grid-demo">
-                            @foreach($contentsWithSameSet->whereIn("type" , "pamphlet" )->chunk(5) as $chunk)
-                                <div class="m-grid-row">
-                                    @foreach($chunk as $item)
-                                        <div class="m-grid-col m-grid-col-middle m-grid-col-center">
-
-                                            <img width="80" alt="{{$item["content"]->name}}" src="{{( ( isset($item["thumbnail"]) && ( strlen($item["thumbnail"]) > 0 ) ) ? $item["thumbnail"] : 'https://www.freeiconspng.com/uploads/orange-pdf-icon-32.png' )}}"/>
-                                            <br/>
-                                            <a href="{{action("EducationalContentController@show" , $item["content"])}}">
-                                                    <i class="fa fa-angle-left"></i>
-                                                {{$item["content"]->name}}
-                                            </a>
-
-                                        </div>
-                                        {{--<li class="mt-list-item @if($item["content"]->id == $educationalContent->id) bg-grey-mint @endif ">--}}
-                                            {{--<div class="list-icon-container">--}}
-                                                {{--<a href="{{action("EducationalContentController@show" , $item["content"])}}">--}}
-                                                    {{--<i class="fa fa-angle-left"></i>--}}
-                                                {{--</a>--}}
-                                            {{--</div>--}}
-                                            {{--<div class="list-thumb">--}}
-                                                {{--<a href="{{action("EducationalContentController@show" , $item["content"])}}">--}}
-                                                    {{--<img alt="{{$item["content"]->name}}"--}}
-                                                         {{--src="{{(isset($item["thumbnail"]))?$item["thumbnail"]:''}}"/>--}}
-                                                {{--</a>--}}
-                                            {{--</div>--}}
-                                            {{--<div class="list-datetime bold uppercase font-yellow-casablanca"> {{$item["content"]->name}} </div>--}}
-                                            {{--<div class="list-item-content">--}}
-                                                {{--<h3 class="uppercase bold">--}}
-                                                    {{--<a href="javascript:;">&nbsp;</a>--}}
-                                                {{--</h3>--}}
-                                            {{--</div>--}}
-                                        {{--</li>--}}
-                                    @endforeach
+                    <div class="col-md-12">
+                        <div class="portlet light ">
+                            <div class="portlet-title">
+                                <div class="caption">
+                                    <i class="fa fa-comment-o" aria-hidden="true"></i>
+                                    جزوات این درس
                                 </div>
+                            </div>
+                            <div class="portlet-body text-justify">
+                                <div class="m-grid m-grid-demo">
+                                    @foreach($contentsWithSameSet->whereIn("type" , "pamphlet" )->chunk(5) as $chunk)
+                                        <div class="m-grid-row">
+                                            @foreach($chunk as $item)
+                                                <div class="m-grid-col m-grid-col-middle m-grid-col-center">
 
-                            @endforeach
-                                <style>
-                                    .m-grid.m-grid-demo .m-grid-col{
-                                        border: none !important;
-                                        min-height: 150px !important;
-                                    }
-                                </style>
+                                                    <img width="80" alt="{{$item["content"]->name}}" src="{{( ( isset($item["thumbnail"]) && ( strlen($item["thumbnail"]) > 0 ) ) ? $item["thumbnail"] : 'https://www.freeiconspng.com/uploads/orange-pdf-icon-32.png' )}}"/>
+                                                    <br/>
+                                                    <a href="{{action("EducationalContentController@show" , $item["content"])}}">
+                                                        <i class="fa fa-angle-left"></i>
+                                                        {{$item["content"]->name}}
+                                                    </a>
+
+                                                </div>
+                                                {{--<li class="mt-list-item @if($item["content"]->id == $educationalContent->id) bg-grey-mint @endif ">--}}
+                                                {{--<div class="list-icon-container">--}}
+                                                {{--<a href="{{action("EducationalContentController@show" , $item["content"])}}">--}}
+                                                {{--<i class="fa fa-angle-left"></i>--}}
+                                                {{--</a>--}}
+                                                {{--</div>--}}
+                                                {{--<div class="list-thumb">--}}
+                                                {{--<a href="{{action("EducationalContentController@show" , $item["content"])}}">--}}
+                                                {{--<img alt="{{$item["content"]->name}}"--}}
+                                                {{--src="{{(isset($item["thumbnail"]))?$item["thumbnail"]:''}}"/>--}}
+                                                {{--</a>--}}
+                                                {{--</div>--}}
+                                                {{--<div class="list-datetime bold uppercase font-yellow-casablanca"> {{$item["content"]->name}} </div>--}}
+                                                {{--<div class="list-item-content">--}}
+                                                {{--<h3 class="uppercase bold">--}}
+                                                {{--<a href="javascript:;">&nbsp;</a>--}}
+                                                {{--</h3>--}}
+                                                {{--</div>--}}
+                                                {{--</li>--}}
+                                            @endforeach
+                                        </div>
+
+                                    @endforeach
+                                    <style>
+                                        .m-grid.m-grid-demo .m-grid-col{
+                                            border: none !important;
+                                            min-height: 150px !important;
+                                        }
+                                    </style>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    {{--<div class="mt-element-list">--}}
+                        {{--<div class="mt-element-list">--}}
                         {{--<div class="mt-list-head list-news ext-1 font-white bg-blue">--}}
-                            {{--<div class="list-head-title-container">--}}
-                                {{--<h3 class="list-title">جزوات مرتبط</h3>--}}
-                            {{--</div>--}}
-                            {{--<div class="list-count pull-right bg-blue-chambray"></div>--}}
+                        {{--<div class="list-head-title-container">--}}
+                        {{--<h3 class="list-title">جزوات مرتبط</h3>--}}
+                        {{--</div>--}}
+                        {{--<div class="list-count pull-right bg-blue-chambray"></div>--}}
                         {{--</div>--}}
                         {{--<div class="mt-list-container list-news ext-2">--}}
-                            {{--<div class="scroller" style="height:500px" data-always-visible="1" data-rail-visible="1"--}}
-                                 {{--data-rail-color="red" data-handle-color="green">--}}
-                                {{--<ul>--}}
-                                    {{--@foreach($contentsWithSameSet->whereIn("type" , "pamphlet" ) as $item)--}}
-                                        {{--<li class="mt-list-item @if($item["content"]->id == $educationalContent->id) bg-grey-mint @endif ">--}}
-                                            {{--<div class="list-icon-container">--}}
-                                                {{--<a href="{{action("EducationalContentController@show" , $item["content"])}}">--}}
-                                                    {{--<i class="fa fa-angle-left"></i>--}}
-                                                {{--</a>--}}
-                                            {{--</div>--}}
-                                            {{--<div class="list-thumb">--}}
-                                                {{--<a href="{{action("EducationalContentController@show" , $item["content"])}}">--}}
-                                                    {{--<img alt="{{$item["content"]->name}}"--}}
-                                                         {{--src="{{(isset($item["thumbnail"]))?$item["thumbnail"]:''}}"/>--}}
-                                                {{--</a>--}}
-                                            {{--</div>--}}
-                                            {{--<div class="list-datetime bold uppercase font-yellow-casablanca"> {{$item["content"]->name}} </div>--}}
-                                            {{--<div class="list-item-content">--}}
-                                                {{--<h3 class="uppercase bold">--}}
-                                                    {{--<a href="javascript:;">&nbsp;</a>--}}
-                                                {{--</h3>--}}
-                                            {{--</div>--}}
-                                        {{--</li>--}}
-                                    {{--@endforeach--}}
-
-                                {{--</ul>--}}
-                            {{--</div>--}}
+                        {{--<div class="scroller" style="height:500px" data-always-visible="1" data-rail-visible="1"--}}
+                        {{--data-rail-color="red" data-handle-color="green">--}}
+                        {{--<ul>--}}
+                        {{--@foreach($contentsWithSameSet->whereIn("type" , "pamphlet" ) as $item)--}}
+                        {{--<li class="mt-list-item @if($item["content"]->id == $educationalContent->id) bg-grey-mint @endif ">--}}
+                        {{--<div class="list-icon-container">--}}
+                        {{--<a href="{{action("EducationalContentController@show" , $item["content"])}}">--}}
+                        {{--<i class="fa fa-angle-left"></i>--}}
+                        {{--</a>--}}
                         {{--</div>--}}
-                    {{--</div>--}}
+                        {{--<div class="list-thumb">--}}
+                        {{--<a href="{{action("EducationalContentController@show" , $item["content"])}}">--}}
+                        {{--<img alt="{{$item["content"]->name}}"--}}
+                        {{--src="{{(isset($item["thumbnail"]))?$item["thumbnail"]:''}}"/>--}}
+                        {{--</a>--}}
+                        {{--</div>--}}
+                        {{--<div class="list-datetime bold uppercase font-yellow-casablanca"> {{$item["content"]->name}} </div>--}}
+                        {{--<div class="list-item-content">--}}
+                        {{--<h3 class="uppercase bold">--}}
+                        {{--<a href="javascript:;">&nbsp;</a>--}}
+                        {{--</h3>--}}
+                        {{--</div>--}}
+                        {{--</li>--}}
+                        {{--@endforeach--}}
+
+                        {{--</ul>--}}
+                        {{--</div>--}}
+                        {{--</div>--}}
+                        {{--</div>--}}
+                    </div>
                 </div>
-            </div>
             @endif
         @elseif($educationalContent->template->name == "pamphlet1" )
             <div class="row">
@@ -319,7 +319,7 @@
                         <div class="portlet-body">
                                 @if($fileToShow->getExtention() === "pdf")
                                     <iframe class="google-docs"
-                                            src='http://docs.google.com/viewer?url={{$fileToShow->getUrl()}}&embedded=true'
+                                            src='https://docs.google.com/viewer?url={{$fileToShow->getUrl()}}&embedded=true'
                                             width='100%' height='760' style='border: none;'></iframe>
                                 @endif
                             <div class="row">
@@ -355,6 +355,48 @@
                         </div>
                     </div>
                 </div>
+                @if(isset($contentsWithSameSet))
+                    <div class="col-md-4 margin-bottom-15">
+                        <div class="mt-element-list">
+                            <div class="mt-list-head list-news ext-1 font-white bg-yellow-crusta">
+                                <div class="list-head-title-container">
+                                    <h3 class="list-title">فیلم های درس</h3>
+                                </div>
+                                <div class="list-count pull-right bg-yellow-saffron"></div>
+                            </div>
+                            <div class="mt-list-container list-news ext-2" id="otherSessions">
+                                <div id="playListScroller" class="scroller" style="min-height: 50px; max-height:500px" data-always-visible="1" data-rail-visible="1"
+                                     data-rail-color="red" data-handle-color="green">
+                                    <ul>
+
+                                        @foreach($contentsWithSameSet->whereIn("type" , "video" ) as $item)
+                                            <li class="mt-list-item @if($item["content"]->id == $educationalContent->id) bg-grey-mint @endif " id="playlistItem_{{$item["content"]->id}}">
+                                                <div class="list-icon-container">
+                                                    <a href="{{action("EducationalContentController@show" , $item["content"])}}">
+                                                        <i class="fa fa-angle-left"></i>
+                                                    </a>
+                                                </div>
+                                                <div class="list-thumb">
+                                                    <a href="{{action("EducationalContentController@show" , $item["content"])}}">
+                                                        <img alt="{{$item["content"]->name}}"
+                                                             src="{{(isset($item["thumbnail"]))?$item["thumbnail"]:''}}"/>
+                                                    </a>
+                                                </div>
+                                                <div class="list-datetime bold uppercase font-yellow-casablanca"> {{($item["content"]->getDisplayName())}} </div>
+                                                <div class="list-item-content">
+                                                    <h3 class="uppercase bold">
+                                                        <a href="javascript:;">&nbsp;</a>
+                                                    </h3>
+                                                </div>
+                                            </li>
+                                        @endforeach
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
                 {{--<div class="col-md-4">--}}
                     {{--@if($contentsWithSameType->isNotEmpty())--}}
                         {{--<div class="mt-element-list">--}}
@@ -387,6 +429,103 @@
                     {{--@endif--}}
                 {{--</div>--}}
             </div>
+            @if(isset($contentsWithSameSet) && $contentsWithSameSet->whereIn("type" , "pamphlet" )->where("content.id" , "<>",$educationalContent->id)->isNotEmpty())
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="portlet light ">
+                            <div class="portlet-title">
+                                <div class="caption">
+                                    <i class="fa fa-comment-o" aria-hidden="true"></i>
+                                    جزوات دیگر
+                                </div>
+                            </div>
+                            <div class="portlet-body text-justify">
+                                <div class="m-grid m-grid-demo">
+                                    @foreach($contentsWithSameSet->whereIn("type" , "pamphlet" )->chunk(5) as $chunk)
+                                        <div class="m-grid-row">
+                                            @foreach($chunk as $item)
+                                                <div class="m-grid-col m-grid-col-middle m-grid-col-center">
+
+                                                    <img width="80" alt="{{$item["content"]->name}}" src="{{( ( isset($item["thumbnail"]) && ( strlen($item["thumbnail"]) > 0 ) ) ? $item["thumbnail"] : 'https://www.freeiconspng.com/uploads/orange-pdf-icon-32.png' )}}"/>
+                                                    <br/>
+                                                    <a href="{{action("EducationalContentController@show" , $item["content"])}}">
+                                                        <i class="fa fa-angle-left"></i>
+                                                        {{$item["content"]->name}}
+                                                    </a>
+
+                                                </div>
+                                                {{--<li class="mt-list-item @if($item["content"]->id == $educationalContent->id) bg-grey-mint @endif ">--}}
+                                                {{--<div class="list-icon-container">--}}
+                                                {{--<a href="{{action("EducationalContentController@show" , $item["content"])}}">--}}
+                                                {{--<i class="fa fa-angle-left"></i>--}}
+                                                {{--</a>--}}
+                                                {{--</div>--}}
+                                                {{--<div class="list-thumb">--}}
+                                                {{--<a href="{{action("EducationalContentController@show" , $item["content"])}}">--}}
+                                                {{--<img alt="{{$item["content"]->name}}"--}}
+                                                {{--src="{{(isset($item["thumbnail"]))?$item["thumbnail"]:''}}"/>--}}
+                                                {{--</a>--}}
+                                                {{--</div>--}}
+                                                {{--<div class="list-datetime bold uppercase font-yellow-casablanca"> {{$item["content"]->name}} </div>--}}
+                                                {{--<div class="list-item-content">--}}
+                                                {{--<h3 class="uppercase bold">--}}
+                                                {{--<a href="javascript:;">&nbsp;</a>--}}
+                                                {{--</h3>--}}
+                                                {{--</div>--}}
+                                                {{--</li>--}}
+                                            @endforeach
+                                        </div>
+
+                                    @endforeach
+                                    <style>
+                                        .m-grid.m-grid-demo .m-grid-col{
+                                            border: none !important;
+                                            min-height: 150px !important;
+                                        }
+                                    </style>
+                                </div>
+                            </div>
+                        </div>
+                        {{--<div class="mt-element-list">--}}
+                        {{--<div class="mt-list-head list-news ext-1 font-white bg-blue">--}}
+                        {{--<div class="list-head-title-container">--}}
+                        {{--<h3 class="list-title">جزوات مرتبط</h3>--}}
+                        {{--</div>--}}
+                        {{--<div class="list-count pull-right bg-blue-chambray"></div>--}}
+                        {{--</div>--}}
+                        {{--<div class="mt-list-container list-news ext-2">--}}
+                        {{--<div class="scroller" style="height:500px" data-always-visible="1" data-rail-visible="1"--}}
+                        {{--data-rail-color="red" data-handle-color="green">--}}
+                        {{--<ul>--}}
+                        {{--@foreach($contentsWithSameSet->whereIn("type" , "pamphlet" ) as $item)--}}
+                        {{--<li class="mt-list-item @if($item["content"]->id == $educationalContent->id) bg-grey-mint @endif ">--}}
+                        {{--<div class="list-icon-container">--}}
+                        {{--<a href="{{action("EducationalContentController@show" , $item["content"])}}">--}}
+                        {{--<i class="fa fa-angle-left"></i>--}}
+                        {{--</a>--}}
+                        {{--</div>--}}
+                        {{--<div class="list-thumb">--}}
+                        {{--<a href="{{action("EducationalContentController@show" , $item["content"])}}">--}}
+                        {{--<img alt="{{$item["content"]->name}}"--}}
+                        {{--src="{{(isset($item["thumbnail"]))?$item["thumbnail"]:''}}"/>--}}
+                        {{--</a>--}}
+                        {{--</div>--}}
+                        {{--<div class="list-datetime bold uppercase font-yellow-casablanca"> {{$item["content"]->name}} </div>--}}
+                        {{--<div class="list-item-content">--}}
+                        {{--<h3 class="uppercase bold">--}}
+                        {{--<a href="javascript:;">&nbsp;</a>--}}
+                        {{--</h3>--}}
+                        {{--</div>--}}
+                        {{--</li>--}}
+                        {{--@endforeach--}}
+
+                        {{--</ul>--}}
+                        {{--</div>--}}
+                        {{--</div>--}}
+                        {{--</div>--}}
+                    </div>
+                </div>
+            @endif
         @elseif($educationalContent->template->name == "article1")
             <div class="row">
                 <div class="col-md-8">
