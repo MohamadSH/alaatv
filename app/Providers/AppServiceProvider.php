@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 
+use App\Contenttype;
 use App\Productfiletype;
 use App\Websitesetting;
 use Illuminate\Database\QueryException;
@@ -252,6 +253,16 @@ class AppServiceProvider extends ServiceProvider
                         Config::set("constants.PRODUCT_FILE_TYPE_VIDEO" , $productfiletypes->where("name" , "video")->first()->id);
                     if($productfiletypes->where("name" , "pamphlet")->isNotEmpty())
                         Config::set("constants.PRODUCT_FILE_TYPE_PAMPHLET" , $productfiletypes->where("name" , "pamphlet")->first()->id);
+                }
+
+//                =============================CONTENT TYPES
+                if (Schema::hasTable('contenttypes'))
+                {
+                    $contenttypes = Contenttype::all();
+                    if($contenttypes->where("name" , "pamphlet")->isNotEmpty())
+                        Config::set("constants.CONTENT_TYPE_PAMPHLET" , $contenttypes->where("name" , "pamphlet")->first()->id);
+                    if($contenttypes->where("name" , "video")->isNotEmpty())
+                        Config::set("constants.CONTENT_TYPE_VIDEO" , $contenttypes->where("name" , "video")->first()->id);
                 }
 
             }

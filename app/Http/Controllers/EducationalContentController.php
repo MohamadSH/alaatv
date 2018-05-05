@@ -453,44 +453,14 @@ class EducationalContentController extends Controller
                                 $files->put("thumbnail" , $file->name);
                             $files->put("videoSource" , $videoSources);
 
-                            $contentSets = $educationalContent->contentsets->where("pivot.isDefault" , 1);
-                            if($contentSets->isNotEmpty())
-                            {
-                                $contentSet = $contentSets->first();
-                                $sameContents =  $contentSet->educationalcontents->where("enable" , 1)->sortBy("pivot.order") ;
-                                $contentsWithSameSet = collect();
-                                $sameContents->load('files');
-                                $sameContents->load('contenttype');
-
-                                foreach ($sameContents as $content)
-                                {
-                                    $file = $content->files->where("pivot.label" , "thumbnail")->first();
-                                    if(isset($file))
-                                        $thumbnailFile = $file->name;
-                                    else
-                                        $thumbnailFile = "" ;
-
-                                    if (isset($content->contenttype)) {
-                                        $myContentType = $content->contenttype->name;
-                                    }else{
-                                        $myContentType ="";
-                                    }
-                                    $session = $content->pivot->order;
-                                    $contentsWithSameSet->push([
-                                        "type"=> $myContentType ,
-                                        "content"=>$content ,
-                                        "thumbnail"=>$thumbnailFile ,
-                                        "session"=>$session
-                                    ]);
-                                }
-                            }
-
+                            $contentsWithSameSet = $educationalContent->getSetMates();
 
                             break;
                         case  "pamphlet1":
                             $metaTagMod = 2;
                             $files = $educationalContent->files;
                             $fileToShow = $educationalContent->file;
+                            $contentsWithSameSet = $educationalContent->getSetMates();
                             break;
                         case "article" :
                             $metaTagMod = 3;

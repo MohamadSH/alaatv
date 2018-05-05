@@ -453,7 +453,7 @@ class HomeController extends Controller
         $majorCollection = collect([
             [
                 "name"=>"همه رشته ها" ,
-                "description"=>"همه_رشته_ها"
+                "description"=>""
             ]
         ]);
         $majorCollection = $majorCollection->merge(Major::all());
@@ -462,9 +462,9 @@ class HomeController extends Controller
         foreach ($majorCollection as $major)
         {
             $lessons = collect([]);
-            switch ($major["description"])
+            switch ($major["name"])
             {
-                case "همه_رشته_ها":
+                case "همه رشته ها":
                     $lessons= $lessons->merge(collect([
                             ["value"=>"", "index"=>"همه دروس"] ,
                             ["value"=>"مشاوره", "index"=>"مشاوره"] ,
@@ -492,7 +492,7 @@ class HomeController extends Controller
                     );
                     $defaultLesson = array_merge($defaultLesson , array_intersect( $lessons->pluck("value")->toArray() , $tagInput ))  ;
                     break ;
-                case "رشته_ریاضی":
+                case "ریاضی":
                     $lessons= $lessons->merge(collect([
                         ["value"=>"", "index"=>"همه دروس"] ,
                         ["value"=>"مشاوره", "index"=>"مشاوره"] ,
@@ -514,7 +514,7 @@ class HomeController extends Controller
                     );
                     $defaultLesson = array_merge($defaultLesson , array_intersect( $lessons->pluck("value")->toArray() , $tagInput ))  ;
                     break;
-                case "رشته_تجربی":
+                case "تجربی":
                     $lessons= $lessons->merge(collect([
                         ["value"=>"", "index"=>"همه دروس"] ,
                         ["value"=>"مشاوره", "index"=>"مشاوره"] ,
@@ -533,7 +533,7 @@ class HomeController extends Controller
                     );
                     $defaultLesson = array_merge($defaultLesson , array_intersect( $lessons->pluck("value")->toArray() , $tagInput ))  ;
                     break;
-                case "رشته_انسانی":
+                case "انسانی":
                     $lessons= $lessons->merge(collect([
                         ["value"=>"", "index"=>"همه دروس"] ,
                         ["value"=>"مشاوره", "index"=>"مشاوره"] ,

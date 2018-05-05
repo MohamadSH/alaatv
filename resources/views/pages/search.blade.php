@@ -89,7 +89,7 @@
                         </div>
                         <div class="col-lg-3 col-md-3 col-sd-3 col-xs-12">
                             <div class="form-group form-md-line-input form-md-floating-label has-info">
-                                {!! Form::select('tags[]',$majors,null,['class' => 'form-control itemFilter' , 'id'=>'majorSelect' ]) !!}
+                                {!! Form::select('tags[]',$majors,null,['class' => 'form-control itemFilter' , 'id'=>'majorSelect' , 'placeHolder'=>'همه رشته ها' ]) !!}
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sd-3 col-xs-12">
@@ -254,6 +254,7 @@
         function makeLessonSelect() {
             var major = $("#majorSelect").val() ;
             var lessons = majorLesson[major];
+            console.log(lessons);
             $("#lessonSelect").empty();
             $.each(lessons , function (index , value)
             {
@@ -266,9 +267,7 @@
 
         function makeTeacherSelect() {
             var lesson = $("#lessonSelect").val() ;
-            console.log(lesson);
             var teachers = lessonTeacher[lesson];
-            console.log(teachers);
             $("#teacherSelect").empty();
             $.each(teachers , function (index , value)
             {
@@ -430,7 +429,6 @@
                 statusCode:
                     {
                         200:function (response) {
-                            console.log(response);
                             var items = response.items;
                             // var itemTypes = response.itemTypes;
                             // location.hash = page;
