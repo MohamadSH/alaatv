@@ -453,7 +453,7 @@ class HomeController extends Controller
         $majorCollection = collect([
             [
                 "name"=>"همه رشته ها" ,
-                "description"=>"همه_رشته_ها"
+                "description"=>""
             ]
         ]);
         $majorCollection = $majorCollection->merge(Major::all());
@@ -462,9 +462,9 @@ class HomeController extends Controller
         foreach ($majorCollection as $major)
         {
             $lessons = collect([]);
-            switch ($major["description"])
+            switch ($major["name"])
             {
-                case "همه_رشته_ها":
+                case "همه رشته ها":
                     $lessons= $lessons->merge(collect([
                             ["value"=>"", "index"=>"همه دروس"] ,
                             ["value"=>"مشاوره", "index"=>"مشاوره"] ,
@@ -492,7 +492,7 @@ class HomeController extends Controller
                     );
                     $defaultLesson = array_merge($defaultLesson , array_intersect( $lessons->pluck("value")->toArray() , $tagInput ))  ;
                     break ;
-                case "رشته_ریاضی":
+                case "ریاضی":
                     $lessons= $lessons->merge(collect([
                         ["value"=>"", "index"=>"همه دروس"] ,
                         ["value"=>"مشاوره", "index"=>"مشاوره"] ,
@@ -514,7 +514,7 @@ class HomeController extends Controller
                     );
                     $defaultLesson = array_merge($defaultLesson , array_intersect( $lessons->pluck("value")->toArray() , $tagInput ))  ;
                     break;
-                case "رشته_تجربی":
+                case "تجربی":
                     $lessons= $lessons->merge(collect([
                         ["value"=>"", "index"=>"همه دروس"] ,
                         ["value"=>"مشاوره", "index"=>"مشاوره"] ,
@@ -533,7 +533,7 @@ class HomeController extends Controller
                     );
                     $defaultLesson = array_merge($defaultLesson , array_intersect( $lessons->pluck("value")->toArray() , $tagInput ))  ;
                     break;
-                case "رشته_انسانی":
+                case "انسانی":
                     $lessons= $lessons->merge(collect([
                         ["value"=>"", "index"=>"همه دروس"] ,
                         ["value"=>"مشاوره", "index"=>"مشاوره"] ,
@@ -2557,6 +2557,9 @@ class HomeController extends Controller
 
     public function bot()
     {
+        /**
+         * Fixing contentset tags
+
         if(Input::has("id"))
             $contentsetId = Input::get("id");
         else
@@ -2580,7 +2583,7 @@ class HomeController extends Controller
                     if(isset($content->tags))
                     {
                         $params = [
-                            "tags"=> json_encode($content->tags) ,
+                            "tags"=> json_encode($content->tags->tags) ,
                         ];
                         if(isset($content->created_at) && strlen($content->created_at) > 0 )
                             $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $content->created_at )->timestamp;
@@ -2614,6 +2617,8 @@ class HomeController extends Controller
         }
         dump("number of total processed contents: ".$contentCounter);
         dd("done!");
+         */
+
         /***
         $contents = Educationalcontent::where("contenttype_id" , 8);
         $contentArray = $contents->pluck("id")->toArray();

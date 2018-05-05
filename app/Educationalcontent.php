@@ -292,6 +292,42 @@ class Educationalcontent extends Model
         );
     }
 
+    public function getSetMates()
+    {
+        $contentSets = $this->contentsets->where("pivot.isDefault" , 1);
+        $contentsWithSameSet = collect();
+        if($contentSets->isNotEmpty())
+        {
+            $contentSet = $contentSets->first();
+            $sameContents =  $contentSet->educationalcontents->where("enable" , 1)->sortBy("pivot.order") ;
+            $sameContents->load('files');
+            $sameContents->load('contenttype');
+
+            foreach ($sameContents as $content)
+            {
+                $file = $content->files->where("pivot.label" , "thumbnail")->first();
+                if(isset($file))
+                    $thumbnailFile = $file->name;
+                else
+                    $thumbnailFile = "" ;
+
+                if (isset($content->contenttype)) {
+                    $myContentType = $content->contenttype->name;
+                }else{
+                    $myContentType ="";
+                }
+                $session = $content->pivot->order;
+                $contentsWithSameSet->push([
+                    "type"=> $myContentType ,
+                    "content"=>$content ,
+                    "thumbnail"=>$thumbnailFile ,
+                    "session"=>$session
+                ]);
+            }
+        }
+        return $contentsWithSameSet ;
+    }
+
 //    public function setTagsAttribute($value)
 //    {
 //        return json_encode($value);
