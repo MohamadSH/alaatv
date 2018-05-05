@@ -466,7 +466,7 @@ class HomeController extends Controller
             {
                 case "همه_رشته_ها":
                     $lessons= $lessons->merge(collect([
-                            ["value"=>"همه_دروس", "index"=>"همه دروس"] ,
+                            ["value"=>"", "index"=>"همه دروس"] ,
                             ["value"=>"مشاوره", "index"=>"مشاوره"] ,
                             ["value"=>"دیفرانسیل", "index"=>"دیفرانسیل"] ,
                             ["value"=>"تحلیلی", "index"=>"تحلیلی"] ,
@@ -494,7 +494,7 @@ class HomeController extends Controller
                     break ;
                 case "رشته_ریاضی":
                     $lessons= $lessons->merge(collect([
-                        ["value"=>"همه_دروس", "index"=>"همه دروس"] ,
+                        ["value"=>"", "index"=>"همه دروس"] ,
                         ["value"=>"مشاوره", "index"=>"مشاوره"] ,
                         ["value"=>"دیفرانسیل", "index"=>"دیفرانسیل"] ,
                         ["value"=>"تحلیلی", "index"=>"تحلیلی"] ,
@@ -516,7 +516,7 @@ class HomeController extends Controller
                     break;
                 case "رشته_تجربی":
                     $lessons= $lessons->merge(collect([
-                        ["value"=>"همه_دروس", "index"=>"همه دروس"] ,
+                        ["value"=>"", "index"=>"همه دروس"] ,
                         ["value"=>"مشاوره", "index"=>"مشاوره"] ,
                         ["value"=>"زیست_شناسی", "index"=>"زیست شناسی"] ,
                         ["value"=>"ریاضی_تجربی", "index"=>"ریاضی تجربی"] ,
@@ -535,7 +535,7 @@ class HomeController extends Controller
                     break;
                 case "رشته_انسانی":
                     $lessons= $lessons->merge(collect([
-                        ["value"=>"همه_دروس", "index"=>"همه دروس"] ,
+                        ["value"=>"", "index"=>"همه دروس"] ,
                         ["value"=>"مشاوره", "index"=>"مشاوره"] ,
                         ["value"=>"ریاضی_انسانی", "index"=>"ریاضی انسانی"] ,
                         ["value"=>"ریاضی_و_آمار", "index"=>"ریاضی و آمار"] ,
@@ -572,7 +572,7 @@ class HomeController extends Controller
 
         $lessonTeacher = collect(
             [
-                "همه_دروس" => [
+                "" => [
                     ["index"=>"همه دبیرها" , "value"=>""],
                     ["index"=>"محمد صادق ثابتی" , "value"=>"محمد_صادق_ثابتی"],
                     ["index"=>"رضا شامیزاده" , "value"=>"رضا_شامیزاده"],
