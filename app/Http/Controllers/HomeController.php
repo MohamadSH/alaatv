@@ -2557,6 +2557,9 @@ class HomeController extends Controller
 
     public function bot()
     {
+        /**
+         * Fixing contentset tags
+
         if(Input::has("id"))
             $contentsetId = Input::get("id");
         else
@@ -2580,7 +2583,7 @@ class HomeController extends Controller
                     if(isset($content->tags))
                     {
                         $params = [
-                            "tags"=> json_encode($content->tags) ,
+                            "tags"=> json_encode($content->tags->tags) ,
                         ];
                         if(isset($content->created_at) && strlen($content->created_at) > 0 )
                             $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $content->created_at )->timestamp;
@@ -2614,6 +2617,8 @@ class HomeController extends Controller
         }
         dump("number of total processed contents: ".$contentCounter);
         dd("done!");
+         */
+
         /***
         $contents = Educationalcontent::where("contenttype_id" , 8);
         $contentArray = $contents->pluck("id")->toArray();
