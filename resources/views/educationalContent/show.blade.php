@@ -317,7 +317,7 @@
                             </div>
                         </div>
                         <div class="portlet-body">
-                                @if($fileToShow->getExtention() === "pdf")
+                                @if(isset($fileToShow) && $fileToShow->getExtention() === "pdf")
                                     <iframe class="google-docs"
                                             src='https://docs.google.com/viewer?url={{$fileToShow->getUrl()}}&embedded=true'
                                             width='100%' height='760' style='border: none;'></iframe>

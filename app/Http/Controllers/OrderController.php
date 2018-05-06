@@ -1840,7 +1840,7 @@ class OrderController extends Controller
                                 $coupon->usageNumber = $coupon->usageNumber + 1;
                                 if ($coupon->update()) {
                                     $order->coupon_id = $coupon->id;
-                                    if($coupon->discounttype->id == Config::get("constants.DISCOUNT_TYPE_COST")) {
+                                    if($coupon->discounttype_id == Config::get("constants.DISCOUNT_TYPE_COST")) {
                                         $order->couponDiscount = 0;
                                         $order->couponDiscountAmount = (int)$coupon->discount;
                                     }
@@ -1874,7 +1874,7 @@ class OrderController extends Controller
                         if($coupon->update())
                         {
                             $order->coupon_id = $coupon->id;
-                            if($coupon->discounttype->id == Config::get("constants.DISCOUNT_TYPE_COST")) {
+                            if($coupon->discounttype_id == Config::get("constants.DISCOUNT_TYPE_COST")) {
                                 $order->couponDiscount = 0;
                                 $order->couponDiscountAmount = (int)$coupon->discount;
                             }

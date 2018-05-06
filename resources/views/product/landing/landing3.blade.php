@@ -82,7 +82,7 @@
                         <a href="{{action("ProductController@show" , 210)}}" title="جزوه و آزمون">همایش ادبیات دکتر سبطی </a>
                     </li>
                     <li>
-                        <a href="{{action("ProductController@show" , 211)}}" title="صفحه اصلی">همایش دین و زندگی دکتر کاغذی</a>
+                        <a href="{{action("ProductController@show" , 211)}}" title="صفحه اصلی">همایش دینی دکتر کاغذی</a>
                     </li>
                     <li>
                         <a href="{{action("ProductController@show" , 212)}}" title="درباره ما">همایش زیست شناسی دکتر چلاجور</a>
@@ -100,16 +100,16 @@
                             <a href="{{action("HomeController@index")}}" title="صفحه اصلی">صفحه اصلی</a>
                         </div>
                         <div class="swiper-slide">
-                            <a href="javascript:void(0)" data-role="210" class="checkout" title="جزوه و آزمون">همایش ادبیات دکتر سبطی </a>
+                            <a href="javascript:void(0)" data-role="210" class="checkout" title="همایش ادبیات دکتر سبطی">همایش ادبیات دکتر سبطی </a>
                         </div>
                         <div class="swiper-slide">
-                            <a href="javascript:void(0)" data-role="211" class="checkout" title="صفحه اصلی">همایش دین و زندگی دکتر کاغذی</a>
+                            <a href="javascript:void(0)" data-role="211" class="checkout" title="همایش دین و زندگی دکتر کاغذی">همایش دین و زندگی دکتر کاغذی</a>
                         </div>
                         <div class="swiper-slide">
-                            <a href="javascript:void(0)" data-role="212" class="checkout" title="درباره ما">همایش زیست شناسی دکتر چلاجور</a>
+                            <a href="javascript:void(0)" data-role="212" class="checkout" title="همایش زیست دکتر چلاجور">همایش زیست شناسی دکتر چلاجور</a>
                         </div>
                         <div class="swiper-slide">
-                            <a href="javascript:void(0)" data-role="213" class="checkout" title="قوانین و مقررات">همایش زمین شناسی دکتر چلاجور</a>
+                            <a href="javascript:void(0)" data-role="213" class="checkout" title="همایش زمین شناسی دکتر چلاجور">همایش زمین شناسی دکتر چلاجور</a>
                         </div>
                         <div class="swiper-slide">
                             <a href="{{action("HomeController@contactUs")}}" title="تماس با ما">تماس با ما</a>
@@ -205,7 +205,7 @@
                                                     <header>
                                                         <a href="javascript:void(0)" data-role="211" class="checkout" title="">
                                                             <h1>
-                                                                <span>دین و زندگی</span>
+                                                                <span>دینی</span>
                                                                 <em>کاغذی</em>
                                                             </h1>
                                                         </a>
@@ -405,7 +405,7 @@
                                                     <header>
                                                         <a href="javascript:void(0)" data-role="212" class="checkout" title="">
                                                             <h1>
-                                                                <span>زیست گیاهی</span>
+                                                                <span>زیست</span>
                                                                 <em>چلاجور</em>
                                                             </h1>
                                                         </a>
@@ -436,7 +436,7 @@
                                                     <header>
                                                         <a href="javascript:void(0)" data-role="213" class="checkout" title="">
                                                             <h1>
-                                                                <span>زمین شناسی</span>
+                                                                <span>زمین</span>
                                                                 <em>چلاجور</em>
                                                             </h1>
                                                         </a>
@@ -467,7 +467,7 @@
                                                     <header>
                                                         <a href="javascript:void(0)" data-role="219" class="checkout" title="">
                                                             <h1>
-                                                                <span>ریاضی تجربی</span>
+                                                                <span>ریاضی</span>
                                                                 <em>امینی</em>
                                                             </h1>
                                                         </a>
@@ -653,58 +653,11 @@
         </section>
     </footer>
 </div>
+<script>
+    var storeOrderUrl = "{{ action('OrderproductController@store') }}";
+</script>
 <script src="/assets/extra/landing3/js/jquery-1.12.4.min.js" defer="defer"></script>
 <script src="/assets/extra/landing3/js/swiper.jquery.min.js" defer="defer"></script>
-<script src="/assets/extra/landing3/js/menu.min.js" defer="defer"></script>
 <script src="/assets/extra/landing3/js/script.js" defer="defer"></script>
-<script>
-    {{--$('a.checkout').click(function() {--}}
-        {{--console.log("clcked");--}}
-        {{--var id = $(this).data('role');--}}
-        {{--$.ajax({--}}
-            {{--url: '{{ action('OrderproductController@store') }}',--}}
-            {{--type: 'POST',--}}
-            {{--// contentType: 'application/json; charset=UTF-8',--}}
-            {{--// dataType: 'json',--}}
-            {{--// timeout: 10000,--}}
-            {{--data: {--}}
-                {{--product_id: id--}}
-            {{--},--}}
-            {{--statusCode: {--}}
-                {{--//The status for when action was successful--}}
-                {{--200: function (response) {--}}
-                    {{--if(response.redirectUrl!= null && response.redirectUrl!="undefined")--}}
-                        {{--window.location.replace(response.redirectUrl);--}}
-                {{--},--}}
-                {{--//The status for when the user is not authorized for making the request--}}
-                {{--403: function (response) {--}}
-                    {{--console.log("response 403");--}}
-                {{--},--}}
-                {{--//The status for when the user is not authorized for making the request--}}
-                {{--401: function (response) {--}}
-                    {{--console.log("response 401");--}}
-                {{--},--}}
-                {{--404: function (response) {--}}
-                    {{--console.log("response 404");--}}
-                {{--},--}}
-                {{--//The status for when form data is not valid--}}
-                {{--422: function (response) {--}}
-                    {{--console.log(response);--}}
-                {{--},--}}
-                {{--//The status for when there is error php code--}}
-                {{--500: function (response) {--}}
-                    {{--console.log("response 500");--}}
-                    {{--console.log(response.responseText);--}}
-                {{--},--}}
-                {{--//The status for when there is error php code--}}
-                {{--503: function (response) {--}}
-                    {{--response = $.parseJSON(response.responseText);--}}
-                    {{--console.log(response.message);--}}
-                {{--}--}}
-            {{--}--}}
-        {{--});--}}
-        {{--return false;--}}
-    {{--});--}}
-</script>
 </body>
 </html>
