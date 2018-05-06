@@ -488,6 +488,8 @@ class HomeController extends Controller
                             ["value"=>"ریاضی_و_آمار", "index"=>"ریاضی و آمار"] ,
                             ["value"=>"منطق", "index"=>"منطق"] ,
                             ["value"=>"اخلاق", "index"=>"اخلاق"] ,
+                            ["value"=>"المپیاد_نجوم", "index"=>"المپیاد نجوم"] ,
+                            ["value"=>"المپیاد_فیزیک", "index"=>"المپیاد فیزیک"] ,
                         ])
                     );
                     $defaultLesson = array_merge($defaultLesson , array_intersect( $lessons->pluck("value")->toArray() , $tagInput ))  ;
@@ -510,6 +512,8 @@ class HomeController extends Controller
                         ["value"=>"دین_و_زندگی", "index"=>"دین و زندگی" ],
                         ["value"=>"زبان_انگلیسی", "index"=>"زبان انگلیسی" ],
                         ["value"=>"آمار_و_مدلسازی", "index"=>"آمار و مدلسازی"] ,
+                        ["value"=>"المپیاد_نجوم", "index"=>"المپیاد نجوم"] ,
+                        ["value"=>"المپیاد_فیزیک", "index"=>"المپیاد فیزیک"] ,
                         ])
                     );
                     $defaultLesson = array_merge($defaultLesson , array_intersect( $lessons->pluck("value")->toArray() , $tagInput ))  ;
@@ -529,6 +533,8 @@ class HomeController extends Controller
                         ["value"=>"دین_و_زندگی", "index"=>"دین و زندگی" ],
                         ["value"=>"زبان_انگلیسی", "index"=>"زبان انگلیسی" ],
                         ["value"=>"آمار_و_مدلسازی", "index"=>"آمار و مدلسازی"] ,
+                        ["value"=>"المپیاد_نجوم", "index"=>"المپیاد نجوم"] ,
+                        ["value"=>"المپیاد_فیزیک", "index"=>"المپیاد فیزیک"] ,
                         ])
                     );
                     $defaultLesson = array_merge($defaultLesson , array_intersect( $lessons->pluck("value")->toArray() , $tagInput ))  ;
@@ -566,6 +572,7 @@ class HomeController extends Controller
         $gradeCollection->push(["displayName"=>"دوم دبیرستان" , "description"=>"دوم_دبیرستان"]);
         $gradeCollection->push(["displayName"=>"سوم دبیرستان" , "description"=>"سوم_دبیرستان"]);
         $gradeCollection->push(["displayName"=>"چهارم دبیرستان" , "description"=>"چهارم_دبیرستان"]);
+        $gradeCollection->push(["displayName"=>"المپیاد" , "description"=>"المپیاد_علمی"]);
         $totalTags = array_merge($totalTags , $gradeCollection->pluck("description")->toArray()) ;
         $grades = $gradeCollection->pluck('displayName' , 'description')->toArray() ;
 //            $grades = array_sort_recursive($grades);
@@ -631,6 +638,8 @@ class HomeController extends Controller
                     ["index"=>"ارشی" , "value"=>"ارشی"],
                     ["index"=>"رضا آقاجانی" , "value"=>"رضا_آقاجانی"],
                     ["index"=>"سید حسام الدین جلالی" , "value"=>"سید_حسام_الدین_جلالی"],
+                    ["index"=>"یاشار بهمند" , "value"=>"یاشار_بهمند"],
+                    ["index"=>"مصطفی جعفری نژاد" , "value"=>"مصطفی_جعفری_نژاد"],
                     ["index"=>"امید زاهدی" , "value"=>"امید_زاهدی"],
                 ],
                 "دیفرانسیل" => [
@@ -690,8 +699,7 @@ class HomeController extends Controller
                 "ریاضی_انسانی" => [
                     ["index"=>"همه دبیرها" , "value"=>""],
                     ["index"=>"خسرو محمد زاده" , "value"=>"خسرو_محمد_زاده"],
-                ]
-                ,
+                ],
                 "عربی" => [
                     ["index"=>"همه دبیرها" , "value"=>""],
                     ["index"=>"میلاد ناصح زاده" , "value"=>"میلاد_ناصح_زاده"],
@@ -733,8 +741,7 @@ class HomeController extends Controller
                     ["index"=>"همه دبیرها" , "value"=>""],
                     ["index"=>"مهدی تفتی" , "value"=>"مهدی_تفتی"],
                     ["index"=>"جعفر رنجبرزاده" , "value"=>"جعفر_رنجبرزاده"],
-                ]
-                ,
+                ],
                 "زبان_و_ادبیات_فارسی" => [
                     ["index"=>"همه دبیرها" , "value"=>""],
                     ["index"=>"هامون سبطی" , "value"=>"هامون_سبطی"],
@@ -768,6 +775,14 @@ class HomeController extends Controller
                     ["index"=>"همه دبیرها" , "value"=>""],
                     ["index"=>"رضا آقاجانی" , "value"=>"رضا_آقاجانی"],
                     ["index"=>"سید حسام الدین جلالی" , "value"=>"سید_حسام_الدین_جلالی"],
+                ],
+                "المپیاد_فیزیک" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"مصطفی جعفری نژاد" , "value"=>"مصطفی_جعفری_نژاد"],
+                ],
+                "المپیاد_نجوم" => [
+                    ["index"=>"همه دبیرها" , "value"=>""],
+                    ["index"=>"یاشار بهمند" , "value"=>"یاشار_بهمند"],
                 ],
                 "مشاوره" => [
                     ["index"=>"همه دبیرها" , "value"=>""],
@@ -1796,6 +1811,34 @@ class HomeController extends Controller
 
         $pageName = "admin";
         return view("admin.indexLottery", compact("userlotteries", "pageName"));
+    }
+
+    /**
+     * Admin panel for tele marketing
+     */
+    public function adminTeleMarketing(Request $request)
+    {
+        if($request->has("group-mobile"))
+        {
+            $mobiles = $request->get("group-mobile");
+            $mobileArray = [];
+            foreach ($mobiles as $mobile)
+            {
+                array_push($mobileArray , $mobile["mobile"]);
+            }
+            $baseDataTime = Carbon::createFromTimeString("2018-05-03 00:00:00");
+            $orders = Order::whereHas("user" , function ($q) use ($mobileArray , $baseDataTime){
+                $q->whereIn("mobile" , $mobileArray) ;
+            })->whereHas("orderproducts" , function ($q2){
+//                $q2->whereIn("product_id" , [210,211,212,213,214,215,216,217,218,219,220,221]);
+                $q2->whereIn("product_id" , [181]); //ToDo
+            })
+            ->where("orderstatus_id" , Config::get("constants.ORDER_STATUS_CLOSED"))
+            ->where("paymentstatus_id" ,  Config::get("constants.PAYMENT_STATUS_PAID"))
+            ->where("completed_at" , ">=" , $baseDataTime)
+            ->get();
+        }
+        return view("admin.indexTeleMarketing" , compact("orders"));
     }
 
     /**
