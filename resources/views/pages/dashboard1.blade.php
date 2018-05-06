@@ -9,6 +9,16 @@
     class="page-header-fixed page-sidebar-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-md"
 @endsection
 
+@section("gtagJs")
+        <!-- Event snippet for Make-A-Payment conversion page -->
+        <script>
+            gtag('event', 'conversion', {
+                'send_to': 'AW-927952751/0L57COfS9YEBEO_evboD',
+                'transaction_id': ''
+            });
+        </script>
+@endsection
+
 @section("css")
     <link rel="stylesheet" href="{{ mix('/css/all.css') }}">
     <link rel="stylesheet" type="text/css" href="/assets/extra/slick/slick/slick.css">
