@@ -49,6 +49,27 @@
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{Config('constants.google.analytics')}}"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        var dimensionValue = '{{ request()->ip() }}';
+
+        gtag('js', new Date());
+        gtag('config', "{{Config('constants.google.analytics')}}");
+        @if(Auth::check())
+        gtag('set', {'user_id': '{{ Auth::user() ->id }}'}); // Set the user ID using signed-in user_id.
+        @endif
+        gtag('config', "{{Config('constants.google.analytics')}}", {
+            'custom_map': {'dimension2': 'dimension2'}
+        });
+        // Sends the custom dimension to Google Analytics.
+        gtag('event', 'hit', {'dimension2': dimensionValue});
+    </script>
+    @section("gtagJs")
+
+    @show
     <style>
         .primary-menu>li>a{
             font-size: 2rem !important;
@@ -356,10 +377,10 @@
                 </div>
             </section>
 
-            <section class="sec-dwon-sample sec-res-down-sample">
+            <section class="sec-dwon-sample sec-res-down-sample" style="display: none">
                 <a href="javascript:void(0)" class="down-sample" title="دانلود نمونه جزوه">
                         <span>
-                            دانلود نمونه جزوه
+                            ارسال کد ۳۳۳ به ۵۰۰۰۱۰۴۰۹۲۳۲ برای دریافت نمونه جزوه
                         </span>
                 </a>
             </section>
@@ -407,6 +428,37 @@
                                                             <h1>
                                                                 <span>زیست</span>
                                                                 <em>چلاجور</em>
+                                                            </h1>
+                                                        </a>
+                                                    </header>
+                                                    <strong>
+                                                            <span class="span-gold">
+                                                                همایش طـــلایی
+                                                            </span>
+                                                        <bdi class="prsent">
+                                                            <i>80%</i>
+                                                            <em> کــــنـکور</em>
+                                                        </bdi>
+                                                    </strong>
+                                                </figcaption>
+                                            </figure>
+                                        </article>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <article class="item-content-field">
+                                            <bdi class="bdi-title math">
+                                                <em>تجربی</em>
+                                            </bdi>
+                                            <figure>
+                                                <a href="javascript:void(0)" data-role="221" class="checkout" title="">
+                                                    <img src="/assets/extra/landing3/images/professors/G11.png" alt="" title="">
+                                                </a>
+                                                <figcaption>
+                                                    <header>
+                                                        <a href="javascript:void(0)" data-role="221" class="checkout" title="">
+                                                            <h1>
+                                                                <span>ژنتیک</span>
+                                                                <em>آل علی</em>
                                                             </h1>
                                                         </a>
                                                     </header>
@@ -498,7 +550,7 @@
                                                     <header>
                                                         <a href="javascript:void(0)" data-role="220" class="checkout" title="">
                                                             <h1>
-                                                                <span>ریاضی تجربی</span>
+                                                                <span>ریاضی</span>
                                                                 <em>نباخته</em>
                                                             </h1>
                                                         </a>
@@ -532,8 +584,9 @@
                     </a>
                 </header>
                 <p>
-                    5 ساعت جمع بندی و نکته و تست داریم و 1 ساعت تست های پلاس مخصوص پزشکا و مهندسا 5 ساعت جمع بندی و نکته و تست 1 ساعت تست های
-                    5 ساعت جمع بندی و نکته و تست داریم و 1 ساعت تست های پلاس مخصوص پزشکا و مهندساپلاس مخصوص پزشکا و مهندسا
+                    چند ماه مانده به کنکور؛ دوران گیجی دانش‌آموزان است: آن‌هایی که زیاد خوانده‌اند دیوانه‌وار بیشتر و بیشتر می‌خوانند و آن‌هایی که کمتر خوانده‌اند پناهشان می‌شود جزوات متعدد دم کنکور! اما چاره این سرگیجه چیست؟
+
+                    با بررسی دلیل موفقیت برترین‌های کنکور در سال‌های متوالی یک نکته مهم در برطرف‌شدن این استرس نهفته است: مرور در ماه‌های آخر!
                 </p>
             </section>
 
@@ -611,32 +664,32 @@
             <li>
                 <a href="javascript:void(0)" title="">
                     <i class="icon-brain-and-head"></i>
-                    <span>تیتر</span>
+                    <span>مفهومی</span>
                 </a>
             </li>
             <li>
                 <a href="javascript:void(0)" title="">
                     <i class="icon-transport"></i>
-                    <span>تیتر</span>
+                    <span>سبقت</span>
                 </a>
             </li>
             <li>
                 <a href="javascript:void(0)" title="">
                     <i class="icon-document"></i>
-                    <span>تیتر</span>
+                    <span>جزوه</span>
                 </a>
             </li>
             <li>
                 <a href="javascript:void(0)" title="">
                     <i class="icon-light-bulb"></i>
-                    <span>تیتر</span>
+                    <span>تحلیل</span>
                 </a>
             </li>
         </ul>
-        <section class="sec-dwon-sample res-down">
+        <section class="sec-dwon-sample res-down" style="display: none">
             <a href="javascript:void(0)" class="down-sample" title="دانلود نمونه جزوه">
                     <span>
-                        دانلود نمونه جزوه
+                            ارسال کد ۳۳۳ به ۵۰۰۰۱۰۴۰۹۲۳۲ برای دریافت نمونه جزوه
                     </span>
             </a>
         </section>
