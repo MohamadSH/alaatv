@@ -14,15 +14,15 @@
 
 
 @section("gtagJs")
-    @if(strcmp(array_get($result,"Status"),'success')==0)
-        <!-- Event snippet for Make-A-Payment conversion page -->
-        <script>
-            gtag('event', 'conversion', {
-                'send_to': 'AW-927952751/0L57COfS9YEBEO_evboD',
-                'transaction_id': ''
-            });
-        </script>
-    @endif
+    {{--@if(strcmp(array_get($result,"Status"),'success')==0)--}}
+        {{--<!-- Event snippet for Make-A-Payment conversion page -->--}}
+        {{--<script>--}}
+            {{--gtag('event', 'conversion', {--}}
+                {{--'send_to': 'AW-927952751/0L57COfS9YEBEO_evboD',--}}
+                {{--'transaction_id': ''--}}
+            {{--});--}}
+        {{--</script>--}}
+    {{--@endif--}}
 @endsection
 @section("content")
     <div class="row">
