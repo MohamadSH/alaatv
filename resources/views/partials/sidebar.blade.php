@@ -75,6 +75,13 @@
                     <ul class="sub-menu">
                         @role((Config::get("constants.ROLE_ADMIN")))
                         <li class="nav-item  ">
+                            <a href="{{action("HomeController@adminTeleMarketing")}}" class="nav-link ">
+                                <span class="title">تله مارکتینگ</span>
+                            </a>
+                        </li>
+                        @endrole
+                        @role((Config::get("constants.ROLE_ADMIN")))
+                        <li class="nav-item  ">
                             <a href="{{action("HomeController@adminLottery")}}" class="nav-link ">
                                 <span class="title">مدیریت قرعه کشی</span>
                             </a>

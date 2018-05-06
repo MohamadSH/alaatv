@@ -231,6 +231,27 @@
                                     <strong>
                                         <header>
                                             <h1>
+                                                <a href="javascript:void(0)" data-role="221" class="link" title="خرید بسته آموزشی">
+                                                    آل علی
+                                                </a>
+                                            </h1>
+                                            <span>جمع بندی ژنتیک زیست کنکور در 6 الی 8 ساعت</span>
+                                        </header>
+                                        <p></p>
+                                        <p></p>
+                                    </strong>
+                                    <figure>
+                                        <a href="javascript:void(0)" title="">
+                                            <img src="/assets/extra/landing4/images/slider/S11.png" alt="" title="">
+                                        </a>
+                                    </figure>
+                                </article>
+                            </div>
+                            <div class="swiper-slide">
+                                <article class="slider-content-main">
+                                    <strong>
+                                        <header>
+                                            <h1>
                                                 <a href="javascript:void(0)" data-role="213" class="link" title="خرید بسته آموزشی">
                                                      دکتر محمد چلاجور
                                                 </a>
@@ -1094,6 +1115,34 @@
                             <span>و با بهترین راندمان</span>
                             <span>دست پیدا کنید</span>
                             <a href="javascript:void(0)"  class="link" data-role="213" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                        </div>
+                    </article>
+                    <article class="art-professors">
+                        <figure>
+                            <a href="javascript2:void(0)" title="">
+                                <img src="/assets/extra/landing4/images/professors/S11.png" alt="1" title="1">
+                            </a>
+                            <figcaption>
+                                <header>
+                                    <a href="javascript:void(0)" title="">
+                                        <h1>آل علی</h1>
+                                    </a>
+                                    <span>همایش طلایی زیست شناسی ژنتیک کنکور</span>
+                                </header>
+                            </figcaption>
+                        </figure>
+                        <p style="text-align: justify">
+                            جمع بندی مبحث ژنتیک زیست شناسی
+                        </p>
+                        <div class="info-professors">
+                            <header>
+                                <h4>جمع بندی مبحث ژنتیک زیست کنکور در 6 الی 8 ساعت</h4>
+                            </header>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <a href="javascript:void(0)"  class="link" data-role="221" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
                     <article class="art-professors">
