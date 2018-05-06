@@ -775,7 +775,7 @@
                             <span>جانوران، بدن انسانی، گیاهی و... </span>
                             <span>کل زیست به جز ژنتیکش رو قراره جمع بندی کنیم.</span>
                             <span>همچنین قراره تست های خاص گیاهی دکتر چلاجور رو تو این همایش داشته باشیم.</span>
-                            <a href="javascript:void(0)" class="link" data-role="221" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                            <a href="javascript:void(0)" class="link" data-role="212" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
                     <article class="art-professors">
@@ -1086,7 +1086,7 @@
                             <span>جانوران، بدن انسانی، گیاهی و... </span>
                             <span>کل زیست به جز ژنتیکش رو قراره جمع بندی کنیم.</span>
                             <span>همچنین قراره تست های خاص گیاهی دکتر چلاجور رو تو این همایش داشته باشیم.</span>
-                            <a href="javascript:void(0)" class="link" data-role="221" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                            <a href="javascript:void(0)" class="link" data-role="212" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
                     <article class="art-professors">
