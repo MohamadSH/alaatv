@@ -377,7 +377,7 @@
                 </div>
             </section>
 
-            <section class="sec-dwon-sample sec-res-down-sample">
+            <section class="sec-dwon-sample sec-res-down-sample" style="display: none">
                 <a href="javascript:void(0)" class="down-sample" title="دانلود نمونه جزوه">
                         <span>
                             ارسال کد ۳۳۳ به ۵۰۰۰۱۰۴۰۹۲۳۲ برای دریافت نمونه جزوه
@@ -686,7 +686,7 @@
                 </a>
             </li>
         </ul>
-        <section class="sec-dwon-sample res-down">
+        <section class="sec-dwon-sample res-down" style="display: none">
             <a href="javascript:void(0)" class="down-sample" title="دانلود نمونه جزوه">
                     <span>
                             ارسال کد ۳۳۳ به ۵۰۰۰۱۰۴۰۹۲۳۲ برای دریافت نمونه جزوه
