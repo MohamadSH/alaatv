@@ -1125,7 +1125,7 @@ class ProductController extends Controller
     */
     public function landing2()
     {
-        return redirect("/landing/3",302);
+        return redirect("/landing/4",302);
         $gheireHozoori = Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_ALLTOGHETHER") ;
         if(Input::has("utm_term"))
         {
