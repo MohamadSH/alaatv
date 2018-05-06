@@ -96,6 +96,7 @@ Route::group(['middleware' => 'auth'], function()
     Route::get('report', 'HomeController@adminReport');
     Route::get('majorAdminPanel', 'HomeController@adminMajor');
     Route::get('lotteryAdminPanel', 'HomeController@adminLottery');
+    Route::get('teleMarketingAdminPanel', 'HomeController@adminTeleMarketing');
     Route::post('adminSendSMS' , 'HomeController@sendSMS');
     Route::get('asset', 'UserController@userProductFiles');
     Route::get('profile', 'UserController@showProfile');
