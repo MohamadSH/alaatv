@@ -45,6 +45,7 @@
             });
             // Sends the custom dimension to Google Analytics.
             gtag('event', 'hit', {'dimension2': dimensionValue});
+            gtag('config', 'AW-927952751');
         </script>
         @section("gtagJs")
 
