@@ -100,16 +100,16 @@
                         <a href="{{action("HomeController@index")}}" title="صفحه اصلی">صفحه اصلی</a>
                     </li>
                     <li>
-                        <a href="{{action("ProductController@show" , 210)}}" title="جزوه و آزمون">همایش ادبیات دکتر سبطی </a>
+                        <a href="javascript:void(0)" data-role="210" class="checkout" title="جزوه و آزمون">همایش ادبیات دکتر سبطی </a>
                     </li>
                     <li>
-                        <a href="{{action("ProductController@show" , 211)}}" title="صفحه اصلی">همایش دینی دکتر کاغذی</a>
+                        <a href="javascript:void(0)" data-role="211" class="checkout" title="صفحه اصلی">همایش دینی دکتر کاغذی</a>
                     </li>
                     <li>
-                        <a href="{{action("ProductController@show" , 212)}}" title="درباره ما">همایش زیست شناسی دکتر چلاجور</a>
+                        <a href="javascript:void(0)" data-role="212" class="checkout" title="درباره ما">همایش زیست شناسی دکتر چلاجور</a>
                     </li>
                     <li>
-                        <a href="{{action("ProductController@show" , 213)}}" title="قوانین و مقررات">همایش زمین شناسی دکتر چلاجور</a>
+                        <a href="javascript:void(0)" data-role="213" class="checkout" title="قوانین و مقررات">همایش زمین شناسی دکتر چلاجور</a>
                     </li>
                     <li>
                         <a href="{{action("HomeController@contactUs")}}" title="تماس با ما">تماس با ما</a>
