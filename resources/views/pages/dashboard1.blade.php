@@ -10,13 +10,13 @@
 @endsection
 
 @section("gtagJs")
-        <!-- Event snippet for Make-A-Payment conversion page -->
-        <script>
-            gtag('event', 'conversion', {
-                'send_to': 'AW-927952751/0L57COfS9YEBEO_evboD',
-                'transaction_id': ''
-            });
-        </script>
+        {{--<!-- Event snippet for Make-A-Payment conversion page -->--}}
+        {{--<script>--}}
+            {{--gtag('event', 'conversion', {--}}
+                {{--'send_to': 'AW-927952751/0L57COfS9YEBEO_evboD',--}}
+                {{--'transaction_id': ''--}}
+            {{--});--}}
+        {{--</script>--}}
 @endsection
 
 @section("css")
