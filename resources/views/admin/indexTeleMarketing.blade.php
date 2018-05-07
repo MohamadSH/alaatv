@@ -132,6 +132,7 @@
                                                     {{$extraAttributevalue->attribute->displayName}} :<span style="font-weight: normal">{{$extraAttributevalue->name}} (+ {{number_format($extraAttributevalue->pivot->extraCost)}} تومان)</span><br>
                                                 @endforeach
                                             @endif
+                                            <br>
                                         @endforeach
                                     @else
                                         <span class="label label-danger">ندارد</span>
