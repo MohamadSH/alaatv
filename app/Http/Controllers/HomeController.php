@@ -17,6 +17,7 @@ use App\Contenttype;
 use App\Coupon;
 use App\Coupontype;
 use App\Educationalcontent;
+use App\Event;
 use App\Gender;
 use App\Grade;
 use App\Http\Requests\ContactUsFormRequest;
@@ -125,7 +126,7 @@ class HomeController extends Controller
 //        {
 //            $authException = ['index' , 'getImage' , 'error404' , 'error403' , 'error500' , 'errorPage' , 'siteMapXML', 'download' ];
 //        }else{
-        $authException = ['index', 'getImage', 'error404', 'error403', 'error500', 'errorPage', 'aboutUs', 'contactUs', 'sendMail', 'rules', 'siteMapXML', 'uploadFile' , 'search'];
+        $authException = ['index', 'getImage', 'error404', 'error403', 'error500', 'errorPage', 'aboutUs', 'contactUs', 'sendMail', 'rules', 'siteMapXML', 'uploadFile' , 'search' , 'schoolRegisterLanding'];
 //        }
         $this->middleware('auth', ['except' => $authException]);
         $this->middleware('ability:' . Config::get("constants.ROLE_ADMIN") . ',' . Config::get("constants.USER_ADMIN_PANEL_ACCESS"), ['only' => 'admin']);
@@ -548,8 +549,6 @@ class HomeController extends Controller
                         ["value"=>"ریاضی_و_آمار", "index"=>"ریاضی و آمار"] ,
                         ["value"=>"منطق", "index"=>"منطق"] ,
                         ["value"=>"اخلاق", "index"=>"اخلاق"] ,
-                        ["value"=>"فیزیک", "index"=>"فیزیک"] ,
-                        ["value"=>"شیمی", "index"=>"شیمی" ],
                         ["value"=>"عربی", "index"=>"عربی" ],
                         ["value"=>"زبان_و_ادبیات_فارسی", "index"=>"زبان و ادبیات فارسی" ],
                         ["value"=>"دین_و_زندگی", "index"=>"دین و زندگی" ],
@@ -568,7 +567,7 @@ class HomeController extends Controller
         $totalTags = array_merge($totalTags , $majorCollection->pluck("description")->toArray()) ;
         $majors = $majorCollection->pluck(  "name" , "description")->toArray();
 
-        $gradeCollection = Grade::where("name" ,'<>' , 'graduated' )->get();
+        $gradeCollection = Grade::whereNotIN("name" , ['graduated' ,"haftom" ,"hashtom" , "nohom" , "davazdahom" ])->get();
         $gradeCollection->push(["displayName"=>"اول دبیرستان" , "description"=>"اول_دبیرستان"]);
         $gradeCollection->push(["displayName"=>"دوم دبیرستان" , "description"=>"دوم_دبیرستان"]);
         $gradeCollection->push(["displayName"=>"سوم دبیرستان" , "description"=>"سوم_دبیرستان"]);
@@ -3609,6 +3608,73 @@ class HomeController extends Controller
         }
     }
 
+    /**
+     * Showing create form for user's kunkoor result
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function submitKonkurResult()
+    {
 
+        $majors = Major::where("majortype_id" ,1)->get()->pluck("name" , "id")->toArray();
+        $majors = array_add($majors , 0 , "انتخاب رشته");
+        $majors = array_sort_recursive($majors);
+        $event = Event::all()->first();
+        $sideBarMode = "closed";
+
+        $userEventReport = Eventresult::where("user_id" ,Auth::user()->id)->where("event_id" , $event->id)->get()->first();
+
+        $pageName = "submitKonkurResult";
+        $user = Auth::user();
+        $userCompletion = (int)$user->completion();
+        return view("user.submitEventResultReport" , compact("majors" , "event" , "sideBarMode" , "userEventReport" , "pageName"  , "user" , "userCompletion"));
+    }
+
+    public function schoolRegisterLanding(Request $request)
+    {
+        $eventRegistered = false;
+        if(Auth::check())
+        {
+            $user = Auth::user();
+            $event = Event::where("name" , "sabtename_sharif_97")->get();
+            if($event->isEmpty())
+            {
+                dd("ثبت نام آغاز نشده است");
+            }
+            else
+            {
+                $event = $event->first() ;
+                $events = $user->eventresults->where("user_id" , $user->id)->where("event_id" , $event->id) ;
+                $eventRegistered = $events->isNotEmpty();
+                if($eventRegistered)
+                {
+                    $score = $events->first()->participationCodeHash;
+                }
+                if(isset($user->firstName) && strlen(preg_replace('/\s+/', '', $user->firstName )) > 0 )
+                    $firstName = $user->firstName;
+                if(isset($user->lastName) && strlen(preg_replace('/\s+/', '', $user->lastName )) > 0 )
+                    $lastName = $user->lastName;
+                if(isset($user->mobile) && strlen(preg_replace('/\s+/', '', $user->mobile )) > 0 )
+                    $mobile = $user->mobile;
+                if(isset($user->nationalCode) && strlen(preg_replace('/\s+/', '', $user->nationalCode )) > 0 )
+                    $nationalCode = $user->nationalCode;
+                $major = $user->major_id;
+                $grade = $user->grade_id;
+
+            }
+
+        }
+        $url = $request->url();
+        $title = $this->setting->site->seo->homepage->metaTitle;
+        SEO::setTitle($title);
+        SEO::opengraph()->setUrl($url);
+        SEO::setCanonical($url);
+        SEO::twitter()->setSite("آلاء");
+        SEO::setDescription($this->setting->site->seo->homepage->metaDescription);
+        SEO::opengraph()->addImage(route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]), ['height' => 100, 'width' => 100]);
+
+        return view("pages.schoolRegister" , compact("user" , "major" , "grade" , "firstName" , "lastName" ,
+            "mobile" , "nationalCode" , "score" , "eventRegistered"));
+    }
 
 }

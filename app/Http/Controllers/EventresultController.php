@@ -6,6 +6,7 @@ use App\Eventresult;
 use App\Http\Requests\InsertEventResultRequest;
 use Illuminate\Http\Request;
 use Auth ;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
@@ -14,12 +15,15 @@ use Illuminate\Support\Facades\Storage;
 class EventresultController extends Controller
 {
 
+    protected $response;
     function __construct()
     {
         /** setting permissions
          *
          */
         $this->middleware('permission:'.Config::get('constants.LIST_EVENTRESULT_ACCESS'),['only'=>'index']);
+
+        $this->response = new Response();
 
     }
 
@@ -59,14 +63,24 @@ class EventresultController extends Controller
      */
     public function store(InsertEventResultRequest $request)
     {
-        $user = Auth::user();
 
         $eventResult  = new Eventresult();
         $eventResult->fill($request->all());
 
-        $eventResult->participationCode = encrypt($request->get("participationCode")) ;
+        if($request->has("participationCode"))
+        {
+            $eventResult->participationCode = encrypt($request->get("participationCode")) ;
+        }
 
-        $eventResult->user_id = $user->id ;
+        if($request->has("user_id"))
+        {
+            $eventResult->user_id = $request->get("user_id");
+        }
+        elseif(Auth::check())
+        {
+            $user = Auth::user();
+            $eventResult->user_id = $user->id ;
+        }
 
         if($request->has("enableReportPublish")) $eventResult->enableReportPublish = 1 ;
         else $eventResult->enableReportPublish = 0;
@@ -115,11 +129,31 @@ class EventresultController extends Controller
 
         if ($eventResult->save()) {
             if($userUpdate ) $user->update();
-            session()->put("success", "کارنامه با موفقیت درج شد");
+            if($request->has("fromAPI"))
+            {
+                $participationCode = $eventResult->participationCode;
+                $message = "نتیجه با موفقیت درج شد";
+                $status = 200;
+            }
+            else
+            {
+                session()->put("success", "کارنامه با موفقیت درج شد");
+            }
         } else {
-            session()->put("error", "خطای پایگاه داده");
+            if($request->has("fromAPI"))
+            {
+                $message = "خطا در درج نتیجه";
+                $status = 503;
+            }
+            else
+            {
+                session()->put("error", "خطای پایگاه داده");
+            }
         }
-        return redirect()->back();
+        if($request->has("fromAPI"))
+            return $this->response->setStatusCode($status)->setContent(["message"=>$message , "participationCode"=>(isset($participationCode)?$participationCode:null)]);
+        else
+            return redirect()->back();
     }
 
     /**

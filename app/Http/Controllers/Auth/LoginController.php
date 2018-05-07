@@ -104,10 +104,6 @@ class LoginController extends Controller
                 $registerRequest->offsetSet("lastName" , null);
                 $registerController = new RegisterController();
                 $registerController->register($registerRequest);
-                //            $client = new Client(['base_uri' =>  url("/")]);
-        //            $response = $client->request('POST', '/register', [
-        //                'form_params' => $registerRequest->all()
-        //            ]);
             }else
             {
                 return redirect()->back()

@@ -48,8 +48,8 @@
                         <i class="fa fa-pencil"></i> تکمیل اطلاعات (مخصوص اردویی ها) </a>
             </li>
             @endif
-            <li @if(strcmp(url()->current() , action("UserController@submitKonkurResult")) == 0) class="active" @endif >
-                <a href="{{action("UserController@submitKonkurResult")}}">
+            <li @if(strcmp(url()->current() , action("HomeController@submitKonkurResult")) == 0) class="active" @endif >
+                <a href="{{action("HomeController@submitKonkurResult")}}">
                     <i class="fa fa-graduation-cap"></i> ثبت رتبه 96 </a>
             </li>
         </ul>

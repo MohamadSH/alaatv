@@ -110,10 +110,10 @@ class RegisterController extends Controller
           $data["userstatus_id"] = Userstatus::all()->where("name" , "active")->first()->id ;
           
 //          $password = $this->generateRandomPassword(4);
-
         if(!isset($data['firstName']) || strlen(preg_replace('/\s+/', '', $data['firstName'])) == 0)  $data['firstName'] = NULL;
         if(!isset($data['lastName']) || strlen(preg_replace('/\s+/', '', $data['lastName'])) == 0)  $data['lastName'] = NULL;
         if(!isset($data['major_id']) || strlen(preg_replace('/\s+/', '', $data['major_id'])) == 0)  $data['major_id'] = NULL;
+        if(!isset($data['grade_id']) || strlen(preg_replace('/\s+/', '', $data['grade_id'])) == 0)  $data['grade_id'] = NULL;
         if(!isset($data['gender_id']) || strlen(preg_replace('/\s+/', '', $data['gender_id'])) == 0)  $data['gender_id'] = NULL;
         if(!isset($data['province']) || strlen(preg_replace('/\s+/', '', $data['province'])) == 0)  $data['province'] = NULL;
         if(!isset($data['city']) || strlen(preg_replace('/\s+/', '', $data['city'])) == 0)  $data['city'] = NULL;
@@ -131,6 +131,7 @@ class RegisterController extends Controller
             'nationalCode' => $data['nationalCode'],
             'mobile' => $data['mobile'],
             'major_id' => $data['major_id'],
+            'grade_id' => $data['grade_id'],
             'gender_id'=>$data['gender_id'],
             'photo' => $data['photo'],
 //            'password' => $password['hashPassword'],

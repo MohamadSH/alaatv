@@ -15,8 +15,10 @@ use App\Event;
 use App\Eventresult;
 use App\Gender;
 use App\Grade;
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Requests\InsertCouponRequest;
 use App\Http\Requests\PasswordRecoveryRequest;
+use App\Http\Requests\RegisterForSanatiSharifHighSchoolRequest;
 use App\Http\Requests\SubmitVerificationCode;
 use App\Lottery;
 use App\Major;
@@ -705,10 +707,12 @@ class UserController extends Controller
         if(strlen(preg_replace('/\s+/', '', $user->medicalCondition )) == 0) $user->medicalCondition = null;
         if(strlen(preg_replace('/\s+/', '', $user->diet )) == 0) $user->diet = null;
 
-        if(strlen($request->get('password')) == 0) {
+        if(!$request->has("password") || strlen($request->get('password')) == 0)
+        {
             $user->password = $password; //Pasword should not be updated
         }
-        else{
+        else
+        {
             $user->password = bcrypt($request->get("password"));
         }
 
@@ -723,14 +727,19 @@ class UserController extends Controller
 
         }
 
-        if ( $request->has("mobileNumberVerification")) $user->mobileNumberVerification = 1;
-        else $user->mobileNumberVerification = 0 ;
+        if ( $request->has("mobileNumberVerification"))
+            $user->mobileNumberVerification = 1;
+        else
+            $user->mobileNumberVerification = 0 ;
 
-        if ( $request->has("lockProfile")) $user->lockProfile = 1;
-        else $user->lockProfile = 0 ;
+        if ( $request->has("lockProfile"))
+            $user->lockProfile = 1;
+        else
+            $user->lockProfile = 0 ;
 
-        if ($user->update()) {
-            if(Auth::User()->can(Config::get('constants.INSET_USER_ROLE')))
+        if ($user->update())
+        {
+            if(Auth::check() && Auth::User()->can(Config::get('constants.INSET_USER_ROLE')))
             {
                 $newRoleIds = array() ;
                 $oldRoles = $user->roles ;
@@ -757,11 +766,32 @@ class UserController extends Controller
                 }
 
             }
-            session()->put("success", "اطلاعات کاربر با موفقیت اصلاح شد");
-        } else {
-            session()->put("error", "خطای پایگاه داده.");
+            if($request->has("fromAPI"))
+            {
+                $message = "اطلاعات با موفقیت اصلاح شد";
+                $status = 200;
+            }
+             else
+             {
+                 session()->put("success", "اطلاعات کاربر با موفقیت اصلاح شد");
+             }
+        } else
+        {
+            if($request->has("fromAPI"))
+            {
+                $message = "خطای پایگاه داده";
+                $status = 503;
+            }
+            else
+            {
+                session()->put("error", "خطای پایگاه داده.");
+            }
         }
-        return redirect()->back();
+
+        if($request->has("fromAPI"))
+            return $this->response->setStatusCode($status)->setContent(["message"=>$message]);
+        else
+            return redirect()->back();
     }
 
     /**
@@ -1498,28 +1528,6 @@ class UserController extends Controller
     }
 
     /**
-     * Storing user's kunkoor result
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function submitKonkurResult()
-    {
-
-        $majors = Major::where("majortype_id" ,1)->get()->pluck("name" , "id")->toArray();
-        $majors = array_add($majors , 0 , "انتخاب رشته");
-        $majors = array_sort_recursive($majors);
-        $event = Event::all()->first();
-        $sideBarMode = "closed";
-
-        $userEventReport = Eventresult::where("user_id" ,Auth::user()->id)->where("event_id" , $event->id)->get()->first();
-
-        $pageName = "submitKonkurResult";
-        $user = Auth::user();
-        $userCompletion = (int)$user->completion();
-        return view("user.submitEventResultReport" , compact("majors" , "event" , "sideBarMode" , "userEventReport" , "pageName"  , "user" , "userCompletion"));
-    }
-
-    /**
      * Storing user's work time (for employees)
      *
      * @param \App\Http\Controllers\EmployeetimesheetController $employeetimesheetController
@@ -1971,5 +1979,110 @@ class UserController extends Controller
         session()->put("success" , "اطلاعات با موفقیت ذخیره شد");
         return redirect()->back();
 
+    }
+
+
+    /**
+     * Register student for sanati sharif highschool
+     *
+     * @param  \App\Http\Requests\RegisterForSanatiSharifHighSchoolRequest $request
+     * @return \Illuminate\Http\Response
+     */
+    public function registerForSanatiSharifHighSchool(RegisterForSanatiSharifHighSchoolRequest $request ,
+                                                      RegisterController $registerController ,
+                                                    EventresultController $eventResultController ,
+                                                    HomeController $homeController)
+    {
+        $event = Event::where("name" , "sabtename_sharif_97")->get();
+        if($event->isEmpty())
+        {
+            session()->put("error", "رخداد یافت نشد");
+            return redirect()->back();
+        }
+        else
+        {
+            $event = $event->first() ;
+        }
+
+        if(Auth::check())
+            $user = Auth::user();
+        else
+            $registeredUser = User::where("mobile" , $request->get("mobile"))->where("nationalCode" , $request->get("nationalCode"))->get();
+
+        if(!isset($user) && $registeredUser->isEmpty()) {
+            $registerRequest = new Request();
+            $registerRequest->offsetSet("firstName", $request->get("firstName"));
+            $registerRequest->offsetSet("lastName", $request->get("lastName"));
+            $registerRequest->offsetSet("mobile", $request->get("mobile"));
+            $registerRequest->offsetSet("nationalCode", $request->get("nationalCode"));
+            $registerRequest->offsetSet("major_id", $request->get("major_id"));
+            $registerRequest->offsetSet("grade_id", $request->get("grade_id"));
+            $registerRequest->offsetSet("gender_id", 1);
+            $registerController = new RegisterController();
+            $response = $registerController->register($registerRequest);
+            if ($response->getStatusCode() != 302)
+            {
+                session()->put("error", "خطایی در ثبت اطلاعات شما اتفاق افتاد . لطفا دوباره اقدام نمایید.");
+                return redirect()->back();
+            }
+            $user = Auth::user();
+        }
+        else
+        {
+            if(!isset($user))
+                $user = $registeredUser->first();
+            $updateRequest = new EditUserRequest();
+            if($request->has("firstName") && (!isset($user->firstName) || strlen(preg_replace('/\s+/', '', $user->firstName )) == 0) )
+                $updateRequest->offsetSet("firstName", $request->get("firstName"));
+            if($request->has("lastName") && ( !isset($user->lastName) || strlen(preg_replace('/\s+/', '', $user->lastName )) == 0) )
+                $updateRequest->offsetSet("lastName", $request->get("lastName"));
+            $updateRequest->offsetSet("major_id" , $request->get("major_id"));
+            $updateRequest->offsetSet("grade_id" , $request->get("grade_id"));
+            $updateRequest->offsetSet("fromAPI" , 1);
+            $response =  $this->update($updateRequest , $user);
+            if($response->getStatusCode() == 503)
+            {
+                session()->put("error", "خطایی در ثبت اطلاعات شما رخ داد. لطفا مجددا اقدام نمایید");
+                return redirect()->back();
+            }
+        }
+
+        $eventRegistered = $user->eventresults->where("user_id" , $user->id)->where("event_id" , $event->id) ;
+        if($eventRegistered->isNotEmpty())
+        {
+            session()->put("error", "شما قبلا ثبت نام کرده اید");
+            return redirect()->back();
+        }
+        else
+        {
+            $evenResultRequest = new \App\Http\Requests\InsertEventResultRequest();
+            $evenResultRequest->offsetSet("user_id" , $user->id);
+            $evenResultRequest->offsetSet("event_id" , $event->id);
+            $evenResultRequest->offsetSet("participationCodeHash" ,$request->get("score") );
+            $evenResultRequest->offsetSet("fromAPI" , 1);
+            $response = $eventResultController->store($evenResultRequest) ;
+            if($response->getStatusCode() == 503)
+            {
+                session()->put("error", "خطایی در ثبت نام شما رخ داد. لطفا مجددا اقدام نمایید");
+                return redirect()->back();
+            }
+            else
+            {
+//                $result = json_decode($response->getContent());
+//                if(isset($result->participationCode))
+//                    $participationCode = $result->participationCode;
+            }
+        }
+
+        $message = "پیش ثبت نام شما در دبیرستان دانشگاه صنعتی شریف با موفقیت انجام شد ." ;
+        if(isset($participationCode))
+            $message .= "کد داوطلبی شما: ".$participationCode;
+//        $sendSMSRequest = new \App\Http\Requests\SendSMSRequest();
+//        $sendSMSRequest->offsetSet("message" , $message);
+//        $sendSMSRequest->offsetSet("users" , [$user->id]);
+//        $sendSMSRequest->offsetSet("relatives" , [0]);
+//        $response = $homeController->sendSMS($sendSMSRequest);
+        session()->put("success", $message);
+        return redirect()->back();
     }
 }
