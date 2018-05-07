@@ -707,7 +707,7 @@ class ProductController extends Controller
         else
             $adminOrder = false;
 
-        $itemsPerPage = 16;
+        $itemsPerPage = 24;
         if ($adminOrder) {
             $products =  Product::getProducts()->orderBy("order")->paginate($itemsPerPage);;
         } else {
@@ -715,7 +715,10 @@ class ProductController extends Controller
                 $excludedProducts = Config::get("constants.PRODUCT_SEARCH_EXCLUDED_PRODUCTS");
             else
                 $excludedProducts = [];
-            $products =  Product::getProducts(0, 1)->whereNotIn("id", $excludedProducts)->orderBy("order")->paginate($itemsPerPage);;
+            $products =  Product::getProducts(0, 1)
+                ->whereNotIn("id", $excludedProducts)
+                ->orderBy("order")
+                ->paginate($itemsPerPage);;
         }
 
         $costCollection = $this->makeCostCollection($products);
