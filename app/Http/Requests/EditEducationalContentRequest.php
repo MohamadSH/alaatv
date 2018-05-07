@@ -35,9 +35,9 @@ class EditEducationalContentRequest extends FormRequest
         return [
 //            'order' => 'required|numeric',
             'name'=>'required',
-            'grades'=>'required|exists:grades,id',
-            'majors'=>'required|exists:majors,id',
-            'contenttypes'=>'required|exists:contenttypes,id',
+//            'grades'=>'required|exists:grades,id',
+//            'majors'=>'required|exists:majors,id',
+//            'contenttypes'=>'required|exists:contenttypes,id',
             'file1'=> $file1ExtraRule,
             'file2'=> $file2ExtraRule
         ];
