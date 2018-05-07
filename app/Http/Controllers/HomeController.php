@@ -2100,9 +2100,16 @@ class HomeController extends Controller
             default :
                 $file = \App\File::where("uuid", $fileName)->get();
                 if ($file->isNotEmpty() && $file->count() == 1) {
-                    $diskName = $file->first()->disks->first()->name;
-                    $file = $file->first();
-                    $fileName = $file->name;
+                    if($file->first()->disks->isNotEmpty())
+                    {
+                        $diskName = $file->first()->disks->first()->name;
+                        $file = $file->first();
+                        $fileName = $file->name;
+                    }
+                    else
+                    {
+                        $externalLink = $file->name ;
+                    }
                 } else {
                     abort("404");
                 }
@@ -2162,7 +2169,7 @@ class HomeController extends Controller
         }
         else
         {
-            if (Storage::disk($diskName)->exists($fileName)) {
+            if ( isset($diskName) && Storage::disk($diskName)->exists($fileName)) {
 //            Other download method :  problem => it changes the file name to download
 //            $file = Storage::disk($diskName)->get($fileName);
 //            return (new Response($file, 200))
@@ -2335,8 +2342,8 @@ class HomeController extends Controller
         SEO::opengraph()->addImage(route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]), ['height' => 100, 'width' => 100]);
 
         $products = Product::getProducts(0, 1)->orderBy("order")->get();
-        $articlecategories = Articlecategory::where('enable', 1)->orderBy('order')->get();
-        $articlesWithoutCategory = Article::where('articlecategory_id', null)->get();
+//        $articlecategories = Articlecategory::where('enable', 1)->orderBy('order')->get();
+//        $articlesWithoutCategory = Article::where('articlecategory_id', null)->get();
         return view("pages.siteMap", compact('products', 'articlecategories', 'articlesWithoutCategory'));
     }
 

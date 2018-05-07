@@ -69,7 +69,7 @@ class EducationalContentController extends Controller
     {
         if(Input::has("controlPanel")){
             if(Auth::check()&& Auth::user()->can(Config::get('constants.LIST_EDUCATIONAL_CONTENT_ACCESS')))
-                $educationalContents = Educationalcontent::orderby("created_at" , "DESC");
+                $educationalContents = Educationalcontent::orderBy("created_at" , "DESC");
             else abort(403) ;
         }
         else
