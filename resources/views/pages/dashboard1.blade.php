@@ -71,8 +71,61 @@
 @endsection
 
 @section("content")
-    <h1 class="hidden">همایش اردو فیلم جزوه آلاء سؤال مشاوره ریاضی فیزیک دیفرانسیل شیمی</h1>
-    <h2 class="hidden">همایش اردو فیلم جزوه آلاء سؤال مشاوره ریاضی فیزیک دیفرانسیل شیمی</h2>
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-xs-12">
+            <div class="portlet light portlet-fit ">
+                <div class="portlet-body "  >
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="mt-element-ribbon bg-grey-steel" style="margin-bottom: 0;">
+                                <div class="ribbon ribbon-vertical-left ribbon-color-warning uppercase">
+                                    <div class="ribbon-sub ribbon-bookmark"></div>
+                                    <i class="fa fa-star"></i>
+                                </div>
+                                <p class="ribbon-content">
+                                     آلاء - همایش طلایی کنکور(80%)
+                                </p>
+                            </div>
+
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mt-element-ribbon bg-grey-steel" style="margin-bottom: 0;">
+                                <div class="ribbon ribbon-vertical-left ribbon-color-danger uppercase">
+                                    <div class="ribbon-sub ribbon-bookmark"></div>
+                                    <i class="fa fa-star"></i>
+                                </div>
+                                <p class="ribbon-content">
+                                    آلاء - تدریس کنکور، رایگان و کامل
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mt-element-ribbon bg-grey-steel" style="margin-bottom: 0;">
+                                <div class="ribbon ribbon-right ribbon-vertical-right ribbon-shadow ribbon-border-dash-vert ribbon-color-primary uppercase">
+                                    <div class="ribbon-sub ribbon-bookmark"></div>
+                                    <i class="fa fa-star"></i>
+                                </div>
+                                <p class="ribbon-content">
+                                    آلاء - تدریس دهم، رایگان
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mt-element-ribbon bg-grey-steel" style="margin-bottom: 0;">
+                                <div class="ribbon ribbon-right ribbon-vertical-right ribbon-shadow ribbon-border-dash-vert ribbon-color-success uppercase">
+                                    <div class="ribbon-sub ribbon-bookmark"></div>
+                                    <i class="fa fa-star"></i>
+                                </div>
+                                <p class="ribbon-content">
+                                    آلاء - تدریس یازدهم، رایگان
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div
+    </div>
     @include("partials.slideShow1" ,["marginBottom"=>"25"])
     <div class="clearfix"></div>
     {{--<div class="row">--}}
@@ -186,11 +239,11 @@
     @foreach($sections as $section)
         <div class="row">
             <div class="col-md-12">
-                <h3 class="text-center">
-                    {{$section["displayName"]}}
-                    <a href="{{urldecode(action("HomeController@search" , ["tags" => $section["tags"]]))}}" class="btn btn-success">بیشتر</a>
-                </h3>
-                <hr style="border-color: #0c203a">
+                <h4 style="font-weight: bold">{{$section["displayName"]}}
+                    <a style="float: left; padding: 10px; width: 15%" href="{{urldecode(action("HomeController@search" , ["tags" => $section["tags"]]))}}" class="btn btn-success">بیشتر</a>
+                </h4>
+
+                <hr style="border-color: #17233a">
                 <div class="search-page search-content-3">
                     <section class="lessonSlider1 slider" style="width: 95%;margin-top: 0px ; margin-bottom: 15px;">
                         @foreach($section["lessons"] as $lesson)
