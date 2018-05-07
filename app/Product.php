@@ -109,7 +109,7 @@ class Product extends Model
 
     public function attributeset()
     {
-        return $this->belongsTo('App\Attributeset')->orderBy('order');
+        return $this->belongsTo('App\Attributeset');
     }
 
     public function children()
