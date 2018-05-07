@@ -2100,10 +2100,10 @@ class HomeController extends Controller
             default :
                 $file = \App\File::where("uuid", $fileName)->get();
                 if ($file->isNotEmpty() && $file->count() == 1) {
-                    if($file->first()->disks->isNotEmpty())
+                    $file = $file->first();
+                    if($file->disks->isNotEmpty())
                     {
-                        $diskName = $file->first()->disks->first()->name;
-                        $file = $file->first();
+                        $diskName = $file->disks->first()->name;
                         $fileName = $file->name;
                     }
                     else
