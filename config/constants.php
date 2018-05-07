@@ -156,6 +156,7 @@ return [
     'SEE_PAID_COST' =>'seePaidCost' ,
     'INSERT_MAJOR' => 'insertMajor' ,
     'GET_USER_REPORT' => 'getUserReport',
+    'TELEMARKETING_PANEL_ACCESS' => 'telemarketingPanel',
 
 
     //Technician
