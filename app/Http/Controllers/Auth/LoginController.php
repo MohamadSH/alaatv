@@ -74,10 +74,13 @@ class LoginController extends Controller
 
 //             $credentials = $this->getCredentials($request);
 
-        if($request->has("remember")) $remember = true;
-        else $remember = false;
+        if($request->has("remember"))
+            $remember = true;
+        else
+            $remember = false;
 
-        $intendedUsers = User::where("mobile" , $request->get("mobile"))->orderBy("created_at" ,"desc")->get();
+        $intendedUsers = User::where("mobile" , $request->get("mobile"))->get();
+
         foreach ($intendedUsers as $user)
         {
             if (Auth::attempt(['id'=>$user->id,'mobile' => $user->mobile, 'password' => $request->get("password")] , $remember)) {
