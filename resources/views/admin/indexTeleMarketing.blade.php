@@ -78,63 +78,59 @@
                             <th class="all"> نام کوچک </th>
                             <th class="none"> محصولات </th>
                             <th class="none"> رشته </th>
-                            <th class="none"> استان </th>
-                            <th class="desktop"> شهر </th>
-                            <th class="none"> آدرس </th>
-                            <th class="none"> کد پستی </th>
-                            @permission((Config::get('constants.SHOW_USER_MOBILE')))
                             <th class="desktop"> موبایل </th>
-                            {{--<th class="all">کد ملی</th>--}}
-                            @endpermission
                             <th class="min-tablet">مبلغ(تومان)</th>
-                            @permission((Config::get('constants.SHOW_USER_EMAIL')))
-                            <th class="none"> ایمیل </th>
-                            @endpermission
                             <th class="desktop">پرداخت شده(تومان)</th>
                             <th class="none">مبلغ برگشتی(تومان)</th>
                             <th class="none">بدهکار/بستانکار(تومان): </th>
                             <th class="none">تراکنش های موفق: </th>
                             <th class="none">تراکنش های منتظر تایید: </th>
                             <th class="none">تراکنش های منتظر پرداخت: </th>
-                            <th class="desktop">توضیحات مسئول</th>
-                            <th class="none">کد مرسوله پستی</th>
+                            <th class="none">توضیحات مسئول</th>
                             <th class="none">توضیحات مشتری</th>
                             <th class="min-tablet">وضعیت سفارش</th>
                             <th class="min-tablet">وضعیت پرداخت</th>
-                            <th class="none"> تاریخ اصلاح مدیریتی: </th>
                             <th class="none"> تاریخ ثبت نهایی: </th>
                             <th class="none">تعداد بن استفاده شده: </th>
                             <th class="none">تعداد بن اضافه شده به شما از این سفارش: </th>
                             <th class="none">کپن استفاده شده: </th>
-                            {{--<th class="none">وضعیت پرداخت:</th>--}}
-                            <th class="none">تاریخ ایجاد اولیه</th>
                         </tr>
                         </thead>
                         <tbody>
                         @foreach($orders as $order)
                             <tr>
-                                <th></th>
-                                <td id="orderCustomerFullName_{{$order->id}}">
-                                    @if(isset($order->user->id)) @if(strlen($order->user->lastName) > 0) <a target="_blank" href="{{action("UserController@edit" , $order->user)}}">{{$order->user->lastName}}</a> @else <span class="label label-sm label-danger"> درج نشده </span> @endif @endif
+                                <th>+</th>
+                                <td >
+                                    @if(isset($order->user->id)) @if(strlen($order->user->lastName) > 0) {{$order->user->lastName}} @else <span class="label label-sm label-danger"> درج نشده </span> @endif @endif
                                 </td>
                                 <td >
                                     @if(isset($order->user->id)) @if(strlen($order->user->firstName) > 0) {{$order->user->firstName}} @else <span class="label label-sm label-danger"> درج نشده </span> @endif @else <span class="label label-sm label-danger"> کاربر نامشخص است </span> @endif
                                 </td>
-                                <td>@if($order->orderproducts)
+                                <td>
+                                    @if($order->orderproducts)
                                         <br>
-                                        @foreach($order->orderproducts as $orderproduct)
+                                        @foreach($order->orderproducts->whereIn("product_id" , $marketingProducts) as $orderproduct)
                                             @if(isset($orderproduct->product->id))
-                                                <span class="bold " style="font-style: italic; ">@if($orderproduct->orderproducttype_id == Config::get("constants.ORDER_PRODUCT_GIFT"))<img src="/assets/extra/gift-box.png" width="25">@endif<a style="color:#607075" target="_blank" href="@if($orderproduct->product->hasParents()){{action("ProductController@show",$orderproduct->product->parents->first())}} @else  {{action("ProductController@show",$orderproduct->product)}} @endif">
-                            {{$orderproduct->product->name}}</a></span>@if(isset($orderproduct->checkoutstatus_id)) - <span class="font-red bold">{{$orderproduct->checkoutstatus->displayName}}</span>@endif<br>
-
-                                                @foreach($orderproduct->product->attributevalues('main')->get() as $attributevalue)
-                                                    {{$attributevalue->attribute->displayName}} : <span style="font-weight: normal">{{$attributevalue->name}} @if(isset(   $attributevalue->pivot->description) && strlen($attributevalue->pivot->description)>0 ) {{$attributevalue->pivot->description}} @endif</span><br>
-                                                @endforeach
+                                                <span class="bold " style="font-style: italic; ">
+                                                    @if($orderproduct->orderproducttype_id == Config::get("constants.ORDER_PRODUCT_GIFT"))
+                                                        <img src="/assets/extra/gift-box.png" width="25">
+                                                    @endif
+                                                        <a style="color:#607075" target="_blank"
+                                                           href="@if($orderproduct->product->hasParents())
+                                                                {{action("ProductController@show",$orderproduct->product->parents->first())}}
+                                                           @else
+                                                           {{action("ProductController@show",$orderproduct->product)}}
+                                                           @endif"
+                                                        >
+                                                        {{$orderproduct->product->name}}
+                                                        </a>
+                                                </span>
+                                                {{--@foreach($orderproduct->product->attributevalues('main')->get() as $attributevalue)--}}
+                                                    {{--{{$attributevalue->attribute->displayName}} : <span style="font-weight: normal">{{$attributevalue->name}} @if(isset(   $attributevalue->pivot->description) && strlen($attributevalue->pivot->description)>0 ) {{$attributevalue->pivot->description}} @endif</span><br>--}}
+                                                {{--@endforeach--}}
                                                 @foreach($orderproduct->attributevalues as $extraAttributevalue)
                                                     {{$extraAttributevalue->attribute->displayName}} :<span style="font-weight: normal">{{$extraAttributevalue->name}} (+ {{number_format($extraAttributevalue->pivot->extraCost)}} تومان)</span><br>
                                                 @endforeach
-
-                                                <br>
                                             @endif
                                         @endforeach
                                     @else
@@ -142,33 +138,19 @@
                                     @endif
                                 </td>
                                 <td>@if(isset($order->user->major->name) > 0){{$order->user->major->name}} @else <span class="label label-sm label-warning"> درج نشده </span> @endif</td>
-                                <td>@if(isset($order->user->id ) && strlen($order->user->province) > 0){{$order->user->province}} @else <span class="label label-sm label-warning"> درج نشده </span> @endif</td>
-                                <td>@if(isset($order->user->id ) && strlen($order->user->city) > 0){{$order->user->city}} @else <span class="label label-sm label-warning"> درج نشده </span> @endif</td>
-                                <td>@if(isset($order->user->id ) && strlen($order->user->address) > 0){{$order->user->address}} @else <span class="label label-sm label-warning"> درج نشده </span> @endif</td>
-                                <td>@if(isset($order->user->id ) && strlen($order->user->postalCode) > 0){{$order->user->postalCode}} @else <span class="label label-sm label-warning"> درج نشده </span> @endif</td>
-                                @permission((Config::get('constants.SHOW_USER_MOBILE')))
                                 <td>
                                     @if(isset($order->user->id)){{$order->user->mobile}} @endif
                                 </td>
-                                {{--<td>--}}
-                                {{--@if(isset($order->user->id)){{$order->user->nationalCode}} @endif--}}
-                                {{--</td>--}}
-                                @endpermission
                                 <td>@if(isset($order->cost) || isset($order->costwithoutcoupon)){{number_format($order->totalCost())}} @else <span class="label label-danger">بدون مبلغ</span> @endif</td>
-                                @permission((Config::get('constants.SHOW_USER_EMAIL')))
-                                <td>
-                                    @if(isset($order->user->email) && strlen($order->user->email) > 0){{$order->user->email}} @else <span class="label label-sm label-warning"> درج نشده </span> @endif
-                                </td>
-                                @endpermission
                                 <td >@if(isset($order->cost) || isset($order->costwithoutcoupon)){{number_format($order->totalPaidCost() + $order->totalRefund())}} @else <span class="label label-danger">بدون مبلغ</span> @endif</td>
                                 <td >@if(isset($order->cost) || isset($order->costwithoutcoupon)){{number_format(-$order->totalRefund())}} @else <span class="label label-danger">بدون مبلغ</span> @endif</td>
                                 <td >
-                                    {{--            @if(isset($order->cost) || isset($order->costwithoutcoupon))@if($order->debt() > 0) {{number_format($order->debt())}} بدهکار @elseif($order->debt() < 0) {{number_format(abs($order->debt()))}} بستانکار @else 0 @endif--}}
                                     @if(isset($order->cost) || isset($order->costwithoutcoupon))
                                         {{number_format($order->debt())}}
                                     @else <span class="label label-danger">بدون مبلغ</span> @endif
                                 </td>
-                                <td>@if($order->successfulTransactions->isEmpty())
+                                <td>
+                                    @if($order->successfulTransactions->isEmpty())
                                         <span class="label label-warning">ندارد</span>
                                     @else
                                         <br>
@@ -188,7 +170,8 @@
                                         @endforeach
                                     @endif
                                 </td>
-                                <td>@if($order->pendingTransactions->isEmpty())
+                                <td>
+                                    @if($order->pendingTransactions->isEmpty())
                                         <span class="label label-success">ندارد</span>
                                     @else
                                         <br>
@@ -206,7 +189,8 @@
                                         @endforeach
                                     @endif
                                 </td>
-                                <td>@if($order->unpaidTransactions->isEmpty())
+                                <td>
+                                    @if($order->unpaidTransactions->isEmpty())
                                         <span class="label label-success">ندارد</span>
                                     @else
                                         <br>
@@ -226,16 +210,6 @@
                                         @endforeach
                                     @else
                                         <span class="label label-warning">بدون توضیح</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if(!$order->orderpostinginfos->isEmpty())
-                                        <span class="font-red bold">
-                @foreach($order->orderpostinginfos as $postingInfo)
-                                                {{$postingInfo->postCode}}<br>
-                                            @endforeach</span>
-                                    @else
-                                        <span class="label label-info">ندارد</span>
                                     @endif
                                 </td>
                                 <td>
@@ -261,7 +235,6 @@
                                     @elseif(isset($order->paymentstatus->id) && $order->paymentstatus->id == Config::get("constants.PAYMENT_STATUS_INDEBTED"))<span class="label label-warning"> {{$order->paymentstatus->displayName}}</span>
                                     @endif
                                 </td>
-                                <td>@if(isset($order->updated_at) && strlen($order->updated_at)>0) {{ $order->UpdatedAt_Jalali() }} @else <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
                                 <td>@if(isset($order->completed_at) && strlen($order->completed_at)>0) {{ $order->CompletedAt_Jalali() }} @else <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
                                 <td>
                                     {{$order->usedBonSum()}}
@@ -286,15 +259,7 @@
                                         بدون کپن
                                     @endif
                                 </td>
-                                {{--<td>--}}
-                                {{--@if(isset($order->paymentstatus_id))--}}
-                                {{--{{$order->paymentstatus->displayName}}--}}
-                                {{--@else--}}
-                                {{--نا مشخص--}}
-                                {{--@endif--}}
-                                {{--</td>--}}
-                                <td>@if(isset($order->created_at) && strlen($order->created_at)>0) {{ $order->CreatedAt_Jalali() }} @else <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
-                            </tr>
+                              </tr>
                         @endforeach
                         </tbody>
                     </table>
