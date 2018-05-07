@@ -1820,6 +1820,7 @@ class HomeController extends Controller
     {
         if($request->has("group-mobile"))
         {
+            $marketingProducts = [210,211,212,213,214,215,216,217,218,219,220,221] ;
             $mobiles = $request->get("group-mobile");
             $mobileArray = [];
             foreach ($mobiles as $mobile)
@@ -1829,16 +1830,16 @@ class HomeController extends Controller
             $baseDataTime = Carbon::createFromTimeString("2018-05-03 00:00:00");
             $orders = Order::whereHas("user" , function ($q) use ($mobileArray , $baseDataTime){
                 $q->whereIn("mobile" , $mobileArray) ;
-            })->whereHas("orderproducts" , function ($q2){
-//                $q2->whereIn("product_id" , [210,211,212,213,214,215,216,217,218,219,220,221]);
-                $q2->whereIn("product_id" , [181]); //ToDo
+            })->whereHas("orderproducts" , function ($q2) use($marketingProducts){
+                $q2->whereIn("product_id" , $marketingProducts);
             })
             ->where("orderstatus_id" , Config::get("constants.ORDER_STATUS_CLOSED"))
             ->where("paymentstatus_id" ,  Config::get("constants.PAYMENT_STATUS_PAID"))
             ->where("completed_at" , ">=" , $baseDataTime)
             ->get();
+            $orders->load("orderproducts");
         }
-        return view("admin.indexTeleMarketing" , compact("orders"));
+        return view("admin.indexTeleMarketing" , compact("orders" , "marketingProducts"));
     }
 
     /**
