@@ -239,14 +239,27 @@ class ProductController extends Controller
             $excludedProducts = [] ;
 
 
-        $otherProducts = Product::getProducts(0,1)->whereNotIn("id",$excludedProducts)->orderBy('created_at' , 'Desc')->where("id","<>" , $product->id)->get()   ;
+        $key="product:otherProducts:".$product->cacheKey();
+        $otherProducts = Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($product,$excludedProducts){
+            $otherProducts = Product::getProducts(0,1)
+                ->whereNotIn("id",$excludedProducts)
+                ->orderBy('created_at' , 'Desc')
+                ->where("id","<>" , $product->id)->get();
+            return $otherProducts;
+        });
         $otherProductChunks = $otherProducts->chunk(4);
 
         if(Config::has("constants.EXCLUSIVE_RELATED_PRODUCTS"))
             $exclusiveOtherProductIds = Config::get("constants.EXCLUSIVE_RELATED_PRODUCTS");
         else
             $exclusiveOtherProductIds = [] ;
-        $exclusiveOtherProducts = Product::whereIn("id" , $exclusiveOtherProductIds)->get();
+
+        $key="product:exclusiveOtherProducts:".md5(implode(".",$exclusiveOtherProductIds));
+        $exclusiveOtherProducts = Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($exclusiveOtherProductIds){
+            $exclusiveOtherProducts = Product::whereIn("id" , $exclusiveOtherProductIds)->get();
+            return $exclusiveOtherProducts;
+
+        });
 //        $disqusPayload = Auth::user()->disqusSSO();
 
         if(Auth::check())
