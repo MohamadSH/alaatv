@@ -73,13 +73,13 @@
                         <span class="arrow "></span>
                     </a>
                     <ul class="sub-menu">
-                        @role((Config::get("constants.ROLE_ADMIN")))
+                        @ability(Config::get('constants.ROLE_ADMIN'),Config::get('constants.TELEMARKETING_PANEL_ACCESS'))
                         <li class="nav-item  ">
                             <a href="{{action("HomeController@adminTeleMarketing")}}" class="nav-link ">
                                 <span class="title">تله مارکتینگ</span>
                             </a>
                         </li>
-                        @endrole
+                        @endability
                         @role((Config::get("constants.ROLE_ADMIN")))
                         <li class="nav-item  ">
                             <a href="{{action("HomeController@adminLottery")}}" class="nav-link ">
