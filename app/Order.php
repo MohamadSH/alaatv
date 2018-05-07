@@ -390,7 +390,8 @@ class Order extends Model
         }
 
         if (!$couponRemoved) {
-            $orderproducts = $this->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->orderBy("created_at", "desc")->get();
+            $orderproducts = $this->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
+                                    ->get();
 
             $orderHasExtraAttribute = false;
             foreach ($orderproducts as $orderproduct) {

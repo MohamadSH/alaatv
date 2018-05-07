@@ -899,11 +899,21 @@ class HomeController extends Controller
 
         if (Config::has("constants.HOME_PRODUCTS_OFFER")) {
             $productIds = Config::get("constants.HOME_PRODUCTS_OFFER");
-            $products = Product::getProducts(0, 1)->orderBy('created_at', 'Desc')->whereIn("id", $productIds)->whereNotIn("id", $excludedProducts)->take(3)->get();
+            $products = Product::getProducts(0, 1)
+                ->orderBy('order')
+                ->whereIn("id", $productIds)
+                ->whereNotIn("id", $excludedProducts)
+                ->take(3)->get();
         } else
-            $products = Product::recentProducts(2)->whereNotIn("id", $excludedProducts)->get();
+        {
+//            $products = Product::recentProducts(2)
+//                ->whereNotIn("id", $excludedProducts)
+//                ->get();
+            $products = collect();
+        }
 
-        $costCollection = $this->makeCostCollection($products);
+//        $costCollection = $this->makeCostCollection($products);
+        $costCollection = collect();
         /**
          * Ordroo registration statistics
          *
