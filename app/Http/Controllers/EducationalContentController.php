@@ -659,10 +659,10 @@ class EducationalContentController extends Controller
                 $educationalContent->grades()->sync($grades);
             }
 
-            if(isset($contentTypes))
-            {
-                $educationalContent->contenttypes()->sync($contentTypes);
-            }
+//            if(isset($contentTypes))
+//            {
+//                $educationalContent->contenttypes()->sync($contentTypes);
+//            }
 
             if ($request->has("file"))
             {
