@@ -106,7 +106,7 @@
                         <div class="col-md-3">
                             <div class="mt-element-ribbon bg-blue" >
                                 <a  href="javascript:void(0)"
-                                    onclick="$('html, body').animate({scrollTop: $('.konkoor').offset().top}, 2000);">
+                                    onclick="$('html, body').animate({scrollTop: $('.konkoor').offset().top - 80}, 2000);">
                                     <div class="ribbon ribbon-left ribbon-vertical-left ribbon-shadow ribbon-border-dash-vert ribbon-color-primary uppercase">
                                         <div class="ribbon-sub ribbon-bookmark"></div>
                                         <i class="fa fa-star"></i>
@@ -120,7 +120,7 @@
                         <div class="col-md-3">
                             <div class="mt-element-ribbon bg-green-jungle" >
                                 <a  href="javascript:void(0)"
-                                    onclick="$('html, body').animate({scrollTop: $('.dahom').offset().top}, 2000);">
+                                    onclick="$('html, body').animate({scrollTop: $('.dahom').offset().top  - 80}, 2000);">
                                     <div class="ribbon ribbon-left ribbon-vertical-left ribbon-shadow ribbon-border-dash-vert ribbon-color-primary uppercase">
                                         <div class="ribbon-sub ribbon-bookmark"></div>
                                         <i class="fa fa-star"></i>
@@ -136,7 +136,7 @@
 
                             <div class="mt-element-ribbon bg-yellow-lemon" >
                                 <a  href="javascript:void(0)"
-                                    onclick="$('html, body').animate({scrollTop: $('.yazdahom').offset().top}, 2000);">
+                                    onclick="$('html, body').animate({scrollTop: $('.yazdahom').offset().top  - 80}, 2000);">
                                     <div class="ribbon ribbon-left ribbon-vertical-left ribbon-shadow ribbon-border-dash-vert ribbon-color-primary uppercase">
                                         <div class="ribbon-sub ribbon-bookmark"></div>
                                         <i class="fa fa-star"></i>
