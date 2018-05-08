@@ -77,7 +77,7 @@
             text-decoration: none !important;
         }
         .mt-element-ribbon {
-            margin-bottom: 15px;
+            margin-bottom: 8px;
 
         }
         a.mt-element-ribbon{
