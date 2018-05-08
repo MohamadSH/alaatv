@@ -400,6 +400,7 @@
         function contentLoadAjaxRequest(url , formData) {
             $.ajax({
                 type: "GET",
+                cache: false,
                 url: url ,
                 data:formData,
                 statusCode:
