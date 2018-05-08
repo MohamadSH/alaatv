@@ -292,7 +292,7 @@
             </li>
             @if(Auth::check())
                 <li class="nav-item @if(isset($pageName) && strcmp($pageName , "submitKonkurResult")==0)start active open @endif">
-                    <a href="{{action("UserController@submitKonkurResult")}}" class="nav-link nav-toggle  bold">
+                    <a href="{{action("HomeController@submitKonkurResult")}}" class="nav-link nav-toggle  bold">
                         <i class="fa fa-graduation-cap" aria-hidden="true"></i>
                         <span class="title">ثبت رتبه 96</span>
                         @if(isset($pageName) && strcmp($pageName , "submitKonkurResult")==0)<span class="selected"></span> @endif
