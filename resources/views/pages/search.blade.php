@@ -510,10 +510,7 @@
             document.title=newUrl;
         }
         $(window).on("popstate", function(e) {
-            var state = e.originalEvent.state;
-            if (state) {
-                window.location.reload();
-            }
+            window.location.reload();
         });
         $(document).on('click', '.pagination a', function (e) {
             var query = $(this).attr('href').split('?')[1];
