@@ -253,14 +253,14 @@
         {
             initialSlick($(".productSlider"));
             initialVideoPortfolio();
-            makeLessonSelect();
-            makeTeacherSelect();
+            makeLessonSelect( $("#majorSelect").val());
+            makeTeacherSelect($("#lessonSelect").val());
         });
 
         function makeLessonSelect() {
             var major = $("#majorSelect").val() ;
             var lessons = majorLesson[major];
-            console.log(lessons);
+            // console.log(lessons);
             $("#lessonSelect").empty();
             $.each(lessons , function (index , value)
             {
@@ -397,40 +397,10 @@
             })(jQuery, window, document);
         }
 
-        function contentLoad(pageName , pageNumber, itemType) {
-            // initiated from url
-
-            var formData = $("#itemFilterForm").find(':not(input[name=_token])').filter(function(index, element) {
-                return $(element).val() != '';
-            }).serialize();
-            formData =  decodeURIComponent(formData);
-            if( pageNumber != undefined && pageNumber > 0 )
-            {
-                var numberQuery  ;
-                if (pageName.length > 0)
-                {
-                    numberQuery = [ pageName+"="+pageNumber ] ;
-                }
-                else
-                {
-                    numberQuery = [ "page="+pageNumber ] ;
-                }
-                formData = formData + "&" + numberQuery.join('&') ;
-            }else
-            {
-                $("#content-search-loading").show();
-            }
-
-            changeUrl(formData);
-            if( itemType != undefined &&  itemType.length > 0 )
-            {
-                var typesQuery = [ "itemTypes[]="+itemType ] ;
-                formData = formData + "&" + typesQuery.join('&') ;
-            }
-            // console.log(formData);
+        function contentLoadAjaxRequest(url , formData) {
             $.ajax({
                 type: "GET",
-                url: "{{action("HomeController@search")}}" ,
+                url: url ,
                 data:formData,
                 statusCode:
                     {
@@ -495,27 +465,55 @@
                         }
                     }
             });
+        }
+
+        function contentLoad(pageName , pageNumber, itemType) {
+            // initiated from url
+            var formData = $("#itemFilterForm").find(':not(input[name=_token])').filter(function(index, element) {
+                return $(element).val() != '';
+            }).serialize();
+            formData =  decodeURIComponent(formData);
+            if( pageNumber != undefined && pageNumber > 0 )
+            {
+                var numberQuery  ;
+                if (pageName.length > 0)
+                {
+                    numberQuery = [ pageName+"="+pageNumber ] ;
+                }
+                else
+                {
+                    numberQuery = [ "page="+pageNumber ] ;
+                }
+                formData = formData + "&" + numberQuery.join('&') ;
+            }else
+            {
+                $("#content-search-loading").show();
+            }
+
+            changeUrl(formData);
+            if( itemType != undefined &&  itemType.length > 0 )
+            {
+                var typesQuery = [ "itemTypes[]="+itemType ] ;
+                formData = formData + "&" + typesQuery.join('&') ;
+            }
+
+            // console.log(formData);
+            contentLoadAjaxRequest('{{action("HomeController@search")}}',formData);
             return false;
         }
 
         function changeUrl(appendUrl)
         {
             var newUrl = "{{action("HomeController@search")}}"+"?"+appendUrl;
-            window.history.pushState("data","Title",newUrl);
+            window.history.pushState({formData: appendUrl},"Title",newUrl);
             document.title=newUrl;
         }
-
-        // $(window).on('hashchange', function() {
-        //     if (window.location.hash) {
-        //         var page = window.location.hash.replace('#', '');
-        //         if (page == Number.NaN || page <= 0) {
-        //             return false;
-        //         } else {
-        //             getPosts(page);
-        //         }
-        //     }
-        // });
-
+        $(window).on("popstate", function(e) {
+            var state = e.originalEvent.state;
+            if (state) {
+                window.location.reload();
+            }
+        });
         $(document).on('click', '.pagination a', function (e) {
             var query = $(this).attr('href').split('?')[1];
             var parameters = query.split('=');

@@ -415,10 +415,16 @@ class HomeController extends Controller
                 case "video":
                 case "pamphlet":
                 case "article":
-                    $query = Educationalcontent::whereIn("id",$arrayOfId)->orderBy("created_at" , "desc")->get();
+                    $query = Educationalcontent::whereIn("id",$arrayOfId)
+                        ->where('enable',1)
+                        ->orderBy("created_at" , "desc")
+                        ->get();
                     break;
                 case "contentset":
-                    $query = Contentset::whereIn("id",$arrayOfId)->orderBy("created_at" , "desc")->get();
+                    $query = Contentset::whereIn("id",$arrayOfId)
+                        ->where('enable',1)
+                        ->orderBy("created_at" , "desc")
+                        ->get();
                     break;
                 case "product":
                     $query = Product::getProducts(0,1)->whereIn("id" , $arrayOfId)
