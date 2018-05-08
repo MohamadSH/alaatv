@@ -77,7 +77,7 @@
                 <div class="portlet-body "  >
                     <div class="row">
                         <div class="col-md-3">
-                            <div class="mt-element-ribbon bg-grey-steel" style="margin-bottom: 0;">
+                            <div class="mt-element-ribbon bg-grey-steel" style="margin-bottom: 15px;">
                                 <div class="ribbon ribbon-vertical-left ribbon-color-warning uppercase">
                                     <div class="ribbon-sub ribbon-bookmark"></div>
                                     <i class="fa fa-star"></i>
@@ -89,7 +89,7 @@
 
                         </div>
                         <div class="col-md-3">
-                            <div class="mt-element-ribbon bg-grey-steel" style="margin-bottom: 0;">
+                            <div class="mt-element-ribbon bg-grey-steel" style="margin-bottom: 15px;">
                                 <div class="ribbon ribbon-vertical-left ribbon-color-danger uppercase">
                                     <div class="ribbon-sub ribbon-bookmark"></div>
                                     <i class="fa fa-star"></i>
@@ -100,7 +100,7 @@
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <div class="mt-element-ribbon bg-grey-steel" style="margin-bottom: 0;">
+                            <div class="mt-element-ribbon bg-grey-steel" style="margin-bottom: 15px;">
                                 <div class="ribbon ribbon-right ribbon-vertical-right ribbon-shadow ribbon-border-dash-vert ribbon-color-primary uppercase">
                                     <div class="ribbon-sub ribbon-bookmark"></div>
                                     <i class="fa fa-star"></i>
@@ -110,8 +110,9 @@
                                 </p>
                             </div>
                         </div>
+
                         <div class="col-md-3">
-                            <div class="mt-element-ribbon bg-grey-steel" style="margin-bottom: 0;">
+                            <div class="mt-element-ribbon bg-grey-steel" style="margin-bottom: 15px;">
                                 <div class="ribbon ribbon-right ribbon-vertical-right ribbon-shadow ribbon-border-dash-vert ribbon-color-success uppercase">
                                     <div class="ribbon-sub ribbon-bookmark"></div>
                                     <i class="fa fa-star"></i>
