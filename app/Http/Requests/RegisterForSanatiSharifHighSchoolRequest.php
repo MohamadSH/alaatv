@@ -52,7 +52,8 @@ class RegisterForSanatiSharifHighSchoolRequest extends FormRequest
             "nationalCode" => $rules["nationalCode"],
             "grade_id" => "required|exists:grades,id",
             "major_id" => "required|exists:majors,id",
-            "score" => array('required' , 'regex:/[0-9]{1,2}\.[0-9]{1,2}/' , 'regex:/[0-9]{1,2}/'),
+            "score" => "required",
+//            "score" => array('required' , 'regex:/([0-9]{1,2})\.([0-9]{1,2})|^([0-9]{1,2})/'),
         ];
     }
 
