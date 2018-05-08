@@ -144,8 +144,9 @@
         {{--</div>--}}
     {{--</div>--}}
     <div class="row" >
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
+
         @if($items->where("type" , "product")->first()["totalitems"] > 0)
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
             <!-- BEGIN PORTLET-->
                 <div class="portlet light " id="productPortlet">
                     <div class="portlet-title tabbable-line">
@@ -163,24 +164,29 @@
                     </div>
                 </div>
                 <!-- END PORTLET-->
+            </div>
         @endif
         @if($items->where("type" , "contentset")->first()["totalitems"] > 0)
-                <div class="portlet light ">
-                    <div class="portlet-title tabbable-line">
-                        <div class="caption">
-                            <i class="icon-globe font-dark hide"></i>
-                            <span class="caption-subject font-dark bold uppercase">دوره های آموزشی آلاء</span>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
+                    <div class="portlet light ">
+                        <div class="portlet-title tabbable-line">
+                            <div class="caption">
+                                <i class="icon-globe font-dark hide"></i>
+                                <span class="caption-subject font-dark bold uppercase">دوره های آموزشی آلاء</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="portlet-body " id="tab_contentset" >
-                        {!! $items->where("type" , "contentset")->first()["view"]  !!}
+                        <div class="portlet-body " id="tab_contentset" >
+                            {!! $items->where("type" , "contentset")->first()["view"]  !!}
+                        </div>
                     </div>
                 </div>
         @endif
+    </div>
         @foreach($ads1 as $image => $link)
             @include('partials.bannerAds', ['img'=>$image , 'link'=>$link])
         @endforeach
             <!-- BEGIN PORTLET-->
+    <div class="row" >
             <div class="portlet light ">
                 <div class="portlet-title tabbable-line">
                     <div class="caption">
