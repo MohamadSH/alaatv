@@ -51,6 +51,8 @@ Route::get('image/{category}/{w}/{h}/{filename}', [
     'as'   => 'image',
     'uses' => 'HomeController@getImage',
 ]);
+Route::get("sharif" , "HomeController@schoolRegisterLanding");
+Route::post("registerForSanatiSharifHighSchool" , "UserController@registerForSanatiSharifHighSchool");
 
 Route::group(['prefix' => 'checkout'], function () {
     Route::get('auth', "OrderController@checkoutAuth");
@@ -102,7 +104,7 @@ Route::group(['middleware' => 'auth'], function()
     Route::get('profile', 'UserController@showProfile');
     Route::get('complete-register', 'UserController@completeRegister');
     Route::get('survey' , 'UserController@showSurvey');
-    Route::get('96' , 'UserController@submitKonkurResult');
+    Route::get('96' , 'HomeController@submitKonkurResult');
     Route::post("transactionToDonate/{transaction}" , "TransactionController@convertToDonate");
     Route::post("completeTransaction/{transaction}" , "TransactionController@completeTransaction");
     Route::post("myTransaction/{transaction}" , "TransactionController@limitedUpdate");
