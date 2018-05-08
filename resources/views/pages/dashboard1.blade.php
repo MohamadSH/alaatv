@@ -124,8 +124,9 @@
                     </div>
                 </div>
             </div>
-        </div
+        </div>
     </div>
+    <div class="clearfix"></div>
     @include("partials.slideShow1" ,["marginBottom"=>"25"])
     <div class="clearfix"></div>
     {{--<div class="row">--}}
