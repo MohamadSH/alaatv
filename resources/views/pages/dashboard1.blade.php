@@ -71,56 +71,82 @@
 @endsection
 
 @section("content")
+    <style>
+        p.ribbon-content{
+            font-weight: bold;
+            text-decoration: none !important;
+        }
+        .mt-element-ribbon {
+            margin-bottom: 15px;
+
+        }
+        a.mt-element-ribbon{
+            text-decoration: none;
+        }
+    </style>
     <div class="row">
         <div class="col-lg-12 col-md-12 col-xs-12">
             <div class="portlet light portlet-fit ">
                 <div class="portlet-body "  >
                     <div class="row">
                         <div class="col-md-3">
-                            <div class="mt-element-ribbon bg-grey-steel" style="margin-bottom: 15px;">
-                                <div class="ribbon ribbon-vertical-left ribbon-color-warning uppercase">
-                                    <div class="ribbon-sub ribbon-bookmark"></div>
-                                    <i class="fa fa-star"></i>
+                            <a  href="/landing/4">
+                                <div class="mt-element-ribbon  bg-red-flamingo">
+                                    <div class="ribbon ribbon-left ribbon-vertical-left ribbon-shadow ribbon-border-dash-vert ribbon-color-primary uppercase">
+                                        <div class="ribbon-sub ribbon-bookmark"></div>
+                                        <i class="fa fa-star"></i>
+                                    </div>
+                                    <p class="ribbon-content font-white">
+                                         آلاء - همایش طلایی کنکور(80%)
+                                    </p>
                                 </div>
-                                <p class="ribbon-content">
-                                     آلاء - همایش طلایی کنکور(80%)
-                                </p>
-                            </div>
+                            </a>
 
                         </div>
                         <div class="col-md-3">
-                            <div class="mt-element-ribbon bg-grey-steel" style="margin-bottom: 15px;">
-                                <div class="ribbon ribbon-vertical-left ribbon-color-danger uppercase">
-                                    <div class="ribbon-sub ribbon-bookmark"></div>
-                                    <i class="fa fa-star"></i>
-                                </div>
-                                <p class="ribbon-content">
-                                    آلاء - تدریس کنکور، رایگان و کامل
-                                </p>
+                            <div class="mt-element-ribbon bg-blue" >
+                                <a  href="javascript:void(0)"
+                                    onclick="$('html, body').animate({scrollTop: $('.konkoor').offset().top}, 2000);">
+                                    <div class="ribbon ribbon-left ribbon-vertical-left ribbon-shadow ribbon-border-dash-vert ribbon-color-primary uppercase">
+                                        <div class="ribbon-sub ribbon-bookmark"></div>
+                                        <i class="fa fa-star"></i>
+                                    </div>
+                                    <p class="ribbon-content font-white">
+                                        آلاء - تدریس کنکور، رایگان و کامل
+                                    </p>
+                                </a>
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <div class="mt-element-ribbon bg-grey-steel" style="margin-bottom: 15px;">
-                                <div class="ribbon ribbon-right ribbon-vertical-right ribbon-shadow ribbon-border-dash-vert ribbon-color-primary uppercase">
-                                    <div class="ribbon-sub ribbon-bookmark"></div>
-                                    <i class="fa fa-star"></i>
-                                </div>
-                                <p class="ribbon-content">
-                                    آلاء - تدریس دهم، رایگان
-                                </p>
+                            <div class="mt-element-ribbon bg-green-jungle" >
+                                <a  href="javascript:void(0)"
+                                    onclick="$('html, body').animate({scrollTop: $('.dahom').offset().top}, 2000);">
+                                    <div class="ribbon ribbon-left ribbon-vertical-left ribbon-shadow ribbon-border-dash-vert ribbon-color-primary uppercase">
+                                        <div class="ribbon-sub ribbon-bookmark"></div>
+                                        <i class="fa fa-star"></i>
+                                    </div>
+                                    <p class="ribbon-content font-white">
+                                        آلاء - تدریس دهم، رایگان
+                                    </p>
+                                </a>
                             </div>
                         </div>
 
                         <div class="col-md-3">
-                            <div class="mt-element-ribbon bg-grey-steel" style="margin-bottom: 15px;">
-                                <div class="ribbon ribbon-right ribbon-vertical-right ribbon-shadow ribbon-border-dash-vert ribbon-color-success uppercase">
-                                    <div class="ribbon-sub ribbon-bookmark"></div>
-                                    <i class="fa fa-star"></i>
-                                </div>
-                                <p class="ribbon-content">
-                                    آلاء - تدریس یازدهم، رایگان
-                                </p>
+
+                            <div class="mt-element-ribbon bg-yellow-lemon" >
+                                <a  href="javascript:void(0)"
+                                    onclick="$('html, body').animate({scrollTop: $('.yazdahom').offset().top}, 2000);">
+                                    <div class="ribbon ribbon-left ribbon-vertical-left ribbon-shadow ribbon-border-dash-vert ribbon-color-primary uppercase">
+                                        <div class="ribbon-sub ribbon-bookmark"></div>
+                                        <i class="fa fa-star"></i>
+                                    </div>
+                                    <p class="ribbon-content font-white">
+                                        آلاء - تدریس یازدهم، رایگان
+                                    </p>
+                                </a>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -240,7 +266,7 @@
     {{--End of Product Portfolio--}}
     @foreach($sections as $section)
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12 {{$section["class"]}}">
                 <h4 style="font-weight: bold">{{$section["displayName"]}}
                     <a style="float: left; padding: 10px; width: 15%" href="{{urldecode(action("HomeController@search" , ["tags" => $section["tags"]]))}}" class="btn btn-success">بیشتر</a>
                 </h4>
