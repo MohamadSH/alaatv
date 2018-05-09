@@ -1,11 +1,13 @@
 <?php
 
 
-use Illuminate\Contracts\Console\Kernel;
+namespace Tests;
+
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
+    use CreatesApplication;
     /**
      * The base URL to use while testing the application.
      *

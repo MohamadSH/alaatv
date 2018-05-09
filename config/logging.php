@@ -1,5 +1,9 @@
 <?php
+
+use Monolog\Handler\StreamHandler;
+
 return [
+
     /*
     |--------------------------------------------------------------------------
     | Default Log Channel
@@ -21,7 +25,8 @@ return [
     | you a variety of powerful log handlers / formatters to utilize.
     |
     | Available Drivers: "single", "daily", "slack", "syslog",
-    |                    "errorlog", "custom", "stack"
+    |                    "errorlog", "monolog",
+    |                    "custom", "stack"
     |
     */
     'channels' => [
@@ -29,17 +34,21 @@ return [
             'driver' => 'stack',
             'channels' => ['single'],
         ],
+
+
         'single' => [
             'driver' => 'single',
             'path' => storage_path('logs/laravel.log'),
-            'level' => env('LOG_LEVEL', 'debug'),
+            'level' => 'debug',
         ],
+
         'daily' => [
             'driver' => 'daily',
             'path' => storage_path('logs/laravel.log'),
             'level' => 'debug',
             'days' => 7,
         ],
+
         'slack' => [
             'driver' => 'slack',
             'url' => env('LOG_SLACK_WEBHOOK_URL'),
@@ -47,13 +56,24 @@ return [
             'emoji' => ':boom:',
             'level' => 'critical',
         ],
+
+        'stderr' => [
+            'driver' => 'monolog',
+            'handler' => StreamHandler::class,
+            'with' => [
+                'stream' => 'php://stderr',
+            ],
+        ],
+
         'syslog' => [
             'driver' => 'syslog',
             'level' => 'debug',
         ],
+
         'errorlog' => [
             'driver' => 'errorlog',
             'level' => 'debug',
         ],
     ],
+
 ];
