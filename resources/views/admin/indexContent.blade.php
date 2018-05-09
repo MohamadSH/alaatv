@@ -587,7 +587,7 @@
             @endpermission
 
             @permission((Config::get('constants.LIST_EDUCATIONAL_CONTENT_ACCESS')))
-            $("#educationalContent-portlet .reload").trigger("click");
+            // $("#educationalContent-portlet .reload").trigger("click");
             $("#educationalContent-expand").trigger("click");
             @endpermission
 

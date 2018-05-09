@@ -232,13 +232,12 @@
                                         <header>
                                             <h1>
                                                 <a href="javascript:void(0)" data-role="221" class="link" title="خرید بسته آموزشی">
-                                                    آل علی
+                                                    سید احمد آل علی
                                                 </a>
                                             </h1>
-                                            <span>جمع بندی ژنتیک زیست کنکور در 6 الی 8 ساعت</span>
+                                            <span>جمع بندی ژنتیک کنکور در 6 الی 8 ساعت</span>
                                         </header>
-                                        <p></p>
-                                        <p></p>
+                                        <p>جمع بندی نکات و کسب مهارت در حلّ مسائل ژنتیک کنکور (فصل 8 زیست شناسی سوم تجربی) </p>
                                     </strong>
                                     <figure>
                                         <a href="javascript:void(0)" title="">
@@ -830,6 +829,31 @@
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
+                                <img src="/assets/extra/landing4/images/professors/S11.png" alt="1" title="1">
+                            </a>
+                            <figcaption>
+                                <header>
+                                    <a href="javascript:void(0)" title="">
+                                        <h1>سید احمد آل علی</h1>
+                                    </a>
+                                    <span>همایش طلایی ژنتیک کنکور</span>
+                                </header>
+                            </figcaption>
+                        </figure>
+                        <p style="text-align: justify">
+                            خواهید دید که چگونه به راحتی می توانید انواع مسائل ژنتیک را در کم تر از 1 دقیق و با اطمینان پاسخ دهید
+                        </p>
+                        <div class="info-professors">
+                            <header>
+                                <h4>جمع بندی مبحث ژنتیک زیست کنکور در 6 الی 8 ساعت</h4>
+                            </header>
+                            <span>دسته بندی و بررسی تمام مسائل ژنتیک کنکور سراسری داخل و خارج کشور در 3 سال اخیر</span>
+                            <a href="javascript:void(0)"  class="link" data-role="221" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                        </div>
+                    </article>
+                    <article class="art-professors">
+                        <figure>
+                            <a href="javascript2:void(0)" title="">
                                 <img src="/assets/extra/landing4/images/professors/S2.png" alt="1" title="1">
                             </a>
                             <figcaption>
@@ -855,6 +879,33 @@
                                 با بررسی موضوعی سوالات ریاضی تجربی کنکور داخل و خارج  ۹۵،۹۴ و ۹۶ از هم اکنون جای پای خود را در کنکور ۹۷ محکم می کنیم. با این همایش شما دانسته هایتان را با سلیقه طراحان کنکور طبقه بندی می کنید و برای به دست آوردن درصد بالایی از این درس خود را آماده می کنید.
                             </p>
                             <a href="javascript:void(0)" class="link" data-role="220" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                        </div>
+                    </article>
+                    <article class="art-professors">
+                        <figure>
+                            <a href="javascript2:void(0)" title="">
+                                <img src="/assets/extra/landing4/images/professors/S4.png" alt="1" title="1">
+                            </a>
+                            <figcaption>
+                                <header>
+                                    <a href="javascript:void(0)" title="">
+                                        <h1>مهدی امینی راد</h1>
+                                    </a>
+                                    <span>همایش طلایی ریاضی تجربی کنکور</span>
+                                </header>
+                            </figcaption>
+                        </figure>
+                        <p style="text-align: justify">در این همایش ریاضی تجربی به صورت خلاصه، منظم، الگوبندی شده و در قالبی روان و دلپذیر جمع بندی و ارائه می شود.
+                            شما با این همایش مهارت در پاسخگویی به سوالات در هر سه سطح ساده، متوسط و دشوار کسب می کنید.</p>
+                        <div class="info-professors">
+                            <header>
+                                <h4>مهارت در ریاضی تجربی</h4>
+                            </header>
+                            <span>کسب مهارت در پاسخگویی به سوالات با هر درجه سختی</span>
+                            <span>صرفه جویی در زمان برای جمع بندی کنکور</span>
+                            <span>فراگیری روش های جدید تست زنی</span>
+                            <span>به همراه حل سوالات کنکور های گذشته و برخی سوالات تالیفی</span>
+                            <a href="javascript:void(0)" class="link" title="خرید بسته آموزشی" data-role="219">خرید بسته آموزشی</a>
                         </div>
                     </article>
                     <article class="art-professors">
@@ -1055,23 +1106,20 @@
                             <figcaption>
                                 <header>
                                     <a href="javascript:void(0)" title="">
-                                        <h1>آل علی</h1>
+                                        <h1>سید احمد آل علی</h1>
                                     </a>
-                                    <span>همایش طلایی زیست شناسی ژنتیک کنکور</span>
+                                    <span>همایش طلایی ژنتیک کنکور</span>
                                 </header>
                             </figcaption>
                         </figure>
                         <p style="text-align: justify">
-                            جمع بندی مبحث ژنتیک زیست شناسی
+                            خواهید دید که چگونه به راحتی می توانید انواع مسائل ژنتیک را در کم تر از 1 دقیق و با اطمینان پاسخ دهید
                         </p>
                         <div class="info-professors">
                             <header>
                                 <h4>جمع بندی مبحث ژنتیک زیست کنکور در 6 الی 8 ساعت</h4>
                             </header>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
+                            <span>دسته بندی و بررسی تمام مسائل ژنتیک کنکور سراسری داخل و خارج کشور در 3 سال اخیر</span>
                             <a href="javascript:void(0)"  class="link" data-role="221" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
