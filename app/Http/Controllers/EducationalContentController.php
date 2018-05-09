@@ -389,17 +389,7 @@ class EducationalContentController extends Controller
             /**
              *      Retrieving Tags
              */
-            $response = $this->sendRequest(
-                env("TAG_API_URL")."id/content/".$educationalContent->id,
-                "GET"
-            );
-
-            if($response["statusCode"] == 200){
-                $result = json_decode($response["result"]);
-                $tags = $result->data->tags;
-            } else {
-                $tags =[];
-            }
+            $tags = $educationalContent->retrievingTags();
 
             //TODO: replace metaTag Mod with contentType
             $metaTagMod = 1;
@@ -764,24 +754,4 @@ class EducationalContentController extends Controller
             return $this->response->setStatusCode(503) ;
         }
      }
-
-    public function retrieveTags()
-    {
-        if(Input::has("apipath"))
-        {
-            $apipath = Input::get("apipath");
-            $client = new \GuzzleHttp\Client();
-            $res = $client->get( $apipath );
-            $responseStatus = $res->getStatusCode();
-            if($responseStatus == 200)
-            {
-                $result = $res->getBody()->getContents();
-                return $this->response->setStatusCode(200)->setContent($result);
-            }
-            else
-            {
-                return $this->response->setStatusCode($responseStatus);
-            }
-        }
-    }
 }
