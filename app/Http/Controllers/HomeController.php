@@ -99,12 +99,17 @@ class HomeController extends Controller
 
     public function debug(Request $request){
         $disableContents = Educationalcontent::where("enable" , 0)->get();
+        $counter = 0;
         foreach ($disableContents as $content)
         {
-          $tags = $content->retrievingTags();
-          if(!empty($tags))
-              dump($content->id." has tags!");
+            $tags = $content->retrievingTags();
+            if(!empty($tags))
+            {
+                dump($content->id." has tags! type: ".$content->contenttype_id);
+                $counter++;
+            }
         }
+        dump("count: ".$counter);
         dd("finish");
         abort(404);
     }
