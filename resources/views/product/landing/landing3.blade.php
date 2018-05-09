@@ -41,7 +41,7 @@
 
     <title></title>
 
-    <link rel="stylesheet" href="/assets/extra/landing3/css/stylesheet.css" />
+    <link rel="stylesheet" href="/assets/extra/landing3/css/stylesheet2.css" />
     <!--[if lt IE 10]>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flexibility/2.0.1/flexibility.js"></script>
     <![endif]-->
@@ -713,7 +713,7 @@
     var storeOrderUrl = "{{ action('OrderproductController@store') }}";
 </script>
 <script src="/assets/extra/landing3/js/jquery-1.12.4.min.js" defer="defer"></script>
-<script src="/assets/extra/landing3/js/swiper.jquery.min.js" defer="defer"></script>
-<script src="/assets/extra/landing3/js/script.js" defer="defer"></script>
+<script src="/assets/extra/landing3/js/swiper2.jquery.min.js" defer="defer"></script>
+<script src="/assets/extra/landing3/js/script2.js" defer="defer"></script>
 </body>
 </html>
