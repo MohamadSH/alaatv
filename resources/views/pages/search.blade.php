@@ -144,8 +144,9 @@
         {{--</div>--}}
     {{--</div>--}}
     <div class="row" >
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
+
         @if($items->where("type" , "product")->first()["totalitems"] > 0)
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
             <!-- BEGIN PORTLET-->
                 <div class="portlet light " id="productPortlet">
                     <div class="portlet-title tabbable-line">
@@ -163,24 +164,29 @@
                     </div>
                 </div>
                 <!-- END PORTLET-->
+            </div>
         @endif
         @if($items->where("type" , "contentset")->first()["totalitems"] > 0)
-                <div class="portlet light ">
-                    <div class="portlet-title tabbable-line">
-                        <div class="caption">
-                            <i class="icon-globe font-dark hide"></i>
-                            <span class="caption-subject font-dark bold uppercase">دوره های آموزشی آلاء</span>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
+                    <div class="portlet light ">
+                        <div class="portlet-title tabbable-line">
+                            <div class="caption">
+                                <i class="icon-globe font-dark hide"></i>
+                                <span class="caption-subject font-dark bold uppercase">دوره های آموزشی آلاء</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="portlet-body " id="tab_contentset" >
-                        {!! $items->where("type" , "contentset")->first()["view"]  !!}
+                        <div class="portlet-body " id="tab_contentset" >
+                            {!! $items->where("type" , "contentset")->first()["view"]  !!}
+                        </div>
                     </div>
                 </div>
         @endif
+    </div>
         @foreach($ads1 as $image => $link)
             @include('partials.bannerAds', ['img'=>$image , 'link'=>$link])
         @endforeach
             <!-- BEGIN PORTLET-->
+    <div class="row" >
             <div class="portlet light ">
                 <div class="portlet-title tabbable-line">
                     <div class="caption">
@@ -247,14 +253,14 @@
         {
             initialSlick($(".productSlider"));
             initialVideoPortfolio();
-            makeLessonSelect();
-            makeTeacherSelect();
+            makeLessonSelect( $("#majorSelect").val());
+            makeTeacherSelect($("#lessonSelect").val());
         });
 
         function makeLessonSelect() {
             var major = $("#majorSelect").val() ;
             var lessons = majorLesson[major];
-            console.log(lessons);
+            // console.log(lessons);
             $("#lessonSelect").empty();
             $.each(lessons , function (index , value)
             {
@@ -391,40 +397,11 @@
             })(jQuery, window, document);
         }
 
-        function contentLoad(pageName , pageNumber, itemType) {
-            // initiated from url
-
-            var formData = $("#itemFilterForm").find(':not(input[name=_token])').filter(function(index, element) {
-                return $(element).val() != '';
-            }).serialize();
-            formData =  decodeURIComponent(formData);
-            if( pageNumber != undefined && pageNumber > 0 )
-            {
-                var numberQuery  ;
-                if (pageName.length > 0)
-                {
-                    numberQuery = [ pageName+"="+pageNumber ] ;
-                }
-                else
-                {
-                    numberQuery = [ "page="+pageNumber ] ;
-                }
-                formData = formData + "&" + numberQuery.join('&') ;
-            }else
-            {
-                $("#content-search-loading").show();
-            }
-
-            changeUrl(formData);
-            if( itemType != undefined &&  itemType.length > 0 )
-            {
-                var typesQuery = [ "itemTypes[]="+itemType ] ;
-                formData = formData + "&" + typesQuery.join('&') ;
-            }
-            // console.log(formData);
+        function contentLoadAjaxRequest(url , formData) {
             $.ajax({
                 type: "GET",
-                url: "{{action("HomeController@search")}}" ,
+                cache: false,
+                url: url ,
                 data:formData,
                 statusCode:
                     {
@@ -489,27 +466,52 @@
                         }
                     }
             });
+        }
+
+        function contentLoad(pageName , pageNumber, itemType) {
+            // initiated from url
+            var formData = $("#itemFilterForm").find(':not(input[name=_token])').filter(function(index, element) {
+                return $(element).val() != '';
+            }).serialize();
+            formData =  decodeURIComponent(formData);
+            if( pageNumber != undefined && pageNumber > 0 )
+            {
+                var numberQuery  ;
+                if (pageName.length > 0)
+                {
+                    numberQuery = [ pageName+"="+pageNumber ] ;
+                }
+                else
+                {
+                    numberQuery = [ "page="+pageNumber ] ;
+                }
+                formData = formData + "&" + numberQuery.join('&') ;
+            }else
+            {
+                $("#content-search-loading").show();
+            }
+
+            changeUrl(formData);
+            if( itemType != undefined &&  itemType.length > 0 )
+            {
+                var typesQuery = [ "itemTypes[]="+itemType ] ;
+                formData = formData + "&" + typesQuery.join('&') ;
+            }
+
+            // console.log(formData);
+            contentLoadAjaxRequest('{{action("HomeController@search")}}',formData);
             return false;
         }
 
         function changeUrl(appendUrl)
         {
             var newUrl = "{{action("HomeController@search")}}"+"?"+appendUrl;
-            window.history.pushState("data","Title",newUrl);
+            window.history.pushState({formData: appendUrl},"Title",newUrl);
             document.title=newUrl;
         }
-
-        // $(window).on('hashchange', function() {
-        //     if (window.location.hash) {
-        //         var page = window.location.hash.replace('#', '');
-        //         if (page == Number.NaN || page <= 0) {
-        //             return false;
-        //         } else {
-        //             getPosts(page);
-        //         }
-        //     }
-        // });
-
+        $(window).on("popstate", function(e) {
+            window.location.reload();
+        });
         $(document).on('click', '.pagination a', function (e) {
             var query = $(this).attr('href').split('?')[1];
             var parameters = query.split('=');

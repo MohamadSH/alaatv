@@ -28,12 +28,21 @@
                     <span class="arrow "></span>
                 </a>
             </li>
-            <li class="nav-item @if(isset($pageName) && strcmp($pageName , "educationalContent")==0)start active open @endif">
+            <li class="nav-item @if(isset($pageName) && strcmp($pageName , "educationalContent")==0)start active open @endif nav-toggle">
                 <a href="{{action("EducationalContentController@search")}}" class="nav-link nav-toggle font-yellow bold">
                     <i class="fa fa-video-camera" aria-hidden="true"></i>
                     <span class="title">فیلم های آلاء</span>
                     @if(isset($pageName) && strcmp($pageName , "educationalContent")==0)<span class="selected"></span> @endif
                     <span class="arrow "></span>
+                    <ul class="sub-menu">
+                        @foreach($sections as $section)
+                            <li class="nav-item  ">
+                                <a href="{{urldecode(action("HomeController@search" , ["tags" => $section["tags"]]))}}" class="nav-link ">
+                                    <span class="title">{{$section["displayName"]}}</span>
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
                 </a>
             </li>
             <li class="nav-item @if(isset($pageName) && strcmp($pageName , "productsPortfolio")==0)start active open @endif">

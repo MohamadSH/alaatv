@@ -15,7 +15,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="cbp-l-grid-projects-title text-center" style="font-size: small">@if(isset($content->name[0])){{$content->name}}@else <span class="font-red">بدون عنوان</span> @endif</div>
+                <div class="cbp-l-grid-projects-title text-center" style="font-size: small">
+                    <a href="{{action("EducationalContentController@show" , $content)}}">
+                        @if(isset($content->name[0])){{$content->name}}@else <span class="font-red">بدون عنوان</span> @endif
+                    </a>
+                </div>
                 {{--<div class="cbp-l-grid-projects-desc uppercase text-center uppercase text-center">Web Design / Graphic</div>--}}
             </div>
         @endforeach

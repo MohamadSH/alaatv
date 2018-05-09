@@ -154,27 +154,33 @@
                                 <div id="playListScroller" class="scroller" style="min-height: 50px; max-height:600px" data-always-visible="1" data-rail-visible="1"
                                      data-rail-color="red" data-handle-color="green">
                                     <ul>
-
                                         @foreach($contentsWithSameSet->whereIn("type" , "video" ) as $item)
+
                                             <li class="mt-list-item @if($item["content"]->id == $educationalContent->id) bg-grey-mint @endif " id="playlistItem_{{$item["content"]->id}}">
-                                                <div class="list-icon-container">
-                                                    <a href="{{action("EducationalContentController@show" , $item["content"])}}">
-                                                        <i class="fa fa-angle-left"></i>
-                                                    </a>
-                                                </div>
-                                                <div class="list-thumb">
-                                                    <a href="{{action("EducationalContentController@show" , $item["content"])}}">
-                                                        <img alt="{{$item["content"]->name}}"
-                                                             src="{{(isset($item["thumbnail"]))?$item["thumbnail"]:''}}"/>
-                                                    </a>
-                                                </div>
-                                                <div class="list-datetime bold uppercase font-yellow-casablanca"> {{($item["content"]->getDisplayName())}} </div>
-                                                <div class="list-item-content">
-                                                    <h3 class="uppercase bold">
-                                                        <a href="javascript:;">&nbsp;</a>
-                                                    </h3>
-                                                </div>
+
+                                                    <div class="list-icon-container">
+                                                        <a href="{{action("EducationalContentController@show" , $item["content"])}}" >
+                                                            <i class="fa fa-angle-left"></i>
+                                                        </a>
+                                                    </div>
+                                                    <div class="list-thumb">
+                                                        <a href="{{action("EducationalContentController@show" , $item["content"])}}" >
+                                                            <img alt="{{$item["content"]->name}}"
+                                                                 src="{{(isset($item["thumbnail"]))?$item["thumbnail"]:''}}"/>
+                                                        </a>
+                                                    </div>
+                                                    <div class="list-datetime bold uppercase font-yellow-casablanca">
+                                                        <a href="{{action("EducationalContentController@show" , $item["content"])}}" >
+                                                            {{($item["content"]->getDisplayName())}}
+                                                        </a>
+                                                    </div>
+                                                    <div class="list-item-content">
+                                                        <h3 class="uppercase bold">
+                                                            <a href="javascript:;">&nbsp;</a>
+                                                        </h3>
+                                                    </div>
                                             </li>
+
                                         @endforeach
 
                                     </ul>

@@ -71,8 +71,89 @@
 @endsection
 
 @section("content")
-    <h1 class="hidden">همایش اردو فیلم جزوه آلاء سؤال مشاوره ریاضی فیزیک دیفرانسیل شیمی</h1>
-    <h2 class="hidden">همایش اردو فیلم جزوه آلاء سؤال مشاوره ریاضی فیزیک دیفرانسیل شیمی</h2>
+    <style>
+        p.ribbon-content{
+            font-weight: bold;
+            text-decoration: none !important;
+        }
+        .mt-element-ribbon {
+            margin-bottom: 8px;
+
+        }
+        a.mt-element-ribbon{
+            text-decoration: none;
+        }
+    </style>
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-xs-12">
+            <div class="portlet light portlet-fit ">
+                <div class="portlet-body "  >
+                    <div class="row">
+                        <div class="col-md-3">
+                            <a  href="/landing/4">
+                                <div class="mt-element-ribbon  bg-red-flamingo">
+                                    <div class="ribbon ribbon-left ribbon-vertical-left ribbon-shadow ribbon-border-dash-vert ribbon-color-primary uppercase">
+                                        <div class="ribbon-sub ribbon-bookmark"></div>
+                                        <i class="fa fa-star"></i>
+                                    </div>
+                                    <p class="ribbon-content font-white">
+                                         آلاء - همایش طلایی کنکور(80%)
+                                    </p>
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mt-element-ribbon bg-blue" >
+                                <a  href="javascript:void(0)"
+                                    onclick="$('html, body').animate({scrollTop: $('.konkoor').offset().top - 80}, 2000);">
+                                    <div class="ribbon ribbon-left ribbon-vertical-left ribbon-shadow ribbon-border-dash-vert ribbon-color-primary uppercase">
+                                        <div class="ribbon-sub ribbon-bookmark"></div>
+                                        <i class="fa fa-star"></i>
+                                    </div>
+                                    <p class="ribbon-content font-white">
+                                        آلاء - تدریس کنکور، رایگان و کامل
+                                    </p>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mt-element-ribbon bg-green-jungle" >
+                                <a  href="javascript:void(0)"
+                                    onclick="$('html, body').animate({scrollTop: $('.dahom').offset().top  - 80}, 2000);">
+                                    <div class="ribbon ribbon-left ribbon-vertical-left ribbon-shadow ribbon-border-dash-vert ribbon-color-primary uppercase">
+                                        <div class="ribbon-sub ribbon-bookmark"></div>
+                                        <i class="fa fa-star"></i>
+                                    </div>
+                                    <p class="ribbon-content font-white">
+                                        آلاء - تدریس دهم، رایگان
+                                    </p>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+
+                            <div class="mt-element-ribbon bg-yellow-lemon" >
+                                <a  href="javascript:void(0)"
+                                    onclick="$('html, body').animate({scrollTop: $('.yazdahom').offset().top  - 80}, 2000);">
+                                    <div class="ribbon ribbon-left ribbon-vertical-left ribbon-shadow ribbon-border-dash-vert ribbon-color-primary uppercase">
+                                        <div class="ribbon-sub ribbon-bookmark"></div>
+                                        <i class="fa fa-star"></i>
+                                    </div>
+                                    <p class="ribbon-content font-white">
+                                        آلاء - تدریس یازدهم، رایگان
+                                    </p>
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
     @include("partials.slideShow1" ,["marginBottom"=>"25"])
     <div class="clearfix"></div>
     {{--<div class="row">--}}
@@ -185,12 +266,12 @@
     {{--End of Product Portfolio--}}
     @foreach($sections as $section)
         <div class="row">
-            <div class="col-md-12">
-                <h3 class="text-center">
-                    {{$section["displayName"]}}
-                    <a href="{{urldecode(action("HomeController@search" , ["tags" => $section["tags"]]))}}" class="btn btn-success">بیشتر</a>
-                </h3>
-                <hr style="border-color: #0c203a">
+            <div class="col-md-12 {{$section["class"]}}">
+                <h4 style="font-weight: bold">{{$section["displayName"]}}
+                    <a style="float: left; padding: 10px; width: 15%" href="{{urldecode(action("HomeController@search" , ["tags" => $section["tags"]]))}}" class="btn btn-success">بیشتر</a>
+                </h4>
+
+                <hr style="border-color: #17233a">
                 <div class="search-page search-content-3">
                     <section class="lessonSlider1 slider" style="width: 95%;margin-top: 0px ; margin-bottom: 15px;">
                         @foreach($section["lessons"] as $lesson)

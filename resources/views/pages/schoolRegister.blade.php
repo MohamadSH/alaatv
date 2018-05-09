@@ -90,7 +90,7 @@
                 <input name="nationalCode" style="{{ $errors->has('nationalCode') ? ' border: solid red;' : '' }}" value="{{(isset($nationalCode))?$nationalCode:old('nationalCode')}}" {{(isset($nationalCode))?"disabled":""}} type="text" placeholder="کدملی بدون خط تیره">
 
                 <select name="grade_id" style="{{ $errors->has('grade_id') ? ' border: solid red;' : '' }}" {{($eventRegistered)?"disabled":""}} class="nice-select-instance gradeSelect">
-                    <option value="0">انتخاب مقطع ثبت نام</option>
+                    <option value="0">انتخاب پایه مورد نظر</option>
                     <option value="5" @if(isset($grade)) {{($grade==5)?"selected":""}} @else {{(old('grade_id') == 5)?"selected":""}}@endif>هفتم</option>
                     <option value="6" @if(isset($grade)) {{($grade==6)?"selected":""}} @else {{(old('grade_id') == 6)?"selected":""}}@endif>هشتم</option>
                     <option value="7" @if(isset($grade)) {{($grade==7)?"selected":""}} @else {{(old('grade_id') == 7)?"selected":""}}@endif>نهم</option>
