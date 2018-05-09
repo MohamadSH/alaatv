@@ -53,6 +53,14 @@
                         </p>
                         @endforeach
                     </div>
+                    @if(isset($wSetting->branches->main->address->postalCode))
+                    <div class="c-section" style="text-align: right;direction: ltr">
+                        <div class="c-content-label uppercase bg-blue">کد پستی</div>
+                            <p dir="rtl">
+                                {{$wSetting->branches->main->address->postalCode}}
+                            </p>
+                    </div>
+                    @endif
                     @if(isset($emergencyContacts) && $emergencyContacts->isNotEmpty())
                         <div class="c-section" style="text-align: right;direction: ltr">
                             <div class="c-content-label uppercase bg-blue">تلفن ضروری</div>

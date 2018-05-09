@@ -25,7 +25,7 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="AlaaTV" />
+    <meta name="apple-mobile-web-app-title" content="Alaa" />
     <meta name="msapplication-tooltip" content="" />
     <meta name="msapplication-starturl" content="" />
     <meta name="msapplication-navbutton-color" content="" />
@@ -41,7 +41,7 @@
 
     <title></title>
 
-    <link rel="stylesheet" href="/assets/extra/landing3/css/stylesheet.css" />
+    <link rel="stylesheet" href="/assets/extra/landing3/css/stylesheet2.css" />
     <!--[if lt IE 10]>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flexibility/2.0.1/flexibility.js"></script>
     <![endif]-->
@@ -73,6 +73,9 @@
     <style>
         .primary-menu>li>a{
             font-size: 2rem !important;
+        }
+        .note-content>header>a>h2{
+            font-size: 6.3rem !important;
         }
     </style>
 </head>
@@ -415,7 +418,7 @@
                                 <div class="swiper-wrapper">
                                     <div class="swiper-slide">
                                         <article class="item-content-field">
-                                            <bdi class="bdi-title math">
+                                            <bdi class="bdi-title experiential">
                                                 <em>تجربی</em>
                                             </bdi>
                                             <figure>
@@ -446,7 +449,7 @@
                                     </div>
                                     <div class="swiper-slide">
                                         <article class="item-content-field">
-                                            <bdi class="bdi-title math">
+                                            <bdi class="bdi-title experiential">
                                                 <em>تجربی</em>
                                             </bdi>
                                             <figure>
@@ -458,7 +461,7 @@
                                                         <a href="javascript:void(0)" data-role="221" class="checkout" title="">
                                                             <h1>
                                                                 <span>ژنتیک</span>
-                                                                <em>آل علی</em>
+                                                                <em>احمد آل علی</em>
                                                             </h1>
                                                         </a>
                                                     </header>
@@ -477,7 +480,7 @@
                                     </div>
                                     <div class="swiper-slide">
                                         <article class="item-content-field">
-                                            <bdi class="bdi-title math">
+                                            <bdi class="bdi-title experiential">
                                                 <em>تجربی</em>
                                             </bdi>
                                             <figure>
@@ -508,7 +511,7 @@
                                     </div>
                                     <div class="swiper-slide">
                                         <article class="item-content-field">
-                                            <bdi class="bdi-title math">
+                                            <bdi class="bdi-title experiential">
                                                 <em>تجربی</em>
                                             </bdi>
                                             <figure>
@@ -539,7 +542,7 @@
                                     </div>
                                     <div class="swiper-slide">
                                         <article class="item-content-field">
-                                            <bdi class="bdi-title math">
+                                            <bdi class="bdi-title experiential">
                                                 <em>تجربی</em>
                                             </bdi>
                                             <figure>
@@ -710,7 +713,7 @@
     var storeOrderUrl = "{{ action('OrderproductController@store') }}";
 </script>
 <script src="/assets/extra/landing3/js/jquery-1.12.4.min.js" defer="defer"></script>
-<script src="/assets/extra/landing3/js/swiper.jquery.min.js" defer="defer"></script>
-<script src="/assets/extra/landing3/js/script.js" defer="defer"></script>
+<script src="/assets/extra/landing3/js/swiper2.jquery.min.js" defer="defer"></script>
+<script src="/assets/extra/landing3/js/script2.js" defer="defer"></script>
 </body>
 </html>
