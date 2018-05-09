@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Traits\APIRequestCommon;
 use App\Traits\Helper;
 use Carbon\Carbon;
 use Exception;
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\Storage;
 
 class Educationalcontent extends Model
 {
+    use APIRequestCommon;
     use SoftDeletes;
     use Helper;
 
