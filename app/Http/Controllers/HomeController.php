@@ -98,19 +98,6 @@ class HomeController extends Controller
     private static $TAG = HomeController::class;
 
     public function debug(Request $request){
-        $disableContents = Educationalcontent::where("enable" , 0)->get();
-        $counter = 0;
-        foreach ($disableContents as $content)
-        {
-            $tags = $content->retrievingTags();
-            if(!empty($tags))
-            {
-                dump($content->id." has tags! type: ".$content->contenttype_id);
-                $counter++;
-            }
-        }
-        dump("count: ".$counter);
-        dd("finish");
         abort(404);
     }
     public function __construct()
@@ -1825,10 +1812,7 @@ class HomeController extends Controller
 //                    return response()->download(Storage::drive($diskName)->getAdapter()->getRoot() . $fileName);
 //
                 $diskAdapter = Storage::disk($diskName)->getAdapter();
-                $rootPath = $diskAdapter->getRoot();
-                $rootPath = str_replace(env("SFTP_ROOT") , env("DOWNLOAD_HOST_PROTOCOL").env("DOWNLOAD_HOST_NAME") ,$rootPath );
                 $diskType = class_basename($diskAdapter);
-                //TODO: baraye chie ?
                 switch ($diskType) {
                     case "SftpAdapter" :
                         if (isset($file))
@@ -2557,6 +2541,26 @@ class HomeController extends Controller
         dump("Number of processed : ".$counter);
         dd("finish");
          * */
+    }
+
+    public function checkDisableContentTagBot()
+    {
+        $disableContents = Educationalcontent::where("enable" , 0)->get();
+        $counter = 0;
+        foreach ($disableContents as $content)
+        {
+            $tags = $content->retrievingTags();
+            if(!empty($tags))
+            {
+                $author = "";
+                if(isset($content->author_id))
+                    $author = $content->user->lastName;
+                dump($content->id." has tags! type: ".$content->contenttype_id." author: ".$author);
+                $counter++;
+            }
+        }
+        dump("count: ".$counter);
+        dd("finish");
     }
 
     public function tagBot()
