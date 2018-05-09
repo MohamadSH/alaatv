@@ -226,7 +226,8 @@ body {
 
 .fig-img-content-field>img {
   width: 100%;
-  max-height: 65.4rem;
+  max-width: 55.9rem;
+  max-height: 55.9rem;
 }
 
 .swiper-content-field>.swiper-wrapper>.swiper-slide {
@@ -235,9 +236,15 @@ body {
   transition: .1s ease-in-out;
 }
 
+.swiper-content-field>.swiper-wrapper>.swiper-slide>.item-content-field {
+  max-width: 29.5rem;
+  max-height: 65.6rem;
+  transition: .1s ease-in-out;
+}
+
 .swiper-content-field>.swiper-wrapper>.swiper-slide:hover {
   /* box-shadow: 0 0.1rem 19.3rem rgba(0, 0, 0, 0.09); */
-  box-shadow: 0 0.1rem 9.3rem 3.4rem rgba(0, 0, 0, 0.26);
+  box-shadow: 0 0.1rem 3.3rem 1rem rgba(0, 0, 0, 0.26);
   transition: .3s ease-in-out;
 }
 
@@ -306,7 +313,7 @@ body {
 .item-content-field>figure>figcaption {
   position: absolute;
   padding: 0 2.1rem;
-  bottom: -33%;
+  bottom: -15.4rem;
 }
 
 .item-content-field>figure>figcaption>header {
@@ -325,9 +332,10 @@ body {
 .item-content-field>figure>figcaption>header>a>h1>span {
   flex: 1 0 100%;
   color: #edf0f2;
-  font-size: 4.4rem;
+  font-size: 7.4rem;
   font-weight: bolder;
   border-bottom: .1rem solid #fff;
+  max-height: 95px;
 }
 
 .item-content-field>figure>figcaption>header>a>h1>em {
@@ -335,6 +343,9 @@ body {
   font-size: 7.4rem;
   font-weight: 400;
   letter-spacing: -0.007rem;
+  max-height: 95px;
+  display: flex;
+  align-items: end;
 }
 
 .header-res {
@@ -368,19 +379,22 @@ body {
 }
 
 .prsent i {
+  position: relative;
   color: #fbd32a;
-  font-size: 7.9rem;
+  font-size: 5.9rem;
   font-weight: 700;
   line-height: 4.193rem;
   letter-spacing: -0.02rem;
 }
 
 .prsent em {
+  position: relative;
   color: #fbd32a;
-  font-size: 5rem;
+  font-size: 4rem;
   font-weight: 700;
   line-height: 4.193rem;
   letter-spacing: -0.007rem;
+  top: -.5rem;
 }
 
 .sec-dwon-sample {
@@ -410,7 +424,7 @@ body {
   justify-content: center;
   color: #fff;
   font-family: Lalezar;
-  font-size: 3.6rem;
+  font-size: 8.6rem;
   font-weight: bolder;
   letter-spacing: -0.03rem;
   top: -1rem;
@@ -443,6 +457,48 @@ body {
   top: 47%;
   z-index: 1010;
   transition: .2s ease-in-out;
+}
+
+.content-field-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.content-field-pagination .swiper-pagination-bullet {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 101%;
+  background: #f9f9f9;
+  opacity: 0.6;
+  transition: .2s ease-in-out;
+}
+
+.content-field-pagination .swiper-pagination-bullet.swiper-pagination-bullet-active {
+  width: 1.2rem;
+  height: 1.2rem;
+  opacity: 1;
+  transition: .3s ease-in-out;
+}
+
+.content-field-pagination-all .swiper-pagination-bullet.swiper-pagination-bullet-active {
+  background: #10c5af;
+  transition: .3s ease-in-out;
+}
+
+.content-field-pagination-experiential .swiper-pagination-bullet.swiper-pagination-bullet-active {
+  background: #ee548d;
+  transition: .3s ease-in-out;
+}
+
+.content-field-pagination-math .swiper-pagination-bullet.swiper-pagination-bullet-active {
+  background: #00ade5;
+  transition: .3s ease-in-out;
+}
+
+.swiper-container-horizontal>.swiper-pagination-bullets.content-field-pagination .swiper-pagination-bullet {
+  margin: 0 .2rem;
 }
 
 .r0 {
@@ -480,7 +536,7 @@ body {
 }
 
 .note-content>header>a>h2 {
-  font-size: 5.3rem;
+  font-size: 8.3rem;
   font-weight: 400;
   letter-spacing: -0.03rem;
 }
@@ -571,6 +627,101 @@ body {
 
 /* Start Responsive */
 
+@media only screen and (min-width: 1601px) and (max-width: 1930px) {
+  .swiper-content-field > .swiper-wrapper > .swiper-slide > .item-content-field {
+    max-width: 36.5rem;
+    max-height: 65.6rem;
+    transition: .1s ease-in-out;
+}
+  .item-content-field > figure > figcaption {
+    bottom: -10rem;
+}
+}
+@media only screen and (min-width: 1601px) and (max-width: 1700px) {
+  .swiper-content-field > .swiper-wrapper > .swiper-slide > .item-content-field {
+    max-width: 31.9rem;
+    max-height: 65.6rem;
+    transition: .1s ease-in-out;
+}
+}
+@media only screen and (min-width: 1200px) and (max-width: 1500px) {
+  .swiper-content-field>.swiper-wrapper>.swiper-slide {
+    max-width: 23.2rem;
+  }
+  .item-content-field>figure>figcaption>header>a>h1>span {
+    font-size: 5.4rem;
+  }
+  .item-content-field>figure>figcaption>header>a>h1>em {
+    font-size: 5.4rem;
+  }
+  .prsent i {
+    font-size: 4.9rem;
+  }
+  .prsent em {
+    position: relative;
+    top: -6px;
+    font-size: 3rem;
+  }
+  .item-content-field>figure>figcaption>header>a>h1 {
+    margin-bottom: -0.5rem;
+  }
+  .item-content-field>figure {
+    top: 4.5rem;
+  }
+  .fig-img-content-field>img {
+    width: 100%;
+    max-height: 65.4rem;
+    height: 455px;
+  }
+  .item-content-field>figure>figcaption {
+    position: absolute;
+    padding: 0 2.1rem;
+    bottom: -12.4rem;
+  }
+  .span-gold {
+    font-size: 3rem;
+  }
+}
+
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+  .swiper-content-field>.swiper-wrapper>.swiper-slide {
+    max-width: 23.2rem;
+  }
+  .item-content-field>figure>figcaption>header>a>h1>span {
+    font-size: 5.4rem;
+  }
+  .item-content-field>figure>figcaption>header>a>h1>em {
+    font-size: 5.4rem;
+  }
+  .prsent i {
+    font-size: 4.9rem;
+  }
+  .prsent em {
+    position: relative;
+    top: -6px;
+    font-size: 3rem;
+  }
+  .item-content-field>figure>figcaption>header>a>h1 {
+    margin-bottom: -0.5rem;
+  }
+  .item-content-field>figure {
+    top: 4.5rem;
+  }
+  .fig-img-content-field>img {
+    width: 100%;
+    max-height: 65.4rem;
+    height: 455px;
+  }
+  .item-content-field>figure>figcaption {
+    position: absolute;
+    padding: 0 2.1rem;
+    bottom: -12.4rem;
+  }
+  .span-gold {
+    font-size: 3rem;
+  }
+}
+
 @media only screen and (min-width: 768px) and (max-width: 991px) {
   .main-landing {
     display: flex;
@@ -586,7 +737,7 @@ body {
     background-size: 100% 100%;
     /* background-size: contain; */
     max-height: 61.4rem;
-    min-height: 47.4rem;
+    min-height: 30.4rem;
     width: 100%;
   }
   .sigin-login {
@@ -604,6 +755,10 @@ body {
   .sigin-login>.a-login {
     display: none;
   }
+  .span-gold {
+    font-size: 3.3rem;
+    margin: 0 12px;
+  }
   .sigin-login>.a-sigin {
     display: none;
   }
@@ -611,11 +766,14 @@ body {
     display: none;
   }
   .menu-res {
-    display: block;
+    display: flex;
+    align-items: center;
+    min-height: 6.3rem;
+    max-height: 6.3rem;
   }
   .a-menu-res {
     color: #fff;
-    font-size: 4.2rem;
+    font-size: 2.5rem;
     font-weight: bolder;
     letter-spacing: 0.037rem;
     transition: .2s ease-in-out;
@@ -643,6 +801,8 @@ body {
   .menu-res>.swiper-wrapper>.swiper-slide {
     width: auto;
     float: left;
+    align-items: center;
+    display: flex;
   }
   .res-gold-fest {
     display: block;
@@ -657,12 +817,17 @@ body {
     margin-right: 8%;
   }
   .header-main {
-    display: none;
-  }
-  .header-res {
     display: block;
     margin-bottom: 3.5rem;
     transform: matrix3d(10px, 10px, 1px)
+  }
+  .header-res {
+    display: none;
+    margin-bottom: 3.5rem;
+    transform: matrix3d(10px, 10px, 1px)
+  }
+  .content-field {
+    width: 100%;
   }
   .tab-footer {
     display: none;
@@ -676,7 +841,9 @@ body {
   }
   .swiper-content-field>.swiper-wrapper>.swiper-slide {
     max-width: 23.2rem;
-    max-width: 85%;
+  }
+  .item-content-field>figure>figcaption {
+    bottom: -11.4rem;
   }
   .main-landing>.content-field:nth-of-type(2) {
     background-color: #10c7b2;
@@ -705,23 +872,18 @@ body {
   .item-content-field>figure>figcaption>header>a>h1>em {
     font-size: 6rem;
   }
-  .span-gold {
-    font-size: 4rem;
-  }
   .prsent i {
-    font-size: 5.9rem;
+    font-size: 4.9rem;
   }
-  /* Start Info Author */
-  /*
-  Theme Name: A Company
-  Author: The MohammadReza Pazani
-  Author URI: Now Load
-  Author Gmail: mohammadreza.pazani746@gmail.com
-  Author Tel: 09337200943
-  */
-  /* End Info Author */
   .prsent em {
+    position: relative;
     font-size: 3rem;
+    top: -6px;
+  }
+  .prsent {
+    width: 12.2rem;
+    position: relative;
+    left: -10px;
   }
   .i-swiper-content {
     color: #fff;
@@ -749,9 +911,18 @@ body {
     font-size: 3rem;
     top: -.5rem;
   }
-  .down-sample:hover::before {
-    visibility: hidden;
-    opacity: 0;
+  /* Start Info Author */
+  /*
+  Theme Name: A Company
+  Author: The MohammadReza Pazani
+  Author URI: Now Load
+  Author Gmail: mohammadreza.pazani746@gmail.com
+  Author Tel: 09337200943
+  */
+  /* End Info Author */
+  .down-sample::before {
+    visibility: visible;
+    opacity: .5;
   }
   .res-down {
     display: block;
@@ -871,7 +1042,9 @@ body {
   }
   .swiper-content-field>.swiper-wrapper>.swiper-slide {
     max-width: 23.2rem;
-    max-width: 85%;
+  }
+  .item-content-field>figure>figcaption {
+    bottom: -11.4rem;
   }
   .main-landing>.content-field:nth-of-type(2) {
     background-color: #10c7b2;
@@ -895,16 +1068,23 @@ body {
     top: 5.5rem;
   }
   .item-content-field>figure>figcaption>header>a>h1>span {
-    font-size: 6rem;
+    font-size: 4rem;
   }
   .item-content-field>figure>figcaption>header>a>h1>em {
-    font-size: 6rem;
+    font-size: 4rem;
   }
   .prsent i {
-    font-size: 7.9rem;
+    font-size: 4.9rem;
   }
   .prsent em {
-    font-size: 4rem;
+    position: relative;
+    font-size: 3rem;
+    top: -6px;
+  }
+  .prsent {
+    width: 12.2rem;
+    position: relative;
+    left: -10px;
   }
   .i-swiper-content {
     color: #fff;
@@ -945,5 +1125,3 @@ body {
 }
 
 /* End Responsive */
-
-/*# sourceMappingURL=stylesheet.css.map */

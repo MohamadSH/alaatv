@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Traits\APIRequestCommon;
 use App\Traits\Helper;
 use Carbon\Carbon;
 use Exception;
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\Storage;
 
 class Educationalcontent extends Model
 {
+    use APIRequestCommon;
     use SoftDeletes;
     use Helper;
 
@@ -326,6 +328,28 @@ class Educationalcontent extends Model
             }
         }
         return $contentsWithSameSet ;
+    }
+
+    public function retrievingTags()
+    {
+        /**
+         *      Retrieving Tags
+         */
+        $response = $this->sendRequest(
+            env("TAG_API_URL")."id/content/".$this->id,
+            "GET"
+        );
+
+        if($response["statusCode"] == 200)
+        {
+            $result = json_decode($response["result"]);
+            $tags = $result->data->tags;
+        } else
+        {
+            $tags =[];
+        }
+
+        return $tags ;
     }
 
 //    public function setTagsAttribute($value)

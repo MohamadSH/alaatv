@@ -422,6 +422,27 @@
                                     </figure>
                                 </article>
                             </div>
+                            <div class="swiper-slide">
+                                <article class="slider-content-main">
+                                    <strong>
+                                        <header>
+                                            <h1>
+                                                <a href="javascript:void(0)" data-role="222" class="link" title="خرید بسته آموزشی"  >
+                                                    مهدی امینی راد
+                                                </a>
+                                            </h1>
+                                            <span>بسته ریاضی انسانی</span>
+                                        </header>
+                                        <p>در این همایش ریاضی انسانی به صورت خلاصه، منظم، الگوبندی شده و در قالبی روان و دلپذیر جمع بندی و ارائه می شود.</p>
+                                        <p>شما با این همایش مهارت در پاسخگویی به سوالات در هر سه سطح ساده، متوسط و دشوار کسب می کنید.</p>
+                                    </strong>
+                                    <figure>
+                                        <a href="javascript:void(0)" title="">
+                                            <img src="/assets/extra/landing4/images/slider/S4.png" alt="" title="">
+                                        </a>
+                                    </figure>
+                                </article>
+                            </div>
                         </div>
                         <div class="swiper-pagination-red"></div>
                     </div>
@@ -515,11 +536,11 @@
                         <li data-tab="2">
                             <a href="javascript:void(0)" title="ریاضی">اختصاصی ریاضی</a>
                         </li>
-                        {{--<li data-tab="3">--}}
-                            {{--<a href="javascript:void(0)" title="تجربی">تجربی</a>--}}
-                        {{--</li>--}}
-                        <li data-tab="4">
+                        <li data-tab="3">
                             <a href="javascript:void(0)" title="تجربی">اختصاصی تجربی</a>
+                        </li>
+                        <li data-tab="4">
+                            <a href="javascript:void(0)" title="تجربی">اختصاصی انسانی</a>
                         </li>
                     </ul>
                 </div>
@@ -809,33 +830,6 @@
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/S4.png" alt="1" title="1">
-                            </a>
-                            <figcaption>
-                                <header>
-                                    <a href="javascript:void(0)" title="">
-                                        <h1>مهدی امینی راد</h1>
-                                    </a>
-                                    <span>همایش طلایی ریاضی تجربی کنکور</span>
-                                </header>
-                            </figcaption>
-                        </figure>
-                        <p style="text-align: justify">در این همایش ریاضی تجربی به صورت خلاصه، منظم، الگوبندی شده و در قالبی روان و دلپذیر جمع بندی و ارائه می شود.
-                            شما با این همایش مهارت در پاسخگویی به سوالات در هر سه سطح ساده، متوسط و دشوار کسب می کنید.</p>
-                        <div class="info-professors">
-                            <header>
-                                <h4>مهارت در ریاضی تجربی</h4>
-                            </header>
-                            <span>کسب مهارت در پاسخگویی به سوالات با هر درجه سختی</span>
-                            <span>صرفه جویی در زمان برای جمع بندی کنکور</span>
-                            <span>فراگیری روش های جدید تست زنی</span>
-                            <span>به همراه حل سوالات کنکور های گذشته و برخی سوالات تالیفی</span>
-                            <a href="javascript:void(0)" class="link" title="خرید بسته آموزشی" data-role="219">خرید بسته آموزشی</a>
-                        </div>
-                    </article>
-                    <article class="art-professors">
-                        <figure>
-                            <a href="javascript2:void(0)" title="">
                                 <img src="/assets/extra/landing4/images/professors/S2.png" alt="1" title="1">
                             </a>
                             <figcaption>
@@ -861,6 +855,33 @@
                                 با بررسی موضوعی سوالات ریاضی تجربی کنکور داخل و خارج  ۹۵،۹۴ و ۹۶ از هم اکنون جای پای خود را در کنکور ۹۷ محکم می کنیم. با این همایش شما دانسته هایتان را با سلیقه طراحان کنکور طبقه بندی می کنید و برای به دست آوردن درصد بالایی از این درس خود را آماده می کنید.
                             </p>
                             <a href="javascript:void(0)" class="link" data-role="220" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                        </div>
+                    </article>
+                    <article class="art-professors">
+                        <figure>
+                            <a href="javascript2:void(0)" title="">
+                                <img src="/assets/extra/landing4/images/professors/S4.png" alt="1" title="1">
+                            </a>
+                            <figcaption>
+                                <header>
+                                    <a href="javascript:void(0)" title="">
+                                        <h1>مهدی امینی راد</h1>
+                                    </a>
+                                    <span>همایش طلایی ریاضی انسانی کنکور</span>
+                                </header>
+                            </figcaption>
+                        </figure>
+                        <p style="text-align: justify">در این همایش ریاضی انسانی به صورت خلاصه، منظم، الگوبندی شده و در قالبی روان و دلپذیر جمع بندی و ارائه می شود.
+                            شما با این همایش مهارت در پاسخگویی به سوالات در هر سه سطح ساده، متوسط و دشوار کسب می کنید.</p>
+                        <div class="info-professors">
+                            <header>
+                                <h4>مهارت در ریاضی انسانی</h4>
+                            </header>
+                            <span>کسب مهارت در پاسخگویی به سوالات با هر درجه سختی</span>
+                            <span>صرفه جویی در زمان برای جمع بندی کنکور</span>
+                            <span>فراگیری روش های جدید تست زنی</span>
+                            <span>به همراه حل سوالات کنکور های گذشته و برخی سوالات تالیفی</span>
+                            <a href="javascript:void(0)" class="link" title="خرید بسته آموزشی" data-role="222">خرید بسته آموزشی</a>
                         </div>
                     </article>
 
@@ -972,97 +993,6 @@
             </div>
             <div class="content-tab-lesson" data-tabc="3">
                 <section class="sec-professors">
-                    <article class="art-professors">
-                        <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/1.png" alt="1" title="1">
-                            </a>
-                            <figcaption>
-                                <header>
-                                    <a href="javascript:void(0)" title="">
-                                        <h1>دکتر هامون سبطی</h1>
-                                    </a>
-                                    <span>فارسی را با فاخته ادبیات ایران تجربه کنید.</span>
-                                </header>
-                            </figcaption>
-                        </figure>
-                        <p>
-                            مولف کتاب های توضیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
-                            در آموزش و پرورش
-                        </p>
-                        <div class="info-professors">
-                            <header>
-                                <h4> 40 دقیقه ویدیوی آموزشی شامل :</h4>
-                            </header>
-                            <span>ادبیات و زبان فارسی سال اول</span>
-                            <span>ادبیات و زبان فارسی سال دوم</span>
-                            <span>ادبیات و زبان فارسی سال سوم</span>
-                            <span>ادبیات و زبان فارسی پیش دانشگاهی </span>
-                            <a href="javascript:void(0)" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
-                        </div>
-                    </article>
-                    <article class="art-professors">
-                        <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/1.png" alt="1" title="1">
-                            </a>
-                            <figcaption>
-                                <header>
-                                    <a href="javascript:void(0)" title="">
-                                        <h1>دکتر هامون سبطی</h1>
-                                    </a>
-                                    <span>فارسی را با فاخته ادبیات ایران تجربه کنید.</span>
-                                </header>
-                            </figcaption>
-                        </figure>
-                        <p>
-                            مولف کتاب های توضیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
-                            در آموزش و پرورش
-                        </p>
-                        <div class="info-professors">
-                            <header>
-                                <h4> 40 دقیقه ویدیوی آموزشی شامل :</h4>
-                            </header>
-                            <span>ادبیات و زبان فارسی سال اول</span>
-                            <span>ادبیات و زبان فارسی سال دوم</span>
-                            <span>ادبیات و زبان فارسی سال سوم</span>
-                            <span>ادبیات و زبان فارسی پیش دانشگاهی </span>
-                            <a href="javascript:void(0)" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
-                        </div>
-                    </article>
-                    <article class="art-professors">
-                        <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/1.png" alt="1" title="1">
-                            </a>
-                            <figcaption>
-                                <header>
-                                    <a href="javascript:void(0)" title="">
-                                        <h1>دکتر هامون سبطی</h1>
-                                    </a>
-                                    <span>فارسی را با فاخته ادبیات ایران تجربه کنید.</span>
-                                </header>
-                            </figcaption>
-                        </figure>
-                        <p>
-                            مولف کتاب های توضیه شده توسط آموزش و پرورش دبیر برتر آموزشگاه های هدف عضو کمیته برنامه ریزی و اجرایی سامان دهی منابع آموزشی
-                            در آموزش و پرورش
-                        </p>
-                        <div class="info-professors">
-                            <header>
-                                <h4> 40 دقیقه ویدیوی آموزشی شامل :</h4>
-                            </header>
-                            <span>ادبیات و زبان فارسی سال اول</span>
-                            <span>ادبیات و زبان فارسی سال دوم</span>
-                            <span>ادبیات و زبان فارسی سال سوم</span>
-                            <span>ادبیات و زبان فارسی پیش دانشگاهی </span>
-                            <a href="javascript:void(0)" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
-                        </div>
-                    </article>
-                </section>
-            </div>
-            <div class="content-tab-lesson" data-tabc="4">
-                <section class="sec-professors">
                     <article class="art-professors" >
                         <figure>
                             <a href="javascript2:void(0)" title="">
@@ -1160,7 +1090,7 @@
                             </figcaption>
                         </figure>
                         <p style="text-align: justify">در این همایش ریاضی تجربی به صورت خلاصه، منظم، الگوبندی شده و در قالبی روان و دلپذیر جمع بندی و ارائه می شود.
-                        شما با این همایش مهارت در پاسخگویی به سوالات در هر سه سطح ساده، متوسط و دشوار کسب می کنید.</p>
+                            شما با این همایش مهارت در پاسخگویی به سوالات در هر سه سطح ساده، متوسط و دشوار کسب می کنید.</p>
                         <div class="info-professors">
                             <header>
                                 <h4>مهارت در ریاضی تجربی</h4>
@@ -1187,7 +1117,7 @@
                             </figcaption>
                         </figure>
                         <p style="text-align: justify">در این همایش موضوع به موضوع سوالات کنکور ۹۴ تا ۹۶ را بررسی می کنیم.
-                           الگوهای طراحان در این همایش معرفی شده و نکات را تشریح می کنیم.</p>
+                            الگوهای طراحان در این همایش معرفی شده و نکات را تشریح می کنیم.</p>
                         <div class="info-professors">
                             <header>
                                 <h4>جمع بندی روشمند و جامع ریاضی کنکور تجربی</h4>
@@ -1269,6 +1199,37 @@
                                 پس از این همایش سوالات با ساده ترین حالت خود در برابر ما قرار خواهد گرفت.
                             </p>
                             <a href="javascript:void(0)" class="link" data-role="217" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
+                        </div>
+                    </article>
+                </section>
+            </div>
+            <div class="content-tab-lesson" data-tabc="4">
+                <section class="sec-professors">
+                    <article class="art-professors">
+                        <figure>
+                            <a href="javascript2:void(0)" title="">
+                                <img src="/assets/extra/landing4/images/professors/S4.png" alt="1" title="1">
+                            </a>
+                            <figcaption>
+                                <header>
+                                    <a href="javascript:void(0)" title="">
+                                        <h1>مهدی امینی راد</h1>
+                                    </a>
+                                    <span>همایش طلایی ریاضی انسانی کنکور</span>
+                                </header>
+                            </figcaption>
+                        </figure>
+                        <p style="text-align: justify">در این همایش ریاضی انسانی به صورت خلاصه، منظم، الگوبندی شده و در قالبی روان و دلپذیر جمع بندی و ارائه می شود.
+                            شما با این همایش مهارت در پاسخگویی به سوالات در هر سه سطح ساده، متوسط و دشوار کسب می کنید.</p>
+                        <div class="info-professors">
+                            <header>
+                                <h4>مهارت در ریاضی انسانی</h4>
+                            </header>
+                            <span>کسب مهارت در پاسخگویی به سوالات با هر درجه سختی</span>
+                            <span>صرفه جویی در زمان برای جمع بندی کنکور</span>
+                            <span>فراگیری روش های جدید تست زنی</span>
+                            <span>به همراه حل سوالات کنکور های گذشته و برخی سوالات تالیفی</span>
+                            <a href="javascript:void(0)" class="link" title="خرید بسته آموزشی" data-role="222">خرید بسته آموزشی</a>
                         </div>
                     </article>
                 </section>
