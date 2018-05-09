@@ -25,7 +25,7 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="AlaaTV" />
+    <meta name="apple-mobile-web-app-title" content="Alaa" />
     <meta name="msapplication-tooltip" content="" />
     <meta name="msapplication-starturl" content="" />
     <meta name="msapplication-navbutton-color" content="" />
@@ -73,6 +73,9 @@
     <style>
         .primary-menu>li>a{
             font-size: 2rem !important;
+        }
+        .note-content>header>a>h2{
+            font-size: 6.3rem !important;
         }
     </style>
 </head>
@@ -415,7 +418,7 @@
                                 <div class="swiper-wrapper">
                                     <div class="swiper-slide">
                                         <article class="item-content-field">
-                                            <bdi class="bdi-title math">
+                                            <bdi class="bdi-title experiential">
                                                 <em>تجربی</em>
                                             </bdi>
                                             <figure>
@@ -446,7 +449,7 @@
                                     </div>
                                     <div class="swiper-slide">
                                         <article class="item-content-field">
-                                            <bdi class="bdi-title math">
+                                            <bdi class="bdi-title experiential">
                                                 <em>تجربی</em>
                                             </bdi>
                                             <figure>
@@ -477,7 +480,7 @@
                                     </div>
                                     <div class="swiper-slide">
                                         <article class="item-content-field">
-                                            <bdi class="bdi-title math">
+                                            <bdi class="bdi-title experiential">
                                                 <em>تجربی</em>
                                             </bdi>
                                             <figure>
@@ -508,7 +511,7 @@
                                     </div>
                                     <div class="swiper-slide">
                                         <article class="item-content-field">
-                                            <bdi class="bdi-title math">
+                                            <bdi class="bdi-title experiential">
                                                 <em>تجربی</em>
                                             </bdi>
                                             <figure>
@@ -539,7 +542,7 @@
                                     </div>
                                     <div class="swiper-slide">
                                         <article class="item-content-field">
-                                            <bdi class="bdi-title math">
+                                            <bdi class="bdi-title experiential">
                                                 <em>تجربی</em>
                                             </bdi>
                                             <figure>
