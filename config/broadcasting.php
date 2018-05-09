@@ -38,21 +38,22 @@ return [
             'options' => [
                 'cluster' => env('PUSHER_APP_CLUSTER'),
                 'encrypted' => true,
-        ],
+            ],
 
-        'redis' => [
-            'driver' => 'redis',
-            'connection' => 'default',
-        ],
+            'redis' => [
+                'driver' => 'redis',
+                'connection' => 'default',
+            ],
 
-        'log' => [
-            'driver' => 'log',
-        ],
+            'log' => [
+                'driver' => 'log',
+            ],
 
-        'null' => [
-            'driver' => 'null',
-        ],
+            'null' => [
+                'driver' => 'null',
+            ],
 
+        ],
     ],
 
 ];
