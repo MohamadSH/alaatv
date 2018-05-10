@@ -1,5 +1,5 @@
 @permission((Config::get('constants.LIST_EVENTRESULT_ACCESS')))
-@if(isset($sharifRegisterEvent) && $sharifRegisterEvent)
+@if(isset($isSharifRegisterEvent) && $isSharifRegisterEvent)
     @foreach($eventresults as $eventresult)
         <tr >
             <th></th>
