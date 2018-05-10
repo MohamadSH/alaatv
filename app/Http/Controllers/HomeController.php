@@ -18,6 +18,7 @@ use App\Coupon;
 use App\Coupontype;
 use App\Educationalcontent;
 use App\Event;
+use App\Eventresult;
 use App\Gender;
 use App\Grade;
 use App\Http\Requests\ContactUsFormRequest;
