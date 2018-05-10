@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Event;
 use App\Eventresult;
 use App\Http\Requests\InsertEventResultRequest;
 use Illuminate\Http\Request;
@@ -42,7 +43,11 @@ class EventresultController extends Controller
             $eventresults = $eventresults->whereIn("event_id" , $eventIds) ;
         }
         $eventresults = $eventresults->get();
-        return view("event.result.index" , compact("eventresults"));
+        $sharifRegisterEvent = Event::where("name" , "")->get()->first();
+        if(isset($sharifRegisterEvent) && in_array($sharifRegisterEvent->id , $eventIds))
+            $isSharifRegisterEvent = true;
+
+        return view("event.result.index" , compact("eventresults" , "eventIds"));
     }
 
     /**

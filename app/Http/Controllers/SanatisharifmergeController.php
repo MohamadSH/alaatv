@@ -3270,18 +3270,22 @@ class SanatisharifmergeController extends Controller
                 $oldContent = Sanatisharifmerge::where('lessonid','=',$lId)
                     ->where('depid','=',$dId)
                     ->first();
-                $tag2 = $this->lessonMultiplexer($lId,$oldContent->lessonname);
-                $tag3 = $this->determineTeacherName(
-                    $oldContent->teacherfirstname,
-                    $oldContent->teacherlastname,
-                    $oldContent->departmentlessonid,
-                    1);
-                $tag3 = $this->makeName($tag3["firstname"],$tag3["lastname"]);
-                if(strlen($tag3) > 0)
-                    $tag3 = [$this->make_slug($tag3 , "_")];
-                else
-                    $tag3 =[];
-                $tag4 = $this->deplessonMultiplexer($oldContent->departmentlessonid,1);
+                if(isset($oldContent))
+                {
+                    $tag2 = $this->lessonMultiplexer($lId,$oldContent->lessonname);
+                    $tag3 = $this->determineTeacherName(
+                        $oldContent->teacherfirstname,
+                        $oldContent->teacherlastname,
+                        $oldContent->departmentlessonid,
+                        1);
+                    $tag3 = $this->makeName($tag3["firstname"],$tag3["lastname"]);
+                    if(strlen($tag3) > 0)
+                        $tag3 = [$this->make_slug($tag3 , "_")];
+                    else
+                        $tag3 =[];
+                    $tag4 = $this->deplessonMultiplexer($oldContent->departmentlessonid,1);
+                }
+
             }elseif (isset($lId)){
                 $oldContent = Sanatisharifmerge::where('lessonid','=',$lId)->first();
                 if (isset($oldContent)) {

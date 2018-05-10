@@ -163,7 +163,9 @@ class Kernel extends ConsoleKernel
                 }
             }
 
-        })->dailyAt('22:30')->timezone('Asia/Tehran') ;
+        })
+            ->dailyAt('22:30')
+            ->timezone('Asia/Tehran') ;
         $schedule->command('backup:mysql-dump')
             ->timezone('Asia/Tehran')
             ->dailyAt('04:30');
