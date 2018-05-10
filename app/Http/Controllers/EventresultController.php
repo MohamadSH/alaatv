@@ -42,10 +42,16 @@ class EventresultController extends Controller
         {
             $eventresults = $eventresults->whereIn("event_id" , $eventIds) ;
         }
+        else
+        {
+            $eventIds = [];
+        }
         $eventresults = $eventresults->get();
         $sharifRegisterEvent = Event::where("name" , "sabtename_sharif_97")->get()->first();
         if(isset($sharifRegisterEvent) && in_array($sharifRegisterEvent->id , $eventIds))
             $isSharifRegisterEvent = true;
+        else
+            $isSharifRegisterEvent = false;
 
         return view("event.result.index" , compact("eventresults" , "eventIds" , "isSharifRegisterEvent"));
     }
