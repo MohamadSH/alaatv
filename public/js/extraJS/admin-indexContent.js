@@ -816,10 +816,11 @@ $(document).on("click", "#mbtiAnswer-portlet .reload", function (){
 /**
  * Event Result Admin Ajax
  */
-$(document).on("click", "#eventResult-portlet .reload", function (){
-    var formData = $("#filterEventresultForm").serialize();
-    $("#eventResult-portlet-loading").removeClass("hidden");
-    $('#eventResult_table > tbody').html("");
+$(document).on("click", ".eventResult-portlet .reload", function (){
+    var identifier = $(this).data("role");
+    var formData = $("#filter"+identifier+"Form").serialize();
+    $("#"+identifier+"-portlet-loading").removeClass("hidden");
+    $('#'+identifier+'_table > tbody').html("");
     $.ajax({
         type: "GET",
         url: "/eventresult",
@@ -827,11 +828,11 @@ $(document).on("click", "#eventResult-portlet .reload", function (){
         success: function (result) {
             // console.log(result);
             // console.log(result.responseText);
-            var newDataTable =$("#eventResult_table").DataTable();
+            var newDataTable =$("#"+identifier+"_table").DataTable();
             newDataTable.destroy();
-            $('#eventResult_table > tbody').html(result);
-            makeDataTable("eventResult_table");
-            $("#eventResult-portlet-loading").addClass("hidden");
+            $('#'+identifier+'_table > tbody').html(result);
+            makeDataTable(identifier+"_table");
+            $("#"+identifier+"-portlet-loading").addClass("hidden");
         },
         error: function (result) {
             // console.log(result);
