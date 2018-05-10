@@ -892,6 +892,8 @@ class OrderController extends Controller
      */
     public function checkoutCompleteInfo()
     {
+        if(!Auth::check())
+            return redirect(action("OrderController@checkoutAuth"));
         $user = Auth::user();
         if($user->completion("afterLoginForm") == 100) {
             session()->pull("success");
@@ -909,8 +911,7 @@ class OrderController extends Controller
             }
         }
         $note = "لطفا برای ادامه مراحل اطلاعات زیر را تکمیل نمایید";
-        if(!Auth::check())
-            return redirect(action("OrderController@checkoutAuth"));
+
         return view("order.checkout.completeInfo" , compact("formFields" , "note" , "tables"));
     }
 
