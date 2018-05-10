@@ -11,7 +11,8 @@
                     @endif
                 @endif
             </td>
-            <td>@if(isset($eventresult->user_d))
+            <td>
+                @if(isset($eventresult->user_d))
                     @if(strlen($eventresult->user->firstName) > 0)
                         {{$eventresult->user->firstName}}
                     @else
