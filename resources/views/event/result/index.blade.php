@@ -3,7 +3,7 @@
     @foreach($eventresults as $eventresult)
         <tr >
             <th></th>
-            <td>@if(isset($eventresult->user_d))
+            <td>@if(isset($eventresult->user_id))
                     @if(strlen($eventresult->user->lastName) > 0)
                         <a target="_blank" href="{{action("UserController@edit" , $eventresult->user)}}">{{$eventresult->user->lastName}}</a>
                     @else
@@ -11,7 +11,8 @@
                     @endif
                 @endif
             </td>
-            <td>@if(isset($eventresult->user_d))
+            <td>
+                @if(isset($eventresult->user_id))
                     @if(strlen($eventresult->user->firstName) > 0)
                         {{$eventresult->user->firstName}}
                     @else
@@ -19,9 +20,9 @@
                     @endif
                 @endif
             </td>
-            <td>@if(isset($eventresult->user_d) && isset($eventresult->user->mobile))  {{$eventresult->user->mobile}} @else <span class="label label-sm label-danger">درج نشده </span> @endif</td>
-            <td>@if(isset($eventresult->user_d) && isset($eventresult->user->major_id)) {{$eventresult->user->major->name}} @else <span class="label label-sm label-danger"> درج نشده </span> @endif </td>
-            <td>@if(isset($eventresult->user_d) && isset($eventresult->user->grade_id)) {{$eventresult->user->grade->displayName}} @else <span class="label label-sm label-danger"> درج نشده </span> @endif </td>
+            <td>@if(isset($eventresult->user_id) && isset($eventresult->user->mobile))  {{$eventresult->user->mobile}} @else <span class="label label-sm label-danger">درج نشده </span> @endif</td>
+            <td>@if(isset($eventresult->user_id) && isset($eventresult->user->major_id)) {{$eventresult->user->major->name}} @else <span class="label label-sm label-danger"> درج نشده </span> @endif </td>
+            <td>@if(isset($eventresult->user_id) && isset($eventresult->user->grade_id)) {{$eventresult->user->grade->displayName}} @else <span class="label label-sm label-danger"> درج نشده </span> @endif </td>
             <td>@if(isset($eventresult->participationCodeHash) && strlen($eventresult->participationCodeHash)>0) {{$eventresult->participationCodeHash}} @else <span class="label label-sm label-danger">بدون معدل </span> @endif</td>
             <td>
                 @if(isset($eventresult->created_at))
