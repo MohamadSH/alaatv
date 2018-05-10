@@ -8,10 +8,12 @@
 
 namespace App;
 
+use App\Traits\Helper;
 use Laratrust\Models\LaratrustRole;
 
 class Role extends LaratrustRole
 {
+    use Helper;
     /**
      * @var array
      */
