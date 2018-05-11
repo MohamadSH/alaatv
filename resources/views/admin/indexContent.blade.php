@@ -642,7 +642,7 @@
                 $("#articlecategory-expand").trigger("click");
             @endpermission
 
-            @permission((Config::get('constants.LIST_EVENTRESULT_ACCESS')))
+            @permission('Config::get("constants.LIST_EDUCATIONAL_CONTENT_ACCESS") , Config::get("constants.LIST_SHARIF_REGISTER_ACCESS")')
             $(".eventResult-portlet .reload").trigger("click");
             $("#eventResult-expand").trigger("click");
             $("#sharifRegisterResult-expand").trigger("click");
