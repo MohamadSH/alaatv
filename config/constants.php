@@ -13,6 +13,7 @@ return [
     'ROLE_TECH'  => 'tech',
     'EMPLOYEE_ROLE'  => 'employee', // Couldn't use ROLE_EMPLOYEE because it returns 6 instead of employee!
     'BOOK_POST_MAN_ROLE'=>'bookPostMan' ,
+    'SHARIF_SCHOOL_REGISTER' => 'sharifSchoolRegister',
     // Permissions :
     'ADMIN_PANEL_ACCESS' => "adminPanel",
     'GIVE_SYSTEM_ROLE' => "giveSystemRole" ,
@@ -138,6 +139,7 @@ return [
     'REMOVE_SITE_CONFIG_ACCESS'=>'removeSiteSetting',
     'SHOW_SITE_CONFIG_ACCESS'=>'showSiteSetting',
     'LIST_EVENTRESULT_ACCESS' => 'listEventResult',
+    'LIST_SHARIF_REGISTER_ACCESS' => 'listSharifRegister',
     'LIST_BELONGING_ACCESS'=>'listBelonging' ,
     'INSERT_BELONGING_ACCESS'=>'insertBelonging',
     'REMOVE_BELONGING_ACCESS'=>'removeBelonging',
