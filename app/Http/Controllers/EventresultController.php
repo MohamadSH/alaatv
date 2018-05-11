@@ -22,7 +22,7 @@ class EventresultController extends Controller
         /** setting permissions
          *
          */
-        $this->middleware('permission:'.Config::get('constants.LIST_EVENTRESULT_ACCESS'),['only'=>'index']);
+        $this->middleware('permission:'.Config::get('constants.LIST_EVENTRESULT_ACCESS')."|".Config::get('constants.LIST_SHARIF_REGISTER_ACCESS'),['only'=>'index']);
 
         $this->response = new Response();
 

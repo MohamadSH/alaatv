@@ -400,7 +400,7 @@
                 <!-- END SAMPLE TABLE PORTLET-->
                 @endpermission
 
-                @permission((Config::get('constants.LIST_EVENTRESULT_ACCESS')))
+                @permission((Config::get('constants.LIST_SHARIF_REGISTER_ACCESS')))
                 <!-- BEGIN QUESTION TABLE PORTLET-->
                 <div class="portlet box eventResult-portlet" style="background-color: #716c6f" >
                     <div class="portlet-title">
