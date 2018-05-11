@@ -409,7 +409,7 @@
                         <div class="tools">
                             <img class="hidden" id="sharifRegisterResult-loading" src="{{Config::get('constants.ADMIN_LOADING_BAR_GIF')}}"  style="width: 50px;">
                             <a href="javascript:;" class="collapse" id="sharifRegisterResult-expand"> </a>
-                            @permission((Config::get('constants.LIST_EVENTRESULT_ACCESS')))
+                            @permission((Config::get('constants.LIST_SHARIF_REGISTER_ACCESS')))
                                 <a href="javascript:;" class="reload" data-role="sharifRegisterResult"> </a>
                             @endpermission
                             <a href="javascript:;" class="remove"> </a>
@@ -642,9 +642,13 @@
                 $("#articlecategory-expand").trigger("click");
             @endpermission
 
-            @permission('Config::get("constants.LIST_EDUCATIONAL_CONTENT_ACCESS") , Config::get("constants.LIST_SHARIF_REGISTER_ACCESS")')
+            @permission((Config::get('constants.LIST_EVENTRESULT_ACCESS')))
             $(".eventResult-portlet .reload").trigger("click");
             $("#eventResult-expand").trigger("click");
+            @endpermission
+
+            @permission((Config::get('constants.LIST_SHARIF_REGISTER_ACCESS')))
+            $(".eventResult-portlet .reload").trigger("click");
             $("#sharifRegisterResult-expand").trigger("click");
             @endpermission
 
