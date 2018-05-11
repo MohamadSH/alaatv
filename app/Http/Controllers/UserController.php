@@ -2017,7 +2017,7 @@ class UserController extends Controller
             $registerRequest->offsetSet("nationalCode", $request->get("nationalCode"));
             $registerRequest->offsetSet("major_id", $request->get("major_id"));
             $registerRequest->offsetSet("grade_id", $request->get("grade_id"));
-            $registerRequest->offsetSet("gender_id", 1);
+//            $registerRequest->offsetSet("gender_id", 1);
             $registerController = new RegisterController();
             $response = $registerController->register($registerRequest);
             if ($response->getStatusCode() != 302)
