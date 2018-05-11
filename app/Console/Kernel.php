@@ -5,6 +5,7 @@ namespace App\Console;
 use App\Employeeschedule;
 use App\Employeetimesheet;
 use App\Traits\DateCommon;
+use App\Traits\Helper;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Config;
 
 class Kernel extends ConsoleKernel
 {
+    use Helper;
     use DateCommon ;
     /**
      * The Artisan commands provided by your application.
