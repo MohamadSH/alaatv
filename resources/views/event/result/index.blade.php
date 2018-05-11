@@ -1,4 +1,3 @@
-@permission((Config::get('constants.LIST_EVENTRESULT_ACCESS')))
 @if(isset($isSharifRegisterEvent) && $isSharifRegisterEvent)
     @foreach($eventresults as $eventresult)
         <tr >
@@ -56,5 +55,4 @@
         </tr>
     @endforeach
 @endif
-@endpermission
 
