@@ -194,7 +194,7 @@ class HomeController extends Controller
 
         $strTags = implode("\",\"",$bucketTags);
         $strTags = "[\"$strTags\"]";
-        $requestBasePath = env("TAG_API_URL") . "tags/";
+        $requestBasePath = config('constants.TAG_API_URL') . "tags/";
         $bucketRequestPath = $requestBasePath . $bucket . "?tags=".$strTags. $requestSubPath;
         $response = $this->sendRequest($bucketRequestPath, "GET");
         if ($response["statusCode"] == 200) {
@@ -874,8 +874,13 @@ class HomeController extends Controller
 //                    "validSince_Jalali" => explode(" ", $educationalContent->validSince_Jalali())[0]
 //                ]);
 //        }
-        $websitePageId = Websitepage::all()->where('url', "/home")->first()->id;
-        $slides = Slideshow::all()->where("isEnable", 1)->where("websitepage_id", $websitePageId)->sortBy("order");
+
+        $slides = Websitepage::where('url', "/home")
+            ->first()
+            ->slides()
+            ->where("isEnable", 1)
+            ->orderBy("order")
+            ->get();
         $slideCounter = 1;
         $slideDisk = 9;
 
@@ -1485,12 +1490,13 @@ class HomeController extends Controller
         $relatives = $request->get("relatives");
         $relatives = explode(',', $relatives);
 
+        $smsNumber = config('constants.SMS_PROVIDER_DEFAULT_NUMBER');
         $users = User::whereIn("id", $usersId)->get();
         if ($users->isEmpty())
             return $this->response->setStatusCode(451);
 
         if (!isset($from) || strlen($from) == 0)
-            $from = getenv("SMS_PROVIDER_DEFAULT_NUMBER");
+            $from = $smsNumber;
 
         /**
          *  for customized message to every user
@@ -1693,7 +1699,7 @@ class HomeController extends Controller
                 $diskName = Config::get('constants.DISK13');
                 $cloudFile = Productfile::where("file", $fileName)->where("product_id", $productId)->get()->first()->cloudFile;
                 //TODO: verify "$productFileLink = "http://".env("SFTP_HOST" , "").":8090/". $cloudFile;"
-                $productFileLink = env("DOWNLOAD_HOST_PROTOCOL" , "https://").env("DOWNLOAD_HOST_NAME" , "dl.takhtekhak.com"). $cloudFile;
+                $productFileLink = config("constants.DOWNLOAD_HOST_PROTOCOL" , "https://").config('constants.DOWNLOAD_HOST_NAME'). $cloudFile;
                 $unixTime = Carbon::today()->addDays(2)->timestamp;
                 $userIP = request()->ip();
                 //TODO: fix diffrent Ip
@@ -1778,7 +1784,7 @@ class HomeController extends Controller
                         $fileRoot = Storage::drive($diskName)->getAdapter()->getRoot();
                         //TODO: verify "$fileRemotePath = "http://" . $fileHost . ":8090" . "/public" . explode("public", $fileRoot)[1];"
 
-                        $fileRemotePath = env("DOWNLOAD_HOST_PROTOCOL" , "https://").env("DOWNLOAD_HOST_NAME" , "dl.takhtekhak.com"). "/public" . explode("public", $fileRoot)[1];
+                        $fileRemotePath = config("constants.DOWNLOAD_HOST_PROTOCOL" ). config("constants.DOWNLOAD_HOST_NAME" ). "/public" . explode("public", $fileRoot)[1];
                         return response()->redirectTo($fileRemotePath . $fileName);
                     } else {
                         $fs = Storage::disk($diskName)->getDriver();
@@ -2066,7 +2072,7 @@ class HomeController extends Controller
         // To send HTML mail, the Content-type header must be set
         $headers = "MIME-Version: 1.0" . "\r\n";
         $headers .= "Content-Type: multipart/alternative; boundary=\"" . $boundary . "\"\r\n";//';charset=UTF-8' .
-        $headers .= "From: " . strip_tags(getenv('MAIL_USERNAME')) . "\r\n" .
+        $headers .= "From: " . strip_tags(config('constants.MAIL_USERNAME')) . "\r\n" .
             "Reply-To: " . strip_tags($email) . "\r\n" .
             "X-Mailer: PHP/" . phpversion();
 
@@ -2160,13 +2166,13 @@ class HomeController extends Controller
                 if($ext == "mp4") $directory = "video";
                 elseif($ext == "pdf") $directory = "pamphlet";
                 $adapter = new SftpAdapter([
-                    'host' => env('SFTP_HOST', ''),
-                    'port' => env('SFTP_PORT', '22'),
-                    'username' => env('SFTP_USERNAME', ''),
-                    'password' => env('SFTP_PASSSWORD', ''),
-                    'privateKey' => env('SFTP_PRIVATE_KEY_PATH', ''),
-                    'root' => env('SFTP_ROOT', '') . '/private/'.$contentId.'/',
-                    'timeout' => env('SFTP_TIMEOUT', '10'),
+                    'host' => config('constants.SFTP_HOST'),
+                    'port' =>config('constants.SFTP_PORT'),
+                    'username' => config('constants.SFTP_USERNAME'),
+                    'password' => config('constants.SFTP_PASSSWORD'),
+                    'privateKey' => config('constants.SFTP_PRIVATE_KEY_PATH'),
+                    'root' =>config('constants.SFTP_ROOT') . '/private/'.$contentId.'/',
+                    'timeout' => config('constants.SFTP_TIMEOUT'),
                     'directoryPerm' => 0755
                 ]);
                 $filesystem = new Filesystem($adapter);
@@ -2215,7 +2221,7 @@ class HomeController extends Controller
         $counter++;
         $smsInfo = array();
         $smsInfo["to"] = array(ltrim($userlottery->mobile, '0'));
-        $smsInfo["from"] = getenv("SMS_PROVIDER_DEFAULT_NUMBER");
+        $smsInfo["from"] = config("constants.SMS_PROVIDER_DEFAULT_NUMBER");
         //
         //            $prize = json_decode($userlottery->pivot->prizes)->items[0]->name ;
         $smsInfo["message"] = "سلام ، کاربر گرامی نتیجه قرعه کشی در پروفایل شما قرار داده شد - آلاء";
@@ -2265,7 +2271,7 @@ class HomeController extends Controller
                             $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $content->created_at )->timestamp;
 
                         $response =  $this->sendRequest(
-                            env("TAG_API_URL")."id/content/".$content->id ,
+                            config("constants.AG_API_URL")."id/content/".$content->id ,
                             "PUT",
                             $params
                         );
@@ -3216,7 +3222,7 @@ class HomeController extends Controller
                         $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $item->created_at )->timestamp;
 
                     $response =  $this->sendRequest(
-                        env("TAG_API_URL")."id/$bucket/".$item->id ,
+                        config("constants.TAG_API_URL")."id/$bucket/".$item->id ,
                         "PUT",
                         $params
                     );

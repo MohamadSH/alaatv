@@ -745,7 +745,7 @@
                                             </div>
                                             <div class="separator clear-left">
                                                 <p class="">
-                                                    <a  href="{{env("SERVER")}}/landing/1" class="btn btn-lg green hidden-sm"><i class="fa fa-cart-plus"></i>سفارش</a>
+                                                    <a  href="{{config("SERVER")}}/landing/1" class="btn btn-lg green hidden-sm"><i class="fa fa-cart-plus"></i>سفارش</a>
                                                 </p>
                                             </div>
                                             <div class="clearfix">

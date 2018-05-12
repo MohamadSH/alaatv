@@ -235,7 +235,7 @@
                                 <br>
                                 <label>هزینه پیامک(ریال): <span id="totalSmsCost">{{Config::get('constants.COST_PER_SMS_2')}}</span></label>
                                 <br>
-                                <label>شماره فرستنده : {{getenv("SMS_PROVIDER_DEFAULT_NUMBER")}}</label>
+                                <label>شماره فرستنده : {{config("constants.SMS_PROVIDER_DEFAULT_NUMBER")}}</label>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" data-dismiss="modal" class="btn btn-outline dark" id="sendSmsForm-close">بستن</button>
