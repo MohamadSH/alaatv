@@ -112,7 +112,7 @@ class OrderCheck
                             $attachedGifts = array();
                             foreach ($value["gifts"] as $gift)
                             {
-                                if($attachedGifts->contains($gift->id))
+                                if(in_array( $gift->id , $attachedGifts ))
                                     continue;
                                 else
                                     $attachedGifts->push($gift->id);

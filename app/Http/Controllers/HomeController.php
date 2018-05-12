@@ -172,7 +172,7 @@ class HomeController extends Controller
             $pageNum = $request->get($pageName);
             if(!isset($pageNum))
                 $pageNum = 1;
-            $offset = $perPage * ($pageNum - 1);
+            $offset = (int)$perPage * ((int)$pageNum - 1);
             $requestSubPath .= "&offset=".$offset;
         }
         else
