@@ -2007,6 +2007,8 @@ class OrderController extends Controller
         if(isset($openOrder))
         {
             $orderproduct = $openOrder->orderproducts->where("product_id" , $product->id)->first();
+            if(!isset($orderproduct))
+                return $this->response->setStatusCode(503)->setContent(["message"=>"محصول مورد نظر در سبد وجود ندارد"]);
             $orderproductController->destroy($orderproduct) ;
 
             $newOpenOrder = $user->orders->where("id" , $openOrder->id)->first();
