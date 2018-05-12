@@ -332,37 +332,6 @@
                                             </figure>
                                         </article>
                                     </div>
-                                    <div class="swiper-slide">
-                                        <article class="item-content-field">
-                                            <bdi class="bdi-title all">
-                                                <em>مشترک</em>
-                                            </bdi>
-                                            <figure>
-                                                <a href="javascript:void(0)" data-role="215" class="checkout" title="">
-                                                    <img src="/assets/extra/landing3/images/professors/G8.png" alt="همایش طلایی عربی کنکور آلاء" title="">
-                                                </a>
-                                                <figcaption>
-                                                    <header>
-                                                        <a href="javascript:void(0)" data-role="215" class="checkout" title="">
-                                                            <h1>
-                                                                <span>عربی</span>
-                                                                <em>استاد آهویی</em>
-                                                            </h1>
-                                                        </a>
-                                                    </header>
-                                                    <strong>
-                                                            <span class="span-gold">
-                                                                همایش طـــلایی
-                                                            </span>
-                                                        <bdi class="prsent">
-                                                            <i>80%</i>
-                                                            <em> کــــنـکور</em>
-                                                        </bdi>
-                                                    </strong>
-                                                </figcaption>
-                                            </figure>
-                                        </article>
-                                    </div>
                                 </div>
                             </div>
                             <i class="icon-right-arrow i-all-next r0 i-all i-swiper-content"></i>
@@ -769,5 +738,53 @@
 <script src="/assets/extra/landing3/js/jquery-1.12.4.min.js" defer="defer"></script>
 <script src="/assets/extra/landing3/js/swiper2.jquery.min.js" defer="defer"></script>
 <script src="/assets/extra/landing3/js/script2.js" defer="defer"></script>
+<script>
+    $('a.link').click(function() {
+        var id = $(this).data('role');
+        $.ajax({
+            url: '{{ action('OrderproductController@store') }}',
+            type: 'POST',
+            // contentType: 'application/json; charset=UTF-8',
+            // dataType: 'json',
+            // timeout: 10000,
+            data: {
+                product_id: id
+            },
+            statusCode: {
+                //The status for when action was successful
+                200: function (response) {
+                    if(response.redirectUrl!= null && response.redirectUrl!="undefined")
+                        window.location.replace(response.redirectUrl);
+                },
+                //The status for when the user is not authorized for making the request
+                403: function (response) {
+                    console.log("response 403");
+                },
+                //The status for when the user is not authorized for making the request
+                401: function (response) {
+                    console.log("response 401");
+                },
+                404: function (response) {
+                    console.log("response 404");
+                },
+                //The status for when form data is not valid
+                422: function (response) {
+                    console.log(response);
+                },
+                //The status for when there is error php code
+                500: function (response) {
+                    console.log("response 500");
+                    console.log(response.responseText);
+                },
+                //The status for when there is error php code
+                503: function (response) {
+                    response = $.parseJSON(response.responseText);
+                    console.log(response.message);
+                }
+            }
+        });
+        return false;
+    });
+</script>
 </body>
 </html>
