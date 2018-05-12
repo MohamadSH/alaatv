@@ -36,7 +36,8 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')
         //          ->hourly();
 
-        $schedule->call(function () {
+        $smsNumber = config("constants.SMS_PROVIDER_DEFAULT_NUMBER");
+        $schedule->call(function () use( $smsNumber ){
             $dayOfWeekJalali = $this->convertToJalaliDay(Carbon::today('Asia/Tehran')->format('l')) ;
             $toDayDate = Carbon::today('Asia/Tehran')->format("Y-m-d") ;
             $employees = User::whereHas("roles" , function ($q){
@@ -151,13 +152,13 @@ class Kernel extends ConsoleKernel
                         {
                             $smsInfo = array();
                             $smsInfo["to"] = array(ltrim($employee->mobile, '0'));
-                            $smsInfo["from"] = getenv("SMS_PROVIDER_DEFAULT_NUMBER");
+                            $smsInfo["from"] = $smsNumber;
                             $smsInfo["message"] = $message ;
                             $response = $this->medianaSendSMS($smsInfo);
                         }else{
                             $smsInfo = array();
                             $smsInfo["to"] = array(ltrim("09190195476", '0'));
-                            $smsInfo["from"] = getenv("SMS_PROVIDER_DEFAULT_NUMBER");
+                            $smsInfo["from"] = $smsNumber;
                             $smsInfo["message"] = $message ;
                             $response = $this->medianaSendSMS($smsInfo);
                         }
