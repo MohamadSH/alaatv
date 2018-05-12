@@ -739,7 +739,7 @@
 <script src="/assets/extra/landing3/js/swiper2.jquery.min.js" defer="defer"></script>
 <script src="/assets/extra/landing3/js/script2.js" defer="defer"></script>
 <script>
-    $('a.link').click(function() {
+    $('a.checkout').click(function() {
         var id = $(this).data('role');
         $.ajax({
             url: '{{ action('OrderproductController@store') }}',
