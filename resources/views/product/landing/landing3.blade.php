@@ -340,37 +340,37 @@
                                             </figure>
                                         </article>
                                     </div>
-                                    <div class="swiper-slide">
-                                        <article class="item-content-field">
-                                            <bdi class="bdi-title all">
-                                                <em>مشترک</em>
-                                            </bdi>
-                                            <figure>
-                                                <a href="javascript:void(0)" data-role="215" class="checkout" title="">
-                                                    <img src="/assets/extra/landing3/images/professors/G8.png" alt="" title="">
-                                                </a>
-                                                <figcaption>
-                                                    <header>
-                                                        <a href="javascript:void(0)" data-role="215" class="checkout" title="">
-                                                            <h1>
-                                                                <span>عربی</span>
-                                                                <em>آهویی</em>
-                                                            </h1>
-                                                        </a>
-                                                    </header>
-                                                    <strong>
-                                                            <span class="span-gold">
-                                                                همایش طـــلایی
-                                                            </span>
-                                                        <bdi class="prsent">
-                                                            <i>80%</i>
-                                                            <em> کــــنـکور</em>
-                                                        </bdi>
-                                                    </strong>
-                                                </figcaption>
-                                            </figure>
-                                        </article>
-                                    </div>
+                                    {{--<div class="swiper-slide">--}}
+                                        {{--<article class="item-content-field">--}}
+                                            {{--<bdi class="bdi-title all">--}}
+                                                {{--<em>مشترک</em>--}}
+                                            {{--</bdi>--}}
+                                            {{--<figure>--}}
+                                                {{--<a href="javascript:void(0)" data-role="215" class="checkout" title="">--}}
+                                                    {{--<img src="/assets/extra/landing3/images/professors/G8.png" alt="" title="">--}}
+                                                {{--</a>--}}
+                                                {{--<figcaption>--}}
+                                                    {{--<header>--}}
+                                                        {{--<a href="javascript:void(0)" data-role="215" class="checkout" title="">--}}
+                                                            {{--<h1>--}}
+                                                                {{--<span>عربی</span>--}}
+                                                                {{--<em>آهویی</em>--}}
+                                                            {{--</h1>--}}
+                                                        {{--</a>--}}
+                                                    {{--</header>--}}
+                                                    {{--<strong>--}}
+                                                            {{--<span class="span-gold">--}}
+                                                                {{--همایش طـــلایی--}}
+                                                            {{--</span>--}}
+                                                        {{--<bdi class="prsent">--}}
+                                                            {{--<i>80%</i>--}}
+                                                            {{--<em> کــــنـکور</em>--}}
+                                                        {{--</bdi>--}}
+                                                    {{--</strong>--}}
+                                                {{--</figcaption>--}}
+                                            {{--</figure>--}}
+                                        {{--</article>--}}
+                                    {{--</div>--}}
                                 </div>
                             </div>
                             <i class="icon-right-arrow i-all-next r0 i-all i-swiper-content"></i>
