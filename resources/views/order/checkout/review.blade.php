@@ -184,11 +184,11 @@
                                                 <div class="col-md-12">
                                                     <div class="well">
                                                         <div class="row static-info align-reverse">
-                                                            <div class="col-md-12 name  bold" style="text-align: center" > جمع کل :  {{number_format($orderproductsRawCost)}}</div>
+                                                            <div class="col-md-12 name  bold" style="text-align: center" > جمع کل :  {{number_format($orderproductsRawCost)}} تومان</div>
                                                             {{--<div class="col-md-5 col-lg-5 col-sm-5 col-xs-5 value" style="text-align: right"> {{number_format($orderproductsRawCost)}} </div>--}}
                                                         </div>
                                                         <div class="row static-info align-reverse">
-                                                            <div class="col-md-12 name font-blue bold" style="text-align: center"> قابل پرداخت :      {{number_format($orderCost)}}</div>
+                                                            <div class="col-md-12 name font-blue bold" style="text-align: center"> قابل پرداخت :      {{number_format($orderCost)}} تومان</div>
                                                             {{--<div class="col-md-5 col-lg-5 col-sm-5 col-xs-5 value font-blue" style="text-align: right"> </div>--}}
                                                         </div>
                                                         <div class="row static-info align-reverse no-print">
