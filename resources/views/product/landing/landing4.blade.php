@@ -288,27 +288,27 @@
                                     </figure>
                                 </article>
                             </div>
-                            <div class="swiper-slide">
-                                <article class="slider-content-main" >
-                                    <strong  style="margin-right: 10% ;">
-                                        <header>
-                                            <h1>
-                                                <a href="javascript:void(0)" data-role="215" class="link" title="خرید بسته آموزشی">
-                                                    محسن آهویی
-                                                </a>
-                                            </h1>
-                                            <span>اگر تا الان عربی نخوندی؛ الان وقتشه</span>
-                                        </header>
-                                        <p>کنکور عربی آسان است به شرطی که هوشمندانه تلاش کنی</p>
-                                        <p>حتی یه سوال عربی می تونه سرنوشت تو رو تو کنکور تغییر بده</p>
-                                    </strong>
-                                    <figure>
-                                        <a href="javascript:void(0)" title="">
-                                            <img src="/assets/extra/landing4/images/slider/S7.png" alt="" title="">
-                                        </a>
-                                    </figure>
-                                </article>
-                            </div>
+                            {{--<div class="swiper-slide">--}}
+                                {{--<article class="slider-content-main" >--}}
+                                    {{--<strong  style="margin-right: 10% ;">--}}
+                                        {{--<header>--}}
+                                            {{--<h1>--}}
+                                                {{--<a href="javascript:void(0)" data-role="215" class="link" title="خرید بسته آموزشی">--}}
+                                                    {{--محسن آهویی--}}
+                                                {{--</a>--}}
+                                            {{--</h1>--}}
+                                            {{--<span>اگر تا الان عربی نخوندی؛ الان وقتشه</span>--}}
+                                        {{--</header>--}}
+                                        {{--<p>کنکور عربی آسان است به شرطی که هوشمندانه تلاش کنی</p>--}}
+                                        {{--<p>حتی یه سوال عربی می تونه سرنوشت تو رو تو کنکور تغییر بده</p>--}}
+                                    {{--</strong>--}}
+                                    {{--<figure>--}}
+                                        {{--<a href="javascript:void(0)" title="">--}}
+                                            {{--<img src="/assets/extra/landing4/images/slider/S7.png" alt="" title="">--}}
+                                        {{--</a>--}}
+                                    {{--</figure>--}}
+                                {{--</article>--}}
+                            {{--</div>--}}
                             <div class="swiper-slide">
                                 <article class="slider-content-main">
                                     <strong>
@@ -707,38 +707,38 @@
                             <a href="javascript:void(0)" class="link" data-role="214" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
-                    <article class="art-professors">
-                        <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/S7.png" alt="1" title="1">
-                            </a>
-                            <figcaption>
-                                <header>
-                                    <a href="javascript:void(0)" title="">
-                                        <h1>محسن آهویی</h1>
-                                    </a>
-                                    <span>همایش طلایی عربی کنکور</span>
-                                </header>
-                            </figcaption>
-                        </figure>
-                        <p style="text-align: justify">
-                            سه دقیقه وقت بزار و دونمای عربی کنکور رو بخون
-                        </p>
-                        <p style="text-align: justify">
-                            با یه نگاه کلی به کنکور عربی سوالات کنکور به چند بخش تقسیم میشه
-                        </p>
-                        <div class="info-professors">
-                            <header>
-                                <h4>بعد این همایش تست های ۳ قسمت مهم عربی رو آسون می زنید:</h4>
-                            </header>
-                            <p style="font-size: 13px">۱.ترجمه که ۵ سوال و تعریب که ۲ سوال کنکور هستند  و ۱ سوال
-                            مفهوم آیات قرآن و جملات تو کنکور داره</p>
-                            <p style="font-size: 13px">۲.درک مطلب که ۴ سوال مفهوم عبارت و ۳ سوال تحلیل صرفی
-                             و ۲ سوال تشکیل تو کنکور داره</p>
-                            <p style="font-size: 13px">۳.قواعد که غالبا ۴ سوال عربی سال دوم و ۴ سوال عربی سال سوم تو کنکور میاد</p>
-                            <a href="javascript:void(0)" class="link" data-role="215" title="خرید بسته آموزشی">خرید بسته آموزشی</a>
-                        </div>
-                    </article>
+                    {{--<article class="art-professors">--}}
+                        {{--<figure>--}}
+                            {{--<a href="javascript2:void(0)" title="">--}}
+                                {{--<img src="/assets/extra/landing4/images/professors/S7.png" alt="1" title="1">--}}
+                            {{--</a>--}}
+                            {{--<figcaption>--}}
+                                {{--<header>--}}
+                                    {{--<a href="javascript:void(0)" title="">--}}
+                                        {{--<h1>محسن آهویی</h1>--}}
+                                    {{--</a>--}}
+                                    {{--<span>همایش طلایی عربی کنکور</span>--}}
+                                {{--</header>--}}
+                            {{--</figcaption>--}}
+                        {{--</figure>--}}
+                        {{--<p style="text-align: justify">--}}
+                            {{--سه دقیقه وقت بزار و دونمای عربی کنکور رو بخون--}}
+                        {{--</p>--}}
+                        {{--<p style="text-align: justify">--}}
+                            {{--با یه نگاه کلی به کنکور عربی سوالات کنکور به چند بخش تقسیم میشه--}}
+                        {{--</p>--}}
+                        {{--<div class="info-professors">--}}
+                            {{--<header>--}}
+                                {{--<h4>بعد این همایش تست های ۳ قسمت مهم عربی رو آسون می زنید:</h4>--}}
+                            {{--</header>--}}
+                            {{--<p style="font-size: 13px">۱.ترجمه که ۵ سوال و تعریب که ۲ سوال کنکور هستند  و ۱ سوال--}}
+                            {{--مفهوم آیات قرآن و جملات تو کنکور داره</p>--}}
+                            {{--<p style="font-size: 13px">۲.درک مطلب که ۴ سوال مفهوم عبارت و ۳ سوال تحلیل صرفی--}}
+                             {{--و ۲ سوال تشکیل تو کنکور داره</p>--}}
+                            {{--<p style="font-size: 13px">۳.قواعد که غالبا ۴ سوال عربی سال دوم و ۴ سوال عربی سال سوم تو کنکور میاد</p>--}}
+                            {{--<a href="javascript:void(0)" class="link" data-role="215" title="خرید بسته آموزشی">خرید بسته آموزشی</a>--}}
+                        {{--</div>--}}
+                    {{--</article>--}}
 
                     <article class="art-professors">
                         <figure>

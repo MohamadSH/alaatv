@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Traits\HasWallet;
 use App\Traits\Helper;
 use Carbon\Carbon;
 use Doctrine\DBAL\Query\QueryBuilder;
@@ -23,6 +24,7 @@ class User extends Authenticatable
     use Helper;
     use SoftDeletes, CascadeSoftDeletes;
     use LaratrustUserTrait;
+    use HasWallet;
     use Notifiable;
 
 
