@@ -6,6 +6,7 @@ namespace App\Providers;
 use App\Contentset;
 use App\Contenttype;
 use App\Productfiletype;
+use App\Wallettype;
 use App\Websitesetting;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
@@ -265,6 +266,15 @@ class AppServiceProvider extends ServiceProvider
                         Config::set("constants.CONTENT_TYPE_PAMPHLET" , $contenttypes->where("name" , "pamphlet")->first()->id);
                     if($contenttypes->where("name" , "video")->isNotEmpty())
                         Config::set("constants.CONTENT_TYPE_VIDEO" , $contenttypes->where("name" , "video")->first()->id);
+                }
+//                =============================WALLET TYPES
+                if (Schema::hasTable('wallettypes'))
+                {
+                    $wallettypes = Wallettype::all();
+                    if($wallettypes->where("name" , "main")->isNotEmpty())
+                        Config::set("constants.WALLET_TYPE_MAIN" , $wallettypes->where("name" , "main")->first()->id);
+                    if($wallettypes->where("name" , "given")->isNotEmpty())
+                        Config::set("constants.WALLET_TYPE_GIVEN" , $wallettypes->where("name" , "given")->first()->id);
                 }
 
             }
