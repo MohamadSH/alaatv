@@ -48,5 +48,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ProductInterrelationSeeder::class);
         $this->call(BloodTypeSeeder::class);
         $this->call(DiscountTypeSeeder::class);
+        $this->call(WallettypeSeeder::class);
     }
 }
