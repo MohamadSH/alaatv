@@ -269,11 +269,28 @@ return [
     'HAMAYESH_LOTTERY_EXCHANGE_DISCOUNT' => 35,
 
     //Cache
-    'CACHE_600' => 600,
-    'CACHE_60' => 60,
+    'CACHE_600' => 0,
+    'CACHE_60' => 0,
     'CACHE_10' => 0,
     'CACHE_5' => 0,
     'CACHE_3' => 0,
     'CACHE_1' =>0 ,
+
+    //
+    'TAG_API_URL' => env("TAG_API_URL",null),
+    'SFTP_ROOT' => env("SFTP_ROOT", null),
+    'DOWNLOAD_HOST_PROTOCOL' =>env("DOWNLOAD_HOST_PROTOCOL","https://"),
+    'DOWNLOAD_HOST_NAME' => env('DOWNLOAD_HOST_NAME',"dl.takhtekhak.com"),
+    'DISQUS_PRIVATE_KEY' => env('DISQUS_PRIVATE_KEY'),
+    'SMS_PROVIDER_DEFAULT_NUMBER' => env('SMS_PROVIDER_DEFAULT_NUMBER'),
+    'MAIL_USERNAME' => env('MAIL_USERNAME'),
+    'SFTP_HOST' => env('SFTP_HOST'),
+    'SFTP_PORT' => env('SFTP_PORT', 22 ),
+    'SFTP_USERNAME' => env('SFTP_USERNAME', ''),
+    'SFTP_PASSSWORD' => env('SFTP_PASSSWORD', ''),
+    'SFTP_PRIVATE_KEY_PATH' => env('SFTP_PRIVATE_KEY_PATH',''),
+    'SFTP_ROOT' => env('SFTP_ROOT' ,''),
+    'SFTP_TIMEOUT' => env('SFTP_TIMEOUT', ''),
+    'SERVER' => env('SERVER'),
 
 ];

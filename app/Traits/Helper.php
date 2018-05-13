@@ -129,7 +129,7 @@ trait Helper
      */
     public function medianaSendSMS(array $params)
     {
-        $url = getenv("MEDIANA_API_URL");
+        $url = config("services.medianaSMS.normal.url");
 
 //        $rcpt_nm = array('9121111111','9122222222');
         if(isset($params["to"]))
@@ -137,11 +137,11 @@ trait Helper
         if(isset($params["from"]))
             $from = $params["from"];
         else
-            $from =getenv("SMS_PROVIDER_DEFAULT_NUMBER") ;
+            $from =config("constants.SMS_PROVIDER_DEFAULT_NUMBER") ;
 
         $param = [
-            'uname'=>getenv("MEDIANA_USERNAME"),
-            'pass'=>getenv("MEDIANA_PASSWORD"),
+            'uname'=>config("services.medianaSMS.normal.userName"),
+            'pass'=>config("services.medianaSMS.normal.password"),
             'from'=>$from,
             'message'=>$params["message"],
             'to'=>json_encode($rcpt_nm),
@@ -185,14 +185,16 @@ trait Helper
     {
         $this->response = new Response();
         $client = new \SoapClient(
-            getenv("MEDIANA_PATTERN_API_URL")
+            config("services.medianaSMS.pattern.url")
         );
-        $user = getenv("MEDIANA_USERNAME");
-        $pass = getenv("MEDIANA_PASSWORD");
+        $user = config("services.medianaSMS.normal.userName");
+        $pass = config("services.medianaSMS.normal.password");
+
         if(isset($params["from"]))
             $from = $params["from"];
         else
-            $from =getenv("SMS_PROVIDER_DEFAULT_NUMBER") ;
+            $from = config("constants.SMS_PROVIDER_DEFAULT_NUMBER") ;
+
         if(isset($params["to"]))
             $rcpt_nm =  $params["to"];
         if(isset($params["patternCode"]))
@@ -201,6 +203,7 @@ trait Helper
             $input_data = $params["inputData"];
 
         $response = $client->sendPatternSms($from , $rcpt_nm , $user , $pass , $pattern_code  , $input_data);
+
         if($response)
             return $this->response->setStatusCode(200);
         else
@@ -209,11 +212,11 @@ trait Helper
 
     public function medianaGetCredit()
     {
-        $url = getenv("MEDIANA_API_URL");
+        $url = config("services.medianaSMS.normal.url");
         $param = array
         (
-            'uname'=>getenv("MEDIANA_USERNAME"),
-            'pass'=>getenv("MEDIANA_PASSWORD"),
+            'uname'=>config("services.medianaSMS.normal.userName"),
+            'pass'=>config("services.medianaSMS.normal.password"),
             'op' => 'credit',
         );
         $handler = curl_init($url);

@@ -393,7 +393,7 @@ class User extends Authenticatable
             $message = base64_encode(json_encode($data));
             $timestamp = time();
             $data = $message . ' ' . $timestamp;
-            $key = getenv('DISQUS_PRIVATE_KEY');
+            $key = config('constants.DISQUS_PRIVATE_KEY');
 
             $blocksize = 64;
             $hashfunc = 'sha1';

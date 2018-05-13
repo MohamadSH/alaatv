@@ -336,7 +336,7 @@ class Educationalcontent extends Model
          *      Retrieving Tags
          */
         $response = $this->sendRequest(
-            env("TAG_API_URL")."id/content/".$this->id,
+            config("constants.TAG_API_URL")."id/content/".$this->id,
             "GET"
         );
 
