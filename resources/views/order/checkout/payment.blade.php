@@ -158,9 +158,17 @@
                                             <div class="form-group">
                                                 <div class="col-lg-12 col-md-12 margin-top-20 text-center">
                                                     @if(isset($coupon))
-                                                        <span class=" bg-green-soft bg-font-dark" style="font-size: 15px;background: #ff7272;    padding: 0px 5px 0px 5px;">مبلغ قابل پرداخت: <lable id="totalCost" style="text-decoration: line-through;">{{number_format($totalRawCost)}}</lable></span>@if(isset($coupon))<span class=" bg-font-dark" style="background: #ff7272;    padding: 0px 5px 0px 5px; font-size: 15px">برای شما </span><span class=" bg-font-dark" style="background: #ee5053;    padding: 0px 5px 0px 5px;font-size: 15px">{{number_format($cost)}}</span>@endif
+                                                        <span class=" bg-green-soft bg-font-dark" style="font-size: 15px;background: #ff7272;    padding: 0px 5px 0px 5px;">مبلغ قابل پرداخت:
+                                                            <lable id="totalCost" style="text-decoration: line-through;">{{number_format($totalRawCost)}}</lable>
+                                                            تومان
+                                                        </span>
+                                                        <span class=" bg-font-dark" style="background: #ff7272;    padding: 0px 5px 0px 5px; font-size: 15px">برای شما </span>
+                                                        <span class=" bg-font-dark" style="background: #ee5053;    padding: 0px 5px 0px 5px;font-size: 15px">{{number_format($cost)}} تومان</span>
                                                     @else
-                                                        <span class="label bg-green-soft" style="font-size: 15px">مبلغ قابل پرداخت: <lable id="totalCost">{{number_format($cost)}}</lable></span>
+                                                        <span class="label bg-green-soft" style="font-size: 15px">مبلغ قابل پرداخت:
+                                                            <lable id="totalCost">{{number_format($cost)}}</lable>
+                                                            تومان
+                                                        </span>
                                                     @endif
 
                                                 </div>
