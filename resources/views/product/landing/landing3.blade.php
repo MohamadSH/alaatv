@@ -70,14 +70,6 @@
     @section("gtagJs")
 
     @show
-    <style>
-        .primary-menu>li>a{
-            font-size: 2rem !important;
-        }
-        .note-content>header>a>h2{
-            font-size: 6.3rem !important;
-        }
-    </style>
 </head>
 
 <body>
@@ -103,31 +95,31 @@
                         <a href="{{action("HomeController@index")}}" title="صفحه اصلی">صفحه اصلی</a>
                     </li>
                     <li>
-                        <a href="javascript:void(0)" data-role="210" class="checkout" title="جزوه و آزمون">همایش ادبیات دکتر سبطی </a>
+                        <a href="javascript:void(0)" data-role="210" class="checkout" title="خرید همایش">همایش ادبیات دکتر سبطی </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0)" data-role="211" class="checkout" title="صفحه اصلی">همایش دینی دکتر کاغذی</a>
+                        <a href="javascript:void(0)" data-role="211" class="checkout" title="خرید همایش">همایش دینی استاد کاغذی</a>
                     </li>
                     <li>
-                        <a href="javascript:void(0)" data-role="212" class="checkout" title="درباره ما">همایش زیست شناسی دکتر چلاجور</a>
+                        <a href="javascript:void(0)" data-role="212" class="checkout" title="خرید همایش">همایش زیست شناسی دکتر چلاجور</a>
                     </li>
                     <li>
-                        <a href="javascript:void(0)" data-role="213" class="checkout" title="قوانین و مقررات">همایش زمین شناسی دکتر چلاجور</a>
+                        <a href="javascript:void(0)" data-role="213" class="checkout" title="خرید همایش">همایش زمین شناسی دکتر چلاجور</a>
                     </li>
                     <li>
-                        <a href="{{action("HomeController@contactUs")}}" title="تماس با ما">تماس با ما</a>
+                        <a href="javascript:void(0)" data-role="214" class="checkout" title="خرید همایش">همایش عربی مهندس ناصح زاده</a>
                     </li>
                 </ul>
                 <div class="swiper-container menu-res">
                     <div class="swiper-wrapper">
                         <div class="swiper-slide">
-                            <a href="{{action("HomeController@index")}}" title="صفحه اصلی">صفحه اصلی</a>
+                            <a href="{{action("HomeController@index")}}" title="آلاء - دبیرستان دانشگاه شریف">صفحه اصلی</a>
                         </div>
                         <div class="swiper-slide">
                             <a href="javascript:void(0)" data-role="210" class="checkout" title="همایش ادبیات دکتر سبطی">همایش ادبیات دکتر سبطی </a>
                         </div>
                         <div class="swiper-slide">
-                            <a href="javascript:void(0)" data-role="211" class="checkout" title="همایش دین و زندگی دکتر کاغذی">همایش دین و زندگی دکتر کاغذی</a>
+                            <a href="javascript:void(0)" data-role="211" class="checkout" title="همایش دین و زندگی استاد کاغذی">همایش دین و زندگی استاد کاغذی</a>
                         </div>
                         <div class="swiper-slide">
                             <a href="javascript:void(0)" data-role="212" class="checkout" title="همایش زیست دکتر چلاجور">همایش زیست شناسی دکتر چلاجور</a>
@@ -153,7 +145,7 @@
                         <h2></h2>
                     </header>
                     <a href="javascript:void(0)">
-                        <img src="/assets/extra/landing3/images/sample/gold-fest.png" alt="" title="">
+                        <img src="/assets/extra/landing3/images/sample/gold-fest.png" alt="همایش طلایی آلاء" >
                     </a>
                 </figure>
             </section>
@@ -165,7 +157,7 @@
                                 <a href="javascript:void(0)" title="همه رشته ها">
                                     <h1>
                                         <figure class="fig-img-content-field">
-                                            <img src="/assets/extra/landing3/images/tablighat/1.png" alt="همه رشته ها" title="همه رشته ها">
+                                            <img src="/assets/extra/landing3/images/tablighat/1.png" alt="همایش کنکور همه رشته ها" title="همه رشته ها">
                                         </figure>
                                     </h1>
                                 </a>
@@ -174,7 +166,7 @@
                                 <a href="javascript:void(0)" title="همه رشته ها">
                                     <h1>
                                         <figure class="fig-img-content-field">
-                                            <img src="/assets/extra/landing3/images/sample/res-all.png" alt="همه رشته ها" title="همه رشته ها">
+                                            <img src="/assets/extra/landing3/images/sample/res-all.png" alt="همایش کنکور همه رشته ها" title="همه رشته ها">
                                         </figure>
                                     </h1>
                                 </a>
@@ -192,14 +184,14 @@
                                             </bdi>
                                             <figure>
                                                 <a href="javascript:void(0)" data-role="210" class="checkout" title="">
-                                                    <img src="/assets/extra/landing3/images/professors/G9.png" alt="" title="">
+                                                    <img src="/assets/extra/landing3/images/professors/G9.png" alt="همایش طلایی ادبیات کنکور دکتر سبطی آلاء" title="">
                                                 </a>
                                                 <figcaption>
                                                     <header>
                                                         <a href="javascript:void(0)" data-role="210" class="checkout" title="">
                                                             <h1>
                                                                 <span>ادبیات</span>
-                                                                <em>سبطی</em>
+                                                                <em>دکتر سبطی</em>
                                                             </h1>
                                                         </a>
                                                     </header>
@@ -223,14 +215,14 @@
                                             </bdi>
                                             <figure>
                                                 <a href="javascript:void(0)" data-role="211" class="checkout" title="">
-                                                    <img src="/assets/extra/landing3/images/professors/G10.png" alt="" title="">
+                                                    <img src="/assets/extra/landing3/images/professors/G10.png" alt="همایش طلایی دین و زندگی کنکور آلاء" title="">
                                                 </a>
                                                 <figcaption>
                                                     <header>
                                                         <a href="javascript:void(0)" data-role="211" class="checkout" title="">
                                                             <h1>
                                                                 <span>دینی</span>
-                                                                <em>کاغذی</em>
+                                                                <em>استاد کاغذی</em>
                                                             </h1>
                                                         </a>
                                                     </header>
@@ -254,14 +246,14 @@
                                             </bdi>
                                             <figure>
                                                 <a href="javascript:void(0)" data-role="216" class="checkout" title="">
-                                                    <img src="/assets/extra/landing3/images/professors/1.png" alt="" title="">
+                                                    <img src="/assets/extra/landing3/images/professors/1.png" alt="همایش طلایی فیزیک کنکور آلاء" title="">
                                                 </a>
                                                 <figcaption>
                                                     <header>
                                                         <a href="javascript:void(0)" data-role="216" class="checkout" title="">
                                                             <h1>
                                                                 <span>فیزیک</span>
-                                                                <em>طلوعی</em>
+                                                                <em>دکتر طلوعی</em>
                                                             </h1>
                                                         </a>
                                                     </header>
@@ -285,14 +277,14 @@
                                             </bdi>
                                             <figure>
                                                 <a href="javascript:void(0)" data-role="217" class="checkout" title="">
-                                                    <img src="/assets/extra/landing3/images/professors/G7.png" alt="" title="">
+                                                    <img src="/assets/extra/landing3/images/professors/G7.png" alt="همایش طلایی شیمی کنکور آلاء" title="">
                                                 </a>
                                                 <figcaption>
                                                     <header>
                                                         <a href="javascript:void(0)" data-role="217" class="checkout" title="">
                                                             <h1>
                                                                 <span>شیمی</span>
-                                                                <em>صنیعی</em>
+                                                                <em>استاد صنیعی</em>
                                                             </h1>
                                                         </a>
                                                     </header>
@@ -316,14 +308,14 @@
                                             </bdi>
                                             <figure>
                                                 <a href="javascript:void(0)" data-role="214" class="checkout" title="">
-                                                    <img src="/assets/extra/landing3/images/professors/G2.png" alt="" title="">
+                                                    <img src="/assets/extra/landing3/images/professors/G2.png" alt="همایش طلایی عربی کنکور آلاء" title="">
                                                 </a>
                                                 <figcaption>
                                                     <header>
                                                         <a href="javascript:void(0)" data-role="214" class="checkout" title="">
                                                             <h1>
                                                                 <span>عربی</span>
-                                                                <em>ناصح زاده</em>
+                                                                <em style="font-size: 4rem !important;">استاد ناصح زاده</em>
                                                             </h1>
                                                         </a>
                                                     </header>
@@ -430,7 +422,7 @@
                                                         <a href="javascript:void(0)" data-role="212" class="checkout" title="">
                                                             <h1>
                                                                 <span>زیست</span>
-                                                                <em>چلاجور</em>
+                                                                <em>دکتر چلاجور</em>
                                                             </h1>
                                                         </a>
                                                     </header>
@@ -492,7 +484,7 @@
                                                         <a href="javascript:void(0)" data-role="213" class="checkout" title="">
                                                             <h1>
                                                                 <span>زمین</span>
-                                                                <em>چلاجور</em>
+                                                                <em>دکتر چلاجور</em>
                                                             </h1>
                                                         </a>
                                                     </header>
@@ -636,6 +628,68 @@
                                                             <h1>
                                                                 <span>دیفرانیل</span>
                                                                 <em>ثابتی</em>
+                                                            </h1>
+                                                        </a>
+                                                    </header>
+                                                    <strong>
+                                                            <span class="span-gold">
+                                                                همایش طـــلایی
+                                                            </span>
+                                                        <bdi class="prsent">
+                                                            <i>80%</i>
+                                                            <em> کــــنـکور</em>
+                                                        </bdi>
+                                                    </strong>
+                                                </figcaption>
+                                            </figure>
+                                        </article>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <article class="item-content-field">
+                                            <bdi class="bdi-title math">
+                                                <em>مشترک</em>
+                                            </bdi>
+                                            <figure>
+                                                <a href="javascript:void(0)" data-role="214" class="checkout" title="">
+                                                    <img src="/assets/extra/landing3/images/professors/G2.png" alt="همایش طلایی عربی کنکور آلاء" title="">
+                                                </a>
+                                                <figcaption>
+                                                    <header>
+                                                        <a href="javascript:void(0)" data-role="214" class="checkout" title="">
+                                                            <h1>
+                                                                <span>عربی</span>
+                                                                <em style="font-size: 4rem !important;">استاد ناصح زاده</em>
+                                                            </h1>
+                                                        </a>
+                                                    </header>
+                                                    <strong>
+                                                            <span class="span-gold">
+                                                                همایش طـــلایی
+                                                            </span>
+                                                        <bdi class="prsent">
+                                                            <i>80%</i>
+                                                            <em> کــــنـکور</em>
+                                                        </bdi>
+                                                    </strong>
+                                                </figcaption>
+                                            </figure>
+                                        </article>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <article class="item-content-field">
+                                            <bdi class="bdi-title math">
+                                                <em>مشترک</em>
+                                            </bdi>
+                                            <figure>
+                                                <a href="javascript:void(0)" data-role="217" class="checkout" title="">
+                                                    <img src="/assets/extra/landing3/images/professors/G7.png" alt="همایش طلایی شیمی کنکور آلاء" title="">
+                                                </a>
+                                                <figcaption>
+                                                    <header>
+                                                        <a href="javascript:void(0)" data-role="217" class="checkout" title="">
+                                                            <h1>
+                                                                <span>شیمی</span>
+                                                                <em>استاد صنیعی</em>
                                                             </h1>
                                                         </a>
                                                     </header>

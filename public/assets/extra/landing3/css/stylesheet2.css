@@ -67,8 +67,8 @@ body {
   background: url('../images/sample/header-imag.png')no-repeat;
   background-size: 100% 100%;
   /* background-size: contain; */
-  max-height: 62.4rem;
-  min-height: 62.4rem;
+  max-height: 45rem;
+  min-height: 30rem;
   width: 100%;
 }
 
@@ -184,7 +184,7 @@ body {
   display: flex;
   align-items: center;
   color: #fff;
-  font-size: 3.5rem;
+  font-size: 2rem;
   font-weight: bolder;
   letter-spacing: 0.037rem;
   max-height: 4.2rem;
@@ -536,16 +536,18 @@ body {
 }
 
 .note-content>header>a>h2 {
-  font-size: 8.3rem;
+  font-family: IRANSans;
+  font-size: 5rem;
   font-weight: 400;
   letter-spacing: -0.03rem;
 }
 
 .note-content>p {
-  font-size: 4.3rem;
-  font-weight: 400;
+  font-family: IRANSans;
+  font-size: 2rem;
   letter-spacing: -0.018rem;
   line-height: 5rem;
+  text-align: justify;
 }
 
 /* End Header */
