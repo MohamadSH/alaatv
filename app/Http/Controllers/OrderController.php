@@ -1079,7 +1079,8 @@ class OrderController extends Controller
                 if($order->orderproducts->whereIn("product_id" , Config::get("constants.DONATE_PRODUCT"))->isNotEmpty()) $orderHasDonate = true;
                 else $orderHasDonate = false ;
 
-                return view("order.checkout.payment" , compact("gateways" , "cost" , "coupon" , "paymentMethods" , "orderHasDonate" , "totalRawCost"));
+                $credit = $user->getTotalWalletBalance();
+                return view("order.checkout.payment" , compact("gateways" , "cost" , "coupon" , "paymentMethods" , "orderHasDonate" , "totalRawCost" , "credit"));
             }else
             {
                 return redirect(action("OrderController@checkoutReview"));

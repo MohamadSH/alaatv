@@ -471,7 +471,8 @@ class TransactionController extends Controller
         else $order_id = session()->get("order_id");
 
         $order = Order::findOrFail($order_id);
-        if($order->orderproducts->isEmpty())  return redirect(action("OrderController@checkoutReview"));
+        if($order->orderproducts->isEmpty())
+            return redirect(action("OrderController@checkoutReview"));
         if(!$this->checkOrderAuthority($order)) {
             $message = "سفارش مورد نظر متعلق به شما نمی باشد";
             $controller = new HomeController();
@@ -495,11 +496,14 @@ class TransactionController extends Controller
 //                else $cost = $this->obtainOrderCost($order );
         if(Auth::check())
         {
-            $description = "آلاء-".Auth::user()->mobile."-محصولات: ";
+            $user = Auth::user();
+            $description = "آلاء-".$user->mobile."-محصولات: ";
 //            $mobile = Auth::user()->mobile;
         }
         else
         {
+            if(isset($order->user_id))
+                $user = $order->user;
             $description = "آلاء-"." مشتری ناشناس- ";
 //            $mobile="";
         }
@@ -530,13 +534,48 @@ class TransactionController extends Controller
                 $order->refreshCost();
             }
         }
-        if(isset($transaction)) $cost = $transaction->cost;
-        else $cost = $order->totalCost() - $order->totalPaidCost();
+        if(isset($transaction))
+            $cost = $transaction->cost;
+        else
+        {
+            $cost = $order->totalCost() - $order->totalPaidCost();
+            if($request->has("payByWallet"))
+            {
+                if(isset($user))
+                {
+                    $amount = $user->getTotalWalletBalance();
+                    if($amount > 0 )
+                    {
+                        if($cost < $amount)
+                            $amount = $cost;
+
+                        //ToDo : what if user does not have wallet ?
+                        $result =  $user->withdraw($amount) ;
+                        if($result["result"])
+                        {
+                            $completed_at = Carbon::now();
+                            $transactionStatus = config("constants.TRANSACTION_STATUS_SUCCESSFUL") ;
+                            $order->transactions()
+                                ->create([
+                                    'order_id' => $order->id ,
+                                    'cost' => $amount ,
+                                    'transactionstatus_id' => $transactionStatus,
+                                    'completed_at' => $completed_at,
+                                ]);
+                        }
+                        $cost = $cost - $amount;
+                    }
+
+                }
+            }
+        }
         switch ($gateway)
         {
             case "zarinpal":
-                if(isset($cost)) $this->zarinReqeust($order , (int)$cost , $description );
-                else return redirect(action("OrderController@verifyPayment"));
+                if(isset($cost) && $cost > 0)
+                    $this->zarinReqeust($order , (int)$cost , $description );
+                else
+                    return redirect(action("OrderController@verifyPayment"));
                 break;
             case "enbank":
                 if(isset($cost)) return $this->ENBankRequest($order , (int)$cost  );

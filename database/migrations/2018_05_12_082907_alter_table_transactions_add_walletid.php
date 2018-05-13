@@ -18,10 +18,17 @@ class AlterTableTransactionsAddWalletid extends Migration
                 ->nullable()
                 ->comment("آیدی مشخص کننده کیف پولی که تراکنش متعلق به آن است")
                 ->after("order_id");
+            $table->foreign('wallet_id')
+                ->references('id')
+                ->on('wallets')
+                ->onDelete('cascade')
+                ->onupdate('cascade');
+
             $table->unsignedInteger("order_id")
                 ->nullable()
                 ->comment("آیدی مشخص کننده سفارشی که تراکنش متعلق به آن است")
                 ->change();
+
         });
     }
 
@@ -40,9 +47,14 @@ class AlterTableTransactionsAddWalletid extends Migration
                 $table->dropColumn('wallet_id');
             }
 
-            $table->unsignedInteger("order_id")
-                ->comment("آیدی مشخص کننده سفارشی که از طریق این تراکنش مبلغ آن پرداخت شده است")
-                ->change();
+            if (Schema::hasColumn('transactions', 'order_id'))
+            {
+                $table->unsignedInteger("order_id")
+                    ->default(NULL)
+                    ->comment("آیدی مشخص کننده سفارشی که از طریق این تراکنش مبلغ آن پرداخت شده است")
+                    ->change();
+            }
+
         });
     }
 }

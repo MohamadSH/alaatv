@@ -31,6 +31,7 @@ use App\User;
 use App\Userbon;
 use App\Userupload;
 use App\Verificationmessage;
+use App\Wallet;
 use App\Websitesetting;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
@@ -297,6 +298,13 @@ class RouteServiceProvider extends ServiceProvider
             $key = "Productphoto:".$value;
            return Cache::remember($key,Config::get("constants.CACHE_5"),function () use ($value){
                 return Productphoto::where('id', $value)->first() ?? abort(404);
+            });
+
+        });
+        Route::bind("wallet", function($value){
+            $key = "Wallet:".$value;
+            return Cache::remember($key,Config::get("constants.CACHE_5"),function () use ($value){
+                return Wallet::where('id', $value)->first() ?? abort(404);
             });
 
         });

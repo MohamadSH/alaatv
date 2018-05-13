@@ -32,7 +32,6 @@ use App\Producttype;
 use App\Question;
 use App\Relative;
 use App\Role;
-use App\Slideshow;
 use App\Traits\APIRequestCommon;
 use App\Traits\CharacterCommon;
 use App\Traits\DateCommon;
@@ -90,7 +89,49 @@ class HomeController extends Controller
     private static $TAG = HomeController::class;
 
     public function debug(Request $request){
-        abort(404);
+        $user = Auth::user();
+        $order_id = session()->get("order_id");
+        $order = Order::findOrFail($order_id);
+
+        $order->refreshCost();
+        if($order->hasCoupon()) {
+            $validateCouponProduct = $order->reviewCoupon();
+            if($validateCouponProduct["couponRemoved"])
+            {
+                $order = Order::where("id" , $order->id)->get()->first();
+                $order->refreshCost();
+            }
+        }
+        if(isset($transaction))
+            $cost = $transaction->cost;
+        else
+        {
+            $cost = $order->totalCost() - $order->totalPaidCost();
+            if($request->has("payByWallet"))
+            {
+                $amount = $user->getTotalWalletBalance();
+                if($amount > 0)
+                {
+                    $result =  $user->withdraw($amount) ;
+                    if($result["result"])
+                    {
+                        $completed_at = Carbon::now();
+                        $transactionStatus = config("constants.TRANSACTION_STATUS_SUCCESSFUL") ;
+                        $order->transactions()
+                            ->create([
+                                'order_id' => $order->id ,
+                                'cost' => $amount ,
+                                'transactionstatus_id' => $transactionStatus,
+                                'completed_at' => $completed_at,
+                            ]);
+                    }
+                }
+                $cost = $cost - $amount;
+            }
+        }
+
+
+        return view("errors.404");
     }
     public function __construct()
     {

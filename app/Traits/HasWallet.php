@@ -4,6 +4,7 @@ namespace App\Traits;
 use App\Http\Controllers\WalletController;
 use App\Http\Requests\Request;
 use App\Wallet;
+use Carbon\Carbon;
 
 trait HasWallet
 {
@@ -28,10 +29,25 @@ trait HasWallet
     public function getWalletBalance($type = 1)
     {
         $wallet = $this->wallets->where("wallettype_id" , $type)->first();
+        $balance = 0 ;
         if(isset($wallet))
-            return $this->wallets->where("wallettype_id" , $type)->first()->balance;
-        else
-            return 0 ;
+            $balance = $this->wallets->where("wallettype_id" , $type)->first()->balance;
+
+        return $balance ;
+    }
+    /**
+     * Retrieve the balance of all of this user's wallet
+     */
+    public function getTotalWalletBalance()
+    {
+        $wallets = $this->wallets;
+        $totalBalance = 0;
+        foreach ($wallets as $wallet)
+        {
+            $totalBalance += $wallet->balance ;
+        }
+
+        return $totalBalance ;
     }
     /**
      * Determine if the user can withdraw the given amount
@@ -50,6 +66,11 @@ trait HasWallet
      */
     public function deposit($amount=0, $walletType=null , $type = 'deposit', $meta = [],  $accepted = true)
     {
+        $failed = true;
+        $responseText = "";
+        $walletController = new WalletController();
+        $request = new Request();
+
         if(!isset($walletType))
             $walletType = config("constants.WALLET_TYPE_MAIN");
         if ($accepted)
@@ -57,37 +78,66 @@ trait HasWallet
             $wallet = $this->wallets->where("wallettype_id" , $walletType)->first();
             if(isset($wallet))
             {
-                $wallet->balance += $amount;
-                $wallet->update();
-                //ToDo: can use WalletController
+                $newBalance = $wallet->balance + $amount;
+                $request->offsetSet("balance" , $newBalance);
+                $request->offsetSet("fromAPI" , 1);
+
+                $response =  $walletController->update($request , $wallet);
+                if($response->getStatusCode() == 200)
+                {
+                    $failed = false;
+                }
+                else
+                {
+                    $failed = true;
+                    $responseText = "CAN_NOT_UPDATE_WALLET";
+                }
             }
             else
             {
-                $request = new Request();
                 $request->offsetSet("user_id" , $this->id);
                 $request->offsetSet("wallettype_id" , $walletType);
                 $request->offsetSet("balance" , $amount);
                 $request->offsetSet("fromAPI" , 1);
-                $walletController = new WalletController();
-                $response = $walletController->store($request);
+                $response =  $walletController->store($request);
                 if($response->getStatusCode() == 200)
                 {
-                    //ToDo:
+                    $failed = false;
+                    $result =  json_decode($response->getContent());
+                    $wallet = Wallet::where("id" , $result->wallet->id)->first() ;
                 }
                 else
                 {
-                    //ToDo:
+                    $failed = true;
+                    $responseText = "CAN_NOT_CREATE_WALLET";
                 }
             }
         }
-        /*$this->wallet->transactions()
-            ->create([
-                'amount' => $amount,
-                'hash' => uniqid('lwch_'),
-                'type' => $type,
-                'accepted' => $accepted,
-                'meta' => $meta
-            ]);*/
+        if(isset($wallet) && !$failed)
+        {
+            $completed_at = Carbon::now();
+            $transactionStatus = config("constants.TRANSACTION_STATUS_SUCCESSFUL") ;
+
+            $wallet->transactions()
+                ->create([
+                    'wallet_id' => $wallet->id ,
+                    'cost' => $amount,
+                    'transactionstatus_id' => $transactionStatus,
+                    'completed_at' => $completed_at,
+                ]);
+
+            $failed = false;
+        }
+        else
+        {
+            $failed = true;
+            $responseText = "NO_WALLET_FOUND";
+        }
+
+        return [
+        "result" => !$failed ,
+        "responseText" => $responseText
+    ] ;
     }
     /**
      * Fail to move credits to this account
@@ -108,6 +158,11 @@ trait HasWallet
      */
     public function withdraw( $amount , $walletType=null, $type = 'withdraw', $meta = [], $shouldAccept = true)
     {
+            $failed = true;
+            $responseText = "";
+            $walletController =  new WalletController();
+            $request = new Request();
+
             if(!isset($walletType))
                 $walletType = config("constants.WALLET_TYPE_MAIN");
 
@@ -119,38 +174,72 @@ trait HasWallet
                 $accepted = $shouldAccept ? $this->canWithdraw($amount) : true;
                 if ($accepted)
                 {
-                    $wallet->balance -= $amount;
-                    $wallet->update();
-                    //ToDo: can use WalletController
+                    $newBalance = $wallet->balance - $amount;
+                    $request->offsetSet("balance" , $newBalance);
+                    $request->offsetSet("fromAPI" , 1);
+
+                    $response =  $walletController->update($request , $wallet);
+                    if($response->getStatusCode() == 200)
+                    {
+                        $failed = false;
+                    }
+                    else
+                    {
+                        $failed = true;
+                        $responseText = "CAN_NOT_UPDATE_WALLET";
+                    }
+                }
+                else
+                {
+                    $failed = true;
+                    $responseText = "CAN_NOT_WITHDRAW";
                 }
             }
             else
             {
-                $request = new Request();
                 $request->offsetSet("user_id" , $this->id);
                 $request->offsetSet("wallettype_id" , $walletType);
                 $request->offsetSet("balance" , -$amount);
                 $request->offsetSet("fromAPI" , 1);
-                $walletController =  new WalletController();
+
                 $response =  $walletController->store($request);
                 if($response->getStatusCode() == 200)
                 {
-                    //ToDo:
+                    $result =  json_decode($response->getContent());
+                    $wallet = Wallet::where("id" , $result->wallet->id)->first() ;
+                    $failed = false ;
                 }
                 else
                 {
-                    //ToDo:
+                    $failed = true;
+                    $responseText = "CAN_NOT_CREATE_WALLET";
                 }
             }
 
-//        $this->wallet->transactions()
-//            ->create([
-//                'amount' => $amount,
-//                'hash' => uniqid('lwch_'),
-//                'type' => $type,
-//                'accepted' => $accepted,
-//                'meta' => $meta
-//            ]);
+            if(isset($wallet) && !$failed)
+            {
+                $completed_at = Carbon::now();
+                $transactionStatus = config("constants.TRANSACTION_STATUS_SUCCESSFUL") ;
+
+                $wallet->transactions()
+                    ->create([
+                        'wallet_id' => $wallet->id ,
+                        'cost' => -$amount,
+                        'transactionstatus_id' => $transactionStatus,
+                        'completed_at' => $completed_at,
+                    ]);
+                $failed = false;
+                $responseText = "SUCCESSFUL";
+            }
+            else
+            {
+                $failed = true;
+                $responseText = "No_WALLET_FOUND";
+            }
+        return [
+            "result" => !$failed ,
+            "responseText" => $responseText
+            ] ;
     }
     /**
      * Move credits from this account
