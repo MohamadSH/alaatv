@@ -1445,7 +1445,7 @@ class HomeController extends Controller
     {
         if($request->has("group-mobile"))
         {
-            $marketingProducts = [210,211,212,213,214,215,216,217,218,219,220,221] ;
+            $marketingProducts = [210,211,212,213,214,215,216,217,218,219,220,221,222] ;
             $mobiles = $request->get("group-mobile");
             $mobileArray = [];
             foreach ($mobiles as $mobile)
