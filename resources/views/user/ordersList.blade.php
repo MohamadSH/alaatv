@@ -289,7 +289,7 @@
                                                     @foreach($order->successfulTransactions as $successfulTransaction)
                                                         @if(isset($successfulTransaction->paymentmethod->displayName)) {{ $successfulTransaction->paymentmethod->displayName}} @else <span class="label label-danger">- نحوه پرداخت نامشخص</span> @endif
                                                         @if($successfulTransaction->getGrandParent() === false)
-                                                            @if($successfulTransaction->getCode() === false) - بدون کد @else - {{$successfulTransaction->getCode()}} @endif
+                                                            @if($successfulTransaction->getCode() !== false)  - {{$successfulTransaction->getCode()}} @endif
                                                                 - مبلغ: @if($successfulTransaction->cost >= 0)
                                                                     {{ number_format($successfulTransaction->cost) }} <br>
                                                                 @else
@@ -366,43 +366,68 @@
                                 @endif
                             </div>
                             <div class="tab-pane" id="tab_2">
-                                <div class="table-scrollable table-scrollable-borderless">
-                                    <table class="table table-hover table-light">
-                                        <thead>
-                                        <tr class="uppercase">
-                                            <th> نحوه پرداخت </th>
-                                            <th> وضعیت </th>
-                                            <th> شناسه </th>
-                                            <th> مبلغ تراکنش (تومان) </th>
-                                            <th> نوع </th>
-                                            <th> تاریخ پرداخت </th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                            @forelse($transactions as $transaction)
-                                                <tr>
-                                                    <td>@if(isset($transaction->paymentmethod)) {{$transaction->paymentmethod->displayName}} @else <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
-                                                    <td>@if(isset($transaction->transactionstatus))
-                                                            @if($transaction->transactionstatus->id == Config::get("constants.TRANSACTION_STATUS_PENDING"))<span class="label label-sm label-info">{{$transaction->transactionstatus->displayName}}</span>
-                                                            @else {{$transaction->transactionstatus->displayName}}
-                                                            @endif
-                                                        @else <span class="label label-sm label-info"> نامشخص </span> @endif</td>
-                                                    <td>
-                                                        @if($transaction->getCode() === false)
-                                                            <span class="label label-sm label-warning"> ندارد </span>
-                                                        @else
-                                                            {{$transaction->getCode()}}
-                                                        @endif
-                                                    </td>
-                                                    <td style="direction: ltr; text-align: right">@if(isset($transaction->cost) && strlen($transaction->cost)>0)@if($transaction->cost >= 0) {{number_format($transaction->cost)}} @else {{number_format(-$transaction->cost)}} @endif @else <span class="label label-sm label-danger"> درج نشده </span>  @endif</td>
-                                                    <td>@if(isset($transaction->cost) && strlen($transaction->cost)>0)@if($transaction->cost >= 0) پرداخت @else دریافت @endif @else <span class="label label-sm label-danger"> درج نشده </span>  @endif</td>
-                                                    <td>@if(isset($transaction->completed_at) && strlen($transaction->completed_at) > 0){{ $transaction->CompletedAt_Jalali() }}@else <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
-                                                </tr>
-                                            @empty
-                                                <tr><td colspan="7" class="alert alert-info text-center bold">شما تاکنون تراکنشی ثبت نکرده اید</td></tr>
-                                            @endforelse
-                                        </tbody>
-                                    </table>
+                                <div class="panel-group accordion scrollable" id="accordion2">
+                                    @foreach($transactions as $key=>$transactionArray)
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title">
+                                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse_{{$key}}"> سفارش #{{$key}} </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapse_{{$key}}" class="panel-collapse collapse">
+                                                <div class="panel-body">
+                                                    <div class="table-scrollable table-scrollable-borderless">
+                                                        <table class="table table-hover table-light">
+                                                            <thead>
+                                                            <tr class="uppercase">
+                                                                <th> نحوه پرداخت </th>
+                                                                <th> وضعیت </th>
+                                                                <th> شناسه </th>
+                                                                <th> مبلغ تراکنش (تومان) </th>
+                                                                <th> نوع </th>
+                                                                <th> تاریخ پرداخت </th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            @forelse($transactionArray as $transaction)
+                                                                <tr>
+                                                                    <td>@if(isset($transaction->paymentmethod))
+                                                                            {{$transaction->paymentmethod->displayName}}
+                                                                            @if($transaction->paymentmethod->id == config("constants.PAYMENT_METHOD_WALLET"))
+                                                                                @if(isset($transaction->wallet_id) && $transaction->wallet->wallettype_id == config("constants.WALLET_TYPE_GIFT"))
+                                                                                    - هدیه
+                                                                                @endif
+                                                                            @endif
+                                                                        @else
+                                                                            <span class="label label-sm label-danger"> درج نشده </span>
+                                                                        @endif
+                                                                    </td>
+                                                                    <td>@if(isset($transaction->transactionstatus))
+                                                                            @if($transaction->transactionstatus->id == Config::get("constants.TRANSACTION_STATUS_PENDING"))<span class="label label-sm label-info">{{$transaction->transactionstatus->displayName}}</span>
+                                                                            @else {{$transaction->transactionstatus->displayName}}
+                                                                            @endif
+                                                                        @else <span class="label label-sm label-info"> نامشخص </span> @endif</td>
+                                                                    <td>
+                                                                        @if($transaction->getCode() === false)
+                                                                            <span class="label label-sm label-warning"> ندارد </span>
+                                                                        @else
+                                                                            {{$transaction->getCode()}}
+                                                                        @endif
+                                                                    </td>
+                                                                    <td style="direction: ltr; text-align: right">@if(isset($transaction->cost) && strlen($transaction->cost)>0)@if($transaction->cost >= 0) {{number_format($transaction->cost)}} @else {{number_format(-$transaction->cost)}} @endif @else <span class="label label-sm label-danger"> درج نشده </span>  @endif</td>
+                                                                    <td>@if(isset($transaction->cost) && strlen($transaction->cost)>0)@if($transaction->cost >= 0) پرداخت @else دریافت @endif @else <span class="label label-sm label-danger"> درج نشده </span>  @endif</td>
+                                                                    <td>@if(isset($transaction->completed_at) && strlen($transaction->completed_at) > 0){{ $transaction->CompletedAt_Jalali() }}@else <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                                                                </tr>
+                                                            @empty
+                                                                <tr><td colspan="7" class="alert alert-info text-center bold">شما تاکنون تراکنشی ثبت نکرده اید</td></tr>
+                                                            @endforelse
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
                                 </div>
                             </div>
                             <div class="tab-pane" id="tab_3">

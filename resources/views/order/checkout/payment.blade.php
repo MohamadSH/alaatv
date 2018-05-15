@@ -144,9 +144,11 @@
                                                         </div>
                                                          <label class="col-lg-5 col-md-5 col-sd-5 col-xs-5 text-center control-label bold font-blue-sharp"
                                                                 style="text-align: center ; font-size: medium">
-                                                             اعتبار شما: {{number_format($credit)}} تومان
+                                                             کیف پول شما: {{number_format($credit)}} تومان
                                                          </label>
-                                                        {!! Form::hidden('payByWallet',1 ) !!}
+                                                        @if($credit > 0 )
+                                                         {!! Form::hidden('payByWallet',1 ) !!}
+                                                        @endif
                                                  </div>
                                                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 " id="gatewayDiv">
                                                     <label class="col-lg-5 col-md-5 col-sd-5 col-xs-5 control-label" style="text-align: center" for="gateway">انتخاب درگاه </label>
@@ -163,14 +165,14 @@
                                             <div class="form-group">
                                                 <div class="col-lg-12 col-md-12 margin-top-20 text-center">
                                                     @if(isset($coupon))
-                                                        <span class=" bg-green-soft bg-font-dark" style="font-size: 15px;background: #ff7272;    padding: 0px 5px 0px 5px;">{{($credit>0)?"جمع کل:":"مبلغ قابل پرداخت:"}}
+                                                        <span class=" {{($credit>0)?"bg-purple-intense":"bg-green-soft"}} bg-font-dark" style="font-size: 15px;background: #ff7272;    padding: 0px 5px 0px 5px;">{{($credit>0)?"جمع کل:":"مبلغ قابل پرداخت:"}}
                                                             <lable id="totalCost" style="text-decoration: line-through;">{{number_format($totalRawCost)}}</lable>
                                                             تومان
                                                         </span>
                                                         <span class=" bg-font-dark" style="background: #ff7272;    padding: 0px 5px 0px 5px; font-size: 15px">برای شما </span>
                                                         <span class=" bg-font-dark" style="background: #ee5053;    padding: 0px 5px 0px 5px;font-size: 15px">{{number_format($cost)}} تومان</span>
                                                     @else
-                                                        <span class="label bg-green-soft" style="font-size: 15px">{{($credit>0)?"جمع کل:":"مبلغ قابل پرداخت:"}}
+                                                        <span class="label {{($credit>0)?"bg-purple-intense":"bg-green-soft"}}" style="font-size: 15px">{{($credit>0)?"جمع کل:":"مبلغ قابل پرداخت:"}}
                                                             <lable id="totalCost">
                                                                 {{number_format($totalRawCost)}}
                                                             </lable>
@@ -182,15 +184,15 @@
                                                 @if($credit > 0)
                                                     <div class="col-lg-12 col-md-12 margin-top-20 text-center">
                                                         <span class="label bg-blue-madison" style="font-size: 15px">
-                                                            استفاده از اعتبار:
+                                                            استفاده از کیف پول:
                                                                     <lable id="totalCost">
-                                                                        {{number_format($credit)}}
+                                                                        {{($cost<$credit)?number_format($cost): number_format($credit)}}
                                                                     </lable>
                                                                     تومان
                                                         </span>
                                                     </div>
                                                     <div class="col-lg-12 col-md-12 margin-top-20 text-center">
-                                                        <span class="label bg-purple-intense" style="font-size: 15px">مبلغ قابل پرداخت:
+                                                        <span class="label bg-green-soft" style="font-size: 15px">مبلغ قابل پرداخت:
                                                                     <lable id="totalCost">
                                                                         {{number_format( max($cost - $credit , 0))}}
                                                                     </lable>

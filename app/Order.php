@@ -4,6 +4,7 @@ namespace App;
 
 use App\Traits\Helper;
 use App\Traits\ProductCommon;
+use Carbon\Carbon;
 use Iatstuti\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -414,6 +415,70 @@ class Order extends Model
         return ["warning" => $warningMessage, "info" => $infoMessage, "error" => $errorMessage, "couponRemoved" => $couponRemoved];
     }
 
+    /**
+     * Detaches coupon from this order
+     *
+     * @return array
+     */
+    public function detachCoupon()
+    {
+        $done = false;
+        if(isset($this->coupon->id))
+        {
+            $coupon = $this->coupon ;
+            $coupon->usageNumber = $coupon->usageNumber - 1;
+            if($coupon->update());
+            {
+                $this->coupon_id = null;
+                $this->couponDiscount = 0 ;
+                $this->couponDiscountAmount = 0 ;
+                $done = true;
+            }
+        }
+        return ["result"=>$done];
+    }
+
+    /**
+     * Determines whether order has used coupon or not
+     *
+     * @return bool
+     */
+    public function hasUsedCoupon()
+    {
+        $flag = false;
+        if(isset($this->coupon->id ))
+        {
+            if($this->coupon->coupontype->id == 2)
+            {
+                foreach ($this->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->get() as $orderproduct)
+                {
+                    $hasCoupon = true;
+                    if(!in_array($this->coupon->id, $orderproduct->product->coupons->pluck('id')->toArray()))
+                    {
+                        $hasCoupon = false;
+                        $parentsArray = $this->makeParentArray($orderproduct->product);
+                        foreach ($parentsArray as $parent)
+                        {
+                            if(in_array($this->coupon->id, $parent->coupons->pluck('id')->toArray()))
+                            {
+                                $hasCoupon = true;
+                                break ;
+                            }
+                        }
+                    }
+
+                    if($hasCoupon)
+                    {
+                        $flag = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return  $flag;
+    }
+
     public function totalCost()
     {
         return $this->obtainOrderCost()["totalCost"];
@@ -456,4 +521,80 @@ class Order extends Model
         return ["newCost" => $orderCost];
     }
 
+    /**
+     * Gives order bons to user
+     *
+     * @param string $bonName
+     * @return array
+     */
+    public function giveUserBons($bonName)
+    {
+        $totalSuccessfulBons = 0;
+        $totalFailedBons = 0;
+        $checkedProducts = array();
+        $user = $this->user;
+
+        $orderproducts = $this->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->get();
+        foreach ($orderproducts as $orderproduct)
+        {
+            if(!isset($user))
+                break;
+            if($user->userbons->where("orderproduct_id" , $orderproduct->id )->isNotEmpty())
+                continue ;
+            $simpleProduct = $orderproduct->product ;
+            $bons = $simpleProduct->bons->where("name" , $bonName);
+            if($bons->isEmpty())
+            {
+                $grandParent = $simpleProduct->getGrandParent();
+                if($grandParent !== false)
+                {
+                    $simpleProduct = $grandParent ;
+                    $bons = $grandParent->bons->where("name" , $bonName)->where("isEnable" , 1);
+                }
+            }
+            if(in_array($simpleProduct->id , $checkedProducts))
+                continue;
+            if($bons->isNotEmpty())
+            {
+                $bon = $bons->first();
+                $bonPlus = $bon->pivot->bonPlus;
+                if($bonPlus)
+                {
+                    $userbon = new Userbon();
+                    $userbon->user_id = $user->id;
+                    $userbon->bon_id = $bon->id;
+                    $userbon->totalNumber = $bon->pivot->bonPlus;
+                    $userbon->userbonstatus_id = Config::get("constants.USERBON_STATUS_ACTIVE");
+                    $userbon->orderproduct_id = $orderproduct->id;
+                    if ($userbon->save())
+                        $totalSuccessfulBons += $userbon->totalNumber;
+                    else
+                        $totalFailedBons += $bon->pivot->bonPlus;
+                }
+            }
+        }
+
+        return [
+            $totalSuccessfulBons ,
+            $totalFailedBons
+        ];
+    }
+
+    /**
+     * Closes this order
+     *
+     * @param string $paymentStatus
+     * @return array
+     */
+    public function close( $paymentStatus , $orderStatus=null)
+    {
+        if(!isset($orderStatus))
+            $orderStatus = Config::get("constants.ORDER_STATUS_CLOSED");
+
+        $this->orderstatus_id = $orderStatus;
+        $this->paymentstatus_id = $paymentStatus;
+        $this->completed_at = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
+                                    ->timezone('Asia/Tehran');
+
+    }
 }

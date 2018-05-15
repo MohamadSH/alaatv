@@ -314,6 +314,30 @@ class User extends Authenticatable
     }
 
     /**
+     * Retrieve only order ralated transactions of this user
+     */
+    public function orderTransactions()
+    {
+        return $this->hasManyThrough("\App\Transaction", "\App\Order");
+    }
+
+    /**
+     * Retrieve only order ralated transactions of this user
+     */
+    public function walletTransactions()
+    {
+        return $this->hasManyThrough("\App\Transaction", "\App\Wallet");
+    }
+
+    /**
+     * Retrieve all transactions of this user
+     */
+    public function transactions()
+    {
+        return $this->hasManyThrough("\App\Transaction", "\App\Wallet");
+    }
+
+    /**
      * @param string $bonName
      * @return bool|number
      * Converting Created_at field to jalali

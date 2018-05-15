@@ -65,6 +65,11 @@ class Transaction extends Model
         return $this->belongsTo('\App\Bankaccount', 'bankaccounts', 'destinationBankAccount_id', 'id');
     }
 
+    public function wallet()
+    {
+        return $this->belongsTo("\App\Wallet");
+    }
+
     /**
      * @return string
      * Converting Created_at field to jalali
