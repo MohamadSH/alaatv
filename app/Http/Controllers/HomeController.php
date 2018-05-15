@@ -110,6 +110,7 @@ class HomeController extends Controller
         $this->middleware('permission:' . Config::get("constants.SMS_ADMIN_PANEL_ACCESS"), ['only' => 'adminSMS']);
         $this->middleware('permission:' . Config::get("constants.REPORT_ADMIN_PANEL_ACCESS"), ['only' => 'adminReport']);
         $this->middleware('ability:' . Config::get("constants.ROLE_ADMIN") . ',' . Config::get("constants.TELEMARKETING_PANEL_ACCESS"), ['only' => 'adminTeleMarketing']);
+        $this->middleware('role:admin' , ['only' => 'bot' , 'smsBot' , 'checkDisableContentTagBot' , 'tagBot']);
         $this->response = new Response();
         $this->setting = json_decode(app('setting')->setting);
 
@@ -2230,6 +2231,36 @@ class HomeController extends Controller
 
     public function bot()
     {
+        $productSet = [
+            [
+                "query"=>"", //whereHas / whereDoesntHave
+                "filter"=>"", //whereIn / whereNotIn / all
+                "id"=>[] // products id
+            ],
+        ];
+
+        $users = User::query();
+        foreach ($productSet as $products)
+        {
+
+            $query = $products["query"];
+            $users->$query("orders" , function ($q) use ($products)
+            {
+                if($products["filter"] != "all")
+                {
+                    $filterType = $products["filter"];
+                    $q->whereHas("orderproducts" , function ($q2) use ($products , $filterType)
+                    {
+                        $q2->$filterType("product_id" , $products["id"]) ;
+                    });
+                }
+
+                $q->where("orderstatus_id" , 2)
+                    ->where("paymentstatus_id" , 3);
+
+            }) ;
+        }
+
         /**
          * Fixing contentset tags
 

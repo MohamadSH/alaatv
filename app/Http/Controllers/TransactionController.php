@@ -489,7 +489,7 @@ class TransactionController extends Controller
             $transaction = Transaction::FindOrFail($request->get("transaction_id"));
             if($transaction->order_id != $order->id)
                 abort("403");
-            $description .= "پرداخت قسط ";
+            $description .= "پرداخت قسط -";
         }
         /**
          *  end
@@ -498,18 +498,9 @@ class TransactionController extends Controller
         /**
          *  Setting some info and description
          */
+        $user = $order->user;
+        $description .= "آلاء - ".$user->mobile." - محصولات: ";
 
-        if(Auth::check())
-        {
-            $user = Auth::user();
-            $description .= "آلاء - ".$user->mobile." - محصولات: ";
-        }
-        else
-        {
-            if(isset($order->user_id))
-                $user = $order->user;
-            $description .= "آلاء - "."مشتری ناشناس - "."محصولات: ";
-        }
         foreach ($order->orderproducts as $orderproduct)
         {
             if(isset($orderproduct->product->id))
@@ -527,7 +518,7 @@ class TransactionController extends Controller
             $order->timestamps = true;
         }
         /**
-         *  ebd
+         *  end
          */
 
         $order->refreshCost();
