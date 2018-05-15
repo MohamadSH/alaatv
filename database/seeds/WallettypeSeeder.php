@@ -22,7 +22,7 @@ class WallettypeSeeder extends Seeder
             ),
             array(
                 'id' => '2',
-                'name' => 'given',
+                'name' => 'gift',
                 'displayName' => 'هدیه',
                 'description' => 'کیف پول هدیه کاربر',
             )

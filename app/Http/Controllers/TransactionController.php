@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Contact;
 use App\Helpers\ENPayment;
 use App\Http\Requests\EditTransactionRequest;
 use App\Http\Requests\InsertTransactionRequest;
 use App\Orderproduct;
 use App\Paymentmethod;
 use App\Traits\Helper;
+use App\Traits\OrderCommon;
 use App\Transaction;
 use App\Transactiongateway;
 use App\Order;
@@ -28,7 +28,7 @@ use Illuminate\Http\Response;
 
 class TransactionController extends Controller
 {
-
+    use OrderCommon;
     use Helper;
     protected $response ;
     function __construct()
@@ -463,16 +463,22 @@ class TransactionController extends Controller
 
     public function paymentRedirect(Request $request)
     {
+        $gateway = $request->get('gateway');
+        $description = "";
         /**
          *  Finding and authorizing the order to be paid
          */
-        $gateway = $request->get('gateway');
-        if($request->has('order_id')) $order_id = $request->get('order_id');
-        else $order_id = session()->get("order_id");
+
+        if($request->has('order_id'))
+            $order_id = $request->get('order_id');
+        else
+            $order_id = session()->get("order_id");
 
         $order = Order::findOrFail($order_id);
-        if($order->orderproducts->isEmpty())  return redirect(action("OrderController@checkoutReview"));
-        if(!$this->checkOrderAuthority($order)) {
+        if($order->orderproducts->isEmpty())
+            return redirect(action("OrderController@checkoutReview"));
+        if(!$this->checkOrderAuthority($order))
+        {
             $message = "سفارش مورد نظر متعلق به شما نمی باشد";
             $controller = new HomeController();
             return $controller->errorPage($message);
@@ -481,7 +487,9 @@ class TransactionController extends Controller
         if($request->has("transaction_id"))
         {
             $transaction = Transaction::FindOrFail($request->get("transaction_id"));
-            if($transaction->order_id != $order->id) abort("403");
+            if($transaction->order_id != $order->id)
+                abort("403");
+            $description .= "پرداخت قسط -";
         }
         /**
          *  end
@@ -490,35 +498,27 @@ class TransactionController extends Controller
         /**
          *  Setting some info and description
          */
+        $user = $order->user;
+        $description .= "آلاء - ".$user->mobile." - محصولات: ";
 
-        //                if(Auth::user()->hasRole("admin")) $cost = 100;
-//                else $cost = $this->obtainOrderCost($order );
-        if(Auth::check())
-        {
-            $description = "آلاء-".Auth::user()->mobile."-محصولات: ";
-//            $mobile = Auth::user()->mobile;
-        }
-        else
-        {
-            $description = "آلاء-"." مشتری ناشناس- ";
-//            $mobile="";
-        }
         foreach ($order->orderproducts as $orderproduct)
         {
             if(isset($orderproduct->product->id))
-                $description .= " ".$orderproduct->product->name." ,";
+                $description .=  $orderproduct->product->name." , ";
             else
-                $description .= " یک محصول نامشخص ,";
+                $description .= "یک محصول نامشخص , ";
         }
-        $customerDescription = $request->get("customerDescription");
-        if(isset($customerDescription)) {
+
+        if($request->has("customerDescription"))
+        {
+            $customerDescription = $request->get("customerDescription");
             $order->customerDescription = $customerDescription;
             $order->timestamps = false;
             $order->update();
             $order->timestamps = true;
         }
         /**
-         *  ebd
+         *  end
          */
 
         $order->refreshCost();
@@ -530,13 +530,41 @@ class TransactionController extends Controller
                 $order->refreshCost();
             }
         }
-        if(isset($transaction)) $cost = $transaction->cost;
-        else $cost = $order->totalCost() - $order->totalPaidCost();
+        if(isset($transaction))
+        {
+            $cost = $transaction->cost;
+        }
+        else
+        {
+            $cost = $order->totalCost() - $order->totalPaidCost();
+            if($request->has("payByWallet"))
+            {
+                if(isset($user))
+                {
+                    $walletPayResult = $this->payOrderCostByWallet($user , $order , $cost);
+                    if($walletPayResult["result"])
+                    {
+                        $cost = $walletPayResult["cost"];
+                        $order->close(Config::get("constants.PAYMENT_STATUS_INDEBTED")) ;
+                        $order->timestamps = false;
+                        $order->update();
+                        $order->timestamps = true;
+                    }
+                }
+            }
+        }
         switch ($gateway)
         {
             case "zarinpal":
-                if(isset($cost)) $this->zarinReqeust($order , (int)$cost , $description );
-                else return redirect(action("OrderController@verifyPayment"));
+                if(isset($cost) && $cost > 0)
+                {
+                    $this->zarinReqeust($order , (int)$cost , $description );
+                }
+                else
+                {
+                    session()->put("closedOrder_id" , $order->id) ;
+                    return redirect(action("OrderController@verifyPayment"));
+                }
                 break;
             case "enbank":
                 if(isset($cost)) return $this->ENBankRequest($order , (int)$cost  );

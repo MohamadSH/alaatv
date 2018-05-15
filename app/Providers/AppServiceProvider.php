@@ -150,6 +150,8 @@ class AppServiceProvider extends ServiceProvider
                         Config::set("constants.PAYMENT_METHOD_POS", $paymentmethods->where("name", "POS")->first()->id);// id = 3
                     if ($paymentmethods->where("name", "paycheck")->isNotEmpty())
                         Config::set("constants.PAYMENT_METHOD_PAYCHECK", $paymentmethods->where("name", "paycheck")->first()->id);// id = 4
+                    if ($paymentmethods->where("name", "wallet")->isNotEmpty())
+                        Config::set("constants.PAYMENT_METHOD_WALLET", $paymentmethods->where("name", "wallet")->first()->id);// id = 5
                 }
 
                 //=====================PAYMENT STATUSES CONSTANTS
@@ -273,8 +275,8 @@ class AppServiceProvider extends ServiceProvider
                     $wallettypes = Wallettype::all();
                     if($wallettypes->where("name" , "main")->isNotEmpty())
                         Config::set("constants.WALLET_TYPE_MAIN" , $wallettypes->where("name" , "main")->first()->id);
-                    if($wallettypes->where("name" , "given")->isNotEmpty())
-                        Config::set("constants.WALLET_TYPE_GIVEN" , $wallettypes->where("name" , "given")->first()->id);
+                    if($wallettypes->where("name" , "gift")->isNotEmpty())
+                        Config::set("constants.WALLET_TYPE_GIFT" , $wallettypes->where("name" , "gift")->first()->id);
                 }
 
             }

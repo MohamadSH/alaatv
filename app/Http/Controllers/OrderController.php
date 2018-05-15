@@ -976,8 +976,9 @@ class OrderController extends Controller
             ->whereIn("product_id" , Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_NOT_DEFAULT"))
             ->get()
             ->isNotEmpty();
-
-        return view("order.checkout.review" , compact("user","orderproducts" , "orderCost" , "orderproductsRawCost" , 'costCollection' ,'orderproductLinks' , 'orderHasOrdrooGheireHozoori'));
+        $credit = $user->getTotalWalletBalance();
+        return view("order.checkout.review" , compact("user","orderproducts" , "orderCost" , "orderproductsRawCost" ,
+            'costCollection' ,'orderproductLinks' , 'orderHasOrdrooGheireHozoori' , 'credit'));
     }
 
     /**
@@ -1079,7 +1080,8 @@ class OrderController extends Controller
                 if($order->orderproducts->whereIn("product_id" , Config::get("constants.DONATE_PRODUCT"))->isNotEmpty()) $orderHasDonate = true;
                 else $orderHasDonate = false ;
 
-                return view("order.checkout.payment" , compact("gateways" , "cost" , "coupon" , "paymentMethods" , "orderHasDonate" , "totalRawCost"));
+                $credit = $user->getTotalWalletBalance();
+                return view("order.checkout.payment" , compact("gateways" , "cost" , "coupon" , "paymentMethods" , "orderHasDonate" , "totalRawCost" , "credit"));
             }else
             {
                 return redirect(action("OrderController@checkoutReview"));
@@ -1100,49 +1102,21 @@ class OrderController extends Controller
     {
         $sendSMS = true;
         $user = Auth::user();
-        if(Input::has('Authority') && Input::has('Status') )
-        {    // it is an online transaction verification
+        if($request->has('Authority') && $request->has('Status') )
+        {    // Come back from ZarinPal
             $result["isAdminOrder"] = false;
-            $authority = Input::get('Authority');
-            $status = Input::get('Status');
+            $authority = $request->get('Authority');
+            $status = $request->get('Status');
 
             $transaction = Transaction::where('authority' ,$authority)->firstOrFail() ;
             $order = Order::FindorFail($transaction->order_id);
-            if(isset($order->coupon->id )){
-                if($order->coupon->coupontype->id == 2)
-                {
-                    $flag = false;
-                    foreach ($order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->get() as $orderproduct)
-                    {
-                        $hasCoupon = true;
-                        if(!in_array($order->coupon->id, $orderproduct->product->coupons->pluck('id')->toArray()))
-                        {
-                            $hasCoupon = false;
-                            $parentsArray = $this->makeParentArray($orderproduct->product);
-                            foreach ($parentsArray as $parent)
-                            {
-                                if(in_array($order->coupon->id, $parent->coupons->pluck('id')->toArray()))
-                                {
-                                    $hasCoupon = true;
-                                    break ;
-                                }
-                            }
-                        }
 
-                        if($hasCoupon)
-                        {
-                            $flag = true;
-                        }
-                    }
-                    if(!$flag)
-                    {
-                        $order->coupon->usageNumber = $order->coupon->usageNumber - 1;
-                        $order->coupon->update();
-                        $order->coupon_id = null;
-                        $order->couponDiscount = 0 ;
-                        $order->couponDiscountAmount = 0 ;
-                    }
-                }
+            $usedCoupon = $order->hasUsedCoupon();
+            if(!$usedCoupon)
+            {
+                /** if order has not used coupon reverse it    */
+
+                $order->detachCoupon() ;
             }
 
             $zarinPal = new Zarinpal($transaction->transactiongateway->merchantNumber,new SoapDriver());
@@ -1151,154 +1125,70 @@ class OrderController extends Controller
             //return $result["status"] = success / canceled
 //            if(Auth::user()->hasRole("admin")){
 //                $result["Status"]="success";
-//                $result["RefID"] = "mohamad";
+//                $result["RefID"] = "mohamad2";
 //            }
             if(!isset($result))
-                abort(404) ;
+                    abort(404) ;
             if(strcmp(array_get($result,"Status"),'success')==0)
             {
-                if($order->orderstatus_id == Config::get("constants.ORDER_STATUS_OPEN"))
-                {
-                    session()->forget("order_id");
-                }else{
-                    $sendSMS = false;
-                }
                 $user = $order->user;
                 $transaction->transactionID = $result["RefID"] ;
                 $transaction->transactionstatus_id = Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL") ;
                 $transaction->completed_at = Carbon::now();
                 $transaction->update();
-                $order->paymentstatus_id = Config::get("constants.PAYMENT_STATUS_PAID");
 
-                $order->orderstatus_id = Config::get("constants.ORDER_STATUS_CLOSED");
+                $order->close(Config::get("constants.PAYMENT_STATUS_PAID")) ;
                 if($transaction->cost < (int)$order->totalCost() )
                 {
                     if((int)$order->totalPaidCost() < (int)$order->totalCost())
                         $order->paymentstatus_id = Config::get("constants.PAYMENT_STATUS_INDEBTED");
                 }
                 $order->timestamps = false;
-                $order->completed_at = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran');
                 if($order->update())
                     $result = array_add($result , "saveOrder" , 1);
                 else
                     $result = array_add($result , "saveOrder" , 0);
                 $order->timestamps = true;
-                $orderproducts = $order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->get();
 
-                /**
-                 *  Attaching user bons for this order
-                 */
+                /** Attaching user bons for this order */
                 $bonName = Config::get("constants.BON1");
-                $checkedProducts = array();
-                foreach ($orderproducts as $orderproduct)
-                {
-                    if($user->userbons->where("orderproduct_id" , $orderproduct->id )->isNotEmpty()) continue ;
-                    $simpleProduct = $orderproduct->product ;
-                    $bons = $simpleProduct->bons->where("name" , $bonName);
-                    if($bons->isEmpty())
-                    {
-                        $grandParent = $simpleProduct->getGrandParent();
-                        if($grandParent !== false)
-                        {
-                            $simpleProduct = $grandParent ;
-                            $bons = $grandParent->bons->where("name" , $bonName)->where("isEnable" , 1);
-                        }
-                    }
-                    if(in_array($simpleProduct->id , $checkedProducts)) continue;
-                    if($bons->isNotEmpty()) {
-                        $bon = $bons->first();
-                        $bonPlus = $bon->pivot->bonPlus;
-                        if($bonPlus)
-                        {
-                            $userbon = new Userbon();
-                            $userbon->user_id = $user->id;
-                            $userbon->bon_id = $bon->id;
-                            $userbon->totalNumber = $bon->pivot->bonPlus;
-                            $userbon->userbonstatus_id = Config::get("constants.USERBON_STATUS_ACTIVE");
-                            $userbon->orderproduct_id = $orderproduct->id;
-                            if ($userbon->save()) {
-                                array_push($checkedProducts , $simpleProduct->id);
-                                $result = array_add($result , "saveBon" , $bon->pivot->bonPlus);
-                            }else{
-                                $result = array_add($result , "saveBon" , -1);
-                            }
-                            $result = array_add($result , "bonName" , $bon->displayName);
-                        }else $result = array_add($result , "saveBon" , 0);
-                    }
-                }
+                [
+                $givenBonNumber ,
+                $failedBonNumber ] = $order->giveUserBons($bonName);
 
-                /**
-                 * code example for selling subscription
-                //            $product_type = $transaction->order->product->producttype->name;
-                //            switch ($product_type) {
-                //                case "subscribe":
-                //                    Auth::user()->permissions()->attach(Permission::all()->where("name", Config::get('constants.DOWNLOAD_ASSIGNMENT_ACCESS'))->first()->id, ["expire_at" => $expirationDate]);
-                //                    exit("your subscription done successful!");
-                //                    break;
-                //                default:
-                //                    break;
-                //            }*/
+                if($givenBonNumber == 0 )
+                    if($failedBonNumber > 0)
+                        $result = array_add($result , "saveBon" , -1);
+                    else
+                        $result = array_add($result , "saveBon" , 0);
+                else
+                    $result = array_add($result , "saveBon" , $givenBonNumber);
+                $result = array_add($result , "bonName" , $bonName);
 
             }
-            elseif(strcmp(array_get($result,"Status"),'canceled')==0 || (strcmp(array_get($result,"Status"),'error')==0 && strcmp(array_get($result,"error"),'-22')==0) )
+            elseif(strcmp(array_get($result,"Status"),'canceled')==0 ||
+                (strcmp(array_get($result,"Status"),'error')==0 && strcmp(array_get($result,"error"),'-22')==0) )
             {
-                if($order->orderstatus_id == Config::get("constants.ORDER_STATUS_OPEN")) {
+                $user = $order->user ;
+                if($order->orderstatus_id == Config::get("constants.ORDER_STATUS_OPEN"))
+                  {
                     $result["tryAgain"] = true;
-                    $order->orderstatus_id = Config::get("constants.ORDER_STATUS_CANCELED");
-                    $order->paymentstatus_id = Config::get("constants.PAYMENT_STATUS_UNPAID");
+
+                    $order->close( Config::get("constants.PAYMENT_STATUS_UNPAID"),Config::get("constants.ORDER_STATUS_CANCELED")) ;
                     $order->timestamps = false;
-                    $order->completed_at = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran');
-                    if ($order->update()) {
+                    if ($order->update())
+                    {
                         $request = new Request();
                         $request->offsetSet("paymentstatus_id", Config::get("constants.PAYMENT_STATUS_UNPAID"));
                         $request->offsetSet("orderstatus_id", Config::get("constants.ORDER_STATUS_OPEN"));
-                        $request->offsetSet("user_id", $order->user_id);
-                        $request->offsetSet("coupon_id", $order->coupon_id);
-                        $request->offsetSet("couponDiscount", $order->couponDiscount);
-                        $request->offsetSet("couponDiscountAmount", $order->couponDiscountAmount);
-                        $request->offsetSet("checkOutDateTime", $order->checkOutDateTime);
-                        $controller = new OrderController();
-                        $newOrder = $controller->store($request);
-                        if ($newOrder) {
-                            $orderproducts = $order->orderproducts;
-                            foreach ($orderproducts as $orderproduct) {
-                                $newOrderproduct = new Orderproduct();
-                                $newOrderproduct->product_id = $orderproduct->product_id;
-                                $newOrderproduct->order_id = $newOrder->id;
-                                $newOrderproduct->quantity = $orderproduct->quantity;
-                                if ($newOrderproduct->save()) {
-                                    $userbons = $orderproduct->userbons;
-                                    foreach ($userbons as $userbon) {
-                                        $newOrderproduct->userbons()->attach($userbon->id, ["usageNumber" => $userbon->pivot->usageNumber , "discount"=>$userbon->pivot->discount]);
-                                    }
-                                    foreach ($orderproduct->attributevalues as $value) {
-                                        if ($orderproduct->product->hasParents()) {
-                                            $myParent = $this->makeParentArray($orderproduct->product);
-                                            $myParent = end($myParent);
-                                            $attributevalue = $myParent->attributevalues->where("id", $value->id);
-                                        }
-                                        else
-                                        {
-                                            $attributevalue = $orderproduct->product->attributevalues->where("id", $value->id);
-                                        }
-                                        if (!$attributevalue->isEmpty()) {
-                                            $newOrderproduct->attributevalues()->attach($attributevalue->first()->id, ["extraCost" => $attributevalue->first()->pivot->extraCost]);
-                                        } else {
-                                        }
-                                    }
-                                } else {
-                                    // he just lost one of last orders items in his new order
-                                }
-                            }
-
-                        } else {
-                            // the new order was not created and no action is necessary.in fact he just lost his last order to add to.
-                        }
-                    } else {
+                        $response = $this->copy($order , $request);
+                    }else
+                    {
                         //last order is not closed and no action is necessary
                     }
                     $order->timestamps = true;
-                }else{
+                }else
+                {
                     $result["tryAgain"] = false;
                 }
 
@@ -1318,40 +1208,14 @@ class OrderController extends Controller
             if(!isset($transaction) || $transaction->transactionstatus->id != Config::get("constants.TRANSACTION_STATUS_TRANSFERRED_TO_PAY") ) return redirect(action(("HomeController@error403")));
             $order = Order::FindorFail($transaction->order_id);
 
-            if(isset($order->coupon->id )){
-                if($order->coupon->coupontype->id == 2)
-                {
-                    $flag = false;
-                    foreach ($order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->get() as $orderproduct)
-                    {
-                        $hasCoupon = true;
-                        if(!in_array($order->coupon->id, $orderproduct->product->coupons->pluck('id')->toArray()))
-                        {
-                            $hasCoupon = false;
-                            $parentsArray = $this->makeParentArray($orderproduct->product);
-                            foreach ($parentsArray as $parent)
-                            {
-                                if(in_array($order->coupon->id, $parent->coupons->pluck('id')->toArray()))
-                                {
-                                    $hasCoupon = true;
-                                    break ;
-                                }
-                            }
-                        }
+            $usedCoupon = $order->hasUsedCoupon();
+            if(!$usedCoupon)
+            {
+                /** if order has not used coupon reverse it    */
 
-                        if($hasCoupon)
-                        {
-                            $flag = true;
-                        }
-                    }
-                    if(!$flag)
-                    {
-                        $order->coupon->usageNumber = $order->coupon->usageNumber - 1;
-                        $order->coupon->update();
-                        $order->coupon_id = null;
-                    }
-                }
+                $order->detachCoupon() ;
             }
+
             if(strcasecmp($state , "ok") == 0) {
                 $result["Status"] = "success" ;
                 $enBankGate = Transactiongateway::all()->where('name' ,'enbank')->first() ;
@@ -1422,49 +1286,21 @@ class OrderController extends Controller
                     else
                         $result = array_add($result , "saveOrder" , 0);
                     $order->timestamps = true;
-                    $orderproducts = $order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->get();
 
-                    /**
-                     *  Attaching user bons for this order
-                     */
+                    /** Attaching user bons for this order */
                     $bonName = Config::get("constants.BON1");
-                    $checkedProducts = array();
-                    foreach ($orderproducts as $orderproduct)
-                    {
-                        $simpleProduct = $orderproduct->product ;
-                        $bons = $simpleProduct->bons->where("name" , $bonName);
-                        if($bons->isEmpty())
-                        {
-                            $grandParent = $simpleProduct->getGrandParent();
-                            if($grandParent !== false)
-                            {
-                                $simpleProduct = $grandParent ;
-                                $bons = $grandParent->bons->where("name" , $bonName)->where("isEnable" , 1);
-                            }
-                        }
-                        if(in_array($simpleProduct->id , $checkedProducts))
-                            continue;
-                        if($bons->isNotEmpty()) {
-                            $bon = $bons->first();
-                            $bonPlus = $bon->pivot->bonPlus;
-                            if($bonPlus)
-                            {
-                                $userbon = new Userbon();
-                                $userbon->user_id = $user->id;
-                                $userbon->bon_id = $bon->id;
-                                $userbon->totalNumber = $bon->pivot->bonPlus;
-                                $userbon->userbonstatus_id = Config::get("constants.USERBON_STATUS_ACTIVE");
-                                $userbon->orderproduct_id = $orderproduct->id;
-                                if ($userbon->save()) {
-                                    array_push($checkedProducts , $simpleProduct->id);
-                                    $result = array_add($result , "saveBon" , $bon->pivot->bonPlus);
-                                }else{
-                                    $result = array_add($result , "saveBon" , -1);
-                                }
-                                $result = array_add($result , "bonName" , $bon->displayName);
-                            }else $result = array_add($result , "saveBon" , 0);
-                        }
-                    }
+                    [
+                        $givenBonNumber ,
+                        $failedBonNumber ] = $order->giveUserBons($bonName);
+
+                    if($givenBonNumber == 0 )
+                        if($failedBonNumber > 0)
+                            $result = array_add($result , "saveBon" , -1);
+                        else
+                            $result = array_add($result , "saveBon" , 0);
+                    else
+                        $result = array_add($result , "saveBon" , $givenBonNumber);
+                    $result = array_add($result , "bonName" , $bonName);
                 }
 
             }
@@ -1482,48 +1318,7 @@ class OrderController extends Controller
                         $request = new Request();
                         $request->offsetSet("paymentstatus_id", Config::get("constants.PAYMENT_STATUS_UNPAID"));
                         $request->offsetSet("orderstatus_id", Config::get("constants.ORDER_STATUS_OPEN"));
-                        $request->offsetSet("user_id", $order->user_id);
-                        $request->offsetSet("coupon_id", $order->coupon_id);
-                        $request->offsetSet("couponDiscount", $order->couponDiscount);
-                        $request->offsetSet("couponDiscountAmount", $order->couponDiscountAmount);
-                        $request->offsetSet("checkOutDateTime", $order->checkOutDateTime);
-                        $controller = new OrderController();
-                        $newOrder = $controller->store($request);
-                        if ($newOrder) {
-                            $orderproducts = $order->orderproducts;
-                            foreach ($orderproducts as $orderproduct) {
-                                $newOrderproduct = new Orderproduct();
-                                $newOrderproduct->product_id = $orderproduct->product_id;
-                                $newOrderproduct->order_id = $newOrder->id;
-                                $newOrderproduct->quantity = $orderproduct->quantity;
-                                if ($newOrderproduct->save()) {
-                                    $userbons = $orderproduct->userbons;
-                                    foreach ($userbons as $userbon) {
-                                        $newOrderproduct->userbons()->attach($userbon->id, ["usageNumber" => $userbon->pivot->usageNumber , "discount"=>$userbon->pivot->discount]);
-                                    }
-                                    foreach ($orderproduct->attributevalues as $value) {
-                                        if ($orderproduct->product->hasParents()) {
-                                            $myParent = $this->makeParentArray($orderproduct->product);
-                                            $myParent = end($myParent);
-                                            $attributevalue = $myParent->attributevalues->where("id", $value->id);
-                                        }
-                                        else
-                                        {
-                                            $attributevalue = $orderproduct->product->attributevalues->where("id", $value->id);
-                                        }
-                                        if (!$attributevalue->isEmpty()) {
-                                            $newOrderproduct->attributevalues()->attach($attributevalue->first()->id, ["extraCost" => $attributevalue->first()->pivot->extraCost]);
-                                        } else {
-                                        }
-                                    }
-                                } else {
-                                    // he just lost one of last orders items in his new order
-                                }
-                            }
-
-                        } else {
-                            // the new order was not created and no action is necessary.in fact he just lost his last order to add to.
-                        }
+                        $response = $this->copy($order , $request);
                     } else {
                         //last order is not closed and no action is necessary
                     }
@@ -1533,82 +1328,75 @@ class OrderController extends Controller
                 }
 
             }
-
-
         }
         else
         {
             $result = array();
             if(session()->has("adminOrder_id"))
             {
-                if(!$user->can(Config::get('constants.INSERT_ORDER_ACCESS'))) return redirect(action("HomeController@error403"));
                 $result["isAdminOrder"] = true;
+
+                if(!$user->can(Config::get('constants.INSERT_ORDER_ACCESS')))
+                    return redirect(action("HomeController@error403"));
+
                 $order_id = session()->get("adminOrder_id");
+                $order = Order::FindorFail($order_id);
+
                 $result["customer_firstName"] = session()->get("customer_firstName");
                 $result["customer_lastName"] = session()->get("customer_lastName");
                 session()->forget("adminOrder_id");
                 session()->forget("customer_id");
                 session()->forget("customer_firstName");
                 session()->forget("customer_lastName");
-                $order = Order::FindorFail($order_id);
             }
-            else
+            elseif(session()->has("closedOrder_id"))
             {
                 $result["isAdminOrder"] = false;
+
+                $order_id = session()->get("closedOrder_id");
+                session()->forget("closedOrder_id");
+                $order = Order::FindorFail($order_id);
+
+                if($order->user->id != $user->id)
+                    abort(403);
+            }
+            elseif(session()->has("order_id"))
+            {
+                $result["isAdminOrder"] = false;
+
                 $order_id = session()->get("order_id");
                 session()->forget("order_id");
                 $order = Order::FindorFail($order_id);
-                if($order->orderstatus_id != Config::get("constants.ORDER_STATUS_OPEN")) return redirect(action("HomeController@error403"));
-                if($order->user->id != $user->id) return redirect(action("HomeController@error403"));
+
+                if($order->orderstatus_id != Config::get("constants.ORDER_STATUS_OPEN"))
+                    abort(403);
+                if($order->user->id != $user->id)
+                    abort(403);
+            }
+            else
+            {
+                abort(404);
             }
 
-            if($order->orderproducts->isEmpty())  return redirect(action("OrderController@checkoutReview"));
+            if($order->orderproducts->isEmpty())
+                return redirect(action("OrderController@checkoutReview"));
 
-            $customerDescription = Input::get("customerDescription");
-            if(isset($customerDescription)) {
+            if($request->has("customerDescription"))
+            {
+                $customerDescription = $request->get("customerDescription");
                 $order->customerDescription = $customerDescription;
             }
-            if(Input::has('paymentmethod'))
+            if($request->has('paymentmethod'))
             {
-                $paymentMethod = Input::get('paymentmethod');
-                if(isset($order->coupon->id))
+                $paymentMethod = $request->get('paymentmethod');
+
+                $usedCoupon = $order->hasUsedCoupon();
+                if(!$usedCoupon)
                 {
-                    if($order->coupon->coupontype_id == 2)
-                    {
-                        $flag = false;
-                        foreach ($order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->get() as $orderproduct)
-                        {
-                            $hasCoupon = true;
-                            if(!in_array($order->coupon->id, $orderproduct->product->coupons->pluck('id')->toArray()))
-                            {
-                                $hasCoupon = false;
-                                $parentsArray = $this->makeParentArray($orderproduct->product);
-                                foreach ($parentsArray as $parent)
-                                {
-                                    if(in_array($order->coupon->id, $parent->coupons->pluck('id')->toArray()))
-                                    {
-                                        $hasCoupon = true;
-                                        break ;
-                                    }
-                                }
-                            }
-
-                            if($hasCoupon)
-                            {
-                                $flag = true;
-                            }
-
-                        }
-                        if(!$flag)
-                        {
-                            $order->coupon->usageNumber = $order->coupon->usageNumber - 1;
-                            $order->coupon->update();
-                            $order->coupon_id = null;
-                            $order->couponDiscount = 0 ;
-                            $order->couponDiscountAmount = 0 ;
-                        }
-                    }
+                    /** if order has not used coupon reverse it    */
+                    $order->detachCoupon() ;
                 }
+
                 $debitCard = Bankaccount::all()->where("user_id" , 2)->first();
                 if(isset($debitCard))
                 {
@@ -1616,7 +1404,6 @@ class OrderController extends Controller
                     $result["debitCardBank"] = $debitCard->bank->name ;
                     $result["debitCardOwner"] = $debitCard->user->firstName ." ".$debitCard->user->lastName;
                 }
-
 
                 switch ($paymentMethod)
                 {
@@ -1632,49 +1419,31 @@ class OrderController extends Controller
                         break;
                 }
 
-                $order->paymentstatus_id = Config::get("constants.PAYMENT_STATUS_UNPAID");
-                $order->orderstatus_id = Config::get("constants.ORDER_STATUS_CLOSED");
-
-                $order->completed_at = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran');
+                $order->close(Config::get("constants.PAYMENT_STATUS_UNPAID")) ;
                 $order->timestamps = false;
-                if($order->update()) $result = array_add($result , "saveOrder" , 1);
-                else $result = array_add($result , "saveOrder" , 0);
+                if($order->update())
+                    $result = array_add($result , "saveOrder" , 1);
+                else
+                    $result = array_add($result , "saveOrder" , 0);
                 $order->timestamps = true;
 
             }
-            elseif(!isset($order->cost) || $order->cost==0  )
+            else
             {
 
-                if(isset($order->coupon->id)){
-                    $order->coupon->usageNumber = $order->coupon->usageNumber - 1;
-                    $order->coupon->update();
-                    $order->coupon_id = null;
-                    $order->couponDiscount = 0 ;
-                    $order->couponDiscountAmount = 0 ;
+                $cost = $order->totalCost() - $order->totalPaidCost();
+
+                if($cost == 0 )
+                {
+                    $order->close(Config::get("constants.PAYMENT_STATUS_PAID")) ;
+                    $order->timestamps = false;
+                    if($order->update())
+                        $result = array_add($result , "saveOrder" , 1);
+                    else
+                        $result = array_add($result , "saveOrder" , 0);
+                    $order->timestamps = true;
+                    $result["Status"] = "freeProduct";
                 }
-                $order->paymentstatus_id = Config::get("constants.PAYMENT_STATUS_PAID");
-                $order->orderstatus_id = Config::get("constants.ORDER_STATUS_CLOSED");
-
-                $order->completed_at = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran');
-                $order->timestamps = false;
-                if($order->update()) $result = array_add($result , "saveOrder" , 1);
-                else $result = array_add($result , "saveOrder" , 0);
-                $order->timestamps = true;
-                $result["Status"] = "freeProduct";
-
-            }
-            else{
-//                dd("30 دقیقه ی دیگر امتحان کنید");
-//                return redirect(action("HomeController@error404")) ;
-                $order->paymentstatus_id = Config::get("constants.PAYMENT_STATUS_PAID");
-                $order->orderstatus_id = Config::get("constants.ORDER_STATUS_CLOSED");
-
-                $order->completed_at = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran');
-                $order->timestamps = false;
-                if($order->update()) $result = array_add($result , "saveOrder" , 1);
-                else $result = array_add($result , "saveOrder" , 0);
-                $order->timestamps = true;
-                $result["Status"] = "freeProduct";
             }
         }
 
@@ -1934,17 +1703,19 @@ class OrderController extends Controller
                 return redirect(action("HomeController@error403"));
         }
 
-        if(isset($order->coupon->id)){
-            $order->coupon->usageNumber = $order->coupon->usageNumber - 1 ;
-            if($order->coupon->update())
-            {
-                $order->coupon_id = null;
-                $order->couponDiscount = 0;
-                $order->couponDiscountAmount = 0;
-                if($order->update()) session()->put('couponMessageSuccess', "کپن سفارش شما با موفیت حذف شد");
-                else session()->put('couponMessageError', "خطای پایگاه داده");
-            }else session()->put('couponMessageError', "خطای پایگاه داده");
+        $result = $order->detachCoupon();
+        if($result)
+        {
+            if($order->update())
+                session()->put('couponMessageSuccess', "کپن سفارش شما با موفیت حذف شد");
+            else
+                session()->put('couponMessageError', "خطای پایگاه داده");
         }
+        else
+        {
+            session()->put('couponMessageError', "خطای پایگاه داده");
+        }
+
         return redirect()->back();
     }
 
@@ -2278,5 +2049,87 @@ class OrderController extends Controller
             return redirect()->back();
         }
 
+    }
+
+    /**
+     * Makes a copy from an order
+     *
+     * @param Order $order
+     * @param  \Illuminate\Http\Request $request
+     * @param \App\Http\Controllers\OrderController $orderController
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public  function copy(Order $order ,Request $request)
+    {
+        $failed = true;
+        $copyOrderRequest = new Request();
+        if($request->has("paymenrstatus_id"))
+            $copyOrderRequest->offsetSet("paymentstatus_id", $request->get("paymenrstatus_id"));
+        if($request->has("orderstatus_id"))
+            $copyOrderRequest->offsetSet("orderstatus_id", $request->get("orderstatus_id"));
+        $copyOrderRequest->offsetSet("user_id", $order->user_id);
+        $copyOrderRequest->offsetSet("coupon_id", $order->coupon_id);
+        $copyOrderRequest->offsetSet("couponDiscount", $order->couponDiscount);
+        $copyOrderRequest->offsetSet("couponDiscountAmount", $order->couponDiscountAmount);
+        $copyOrderRequest->offsetSet("checkOutDateTime", $order->checkOutDateTime);
+        $orderController = new  OrderController() ;
+        $newOrder = $orderController->store($copyOrderRequest);
+        if ($newOrder) {
+            $orderproducts = $order->orderproducts;
+            foreach ($orderproducts as $orderproduct)
+            {
+                $newOrderproduct = new Orderproduct();
+                $newOrderproduct->product_id = $orderproduct->product_id;
+                $newOrderproduct->order_id = $newOrder->id;
+                $newOrderproduct->quantity = $orderproduct->quantity;
+                if ($newOrderproduct->save())
+                {
+                    $userbons = $orderproduct->userbons;
+                    foreach ($userbons as $userbon)
+                    {
+                        $newOrderproduct->userbons()
+                            ->attach($userbon->id, ["usageNumber" => $userbon->pivot->usageNumber , "discount"=>$userbon->pivot->discount]);
+                    }
+                    foreach ($orderproduct->attributevalues as $value)
+                    {
+                        if ($orderproduct->product->hasParents()) {
+                            $myParent = $this->makeParentArray($orderproduct->product);
+                            $myParent = end($myParent);
+                            $attributevalue = $myParent->attributevalues->where("id", $value->id);
+                        }
+                        else
+                        {
+                            $attributevalue = $orderproduct->product->attributevalues->where("id", $value->id);
+                        }
+                        if (!$attributevalue->isEmpty()) {
+                            $newOrderproduct->attributevalues()
+                                ->attach($attributevalue->first()->id, ["extraCost" => $attributevalue->first()->pivot->extraCost]);
+                        } else {
+                        }
+                    }
+                    $failed = false;
+                } else
+                {
+                    // he just lost one of last orders items in his new order
+                }
+            }
+
+        } else
+        {
+            // the new order was not created and no action is necessary.in fact he just lost his last order to add to.
+        }
+
+        if($request->has("fromAPI"))
+        {
+            if(!$failed)
+                return $this->response
+                            ->setStatusCode(200);
+            else
+                return $this->response
+                    ->setStatusCode(503);
+        }
+        else{
+
+        }
     }
 }
