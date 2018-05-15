@@ -5,12 +5,10 @@ namespace App;
 use App\Traits\HasWallet;
 use App\Traits\Helper;
 use Carbon\Carbon;
-use Doctrine\DBAL\Query\QueryBuilder;
 use Iatstuti\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -313,6 +311,30 @@ class User extends Authenticatable
         $result = Product::hydrate($result->toArray());
 
         return $result;
+    }
+
+    /**
+     * Retrieve only order ralated transactions of this user
+     */
+    public function orderTransactions()
+    {
+        return $this->hasManyThrough("\App\Transaction", "\App\Order");
+    }
+
+    /**
+     * Retrieve only order ralated transactions of this user
+     */
+    public function walletTransactions()
+    {
+        return $this->hasManyThrough("\App\Transaction", "\App\Wallet");
+    }
+
+    /**
+     * Retrieve all transactions of this user
+     */
+    public function transactions()
+    {
+        return $this->hasManyThrough("\App\Transaction", "\App\Wallet");
     }
 
     /**

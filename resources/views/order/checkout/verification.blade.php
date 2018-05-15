@@ -186,7 +186,7 @@
                                                     <a href="{{action("OrderController@checkoutAuth")}}"   class="btn green btn-outline">ثبت مجدد</a>
                                                 @endif
                                                 @if(isset($result["isAdminOrder"]) &&  !$result["isAdminOrder"])
-                                                    <p class="font-red-thunderbird">از هم اکنون می توانید از این محصول رایگان استفاده نمایید</p>
+                                                    <p class="font-red-thunderbird"><a href="{{action('UserController@userOrders')}}" class="btn blue btn-outline">لیست سفارشهای شما</a></p>
                                                 @endif
                                             </div>
                                         </div>

@@ -18,7 +18,7 @@ class CreateWalletsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger("user_id")->nullable()->comment("آیدی مشخص کننده کاربر صاحب کیف پول");
             $table->unsignedInteger("wallettype_id")->nullable()->comment("آیدی مشخص کننده نوع کیف پول");
-            $table->bigInteger('balance');
+            $table->bigInteger('balance')->default(0)->comment("اعتبار کیف پول");
             $table->timestamps();
             $table->softDeletes();
             $table->unique(['user_id','wallettype_id'] );

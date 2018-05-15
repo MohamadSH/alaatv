@@ -19,6 +19,7 @@ class Transaction extends Model
      */
     protected $fillable = [
         'order_id',
+        'wallet_id',
         'cost',
         'authority',
         'transactionID',
@@ -62,6 +63,11 @@ class Transaction extends Model
     public function destinationBankAccount()
     {
         return $this->belongsTo('\App\Bankaccount', 'bankaccounts', 'destinationBankAccount_id', 'id');
+    }
+
+    public function wallet()
+    {
+        return $this->belongsTo("\App\Wallet");
     }
 
     /**

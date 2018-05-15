@@ -45,17 +45,18 @@ class WalletController extends Controller
     {
         $wallet = new Wallet();
         $wallet->fill($request->all());
+
+        $done = false;
         if($wallet->save())
             $done = true;
-        else
-            $done = false;
 
         if($done)
         {
             if($request->has("fromAPI"))
             {
                 return $this->response
-                            ->setStatusCode(200);
+                            ->setStatusCode(200)
+                            ->setContent(["wallet"=>$wallet]) ;
             }
             else
             {
@@ -92,10 +93,10 @@ class WalletController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Wallet  $wallet
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Wallet $wallet)
     {
         //
     }
@@ -104,21 +105,49 @@ class WalletController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Wallet  $wallet
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Wallet $wallet)
     {
-        //
+        $wallet->fill($request->all());
+        $done = false;
+        if($wallet->update())
+            $done = true ;
+
+        if($done)
+        {
+            if($request->has("fromAPI"))
+            {
+                return $this->response
+                    ->setStatusCode(200);
+            }
+            else
+            {
+
+            }
+        }
+        else
+        {
+            if($request->has("fromAPI"))
+            {
+                return $this->response
+                    ->setStatusCode(503);
+            }
+            else
+            {
+
+            }
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Wallet  $wallet
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Wallet $wallet)
     {
         //
     }

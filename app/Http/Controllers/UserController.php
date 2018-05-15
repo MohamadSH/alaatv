@@ -932,17 +932,37 @@ class UserController extends Controller
 //        }
 
         $debitCard = Bankaccount::all()->where("user_id" , 2)->first();
-        $orders = Auth::user()->orders->where("orderstatus_id","<>",Config::get("constants.ORDER_STATUS_OPEN"))->where("orderstatus_id","<>",Config::get("constants.ORDER_STATUS_OPEN_BY_ADMIN"))->sortByDesc("completed_at");
+        $excludedOrderStatuses = [
+            Config::get("constants.ORDER_STATUS_OPEN") ,
+            Config::get("constants.ORDER_STATUS_OPEN_BY_ADMIN"),
+            Config::get("constants.ORDER_STATUS_OPEN_BY_WALLET")
+        ];
+        $user = Auth::user() ;
+        $orders = $user->orders
+                            ->whereNotIn("orderstatus_id",$excludedOrderStatuses)
+                            ->sortByDesc("completed_at");
 
-        $transactions = Transaction::whereIn("order_id" , $orders->pluck("id"))->whereDoesntHave("parents")->where(function ($q){
-          $q->where("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL"))
-              ->orWhere("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_ARCHIVED_SUCCESSFUL"))
-              ->orWhere("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_PENDING")) ;
-        })->orderByDesc("completed_at")->get();
+        $transactions = $user->orderTransactions()
+                            ->whereDoesntHave("parents")
+                            ->where(function ($q){
+                                $q->where("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL"))
+                                    ->orWhere("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_ARCHIVED_SUCCESSFUL"))
+                                    ->orWhere("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_PENDING")) ;
+                            })
+                            ->orderByDesc("completed_at")
+                            ->get()
+                            ->groupBy("order_id");
 
-        $instalments  = Transaction::whereIn("order_id" , $orders->pluck("id"))->whereDoesntHave("parents")->where("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_UNPAID"))->orderBy("deadline_at")->get();
+        $instalments  = Transaction::whereIn("order_id" , $orders->pluck("id"))
+                                    ->whereDoesntHave("parents")
+                                    ->where("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_UNPAID"))
+                                    ->orderBy("deadline_at")
+                                    ->get();
 
-        $gateways = Transactiongateway::all()->where("enable",1)->sortBy("order")->pluck("displayName" , "name");
+        $gateways = Transactiongateway::all()
+                                        ->where("enable",1)
+                                        ->sortBy("order")
+                                        ->pluck("displayName" , "name");
 
         $orderCoupons = collect();
         foreach($orders as $order)
