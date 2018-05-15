@@ -976,8 +976,9 @@ class OrderController extends Controller
             ->whereIn("product_id" , Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_NOT_DEFAULT"))
             ->get()
             ->isNotEmpty();
-
-        return view("order.checkout.review" , compact("user","orderproducts" , "orderCost" , "orderproductsRawCost" , 'costCollection' ,'orderproductLinks' , 'orderHasOrdrooGheireHozoori'));
+        $credit = $user->getTotalWalletBalance();
+        return view("order.checkout.review" , compact("user","orderproducts" , "orderCost" , "orderproductsRawCost" ,
+            'costCollection' ,'orderproductLinks' , 'orderHasOrdrooGheireHozoori' , 'credit'));
     }
 
     /**
