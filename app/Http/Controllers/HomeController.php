@@ -21,6 +21,7 @@ use App\Http\Requests\ContactUsFormRequest;
 use App\Http\Requests\SendSMSRequest;
 use App\Lottery;
 use App\Major;
+use App\Notifications\GiftGiven;
 use App\Order;
 use App\Orderstatus;
 use App\Paymentmethod;
@@ -91,21 +92,6 @@ class HomeController extends Controller
 
     public function debug(Request $request)
     {
-        $user = User::FindOrFail(1);
-
-//        $order = Order::FindOrFail(85131);
-//        dd($user->notify(new \App\Notifications\InvoicePaid($order)));
-
-
-        $gift  = 30000;
-        $result = $user->deposit($gift , 2);
-        if($result["result"])
-        {
-            dump($gift);
-            dd($user->notify(new \App\Notifications\GiftGiven($gift)));
-
-        }
-        dd("no deposit");
         return view("errors.404");
     }
     public function __construct()
@@ -2798,7 +2784,7 @@ class HomeController extends Controller
                 $wallet = "unknown";
             if($result["result"])
             {
-                //ToDo: notify user
+                $user->notify(new GiftGiven($giftCredit));
                 $successCounter++;
             }
             else
