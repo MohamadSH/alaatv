@@ -1100,7 +1100,7 @@ class OrderController extends Controller
      */
     public function verifyPayment(Request $request)
     {
-        $sendSMS = true;
+        $sendSMS = false;
         $user = Auth::user();
         if($request->has('Authority') && $request->has('Status') )
         {    // Come back from ZarinPal
@@ -1164,7 +1164,7 @@ class OrderController extends Controller
                 else
                     $result = array_add($result , "saveBon" , $givenBonNumber);
                 $result = array_add($result , "bonName" , $bonName);
-
+                $sendSMS = true;
             }
             elseif(strcmp(array_get($result,"Status"),'canceled')==0 ||
                 (strcmp(array_get($result,"Status"),'error')==0 && strcmp(array_get($result,"error"),'-22')==0) )
@@ -1192,7 +1192,6 @@ class OrderController extends Controller
                     $result["tryAgain"] = false;
                 }
 
-                $sendSMS = false;
             }
         }
         elseif( $request->has("State") && $request->has("token"))
@@ -1426,6 +1425,7 @@ class OrderController extends Controller
                 else
                     $result = array_add($result , "saveOrder" , 0);
                 $order->timestamps = true;
+                $sendSMS = true;
 
             }
             else
@@ -1443,6 +1443,7 @@ class OrderController extends Controller
                         $result = array_add($result , "saveOrder" , 0);
                     $order->timestamps = true;
                     $result["Status"] = "freeProduct";
+                    $sendSMS = true;
                 }
             }
         }

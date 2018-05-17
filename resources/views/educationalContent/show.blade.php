@@ -102,7 +102,7 @@
                                 @foreach($files["videoSource"] as $key => $source)
                                     <div class="col-md-4">
                                         <a href="{{$source["src"]}}?download=1" class="btn red margin-bottom-5" style="width: 250px;">
-                                            فایل {{$source["caption"]}}{{ (isset($source["size"]))?"(".$source["size"]. "مگ)":""  }}
+                                            فایل {{$source["caption"]}}{{ (isset($source["size"]))?"(".$source["size"]. ")":""  }}
                                         </a>
                                     </div>
                                 @endforeach

@@ -44,6 +44,7 @@ use App\Userstatus;
 use App\Usersurveyanswer;
 use App\Userupload;
 use App\Useruploadstatus;
+use App\Wallet;
 use App\Websitesetting;
 use App\Websitepage;
 use App\Http\Requests\Request;
@@ -90,6 +91,23 @@ class HomeController extends Controller
 
     public function debug(Request $request)
     {
+        $user = User::FindOrFail(1);
+
+//        $order = Order::FindOrFail(85123);
+//        dd($user->notify(new \App\Notifications\InvoicePaid($order)));
+
+
+        $gift  = 20000;
+        $result = $user->deposit($gift , 2);
+        if($result["result"])
+        {
+            $walletId = $result["wallet"];
+            $wallet = Wallet::FindOrFail($walletId);
+            dump($wallet);
+            dd($user->notify(new \App\Notifications\GiftGiven($wallet)));
+
+        }
+        dd("no deposit");
         return view("errors.404");
     }
     public function __construct()
@@ -612,7 +630,7 @@ class HomeController extends Controller
                     ["index"=>"محمد علی امینی راد" , "value"=>"محمد_علی_امینی_راد"],
                     ["index"=>"محمد پازوکی" , "value"=>"محمد_پازوکی"],
                     ["index"=>"عباس راستی بروجنی" , "value"=>"عباس_راستی_بروجنی"],
-                    ["index"=>"ابوالفضل جعفری" , "value"=>"ابوالفضل_جعری"],
+                    ["index"=>"ابوالفضل جعفری" , "value"=>"ابوالفضل_جعفری"],
                     ["index"=>"جلال موقاری" , "value"=>"جلال_موقاری"],
                     ["index"=>"مسعود حدادی" , "value"=>"مسعود_حدادی"],
                     ["index"=>"ارشی" , "value"=>"ارشی"],
@@ -742,7 +760,7 @@ class HomeController extends Controller
                     ["index"=>"محمد علی امینی راد" , "value"=>"محمد_علی_امینی_راد"],
                     ["index"=>"محمد پازوکی" , "value"=>"محمد_پازوکی"],
                     ["index"=>"عباس راستی بروجنی" , "value"=>"عباس_راستی_بروجنی"],
-                    ["index"=>"ابوالفضل جعفری" , "value"=>"ابوالفضل_جعری"],
+                    ["index"=>"ابوالفضل جعفری" , "value"=>"ابوالفضل_جعفری"],
                     ["index"=>"جلال موقاری" , "value"=>"جلال_موقاری"],
                     ["index"=>"مسعود حدادی" , "value"=>"مسعود_حدادی"],
                     ["index"=>"ارشی" , "value"=>"ارشی"],
@@ -2201,6 +2219,29 @@ class HomeController extends Controller
         }
     }
 
+    public function adminBot()
+    {
+        if(!Input::has("bot"))
+              dd("Please pass bot as input");
+
+        $bot = Input::get("bot");
+        $view = "";
+        switch ($bot)
+        {
+            case "wallet":
+                $view = "admin.bot.wallet" ;
+                break;
+            default:
+                break;
+        }
+        $pageName = "adminBot";
+        if(strlen($view) > 0 )
+            return view($view , compact('pageName'));
+        else
+            abort(404);
+
+    }
+
     public function smsBot()
     {
         abort("403");
@@ -2231,36 +2272,6 @@ class HomeController extends Controller
 
     public function bot()
     {
-        $productSet = [
-            [
-                "query"=>"", //whereHas / whereDoesntHave
-                "filter"=>"", //whereIn / whereNotIn / all
-                "id"=>[] // products id
-            ],
-        ];
-
-        $users = User::query();
-        foreach ($productSet as $products)
-        {
-
-            $query = $products["query"];
-            $users->$query("orders" , function ($q) use ($products)
-            {
-                if($products["filter"] != "all")
-                {
-                    $filterType = $products["filter"];
-                    $q->whereHas("orderproducts" , function ($q2) use ($products , $filterType)
-                    {
-                        $q2->$filterType("product_id" , $products["id"]) ;
-                    });
-                }
-
-                $q->where("orderstatus_id" , 2)
-                    ->where("paymentstatus_id" , 3);
-
-            }) ;
-        }
-
         /**
          * Fixing contentset tags
 
@@ -2570,6 +2581,194 @@ class HomeController extends Controller
         dump("Number of processed : ".$counter);
         dd("finish");
          * */
+    }
+
+    public function walletBot(Request $request)
+    {
+        if(!$request->has("userGroup"))
+        {
+            session()->put("error" , "لطفا گروه کاربران را تعیین کنید");
+            return redirect()->back() ;
+        }
+        else
+        {
+            $userGroup = $request->get("userGroup");
+        }
+
+        $hamayeshTalai = [ 210 , 211 ,212 ,213 , 214,215,216,217,218,219,220,221, 222 ];
+        $ordooHozoori =[ 195 , 184 , 185 , 186 ] ;
+        $ordooGheireHozoori= [ 196 , 199 , 206 , 202 , 200 , 201 , 203 , 204 , 205 ] ;
+        $hamayesh5Plus1 = [123 , 124 ,125 , 119 , 120 ,121, 163 , 164 , 165 , 159 , 160  , 161 ,
+            155 ,156 , 157 , 151 , 152 , 153 , 147 , 148 , 149 , 143 , 144 , 145 , 139 , 140 , 141 ,
+            135 , 136 , 137 , 131 , 132 , 133 , 127 , 128 , 129 ] ;
+        switch ($userGroup)
+        {
+            case "1":
+                $giftCredit = 20000;
+                $productSet=[
+                    [
+                        "query"=>"whereHas", //whereHas / whereDoesntHave
+                        "filter"=>"whereIn", //whereIn / whereNotIn / all
+                        "id"=>[$hamayesh5Plus1] // products id
+                    ],
+                    [
+                        "query"=>"whereHas", //whereHas / whereDoesntHave
+                        "filter"=>"whereIn", //whereIn / whereNotIn / all
+                        "id"=>[$hamayeshTalai] // products id
+                    ],
+                    [
+                        "query"=>"whereHas", //whereHas / whereDoesntHave
+                        "filter"=>"whereIn", //whereIn / whereNotIn / all
+                        "id"=>[$ordooGheireHozoori,
+                            $ordooHozoori
+                        ], // products id
+                    ],
+                ];
+                break;
+            case "2":
+                $giftCredit = 20000;
+                $productSet=[
+                    [
+                        "query"=>"whereHas", //whereHas / whereDoesntHave
+                        "filter"=>"whereIn", //whereIn / whereNotIn / all
+                        "id"=>[$hamayesh5Plus1] // products id
+                    ],
+                    [
+                        "query"=>"whereHas", //whereHas / whereDoesntHave
+                        "filter"=>"whereIn", //whereIn / whereNotIn / all
+                        "id"=>[$ordooGheireHozoori,
+                            $ordooHozoori
+                        ], // products id
+                    ],
+                    [
+                        "query"=>"whereDoesntHave", //whereHas / whereDoesntHave
+                        "filter"=>"whereIn", //whereIn / whereNotIn / all
+                        "id"=>[$hamayeshTalai] // products id
+                    ],
+                ];
+                break;
+            case "3":
+                $giftCredit = 20000;
+                $productSet=[
+                    [
+                        "query"=>"whereHas", //whereHas / whereDoesntHave
+                        "filter"=>"whereIn", //whereIn / whereNotIn / all
+                        "id"=>[$hamayesh5Plus1] // products id
+                    ],
+                    [
+                        "query"=>"whereDoesntHave", //whereHas / whereDoesntHave
+                        "filter"=>"whereNotIn", //whereIn / whereNotIn / all
+                        "id"=>[$hamayesh5Plus1] // products id
+                    ],
+                ];
+                break;
+            case "4":
+                $giftCredit = 20000;
+                $productSet=[
+                    [
+                        "query"=>"whereDoesntHave", //whereHas / whereDoesntHave
+                        "filter"=>"all", //whereIn / whereNotIn / all
+                        "id"=> [] // products id
+                    ],
+                ];
+                break;
+            case "5":
+                $giftCredit = 20000;
+                $productSet=[
+                    [
+                        "query"=>"whereHas", //whereHas / whereDoesntHave
+                        "filter"=>"all", //whereIn / whereNotIn / all
+                        "id"=> [] // products id
+                    ],
+                    [
+                        "query"=>"whereDoesntHave", //whereHas / whereDoesntHave
+                        "filter"=>"whereIn", //whereIn / whereNotIn / all
+                        "id"=> [
+                            $hamayeshTalai,
+                            $ordooHozoori,
+                            $ordooGheireHozoori,
+                            $hamayesh5Plus1
+                        ] // products id
+                    ],
+                ];
+                break;
+            default:
+                session()->put("error" , "گروه کاربران معتبر نمی باشد");
+                return redirect()->back() ;
+                break;
+        }
+
+        $users = User::query();
+        foreach ($productSet as $products)
+        {
+            $query = $products["query"];
+            $users->$query("orders" , function ($q) use ($products)
+            {
+                if($products["filter"] != "all")
+                {
+                    if(isset($products["filter"]))
+                        $filterType = $products["filter"];
+                    else
+                        $filterType = "";
+
+                    if(isset($products["id"]))
+                        $idArray = $products["id"];
+                    else
+                        $idArray = [];
+
+                    $q->whereHas("orderproducts" , function ($q2) use ($idArray  , $filterType)
+                    {
+                        if(!empty($idArray) && strlen($filterType) > 0 )
+                        {
+                            foreach ($idArray as $key => $ids)
+                            {
+                                if($key > 0)
+                                    $myFilterType = "or".$filterType ;
+                                else
+                                    $myFilterType = $filterType ;
+
+                                $q2->$myFilterType("product_id" ,$ids ) ;
+                            }
+                        }
+                    });
+                }
+
+                $q->whereIn("orderstatus_id" , [2,5,7])
+                    ->whereIn("paymentstatus_id" , [2,3]);
+
+            }) ;
+        }
+
+        $users = $users->get();
+        dump("Total number of users:" . $users->count());
+
+        if(!$request->has("giveGift"))
+            dd("Done!");
+
+        $successCounter = 0 ;
+        $failedCounter = 0 ;
+        foreach ($users as $user)
+        {
+            $result = $user->deposit($giftCredit);
+            if(isset($result["wallet"]))
+                $wallet = $result["wallet"];
+            else
+                $wallet = "unknown";
+            if($result["result"])
+            {
+                //ToDo: notify user
+                $successCounter++;
+            }
+            else
+            {
+                $failedCounter++ ;
+                dump("Credit for user: ".$user->id." was not given!"."wallet: ".$wallet." ,response: ".$result["responseText"]);
+            }
+
+        }
+        dump("Number of successfully processed users: ",$successCounter);
+        dump("Number of failed users: ",$failedCounter);
+        dd("Done!");
     }
 
     public function checkDisableContentTagBot()

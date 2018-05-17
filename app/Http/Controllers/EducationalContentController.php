@@ -579,7 +579,13 @@ class EducationalContentController extends Controller
             $validSinceTime = explode(" " , $educationalContent->validSince);
             $validSinceTime = $validSinceTime[1] ;
         }
-        return view("educationalContent.edit" , compact("educationalContent" ,"rootContentTypes" , "childContentTypes" , "majors" , "grades" , 'validSinceTime')) ;
+
+        $tags = "";
+        if(isset($educationalContent->tags->tags))
+            $tags = $strTags = implode(",",$educationalContent->tags->tags);
+
+        return view("educationalContent.edit" , compact("educationalContent" ,"rootContentTypes" , "childContentTypes" ,
+            "majors" , "grades" , 'validSinceTime' , 'tags')) ;
     }
 
     /**
@@ -612,9 +618,9 @@ class EducationalContentController extends Controller
             $educationalContent->validSince = $validSince;
         }
 
-        if($request->has("contenttypes"))
+        if($request->has("contenttype_id"))
         {
-            $contentTypes = $request->get("contenttypes");
+            $educationalContent->contenttype_id = $request->get("contenttype_id");
         }
 
         if($request->has("enable"))
@@ -622,36 +628,42 @@ class EducationalContentController extends Controller
         else
             $educationalContent->enable = 0 ;
 
+        if($request->has("tags"))
+        {
+            $tagString = $request->get("tags") ;
+            $tags = explode("," , $tagString);
+            $tags = array_filter($tags);
+            $tagsJson = [
+                "bucket" => "content",
+                "tags" => $tags
+            ];
+            $educationalContent->tags= json_encode($tagsJson) ;
+        }
 
-        if($educationalContent->save()){
+        if($educationalContent->update()){
 
-            if($request->has("contentsets"))
-            {
-                $contentSets = $request->get("contentsets");
-                foreach ($contentSets as $contentSet)
-                {
-                    if(isset($contentSet["order"]))
-                        $educationalContent->contentsets()->sync($contentSet["id"] , ["order"=>$contentSet["order"]]);
-                    else
-                        $educationalContent->contentsets()->sync($contentSet["id"]);
-                }
-            }
-
-            if($request->has("majors"))
-            {
-                $majors = $request->get("majors") ;
-                $educationalContent->majors()->sync($majors);
-            }
-
-            if($request->has("grades"))
-            {
-                $grades = $request->get("grades") ;
-                $educationalContent->grades()->sync($grades);
-            }
-
-//            if(isset($contentTypes))
+//            if($request->has("contentsets"))
 //            {
-//                $educationalContent->contenttypes()->sync($contentTypes);
+//                $contentSets = $request->get("contentsets");
+//                foreach ($contentSets as $contentSet)
+//                {
+//                    if(isset($contentSet["order"]))
+//                        $educationalContent->contentsets()->sync($contentSet["id"] , ["order"=>$contentSet["order"]]);
+//                    else
+//                        $educationalContent->contentsets()->sync($contentSet["id"]);
+//                }
+//            }
+
+//            if($request->has("majors"))
+//            {
+//                $majors = $request->get("majors") ;
+//                $educationalContent->majors()->sync($majors);
+//            }
+//
+//            if($request->has("grades"))
+//            {
+//                $grades = $request->get("grades") ;
+//                $educationalContent->grades()->sync($grades);
 //            }
 
             if ($request->has("file"))
@@ -673,6 +685,34 @@ class EducationalContentController extends Controller
                     $fileId = $fileController->store($fileRequest) ;
                     if($fileId)
                         $educationalContent->files()->attach($fileId);
+                }
+            }
+
+            if( isset($educationalContent->tags) &&
+                is_array($educationalContent->tags->tags) &&
+                !empty($educationalContent->tags->tags))
+            {
+                $itemTagsArray = $educationalContent->tags->tags ;
+                $params = [
+                    "tags"=> json_encode($itemTagsArray) ,
+                ];
+
+                if(isset($educationalContent->created_at) && strlen($educationalContent->created_at) > 0 )
+                    $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $educationalContent->created_at )->timestamp;
+
+                $response =  $this->sendRequest(
+                    config("constants.TAG_API_URL")."id/content/".$educationalContent->id ,
+                    "PUT",
+                    $params
+                );
+
+                if($response["statusCode"] == 200)
+                {
+                    //
+                }
+                else
+                {
+                    session()->put('error', 'خطا در ریکوئست تگ ها');
                 }
             }
 

@@ -56,6 +56,7 @@ trait HasWallet
      * @param  integer $amount
      * @param  string  $type
      * @param  array   $meta
+     * @return array
      */
     public function deposit($amount=0, $walletType=null )
     {
@@ -76,7 +77,7 @@ trait HasWallet
             else
             {
                 $failed = true;
-                $responseText = "CAN_NOT_UPDATE_WALLET";
+                $responseText = $result["responseText"];
             }
         }
         else
@@ -126,6 +127,7 @@ trait HasWallet
      * @param  string  $type
      * @param  array   $meta
      * @param  boolean $shouldAccept
+     * @return array
      */
     public function withdraw( $amount , $walletType=null, $shouldAccept = true)
     {
@@ -146,7 +148,7 @@ trait HasWallet
             else
             {
                 $failed = true;
-                $responseText = "CAN_NOT_UPDATE_WALLET";
+                $responseText = $result["responseText"];
             }
         }
         else
