@@ -562,7 +562,7 @@ class SanatisharifmergeController extends Controller
                 "userfirstname" => "سید حمید رضا",
                 "userlastname" => "مداح حسینی",
                 "mobile" => "09991968225",
-                "password" => "3201968225",
+                "password" => "0000000000",
             ]
             , [
                 "userid" => "4051",

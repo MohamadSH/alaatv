@@ -93,6 +93,7 @@ Route::group(['middleware' => 'auth'], function()
     Route::get('contentAdmin', 'HomeController@adminContent');
     Route::get('ordersAdmin', 'HomeController@adminOrder');
     Route::get('smsAdmin', 'HomeController@adminSMS');
+    Route::get('botAdmin', 'HomeController@adminBot');
     Route::get('siteConfigAdmin', 'HomeController@adminSiteConfig');
     Route::get('slideShowAdmin', 'HomeController@adminSlideShow');
     Route::get('report', 'HomeController@adminReport');
@@ -120,6 +121,7 @@ Route::group(['middleware' => 'auth'], function()
     Route::get('givePrize', "LotteryController@givePrizes");
     Route::get('smsbot' , "HomeController@smsBot");
     Route::get("bot" , "HomeController@bot");
+    Route::post("walletBot" , "HomeController@walletBot");
 
     Route::group(['prefix' => 'user'], function () {
         Route::get('info', "UserController@informationPublicUrl");
