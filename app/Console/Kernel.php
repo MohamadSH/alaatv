@@ -125,29 +125,31 @@ class Kernel extends ConsoleKernel
                      * Sending auto generated password through SMS
                      */
                     if(isset($employeeTimeSheet->getEmployeeFullName()[0]))
-                        $message = $employeeTimeSheet->getEmployeeFullName()." عزیز، " ;
-                    else $message = "" ;
-                    $message .= "سلام ممنون از زحمات شما"."\n";
+                        $message = "سلام " .$employeeTimeSheet->getEmployeeFullName()." عزیز"."\n" ;
+                    else
+                        $message = "سلام"."\n" ;
+
                     $todayJalaliDate = $this->convertDate($toDayDate , "toJalali");
                     $todayJalaliDate = explode("/" , $todayJalaliDate);
                     $jalaliYear = $todayJalaliDate[0];
                     $jalaliMonth = $this->convertToJalaliMonth($todayJalaliDate[1]);
-                    $jalaliDay = $todayJalaliDate[2];
+                    $jalaliDay = substr( $todayJalaliDate[2], -2);
                     $todayJalaliDateCaption = $jalaliDay . " ". $jalaliMonth. " ".$jalaliYear ;
-                    $message .= "امروز: ".$todayJalaliDateCaption."\n" ;
+                    $message .= $todayJalaliDateCaption."\n" ;
                     $persianShiftTime = $employeeTimeSheet->obtainShiftTime("PERSIAN_FORMAT") ;
-                    $message .= "شیفت کاری: ". $persianShiftTime."\n";
+                    $message .= "موظفی: ". $persianShiftTime."\n";
 
                     if($persianShiftTime !== 0)
                     {
                         $realWorkTime = $employeeTimeSheet->obtainRealWorkTime("IN_SECONDS") ;
                         if( $realWorkTime !== false)
                             if($realWorkTime == 0)
-                                $message .= " مرخصی: ".$persianShiftTime."\n" ;
+                                $message .= " مرخصی: ".$persianShiftTime ;
                             else
-                                $message .= " اضافه کاری: ".$employeeTimeSheet->obtainWorkAndShiftDiff("PERSIAN_FORMAT")."\n" ;
+                                $message .= " اضافه کاری: ".$employeeTimeSheet->obtainWorkAndShiftDiff("HOUR_FORMAT")." منفی" ;
                         else
-                            $message .= "خطا در محاسبه ساعت کاری رخ داد"."\n" ;
+                            $message .= "خطا" ;
+
                         if(isset($employee->mobile[0]))
                         {
                             $smsInfo = array();
