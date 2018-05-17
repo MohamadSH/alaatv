@@ -19,6 +19,20 @@
                     @endif
                 @endif
             </td>
+            <td>
+                @if(isset($eventresult->user->province) && strlen($eventresult->user->province)>0)
+                    {{$eventresult->user->province}}
+                @else
+                    <span class="label label-sm label-warning"> درج نشده </span>
+                @endif
+            </td>
+            <td>
+                @if(isset($eventresult->user->city) && strlen($eventresult->user->city)>0)
+                    {{$eventresult->user->city}}
+                @else
+                    <span class="label label-sm label-warning"> درج نشده </span>
+                @endif
+            </td>
             <td>@if(isset($eventresult->user_id) && isset($eventresult->user->mobile))  {{$eventresult->user->mobile}} @else <span class="label label-sm label-danger">درج نشده </span> @endif</td>
             <td>@if(isset($eventresult->user_id) && isset($eventresult->user->major_id)) {{$eventresult->user->major->name}} @else <span class="label label-sm label-danger"> درج نشده </span> @endif </td>
             <td>@if(isset($eventresult->user_id) && isset($eventresult->user->grade_id)) {{$eventresult->user->grade->displayName}} @else <span class="label label-sm label-danger"> درج نشده </span> @endif </td>
