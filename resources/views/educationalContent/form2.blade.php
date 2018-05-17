@@ -15,16 +15,16 @@
             </label>
         </div>
     </label>
-    {!! Form::select('grades[]',$grades,$educationalContent->grades,['multiple' => 'multiple','class' => 'mt-multiselect btn btn-default', 'id' => 'grades' , "data-label" => "left" , "data-width" => "100%" , "data-filter" => "true" , "data-height" => "200" , "title" => "مقطع ها"]) !!}
+    {{--{!! Form::select('grades[]',$grades,$educationalContent->grades,['multiple' => 'multiple','class' => 'mt-multiselect btn btn-default', 'id' => 'grades' , "data-label" => "left" , "data-width" => "100%" , "data-filter" => "true" , "data-height" => "200" , "title" => "مقطع ها"]) !!}--}}
 
-    {!! Form::select('majors[]',$majors,$educationalContent->majors,['multiple' => 'multiple','class' => 'mt-multiselect btn btn-default', 'id' => 'majors' , "data-label" => "left" , "data-width" => "100%" , "data-filter" => "true" , "data-height" => "200" , "title" => "رشته ها"]) !!}
-    <select name="contenttypes[]" class="form-control" id="rootContentTypes" >
+    {{--{!! Form::select('majors[]',$majors,$educationalContent->majors,['multiple' => 'multiple','class' => 'mt-multiselect btn btn-default', 'id' => 'majors' , "data-label" => "left" , "data-width" => "100%" , "data-filter" => "true" , "data-height" => "200" , "title" => "رشته ها"]) !!}--}}
+    <select name="contenttype_id" class="form-control" id="rootContentTypes" >
         <option value="" selected>انتخاب نوع محتوا</option>
         @foreach($rootContentTypes as $rootContentType)
             <option value="{{$rootContentType->id}}" data-title="{{$rootContentType->name}}" @if(in_array($rootContentType->id,$educationalContent->contenttypes->pluck('id')->toArray())) selected @endif >{{$rootContentType->displayName}}</option>
         @endforeach
     </select>
-    {!! Form::select("contenttypes[]", $childContentTypes , null, ['class' => 'form-control', 'id'=>'childContentTypes' , 'placeholder' => 'انتخاب زیر شاخه' ]) !!}
+    {{--{!! Form::select("contenttypes[]", $childContentTypes , null, ['class' => 'form-control', 'id'=>'childContentTypes' , 'placeholder' => 'انتخاب زیر شاخه' ]) !!}--}}
     <ul class="list-group margin-top-20 text-center">
         <li class="list-group-item bold" style="font-size: small">فایل های موجود
         </li>
@@ -97,6 +97,15 @@
         </label>
         <div class="col-md-9">
             {!! Form::textarea('description', null, ['class' => 'form-control', 'id' => 'descriptionSummerNote', 'rows' => '5' ]) !!}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2 control-label" for="tags">
+            تگ ها :
+        </label>
+        <div class="col-md-9">
+            <input name="tags" type="text" class="form-control input-large" value="{{$tags}}" data-role="tagsinput">
         </div>
     </div>
     <div class="form-group">
