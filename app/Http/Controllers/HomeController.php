@@ -93,18 +93,16 @@ class HomeController extends Controller
     {
         $user = User::FindOrFail(1);
 
-//        $order = Order::FindOrFail(85123);
+//        $order = Order::FindOrFail(85131);
 //        dd($user->notify(new \App\Notifications\InvoicePaid($order)));
 
 
-        $gift  = 20000;
+        $gift  = 30000;
         $result = $user->deposit($gift , 2);
         if($result["result"])
         {
-            $walletId = $result["wallet"];
-            $wallet = Wallet::FindOrFail($walletId);
-            dump($wallet);
-            dd($user->notify(new \App\Notifications\GiftGiven($wallet)));
+            dump($gift);
+            dd($user->notify(new \App\Notifications\GiftGiven($gift)));
 
         }
         dd("no deposit");
@@ -2601,10 +2599,20 @@ class HomeController extends Controller
         $hamayesh5Plus1 = [123 , 124 ,125 , 119 , 120 ,121, 163 , 164 , 165 , 159 , 160  , 161 ,
             155 ,156 , 157 , 151 , 152 , 153 , 147 , 148 , 149 , 143 , 144 , 145 , 139 , 140 , 141 ,
             135 , 136 , 137 , 131 , 132 , 133 , 127 , 128 , 129 ] ;
+        if($request->has("giftCost"))
+        {
+            $giftCredit = $request->get("giftCost");
+        }
+        else
+        {
+            session()->put("error" , "لطفا مبلغ هدیه را تعیین کنید");
+            return redirect()->back() ;
+        }
+
+
         switch ($userGroup)
         {
             case "1":
-                $giftCredit = 20000;
                 $productSet=[
                     [
                         "query"=>"whereHas", //whereHas / whereDoesntHave
@@ -2626,7 +2634,6 @@ class HomeController extends Controller
                 ];
                 break;
             case "2":
-                $giftCredit = 20000;
                 $productSet=[
                     [
                         "query"=>"whereHas", //whereHas / whereDoesntHave
@@ -2648,7 +2655,6 @@ class HomeController extends Controller
                 ];
                 break;
             case "3":
-                $giftCredit = 20000;
                 $productSet=[
                     [
                         "query"=>"whereHas", //whereHas / whereDoesntHave
@@ -2663,7 +2669,6 @@ class HomeController extends Controller
                 ];
                 break;
             case "4":
-                $giftCredit = 20000;
                 $productSet=[
                     [
                         "query"=>"whereDoesntHave", //whereHas / whereDoesntHave
@@ -2673,7 +2678,6 @@ class HomeController extends Controller
                 ];
                 break;
             case "5":
-                $giftCredit = 20000;
                 $productSet=[
                     [
                         "query"=>"whereHas", //whereHas / whereDoesntHave
@@ -2690,6 +2694,44 @@ class HomeController extends Controller
                             $hamayesh5Plus1
                         ] // products id
                     ],
+                ];
+                break;
+            case "6":
+                $productSet=[
+                    [
+                        "query"=>"whereHas", //whereHas / whereDoesntHave
+                        "filter"=>"whereIn", //whereIn / whereNotIn / all
+                        "id"=> [
+                            $hamayeshTalai
+                        ] // products id
+                    ],
+                    [
+                        "query"=>"whereHas", //whereHas / whereDoesntHave
+                        "filter"=>"whereIn", //whereIn / whereNotIn / all
+                        "id"=> [
+                            $hamayesh5Plus1
+                        ] // products id
+                    ],
+                    [
+                        "query"=>"whereDoesntHave", //whereHas / whereDoesntHave
+                        "filter"=>"whereIn", //whereIn / whereNotIn / all
+                        "id"=> [
+                            $ordooGheireHozoori,
+                            $ordooHozoori
+                        ] // products id
+                    ],
+                ];
+                break;
+            case "7":
+                $productSet=[
+                    [
+                        "query"=>"whereHas", //whereHas / whereDoesntHave
+                        "filter"=>"whereIn", //whereIn / whereNotIn / all
+                        "id"=> [
+                            $hamayeshTalai
+                        ] // products id
+                    ],
+
                 ];
                 break;
             default:
@@ -2749,7 +2791,7 @@ class HomeController extends Controller
         $failedCounter = 0 ;
         foreach ($users as $user)
         {
-            $result = $user->deposit($giftCredit);
+            $result = $user->deposit($giftCredit , 2);
             if(isset($result["wallet"]))
                 $wallet = $result["wallet"];
             else
