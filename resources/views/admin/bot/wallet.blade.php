@@ -45,11 +45,14 @@
                         <option value="3">5+1 خریده اند و دیگر هیچی نخریده اند</option>
                         <option value="4">هیچی نخریده اند</option>
                         <option value="5">از محصولات دیگر خریده اند</option>
+                        <option value="6">همایش 1+5 و طلایی خریده اند و اردو ندارند</option>
+                        <option value="7">همایش طلایی را خریده اند</option>
                     </select>
                     <label for="userGroup" class="control-label">
                         <input type="checkbox" name="giveGift" value="1" >
-                        اعتبار ها را اهدا کن
+                        اعتبار اهداء کن
                     </label>
+                    <input type="text" name="giftCost" value=""  placeholder="مبلغ اهدایی">
                     <input type="submit" value="انجام بده">
                     {!! Form::close() !!}
                 </div>
