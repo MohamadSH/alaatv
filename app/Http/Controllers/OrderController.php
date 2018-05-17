@@ -1433,7 +1433,8 @@ class OrderController extends Controller
 
                 $cost = $order->totalCost() - $order->totalPaidCost();
 
-                if($cost == 0 )
+                if($cost == 0 &&
+                    (isset($order->cost) || isset($order->costwithoutcoupon)) )
                 {
                     $order->close(Config::get("constants.PAYMENT_STATUS_PAID")) ;
                     $order->timestamps = false;
