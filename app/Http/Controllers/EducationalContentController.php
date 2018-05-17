@@ -618,10 +618,10 @@ class EducationalContentController extends Controller
             $educationalContent->validSince = $validSince;
         }
 
-        if($request->has("contenttype_id"))
-        {
-            $educationalContent->contenttype_id = $request->get("contenttype_id");
-        }
+//        if($request->has("contenttype_id"))
+//        {
+//            $educationalContent->contenttype_id = $request->get("contenttype_id");
+//        }
 
         if($request->has("enable"))
             $educationalContent->enable = 1;
