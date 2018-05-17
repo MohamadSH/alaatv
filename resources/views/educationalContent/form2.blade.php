@@ -18,12 +18,12 @@
     {{--{!! Form::select('grades[]',$grades,$educationalContent->grades,['multiple' => 'multiple','class' => 'mt-multiselect btn btn-default', 'id' => 'grades' , "data-label" => "left" , "data-width" => "100%" , "data-filter" => "true" , "data-height" => "200" , "title" => "مقطع ها"]) !!}--}}
 
     {{--{!! Form::select('majors[]',$majors,$educationalContent->majors,['multiple' => 'multiple','class' => 'mt-multiselect btn btn-default', 'id' => 'majors' , "data-label" => "left" , "data-width" => "100%" , "data-filter" => "true" , "data-height" => "200" , "title" => "رشته ها"]) !!}--}}
-    <select name="contenttype_id" class="form-control" id="rootContentTypes" >
-        <option value="" selected>انتخاب نوع محتوا</option>
-        @foreach($rootContentTypes as $rootContentType)
-            <option value="{{$rootContentType->id}}" data-title="{{$rootContentType->name}}" @if(in_array($rootContentType->id,$educationalContent->contenttypes->pluck('id')->toArray())) selected @endif >{{$rootContentType->displayName}}</option>
-        @endforeach
-    </select>
+    {{--<select name="contenttype_id" class="form-control" id="rootContentTypes" >--}}
+        {{--<option value="" selected>انتخاب نوع محتوا</option>--}}
+        {{--@foreach($rootContentTypes as $rootContentType)--}}
+            {{--<option value="{{$rootContentType->id}}" data-title="{{$rootContentType->name}}" @if(in_array($rootContentType->id,$educationalContent->contenttypes->pluck('id')->toArray())) selected @endif >{{$rootContentType->displayName}}</option>--}}
+        {{--@endforeach--}}
+    {{--</select>--}}
     {{--{!! Form::select("contenttypes[]", $childContentTypes , null, ['class' => 'form-control', 'id'=>'childContentTypes' , 'placeholder' => 'انتخاب زیر شاخه' ]) !!}--}}
     <ul class="list-group margin-top-20 text-center">
         <li class="list-group-item bold" style="font-size: small">فایل های موجود
