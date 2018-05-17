@@ -90,6 +90,21 @@
                         <span class="arrow "></span>
                     </a>
                     <ul class="sub-menu">
+                        @role((Config::get("constants.ROLE_ADMIN")))
+                        <li class="nav-item  ">
+                            <a href="#" class="nav-link nav-toggle">
+                                <span class="title">بات</span>
+                                <span class="arrow"></span>
+                            </a>
+                            <ul class="sub-menu">
+                                <li class="nav-item">
+                                    <a href="{{action("HomeController@adminBot" , ["bot"=>"wallet"])}}" class="nav-link ">
+                                        <span class="title">هدیه کیف پول</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        @endrole
                         @ability(Config::get('constants.ROLE_ADMIN'),Config::get('constants.TELEMARKETING_PANEL_ACCESS'))
                         <li class="nav-item  ">
                             <a href="{{action("HomeController@adminTeleMarketing")}}" class="nav-link ">
@@ -106,31 +121,32 @@
                         @endrole
                         @permission((Config::get('constants.INSERT_MAJOR')))
                         <li class="nav-item  ">
-                            <a href="#" class="nav-link ">
+                            <a href="#" class="nav-link nav-toggle">
                                 <span class="title">درج رشته</span>
+                                <span class="arrow"></span>
                             </a>
                             <ul class="sub-menu">
-                                <li>
+                                <li class="nav-item">
                                     <a href="{{action("HomeController@adminMajor" , ["parent"=>"ریاضی"])}}" class="nav-link ">
                                         <span class="title">ریاضی</span>
                                     </a>
                                 </li>
-                                <li>
+                                <li class="nav-item">
                                     <a href="{{action("HomeController@adminMajor" , ["parent"=>"تجربی"])}}" class="nav-link ">
                                         <span class="title">تجربی</span>
                                     </a>
                                 </li>
-                                <li>
+                                <li class="nav-item">
                                     <a href="{{action("HomeController@adminMajor" , ["parent"=>"انسانی"])}}" class="nav-link ">
                                         <span class="title">انسانی</span>
                                     </a>
                                 </li>
-                                <li>
+                                <li class="nav-item">
                                     <a href="{{action("HomeController@adminMajor" , ["parent"=>"هنر"])}}" class="nav-link ">
                                         <span class="title">هنر</span>
                                     </a>
                                 </li>
-                                <li>
+                                <li class="nav-item">
                                     <a href="{{action("HomeController@adminMajor" , ["parent"=>"زبان"])}}" class="nav-link ">
                                         <span class="title">زبان</span>
                                     </a>
@@ -143,6 +159,7 @@
                             <a href="#" class="nav-link  nav-toggle">
                                 <i class="fa fa-cogs"></i>
                                 <span class="title">پیکربندی سایت</span>
+                                <span class="arrow"></span>
                             </a>
                             <ul class="sub-menu">
                                 @permission((Config::get('constants.SHOW_SITE_CONFIG_ACCESS')))
