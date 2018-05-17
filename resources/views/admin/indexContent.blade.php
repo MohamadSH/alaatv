@@ -443,6 +443,8 @@
                                 <th></th>
                                 <th class="all"> نام خانوادگی </th>
                                 <th class="all"> نام </th>
+                                <th class="all"> استان </th>
+                                <th class="all"> شهر </th>
                                 <th class="min-tablet"> شماره تماس </th>
                                 <th class="min-tablet">رشته</th>
                                 <th class="all"> پایه </th>
