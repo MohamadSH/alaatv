@@ -73,7 +73,7 @@ class GiftGiven extends Notification implements ShouldQueue
         }else{
             $gender = "";
         }
-        $messageCore = "مبلغ به عنوان هدبه به کیف پول شما افزوده شد."
+        $messageCore = "مبلغ ".$this->giftCost." به عنوان هدیه به کیف پول شما افزوده شد."
             ."\n"
             ."آلاء"
             ."\n"
