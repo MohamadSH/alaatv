@@ -4,22 +4,16 @@
             @foreach ($chunk as $contentset)
                 <li>
                     <a href="@if($contentset->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->isNotEmpty()){{action("EducationalContentController@show", $contentset->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id)}} @else #@endif">
-                        <div class="col1">
-                            <div class="cont">
-                                <div class="cont-col1">
-                                    <div class="label label-sm label-success">
-                                        <i class="fa fa-list-alt"></i>
-                                    </div>
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sd-12 col-xs-12">
+                                <div class="col-lg-2 col-md-2 col-sd-2 col-xs-2">
+                                    {{--<i class="fa fa-list-alt"></i>--}}
+                                    <img src="{{(isset($contentset->photo))?$contentset->photo:"/img/extra/default_playlist.png"}}" height="40">
                                 </div>
-                                <div class="cont-col2">
-                                    <div class="desc">
-                                        {{$contentset->name}}
-                                    </div>
+                                <div class="col-lg-10 col-md-10 col-sd-10 col-xs-10">
+                                    {{$contentset->name}}
                                 </div>
                             </div>
-                        </div>
-                        <div class="col2">
-                            {{--<div class="date">{{$content["validSince_Jalali"]}}</div>--}}
                         </div>
                     </a>
                 </li>
