@@ -1197,6 +1197,7 @@ class ProductController extends Controller
      */
     public function landing4(Request $request)
     {
+        return redirect("/landing/3",301);
         $url = $request->url();
         SEO::opengraph()->setUrl($url);
         SEO::setCanonical($url);

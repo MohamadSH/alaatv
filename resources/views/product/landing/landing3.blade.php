@@ -41,7 +41,7 @@
 
     <title></title>
 
-    <link rel="stylesheet" href="/assets/extra/landing3/css/stylesheet2.css" />
+    <link rel="stylesheet" href="/assets/extra/landing3/css/stylesheet3.css" />
     <!--[if lt IE 10]>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flexibility/2.0.1/flexibility.js"></script>
     <![endif]-->
@@ -409,68 +409,7 @@
                         <article class="art-slider-field">
                             <div class="swiper-container swiper-content-field swiper-content-field-experiential">
                                 <div class="swiper-wrapper">
-                                    <div class="swiper-slide">
-                                        <article class="item-content-field">
-                                            <bdi class="bdi-title experiential">
-                                                <em>تجربی</em>
-                                            </bdi>
-                                            <figure>
-                                                <a href="javascript:void(0)" data-role="212" class="checkout" title="">
-                                                    <img src="/assets/extra/landing3/images/professors/G1.png" alt="" title="">
-                                                </a>
-                                                <figcaption>
-                                                    <header>
-                                                        <a href="javascript:void(0)" data-role="212" class="checkout" title="">
-                                                            <h1>
-                                                                <span>زیست</span>
-                                                                <em>دکتر چلاجور</em>
-                                                            </h1>
-                                                        </a>
-                                                    </header>
-                                                    <strong>
-                                                            <span class="span-gold">
-                                                                همایش طـــلایی
-                                                            </span>
-                                                        <bdi class="prsent">
-                                                            <i>80%</i>
-                                                            <em> کــــنـکور</em>
-                                                        </bdi>
-                                                    </strong>
-                                                </figcaption>
-                                            </figure>
-                                        </article>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <article class="item-content-field">
-                                            <bdi class="bdi-title experiential">
-                                                <em>تجربی</em>
-                                            </bdi>
-                                            <figure>
-                                                <a href="javascript:void(0)" data-role="221" class="checkout" title="">
-                                                    <img src="/assets/extra/landing3/images/professors/G11.png" alt="" title="">
-                                                </a>
-                                                <figcaption>
-                                                    <header>
-                                                        <a href="javascript:void(0)" data-role="221" class="checkout" title="">
-                                                            <h1>
-                                                                <span>ژنتیک</span>
-                                                                <em>احمد آل علی</em>
-                                                            </h1>
-                                                        </a>
-                                                    </header>
-                                                    <strong>
-                                                            <span class="span-gold">
-                                                                همایش طـــلایی
-                                                            </span>
-                                                        <bdi class="prsent">
-                                                            <i>80%</i>
-                                                            <em> کــــنـکور</em>
-                                                        </bdi>
-                                                    </strong>
-                                                </figcaption>
-                                            </figure>
-                                        </article>
-                                    </div>
+
                                     <div class="swiper-slide">
                                         <article class="item-content-field">
                                             <bdi class="bdi-title experiential">
@@ -548,6 +487,68 @@
                                                             <h1>
                                                                 <span>ریاضی</span>
                                                                 <em>نباخته</em>
+                                                            </h1>
+                                                        </a>
+                                                    </header>
+                                                    <strong>
+                                                            <span class="span-gold">
+                                                                همایش طـــلایی
+                                                            </span>
+                                                        <bdi class="prsent">
+                                                            <i>80%</i>
+                                                            <em> کــــنـکور</em>
+                                                        </bdi>
+                                                    </strong>
+                                                </figcaption>
+                                            </figure>
+                                        </article>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <article class="item-content-field">
+                                            <bdi class="bdi-title experiential">
+                                                <em>تجربی</em>
+                                            </bdi>
+                                            <figure>
+                                                <a href="javascript:void(0)" data-role="212" class="checkout" title="">
+                                                    <img src="/assets/extra/landing3/images/professors/G1.png" alt="" title="">
+                                                </a>
+                                                <figcaption>
+                                                    <header>
+                                                        <a href="javascript:void(0)" data-role="212" class="checkout" title="">
+                                                            <h1>
+                                                                <span>زیست</span>
+                                                                <em>دکتر چلاجور</em>
+                                                            </h1>
+                                                        </a>
+                                                    </header>
+                                                    <strong>
+                                                            <span class="span-gold">
+                                                                همایش طـــلایی
+                                                            </span>
+                                                        <bdi class="prsent">
+                                                            <i>80%</i>
+                                                            <em> کــــنـکور</em>
+                                                        </bdi>
+                                                    </strong>
+                                                </figcaption>
+                                            </figure>
+                                        </article>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <article class="item-content-field">
+                                            <bdi class="bdi-title experiential">
+                                                <em>تجربی</em>
+                                            </bdi>
+                                            <figure>
+                                                <a href="javascript:void(0)" data-role="221" class="checkout" title="">
+                                                    <img src="/assets/extra/landing3/images/professors/G11.png" alt="" title="">
+                                                </a>
+                                                <figcaption>
+                                                    <header>
+                                                        <a href="javascript:void(0)" data-role="221" class="checkout" title="">
+                                                            <h1>
+                                                                <span>ژنتیک</span>
+                                                                <em>احمد آل علی</em>
                                                             </h1>
                                                         </a>
                                                     </header>
@@ -717,6 +718,59 @@
             </section>
         </div>
     </main>
+    <section class="lottery-banner">
+        <div class="container clearfix">
+            <div class="ttla">هدیه خرید آلاء <span>برای کسانی که تا 3 خرداد خرید می کنند</span></div>
+
+            <div class="bnra">
+                <img class="banner" src="/assets/extra/landing4/images/banner2.png" alt="banner">
+                <img class="infinite animated pulse shadow" src="/assets/extra/landing4/images/shadow.png" alt="banner">
+            </div><!-- .bnra -->
+
+            <div class="gifts">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>نفر اول  :</th>
+                        <th>آیفون x</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr>
+                        <td>5 نفر دوم  : </td>
+                        <td>120 هزار تومان اعتبار هدیه</td>
+                    </tr>
+                    <tr>
+                        <td>7 نفر سوم :</td>
+                        <td>80 هزار تومان اعتبار هدیه</td>
+                    </tr>
+
+                    <tr>
+                        <td>110 نفر چهارم : </td>
+                        <td>60 هزار تومان اعتبار هدیه</td>
+                    </tr>
+
+                    <tr>
+                        <td>180 نفر پنجم :</td>
+                        <td>50 هزار تومان اعتبار هدیه</td>
+                    </tr>
+
+                    <tr>
+                        <td>59 نفر ششم :</td>
+                        <td>40 هزار تومان اعتبار هدیه</td>
+                    </tr>
+
+                    <tr>
+                        <td>313 نفر هفتم :</td>
+                        <td>25 هزار تومان اعتبار هدیه</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div><!-- .gifts -->
+
+        </div><!-- .container -->
+    </section>
     <footer class="site-footer site-footer-lading" role="contentinfo">
         <ul class="tab-footer">
             <li>

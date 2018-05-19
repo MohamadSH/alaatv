@@ -1336,7 +1336,6 @@
             </div><!-- .gifts -->
 
         </div><!-- .container -->
-
     </section>
 
     <footer class="site-footer site-footer-lading" role="contentinfo" id="section-footer">

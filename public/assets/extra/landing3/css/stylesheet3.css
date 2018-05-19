@@ -1126,4 +1126,126 @@ body {
   }
 }
 
+.lottery-banner{
+  background: url(/assets/extra/landing3/images/gradient.jpg) no-repeat;
+  background-size: cover;
+  padding: 152px 10px 77px;
+  margin-bottom: 65px;
+}
+
+.lottery-banner .container{
+  display: -ms-flexbox;
+  display: box;
+  display: flex;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+
+.lottery-banner .container .ttla{
+  color: #ffffff;
+  font-family: IRANSans;
+  font-size: 61px;
+  font-weight: 700;
+  text-align: left;
+  width: 30%;
+  white-space: nowrap;
+  z-index: 2;
+}
+
+.lottery-banner .container .ttla span{
+  font-family: IRANSans;
+  display: block;
+  font-size: 26px;
+  margin-right: 0;
+}
+
+.lottery-banner .container .bnra{
+  text-align: center;
+  margin-right: -113px;
+}
+
+.lottery-banner .container .bnra img.banner{
+  display: block;
+  margin: 0 auto;
+}
+
+.lottery-banner .container .bnra img.shadow{
+  display: inline-block;
+  margin-top: 40px;
+}
+
+.lottery-banner .container .gifts{
+  box-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  -ms-flex-item-align: center;
+  align-self: center;
+  margin-right: 20px;
+}
+
+.lottery-banner .container .gifts table{
+  font-family: IRANSans;
+  color: #fff;
+  width: 100%;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.lottery-banner .container .gifts table td,
+.lottery-banner .container .gifts table th{
+  padding: 8px 0;
+}
+
+@media( max-width: 1200px ){
+  .lottery-banner .container .ttla{
+
+    font-size: 50px;
+  }
+
+  .lottery-banner .container .ttla span{
+    font-size: 16px;
+  }
+}
+
+@media( max-width: 992px ){
+  .lottery-banner .container .ttla{
+    width: 100%;
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .lottery-banner .container .bnra{
+    margin-right: 0
+  }
+
+  .lottery-banner .container .gifts table{
+    font-size: 13px;
+  }
+}
+
+@media( max-width: 768px ){
+  .lottery-banner .container .gifts table{
+    font-size: 16px;
+  }
+
+  .lottery-banner .container .gifts,
+  .lottery-banner .container .bnra{
+    width: 100%;
+    box-flex: 0 0 100%;
+    -ms-flex: 0 0 100%;
+    flex: 0 0 100%;
+  }
+
+  .lottery-banner .container .gifts{
+    margin-top: 30px;
+  }
+
+  .lottery-banner .container .gifts table td,
+  .lottery-banner .container .gifts table th{
+    text-align: center;
+  }
+}
+
 /* End Responsive */
