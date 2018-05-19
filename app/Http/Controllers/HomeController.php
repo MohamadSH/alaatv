@@ -2256,6 +2256,11 @@ class HomeController extends Controller
 
     public function bot()
     {
+        $orders = Order::whereDoesntHave("orderproducts")
+            ->where("orderstatus_id" , 2)
+            ->whereIn("paymentstatus_id" , [2,3]);
+        dd($orders->pluck("id")->toArray());
+
         /**
          * Fixing contentset tags
 
