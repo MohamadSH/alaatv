@@ -186,9 +186,11 @@
                                                         <div class="row static-info align-reverse">
                                                             <div class="col-md-12 name  bold" style="text-align: center" > جمع کل :  {{number_format($orderproductsRawCost)}} تومان</div>
                                                         </div>
-                                                        <div class="row static-info align-reverse">
-                                                            <div class="col-md-12 name bold" style="text-align: center"> مبلغ با لحاظ تخفیف :      {{number_format($orderCost)}} تومان</div>
-                                                        </div>
+                                                        @if($orderproductsRawCost > $orderCost)
+                                                            <div class="row static-info align-reverse">
+                                                                <div class="col-md-12 name bold font-red" style="text-align: center"> مبلغ با لحاظ تخفیف :      {{number_format($orderCost)}} تومان</div>
+                                                            </div>
+                                                        @endif
                                                         <div class="row static-info align-reverse">
                                                             <div class="col-md-12 name bold" style="text-align: center"> استفاده از کیف پول :      {{number_format(min($orderCost , $credit))}} تومان</div>
                                                         </div>
