@@ -37,6 +37,7 @@ class TransactionController extends Controller
         $this->middleware('permission:'.Config::get('constants.LIST_TRANSACTION_ACCESS'),['only'=>'index']);
         $this->middleware('permission:'.Config::get('constants.SHOW_TRANSACTION_ACCESS'),['only'=>'edit']);
         $this->middleware('permission:'.Config::get('constants.EDIT_TRANSACTION_ACCESS'),['only'=>'update']);
+        $this->middleware('role:admin' ,['only'=>'getUnverifiedTransactions']);
 //        $this->middleware('permission:'.Config::get('constants.INSERT_TRANSACTION_ACCESS'),['only'=>'store']);
     }
 
