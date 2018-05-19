@@ -539,17 +539,21 @@ class EducationalContentController extends Controller
                     break;
             }
 
+            $userCanSeeCounter = false ;
             if(Auth::check())
             {
+                $user = Auth::user();
                 $baseUrl = url("/");
                 $contentPath = str_replace($baseUrl , "" , action("EducationalContentController@show" , $educationalContent));
                 $productSeenCount = $this->userSeen($contentPath);
-
+                if($user->hasRole("admin"))
+                    $userCanSeeCounter = true ;
             }
 
             $sideBarMode = "closed";
 
-            return view("educationalContent.show", compact("productSeenCount","author","educationalContent", "rootContentType", "childContentType", "contentsWithSameType" , "soonContentsWithSameType" , "educationalContentSet" , "contentsWithSameSet" , "videoSources" , "files" , "tags" , "sideBarMode" , "educationalContentDisplayName" , "sessionNumber" , "fileToShow"));
+            return view("educationalContent.show", compact("productSeenCount","author","educationalContent", "rootContentType", "childContentType", "contentsWithSameType" , "soonContentsWithSameType" , "educationalContentSet" , "contentsWithSameSet" , "videoSources" ,
+                "files" , "tags" , "sideBarMode" , "educationalContentDisplayName" , "sessionNumber" , "fileToShow" , "userCanSeeCounter"));
         }
         else
             abort(404);

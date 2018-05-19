@@ -96,6 +96,12 @@
                                     <div class="col-md-12">
                                         <ul class="list-inline">
                                             <li><i class="fa fa-user"></i>مدرس : {{$author}}</li>&nbsp;
+                                            @if($userCanSeeCounter)
+                                                <li>
+                                                    <i class="fa fa-eye"></i>
+                                                    {{$productSeenCount}}
+                                                </li>
+                                            @endif
                                         </ul>
                                     </div>
                                 @endif
