@@ -282,7 +282,7 @@ class HomeController extends Controller
                         "videoviewcounter" =>"0",
                         "videoDuration" => 0,
                         "session" => $sessionNumber."",
-                        "thumbnail" => $thumbnail->name
+                        "thumbnail" => (isset($thumbnail->name))?$thumbnail->name:""
                     ]
                 );
                 //dd($response);
