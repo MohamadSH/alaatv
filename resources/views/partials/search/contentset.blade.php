@@ -6,11 +6,11 @@
                     <a href="@if($contentset->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->isNotEmpty()){{action("EducationalContentController@show", $contentset->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id)}} @else #@endif">
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sd-12 col-xs-12">
-                                <div class="col-lg-2 col-md-2 col-sd-2 col-xs-2">
+                                <div class="col-lg-4 col-md-2 col-sd-2 col-xs-2">
                                     {{--<i class="fa fa-list-alt"></i>--}}
-                                    <img src="{{(isset($contentset->photo))?$contentset->photo:"/img/extra/default_playlist.png"}}" height="40">
+                                    <img src="{{(isset($contentset->photo))?$contentset->photo:"https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/".$contentset->id.".jpg"}}" style="width: 200px; height: 113px; ">
                                 </div>
-                                <div class="col-lg-10 col-md-10 col-sd-10 col-xs-10">
+                                <div class="col-lg-8 col-md-10 col-sd-10 col-xs-10">
                                     {{$contentset->name}}
                                 </div>
                             </div>
