@@ -45,6 +45,9 @@
             opacity: 1;
         }
 
+        .contentset-thumbnail{
+            width: 100%;
+        }
     </style>
 @endsection
 
@@ -173,6 +176,13 @@
                             <div class="caption">
                                 <i class="icon-globe font-dark hide"></i>
                                 <span class="caption-subject font-dark bold uppercase">دوره های آموزشی آلاء</span>
+                                @if(!empty($tagInput))
+                                    {{--<div class="row">--}}
+                                        {{--<div class="col-md-12">--}}
+                                            @include("partials.search.tagLabel" , ["tags"=>$tagInput])
+                                        {{--</div>--}}
+                                    {{--</div>--}}
+                                @endif
                             </div>
                         </div>
                         <div class="portlet-body " id="tab_contentset" >
@@ -192,6 +202,13 @@
                     <div class="caption">
                         <i class="icon-globe font-dark hide"></i>
                         <span class="caption-subject font-dark bold uppercase">فیلم ها و جزوات آموزشی آلاء</span>
+                        @if(!empty($tagInput))
+                            {{--<div class="row">--}}
+                            {{--<div class="col-md-12">--}}
+                            @include("partials.search.tagLabel" , ["tags"=>$tagInput])
+                            {{--</div>--}}
+                            {{--</div>--}}
+                        @endif
                     </div>
                     <ul class="nav nav-tabs">
                         @if($items->where("type" , "article")->first()["totalitems"] > 0)
@@ -245,8 +262,8 @@
     <script src="/assets/pages/scripts/search.min.js" type="text/javascript"></script>
     <script src="/assets/extra/slick/slick/slick.min.js" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript">
-        var majorLesson = {!!  json_encode($majorLesson)!!};
-        var lessonTeacher = {!!  json_encode($lessonTeacher)!!};
+        var majorLesson = {!!  $majorLesson->toJson()!!};
+        var lessonTeacher = {!!  $lessonTeacher->toJson()!!};
         var defaultLesson = "{!!$defaultLesson!!}";
         var defaultTeacher = "{!!$defaultTeacher!!}";
         $(document).ready(function()
@@ -264,8 +281,18 @@
             $("#lessonSelect").empty();
             $.each(lessons , function (index , value)
             {
+                var caption = "" ;
+                if(value.index != null && value.index != undefined)
+                {
+                    caption = value.index;
+                }
+                else if(value.initialIndex != null && value.initialIndex != undefined)
+                {
+                    caption = value.initialIndex;
+                }
+
                 $("#lessonSelect").append($("<option></option>")
-                    .attr("value", value.value).text(value.index));
+                    .attr("value", value.value).text(caption));
             });
             if(defaultLesson.length > 0)
                 $("#lessonSelect").val(defaultLesson);
@@ -277,8 +304,24 @@
             $("#teacherSelect").empty();
             $.each(teachers , function (index , value)
             {
+                var lastName = "" ;
+                var firstName = "" ;
+                if(value.lastName != null && value.lastName != undefined)
+                {
+                    lastName = value.lastName;
+                }
+                else if(value.index != null && value.index != undefined)
+                {
+                    lastName = value.index;
+                }
+
+                if(value.firstName != null && value.firstName != undefined)
+                {
+                    firstName = value.firstName;
+                }
+
                 $("#teacherSelect").append($("<option></option>")
-                    .attr("value", value.value).text(value.index));
+                    .attr("value", value.value).text(firstName + " " + lastName));
             });
             if(defaultTeacher.length > 0)
                 $("#teacherSelect").val(defaultTeacher);
