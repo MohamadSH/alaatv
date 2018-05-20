@@ -97,7 +97,7 @@
                         <a href="javascript:void(0)" data-role="210" class="checkout" title="خرید همایش">همایش ادبیات دکتر سبطی </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0)" data-role="211" class="checkout" title="خرید همایش">همایش دینی کاغذی</a>
+                        <a href="javascript:void(0)" data-role="211" class="checkout" title="خرید همایش">همایش دینی خانم کاغذی</a>
                     </li>
                     <li>
                         <a href="javascript:void(0)" data-role="212" class="checkout" title="خرید همایش">همایش زیست شناسی دکتر چلاجور</a>
