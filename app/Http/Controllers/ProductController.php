@@ -29,6 +29,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use SEO;
@@ -1197,6 +1198,8 @@ class ProductController extends Controller
      */
     public function landing4(Request $request)
     {
+//        dd($request->all());
+        return redirect()->route('landing.3',$request->all());
         $url = $request->url();
         SEO::opengraph()->setUrl($url);
         SEO::setCanonical($url);

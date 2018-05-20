@@ -135,7 +135,7 @@
                                 </div>
                                 <div class="portlet-body text-justify">
                                     @if(isset($educationalContent->description[0]))
-                                        <div class="scroller" style="height:100px" data-rail-visible="1" data-rail-color="black"
+                                        <div class="scroller" style="max-height:400px" data-rail-visible="1" data-rail-color="black"
                                              data-handle-color="#a1b2bd">
                                             {!! $educationalContent->description !!}
                                         </div>
