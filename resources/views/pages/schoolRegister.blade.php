@@ -49,7 +49,7 @@
     <div class="container">
         <div class="register-form">
             <div class="register-title">
-                <h2>پیش ثبت نام</h2>
+                <h2>پیش ثبت نام(فقط تهرانی ها)</h2>
 
                 <div class="sub">
                     <span>دبیرستان غیردولتی پسرانه</span>
