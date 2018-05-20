@@ -97,7 +97,7 @@
                         <a href="javascript:void(0)" data-role="210" class="checkout" title="خرید همایش">همایش ادبیات دکتر سبطی </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0)" data-role="211" class="checkout" title="خرید همایش">همایش دینی استاد کاغذی</a>
+                        <a href="javascript:void(0)" data-role="211" class="checkout" title="خرید همایش">همایش دینی خانم کاغذی</a>
                     </li>
                     <li>
                         <a href="javascript:void(0)" data-role="212" class="checkout" title="خرید همایش">همایش زیست شناسی دکتر چلاجور</a>
@@ -118,7 +118,7 @@
                             <a href="javascript:void(0)" data-role="210" class="checkout" title="همایش ادبیات دکتر سبطی">همایش ادبیات دکتر سبطی </a>
                         </div>
                         <div class="swiper-slide">
-                            <a href="javascript:void(0)" data-role="211" class="checkout" title="همایش دین و زندگی استاد کاغذی">همایش دین و زندگی استاد کاغذی</a>
+                            <a href="javascript:void(0)" data-role="211" class="checkout" title="همایش دین و زندگی کاغذی">همایش دین و زندگی کاغذی</a>
                         </div>
                         <div class="swiper-slide">
                             <a href="javascript:void(0)" data-role="212" class="checkout" title="همایش زیست دکتر چلاجور">همایش زیست شناسی دکتر چلاجور</a>
@@ -221,7 +221,7 @@
                                                         <a href="javascript:void(0)" data-role="211" class="checkout" title="">
                                                             <h1>
                                                                 <span>دینی</span>
-                                                                <em>استاد کاغذی</em>
+                                                                <em>کاغذی</em>
                                                             </h1>
                                                         </a>
                                                     </header>
@@ -283,7 +283,7 @@
                                                         <a href="javascript:void(0)" data-role="217" class="checkout" title="">
                                                             <h1>
                                                                 <span>شیمی</span>
-                                                                <em>استاد صنیعی</em>
+                                                                <em>صنیعی</em>
                                                             </h1>
                                                         </a>
                                                     </header>
@@ -314,7 +314,7 @@
                                                         <a href="javascript:void(0)" data-role="214" class="checkout" title="">
                                                             <h1>
                                                                 <span>عربی</span>
-                                                                <em style="font-size: 4rem !important;">استاد ناصح زاده</em>
+                                                                <em style="font-size: 4rem !important;">ناصح زاده</em>
                                                             </h1>
                                                         </a>
                                                     </header>
@@ -660,7 +660,7 @@
                                                         <a href="javascript:void(0)" data-role="214" class="checkout" title="">
                                                             <h1>
                                                                 <span>عربی</span>
-                                                                <em style="font-size: 4rem !important;">استاد ناصح زاده</em>
+                                                                <em style="font-size: 4rem !important;">ناصح زاده</em>
                                                             </h1>
                                                         </a>
                                                     </header>
@@ -691,7 +691,7 @@
                                                         <a href="javascript:void(0)" data-role="217" class="checkout" title="">
                                                             <h1>
                                                                 <span>شیمی</span>
-                                                                <em>استاد صنیعی</em>
+                                                                <em>صنیعی</em>
                                                             </h1>
                                                         </a>
                                                     </header>
