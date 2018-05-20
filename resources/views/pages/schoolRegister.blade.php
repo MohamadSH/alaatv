@@ -33,13 +33,13 @@
         var dimensionValue = '{{ request()->ip() }}';
 
         gtag('js', new Date());
-        gtag('config', "{{Config('constants.google.analytics')}}");
-        @if(Auth::check())
-        gtag('set', {'user_id': '{{ Auth::user() ->id }}'}); // Set the user ID using signed-in user_id.
-        @endif
+
         gtag('config', "{{Config('constants.google.analytics')}}", {
             'custom_map': {'dimension2': 'dimension2'}
         });
+        @if(Auth::check())
+            gtag('set', {'user_id': '{{ Auth::user() ->id }}'}); // Set the user ID using signed-in user_id.
+        @endif
         // Sends the custom dimension to Google Analytics.
         gtag('event', 'hit', {'dimension2': dimensionValue});
     </script>
