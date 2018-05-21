@@ -28,6 +28,14 @@
                     <span class="arrow "></span>
                 </a>
             </li>
+            <li class="nav-item @if(isset($pageName) && strcmp($pageName , "donate")==0)start active open @endif">
+                <a href="{{action("HomeController@donate")}}" class="nav-link nav-toggle font-yellow bold">
+                    <i class="fa fa-credit-card"></i>
+                    <span class="title">کمک مالی به آلاء</span>
+                    @if(isset($pageName) && strcmp($pageName , "donate")==0)<span class="selected"></span> @endif
+                    <span class="arrow "></span>
+                </a>
+            </li>
             <li class="nav-item @if(isset($pageName) && strcmp($pageName , "educationalContent")==0)start active open @endif nav-toggle">
                 <a href="{{action("EducationalContentController@search")}}" class="nav-link nav-toggle font-yellow bold">
                     <i class="fa fa-video-camera" aria-hidden="true"></i>
