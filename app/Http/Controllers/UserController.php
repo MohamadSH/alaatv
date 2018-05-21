@@ -935,7 +935,8 @@ class UserController extends Controller
         $excludedOrderStatuses = [
             Config::get("constants.ORDER_STATUS_OPEN") ,
             Config::get("constants.ORDER_STATUS_OPEN_BY_ADMIN"),
-            Config::get("constants.ORDER_STATUS_OPEN_BY_WALLET")
+            Config::get("constants.ORDER_STATUS_OPEN_BY_WALLET"),
+            Config::get("constants.ORDER_STATUS_OPEN_DONATE"),
         ];
         $user = Auth::user() ;
         $orders = $user->orders
