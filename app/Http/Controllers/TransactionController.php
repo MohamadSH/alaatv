@@ -522,7 +522,9 @@ class TransactionController extends Controller
          *  end
          */
 
-        $order->refreshCost();
+        if(!$request->has("forcePay_bhrk"))
+            $order->refreshCost();
+
         if($order->hasCoupon()) {
             $validateCouponProduct = $order->reviewCoupon();
             if($validateCouponProduct["couponRemoved"])

@@ -1956,6 +1956,20 @@ class HomeController extends Controller
         return view("pages.rules");
     }
 
+    function donate(Request $request)
+    {
+        $url = $request->url();
+        $title ="آلاء|کمک مالی";
+        SEO::setTitle($title);
+        SEO::opengraph()->setUrl($url);
+        SEO::setCanonical($url);
+        SEO::twitter()->setSite("آلاء");
+        SEO::setDescription($this->setting->site->seo->homepage->metaDescription);
+        SEO::opengraph()->addImage(route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]), ['height' => 100, 'width' => 100]);
+
+        return view("pages.donate");
+    }
+
     function siteMap(Request $request)
     {
 

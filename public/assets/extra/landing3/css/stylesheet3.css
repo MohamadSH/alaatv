@@ -949,7 +949,7 @@ body {
     background-size: 100% 100%;
     /* background-size: contain; */
     max-height: 61.4rem;
-    min-height: 30.4rem;
+    min-height: 20.4rem;
     width: 100%;
   }
   .sigin-login {

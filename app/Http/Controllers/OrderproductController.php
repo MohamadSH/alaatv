@@ -171,7 +171,11 @@ class OrderproductController extends Controller
             /**
              * Determines it is an order by admin or by a user
              */
-            if(session()->has("adminOrder_id"))
+            if($request->has("order_id"))
+            {
+                $order_id = $request->get("order_id");
+            }
+            elseif(session()->has("adminOrder_id"))
             {
                 if(!$user->can(Config::get('constants.INSERT_ORDER_ACCESS')))
                 {
@@ -188,21 +192,22 @@ class OrderproductController extends Controller
                 $order_id = session()->get("adminOrder_id");
                 $user_id = session()->get("customer_id");
                 $user = User::FindOrFail($user_id);
-                $order = Order::FindorFail($order_id);
             }else
             {
                 $order_id = session()->get("order_id");
-                $order = Order::FindorFail($order_id);
-                if($order->user->id != $user->id)
+
+            }
+
+            $order = Order::FindorFail($order_id);
+            if($order->user->id != $user->id)
+            {
+                if($ajax)
                 {
-                    if($ajax)
-                    {
-                        return $this->response->setStatusCode(403);
-                    }
-                    else
-                    {
-                        return redirect(action("HomeController@error403"));
-                    }
+                    return $this->response->setStatusCode(403);
+                }
+                else
+                {
+                    return redirect(action("HomeController@error403"));
                 }
             }
             /**
@@ -213,21 +218,34 @@ class OrderproductController extends Controller
                 foreach ($simpleProducts as $simpleProduct)
                 {
                     $orderproduct = new Orderproduct();
-
                     $orderproduct->product_id = $simpleProduct->id;
-                    if($order->orderproducts->isNotEmpty()){
+                    $orderstatus = $order->orderstatus->id;
+
+                    $donateFlag = false;
+                    if(isset($orderstatus) && $orderstatus == config("constants.ORDER_STATUS_OPEN_DONATE"))
+                        $donateFlag = true;
+
+                    if($order->orderproducts->isNotEmpty())
+                    {
                         $orderHasProduct = false ;
                         foreach ($order->orderproducts as $singleOrderproduct)
                         {
-                            if($simpleProduct->id == $singleOrderproduct->product->id) {
+                            if($donateFlag)
+                            {
+                                $singleOrderproduct->delete();
+                            }
+                            elseif($simpleProduct->id == $singleOrderproduct->product->id)
+                            {
                                 $orderHasProduct = true ;
                                 continue ;
                             }
+
                         }
                         if($orderHasProduct) continue ;
                     }
                     $orderproduct->order_id = $order->id;
-                    if($orderproduct->save()){
+                    if($orderproduct->save())
+                    {
                         /**
                          * Adding selected extra attributes to the orderproduct
                          */
@@ -305,11 +323,18 @@ class OrderproductController extends Controller
                          * Saving orderproduct cost
                          */
                             $costArray = array() ;
-                            $costArray = $orderproduct->obtainOrderproductCost();
 
+                            if($request->has("cost"))
+                            {
+                                $costArray["cost"] = $request->get("cost_bhrk") ;
+                            }
+                            else
+                            {
+                                $costArray = $orderproduct->obtainOrderproductCost();
+                            }
                             $orderproduct->fillCostValues($costArray);
 
-                            $orderproduct->update();
+                            $updateFlag =  $orderproduct->update();
                         /**
                          *  end
                          */
