@@ -521,7 +521,6 @@ class TransactionController extends Controller
         /**
          *  end
          */
-
         if(!$request->has("forcePay_bhrk"))
             $order->refreshCost();
 

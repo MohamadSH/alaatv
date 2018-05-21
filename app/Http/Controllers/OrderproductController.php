@@ -324,7 +324,7 @@ class OrderproductController extends Controller
                          */
                             $costArray = array() ;
 
-                            if($request->has("cost"))
+                            if($request->has("cost_bhrk"))
                             {
                                 $costArray["cost"] = $request->get("cost_bhrk") ;
                             }

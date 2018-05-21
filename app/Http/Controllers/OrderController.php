@@ -1128,7 +1128,7 @@ class OrderController extends Controller
             //return $result["status"] = success / canceled
 //            if(Auth::user()->hasRole("admin")){
 //                $result["Status"]="success";
-//                $result["RefID"] = "mohamad1";
+//                $result["RefID"] = "mohamad5";
 //            }
             if(!isset($result))
                     abort(404) ;
@@ -2241,7 +2241,7 @@ class OrderController extends Controller
                 $request = new Request();
                 $request->offsetSet("gateway" , "zarinpal");
                 $request->offsetSet("order_id" , $donateOrder->id);
-                $request->offsetSet("forcePay_bhrk" , $donateOrder->id);
+                $request->offsetSet("forcePay_bhrk" , true);
                 $transactionController = new TransactionController();
                 $result =  $transactionController->paymentRedirect($request);
 //                dd($result);
