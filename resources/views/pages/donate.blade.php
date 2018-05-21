@@ -33,84 +33,62 @@
                 <span class="suffix">تومان</span>
             </div><!-- .textfield -->
 
-            <button type="submot">همین الان کمک می کنم</button>
+            <button type="submit">همین الان کمک می کنم</button>
         {!! Form::close() !!}
 
     </div><!-- .hero -->
 
-    {{--<div class="last-donations container">--}}
-        {{--<div class="row">--}}
-            {{--<div class="recent-donators">--}}
-                {{--<h3>آخرین کمک های امروز</h3>--}}
+    <div class="last-donations container">
+        <div class="row">
+            <div class="recent-donators">
+                <h3>آخرین کمک های امروز</h3>
+                @if($latestDonors->isEmpty())
+                    <div class="hero" style="margin-bottom: 200px"> <h2>کمکی نشده</h2></div>
+                @else
+                    <ul class="list">
+                        @foreach($latestDonors as $latestDonor )
+                            <li>
+                                <div class="donator">
+                                    <img src="{{ route('image', ['category'=>'1','w'=>'39' , 'h'=>'39' ,  'filename' =>  $latestDonor["avatar"] ]) }}" alt="donator">
 
-                {{--<ul class="list">--}}
-                    {{--<li>--}}
-                        {{--<div class="donator">--}}
-                            {{--<img src="/assets/extra/donate/images/sample/avatar.png" alt="donator">--}}
+                                    <span class="name">
+                                    {{(strlen($latestDonor["firstName"])>0)?$latestDonor["firstName"]:""}} {{(strlen($latestDonor["lastName"])>0)?$latestDonor["lastName"]:""}}
+                                </span>
+                                    <span class="price">{{number_format($latestDonor["donateAmount"])}} <span class="currency">تومان</span></span>
+                                </div><!-- .donator -->
+                            </li>
+                        @endforeach
 
-                            {{--<span class="name">پری خداپرست</span>--}}
-                            {{--<span class="price">2,000,000 <span class="currency">تومان</span></span>--}}
-                        {{--</div><!-- .donator -->--}}
-                    {{--</li>--}}
+                    </ul>
+                @endif
+            </div><!-- .recent-donators -->
 
-                    {{--<li>--}}
-                        {{--<div class="donator">--}}
-                            {{--<img src="/assets/extra/donate/images/sample/avatar.png" alt="donator">--}}
+            <div class="best-donators">
+                <h3>بیشترین کمک های خرداد</h3>
+                @if($maxDonors->isEmpty())
+                    <div class="hero" style="margin-bottom: 200px"> <h2>کمکی نشده</h2></div>
+                @else
+                    <ul class="list">
+                        @foreach($maxDonors as $maxDonor )
+                            <li>
+                                <div class="donator">
+                                    <img src="{{ route('image', ['category'=>'1','w'=>'39' , 'h'=>'39' ,  'filename' =>  $maxDonor["avatar"] ]) }}" alt="donator">
 
-                            {{--<span class="name">پری خداپرست</span>--}}
-                            {{--<span class="price">2,000,000 <span class="currency">تومان</span></span>--}}
-                        {{--</div><!-- .donator -->--}}
-                    {{--</li>--}}
+                                    <span class="name">
+                                        {{(strlen($maxDonor["firstName"])>0)?$maxDonor["firstName"]:""}} {{(strlen($maxDonor["lastName"])>0)?$maxDonor["lastName"]:""}}
+                                    </span>
+                                    <span class="price">{{number_format($maxDonor["donateAmount"])}} <span class="currency">تومان</span></span>
+                                </div><!-- .donator -->
+                            </li>
+                        @endforeach
+                    </ul>
+                @endif
+            </div><!-- .recent-donators -->
 
-                    {{--<li>--}}
-                        {{--<div class="donator">--}}
-                            {{--<img src="/assets/extra/donate/images/sample/avatar.png" alt="donator">--}}
+        </div><!-- .row -->
 
-                            {{--<span class="name">پری خداپرست</span>--}}
-                            {{--<span class="price">2,000,000 <span class="currency">تومان</span></span>--}}
-                        {{--</div><!-- .donator -->--}}
-                    {{--</li>--}}
-
-                {{--</ul>--}}
-            {{--</div><!-- .recent-donators -->--}}
-
-            {{--<div class="best-donators">--}}
-                {{--<h3>بیشترین کمک های خرداد</h3>--}}
-
-                {{--<ul class="list">--}}
-                    {{--<li>--}}
-                        {{--<div class="donator">--}}
-                            {{--<img src="/assets/extra/donate/images/sample/avatar.png" alt="donator">--}}
-
-                            {{--<span class="name">پری خداپرست</span>--}}
-                            {{--<span class="price">2,000,000 <span class="currency">تومان</span></span>--}}
-                        {{--</div><!-- .donator -->--}}
-                    {{--</li>--}}
-
-                    {{--<li>--}}
-                        {{--<div class="donator">--}}
-                            {{--<img src="/assets/extra/donate/images/sample/avatar.png" alt="donator">--}}
-
-                            {{--<span class="name">پری خداپرست</span>--}}
-                            {{--<span class="price">2,000,000 <span class="currency">تومان</span></span>--}}
-                        {{--</div><!-- .donator -->--}}
-                    {{--</li>--}}
-
-                    {{--<li>--}}
-                        {{--<div class="donator">--}}
-                            {{--<img src="/assets/extra/donate/images/sample/avatar.png" alt="donator">--}}
-
-                            {{--<span class="name">پری خداپرست</span>--}}
-                            {{--<span class="price">2,000,000 <span class="currency">تومان</span></span>--}}
-                        {{--</div><!-- .donator -->--}}
-                    {{--</li>--}}
-
-                {{--</ul>--}}
-            {{--</div><!-- .recent-donators -->--}}
-
-        {{--</div><!-- .row -->--}}
-
-    {{--</div><!-- .last-donations -->--}}
+    </div>
+    <!-- .last-donations -->
 
         <div class="best-donators  container" style="margin-bottom: 25px">
         <div class="row">

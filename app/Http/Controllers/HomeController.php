@@ -38,6 +38,7 @@ use App\Traits\CharacterCommon;
 use App\Traits\DateCommon;
 use App\Traits\Helper;
 use App\Traits\ProductCommon;
+use App\Transaction;
 use App\Transactionstatus;
 use App\User;
 use App\Userbonstatus;
@@ -1967,73 +1968,75 @@ class HomeController extends Controller
         SEO::setDescription($this->setting->site->seo->homepage->metaDescription);
         SEO::opengraph()->addImage(route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]), ['height' => 100, 'width' => 100]);
 
-//        $orders = Order::whereHas("orderproducts" , function ($q){
-//            $q->where("product_id" , config("constants.CUSTOM_DONATE_PRODUCT"));
-//        })
-//        ->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
-//        ->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_PAID"))
-//        ->orderBy("completed_at" , "DESC")
-//        ->get();
-//
-//        $latestOrders = 3 ;
-//        $latestDonors = collect();
-//        $today = Carbon::today();
-//        $todayDonates = $orders->where("completed_at" , ">=" , $today ) ;
-//        foreach ($todayDonates as $latestOrder)
-//        {
-//            if($latestOrders == 0)
-//                break;
-//
-//            if(isset($latestOrder->user->id))
-//            {
-//                $firstName =  $latestOrder->user->firstName ;
-//                $lastName =  $latestOrder->user->lastName ;
-//                $avatar = $latestOrder->user->photo ;
-//            }
-//
-//            $donateAmount =  $latestOrder->successfulTransactions
-//                        ->sum("cost");
-//
-//            $latestDonors->push([
-//                    "firstName" => (isset($firstName))?$firstName:"",
-//                    "lastName" => (isset($lastName))?$lastName:"",
-//                    "donateAmount" => $donateAmount ,
-//                    "avatar" => (isset($avatar))?$avatar:"",
-//            ]);
-//
-//            $latestOrders--;
-//        }
-//
-//        $latestOrders = 3 ;
-//        $date = Carbon::createMidnightDate("2018" , "05" , "22");
-//        $maxDonates = $orders->where("completed_at" , ">=" , $date ) ;
-//        foreach ($maxDonates as $latestOrder)
-//        {
-//            if($latestOrders == 0)
-//                break;
-//
-//            if(isset($latestOrder->user->id))
-//            {
-//                $firstName =  $latestOrder->user->firstName ;
-//                $lastName =  $latestOrder->user->lastName ;
-//                $avatar = $latestOrder->user->photo ;
-//            }
-//
-//            $donateAmount =  $latestOrder->successfulTransactions
-//                ->sum("cost");
-//
-//            $latestDonors->push([
-//                "firstName" => (isset($firstName))?$firstName:"",
-//                "lastName" => (isset($lastName))?$lastName:"",
-//                "donateAmount" => $donateAmount ,
-//                "avatar" => (isset($avatar))?$avatar:"",
-//            ]);
-//
-//            $latestOrders--;
-//        }
-//        dd($maxDonates);
+        $orders = Order::whereHas("orderproducts" , function ($q){
+            $q->where("product_id" , config("constants.CUSTOM_DONATE_PRODUCT"));
+        })
+        ->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
+        ->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_PAID"))
+        ->orderBy("completed_at" , "DESC")
+        ->get();
 
-        return view("pages.donate");
+        $latestOrders = 3 ;
+        $latestDonors = collect();
+        $today = Carbon::today();
+        $todayDonates = $orders->where("completed_at" , ">=" , $today ) ;
+        foreach ($todayDonates as $latestOrder)
+        {
+            if($latestOrders == 0)
+                break;
+
+            if(isset($latestOrder->user->id))
+            {
+                $firstName =  $latestOrder->user->firstName ;
+                $lastName =  $latestOrder->user->lastName ;
+                $avatar = $latestOrder->user->photo ;
+            }
+
+            $donateAmount =  $latestOrder->successfulTransactions
+                        ->sum("cost");
+
+            $latestDonors->push([
+                    "firstName" => (isset($firstName))?$firstName:"",
+                    "lastName" => (isset($lastName))?$lastName:"",
+                    "donateAmount" => $donateAmount ,
+                    "avatar" => (isset($avatar))?$avatar:"",
+            ]);
+
+            $latestOrders--;
+        }
+
+        $latestMax = 3 ;
+        $date = Carbon::createMidnightDate("2018" , "05" , "22");
+        $thisMonthDonates = $orders->where("completed_at" , ">=" , $today )
+                                    ->pluck("id")
+                                    ->toArray();
+        $maxDonates = Transaction::whereIn("order_id" , $thisMonthDonates)
+                                    ->where("transactionstatus_id" , config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
+                                    ->orderBy("cost" , "DESC")
+                                    ->take($latestMax)
+                                    ->get();
+        $maxDonors = collect();
+        foreach ($maxDonates as $maxDonate)
+        {
+            if(isset($maxDonate->order->user->id))
+            {
+                $firstName =  $maxDonate->order->user->firstName ;
+                $lastName =  $maxDonate->order->user->lastName ;
+                $avatar = $maxDonate->order->user->photo ;
+            }
+
+            $donateAmount =  $maxDonate->cost ;
+
+            $maxDonors->push([
+                "firstName" => (isset($firstName))?$firstName:"",
+                "lastName" => (isset($lastName))?$lastName:"",
+                "donateAmount" => $donateAmount ,
+                "avatar" => (isset($avatar))?$avatar:"",
+            ]);
+
+        }
+
+        return view("pages.donate" , compact("latestDonors" , "maxDonors"));
     }
 
     function siteMap(Request $request)
