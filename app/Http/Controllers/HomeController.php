@@ -112,7 +112,7 @@ class HomeController extends Controller
         $this->middleware('permission:' . Config::get("constants.SMS_ADMIN_PANEL_ACCESS"), ['only' => 'adminSMS']);
         $this->middleware('permission:' . Config::get("constants.REPORT_ADMIN_PANEL_ACCESS"), ['only' => 'adminReport']);
         $this->middleware('ability:' . Config::get("constants.ROLE_ADMIN") . ',' . Config::get("constants.TELEMARKETING_PANEL_ACCESS"), ['only' => 'adminTeleMarketing']);
-        $this->middleware('role:admin' , ['only' => 'bot' , 'smsBot' , 'checkDisableContentTagBot' , 'tagBot']);
+        $this->middleware('role:admin' , ['only' => ['bot' , 'smsBot' , 'checkDisableContentTagBot' , 'tagBot']]);
         $this->response = new Response();
         $this->setting = json_decode(app('setting')->setting);
 
@@ -1966,6 +1966,72 @@ class HomeController extends Controller
         SEO::twitter()->setSite("آلاء");
         SEO::setDescription($this->setting->site->seo->homepage->metaDescription);
         SEO::opengraph()->addImage(route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]), ['height' => 100, 'width' => 100]);
+
+//        $orders = Order::whereHas("orderproducts" , function ($q){
+//            $q->where("product_id" , config("constants.CUSTOM_DONATE_PRODUCT"));
+//        })
+//        ->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
+//        ->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_PAID"))
+//        ->orderBy("completed_at" , "DESC")
+//        ->get();
+//
+//        $latestOrders = 3 ;
+//        $latestDonors = collect();
+//        $today = Carbon::today();
+//        $todayDonates = $orders->where("completed_at" , ">=" , $today ) ;
+//        foreach ($todayDonates as $latestOrder)
+//        {
+//            if($latestOrders == 0)
+//                break;
+//
+//            if(isset($latestOrder->user->id))
+//            {
+//                $firstName =  $latestOrder->user->firstName ;
+//                $lastName =  $latestOrder->user->lastName ;
+//                $avatar = $latestOrder->user->photo ;
+//            }
+//
+//            $donateAmount =  $latestOrder->successfulTransactions
+//                        ->sum("cost");
+//
+//            $latestDonors->push([
+//                    "firstName" => (isset($firstName))?$firstName:"",
+//                    "lastName" => (isset($lastName))?$lastName:"",
+//                    "donateAmount" => $donateAmount ,
+//                    "avatar" => (isset($avatar))?$avatar:"",
+//            ]);
+//
+//            $latestOrders--;
+//        }
+//
+//        $latestOrders = 3 ;
+//        $date = Carbon::createMidnightDate("2018" , "05" , "22");
+//        $maxDonates = $orders->where("completed_at" , ">=" , $date ) ;
+//        foreach ($maxDonates as $latestOrder)
+//        {
+//            if($latestOrders == 0)
+//                break;
+//
+//            if(isset($latestOrder->user->id))
+//            {
+//                $firstName =  $latestOrder->user->firstName ;
+//                $lastName =  $latestOrder->user->lastName ;
+//                $avatar = $latestOrder->user->photo ;
+//            }
+//
+//            $donateAmount =  $latestOrder->successfulTransactions
+//                ->sum("cost");
+//
+//            $latestDonors->push([
+//                "firstName" => (isset($firstName))?$firstName:"",
+//                "lastName" => (isset($lastName))?$lastName:"",
+//                "donateAmount" => $donateAmount ,
+//                "avatar" => (isset($avatar))?$avatar:"",
+//            ]);
+//
+//            $latestOrders--;
+//        }
+//        dd($maxDonates);
 
         return view("pages.donate");
     }
