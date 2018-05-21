@@ -24,6 +24,7 @@ class SanatisharifmergeController extends Controller
 
     function __construct()
     {
+        $this->middleware('role:admin' , ['copyDepartmentlesson' , 'copyContent']);
         $this->teachers = collect([
             [
                 "userid" => "2",

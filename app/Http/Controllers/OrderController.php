@@ -8,6 +8,7 @@ use App\Bankaccount;
 use App\Bon;
 use App\Coupon;
 use App\Helpers\ENPayment;
+use App\Http\Requests\DonateRequest;
 use App\Http\Requests\InsertTransactionRequest;
 use App\Http\Requests\SendSMSRequest;
 use App\Http\Requests\SubmitCouponRequest;
@@ -15,6 +16,7 @@ use App\Notifications\InvoicePaid;
 use App\Ordermanagercomment;
 use App\Orderpostinginfo;
 use App\Paymentmethod;
+use App\Traits\APIRequestCommon;
 use App\Traits\Helper;
 use App\Traits\ProductCommon;
 use App\Traits\RequestCommon;
@@ -49,6 +51,7 @@ use SEO;
 
 class OrderController extends Controller
 {
+    use APIRequestCommon ;
     use Helper;
     protected $response ;
     protected $setting;
@@ -1125,7 +1128,7 @@ class OrderController extends Controller
             //return $result["status"] = success / canceled
 //            if(Auth::user()->hasRole("admin")){
 //                $result["Status"]="success";
-//                $result["RefID"] = "mohamad2";
+//                $result["RefID"] = "mohamad1";
 //            }
             if(!isset($result))
                     abort(404) ;
@@ -1187,7 +1190,15 @@ class OrderController extends Controller
                         //last order is not closed and no action is necessary
                     }
                     $order->timestamps = true;
-                }else
+                }elseif($order->orderstatus_id == Config::get("constants.ORDER_STATUS_OPEN_DONATE"))
+                {
+//                    $order->close( Config::get("constants.PAYMENT_STATUS_UNPAID"),Config::get("constants.ORDER_STATUS_CANCELED")) ;
+//                    $order->timestamps = false;
+//                    $order->update();
+//                    $order->timestamps = true;
+                    $result["tryAgain"] = false;
+                }
+                else
                 {
                     $result["tryAgain"] = false;
                 }
@@ -1729,45 +1740,99 @@ class OrderController extends Controller
         return redirect(action("ProductController@search"));
     }
 
-    public function addOrderproduct(Product $product)
+    public function addOrderproduct(Request $request , Product $product)
     {
-        $user = Auth::user();
-
-        $openOrder = $user->openOrders()->get()->first();
-        //ToDo : if($openOrders->count()>1)
-
-        if(isset($openOrder))
+        try
         {
-            $restorableProducts = Config::get("constants.DONATE_PRODUCT") ;
-            $oldOrderproduct = $openOrder->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->whereIn("product_id" , $restorableProducts )->onlyTrashed()->get() ;
-            if(in_array($product->id , $restorableProducts) && $oldOrderproduct->isNotEmpty())
+            $user = Auth::user();
+            if($request->has("cost"))
+                $cost = $request->get("cost");
+            $orderMode = "normal";
+            if($request->has("mode"))
+                $orderMode = $request->get("mode");
+
+            switch ($orderMode)
             {
-                $deletedOrderproduct = $oldOrderproduct->first() ;
-                $deletedOrderproduct->restore();
-            }else
-            {
-                $request = new Request();
-                $request->offsetSet("product_id" ,  $product->id);
-                $orderproductController = new OrderproductController();
-                $orderproductController->store($request) ;
+                case "normal":
+                    $openOrder = $user->openOrders()
+                        ->get()
+                        ->first();
+                    break;
+                case "donate":
+                    $openOrder = Order::where("user_id" , $user->id)
+                        ->where("orderstatus_id" , config()->get("constants.ORDER_STATUS_OPEN_DONATE"))
+                        ->first();
+                    // chon order taze sakhte shode in code order ro peida nemikonad va user->fresh ham kar nemikone
+//                    $openOrder = $user->orders
+//                        ->where("orderstatus_id" , config()->get("constants.ORDER_STATUS_OPEN_DONATE"))
+//                        ->first();
+                    break;
+                default:
+                    break;
             }
 
-                $newOpenOrder = $user->orders->where("id" , $openOrder->id)->first();
-                $orderCost = $newOpenOrder->obtainOrderCost(true , false) ;
-                $newOpenOrder->cost = $orderCost["rawCostWithDiscount"];
-                $newOpenOrder->costwithoutcoupon = $orderCost["rawCostWithoutDiscount"];
-                $newOpenOrder->timestamps = false;
-                $updateFlag = $newOpenOrder->update();
-                $newOpenOrder->timestamps = true;
-                $cost = $newOpenOrder->totalCost();
+            if(isset($openOrder))
+            {
+                $restorableProducts = Config::get("constants.DONATE_PRODUCT") ;
+                $createFlag = true;
+                if(in_array($product->id , $restorableProducts))
+                {
+                    $oldOrderproduct = $openOrder->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
+                        ->whereIn("product_id" , $restorableProducts )
+                        ->onlyTrashed()
+                        ->get() ;
+                    if( $oldOrderproduct->isNotEmpty())
+                    {
+                        $deletedOrderproduct = $oldOrderproduct->first() ;
+                        $deletedOrderproduct->restore();
+                        $createFlag = false;
+                    }
+                }
+
+                if($createFlag)
+                {
+                    $request = new Request();
+                    $request->offsetSet("product_id" ,  $product->id);
+                    $request->offsetSet("order_id" ,  $openOrder->id);
+                    if(isset($cost))
+                        $request->offsetSet("cost_bhrk" ,  $cost);
+                    $orderproductController = new OrderproductController();
+                    $orderproductController->store($request) ;
+                }
+
+                $openOrder->fresh();
+                $orderCost = $openOrder->obtainOrderCost(true , false) ;
+                $openOrder->cost = $orderCost["rawCostWithDiscount"];
+                $openOrder->costwithoutcoupon = $orderCost["rawCostWithoutDiscount"];
+                $openOrder->timestamps = false;
+                $updateFlag = $openOrder->update();
+                $openOrder->timestamps = true;
+                $cost = $openOrder->totalCost();
+
                 if($updateFlag)
-                    return $this->response->setStatusCode(200)->setContent(["cost"=>$cost]);
+                    return $this->response
+                        ->setStatusCode(200)
+                        ->setContent(["cost"=>$cost]);
                 else
-                    return $this->response->setStatusCode(503)->setContent(["errorMessage"=>"خطای پایگاه داده"]);
+                    return $this->response
+                        ->setStatusCode(503)
+                        ->setContent(["errorMessage"=>"خطای پایگاه داده"]);
+            }
+            return $this->response
+                ->setStatusCode(503)
+                ->setContent(["errorMessage"=>"خطا در یافتن سفارش"]);
+        }catch (\Exception    $e)
+        {
+            $message = "unexpected error";
+            return $this->response
+                ->setStatusCode(503)
+                ->setContent([
+                    "message"=>$message ,
+                    "error"=>$e->getMessage() ,
+                    "line"=>$e->getLine() ,
+                    "file"=>$e->getFile()
+                ]);
         }
-        return $this->response->setStatusCode(503)->setContent(["errorMessage"=>"خطای غیر منتظره"]);
-
-
     }
 
     public function removeOrderproduct(Product $product , Request $request , OrderproductController $orderproductController)
@@ -2059,7 +2124,6 @@ class OrderController extends Controller
      * @param Order $order
      * @param  \Illuminate\Http\Request $request
      * @param \App\Http\Controllers\OrderController $orderController
-     * @return \Illuminate\Http\RedirectResponse
      */
     public  function copy(Order $order ,Request $request)
     {
@@ -2133,5 +2197,61 @@ class OrderController extends Controller
         else{
 
         }
+    }
+
+    /**
+     * Makes a donate request
+     *
+     * @param Order $order
+     * @param \App\Http\Requests\DonateRequest $request
+     */
+    public function donateOrder(DonateRequest $request)
+    {
+        $amount = $request->get("amount") ;
+        $user = Auth::user();
+        $donateOrders = $user->orders->where("orderstatus_id", config("constants.ORDER_STATUS_OPEN_DONATE")) ;
+        if($donateOrders->isNotEmpty())
+        {
+            $donateOrder = $donateOrders->first();
+        }
+        else
+        {
+            $donateOrder = new Order();
+            $donateOrder->orderstatus_id = config("constants.ORDER_STATUS_OPEN_DONATE") ;
+            $donateOrder->paymentstatus_id = config("constants.PAYMENT_STATUS_PAID") ;
+            $donateOrder->user_id = $user->id ;
+            if($donateOrder->save())
+            {
+                $user->fresh();
+                //ToDo
+            }
+        }
+        $request->offsetSet("mode" , "donate");
+        $request->offsetSet("cost" , $amount);
+        $product = Product::FindOrFail(config("constants.CUSTOM_DONATE_PRODUCT")) ;
+        $response = $this->addOrderproduct($request , $product) ;
+        $responseStatus = $response->getStatusCode();
+        $result = json_decode($response->getContent());
+        if($responseStatus == 200)
+        {
+            if(isset($result->cost))
+                $cost = $result->cost;
+            if(isset($cost))
+            {
+                $request = new Request();
+                $request->offsetSet("gateway" , "zarinpal");
+                $request->offsetSet("order_id" , $donateOrder->id);
+                $request->offsetSet("forcePay_bhrk" , $donateOrder->id);
+                $transactionController = new TransactionController();
+                $result =  $transactionController->paymentRedirect($request);
+//                dd($result);
+            }
+        }
+        else
+        {
+//            dd($result);
+        }
+        return redirect()->back();
+
     }
 }

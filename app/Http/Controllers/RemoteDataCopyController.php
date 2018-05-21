@@ -13,6 +13,7 @@ class RemoteDataCopyController extends Controller
     protected $response;
     public function __construct()
     {
+        $this->middleware('role:admin');
         $this->connection =  DB::connection('mysql_sanatisharif');
         $this->response = new Response();
     }
@@ -24,7 +25,6 @@ class RemoteDataCopyController extends Controller
     public function copyLesson(SanatisharifmergeController $sanatisharifSyncController)
     {
         $lessons = $this->connection->select("SELECT * FROM `lesson`");
-        dd($lessons);
         foreach ($lessons as $lesson)
         {
             $lessonid = $lesson->lessonid;
@@ -41,7 +41,6 @@ class RemoteDataCopyController extends Controller
     public function copyDepartment(SanatisharifmergeController $sanatisharifSyncController)
     {
         $departments = $this->connection->select("SELECT * FROM `department`");
-        dd($departments);
         foreach ($departments as $department)
         {
             $sanatisharifDataRequest = new Request();

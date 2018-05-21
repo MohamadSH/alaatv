@@ -32,15 +32,7 @@ Route::post('user/getPassword' , 'UserController@sendGeneratedPassword');
 Route::get('product/search', 'ProductController@search');
 Route::get('showPartial/{product}' , 'ProductController@showPartial');
 Route::post('refreshPrice/{product}' , 'ProductController@refreshPrice');
-Route::get( "copylessonfromremote" , "RemoteDataCopyController@copyLesson");
-Route::get( "copydepartmentfromremote" , "RemoteDataCopyController@copyDepartment");
-Route::get( "copydepartmentlessonfromremote" , "RemoteDataCopyController@copyDepartmentlesson");
-Route::get( "copyvideofromremote" , "RemoteDataCopyController@copyVideo");
-Route::get( "copypamphletfromremote" , "RemoteDataCopyController@copyPamphlet");
-Route::get( "copydepartmentlessontotakhtekhak" , "SanatisharifmergeController@copyDepartmentlesson");
-Route::get( "copycontenttotakhtekhak" , "SanatisharifmergeController@copyContent");
 Route::get("ctag" , "EducationalContentController@retrieveTags");
-ROute::get("tagbot", "HomeController@tagbot");
 Route::get('Sanati-Sharif-Lesson/{lId?}/{dId?}','SanatisharifmergeController@redirectLesson');
 Route::get('Sanati-Sharif-Video/{lId?}/{dId?}/{vId?}','SanatisharifmergeController@redirectVideo');
 Route::get('SanatiSharif-Video/{lId?}/{dId?}/{vId?}','SanatisharifmergeController@redirectEmbedVideo');
@@ -191,6 +183,18 @@ Route::group(['middleware' => 'auth'], function()
     Route::resource('file' , 'FileController') ;
     Route::resource('employeetimesheet' , 'EmployeetimesheetController') ;
     Route::resource('lottery' , 'LotteryController') ;
+
+    Route::get( "copylessonfromremote" , "RemoteDataCopyController@copyLesson");
+    Route::get( "copydepartmentfromremote" , "RemoteDataCopyController@copyDepartment");
+    Route::get( "copydepartmentlessonfromremote" , "RemoteDataCopyController@copyDepartmentlesson");
+    Route::get( "copyvideofromremote" , "RemoteDataCopyController@copyVideo");
+    Route::get( "copypamphletfromremote" , "RemoteDataCopyController@copyPamphlet");
+    Route::get( "copydepartmentlessontotakhtekhak" , "SanatisharifmergeController@copyDepartmentlesson");
+    Route::get( "copycontenttotakhtekhak" , "SanatisharifmergeController@copyContent");
+    Route::get("tagbot", "HomeController@tagbot");
+
+    Route::get("donate" , "HomeController@donate") ;
+    Route::post("donateOrder" , "OrderController@donateOrder") ;
 });
 
 Route::resource('product', 'ProductController');
