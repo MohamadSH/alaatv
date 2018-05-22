@@ -49,7 +49,7 @@
                         @foreach($latestDonors as $latestDonor )
                             <li>
                                 <div class="donator">
-                                    <img src="{{ route('image', ['category'=>'1','w'=>'39' , 'h'=>'39' ,  'filename' =>  $latestDonor["avatar"] ]) }}" alt="donator">
+                                    <img src="{{ route('image', ['category'=>'1','w'=>'141' , 'h'=>'141' ,  'filename' =>  $latestDonor["avatar"] ]) }}" alt="donator">
 
                                     <span class="name">
                                     {{(strlen($latestDonor["firstName"])>0)?$latestDonor["firstName"]:""}} {{(strlen($latestDonor["lastName"])>0)?$latestDonor["lastName"]:""}}
@@ -72,7 +72,7 @@
                         @foreach($maxDonors as $maxDonor )
                             <li>
                                 <div class="donator">
-                                    <img src="{{ route('image', ['category'=>'1','w'=>'39' , 'h'=>'39' ,  'filename' =>  $maxDonor["avatar"] ]) }}" alt="donator">
+                                    <img src="{{ route('image', ['category'=>'1','w'=>'141' , 'h'=>'141' ,  'filename' =>  $maxDonor["avatar"] ]) }}" alt="donator">
 
                                     <span class="name">
                                         {{(strlen($maxDonor["firstName"])>0)?$maxDonor["firstName"]:""}} {{(strlen($maxDonor["lastName"])>0)?$maxDonor["lastName"]:""}}
