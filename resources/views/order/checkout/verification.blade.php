@@ -71,8 +71,19 @@
                                         <div class="row static-info">
                                             <div class="col-md-12 " style="text-align: center">
                                                     <h3 class="bold">پرداخت شما ناموفق بود</h3>
-                                                <p>شما می توانید اطلاعات این سفارش را با رفتن به  <a href="{{action('UserController@userOrders')}}" class="btn blue btn-outline">لیست سفارش های خود</a> از طریق منوی بالای صفحه مشاهده نمایید .</p>
-                                                    @if($result["tryAgain"])<a href="{{action("OrderController@checkoutAuth")}}"   class="btn green btn-outline">پرداخت مجدد</a>@endif
+                                                @if(isset($result["walletUsed"]))
+                                                    <p class="font-red bold" style="font-size: larger">
+                                                        مبلغ {{number_format($result["walletAmount"])}} تومان برای این سفارش از کیف شما استفاده شده است
+                                                    </p>
+                                                @endif
+                                                <p class="bold">
+                                                    شما می توانید اطلاعات این سفارش را با رفتن به
+                                                    <a href="{{action('UserController@userOrders')}}" class="btn blue btn-outline">لیست سفارش های خود</a>
+                                                     مشاهده نمایید .
+                                                </p>
+                                                @if($result["tryAgain"])
+                                                    <a href="{{action("OrderController@checkoutAuth")}}"   class="btn green btn-outline">پرداخت مجدد</a>
+                                                @endif
                                             </div>
                                         </div>
                                     @elseif(strcmp(array_get($result,"Status"),'error')==0)
