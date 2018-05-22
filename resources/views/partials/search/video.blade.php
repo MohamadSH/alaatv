@@ -30,6 +30,8 @@
     موردی یافت نشد
 </p>
 @endif
+@if($items instanceof \Illuminate\Pagination\LengthAwarePaginator )
 <div class="row text-center">
 {{ $items->links() }}
 </div>
+@endif
