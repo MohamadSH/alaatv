@@ -1978,9 +1978,13 @@ class HomeController extends Controller
 
         $latestOrders = 3 ;
         $latestDonors = collect();
-        $today = Carbon::today();
-        $todayDonates = $orders->where("completed_at" , ">=" , $today ) ;
-        foreach ($todayDonates as $latestOrder)
+//        $today = Carbon::today();
+        $weekBegining = Carbon::createMidnightDate("2018" , "05" , "21");
+        $weekEnd = Carbon::createMidnightDate("2018" , "05" , "25");
+//        $todayDonates = $orders->where("completed_at" , ">=" , $today ) ;
+        $donates = $orders->where("completed_at" ,">=" , $weekBegining )
+                          ->where("completed_at" , "<" , $weekEnd);
+        foreach ($donates as $latestOrder)
         {
             if($latestOrders == 0)
                 break;
@@ -2006,8 +2010,8 @@ class HomeController extends Controller
         }
 
         $latestMax = 3 ;
-        $date = Carbon::createMidnightDate("2018" , "05" , "22");
-        $thisMonthDonates = $orders->where("completed_at" , ">=" , $today )
+        $date = Carbon::createMidnightDate("2018" , "05" , "21");
+        $thisMonthDonates = $orders->where("completed_at" , ">=" , $date )
                                     ->pluck("id")
                                     ->toArray();
         $maxDonates = Transaction::whereIn("order_id" , $thisMonthDonates)
