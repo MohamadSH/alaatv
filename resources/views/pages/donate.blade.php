@@ -26,14 +26,14 @@
         <img class="hearts" src="/assets/extra/donate/images/hearts.png" alt="hearts">
 
         {!! Form::open(['method'=>'POST' , 'action'=>'OrderController@donateOrder' , 'class'=>'donation-form']) !!}
-            <p>با کمک های شما عزیزان مجموعه آلا به راحتی بر روی کیفیت خدمات کار می کند</p>
+        <p>با کمک های شما عزیزان مجموعه آلا به راحتی بر روی کیفیت خدمات کار می کند</p>
 
-            <div class="textfield">
-                <input type="text" placeholder="مبلغ مورد نظر شما" name="amount" id="amount">
-                <span class="suffix">تومان</span>
-            </div><!-- .textfield -->
+        <div class="textfield">
+            <input type="text" placeholder="مبلغ مورد نظر شما" name="amount" id="amount">
+            <span class="suffix">تومان</span>
+        </div><!-- .textfield -->
 
-            <button type="submit">همین الان کمک می کنم</button>
+        <button type="submit">همین الان کمک می کنم</button>
         {!! Form::close() !!}
 
     </div><!-- .hero -->
@@ -49,7 +49,7 @@
                         @foreach($latestDonors as $latestDonor )
                             <li>
                                 <div class="donator">
-                                    <img src="{{ route('image', ['category'=>'1','w'=>'141' , 'h'=>'141' ,  'filename' =>  $latestDonor["avatar"] ]) }}" alt="donator">
+                                    <img src="{{ route('image', ['category'=>'1','w'=>'39' , 'h'=>'39' ,  'filename' =>  $latestDonor["avatar"] ]) }}" alt="donator">
 
                                     <span class="name">
                                     {{(strlen($latestDonor["firstName"])>0)?$latestDonor["firstName"]:""}} {{(strlen($latestDonor["lastName"])>0)?$latestDonor["lastName"]:""}}
@@ -72,7 +72,7 @@
                         @foreach($maxDonors as $maxDonor )
                             <li>
                                 <div class="donator">
-                                    <img src="{{ route('image', ['category'=>'1','w'=>'141' , 'h'=>'141' ,  'filename' =>  $maxDonor["avatar"] ]) }}" alt="donator">
+                                    <img src="{{ route('image', ['category'=>'1','w'=>'39' , 'h'=>'39' ,  'filename' =>  $maxDonor["avatar"] ]) }}" alt="donator">
 
                                     <span class="name">
                                         {{(strlen($maxDonor["firstName"])>0)?$maxDonor["firstName"]:""}} {{(strlen($maxDonor["lastName"])>0)?$maxDonor["lastName"]:""}}
@@ -90,7 +90,7 @@
     </div>
     <!-- .last-donations -->
 
-        <div class="best-donators  container" style="margin-bottom: 25px">
+    <div class="best-donators  container" style="margin-bottom: 25px">
         <div class="row">
             <div class="col-md-12">
                 <div class="donator">
@@ -103,131 +103,131 @@
         </div>
     </div>
 
-    {{--<div class="monthly-charts">--}}
-        {{--<div class="container">--}}
-            {{--<div class="totals">--}}
-                {{--<div class="total">--}}
-                    {{--<span class="title">مجموع دونیت ها</span>--}}
+    <div class="monthly-charts">
+        <div class="container">
+            <div class="totals">
+                <div class="total">
+                    <span class="title">مجموع دونیت ها</span>
 
-                    {{--<span class="amount">67,000,000 <span class="currency">تومان</span></span>--}}
-                {{--</div><!-- .title -->--}}
+                    <span class="amount">{{number_format($totalIncome)}}<span class="currency">تومان</span></span>
+                </div><!-- .title -->
 
-                {{--<div class="total">--}}
-                    {{--<span class="title">مجموع هزینه ها</span>--}}
+                <div class="total">
+                    <span class="title">مجموع هزینه ها</span>
 
-                    {{--<span class="amount">100,000,000 <span class="currency">تومان</span></span>--}}
-                {{--</div><!-- .title -->--}}
+                    <span class="amount">{{number_format($totalSpend)}}<span class="currency">تومان</span></span>
+                </div><!-- .title -->
 
-            {{--</div><!-- .totals -->--}}
+            </div><!-- .totals -->
 
-            {{--<div class="chart-by-month">--}}
-                {{--<canvas id="monthlychart"></canvas>--}}
-            {{--</div><!-- .chart-by-month -->--}}
+            <div class="chart-by-month">
+                <canvas id="monthlychart"></canvas>
+            </div><!-- .chart-by-month -->
 
-        {{--</div><!-- .container -->--}}
+        </div><!-- .container -->
 
-    {{--</div><!-- .monthly-charts -->--}}
+    </div><!-- .monthly-charts -->
 
     {{--<div class="provinces-charts">--}}
-        {{--<div class="container">--}}
-            {{--<div class="chart-by-province">--}}
-                {{--<canvas id="provincecharts"></canvas>--}}
+    {{--<div class="container">--}}
+    {{--<div class="chart-by-province">--}}
+    {{--<canvas id="provincecharts"></canvas>--}}
 
-            {{--</div><!-- .chart-by-province -->--}}
+    {{--</div><!-- .chart-by-province -->--}}
 
-            {{--<div class="province-donations">--}}
-                {{--<h3>مجموع دونیت های پرداخت شده <strong>استان ها</strong></h3>--}}
+    {{--<div class="province-donations">--}}
+    {{--<h3>مجموع دونیت های پرداخت شده <strong>استان ها</strong></h3>--}}
 
-                {{--<ul class="list">--}}
-                    {{--<li>--}}
-                        {{--<span class="color" style="background-color: #ff839c"></span>--}}
-                        {{--<span class="province">تهران</span>--}}
-                        {{--<span class="amount">390,000</span>--}}
-                    {{--</li>--}}
+    {{--<ul class="list">--}}
+    {{--<li>--}}
+    {{--<span class="color" style="background-color: #ff839c"></span>--}}
+    {{--<span class="province">تهران</span>--}}
+    {{--<span class="amount">390,000</span>--}}
+    {{--</li>--}}
 
-                    {{--<li>--}}
-                        {{--<span class="color" style="background-color: #c7c7c7"></span>--}}
-                        {{--<span class="province">فارس</span>--}}
-                        {{--<span class="amount">390,000</span>--}}
-                    {{--</li>--}}
+    {{--<li>--}}
+    {{--<span class="color" style="background-color: #c7c7c7"></span>--}}
+    {{--<span class="province">فارس</span>--}}
+    {{--<span class="amount">390,000</span>--}}
+    {{--</li>--}}
 
-                    {{--<li>--}}
-                        {{--<span class="color" style="background-color: #dadada"></span>--}}
-                        {{--<span class="province">اصفهان</span>--}}
-                        {{--<span class="amount">390,000</span>--}}
-                    {{--</li>--}}
+    {{--<li>--}}
+    {{--<span class="color" style="background-color: #dadada"></span>--}}
+    {{--<span class="province">اصفهان</span>--}}
+    {{--<span class="amount">390,000</span>--}}
+    {{--</li>--}}
 
-                    {{--<li>--}}
-                        {{--<span class="color" style="background-color: #39e4ce"></span>--}}
-                        {{--<span class="province">خراسان</span>--}}
-                        {{--<span class="amount">390,000</span>--}}
-                    {{--</li>--}}
+    {{--<li>--}}
+    {{--<span class="color" style="background-color: #39e4ce"></span>--}}
+    {{--<span class="province">خراسان</span>--}}
+    {{--<span class="amount">390,000</span>--}}
+    {{--</li>--}}
 
-                    {{--<li>--}}
-                        {{--<span class="color" style="background-color: #2ae58b"></span>--}}
-                        {{--<span class="province">کرمان</span>--}}
-                        {{--<span class="amount">390,000</span>--}}
-                    {{--</li>--}}
+    {{--<li>--}}
+    {{--<span class="color" style="background-color: #2ae58b"></span>--}}
+    {{--<span class="province">کرمان</span>--}}
+    {{--<span class="amount">390,000</span>--}}
+    {{--</li>--}}
 
-                    {{--<li>--}}
-                        {{--<span class="color" style="background-color: #ff839c"></span>--}}
-                        {{--<span class="province">بوشهر</span>--}}
-                        {{--<span class="amount">390,000</span>--}}
-                    {{--</li>--}}
+    {{--<li>--}}
+    {{--<span class="color" style="background-color: #ff839c"></span>--}}
+    {{--<span class="province">بوشهر</span>--}}
+    {{--<span class="amount">390,000</span>--}}
+    {{--</li>--}}
 
-                    {{--<li>--}}
-                        {{--<span class="color" style="background-color: #dadada"></span>--}}
-                        {{--<span class="province">اهواز</span>--}}
-                        {{--<span class="amount">390,000</span>--}}
-                    {{--</li>--}}
+    {{--<li>--}}
+    {{--<span class="color" style="background-color: #dadada"></span>--}}
+    {{--<span class="province">اهواز</span>--}}
+    {{--<span class="amount">390,000</span>--}}
+    {{--</li>--}}
 
-                    {{--<li>--}}
-                        {{--<span class="color" style="background-color: #ff839c"></span>--}}
-                        {{--<span class="province">تهران</span>--}}
-                        {{--<span class="amount">390,000</span>--}}
-                    {{--</li>--}}
+    {{--<li>--}}
+    {{--<span class="color" style="background-color: #ff839c"></span>--}}
+    {{--<span class="province">تهران</span>--}}
+    {{--<span class="amount">390,000</span>--}}
+    {{--</li>--}}
 
-                    {{--<li>--}}
-                        {{--<span class="color" style="background-color: #c7c7c7"></span>--}}
-                        {{--<span class="province">فارس</span>--}}
-                        {{--<span class="amount">390,000</span>--}}
-                    {{--</li>--}}
+    {{--<li>--}}
+    {{--<span class="color" style="background-color: #c7c7c7"></span>--}}
+    {{--<span class="province">فارس</span>--}}
+    {{--<span class="amount">390,000</span>--}}
+    {{--</li>--}}
 
-                    {{--<li>--}}
-                        {{--<span class="color" style="background-color: #dadada"></span>--}}
-                        {{--<span class="province">اصفهان</span>--}}
-                        {{--<span class="amount">390,000</span>--}}
-                    {{--</li>--}}
+    {{--<li>--}}
+    {{--<span class="color" style="background-color: #dadada"></span>--}}
+    {{--<span class="province">اصفهان</span>--}}
+    {{--<span class="amount">390,000</span>--}}
+    {{--</li>--}}
 
-                    {{--<li>--}}
-                        {{--<span class="color" style="background-color: #39e4ce"></span>--}}
-                        {{--<span class="province">خراسان</span>--}}
-                        {{--<span class="amount">390,000</span>--}}
-                    {{--</li>--}}
+    {{--<li>--}}
+    {{--<span class="color" style="background-color: #39e4ce"></span>--}}
+    {{--<span class="province">خراسان</span>--}}
+    {{--<span class="amount">390,000</span>--}}
+    {{--</li>--}}
 
-                    {{--<li>--}}
-                        {{--<span class="color" style="background-color: #2ae58b"></span>--}}
-                        {{--<span class="province">کرمان</span>--}}
-                        {{--<span class="amount">390,000</span>--}}
-                    {{--</li>--}}
+    {{--<li>--}}
+    {{--<span class="color" style="background-color: #2ae58b"></span>--}}
+    {{--<span class="province">کرمان</span>--}}
+    {{--<span class="amount">390,000</span>--}}
+    {{--</li>--}}
 
-                    {{--<li>--}}
-                        {{--<span class="color" style="background-color: #ff839c"></span>--}}
-                        {{--<span class="province">بوشهر</span>--}}
-                        {{--<span class="amount">390,000</span>--}}
-                    {{--</li>--}}
+    {{--<li>--}}
+    {{--<span class="color" style="background-color: #ff839c"></span>--}}
+    {{--<span class="province">بوشهر</span>--}}
+    {{--<span class="amount">390,000</span>--}}
+    {{--</li>--}}
 
-                    {{--<li>--}}
-                        {{--<span class="color" style="background-color: #dadada"></span>--}}
-                        {{--<span class="province">اهواز</span>--}}
-                        {{--<span class="amount">390,000</span>--}}
-                    {{--</li>--}}
+    {{--<li>--}}
+    {{--<span class="color" style="background-color: #dadada"></span>--}}
+    {{--<span class="province">اهواز</span>--}}
+    {{--<span class="amount">390,000</span>--}}
+    {{--</li>--}}
 
-                {{--</ul>--}}
+    {{--</ul>--}}
 
-            {{--</div><!-- .province-donations -->--}}
+    {{--</div><!-- .province-donations -->--}}
 
-        {{--</div><!-- .container -->--}}
+    {{--</div><!-- .container -->--}}
 
     {{--</div><!-- .provinces-charts -->--}}
 
@@ -242,23 +242,20 @@
 <script src="/assets/extra/donate/js/Chart.bundle.min.js"></script>
 
 <script>
-    var MONTHS = ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
+    var MONTHS = {!! $chartData->pluck("month")->toJson() !!};
+    console.log(MONTHS);
     var config = {
         type: 'line',
         data: {
-            labels: ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر'],
+            labels: MONTHS,
             datasets: [{
                 label: 'مجموع دونیت ها',
                 backgroundColor: '#49aaed',
                 borderColor: '#49aaed',
                 data: [
-                    39,
-                    12,
-                    14,
-                    16,
-                    5,
-                    8,
-                    20
+                    @foreach($chartData as $chartDatum)
+                        {{$chartData->where("month" , $chartDatum["month"])->first()["totalIncome"]}},
+                    @endforeach
                 ],
                 fill: false,
             }, {
@@ -267,13 +264,9 @@
                 backgroundColor: '#ff597c',
                 borderColor: '#ff597c',
                 data: [
-                    20,
-                    4,
-                    15,
-                    19,
-                    5,
-                    8,
-                    30
+                    @foreach($chartData as $chartDatum)
+                    {{$chartData->where("month" , $chartDatum["month"])->first()["totalSpend"]}},
+                    @endforeach
                 ],
             }]
         },
@@ -349,7 +342,7 @@
     }
 
     window.onload = function() {
-            var ctx = document.getElementById('monthlychart').getContext('2d');
+        var ctx = document.getElementById('monthlychart').getContext('2d');
         window.myLine = new Chart(ctx, config);
 
         var ctxx = document.getElementById('provincecharts').getContext('2d');
