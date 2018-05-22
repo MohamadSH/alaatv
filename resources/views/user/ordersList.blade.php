@@ -214,33 +214,42 @@
                                                     @if(isset($order->orderstatus->id) && ($order->orderstatus->id == Config::get("constants.ORDER_STATUS_CLOSED") ||
                                                         $order->orderstatus->id == Config::get("constants.ORDER_STATUS_POSTED")) )
                                                         <div class="btn-group pull-right">
-                                                            <button class="btn btn-xs dark btn-outline dropdown-toggle" data-toggle="dropdown" aria-expanded="false">پرداخت
-                                                                <i class="fa fa-angle-down"></i>
+                                                            <button class="btn btn-xs dark btn-outline onlinePayment" data-target="#onlinePaymentModal"  data-toggle="modal" rel="{{$order->id}}">پرداخت
+                                                                {{--<i class="fa fa-credit-card-alt"></i>--}}
                                                             </button>
-                                                            <ul class="dropdown-menu pull-right">
-                                                                <li>
-                                                                    <a  data-target="#onlinePaymentModal"  data-toggle="modal"  class="onlinePayment" rel="{{$order->id}}">پرداخت آنلاین</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a  data-target="#ATMPaymentModal"  data-toggle="modal"  class="ATMPayment" id="ATMPayment-button" rel="{{$order->id}}">کارت به کارت</a>
-                                                                </li>
-                                                            </ul>
+                                                            {{--<button class="btn btn-xs dark btn-outline dropdown-toggle" data-toggle="dropdown" aria-expanded="false">پرداخت--}}
+                                                                {{--<i class="fa fa-angle-down"></i>--}}
+                                                            {{--</button>--}}
+                                                            {{--<button class="btn btn-xs dark btn-outline dropdown-toggle" data-toggle="dropdown" aria-expanded="false">پرداخت--}}
+                                                                {{--<i class="fa fa-angle-down"></i>--}}
+                                                            {{--</button>--}}
+                                                            {{--<ul class="dropdown-menu pull-right">--}}
+                                                                {{--<li>--}}
+                                                                    {{--<a  data-target="#onlinePaymentModal"  data-toggle="modal"  class="onlinePayment" rel="{{$order->id}}">پرداخت آنلاین</a>--}}
+                                                                {{--</li>--}}
+                                                                {{--<li>--}}
+                                                                    {{--<a  data-target="#ATMPaymentModal"  data-toggle="modal"  class="ATMPayment" id="ATMPayment-button" rel="{{$order->id}}">کارت به کارت</a>--}}
+                                                                {{--</li>--}}
+                                                            {{--</ul>--}}
                                                         </div>
                                                     @endif
                                                 @elseif(isset($order->paymentstatus->id) && $order->paymentstatus->id == Config::get("constants.PAYMENT_STATUS_INDEBTED"))
                                                     <span class="label label-warning"> {{$order->paymentstatus->displayName}}</span>
                                                     <div class="btn-group pull-right">
-                                                        <button class="btn btn-xs dark btn-outline dropdown-toggle" data-toggle="dropdown" aria-expanded="false">پرداخت
-                                                            <i class="fa fa-angle-down"></i>
+                                                        <button class="btn btn-xs dark btn-outline onlinePayment" data-target="#onlinePaymentModal"  data-toggle="modal" rel="{{$order->id}}">پرداخت
+                                                            {{--<i class="fa fa-credit-card-alt"></i>--}}
                                                         </button>
-                                                        <ul class="dropdown-menu pull-right">
-                                                            <li>
-                                                                <a  data-target="#onlinePaymentModal"  data-toggle="modal"  class="onlinePayment" rel="{{$order->id}}">پرداخت آنلاین</a>
-                                                            </li>
-                                                            <li>
-                                                                <a  data-target="#ATMPaymentModal"  data-toggle="modal"  class="ATMPayment" id="ATMPayment-button" rel="{{$order->id}}">کارت به کارت</a>
-                                                            </li>
-                                                        </ul>
+                                                        {{--<button class="btn btn-xs dark btn-outline dropdown-toggle" data-toggle="dropdown" aria-expanded="false">پرداخت--}}
+                                                            {{--<i class="fa fa-angle-down"></i>--}}
+                                                        {{--</button>--}}
+                                                        {{--<ul class="dropdown-menu pull-right">--}}
+                                                            {{--<li>--}}
+                                                                {{--<a  data-target="#onlinePaymentModal"  data-toggle="modal"  class="onlinePayment" rel="{{$order->id}}">پرداخت آنلاین</a>--}}
+                                                            {{--</li>--}}
+                                                            {{--<li>--}}
+                                                                {{--<a  data-target="#ATMPaymentModal"  data-toggle="modal"  class="ATMPayment" id="ATMPayment-button" rel="{{$order->id}}">کارت به کارت</a>--}}
+                                                            {{--</li>--}}
+                                                        {{--</ul>--}}
                                                     </div>
                                                 @else
                                                     <span class="label label-info">ندارد</span>
@@ -449,9 +458,9 @@
                                                             <li>
                                                                 <button   data-target="#onlinePaymentModal"  data-toggle="modal"  class="btn btn-xs green-jungle onlinePayment" style="width: 100px" rel="{{$transaction->order_id}}" data-role="{{$transaction->id}}">پرداخت آنلاین</button>
                                                             </li>
-                                                            <li>
-                                                                <button   data-target="#ATMPaymentModal"  data-toggle="modal"  class="btn btn-xs bg-font-blue ATMPayment" style="width: 100px;background: #00c4e6" id="ATMPayment-button" data-role="{{$transaction->id}}" data-action="{{action("TransactionController@limitedUpdate" , $transaction)}}" data-control="POST" rel="{{$transaction->order_id}}" >کارت به کارت</button>
-                                                            </li>
+                                                            {{--<li>--}}
+                                                                {{--<button   data-target="#ATMPaymentModal"  data-toggle="modal"  class="btn btn-xs bg-font-blue ATMPayment" style="width: 100px;background: #00c4e6" id="ATMPayment-button" data-role="{{$transaction->id}}" data-action="{{action("TransactionController@limitedUpdate" , $transaction)}}" data-control="POST" rel="{{$transaction->order_id}}" >کارت به کارت</button>--}}
+                                                            {{--</li>--}}
                                                         </ul>
                                                     </td>
                                                     <td>@if(isset($transaction->deadline_at) && strlen($transaction->deadline_at) > 0){{ $transaction->DeadlineAt_Jalali() }}@else <span class="label label-sm label-danger"> نامشخص </span> @endif</td>
