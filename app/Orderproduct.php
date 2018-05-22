@@ -6,6 +6,7 @@ namespace App;
 use App\Traits\ProductCommon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 
 class Orderproduct extends Model
