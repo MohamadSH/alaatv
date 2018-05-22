@@ -147,8 +147,8 @@
                         </div>
                     </div>
                 </div>
-                @if(isset($contentsWithSameSet))
                     <div class="col-md-4 margin-bottom-15">
+                        @if(isset($contentsWithSameSet))
                         <div class="mt-element-list">
                             <div class="mt-list-head list-news ext-1 font-white bg-yellow-crusta">
                                 <div class="list-head-title-container">
@@ -193,8 +193,22 @@
                                 </div>
                             </div>
                         </div>
+                        @endif
+                        @if(isset($adItems) )
+                            <div class="portlet light margin-top-10">
+                            <div class="portlet-title">
+                                <div class="caption">
+                                    <i class="fa fa-video-camera" aria-hidden="true"></i>
+                                    نمونه همایش های طلایی 97
+                                </div>
+                            </div>
+
+                            <div class="portlet-body">
+                                @include("educationalContent.partials.adSideBar" , ["items" => $adItems])
+                            </div>
+                        </div>
+                        @endif
                     </div>
-                @endif
             </div>
 
             @if(isset($contentsWithSameSet) && $contentsWithSameSet->whereIn("type" , "pamphlet" )->isNotEmpty())
@@ -367,9 +381,9 @@
                         </div>
                     </div>
                 </div>
-                @if(isset($contentsWithSameSet))
                     <div class="col-md-4 margin-bottom-15">
-                        <div class="mt-element-list">
+                        @if(isset($contentsWithSameSet) && $contentsWithSameSet->isNotEmpty())
+                            <div class="mt-element-list">
                             <div class="mt-list-head list-news ext-1 font-white bg-yellow-crusta">
                                 <div class="list-head-title-container">
                                     <h3 class="list-title">فیلم های درس</h3>
@@ -407,8 +421,22 @@
                                 </div>
                             </div>
                         </div>
+                        @endif
+                        @if(isset($adItems) )
+                            <div class="portlet light margin-top-10">
+                                <div class="portlet-title">
+                                    <div class="caption">
+                                        <i class="fa fa-video-camera" aria-hidden="true"></i>
+                                        نمونه همایش های طلایی 97
+                                    </div>
+                                </div>
+
+                                <div class="portlet-body">
+                                    @include("educationalContent.partials.adSideBar" , ["items" => $adItems])
+                                </div>
+                            </div>
+                        @endif
                     </div>
-                @endif
                 {{--<div class="col-md-4">--}}
                     {{--@if($contentsWithSameType->isNotEmpty())--}}
                         {{--<div class="mt-element-list">--}}

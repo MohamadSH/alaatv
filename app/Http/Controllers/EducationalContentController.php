@@ -552,8 +552,16 @@ class EducationalContentController extends Controller
 
             $sideBarMode = "closed";
 
+            $adItems = Educationalcontent::whereHas("contentsets" , function ($q)
+            {
+                $q->where("id" , 199) ;
+            })
+                ->where("enable" , 1)
+                ->orderBy("order")
+                ->get();
+
             return view("educationalContent.show", compact("productSeenCount","author","educationalContent", "rootContentType", "childContentType", "contentsWithSameType" , "soonContentsWithSameType" , "educationalContentSet" , "contentsWithSameSet" , "videoSources" ,
-                "files" , "tags" , "sideBarMode" , "educationalContentDisplayName" , "sessionNumber" , "fileToShow" , "userCanSeeCounter"));
+                "files" , "tags" , "sideBarMode" , "educationalContentDisplayName" , "sessionNumber" , "fileToShow" , "userCanSeeCounter" , "adItems"));
         }
         else
             abort(404);
