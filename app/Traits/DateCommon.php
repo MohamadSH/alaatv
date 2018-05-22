@@ -34,30 +34,39 @@ trait DateCommon
     public function convertToJalaliMonth($month){
         switch ($month)
         {
+            case "1":
             case "01":
                 return "فروردین";
                 break;
+            case "2":
             case "02":
                 return "اردیبهشت";
                 break;
+            case "3":
             case "03":
                 return "خرداد";
                 break;
+            case "4":
             case "04":
                 return "تیر";
                 break;
+            case "5":
             case "05":
                 return "مرداد";
                 break;
+            case "6":
             case "06":
                 return "شهریور";
                 break;
+            case "7":
             case "07":
                 return "مهر";
                 break;
+            case "8":
             case "08":
                 return "آبان";
                 break;
+            case "9":
             case "09":
                 return "آذر";
                 break;

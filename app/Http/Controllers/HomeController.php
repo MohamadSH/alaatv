@@ -1976,28 +1976,35 @@ class HomeController extends Controller
         ->orderBy("completed_at" , "DESC")
         ->get();
 
+
+        /** THIS WEEK/TODAY LATEST DONATES **/
         $latestOrders = 3 ;
         $latestDonors = collect();
 //        $today = Carbon::today();
         $weekBegining = Carbon::createMidnightDate("2018" , "05" , "21");
-        $weekEnd = Carbon::createMidnightDate("2018" , "05" , "25");
+        $weekEnd = Carbon::createMidnightDate("2018" , "05" , "26");
 //        $todayDonates = $orders->where("completed_at" , ">=" , $today ) ;
         $donates = $orders->where("completed_at" ,">=" , $weekBegining )
-                          ->where("completed_at" , "<" , $weekEnd);
-        foreach ($donates as $latestOrder)
+                          ->where("completed_at" , "<=" , $weekEnd);
+        foreach ($donates as $donate)
         {
             if($latestOrders == 0)
                 break;
 
-            if(isset($latestOrder->user->id))
+            if(isset($donate->user->id))
             {
-                $firstName =  $latestOrder->user->firstName ;
-                $lastName =  $latestOrder->user->lastName ;
-                $avatar = $latestOrder->user->photo ;
+                $firstName =  $donate->user->firstName ;
+                $lastName =  $donate->user->lastName ;
+                $avatar = $donate->user->photo ;
             }
 
-            $donateAmount =  $latestOrder->successfulTransactions
-                        ->sum("cost");
+//            $donateAmount =  $donate->successfulTransactions
+//                        ->sum("cost");
+
+            $donateAmount = $donate->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
+                                        ->where("product_id" , config("constants.CUSTOM_DONATE_PRODUCT") )
+                                        ->get()
+                                        ->sum("cost");
 
             $latestDonors->push([
                     "firstName" => (isset($firstName))?$firstName:"",
@@ -2008,7 +2015,9 @@ class HomeController extends Controller
 
             $latestOrders--;
         }
+        /** END **/
 
+        /** CURRENT MONTH MAXIMUM DONATES **/
         $latestMax = 3 ;
         $date = Carbon::createMidnightDate("2018" , "05" , "21");
         $thisMonthDonates = $orders->where("completed_at" , ">=" , $date )
@@ -2039,8 +2048,112 @@ class HomeController extends Controller
             ]);
 
         }
+        /** END **/
 
-        return view("pages.donate" , compact("latestDonors" , "maxDonors"));
+        /** DONATES CHART **/
+            $allMonths = [
+                "مهر",
+                "آبان",
+                "آذر",
+                "دی",
+                "بهمن",
+                "اسفند",
+                "فروردین",
+                "اردیبهشت",
+                "خرداد",
+                "تیر",
+                "مرداد",
+                "شهریور",
+            ];
+
+            $currentGregorianDate = Carbon::now();
+            $delimiter = "/";
+            $currentJalaliDate = $this->gregorian_to_jalali($currentGregorianDate->year , $currentGregorianDate->month , $currentGregorianDate->day , $delimiter);
+            $currentJalaliDateSplit = explode($delimiter , $currentJalaliDate );
+            $currentJalaliMonth = $this->convertToJalaliMonth($currentJalaliDateSplit[1]);
+
+            $months = array_splice($allMonths , 0 , array_search($currentJalaliMonth , $allMonths)) ;
+
+            $chartData = collect();
+            $monthToPeriodConvert = collect([
+                ["month"=>"خرداد", "periodBegin"=>"2018-05-22" , "periodEnd"=>"2018-06-22"],
+                ["month"=>"تیر", "periodBegin"=>"2018-06-22" , "periodEnd"=>"2018-07-23"],
+                ["month"=>"مرداد", "periodBegin"=>"2018-07-23" , "periodEnd"=>"2018-08-23"],
+                ["month"=>"شهریور", "periodBegin"=>"2018-08-23" , "periodEnd"=>"2018-09-23"],
+            ]);
+            $totalSpend = 0;
+            $totalIncome = 0;
+            foreach ($months as $month)
+            {
+                switch ($month)
+                {
+                    case "مهر" :
+                        $totalMonthIncome = 2491700;
+                        $totalMonthSpend = 25000000;
+                        break;
+                    case "آبان" :
+                        $totalMonthIncome = 1563186;
+                        $totalMonthSpend = 25000000;
+                        break;
+                    case "آذر" :
+                        $totalMonthIncome = 2339988;
+                        $totalMonthSpend = 25000000;
+                        break;
+                    case "دی" :
+                        $totalMonthIncome = 1270397;
+                        $totalMonthSpend = 25000000;
+                        break;
+                    case "بهمن" :
+                        $totalMonthIncome = 1270397;
+                        $totalMonthSpend = 25000000;
+                        break;
+                    case "اسفند" :
+                        $totalMonthIncome = 1270397;
+                        $totalMonthSpend = 25000000;
+                        break;
+                    case "فروردین" :
+                        $totalMonthIncome = 823600;
+                        $totalMonthSpend = 25000000;
+                        break;
+                    case "اردیبهشت" :
+                        $totalMonthIncome = 1000000;
+                        $totalMonthSpend = 25000000;
+                        break;
+                    default:
+                        $date = $monthToPeriodConvert->where("month" , $month)
+                                                     ->first();
+                        $donates = $orders->where("completed_at" ,">=" , $date["periodBegin"] )
+                                          ->where("completed_at" , "<=" , $date["periodEnd"]);
+                        $totalMonthIncome = 0 ;
+                        foreach ($donates as $donate)
+                        {
+
+//            $donateAmount =  $latestOrder->successfulTransactions
+//                        ->sum("cost");
+
+                            $amount = $donate->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
+                                            ->where("product_id" , config("constants.CUSTOM_DONATE_PRODUCT") )
+                                            ->get()
+                                            ->sum("cost");
+
+                            $totalMonthIncome += $amount ;
+                        }
+                        $totalMonthSpend = 25000000;
+                        break;
+                }
+                $totalIncome += $totalMonthIncome;
+                $totalSpend += $totalMonthSpend;
+                $chartData->push([
+                    "month"=>$month ,
+                    "totalIncome"=> $totalMonthIncome ,
+                    "totalSpend" => $totalMonthSpend
+                ]);
+
+            }
+
+        /** END **/
+        return view("pages.donate" , compact("latestDonors" , "maxDonors" ,"months"
+            , "chartData" , "totalSpend" , "totalIncome"));
     }
 
     function siteMap(Request $request)
