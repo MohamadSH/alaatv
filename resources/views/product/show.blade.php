@@ -468,6 +468,38 @@
                 </div>
             </div>
         @endif
+        @if(isset($hamayeshTalaiVideos))
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- BEGIN Portlet PORTLET-->
+                    <div class="portlet light">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                {{--<i class="icon-paper-plane font-yellow-casablanca"></i>--}}
+                                <span class="caption-subject bold font-yellow-casablanca uppercase"> نمونه همایش های طلایی 97 </span>
+                                {{--<span class="caption-helper">more samples...</span>--}}
+                            </div>
+                            <div class="inputs">
+                                <div class="portlet-input input-inline input-medium">
+                                    {{--<div class="input-group">--}}
+                                        {{--<input type="text" class="form-control input-circle-left" placeholder="search...">--}}
+                                        {{--<span class="input-group-btn">--}}
+                                                            {{--<button class="btn btn-circle-right btn-default" type="submit">Go!</button>--}}
+                                                        {{--</span>--}}
+                                    {{--</div>--}}
+                                    <a href="{{action("ProductController@landing3")}}" class="btn btn-lg purple"> خرید همایش ها
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            @include("partials.search.video"  , ["items" => $hamayeshTalaiVideos])
+                        </div>
+                    </div>
+                    <!-- END Portlet PORTLET-->
+                </div>
+            </div>
+        @endif
         @if(isset($product->specialDescription))
             <div class="row">
                 {!! $product->specialDescription !!}
@@ -968,7 +1000,74 @@
                 // $(".chooseServer").hide();
                 // $("#liveFrame").fadeIn(3000);
             });
+
+            (function($, window, document, undefined) {
+                'use strict';
+
+                // init cubeportfolio
+                $('#js-grid-juicy-projects').cubeportfolio({
+                    // filters: '#js-filters-juicy-projects',
+                    // loadMore: '#js-loadMore-juicy-projects',
+                    // loadMoreAction: 'click',
+                    layoutMode: 'grid',
+                    defaultFilter: '*',
+                    animationType: 'quicksand',
+                    gapHorizontal: 35,
+                    gapVertical: 30,
+                    gridAdjustment: 'responsive',
+                    mediaQueries: [{
+                        width: 1500,
+                        cols: 4
+                    }, {
+                        width: 1100,
+                        cols: 4
+                    }, {
+                        width: 800,
+                        cols: 3
+                    }, {
+                        width: 480,
+                        cols: 3
+                    }, {
+                        width: 320,
+                        cols: 1
+                    }],
+                    caption: 'overlayBottomReveal',
+                    displayType: 'sequentially',
+                    displayTypeSpeed: 80,
+
+                    // lightbox
+                    lightboxDelegate: '.cbp-lightbox',
+                    lightboxGallery: true,
+                    lightboxTitleSrc: 'data-title',
+                    lightboxCounter: '<div class="cbp-popup-lightbox-counter"> of </div>',
+
+                    // singlePage popup
+                    singlePageDelegate: '.cbp-singlePage',
+                    singlePageDeeplinking: true,
+                    singlePageStickyNavigation: true,
+                    singlePageCounter: '<div class="cbp-popup-singlePage-counter"> of </div>',
+                    singlePageCallback: function(url, element) {
+                        // to update singlePage content use the following method: this.updateSinglePage(yourContent)
+                        var t = this;
+
+                        $.ajax({
+                            url: url,
+                            type: 'GET',
+                            dataType: 'html',
+                            timeout: 10000
+                        })
+                            .done(function(result) {
+                                t.updateSinglePage(result);
+                            })
+                            .fail(function() {
+                                t.updateSinglePage('AJAX Error! Please refresh the page!');
+                            });
+                    },
+                });
+
+            })(jQuery, window, document);
         </script>
         <script src="/js/extraJS/product-show-v12.js" type="text/javascript"></script>
+
     @endif
 @endsection

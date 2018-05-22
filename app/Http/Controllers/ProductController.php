@@ -7,6 +7,7 @@ use App\Attributeset;
 use App\Attributetype;
 use App\Attributevalue;
 use App\Bon;
+use App\Educationalcontent;
 use App\Http\Requests\AddComplimentaryProductRequest;
 use App\Http\Requests\EditProductRequest;
 use App\Http\Requests\InsertProductRequest;
@@ -273,8 +274,6 @@ class ProductController extends Controller
         if(isset($product->introVideo) && strlen($product->introVideo) > 0)
              $productIntroVideo = $product->introVideo;
 
-
-
         $key="product:validProductfiles:pamphlet|video".$product->cacheKey();
 
         [$productsWithPamphlet,$productsWithVideo] = Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($product){
@@ -359,9 +358,19 @@ class ProductController extends Controller
         $isLive = $product->isHappening();
         if(Auth::check() && Auth::user()->hasRole("admin") && $isLive!== false) $isLive = 0 ;
 //        return response()->make("Ok");
+
+        $hamayeshTalaiVideos = Educationalcontent::whereHas("contentsets" , function ($q)
+        {
+            $q->where("id" , 199) ;
+        })
+        ->where("enable" , 1)
+        ->orderBy("order")
+        ->get();
+
         return view("product.show" , compact("product" , "productType" ,"productSeenCount","productIntroVideo" , "otherProductChunks"  , 'discount' , 'cost' , "selectCollection" ,"simpleInfoAttributes"
             , "checkboxInfoAttributes" , "extraSelectCollection" , "extraCheckboxCollection" , 'groupedCheckboxCollection'  , "descriptionIframe"
-            , "isProductExistInOrder"  , "productsWithVideo" , "productsWithPamphlet" , "exclusiveOtherProducts" , "productSamplePhotos" , "giftCollection" , "isLive" ));
+            , "isProductExistInOrder"  , "productsWithVideo" , "productsWithPamphlet" , "exclusiveOtherProducts" , "productSamplePhotos" , "giftCollection" , "isLive"
+         , "hamayeshTalaiVideos"));
     }
 
     /**

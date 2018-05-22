@@ -1172,6 +1172,7 @@ class OrderController extends Controller
             elseif(strcmp(array_get($result,"Status"),'canceled')==0 ||
                 (strcmp(array_get($result,"Status"),'error')==0 && strcmp(array_get($result,"error"),'-22')==0) )
             {
+                $result["Status"] = 'canceled' ;
                 $user = $order->user ;
                 if($order->orderstatus_id == Config::get("constants.ORDER_STATUS_OPEN"))
                   {
@@ -1200,9 +1201,15 @@ class OrderController extends Controller
                 }
                 else
                 {
+                    $walletTransactions = $order->successfulTransactions
+                                                ->where("paymentmethod_id" , config("constants.PAYMENT_METHOD_WALLET"));
+                    if($walletTransactions->isNotEmpty())
+                    {
+                        $result["walletAmount"] = $walletTransactions->sum("cost");
+                        $result["walletUsed"] = true;
+                    }
                     $result["tryAgain"] = false;
                 }
-
             }
         }
         elseif( $request->has("State") && $request->has("token"))
