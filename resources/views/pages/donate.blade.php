@@ -41,7 +41,7 @@
     <div class="last-donations container">
         <div class="row">
             <div class="recent-donators">
-                <h3>آخرین کمک های امروز</h3>
+                <h3>آخرین کمک های هفته</h3>
                 @if($latestDonors->isEmpty())
                     <div class="hero" style="margin-bottom: 200px"> <h2>کمکی نشده</h2></div>
                 @else
