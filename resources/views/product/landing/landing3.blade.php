@@ -331,7 +331,161 @@
                                             </figure>
                                         </article>
                                     </div>
-
+                                    <div class="swiper-slide">
+                                        <article class="item-content-field">
+                                            <bdi class="bdi-title all">
+                                                <em>تجربی</em>
+                                            </bdi>
+                                            <figure>
+                                                <a href="{{ action('ProductController@show',220) }}" data-role="220"  title="همایش طلایی ریاضی تجربی کنکور">
+                                                    <img src="/assets/extra/landing3/images/professors/G3.png" alt="همایش طلایی ریاضی تجربی کنکور آلاء" title="همایش طلایی ریاضی تجربی کنکور">
+                                                </a>
+                                                <figcaption>
+                                                    <header>
+                                                        <a href="{{ action('ProductController@show',220) }}" data-role="220"  title="همایش طلایی ریاضی تجربی کنکور">
+                                                            <h1>
+                                                                <span>ریاضی</span>
+                                                                <em>نباخته</em>
+                                                            </h1>
+                                                        </a>
+                                                    </header>
+                                                    <strong>
+                                                            <span class="span-gold">
+                                                                همایش طـــلایی
+                                                            </span>
+                                                        <bdi class="prsent">
+                                                            <i>80%</i>
+                                                            <em> کــــنـکور</em>
+                                                        </bdi>
+                                                    </strong>
+                                                </figcaption>
+                                            </figure>
+                                        </article>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <article class="item-content-field">
+                                            <bdi class="bdi-title all">
+                                                <em>تجربی</em>
+                                            </bdi>
+                                            <figure>
+                                                <a href="{{ action('ProductController@show',219) }}" data-role="219"  title="همایش طلایی ریاضی تجربی کنکور">
+                                                    <img src="/assets/extra/landing3/images/professors/G5.png" alt="همایش طلایی ریاضی تجربی کنکور آلاء" title="همایش طلایی ریاضی تجربی کنکور">
+                                                </a>
+                                                <figcaption>
+                                                    <header>
+                                                        <a href="{{ action('ProductController@show',219) }}" data-role="219"  title="همایش طلایی ریاضی تجربی کنکور">
+                                                            <h1>
+                                                                <span>ریاضی</span>
+                                                                <em>امینی</em>
+                                                            </h1>
+                                                        </a>
+                                                    </header>
+                                                    <strong>
+                                                            <span class="span-gold">
+                                                                همایش طـــلایی
+                                                            </span>
+                                                        <bdi class="prsent">
+                                                            <i>80%</i>
+                                                            <em> کــــنـکور</em>
+                                                        </bdi>
+                                                    </strong>
+                                                </figcaption>
+                                            </figure>
+                                        </article>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <article class="item-content-field">
+                                            <bdi class="bdi-title all">
+                                                <em>تجربی</em>
+                                            </bdi>
+                                            <figure>
+                                                <a href="{{ action('ProductController@show',213) }}" data-role="213"  title="همایش طلایی زمین شناسی کنکور">
+                                                    <img src="/assets/extra/landing3/images/professors/G1.png" alt="همایش طلایی زمین شناسی کنکور آلاء" title="همایش طلایی زمین شناسی کنکور">
+                                                </a>
+                                                <figcaption>
+                                                    <header>
+                                                        <a href="{{ action('ProductController@show',213) }}" data-role="213"  title="همایش طلایی زمین شناسی کنکور">
+                                                            <h1>
+                                                                <span>زمین</span>
+                                                                <em>دکتر چلاجور</em>
+                                                            </h1>
+                                                        </a>
+                                                    </header>
+                                                    <strong>
+                                                            <span class="span-gold">
+                                                                همایش طـــلایی
+                                                            </span>
+                                                        <bdi class="prsent">
+                                                            <i>80%</i>
+                                                            <em> کــــنـکور</em>
+                                                        </bdi>
+                                                    </strong>
+                                                </figcaption>
+                                            </figure>
+                                        </article>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <article class="item-content-field">
+                                            <bdi class="bdi-title all">
+                                                <em>تجربی</em>
+                                            </bdi>
+                                            <figure>
+                                                <a href="{{ action('ProductController@show',212) }}" data-role="212"  title="همایش طلایی زیست شناسی کنکور">
+                                                    <img src="/assets/extra/landing3/images/professors/G1.png" alt="همایش طلایی زیست شناسی کنکور آلاء" title="همایش طلایی زیست شناسی کنکور آلاء">
+                                                </a>
+                                                <figcaption>
+                                                    <header>
+                                                        <a href="{{ action('ProductController@show',212) }}" data-role="212"  title="همایش طلایی زیست شناسی کنکور آلاء">
+                                                            <h1>
+                                                                <span>زیست</span>
+                                                                <em>دکتر چلاجور</em>
+                                                            </h1>
+                                                        </a>
+                                                    </header>
+                                                    <strong>
+                                                            <span class="span-gold">
+                                                                همایش طـــلایی
+                                                            </span>
+                                                        <bdi class="prsent">
+                                                            <i>80%</i>
+                                                            <em> کــــنـکور</em>
+                                                        </bdi>
+                                                    </strong>
+                                                </figcaption>
+                                            </figure>
+                                        </article>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <article class="item-content-field">
+                                            <bdi class="bdi-title all">
+                                                <em>انسانی</em>
+                                            </bdi>
+                                            <figure>
+                                                <a href="{{ action('ProductController@show',222) }}" data-role="222"  title="همایش طلایی ریاضی انسانی کنکور">
+                                                    <img src="/assets/extra/landing3/images/professors/G5.png" alt="همایش طلایی ریاضی انسای کنکور آلاء" title="همایش طلایی ریاضی انسانی کنکور">
+                                                </a>
+                                                <figcaption>
+                                                    <header>
+                                                        <a href="{{ action('ProductController@show',222) }}" data-role="222"  title="همایش طلایی ریاضی انسانی کنکور">
+                                                            <h1>
+                                                                <span>ریاضی</span>
+                                                                <em>امینی</em>
+                                                            </h1>
+                                                        </a>
+                                                    </header>
+                                                    <strong>
+                                                            <span class="span-gold">
+                                                                همایش طـــلایی
+                                                            </span>
+                                                        <bdi class="prsent">
+                                                            <i>80%</i>
+                                                            <em> کــــنـکور</em>
+                                                        </bdi>
+                                                    </strong>
+                                                </figcaption>
+                                            </figure>
+                                        </article>
+                                    </div>
                                     {{--<div class="swiper-slide">--}}
                                         {{--<article class="item-content-field">--}}
                                             {{--<bdi class="bdi-title all">--}}
