@@ -96,6 +96,9 @@
                                     <div class="col-md-12">
                                         <ul class="list-inline">
                                             <li><i class="fa fa-user"></i>مدرس : {{$author}}</li>&nbsp;
+                                            @if(isset($contentSetName))
+                                                <li><i class="fa fa-user"></i>نام دوره : {{$contentSetName}}</li>&nbsp;
+                                            @endif
                                             @if($userCanSeeCounter)
                                                 <li>
                                                     <i class="fa fa-eye"></i>
