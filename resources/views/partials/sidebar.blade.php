@@ -28,11 +28,11 @@
                     <span class="arrow "></span>
                 </a>
             </li>
-            <li class="nav-item @if(isset($pageName) && strcmp($pageName , "donate")==0)start active open @endif">
-                <a href="{{action("HomeController@donate")}}" class="nav-link nav-toggle font-yellow bold">
-                    <i class="fa fa-credit-card"></i>
-                    <span class="title">کمک مالی به آلاء</span>
-                    @if(isset($pageName) && strcmp($pageName , "donate")==0)<span class="selected"></span> @endif
+            <li class="nav-item @if(isset($pageName) && strcmp($pageName , "productsPortfolio")==0)start active open @endif">
+                <a href="{{action("ProductController@search")}}" class="nav-link nav-toggle font-yellow bold">
+                    <i class="icon-basket"></i>
+                    <span class="title">همایش های آلاء</span>
+                    @if(isset($pageName) && strcmp($pageName , "productsPortfolio")==0)<span class="selected"></span> @endif
                     <span class="arrow "></span>
                 </a>
             </li>
@@ -53,11 +53,11 @@
                     </ul>
                 </a>
             </li>
-            <li class="nav-item @if(isset($pageName) && strcmp($pageName , "productsPortfolio")==0)start active open @endif">
-                <a href="{{action("ProductController@search")}}" class="nav-link nav-toggle font-yellow bold">
-                    <i class="icon-basket"></i>
-                    <span class="title">همایش های آلاء</span>
-                    @if(isset($pageName) && strcmp($pageName , "productsPortfolio")==0)<span class="selected"></span> @endif
+            <li class="nav-item @if(isset($pageName) && strcmp($pageName , "donate")==0)start active open @endif">
+                <a href="{{action("HomeController@donate")}}" class="nav-link nav-toggle font-yellow bold">
+                    <i class="fa fa-credit-card"></i>
+                    <span class="title">کمک مالی به آلاء</span>
+                    @if(isset($pageName) && strcmp($pageName , "donate")==0)<span class="selected"></span> @endif
                     <span class="arrow "></span>
                 </a>
             </li>

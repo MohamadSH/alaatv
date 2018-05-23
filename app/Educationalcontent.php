@@ -298,9 +298,11 @@ class Educationalcontent extends Model
     {
         $contentSets = $this->contentsets->where("pivot.isDefault" , 1);
         $contentsWithSameSet = collect();
+        $contentSetName = "" ;
         if($contentSets->isNotEmpty())
         {
             $contentSet = $contentSets->first();
+            $contentSetName = $contentSet->name;
             $sameContents =  $contentSet->educationalcontents->where("enable" , 1)->sortBy("pivot.order") ;
             $sameContents->load('files');
             $sameContents->load('contenttype');
@@ -327,7 +329,10 @@ class Educationalcontent extends Model
                 ]);
             }
         }
-        return $contentsWithSameSet ;
+        return [
+            $contentsWithSameSet ,
+            $contentSetName ,
+            ];
     }
 
     public function retrievingTags()

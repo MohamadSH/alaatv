@@ -400,12 +400,14 @@ class EducationalContentController extends Controller
                     $author,
                     $educationalContent,
                     $contentsWithSameSet,
+                    $contentSetName,
                     $videoSources,
                     $files,
                     $fileToShow,
                     $metaTagMod
                 ] =  Cache::remember($key,Config::get("constants.CACHE_60"),function () use($educationalContent) {
                     $contentsWithSameSet = null ;
+                    $contentSetName = null ;
                     $videoSources = null ;
                     $files = null;
                     $fileToShow = null;
@@ -443,14 +445,20 @@ class EducationalContentController extends Controller
                                 $files->put("thumbnail" , $file->name);
                             $files->put("videoSource" , $videoSources);
 
-                            $contentsWithSameSet = $educationalContent->getSetMates();
+                        [
+                            $contentsWithSameSet ,
+                            $contentSetName
+                        ]  = $educationalContent->getSetMates();
 
                             break;
                         case  "pamphlet1":
                             $metaTagMod = 2;
                             $files = $educationalContent->files;
                             $fileToShow = $educationalContent->file;
-                            $contentsWithSameSet = $educationalContent->getSetMates();
+                            [
+                                $contentsWithSameSet ,
+                                $contentSetName
+                            ]  = $educationalContent->getSetMates();
                             break;
                         case "article" :
                             $metaTagMod = 3;
@@ -469,6 +477,7 @@ class EducationalContentController extends Controller
                         $author,
                         $educationalContent,
                         $contentsWithSameSet,
+                        $contentSetName,
                         $videoSources,
                         $files,
                         $fileToShow,
@@ -552,15 +561,16 @@ class EducationalContentController extends Controller
 
             $sideBarMode = "closed";
 
-            $adItems = Educationalcontent::whereHas("contentsets" , function ($q)
-            {
-                $q->where("id" , 199) ;
-            })
-                ->where("enable" , 1)
-                ->orderBy("order")
-                ->get();
+            if(!in_array($educationalContent->id , [7863 , 7884 , 7882 , 7885 , 7883 , ]))
+                $adItems = Educationalcontent::whereHas("contentsets" , function ($q)
+                {
+                    $q->where("id" , 199) ;
+                })
+                    ->where("enable" , 1)
+                    ->orderBy("order")
+                    ->get();
 
-            return view("educationalContent.show", compact("productSeenCount","author","educationalContent", "rootContentType", "childContentType", "contentsWithSameType" , "soonContentsWithSameType" , "educationalContentSet" , "contentsWithSameSet" , "videoSources" ,
+            return view("educationalContent.show", compact("productSeenCount","author","educationalContent", "rootContentType", "childContentType", "contentsWithSameType" , "soonContentsWithSameType" , "educationalContentSet" , "contentsWithSameSet" , "contentSetName" , "videoSources" ,
                 "files" , "tags" , "sideBarMode" , "educationalContentDisplayName" , "sessionNumber" , "fileToShow" , "userCanSeeCounter" , "adItems"));
         }
         else
