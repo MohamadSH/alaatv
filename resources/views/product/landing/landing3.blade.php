@@ -88,7 +88,7 @@
                     {{--ثبت نام--}}
                 {{--</a>--}}
             {{--</article>--}}
-            <nav class="nav-primary-menu" role="navigation">
+            <nav class="nav-primary-menu" role="navigation" style="display: none">
                 <ul class="primary-menu">
                     <li>
                         <a href="{{action("HomeController@index")}}" title="صفحه اصلی">صفحه اصلی</a>
@@ -109,7 +109,7 @@
                         <a href="{{ action('ProductController@show',214) }}" data-role="214"  title="خرید همایش">همایش عربی مهندس ناصح زاده</a>
                     </li>
                 </ul>
-                <div class="swiper-container menu-res">
+                <div class="swiper-container menu-res hidden" style="display: none">
                     <div class="swiper-wrapper">
                         <div class="swiper-slide">
                             <a href="{{action("HomeController@index")}}" title="آلاء - دبیرستان دانشگاه شریف">صفحه اصلی</a>
