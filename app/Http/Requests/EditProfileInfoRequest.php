@@ -46,7 +46,7 @@ class EditProfileInfoRequest extends FormRequest
             foreach ($afterLoginFields as $afterLoginField)
             {
                 if(strcmp($afterLoginField, "email") == 0) $rules[$afterLoginField] = "required|email";
-                elseif(strcmp($afterLoginField, "photo") == 0) $rules[$afterLoginField] = "required|image|mimes:jpeg,jpg,png|max:200";
+                elseif(strcmp($afterLoginField, "photo") == 0) $rules[$afterLoginField] = "required|image|mimes:jpeg,jpg,png|max:512";
                 elseif(strcmp($afterLoginField, "major_id") == 0) $rules[$afterLoginField] = "required|exists:majors,id";
                 elseif(strcmp($afterLoginField, "gender_id") == 0) $rules[$afterLoginField] = "required|exists:genders,id";
                 else $rules[$afterLoginField] = "required|max:255";
