@@ -311,10 +311,10 @@
                                                 </a>
                                                 <figcaption>
                                                     <header>
-                                                        <a href="{{ action('ProductController@show',214) }}" data-role="214"  title="">
+                                                        <a href="{{ action('ProductController@show',214) }}" data-role="214"  title="همایش طلایی عربی کنکور">
                                                             <h1>
                                                                 <span>عربی</span>
-                                                                <em style="font-size: 4rem !important;">ناصح زاده</em>
+                                                                <em>ناصح زاده</em>
                                                             </h1>
                                                         </a>
                                                     </header>
