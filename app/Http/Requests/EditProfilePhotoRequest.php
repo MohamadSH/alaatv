@@ -26,7 +26,7 @@ class EditProfilePhotoRequest extends FormRequest
     {
         session()->put("tab", "tab_1_2");
         return [
-            'photo' => 'required|image|mimes:jpeg,jpg,png|max:200',
+            'photo' => 'required|image|mimes:jpeg,jpg,png|max:512',
         ];
     }
 }
