@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="viewport" content="width=device-width, initial-scale = 1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no" />
     <meta name="application-name" content="" />
     <meta name="google" content="notranslate" />
 
@@ -41,7 +41,7 @@
 
     <title></title>
 
-    <link rel="stylesheet" href="/assets/extra/landing3/css/stylesheet4.css" />
+    <link rel="stylesheet" href="/assets/extra/landing3/css/stylesheet5.css" />
     <!--[if lt IE 10]>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flexibility/2.0.1/flexibility.js"></script>
     <![endif]-->
