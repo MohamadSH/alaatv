@@ -35,12 +35,27 @@
 @endsection
 
 @section("content")
-    <div class="row">
-        {{--Ajax modal loaded after inserting content--}}
-        <div id="ajax-modal" class="modal fade" tabindex="-1"> </div>
+    {{--Ajax modal loaded after inserting content--}}
+    <div id="ajax-modal" class="modal fade" tabindex="-1"> </div>
     {{--Ajax modal for panel startup --}}
-
-    <!-- /.modal -->
+    <div class="row">
+        @include("systemMessage.flash")
+        <div class="col-md-12">
+            <!-- BEGIN Portlet PORTLET-->
+            <div class="portlet light">
+                <div class="portlet-body">
+                    <span class="bold" style="font-size: larger"></span>&nbsp;&nbsp;
+                    <a class="btn btn-default" href="{{action("HomeController@pointBot")}}" {{($pointsGiven)?"disabled":""}} target="_blank">
+                        اهدای امتیاز به کاربران
+                    </a>
+                    <span class="font-red bold">{{($pointsGiven)?"اهدا شده است":""}}</span>
+                    <hr>
+                </div>
+            </div>
+            <!-- END Portlet PORTLET-->
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-12">
 
             @role((Config::get("constants.ROLE_ADMIN")))
@@ -48,7 +63,7 @@
             <div class="portlet box blue-dark" id="lottery-portlet">
                 <div class="portlet-title">
                     <div class="caption">
-                        <i class="fa fa-cogs"></i>برندگان قرعه کشی همایش 1 + 5</div>
+                        <i class="fa fa-cogs"></i>برندگان قرعه کشی {{$lotteryDisplayName}}</div>
                     <div class="tools">
                         <img class="hidden" id="lottery-portlet-loading" src="{{Config::get('constants.ADMIN_LOADING_BAR_GIF')}}" alt="loading"  style="width: 50px;">
                         <a href="javascript:;" class="collapse" id="lottery-expand"> </a>
@@ -63,11 +78,13 @@
                             <div class="col-md-6">
                                 <div class="btn-group">
                                     @if(isset($userlotteries) && $userlotteries->isEmpty())
-                                        <a href="{{action("LotteryController@doLottery")}}" class="btn btn-outline blue-dark" target="_blank">
-                                             برگزاری قرعه کشی </a>
+                                        <a href="{{action("LotteryController@holdLottery" , ["lottery"=>$lotteryName])}}" class="btn btn-outline blue-dark" target="_blank">
+                                             برگزاری قرعه کشی
+                                        </a>
+                                    @else
+                                        <a href="{{action("LotteryController@givePrizes", ["lottery"=>$lotteryName])}}" class="btn btn-outline red" target="_blank">
+                                            اهدای جوایز </a>
                                     @endif
-                                        {{--<a href="{{action("LotteryController@givePrizes")}}" class="btn btn-outline red" target="_blank">--}}
-                                            {{--اهدای جوایز </a>--}}
                                 </div>
                             </div>
                         </div>
@@ -89,9 +106,12 @@
                                  <td>{{$userlottery->pivot->rank}}</td>
                                  <td><a href="{{action("UserController@edit", $userlottery)}}" target="_blank">{{$userlottery->getfullName()}}</a></td>
                                  <td>{{$userlottery->mobile}}</td>
-                                 <td>@foreach(json_decode($userlottery->pivot->prizes)->items as $item )
-                                         <p class="text-center bold">{{$item->name}}</p>
-                                     @endforeach
+                                 <td>
+                                     @if(isset($userlottery->pivot->prizes))
+                                         @foreach(json_decode($userlottery->pivot->prizes)->items as $item )
+                                             <p class="text-center bold">{{$item->name}}</p>
+                                         @endforeach
+                                     @endif
                                  </td>
                              </tr>
                          @endforeach

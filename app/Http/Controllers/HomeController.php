@@ -116,7 +116,7 @@ class HomeController extends Controller
         $this->middleware('permission:' . Config::get("constants.SMS_ADMIN_PANEL_ACCESS"), ['only' => 'adminSMS']);
         $this->middleware('permission:' . Config::get("constants.REPORT_ADMIN_PANEL_ACCESS"), ['only' => 'adminReport']);
         $this->middleware('ability:' . Config::get("constants.ROLE_ADMIN") . ',' . Config::get("constants.TELEMARKETING_PANEL_ACCESS"), ['only' => 'adminTeleMarketing']);
-        $this->middleware('role:admin' , ['only' => ['bot' , 'smsBot' , 'checkDisableContentTagBot' , 'tagBot' , 'pointBot']]);
+        $this->middleware('role:admin' , ['only' => ['bot' , 'smsBot' , 'checkDisableContentTagBot' , 'tagBot' , 'pointBot' , 'adminLottery']]);
         $this->response = new Response();
         $this->setting = json_decode(app('setting')->setting);
 
@@ -1437,14 +1437,26 @@ class HomeController extends Controller
     /**
      * Admin panel for lotteries
      */
-    public function adminLottery()
+    public function adminLottery(Request $request)
     {
-        $lottery = Lottery::where("name", Config::get("constants.LOTTERY_NAME"))->get()->first();
-        $userlotteries = $lottery->users->where("pivot.rank", ">", 0)->sortBy("pivot.rank");
+        $userlotteries = collect() ;
+        if($request->has("lottery"))
+        {
+            $lotteryName = $request->get("lottery") ;
+            $lottery = Lottery::where("name", $lotteryName)->get()->first();
+            $lotteryDisplayName = $lottery->displayName;
+            $userlotteries = $lottery->users->where("pivot.rank", ">", 0)->sortBy("pivot.rank");
+        }
 
+        $bonName = config("constants.BON2");
+        $bon = Bon::where("name" , $bonName)->first();
+        $pointsGiven = Userbon::where("bon_id" , $bon->id)
+            ->where("userbonstatus_id" , 1)
+            ->get()
+            ->isNotEmpty();
 
         $pageName = "admin";
-        return view("admin.indexLottery", compact("userlotteries", "pageName"));
+        return view("admin.indexLottery", compact("userlotteries", "pageName" ,"lotteryName" , "lotteryDisplayName" , "pointsGiven"));
     }
 
     /**
@@ -2447,18 +2459,6 @@ class HomeController extends Controller
         {
             case "wallet":
                 $view = "admin.bot.wallet" ;
-                break;
-            case "lottery":
-                $bonName = config("constants.BON2");
-                $bon = Bon::where("name" , $bonName)->first();
-                $pointsGiven = Userbon::where("bon_id" , $bon->id)
-                                            ->where("userbonstatus_id" , 1)
-                                            ->get()
-                                            ->isNotEmpty();
-                if($pointsGiven)
-                    $params["pointGiven"] = true;
-
-                $view = "admin.bot.lottery" ;
                 break;
             default:
                 break;

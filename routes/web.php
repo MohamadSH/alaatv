@@ -109,7 +109,7 @@ Route::group(['middleware' => 'auth'], function()
     Route::get('MBTI-Introduction' , "MbtianswerController@introduction");
     Route::post('storeContentFileCaption/{c}/{file}' , 'EducationalContentController@storeFileCaption');
     Route::post('detachContentFile/{c}/{file}' , 'EducationalContentController@detachFile');
-    Route::get('dolottery' , "LotteryController@holdLottery");
+    Route::get('holdlottery' , "LotteryController@holdLottery");
     Route::get('givePrize', "LotteryController@givePrizes");
     Route::get('smsbot' , "HomeController@smsBot");
     Route::get("bot" , "HomeController@bot");

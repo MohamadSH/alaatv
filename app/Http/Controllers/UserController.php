@@ -621,43 +621,49 @@ class UserController extends Controller
             $sideBarMode = "closed";
 
             /** LOTTERY POINTS*/
-            $bon = Bon::where("name" , Config::get("constants.BON2"))->first() ;
-            $userPoints = 0 ;
-            if(isset($bon))
+            $now = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
+                            ->timezone('Asia/Tehran');
+            $startTime = Carbon::create(2018, 05, 25, 07, 00, 00, 'Asia/Tehran');
+            if($now->diffInMinutes($startTime, false) > 0)
             {
-                $userPoints = $user->userHasBon($bon->name);
-                $exchangeAmount = $userPoints * config("constants.HAMAYESH_LOTTERY_EXCHANGE_AMOUNT");
-            }
-            if($userPoints <= 0)
-            {
-                $lottery = Lottery::where("name" , Config::get("constants.LOTTERY_NAME"))
-                    ->get()
-                    ->first();
-                if(isset($lottery))
+                $bon = Bon::where("name" , Config::get("constants.BON2"))->first() ;
+                $userPoints = 0 ;
+                if(isset($bon))
                 {
-                    $userLottery = $user->lotteries()
-                        ->where("lottery_id" , $lottery->id)
+                    $userPoints = $user->userHasBon($bon->name);
+                    $exchangeAmount = $userPoints * config("constants.HAMAYESH_LOTTERY_EXCHANGE_AMOUNT");
+                }
+                if($userPoints <= 0)
+                {
+                    $lottery = Lottery::where("name" , Config::get("constants.LOTTERY_NAME"))
                         ->get()
-                        ->first() ;
-                    if(isset($userLottery))
+                        ->first();
+                    if(isset($lottery))
                     {
-                        $prizes = json_decode($userLottery
-                            ->pivot
-                            ->prizes
-                        )->items;
-                        $prizeCollection = collect() ;
-                        foreach ($prizes as $prize)
+                        $userLottery = $user->lotteries()
+                            ->where("lottery_id" , $lottery->id)
+                            ->get()
+                            ->first() ;
+                        if(isset($userLottery))
                         {
-                            if(isset($prize->objectId))
+                            $prizes = json_decode($userLottery
+                                ->pivot
+                                ->prizes
+                            )->items;
+                            $prizeCollection = collect() ;
+                            foreach ($prizes as $prize)
                             {
-                                $id = $prize->objectId;
-                                $model_name = $prize->objectType;
-                                $model = new $model_name;
-                                $modelObject = $model->find($id);
+                                if(isset($prize->objectId))
+                                {
+                                    $id = $prize->objectId;
+                                    $model_name = $prize->objectType;
+                                    $model = new $model_name;
+                                    $modelObject = $model->find($id);
 
-                                $prizeCollection->push(["name"=>$prize->name]);
-                            }else{
-                                $prizeCollection->push(["name"=>$prize->name]);
+                                    $prizeCollection->push(["name"=>$prize->name]);
+                                }else{
+                                    $prizeCollection->push(["name"=>$prize->name]);
+                                }
                             }
                         }
                     }

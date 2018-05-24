@@ -110,11 +110,6 @@
                                         <span class="title">هدیه کیف پول</span>
                                     </a>
                                 </li>
-                                <li class="nav-item">
-                                    <a href="{{action("HomeController@adminBot" , ["bot"=>"lottery"])}}" class="nav-link ">
-                                        <span class="title">قرعه کشی</span>
-                                    </a>
-                                </li>
                             </ul>
                         </li>
                         @endrole
@@ -127,9 +122,22 @@
                         @endability
                         @role((Config::get("constants.ROLE_ADMIN")))
                         <li class="nav-item  ">
-                            <a href="{{action("HomeController@adminLottery")}}" class="nav-link ">
+                            <a href="#" class="nav-link nav-toggle">
                                 <span class="title">مدیریت قرعه کشی</span>
+                                <span class="arrow"></span>
                             </a>
+                            <ul class="sub-menu">
+                                <li class="nav-item">
+                                    <a href="{{action("HomeController@adminLottery" , ["lottery"=>"hamyeshDey"])}}" class="nav-link ">
+                                        <span class="title">قرعه کشی همایش 1+5</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{action("HomeController@adminLottery" , ["lottery"=>"hamyeshTalai"])}}" class="nav-link ">
+                                        <span class="title">قرعه کشی همایش طلایی</span>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                         @endrole
                         @permission((Config::get('constants.INSERT_MAJOR')))
