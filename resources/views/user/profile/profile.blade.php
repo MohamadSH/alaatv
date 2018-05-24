@@ -178,7 +178,7 @@
                                                             </div>
                                                             <div class="clearfix margin-top-10">
                                                                 <span class="label label-danger">توجه! </span>
-                                                                <span> دقت نمایید که حجم عکس مورد نظر باید حداکثر ۲۰۰ کیلوبایت و فرمت آن jpg و یا png باشد. </span>
+                                                                <span> دقت نمایید که حجم عکس مورد نظر باید حداکثر 500 کیلوبایت و فرمت آن jpg و یا png باشد. </span>
                                                             </div>
                                                         </div>
                                                         <div class="margin-top-10">
