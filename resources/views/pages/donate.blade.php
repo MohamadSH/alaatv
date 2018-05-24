@@ -110,12 +110,14 @@
                     <span class="title">مجموع دونیت ها</span>
 
                     <span class="amount">{{number_format($totalIncome)}}<span class="currency">تومان</span></span>
+                    <span class="title">از 1 مهر تا {{$currentJalaliDateString}}</span>
                 </div><!-- .title -->
 
                 <div class="total">
                     <span class="title">مجموع هزینه ها</span>
 
                     <span class="amount">{{number_format($totalSpend)}}<span class="currency">تومان</span></span>
+                    <span class="title">از 1 مهر تا {{$currentJalaliDateString}}</span>
                 </div><!-- .title -->
 
             </div><!-- .totals -->
@@ -254,7 +256,7 @@
                 borderColor: '#49aaed',
                 data: [
                     @foreach($chartData as $chartDatum)
-                        {{$chartData->where("month" , $chartDatum["month"])->first()["totalIncome"]}},
+                        {{$chartDatum["totalIncome"]}},
                     @endforeach
                 ],
                 fill: false,
@@ -265,12 +267,18 @@
                 borderColor: '#ff597c',
                 data: [
                     @foreach($chartData as $chartDatum)
-                    {{$chartData->where("month" , $chartDatum["month"])->first()["totalSpend"]}},
+                        {{$chartDatum["totalSpend"]}},
+                        // 25000000,
                     @endforeach
                 ],
             }]
         },
         options: {
+            elements: {
+                line: {
+                    tension: 0
+                }
+            },
             responsive: true,
             title: {
                 display: false,
@@ -279,6 +287,11 @@
             tooltips: {
                 mode: 'index',
                 intersect: false,
+                callbacks: {
+                    label: function(tooltipItem, data) {
+                        return tooltipItem.yLabel.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    },
+                },
             },
             hover: {
                 mode: 'nearest',
@@ -297,7 +310,17 @@
                     scaleLabel: {
                         display: true,
                         labelString: ''
-                    }
+                    },
+                    ticks: {
+                        callback: function(label, index, labels) {
+                            var amount = label / 1000000;
+                            return amount + " میلیون تومان" ;
+
+                            },
+                        beginAtZero:true,
+                        max: 30000000 ,
+                    },
+
                 }]
             }
         }

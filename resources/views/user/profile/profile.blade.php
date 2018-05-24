@@ -35,32 +35,32 @@
 @endsection
 
 @section("content")
-    {{--Exchange lottery--}}
-    {{--<div class="row">--}}
-        {{--<div class="col-md-12">--}}
-            {{--@if(isset($userPoints) && $userPoints)--}}
-                {{--<div class="alert alert-block bg-purple bg-font-purple fade in">--}}
-                    {{--<button type="button" class="close" data-dismiss="alert"></button>--}}
-                    {{--<h4 class="alert-heading text-center" style="line-height: normal;">برای انصرف از قرعه کشی همایش 1 + 5 ، روی دکمه زیر کلیک کنید</h4>--}}
-                    {{--<h4 class="alert-heading text-center" style="line-height: normal;">در صورت انصراف کد تخفیف " {{Config::get("constants.HAMAYESH_LOTTERY_EXCHANGE_DISCOUNT")}}% آلاء"(2 روز اعتبار) به رسم یاد بود به شما اهدا خواهد شد.</h4>--}}
-                    {{--<p style="text-align: center;">--}}
-                        {{--<button class="btn mt-sweetalert" data-title="آیا از انصراف خود مطمئنید؟" data-type="warning" data-allow-outside-click="true" data-show-confirm-button="true" data-show-cancel-button="true" data-cancel-button-class="btn-danger" data-cancel-button-text="خیر انصراف نمی دهم" data-confirm-button-text="بله انصراف می دهم" data-confirm-button-class="btn-info" style="background: #d6af18;">انصراف از قرعه کشی و دریافت کد تخفیف</button>--}}
-                    {{--</p>--}}
-                {{--</div>--}}
-            {{--@elseif(isset($userLottery))--}}
-                {{--<div class="alert alert-block bg-blue bg-font-blue fade in">--}}
-                    {{--<button type="button" class="close" data-dismiss="alert"></button>--}}
-                    {{--<h4 class="alert-heading text-center" style="line-height: normal;">شما از قرعه کشی همایش 1 + 5 انصراف داده اید</h4>--}}
-                    {{--@foreach(json_decode($userLottery->pivot->prizes)->items as $item )--}}
-                        {{--<h5 class="text-center bold" style="font-size: large">{{$item->name}}</h5>--}}
-                    {{--@endforeach--}}
-                    {{--<h4 class="alert-heading text-center" style="line-height: normal;">هدیه آلاء به شماست . به امید موفقیت شما .</h4>--}}
-                {{--</div>--}}
-            {{--@endif--}}
-        {{--</div>--}}
-    {{--</div>--}}
+    {{--EXCHANGE LOTTERY--}}
+    <div class="row">
+        <div class="col-md-12">
+            @if(isset($userPoints) && $userPoints)
+                <div class="alert alert-block bg-purple bg-font-purple fade in">
+                    <button type="button" class="close" data-dismiss="alert"></button>
+                    <h4 class="alert-heading text-center" style="line-height: normal;">برای انصرف از قرعه کشی همایش طلایی ، روی دکمه زیر کلیک کنید</h4>
+                    <h4 class="alert-heading text-center" style="line-height: normal;">در صورت انصراف مبلغ {{(isset($exchangeAmount))?number_format($exchangeAmount):""}} تومان اعتبار هدیه به رسم یاد بود به شما اهدا خواهد شد.</h4>
+                    <p style="text-align: center;">
+                        <button class="btn mt-sweetalert" data-title="آیا از انصراف خود مطمئنید؟" data-type="warning" data-allow-outside-click="true" data-show-confirm-button="true" data-show-cancel-button="true" data-cancel-button-class="btn-danger" data-cancel-button-text="خیر انصراف نمی دهم" data-confirm-button-text="بله انصراف می دهم" data-confirm-button-class="btn-info" style="background: #d6af18;">انصراف از قرعه کشی و دریافت مبلغ هدبه</button>
+                    </p>
+                </div>
+            @elseif(isset($userLottery))
+                <div class="alert alert-block bg-blue bg-font-blue fade in">
+                    <button type="button" class="close" data-dismiss="alert"></button>
+                    <h4 class="alert-heading text-center" style="line-height: normal;">شما از قرعه کشی همایش طلایی انصراف داده اید</h4>
+                    @foreach(json_decode($userLottery->pivot->prizes)->items as $item )
+                        <h5 class="text-center bold" style="font-size: large">{{$item->name}}</h5>
+                    @endforeach
+                    <h4 class="alert-heading text-center" style="line-height: normal;"> از طرف آلاء به شما تقدیم شده است. به امید موفقیت شما</h4>
+                </div>
+            @endif
+        </div>
+    </div>
 
-    {{--Lottery prize--}}
+    {{--LOTTERY PRIZE--}}
     {{--@if(isset($userlottery) && isset($userlottery->pivot->rank))--}}
         {{--<div class="row">--}}
             {{--<div class="col-md-12">--}}
@@ -404,8 +404,7 @@
                                             dataType: "json",
                                             statusCode: {
                                                 200:function (response) {
-                                                    // console.log("success!");
-                                                    // console.log(response);
+                                                    // console.log(response.responseText);
                                                     location.reload();
                                                 },
                                                 //The status for when the user is not authorized for making the request
@@ -421,6 +420,7 @@
                                                 },
                                                 //The status for when there is error php code
                                                 500: function (response) {
+                                                    console.log(response);
                                                 },
                                                 //The status for when there is error php code
                                                 503: function (response) {
