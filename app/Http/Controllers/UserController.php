@@ -624,7 +624,7 @@ class UserController extends Controller
             $now = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
                             ->timezone('Asia/Tehran');
             $startTime = Carbon::create(2018, 05, 25, 07, 00, 00, 'Asia/Tehran');
-            if($now->diffInMinutes($startTime, false) > 0)
+            if($now->diffInMinutes($startTime, false) < 0)
             {
                 $bon = Bon::where("name" , Config::get("constants.BON2"))->first() ;
                 $userPoints = 0 ;
@@ -1677,10 +1677,8 @@ class UserController extends Controller
                                     ]
                                 );
 
-                            $key="user:userHasBon:".$user->cacheKey()."-".$bonName;
-                            Cache::forget($key);
-                            $key="user:userValidBons:".$user->cacheKey()."-".(isset($bon) ? $bon->cacheKey() : "");
-                            Cache::forget($key);
+                            /**  clearing cache */
+                            Cache::tags('bon')->flush();
                             $done = true ;
                         }
                         else
