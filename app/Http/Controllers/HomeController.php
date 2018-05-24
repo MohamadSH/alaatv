@@ -2068,6 +2068,19 @@ class HomeController extends Controller
         /** END **/
 
         /** DONATES CHART **/
+
+        $currentGregorianDate = Carbon::now();
+        $delimiter = "/";
+        $currentJalaliDate = $this->gregorian_to_jalali($currentGregorianDate->year , $currentGregorianDate->month , $currentGregorianDate->day , $delimiter);
+        $currentJalaliDateSplit = explode($delimiter , $currentJalaliDate );
+        $currentJalaliYear = $currentJalaliDateSplit[0] ;
+        $currentJalaliMonth = $currentJalaliDateSplit[1];
+        $currentJalaliDay = $currentJalaliDateSplit[2];
+        $currentJalaliMonthString = $this->convertToJalaliMonth($currentJalaliMonth);
+        $currentJalaliMonthDays = $this->getJalaliMonthDays($currentJalaliMonthString);
+
+        $currentJalaliDateString = $currentJalaliDay." ".$currentJalaliMonthString;
+
         $allMonths = [
             "مهر",
             "آبان",
@@ -2082,20 +2095,8 @@ class HomeController extends Controller
             "مرداد",
             "شهریور",
         ];
-
-        $currentGregorianDate = Carbon::now();
-        $delimiter = "/";
-        $currentJalaliDate = $this->gregorian_to_jalali($currentGregorianDate->year , $currentGregorianDate->month , $currentGregorianDate->day , $delimiter);
-        $currentJalaliDateSplit = explode($delimiter , $currentJalaliDate );
-        $currentJalaliYear = $currentJalaliDateSplit[0] ;
-        $currentJalaliMonth = $currentJalaliDateSplit[1];
-        $currentJalaliDay = $currentJalaliDateSplit[2];
-        $currentJalaliMonthString = $this->convertToJalaliMonth($currentJalaliMonth);
-        $currentJalaliMonthDays = $this->getJalaliMonthDays($currentJalaliMonthString);
-
-        $currentJalaliDateString = $currentJalaliDay." ".$currentJalaliMonthString;
-
-        $months = array_splice($allMonths , 0 , array_search($currentJalaliMonthString , $allMonths) + 1) ;
+        $currentMonthKey = array_search($currentJalaliMonthString , $allMonths);
+        $months = array_splice($allMonths , 0 , $currentMonthKey + 1) ;
 
         $chartData = collect();
         $monthToPeriodConvert = collect([
@@ -2175,8 +2176,12 @@ class HomeController extends Controller
             }
             $totalIncome += $totalMonthIncome;
             $totalSpend += $totalMonthSpend;
+            if($month == $currentJalaliMonthString)
+                $monthData = $currentJalaliDay . " ". $month;
+            else
+                $monthData = $month;
             $chartData->push([
-                "month"=>$month ,
+                "month"=>$monthData ,
                 "totalIncome"=> $totalMonthIncome ,
                 "totalSpend" => $totalMonthSpend
             ]);
