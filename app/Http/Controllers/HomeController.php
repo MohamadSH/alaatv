@@ -3087,7 +3087,36 @@ class HomeController extends Controller
                 $warningCounter++;
             }
         }
+        
+        // USERS WITH PLUS POINTS
+        $orders = Order::where("completed_at" , "<" , "2018-05-18")
+                        ->whereIn("orderstatus_id" , [2,5,7])
+                        ->whereIn("paymentstatus_id" , [3])
+                        ->whereHas("orderproducts" , function ($q) use ($hamayeshTalai){
+                            $q->whereIn("product_id" , $hamayeshTalai);
+                        })
+                        ->pluck("user_id")
+                        ->toArray();
 
+        $usersPlus = [];
+        foreach ($orders as $userId)
+        {
+            if(in_array($userId , $usersPlus))
+                continue;
+            else
+                array_push($usersPlus , $userId) ;
+
+            if(isset($users[$userId]))
+            {
+                $users[$userId]++ ;
+            }
+            else
+            {
+                $users[$userId] = 1 ;
+            }
+
+        }
+        
         $bonName = config("constants.BON2");
         $bon = Bon::where("name" , $bonName)->first();
         if(!isset($bon))
