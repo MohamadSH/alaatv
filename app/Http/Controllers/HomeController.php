@@ -6,6 +6,7 @@ use App\Assignmentstatus;
 use App\Attribute;
 use App\Attributecontrol;
 use App\Attributeset;
+use App\Bon;
 use App\Checkoutstatus;
 use App\Consultationstatus;
 use App\Contentset;
@@ -23,6 +24,7 @@ use App\Lottery;
 use App\Major;
 use App\Notifications\GiftGiven;
 use App\Order;
+use App\Orderproduct;
 use App\Orderstatus;
 use App\Paymentmethod;
 use App\Paymentstatus;
@@ -41,6 +43,7 @@ use App\Traits\ProductCommon;
 use App\Transaction;
 use App\Transactionstatus;
 use App\User;
+use App\Userbon;
 use App\Userbonstatus;
 use App\Userstatus;
 use App\Usersurveyanswer;
@@ -113,7 +116,7 @@ class HomeController extends Controller
         $this->middleware('permission:' . Config::get("constants.SMS_ADMIN_PANEL_ACCESS"), ['only' => 'adminSMS']);
         $this->middleware('permission:' . Config::get("constants.REPORT_ADMIN_PANEL_ACCESS"), ['only' => 'adminReport']);
         $this->middleware('ability:' . Config::get("constants.ROLE_ADMIN") . ',' . Config::get("constants.TELEMARKETING_PANEL_ACCESS"), ['only' => 'adminTeleMarketing']);
-        $this->middleware('role:admin' , ['only' => ['bot' , 'smsBot' , 'checkDisableContentTagBot' , 'tagBot']]);
+        $this->middleware('role:admin' , ['only' => ['bot' , 'smsBot' , 'checkDisableContentTagBot' , 'tagBot' , 'pointBot' , 'adminLottery']]);
         $this->response = new Response();
         $this->setting = json_decode(app('setting')->setting);
 
@@ -451,31 +454,31 @@ class HomeController extends Controller
             {
                 case "همه رشته ها":
                     $lessons= $lessons->merge(collect([
-                            ["value"=>"", "initialIndex"=>"همه دروس"] ,
-                            ["value"=>"مشاوره", "index"=>"مشاوره"] ,
-                            ["value"=>"دیفرانسیل", "index"=>"دیفرانسیل"] ,
-                            ["value"=>"تحلیلی", "index"=>"تحلیلی"] ,
-                            ["value"=>"گسسته", "index"=>"گسسته"] ,
-                            ["value"=>"حسابان", "index"=>"حسابان"] ,
-                            ["value"=>"جبر_و_احتمال", "index"=>"جبر و احتمال"] ,
-                            ["value"=>"ریاضی_پایه", "index"=>"ریاضی پایه"] ,
-                            ["value"=>"هندسه_پایه", "index"=>"هندسه پایه"] ,
-                            ["value"=>"فیزیک", "index"=>"فیزیک"] ,
-                            ["value"=>"شیمی", "index"=>"شیمی" ],
-                            ["value"=>"عربی", "index"=>"عربی" ],
-                            ["value"=>"زبان_و_ادبیات_فارسی", "index"=>"زبان و ادبیات فارسی" ],
-                            ["value"=>"دین_و_زندگی", "index"=>"دین و زندگی" ],
-                            ["value"=>"زبان_انگلیسی", "index"=>"زبان انگلیسی" ],
-                            ["value"=>"آمار_و_مدلسازی", "index"=>"آمار و مدلسازی"] ,
-                            ["value"=>"زیست_شناسی", "index"=>"زیست شناسی"] ,
-                            ["value"=>"ریاضی_تجربی", "index"=>"ریاضی تجربی"] ,
-                            ["value"=>"ریاضی_انسانی", "index"=>"ریاضی انسانی"] ,
-                            ["value"=>"ریاضی_و_آمار", "index"=>"ریاضی و آمار"] ,
-                            ["value"=>"منطق", "index"=>"منطق"] ,
-                            ["value"=>"اخلاق", "index"=>"اخلاق"] ,
-                            ["value"=>"المپیاد_نجوم", "index"=>"المپیاد نجوم"] ,
-                            ["value"=>"المپیاد_فیزیک", "index"=>"المپیاد فیزیک"] ,
-                        ])->sortBy("index")->values()
+                        ["value"=>"", "initialIndex"=>"همه دروس"] ,
+                        ["value"=>"مشاوره", "index"=>"مشاوره"] ,
+                        ["value"=>"دیفرانسیل", "index"=>"دیفرانسیل"] ,
+                        ["value"=>"تحلیلی", "index"=>"تحلیلی"] ,
+                        ["value"=>"گسسته", "index"=>"گسسته"] ,
+                        ["value"=>"حسابان", "index"=>"حسابان"] ,
+                        ["value"=>"جبر_و_احتمال", "index"=>"جبر و احتمال"] ,
+                        ["value"=>"ریاضی_پایه", "index"=>"ریاضی پایه"] ,
+                        ["value"=>"هندسه_پایه", "index"=>"هندسه پایه"] ,
+                        ["value"=>"فیزیک", "index"=>"فیزیک"] ,
+                        ["value"=>"شیمی", "index"=>"شیمی" ],
+                        ["value"=>"عربی", "index"=>"عربی" ],
+                        ["value"=>"زبان_و_ادبیات_فارسی", "index"=>"زبان و ادبیات فارسی" ],
+                        ["value"=>"دین_و_زندگی", "index"=>"دین و زندگی" ],
+                        ["value"=>"زبان_انگلیسی", "index"=>"زبان انگلیسی" ],
+                        ["value"=>"آمار_و_مدلسازی", "index"=>"آمار و مدلسازی"] ,
+                        ["value"=>"زیست_شناسی", "index"=>"زیست شناسی"] ,
+                        ["value"=>"ریاضی_تجربی", "index"=>"ریاضی تجربی"] ,
+                        ["value"=>"ریاضی_انسانی", "index"=>"ریاضی انسانی"] ,
+                        ["value"=>"ریاضی_و_آمار", "index"=>"ریاضی و آمار"] ,
+                        ["value"=>"منطق", "index"=>"منطق"] ,
+                        ["value"=>"اخلاق", "index"=>"اخلاق"] ,
+                        ["value"=>"المپیاد_نجوم", "index"=>"المپیاد نجوم"] ,
+                        ["value"=>"المپیاد_فیزیک", "index"=>"المپیاد فیزیک"] ,
+                    ])->sortBy("index")->values()
                     );
                     $defaultLesson = array_merge($defaultLesson , array_intersect( $lessons->pluck("value")->toArray() , $tagInput ))  ;
                     break ;
@@ -499,7 +502,7 @@ class HomeController extends Controller
                         ["value"=>"آمار_و_مدلسازی", "index"=>"آمار و مدلسازی"] ,
                         ["value"=>"المپیاد_نجوم", "index"=>"المپیاد نجوم"] ,
                         ["value"=>"المپیاد_فیزیک", "index"=>"المپیاد فیزیک"] ,
-                        ])->sortBy("index")->values()
+                    ])->sortBy("index")->values()
                     );
                     $defaultLesson = array_merge($defaultLesson , array_intersect( $lessons->pluck("value")->toArray() , $tagInput ))  ;
                     break;
@@ -520,7 +523,7 @@ class HomeController extends Controller
                         ["value"=>"آمار_و_مدلسازی", "index"=>"آمار و مدلسازی"] ,
                         ["value"=>"المپیاد_نجوم", "index"=>"المپیاد نجوم"] ,
                         ["value"=>"المپیاد_فیزیک", "index"=>"المپیاد فیزیک"] ,
-                        ])->sortBy("index")->values()
+                    ])->sortBy("index")->values()
                     );
                     $defaultLesson = array_merge($defaultLesson , array_intersect( $lessons->pluck("value")->toArray() , $tagInput ))  ;
                     break;
@@ -537,7 +540,7 @@ class HomeController extends Controller
                         ["value"=>"دین_و_زندگی", "index"=>"دین و زندگی" ],
                         ["value"=>"زبان_انگلیسی", "index"=>"زبان انگلیسی" ],
                         ["value"=>"آمار_و_مدلسازی", "index"=>"آمار و مدلسازی"] ,
-                        ])->sortBy("index")->values()
+                    ])->sortBy("index")->values()
                     );
                     $defaultLesson = array_merge($defaultLesson , array_intersect( $lessons->pluck("value")->toArray() , $tagInput ))  ;
                     break;
@@ -649,11 +652,11 @@ class HomeController extends Controller
                     ["lastName"=>"حسینی فرد" , "firstName"=>"محمد رضا", "value"=>"محمد_رضا_حسینی_فرد"],
                 ])->sortBy("lastName")->values(),
                 "هندسه_پایه" => collect([
-                        ["index"=>"همه دبیرها" , "firstName"=>"" , "value"=>""],
-                        ["lastName"=>"کبریایی" , "firstName"=>"وحید", "value"=>"وحید_کبریایی"],
-                        ["lastName"=>"شامیزاده" , "firstName"=>"رضا", "value"=>"رضا_شامیزاده"],
-                        ["lastName"=>"حسینی فرد", "firstName"=>"محمد رضا" , "value"=>"محمد_رضا_حسینی_فرد"],
-                        ["lastName"=>"مرصعی" , "firstName"=>"حسن", "value"=>"حسن_مرصعی"],
+                    ["index"=>"همه دبیرها" , "firstName"=>"" , "value"=>""],
+                    ["lastName"=>"کبریایی" , "firstName"=>"وحید", "value"=>"وحید_کبریایی"],
+                    ["lastName"=>"شامیزاده" , "firstName"=>"رضا", "value"=>"رضا_شامیزاده"],
+                    ["lastName"=>"حسینی فرد", "firstName"=>"محمد رضا" , "value"=>"محمد_رضا_حسینی_فرد"],
+                    ["lastName"=>"مرصعی" , "firstName"=>"حسن", "value"=>"حسن_مرصعی"],
                 ])->sortBy("lastName")->values(),
                 "حسابان" => collect([
                     ["index"=>"همه دبیرها" , "firstName"=>"" , "value"=>""],
@@ -662,9 +665,9 @@ class HomeController extends Controller
                     ["lastName"=>"رحیمی" , "firstName"=>"شهروز", "value"=>"شهروز_رحیمی"],
                 ])->sortBy("lastName")->values(),
                 "جبر_و_احتمال" => collect([
-                        ["index"=>"همه دبیرها" , "firstName"=>"" , "value"=>""],
-                        ["lastName"=>"کرد" , "firstName"=>"حسین", "value"=>"حسین_کرد"],
-                        ["lastName"=>"شامیزاده", "firstName"=>"رضا" , "value"=>"رضا_شامیزاده"],
+                    ["index"=>"همه دبیرها" , "firstName"=>"" , "value"=>""],
+                    ["lastName"=>"کرد" , "firstName"=>"حسین", "value"=>"حسین_کرد"],
+                    ["lastName"=>"شامیزاده", "firstName"=>"رضا" , "value"=>"رضا_شامیزاده"],
                 ])->sortBy("lastName")->values(),
                 "ریاضی_پایه" => collect([
                     ["index"=>"همه دبیرها" , "firstName"=>"" , "value"=>""],
@@ -817,8 +820,8 @@ class HomeController extends Controller
         {
             $sideBarMode = "closed";
             $ads1 = [
-            //DINI SEBTI
-                 'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-1.jpg' => 'https://sanatisharif.ir/landing/4',
+                //DINI SEBTI
+                'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-1.jpg' => 'https://sanatisharif.ir/landing/4',
             ];
             $ads2 = [
                 //DINI SEBTI
@@ -1434,14 +1437,26 @@ class HomeController extends Controller
     /**
      * Admin panel for lotteries
      */
-    public function adminLottery()
+    public function adminLottery(Request $request)
     {
-        $lottery = Lottery::where("name", Config::get("constants.HAMAYESH_DEY_LOTTERY"))->get()->first();
-        $userlotteries = $lottery->users->where("pivot.rank", ">", 0)->sortBy("pivot.rank");
+        $userlotteries = collect() ;
+        if($request->has("lottery"))
+        {
+            $lotteryName = $request->get("lottery") ;
+            $lottery = Lottery::where("name", $lotteryName)->get()->first();
+            $lotteryDisplayName = $lottery->displayName;
+            $userlotteries = $lottery->users->where("pivot.rank", ">", 0)->sortBy("pivot.rank");
+        }
 
+        $bonName = config("constants.BON2");
+        $bon = Bon::where("name" , $bonName)->first();
+        $pointsGiven = Userbon::where("bon_id" , $bon->id)
+            ->where("userbonstatus_id" , 1)
+            ->get()
+            ->isNotEmpty();
 
         $pageName = "admin";
-        return view("admin.indexLottery", compact("userlotteries", "pageName"));
+        return view("admin.indexLottery", compact("userlotteries", "pageName" ,"lotteryName" , "lotteryDisplayName" , "pointsGiven"));
     }
 
     /**
@@ -1464,10 +1479,10 @@ class HomeController extends Controller
             })->whereHas("orderproducts" , function ($q2) use($marketingProducts){
                 $q2->whereIn("product_id" , $marketingProducts);
             })
-            ->where("orderstatus_id" , Config::get("constants.ORDER_STATUS_CLOSED"))
-            ->where("paymentstatus_id" ,  Config::get("constants.PAYMENT_STATUS_PAID"))
-            ->where("completed_at" , ">=" , $baseDataTime)
-            ->get();
+                ->where("orderstatus_id" , Config::get("constants.ORDER_STATUS_CLOSED"))
+                ->where("paymentstatus_id" ,  Config::get("constants.PAYMENT_STATUS_PAID"))
+                ->where("completed_at" , ">=" , $baseDataTime)
+                ->get();
             $orders->load("orderproducts");
         }
         return view("admin.indexTeleMarketing" , compact("orders" , "marketingProducts"));
@@ -1973,10 +1988,10 @@ class HomeController extends Controller
         $orders = Order::whereHas("orderproducts" , function ($q){
             $q->where("product_id" , config("constants.CUSTOM_DONATE_PRODUCT"));
         })
-        ->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
-        ->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_PAID"))
-        ->orderBy("completed_at" , "DESC")
-        ->get();
+            ->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
+            ->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_PAID"))
+            ->orderBy("completed_at" , "DESC")
+            ->get();
 
 
         /** THIS WEEK/TODAY LATEST DONATES **/
@@ -1987,7 +2002,7 @@ class HomeController extends Controller
         $weekEnd = Carbon::createMidnightDate("2018" , "05" , "26");
 //        $todayDonates = $orders->where("completed_at" , ">=" , $today ) ;
         $donates = $orders->where("completed_at" ,">=" , $weekBegining )
-                          ->where("completed_at" , "<=" , $weekEnd);
+            ->where("completed_at" , "<=" , $weekEnd);
         foreach ($donates as $donate)
         {
             if($latestOrders == 0)
@@ -2004,15 +2019,15 @@ class HomeController extends Controller
 //                        ->sum("cost");
 
             $donateAmount = $donate->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
-                                        ->where("product_id" , config("constants.CUSTOM_DONATE_PRODUCT") )
-                                        ->get()
-                                        ->sum("cost");
+                ->where("product_id" , config("constants.CUSTOM_DONATE_PRODUCT") )
+                ->get()
+                ->sum("cost");
 
             $latestDonors->push([
-                    "firstName" => (isset($firstName))?$firstName:"",
-                    "lastName" => (isset($lastName))?$lastName:"",
-                    "donateAmount" => $donateAmount ,
-                    "avatar" => (isset($avatar))?$avatar:"",
+                "firstName" => (isset($firstName))?$firstName:"",
+                "lastName" => (isset($lastName))?$lastName:"",
+                "donateAmount" => $donateAmount ,
+                "avatar" => (isset($avatar))?$avatar:"",
             ]);
 
             $latestOrders--;
@@ -2023,13 +2038,13 @@ class HomeController extends Controller
         $latestMax = 3 ;
         $date = Carbon::createMidnightDate("2018" , "05" , "21");
         $thisMonthDonates = $orders->where("completed_at" , ">=" , $date )
-                                    ->pluck("id")
-                                    ->toArray();
+            ->pluck("id")
+            ->toArray();
         $maxDonates = Transaction::whereIn("order_id" , $thisMonthDonates)
-                                    ->where("transactionstatus_id" , config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
-                                    ->orderBy("cost" , "DESC")
-                                    ->take($latestMax)
-                                    ->get();
+            ->where("transactionstatus_id" , config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
+            ->orderBy("cost" , "DESC")
+            ->take($latestMax)
+            ->get();
         $maxDonors = collect();
         foreach ($maxDonates as $maxDonate)
         {
@@ -2053,105 +2068,120 @@ class HomeController extends Controller
         /** END **/
 
         /** DONATES CHART **/
-            $allMonths = [
-                "مهر",
-                "آبان",
-                "آذر",
-                "دی",
-                "بهمن",
-                "اسفند",
-                "فروردین",
-                "اردیبهشت",
-                "خرداد",
-                "تیر",
-                "مرداد",
-                "شهریور",
-            ];
+        $allMonths = [
+            "مهر",
+            "آبان",
+            "آذر",
+            "دی",
+            "بهمن",
+            "اسفند",
+            "فروردین",
+            "اردیبهشت",
+            "خرداد",
+            "تیر",
+            "مرداد",
+            "شهریور",
+        ];
 
-            $currentGregorianDate = Carbon::now();
-            $delimiter = "/";
-            $currentJalaliDate = $this->gregorian_to_jalali($currentGregorianDate->year , $currentGregorianDate->month , $currentGregorianDate->day , $delimiter);
-            $currentJalaliDateSplit = explode($delimiter , $currentJalaliDate );
-            $currentJalaliMonth = $this->convertToJalaliMonth($currentJalaliDateSplit[1]);
+        $currentGregorianDate = Carbon::now();
+        $delimiter = "/";
+        $currentJalaliDate = $this->gregorian_to_jalali($currentGregorianDate->year , $currentGregorianDate->month , $currentGregorianDate->day , $delimiter);
+        $currentJalaliDateSplit = explode($delimiter , $currentJalaliDate );
+        $currentJalaliYear = $currentJalaliDateSplit[0] ;
+        $currentJalaliMonth = $currentJalaliDateSplit[1];
+        $currentJalaliDay = $currentJalaliDateSplit[2];
+        $currentJalaliMonthString = $this->convertToJalaliMonth($currentJalaliMonth);
+        $currentJalaliMonthDays = $this->getJalaliMonthDays($currentJalaliMonthString);
 
-            $months = array_splice($allMonths , 0 , array_search($currentJalaliMonth , $allMonths)) ;
+        $currentJalaliDateString = $currentJalaliDay." ".$currentJalaliMonthString;
 
-            $chartData = collect();
-            $monthToPeriodConvert = collect([
-                ["month"=>"خرداد", "periodBegin"=>"2018-05-22" , "periodEnd"=>"2018-06-22"],
-                ["month"=>"تیر", "periodBegin"=>"2018-06-22" , "periodEnd"=>"2018-07-23"],
-                ["month"=>"مرداد", "periodBegin"=>"2018-07-23" , "periodEnd"=>"2018-08-23"],
-                ["month"=>"شهریور", "periodBegin"=>"2018-08-23" , "periodEnd"=>"2018-09-23"],
-            ]);
-            $totalSpend = 0;
-            $totalIncome = 0;
-            foreach ($months as $month)
+        $months = array_splice($allMonths , 0 , array_search($currentJalaliMonthString , $allMonths) + 1) ;
+
+        $chartData = collect();
+        $monthToPeriodConvert = collect([
+            ["month"=>"خرداد", "periodBegin"=>"2018-05-21" , "periodEnd"=>"2018-06-22"],
+            ["month"=>"تیر", "periodBegin"=>"2018-06-22" , "periodEnd"=>"2018-07-23"],
+            ["month"=>"مرداد", "periodBegin"=>"2018-07-23" , "periodEnd"=>"2018-08-23"],
+            ["month"=>"شهریور", "periodBegin"=>"2018-08-23" , "periodEnd"=>"2018-09-23"],
+        ]);
+        $totalSpend = 0;
+        $totalIncome = 0;
+        $MONTH_SPEND = 25000000;
+        foreach ($months as $month)
+        {
+            switch ($month)
             {
-                switch ($month)
-                {
-                    case "مهر" :
-                        $totalMonthIncome = 2491700;
-                        $totalMonthSpend = 25000000;
-                        break;
-                    case "آبان" :
-                        $totalMonthIncome = 1563186;
-                        $totalMonthSpend = 25000000;
-                        break;
-                    case "آذر" :
-                        $totalMonthIncome = 2339988;
-                        $totalMonthSpend = 25000000;
-                        break;
-                    case "دی" :
-                        $totalMonthIncome = 1270397;
-                        $totalMonthSpend = 25000000;
-                        break;
-                    case "بهمن" :
-                        $totalMonthIncome = 1270397;
-                        $totalMonthSpend = 25000000;
-                        break;
-                    case "اسفند" :
-                        $totalMonthIncome = 1270397;
-                        $totalMonthSpend = 25000000;
-                        break;
-                    case "فروردین" :
-                        $totalMonthIncome = 823600;
-                        $totalMonthSpend = 25000000;
-                        break;
-                    case "اردیبهشت" :
-                        $totalMonthIncome = 1000000;
-                        $totalMonthSpend = 25000000;
-                        break;
-                    default:
-                        $date = $monthToPeriodConvert->where("month" , $month)
-                                                     ->first();
-                        $donates = $orders->where("completed_at" ,">=" , $date["periodBegin"] )
-                                          ->where("completed_at" , "<=" , $date["periodEnd"]);
-                        $totalMonthIncome = 0 ;
-                        foreach ($donates as $donate)
-                        {
+                case "مهر" :
+                    $totalMonthIncome = 2491700;
+                    $totalMonthSpend = $MONTH_SPEND;
+                    break;
+                case "آبان" :
+                    $totalMonthIncome = 1563186;
+                    $totalMonthSpend = $MONTH_SPEND;
+                    break;
+                case "آذر" :
+                    $totalMonthIncome = 2339988;
+                    $totalMonthSpend = $MONTH_SPEND;
+                    break;
+                case "دی" :
+                    $totalMonthIncome = 1270397;
+                    $totalMonthSpend = $MONTH_SPEND;
+                    break;
+                case "بهمن" :
+                    $totalMonthIncome = 1270397;
+                    $totalMonthSpend = $MONTH_SPEND;
+                    break;
+                case "اسفند" :
+                    $totalMonthIncome = 1270397;
+                    $totalMonthSpend = $MONTH_SPEND;
+                    break;
+                case "فروردین" :
+                    $totalMonthIncome = 823600;
+                    $totalMonthSpend = $MONTH_SPEND;
+                    break;
+                case "اردیبهشت" :
+                    $totalMonthIncome = 1000000;
+                    $totalMonthSpend = $MONTH_SPEND;
+                    break;
+                default:
+                    $date = $monthToPeriodConvert->where("month" , $month)
+                        ->first();
+                    $donates = $orders->where("completed_at" ,">=" , $date["periodBegin"] )
+                        ->where("completed_at" , "<=" , $date["periodEnd"]);
+                    $totalMonthIncome = 0 ;
+                    foreach ($donates as $donate)
+                    {
 
 //            $donateAmount =  $latestOrder->successfulTransactions
 //                        ->sum("cost");
 
-                            $amount = $donate->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
-                                            ->where("product_id" , config("constants.CUSTOM_DONATE_PRODUCT") )
-                                            ->get()
-                                            ->sum("cost");
+                        $amount = $donate->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
+                            ->where("product_id" , config("constants.CUSTOM_DONATE_PRODUCT") )
+                            ->get()
+                            ->sum("cost");
 
-                            $totalMonthIncome += $amount ;
-                        }
-                        $totalMonthSpend = 25000000;
-                        break;
-                }
-                $totalIncome += $totalMonthIncome;
-                $totalSpend += $totalMonthSpend;
-                $chartData->push([
-                    "month"=>$month ,
-                    "totalIncome"=> $totalMonthIncome ,
-                    "totalSpend" => $totalMonthSpend
-                ]);
-
+                        $totalMonthIncome += $amount ;
+                    }
+                    if($month == $currentJalaliMonthString)
+                    {
+                        $dayRatio = $currentJalaliDay/$currentJalaliMonthDays ;
+                        $totalMonthSpend = (int)round($MONTH_SPEND * $dayRatio );
+                    }
+                    else
+                    {
+                        $totalMonthSpend = $MONTH_SPEND;
+                    }
+                    break;
             }
+            $totalIncome += $totalMonthIncome;
+            $totalSpend += $totalMonthSpend;
+            $chartData->push([
+                "month"=>$month ,
+                "totalIncome"=> $totalMonthIncome ,
+                "totalSpend" => $totalMonthSpend
+            ]);
+
+        }
 
         $userCanSeeCounter = false ;
         if(Auth::check())
@@ -2163,10 +2193,10 @@ class HomeController extends Controller
             if($user->hasRole("admin"))
                 $userCanSeeCounter = true ;
         }
-        
+
         /** END **/
         return view("pages.donate" , compact("latestDonors" , "maxDonors" ,"months"
-            , "chartData" , "totalSpend" , "totalIncome"));
+            , "chartData" , "totalSpend" , "totalIncome" , "currentJalaliDateString"));
     }
 
     function siteMap(Request $request)
@@ -2420,10 +2450,11 @@ class HomeController extends Controller
     public function adminBot()
     {
         if(!Input::has("bot"))
-              dd("Please pass bot as input");
+            dd("Please pass bot as input");
 
         $bot = Input::get("bot");
         $view = "";
+        $params = [];
         switch ($bot)
         {
             case "wallet":
@@ -2434,7 +2465,7 @@ class HomeController extends Controller
         }
         $pageName = "adminBot";
         if(strlen($view) > 0 )
-            return view($view , compact('pageName'));
+            return view($view , compact('pageName' , 'params'));
         else
             abort(404);
 
@@ -2444,7 +2475,7 @@ class HomeController extends Controller
     {
         abort("403");
         /**
-        $lottery = Lottery::where("name", Config::get("constants.HAMAYESH_DEY_LOTTERY"))->get()->first();
+        $lottery = Lottery::where("name", Config::get("constants.LOTTERY_NAME"))->get()->first();
         $userlotteries = $lottery->users->where("pivot.rank", ">", 0)->sortBy("pivot.rank");
 
         $counter = 0;
@@ -2479,58 +2510,58 @@ class HomeController extends Controller
          * Fixing contentset tags
 
         if(Input::has("id"))
-            $contentsetId = Input::get("id");
+        $contentsetId = Input::get("id");
         else
-            dd("Wring inputs, Please pass id as input");
+        dd("Wring inputs, Please pass id as input");
 
         if(!is_array($contentsetId))
-            dd("The id input must be an array!");
+        dd("The id input must be an array!");
         $contentsets = Contentset::whereIn("id" , $contentsetId)->get();
         dump("number of contentsets:".$contentsets->count());
         $contentCounter = 0;
         foreach ($contentsets as $contentset)
         {
-            $baseTime = Carbon::createFromDate("2017" , "06" , "01" , "Asia/Tehran");
-            $contents = $contentset->educationalcontents->sortBy("pivot.order");
-            $contentCounter += $contents->count();
-            foreach ($contents as $content)
-            {
-                $content->created_at = $baseTime;
-                if($content->update())
-                {
-                    if(isset($content->tags))
-                    {
-                        $params = [
-                            "tags"=> json_encode($content->tags->tags) ,
-                        ];
-                        if(isset($content->created_at) && strlen($content->created_at) > 0 )
-                            $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $content->created_at )->timestamp;
+        $baseTime = Carbon::createFromDate("2017" , "06" , "01" , "Asia/Tehran");
+        $contents = $contentset->educationalcontents->sortBy("pivot.order");
+        $contentCounter += $contents->count();
+        foreach ($contents as $content)
+        {
+        $content->created_at = $baseTime;
+        if($content->update())
+        {
+        if(isset($content->tags))
+        {
+        $params = [
+        "tags"=> json_encode($content->tags->tags) ,
+        ];
+        if(isset($content->created_at) && strlen($content->created_at) > 0 )
+        $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $content->created_at )->timestamp;
 
-                        $response =  $this->sendRequest(
-                            config("constants.AG_API_URL")."id/content/".$content->id ,
-                            "PUT",
-                            $params
-                        );
+        $response =  $this->sendRequest(
+        config("constants.AG_API_URL")."id/content/".$content->id ,
+        "PUT",
+        $params
+        );
 
-                        if($response["statusCode"] == 200)
-                        {
-                        }
-                        else
-                        {
-                            dump("tag request for content id ".$content->id." failed. response : ".$response["statusCode"]);
-                        }
-                    }
-                    else
-                    {
-                        dump("content id ".$content->id."did not have ant tags!");
-                    }
-                }
-                 else
-                 {
-                     dump("content id ".$content->id." was not updated");
-                 }
-                $baseTime = $baseTime->addDay();
-            }
+        if($response["statusCode"] == 200)
+        {
+        }
+        else
+        {
+        dump("tag request for content id ".$content->id." failed. response : ".$response["statusCode"]);
+        }
+        }
+        else
+        {
+        dump("content id ".$content->id."did not have ant tags!");
+        }
+        }
+        else
+        {
+        dump("content id ".$content->id." was not updated");
+        }
+        $baseTime = $baseTime->addDay();
+        }
 
         }
         dump("number of total processed contents: ".$contentCounter);
@@ -2576,22 +2607,22 @@ class HomeController extends Controller
         $failedCounter = 0;
         foreach ($contents as $content)
         {
-            $contenttype = $content->contenttypes()->whereDoesntHave("parents")->get()->first();
-            $content->contenttype_id = $contenttype->id ;
-            if($content->update())
-            {
-                $successCounter++;
-            }
-            else
-            {
-                $failedCounter++;
-                dump("content for ".$content->id." was not saved.") ;
-            }
+        $contenttype = $content->contenttypes()->whereDoesntHave("parents")->get()->first();
+        $content->contenttype_id = $contenttype->id ;
+        if($content->update())
+        {
+        $successCounter++;
+        }
+        else
+        {
+        $failedCounter++;
+        dump("content for ".$content->id." was not saved.") ;
+        }
         }
         dump("successful : ".$successCounter);
         dump("failed: ".$failedCounter) ;
         dd("finish");
-        **/
+         **/
         /**
          * Giving gift to users
 
@@ -3015,6 +3046,69 @@ class HomeController extends Controller
         }
         dump("Number of successfully processed users: ",$successCounter);
         dump("Number of failed users: ",$failedCounter);
+        dd("Done!");
+    }
+
+    public function pointBot(Request $request)
+    {
+        $hamayeshTalai = [ 210 , 211 ,212 ,213 , 214,215,216,217,218,219,220,221, 222 ];
+
+        $orderproducts = Orderproduct::whereHas("order" , function ($q) use ($hamayeshTalai){
+                                $q->whereIn("orderstatus_id" , [2,5,7])
+                                  ->whereIn("paymentstatus_id" , [3]);
+                            })->whereIn("product_id" , $hamayeshTalai)
+                              ->get();
+        $users = [];
+        $successCounter = 0;
+        $failedCounter = 0 ;
+        $warningCounter = 0 ;
+        foreach ($orderproducts as $orderproduct)
+        {
+            if(isset($orderproduct->order->user->id))
+            {
+                $user = $orderproduct->order->user ;
+                if(isset($users[$user->id]))
+                {
+                    $users[$user->id]++;
+                }
+                else
+                {
+                    $users[$user->id] = 1 ;
+                }
+            }
+            else
+            {
+                dump("User was not found for orderproduct ".$orderproduct->id);
+                $warningCounter++;
+            }
+        }
+
+        $bonName = config("constants.BON2");
+        $bon = Bon::where("name" , $bonName)->first();
+        if(!isset($bon))
+            dd("Bon not found");
+
+        dump("Number of available users: ".count($users));
+        foreach ($users as $userId => $points)
+        {
+            $userBon = new Userbon();
+            $userBon->bon_id = $bon->id ;
+            $userBon->user_id = $userId ;
+            $userBon->totalNumber = $points ;
+            $userBon->userbonstatus_id = 1 ;
+            $bonResult = $userBon->save() ;
+            if($bonResult)
+            {
+                $successCounter++;
+            }
+            else
+            {
+                $failedCounter++;
+                dump("Userbon for user ".$userId." was not created");
+            }
+        }
+        dump("number of successfully processed users: ".$successCounter);
+        dump("number of failed users: ".$failedCounter);
         dd("Done!");
     }
 
