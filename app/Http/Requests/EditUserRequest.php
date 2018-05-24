@@ -50,7 +50,7 @@ class EditUserRequest extends FormRequest
                                 })
                             ],
             'userstatus_id' => 'required|exists:userstatuses,id',
-            'photo' => 'image|mimes:jpeg,jpg,png|max:350',
+            'photo' => 'image|mimes:jpeg,jpg,png|max:512',
             'postalCode'    => 'numeric',
             'email' => 'email',
             'password' => 'confirmed|min:6',
