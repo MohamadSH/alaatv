@@ -113,6 +113,7 @@ Route::group(['middleware' => 'auth'], function()
     Route::get('givePrize', "LotteryController@givePrizes");
     Route::get('smsbot' , "HomeController@smsBot");
     Route::get("bot" , "HomeController@bot");
+    Route::get("pointBot" , "HomeController@pointBot");
     Route::post("walletBot" , "HomeController@walletBot");
 
     Route::group(['prefix' => 'user'], function () {

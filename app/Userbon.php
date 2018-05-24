@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Traits\Helper;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Userbon extends Model
 {
     use SoftDeletes;
-
+    use Helper;
     /**
      * @var array
      */

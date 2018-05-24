@@ -36,6 +36,7 @@ use App\Traits\DateCommon;
 use App\Traits\Helper;
 use App\Traits\ProductCommon;
 use App\Traits\RequestCommon;
+use App\Traits\UserCommon;
 use App\Transaction;
 use App\Transactiongateway;
 use App\Order;
@@ -71,7 +72,8 @@ class UserController extends Controller
     use RequestCommon;
     use CharacterCommon ;
     use Helper;
-    
+    use UserCommon;
+
     function __construct()
     {
         /** setting permissions
@@ -618,44 +620,56 @@ class UserController extends Controller
             $majors = Major::pluck('name', 'id')->prepend("نامشخص");
             $sideBarMode = "closed";
 
-            /** Lottery snippet
-            $bons = Bon::where("name" , Config::get("constants.BON2"))->get() ;
-            if($bons->isNotEmpty())
+            /** LOTTERY POINTS*/
+            $bon = Bon::where("name" , Config::get("constants.BON2"))->first() ;
+            $userPoints = 0 ;
+            if(isset($bon))
             {
-                $bon = $bons->first();
                 $userPoints = $user->userHasBon($bon->name);
+                $exchangeAmount = $userPoints * config("constants.HAMAYESH_LOTTERY_EXCHANGE_AMOUNT");
             }
-            $lottery = Lottery::where("name" , Config::get("constants.HAMAYESH_DEY_LOTTERY"))->get()->first();
-            if(isset($lottery))
+            if($userPoints <= 0)
             {
-                $userlottery = $user->lotteries()->where("lottery_id" , $lottery->id)->get()->first() ;
-                if(isset($userlottery))
+                $lottery = Lottery::where("name" , Config::get("constants.LOTTERY_NAME"))
+                    ->get()
+                    ->first();
+                if(isset($lottery))
                 {
-                    $prizes = json_decode($userlottery->pivot->prizes)->items;
-                    $prizeColle ction = collect() ;
-                    foreach ($prizes as $prize)
+                    $userLottery = $user->lotteries()
+                        ->where("lottery_id" , $lottery->id)
+                        ->get()
+                        ->first() ;
+                    if(isset($userLottery))
                     {
-                        if(isset($prize->objectId))
+                        $prizes = json_decode($userLottery
+                            ->pivot
+                            ->prizes
+                        )->items;
+                        $prizeCollection = collect() ;
+                        foreach ($prizes as $prize)
                         {
-                            $id = $prize->objectId;
-                            $model_name = $prize->objectType;
-                            $model = new $model_name;
-                            $modelObject = $model->find($id);
+                            if(isset($prize->objectId))
+                            {
+                                $id = $prize->objectId;
+                                $model_name = $prize->objectType;
+                                $model = new $model_name;
+                                $modelObject = $model->find($id);
 
-                            $prizeCollection->push(["name"=>$prize->name , "validUntil"=>explode(" ", $modelObject->ValidUntil_Jalali())[0] ]);
-                        }else{
-                            $prizeCollection->push(["name"=>$prize->name]);
+                                $prizeCollection->push(["name"=>$prize->name]);
+                            }else{
+                                $prizeCollection->push(["name"=>$prize->name]);
+                            }
                         }
                     }
                 }
             }
-             */
+
             $hasCompleteProfile = $user->orders()->whereHas("orderproducts" , function ($q)
             {
                 $q->whereIn("product_id" , Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT"))->orwhereIn("product_id" , Config::get("constants.ORDOO_HOZOORI_NOROOZ_97_PRODUCT"));
             })->whereIn("orderstatus_id" , [Config::get("constants.ORDER_STATUS_CLOSED")])->get()->isNotEmpty();
             $userCompletion = (int)$user->completion();
-            return view("user.profile.profile", compact("genders", "majors", "sideBarMode", "user" , "userPoints" , "userlottery" ,"prizeCollection" , "hasCompleteProfile" , "userCompletion"));
+            return view("user.profile.profile", compact("genders", "majors", "sideBarMode", "user" , "userPoints" , "exchangeAmount" , "userLottery" ,"prizeCollection" , "hasCompleteProfile" , "userCompletion"));
         } else {
             abort(403);
         }
@@ -1598,89 +1612,94 @@ class UserController extends Controller
      * @param \App\Http\Controllers\CouponController $couponController
      * @return \Illuminate\Http\Response
      */
-    public function removeFromLottery(CouponController $couponController)
+    public function removeFromLottery()
     {
         $user = Auth::user() ;
         $message= "" ;
 
-        $bons = Bon::where("name" , Config::get("constants.BON2"))->get() ;
-        if($bons->isNotEmpty())
+        $bonName = Config::get("constants.BON2") ;
+        $bon = Bon::where("name" , $bonName)->first() ;
+        if(isset($bon))
         {
-            $bon = $bons->first();
             $userbons = $user->userValidBons($bon);
             if($userbons->isNotEmpty())
             {
-
                 $usedUserBon = collect();
+                $sumBonNumber = 0 ;
                 foreach ($userbons as $userbon)
                 {
                     $totalBonNumber = $userbon->totalNumber - $userbon->usedNumber;
                     $usedUserBon->put($userbon->id,["used"=>$totalBonNumber]);
+                    $sumBonNumber += $totalBonNumber ;
                     $userbon->usedNumber = $userbon->usedNumber + $totalBonNumber;
                     $userbon->userbonstatus_id = Config::get("constants.USERBON_STATUS_USED");
                     $userbon->update();
                 }
                 $userBonTaken = true;
 
-                do {
-                    $couponCode = str_random(5);
-                }while(Coupon::where("code" , $couponCode)->get()->isNotEmpty());
+                [
+                    $result ,
+                    $responseText ,
+                    $prizeName ,
+                    $walletId
+                ] = $this->exchangeLottery($user , $sumBonNumber);
 
-                $insertCouponRequest = new \App\Http\Requests\InsertCouponRequest() ;
-                $insertCouponRequest->offsetSet("enable" , 1);
-                $insertCouponRequest->offsetSet("name" , "قرعه کشی همایش ویژه دی برای ".$user->getFullName());
-                $insertCouponRequest->offsetSet("code" , $couponCode);
-                $insertCouponRequest->offsetSet("discount" , Config::get("constants.HAMAYESH_LOTTERY_EXCHANGE_DISCOUNT"));
-                $insertCouponRequest->offsetSet("usageNumber" , 0);
-                $insertCouponRequest->offsetSet("usageLimit" , 1);
-                $insertCouponRequest->offsetSet("limitStatus" , 1);
-                $insertCouponRequest->offsetSet("coupontype_id" , 2);
-                $couponProducts = Product::whereNotIn("id" , [167,168,169,174,175,170,171,172,173,179,180,176,177,178])->get()->pluck('id')->toArray();
-                $insertCouponRequest->offsetSet("products" , $couponProducts);
-                $insertCouponRequest->offsetSet("validSince" , "2017-12-14T00:00:00");
-                $insertCouponRequest->offsetSet("validUntil" , "2017-12-19T24:00:00");
-
-                if($couponController->store($insertCouponRequest)->status() == 200)
+                if($result)
                 {
-                    $attachCouponRequest = new \App\Http\Requests\SubmitCouponRequest() ;
-                    $attachCouponRequest->offsetSet("coupon" , $couponCode);
-                    $orderController = new \App\Http\Controllers\OrderController();
-                    $orderController->submitCoupon($attachCouponRequest) ;
-                    session()->forget('couponMessageError');
-                    session()->forget('couponMessageSuccess');
-
-                    $lottery = Lottery::where("name" , Config::get("constants.HAMAYESH_DEY_LOTTERY"))->get()->first();
-                    $prizeName = "کد تخفیف ".$couponCode." با ".Config::get("constants.HAMAYESH_LOTTERY_EXCHANGE_DISCOUNT")."% تخفیف( تا تاریخ 1396/09/28 اعتبار دارد )" ;
-                    $prizes = '{
+                    $lottery = Lottery::where("name" , Config::get("constants.LOTTERY_NAME"))
+                                        ->first();
+                    if(isset($lottery))
+                    {
+                        $prizes = '{
                           "items": [
                             {
                               "name": "'.$prizeName.'",
-                              "id": 54
+                              "objectType": "App\\\\Wallet",
+                              "objectId": "'.$walletId.'"
                             }
                           ]
                         }';
-                    if($user->lotteries()->where("lottery_id",$lottery->id)->get()->isEmpty())
-                    {
-                        $attachResult = $user->lotteries()->attach($lottery->id, ["rank" => 0, "prizes" => $prizes]);
-                        $done = true ;
-                    }else
+                        if($user->lotteries()
+                            ->where("lottery_id",$lottery->id)
+                            ->get()
+                            ->isEmpty())
+                        {
+                            $attachResult = $user->lotteries()
+                                ->attach($lottery->id, [
+                                        "rank" => 0,
+                                        "prizes" => $prizes
+                                    ]
+                                );
+
+                            $key="user:userHasBon:".$user->cacheKey()."-".$bonName;
+                            Cache::forget($key);
+                            $key="user:userValidBons:".$user->cacheKey()."-".(isset($bon) ? $bon->cacheKey() : "");
+                            Cache::forget($key);
+                            $done = true ;
+                        }
+                        else
+                        {
+                            $done = false ;
+                            $message = "شما قبلا از قرعه کشی انصراف داده اید";
+                        }
+                    }
+                    else
                     {
                         $done = false ;
-                        $message = "شرکت شما در قرعه کشی قبلا انجام شده است";
+                        $message = "خطای غیر منتظره. لطفا بعدا دوباره اقدام نمایید";
                     }
-
                 }
                 else{
-                    $message = "خطا در ایجاد کد تخفیف . لطفا بعدا دوباره اقدام نمایید";
+                    $message = $responseText;
                     $done = false ;
                 }
             }else{
                 $done = false ;
-                $message = "شما نمی توانید در قرعه کشی شرکت کنید";
+                $message = "شما در قرعه کشی نیستید";
             }
         }else{
             $done = false;
-            $message = "شما نمی توانید در قرعه کشی شرکت کنید";
+            $message = "خطای غیر منتظره . لطفا بعدا اقدام فرمایید";
         }
 
         if(isset($done))
@@ -1695,8 +1714,8 @@ class UserController extends Controller
                     {
                         if(isset($usedUserBon[$userbon->id]))
                         {
-                            $usedNumber = $usedUserBon[$userbon->id] ;
-                            $userbon->usedNumber = $userbon->usedNumber - $usedNumber;
+                            $usedNumber = $usedUserBon[$userbon->id]["used"] ;
+                            $userbon->usedNumber = max($userbon->usedNumber - $usedNumber , 0);
                             $userbon->userbonstatus_id = Config::get("constants.USERBON_STATUS_ACTIVE");
                         }else{
                             $userbon->usedNumber = 0;

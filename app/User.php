@@ -313,6 +313,11 @@ class User extends Authenticatable
         return $result;
     }
 
+    public function orderproducts()
+    {
+        return $this->hasManyThrough("\App\Orderproduct", "\App\Order");
+    }
+
     /**
      * Retrieve only order ralated transactions of this user
      */

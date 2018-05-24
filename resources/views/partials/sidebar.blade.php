@@ -110,6 +110,11 @@
                                         <span class="title">هدیه کیف پول</span>
                                     </a>
                                 </li>
+                                <li class="nav-item">
+                                    <a href="{{action("HomeController@adminBot" , ["bot"=>"lottery"])}}" class="nav-link ">
+                                        <span class="title">قرعه کشی</span>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                         @endrole
