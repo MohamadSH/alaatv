@@ -11,6 +11,12 @@ use Auth;
 
 class LotteryController extends Controller
 {
+    public function __construct()
+    {
+
+        $this->middleware('role:admin');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -92,13 +98,18 @@ class LotteryController extends Controller
      *
      */
     public function holdLottery(){
-        if(!Auth::user()->hasRole("admin")) abort(404) ;
         // Setup
-        $lottery = Lottery::where("name" ,  Config::get("constants.HAMAYESH_DEY_LOTTERY"))->get()->first() ;
-        if(!isset($lottery)) dd("Lottery not found!") ;
+        $lottery = Lottery::where("name" ,  Config::get("constants.LOTTERY_NAME"))
+                            ->get()
+                            ->first() ;
+        if(!isset($lottery))
+            dd("Lottery not found!") ;
+
         $luckyBox = new LuckyBox();
         $luckyBox->setConsumable(true);
-        $participants = \App\Userbon::where("bon_id" , 2)->where("userbonstatus_id" , 1)->get();
+        $participants = \App\Userbon::where("bon_id" , 2)->where("userbonstatus_id" , 1)
+                                                        ->get();
+
         echo "number of participants: ".$participants->count() ;
         $participantArray = array();
         foreach ($participants as $participant)
@@ -121,10 +132,15 @@ class LotteryController extends Controller
         while (!$luckyBox->isEmpty()) {
             $card = $luckyBox->draw();
 
-            $user = \App\User::where("id" , $card->getId())->get()->first();
+            $user = \App\User::where("id" , $card->getId())->get()
+                                                            ->first();
             if($user)
             {
-                $userbon = \App\Userbon::where("bon_id" , 2)->where("userbonstatus_id" , 1)->where("user_id" , $user->id)->get()->first();
+                $userbon = \App\Userbon::where("bon_id" , 2)
+                                        ->where("userbonstatus_id" , 1)
+                                        ->where("user_id" , $user->id)
+                                        ->get()
+                                        ->first();
                 if(isset($userbon))
                 {
                     $userbon->userbonstatus_id = 3 ;
@@ -166,7 +182,8 @@ class LotteryController extends Controller
                     else
                         dump("Critical : User ".$user->id." had been participated in lottery with rank > 0") ;
                 }
-            }else{
+            }else
+            {
                 dump("#$counter was not found! User id: ".$card->getId());
             }
             $counter++ ;
@@ -181,9 +198,8 @@ class LotteryController extends Controller
     public function givePrizes()
     {
         abort(404) ;
-        if(!Auth::user()->hasRole("admin")) abort(404) ;
 
-        $lottery = \App\Lottery::where("name" , Config::get("constants.HAMAYESH_DEY_LOTTERY"))->get()->first();
+        $lottery = \App\Lottery::where("name" , Config::get("constants.LOTTERY_NAME"))->get()->first();
         $userlotteries = $lottery->users->where("pivot.rank" ,">" ,  8 )->sortBy("pivot.rank");
 
         $counter = 0 ;
