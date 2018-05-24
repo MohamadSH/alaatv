@@ -501,7 +501,7 @@
                     </div>
                 </div>
                 <div class="clearfix margin-top-10">
-                    <span class="label label-danger">توجه</span> فرمت های مجاز: jpg , png - حداکثر حجم مجاز: ۳۵۰KB </div>
+                    <span class="label label-danger">توجه</span> فرمت های مجاز: jpg , png - حداکثر حجم مجاز: 500KB </div>
                  </div>
         </div>
         <div class="form-group {{ $errors->has('major_id') ? ' has-error' : '' }}">
@@ -722,7 +722,7 @@
                                     <a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput"> حذف </a>
                                 </div>
                                 <div class="clearfix margin-top-10">
-                                    <span class="label label-danger">توجه</span><strong id="photoAlert">فرمت های مجاز: jpg , png - حداکثر حجم مجاز: ۲۰۰KB</strong>
+                                    <span class="label label-danger">توجه</span><strong id="photoAlert">فرمت های مجاز: jpg , png - حداکثر حجم مجاز: 500KB</strong>
                                 </div>
                             </div>
                         @else
@@ -861,7 +861,7 @@
                         <a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput"> حذف </a>
                     </div>
                     <div class="clearfix margin-top-10">
-                        <span class="label label-danger">توجه</span><strong id="photoAlert">فرمت های مجاز: jpg , png - حداکثر حجم مجاز: ۲۰۰KB</strong>
+                        <span class="label label-danger">توجه</span><strong id="photoAlert">فرمت های مجاز: jpg , png - حداکثر حجم مجاز: 500KB</strong>
                     </div>
                 </div>
             </div>

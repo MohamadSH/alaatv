@@ -47,7 +47,7 @@ class InsertUserRequest extends FormRequest
                                 })
                                  ],
             'userstatus_id' => 'required|exists:userstatuses,id',
-            'photo' => 'image|mimes:jpeg,jpg,png|max:200',
+            'photo' => 'image|mimes:jpeg,jpg,png|max:512',
             'postalCode'    => 'numeric',
             'major_id' => 'exists:majors,id',
             'gender_id' => 'exists:genders,id',

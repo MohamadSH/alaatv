@@ -2153,6 +2153,17 @@ class HomeController extends Controller
 
             }
 
+        $userCanSeeCounter = false ;
+        if(Auth::check())
+        {
+            $user = Auth::user();
+            $baseUrl = url("/");
+            $contentPath = str_replace($baseUrl , "" , action("HomeController@donate"));
+            $seenCount = $this->userSeen($contentPath);
+            if($user->hasRole("admin"))
+                $userCanSeeCounter = true ;
+        }
+        
         /** END **/
         return view("pages.donate" , compact("latestDonors" , "maxDonors" ,"months"
             , "chartData" , "totalSpend" , "totalIncome"));
