@@ -896,7 +896,7 @@
                         <td>Apple Watch series 3</td>
                     </tr>
                     <tr>
-                        <td>7 نفر سوم :</td>
+                        <td> نفر سوم :</td>
                         <td>Apple Airpods</td>
                     </tr>
 
