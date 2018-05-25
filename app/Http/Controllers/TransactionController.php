@@ -241,6 +241,8 @@ class TransactionController extends Controller
      */
     public function index()
     {
+        try
+        {
         $transactions = Transaction::orderBy('created_at', 'Desc');
 
         $createdSinceDate = Input::get('createdSinceDate');
@@ -450,6 +452,17 @@ class TransactionController extends Controller
 
         $totaolCost = number_format($transactions->sum("cost"));
         return json_encode(array('index' => View::make('transaction.index', compact('transactions' , "transactionOrderproductCost" ))->render() , "totalCost" => $totaolCost , "orderproductTotalCost"=>$transactionOrderproductTotalCost , "orderproductTotalExtraCost"=>$transactionOrderproductTotalExtraCost));
+        }catch (\Exception    $e) {
+                $message = "unexpected error";
+                return $this->response
+                    ->setStatusCode(503)
+                    ->setContent([
+                        "message"=>$message ,
+                        "error"=>$e->getMessage() ,
+                        "line"=>$e->getLine() ,
+                        "file"=>$e->getFile()
+                    ]);
+            }
     }
 
     /**
