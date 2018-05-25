@@ -12,9 +12,9 @@
     <meta name="alexaVerifyID" content="" />
     <meta name="norton-safeweb-site-verification" content="" />
 
-    <meta name="designer" content="https://ivahid.com" />
-    <meta name="copyright" content="&copy; 2017 ivahid.com" />
-    <link rel="license" href="https://ivahid.com" />
+    <meta name="designer" content="https://sanatisharif.ir" />
+    <meta name="copyright" content="آموزش مجازی آلاء" />
+    <link rel="license" href="https://sanatisharif.ir" />
 
     <link rel="author" href="" />
     <meta itemprop="name" content="" />
@@ -39,9 +39,9 @@
     {!! SEO::generate(true) !!}
     <link rel="index" href="javascript:void(0)" />
 
-    <title></title>
+    <title>همایش طلایی کنکور آلاء</title>
 
-    <link rel="stylesheet" href="/assets/extra/landing3/css/stylesheet5.css" />
+    <link rel="stylesheet" href="/assets/extra/landing3/css/stylesheet6.css" />
     <!--[if lt IE 10]>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flexibility/2.0.1/flexibility.js"></script>
     <![endif]-->
@@ -874,40 +874,9 @@
     </main>
     <section class="lottery-banner">
         <div class="container clearfix">
-            <div class="ttla">قرعه کشی آلاء <span>برای کسانی که تا عید فطر خرید می کنند</span></div>
-
             <div class="bnra">
-                <img class="banner" src="/assets/extra/landing4/images/banner2.png" alt="banner">
-                <img class="infinite animated pulse shadow" src="/assets/extra/landing4/images/shadow.png" alt="banner">
-            </div><!-- .bnra -->
-
-            <div class="gifts">
-                <table>
-                    <thead>
-                    <tr>
-                        <th>نفر اول  :</th>
-                        <th>iphone X</th>
-                    </tr>
-                    </thead>
-
-                    <tbody>
-                    <tr>
-                        <td>نفر دوم  : </td>
-                        <td>Apple Watch series 3</td>
-                    </tr>
-                    <tr>
-                        <td> نفر سوم :</td>
-                        <td>Apple Airpods</td>
-                    </tr>
-
-                    <tr>
-                        <td>110 نفر چهارم : </td>
-                        <td>30 هزار تومان اعتبار هدیه</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div><!-- .gifts -->
-
+                <img class="banner" src="/assets/extra/landing4/images/banner3.png" alt="قرعه کشی آلاء">
+           </div><!-- .bnra -->
         </div><!-- .container -->
     </section>
     <footer class="site-footer site-footer-lading" role="contentinfo">
