@@ -874,7 +874,7 @@
     </main>
     <section class="lottery-banner">
         <div class="container clearfix">
-            <div class="ttla">هدیه خرید آلاء <span>برای کسانی که تا 3 خرداد خرید می کنند</span></div>
+            <div class="ttla">قرعه کشی آلاء <span>برای کسانی که تا عید فطر خرید می کنند</span></div>
 
             <div class="bnra">
                 <img class="banner" src="/assets/extra/landing4/images/banner2.png" alt="banner">
@@ -886,38 +886,23 @@
                     <thead>
                     <tr>
                         <th>نفر اول  :</th>
-                        <th>آیفون x</th>
+                        <th>iphone X</th>
                     </tr>
                     </thead>
 
                     <tbody>
                     <tr>
-                        <td>5 نفر دوم  : </td>
-                        <td>120 هزار تومان اعتبار هدیه</td>
+                        <td>نفر دوم  : </td>
+                        <td>Apple Watch series 3</td>
                     </tr>
                     <tr>
                         <td>7 نفر سوم :</td>
-                        <td>80 هزار تومان اعتبار هدیه</td>
+                        <td>Apple Airpods</td>
                     </tr>
 
                     <tr>
                         <td>110 نفر چهارم : </td>
-                        <td>60 هزار تومان اعتبار هدیه</td>
-                    </tr>
-
-                    <tr>
-                        <td>180 نفر پنجم :</td>
-                        <td>50 هزار تومان اعتبار هدیه</td>
-                    </tr>
-
-                    <tr>
-                        <td>59 نفر ششم :</td>
-                        <td>40 هزار تومان اعتبار هدیه</td>
-                    </tr>
-
-                    <tr>
-                        <td>313 نفر هفتم :</td>
-                        <td>25 هزار تومان اعتبار هدیه</td>
+                        <td>30 هزار تومان اعتبار هدیه</td>
                     </tr>
                     </tbody>
                 </table>
