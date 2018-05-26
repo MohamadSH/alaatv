@@ -130,7 +130,7 @@
                                                     <div class="mt-list-container list-simple scroller" style="height: 100px">
                                                         <ul>
                                                             @foreach($productPamphlets["pamphlets"] as $pamphlet)
-                                                                @if(isset($video["file"]))
+                                                                @if(isset($pamphlet["file"]))
                                                                     <li class="mt-list-item">
                                                                         <div class="list-icon-container">
                                                                             <i class="fa fa-download"></i>
