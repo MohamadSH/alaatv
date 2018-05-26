@@ -14,6 +14,8 @@ class Lottery extends Model
 
     protected $fillable = [
         'name',
+        'displayName',
+        'holdingDate',
         'essentialPoints',
         'prizes',
     ];

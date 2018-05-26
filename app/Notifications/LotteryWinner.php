@@ -73,7 +73,7 @@ class LotteryWinner extends Notification implements ShouldQueue
     }
 
     private function msg() : string {
-        $lotteryName = $this->lottery->name;
+        $lotteryName = $this->lottery->displayName;
         $rank = $this->rank;
         $prize = $this->prize;
         if(isset($this->user->gender_id))
