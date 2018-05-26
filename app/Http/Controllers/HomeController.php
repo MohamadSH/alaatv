@@ -96,6 +96,19 @@ class HomeController extends Controller
 
     public function debug(Request $request)
     {
+        $lotteryName = "hamyeshTalai";
+        $lottery = Lottery::where("name", $lotteryName)
+            ->first();
+        $counter = 1 ;
+        [
+            $prizeName ,
+            $amount
+        ]= $lottery->prizes($counter);
+        $user = User::FindOrFail(1);
+        $user->notify(new \App\Notifications\LotteryWinner($lottery , $counter , $prizeName));
+        echo "<span style='color:green;font-weight: bolder'>User notified</span>";
+        echo "<br>";
+
         return view("errors.404");
     }
     public function __construct()
@@ -1985,8 +1998,10 @@ class HomeController extends Controller
         SEO::setDescription($this->setting->site->seo->homepage->metaDescription);
         SEO::opengraph()->addImage(route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]), ['height' => 100, 'width' => 100]);
 
-        $orders = Order::whereHas("orderproducts" , function ($q){
-            $q->where("product_id" , config("constants.CUSTOM_DONATE_PRODUCT"));
+        $donateProductArray = config("constants.DONATE_PRODUCT") ;
+        array_push($donateProductArray , config("constants.CUSTOM_DONATE_PRODUCT")) ;
+        $orders = Order::whereHas("orderproducts" , function ($q) use ($donateProductArray){
+            $q->whereIn("product_id" , $donateProductArray);
         })
             ->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
             ->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_PAID"))
@@ -2002,7 +2017,7 @@ class HomeController extends Controller
         $weekEnd = Carbon::createMidnightDate("2018" , "05" , "26");
 //        $todayDonates = $orders->where("completed_at" , ">=" , $today ) ;
         $donates = $orders->where("completed_at" ,">=" , $weekBegining )
-            ->where("completed_at" , "<=" , $weekEnd);
+                          ->where("completed_at" , "<=" , $weekEnd);
         foreach ($donates as $donate)
         {
             if($latestOrders == 0)
@@ -2019,9 +2034,9 @@ class HomeController extends Controller
 //                        ->sum("cost");
 
             $donateAmount = $donate->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
-                ->where("product_id" , config("constants.CUSTOM_DONATE_PRODUCT") )
-                ->get()
-                ->sum("cost");
+                                    ->whereIn("product_id" , $donateProductArray )
+                                    ->get()
+                                    ->sum("cost");
 
             $latestDonors->push([
                 "firstName" => (isset($firstName))?$firstName:"",
@@ -2157,7 +2172,7 @@ class HomeController extends Controller
 //                        ->sum("cost");
 
                         $amount = $donate->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
-                            ->where("product_id" , config("constants.CUSTOM_DONATE_PRODUCT") )
+                            ->whereIn("product_id" , $donateProductArray )
                             ->get()
                             ->sum("cost");
 

@@ -192,10 +192,10 @@
                                                             </div>
                                                         @endif
                                                         <div class="row static-info align-reverse">
-                                                            <div class="col-md-12 name bold" style="text-align: center"> استفاده از کیف پول :      {{number_format(min($orderCost , $credit))}} تومان</div>
+                                                            <div class="col-md-12 name bold" style="text-align: center"> استفاده از کیف پول :      {{number_format($walletUse)}} تومان</div>
                                                         </div>
                                                         <div class="row static-info align-reverse">
-                                                            <div class="col-md-12 name font-blue bold" style="text-align: center"> قابل پرداخت :      {{number_format(max($orderCost - $credit , 0))}} تومان</div>
+                                                            <div class="col-md-12 name font-blue bold" style="text-align: center"> قابل پرداخت :      {{number_format($payableCost)}} تومان</div>
                                                         </div>
                                                         <div class="row static-info align-reverse no-print">
                                                             <div class="col-md-4 col-lg-4 col-sm-4 col-xs-12" >

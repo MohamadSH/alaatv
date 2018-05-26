@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Bon;
 use App\Lottery;
+use App\Notifications\GiftGiven;
+use App\Notifications\LotteryWinner;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
 use LuckyBox\LuckyBox;
 use LuckyBox\Card\IdCard;
@@ -12,10 +15,13 @@ use Auth;
 
 class LotteryController extends Controller
 {
+
+    private $response;
     public function __construct()
     {
 
         $this->middleware('role:admin');
+        $this->response = new response();
     }
 
     /**
@@ -98,107 +104,135 @@ class LotteryController extends Controller
      * Holding the lottery
      *
      */
-    public function holdLottery(Request $request){
-        // Setup
-        $lotteryName = "" ;
-        if($request->has("lottery"))
-        {
-            $lotteryName = $request->get("lottery") ;
-        }
+    public function holdLottery(Request $request)
+    {
 
-        $lottery = Lottery::where("name" ,  $lotteryName)
-                            ->first();
-        if(!isset($lottery))
-            dd("Lottery not found!") ;
+      try {
+          // Setup
+          $lotteryName = "";
+          if ($request->has("lottery")) {
+              $lotteryName = $request->get("lottery");
+          }
 
-        $luckyBox = new LuckyBox();
-        $luckyBox->setConsumable(true);
-        $bonName = config("constants.BON2");
-        $bon = Bon::where("name" , $bonName)->first();
-        if(!isset($bon))
-            dd("Unexpected error! bon not found.") ;
+          $lottery = Lottery::where("name", $lotteryName)
+              ->first();
+          if (!isset($lottery))
+              dd("Lottery not found!");
 
-        $participants = \App\Userbon::where("bon_id" , $bon->id)
-                                    ->where("userbonstatus_id" , 1)
-                                    ->get();
+          $bonName = config("constants.BON2");
+          $bon = Bon::where("name", $bonName)->first();
+          if (!isset($bon))
+              dd("Unexpected error! bon not found.");
 
-        dump("number of participants: ".$participants->count()) ;
-        $participantArray = array();
-        foreach ($participants as $participant)
-        {
-            if(!in_array($participant->user->id , $participantArray))
-            {
-                $points = $participant->totalNumber - $participant->usedNumber ;
-                for($i = $points ; $i>0 ; $i--)
-                {
-                    $card = new IdCard();
-                    $card->setId($participant->user->id)
-                        ->setRate(100);
-                    $luckyBox->add($card);
-                }
+          $luckyBox = new LuckyBox();
+          $luckyBox->setConsumable(true);
 
-                array_push($participantArray , $participant->user->id) ;
-            }
+          $participants = \App\Userbon::where("bon_id", $bon->id)
+                                      ->where("userbonstatus_id", 1)
+                                      ->get();
 
-        }
-        dump($luckyBox);
-        // Draw
-        $counter = 1 ;
-        $successCounter = 0;
-        $failedCounter = 0 ;
-        $warningCounter = 0;
-        while (!$luckyBox->isEmpty()) {
-            $card = $luckyBox->draw();
+          dump("Number of participants: " . $participants->count());
+          dump("Sum of total points: " . $participants->sum("totalNumber"));
+          $participantArray = array();
+          foreach ($participants as $participant) {
+              if (in_array($participant->user->id, $participantArray))
+                  continue;
+              else
+                  array_push($participantArray, $participant->user->id);
 
-            $user = \App\User::where("id" , $card->getId())->first();
-            if(isset($user))
-            {
-                $userbon = \App\Userbon::where("bon_id" , $bon->id)
-                                        ->where("userbonstatus_id" , 1)
-                                        ->where("user_id" , $user->id)
-                                        ->get()
-                                        ->first();
-                if(isset($userbon))
-                {
-                    $userbon->userbonstatus_id = 3 ;
-                    $userbon->usedNumber = $userbon->totalNumber  ;
-                    $userbon->update();
-                }else{
-                    dump("Userbon not found for user: ".$user->id) ;
-                    $warningCounter++;
-                }
+              $points = $participant->totalNumber - $participant->usedNumber;
+              for ($i = $points; $i > 0; $i--) {
+                  $card = new IdCard();
+                  $card->setId($participant->user->id)
+                      ->setRate(100);
+                  $luckyBox->add($card);
+              }
+          }
+          dump($luckyBox);
+          // Draw
+          $counter = 0;
+          $successCounter = 0;
+          $failedCounter = 0;
+          $warningCounter = 0;
+          $winners = array();
+          while (!$luckyBox->isEmpty())
+          {
+              $card = $luckyBox->draw();
+              $cardId = $card->getId();
 
-                $userlottery =  $user->lotteries->where("lottery_id" , $lottery->id);
-                if($userlottery->isEmpty())
-                {
-                    $user->lotteries()->attach($lottery->id,["rank"=>$counter  ]);
-                    dump("#$counter: ".$user->getfullName()." - $user->mobile"." - $user->nationalCode") ;
-                    $successCounter++;
-                }else
-                {
-                    if($userlottery->first()->rank == 0)
-                    {
-                        dump("User ".$user->id." had been removed from lottery") ;
-                        $warningCounter++;
-                    }
-                    else
-                    {
-                        dump("Critical : User ".$user->id." had been participated in lottery with rank > 0") ;
-                        $failedCounter++;
-                    }
-                }
-            }else
-            {
-                dump("#$counter was not found! User id: ".$card->getId());
-                $warningCounter++;
-            }
-            $counter++ ;
-        }
+              if(in_array($cardId , $winners))
+                    continue ;
 
-        dump("number of successfully processed users: ".$successCounter);
-        dump("number of failed users: ".$failedCounter);
-        dump("number of warnings: ".$warningCounter);
-        dd("finish");
+              $user = \App\User::where("id", $cardId)->first();
+              if (isset($user))
+              {
+                  $userbon = $user->userbons->where("bon_id", $bon->id)
+                                              ->where("userbonstatus_id", 1)
+                                              ->first();
+
+                  if (isset($userbon))
+                  {
+                      $userbon->userbonstatus_id = 3;
+                      $userbon->usedNumber = $userbon->totalNumber;
+                      $userbon->update();
+                  }
+                  else
+                  {
+                      dump("Warning! Userbon not found for user: " . $user->id);
+                      $warningCounter++;
+                  }
+
+                  $userlotteries = $user->lotteries->where("lottery_id", $lottery->id);
+                  if ($userlotteries->isEmpty())
+                  {
+                      $counter++;
+                      $user->lotteries()->attach($lottery->id, ["rank" => $counter]);
+                      echo "<span style='color:red;font-weight: bolder'>". "#$counter: " ."</span>". $user->getfullName() . " - $user->mobile" . " - $user->nationalCode";
+                      echo "<br>";
+                      $successCounter++;
+
+                      [
+                          $prizeName ,
+                          $amount
+                      ]= $lottery->prizes($counter);
+
+                      $user->notify(new LotteryWinner($lottery , $counter , $prizeName));
+                      echo "<span style='color:green;font-weight: bolder'>User notified</span>";
+                      echo "<br>";
+
+
+
+                      array_push($winners , $cardId) ;
+                  }
+                  else
+                  {
+                      if ($userlotteries->first()->pivot->rank == 0) {
+                          dump("Warning! User " . $user->id . " had been removed from lottery");
+                          $warningCounter++;
+                      } else {
+                          dump("Failed : User " . $user->id . " had been participated in lottery with rank > 0");
+                          $failedCounter++;
+                      }
+                  }
+              } else {
+                  dump("Warning! #$counter was not found! User id: " . $card->getId());
+                  $warningCounter++;
+              }
+          }
+
+          dump("number of successfully processed users: " . $successCounter);
+          dump("number of failed users: " . $failedCounter);
+          dump("number of warnings: " . $warningCounter);
+          dd("finish");
+      }
+      catch(\Exception $e)
+      {
+          $message = "unexpected error";
+          dump($successCounter." users successfully done");
+          dump($failedCounter." users failed");
+          dump($warningCounter." warnings");
+          return $this->response->setStatusCode(503)->setContent(["message" => $message,"number of successfully processed items"=>$counter, "error" => $e->getMessage(), "line" => $e->getLine()]);
+      }
     }
 
     /**
@@ -221,6 +255,7 @@ class LotteryController extends Controller
 
         $successCounter = 0 ;
         $failedCounter = 0 ;
+        dump("Number of participants: ".$userlotteries->count());
         foreach ($userlotteries as $userlottery)
         {
             $rank = $userlottery->pivot->rank ;
@@ -229,45 +264,75 @@ class LotteryController extends Controller
                 $amount
             ]= $lottery->prizes($rank);
 
+            if(strlen($prizeName) == 0)
+                continue;
+
             $done = true;
             $prizeInfo = "" ;
-            if($amount != 0)
+            if($amount > 0)
             {
                 $depositResult =  $userlottery->deposit($amount , config("constants.WALLET_TYPE_GIFT"));
                 $done = $depositResult["result"];
                 $responseText = $depositResult["responseText"];
-                $objectId = $depositResult["wallet"] ;
-                $prizeInfo = '
+                if($done)
+                {
+                    $userlottery->notify(new GiftGiven($amount));
+                    echo "<span style='color:green' >"."Notification sent to user :".$userlottery->lastName."</span>";
+                    echo "<br>";
+                    $objectId = $depositResult["wallet"] ;
+                    $prizeInfo = '
                           "objectType": "App\\\\Wallet",
                           "objectId": "'.$objectId.'"
                           ';
+                }
             }
             if($done)
             {
-                $prizes = '{
+                if(strlen($prizeInfo) > 0)
+                {
+                    $prizes = '{
                       "items": [
                         {
                           "name": "'.$prizeName.'",'
-                         .(strlen($prizeInfo)>0)?$prizeInfo:"".
+                            .$prizeInfo.
                         '}
                       ]
                     }';
-                $givePrizeResult = $userlottery->lotteries()->updateExistingPivot($lottery->id ,["prizes" => $prizes]);
+                }
+                else
+                {
+                    $prizes = '{
+                      "items": [
+                        {
+                          "name": "'.$prizeName.'"
+                        }
+                          ]
+                    }';
+
+                }
+
+                $givePrizeResult = $userlottery->lotteries()
+                                                ->where("lottery_id" , $lottery->id)
+                                                ->where("pivot.rank" , $rank)
+                                                ->updateExistingPivot($lottery->id ,["prizes" => $prizes]);
                 if(!$givePrizeResult)
                 {
-                    dump("Error on updating prize for user: ".$userlottery->id) ;
+                    dump("Failed on updating prize for user: ".$userlottery->id) ;
                     $failedCounter++ ;
                 }
-                $successCounter++ ;
+                else
+                {
+                    $successCounter++ ;
+                }
             }
             else
             {
-                dump("Error on updating wallet for user ".$userlottery->id." ".$responseText);
+                dump("Failed on updating wallet for user ".$userlottery->id." ".$responseText);
                 $failedCounter++;
             }
         }
-        dump("processed users ".$successCounter);
-        dump("failed users: ".$failedCounter);
+        dump("Successfully processed users ".$successCounter);
+        dump("ّFiled users: ".$failedCounter);
         dd("done") ;
     }
 }
