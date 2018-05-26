@@ -413,6 +413,7 @@ body {
     width: 77.5rem;
     height: 26.4rem;
     background: url('../images/sample/book.png') no-repeat;
+    background-size: 100% 100% !important;
     border-radius: 13rem;
 }
 
@@ -906,7 +907,7 @@ body {
         width: 85%;
         height: 12.4rem;
         background: url('../images/sample/book.png') no-repeat;
-        background-size: 100% 100%;
+        background-size: 100% 100% !important;
         margin: 2.3rem auto 0 auto;
     }
     .down-sample>span {
