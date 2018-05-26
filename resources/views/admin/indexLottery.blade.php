@@ -108,9 +108,16 @@
                                  <td>{{$userlottery->mobile}}</td>
                                  <td>
                                      @if(isset($userlottery->pivot->prizes))
-                                         @foreach(json_decode($userlottery->pivot->prizes)->items as $item )
-                                             <p class="text-center bold">{{$item->name}}</p>
-                                         @endforeach
+{{--                                         {{dd(json_decode($userlottery->pivot->prizes))}}--}}
+                                         @if(isset(json_decode($userlottery->pivot->prizes)->items))
+                                             @foreach(json_decode($userlottery->pivot->prizes)->items as $item )
+                                                 <p class="text-center bold">{{$item->name}}</p>
+                                             @endforeach
+                                         @else
+                                             جایزه ای داده نشده
+                                         @endif
+                                     @else
+                                         جایزه نال است
                                      @endif
                                  </td>
                              </tr>
