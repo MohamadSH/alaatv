@@ -130,16 +130,18 @@
                                                     <div class="mt-list-container list-simple scroller" style="height: 100px">
                                                         <ul>
                                                             @foreach($productPamphlets["pamphlets"] as $pamphlet)
-                                                                <li class="mt-list-item">
-                                                                    <div class="list-icon-container">
-                                                                        <i class="fa fa-download"></i>
-                                                                    </div>
-                                                                    <div class="list-item-content">
-                                                                        <p class="uppercase" style="    font-size: 16px;">
-                                                                            <a href="{{action("HomeController@download" , ["content"=>"فایل محصول","fileName"=>$pamphlet["file"] , "pId"=>$pamphlet["product_id"] ])}}">دانلود {{$pamphlet["name"]}}</a>
-                                                                        </p>
-                                                                    </div>
-                                                                </li>
+                                                                @if(isset($video["file"]))
+                                                                    <li class="mt-list-item">
+                                                                        <div class="list-icon-container">
+                                                                            <i class="fa fa-download"></i>
+                                                                        </div>
+                                                                        <div class="list-item-content">
+                                                                            <p class="uppercase" style="    font-size: 16px;">
+                                                                                <a href="{{action("HomeController@download" , ["content"=>"فایل محصول","fileName"=>$pamphlet["file"] , "pId"=>$pamphlet["product_id"] ])}}">دانلود {{$pamphlet["name"]}}</a>
+                                                                            </p>
+                                                                        </div>
+                                                                    </li>
+                                                                @endif
                                                             @endforeach
                                                         </ul>
                                                     </div>
