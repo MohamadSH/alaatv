@@ -160,38 +160,38 @@
                                                     @if($credit > 0 )
                                                         {!! Form::hidden('payByWallet',1 ) !!}
                                                     @endif
-                                                        @if(isset($coupon))
-                                                            <div class="col-lg-12 col-md-12 margin-top-20 text-left">
-                                                                <span class="bold font-blue-sharp"  style="font-size: 15px; padding: 0px 5px 0px 5px;">
-                                                                    {{($credit>0)?"جمع کل:":"مبلغ قابل پرداخت:"}}
-                                                                    <lable id="totalCost" style="text-decoration: line-through;">
-                                                                        {{number_format($totalRawCost)}}
-                                                                    </lable>
-                                                                تومان
-                                                                </span>
-                                                            </div>
-                                                            <div class="col-lg-12 col-md-12 margin-top-20 text-left">
-                                                                <span class="bold font-red" style="padding: 0px 5px 0px 5px; font-size: 15px">
-                                                                        برای شما {{number_format($cost)}} تومان
-                                                                </span>
-                                                            </div>
-                                                        @else
-                                                            <div class="col-lg-12 col-md-12 margin-top-20 text-left">
-                                                                <span class="bold font-blue-sharp"  style="font-size: 15px">
-                                                                    {{($credit>0)?"جمع کل:":"مبلغ قابل پرداخت:"}}
-                                                                    <lable id="totalCost">
-                                                                        {{number_format($totalRawCost)}}
-                                                                    </lable>
-                                                                تومان
-                                                                </span>
-                                                            </div>
-                                                        @endif
+                                                    @if(isset($coupon))
+                                                        <div class="col-lg-12 col-md-12 margin-top-20 text-left">
+                                                            <span class="bold font-blue-sharp"  style="font-size: 15px; padding: 0px 5px 0px 5px;">
+                                                                {{($credit>0)?"جمع کل:":"مبلغ قابل پرداخت:"}}
+                                                                <lable id="totalCost" style="text-decoration: line-through;">
+                                                                    {{number_format($totalRawCost)}}
+                                                                </lable>
+                                                            تومان
+                                                            </span>
+                                                        </div>
+                                                        <div class="col-lg-12 col-md-12 margin-top-20 text-left">
+                                                            <span class="bold font-red" style="padding: 0px 5px 0px 5px; font-size: 15px">
+                                                                    برای شما {{number_format($cost)}} تومان
+                                                            </span>
+                                                        </div>
+                                                    @else
+                                                        <div class="col-lg-12 col-md-12 margin-top-20 text-left">
+                                                            <span class="bold font-blue-sharp"  style="font-size: 15px">
+                                                                {{($credit>0)?"جمع کل:":"مبلغ قابل پرداخت:"}}
+                                                                <lable id="totalCost">
+                                                                    {{number_format($cost)}}
+                                                                </lable>
+                                                            تومان
+                                                            </span>
+                                                        </div>
+                                                    @endif
                                                     @if($credit > 0)
                                                         <div class="col-lg-12 col-md-12 margin-top-20 text-left">
                                                         <span class="bold font-blue-sharp" style="font-size: 15px">
                                                             استفاده از کیف پول:
                                                                     <lable id="totalCost">
-                                                                        {{number_format(min($cost , $credit))}}
+                                                                        {{number_format($walletUse)}}
                                                                     </lable>
                                                                     تومان
                                                         </span>
@@ -199,7 +199,7 @@
                                                         <div class="col-lg-12 col-md-12 margin-top-20 text-left">
                                                             <span class="bold font-blue-sharp" style="font-size: 15px">مبلغ قابل پرداخت:
                                                                         <lable id="totalCost">
-                                                                            {{number_format( max($cost - $credit , 0))}}
+                                                                            {{number_format( $payableCost)}}
                                                                         </lable>
                                                                         تومان
                                                             </span>
@@ -217,7 +217,7 @@
                                                         بازبینی
                                                     </a>
                                                     <button type="submit"  class="btn green btn-outline" style="width: 100px">
-                                                        {{(max($cost - $credit , 0) == 0)?"ثبت نهایی":"پرداخت"}}
+                                                        {{($payableCost == 0)?"ثبت نهایی":"پرداخت"}}
                                                     </button>
                                                 </div>
                                             </div>
@@ -299,7 +299,8 @@
                     dataType: "json",
                     statusCode: {
                         200:function (response) {
-                            $("#totalCost").text(response.cost).number(true) ;
+                            location.reload();
+                            // $("#totalCost").text(response.cost).number(true) ;
                         },
                         //The status for when the user is not authorized for making the request
                         401:function (ressponse) {
@@ -339,7 +340,8 @@
                     dataType: "json",
                     statusCode: {
                         200:function (response) {
-                            $("#totalCost").text(response.cost).number(true) ;
+                            location.reload();
+                            // $("#totalCost").text(response.cost).number(true) ;
                         },
                         //The status for when the user is not authorized for making the request
                         401:function (ressponse) {

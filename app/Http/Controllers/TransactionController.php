@@ -552,14 +552,19 @@ class TransactionController extends Controller
         else
         {
             $cost = $order->totalCost() - $order->totalPaidCost();
+            $walletCost = 0 ;
             if($request->has("payByWallet"))
             {
                 if(isset($user))
                 {
-                    $walletPayResult = $this->payOrderCostByWallet($user , $order , $cost);
+                    $walletCost = $cost ;
+                    if($order->hasProducts(Config::get("constants.DONATE_PRODUCT")))
+                        $walletCost = $walletCost - config("constants.DONATE_PRODUCT_COST") ;
+
+                    $walletPayResult = $this->payOrderCostByWallet($user , $order , $walletCost);
                     if($walletPayResult["result"])
                     {
-                        $cost = $walletPayResult["cost"];
+//                        $walletCost = $walletPayResult["cost"];
                         $order->close(Config::get("constants.PAYMENT_STATUS_INDEBTED")) ;
                         $order->timestamps = false;
                         $order->update();
@@ -568,6 +573,8 @@ class TransactionController extends Controller
                 }
             }
         }
+
+        $cost = $cost - $walletCost ;
         switch ($gateway)
         {
             case "zarinpal":

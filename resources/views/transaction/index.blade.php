@@ -28,7 +28,9 @@
         <td>
         @permission((Config::get('constants.EDIT_TRANSACTION_ACCESS')))
                 <a target="_blank" class="btn btn-success" href="{{action("TransactionController@edit" , $transaction)}}"><i class="fa fa-pencil"></i> اصلاح </a>
-                <a target="_blank" class="btn blue" href="{{action("OrderController@edit" , $transaction->order)}}"><i class="fa fa-pencil"></i> رفتن به سفارش </a>
+                @if(isset($transaction->order->id))
+                    <a target="_blank" class="btn blue" href="{{action("OrderController@edit" , $transaction->order)}}"><i class="fa fa-pencil"></i> رفتن به سفارش </a>
+                @endif
         @endpermission
             @if($transaction->cost < 0)
                 @if(!isset($transaction->traceNumber))

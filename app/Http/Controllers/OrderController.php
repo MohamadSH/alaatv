@@ -979,9 +979,22 @@ class OrderController extends Controller
             ->whereIn("product_id" , Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_NOT_DEFAULT"))
             ->get()
             ->isNotEmpty();
+
+        $orderHasDonate = $order->hasProducts(Config::get("constants.DONATE_PRODUCT")) ;
+
+        $donateCost = 0 ;
+        if($orderHasDonate)
+        {
+            $donateCost = config("constants.DONATE_PRODUCT_COST")  ;
+        }
+
         $credit = $user->getTotalWalletBalance();
+        $costWithWallet = $orderCost - $donateCost ;
+        $walletUse = min($costWithWallet , $credit) ;
+        $payableCost = max($orderCost - $walletUse , 0);
+
         return view("order.checkout.review" , compact("user","orderproducts" , "orderCost" , "orderproductsRawCost" ,
-            'costCollection' ,'orderproductLinks' , 'orderHasOrdrooGheireHozoori' , 'credit'));
+            'costCollection' ,'orderproductLinks' , 'orderHasOrdrooGheireHozoori' , 'credit' , 'walletUse' , 'payableCost'));
     }
 
     /**
@@ -1080,11 +1093,21 @@ class OrderController extends Controller
 //                    $paymentMethods = array("onlinePayment" => "آنلاین" , "offlinePayment" => "کارت به کارت");
                     $paymentMethods = array("onlinePayment" => "آنلاین" );
                 }
-                if($order->orderproducts->whereIn("product_id" , Config::get("constants.DONATE_PRODUCT"))->isNotEmpty()) $orderHasDonate = true;
-                else $orderHasDonate = false ;
+
+                $orderHasDonate = $order->hasProducts(Config::get("constants.DONATE_PRODUCT")) ;
+                $donateCost = 0 ;
+                if($orderHasDonate)
+                {
+                    $donateCost = config("constants.DONATE_PRODUCT_COST")  ;
+                }
 
                 $credit = $user->getTotalWalletBalance();
-                return view("order.checkout.payment" , compact("gateways" , "cost" , "coupon" , "paymentMethods" , "orderHasDonate" , "totalRawCost" , "credit"));
+                $costWithWallet = $cost - $donateCost ;
+                $walletUse = min($costWithWallet , $credit) ;
+                $payableCost = max($cost - $walletUse , 0);
+
+                return view("order.checkout.payment" , compact("gateways" , "cost" , "coupon" , "paymentMethods" , "orderHasDonate" ,
+                    "totalRawCost" , "credit" , "walletPaymentAmount" , "walletUse"  , "payableCost"));
             }else
             {
                 return redirect(action("OrderController@checkoutReview"));
