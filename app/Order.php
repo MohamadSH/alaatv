@@ -597,4 +597,17 @@ class Order extends Model
                                     ->timezone('Asia/Tehran');
 
     }
+
+    /**
+     * Determines if this order has given products
+     *
+     * @param array $product
+     * @return array
+     */
+    public function hasProducts($products)
+    {
+        return $this->orderproducts
+                    ->whereIn("product_id" ,$products)
+                    ->isNotEmpty();
+    }
 }
