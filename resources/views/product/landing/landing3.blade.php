@@ -12,9 +12,9 @@
     <meta name="alexaVerifyID" content="" />
     <meta name="norton-safeweb-site-verification" content="" />
 
-    <meta name="designer" content="https://ivahid.com" />
-    <meta name="copyright" content="&copy; 2017 ivahid.com" />
-    <link rel="license" href="https://ivahid.com" />
+    <meta name="designer" content="https://sanatisharif.ir" />
+    <meta name="copyright" content="آموزش مجازی آلاء" />
+    <link rel="license" href="https://sanatisharif.ir" />
 
     <link rel="author" href="" />
     <meta itemprop="name" content="" />
@@ -39,9 +39,9 @@
     {!! SEO::generate(true) !!}
     <link rel="index" href="javascript:void(0)" />
 
-    <title></title>
+    <title>همایش طلایی کنکور آلاء</title>
 
-    <link rel="stylesheet" href="/assets/extra/landing3/css/stylesheet5.css" />
+    <link rel="stylesheet" href="/assets/extra/landing3/css/stylesheet6.css" />
     <!--[if lt IE 10]>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flexibility/2.0.1/flexibility.js"></script>
     <![endif]-->
@@ -874,55 +874,9 @@
     </main>
     <section class="lottery-banner">
         <div class="container clearfix">
-            <div class="ttla">هدیه خرید آلاء <span>برای کسانی که تا 3 خرداد خرید می کنند</span></div>
-
             <div class="bnra">
-                <img class="banner" src="/assets/extra/landing4/images/banner2.png" alt="banner">
-                <img class="infinite animated pulse shadow" src="/assets/extra/landing4/images/shadow.png" alt="banner">
-            </div><!-- .bnra -->
-
-            <div class="gifts">
-                <table>
-                    <thead>
-                    <tr>
-                        <th>نفر اول  :</th>
-                        <th>آیفون x</th>
-                    </tr>
-                    </thead>
-
-                    <tbody>
-                    <tr>
-                        <td>5 نفر دوم  : </td>
-                        <td>120 هزار تومان اعتبار هدیه</td>
-                    </tr>
-                    <tr>
-                        <td>7 نفر سوم :</td>
-                        <td>80 هزار تومان اعتبار هدیه</td>
-                    </tr>
-
-                    <tr>
-                        <td>110 نفر چهارم : </td>
-                        <td>60 هزار تومان اعتبار هدیه</td>
-                    </tr>
-
-                    <tr>
-                        <td>180 نفر پنجم :</td>
-                        <td>50 هزار تومان اعتبار هدیه</td>
-                    </tr>
-
-                    <tr>
-                        <td>59 نفر ششم :</td>
-                        <td>40 هزار تومان اعتبار هدیه</td>
-                    </tr>
-
-                    <tr>
-                        <td>313 نفر هفتم :</td>
-                        <td>25 هزار تومان اعتبار هدیه</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div><!-- .gifts -->
-
+                <img class="banner" src="/assets/extra/landing4/images/banner3.png" alt="قرعه کشی آلاء">
+           </div><!-- .bnra -->
         </div><!-- .container -->
     </section>
     <footer class="site-footer site-footer-lading" role="contentinfo">
