@@ -710,7 +710,7 @@ class EducationalContentController extends Controller
                 }
             }
 
-            if( isset($educationalContent->tags) &&
+            if($educationalContent->enable  &&  isset($educationalContent->tags) &&
                 is_array($educationalContent->tags->tags) &&
                 !empty($educationalContent->tags->tags))
             {
