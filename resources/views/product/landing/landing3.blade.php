@@ -880,6 +880,6 @@
 </div>
 <script src="/assets/extra/landing3/js/jquery-1.12.4.min.js"></script>
 <script src="/assets/extra/landing3/js/swiper2.jquery.min.js" defer="defer"></script>
-<script src="/assets/extra/landing3/js/script2.js" defer="defer"></script>
+<script src="/assets/extra/landing3/js/script3.js" defer="defer"></script>
 </body>
 </html>
