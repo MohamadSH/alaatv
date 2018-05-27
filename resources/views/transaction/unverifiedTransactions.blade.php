@@ -49,20 +49,49 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @if(isset($transactions))
                             @foreach( $transactions as $transaction)
                                 <tr >
-                                    <td>@if(isset(\App\Transaction::all()->where("authority",$transaction->Authority)->first()->order->user->firstName)  || isset(\App\Transaction::all()->where("authority",$transaction->Authority)->first()->order->user->lastName)) @if(isset(\App\Transaction::all()->where("authority",$transaction->Authority)->first()->order->user->firstName)) {{ \App\Transaction::all()->where("authority",$transaction->Authority)->first()->order->user->firstName}} @endif @if(isset(\App\Transaction::all()->where("authority",$transaction->Authority)->first()->order->user->lastName) ) {{\App\Transaction::all()->where("authority",$transaction->Authority)->first()->order->user->lastName}} @endif @else <span class="label label-sm label-danger">یافت نشد </span> @endif</td>
-                                    <td>@if(isset(\App\Transaction::all()->where("authority",$transaction->Authority)->first()->order->user->mobile) )  {{ \App\Transaction::all()->where("authority",$transaction->Authority)->first()->order->user->mobile}} @else <span class="label label-sm label-danger">یافت نشد </span> @endif</td>
-                                    <td>@if(isset($transaction->Authority) )  {{ $transaction->Authority}} @else <span class="label label-sm label-danger"> ندارد </span> @endif</td>
-                                    <td>@if(isset($transaction->Amount) )  {{ number_format($transaction->Amount)}} @else <span class="label label-sm label-danger"> ندارد </span> @endif</td>
-                                    <td>@if(isset(\App\Transaction::all()->where("authority",$transaction->Authority)->first()->created_at) )  {{ \App\Transaction::all()->where("authority",$transaction->Authority)->first()->CreatedAt_Jalali()}} @else <span class="label label-sm label-warning"> یافت نشد </span> @endif</td>
+                                    <td>
+                                        @if(strlen($transaction["firstName"])>0 || strlen($transaction["lastName"])>0)
+                                        <a target="_blank" href="{{action("UserController@edit" , (isset($transaction["userId"]))?$transaction["userId"]:0 )}}">
+                                            {{$transaction["firstName"]}} {{$transaction["lastName"]}}
+                                        </a>
+                                        @else
+                                            <span class="label label-sm label-danger"> ناشناس </span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if(strlen($transaction["mobile"])>0)
+                                            {{$transaction["mobile"]}}
+                                        @else
+                                            <span class="label label-sm label-danger"> نامشخص </span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if(strlen($transaction["authority"])>0)
+                                            {{$transaction["authority"]}}
+                                        @else
+                                            <span class="label label-sm label-danger"> نامشخص </span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if(strlen($transaction["amount"])>0)
+                                            {{$transaction["amount"]}}
+                                        @else
+                                            <span class="label label-sm label-danger"> نامشخص </span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if(strlen($transaction["created_at"])>0)
+                                            {{$transaction["created_at"]}}
+                                        @else
+                                            <span class="label label-sm label-danger"> نامشخص </span>
+                                        @endif
+                                    </td>
                                 </tr>
                             @endforeach
-                        @elseif(isset($error))
+                        @if(isset($error))
                             <tr><td colspan="5" class="font-red bold text-center">خطا در برقراری ارتباط با سرویس دهنده</td></tr>
-                        @else
-                            <tr><td colspan="5" class="font-green bold text-center">تراکنشی یافت نشد</td></tr>
                         @endif
                         </tbody>
                     </table>
