@@ -96,19 +96,6 @@ class HomeController extends Controller
 
     public function debug(Request $request)
     {
-        $lotteryName = "hamyeshTalai";
-        $lottery = Lottery::where("name", $lotteryName)
-            ->first();
-        $counter = 1 ;
-        [
-            $prizeName ,
-            $amount
-        ]= $lottery->prizes($counter);
-        $user = User::FindOrFail(1);
-        $user->notify(new \App\Notifications\LotteryWinner($lottery , $counter , $prizeName));
-        echo "<span style='color:green;font-weight: bolder'>User notified</span>";
-        echo "<br>";
-
         return view("errors.404");
     }
     public function __construct()
