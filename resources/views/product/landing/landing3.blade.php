@@ -165,7 +165,7 @@
                                 <a href="javascript:void(0)" title="همه رشته ها">
                                     <h1>
                                         <figure class="fig-img-content-field">
-                                            <img src="/assets/extra/landing3/images/sample/res-all.png" alt="همایش کنکور همه رشته ها" title="همه رشته ها">
+                                            <img src="/assets/extra/landing3/images/sample/res-all2.png" alt="همایش کنکور همه رشته ها" title="همه رشته ها">
                                         </figure>
                                     </h1>
                                 </a>
@@ -552,7 +552,7 @@
                                 <a href="javascript:void(0)" title="رشته تجربی">
                                     <h1>
                                         <figure class="fig-img-content-field">
-                                            <img src="/assets/extra/landing3/images/sample/res-experiential.png" alt="رشته تجربی" title="رشته تجربی">
+                                            <img src="/assets/extra/landing3/images/sample/res-experiential2.png" alt="رشته تجربی" title="رشته تجربی">
                                         </figure>
                                     </h1>
                                 </a>
@@ -758,7 +758,7 @@
                                 <a href="javascript:void(0)" title="رشته ریاضی">
                                     <h1>
                                         <figure class="fig-img-content-field">
-                                            <img src="/assets/extra/landing3/images/sample/res-math.png" alt="رشته ریاضی" title="رشته ریاضی">
+                                            <img src="/assets/extra/landing3/images/sample/res-math2.png" alt="رشته ریاضی" title="رشته ریاضی">
                                         </figure>
                                     </h1>
                                 </a>
