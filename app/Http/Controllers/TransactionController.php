@@ -933,16 +933,66 @@ class TransactionController extends Controller
 
     public function getUnverifiedTransactions()
     {
-        $zarinGate = Transactiongateway::all()->where('name' ,'zarinpal')->first() ;
-        $merchant = $zarinGate->merchantNumber;
-        $zarinPal = new Zarinpal($merchant,new SoapDriver()  , "zarinGate");
-        $result = $zarinPal->unverifiedTransactions();
-        if(!isset($result["error"]))
+        try
         {
-            $transactions = json_decode($result["Authorities"]);
-        }else $error = $result["error"];
-        $pageName="admin";
-        return view("transaction.unverifiedTransactions" , compact("transactions" , "error" , 'pageName'));
+            $zarinGate = Transactiongateway::all()->where('name' ,'zarinpal')->first() ;
+            $merchant = $zarinGate->merchantNumber;
+            $zarinPal = new Zarinpal($merchant,new SoapDriver()  , "zarinGate");
+            $result = $zarinPal->unverifiedTransactions();
+            $transactions = collect();
+            if(!isset($result["error"]))
+            {
+                $authorities = json_decode($result["Authorities"]);
+
+                foreach ($authorities as $authority)
+                {
+                    $transaction = Transaction::where("authority",$authority->Authority)->first();
+                    $firstName = "";
+                    $lastName = "";
+                    $mobile = "";
+                    $created_at = "";
+                    if(isset($transaction))
+                    {
+                        $created_at =  $transaction->created_at;
+                        $user = $transaction->order->user;
+                        if(isset($user))
+                        {
+                            $userId = $user->id;
+                            $firstName =  $user->firstName;
+                            $lastName =  $user->lastName;
+                            $mobile =  $user->mobile;
+                        }
+                    }
+
+                    $transactions->push([
+                                "userId" => (isset($userId))?$userId:null ,
+                                "firstName"=> $firstName,
+                                "lastName"=> $lastName,
+                                "mobile"=> $mobile,
+                                "authority"=> $authority->Authority,
+                                "amount"=> $authority->Amount,
+                                "created_at"=> $created_at,
+                    ]);
+                }
+            }else
+            {
+                $error = $result["error"];
+            }
+            $pageName="admin";
+            return view("transaction.unverifiedTransactions" , compact("transactions" , "error" , 'pageName'));
+        }
+        catch (\Exception    $e)
+        {
+            $message = "unexpected error";
+            return $this->response
+                ->setStatusCode(503)
+                ->setContent([
+                    "message"=>$message ,
+                    "error"=>$e->getMessage() ,
+                    "line"=>$e->getLine() ,
+                    "file"=>$e->getFile()
+                ]);
+        }
     }
 
     public function convertToDonate(Transaction $transaction)
