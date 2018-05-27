@@ -3071,6 +3071,7 @@ class HomeController extends Controller
 
     public function pointBot(Request $request)
     {
+        abort(403);
         $hamayeshTalai = [ 210 , 211 ,212 ,213 , 214,216,217,218,219,220,221, 222 ];
 
         $orderproducts = Orderproduct::whereHas("order" , function ($q) use ($hamayeshTalai){
