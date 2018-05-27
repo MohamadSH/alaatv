@@ -125,7 +125,7 @@ class Kernel extends ConsoleKernel
                      * Sending auto generated password through SMS
                      */
                     if(isset($employeeTimeSheet->getEmployeeFullName()[0]))
-                        $message = "سلام " .$employeeTimeSheet->getEmployeeFullName()." عزیز"."\n" ;
+                        $message = "سلام " .$employeeTimeSheet->user->firstName." عزیز"."\n" ;
                     else
                         $message = "سلام"."\n" ;
 
@@ -133,20 +133,22 @@ class Kernel extends ConsoleKernel
                     $todayJalaliDate = explode("/" , $todayJalaliDate);
                     $jalaliYear = $todayJalaliDate[0];
                     $jalaliMonth = $this->convertToJalaliMonth($todayJalaliDate[1]);
-                    $jalaliDay = substr( $todayJalaliDate[2], -2);
+                    $jalaliDay = $todayJalaliDate[2];
+                    $jalaliYear = substr( $jalaliYear, -2);
+                    $todayJalaliDateCaption = "امروز: ";
                     $todayJalaliDateCaption = $jalaliDay . " ". $jalaliMonth. " ".$jalaliYear ;
                     $message .= $todayJalaliDateCaption."\n" ;
                     $persianShiftTime = $employeeTimeSheet->obtainShiftTime("PERSIAN_FORMAT") ;
-                    $message .= "موظفی: ". $persianShiftTime."\n";
 
                     if($persianShiftTime !== 0)
                     {
+                        $message .= "موظفی: ". $persianShiftTime."\n";
                         $realWorkTime = $employeeTimeSheet->obtainRealWorkTime("IN_SECONDS") ;
                         if( $realWorkTime !== false)
                             if($realWorkTime == 0)
-                                $message .= " مرخصی: ".$persianShiftTime ;
+                                $message .= "مرخصی: ".$persianShiftTime ;
                             else
-                                $message .= " اضافه کاری: ".$employeeTimeSheet->obtainWorkAndShiftDiff("HOUR_FORMAT")." منفی" ;
+                                $message .= "اضافه کاری: ".$employeeTimeSheet->obtainWorkAndShiftDiff("HOUR_FORMAT")." منفی" ;
                         else
                             $message .= "خطا" ;
 
