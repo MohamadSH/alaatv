@@ -624,8 +624,9 @@ class UserController extends Controller
             $now = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
                             ->timezone('Asia/Tehran');
             $startTime = Carbon::create(2018, 05, 25, 07, 00, 00, 'Asia/Tehran');
-	    //$flag = ($now->diffInMinutes($startTime, false) < 0 );
-	    $flag = true;
+            $endTime = Carbon::create(2018, 05, 31, 23, 59, 00, 'Asia/Tehran');
+            $flag = ($now->between($startTime, $endTime));
+//	        $flag = true;
             if($flag)
             {
                 $bon = Bon::where("name" , Config::get("constants.BON2"))->first() ;
