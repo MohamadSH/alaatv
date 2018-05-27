@@ -625,7 +625,7 @@ class UserController extends Controller
                             ->timezone('Asia/Tehran');
             $startTime = Carbon::create(2018, 05, 25, 07, 00, 00, 'Asia/Tehran');
 	    //$flag = ($now->diffInMinutes($startTime, false) < 0 );
-	    $flag = false;
+	    $flag = true;
             if($flag)
             {
                 $bon = Bon::where("name" , Config::get("constants.BON2"))->first() ;
@@ -648,25 +648,41 @@ class UserController extends Controller
                             ->first() ;
                         if(isset($userLottery))
                         {
-                            $prizes = json_decode($userLottery
-                                ->pivot
-                                ->prizes
-                            )->items;
-                            $prizeCollection = collect() ;
-                            foreach ($prizes as $prize)
+                            $lotteryName = $lottery->displayName;
+                            $lotteryMessage = "شما در قرعه کشی ".$lotteryName." شرکت داده شدید و متاسفانه برنده نشدید." ;
+                            if(isset($userLottery->pivot->prizes))
                             {
-                                if(isset($prize->objectId))
+                                $lotteryRank = $userLottery->pivot->rank;
+                                if($lotteryRank == 0)
                                 {
-                                    $id = $prize->objectId;
-                                    $model_name = $prize->objectType;
-                                    $model = new $model_name;
-                                    $modelObject = $model->find($id);
+                                    $lotteryMessage = "شما از قرعه کشی ".$lotteryName." انصراف دادید." ;
+                                }
+                                else
+                                {
+                                    $lotteryMessage = "شما در قرعه کشی ".$lotteryName." برنده ".$lotteryRank." شدید." ;
+                                }
 
-                                    $prizeCollection->push(["name"=>$prize->name]);
-                                }else{
-                                    $prizeCollection->push(["name"=>$prize->name]);
+                                $prizes = json_decode($userLottery
+                                    ->pivot
+                                    ->prizes
+                                )->items;
+                                $prizeCollection = collect() ;
+                                foreach ($prizes as $prize)
+                                {
+                                    if(isset($prize->objectId))
+                                    {
+                                        $id = $prize->objectId;
+                                        $model_name = $prize->objectType;
+                                        $model = new $model_name;
+                                        $modelObject = $model->find($id);
+
+                                        $prizeCollection->push(["name"=>$prize->name]);
+                                    }else{
+                                        $prizeCollection->push(["name"=>$prize->name]);
+                                    }
                                 }
                             }
+
                         }
                     }
                 }
@@ -677,7 +693,8 @@ class UserController extends Controller
                 $q->whereIn("product_id" , Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT"))->orwhereIn("product_id" , Config::get("constants.ORDOO_HOZOORI_NOROOZ_97_PRODUCT"));
             })->whereIn("orderstatus_id" , [Config::get("constants.ORDER_STATUS_CLOSED")])->get()->isNotEmpty();
             $userCompletion = (int)$user->completion();
-            return view("user.profile.profile", compact("genders", "majors", "sideBarMode", "user" , "userPoints" , "exchangeAmount" , "userLottery" ,"prizeCollection" , "hasCompleteProfile" , "userCompletion"));
+            return view("user.profile.profile", compact("genders", "majors", "sideBarMode", "user" , "userPoints" ,
+                "exchangeAmount" , "userLottery" ,"prizeCollection" , "hasCompleteProfile" , "userCompletion" , "lotteryRank" , "lottery" , "lotteryMessage"));
         } else {
             abort(403);
         }
