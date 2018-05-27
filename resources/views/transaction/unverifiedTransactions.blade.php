@@ -41,16 +41,18 @@
                     <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="user_table">
                         <thead>
                         <tr>
+                            <th></th>
                             <th class="all"> نام مشتری </th>
                             <th class="all"> موبایل مشتری </th>
-                            <th class="all"> Authority </th>
-                            <th class="all"> مبلغ </th>
-                            <th class="all"> تاریخ </th>
+                            <th class="min-tablet"> Authority </th>
+                            <th class="min-tablet"> مبلغ </th>
+                            <th class="min-tablet"> تاریخ </th>
                         </tr>
                         </thead>
                         <tbody>
                             @foreach( $transactions as $transaction)
                                 <tr >
+                                    <th></th>
                                     <td>
                                         @if(strlen($transaction["firstName"])>0 || strlen($transaction["lastName"])>0)
                                         <a target="_blank" href="{{action("UserController@edit" , (isset($transaction["userId"]))?$transaction["userId"]:0 )}}">
