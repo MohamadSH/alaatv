@@ -65,7 +65,7 @@
      </> introduction
     ------------------------------------*/
   var swiper_content_field = new Swiper('.swiper-content-field-all', {
-      loop: true,
+      
     slidesPerView: 'auto',
     spaceBetween: 14,
     slidesPerGroup: 1,
