@@ -2084,7 +2084,7 @@ class HomeController extends Controller
 
         /** DONATES CHART **/
 
-        $currentGregorianDate = Carbon::now();
+        $currentGregorianDate = Carbon::now()->timezone('Asia/Tehran');
         $delimiter = "/";
         $currentJalaliDate = $this->gregorian_to_jalali($currentGregorianDate->year , $currentGregorianDate->month , $currentGregorianDate->day , $delimiter);
         $currentJalaliDateSplit = explode($delimiter , $currentJalaliDate );
