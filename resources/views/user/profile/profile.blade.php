@@ -48,14 +48,24 @@
                     </p>
                 </div>
             @elseif(isset($userLottery))
-                <div class="alert alert-block bg-blue bg-font-blue fade in">
-                    <button type="button" class="close" data-dismiss="alert"></button>
-                    <h4 class="alert-heading text-center" style="line-height: normal;">شما از قرعه کشی همایش طلایی انصراف داده اید</h4>
-                    @foreach(json_decode($userLottery->pivot->prizes)->items as $item )
-                        <h5 class="text-center bold" style="font-size: large">{{$item->name}}</h5>
-                    @endforeach
-                    <h4 class="alert-heading text-center" style="line-height: normal;"> از طرف آلاء به شما تقدیم شده است. به امید موفقیت شما</h4>
-                </div>
+                @if(isset($prizeCollection))
+                    <div class="alert alert-block bg-blue bg-font-blue fade in">
+                        <button type="button" class="close" data-dismiss="alert"></button>
+                        <h4 class="alert-heading text-center" style="line-height: normal;">{{$lotteryMessage}} {{($lotteryRank>0)?" جایزه شما:":""}}</h4>
+                        @foreach($prizeCollection as $prize )
+                            <h5 class="text-center bold" style="font-size: large">{{$prize["name"]}}</h5>
+                        @endforeach
+                        <h4 class="alert-heading text-center" style="line-height: normal;"> از طرف آلاء به شما تقدیم شده است. به امید موفقیت شما</h4>
+                    </div>
+                @else
+                    <div class="alert alert-block bg-blue bg-font-blue fade in">
+                        <button type="button" class="close" data-dismiss="alert"></button>
+                        <h4 class="alert-heading text-center" style="line-height: normal;">{{$lotteryMessage}}</h4>
+
+                        <h4 class="alert-heading text-center" style="line-height: normal;">از شرکت شما در قرعه کشی سپاس گزاریم . با امید موفقیت شما.</h4>
+                    </div>
+                @endif
+
             @endif
         </div>
     </div>

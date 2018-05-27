@@ -106,7 +106,7 @@ class LotteryController extends Controller
      */
     public function holdLottery(Request $request)
     {
-
+    abort(403);
       try {
           // Setup
           $lotteryName = "";
@@ -241,67 +241,70 @@ class LotteryController extends Controller
      */
     public function givePrizes(Request $request)
     {
-        $lotteryName = "" ;
-        if($request->has("lottery"))
+        abort(403);
+        try
         {
-            $lotteryName = $request->get("lottery") ;
-        }
-
-        $lottery = Lottery::where("name" ,  $lotteryName)->first();
-        if(!isset($lottery))
-            dd("Lottery not found!") ;
-
-        $userlotteries = $lottery->users->sortBy("pivot.rank");
-
-        $successCounter = 0 ;
-        $failedCounter = 0 ;
-        dump("Number of participants: ".$userlotteries->count());
-        foreach ($userlotteries as $userlottery)
-        {
-            $rank = $userlottery->pivot->rank ;
-            [
-                $prizeName ,
-                $amount
-            ]= $lottery->prizes($rank);
-
-            if(strlen($prizeName) == 0)
-                continue;
-
-            $done = true;
-            $prizeInfo = "" ;
-            if($amount > 0)
+            $lotteryName = "" ;
+            if($request->has("lottery"))
             {
-                $depositResult =  $userlottery->deposit($amount , config("constants.WALLET_TYPE_GIFT"));
-                $done = $depositResult["result"];
-                $responseText = $depositResult["responseText"];
-                if($done)
+                $lotteryName = $request->get("lottery") ;
+            }
+
+            $lottery = Lottery::where("name" ,  $lotteryName)->first();
+            if(!isset($lottery))
+                dd("Lottery not found!") ;
+
+            $userlotteries = $lottery->users->sortBy("pivot.rank");
+
+            $successCounter = 0 ;
+            $failedCounter = 0 ;
+            dump("Number of participants: ".$userlotteries->count());
+            foreach ($userlotteries as $userlottery)
+            {
+                $rank = $userlottery->pivot->rank ;
+                [
+                    $prizeName ,
+                    $amount
+                ]= $lottery->prizes($rank);
+
+                if(strlen($prizeName) == 0)
+                    continue;
+
+                $done = true;
+                $prizeInfo = "" ;
+                if($amount > 0)
                 {
+                    $depositResult =  $userlottery->deposit($amount , config("constants.WALLET_TYPE_GIFT"));
+                    $done = $depositResult["result"];
+                    $responseText = $depositResult["responseText"];
+                    if($done)
+                    {
                     $userlottery->notify(new GiftGiven($amount));
-                    echo "<span style='color:green' >"."Notification sent to user :".$userlottery->lastName."</span>";
-                    echo "<br>";
-                    $objectId = $depositResult["wallet"] ;
-                    $prizeInfo = '
+                        echo "<span style='color:green' >"."Notification sent to user :".$userlottery->lastName."</span>";
+                        echo "<br>";
+                        $objectId = $depositResult["wallet"] ;
+                        $prizeInfo = '
                           "objectType": "App\\\\Wallet",
                           "objectId": "'.$objectId.'"
                           ';
+                    }
                 }
-            }
-            if($done)
-            {
-                if(strlen($prizeInfo) > 0)
+                if($done)
                 {
-                    $prizes = '{
+                    if(strlen($prizeInfo) > 0)
+                    {
+                        $prizes = '{
                       "items": [
                         {
                           "name": "'.$prizeName.'",'
                             .$prizeInfo.
-                        '}
+                            '}
                       ]
                     }';
-                }
-                else
-                {
-                    $prizes = '{
+                    }
+                    else
+                    {
+                        $prizes = '{
                       "items": [
                         {
                           "name": "'.$prizeName.'"
@@ -309,30 +312,43 @@ class LotteryController extends Controller
                           ]
                     }';
 
-                }
+                    }
 
-                $givePrizeResult = $userlottery->lotteries()
-                                                ->where("lottery_id" , $lottery->id)
-                                                ->where("pivot.rank" , $rank)
-                                                ->updateExistingPivot($lottery->id ,["prizes" => $prizes]);
-                if(!$givePrizeResult)
-                {
-                    dump("Failed on updating prize for user: ".$userlottery->id) ;
-                    $failedCounter++ ;
+                    $givePrizeResult = $userlottery->lotteries()
+                        ->where("lottery_id" , $lottery->id)
+                        ->where("pivot.rank" , $rank)
+                        ->updateExistingPivot($lottery->id ,["prizes" => $prizes]);
+                    if(!$givePrizeResult)
+                    {
+                        dump("Failed on updating prize for user: ".$userlottery->id) ;
+                        $failedCounter++ ;
+                    }
+                    else
+                    {
+                        $successCounter++ ;
+                    }
                 }
                 else
                 {
-                    $successCounter++ ;
+                    dump("Failed on updating wallet for user ".$userlottery->id." ".$responseText);
+                    $failedCounter++;
                 }
             }
-            else
-            {
-                dump("Failed on updating wallet for user ".$userlottery->id." ".$responseText);
-                $failedCounter++;
-            }
+            dump("Successfully processed users ".$successCounter);
+            dump("ّFiled users: ".$failedCounter);
+            dd("done") ;
         }
-        dump("Successfully processed users ".$successCounter);
-        dump("ّFiled users: ".$failedCounter);
-        dd("done") ;
+        catch(\Exception $e)
+        {
+            $message = "unexpected error";
+            return $this->response
+                        ->setStatusCode(503)
+                        ->setContent([
+                            "message" => $message,
+                            "error" => $e->getMessage(),
+                            "line" => $e->getLine()
+                        ]);
+                    }
+
     }
 }
