@@ -44,9 +44,9 @@
                             <th></th>
                             <th class="all"> نام مشتری </th>
                             <th class="all"> موبایل مشتری </th>
-                            <th class="all"> Authority </th>
-                            <th class="all"> مبلغ </th>
-                            <th class="all"> تاریخ </th>
+                            <th class="min-tablet"> Authority </th>
+                            <th class="min-tablet"> مبلغ </th>
+                            <th class="min-tablet"> تاریخ </th>
                         </tr>
                         </thead>
                         <tbody>
