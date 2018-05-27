@@ -50,13 +50,13 @@ class EditUserRequest extends FormRequest
                                 })
                             ],
             'userstatus_id' => 'required|exists:userstatuses,id',
-            'photo' => 'image|mimes:jpeg,jpg,png|max:512',
-            'postalCode'    => 'numeric',
-            'email' => 'email',
-            'password' => 'confirmed|min:6',
-            'major_id' => 'exists:majors,id',
-            'gender_id' => 'exists:genders,id',
-            'techCode' => 'alpha_num|max:5|min:5|unique:users,techCode,'.$this->userId.',id',
+            'photo' => 'sometimes|nullable|image|mimes:jpeg,jpg,png|max:512',
+            'postalCode'    => 'sometimes|nullable|numeric',
+            'email' => 'sometimes|nullable|email',
+            'password' => 'sometimes|nullable|confirmed|min:6',
+            'major_id' => 'sometimes|nullable|exists:majors,id',
+            'gender_id' => 'sometimes|nullable|exists:genders,id',
+            'techCode' => 'sometimes|nullable|alpha_num|max:5|min:5|unique:users,techCode,'.$this->userId.',id',
          ];
 
         if($this->request->has("major_id") && strcmp($this->request->get("major_id"),"0")!=0) $rules["major_id"] = "exists:majors,id";
