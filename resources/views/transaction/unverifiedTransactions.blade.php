@@ -81,7 +81,7 @@
                                             <span class="label label-sm label-danger"> نامشخص </span>
                                         @endif
                                     </td>
-                                    <td>
+                                    <td dir="ltr">
                                         @if(strlen($transaction["created_at"])>0)
                                             {{$transaction["created_at"]}}
                                         @else
