@@ -65,9 +65,10 @@
      </> introduction
     ------------------------------------*/
   var swiper_content_field = new Swiper('.swiper-content-field-all', {
+      
     slidesPerView: 'auto',
     spaceBetween: 14,
-    slidesPerGroup: 2,
+    slidesPerGroup: 1,
     grabCursor: true,
     noSwiping: false,
     navigation: {
@@ -84,19 +85,11 @@
     // },
 
   });
-  var nenu_res = new Swiper('.menu-res', {
-    slidesPerView: 'auto',
-    spaceBetween: 85,
-    autoplay: {
-      delay: 9000,
-      disableOnInteraction: false,
-    },
-
-  });
   var swiper_content_field_experiential = new Swiper('.swiper-content-field-experiential', {
+      loop: true,
     slidesPerView: 'auto',
     spaceBetween: 14,
-    slidesPerGroup: 2,
+    slidesPerGroup: 1,
     grabCursor: true,
     noSwiping: false,
     navigation: {
@@ -114,9 +107,10 @@
 
   });
   var swiper_content_field_math = new Swiper('.swiper-content-field-math', {
+      loop: true,
     slidesPerView: 'auto',
     spaceBetween: 14,
-    slidesPerGroup: 2,
+    slidesPerGroup: 1,
     grabCursor: true,
     noSwiping: false,
     navigation: {

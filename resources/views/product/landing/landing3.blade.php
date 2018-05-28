@@ -41,7 +41,7 @@
 
     <title>همایش طلایی کنکور آلاء</title>
 
-    <link rel="stylesheet" href="/assets/extra/landing3/css/stylesheet7.css" />
+    <link rel="stylesheet" href="/assets/extra/landing3/css/stylesheet8.css" />
     <!--[if lt IE 10]>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flexibility/2.0.1/flexibility.js"></script>
     <![endif]-->
@@ -73,69 +73,13 @@
 
 <body>
 <div class="wrapper" id="main-page">
-    <header class="site-header">
-        <section class="header-top">
-            {{--<article class="sigin-login">--}}
-                {{--<a href="javascript:void(0)" title="ورود">--}}
-                    {{--<bdi class="bdi-sig-log">--}}
-                        {{--<i class="icon-social-1"></i>--}}
-                    {{--</bdi>--}}
-                {{--</a>--}}
-                {{--<a href="javascript:void(0)" class="a-login" title="ورود">--}}
-                    {{--ورود--}}
-                {{--</a>--}}
-                {{--<a href="javascript:void(0)" class="a-sigin" title="ثبت نام">--}}
-                    {{--ثبت نام--}}
-                {{--</a>--}}
-            {{--</article>--}}
-            <nav class="nav-primary-menu" role="navigation" style="display: none">
-                <ul class="primary-menu">
-                    <li>
-                        <a href="{{action("HomeController@index")}}" title="صفحه اصلی">صفحه اصلی</a>
-                    </li>
-                    <li>
-                        <a href="{{ action('ProductController@show',210) }}" data-role="210"  title="خرید همایش">همایش ادبیات دکتر سبطی </a>
-                    </li>
-                    <li>
-                        <a href="{{ action('ProductController@show',211) }}" data-role="211"  title="خرید همایش">همایش دینی خانم کاغذی</a>
-                    </li>
-                    <li>
-                        <a href="{{ action('ProductController@show',212) }}" data-role="212"  title="خرید همایش">همایش زیست شناسی دکتر چلاجور</a>
-                    </li>
-                    <li>
-                        <a href="{{ action('ProductController@show',213) }}" data-role="213"  title="خرید همایش">همایش زمین شناسی دکتر چلاجور</a>
-                    </li>
-                    <li>
-                        <a href="{{ action('ProductController@show',214) }}" data-role="214"  title="خرید همایش">همایش عربی مهندس ناصح زاده</a>
-                    </li>
-                </ul>
-                <div class="swiper-container menu-res hidden" style="display: none">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide">
-                            <a href="{{action("HomeController@index")}}" title="آلاء - دبیرستان دانشگاه شریف">صفحه اصلی</a>
-                        </div>
-                        <div class="swiper-slide">
-                            <a href="{{ action('ProductController@show',210) }}" data-role="210"  title="همایش ادبیات دکتر سبطی">همایش ادبیات دکتر سبطی </a>
-                        </div>
-                        <div class="swiper-slide">
-                            <a href="{{ action('ProductController@show',211) }}" data-role="211"  title="همایش دین و زندگی کاغذی">همایش دین و زندگی کاغذی</a>
-                        </div>
-                        <div class="swiper-slide">
-                            <a href="{{ action('ProductController@show',212) }}" data-role="212"  title="همایش زیست دکتر چلاجور">همایش زیست شناسی دکتر چلاجور</a>
-                        </div>
-                        <div class="swiper-slide">
-                            <a href="{{ action('ProductController@show',213) }}" data-role="213"  title="همایش زمین شناسی دکتر چلاجور">همایش زمین شناسی دکتر چلاجور</a>
-                        </div>
-                        <div class="swiper-slide">
-                            <a href="{{action("HomeController@contactUs")}}" title="تماس با ما">تماس با ما</a>
-                        </div>
-                    </div>
-                    <!-- <div class="swiper-button-next"></div>
-                    <div class="swiper-button-prev"></div> -->
-                </div>
-            </nav>
-        </section>
-    </header>
+    <section class="lottery-banner">
+        <div class="container clearfix">
+            <div class="bnra">
+                <img class="banner" src="/assets/extra/landing4/images/banner3.png" alt="قرعه کشی آلاء">
+            </div><!-- .bnra -->
+        </div><!-- .container -->
+    </section>
     <main>
         <div class="container main-landing">
             <section class="res-gold-fest">
@@ -143,26 +87,17 @@
                     <header class="header-none">
                         <h2></h2>
                     </header>
-                    <a href="javascript:void(0)">
+                    <a href="">
                         <img src="/assets/extra/landing3/images/sample/gold-fest.png" alt="همایش طلایی آلاء" >
                     </a>
                 </figure>
             </section>
             <section class="content-field">
                 <div class="row p30">
-                    <div class="col-md-9">
+                    <div class="col-md-24">
                         <article class="art-img-content-field">
-                            <header class="header-main">
-                                <a href="javascript:void(0)" title="همه رشته ها">
-                                    <h1>
-                                        <figure class="fig-img-content-field">
-                                            <img src="/assets/extra/landing3/images/tablighat/1.png" alt="همایش کنکور همه رشته ها" title="همه رشته ها">
-                                        </figure>
-                                    </h1>
-                                </a>
-                            </header>
                             <header class="header-res">
-                                <a href="javascript:void(0)" title="همه رشته ها">
+                                <a href="" title="همه رشته ها">
                                     <h1>
                                         <figure class="fig-img-content-field">
                                             <img src="/assets/extra/landing3/images/sample/res-all2.png" alt="همایش کنکور همه رشته ها" title="همه رشته ها">
@@ -172,7 +107,7 @@
                             </header>
                         </article>
                     </div>
-                    <div class="col-md-15">
+                    <div class="col-md-24">
                         <article class="art-slider-field">
                             <div class="swiper-container swiper-content-field swiper-content-field-all">
                                 <div class="swiper-wrapper">
@@ -486,38 +421,6 @@
                                             </figure>
                                         </article>
                                     </div>
-                                    {{--<div class="swiper-slide">--}}
-                                        {{--<article class="item-content-field">--}}
-                                            {{--<bdi class="bdi-title all">--}}
-                                                {{--<em>مشترک</em>--}}
-                                            {{--</bdi>--}}
-                                            {{--<figure>--}}
-                                                {{--<a href="javascript:void(0)" data-role="215"  title="">--}}
-                                                    {{--<img src="/assets/extra/landing3/images/professors/G8.png" alt="" title="">--}}
-                                                {{--</a>--}}
-                                                {{--<figcaption>--}}
-                                                    {{--<header>--}}
-                                                        {{--<a href="javascript:void(0)" data-role="215"  title="">--}}
-                                                            {{--<h1>--}}
-                                                                {{--<span>عربی</span>--}}
-                                                                {{--<em>آهویی</em>--}}
-                                                            {{--</h1>--}}
-                                                        {{--</a>--}}
-                                                    {{--</header>--}}
-                                                    {{--<strong>--}}
-                                                            {{--<span class="span-gold">--}}
-                                                                {{--همایش طـــلایی--}}
-                                                            {{--</span>--}}
-                                                        {{--<bdi class="prsent">--}}
-                                                            {{--<i>80%</i>--}}
-                                                            {{--<em> کــــنـکور</em>--}}
-                                                        {{--</bdi>--}}
-                                                    {{--</strong>--}}
-                                                {{--</figcaption>--}}
-                                            {{--</figure>--}}
-                                        {{--</article>--}}
-                                    {{--</div>--}}
-
                                 </div>
                             </div>
                             <i class="icon-right-arrow i-all-next r0 i-all i-swiper-content"></i>
@@ -526,28 +429,10 @@
                     </div>
                 </div>
             </section>
-
-            <section class="sec-dwon-sample sec-res-down-sample">
-                <a href="{{ action('EducationalContentController@show',7884) }}" class="down-sample" title="دانلود نمونه فیلم">
-                        <span>
-                           دانلود نمونه فیلم همایش
-                        </span>
-                </a>
-            </section>
-
             <section class="content-field">
                 <div class="row p30">
-                    <div class="col-md-9">
+                    <div class="col-md-24">
                         <article class="art-img-content-field">
-                            <header class="header-main">
-                                <a href="javascript:void(0)" title="رشته تجربی">
-                                    <h1>
-                                        <figure class="fig-img-content-field">
-                                            <img src="/assets/extra/landing3/images/tablighat/2.png" alt="رشته تجربی" title="رشته تجربی">
-                                        </figure>
-                                    </h1>
-                                </a>
-                            </header>
                             <header class="header-res">
                                 <a href="javascript:void(0)" title="رشته تجربی">
                                     <h1>
@@ -559,7 +444,7 @@
                             </header>
                         </article>
                     </div>
-                    <div class="col-md-15">
+                    <div class="col-md-24">
                         <article class="art-slider-field">
                             <div class="swiper-container swiper-content-field swiper-content-field-experiential">
                                 <div class="swiper-wrapper">
@@ -727,33 +612,10 @@
                     </div>
                 </div>
             </section>
-
-            <section class="note-content sec-res-down-sample">
-                <header>
-                    <a href="javascript:void(0)" title="">
-                        <h2>با ماندگاری مطالب در ذهنتان، استرس را فراموش کنید!</h2>
-                    </a>
-                </header>
-                <p>
-                    چند ماه مانده به کنکور؛ دوران گیجی دانش‌آموزان است: آن‌هایی که زیاد خوانده‌اند دیوانه‌وار بیشتر و بیشتر می‌خوانند و آن‌هایی که کمتر خوانده‌اند پناهشان می‌شود جزوات متعدد دم کنکور! اما چاره این سرگیجه چیست؟
-
-                    با بررسی دلیل موفقیت برترین‌های کنکور در سال‌های متوالی یک نکته مهم در برطرف‌شدن این استرس نهفته است: مرور در ماه‌های آخر!
-                </p>
-            </section>
-
             <section class="content-field">
                 <div class="row p30">
-                    <div class="col-md-9">
+                    <div class="col-md-24">
                         <article class="art-img-content-field">
-                            <header class="header-main">
-                                <a href="javascript:void(0)" title="رشته ریاضی">
-                                    <h1>
-                                        <figure class="fig-img-content-field">
-                                            <img src="/assets/extra/landing3/images/tablighat/3.png" alt="رشته ریاضی" title="رشته ریاضی">
-                                        </figure>
-                                    </h1>
-                                </a>
-                            </header>
                             <header class="header-res">
                                 <a href="javascript:void(0)" title="رشته ریاضی">
                                     <h1>
@@ -765,7 +627,7 @@
                             </header>
                         </article>
                     </div>
-                    <div class="col-md-15">
+                    <div class="col-md-24">
                         <article class="art-slider-field">
                             <div class="swiper-container swiper-content-field swiper-content-field-math">
                                 <div class="swiper-wrapper">
@@ -862,6 +724,99 @@
                                             </figure>
                                         </article>
                                     </div>
+                                    <div class="swiper-slide">
+                                        <article class="item-content-field">
+                                            <bdi class="bdi-title math">
+                                                <em>مشترک</em>
+                                            </bdi>
+                                            <figure>
+                                                <a href="{{ action('ProductController@show',210) }}" data-role="210"  title="همایش طلایی ادبیات کنکور دکتر سبطی">
+                                                    <img src="/assets/extra/landing3/images/professors/G9.png" alt="همایش طلایی ادبیات کنکور دکتر سبطی آلاء" title="همایش طلایی ادبیات کنکور دکتر سبطی">
+                                                </a>
+                                                <figcaption>
+                                                    <header>
+                                                        <a href="{{ action('ProductController@show',210) }}" data-role="210"  title="همایش طلایی ادبیات کنکور دکتر سبطی">
+                                                            <h1>
+                                                                <span>ادبیات</span>
+                                                                <em>دکتر سبطی</em>
+                                                            </h1>
+                                                        </a>
+                                                    </header>
+                                                    <strong>
+                                                            <span class="span-gold">
+                                                                همایش طـــلایی
+                                                            </span>
+                                                        <bdi class="prsent">
+                                                            <i>80%</i>
+                                                            <em> کــــنـکور</em>
+                                                        </bdi>
+                                                    </strong>
+                                                </figcaption>
+                                            </figure>
+                                        </article>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <article class="item-content-field">
+                                            <bdi class="bdi-title math">
+                                                <em>مشترک</em>
+                                            </bdi>
+                                            <figure>
+                                                <a href="{{ action('ProductController@show',211) }}" data-role="211"  title="همایش طلایی دین و زندگی کنکور">
+                                                    <img src="/assets/extra/landing3/images/professors/G10.png" alt="همایش طلایی دین و زندگی کنکور آلاء" title="همایش طلایی دین و زندگی کنکور">
+                                                </a>
+                                                <figcaption>
+                                                    <header>
+                                                        <a href="{{ action('ProductController@show',211) }}" data-role="211"  title="همایش طلایی دین و زندگی کنکور">
+                                                            <h1>
+                                                                <span>دینی</span>
+                                                                <em>کاغذی</em>
+                                                            </h1>
+                                                        </a>
+                                                    </header>
+                                                    <strong>
+                                                            <span class="span-gold">
+                                                                همایش طـــلایی
+                                                            </span>
+                                                        <bdi class="prsent">
+                                                            <i>80%</i>
+                                                            <em> کــــنـکور</em>
+                                                        </bdi>
+                                                    </strong>
+                                                </figcaption>
+                                            </figure>
+                                        </article>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <article class="item-content-field">
+                                            <bdi class="bdi-title math">
+                                                <em>مشترک</em>
+                                            </bdi>
+                                            <figure>
+                                                <a href="{{ action('ProductController@show',216) }}" data-role="216"  title="همایش طلایی فیزیک کنکور">
+                                                    <img src="/assets/extra/landing3/images/professors/1.png" alt="همایش طلایی فیزیک کنکور آلاء" title="همایش طلایی فیزیک کنکور">
+                                                </a>
+                                                <figcaption>
+                                                    <header>
+                                                        <a href="{{ action('ProductController@show',216) }}" data-role="216"  title="">
+                                                            <h1>
+                                                                <span>فیزیک</span>
+                                                                <em>دکتر طلوعی</em>
+                                                            </h1>
+                                                        </a>
+                                                    </header>
+                                                    <strong>
+                                                            <span class="span-gold">
+                                                                همایش طـــلایی
+                                                            </span>
+                                                        <bdi class="prsent">
+                                                            <i>80%</i>
+                                                            <em> کــــنـکور</em>
+                                                        </bdi>
+                                                    </strong>
+                                                </figcaption>
+                                            </figure>
+                                        </article>
+                                    </div>
                                 </div>
                             </div>
                             <i class="icon-right-arrow i-math-next r0 i-math i-swiper-content"></i>
@@ -870,16 +825,30 @@
                     </div>
                 </div>
             </section>
+
         </div>
     </main>
-    <section class="lottery-banner">
-        <div class="container clearfix">
-            <div class="bnra">
-                <img class="banner" src="/assets/extra/landing4/images/banner3.png" alt="قرعه کشی آلاء">
-           </div><!-- .bnra -->
-        </div><!-- .container -->
-    </section>
+
     <footer class="site-footer site-footer-lading" role="contentinfo">
+        <section class="sec-dwon-sample">
+            <a href="{{ action('EducationalContentController@show',7884) }}" class="down-sample" title="دانلود نمونه فیلم">
+                        <span>
+                           دانلود نمونه فیلم همایش
+                        </span>
+            </a>
+        </section>
+        <section class="note-content">
+            <header>
+                <a href="" title="">
+                    <h2>با ماندگاری مطالب در ذهنتان، استرس را فراموش کنید!</h2>
+                </a>
+            </header>
+            <p>
+                چند ماه مانده به کنکور؛ دوران گیجی دانش‌آموزان است: آن‌هایی که زیاد خوانده‌اند دیوانه‌وار بیشتر و بیشتر می‌خوانند و آن‌هایی که کمتر خوانده‌اند پناهشان می‌شود جزوات متعدد دم کنکور! اما چاره این سرگیجه چیست؟
+
+                با بررسی دلیل موفقیت برترین‌های کنکور در سال‌های متوالی یک نکته مهم در برطرف‌شدن این استرس نهفته است: مرور در ماه‌های آخر!
+            </p>
+        </section>
         <ul class="tab-footer">
             <li>
                 <a href="javascript:void(0)" title="">
@@ -906,80 +875,11 @@
                 </a>
             </li>
         </ul>
-        <section class="sec-dwon-sample res-down">
-            <a href="{{ action('EducationalContentController@show',7884) }}" class="down-sample" title="دانلود نمونه فیلم">
-                    <span>
-                           دانلود نمونه فیلم همایش
-                    </span>
-            </a>
-        </section>
-        <section class="note-content res-note">
-            <header>
-                <a href="javascript:void(0)" title="">
-                    <h2>با ماندگاری مطالب در ذهنتان، استرس را فراموش کنید!</h2>
-                </a>
-            </header>
-            <p>
-                چند ماه مانده به کنکور؛ دوران گیجی دانش‌آموزان است: آن‌هایی که زیاد خوانده‌اند دیوانه‌وار بیشتر و بیشتر می‌خوانند و آن‌هایی که کمتر خوانده‌اند پناهشان می‌شود جزوات متعدد دم کنکور! اما چاره این سرگیجه چیست؟
 
-                با بررسی دلیل موفقیت برترین‌های کنکور در سال‌های متوالی یک نکته مهم در برطرف‌شدن این استرس نهفته است: مرور در ماه‌های آخر!
-            </p>
-        </section>
     </footer>
 </div>
-<script>
-    var storeOrderUrl = "{{ action('OrderproductController@store') }}";
-</script>
 <script src="/assets/extra/landing3/js/jquery-1.12.4.min.js"></script>
 <script src="/assets/extra/landing3/js/swiper2.jquery.min.js" defer="defer"></script>
-<script src="/assets/extra/landing3/js/script2.js" defer="defer"></script>
-{{--<script>--}}
-    {{--$('a.checkout').click(function() {--}}
-        {{--var id = $(this).data('role');--}}
-        {{--$.ajax({--}}
-            {{--url: '{{ action('OrderproductController@store') }}',--}}
-            {{--type: 'POST',--}}
-            {{--// contentType: 'application/json; charset=UTF-8',--}}
-            {{--// dataType: 'json',--}}
-            {{--// timeout: 10000,--}}
-            {{--data: {--}}
-                {{--product_id: id--}}
-            {{--},--}}
-            {{--statusCode: {--}}
-                {{--//The status for when action was successful--}}
-                {{--200: function (response) {--}}
-                    {{--if(response.redirectUrl!= null && response.redirectUrl!="undefined")--}}
-                        {{--window.location.replace(response.redirectUrl);--}}
-                {{--},--}}
-                {{--//The status for when the user is not authorized for making the request--}}
-                {{--403: function (response) {--}}
-                    {{--console.log("response 403");--}}
-                {{--},--}}
-                {{--//The status for when the user is not authorized for making the request--}}
-                {{--401: function (response) {--}}
-                    {{--console.log("response 401");--}}
-                {{--},--}}
-                {{--404: function (response) {--}}
-                    {{--console.log("response 404");--}}
-                {{--},--}}
-                {{--//The status for when form data is not valid--}}
-                {{--422: function (response) {--}}
-                    {{--console.log(response);--}}
-                {{--},--}}
-                {{--//The status for when there is error php code--}}
-                {{--500: function (response) {--}}
-                    {{--console.log("response 500");--}}
-                    {{--console.log(response.responseText);--}}
-                {{--},--}}
-                {{--//The status for when there is error php code--}}
-                {{--503: function (response) {--}}
-                    {{--response = $.parseJSON(response.responseText);--}}
-                    {{--console.log(response.message);--}}
-                {{--}--}}
-            {{--}--}}
-        {{--});--}}
-        {{--return false;--}}
-    {{--});--}}
-{{--</script>--}}
+<script src="/assets/extra/landing3/js/script3.js" defer="defer"></script>
 </body>
 </html>
