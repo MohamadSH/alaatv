@@ -595,6 +595,7 @@
                     "teacherSelect"
             ];
 
+            
             $.each(elemets , function (key , value)
             {
                 $("#"+value).each(function ()
