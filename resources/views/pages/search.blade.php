@@ -75,7 +75,7 @@
             <div class="row">
 
                 {!! Form::open(['action'=> 'EducationalContentController@index'  ,'role'=>'form' , 'id' => 'itemFilterForm'  ]) !!}
-                <div class="form-body">
+                <div class="form-body" id="itemFilterFormBody">
                     {{--CHECKBOXES FOR BUCKETS--}}
                     {{--<div class="form-group form-md-line-input form-md-floating-label has-info">--}}
                     {{--<div class="col-md-12 itemType hidden">--}}
@@ -87,7 +87,7 @@
                     <div class="row">
                         <div class="col-lg-3 col-md-3 col-sd-3 col-xs-12">
                             <div class="form-group form-md-line-input form-md-floating-label has-info">
-                                {!! Form::select('tags[]',$grades,null,['class' => 'form-control itemFilter' , 'placeholder'=>'همه مقاطع' ]) !!}
+                                {!! Form::select('tags[]',$grades,null,['class' => 'form-control itemFilter' , 'id'=>'gradeSelect' , 'placeholder'=>'همه مقاطع' ]) !!}
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sd-3 col-xs-12">
@@ -106,13 +106,6 @@
                             </div>
                         </div>
                     </div>
-                    @if(!empty($extraTagArray))
-                        <div class="row">
-                            <div class="col-md-12">
-                                @include("partials.search.tagLabel" , ["tags"=>$extraTagArray , "withCloseIcon"=>true  , "withInput"=>true])
-                            </div>
-                        </div>
-                    @endif
                 </div>
                 {!! Form::close() !!}
                 <div class="row text-center">
@@ -254,31 +247,37 @@
         var lessonTeacher = {!!  $lessonTeacher->toJson()!!};
         var defaultLesson = "{!!$defaultLesson!!}";
         var defaultTeacher = "{!!$defaultTeacher!!}";
-        var tags = {!! json_encode($tagInput) !!}
+        var tags = {!! json_encode($tagInput) !!};
+         var extraTags = {!! json_encode($extraTagArray) !!} ;
         $(document).ready(function()
         {
             initialSlick($(".productSlider"));
             initialVideoPortfolio();
             makeLessonSelect( $("#majorSelect").val());
             makeTeacherSelect($("#lessonSelect").val());
-            $(".contentPortlet .portlet-title .caption").append(makeTagLabels(tags));
+            $(".contentPortlet .portlet-title .caption").append(makeTagLabels(tags) );
+            $("#itemFilterFormBody").append(makeTagLabels(extraTags ,true ) );
         });
 
-        function makeTagLabels(tags) {
+        function makeTagLabels(tags , withInput) {
             var labels = "";
+            if(withInput == null || withInput == undefined)
+                withInput = false;
             $.each(tags , function (key , value)
             {
-                    // var label = '<span class="tag label label-info" id="tag_'+key+'" style="display: inline-block; margin: 2px; padding: 10px;">\n'  ;
-                    var label = '<span class="tag label label-info portlet-tag" style="display: inline-block; margin: 2px; padding: 10px;">\n'  ;
-                    // label += '<a class="removeTagLabel" data-role="'+key+'" style="padding-left: 10px"><i class="fa fa-remove"></i></a>\n' ;
+                    var label = '<span class="tag label label-info tag_'+key+'" style="display: inline-block; margin: 2px; padding: 10px;">\n'  ;
+                    label += '<a class="removeTagLabel" data-role="'+key+'" style="padding-left: 10px"><i class="fa fa-remove"></i></a>\n' ;
                     label += '<span >\n' ;
                     label += '<a href="{{action("HomeController@search")}}?tags[]='+value+'"  class="font-white">'+value+'</a>\n' ;
                     label += '</span>\n' ;
-                    // label += '<input id="tagInput_'+key+'" name="tags[]" type="hidden" value="'+value+'">\n' ;
+                    if(withInput)
+                    {
+                        label += '<input id="tagInput_'+key+'" name="tags[]" type="hidden" value="'+value+'">\n' ;
+                    }
                     label += '</span>';
 
                     labels += label
-            })
+            });
             return labels ;
         }
 
@@ -458,9 +457,11 @@
                     {
                         200:function (response) {
                             var items = response.items;
-                            var tagLabels = response.tagLabels;
-                            $(".portlet-tag").remove();
-                            $(".contentPortlet .portlet-title .caption").append(makeTagLabels(tagLabels));
+                            tags = response.tagLabels;
+                            extraTags = response.extraTags;
+                            $(".tag").remove();
+                            $(".contentPortlet .portlet-title .caption").append(makeTagLabels(tags));
+                            $("#itemFilterFormBody").append(makeTagLabels(extraTags , true));
                             // var itemTypes = response.itemTypes;
                             // location.hash = page;
                             $.each(items , function (key , item) {
@@ -585,16 +586,51 @@
 
         $(document).on("click", ".removeTagLabel", function (){
             var id = $(this).data("role");
-            $("#tag_"+id).remove();
+            $(".tag_"+id).remove();
+            tags.splice(id, 1);
+            var elemets = [
+                    "gradeSelect" ,
+                    "majorSelect" ,
+                    "lessonSelect",
+                    "teacherSelect"
+            ];
+
+            
+            $.each(elemets , function (key , value)
+            {
+                $("#"+value).each(function ()
+                {
+                    if ($.inArray($(this).val(), tags) != -1)
+                    {
+                        $(this).prop('selected', true);
+                    }
+                    else
+                    {
+                        $("#"+value).val($("#"+value+" option:first").val());
+                    }
+                });
+            });
+
             contentLoad();
         });
 
+
+        $(document).on("change", "#gradeSelect", function (){
+            tags.push($("#gradeSelect option:selected").val());
+        });
+
         $(document).on("change", "#majorSelect", function (){
+            tags.push($("#majorSelect option:selected").val());
             makeLessonSelect();
         });
 
         $(document).on("change", "#lessonSelect", function (){
+            tags.push($("#lessonSelect option:selected").val());
             makeTeacherSelect();
+        });
+
+        $(document).on("change", "#teacherSelect", function (){
+            tags.push($("#teacherSelect option:selected").val());
         });
 
     </script>
