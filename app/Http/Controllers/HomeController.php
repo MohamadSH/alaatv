@@ -434,13 +434,13 @@ class HomeController extends Controller
             return response()->json($response,200);
         }
 
-        $tagLabels = View::make(
-            'partials.search.tagLabel',
-            [
-                'tags' => $tagInput,
-                "spanClass"=>"portlet-tag"
-            ]
-        )->render();
+//        $tagLabels = View::make(
+//            'partials.search.tagLabel',
+//            [
+//                'tags' => $tagInput,
+//                "spanClass"=>"portlet-tag"
+//            ]
+//        )->render();
 
         if(request()->ajax())
         {
@@ -449,7 +449,7 @@ class HomeController extends Controller
                 ->setContent([
                     "items"=>$items ,
                     "itemTypes"=>$itemTypes ,
-                    "tagLabels" => $tagLabels
+                    "tagLabels" => $tagInput
                 ]);
         }
         else
@@ -838,7 +838,7 @@ class HomeController extends Controller
                 'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-2.jpg' => 'https://sanatisharif.ir/landing/4',
                 'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-3.jpg' => 'https://sanatisharif.ir/landing/4',
             ];
-            return view("pages.search" , compact("items" , "tagLabels"  ,"itemTypes" ,"tagArray" , "extraTagArray",
+            return view("pages.search" , compact("items" ,"itemTypes" ,"tagArray" , "extraTagArray",
                 "majors" , "grades"  , "defaultLesson" , "sideBarMode" , "majorLesson" , "lessonTeacher" , "defaultTeacher" , "ads1" , "ads2" , 'tagInput' ));
         }
     }
