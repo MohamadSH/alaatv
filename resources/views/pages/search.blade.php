@@ -171,18 +171,12 @@
         @endif
         @if($items->where("type" , "contentset")->first()["totalitems"] > 0)
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
-                    <div class="portlet light ">
+                    <div class="portlet light contentPortlet">
                         <div class="portlet-title tabbable-line">
                             <div class="caption">
                                 <i class="icon-globe font-dark hide"></i>
                                 <span class="caption-subject font-dark bold uppercase">دوره های آموزشی آلاء</span>
-                                @if(!empty($tagInput))
-                                    {{--<div class="row">--}}
-                                        {{--<div class="col-md-12">--}}
-                                            @include("partials.search.tagLabel" , ["tags"=>$tagInput])
-                                        {{--</div>--}}
-                                    {{--</div>--}}
-                                @endif
+                                {!! $tagLabels !!}
                             </div>
                         </div>
                         <div class="portlet-body " id="tab_contentset" >
@@ -197,18 +191,12 @@
         @endforeach
             <!-- BEGIN PORTLET-->
     <div class="row" >
-            <div class="portlet light ">
+            <div class="portlet light contentPortlet">
                 <div class="portlet-title tabbable-line">
                     <div class="caption">
                         <i class="icon-globe font-dark hide"></i>
                         <span class="caption-subject font-dark bold uppercase">فیلم ها و جزوات آموزشی آلاء</span>
-                        @if(!empty($tagInput))
-                            {{--<div class="row">--}}
-                            {{--<div class="col-md-12">--}}
-                            @include("partials.search.tagLabel" , ["tags"=>$tagInput])
-                            {{--</div>--}}
-                            {{--</div>--}}
-                        @endif
+                        {!! $tagLabels !!}
                     </div>
                     <ul class="nav nav-tabs">
                         @if($items->where("type" , "article")->first()["totalitems"] > 0)
@@ -450,6 +438,9 @@
                     {
                         200:function (response) {
                             var items = response.items;
+                            var tagLabels = response.tagLabels;
+                            $(".portlet-tag").remove();
+                            $(".contentPortlet .portlet-title .caption").append(tagLabels);
                             // var itemTypes = response.itemTypes;
                             // location.hash = page;
                             $.each(items , function (key , item) {
