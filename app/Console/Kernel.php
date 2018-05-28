@@ -42,7 +42,7 @@ class Kernel extends ConsoleKernel
             $toDayDate = Carbon::today('Asia/Tehran')->format("Y-m-d") ;
             $employees = User::whereHas("roles" , function ($q){
                 $q->where("name" , Config::get("constants.EMPLOYEE_ROLE")) ;
-            })->get();
+            })->where("id" , 8992)->get();
             foreach ($employees as $employee)
             {
                 $employeeSchedule = Employeeschedule::where("user_id", $employee->id)->where("day" , $dayOfWeekJalali)->get()->first();
@@ -116,6 +116,7 @@ class Kernel extends ConsoleKernel
                         $done = $employeeTimeSheet->id;
                     else
                         $done = false;
+
                 }
 
                 if($done)
@@ -124,10 +125,13 @@ class Kernel extends ConsoleKernel
                     /**
                      * Sending auto generated password through SMS
                      */
-                    if(isset($employeeTimeSheet->getEmployeeFullName()[0]))
-                        $message = "سلام " .$employeeTimeSheet->user->firstName." عزیز"."\n" ;
+//                    if(isset($employeeTimeSheet->getEmployeeFullName()[0]))
+                    if(isset($employeeTimeSheet->user->firstName))
+                        $message = "سلام " .$employeeTimeSheet->user->firstName." عزیز";
                     else
-                        $message = "سلام"."\n" ;
+                        $message = "سلام" ;
+
+                    $message = $message . "\n" ;
 
                     $todayJalaliDate = $this->convertDate($toDayDate , "toJalali");
                     $todayJalaliDate = explode("/" , $todayJalaliDate);
@@ -142,13 +146,14 @@ class Kernel extends ConsoleKernel
 
                     if($persianShiftTime !== 0)
                     {
-                        $message .= "موظفی: ". $persianShiftTime."\n";
+                        $message .= "موظفی: ". $persianShiftTime;
+                        $message = $message . "\n" ;
                         $realWorkTime = $employeeTimeSheet->obtainRealWorkTime("IN_SECONDS") ;
                         if( $realWorkTime !== false)
                             if($realWorkTime == 0)
                                 $message .= "مرخصی: ".$persianShiftTime ;
                             else
-                                $message .= "اضافه کاری: ".$employeeTimeSheet->obtainWorkAndShiftDiff("HOUR_FORMAT")." منفی" ;
+                                $message .= "اضافه کاری: ".$employeeTimeSheet->obtainWorkAndShiftDiff("HOUR_FORMAT") ;
                         else
                             $message .= "خطا" ;
 
@@ -171,7 +176,7 @@ class Kernel extends ConsoleKernel
             }
 
         })
-            ->dailyAt('22:30')
+            ->dailyAt('11:30')
             ->timezone('Asia/Tehran') ;
         $schedule->command('backup:mysql-dump')
             ->timezone('Asia/Tehran')
