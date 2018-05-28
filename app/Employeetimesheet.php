@@ -434,9 +434,9 @@ class Employeetimesheet extends Model
                     $finishTime = Carbon::parse($this->obtainShiftTime());
                     $workAndShiftDiff = $finishTime->diffInSeconds($beginTime, false);
                     if ($workAndShiftDiff < 0) {
-                        return "- " . gmdate("H:i:s", abs($workAndShiftDiff));
+                        return gmdate("H:i", abs($workAndShiftDiff))." منفی";
                     } else {
-                        return "+ " . gmdate("H:i:s", abs($workAndShiftDiff));
+                        return gmdate("H:i", abs($workAndShiftDiff));
                     }
                 } else {
                     return false;
