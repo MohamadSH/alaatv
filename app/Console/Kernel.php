@@ -42,7 +42,7 @@ class Kernel extends ConsoleKernel
             $toDayDate = Carbon::today('Asia/Tehran')->format("Y-m-d") ;
             $employees = User::whereHas("roles" , function ($q){
                 $q->where("name" , Config::get("constants.EMPLOYEE_ROLE")) ;
-            })->where("id" , 8992)->get();
+            })->get();
             foreach ($employees as $employee)
             {
                 $employeeSchedule = Employeeschedule::where("user_id", $employee->id)->where("day" , $dayOfWeekJalali)->get()->first();
@@ -176,7 +176,7 @@ class Kernel extends ConsoleKernel
             }
 
         })
-            ->dailyAt('11:30')
+            ->dailyAt('22:30')
             ->timezone('Asia/Tehran') ;
         $schedule->command('backup:mysql-dump')
             ->timezone('Asia/Tehran')
