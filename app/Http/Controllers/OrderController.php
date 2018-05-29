@@ -1198,7 +1198,7 @@ class OrderController extends Controller
                 $result["Status"] = 'canceled' ;
                 $user = $order->user ;
                 if($order->orderstatus_id == Config::get("constants.ORDER_STATUS_OPEN"))
-                  {
+                {
                     $result["tryAgain"] = true;
 
                     $order->close( Config::get("constants.PAYMENT_STATUS_UNPAID"),Config::get("constants.ORDER_STATUS_CANCELED")) ;
@@ -1224,14 +1224,52 @@ class OrderController extends Controller
                 }
                 else
                 {
-                    $walletTransactions = $order->successfulTransactions
-                                                ->where("paymentmethod_id" , config("constants.PAYMENT_METHOD_WALLET"));
-                    if($walletTransactions->isNotEmpty())
-                    {
-                        $result["walletAmount"] = $walletTransactions->sum("cost");
-                        $result["walletUsed"] = true;
-                    }
                     $result["tryAgain"] = false;
+                    $walletTransactions = $order->pendingTransactions
+                                                ->where("paymentmethod_id" , config("constants.PAYMENT_METHOD_WALLET"));
+                    $totalWalletRefund = 0 ;
+                        foreach ($walletTransactions as $transaction)
+                        {
+                            $wallet = $transaction->wallet ;
+                            $amount = $transaction->cost;
+                            if(isset($wallet))
+                            {
+                                $response =  $wallet->deposit($amount);
+                                if($response["result"])
+                                {
+                                    $transaction->delete();
+                                    $totalWalletRefund += $amount;
+                                }
+                                else
+                                {
+
+                                }
+                            }
+                            else
+                            {
+                                $response = $user->deposit($amount , config("constants.WALLET_TYPE_GIFT")) ;
+                                if($response["result"])
+                                {
+                                    $transaction->delete();
+                                    $totalWalletRefund += $amount;
+                                }
+                                else
+                                {
+
+                                }
+                            }
+
+                        }
+                        if($totalWalletRefund > 0)
+                        {
+                            $result["walletAmount"] = $totalWalletRefund;
+                            $result["walletRefund"] = true;
+                        }
+
+                    $order->close( Config::get("constants.PAYMENT_STATUS_UNPAID"),Config::get("constants.ORDER_STATUS_CANCELED")) ;
+                    $order->timestamps = false;
+                    $order->update() ;
+                    $order->timestamps = true;
                 }
             }
         }
