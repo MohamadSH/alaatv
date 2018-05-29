@@ -2018,8 +2018,8 @@ class HomeController extends Controller
         $latestOrders = 3 ;
         $latestDonors = collect();
 //        $today = Carbon::today();
-        $weekBegining = Carbon::createMidnightDate("2018" , "05" , "21");
-        $weekEnd = Carbon::createMidnightDate("2018" , "05" , "26");
+        $weekBegining = Carbon::createMidnightDate("2018" , "05" , "26");
+        $weekEnd = Carbon::createMidnightDate("2018" , "06" , "02");
 //        $todayDonates = $orders->where("completed_at" , ">=" , $today ) ;
         $donates = $orders->where("completed_at" ,">=" , $weekBegining )
                           ->where("completed_at" , "<=" , $weekEnd);
