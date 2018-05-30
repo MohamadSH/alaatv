@@ -106,12 +106,6 @@
     <div class="monthly-charts">
         <div class="container">
             <div class="totals">
-                <div class="total">
-                    <span class="title">مجموع هزینه ها</span>
-
-                    <span class="amount">{{number_format($totalSpend)}}<span class="currency">تومان</span></span>
-                    <span class="title">از 1 مهر تا {{$currentJalaliDateString}}</span>
-                </div><!-- .title -->
 
                 <div class="total">
                     <span class="title">مجموع دونیت ها</span>
@@ -120,6 +114,13 @@
                     <span class="title">از 1 مهر تا {{$currentJalaliDateString}}</span>
                 </div><!-- .title -->
 
+                <div class="total">
+                    <span class="title">مجموع هزینه ها</span>
+
+                    <span class="amount">{{number_format($totalSpend)}}<span class="currency">تومان</span></span>
+                    <span class="title">از 1 مهر تا {{$currentJalaliDateString}}</span>
+                </div><!-- .title -->
+                
             </div><!-- .totals -->
 
             <div class="chart-by-month">
