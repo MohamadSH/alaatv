@@ -111,7 +111,7 @@
                                 @foreach($files["videoSource"] as $key => $source)
                                     <div class="col-md-4">
                                         <a href="{{$source["src"]}}?download=1" class="btn red margin-bottom-5" style="width: 250px;">
-                                            فایل {{$source["caption"]}}{{ (isset($source["size"]))?"(".$source["size"]. ")":""  }}
+                                            فایل {{$source["caption"]}}{{ (isset($source["size"] )  && strlen($source["size"])  > 0 )?"(".$source["size"]. ")":""  }}
                                         </a>
                                     </div>
                                 @endforeach

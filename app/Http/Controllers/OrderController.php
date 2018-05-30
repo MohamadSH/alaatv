@@ -1151,7 +1151,7 @@ class OrderController extends Controller
             //return $result["status"] = success / canceled
 //            if(Auth::user()->hasRole("admin")){
 //                $result["Status"]="success";
-//                $result["RefID"] = "mohamad5";
+//                $result["RefID"] = "mohamad1";
 //            }
             if(!isset($result))
                     abort(404) ;
@@ -1163,12 +1163,16 @@ class OrderController extends Controller
                 $transaction->completed_at = Carbon::now();
                 $transaction->update();
 
+                /** Wallet transactions */
+                $order->closeWalletPendingTransactions();
+                /** End */
                 $order->close(Config::get("constants.PAYMENT_STATUS_PAID")) ;
                 if($transaction->cost < (int)$order->totalCost() )
                 {
                     if((int)$order->totalPaidCost() < (int)$order->totalCost())
                         $order->paymentstatus_id = Config::get("constants.PAYMENT_STATUS_INDEBTED");
                 }
+
                 $order->timestamps = false;
                 if($order->update())
                     $result = array_add($result , "saveOrder" , 1);
@@ -1178,18 +1182,25 @@ class OrderController extends Controller
 
                 /** Attaching user bons for this order */
                 $bonName = Config::get("constants.BON1");
-                [
-                $givenBonNumber ,
-                $failedBonNumber ] = $order->giveUserBons($bonName);
+                $bon = Bon::where("name" , $bonName)->first();
+                if(isset($bon))
+                {
+                    [
+                        $givenBonNumber ,
+                        $failedBonNumber ] = $order->giveUserBons($bonName);
 
-                if($givenBonNumber == 0 )
-                    if($failedBonNumber > 0)
-                        $result = array_add($result , "saveBon" , -1);
+                    if($givenBonNumber == 0 )
+                        if($failedBonNumber > 0)
+                            $result = array_add($result , "saveBon" , -1);
+                        else
+                            $result = array_add($result , "saveBon" , 0);
                     else
-                        $result = array_add($result , "saveBon" , 0);
-                else
-                    $result = array_add($result , "saveBon" , $givenBonNumber);
-                $result = array_add($result , "bonName" , $bonName);
+                        $result = array_add($result , "saveBon" , $givenBonNumber);
+
+                    $bonDisplayName = $bon->displayName ;
+                    $result = array_add($result , "bonName" , $bonDisplayName);
+                }
+
                 $sendSMS = true;
             }
             elseif(strcmp(array_get($result,"Status"),'canceled')==0 ||
@@ -1198,7 +1209,7 @@ class OrderController extends Controller
                 $result["Status"] = 'canceled' ;
                 $user = $order->user ;
                 if($order->orderstatus_id == Config::get("constants.ORDER_STATUS_OPEN"))
-                  {
+                {
                     $result["tryAgain"] = true;
 
                     $order->close( Config::get("constants.PAYMENT_STATUS_UNPAID"),Config::get("constants.ORDER_STATUS_CANCELED")) ;
@@ -1224,14 +1235,57 @@ class OrderController extends Controller
                 }
                 else
                 {
-                    $walletTransactions = $order->successfulTransactions
-                                                ->where("paymentmethod_id" , config("constants.PAYMENT_METHOD_WALLET"));
-                    if($walletTransactions->isNotEmpty())
-                    {
-                        $result["walletAmount"] = $walletTransactions->sum("cost");
-                        $result["walletUsed"] = true;
-                    }
                     $result["tryAgain"] = false;
+                    $walletTransactions = $order->pendingTransactions
+                                                ->where("paymentmethod_id" , config("constants.PAYMENT_METHOD_WALLET"));
+                    $totalWalletRefund = 0 ;
+                    $closeOrderFlag = false;
+                    foreach ($walletTransactions as $transaction)
+                    {
+                        $wallet = $transaction->wallet ;
+                        $amount = $transaction->cost;
+                        if(isset($wallet))
+                        {
+                            $response =  $wallet->deposit($amount);
+                            if($response["result"])
+                            {
+                                $transaction->delete();
+                                $totalWalletRefund += $amount;
+                            }
+                            else
+                            {
+
+                            }
+                        }
+                        else
+                        {
+                            $response = $user->deposit($amount , config("constants.WALLET_TYPE_GIFT")) ;
+                            if($response["result"])
+                            {
+                                $transaction->delete();
+                                $totalWalletRefund += $amount;
+                            }
+                            else
+                            {
+
+                            }
+                        }
+                        $closeOrderFlag = true ;
+
+                    }
+                    if($totalWalletRefund > 0)
+                    {
+                        $result["walletAmount"] = $totalWalletRefund;
+                        $result["walletRefund"] = true;
+                    }
+
+                    if($closeOrderFlag)
+                    {
+                        $order->close( Config::get("constants.PAYMENT_STATUS_UNPAID"),Config::get("constants.ORDER_STATUS_CANCELED")) ;
+                        $order->timestamps = false;
+                        $order->update() ;
+                        $order->timestamps = true;
+                    }
                 }
             }
         }
@@ -1471,7 +1525,9 @@ class OrderController extends Controller
             }
             else
             {
-
+                /** Wallet transactions */
+                $order->closeWalletPendingTransactions();
+                /** End */
                 $cost = $order->totalCost() - $order->totalPaidCost();
 
                 if($cost == 0 &&
@@ -1484,6 +1540,26 @@ class OrderController extends Controller
                     else
                         $result = array_add($result , "saveOrder" , 0);
                     $order->timestamps = true;
+                    /** Attaching user bons for this order */
+                    $bonName = Config::get("constants.BON1");
+                    $bon = Bon::where("name" , $bonName)->first();
+                    if(isset($bon))
+                    {
+                        [
+                            $givenBonNumber ,
+                            $failedBonNumber ] = $order->giveUserBons($bonName);
+
+                        if($givenBonNumber == 0 )
+                            if($failedBonNumber > 0)
+                                $result = array_add($result , "saveBon" , -1);
+                            else
+                                $result = array_add($result , "saveBon" , 0);
+                        else
+                            $result = array_add($result , "saveBon" , $givenBonNumber);
+
+                        $bonDisplayName = $bon->displayName ;
+                        $result = array_add($result , "bonName" , $bonDisplayName);
+                    }
                     $result["Status"] = "freeProduct";
                     $sendSMS = true;
                 }
@@ -1503,13 +1579,14 @@ class OrderController extends Controller
 
         if(isset($result["Status"]))
         {
-            if(isset($result["RefID"]))
+            if(isset($result["RefID"]) || strcmp($result["Status"],'freeProduct')==0)
             {
                 session()->put("verifyPayment" , 1) ;
                 return redirect(action("OrderController@successfulPayment" , [
                     "result" => $result
                 ]));
-            }elseif(strcmp($result["Status"],'canceled')==0 || (strcmp($result["Status"],'error')==0 && isset($result["error"]) && strcmp($result["error"],'-22')==0))
+            }elseif(strcmp($result["Status"],'canceled')==0 ||
+                (strcmp($result["Status"],'error')==0 && isset($result["error"]) && strcmp($result["error"],'-22')==0))
             {
                 if(isset($result["tryAgain"]) && $result["tryAgain"])
                 {

@@ -70,19 +70,24 @@ class Wallet extends Model
             $result =  $this->update();
             if($result)
             {
-                $completed_at = Carbon::now();
-                $transactionStatus = config("constants.TRANSACTION_STATUS_SUCCESSFUL") ;
-                $paymentMethod = config("constants.PAYMENT_METHOD_WALLET") ;
-
-                $this->transactions()
-                    ->create([
-                        'order_id'=>$orderId,
-                        'wallet_id' => $this->id ,
-                        'cost' => $amount,
-                        'transactionstatus_id' => $transactionStatus,
-                        'paymentmethod_id' => $paymentMethod,
-                        'completed_at' => $completed_at,
-                    ]);
+                if($amount > 0 )
+                {
+                    $completed_at = Carbon::now();
+                    if(isset($orderId))
+                        $transactionStatus = config("constants.TRANSACTION_STATUS_PENDING") ;
+                    else
+                        $transactionStatus = config("constants.TRANSACTION_STATUS_SUCCESSFUL") ;
+                    $paymentMethod = config("constants.PAYMENT_METHOD_WALLET") ;
+                    $this->transactions()
+                        ->create([
+                            'order_id'=>$orderId,
+                            'wallet_id' => $this->id ,
+                            'cost' => $amount,
+                            'transactionstatus_id' => $transactionStatus,
+                            'paymentmethod_id' => $paymentMethod,
+                            'completed_at' => $completed_at,
+                        ]);
+                }
                 $responseText = "SUCCESSFUL";
                 $failed = false;
             }
@@ -132,16 +137,18 @@ class Wallet extends Model
         $result =  $this->update();
         if($result)
         {
-            $completed_at = Carbon::now();
-            $transactionStatus = config("constants.TRANSACTION_STATUS_SUCCESSFUL") ;
-
-            $this->transactions()
-                ->create([
-                    'wallet_id' => $this->id ,
-                    'cost' => -$amount,
-                    'transactionstatus_id' => $transactionStatus,
-                    'completed_at' => $completed_at,
-                ]);
+            if($amount > 0)
+            {
+                $completed_at = Carbon::now();
+                $transactionStatus = config("constants.TRANSACTION_STATUS_SUCCESSFUL") ;
+                $this->transactions()
+                    ->create([
+                        'wallet_id' => $this->id ,
+                        'cost' => -$amount,
+                        'transactionstatus_id' => $transactionStatus,
+                        'completed_at' => $completed_at,
+                    ]);
+            }
             $responseText = "SUCCESSFUL";
             $failed = false;
         }

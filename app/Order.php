@@ -610,4 +610,15 @@ class Order extends Model
                     ->whereIn("product_id" ,$products)
                     ->isNotEmpty();
     }
+
+    public function closeWalletPendingTransactions()
+    {
+        $walletTransactions = $this->pendingTransactions
+            ->where("paymentmethod_id" , config("constants.PAYMENT_METHOD_WALLET"));
+        foreach($walletTransactions as $transaction)
+        {
+            $transaction->transactionstatus_id = config("constants.TRANSACTION_STATUS_SUCCESSFUL") ;
+            $transaction->update();
+        }
+    }
 }
