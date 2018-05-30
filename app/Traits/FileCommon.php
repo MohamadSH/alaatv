@@ -55,9 +55,19 @@ trait FileCommon
        curl_setopt($curl, CURLOPT_MAXREDIRS, 3);
 
        curl_exec($curl);
-       $fileSize = curl_getinfo($curl, CURLINFO_CONTENT_LENGTH_DOWNLOAD);
+       $fileSizeString = "";
+       if (!curl_errno($curl)) {
+           switch ($http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE)) {
+               case 200:
+                   $fileSize = curl_getinfo($curl, CURLINFO_CONTENT_LENGTH_DOWNLOAD);
+                   $fileSizeString =  $this->FileSizeConvert($fileSize);
+                   break;
+               default:
+                   $fileSizeString = "";
+           }
+       }
        curl_close($curl);
-       return  $this->FileSizeConvert($fileSize);
+       return $fileSizeString ;
    }
 
 }

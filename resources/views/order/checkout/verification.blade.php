@@ -71,9 +71,9 @@
                                         <div class="row static-info">
                                             <div class="col-md-12 " style="text-align: center">
                                                     <h3 class="bold">پرداخت شما ناموفق بود</h3>
-                                                @if(isset($result["walletUsed"]))
+                                                @if(isset($result["walletRefund"]))
                                                     <p class="font-red bold" style="font-size: larger">
-                                                        مبلغ {{number_format($result["walletAmount"])}} تومان برای این سفارش از کیف شما استفاده شده است
+                                                        مبلغ {{number_format($result["walletAmount"])}} تومان به کیف پول شما بازگشت
                                                     </p>
                                                 @endif
                                                 <p class="bold">
