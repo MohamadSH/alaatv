@@ -195,7 +195,7 @@
             // The setting up of the dropzone
             init: function() {
                 this.on("addedfile", function(file) {
-                    file.previewElement.querySelector('[type="submit"]').disabled=true;
+                    // file.previewElement.querySelector('[type="submit"]').disabled=true;
                     $("#products").parent("div .col-md-2").removeClass("has-error");
 
 
