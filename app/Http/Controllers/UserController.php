@@ -1434,7 +1434,7 @@ class UserController extends Controller
 
                     foreach($product->validProductfiles as $productfile)
                     {
-                        if($productfile->productfiletype_id == Config::get("PRODUCT_FILE_TYPE_PAMPHLET"))
+                        if($productfile->productfiletype_id == Config::get("constants.PRODUCT_FILE_TYPE_PAMPHLET"))
                             array_push($pamphletArray , [
                                 "file"=>$productfile->file ,
                                 "name"=>$productfile->name ,
