@@ -182,16 +182,7 @@ class EducationalContentController extends Controller
     {
         $rootContentTypes = Contenttype::whereDoesntHave("parents")->get() ;
 
-        $childContentTypes = Contenttype::whereHas("parents" , function ($q) {
-            $q->where("name" , "exam") ;
-        })->pluck("displayName" , "id") ;
-
-        $highSchoolType = Majortype::where("name" , "highschool")->get()->first();
-        $majors = Major::where("majortype_id" , $highSchoolType->id)->pluck('name', 'id');
-
-        $grades = Grade::pluck('displayName', 'id');
-
-        return view("educationalContent.create2" , compact("rootContentTypes" , "childContentTypes" , "majors" , "grades")) ;
+        return view("educationalContent.create2" , compact("rootContentTypes")) ;
     }
 
     /**
@@ -423,22 +414,25 @@ class EducationalContentController extends Controller
                             $file = $educationalContent->files->where("pivot.label" , "hd")->first() ;
                             if(isset($file))
                             {
-                                $size = $this->curlGetFileSize($file->name);
-                                $videoSources->put( "hd" , ["src"=>$file->name , "caption"=>$file->pivot->caption , "size"=>$size]) ;
+                                $url = $file->name;
+                                $size = $this->curlGetFileSize($url);
+                                $videoSources->put( "hd" , ["src"=>$url , "caption"=>$file->pivot->caption , "size"=>$size]) ;
                             }
 
                             $file = $educationalContent->files->where("pivot.label" , "hq")->first() ;
                             if(isset($file))
                             {
-                                $size = $this->curlGetFileSize($file->name);
-                                $videoSources->put( "hq" , ["src"=>$file->name , "caption"=>$file->pivot->caption, "size"=>$size]) ;
+                                $url = $file->name;
+                                $size = $this->curlGetFileSize($url);
+                                $videoSources->put( "hq" , ["src"=>$url , "caption"=>$file->pivot->caption, "size"=>$size]) ;
                             }
 
                             $file = $educationalContent->files->where("pivot.label" , "240p")->first() ;
                             if(isset($file))
                             {
-                                $size = $this->curlGetFileSize($file->name);
-                                $videoSources->put( "240p" , ["src"=>$file->name ,  "caption"=>$file->pivot->caption, "size"=>$size]) ;
+                                $url = $file->name;
+                                $size = $this->curlGetFileSize($url);
+                                $videoSources->put( "240p" , ["src"=>$url ,  "caption"=>$file->pivot->caption, "size"=>$size]) ;
                             }
                             $file = $educationalContent->files->where("pivot.label" , "thumbnail")->first();
                             if(isset($file))
