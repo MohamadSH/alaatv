@@ -20,6 +20,10 @@ class GiftGiven extends Notification implements ShouldQueue
      */
     protected  $giftCost;
     /**
+     * @var string
+     */
+    protected  $partialMessage;
+    /**
      * @var User
      */
     protected $user;
@@ -30,8 +34,9 @@ class GiftGiven extends Notification implements ShouldQueue
      *
      * @param int $giftCost
      */
-    public function __construct( $giftCost)
+    public function __construct( $giftCost , $partialMessage = null)
     {
+        $this->partialMessage = $partialMessage ;
         $this->giftCost = $giftCost;
     }
 
@@ -62,6 +67,9 @@ class GiftGiven extends Notification implements ShouldQueue
     }
 
     private function msg() : string {
+        $partialMessage = "به عنوان هدیه به کیف پول شما افزوده شد.";
+        if(isset($this->partialMessage))
+            $partialMessage = $this->partialMessage ;
         if(isset($this->user->gender_id))
         {
             if($this->user->gender->name=="خانم")
@@ -73,7 +81,7 @@ class GiftGiven extends Notification implements ShouldQueue
         }else{
             $gender = "";
         }
-        $messageCore = "مبلغ ".$this->giftCost." به عنوان هدیه به کیف پول شما افزوده شد."
+        $messageCore = "مبلغ ".$this->giftCost." ".$partialMessage
             ."\n"
             ."آلاء"
             ."\n"

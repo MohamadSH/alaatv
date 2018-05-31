@@ -96,6 +96,9 @@ class HomeController extends Controller
 
     public function debug(Request $request)
     {
+        $user = User::FindOrFail(1);
+        $amount = 9000 ;
+        $user->notify(new GiftGiven($amount , "به کیف پول شما بازگشت."));
         return view("errors.404");
     }
     public function __construct()
@@ -2524,8 +2527,92 @@ class HomeController extends Controller
 //        return view("pages.certificates");
 //    }
 
-    public function bot()
+    public function bot(Request $request)
     {
+        if($request->has("fixDini"))
+        {
+            $diniProductId = 105 ;
+            $donateProductId = 180;
+            $orders = Order::where("completed_at" , ">=" , "2018-05-30 00:00:00")
+                            ->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
+                            ->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_INDEBTED"))
+                            ->whereHas("orderproducts" ,function ($q) use ($diniProductId){
+                                $q->where("product_id" , $diniProductId) ;
+                            });
+
+            $failedCounter = 0 ;
+            foreach ($orders as $order)
+            {
+                $user = $order->user;
+
+                $walletTransactions = $order->transactions
+                                            ->where("paymentmethod_id" , config("constants.PAYMENT_METHOD_WALLET"));
+
+                foreach ($walletTransactions as $transaction)
+                {
+                    $wallet = $transaction->wallet ;
+                    $amount = $transaction->cost;
+                    if(isset($wallet))
+                    {
+                        $response =  $wallet->deposit($amount);
+                        if($response["result"])
+                        {
+                            $user->notify(new GiftGiven($amount , "به کیف پول شما بازگشت."));
+                            $transaction->delete();
+                        }
+                        else
+                        {
+                            dump("Amount for user #".$user->id." was not deposited") ;
+                            $failedCounter++;
+                        }
+                    }
+                    else
+                    {
+                        $response = $user->deposit($amount , config("constants.WALLET_TYPE_GIFT")) ;
+                        if($response["result"])
+                        {
+                            $user->notify(new GiftGiven($amount , "به کیف پول شما بازگشت."));
+                            $transaction->delete();
+                        }
+                        else
+                        {
+                            dump("Amount for user #".$user->id." was not deposited") ;
+                            $failedCounter++;
+                        }
+                    }
+                }
+                $allOrderproducts = $order->orderproducts;
+                $allTransactions = $order->transactions;
+                if($allTransactions->isEmpty() && $allOrderproducts->isNotEmpty())
+                {
+                    $otherOrderproducts = $order->orderproducts
+                                               ->whereNotIn("product_id" , [$diniProductId]);
+                    if($otherOrderproducts->isEmpty())
+                    {
+                        $freeOrderproduct = $allOrderproducts->first();
+                        $freeOrderproduct->cost = 0 ;
+                        if(!$freeOrderproduct->update())
+                        {
+                            $failedCounter++;
+                            dump("Orderproduct #".$freeOrderproduct->id." was not updated");
+                        }
+
+                        $order->cost = 0;
+                        $order->costwithoutcoupon = 0;
+                        $order->paymentstatus_id = config("constants.PAYMENT_STATUS_PAID") ;
+                        if(!$order->update())
+                        {
+                            $failedCounter++;
+                            dump("Order #".$order->id." was not updated");
+                        }
+                    }
+                }
+            }
+            dump("Failed : ".$failedCounter);
+
+        }
+        dd("Done!") ;
+
         $orders = Order::whereDoesntHave("orderproducts")
             ->where("orderstatus_id" , 2)
             ->whereIn("paymentstatus_id" , [2,3]);
