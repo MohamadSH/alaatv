@@ -44,30 +44,29 @@
         <div class="col-md-12">
             <form id="my-awesome-dropzone" class="dropzone dropzone-file-area needsclick dz-clickable" >
                 {{--{{ csrf_field() }}--}}
-                <div class="row">
-                    <div class="col-md-4"></div>
-                    <div class="col-md-2">
+                {{--<div class="row">--}}
+                    {{--<div class="col-md-2">--}}
 {{--                        {!! Form::select(null, $grades , null, ['class' => 'form-control', 'id' => 'grades' , 'placeholder' => 'انتخاب مقطع'  ]) !!}--}}
-                        <select class="mt-multiselect btn btn-default" multiple="multiple" data-label="left" data-width="100%" data-filter="true" data-height="200"
-                                id="grades" name="grades[]" title="انتخاب مقطع">
-                            @foreach($grades as $key=>$value)
-                                <option value="{{$key}}">{{$value}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-2">
+                        {{--<select class="mt-multiselect btn btn-default" multiple="multiple" data-label="left" data-width="100%" data-filter="true" data-height="200"--}}
+                                {{--id="grades" name="grades[]" title="انتخاب مقطع">--}}
+                            {{--@foreach($grades as $key=>$value)--}}
+                                {{--<option value="{{$key}}">{{$value}}</option>--}}
+                            {{--@endforeach--}}
+                        {{--</select>--}}
+                    {{--</div>--}}
+                    {{--<div class="col-md-2">--}}
 {{--                        {!! Form::select(null, $majors , null, ['class' => 'form-control', 'id' => 'majors' , 'placeholder' => 'انتخاب رشته'  ]) !!}--}}
-                        <select class="mt-multiselect btn btn-default" multiple="multiple" data-label="left" data-width="100%" data-filter="true" data-height="200"
-                                id="majors" name="majors[]" title="انتخاب رشته">
-                            @foreach($majors as $key=>$value)
-                                <option value="{{$key}}">{{$value}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
+                        {{--<select class="mt-multiselect btn btn-default" multiple="multiple" data-label="left" data-width="100%" data-filter="true" data-height="200"--}}
+                                {{--id="majors" name="majors[]" title="انتخاب رشته">--}}
+                            {{--@foreach($majors as $key=>$value)--}}
+                                {{--<option value="{{$key}}">{{$value}}</option>--}}
+                            {{--@endforeach--}}
+                        {{--</select>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
                 <div class="row">
                     <div class="col-md-4"></div>
-                    <div class="col-md-2">
+                    <div class="col-md-4">
                         {{--{!! Form::select('contenttype', $rootContentTypes , null, ['class' => 'form-control', 'id' => 'rootContentTypes' , 'placeholder' => 'انتخاب نوع محتوا'  ]) !!}--}}
                         <select name="contenttype" class="form-control" id="rootContentTypes" >
                             <option value="" selected>انتخاب نوع محتوا</option>
@@ -76,9 +75,9 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-md-2">
-                        {!! Form::select(null, $childContentTypes , null, ['class' => 'form-control', 'id' => 'childContentTypes' , 'placeholder' => 'انتخاب زیر شاخه' , 'disabled' ]) !!}
-                    </div>
+                    {{--<div class="col-md-2">--}}
+                        {{--{!! Form::select(null, $childContentTypes , null, ['class' => 'form-control', 'id' => 'childContentTypes' , 'placeholder' => 'انتخاب زیر شاخه' , 'disabled' ]) !!}--}}
+                    {{--</div>--}}
                 </div>
                 <div class="row">
                     <div class="col-md-12">
@@ -126,28 +125,7 @@
 @section("extraJS")
     <script src="/js/extraJS/scripts/admin-makeMultiSelect.js" type="text/javascript"></script>
     <script>
-
-        // $('#descriptionSummerNote').summernote({height: 300});
-
-        function setContentTypeSelectStatus() {
-            var selected = $("#rootContentTypes option:selected").text();
-            if(selected == "آزمون")
-            {
-                $("#childContentTypes").prop("disabled" , false);
-            }else{
-                $("#childContentTypes").prop("disabled" , true);
-            }
-        }
-
-        setContentTypeSelectStatus();
-
         $(document).ready(function () {
-            $('#rootContentTypes').on('change', function() {
-                setContentTypeSelectStatus();
-            });
-
-
-
         });
 
         var u = Dropzone.options.myAwesomeDropzone = { // The camelized version of the ID of the form element
@@ -232,22 +210,10 @@
             init: function() {
                 this.on("addedfile", function(file) {
                     // file.previewElement.querySelector('[type="submit"]').disabled=true;
-                    $("#grades").parents("div .col-md-2").css("border","");
-                    $("#majors").parents("div .col-md-2").css("border","");
                     $("#rootContentTypes").parent("div .col-md-2").removeClass("has-error");
-                    $("#childContentTypes").parent("div .col-md-2").removeClass("has-error");
 
-                    if($("#grades option:selected").length === 0)  {
-                        $("#grades").parents("div .col-md-2").css("border","solid 1.5px red");
-                        this.removeFile(file);
-                    }else if($("#majors option:selected").length === 0)  {
-                        $("#majors").parents("div .col-md-2").css("border","solid 1.5px red");
-                        this.removeFile(file);
-                    }else if($("#rootContentTypes option:selected").val().length === 0)  {
+                    if($("#rootContentTypes option:selected").val().length === 0)  {
                         $("#rootContentTypes").parent("div .col-md-2").addClass("has-error");
-                        this.removeFile(file);
-                    }else if($("#childContentTypes").is(':enabled') && $("#childContentTypes option:selected").val().length === 0){
-                        $("#childContentTypes").parent("div .col-md-2").addClass("has-error");
                         this.removeFile(file);
                     }
 
@@ -306,85 +272,80 @@
                     var rootContentTypeHidden = Dropzone.createElement("<input type='hidden' name='contenttypes[]' value='"+rootContentTypeValue+"'>");
                     file.previewElement.querySelector('.form-horizontal').appendChild(rootContentTypeHidden);
 
-                    if($("#childContentTypes").is(':enabled')) {
-                        var childContentTypeValue = $("#childContentTypes option:selected").val();
-                        var chileContentTypeHidden = Dropzone.createElement("<input type='hidden' name='contenttypes[]' value='" + childContentTypeValue + "'>");
-                        file.previewElement.querySelector('.form-horizontal').appendChild(chileContentTypeHidden);
+                    //CODE SNIPPET
+//                     if($("#childContentTypes").is(':enabled')) {
+//                         var childContentTypeValue = $("#childContentTypes option:selected").val();
+//                         var chileContentTypeHidden = Dropzone.createElement("<input type='hidden' name='contenttypes[]' value='" + childContentTypeValue + "'>");
+//                         file.previewElement.querySelector('.form-horizontal').appendChild(chileContentTypeHidden);
+//
+//                         var fileName = file.name;
+//                         var i = 0 ;
+//                         var j = 2 ;
+//                         var subString = [];
+//                         var year;
+//                         var month;
+//                         var day;
+//                         do{
+//                             subString[i] = fileName.substring(i,j);
+//                             i = i + 2;
+//                             j = j + 2;
+//                         }while(subString[i-2].length>0);
+// //                        console.log(subString);
+//                         year = subString[0];
+//                         month = subString[2];
+//                         day = subString[4];
+//                         day = day.replace(/^0+/, '');
+//                         switch (month){
+//                             case "01":
+//                                 month = "فروردین";
+//                                 break;
+//                             case "02":
+//                                 month = "اردیبهشت";
+//                                 break;
+//                             case "03":
+//                                 month = "خرداد";
+//                                 break;
+//                             case "04":
+//                                 month = "تیر";
+//                                 break;
+//                             case "05":
+//                                 month = "مرداد";
+//                                 break;
+//                             case "06":
+//                                 month = "شهریور";
+//                                 break;
+//                             case "07":
+//                                 month = "مهر";
+//                                 break;
+//                             case "08":
+//                                 month = "آبان";
+//                                 break;
+//                             case "09":
+//                                 month = "آذر";
+//                                 break;
+//                             case "10":
+//                                 month = "دی";
+//                                 break;
+//                             case "11":
+//                                 month = "بهمن";
+//                                 break;
+//                             case "12":
+//                                 month = "اسفند";
+//                                 break;
+//                             default:
+//                                 break;
+//                         }
+//
+//                         var fileNameSuggestion = day + " " + month + " ماه " + year;
+//                         file.previewElement.querySelector('input[name="name"]').value = fileNameSuggestion ;
+//                     }
 
-                        var fileName = file.name;
-                        var i = 0 ;
-                        var j = 2 ;
-                        var subString = [];
-                        var year;
-                        var month;
-                        var day;
-                        do{
-                            subString[i] = fileName.substring(i,j);
-                            i = i + 2;
-                            j = j + 2;
-                        }while(subString[i-2].length>0);
-//                        console.log(subString);
-                        year = subString[0];
-                        month = subString[2];
-                        day = subString[4];
-                        day = day.replace(/^0+/, '');
-                        switch (month){
-                            case "01":
-                                month = "فروردین";
-                                break;
-                            case "02":
-                                month = "اردیبهشت";
-                                break;
-                            case "03":
-                                month = "خرداد";
-                                break;
-                            case "04":
-                                month = "تیر";
-                                break;
-                            case "05":
-                                month = "مرداد";
-                                break;
-                            case "06":
-                                month = "شهریور";
-                                break;
-                            case "07":
-                                month = "مهر";
-                                break;
-                            case "08":
-                                month = "آبان";
-                                break;
-                            case "09":
-                                month = "آذر";
-                                break;
-                            case "10":
-                                month = "دی";
-                                break;
-                            case "11":
-                                month = "بهمن";
-                                break;
-                            case "12":
-                                month = "اسفند";
-                                break;
-                            default:
-                                break;
-                        }
-
-                        var fileNameSuggestion = day + " " + month + " ماه " + year;
-                        file.previewElement.querySelector('input[name="name"]').value = fileNameSuggestion ;
-                    }
-
-                    $("#grades option:selected").map(function()
-                    {
-                        var gradeHidden = Dropzone.createElement("<input type='hidden' name='grades[]' value='"+this.value+"'>");
-                        file.previewElement.querySelector('.form-horizontal').appendChild(gradeHidden);
-                    });
-
-
-                    $("#majors option:selected").map(function()
-                    {
-                        var majorHidden = Dropzone.createElement("<input type='hidden' name='majors[]' value='"+this.value+"'>");
-                        file.previewElement.querySelector('.form-horizontal').appendChild(majorHidden);
-                    });
+                    //CODE SNIPPET
+                    // $("#grades option:selected").map(function()
+                    // {
+                    //     var gradeHidden = Dropzone.createElement("<input type='hidden' name='grades[]' value='"+this.value+"'>");
+                    //     file.previewElement.querySelector('.form-horizontal').appendChild(gradeHidden);
+                    // });
 
                     //code sample:
 //                    var majorOptions = $("#majors > option").clone();
@@ -399,7 +360,7 @@
 //                        }
 //                    });
 
-                    //code sample:
+                    //CODE SNIPPET
 //                    var isEnabled = $("#childContentTypes").is(':enabled');
 //                    if(isEnabled){
 //                        var childOptions = $("#childContentTypes > option").clone();
