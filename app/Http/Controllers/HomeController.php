@@ -2563,7 +2563,7 @@ class HomeController extends Controller
 
                     $walletTransactions = $order->transactions
                                                 ->where("paymentmethod_id" , config("constants.PAYMENT_METHOD_WALLET"));
-                    $allTransactions = $order->transactions;
+                    $allTransactions = $order->successfulTransactions;
 
                     foreach ($walletTransactions as $transaction)
                     {
