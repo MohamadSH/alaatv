@@ -1236,7 +1236,7 @@ class OrderController extends Controller
                 else
                 {
                     $result["tryAgain"] = false;
-                    $walletTransactions = $order->pendingTransactions
+                    $walletTransactions = $order->suspendedTransactions
                                                 ->where("paymentmethod_id" , config("constants.PAYMENT_METHOD_WALLET"));
                     $totalWalletRefund = 0 ;
                     $closeOrderFlag = false;

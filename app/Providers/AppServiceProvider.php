@@ -135,6 +135,8 @@ class AppServiceProvider extends ServiceProvider
                     Config::set("constants.TRANSACTION_STATUS_ARCHIVED_SUCCESSFUL", $transactionstatuses->where("name", "archivedSuccessful")->first()->id);// id = 5
                 if ($transactionstatuses->where("name", "unpaid")->isNotEmpty())
                     Config::set("constants.TRANSACTION_STATUS_UNPAID", $transactionstatuses->where("name", "unpaid")->first()->id);// id = 6
+                if ($transactionstatuses->where("name", "suspended")->isNotEmpty())
+                    Config::set("constants.TRANSACTION_STATUS_SUSPENDED", $transactionstatuses->where("name", "suspended")->first()->id);// id = 7
             }
 
             //=================PAYMENT METHODS CONSTANTS
