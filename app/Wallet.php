@@ -74,7 +74,7 @@ class Wallet extends Model
                 {
                     $completed_at = Carbon::now();
                     if(isset($orderId))
-                        $transactionStatus = config("constants.TRANSACTION_STATUS_PENDING") ;
+                        $transactionStatus = config("constants.TRANSACTION_STATUS_SUSPENDED") ;
                     else
                         $transactionStatus = config("constants.TRANSACTION_STATUS_SUCCESSFUL") ;
                     $paymentMethod = config("constants.PAYMENT_METHOD_WALLET") ;

@@ -90,7 +90,10 @@ class Order extends Model
     public function successfulTransactions()
     {
         //ToDo : add where to get only paymentMethod = online
-        return $this->hasMany('App\Transaction')->where("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL"));
+        return $this->hasMany('App\Transaction')->where(function ($q){
+            $q->where("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL"))
+              ->orWhere("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_SUSPENDED")) ;
+        });
     }
 
     public function pendingTransactions()
@@ -101,6 +104,12 @@ class Order extends Model
     public function unpaidTransactions()
     {
         return $this->hasMany('App\Transaction')->where("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_UNPAID"));
+    }
+
+    public function suspendedTransactions()
+    {
+        return $this->hasMany('App\Transaction')
+                    ->where("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_SUSPENDED"));
     }
 
     public function archivedSuccessfulTransactions()
@@ -285,13 +294,13 @@ class Order extends Model
     public function totalPaidCost()
     {
         if ($this->transactions->isEmpty()) return 0;
-        else return $this->transactions->where("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL"))->where('cost', '>', 0)->sum("cost");
+        else return $this->successfulTransactions->where('cost', '>', 0)->sum("cost");
     }
 
     public function totalRefund()
     {
         if ($this->transactions->isEmpty()) return 0;
-        else return $this->transactions->where("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL"))->where('cost', '<', 0)->sum("cost");
+        else return $this->successfulTransactions->where('cost', '<', 0)->sum("cost");
     }
 
     /**
@@ -613,8 +622,8 @@ class Order extends Model
 
     public function closeWalletPendingTransactions()
     {
-        $walletTransactions = $this->pendingTransactions
-            ->where("paymentmethod_id" , config("constants.PAYMENT_METHOD_WALLET"));
+        $walletTransactions = $this->suspendedTransactions
+                                   ->where("paymentmethod_id" , config("constants.PAYMENT_METHOD_WALLET"));
         foreach($walletTransactions as $transaction)
         {
             $transaction->transactionstatus_id = config("constants.TRANSACTION_STATUS_SUCCESSFUL") ;
