@@ -125,33 +125,33 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="dashboard-stat2 ">
-                    <div class="display">
-                        <div class="number">
-                            <h3 class="font-red-soft">
-                                <span >ویژه دی ماه</span>
-                            </h3>
-                            <small>متناسب با تقویم کنکوری ها</small>
-                        </div>
-                        <div class="icon">
-                            <!--<i class="fa fa-calendar-check-o"></i>-->
-                            <img src="/img/extra/landing/calendar.png" style="height: 40px;">
-                        </div>
-                    </div>
-                    <div class="progress-info" style="font-style:italic">
-                        <div class="progress">
-                                    <span style="width: 100%;" class="progress-bar progress-bar-success red-soft">
-                                        <span class="sr-only">45% grow</span>
-                                    </span>
-                        </div>
-                        <div class="status">
-                            <div class="status-title">  </div>
-                            <div class="status-number font-red-soft"> ۱۰۰% </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {{--<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">--}}
+                {{--<div class="dashboard-stat2 ">--}}
+                    {{--<div class="display">--}}
+                        {{--<div class="number">--}}
+                            {{--<h3 class="font-red-soft">--}}
+                                {{--<span >ویژه دی ماه</span>--}}
+                            {{--</h3>--}}
+                            {{--<small>متناسب با تقویم کنکوری ها</small>--}}
+                        {{--</div>--}}
+                        {{--<div class="icon">--}}
+                            {{--<!--<i class="fa fa-calendar-check-o"></i>-->--}}
+                            {{--<img src="/img/extra/landing/calendar.png" style="height: 40px;">--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
+                    {{--<div class="progress-info" style="font-style:italic">--}}
+                        {{--<div class="progress">--}}
+                                    {{--<span style="width: 100%;" class="progress-bar progress-bar-success red-soft">--}}
+                                        {{--<span class="sr-only">45% grow</span>--}}
+                                    {{--</span>--}}
+                        {{--</div>--}}
+                        {{--<div class="status">--}}
+                            {{--<div class="status-title">  </div>--}}
+                            {{--<div class="status-number font-red-soft"> ۱۰۰% </div>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+            {{--</div>--}}
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="dashboard-stat2 ">
                     <div class="display">
