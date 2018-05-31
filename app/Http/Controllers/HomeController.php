@@ -2529,89 +2529,128 @@ class HomeController extends Controller
 
     public function bot(Request $request)
     {
-        if($request->has("fixDini"))
+        try
         {
-            $diniProductId = 105 ;
-            $donateProductId = 180;
-            $orders = Order::where("completed_at" , ">=" , "2018-05-30 00:00:00")
-                            ->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
-                            ->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_INDEBTED"))
-                            ->whereHas("orderproducts" ,function ($q) use ($diniProductId){
-                                $q->where("product_id" , $diniProductId) ;
-                            });
-
-            $failedCounter = 0 ;
-            foreach ($orders as $order)
+            if($request->has("fixDini"))
             {
-                $user = $order->user;
+                $diniProductId = 105 ;
+                $donateProductId = 180;
+                $orders = Order::where("completed_at" , ">=" , "2018-05-30 00:00:00")
+                                ->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
+                                ->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_INDEBTED"))
+                                ->whereHas("orderproducts" ,function ($q) use ($diniProductId){
+                                    $q->where("product_id" , $diniProductId) ;
+                                })
+                                ->get();
 
-                $walletTransactions = $order->transactions
-                                            ->where("paymentmethod_id" , config("constants.PAYMENT_METHOD_WALLET"));
-
-                foreach ($walletTransactions as $transaction)
+                $failedCounter = 0 ;
+                foreach ($orders as $order)
                 {
-                    $wallet = $transaction->wallet ;
-                    $amount = $transaction->cost;
-                    if(isset($wallet))
+                    $user = $order->user;
+
+                    $walletTransactions = $order->transactions
+                                                ->where("paymentmethod_id" , config("constants.PAYMENT_METHOD_WALLET"));
+
+                    foreach ($walletTransactions as $transaction)
                     {
-                        $response =  $wallet->deposit($amount);
-                        if($response["result"])
+                        $wallet = $transaction->wallet ;
+                        $amount = $transaction->cost;
+                        $walletMessage = "به کیف پول شما بازگشت." ;
+                        if(isset($wallet))
                         {
-                            $user->notify(new GiftGiven($amount , "به کیف پول شما بازگشت."));
-                            $transaction->delete();
+                            $response =  $wallet->deposit($amount);
+                            if($response["result"])
+                            {
+                                $user->notify(new GiftGiven($amount , $walletMessage));
+                                $transaction->delete();
+                            }
+                            else
+                            {
+                                dump("Amount for user #".$user->id." was not deposited") ;
+                                $failedCounter++;
+                            }
                         }
                         else
                         {
-                            dump("Amount for user #".$user->id." was not deposited") ;
-                            $failedCounter++;
+                            $response = $user->deposit($amount , config("constants.WALLET_TYPE_GIFT")) ;
+                            if($response["result"])
+                            {
+                                $user->notify(new GiftGiven($amount , $walletMessage));
+                                $transaction->delete();
+                            }
+                            else
+                            {
+                                dump("Amount for user #".$user->id." was not deposited") ;
+                                $failedCounter++;
+                            }
                         }
                     }
-                    else
+                    $allOrderproducts = $order->orderproducts;
+                    $allTransactions = $order->transactions;
+                    if($allTransactions->isEmpty() && $allOrderproducts->isNotEmpty())
                     {
-                        $response = $user->deposit($amount , config("constants.WALLET_TYPE_GIFT")) ;
-                        if($response["result"])
+                        $otherOrderproducts = $order->orderproducts
+                                                    ->whereNotIn("product_id" , [$diniProductId]);
+                        $orderFailed = false;
+                        if($otherOrderproducts->isEmpty())
                         {
-                            $user->notify(new GiftGiven($amount , "به کیف پول شما بازگشت."));
-                            $transaction->delete();
-                        }
-                        else
-                        {
-                            dump("Amount for user #".$user->id." was not deposited") ;
-                            $failedCounter++;
-                        }
-                    }
-                }
-                $allOrderproducts = $order->orderproducts;
-                $allTransactions = $order->transactions;
-                if($allTransactions->isEmpty() && $allOrderproducts->isNotEmpty())
-                {
-                    $otherOrderproducts = $order->orderproducts
-                                               ->whereNotIn("product_id" , [$diniProductId]);
-                    if($otherOrderproducts->isEmpty())
-                    {
-                        $freeOrderproduct = $allOrderproducts->first();
-                        $freeOrderproduct->cost = 0 ;
-                        if(!$freeOrderproduct->update())
-                        {
-                            $failedCounter++;
-                            dump("Orderproduct #".$freeOrderproduct->id." was not updated");
-                        }
+                            $freeOrderproduct = $allOrderproducts->first();
+                            $freeOrderproduct->cost = 0 ;
+                            if(!$freeOrderproduct->update())
+                            {
+                                $orderFailed = true;
+                                $failedCounter++;
+                                dump("Orderproduct #".$freeOrderproduct->id." was not updated");
+                            }
 
-                        $order->cost = 0;
-                        $order->costwithoutcoupon = 0;
-                        $order->paymentstatus_id = config("constants.PAYMENT_STATUS_PAID") ;
-                        if(!$order->update())
-                        {
-                            $failedCounter++;
-                            dump("Order #".$order->id." was not updated");
+                            $order->cost = 0;
+                            $order->costwithoutcoupon = 0;
+                            $order->paymentstatus_id = config("constants.PAYMENT_STATUS_PAID") ;
+                            if(!$order->update())
+                            {
+                                $orderFailed = true;
+                                $failedCounter++;
+                                dump("Order #".$order->id." was not updated");
+                            }
+
+                            if(!$orderFailed)
+                            {
+                                $message = "کاربر گرامی همایش رایگان دین و زندگی برای شما ثبت شد و می توانید آن را دانلود کنید.";
+                                $message .= "\n";
+                                $message .= "آلاء";
+                                $message .= "\n";
+                                $message .= "sanatisharif.ir/asset";
+                                $smsNumber = config("constants.SMS_PROVIDER_DEFAULT_NUMBER");
+                                $smsInfo = array();
+                                $smsInfo["to"] = array(ltrim($user->mobile, '0'));
+                                $smsInfo["from"] = $smsNumber;
+                                $smsInfo["message"] = $message ;
+                                $response = $this->medianaSendSMS($smsInfo);
+                                if(isset($response["error"]) && $response["error"])
+                                {
+                                    $failedCounter++;
+                                    dump("SMS was not sent to user #".$user->id);
+                                }
+                            }
                         }
                     }
                 }
+                dump("Failed : ".$failedCounter);
+
             }
-            dump("Failed : ".$failedCounter);
-
+            dd("Done!") ;
         }
-        dd("Done!") ;
+        catch (\Exception    $e) {
+            $message = "unexpected error";
+            return $this->response
+                ->setStatusCode(503)
+                ->setContent([
+                    "message"=>$message ,
+                    "error"=>$e->getMessage() ,
+                    "line"=>$e->getLine() ,
+                    "file"=>$e->getFile()
+                ]);
+        }
 
         $orders = Order::whereDoesntHave("orderproducts")
             ->where("orderstatus_id" , 2)
