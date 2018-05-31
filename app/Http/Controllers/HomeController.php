@@ -2651,9 +2651,9 @@ class HomeController extends Controller
                     }
                 }
                 dump("Failed : ".$failedCounter);
-
+                dd("Done!") ;
             }
-            dd("Done!") ;
+
         }
         catch (\Exception    $e) {
             $message = "unexpected error";
