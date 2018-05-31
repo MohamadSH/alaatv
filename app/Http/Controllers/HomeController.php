@@ -2563,7 +2563,8 @@ class HomeController extends Controller
 
                     $walletTransactions = $order->transactions
                                                 ->where("paymentmethod_id" , config("constants.PAYMENT_METHOD_WALLET"));
-
+                    $allTransactions = $order->transactions;
+                    
                     foreach ($walletTransactions as $transaction)
                     {
                         $wallet = $transaction->wallet ;
@@ -2574,6 +2575,8 @@ class HomeController extends Controller
                             $response =  $wallet->deposit($amount);
                             if($response["result"])
                             {
+                                echo "Deposit user #".$user->id." amount: ".$amount ;
+                                echo "<br>";
                                 $user->notify(new GiftGiven($amount , $walletMessage));
                                 $transaction->delete();
                             }
@@ -2589,6 +2592,8 @@ class HomeController extends Controller
                             $response = $user->deposit($amount , config("constants.WALLET_TYPE_GIFT")) ;
                             if($response["result"])
                             {
+                                echo "Deposit user #".$user->id." amount: ".$amount ;
+                                echo "<br>";
                                 $user->notify(new GiftGiven($amount , $walletMessage));
                                 $transaction->delete();
                             }
@@ -2601,15 +2606,18 @@ class HomeController extends Controller
                         }
                     }
 
-                    $order->fresh();
-                    $allTransactions = $order->transactions;
+//                    $order->fresh();
+                    $orderFailed = false;
+                    $orderUpdate = false;
                     if($allTransactions->isEmpty())
                     {
-                        $orderFailed = false;
-
                         $freeOrderproduct = $allOrderproducts->first();
                         $freeOrderproduct->cost = 0 ;
-                        if(!$freeOrderproduct->update())
+                        if($freeOrderproduct->update())
+                        {
+                            $orderUpdate = true;
+                        }
+                        else
                         {
                             $orderFailed = true;
                             $failedCounter++;
@@ -2620,7 +2628,11 @@ class HomeController extends Controller
                         $order->cost = 0;
                         $order->costwithoutcoupon = 0;
                         $order->paymentstatus_id = config("constants.PAYMENT_STATUS_PAID") ;
-                        if(!$order->update())
+                        if($order->update())
+                        {
+                            $orderUpdate = true;
+                        }
+                        else
                         {
                             $orderFailed = true;
                             $failedCounter++;
@@ -2649,6 +2661,9 @@ class HomeController extends Controller
                             }
                         }
                     }
+                    echo "Order update #".$order->id," : ".$orderUpdate;
+                    echo "<br>";
+
                 }
                 dump("Failed : ".$failedCounter);
                 dd("Done!") ;
