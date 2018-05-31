@@ -2546,6 +2546,19 @@ class HomeController extends Controller
                 $failedCounter = 0 ;
                 foreach ($orders as $order)
                 {
+                    echo "start order #".$order->id;
+                    echo "<br>";
+
+                    $otherOrderproducts = $order->orderproducts
+                                                ->whereNotIn("product_id" , [$diniProductId]);
+                    $allOrderproducts = $order->orderproducts;
+
+                    if($allOrderproducts->isEmpty())
+                        continue;
+
+                    if($otherOrderproducts->isNotEmpty())
+                        continue ;
+
                     $user = $order->user;
 
                     $walletTransactions = $order->transactions
@@ -2566,7 +2579,8 @@ class HomeController extends Controller
                             }
                             else
                             {
-                                dump("Amount for user #".$user->id." was not deposited") ;
+                                echo "Amount for user #".$user->id." was not deposited" ;
+                                echo "<br>";
                                 $failedCounter++;
                             }
                         }
@@ -2580,57 +2594,58 @@ class HomeController extends Controller
                             }
                             else
                             {
-                                dump("Amount for user #".$user->id." was not deposited") ;
+                                echo "Amount for user #".$user->id." was not deposited" ;
+                                echo "<br>";
                                 $failedCounter++;
                             }
                         }
                     }
-                    $allOrderproducts = $order->orderproducts;
+
+                    $order->fresh();
                     $allTransactions = $order->transactions;
-                    if($allTransactions->isEmpty() && $allOrderproducts->isNotEmpty())
+                    if($allTransactions->isEmpty())
                     {
-                        $otherOrderproducts = $order->orderproducts
-                                                    ->whereNotIn("product_id" , [$diniProductId]);
                         $orderFailed = false;
-                        if($otherOrderproducts->isEmpty())
+
+                        $freeOrderproduct = $allOrderproducts->first();
+                        $freeOrderproduct->cost = 0 ;
+                        if(!$freeOrderproduct->update())
                         {
-                            $freeOrderproduct = $allOrderproducts->first();
-                            $freeOrderproduct->cost = 0 ;
-                            if(!$freeOrderproduct->update())
-                            {
-                                $orderFailed = true;
-                                $failedCounter++;
-                                dump("Orderproduct #".$freeOrderproduct->id." was not updated");
-                            }
+                            $orderFailed = true;
+                            $failedCounter++;
+                            echo "Orderproduct #".$freeOrderproduct->id." was not updated";
+                            echo "<br>";
+                        }
 
-                            $order->cost = 0;
-                            $order->costwithoutcoupon = 0;
-                            $order->paymentstatus_id = config("constants.PAYMENT_STATUS_PAID") ;
-                            if(!$order->update())
-                            {
-                                $orderFailed = true;
-                                $failedCounter++;
-                                dump("Order #".$order->id." was not updated");
-                            }
+                        $order->cost = 0;
+                        $order->costwithoutcoupon = 0;
+                        $order->paymentstatus_id = config("constants.PAYMENT_STATUS_PAID") ;
+                        if(!$order->update())
+                        {
+                            $orderFailed = true;
+                            $failedCounter++;
+                            echo "Order #".$order->id." was not updated";
+                            echo "<br>";
+                        }
 
-                            if(!$orderFailed)
+                        if(!$orderFailed)
+                        {
+                            $message = "کاربر گرامی همایش رایگان دین و زندگی برای شما ثبت شد و می توانید آن را دانلود کنید.";
+                            $message .= "\n";
+                            $message .= "آلاء";
+                            $message .= "\n";
+                            $message .= "sanatisharif.ir/asset";
+                            $smsNumber = config("constants.SMS_PROVIDER_DEFAULT_NUMBER");
+                            $smsInfo = array();
+                            $smsInfo["to"] = array(ltrim($user->mobile, '0'));
+                            $smsInfo["from"] = $smsNumber;
+                            $smsInfo["message"] = $message ;
+                            $response = $this->medianaSendSMS($smsInfo);
+                            if(isset($response["error"]) && $response["error"])
                             {
-                                $message = "کاربر گرامی همایش رایگان دین و زندگی برای شما ثبت شد و می توانید آن را دانلود کنید.";
-                                $message .= "\n";
-                                $message .= "آلاء";
-                                $message .= "\n";
-                                $message .= "sanatisharif.ir/asset";
-                                $smsNumber = config("constants.SMS_PROVIDER_DEFAULT_NUMBER");
-                                $smsInfo = array();
-                                $smsInfo["to"] = array(ltrim($user->mobile, '0'));
-                                $smsInfo["from"] = $smsNumber;
-                                $smsInfo["message"] = $message ;
-                                $response = $this->medianaSendSMS($smsInfo);
-                                if(isset($response["error"]) && $response["error"])
-                                {
-                                    $failedCounter++;
-                                    dump("SMS was not sent to user #".$user->id);
-                                }
+                                $failedCounter++;
+                                echo "SMS was not sent to user #".$user->id;
+                                echo "<br>";
                             }
                         }
                     }
