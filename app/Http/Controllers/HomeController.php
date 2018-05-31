@@ -2564,7 +2564,7 @@ class HomeController extends Controller
                     $walletTransactions = $order->transactions
                                                 ->where("paymentmethod_id" , config("constants.PAYMENT_METHOD_WALLET"));
                     $allTransactions = $order->transactions;
-                    
+
                     foreach ($walletTransactions as $transaction)
                     {
                         $wallet = $transaction->wallet ;
@@ -2653,6 +2653,8 @@ class HomeController extends Controller
                             $smsInfo["from"] = $smsNumber;
                             $smsInfo["message"] = $message ;
                             $response = $this->medianaSendSMS($smsInfo);
+                            echo "Order SMS to user :".$user->mobile;
+                            echo "<br>";
                             if(isset($response["error"]) && $response["error"])
                             {
                                 $failedCounter++;
