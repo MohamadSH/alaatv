@@ -2663,8 +2663,12 @@ class HomeController extends Controller
                             }
                         }
                     }
-                    echo "Order update #".$order->id," : ".$orderUpdate;
-                    echo "<br>";
+                    if($orderUpdate)
+                    {
+                        echo "Order update #".$order->id," : ".$orderUpdate;
+                        echo "<br>";
+                    }
+
 
                 }
                 dump("Failed : ".$failedCounter);
