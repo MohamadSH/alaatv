@@ -2018,19 +2018,12 @@ class HomeController extends Controller
 
 
         /** THIS WEEK/TODAY LATEST DONATES **/
-        $latestOrders = 3 ;
         $latestDonors = collect();
 //        $today = Carbon::today();
-        $weekBegining = Carbon::createMidnightDate("2018" , "05" , "26");
-        $weekEnd = Carbon::createMidnightDate("2018" , "06" , "02");
 //        $todayDonates = $orders->where("completed_at" , ">=" , $today ) ;
-        $donates = $orders->where("completed_at" ,">=" , $weekBegining )
-                          ->where("completed_at" , "<=" , $weekEnd);
+        $donates = $orders->take(3) ;
         foreach ($donates as $donate)
         {
-            if($latestOrders == 0)
-                break;
-
             if(isset($donate->user->id))
             {
                 $firstName =  $donate->user->firstName ;
@@ -2052,8 +2045,6 @@ class HomeController extends Controller
                 "donateAmount" => $donateAmount ,
                 "avatar" => (isset($avatar))?$avatar:"",
             ]);
-
-            $latestOrders--;
         }
         /** END **/
 
