@@ -534,7 +534,7 @@ class TransactionController extends Controller
         /**
          *  end
          */
-        if(!$request->has("forcePay_bhrk"))
+        if(!$request->has("forcePay_bhrk") && $order->orderstatus_id == config("constants.ORDER_STATUS_OPEN"))
             $order->refreshCost();
 
         if($order->hasCoupon()) {
