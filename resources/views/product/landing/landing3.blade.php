@@ -87,7 +87,7 @@
     <section class="lottery-banner">
         <div class="container clearfix">
             <div class="bnra">
-                <img class="banner" src="/assets/extra/landing4/images/banner3.png" alt="قرعه کشی آلاء">
+                <img class="banner" src="/assets/extra/landing4/images/banner4.png" alt="قرعه کشی آلاء">
             </div><!-- .bnra -->
         </div><!-- .container -->
     </section>
