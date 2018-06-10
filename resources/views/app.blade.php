@@ -45,6 +45,17 @@
             // Sends the custom dimension to Google Analytics.
             gtag('event', 'hit', {'dimension2': dimensionValue});
         </script>
+        <script>
+            now = new Date();
+            var head = document.getElementsByTagName('head')[0];
+            var script = document.createElement('script');
+            script.type = 'text/javascript';
+            var script_address = 'https://cdn.yektanet.com/rg_woebegone/scripts/1603/rg.complete.js';
+            script.src = script_address + '?v=' + now.getFullYear().toString() + '0'
+                + now.getMonth() + '0' + now.getDate() + '0' + now.getHours();
+            script.async = true;
+            head.appendChild(script);
+        </script>
         @section("gtagJs")
 
         @show
