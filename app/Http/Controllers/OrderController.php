@@ -1881,7 +1881,7 @@ class OrderController extends Controller
                 default:
                     if($request->has("orderId_bhrk"))
                     {
-                        $orderId = $request->get("orderId");
+                        $orderId = $request->get("orderId_bhrk");
                         $openOrder = Order::where("id" , $orderId)
                                     ->first();
                     }
