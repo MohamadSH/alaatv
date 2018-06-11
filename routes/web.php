@@ -130,6 +130,7 @@ Route::group(['middleware' => 'auth'], function()
         Route::post('sendSMS' , 'UserController@sendSMS');
         Route::post('submitWorkTime' , 'UserController@submitWorkTime');
         Route::post('removeFromLottery' , 'UserController@removeFromLottery');
+        Route::post('addToArabiHozouri' , 'OrderController@addToArabiHozouri');
         Route::get('uploadQuestion', 'UserController@uploadConsultingQuestion')->middleware('completeInfo');
     });
     Route::group(['prefix' => 'order'], function () {

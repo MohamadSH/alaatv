@@ -38,6 +38,21 @@
     {{--EXCHANGE LOTTERY--}}
     <div class="row">
         <div class="col-md-12">
+            @if(isset($hasHamayeshHozouriArabi) && $hasHamayeshHozouriArabi)
+                <div class="alert alert-block bg-blue bg-font-blue fade in">
+                    <button type="button" class="close" data-dismiss="alert"></button>
+                    <h4 class="alert-heading text-center" style="line-height: normal;">شما در همایش حضوری عربی آقای ناصح زاده روز 27 خرداد ثبت نام کرده اید</h4>
+                </div>
+            @elseif(isset($hasHamayeshTalaiArabi) && $hasHamayeshTalaiArabi)
+                <div class="alert alert-block bg-purple bg-font-purple fade in">
+                    <button type="button" class="close" data-dismiss="alert"></button>
+                    <h4 class="alert-heading text-center" style="line-height: normal;">برای ثبت نام در همایش حضوری عربی آقای ناصح زاده روز 27 خرداد کلیک کنید</h4>
+                    <h4 class="alert-heading text-center" style="line-height: normal;">ثبت نام تا ساعت 24 سه شنبه 22 خرداد باز خواهد بود.</h4>
+                    <p style="text-align: center;">
+                        <button class="btn mt-sweetalert-hamayesh-arabi" data-title="آیا از ثبت نام خود مطمئنید؟" data-type="warning" data-allow-outside-click="true" data-show-confirm-button="true" data-show-cancel-button="true" data-cancel-button-class="btn-danger" data-cancel-button-text="خیر" data-confirm-button-text="بله ثبت نام می کنم" data-confirm-button-class="btn-info" style="background: #d6af18;">ثبت نام در همایش حضوری</button>
+                    </p>
+                </div>
+            @endif
             @if(isset($userPoints) && $userPoints)
                 <div class="alert alert-block bg-purple bg-font-purple fade in">
                     <button type="button" class="close" data-dismiss="alert"></button>
@@ -436,6 +451,100 @@
                                                 503: function (response) {
                                                     // console.log("503 Error");
                                                     toastr["error"]($.parseJSON(response.responseText).message, "پیام سیستم");
+                                                }
+                                            }
+                                        });
+                                        // swal(sa_popupTitleSuccess, sa_popupMessageSuccess, "success");
+                                    } else {
+                                        // swal(sa_popupTitleCancel, sa_popupMessageCancel, "error");
+                                    }
+                                });
+                        });
+                    });
+
+                    $('.mt-sweetalert-hamayesh-arabi').each(function(){
+                        var sa_title = $(this).data('title');
+                        var sa_message = $(this).data('message');
+                        var sa_type = $(this).data('type');
+                        var sa_allowOutsideClick = $(this).data('allow-outside-click');
+                        var sa_showConfirmButton = $(this).data('show-confirm-button');
+                        var sa_showCancelButton = $(this).data('show-cancel-button');
+                        var sa_closeOnConfirm = $(this).data('close-on-confirm');
+                        var sa_closeOnCancel = $(this).data('close-on-cancel');
+                        var sa_confirmButtonText = $(this).data('confirm-button-text');
+                        var sa_cancelButtonText = $(this).data('cancel-button-text');
+                        var sa_popupTitleSuccess = $(this).data('popup-title-success');
+                        var sa_popupMessageSuccess = $(this).data('popup-message-success');
+                        var sa_popupTitleCancel = $(this).data('popup-title-cancel');
+                        var sa_popupMessageCancel = $(this).data('popup-message-cancel');
+                        var sa_confirmButtonClass = $(this).data('confirm-button-class');
+                        var sa_cancelButtonClass = $(this).data('cancel-button-class');
+
+                        $(this).click(function(){
+                            //console.log(sa_btnClass);
+                            swal({
+                                    title: sa_title,
+                                    text: sa_message,
+                                    type: sa_type,
+                                    allowOutsideClick: sa_allowOutsideClick,
+                                    showConfirmButton: sa_showConfirmButton,
+                                    showCancelButton: sa_showCancelButton,
+                                    confirmButtonClass: sa_confirmButtonClass,
+                                    cancelButtonClass: sa_cancelButtonClass,
+                                    closeOnConfirm: sa_closeOnConfirm,
+                                    closeOnCancel: sa_closeOnCancel,
+                                    confirmButtonText: sa_confirmButtonText,
+                                    cancelButtonText: sa_cancelButtonText,
+                                },
+                                function(isConfirm){
+                                    if (isConfirm){
+                                        toastr.options = {
+                                            "closeButton": true,
+                                            "debug": false,
+                                            "positionClass": "toast-top-center",
+                                            "onclick": null,
+                                            "showDuration": "1000",
+                                            "hideDuration": "1000",
+                                            "timeOut": "5000",
+                                            "extendedTimeOut": "1000",
+                                            "showEasing": "swing",
+                                            "hideEasing": "linear",
+                                            "showMethod": "fadeIn",
+                                            "hideMethod": "fadeOut"
+                                        };
+
+                                        if(userAjax) {
+                                            userAjax.abort();
+                                        }
+                                        userAjax = $.ajax({
+                                            type: "POST",
+                                            url: "{{action("OrderController@addToArabiHozouri")}}",
+                                            contentType: "application/json",
+                                            dataType: "json",
+                                            statusCode: {
+                                                200:function (response) {
+                                                    location.reload();
+                                                },
+                                                //The status for when the user is not authorized for making the request
+                                                401:function (ressponse) {
+                                                },
+                                                403: function (response) {
+                                                },
+                                                404: function (response) {
+                                                },
+                                                //The status for when form data is not valid
+                                                422: function (response) {
+                                                    //
+                                                },
+                                                //The status for when there is error php code
+                                                500: function (response) {
+                                                    console.log(response);
+                                                },
+                                                //The status for when there is error php code
+                                                503: function (response) {
+                                                    // console.log("503 Error");
+                                                    console.log(response);
+                                                    toastr["error"]("خطا", "پیام سیستم");
                                                 }
                                             }
                                         });
