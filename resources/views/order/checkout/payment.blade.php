@@ -90,6 +90,7 @@
                                         <div class="col-lg-12">
                                             {!! Form::open(['method' => 'POST','action' => ['OrderController@addOrderproduct' , 180] , 'class'=>'form-horizontal' , 'id'=>'donateForm' ]) !!}
                                                 <label for="donateSwitch">5 هزار تومان مشارکت می کنم در هزینه های آلاء</label>
+                                                <input type="hidden" name="mode" value="normal">
                                                 <input type="checkbox" @if(isset($orderHasDonate) && $orderHasDonate) checked @endif  id="donateSwitch" value="" class="make-switch" data-off-color="danger" data-on-color="success"  data-off-text="&nbsp;کمک&nbsp;نمی&nbsp;کنم&nbsp;" data-on-text="&nbsp;کمک&nbsp;می&nbsp;کنم&nbsp;">
                                             {!! Form::close() !!}
                                         </div>
@@ -287,7 +288,6 @@
         $(document).on("switchChange.bootstrapSwitch", "#donateSwitch", function (){
             if ($(this).is(':checked')){
                 var formData = $("#donateForm").serialize();
-
                 if(submitDonateAjax) {
                     submitDonateAjax.abort();
                 }
@@ -295,8 +295,8 @@
                     type: "POST",
                     url: $("#donateForm").attr("action"),
                     data: formData,
-                    contentType: "application/json",
-                    dataType: "json",
+                    // contentType: "application/json",
+                    // dataType: "json",
                     statusCode: {
                         200:function (response) {
                             location.reload();
@@ -323,6 +323,8 @@
                         },
                         //The status for when there is error php code
                         503: function (response) {
+                            console.log(response);
+                            console.log(response.responseText);
                             // toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
                         }
                     }
