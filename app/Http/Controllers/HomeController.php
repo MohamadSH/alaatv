@@ -2824,7 +2824,6 @@ class HomeController extends Controller
                 echo "number of users:".$users->count();
                 echo "<br>";
 
-                $users = User::where("id" , 1)->get();
                 $couponController = new CouponController();
                 $failedCounter = 0 ;
                 $proccessed = 0 ;
