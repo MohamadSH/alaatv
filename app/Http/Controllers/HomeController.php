@@ -2858,7 +2858,15 @@ class HomeController extends Controller
 
                     if($storeCoupon->status() == 200) {
 
-                        $message = "";
+                        $message = "شما در قرعه کشی وفاداران آلاء برنده یک کد تخفیف شدید.";
+                        $message .= "\n";
+                        $message .= "کد شما:";
+                        $message .= "\n";
+                        $message .= $couponCode;
+                        $message .= "\n";
+                        $message .= "مهلت استفاده از کد: تا پنجشنبه ساعت 11 شب";
+                        $message .= "\n";
+                        $message .= "به امید اینکه با کمک دیگر همایش های آلاء در کنکور بدرخشید و برنده iphonex در قرعه کشی عید فطر آلاء باشید.";
                         $smsInfo = array();
                         $smsInfo["to"] = array(ltrim($user->mobile, '0'));
                         $smsInfo["from"] = $smsNumber;
