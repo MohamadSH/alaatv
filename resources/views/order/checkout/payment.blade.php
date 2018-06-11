@@ -288,7 +288,6 @@
         $(document).on("switchChange.bootstrapSwitch", "#donateSwitch", function (){
             if ($(this).is(':checked')){
                 var formData = $("#donateForm").serialize();
-                console.log(formData);
                 if(submitDonateAjax) {
                     submitDonateAjax.abort();
                 }
