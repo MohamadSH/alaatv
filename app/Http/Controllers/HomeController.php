@@ -2884,7 +2884,7 @@ class HomeController extends Controller
                             }
                             else
                             {
-                                echo "<span style='color:red'>";
+                                echo "<span style='color:green'>";
                                 echo "user ".$user->id." notfied";
                                 echo "</span>";
                                 echo "<br>";
