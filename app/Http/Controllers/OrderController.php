@@ -1937,11 +1937,11 @@ class OrderController extends Controller
                 else
                     return $this->response
                         ->setStatusCode(503)
-                        ->setContent(["errorMessage"=>"خطای پایگاه داده"]);
+                        ->setContent(["errorMessage"=>"could not update order"]);
             }
             return $this->response
                 ->setStatusCode(503)
-                ->setContent(["errorMessage"=>"خطا در یافتن سفارش"]);
+                ->setContent(["errorMessage"=>"cound not find order"]);
         }catch (\Exception    $e)
         {
             $message = "unexpected error";
