@@ -383,7 +383,11 @@ class Order extends Model
             $errorMessage .= "حداکثر مبلغ سبد خرید برای استفاده از این کپن " . number_format($this->coupon->maxCost) . " تومان  می باشد.";
         }
 
-        if (strlen($this->coupon->validateCoupon()) > 0) {
+        [
+          $couponValidationMessage,
+          $couponValidationCode
+        ] = $this->coupon->validateCoupon();
+        if (strlen($couponValidationMessage) > 0 && $couponValidationCode != 4) {
             $collapseCoupon = true;
         }
 
@@ -482,6 +486,10 @@ class Order extends Model
                         break;
                     }
                 }
+            }
+            else
+            {
+                $flag = true;
             }
         }
 

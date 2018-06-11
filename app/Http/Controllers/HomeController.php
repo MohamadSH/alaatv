@@ -2522,148 +2522,387 @@ class HomeController extends Controller
     {
         try
         {
-            if($request->has("fixDini"))
+            if($request->has("coupon"))
             {
-                $diniProductId = 105 ;
-                $donateProductId = 180;
-                $orders = Order::where("completed_at" , ">=" , "2018-05-30 00:00:00")
-                                ->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
-                                ->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_INDEBTED"))
-                                ->whereHas("orderproducts" ,function ($q) use ($diniProductId){
-                                    $q->where("product_id" , $diniProductId) ;
-                                })
-                                ->get();
-
-                $failedCounter = 0 ;
-                foreach ($orders as $order)
+                $hamayeshTalai = [ 210 , 211 ,212 ,213 , 214,215,216,217,218,219,220,221, 222 ];
+                $notIncludedUsers = [
+                    2
+                    , 111
+                    , 117
+                    , 203
+                    , 347
+                    , 417
+                    , 806
+                    , 923
+                    , 963
+                    , 1132
+                    , 1680
+                    , 2150
+                    , 2439
+                    , 2501
+                    , 3176
+                    , 3194
+                    , 3350
+                    , 3778
+                    , 3854
+                    , 4058
+                    , 4134
+                    , 4273
+                    , 4598
+                    , 4994
+                    , 5443
+                    , 5543
+                    , 5949
+                    , 6159
+                    , 6655
+                    , 6712
+                    , 7109
+                    , 7200
+                    , 7325
+                    , 7467
+                    , 7772
+                    , 8151
+                    , 8568
+                    , 8934
+                    , 9247
+                    , 9895
+                    , 9926
+                    , 10127
+                    , 10577
+                    , 10690
+                    , 11017
+                    , 11412
+                    , 11428
+                    , 11513
+                    , 11517
+                    , 11569
+                    , 11619
+                    , 11688
+                    , 11854
+                    , 12173
+                    , 12196
+                    , 12347
+                    , 12443
+                    , 12492
+                    , 12621
+                    , 12672
+                    , 12720
+                    , 12907
+                    , 12959
+                    , 13004
+                    , 13557
+                    , 13583
+                    , 13742
+                    , 13928
+                    , 14046
+                    , 14371
+                    , 14680
+                    , 14870
+                    , 15020
+                    , 15028
+                    , 15079
+                    , 15136
+                    , 15195
+                    , 15330
+                    , 15722
+                    , 15774
+                    , 15893
+                    , 16667
+                    , 16698
+                    , 17671
+                    , 18250
+                    , 19010
+                    , 19169
+                    , 19384
+                    , 19394
+                    , 19588
+                    , 20123
+                    , 20191
+                    , 20285
+                    , 20403
+                    , 20460
+                    , 20534
+                    , 20641
+                    , 20643
+                    , 20669
+                    , 20865
+                    , 21261
+                    , 21292
+                    , 21442
+                    , 21468
+                    , 21471
+                    , 21513
+                    , 21536
+                    , 21663
+                    , 21681
+                    , 21792
+                    , 21922
+                    , 22126
+                    , 22397
+                    , 22419
+                    , 22560
+                    , 22597
+                    , 22733
+                    , 23281
+                    , 23410
+                    , 24019
+                    , 24373
+                    , 24463
+                    , 24683
+                    , 24902
+                    , 25243
+                    , 25276
+                    , 25375
+                    , 25436
+                    , 26289
+                    , 26860
+                    , 27276
+                    , 27387
+                    , 27519
+                    , 27588
+                    , 27590
+                    , 27757
+                    , 27864
+                    , 27886
+                    , 27902
+                    , 28038
+                    , 28117
+                    , 28143
+                    , 28280
+                    , 28340
+                    , 28631
+                    , 28898
+                    , 28907
+                    , 29041
+                    , 29503
+                    , 29740
+                    , 29787
+                    , 29972
+                    , 30087
+                    , 30093
+                    , 30255
+                    , 30367
+                    , 30554
+                    , 31028
+                    , 31033
+                    , 31334
+                    , 31863
+                    , 32573
+                    , 32707
+                    , 32819
+                    , 33189
+                    , 33198
+                    , 33386
+                    , 33666
+                    , 33785
+                    , 34617
+                    , 34851
+                    , 34913
+                    , 34939
+                    , 35468
+                    , 35564
+                    , 35800
+                    , 36119
+                    , 36235
+                    , 36256
+                    , 36753
+                    , 36841
+                    , 36921
+                    , 36950
+                    , 37789
+                    , 38224
+                    , 38368
+                    , 38530
+                    , 38584
+                    , 38604
+                    , 38683
+                    , 39527
+                    , 40743
+                    , 42260
+                    , 42491
+                    , 42676
+                    , 42747
+                    , 42878
+                    , 43381
+                    , 44086
+                    , 44328
+                    , 44399
+                    , 44872
+                    , 46301
+                    , 46357
+                    , 46511
+                    , 46567
+                    , 46641
+                    , 46736
+                    , 47586
+                    , 47612
+                    , 47624
+                    , 48050
+                    , 48417
+                    , 48693
+                    , 49249
+                    , 49543
+                    , 50084
+                    , 50883
+                    , 51899
+                    , 51969
+                    , 52058
+                    , 53232
+                    , 54116
+                    , 56841
+                    , 57559
+                    , 61798
+                    , 62314
+                    , 62449
+                    , 63522
+                    , 64092
+                    , 64235
+                    , 66573
+                    , 67570
+                    , 68263
+                    , 68482
+                    , 69806
+                    , 70904
+                    , 71801
+                    , 73465
+                    , 76536
+                    , 78080
+                    , 78813
+                    , 80023
+                    , 80349
+                    , 81118
+                    , 81753
+                    , 82728
+                    , 83913
+                    , 85670
+                    , 87430
+                    , 88302
+                    , 92617
+                    , 94553
+                    , 94766
+                    , 95339
+                    , 95588
+                    , 96011
+                    , 97934
+                    , 98640
+                    , 103379
+                    , 103875
+                    , 103961
+                    , 105811
+                    , 106239
+                    , 106313
+                    , 107562
+                    , 107751
+                    , 108011
+                    , 108113
+                    , 109148
+                    , 109770
+                    , 109952
+                    , 112128
+                    , 112816
+                    , 113664
+                    , 114751
+                    , 116219
+                    , 116809
+                ];
+                $smsNumber = config("constants.SMS_PROVIDER_DEFAULT_NUMBER");
+                $users = User::whereHas("orderproducts" , function ($q) use ($hamayeshTalai)
                 {
-                    echo "start order #".$order->id;
-                    echo "<br>";
-
-                    $otherOrderproducts = $order->orderproducts
-                                                ->whereNotIn("product_id" , [$diniProductId]);
-                    $allOrderproducts = $order->orderproducts;
-
-                    if($allOrderproducts->isEmpty())
-                        continue;
-
-                    if($otherOrderproducts->isNotEmpty())
-                        continue ;
-
-                    $user = $order->user;
-
-                    $walletTransactions = $order->transactions
-                                                ->where("paymentmethod_id" , config("constants.PAYMENT_METHOD_WALLET"));
-                    $allTransactions = $order->successfulTransactions;
-
-                    foreach ($walletTransactions as $transaction)
+                    $q->whereHas("order" , function ($q) use ($hamayeshTalai)
                     {
-                        $wallet = $transaction->wallet ;
-                        $amount = $transaction->cost;
-                        $walletMessage = "به کیف پول شما بازگشت." ;
-                        if(isset($wallet))
+                        $q->where("orderstatus_id" ,config("constants.ORDER_STATUS_CLOSED") )
+                            ->whereIn("paymentstatus_id" , [
+                                config("constants.PAYMENT_STATUS_PAID")
+                            ]);
+                    })
+                        ->whereIn("product_id" , $hamayeshTalai)
+                        ->havingRaw('COUNT(*) = 3');
+                })
+                ->whereNotIn("id" , $notIncludedUsers)
+                ->get();
+
+                echo "number of users:".$users->count();
+                echo "<br>";
+
+                $couponController = new CouponController();
+                $failedCounter = 0 ;
+                $proccessed = 0 ;
+                dump($users->pluck("id")->toArray());
+
+                foreach ($users as $user)
+                {
+                    do {
+                        $couponCode = str_random(5);
+                    }while(\App\Coupon::where("code" , $couponCode)->get()->isNotEmpty());
+
+                    $insertCouponRequest = new \App\Http\Requests\InsertCouponRequest() ;
+                    $insertCouponRequest->offsetSet("enable" , 1);
+                    $insertCouponRequest->offsetSet("name" , "قرعه کشی وفاداران آلاء برای ".$user->getFullName());
+                    $insertCouponRequest->offsetSet("description" , "جایزه قرعه کشی");
+                    $insertCouponRequest->offsetSet("code" , $couponCode);
+                    $insertCouponRequest->offsetSet("usageNumber" , 0);
+                    $insertCouponRequest->offsetSet("limitStatus" , 0);
+                    $insertCouponRequest->offsetSet("coupontype_id" , 2);
+                    $couponProducts = \App\Product::whereNotIn("id" , [179 , 180 , 182])->get()->pluck('id')->toArray();
+                    $insertCouponRequest->offsetSet("products" , $couponProducts);
+                    $insertCouponRequest->offsetSet("discounttype_id" , 1);
+                    $insertCouponRequest->offsetSet("discount" , 55);
+                    $insertCouponRequest->offsetSet("validSince" , "2018-06-11");
+                    $insertCouponRequest->offsetSet("sinceTime" , " 00:00:00");
+                    $insertCouponRequest->offsetSet("validSinceEnable" , 1);
+                    $insertCouponRequest->offsetSet("validUntil" , "2018-06-15");
+                    $insertCouponRequest->offsetSet("untilTime" , "12:00:00");
+                    $insertCouponRequest->offsetSet("validUntilEnable" , 1);
+
+                    $storeCoupon = $couponController->store($insertCouponRequest);
+
+                    if($storeCoupon->status() == 200) {
+
+                        $message = "";
+                        $smsInfo = array();
+                        $smsInfo["to"] = array(ltrim($user->mobile, '0'));
+                        $smsInfo["from"] = $smsNumber;
+                        $smsInfo["message"] = $message ;
+                        $response = $this->medianaSendSMS($smsInfo);
+                        if(isset($response["error"]))
                         {
-                            $response =  $wallet->deposit($amount);
-                            if($response["result"])
+                            if($response["error"])
                             {
-                                echo "Deposit user #".$user->id." amount: ".$amount ;
+                                echo "<span style='color:red'>";
+                                echo "user ".$user->id." wasnot notfied";
+                                echo "</span>";
                                 echo "<br>";
-                                $user->notify(new GiftGiven($amount , $walletMessage));
-                                $transaction->delete();
+                                $failedCounter++;
                             }
                             else
                             {
-                                echo "Amount for user #".$user->id." was not deposited" ;
+                                echo "<span style='color:red'>";
+                                echo "user ".$user->id." notfied";
+                                echo "</span>";
                                 echo "<br>";
-                                $failedCounter++;
                             }
                         }
-                        else
-                        {
-                            $response = $user->deposit($amount , config("constants.WALLET_TYPE_GIFT")) ;
-                            if($response["result"])
-                            {
-                                echo "Deposit user #".$user->id." amount: ".$amount ;
-                                echo "<br>";
-                                $user->notify(new GiftGiven($amount , $walletMessage));
-                                $transaction->delete();
-                            }
-                            else
-                            {
-                                echo "Amount for user #".$user->id." was not deposited" ;
-                                echo "<br>";
-                                $failedCounter++;
-                            }
-                        }
-                    }
 
-//                    $order->fresh();
-                    $orderFailed = false;
-                    $orderUpdate = false;
-                    if($allTransactions->isEmpty())
+                        $proccessed++ ;
+
+
+//                    $openOrder = $userlottery->openOrders()->get()->first();
+//                    if (isset($openOrder)) {
+//                        session()->forget("order_id");
+//                        session()->put("order_id", $openOrder->id);
+//                        $attachCouponRequest = new \App\Http\Requests\SubmitCouponRequest();
+//                        $attachCouponRequest->offsetSet("coupon", $couponCode);
+//                        $orderController = new \App\Http\Controllers\OrderController();
+//                        $orderController->submitCoupon($attachCouponRequest);
+//                        session()->forget('couponMessageError');
+//                        session()->forget('couponMessageSuccess');
+//                    }
+                    }
+                    else
                     {
-                        $freeOrderproduct = $allOrderproducts->first();
-                        $freeOrderproduct->cost = 0 ;
-                        if($freeOrderproduct->update())
-                        {
-                            $orderUpdate = true;
-                        }
-                        else
-                        {
-                            $orderFailed = true;
-                            $failedCounter++;
-                            echo "Orderproduct #".$freeOrderproduct->id." was not updated";
-                            echo "<br>";
-                        }
-
-                        $order->cost = 0;
-                        $order->costwithoutcoupon = 0;
-                        $order->paymentstatus_id = config("constants.PAYMENT_STATUS_PAID") ;
-                        if($order->update())
-                        {
-                            $orderUpdate = true;
-                        }
-                        else
-                        {
-                            $orderFailed = true;
-                            $failedCounter++;
-                            echo "Order #".$order->id." was not updated";
-                            echo "<br>";
-                        }
-
-                        if(!$orderFailed)
-                        {
-                            $message = "کاربر گرامی همایش رایگان دین و زندگی برای شما ثبت شد و می توانید آن را دانلود کنید.";
-                            $message .= "\n";
-                            $message .= "آلاء";
-                            $message .= "\n";
-                            $message .= "sanatisharif.ir/asset";
-                            $smsNumber = config("constants.SMS_PROVIDER_DEFAULT_NUMBER");
-                            $smsInfo = array();
-                            $smsInfo["to"] = array(ltrim($user->mobile, '0'));
-                            $smsInfo["from"] = $smsNumber;
-                            $smsInfo["message"] = $message ;
-                            $response = $this->medianaSendSMS($smsInfo);
-                            echo "Order SMS to user :".$user->mobile;
-                            echo "<br>";
-                            if(isset($response["error"]) && $response["error"])
-                            {
-                                $failedCounter++;
-                                echo "SMS was not sent to user #".$user->id;
-                                echo "<br>";
-                            }
-                        }
+                        $failedCounter++;
                     }
-                    if($orderUpdate)
-                    {
-                        echo "Order update #".$order->id," : ".$orderUpdate;
-                        echo "<br>";
-                    }
-
-
                 }
-                dump("Failed : ".$failedCounter);
-                dd("Done!") ;
             }
 
         }
@@ -2679,9 +2918,16 @@ class HomeController extends Controller
                 ]);
         }
 
+        dump("processed: ".$proccessed);
+        dump("failed: ".$failedCounter);
+        dd("coupons done");
+
         $orders = Order::whereDoesntHave("orderproducts")
-            ->where("orderstatus_id" , 2)
-            ->whereIn("paymentstatus_id" , [2,3]);
+            ->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
+            ->whereIn("paymentstatus_id" , [
+                config("constants.PAYMENT_STATUS_INDEBTED"),
+                config("constants.PAYMENT_STATUS_PAID")
+            ]);
         dd($orders->pluck("id")->toArray());
 
         /**
