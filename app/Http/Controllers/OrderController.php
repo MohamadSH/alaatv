@@ -1857,7 +1857,8 @@ class OrderController extends Controller
             $user = Auth::user();
             if($request->has("cost"))
                 $cost = $request->get("cost");
-            $orderMode = "normal";
+
+            $orderMode = "";
             if($request->has("mode"))
                 $orderMode = $request->get("mode");
 
@@ -1878,9 +1879,9 @@ class OrderController extends Controller
 //                        ->first();
                     break;
                 default:
-                    if($request->has("orderId"))
+                    if($request->has("orderId_bhrk"))
                     {
-                        $orderId = $request->get("orderId");
+                        $orderId = $request->get("orderId_bhrk");
                         $openOrder = Order::where("id" , $orderId)
                                     ->first();
                     }
@@ -2419,7 +2420,7 @@ class OrderController extends Controller
                 if($hozouriOrder->save())
                 {
                     $request->offsetSet("cost" , 0);
-                    $request->offsetSet("orderId" , $hozouriOrder->id);
+                    $request->offsetSet("orderId_bhrk" , $hozouriOrder->id);
                     $product =  Product::where("id" , $hamayeshHozouriProductId)->first();
                     if(isset($product))
                     {
