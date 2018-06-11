@@ -1713,7 +1713,11 @@ class OrderController extends Controller
                     return redirect(action("HomeController@error403"));
             }
 
-            $validateCoupon = $coupon->validateCoupon();
+            [
+                $validateCoupon ,
+                $validateCouponCode
+            ] = $coupon->validateCoupon();
+
             if(strlen($validateCoupon)==0)
             {
                 $order->refreshCost();
@@ -1798,7 +1802,6 @@ class OrderController extends Controller
         }else{
             session()->put('couponMessageError', "کد وارد شده اشتباه می باشد");
         }
-
         return redirect()->back();
     }
 
@@ -1867,14 +1870,20 @@ class OrderController extends Controller
                     break;
                 case "donate":
                     $openOrder = Order::where("user_id" , $user->id)
-                        ->where("orderstatus_id" , config()->get("constants.ORDER_STATUS_OPEN_DONATE"))
-                        ->first();
+                                        ->where("orderstatus_id" , config()->get("constants.ORDER_STATUS_OPEN_DONATE"))
+                                        ->first();
                     // chon order taze sakhte shode in code order ro peida nemikonad va user->fresh ham kar nemikone
 //                    $openOrder = $user->orders
 //                        ->where("orderstatus_id" , config()->get("constants.ORDER_STATUS_OPEN_DONATE"))
 //                        ->first();
                     break;
                 default:
+                    if($request->has("orderId"))
+                    {
+                        $orderId = $request->get("orderId");
+                        $openOrder = Order::where("id" , $orderId)
+                                    ->first();
+                    }
                     break;
             }
 
@@ -2360,5 +2369,102 @@ class OrderController extends Controller
         }
         return redirect()->back();
 
+    }
+
+    public function addToArabiHozouri(Request $request)
+    { //Adding user to Hamayesh Houzori Arabi 27 Khordad
+        try
+        {
+            $user = Auth::user();
+            $done =false;
+            $hamayeshHozouriProductId = 223;
+            $hamayeshTalaiProductId = 214;
+            $hamayeshTalai = $user->orders()
+                                ->whereHas("orderproducts" , function ($q) use ($hamayeshTalaiProductId){
+                                    $q->where("product_id" , $hamayeshTalaiProductId);
+                                })
+                                ->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
+                                ->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_PAID"))
+                                ->first();
+
+            if(!isset($hamayeshTalai))
+                return $this->response
+                    ->setStatusCode(503)
+                    ->setContent([
+                        "message"=>"شما همایش طلایی عربی ندارد"
+                    ]);
+
+            $hozouriOrders = $user->orders()
+                ->whereHas("orderproducts" , function ($q) use ($hamayeshHozouriProductId){
+                    $q->where("product_id" , $hamayeshHozouriProductId);
+                })
+                ->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
+                ->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_PAID"))
+                ->get();
+            if($hozouriOrders->isNotEmpty())
+            {
+                return $this->response
+                    ->setStatusCode(503)
+                    ->setContent(["message"=>"شما قبلا در همایش حضوری ثبت نام کرده اید"]);
+            }
+            else
+            {
+                $hozouriOrder = new Order();
+                $hozouriOrder->orderstatus_id = config("constants.ORDER_STATUS_CLOSED") ;
+                $hozouriOrder->paymentstatus_id = config("constants.PAYMENT_STATUS_PAID") ;
+                $hozouriOrder->cost = 0 ;
+                $hozouriOrder->costwithoutcoupon = 0;
+                $hozouriOrder->user_id = $user->id ;
+                $hozouriOrder->completed_at = Carbon::now()->setTimezone("Asia/Tehran");
+                if($hozouriOrder->save())
+                {
+                    $request->offsetSet("cost" , 0);
+                    $request->offsetSet("orderId" , $hozouriOrder->id);
+                    $product =  Product::where("id" , $hamayeshHozouriProductId)->first();
+                    if(isset($product))
+                    {
+                        $response = $this->addOrderproduct($request , $product) ;
+                        $responseStatus = $response->getStatusCode();
+                        $result = json_decode($response->getContent());
+                        if($responseStatus == 200)
+                        {
+                            $done = true;
+                        }
+                        else
+                        {
+                            $done = false;
+                        }
+                    }
+                    else
+                    {
+                        $done = false;
+                    }
+                }
+                else
+                {
+                    $done =false;
+                }
+            }
+
+            if($done)
+            {
+                return $this->response->setStatusCode(200);
+            }
+            else
+            {
+                return $this->response->setStatusCode(503);
+            }
+        }
+        catch (\Exception    $e) {
+            $message = "unexpected error";
+            return $this->response
+                ->setStatusCode(503)
+                ->setContent([
+                    "message"=>$message ,
+                    "error"=>$e->getMessage() ,
+                    "line"=>$e->getLine() ,
+                    "file"=>$e->getFile()
+                ]);
+        }
     }
 }
