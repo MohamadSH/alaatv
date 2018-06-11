@@ -158,15 +158,16 @@ class OrderproductController extends Controller
                 return redirect()->back();
             }
         }
-        if(isset($simpleProducts) && $parentProductType != "simple")
+        if(isset($simpleProducts))
         {
-            foreach ($simpleProducts as $simpleProduct){
-                $validateProduct = $simpleProduct->validateProduct();
-                if(strlen($validateProduct) != 0){
-                    session()->put("warning" , $validateProduct);
-                    return redirect()->back();
+            if($parentProductType != "simple")
+                foreach ($simpleProducts as $simpleProduct){
+                    $validateProduct = $simpleProduct->validateProduct();
+                    if(strlen($validateProduct) != 0){
+                        session()->put("warning" , $validateProduct);
+                        return redirect()->back();
+                    }
                 }
-            }
         }
         else{
             $message = "محصول مورد نظر شما غیر فعال شده است";
