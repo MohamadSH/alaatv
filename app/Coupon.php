@@ -60,19 +60,38 @@ class Coupon extends Model
     /**
      * Validates a coupon
      *
-     * @return \Illuminate\Http\Response
+     * @return array
      */
     public function validateCoupon()
     {
+        $message = "" ;
+        $validationCode = 0;
         if (!$this->enable)
-            return "کپن وارد شده غیر فعال می باشد";
-        elseif (isset($this->usageLimit) && $this->usageNumber >= $this->usageLimit)
-            return "تعداد مجاز استفاده از کپن به پایان رسیده است";
+        {
+            $message =  "کپن وارد شده غیر فعال می باشد";
+            $validationCode = 1;
+        }
         elseif (isset($this->validSince) && Carbon::now() < $this->validSince)
-            return "تاریخ استفاده از کپن آغاز نشده است";
+        {
+            $message =  "تاریخ استفاده از کپن آغاز نشده است";
+            $validationCode = 2;
+        }
         elseif (isset($this->validUntil) && Carbon::now() > $this->validUntil)
-            return "تاریخ استفاده از کپن به پایان رسیده است";
-        else return "";
+        {
+            $message =  "تاریخ استفاده از کپن به پایان رسیده است";
+            $validationCode = 3;
+        }
+        elseif (isset($this->usageLimit) && $this->usageNumber >= $this->usageLimit)
+        {
+            $message =  "تعداد مجاز استفاده از کپن به پایان رسیده است";
+            $validationCode = 4;
+        }
+
+
+        return [
+            $message ,
+            $validationCode
+            ];
     }
 
     /**
