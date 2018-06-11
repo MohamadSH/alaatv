@@ -62,7 +62,10 @@ class OrderproductController extends Controller
         $user = Auth::user();
         $ajax = request()->ajax();
 
-        if( ( Auth::check() && !$user->can(Config::get('constants.ORDER_ANY_THING')) ) && !session()->has("adminOrder_id"))
+        if( ( Auth::check() &&
+                !$user->can(Config::get('constants.ORDER_ANY_THING')) ) &&
+                !session()->has("adminOrder_id") &&
+                ! $request->has("forceStore_bhrk"))
         {
             $validateProduct = $product->validateProduct();
             if (strlen($validateProduct) != 0) {
