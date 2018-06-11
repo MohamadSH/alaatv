@@ -605,7 +605,6 @@ class UserController extends Controller
      */
     public function show($user)
     {
-
         if(
             ( $user->id === Auth::id() ) ||
             ( Auth::user()->hasRole(Config::get('constants.ROLE_ADMIN') ) ) ||
@@ -623,70 +622,92 @@ class UserController extends Controller
             /** LOTTERY POINTS*/
             $now = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
                             ->timezone('Asia/Tehran');
-            $startTime = Carbon::create(2018, 05, 25, 07, 00, 00, 'Asia/Tehran');
-            $endTime = Carbon::create(2018, 05, 31, 23, 59, 00, 'Asia/Tehran');
+            $startTime = Carbon::create(2018, 06, 10, 07, 00, 00, 'Asia/Tehran');
+            $endTime = Carbon::create(2018, 06, 13, 23, 59, 00, 'Asia/Tehran');
             $flag = ($now->between($startTime, $endTime));
 //	        $flag = true;
             if($flag)
             {
-                $bon = Bon::where("name" , Config::get("constants.BON2"))->first() ;
-                $userPoints = 0 ;
-                if(isset($bon))
-                {
-                    $userPoints = $user->userHasBon($bon->name);
-                    $exchangeAmount = $userPoints * config("constants.HAMAYESH_LOTTERY_EXCHANGE_AMOUNT");
-                }
-                if($userPoints <= 0)
-                {
-                    $lottery = Lottery::where("name" , Config::get("constants.LOTTERY_NAME"))
-                        ->get()
-                        ->first();
-                    if(isset($lottery))
+                    $hamayeshHozouriProductId = 223;
+                    $hasHamayeshHozouriArabi = $user->orders()
+                                                    ->whereHas("orderproducts" , function ($q) use ($hamayeshHozouriProductId){
+                                                        $q->where("product_id" , $hamayeshHozouriProductId);
+                                                    })
+                                                    ->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
+                                                    ->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_PAID"))
+                                                    ->get()
+                                                    ->isNotEmpty();
+                    if(!$hasHamayeshHozouriArabi)
                     {
-                        $userLottery = $user->lotteries()
-                            ->where("lottery_id" , $lottery->id)
+                        $hamayeshTalaiProductId = 214;
+                        $hasHamayeshTalaiArabi = $user->orders()
+                            ->whereHas("orderproducts" , function ($q) use ($hamayeshTalaiProductId){
+                                $q->where("product_id" , $hamayeshTalaiProductId);
+                            })
+                            ->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
+                            ->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_PAID"))
                             ->get()
-                            ->first() ;
-                        if(isset($userLottery))
-                        {
-                            $lotteryName = $lottery->displayName;
-                            $lotteryMessage = "شما در قرعه کشی ".$lotteryName." شرکت داده شدید و متاسفانه برنده نشدید." ;
-                            if(isset($userLottery->pivot->prizes))
-                            {
-                                $lotteryRank = $userLottery->pivot->rank;
-                                if($lotteryRank == 0)
-                                {
-                                    $lotteryMessage = "شما از قرعه کشی ".$lotteryName." انصراف دادید." ;
-                                }
-                                else
-                                {
-                                    $lotteryMessage = "شما در قرعه کشی ".$lotteryName." برنده ".$lotteryRank." شدید." ;
-                                }
-
-                                $prizes = json_decode($userLottery
-                                    ->pivot
-                                    ->prizes
-                                )->items;
-                                $prizeCollection = collect() ;
-                                foreach ($prizes as $prize)
-                                {
-                                    if(isset($prize->objectId))
-                                    {
-                                        $id = $prize->objectId;
-                                        $model_name = $prize->objectType;
-                                        $model = new $model_name;
-                                        $modelObject = $model->find($id);
-
-                                        $prizeCollection->push(["name"=>$prize->name]);
-                                    }else{
-                                        $prizeCollection->push(["name"=>$prize->name]);
-                                    }
-                                }
-                            }
-
-                        }
+                            ->isNotEmpty();
                     }
-                }
+
+//                $bon = Bon::where("name" , Config::get("constants.BON2"))->first() ;
+//                $userPoints = 0 ;
+//                if(isset($bon))
+//                {
+//                    $userPoints = $user->userHasBon($bon->name);
+//                    $exchangeAmount = $userPoints * config("constants.HAMAYESH_LOTTERY_EXCHANGE_AMOUNT");
+//                }
+//                if($userPoints <= 0)
+//                {
+//                    $lottery = Lottery::where("name" , Config::get("constants.LOTTERY_NAME"))
+//                        ->get()
+//                        ->first();
+//                    if(isset($lottery))
+//                    {
+//                        $userLottery = $user->lotteries()
+//                            ->where("lottery_id" , $lottery->id)
+//                            ->get()
+//                            ->first() ;
+//                        if(isset($userLottery))
+//                        {
+//                            $lotteryName = $lottery->displayName;
+//                            $lotteryMessage = "شما در قرعه کشی ".$lotteryName." شرکت داده شدید و متاسفانه برنده نشدید." ;
+//                            if(isset($userLottery->pivot->prizes))
+//                            {
+//                                $lotteryRank = $userLottery->pivot->rank;
+//                                if($lotteryRank == 0)
+//                                {
+//                                    $lotteryMessage = "شما از قرعه کشی ".$lotteryName." انصراف دادید." ;
+//                                }
+//                                else
+//                                {
+//                                    $lotteryMessage = "شما در قرعه کشی ".$lotteryName." برنده ".$lotteryRank." شدید." ;
+//                                }
+//
+//                                $prizes = json_decode($userLottery
+//                                    ->pivot
+//                                    ->prizes
+//                                )->items;
+//                                $prizeCollection = collect() ;
+//                                foreach ($prizes as $prize)
+//                                {
+//                                    if(isset($prize->objectId))
+//                                    {
+//                                        $id = $prize->objectId;
+//                                        $model_name = $prize->objectType;
+//                                        $model = new $model_name;
+//                                        $modelObject = $model->find($id);
+//
+//                                        $prizeCollection->push(["name"=>$prize->name]);
+//                                    }else{
+//                                        $prizeCollection->push(["name"=>$prize->name]);
+//                                    }
+//                                }
+//                            }
+//
+//                        }
+//                    }
+//                }
             }
 
             $hasCompleteProfile = $user->orders()->whereHas("orderproducts" , function ($q)
@@ -695,7 +716,8 @@ class UserController extends Controller
             })->whereIn("orderstatus_id" , [Config::get("constants.ORDER_STATUS_CLOSED")])->get()->isNotEmpty();
             $userCompletion = (int)$user->completion();
             return view("user.profile.profile", compact("genders", "majors", "sideBarMode", "user" , "userPoints" ,
-                "exchangeAmount" , "userLottery" ,"prizeCollection" , "hasCompleteProfile" , "userCompletion" , "lotteryRank" , "lottery" , "lotteryMessage"));
+                "exchangeAmount" , "userLottery" ,"prizeCollection" , "hasCompleteProfile" , "userCompletion" , "lotteryRank" , "lottery" , "lotteryMessage" ,
+                "hasHamayeshTalaiArabi" , "hasHamayeshHozouriArabi"));
         } else {
             abort(403);
         }

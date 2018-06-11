@@ -1857,7 +1857,8 @@ class OrderController extends Controller
             $user = Auth::user();
             if($request->has("cost"))
                 $cost = $request->get("cost");
-            $orderMode = "normal";
+
+            $orderMode = "";
             if($request->has("mode"))
                 $orderMode = $request->get("mode");
 
