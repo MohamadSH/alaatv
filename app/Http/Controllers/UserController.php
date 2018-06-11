@@ -622,21 +622,22 @@ class UserController extends Controller
             /** LOTTERY POINTS*/
             $now = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
                             ->timezone('Asia/Tehran');
-            $startTime = Carbon::create(2018, 06, 10, 07, 00, 00, 'Asia/Tehran');
+            $startTime = Carbon::create(2018, 06, 11, 07, 00, 00, 'Asia/Tehran');
             $endTime = Carbon::create(2018, 06, 13, 23, 59, 00, 'Asia/Tehran');
             $flag = ($now->between($startTime, $endTime));
 //	        $flag = true;
+            $hamayeshHozouriProductId = 223;
+            $hasHamayeshHozouriArabi = $user->orders()
+                ->whereHas("orderproducts" , function ($q) use ($hamayeshHozouriProductId){
+                    $q->where("product_id" , $hamayeshHozouriProductId);
+                })
+                ->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
+                ->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_PAID"))
+                ->get()
+                ->isNotEmpty();
             if($flag)
             {
-                    $hamayeshHozouriProductId = 223;
-                    $hasHamayeshHozouriArabi = $user->orders()
-                                                    ->whereHas("orderproducts" , function ($q) use ($hamayeshHozouriProductId){
-                                                        $q->where("product_id" , $hamayeshHozouriProductId);
-                                                    })
-                                                    ->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
-                                                    ->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_PAID"))
-                                                    ->get()
-                                                    ->isNotEmpty();
+
                     if(!$hasHamayeshHozouriArabi)
                     {
                         $hamayeshTalaiProductId = 214;
