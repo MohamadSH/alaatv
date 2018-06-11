@@ -81,40 +81,48 @@ class OrderproductController extends Controller
 
             }
         }
-        if($request->has("attribute") || $product->producttype_id == Config::get("constants.PRODUCT_TYPE_SIMPLE"))
-            switch ($product->producttype->name){
-                    case "configurable" :
-                        if(session()->has("adminOrder_id"))$children = $product->children;
-                        else $children = $product->children->where("enable" , 1);
 
-                        foreach($children as $child)
+        $parentProductType = $product->producttype->name;
+        if($request->has("attribute") ||
+            $product->producttype_id == Config::get("constants.PRODUCT_TYPE_SIMPLE")
+          )
+        {
+            switch ($parentProductType)
+            {
+                case "configurable" :
+                    if(session()->has("adminOrder_id"))$children = $product->children;
+                    else $children = $product->children->where("enable" , 1);
+
+                    foreach($children as $child)
+                    {
+                        $attributevalues = $child->attributevalues;
+                        $flag = true;
+                        foreach($request->get("attribute") as $value)
                         {
-                            $attributevalues = $child->attributevalues;
-                            $flag = true;
-                            foreach($request->get("attribute") as $value)
-                            {
-                                if(!$attributevalues->contains($value)) {
-                                    $flag = false;
-                                    break;
-                                }
-                            }
-                            if($flag && $attributevalues->count() == count($request->get("attribute"))) {
-                                $simpleProducts = [$child];
+                            if(!$attributevalues->contains($value)) {
+                                $flag = false;
                                 break;
                             }
-
                         }
-                        break;
-                    case "simple" :
-                        if(session()->has("adminOrder_id"))
-                            $children = $product->children;
-                        else $children = $product->children->where("enable" , 1);
+                        if($flag && $attributevalues->count() == count($request->get("attribute"))) {
+                            $simpleProducts = [$child];
+                            break;
+                        }
 
-                        $simpleProducts = [$product] ;
-                        break;
-                    default: break;
-             }
-        elseif($request->has("products")) {
+                    }
+                    break;
+                case "simple" :
+                    if(session()->has("adminOrder_id"))
+                        $children = $product->children;
+                    else $children = $product->children->where("enable" , 1);
+
+                    $simpleProducts = [$product] ;
+                    break;
+                default: break;
+            }
+        }
+        elseif($request->has("products"))
+        {
             $products = $request->get("products");
             $simpleProducts = array();
             foreach ($products as $key => $productId)
@@ -136,7 +144,9 @@ class OrderproductController extends Controller
                 if(in_array($productId , $products))
                     array_push($simpleProducts , $simpleProduct);
             }
-        }else{
+        }
+        else
+        {
             $message = "لطفا ابتدا در قسمت \"انتخاب محصول\" تیک محصولات مورد نظرتون رو بزنید(انتخاب کنید)";
             if($ajax)
             {
@@ -148,7 +158,7 @@ class OrderproductController extends Controller
                 return redirect()->back();
             }
         }
-        if(isset($simpleProducts))
+        if(isset($simpleProducts) && $parentProductType != "simple")
         {
             foreach ($simpleProducts as $simpleProduct){
                 $validateProduct = $simpleProduct->validateProduct();
