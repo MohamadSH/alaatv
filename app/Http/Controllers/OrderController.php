@@ -1862,6 +1862,7 @@ class OrderController extends Controller
             if($request->has("mode"))
                 $orderMode = $request->get("mode");
 
+            $forceStore = false;
             switch ($orderMode)
             {
                 case "normal":
@@ -1884,6 +1885,7 @@ class OrderController extends Controller
                         $orderId = $request->get("orderId_bhrk");
                         $openOrder = Order::where("id" , $orderId)
                                     ->first();
+                        $forceStore = true;
                     }
                     break;
             }
@@ -1911,6 +1913,8 @@ class OrderController extends Controller
                     $request = new Request();
                     $request->offsetSet("product_id" ,  $product->id);
                     $request->offsetSet("order_id" ,  $openOrder->id);
+                    if($forceStore)
+                        $request->offsetSet("forceStore_bhrk" ,  true);
                     if(isset($cost))
                         $request->offsetSet("cost_bhrk" ,  $cost);
                     $orderproductController = new OrderproductController();
