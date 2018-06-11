@@ -1879,7 +1879,7 @@ class OrderController extends Controller
 //                        ->first();
                     break;
                 default:
-                    if($request->has("orderId"))
+                    if($request->has("orderId_bhrk"))
                     {
                         $orderId = $request->get("orderId");
                         $openOrder = Order::where("id" , $orderId)
@@ -2420,7 +2420,7 @@ class OrderController extends Controller
                 if($hozouriOrder->save())
                 {
                     $request->offsetSet("cost" , 0);
-                    $request->offsetSet("orderId" , $hozouriOrder->id);
+                    $request->offsetSet("orderId_bhrk" , $hozouriOrder->id);
                     $product =  Product::where("id" , $hamayeshHozouriProductId)->first();
                     if(isset($product))
                     {
