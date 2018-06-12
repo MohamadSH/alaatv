@@ -2548,7 +2548,7 @@ class HomeController extends Controller
                 {
                     $message .= "sanatisharif.ir/user/".$user->id;
                     $message .= "\n";
-                    $message .= "ظریفت محدود";
+                    $message .= "ظرفیت محدود";
                     $user->notify(new GeneralNotice($message));
                 }
 
