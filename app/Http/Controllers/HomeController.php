@@ -96,9 +96,6 @@ class HomeController extends Controller
 
     public function debug(Request $request)
     {
-        $user = User::FindOrFail(1);
-        $amount = 9000 ;
-        $user->notify(new GiftGiven($amount , "به کیف پول شما بازگشت."));
         return view("errors.404");
     }
     public function __construct()
@@ -2911,7 +2908,20 @@ class HomeController extends Controller
                         $failedCounter++;
                     }
                 }
+
+                dump("processed: ".$proccessed);
+                dump("failed: ".$failedCounter);
+                dd("coupons done");
+
             }
+
+            $orders = Order::whereDoesntHave("orderproducts")
+                ->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
+                ->whereIn("paymentstatus_id" , [
+                    config("constants.PAYMENT_STATUS_INDEBTED"),
+                    config("constants.PAYMENT_STATUS_PAID")
+                ]);
+            dd($orders->pluck("id")->toArray());
 
         }
         catch (\Exception    $e) {
@@ -2925,18 +2935,6 @@ class HomeController extends Controller
                     "file"=>$e->getFile()
                 ]);
         }
-
-        dump("processed: ".$proccessed);
-        dump("failed: ".$failedCounter);
-        dd("coupons done");
-
-        $orders = Order::whereDoesntHave("orderproducts")
-            ->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
-            ->whereIn("paymentstatus_id" , [
-                config("constants.PAYMENT_STATUS_INDEBTED"),
-                config("constants.PAYMENT_STATUS_PAID")
-            ]);
-        dd($orders->pluck("id")->toArray());
 
         /**
          * Fixing contentset tags
