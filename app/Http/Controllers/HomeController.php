@@ -2538,15 +2538,17 @@ class HomeController extends Controller
 
                 echo "Number of users:".$users->count();
 
-                $message = "شما به قدردانی از حمایتتان از آلاء به همایش حضوری عربی میلاد ناصح زاده 27 خرداد دعوت شده اید";
+                $message = "رایگان برای حامیان آلاء";
                 $message .= "\n";
-                $message .= "برای اعلام شرکت در همایش به پروفایل خود مراجعه کنید";
+                $message .= "همایش حضوری 27 خرداد عربی میلاد ناصح زاده";
+                $message .= "\n";
+                $message .= "اعلام حضور از طریق";
                 $message .= "\n";
                 foreach ($users as $user)
                 {
                     $message .= "sanatisharif.ir/user/".$user->id;
                     $message .= "\n";
-                    $message .= "با توجه به اینکه ظرفیت محدود می باشد در صورت تمایل هر چه زودتر حضور خود را اعلام نمایید.";
+                    $message .= "ظریفت محدود";
                     $user->notify(new GeneralNotice($message));
                 }
 
