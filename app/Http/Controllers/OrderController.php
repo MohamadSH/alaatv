@@ -2383,10 +2383,10 @@ class OrderController extends Controller
             $user = Auth::user();
             $done =false;
             $hamayeshHozouriProductId = 223;
-            $hamayeshTalaiProductId = 214;
+            $hamayeshTalaiProductId = [ 210 , 211 ,212 ,213 , 214,215,216,217,218,219,220,221, 222 ];
             $hamayeshTalai = $user->orders()
                                 ->whereHas("orderproducts" , function ($q) use ($hamayeshTalaiProductId){
-                                    $q->where("product_id" , $hamayeshTalaiProductId);
+                                    $q->whereIn("product_id" , $hamayeshTalaiProductId);
                                 })
                                 ->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
                                 ->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_PAID"))
