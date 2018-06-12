@@ -63,21 +63,21 @@ class GeneralNotice extends Notification implements ShouldQueue
     }
 
     private function msg() : string {
-        if(isset($this->user->gender_id))
-        {
-            if($this->user->gender->name=="خانم")
-                $gender = "خانم ";
-            elseif($this->user->gender->name=="آقا")
-                $gender = "آقای ";
-            else
-                $gender = "";
-        }else{
-            $gender = "";
-        }
-
-
+//        if(isset($this->user->gender_id))
+//        {
+//            if($this->user->gender->name=="خانم")
+//                $gender = "خانم ";
+//            elseif($this->user->gender->name=="آقا")
+//                $gender = "آقای ";
+//            else
+//                $gender = "";
+//        }else{
+//            $gender = "";
+//        }
+        
         $messageCore = $this->message;
-        $message = "سلام ".$gender.$this->user->getfullName()."\n".$messageCore;
+//        $message = "سلام ".$gender.$this->user->getfullName()."\n".$messageCore;
+        $message = $messageCore;
 
         return $message;
     }
