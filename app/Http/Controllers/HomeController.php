@@ -22,6 +22,7 @@ use App\Http\Requests\ContactUsFormRequest;
 use App\Http\Requests\SendSMSRequest;
 use App\Lottery;
 use App\Major;
+use App\Notifications\GeneralNotice;
 use App\Notifications\GiftGiven;
 use App\Order;
 use App\Orderproduct;
@@ -2519,6 +2520,39 @@ class HomeController extends Controller
     {
         try
         {
+            if($request->has("smsarabi"))
+            {
+                $hamayeshTalai = [ 210 , 211 ,212 ,213 , 214,215,216,217,218,219,220,221, 222 ];
+                $users = User::whereHas("orderproducts" , function ($q) use ($hamayeshTalai)
+                {
+                    $q->whereHas("order" , function ($q) use ($hamayeshTalai)
+                    {
+                        $q->where("orderstatus_id" ,config("constants.ORDER_STATUS_CLOSED") )
+                            ->whereIn("paymentstatus_id" , [
+                                config("constants.PAYMENT_STATUS_PAID")
+                            ]);
+                    })
+                    ->whereIn("product_id" , $hamayeshTalai) ;
+                })
+                ->get();
+
+                echo "Number of users:".$users->count();
+
+                $message = "شما به قدردانی از حمایتتان از آلاء به همایش حضوری عربی میلاد ناصح زاده 27 خرداد دعوت شده اید";
+                $message .= "\n";
+                $message .= "برای اعلام شرکت در همایش به پروفایل خود مراجعه کنید";
+                $message .= "\n";
+                foreach ($users as $user)
+                {
+                    $message .= "sanatisharif.ir/user/".$user->id;
+                    $message .= "\n";
+                    $message .= "با توجه به اینکه ظرفیت محدود می باشد در صورت تمایل هر چه زودتر حضور خود را اعلام نمایید.";
+                    $user->notify(new GeneralNotice($message));
+                }
+
+                dd("Done");
+            }
+
             if($request->has("coupon"))
             {
                 $hamayeshTalai = [ 210 , 211 ,212 ,213 , 214,215,216,217,218,219,220,221, 222 ];
