@@ -2532,23 +2532,31 @@ class HomeController extends Controller
                                 config("constants.PAYMENT_STATUS_PAID")
                             ]);
                     })
-                    ->whereIn("product_id" , $hamayeshTalai) ;
+                        ->whereIn("product_id" , $hamayeshTalai);
+                    //                        ->havingRaw('COUNT(*) > 0');
+                })->whereDoesntHave("orderproducts" , function ($q) use ($hamayeshTalai)
+                {
+                    $q->whereHas("order" , function ($q) use ($hamayeshTalai)
+                    {
+                        $q->where("orderstatus_id" ,config("constants.ORDER_STATUS_CLOSED") )
+                            ->whereIn("paymentstatus_id" , [
+                                config("constants.PAYMENT_STATUS_PAID")
+                            ]);
+                    })
+                        ->where("product_id" , 210);
                 })
                 ->get();
 
                 echo "Number of users:".$users->count();
+                dd("stop");
 
-                $message = "رایگان برای حامیان آلاء";
-                $message .= "\n";
-                $message .= "همایش حضوری 27 خرداد عربی میلاد ناصح زاده";
-                $message .= "\n";
-                $message .= "اعلام حضور از طریق";
-                $message .= "\n";
                 foreach ($users as $user)
                 {
-                    $message .= "sanatisharif.ir/user/".$user->id;
+                    $message = "آلایی عزیز ضریب ادبیات در کنکور 4 است که کلش در 15 ساعت توسط دکتر هامون سبطی جمع بندی شده";
                     $message .= "\n";
-                    $message .= "ظرفیت محدود";
+                    $message .= "توصیه می کنیم آخر هفته حتما فیلم های ایشان را نگاه کنید";
+                    $message .= "\n";
+                    $message .= "sanatisharif.ir/product/210";
                     $user->notify(new GeneralNotice($message));
                 }
 
