@@ -3105,7 +3105,7 @@ class HomeController extends Controller
                                 })
                                 ->whereIn("product_id" , $hamayeshTalai);
     //                        ->havingRaw('COUNT(*) > 0');
-                            })->whereDosentHave("orderproducts" , function ($q) use ($hamayeshTalai)
+                            })->whereDoesntHave("orderproducts" , function ($q) use ($hamayeshTalai)
                                 {
                                     $q->whereHas("order" , function ($q) use ($hamayeshTalai)
                                     {
