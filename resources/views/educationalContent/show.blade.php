@@ -151,7 +151,7 @@
                     </div>
                 </div>
                     <div class="col-md-4 margin-bottom-15">
-                        @if(isset($contentsWithSameSet))
+                        @if(isset($contentsWithSameSet) && $contentsWithSameSet->whereIn("type" , "video" )->isNotEmpty())
                         <div class="mt-element-list">
                             <div class="mt-list-head list-news ext-1 font-white bg-yellow-crusta">
                                 <div class="list-head-title-container">
