@@ -540,7 +540,7 @@
                                     @endif
                                 </ul>
                                 <div class="tab-content">
-                                    <div class="tab-pane active" id="tab_15_1">
+                                    <div class="tab-pane {{(isset($product->longDescription) && strlen($product->longDescription) > 0)?"active":""}}" id="tab_15_1">
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <!-- BEGIN Portlet PORTLET-->
@@ -623,7 +623,7 @@
                                         {{--@endif--}}
                                     @endif
 
-                                    <div class="tab-pane" id="tab_15_3">
+                                    <div class="tab-pane {{(!isset($product->longDescription) || strlen($product->longDescription) <= 0)?"active":""}}" id="tab_15_3">
                                         <div class="row">
                                             <style>
                                                 .videoList .slimScrollBar {
