@@ -41,7 +41,12 @@
             @if(isset($hasHamayeshHozouriArabi) && $hasHamayeshHozouriArabi)
                 <div class="alert alert-block bg-blue bg-font-blue fade in">
                     <button type="button" class="close" data-dismiss="alert"></button>
-                    <h4 class="alert-heading text-center" style="line-height: normal;">نام شما در شرکت کنندگان همایش رایگان حضوری عربی آقای ناصح زاده روز 27 خرداد ثبت نام شده است</h4>
+                    <h4 class="alert-heading text-center" style="line-height: normal;">نام شما در شرکت کنندگان همایش رایگان حضوری عربی آقای ناصح زاده روز 27 خرداد ثبت شده است</h4>
+                    <h4 class="alert-heading text-center" style="line-height: normal;">برای انصراف از شرکت در همایش بر روی دکمه زیر کلیک کنید</h4>
+                    <p style="text-align: center;">
+                        {{--<button class="btn mt-sweetalert-hamayesh-arabi" data-title="آیا از شرکت خود مطمئنید؟" data-type="warning" data-allow-outside-click="true" data-show-confirm-button="true" data-show-cancel-button="true" data-cancel-button-class="btn-danger" data-cancel-button-text="خیر" data-confirm-button-text="بله شرکت می کنم" data-confirm-button-class="btn-info" style="background: #d6af18;">ثبت نام در همایش حضوری</button>--}}
+                        <button class="btn btn-lg" id="bt-cancel-hamayesh-arabi"  style="background: #d6af18;">انصراف می دهم</button>
+                    </p>
                 </div>
             @elseif(isset($hasHamayeshTalaiArabi) && $hasHamayeshTalaiArabi)
                 <div class="alert alert-block bg-purple bg-font-purple fade in">
@@ -50,7 +55,7 @@
                     <h4 class="alert-heading text-center" style="line-height: normal;">(محل برگزاری تهران) ثبت نام تا ساعت 24 سه شنبه 22 خرداد باز خواهد بود.</h4>
                     <p style="text-align: center;">
                         {{--<button class="btn mt-sweetalert-hamayesh-arabi" data-title="آیا از شرکت خود مطمئنید؟" data-type="warning" data-allow-outside-click="true" data-show-confirm-button="true" data-show-cancel-button="true" data-cancel-button-class="btn-danger" data-cancel-button-text="خیر" data-confirm-button-text="بله شرکت می کنم" data-confirm-button-class="btn-info" style="background: #d6af18;">ثبت نام در همایش حضوری</button>--}}
-                        <button class="btn btn-lg" id="bt-sweetalert-hamayesh-arabi"  style="background: #d6af18;">شرکت می کنم</button>
+                        <button class="btn btn-lg" id="bt-register-hamayesh-arabi"  style="background: #d6af18;">شرکت می کنم</button>
                     </p>
                 </div>
             @endif
@@ -471,7 +476,7 @@
             SweetAlert.init();
         });
 
-        $(document).on("click", "#bt-sweetalert-hamayesh-arabi", function (){
+        $(document).on("click", "#bt-register-hamayesh-arabi", function (){
             toastr.options = {
                 "closeButton": true,
                 "debug": false,
@@ -493,6 +498,59 @@
             userAjax = $.ajax({
                 type: "POST",
                 url: "{{action("OrderController@addToArabiHozouri")}}",
+                contentType: "application/json",
+                dataType: "json",
+                statusCode: {
+                    200:function (response) {
+                        location.reload();
+                    },
+                    //The status for when the user is not authorized for making the request
+                    401:function (ressponse) {
+                    },
+                    403: function (response) {
+                    },
+                    404: function (response) {
+                    },
+                    //The status for when form data is not valid
+                    422: function (response) {
+                        //
+                    },
+                    //The status for when there is error php code
+                    500: function (response) {
+                        console.log(response);
+                    },
+                    //The status for when there is error php code
+                    503: function (response) {
+                        // console.log("503 Error");
+                        console.log(response);
+                        toastr["error"]("خطا", "پیام سیستم");
+                    }
+                }
+            });
+        });
+
+        $(document).on("click", "#bt-cancel-hamayesh-arabi", function (){
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "positionClass": "toast-top-center",
+                "onclick": null,
+                "showDuration": "1000",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+
+            if(userAjax) {
+                userAjax.abort();
+            }
+            userAjax = $.ajax({
+                type: "POST",
+                url: "{{action("OrderController@removeArabiHozouri")}}",
                 contentType: "application/json",
                 dataType: "json",
                 statusCode: {
