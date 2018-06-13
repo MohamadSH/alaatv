@@ -3134,23 +3134,33 @@ class HomeController extends Controller
                         $couponCode = str_random(5);
                     }while(\App\Coupon::where("code" , $couponCode)->get()->isNotEmpty());
 
+                    /** Coupon Settings */
+                    $couponName = "قرعه کشی وفاداران آلاء برای ".$user->getFullName();
+                    $couponDescription = "قرعه کشی وفاداران آلاء برای ".$user->getFullName();
+                    $validSinceDate = "2018-06-11";
+                    $validUntilDate = " 00:00:00";
+                    $validSinceTime = "2018-06-15";
+                    $validUntilTime = "12:00:00";
+                    $couponProducts = \App\Product::whereNotIn("id" , [179 , 180 , 182])->get()->pluck('id')->toArray();
+                    $discount = 55;
+                    /** Coupon Settings */
+
                     $insertCouponRequest = new \App\Http\Requests\InsertCouponRequest() ;
                     $insertCouponRequest->offsetSet("enable" , 1);
-                    $insertCouponRequest->offsetSet("name" , "قرعه کشی وفاداران آلاء برای ".$user->getFullName());
-                    $insertCouponRequest->offsetSet("description" , "جایزه قرعه کشی");
-                    $insertCouponRequest->offsetSet("code" , $couponCode);
                     $insertCouponRequest->offsetSet("usageNumber" , 0);
                     $insertCouponRequest->offsetSet("limitStatus" , 0);
                     $insertCouponRequest->offsetSet("coupontype_id" , 2);
-                    $couponProducts = \App\Product::whereNotIn("id" , [179 , 180 , 182])->get()->pluck('id')->toArray();
-                    $insertCouponRequest->offsetSet("products" , $couponProducts);
                     $insertCouponRequest->offsetSet("discounttype_id" , 1);
-                    $insertCouponRequest->offsetSet("discount" , 55);
-                    $insertCouponRequest->offsetSet("validSince" , "2018-06-11");
-                    $insertCouponRequest->offsetSet("sinceTime" , " 00:00:00");
+                    $insertCouponRequest->offsetSet("name" , $couponName);
+                    $insertCouponRequest->offsetSet("description" , $couponDescription);
+                    $insertCouponRequest->offsetSet("code" , $couponCode);
+                    $insertCouponRequest->offsetSet("products" , $couponProducts);
+                    $insertCouponRequest->offsetSet("discount" , $discount);
+                    $insertCouponRequest->offsetSet("validSince" , $validSinceDate);
+                    $insertCouponRequest->offsetSet("sinceTime" , $validSinceTime);
                     $insertCouponRequest->offsetSet("validSinceEnable" , 1);
-                    $insertCouponRequest->offsetSet("validUntil" , "2018-06-15");
-                    $insertCouponRequest->offsetSet("untilTime" , "12:00:00");
+                    $insertCouponRequest->offsetSet("validUntil" , $validUntilDate);
+                    $insertCouponRequest->offsetSet("untilTime" , $validUntilTime);
                     $insertCouponRequest->offsetSet("validUntilEnable" , 1);
 
                     $storeCoupon = $couponController->store($insertCouponRequest);
