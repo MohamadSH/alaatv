@@ -2400,13 +2400,13 @@ class OrderController extends Controller
                     ]);
 
             $hozouriOrders = $user->orders()
-                ->whereHas("orderproducts" , function ($q) use ($hamayeshHozouriProductId){
-                    $q->where("product_id" , $hamayeshHozouriProductId);
-                })
-                ->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
-                ->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_PAID"))
-                ->get();
-            if($hozouriOrders->isNotEmpty())
+                                    ->whereHas("orderproducts" , function ($q) use ($hamayeshHozouriProductId){
+                                        $q->where("product_id" , $hamayeshHozouriProductId);
+                                    })
+                                    ->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
+                                    ->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_PAID"))
+                                    ;
+            if($hozouriOrders->get()->isNotEmpty())
             {
                 return $this->response
                     ->setStatusCode(503)
@@ -2414,26 +2414,47 @@ class OrderController extends Controller
             }
             else
             {
-                $hozouriOrder = new Order();
-                $hozouriOrder->orderstatus_id = config("constants.ORDER_STATUS_CLOSED") ;
-                $hozouriOrder->paymentstatus_id = config("constants.PAYMENT_STATUS_PAID") ;
-                $hozouriOrder->cost = 0 ;
-                $hozouriOrder->costwithoutcoupon = 0;
-                $hozouriOrder->user_id = $user->id ;
-                $hozouriOrder->completed_at = Carbon::now()->setTimezone("Asia/Tehran");
-                if($hozouriOrder->save())
+                $withTrashedOrders = $hozouriOrders->withTrashed()->get();
+                if($withTrashedOrders->isNotEmpty())
                 {
-                    $request->offsetSet("cost" , 0);
-                    $request->offsetSet("orderId_bhrk" , $hozouriOrder->id);
-                    $product =  Product::where("id" , $hamayeshHozouriProductId)->first();
-                    if(isset($product))
+                    $deletedOrder = $withTrashedOrders->first();
+                    $restoreResult =  $deletedOrder->restore();
+                    if($restoreResult)
                     {
-                        $response = $this->addOrderproduct($request , $product) ;
-                        $responseStatus = $response->getStatusCode();
-                        $result = json_decode($response->getContent());
-                        if($responseStatus == 200)
+                        $done = true;
+                    }
+                    else
+                    {
+                        $done =false;
+                    }
+                }
+                else
+                {
+                    $hozouriOrder = new Order();
+                    $hozouriOrder->orderstatus_id = config("constants.ORDER_STATUS_CLOSED") ;
+                    $hozouriOrder->paymentstatus_id = config("constants.PAYMENT_STATUS_PAID") ;
+                    $hozouriOrder->cost = 0 ;
+                    $hozouriOrder->costwithoutcoupon = 0;
+                    $hozouriOrder->user_id = $user->id ;
+                    $hozouriOrder->completed_at = Carbon::now()->setTimezone("Asia/Tehran");
+                    if($hozouriOrder->save())
+                    {
+                        $request->offsetSet("cost" , 0);
+                        $request->offsetSet("orderId_bhrk" , $hozouriOrder->id);
+                        $product =  Product::where("id" , $hamayeshHozouriProductId)->first();
+                        if(isset($product))
                         {
-                            $done = true;
+                            $response = $this->addOrderproduct($request , $product) ;
+                            $responseStatus = $response->getStatusCode();
+                            $result = json_decode($response->getContent());
+                            if($responseStatus == 200)
+                            {
+                                $done = true;
+                            }
+                            else
+                            {
+                                $done = false;
+                            }
                         }
                         else
                         {
@@ -2442,14 +2463,69 @@ class OrderController extends Controller
                     }
                     else
                     {
-                        $done = false;
+                        $done =false;
                     }
                 }
-                else
-                {
-                    $done =false;
-                }
             }
+
+            if($done)
+            {
+                return $this->response->setStatusCode(200);
+            }
+            else
+            {
+                return $this->response->setStatusCode(503);
+            }
+        }
+        catch (\Exception    $e) {
+            $message = "unexpected error";
+            return $this->response
+                ->setStatusCode(503)
+                ->setContent([
+                    "message"=>$message ,
+                    "error"=>$e->getMessage() ,
+                    "line"=>$e->getLine() ,
+                    "file"=>$e->getFile()
+                ]);
+        }
+    }
+
+    public function removeArabiHozouri(Request $request)
+    { //Adding user to Hamayesh Houzori Arabi 27 Khordad
+        try
+        {
+            $user = Auth::user();
+            $done =false;
+            $hamayeshHozouriProductId = 223;
+
+            $hozouriOrders = $user->orders()
+                                ->whereHas("orderproducts" , function ($q) use ($hamayeshHozouriProductId){
+                                    $q->where("product_id" , $hamayeshHozouriProductId);
+                                })
+                                ->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
+                                ->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_PAID"))
+                                ->get();
+            if($hozouriOrders->isNotEmpty())
+            {
+                $done = true;
+                foreach ($hozouriOrders as $hozouriOrder)
+                {
+                    $removeResult = $hozouriOrder->delete();
+                    if(!$removeResult)
+                    {
+                        $done = false;
+                        break;
+                    }
+                }
+
+            }
+            else
+            {
+                return $this->response
+                    ->setStatusCode(503)
+                    ->setContent(["message"=>"شما در همایش ثبت نام نکرده اید"]);
+            }
+
 
             if($done)
             {
