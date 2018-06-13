@@ -2558,7 +2558,7 @@ class HomeController extends Controller
             if($request->has("coupon"))
             {
                 $hamayeshTalai = [ 210 , 211 ,212 ,213 , 214,215,216,217,218,219,220,221, 222 ];
-                $notIncludedUsers = [
+                $notIncludedUsers_Shimi = [
                     2
                     , 111
                     , 117
@@ -2838,25 +2838,291 @@ class HomeController extends Controller
                     , 116219
                     , 116809
                 ];
+                $notIncludedUsers_Vafadaran =  [
+                    100
+                    , 272
+                    , 282
+                    , 502
+                    , 589
+                    , 751
+                    , 1031
+                    , 1281
+                    , 1421
+                    , 1565
+                    , 1572
+                    , 1695
+                    , 1846
+                    , 2143
+                    , 2385
+                    , 2661
+                    , 3396
+                    , 3538
+                    , 3646
+                    , 3738
+                    , 3788
+                    , 4051
+                    , 4117
+                    , 4197
+                    , 4517
+                    , 5009
+                    , 5385
+                    , 5877
+                    , 6452
+                    , 6767
+                    , 6895
+                    , 6896
+                    , 7020
+                    , 7037
+                    , 7056
+                    , 7192
+                    , 7291
+                    , 7442
+                    , 7527
+                    , 7942
+                    , 8199
+                    , 8681
+                    , 9363
+                    , 10244
+                    , 10263
+                    , 10343
+                    , 11088
+                    , 11133
+                    , 11339
+                    , 11440
+                    , 11594
+                    , 11623
+                    , 11742
+                    , 11797
+                    , 11804
+                    , 12155
+                    , 12788
+                    , 13313
+                    , 13410
+                    , 13436
+                    , 13442
+                    , 13448
+                    , 13541
+                    , 13724
+                    , 13746
+                    , 13752
+                    , 14084
+                    , 14807
+                    , 14937
+                    , 15603
+                    , 15914
+                    , 16114
+                    , 16141
+                    , 16291
+                    , 16491
+                    , 16779
+                    , 17275
+                    , 17500
+                    , 17527
+                    , 18344
+                    , 18377
+                    , 18663
+                    , 18759
+                    , 19481
+                    , 19714
+                    , 19736
+                    , 20016
+                    , 20150
+                    , 20172
+                    , 20381
+                    , 20442
+                    , 20501
+                    , 20652
+                    , 20666
+                    , 20732
+                    , 20753
+                    , 20937
+                    , 20953
+                    , 21412
+                    , 21431
+                    , 21522
+                    , 22275
+                    , 22290
+                    , 22391
+                    , 22495
+                    , 23130
+                    , 23438
+                    , 23600
+                    , 23986
+                    , 24223
+                    , 24472
+                    , 25457
+                    , 25557
+                    , 25572
+                    , 25776
+                    , 25806
+                    , 26355
+                    , 26621
+                    , 27764
+                    , 28269
+                    , 28288
+                    , 28371
+                    , 28385
+                    , 28397
+                    , 28405
+                    , 28488
+                    , 28719
+                    , 28865
+                    , 29021
+                    , 29050
+                    , 29054
+                    , 29194
+                    , 29230
+                    , 29334
+                    , 29589
+                    , 29737
+                    , 30038
+                    , 30129
+                    , 30158
+                    , 30318
+                    , 30652
+                    , 30857
+                    , 30958
+                    , 31508
+                    , 32131
+                    , 32274
+                    , 32894
+                    , 32906
+                    , 32959
+                    , 32987
+                    , 33187
+                    , 33255
+                    , 33616
+                    , 33680
+                    , 33803
+                    , 33817
+                    , 33949
+                    , 34018
+                    , 34062
+                    , 34188
+                    , 34966
+                    , 35004
+                    , 35327
+                    , 35652
+                    , 35911
+                    , 35929
+                    , 35936
+                    , 36264
+                    , 36364
+                    , 36444
+                    , 36460
+                    , 36524
+                    , 36788
+                    , 36793
+                    , 36883
+                    , 37006
+                    , 37021
+                    , 37058
+                    , 37156
+                    , 38868
+                    , 38893
+                    , 39022
+                    , 39062
+                    , 39075
+                    , 40088
+                    , 40189
+                    , 40503
+                    , 40958
+                    , 41389
+                    , 41448
+                    , 41858
+                    , 42848
+                    , 43322
+                    , 44436
+                    , 46322
+                    , 48191
+                    , 49032
+                    , 49314
+                    , 50637
+                    , 50671
+                    , 51091
+                    , 54884
+                    , 56547
+                    , 57493
+                    , 57649
+                    , 58317
+                    , 59178
+                    , 62602
+                    , 62713
+                    , 62903
+                    , 62987
+                    , 63530
+                    , 66143
+                    , 66485
+                    , 68472
+                    , 69136
+                    , 71817
+                    , 72386
+                    , 72458
+                    , 73399
+                    , 75119
+                    , 76888
+                    , 77855
+                    , 78596
+                    , 78897
+                    , 80328
+                    , 80408
+                    , 80973
+                    , 82093
+                    , 82744
+                    , 82785
+                    , 83048
+                    , 83991
+                    , 85557
+                    , 86966
+                    , 87086
+                    , 87791
+                    , 88977
+                    , 90447
+                    , 92857
+                    , 92951
+                    , 93432
+                    , 93701
+                    , 99623
+                    , 99686
+                    , 101628
+                    , 107960
+                    , 108174
+                    , 110145
+                    , 115132
+                    , 118902
+                    , 119386
+                    , 125351
+                ];
                 $smsNumber = config("constants.SMS_PROVIDER_DEFAULT_NUMBER");
                 $users = User::whereHas("orderproducts" , function ($q) use ($hamayeshTalai)
-                {
-                    $q->whereHas("order" , function ($q) use ($hamayeshTalai)
-                    {
-                        $q->where("orderstatus_id" ,config("constants.ORDER_STATUS_CLOSED") )
-                            ->whereIn("paymentstatus_id" , [
-                                config("constants.PAYMENT_STATUS_PAID")
-                            ]);
-                    })
-                        ->whereIn("product_id" , $hamayeshTalai)
-                        ->havingRaw('COUNT(*) = 3');
-                })
-                ->whereNotIn("id" , $notIncludedUsers)
+                            {
+                                $q->whereHas("order" , function ($q) use ($hamayeshTalai)
+                                {
+                                    $q->where("orderstatus_id" ,config("constants.ORDER_STATUS_CLOSED") )
+                                        ->whereIn("paymentstatus_id" , [
+                                            config("constants.PAYMENT_STATUS_PAID")
+                                        ]);
+                                })
+                                ->whereIn("product_id" , $hamayeshTalai);
+    //                        ->havingRaw('COUNT(*) > 0');
+                            })->whereDosentHave("orderproducts" , function ($q) use ($hamayeshTalai)
+                                {
+                                    $q->whereHas("order" , function ($q) use ($hamayeshTalai)
+                                    {
+                                        $q->where("orderstatus_id" ,config("constants.ORDER_STATUS_CLOSED") )
+                                            ->whereIn("paymentstatus_id" , [
+                                                config("constants.PAYMENT_STATUS_PAID")
+                                            ]);
+                                    })
+                                    ->where("product_id" , 210);
+                                })
+                ->whereNotIn("id" , $notIncludedUsers_Shimi)
+                ->whereNotIn("id" , $notIncludedUsers_Vafadaran)
                 ->get();
 
                 echo "number of users:".$users->count();
                 echo "<br>";
-
+                dd("stop");
                 $couponController = new CouponController();
                 $failedCounter = 0 ;
                 $proccessed = 0 ;
