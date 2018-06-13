@@ -3176,30 +3176,12 @@ class HomeController extends Controller
                         $message .= "مهلت استفاده از کد: تا پنجشنبه ساعت 11 شب";
                         $message .= "\n";
                         $message .= "به امید اینکه با کمک دیگر همایش های آلاء در کنکور بدرخشید و برنده iphonex در قرعه کشی عید فطر آلاء باشید.";
-                        $smsInfo = array();
-                        $smsInfo["to"] = array(ltrim($user->mobile, '0'));
-                        $smsInfo["from"] = $smsNumber;
-                        $smsInfo["message"] = $message ;
-                        $response = $this->medianaSendSMS($smsInfo);
-                        if(isset($response["error"]))
-                        {
-                            if($response["error"])
-                            {
-                                echo "<span style='color:red'>";
-                                echo "user ".$user->id." wasnot notfied";
-                                echo "</span>";
-                                echo "<br>";
-                                $failedCounter++;
-                            }
-                            else
-                            {
-                                echo "<span style='color:green'>";
-                                echo "user ".$user->id." notfied";
-                                echo "</span>";
-                                echo "<br>";
-                            }
-                        }
-
+                        $user->notify(new GeneralNotice($message));
+                        echo "<span style='color:green'>";
+                        echo "user ".$user->id." notfied";
+                        echo "</span>";
+                        echo "<br>";
+                        
                         $proccessed++ ;
 
 
