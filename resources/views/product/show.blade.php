@@ -530,7 +530,7 @@
                                     @endif
                                     @if($productsWithVideo->isNotEmpty() || $productsWithPamphlet->isNotEmpty())
                                         <li>
-                                            <a href="#tab_15_3" data-toggle="tab" class="bold  uppercase">دانلود فیلم ها
+                                            <a href="#tab_15_3" data-toggle="tab" class="bold  uppercase {{(!isset($product->longDescription) || strlen($product->longDescription) <= 0)?"active":""}}">دانلود فیلم ها
                                                 و جزوات</a>
                                         </li>
                                     @endif
