@@ -623,7 +623,7 @@ class UserController extends Controller
             $now = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
                             ->timezone('Asia/Tehran');
             $startTime = Carbon::create(2018, 06, 11, 07, 00, 00, 'Asia/Tehran');
-            $endTime = Carbon::create(2018, 06, 13, 23, 59, 00, 'Asia/Tehran');
+            $endTime = Carbon::create(2018, 06, 15, 12, 00, 00, 'Asia/Tehran');
             $flag = ($now->between($startTime, $endTime));
 //	        $flag = true;
             $hamayeshHozouriProductId = 223;
