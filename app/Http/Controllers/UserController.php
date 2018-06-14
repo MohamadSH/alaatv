@@ -650,65 +650,71 @@ class UserController extends Controller
                             ->get()
                             ->isNotEmpty();
                     }
+            }
 
-//                $bon = Bon::where("name" , Config::get("constants.BON2"))->first() ;
-//                $userPoints = 0 ;
-//                if(isset($bon))
-//                {
-//                    $userPoints = $user->userHasBon($bon->name);
-//                    $exchangeAmount = $userPoints * config("constants.HAMAYESH_LOTTERY_EXCHANGE_AMOUNT");
-//                }
-//                if($userPoints <= 0)
-//                {
-//                    $lottery = Lottery::where("name" , Config::get("constants.LOTTERY_NAME"))
-//                        ->get()
-//                        ->first();
-//                    if(isset($lottery))
-//                    {
-//                        $userLottery = $user->lotteries()
-//                            ->where("lottery_id" , $lottery->id)
-//                            ->get()
-//                            ->first() ;
-//                        if(isset($userLottery))
-//                        {
-//                            $lotteryName = $lottery->displayName;
-//                            $lotteryMessage = "شما در قرعه کشی ".$lotteryName." شرکت داده شدید و متاسفانه برنده نشدید." ;
-//                            if(isset($userLottery->pivot->prizes))
-//                            {
-//                                $lotteryRank = $userLottery->pivot->rank;
-//                                if($lotteryRank == 0)
-//                                {
-//                                    $lotteryMessage = "شما از قرعه کشی ".$lotteryName." انصراف دادید." ;
-//                                }
-//                                else
-//                                {
-//                                    $lotteryMessage = "شما در قرعه کشی ".$lotteryName." برنده ".$lotteryRank." شدید." ;
-//                                }
-//
-//                                $prizes = json_decode($userLottery
-//                                    ->pivot
-//                                    ->prizes
-//                                )->items;
-//                                $prizeCollection = collect() ;
-//                                foreach ($prizes as $prize)
-//                                {
-//                                    if(isset($prize->objectId))
-//                                    {
-//                                        $id = $prize->objectId;
-//                                        $model_name = $prize->objectType;
-//                                        $model = new $model_name;
-//                                        $modelObject = $model->find($id);
-//
-//                                        $prizeCollection->push(["name"=>$prize->name]);
-//                                    }else{
-//                                        $prizeCollection->push(["name"=>$prize->name]);
-//                                    }
-//                                }
-//                            }
-//
-//                        }
-//                    }
-//                }
+            $startTime2 = Carbon::create(2018, 06, 15, 07, 00, 00, 'Asia/Tehran');
+            $endTime2 = Carbon::create(2018, 06, 15, 23, 59, 30, 'Asia/Tehran');
+            $flag2 = ($now->between($startTime2, $endTime2));
+            if($flag2)
+            {
+                $bon = Bon::where("name" , Config::get("constants.BON2"))->first() ;
+                $userPoints = 0 ;
+                if(isset($bon))
+                {
+                    $userPoints = $user->userHasBon($bon->name);
+                    $exchangeAmount = $userPoints * config("constants.HAMAYESH_LOTTERY_EXCHANGE_AMOUNT");
+                }
+                if($userPoints <= 0)
+                {
+                    $lottery = Lottery::where("name" , Config::get("constants.LOTTERY_NAME"))
+                        ->get()
+                        ->first();
+                    if(isset($lottery))
+                    {
+                        $userLottery = $user->lotteries()
+                            ->where("lottery_id" , $lottery->id)
+                            ->get()
+                            ->first() ;
+                        if(isset($userLottery))
+                        {
+                            $lotteryName = $lottery->displayName;
+                            $lotteryMessage = "شما در قرعه کشی ".$lotteryName." شرکت داده شدید و متاسفانه برنده نشدید." ;
+                            if(isset($userLottery->pivot->prizes))
+                            {
+                                $lotteryRank = $userLottery->pivot->rank;
+                                if($lotteryRank == 0)
+                                {
+                                    $lotteryMessage = "شما از قرعه کشی ".$lotteryName." انصراف دادید." ;
+                                }
+                                else
+                                {
+                                    $lotteryMessage = "شما در قرعه کشی ".$lotteryName." برنده ".$lotteryRank." شدید." ;
+                                }
+
+                                $prizes = json_decode($userLottery
+                                    ->pivot
+                                    ->prizes
+                                )->items;
+                                $prizeCollection = collect() ;
+                                foreach ($prizes as $prize)
+                                {
+                                    if(isset($prize->objectId))
+                                    {
+                                        $id = $prize->objectId;
+                                        $model_name = $prize->objectType;
+                                        $model = new $model_name;
+                                        $modelObject = $model->find($id);
+
+                                        $prizeCollection->push(["name"=>$prize->name]);
+                                    }else{
+                                        $prizeCollection->push(["name"=>$prize->name]);
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                }
             }
 
             $hasCompleteProfile = $user->orders()->whereHas("orderproducts" , function ($q)

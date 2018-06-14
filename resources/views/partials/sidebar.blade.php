@@ -137,6 +137,11 @@
                                         <span class="title">قرعه کشی همایش طلایی</span>
                                     </a>
                                 </li>
+                                <li class="nav-item">
+                                    <a href="{{action("HomeController@adminLottery" , ["lottery"=>"eideFetr"])}}" class="nav-link ">
+                                        <span class="title">قرعه کشی عید فطر</span>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                         @endrole
