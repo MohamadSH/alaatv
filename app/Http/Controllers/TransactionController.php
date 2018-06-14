@@ -455,7 +455,8 @@ class TransactionController extends Controller
                         $extraCost = 0 ;
                         foreach ($transactionOrderproducts as $orderproduct)
                         {
-                            if(in_array($orderproduct->id , $checkedOrderproducts)) continue ;
+                            if(in_array($orderproduct->id , $checkedOrderproducts))
+                                continue ;
                             $orderproductCost = (int)($orderproduct->calculatePayableCost());
 
                             $orderproductCost = $orderproductCost - $orderDiscountPerItem ;
@@ -475,6 +476,7 @@ class TransactionController extends Controller
                                 $extraCost =  $orderproduct->getExtraCost($extraAttributevaluesId) ;
                             else
                                 $extraCost =  $orderproduct->getExtraCost() ;
+                            
                             array_push($checkedOrderproducts , $orderproduct->id) ;
                         }
                     }
