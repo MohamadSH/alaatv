@@ -430,27 +430,33 @@ class TransactionController extends Controller
                     if($transactionOrderproducts->isNotEmpty())
                     {
                         $orderDiscount = $transaction->order->discount ;
+                        $donateProducts = array_merge(config("constants.DONATE_PRODUCT") , [config("constants.CUSTOM_DONATE_PRODUCT")]);
                         $numOfOrderproducts = $transaction->order
-                            ->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
-                            ->count();
+                                                            ->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
+                                                            ->whereNotIn("product_id" ,$donateProducts)
+                                                            ->count();
                         $orderDiscountPerItem = $orderDiscount/$numOfOrderproducts;
                         $orderSuccessfulTransaction = $transaction->order
-                            ->transactions ;
+                                                                    ->transactions ;
+
+                        //ToDo : Main wallet
+                        $orderWalletTransactionSum = $orderSuccessfulTransaction->where("paymentmethod_id" , config("constants.PAYMENT_METHOD_WALLET"))
+                                                                                ->sum("cost");
+
                         if(isset($transactionStatusFilter))
                             $orderSuccessfulTransaction = $orderSuccessfulTransaction->whereIn("transactionstatus_id" , $transactionStatusFilter);
 
                         if(isset($paymentMethodsId))
                             $orderSuccessfulTransaction = $orderSuccessfulTransaction->whereIn("paymentmethod_id" , $paymentMethodsId) ;
 
-
-
                         $orderSuccessfulTransactionPaidSum = $orderSuccessfulTransaction->where("cost" , ">" , 0)
-                            ->sum("cost") ;
+                                                                                        ->sum("cost") ;
 
                         $orderSuccessfulTransactionRefundSum = $orderSuccessfulTransaction->where("cost" , "<" , 0)
-                            ->sum("cost") ;
+                                                                                            ->sum("cost") ;
 
                         $orderRefundPerItem = $orderSuccessfulTransactionRefundSum / $numOfOrderproducts; // it is a negative number
+                        $orderWalletUsePerItem = $orderWalletTransactionSum/$numOfOrderproducts ;
                         $cost = 0;
                         $extraCost = 0 ;
                         foreach ($transactionOrderproducts as $orderproduct)
@@ -463,6 +469,7 @@ class TransactionController extends Controller
                             $orderproductCost = $orderproductCost + $orderRefundPerItem ;
                             if($orderSuccessfulTransactionPaidSum > $orderproductCost )
                             {
+                                $orderproductCost = $orderproductCost - $orderWalletUsePerItem ;
                                 $cost += $orderproductCost ;
                                 $orderSuccessfulTransactionPaidSum = $orderSuccessfulTransactionPaidSum - $orderproductCost;
                             }
