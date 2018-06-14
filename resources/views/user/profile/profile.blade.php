@@ -60,7 +60,7 @@
                 </div>
             @endif
             @if(isset($userPoints) && $userPoints)
-                <div class="alert alert-block bg-purple bg-font-purple fade in">
+                    <div class="alert alert-block bg-dark bg-font-purple fade in">
                     <button type="button" class="close" data-dismiss="alert"></button>
                     <h4 class="alert-heading text-center" style="line-height: normal;">برای انصرف از قرعه کشی همایش طلایی ، روی دکمه زیر کلیک کنید</h4>
                     <h4 class="alert-heading text-center" style="line-height: normal;">در صورت انصراف مبلغ {{(isset($exchangeAmount))?number_format($exchangeAmount):""}} تومان اعتبار هدیه به رسم یاد بود به شما اهدا خواهد شد.</h4>
