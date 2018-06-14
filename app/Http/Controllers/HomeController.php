@@ -3919,7 +3919,7 @@ class HomeController extends Controller
         if(!isset($bon))
             dd("Bon not found");
 
-        dump("Number of available users: ".count($users));
+        dump("Number of available users: ".$users->count());
         foreach ($users as $userPoint)
         {
             $userId = $userPoint["user_id"] ;
