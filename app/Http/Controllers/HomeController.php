@@ -2552,11 +2552,9 @@ class HomeController extends Controller
 
                 foreach ($users as $user)
                 {
-                    $message = "آلایی عزیز ضریب ادبیات در کنکور 4 است که کلش در 15 ساعت توسط دکتر هامون سبطی جمع بندی شده";
+                    $message = "آلایی عزیز تا جمعه ظهر فرصت دارید حضور خود را در همایش اعلام کنید";
                     $message .= "\n";
-                    $message .= "توصیه می کنیم آخر هفته حتما فیلم های ایشان را نگاه کنید";
-                    $message .= "\n";
-                    $message .= "sanatisharif.ir/product/210";
+                    $message .= "sanatisharif.if/user".$user->id;
                     $user->notify(new GeneralNotice($message));
                 }
 
