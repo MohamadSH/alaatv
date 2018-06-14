@@ -2532,7 +2532,7 @@ class HomeController extends Controller
                                 config("constants.PAYMENT_STATUS_PAID")
                             ]);
                     })
-                        ->whereIn("product_id" , $hamayeshTalai);
+                        ->whereIn("product_id" , [214]);
                     //                        ->havingRaw('COUNT(*) > 0');
                 })->whereDoesntHave("orderproducts" , function ($q) use ($hamayeshTalai)
                 {
@@ -2543,7 +2543,7 @@ class HomeController extends Controller
                                 config("constants.PAYMENT_STATUS_PAID")
                             ]);
                     })
-                        ->where("product_id" , 210);
+                        ->where("product_id" , 223);
                 })
                 ->get();
 
@@ -2552,7 +2552,7 @@ class HomeController extends Controller
 
                 foreach ($users as $user)
                 {
-                    $message = "آلایی عزیز تا جمعه ظهر فرصت دارید حضور خود را در همایش اعلام کنید";
+                    $message = "آلایی عزیز تا جمعه ظهر فرصت دارید تا حضور خود در همایش  حضوری عربی را اعلام کنید";
                     $message .= "\n";
                     $message .= "sanatisharif.ir/user/".$user->id;
                     $user->notify(new GeneralNotice($message));
