@@ -2532,7 +2532,7 @@ class HomeController extends Controller
                                 config("constants.PAYMENT_STATUS_PAID")
                             ]);
                     })
-                        ->whereIn("product_id" , $hamayeshTalai);
+                        ->whereIn("product_id" , [214]);
                     //                        ->havingRaw('COUNT(*) > 0');
                 })->whereDoesntHave("orderproducts" , function ($q) use ($hamayeshTalai)
                 {
@@ -2543,7 +2543,7 @@ class HomeController extends Controller
                                 config("constants.PAYMENT_STATUS_PAID")
                             ]);
                     })
-                        ->where("product_id" , 210);
+                        ->where("product_id" , 223);
                 })
                 ->get();
 
@@ -2552,9 +2552,9 @@ class HomeController extends Controller
 
                 foreach ($users as $user)
                 {
-                    $message = "آلایی عزیز تا جمعه ظهر فرصت دارید حضور خود را در همایش اعلام کنید";
+                    $message = "آلایی عزیز تا جمعه ظهر فرصت دارید تا حضور خود در همایش  حضوری عربی را اعلام کنید";
                     $message .= "\n";
-                    $message .= "sanatisharif.if/user".$user->id;
+                    $message .= "sanatisharif.ir/user/".$user->id;
                     $user->notify(new GeneralNotice($message));
                 }
 
@@ -3781,76 +3781,149 @@ class HomeController extends Controller
 
     public function pointBot(Request $request)
     {
-        abort(403);
-        $hamayeshTalai = [ 210 , 211 ,212 ,213 , 214,216,217,218,219,220,221, 222 ];
+            /** Points for Hamayesh Talai lottery */
+//        $hamayeshTalai = [ 210 , 211 ,212 ,213 , 214,216,217,218,219,220,221, 222 ];
+//
+//        $orderproducts = Orderproduct::whereHas("order" , function ($q) use ($hamayeshTalai){
+//                                $q->whereIn("orderstatus_id" , [2,5,7])
+//                                  ->whereIn("paymentstatus_id" , [3]);
+//                            })->whereIn("product_id" , $hamayeshTalai)
+//                              ->get();
+//        $users = [];
+//        $successCounter = 0;
+//        $failedCounter = 0 ;
+//        $warningCounter = 0 ;
+//        foreach ($orderproducts as $orderproduct)
+//        {
+//            if(isset($orderproduct->order->user->id))
+//            {
+//                $user = $orderproduct->order->user ;
+//                if(isset($users[$user->id]))
+//                {
+//                    $users[$user->id]++;
+//                }
+//                else
+//                {
+//                    $users[$user->id] = 1 ;
+//                }
+//            }
+//            else
+//            {
+//                dump("User was not found for orderproduct ".$orderproduct->id);
+//                $warningCounter++;
+//            }
+//        }
+//
+//        // USERS WITH PLUS POINTS
+//        $orders = Order::where("completed_at" , "<" , "2018-05-18")
+//                        ->whereIn("orderstatus_id" , [2,5,7])
+//                        ->whereIn("paymentstatus_id" , [3])
+//                        ->whereHas("orderproducts" , function ($q) use ($hamayeshTalai){
+//                            $q->whereIn("product_id" , $hamayeshTalai);
+//                        })
+//                        ->pluck("user_id")
+//                        ->toArray();
+//
+//        $usersPlus = [];
+//        foreach ($orders as $userId)
+//        {
+//            if(in_array($userId , $usersPlus))
+//                continue;
+//            else
+//                array_push($usersPlus , $userId) ;
+//
+//            if(isset($users[$userId]))
+//            {
+//                $users[$userId]++ ;
+//            }
+//            else
+//            {
+//                $users[$userId] = 1 ;
+//            }
+//
+//        }
+        /** Points for Hamayesh Talai lottery */
 
-        $orderproducts = Orderproduct::whereHas("order" , function ($q) use ($hamayeshTalai){
-                                $q->whereIn("orderstatus_id" , [2,5,7])
-                                  ->whereIn("paymentstatus_id" , [3]);
-                            })->whereIn("product_id" , $hamayeshTalai)
-                              ->get();
-        $users = [];
+
+        /** Points for Eide Fetr lottery */
+        $transactions = Transaction::where("completed_at" , ">" , "2018-05-24 20:00:00")
+                                    ->where("transactionstatus_id" , config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
+                                    ->whereIn("paymentmethod_id" , [
+                                        config("constants.PAYMENT_METHOD_ONLINE") ,
+                                        config("constants.PAYMENT_METHOD_ATM")
+                                    ])
+                                    ->where("cost" , ">" , 0);
+        $users = collect();
         $successCounter = 0;
         $failedCounter = 0 ;
         $warningCounter = 0 ;
-        foreach ($orderproducts as $orderproduct)
+        foreach ($transactions as $transaction)
         {
-            if(isset($orderproduct->order->user->id))
+            $user = $transaction->order->user;
+            if(isset($user))
             {
-                $user = $orderproduct->order->user ;
-                if(isset($users[$user->id]))
+                $userRecord = $users->where("user_id" , $user->id)->first();
+                if(isset($userRecord))
                 {
-                    $users[$user->id]++;
+                    $userRecord["totalAmount"] += $transaction->cost;
                 }
                 else
                 {
-                    $users[$user->id] = 1 ;
+                    $users->push([
+                        "user_id" => $user->id,
+                        "totalAmount" => $transaction->cost ,
+                        "point" => 1
+                    ]);
                 }
             }
             else
             {
-                dump("User was not found for orderproduct ".$orderproduct->id);
+                dump("User was not found for transaction ".$transaction->id);
                 $warningCounter++;
             }
         }
-        
-        // USERS WITH PLUS POINTS
-        $orders = Order::where("completed_at" , "<" , "2018-05-18")
-                        ->whereIn("orderstatus_id" , [2,5,7])
-                        ->whereIn("paymentstatus_id" , [3])
-                        ->whereHas("orderproducts" , function ($q) use ($hamayeshTalai){
-                            $q->whereIn("product_id" , $hamayeshTalai);
-                        })
-                        ->pluck("user_id")
-                        ->toArray();
 
-        $usersPlus = [];
-        foreach ($orders as $userId)
+        $users = $users->where("totalAmount"  , ">" , 100000);
+
+        $userbons = Userbon::where("bon_id" , 2)
+                            ->where("created_at" , ">" , "2018-05-24 00:00:00")
+                            ->where("totalNumber" , ">=" , "3");
+
+        foreach ($userbons as $userbon)
         {
-            if(in_array($userId , $usersPlus))
-                continue;
-            else
-                array_push($usersPlus , $userId) ;
-
-            if(isset($users[$userId]))
+            $user = $userbon->user;
+            $successfulTransactions = $user->orderTransactions
+                                        ->where("completed_at" , ">" , "2018-05-24 20:00:00")
+                                        ->where("transactionstatus_id" , config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
+                                        ->whereIn("paymentmethod_id" , [
+                                            config("constants.PAYMENT_METHOD_ONLINE") ,
+                                            config("constants.PAYMENT_METHOD_ATM")
+                                        ])
+                                        ->where("cost" , ">" , 0);
+            if($successfulTransactions->isNotEmpty())
             {
-                $users[$userId]++ ;
+                $userRecord = $users->where("user_id" , $user->id)->first();
+                if(!isset($userRecord))
+                {
+                    $users->push([
+                        "user_id" => $user->id,
+                        "totalAmount" => -1 ,
+                        "point" => 1 ,
+                    ]);
+                }
             }
-            else
-            {
-                $users[$userId] = 1 ;
-            }
-
         }
-        
+
         $bonName = config("constants.BON2");
         $bon = Bon::where("name" , $bonName)->first();
         if(!isset($bon))
             dd("Bon not found");
 
         dump("Number of available users: ".count($users));
-        foreach ($users as $userId => $points)
+        foreach ($users as $userPoint)
         {
+            $userId = $userPoint["user_id"] ;
+            $points = $userPoint["point"];
             $userBon = new Userbon();
             $userBon->bon_id = $bon->id ;
             $userBon->user_id = $userId ;
