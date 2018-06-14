@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Afterloginformcontrol;
-use App\Attributevalue;
 use App\Bankaccount;
 use App\Bon;
 use App\Coupon;
@@ -29,8 +28,6 @@ use App\Paymentstatus;
 use App\Product;
 use App\Transactionstatus;
 use App\User;
-use App\Userbon;
-use App\Websitesetting;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Requests\EditOrderRequest;
@@ -1572,6 +1569,7 @@ class OrderController extends Controller
         if($sendSMS && isset($order))
         {
             $user = $order->user;
+            $order =  $order->fresh();
             $user->notify(new InvoicePaid($order));
             Cache::tags('bon')->flush();
         }
