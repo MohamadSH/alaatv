@@ -2554,7 +2554,7 @@ class HomeController extends Controller
                 {
                     $message = "آلایی عزیز تا جمعه ظهر فرصت دارید حضور خود را در همایش اعلام کنید";
                     $message .= "\n";
-                    $message .= "sanatisharif.if/user".$user->id;
+                    $message .= "sanatisharif.ir/user/".$user->id;
                     $user->notify(new GeneralNotice($message));
                 }
 
