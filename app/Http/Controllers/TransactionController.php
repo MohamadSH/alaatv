@@ -243,226 +243,264 @@ class TransactionController extends Controller
     {
         try
         {
-        $transactions = Transaction::orderBy('created_at', 'Desc');
+            $transactions = Transaction::orderBy('created_at', 'Desc');
 
-        $createdSinceDate = Input::get('createdSinceDate');
-        $createdTillDate = Input::get('createdTillDate');
-        $createdTimeEnable = Input::get('createdTimeEnable');
-        if(strlen($createdSinceDate)>0 && strlen($createdTillDate)>0 && isset($createdTimeEnable))
-        {
-            $transactions = $this->timeFilterQuery($transactions, $createdSinceDate, $createdTillDate, 'completed_at');
-        }
-
-        $deadlineSinceDate = Input::get('DeadlineSinceDate');
-        $deadlineTillDate = Input::get('DeadlineTillDate');
-        $deadlineTimeEnable = Input::get('DeadlineTimeEnable');
-        if(strlen($deadlineSinceDate)>0 && strlen($deadlineTillDate)>0 && isset($deadlineTimeEnable))
-        {
-            $transactions = $this->timeFilterQuery($transactions, $deadlineSinceDate, $deadlineTillDate, 'deadline_at');
-        }
-
-        if(Input::has('transactionStatus'))
-        {
-            $transactions = $transactions->where("transactionstatus_id", Input::get('transactionStatus'));
-        }
-
-        $transactionCode = trim(Input::get("transactionCode"));
-        if(isset($transactionCode[0])){
-            $transactions = $transactions->where(function ($q) use ($transactionCode){
-                $q->where("traceNumber" , "like" , "%" . $transactionCode . "%")
-                    ->orWhere("referenceNumber" , "like" , "%" . $transactionCode . "%")
-                    ->orWhere("paycheckNumber" , "like" , "%" . $transactionCode . "%")
-                    ->orWhere("transactionID" , "like" , "%" . $transactionCode . "%");
-            });
-        }
-
-        $transactionManagerComment = Input::get("transactionManagerComment");
-        if(isset($transactionManagerComment[0])){
-            $transactions = $transactions->where(function ($q) use ($transactionManagerComment){
-                $q->where("managerComment" , "like" , "%" . $transactionManagerComment . "%") ;
-            });
-        }
-
-        $firstName = trim(Input::get('firstName'));
-        if(isset($firstName) && strlen($firstName)>0)
-        {
-            $transactions = $transactions->whereHas("order" , function ($query) use ($firstName){
-                $query->whereHas('user', function($q) use ($firstName) {
-                    $q->where('firstName', 'like', '%' . $firstName . '%');
-                });
-            });
-        }
-
-        $lastName = trim(Input::get('lastName'));
-        if(isset($lastName) && strlen($lastName)>0)
-        {
-            $transactions = $transactions->whereHas("order" , function ($query) use ($lastName){
-                $query->whereHas('user', function($q) use ($lastName) {
-                    $q->where('lastName', 'like', '%' . $lastName . '%');
-                });
-            });
-        }
-
-        $nationalCode = trim(Input::get('nationalCode'));
-        if(isset($nationalCode) && strlen($nationalCode)>0)
-        {
-            $transactions = $transactions->whereHas("order" , function ($query) use ($nationalCode){
-                $query->whereHas('user', function($q) use ($nationalCode) {
-                    $q->where('nationalCode', 'like', '%' . $nationalCode . '%');
-                });
-            });
-        }
-
-        $mobile = trim(Input::get('mobile'));
-        if(isset($mobile) && strlen($mobile)>0)
-        {
-            $transactions = $transactions->whereHas("order" , function ($query) use ($mobile){
-                $query->whereHas('user', function($q) use ($mobile) {
-                    $q->where('mobile', 'like', '%' . $mobile . '%');
-                });
-            });
-        }
-
-
-
-        $productsId = Input::get('products');
-        $transactionOrderproductCost = collect() ;
-        $transactionOrderproductTotalCost = 0 ;
-        $transactionOrderproductTotalExtraCost = 0 ;
-        if(isset($productsId) && !in_array(0, $productsId))
-        {
-            $products = Product::whereIn('id', $productsId)->get();
-            foreach ($products as $product) {
-                if($product->producttype_id == Config::get("constants.PRODUCT_TYPE_CONFIGURABLE"))
-                    if ($product->hasChildren())
-                    {
-                        $productsId = array_merge($productsId, Product::whereHas('parents', function ($q) use ($productsId) {
-                            $q->whereIn("parent_id", $productsId);
-                        })->pluck("id")->toArray());
-                    }
-            }
-            if(Input::has("checkoutStatusEnable"))
+            $createdSinceDate = Input::get('createdSinceDate');
+            $createdTillDate = Input::get('createdTillDate');
+            $createdTimeEnable = Input::get('createdTimeEnable');
+            if(strlen($createdSinceDate)>0 && strlen($createdTillDate)>0 && isset($createdTimeEnable))
             {
-                $checkoutStatuses = Input::get("checkoutStatuses");
-                if(in_array(0 , $checkoutStatuses))
-                {
-                    $transactions = $transactions->whereIn('order_id', Orderproduct::whereNull("checkoutstatus_id")->whereIn('product_id', $productsId)->pluck('order_id'));
-                }else{
-                    $transactions = $transactions->whereIn('order_id', Orderproduct::whereIn("checkoutstatus_id" , $checkoutStatuses)->whereIn('product_id', $productsId)->pluck('order_id'));
+                $transactions = $this->timeFilterQuery($transactions, $createdSinceDate, $createdTillDate, 'completed_at');
+            }
+
+            $deadlineSinceDate = Input::get('DeadlineSinceDate');
+            $deadlineTillDate = Input::get('DeadlineTillDate');
+            $deadlineTimeEnable = Input::get('DeadlineTimeEnable');
+            if(strlen($deadlineSinceDate)>0 && strlen($deadlineTillDate)>0 && isset($deadlineTimeEnable))
+            {
+                $transactions = $this->timeFilterQuery($transactions, $deadlineSinceDate, $deadlineTillDate, 'deadline_at');
+            }
+
+            if(Input::has('transactionStatus'))
+            {
+                $transactionStatusFilter = Input::get('transactionStatus');
+                $transactions = $transactions->where("transactionstatus_id", $transactionStatusFilter);
+            }
+
+            $transactionCode = trim(Input::get("transactionCode"));
+            if(isset($transactionCode[0])){
+                $transactions = $transactions->where(function ($q) use ($transactionCode){
+                    $q->where("traceNumber" , "like" , "%" . $transactionCode . "%")
+                        ->orWhere("referenceNumber" , "like" , "%" . $transactionCode . "%")
+                        ->orWhere("paycheckNumber" , "like" , "%" . $transactionCode . "%")
+                        ->orWhere("transactionID" , "like" , "%" . $transactionCode . "%");
+                });
+            }
+
+            $transactionManagerComment = Input::get("transactionManagerComment");
+            if(isset($transactionManagerComment[0])){
+                $transactions = $transactions->where(function ($q) use ($transactionManagerComment){
+                    $q->where("managerComment" , "like" , "%" . $transactionManagerComment . "%") ;
+                });
+            }
+
+            $firstName = trim(Input::get('firstName'));
+            if(isset($firstName) && strlen($firstName)>0)
+            {
+                $transactions = $transactions->whereHas("order" , function ($query) use ($firstName){
+                    $query->whereHas('user', function($q) use ($firstName) {
+                        $q->where('firstName', 'like', '%' . $firstName . '%');
+                    });
+                });
+            }
+
+            $lastName = trim(Input::get('lastName'));
+            if(isset($lastName) && strlen($lastName)>0)
+            {
+                $transactions = $transactions->whereHas("order" , function ($query) use ($lastName){
+                    $query->whereHas('user', function($q) use ($lastName) {
+                        $q->where('lastName', 'like', '%' . $lastName . '%');
+                    });
+                });
+            }
+
+            $nationalCode = trim(Input::get('nationalCode'));
+            if(isset($nationalCode) && strlen($nationalCode)>0)
+            {
+                $transactions = $transactions->whereHas("order" , function ($query) use ($nationalCode){
+                    $query->whereHas('user', function($q) use ($nationalCode) {
+                        $q->where('nationalCode', 'like', '%' . $nationalCode . '%');
+                    });
+                });
+            }
+
+            $mobile = trim(Input::get('mobile'));
+            if(isset($mobile) && strlen($mobile)>0)
+            {
+                $transactions = $transactions->whereHas("order" , function ($query) use ($mobile){
+                    $query->whereHas('user', function($q) use ($mobile) {
+                        $q->where('mobile', 'like', '%' . $mobile . '%');
+                    });
+                });
+            }
+
+
+            $productsId = Input::get('products');
+            $transactionOrderproductCost = collect() ;
+            $transactionOrderproductTotalCost = 0 ;
+            $transactionOrderproductTotalExtraCost = 0 ;
+            if(isset($productsId) && !in_array(0, $productsId))
+            {
+                $products = Product::whereIn('id', $productsId)->get();
+                foreach ($products as $product) {
+                    if($product->producttype_id == Config::get("constants.PRODUCT_TYPE_CONFIGURABLE"))
+                        if ($product->hasChildren())
+                        {
+                            $productsId = array_merge($productsId, Product::whereHas('parents', function ($q) use ($productsId) {
+                                $q->whereIn("parent_id", $productsId);
+                            })->pluck("id")->toArray());
+                        }
                 }
-            }else{
-                $transactions = $transactions->whereIn('order_id', Orderproduct::whereIn('product_id', $productsId)->pluck('order_id'));
-            }
-        }elseif(Input::has("checkoutStatusEnable"))
-        {
-            $checkoutStatuses = Input::get("checkoutStatuses");
-            if(in_array(0 , $checkoutStatuses))
-            {
-                $transactions = $transactions->whereIn('order_id', Orderproduct::whereNull("checkoutstatus_id")->pluck('order_id'));
-            }else{
-                $transactions = $transactions->whereIn('order_id', Orderproduct::whereIn("checkoutstatus_id" , $checkoutStatuses)->pluck('order_id'));
-            }
-        }
-
-        $extraAttributevaluesId= Input::get('extraAttributes');
-        if(isset($extraAttributevaluesId))
-        {
-                $transactions = $transactions->whereIn('order_id',  Orderproduct::whereHas("attributevalues" , function ($q) use ($extraAttributevaluesId ){
-                    $q->whereIn('value_id' , $extraAttributevaluesId);
-                })->pluck('order_id'));
-        }
-
-        $paymentMethodsId = Input::get('paymentMethods');
-//        if(isset($paymentMethodsId) && !in_array(0, $paymentMethodsId)){
-        if(isset($paymentMethodsId)){
-            $transactions = $transactions->whereIn('paymentmethod_id' , $paymentMethodsId);
-        }
-
-        if(Input::has('orderStatuses'))
-        {
-            $orderStatusesId = Input::get('orderStatuses');
-//            $orders = Order::orderStatusFilter($orders, $orderStatusesId);
-            $transactions = $transactions->whereHas("order" , function ($q) use ($orderStatusesId)
-            {
-               $q->whereIn("orderstatus_id" , $orderStatusesId) ;
-            });
-        }
-
-        $transactionType = Input::get("transactionType");
-        if(isset($transactionType) && strlen($transactionType) > 0){
-            if($transactionType == 0) $transactions = $transactions->where("cost" , ">" , 0);
-            elseif($transactionType == 1) $transactions = $transactions->where("cost" , "<" , 0);
-        }
-
-        $transactions = $transactions->get();
-
-        if(isset($productsId) && !in_array(0, $productsId))
-        {
-            $checkedOrderproducts = array();
-            foreach($transactions as $transaction)
-            {
-                $cost = 0;
-                $extraCost = 0 ;
                 if(Input::has("checkoutStatusEnable"))
                 {
                     $checkoutStatuses = Input::get("checkoutStatuses");
                     if(in_array(0 , $checkoutStatuses))
                     {
-                        $transactionOrderproducts = $transaction->order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->whereIn("product_id", $productsId)->whereNull("checkoutstatus_id")->get();
+                        $transactions = $transactions->whereIn('order_id', Orderproduct::whereNull("checkoutstatus_id")->whereIn('product_id', $productsId)->pluck('order_id'));
                     }else{
-                        $transactionOrderproducts = $transaction->order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->whereIn("product_id", $productsId)->whereIn("checkoutstatus_id" , $checkoutStatuses)->get();
+                        $transactions = $transactions->whereIn('order_id', Orderproduct::whereIn("checkoutstatus_id" , $checkoutStatuses)->whereIn('product_id', $productsId)->pluck('order_id'));
                     }
+                }else{
+                    $transactions = $transactions->whereIn('order_id', Orderproduct::whereIn('product_id', $productsId)->pluck('order_id'));
                 }
-                else
+            }elseif(Input::has("checkoutStatusEnable"))
+            {
+                $checkoutStatuses = Input::get("checkoutStatuses");
+                if(in_array(0 , $checkoutStatuses))
                 {
-                    $transactionOrderproducts = $transaction->order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->whereIn("product_id", $productsId)->get();
+                    $transactions = $transactions->whereIn('order_id', Orderproduct::whereNull("checkoutstatus_id")->pluck('order_id'));
+                }else{
+                    $transactions = $transactions->whereIn('order_id', Orderproduct::whereIn("checkoutstatus_id" , $checkoutStatuses)->pluck('order_id'));
                 }
+            }
 
-                if($transactionOrderproducts->isNotEmpty())
+            $extraAttributevaluesId= Input::get('extraAttributes');
+            if(isset($extraAttributevaluesId))
+            {
+                $transactions = $transactions->whereIn('order_id',  Orderproduct::whereHas("attributevalues" , function ($q) use ($extraAttributevaluesId ){
+                    $q->whereIn('value_id' , $extraAttributevaluesId);
+                })->pluck('order_id'));
+            }
+
+//        if(isset($paymentMethodsId) && !in_array(0, $paymentMethodsId)){
+            if(Input::has('paymentMethods')){
+                $paymentMethodsId = Input::get('paymentMethods');
+                $transactions = $transactions->whereIn('paymentmethod_id' , $paymentMethodsId);
+            }
+
+            if(Input::has('orderStatuses'))
+            {
+                $orderStatusesId = Input::get('orderStatuses');
+//            $orders = Order::orderStatusFilter($orders, $orderStatusesId);
+                $transactions = $transactions->whereHas("order" , function ($q) use ($orderStatusesId)
                 {
-                    $orderDiscount = $transaction->order->discount ;
-                    $numOfOrderproducts = $transactionOrderproducts->count();
-                    $orderDiscountPerItem = $orderDiscount/$numOfOrderproducts;
-                    foreach ($transactionOrderproducts as $orderproduct) {
-                        if(in_array($orderproduct->id , $checkedOrderproducts)) continue ;
-                        $costArray = $orderproduct->obtainOrderproductCost(false);
-                        $orderproductCost = 0 ;
+                    $q->whereIn("orderstatus_id" , $orderStatusesId) ;
+                });
+            }
 
-                        $orderproductCost = (int)($orderproduct->calculatePayableCost());
+            if(Input::has('paymentStatuses'))
+            {
+                $paymentStatusesId = Input::get('paymentStatuses');
+                $transactions = $transactions->whereHas("order" , function ($q) use ($paymentStatusesId)
+                {
+                    $q->whereIn("paymentstatus_id" , $paymentStatusesId) ;
+                });
+            }
 
-                        if($orderproduct->order->successfulTransactions->sum("cost") > 0 )
+            $transactionType = Input::get("transactionType");
+            if(isset($transactionType) && strlen($transactionType) > 0){
+                if($transactionType == 0)
+                    $transactions = $transactions->where("cost" , ">" , 0);
+                elseif($transactionType == 1)
+                    $transactions = $transactions->where("cost" , "<" , 0);
+            }
+
+            $transactions = $transactions->get();
+
+            if(isset($productsId) && !in_array(0, $productsId))
+            {
+                $checkedOrderproducts = array();
+                foreach($transactions as $transaction)
+                {
+                    if(Input::has("checkoutStatusEnable"))
+                    {
+                        $checkoutStatuses = Input::get("checkoutStatuses");
+                        if(in_array(0 , $checkoutStatuses))
                         {
-                            $cost += $orderproductCost ;
-                            $cost = $cost - $orderDiscountPerItem ;
+                            $transactionOrderproducts = $transaction->order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->whereIn("product_id", $productsId)->whereNull("checkoutstatus_id")->get();
+                        }else{
+                            $transactionOrderproducts = $transaction->order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->whereIn("product_id", $productsId)->whereIn("checkoutstatus_id" , $checkoutStatuses)->get();
                         }
-                        if(isset($extraAttributevaluesId))
-                            $extraCost =  $orderproduct->getExtraCost($extraAttributevaluesId) ;
-                        else
-                            $extraCost =  $orderproduct->getExtraCost() ;
-                        array_push($checkedOrderproducts , $orderproduct->id) ;
                     }
-                    if($cost > $transaction->cost) $cost = $transaction->cost;
+                    else
+                    {
+                        $transactionOrderproducts = $transaction->order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->whereIn("product_id", $productsId)->get();
+                    }
+
+                    if($transactionOrderproducts->isNotEmpty())
+                    {
+                        $orderDiscount = $transaction->order->discount ;
+                        $numOfOrderproducts = $transaction->order
+                            ->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
+                            ->count();
+                        $orderDiscountPerItem = $orderDiscount/$numOfOrderproducts;
+                        $orderSuccessfulTransaction = $transaction->order
+                            ->transactions ;
+                        if(isset($transactionStatusFilter))
+                            $orderSuccessfulTransaction = $orderSuccessfulTransaction->whereIn("transactionstatus_id" , $transactionStatusFilter);
+
+                        if(isset($paymentMethodsId))
+                            $orderSuccessfulTransaction = $orderSuccessfulTransaction->whereIn("paymentmethod_id" , $paymentMethodsId) ;
+
+
+
+                        $orderSuccessfulTransactionPaidSum = $orderSuccessfulTransaction->where("cost" , ">" , 0)
+                            ->sum("cost") ;
+
+                        $orderSuccessfulTransactionRefundSum = $orderSuccessfulTransaction->where("cost" , "<" , 0)
+                            ->sum("cost") ;
+
+                        $orderRefundPerItem = $orderSuccessfulTransactionRefundSum / $numOfOrderproducts; // it is a negative number
+                        $cost = 0;
+                        $extraCost = 0 ;
+                        foreach ($transactionOrderproducts as $orderproduct)
+                        {
+                            if(in_array($orderproduct->id , $checkedOrderproducts))
+                                continue ;
+                            $orderproductCost = (int)($orderproduct->calculatePayableCost());
+
+                            $orderproductCost = $orderproductCost - $orderDiscountPerItem ;
+                            $orderproductCost = $orderproductCost + $orderRefundPerItem ;
+                            if($orderSuccessfulTransactionPaidSum > $orderproductCost )
+                            {
+                                $cost += $orderproductCost ;
+                                $orderSuccessfulTransactionPaidSum = $orderSuccessfulTransactionPaidSum - $orderproductCost;
+                            }
+                            else
+                            {
+                                $cost += $orderSuccessfulTransactionPaidSum ;
+                                $orderSuccessfulTransactionPaidSum = 0;
+                            }
+
+                            if(isset($extraAttributevaluesId))
+                                $extraCost =  $orderproduct->getExtraCost($extraAttributevaluesId) ;
+                            else
+                                $extraCost =  $orderproduct->getExtraCost() ;
+                            
+                            array_push($checkedOrderproducts , $orderproduct->id) ;
+                        }
+                    }
+                    $transactionOrderproductCost->put($transaction->id , ["cost"=>$cost , "extraCost"=>$extraCost]) ;
+
                 }
-                $transactionOrderproductCost->put($transaction->id , ["cost"=>$cost , "extraCost"=>$extraCost]) ;
-
+                $transactionOrderproductTotalCost = number_format($transactionOrderproductCost->sum("cost")) ;
+                $transactionOrderproductTotalExtraCost =  number_format($transactionOrderproductCost->sum("extraCost")) ;
             }
-            $transactionOrderproductTotalCost = number_format($transactionOrderproductCost->sum("cost")) ;
-            $transactionOrderproductTotalExtraCost =  number_format($transactionOrderproductCost->sum("extraCost")) ;
+
+            $totaolCost = number_format($transactions->sum("cost"));
+            return json_encode(array('index' => View::make('transaction.index', compact('transactions' , "transactionOrderproductCost" ))->render() , "totalCost" => $totaolCost , "orderproductTotalCost"=>$transactionOrderproductTotalCost , "orderproductTotalExtraCost"=>$transactionOrderproductTotalExtraCost));
         }
-
-        $totaolCost = number_format($transactions->sum("cost"));
-        return json_encode(array('index' => View::make('transaction.index', compact('transactions' , "transactionOrderproductCost" ))->render() , "totalCost" => $totaolCost , "orderproductTotalCost"=>$transactionOrderproductTotalCost , "orderproductTotalExtraCost"=>$transactionOrderproductTotalExtraCost));
-        }catch (\Exception    $e) {
-                $message = "unexpected error";
-                return $this->response
-                    ->setStatusCode(503)
-                    ->setContent([
-                        "message"=>$message ,
-                        "error"=>$e->getMessage() ,
-                        "line"=>$e->getLine() ,
-                        "file"=>$e->getFile()
-                    ]);
-            }
+        catch (\Exception    $e) {
+            $message = "unexpected error";
+            return $this->response
+                ->setStatusCode(503)
+                ->setContent([
+                    "message"=>$message ,
+                    "error"=>$e->getMessage() ,
+                    "line"=>$e->getLine() ,
+                    "file"=>$e->getFile()
+                ]);
+        }
     }
 
     /**

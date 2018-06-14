@@ -330,13 +330,16 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             @include('admin.filters.orderstatusFilter' , ["id"=>"transactionOrderStatuses"])
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
+                                            @include('admin.filters.paymentstatusFilter' , ["id"=>"transactionPaymentStatuses"])
+                                        </div>
+                                        <div class="col-md-3">
                                             @include("admin.filters.transactionStatusFilter" , ["selectType"=>"dropdown"])
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             @include("admin.filters.checkoutStatusFilter" , ["dropdownId"=>"transactionCheckoutStatus" , "checkboxId"=>"transactionCheckoutStatusEnable"])
                                         </div>
                                     </div>
