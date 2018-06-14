@@ -3852,7 +3852,8 @@ class HomeController extends Controller
                                         config("constants.PAYMENT_METHOD_ONLINE") ,
                                         config("constants.PAYMENT_METHOD_ATM")
                                     ])
-                                    ->where("cost" , ">" , 0);
+                                    ->where("cost" , ">" , 0)
+                                    ->get();
         $users = collect();
         $successCounter = 0;
         $failedCounter = 0 ;
@@ -3887,7 +3888,8 @@ class HomeController extends Controller
 
         $userbons = Userbon::where("bon_id" , 2)
                             ->where("created_at" , ">" , "2018-05-24 00:00:00")
-                            ->where("totalNumber" , ">=" , "3");
+                            ->where("totalNumber" , ">=" , "3")
+                            ->get();
 
         foreach ($userbons as $userbon)
         {
