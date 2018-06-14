@@ -60,12 +60,12 @@
                 </div>
             @endif
             @if(isset($userPoints) && $userPoints)
-                    <div class="alert alert-block bg-dark bg-font-purple fade in">
+                <div class="alert alert-block bg-dark bg-font-purple fade in">
                     <button type="button" class="close" data-dismiss="alert"></button>
-                    <h4 class="alert-heading text-center" style="line-height: normal;">برای انصرف از قرعه کشی همایش طلایی ، روی دکمه زیر کلیک کنید</h4>
+                    <h4 class="alert-heading text-center" style="line-height: normal;">برای انصرف از قرعه کشی عید فطر ، روی دکمه زیر کلیک کنید</h4>
                     <h4 class="alert-heading text-center" style="line-height: normal;">در صورت انصراف مبلغ {{(isset($exchangeAmount))?number_format($exchangeAmount):""}} تومان اعتبار هدیه به رسم یاد بود به شما اهدا خواهد شد.</h4>
                     <p style="text-align: center;">
-                        <button class="btn mt-sweetalert" data-title="آیا از انصراف خود مطمئنید؟" data-type="warning" data-allow-outside-click="true" data-show-confirm-button="true" data-show-cancel-button="true" data-cancel-button-class="btn-danger" data-cancel-button-text="خیر انصراف نمی دهم" data-confirm-button-text="بله انصراف می دهم" data-confirm-button-class="btn-info" style="background: #d6af18;">انصراف از قرعه کشی و دریافت مبلغ هدبه</button>
+                        <button class="btn mt-sweetalert" data-title="آیا از انصراف خود مطمئنید؟" data-type="warning" data-allow-outside-click="true" data-show-confirm-button="true" data-show-cancel-button="true" data-cancel-button-class="btn-danger" data-cancel-button-text="خیر انصراف نمی دهم" data-confirm-button-text="بله انصراف می دهم" data-confirm-button-class="btn-info" style="background: #d6af18;">انصراف از قرعه کشی و دریافت مبلغ هدیه</button>
                     </p>
                 </div>
             @elseif(isset($userLottery))
@@ -93,252 +93,252 @@
 
     {{--LOTTERY PRIZE--}}
     {{--@if(isset($userlottery) && isset($userlottery->pivot->rank))--}}
-        {{--<div class="row">--}}
-            {{--<div class="col-md-12">--}}
-                    {{--<div class="alert alert-block bg-blue bg-font-blue fade in">--}}
-                        {{--<button type="button" class="close" data-dismiss="alert"></button>--}}
-                        {{--@if($userlottery->pivot->rank > 0)--}}
-                            {{--<h4 class="alert-heading text-center" style="line-height: normal;">ضمن عرض تبریک ، شما نفر {{$userlottery->pivot->rank}} قرعه کشی {{$userlottery->displayName}}   شده اید </h4>--}}
-                            {{--@if(isset($prizeCollection) && $prizeCollection->isNotEmpty())--}}
-                                {{--<h4 class="alert-heading text-center" style="line-height: normal;">جایزه شما--}}
-                                    {{--@foreach($prizeCollection as $prize )--}}
-                                        {{--<span class="bold" style="font-size:larger">{{$prize["name"]}}@if(isset($prize["validUntil"]))( معتبر تا بامداد {{$prize["validUntil"]}} )@endif</span>--}}
-                                    {{--@endforeach--}}
-                                {{--می باشد.</h4>--}}
-                            {{--@endif--}}
-                        {{--@elseif($userlottery->pivot->rank == 0)--}}
-                            {{--<h4 class="alert-heading text-center" style="line-height: normal;">شما از قرعه کشی {{$userlottery->displayName}} انصراف داده اید </h4>--}}
-                            {{--@if(isset($prizeCollection) && $prizeCollection->isNotEmpty())--}}
-                                    {{--@foreach($prizeCollection as $prize )--}}
-                                        {{--<h5 class="bold text-center" style="font-size:larger">{{$prize["name"]}}@if(isset($prize["validUntil"]))( معتبر تا بامداد {{$prize["validUntil"]}} )@endif</h5>--}}
-                                    {{--@endforeach--}}
-                                    {{--<h4 class="alert-heading text-center" style="line-height: normal;">هدیه آلاء به شماست . به امید موفقیت شما .</h4>--}}
-                            {{--@endif--}}
-                        {{--@endif--}}
-                    {{--</div>--}}
-            {{--</div>--}}
-        {{--</div>--}}
+    {{--<div class="row">--}}
+    {{--<div class="col-md-12">--}}
+    {{--<div class="alert alert-block bg-blue bg-font-blue fade in">--}}
+    {{--<button type="button" class="close" data-dismiss="alert"></button>--}}
+    {{--@if($userlottery->pivot->rank > 0)--}}
+    {{--<h4 class="alert-heading text-center" style="line-height: normal;">ضمن عرض تبریک ، شما نفر {{$userlottery->pivot->rank}} قرعه کشی {{$userlottery->displayName}}   شده اید </h4>--}}
+    {{--@if(isset($prizeCollection) && $prizeCollection->isNotEmpty())--}}
+    {{--<h4 class="alert-heading text-center" style="line-height: normal;">جایزه شما--}}
+    {{--@foreach($prizeCollection as $prize )--}}
+    {{--<span class="bold" style="font-size:larger">{{$prize["name"]}}@if(isset($prize["validUntil"]))( معتبر تا بامداد {{$prize["validUntil"]}} )@endif</span>--}}
+    {{--@endforeach--}}
+    {{--می باشد.</h4>--}}
+    {{--@endif--}}
+    {{--@elseif($userlottery->pivot->rank == 0)--}}
+    {{--<h4 class="alert-heading text-center" style="line-height: normal;">شما از قرعه کشی {{$userlottery->displayName}} انصراف داده اید </h4>--}}
+    {{--@if(isset($prizeCollection) && $prizeCollection->isNotEmpty())--}}
+    {{--@foreach($prizeCollection as $prize )--}}
+    {{--<h5 class="bold text-center" style="font-size:larger">{{$prize["name"]}}@if(isset($prize["validUntil"]))( معتبر تا بامداد {{$prize["validUntil"]}} )@endif</h5>--}}
+    {{--@endforeach--}}
+    {{--<h4 class="alert-heading text-center" style="line-height: normal;">هدیه آلاء به شماست . به امید موفقیت شما .</h4>--}}
+    {{--@endif--}}
+    {{--@endif--}}
+    {{--</div>--}}
+    {{--</div>--}}
+    {{--</div>--}}
     {{--@endif--}}
 
     <div class="row">
+        <div class="col-md-12">
+            <!-- BEGIN PROFILE SIDEBAR -->
+            <div class="profile-sidebar">
+                @include('partials.profileSidebar',['user'=>$user])
+            </div>
+            <!-- END BEGIN PROFILE SIDEBAR -->
+            <!-- BEGIN PROFILE CONTENT -->
+            <div class="profile-content">
+                <div class="row">
                     <div class="col-md-12">
-                        <!-- BEGIN PROFILE SIDEBAR -->
-                        <div class="profile-sidebar">
-                            @include('partials.profileSidebar',['user'=>$user])
-                        </div>
-                        <!-- END BEGIN PROFILE SIDEBAR -->
-                        <!-- BEGIN PROFILE CONTENT -->
-                        <div class="profile-content">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="portlet light ">
-                                        <div class="portlet-title tabbable-line">
-                                            <div class="caption caption-md">
-                                                <i class="icon-globe theme-font hide"></i>
-                                                <span class="caption-subject font-blue-madison bold uppercase">
+                        <div class="portlet light ">
+                            <div class="portlet-title tabbable-line">
+                                <div class="caption caption-md">
+                                    <i class="icon-globe theme-font hide"></i>
+                                    <span class="caption-subject font-blue-madison bold uppercase">
                                                     @if( ( !$user->lockProfile and $user->id == Auth::id()))
-                                                        اصلاح پروفایل
-                                                    @else
-                                                        پروفایل
-                                                    @endif
+                                            اصلاح پروفایل
+                                        @else
+                                            پروفایل
+                                        @endif
                                                 </span>
-                                            </div>
-                                            <ul class="nav nav-tabs">
-                                                <li @if(Empty(session('tabPane')) || strcmp(session('tabPane') , "tab_1_1") == 0) {{ "class=active" }} @endif>
-                                                    <a href="#tab_1_1" data-toggle="tab">
-                                                        @if( ( !$user->lockProfile and $user->id == Auth::id()))
+                                </div>
+                                <ul class="nav nav-tabs">
+                                    <li @if(Empty(session('tabPane')) || strcmp(session('tabPane') , "tab_1_1") == 0) {{ "class=active" }} @endif>
+                                        <a href="#tab_1_1" data-toggle="tab">
+                                            @if( ( !$user->lockProfile and $user->id == Auth::id()))
 
-                                                            ویرایش اطلاعات شخصی
-                                                        @else
-                                                            نمایش اطلاعات شخصی
-                                                        @endif
+                                                ویرایش اطلاعات شخصی
+                                            @else
+                                                نمایش اطلاعات شخصی
+                                            @endif
 
-                                                    </a>
-                                                </li>
-                                                @if(($user->id == Auth::id()))
-                                                <li @if(strcmp(session('tabPane') , "tab_1_2") == 0) {{ "class=active" }} @endif>
-                                                    <a href="#tab_1_2" data-toggle="tab">تغییر عکس</a>
-                                                </li>
-                                                @endif
-                                                @permission((Config::get('constants.EDIT_USER_ACCESS')))
-                                                @if($user->id == Auth::id())
-                                                    <li @if(strcmp(session('tabPane') , "tab_1_3") == 0) {{ "class=active" }} @endif>
-                                                        <a href="#tab_1_3" data-toggle="tab">تغییر رمز عبور</a>
-                                                    </li>
-                                                @endif
-                                                @endpermission
-                                            </ul>
-                                        </div>
+                                        </a>
+                                    </li>
+                                    @if(($user->id == Auth::id()))
+                                        <li @if(strcmp(session('tabPane') , "tab_1_2") == 0) {{ "class=active" }} @endif>
+                                            <a href="#tab_1_2" data-toggle="tab">تغییر عکس</a>
+                                        </li>
+                                    @endif
+                                    @permission((Config::get('constants.EDIT_USER_ACCESS')))
+                                    @if($user->id == Auth::id())
+                                        <li @if(strcmp(session('tabPane') , "tab_1_3") == 0) {{ "class=active" }} @endif>
+                                            <a href="#tab_1_3" data-toggle="tab">تغییر رمز عبور</a>
+                                        </li>
+                                    @endif
+                                    @endpermission
+                                </ul>
+                            </div>
 
-                                        <div class="portlet-body">
-                                            <div class="tab-content">
-                                                <!-- PERSONAL INFO TAB -->
-                                                <div class="tab-pane @if(Empty(session('tabPane')) || strcmp(session('tabPane') , "tab_1_1") == 0) active @endif" id="tab_1_1">
-                                                    @if(
-                                                         (!$user->lockProfile and $user->id == Auth::id()))
+                            <div class="portlet-body">
+                                <div class="tab-content">
+                                    <!-- PERSONAL INFO TAB -->
+                                    <div class="tab-pane @if(Empty(session('tabPane')) || strcmp(session('tabPane') , "tab_1_1") == 0) active @endif" id="tab_1_1">
+                                        @if(
+                                             (!$user->lockProfile and $user->id == Auth::id()))
 
-                                                        @include('user.profile.profileEditView')
-                                                    @else
-                                                        @include('user.profile.profileView')
-                                                    @endif
-                                                    @if(Session::has('belongsTo') && strcmp(Session::get('belongsTo'),"moreInfo")==0)
-                                                        @include("systemMessage.flash")
-                                                    @endif
-                                                </div>
-                                                <!-- END PERSONAL INFO TAB -->
-                                                <!-- CHANGE AVATAR TAB -->
-                                                @if(($user->id == Auth::id()))
-                                                <div class="tab-pane @if(strcmp(session('tabPane') , "tab_1_2") == 0) active @endif" id="tab_1_2">
-                                                    <p> می توانید عکس پروفایل خود را با استفاده از فرم زیر تغییر دهید . </p>
-                                                    <form method="post" role="form" action="{{ action("UserController@updatePhoto" ) }}" enctype="multipart/form-data">
-                                                        <input type="hidden" name="_method" value="PUT">
-                                                        {{ csrf_field() }}
-                                                        <div class="form-group {{ $errors->has('photo') ? ' has-error' : '' }}">
-                                                            <div class="fileinput fileinput-new" data-provides="fileinput">
-                                                                <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">
-                                                                       <img  @if(isset($user->photo)) src="{{ route('image', ['category'=>'1','w'=>'140' , 'h'=>'140' ,  'filename' =>  $user->photo ]) }}" @endif  alt="عکس پروفایل" />
-                                                                </div>
-                                                                <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"> </div>
-                                                                <div>
+                                            @include('user.profile.profileEditView')
+                                        @else
+                                            @include('user.profile.profileView')
+                                        @endif
+                                        @if(Session::has('belongsTo') && strcmp(Session::get('belongsTo'),"moreInfo")==0)
+                                            @include("systemMessage.flash")
+                                        @endif
+                                    </div>
+                                    <!-- END PERSONAL INFO TAB -->
+                                    <!-- CHANGE AVATAR TAB -->
+                                    @if(($user->id == Auth::id()))
+                                        <div class="tab-pane @if(strcmp(session('tabPane') , "tab_1_2") == 0) active @endif" id="tab_1_2">
+                                            <p> می توانید عکس پروفایل خود را با استفاده از فرم زیر تغییر دهید . </p>
+                                            <form method="post" role="form" action="{{ action("UserController@updatePhoto" ) }}" enctype="multipart/form-data">
+                                                <input type="hidden" name="_method" value="PUT">
+                                                {{ csrf_field() }}
+                                                <div class="form-group {{ $errors->has('photo') ? ' has-error' : '' }}">
+                                                    <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                        <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">
+                                                            <img  @if(isset($user->photo)) src="{{ route('image', ['category'=>'1','w'=>'140' , 'h'=>'140' ,  'filename' =>  $user->photo ]) }}" @endif  alt="عکس پروفایل" />
+                                                        </div>
+                                                        <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"> </div>
+                                                        <div>
                                                                         <span class="btn default btn-file">
                                                                             <span class="fileinput-new"> انتخاب عکس </span>
                                                                             <span class="fileinput-exists"> تغییر </span>
                                                                             <input type="file" name="photo"> </span>
-                                                                    <a href="javascript:;" class="btn default fileinput-exists" data-dismiss="fileinput"> حذف </a>
-                                                                </div>
-                                                            </div>
-                                                            <div class="clearfix margin-top-10">
-                                                                <span class="label label-danger">توجه! </span>
-                                                                <span> دقت نمایید که حجم عکس مورد نظر باید حداکثر 500 کیلوبایت و فرمت آن jpg و یا png باشد. </span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="margin-top-10">
-                                                            <button type="submit"  class="btn green"> ذخیره </button>
-                                                        </div>
-                                                        @if($errors->has('photo'))
-                                                            @include("systemMessage.flash",array("error"=>$errors->first('photo')))
-                                                        @else
-                                                            @if(Session::has('belongsTo') && strcmp(Session::get('belongsTo'),"photo")==0)
-                                                                @include("systemMessage.flash")
-                                                            @endif
-                                                        @endif
-                                                    </form>
-                                                </div>
-                                                <!-- END CHANGE AVATAR TAB -->
-                                                <!-- CHANGE PASSWORD TAB -->
-                                                <div class="tab-pane @if(strcmp(session('tabPane') , "tab_1_3") == 0) active @endif" id="tab_1_3">
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            <!-- BEGIN Portlet PORTLET-->
-                                                            <div class="portlet light bg-inverse">
-                                                                <div class="portlet-title">
-                                                                    <div class="caption font-purple-plum">
-                                                                        <span class="caption-subject bold uppercase"> درخواست رمز عبور اتوماتیک</span>
-                                                                        <span class="caption-helper">ارسال از طریق پیامک</span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="portlet-body">
-																	<div class="row">
-																		<form  action="{{ action("UserController@sendGeneratedPassword") }}" method="post" >
-																			{{ csrf_field() }}
-																			<div class="form-actions">
-																			برای ارسال پیامک رمز عبور جدید بر روی این دکمه کلیک کنید
-																				<button type="submit" class="btn yellow">ارسال پیامک رمز عبور</button>
-																			</div>
-																		</form>
-																	</div>
-                                                                </div>
-                                                            </div>
-                                                            <!-- END Portlet PORTLET-->
+                                                            <a href="javascript:;" class="btn default fileinput-exists" data-dismiss="fileinput"> حذف </a>
                                                         </div>
                                                     </div>
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            <!-- BEGIN Portlet PORTLET-->
-                                                            <div class="portlet light bg-inverse">
-                                                                <div class="portlet-title">
-                                                                    <div class="caption font-purple-plum">
-                                                                        <span class="caption-subject bold uppercase"> رمز عبور دلخواه</span>
-                                                                        <span class="caption-helper">تنظیم رمز عبور دلخواه</span>
+                                                    <div class="clearfix margin-top-10">
+                                                        <span class="label label-danger">توجه! </span>
+                                                        <span> دقت نمایید که حجم عکس مورد نظر باید حداکثر 500 کیلوبایت و فرمت آن jpg و یا png باشد. </span>
+                                                    </div>
+                                                </div>
+                                                <div class="margin-top-10">
+                                                    <button type="submit"  class="btn green"> ذخیره </button>
+                                                </div>
+                                                @if($errors->has('photo'))
+                                                    @include("systemMessage.flash",array("error"=>$errors->first('photo')))
+                                                @else
+                                                    @if(Session::has('belongsTo') && strcmp(Session::get('belongsTo'),"photo")==0)
+                                                        @include("systemMessage.flash")
+                                                    @endif
+                                                @endif
+                                            </form>
+                                        </div>
+                                        <!-- END CHANGE AVATAR TAB -->
+                                        <!-- CHANGE PASSWORD TAB -->
+                                        <div class="tab-pane @if(strcmp(session('tabPane') , "tab_1_3") == 0) active @endif" id="tab_1_3">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <!-- BEGIN Portlet PORTLET-->
+                                                    <div class="portlet light bg-inverse">
+                                                        <div class="portlet-title">
+                                                            <div class="caption font-purple-plum">
+                                                                <span class="caption-subject bold uppercase"> درخواست رمز عبور اتوماتیک</span>
+                                                                <span class="caption-helper">ارسال از طریق پیامک</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="portlet-body">
+                                                            <div class="row">
+                                                                <form  action="{{ action("UserController@sendGeneratedPassword") }}" method="post" >
+                                                                    {{ csrf_field() }}
+                                                                    <div class="form-actions">
+                                                                        برای ارسال پیامک رمز عبور جدید بر روی این دکمه کلیک کنید
+                                                                        <button type="submit" class="btn yellow">ارسال پیامک رمز عبور</button>
                                                                     </div>
-                                                                </div>
-                                                                <div class="portlet-body">
-                                                                    <form action="{{action("UserController@updatePassword" )}}" method="post">
-                                                                        <input type="hidden" name="_method" value="PUT">
-                                                                        {{ csrf_field() }}
-                                                                        <div class="form-group {{ $errors->has('oldPassword') ? ' has-error' : '' }}">
-                                                                            <label class="control-label">رمز عبور فعلی</label>
-                                                                            <input type="password" class="form-control" name="oldPassword" />
-                                                                            @if ($errors->has('oldPassword'))
-                                                                                <span class="help-block">
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- END Portlet PORTLET-->
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <!-- BEGIN Portlet PORTLET-->
+                                                    <div class="portlet light bg-inverse">
+                                                        <div class="portlet-title">
+                                                            <div class="caption font-purple-plum">
+                                                                <span class="caption-subject bold uppercase"> رمز عبور دلخواه</span>
+                                                                <span class="caption-helper">تنظیم رمز عبور دلخواه</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="portlet-body">
+                                                            <form action="{{action("UserController@updatePassword" )}}" method="post">
+                                                                <input type="hidden" name="_method" value="PUT">
+                                                                {{ csrf_field() }}
+                                                                <div class="form-group {{ $errors->has('oldPassword') ? ' has-error' : '' }}">
+                                                                    <label class="control-label">رمز عبور فعلی</label>
+                                                                    <input type="password" class="form-control" name="oldPassword" />
+                                                                    @if ($errors->has('oldPassword'))
+                                                                        <span class="help-block">
                                                                 <strong>{{ $errors->first('oldPassword') }}</strong>
                                                               </span>
-                                                                            @endif
-                                                                        </div>
-                                                                        <div class="form-group {{ $errors->has('password') ? ' has-error' : '' }}">
-                                                                            <label class="control-label">رمز عبور جدید</label>
-                                                                            <input type="password" class="form-control" name="password" />
-                                                                            @if ($errors->has('password'))
-                                                                                <span class="help-block">
+                                                                    @endif
+                                                                </div>
+                                                                <div class="form-group {{ $errors->has('password') ? ' has-error' : '' }}">
+                                                                    <label class="control-label">رمز عبور جدید</label>
+                                                                    <input type="password" class="form-control" name="password" />
+                                                                    @if ($errors->has('password'))
+                                                                        <span class="help-block">
                                                                 <strong>{{ $errors->first('password') }}</strong>
                                                               </span>
-                                                                            @endif
-                                                                        </div>
+                                                                    @endif
+                                                                </div>
 
-                                                                        <div class="form-group {{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
-                                                                            <label class="control-label">تکرار رمز عبور جدید</label>
-                                                                            <input type="password" class="form-control" name="password_confirmation" />
-                                                                            @if ($errors->has('password_confirmation'))
-                                                                                <span class="help-block">
+                                                                <div class="form-group {{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
+                                                                    <label class="control-label">تکرار رمز عبور جدید</label>
+                                                                    <input type="password" class="form-control" name="password_confirmation" />
+                                                                    @if ($errors->has('password_confirmation'))
+                                                                        <span class="help-block">
                                                                  <strong>{{ $errors->first('password_confirmation') }}</strong>
                                                             </span>
-                                                                            @endif
-                                                                        </div>
-
-                                                                        <div class="margin-top-10">
-                                                                            <button type="submit" class="btn green"> تغییر </button>
-                                                                        </div>
-                                                                        @if(Session::has('belongsTo') && strcmp(Session::get('belongsTo'),"password")==0)
-                                                                            @include("systemMessage.flash")
-                                                                        @endif
-                                                                    </form>
+                                                                    @endif
                                                                 </div>
-                                                            </div>
-                                                            <!-- END Portlet PORTLET-->
+
+                                                                <div class="margin-top-10">
+                                                                    <button type="submit" class="btn green"> تغییر </button>
+                                                                </div>
+                                                                @if(Session::has('belongsTo') && strcmp(Session::get('belongsTo'),"password")==0)
+                                                                    @include("systemMessage.flash")
+                                                                @endif
+                                                            </form>
                                                         </div>
                                                     </div>
-
+                                                    <!-- END Portlet PORTLET-->
                                                 </div>
-                                                <!-- END CHANGE PASSWORD TAB -->
-                                                @endif
-
                                             </div>
+
                                         </div>
-                                    </div>
-                                    @if($user->bio != null)
-                                        <div class="portlet light ">
-                                            <div class="portlet-title tabbable-line">
-                                                <div class="caption caption-md">
-                                                    <i class="icon-globe theme-font hide"></i>
-                                                    <span class="caption-subject font-blue-madison bold uppercase">درباره من</span>
-                                                </div>
-                                             </div>
-                                            <div class="portlet-body">
-                                                <div class="content">
-                                                    <p style=" text-align: justify; line-height: initial;">
-                                                        {!! $user->bio !!}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                         </div>
+                                        <!-- END CHANGE PASSWORD TAB -->
                                     @endif
+
                                 </div>
                             </div>
                         </div>
-                        <!-- END PROFILE CONTENT -->
-
+                        @if($user->bio != null)
+                            <div class="portlet light ">
+                                <div class="portlet-title tabbable-line">
+                                    <div class="caption caption-md">
+                                        <i class="icon-globe theme-font hide"></i>
+                                        <span class="caption-subject font-blue-madison bold uppercase">درباره من</span>
+                                    </div>
+                                </div>
+                                <div class="portlet-body">
+                                    <div class="content">
+                                        <p style=" text-align: justify; line-height: initial;">
+                                            {!! $user->bio !!}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                    </div>
                 </div>
             </div>
+            <!-- END PROFILE CONTENT -->
+
+        </div>
+    </div>
 @endsection
 
 @section("footerPageLevelPlugin")
