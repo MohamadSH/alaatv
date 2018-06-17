@@ -91,15 +91,16 @@ class LotteryWinner extends Notification implements ShouldQueue
         if(strlen($prize) > 0)
             $messageCore = "شما برنده ".$rank." در قرعه کشی ".$lotteryName." شده اید. جایزه شما ".$prize." می باشد و در سریع ترین زمان به شما تقدیم خواهد شد.";
         else
-            $messageCore = "شما نفر ".$rank." در قرعه کشی ".$lotteryName." شدید و متاسفانه چیزی برنده نشدید.".$prize." از اینکه در قرعه کشی شرکت نمودید سپاسگزاریم." ;
+            $messageCore = "شما در قرعه کشی ".$lotteryName." شرکت داده شدید و متاسفانه چیزی برنده نشدید. به رسم یادبود کد تخفیف 70 درصد زیر تقدیمتان می شود." ;
+
+        $messageCore .= "\n";
+        $messageCore .= "ayft";
 
         $messageCore = $messageCore
             ."\n"
             ."آلاء"
             ."\n"
-            ."پشتیبانی:"
-            ."\n"
-            ."https://goo.gl/jme5VU";
+            ."sanatisharif.ir";
         $message = "سلام ".$gender.$this->user->getfullName()."\n".$messageCore;
 
         return $message;
