@@ -3369,7 +3369,7 @@ class HomeController extends Controller
 
     public function pointBot(Request $request)
     {
-            /** Points for Hamayesh Talai lottery */
+        /** Points for Hamayesh Talai lottery */
         $hamayeshTalai = [ 210 , 211 ,212 ,213 , 214,216,217,218,219,220,221, 222 ];
 //
 //        $orderproducts = Orderproduct::whereHas("order" , function ($q) use ($hamayeshTalai){
@@ -3501,8 +3501,8 @@ class HomeController extends Controller
 //        }
         $pointUnit = 150000;
         $userbons = Userbon::where("bon_id" , 2)
-                            ->where("userbonstatus_id" , "1")
-                            ->get();
+            ->where("userbonstatus_id" , "1")
+            ->get();
 
         foreach ($userbons as $userbon)
         {
@@ -3517,24 +3517,50 @@ class HomeController extends Controller
                 continue;
             }
             $userHTBons = $user->userbons->where("bon_id" , 2)
-                                        ->whereBetween("created_at" , ["2018-05-23 00:00:00" , "2018-05-26 00:00:00"])
-                                        ->where("userbonstatus_id" , "3")
-                                        ->isNotEmpty();
+                ->where("created_at" ,">=" , "2018-05-23 00:00:00" )
+                ->where("created_at" ,"<=" , "2018-05-26 00:00:00" )
+                ->where("userbonstatus_id" , "3")
+                ->isNotEmpty();
             //Whether user was in Hamayesh Talai lottery or not
-            if($userHTBons)
+            $userHTBon = $userHTBons->first();
+            if(isset($userHTBon) && $userHTBon->totalNumber >= 3)
             {
-                $userHTBon = $userHTBons->first();
-                if($userHTBon->totalNumber >= 3)
-                {
                     $userNewPurchases = $user->orderproducts()->whereHas("order" , function ($q) use ($hamayeshTalai){
+                        $q->where("orderstatus_id" , 2);
+                        $q->where("paymentstatus_id" , 3) ;
+                        $q->where("completed_at" , ">=" , "2018-05-25 00:00:30") ;
+                    })->whereIn("product_id" , $hamayeshTalai)
+                        ->get();
+                    $points += $userNewPurchases->count();
+            }
+            else
+            {
+                echo "User is new in lottery" ;
+                echo "</br>";
+                $totalTransactions = $user->transactions->where("completed_at",">=" ,  "2018-05-24 20:00:00" )
+                                                    ->where("completed_at" , "<=" , "2018-06-14 21:30:00")
+                                                    ->where("transactionstatus_id" , config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
+                                                    ->where("cost" , ">" , 0);
+                $totalAmount = 0;
+                if($totalTransactions->isNotEmpty())
+                {
+                    $totalAmount = $totalTransactions->sum('cost');
+                }
+                $points += (int)($totalAmount / $pointUnit);
+                echo "User ".$user->id." total transactions:".$totalAmount ;
+                echo "</br>";
+
+            }
+
+            $userTotalHamayesh = $user->orderproducts()->whereHas("order" , function ($q) use ($hamayeshTalai){
                                             $q->where("orderstatus_id" , 2);
                                             $q->where("paymentstatus_id" , 3) ;
-                                            $q->where("completed_at" , ">=" , "2018-05-25 00:00:30") ;
                                         })->whereIn("product_id" , $hamayeshTalai)
-                                        ->get();
-                    $points += $userNewPurchases->count();
-                }
+                                            ->get()
+                                            ->count();
 
+            if($userTotalHamayesh > 0)
+            {
                 $riyaziTotalLessons = 6;
                 $tajrobiTotalLessons = 9;
                 $ensaniTotalLessons = 4;
@@ -3542,21 +3568,21 @@ class HomeController extends Controller
                 {
                     if($user->major->name == "ریاضی")
                     {//6
-                        if($userHTBon->totalNumber >= $riyaziTotalLessons)
+                        if($userTotalHamayesh >= $riyaziTotalLessons)
                         {
                             $points++;
                         }
                     }
                     elseif($user->major->name == "تجربی")
                     {//9
-                        if($userHTBon->totalNumber >= $tajrobiTotalLessons)
+                        if($userTotalHamayesh >= $tajrobiTotalLessons)
                         {
                             $points++;
                         }
                     }
                     elseif($user->major->name == "انسانی")
                     {
-                        if($userHTBon->totalNumber >= $ensaniTotalLessons)
+                        if($userTotalHamayesh >= $ensaniTotalLessons)
                         {
                             $points++;
                         }
@@ -3567,16 +3593,16 @@ class HomeController extends Controller
                 {
                     $hamayeshDif = 218;
                     $hamayeshDifPurchases = $user->orderproducts()->whereHas("order" , function ($q) use ($hamayeshDif){
-                                                            $q->where("orderstatus_id" , 2);
-                                                            $q->where("paymentstatus_id" , 3) ;
-                                                            $q->where("completed_at" , "<" , "2018-05-25 00:00:30") ;
-                                                        })->where("product_id" , $hamayeshDif)
-                                                            ->get();
+                        $q->where("orderstatus_id" , 2);
+                        $q->where("paymentstatus_id" , 3) ;
+                        $q->where("completed_at" , "<" , "2018-05-25 00:00:30") ;
+                    })->where("product_id" , $hamayeshDif)
+                        ->get();
                     if($hamayeshDifPurchases->isNotEmpty())
                     {
                         $user->major_id = 1;
                         $user->update();
-                        if($userHTBon->totalNumber >= $riyaziTotalLessons)
+                        if($userTotalHamayesh >= $riyaziTotalLessons)
                         {
                             $points++ ;
                         }
@@ -3585,25 +3611,25 @@ class HomeController extends Controller
                         $hamayeshZist = 212 ;
                         $hamayeshGenetic = 221;
                         $hamayeshZistPurchases = $user->orderproducts()->whereHas("order" , function ($q) use ($hamayeshZist){
-                                                    $q->where("orderstatus_id" , 2);
-                                                    $q->where("paymentstatus_id" , 3) ;
-                                                    $q->where("completed_at" , "<=" , "2018-05-25 00:00:30") ;
-                                                })->where("product_id" , $hamayeshZist)
-                                                    ->get();
+                            $q->where("orderstatus_id" , 2);
+                            $q->where("paymentstatus_id" , 3) ;
+                            $q->where("completed_at" , "<=" , "2018-05-25 00:00:30") ;
+                        })->where("product_id" , $hamayeshZist)
+                            ->get();
 
                         $hamayeshGeneticPurchases = $user->orderproducts()->whereHas("order" , function ($q) use ($hamayeshGenetic){
-                                                                            $q->where("orderstatus_id" , 2);
-                                                                            $q->where("paymentstatus_id" , 3) ;
-                                                                            $q->where("completed_at" , "<" , "2018-05-25 00:00:30") ;
-                                                                        })->where("product_id" , $hamayeshGenetic)
-                                                                            ->get();
+                            $q->where("orderstatus_id" , 2);
+                            $q->where("paymentstatus_id" , 3) ;
+                            $q->where("completed_at" , "<" , "2018-05-25 00:00:30") ;
+                        })->where("product_id" , $hamayeshGenetic)
+                            ->get();
 
                         if($hamayeshZistPurchases->isNotEmpty() &&
                             $hamayeshGeneticPurchases->isNotEmpty() )
                         {
                             $user->major_id = 2;
                             $user->update();
-                            if($userHTBon->totalNumber >= $tajrobiTotalLessons)
+                            if($userTotalHamayesh >= $tajrobiTotalLessons)
                             {
                                 $points++ ;
                             }
@@ -3614,16 +3640,16 @@ class HomeController extends Controller
                     {
                         $hamayeshRiyaziEnsani = 222;
                         $hamayeshRiyaziEnsaniPurchases = $user->orderproducts()->whereHas("order" , function ($q) use ($hamayeshRiyaziEnsani){
-                                                                        $q->where("orderstatus_id" , 2);
-                                                                        $q->where("paymentstatus_id" , 3) ;
-                                                                        $q->where("completed_at" , "<=" , "2018-05-25 00:00:30") ;
-                                                                    })->where("product_id" , $hamayeshRiyaziEnsani)
-                                                                        ->get();
+                            $q->where("orderstatus_id" , 2);
+                            $q->where("paymentstatus_id" , 3) ;
+                            $q->where("completed_at" , "<=" , "2018-05-25 00:00:30") ;
+                        })->where("product_id" , $hamayeshRiyaziEnsani)
+                            ->get();
                         if($hamayeshRiyaziEnsaniPurchases->isNotEmpty())
                         {
                             $user->major_id = 3;
                             $user->update();
-                            if($userHTBon->totalNumber >= $ensaniTotalLessons)
+                            if($userTotalHamayesh >= $ensaniTotalLessons)
                             {
                                 $points++ ;
                             }
@@ -3631,26 +3657,10 @@ class HomeController extends Controller
                     }
                 }
             }
-            else
-            {
-                $userRecord = $user->where("user_id", $user->id);
-                if(isset($userRecord))
-                {
-                  $totalAmount = $userRecord["totalAmount"] ;
 
-                  $points += (int)($totalAmount / $pointUnit);
-                }
-                else
-                {
-                    echo "<span style='color:red'>";
-                    echo "User ".$user->id." has no transaction records" ;
-                    echo "</span>";
-                    $failedCounter++ ;
-                }
-
-            }
 
             echo "User ".$user->id." points: ".$points ;
+            echo "</br>";
             if($points > 0 )
             {
 //                $userbon->totalNumber = $points ;
