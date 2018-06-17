@@ -2518,711 +2518,300 @@ class HomeController extends Controller
 
     public function bot(Request $request)
     {
-        try
-        {
-            if($request->has("smsarabi"))
-            {
-                $hamayeshTalai = [ 210 , 211 ,212 ,213 , 214,215,216,217,218,219,220,221, 222 ];
-                $users = User::whereHas("orderproducts" , function ($q) use ($hamayeshTalai)
-                {
-                    $q->whereHas("order" , function ($q) use ($hamayeshTalai)
-                    {
-                        $q->where("orderstatus_id" ,config("constants.ORDER_STATUS_CLOSED") )
-                            ->whereIn("paymentstatus_id" , [
-                                config("constants.PAYMENT_STATUS_PAID")
-                            ]);
-                    })
-                        ->whereIn("product_id" , [214]);
-                    //                        ->havingRaw('COUNT(*) > 0');
-                })->whereDoesntHave("orderproducts" , function ($q) use ($hamayeshTalai)
-                {
-                    $q->whereHas("order" , function ($q) use ($hamayeshTalai)
-                    {
-                        $q->where("orderstatus_id" ,config("constants.ORDER_STATUS_CLOSED") )
-                            ->whereIn("paymentstatus_id" , [
-                                config("constants.PAYMENT_STATUS_PAID")
-                            ]);
-                    })
-                        ->where("product_id" , 223);
-                })
-                ->get();
-
-                echo "Number of users:".$users->count();
-                dd("stop");
-
-                foreach ($users as $user)
-                {
-                    $message = "آلایی عزیز تا جمعه ظهر فرصت دارید تا حضور خود در همایش  حضوری عربی را اعلام کنید";
-                    $message .= "\n";
-                    $message .= "sanatisharif.ir/user/".$user->id;
-                    $user->notify(new GeneralNotice($message));
-                }
-
-                dd("Done");
-            }
-
-            if($request->has("coupon"))
-            {
-                $hamayeshTalai = [ 210 , 211 ,212 ,213 , 214,215,216,217,218,219,220,221, 222 ];
-                $notIncludedUsers_Shimi = [
-                    2
-                    , 111
-                    , 117
-                    , 203
-                    , 347
-                    , 417
-                    , 806
-                    , 923
-                    , 963
-                    , 1132
-                    , 1680
-                    , 2150
-                    , 2439
-                    , 2501
-                    , 3176
-                    , 3194
-                    , 3350
-                    , 3778
-                    , 3854
-                    , 4058
-                    , 4134
-                    , 4273
-                    , 4598
-                    , 4994
-                    , 5443
-                    , 5543
-                    , 5949
-                    , 6159
-                    , 6655
-                    , 6712
-                    , 7109
-                    , 7200
-                    , 7325
-                    , 7467
-                    , 7772
-                    , 8151
-                    , 8568
-                    , 8934
-                    , 9247
-                    , 9895
-                    , 9926
-                    , 10127
-                    , 10577
-                    , 10690
-                    , 11017
-                    , 11412
-                    , 11428
-                    , 11513
-                    , 11517
-                    , 11569
-                    , 11619
-                    , 11688
-                    , 11854
-                    , 12173
-                    , 12196
-                    , 12347
-                    , 12443
-                    , 12492
-                    , 12621
-                    , 12672
-                    , 12720
-                    , 12907
-                    , 12959
-                    , 13004
-                    , 13557
-                    , 13583
-                    , 13742
-                    , 13928
-                    , 14046
-                    , 14371
-                    , 14680
-                    , 14870
-                    , 15020
-                    , 15028
-                    , 15079
-                    , 15136
-                    , 15195
-                    , 15330
-                    , 15722
-                    , 15774
-                    , 15893
-                    , 16667
-                    , 16698
-                    , 17671
-                    , 18250
-                    , 19010
-                    , 19169
-                    , 19384
-                    , 19394
-                    , 19588
-                    , 20123
-                    , 20191
-                    , 20285
-                    , 20403
-                    , 20460
-                    , 20534
-                    , 20641
-                    , 20643
-                    , 20669
-                    , 20865
-                    , 21261
-                    , 21292
-                    , 21442
-                    , 21468
-                    , 21471
-                    , 21513
-                    , 21536
-                    , 21663
-                    , 21681
-                    , 21792
-                    , 21922
-                    , 22126
-                    , 22397
-                    , 22419
-                    , 22560
-                    , 22597
-                    , 22733
-                    , 23281
-                    , 23410
-                    , 24019
-                    , 24373
-                    , 24463
-                    , 24683
-                    , 24902
-                    , 25243
-                    , 25276
-                    , 25375
-                    , 25436
-                    , 26289
-                    , 26860
-                    , 27276
-                    , 27387
-                    , 27519
-                    , 27588
-                    , 27590
-                    , 27757
-                    , 27864
-                    , 27886
-                    , 27902
-                    , 28038
-                    , 28117
-                    , 28143
-                    , 28280
-                    , 28340
-                    , 28631
-                    , 28898
-                    , 28907
-                    , 29041
-                    , 29503
-                    , 29740
-                    , 29787
-                    , 29972
-                    , 30087
-                    , 30093
-                    , 30255
-                    , 30367
-                    , 30554
-                    , 31028
-                    , 31033
-                    , 31334
-                    , 31863
-                    , 32573
-                    , 32707
-                    , 32819
-                    , 33189
-                    , 33198
-                    , 33386
-                    , 33666
-                    , 33785
-                    , 34617
-                    , 34851
-                    , 34913
-                    , 34939
-                    , 35468
-                    , 35564
-                    , 35800
-                    , 36119
-                    , 36235
-                    , 36256
-                    , 36753
-                    , 36841
-                    , 36921
-                    , 36950
-                    , 37789
-                    , 38224
-                    , 38368
-                    , 38530
-                    , 38584
-                    , 38604
-                    , 38683
-                    , 39527
-                    , 40743
-                    , 42260
-                    , 42491
-                    , 42676
-                    , 42747
-                    , 42878
-                    , 43381
-                    , 44086
-                    , 44328
-                    , 44399
-                    , 44872
-                    , 46301
-                    , 46357
-                    , 46511
-                    , 46567
-                    , 46641
-                    , 46736
-                    , 47586
-                    , 47612
-                    , 47624
-                    , 48050
-                    , 48417
-                    , 48693
-                    , 49249
-                    , 49543
-                    , 50084
-                    , 50883
-                    , 51899
-                    , 51969
-                    , 52058
-                    , 53232
-                    , 54116
-                    , 56841
-                    , 57559
-                    , 61798
-                    , 62314
-                    , 62449
-                    , 63522
-                    , 64092
-                    , 64235
-                    , 66573
-                    , 67570
-                    , 68263
-                    , 68482
-                    , 69806
-                    , 70904
-                    , 71801
-                    , 73465
-                    , 76536
-                    , 78080
-                    , 78813
-                    , 80023
-                    , 80349
-                    , 81118
-                    , 81753
-                    , 82728
-                    , 83913
-                    , 85670
-                    , 87430
-                    , 88302
-                    , 92617
-                    , 94553
-                    , 94766
-                    , 95339
-                    , 95588
-                    , 96011
-                    , 97934
-                    , 98640
-                    , 103379
-                    , 103875
-                    , 103961
-                    , 105811
-                    , 106239
-                    , 106313
-                    , 107562
-                    , 107751
-                    , 108011
-                    , 108113
-                    , 109148
-                    , 109770
-                    , 109952
-                    , 112128
-                    , 112816
-                    , 113664
-                    , 114751
-                    , 116219
-                    , 116809
-                ];
-                $notIncludedUsers_Vafadaran =  [
-                    100
-                    , 272
-                    , 282
-                    , 502
-                    , 589
-                    , 751
-                    , 1031
-                    , 1281
-                    , 1421
-                    , 1565
-                    , 1572
-                    , 1695
-                    , 1846
-                    , 2143
-                    , 2385
-                    , 2661
-                    , 3396
-                    , 3538
-                    , 3646
-                    , 3738
-                    , 3788
-                    , 4051
-                    , 4117
-                    , 4197
-                    , 4517
-                    , 5009
-                    , 5385
-                    , 5877
-                    , 6452
-                    , 6767
-                    , 6895
-                    , 6896
-                    , 7020
-                    , 7037
-                    , 7056
-                    , 7192
-                    , 7291
-                    , 7442
-                    , 7527
-                    , 7942
-                    , 8199
-                    , 8681
-                    , 9363
-                    , 10244
-                    , 10263
-                    , 10343
-                    , 11088
-                    , 11133
-                    , 11339
-                    , 11440
-                    , 11594
-                    , 11623
-                    , 11742
-                    , 11797
-                    , 11804
-                    , 12155
-                    , 12788
-                    , 13313
-                    , 13410
-                    , 13436
-                    , 13442
-                    , 13448
-                    , 13541
-                    , 13724
-                    , 13746
-                    , 13752
-                    , 14084
-                    , 14807
-                    , 14937
-                    , 15603
-                    , 15914
-                    , 16114
-                    , 16141
-                    , 16291
-                    , 16491
-                    , 16779
-                    , 17275
-                    , 17500
-                    , 17527
-                    , 18344
-                    , 18377
-                    , 18663
-                    , 18759
-                    , 19481
-                    , 19714
-                    , 19736
-                    , 20016
-                    , 20150
-                    , 20172
-                    , 20381
-                    , 20442
-                    , 20501
-                    , 20652
-                    , 20666
-                    , 20732
-                    , 20753
-                    , 20937
-                    , 20953
-                    , 21412
-                    , 21431
-                    , 21522
-                    , 22275
-                    , 22290
-                    , 22391
-                    , 22495
-                    , 23130
-                    , 23438
-                    , 23600
-                    , 23986
-                    , 24223
-                    , 24472
-                    , 25457
-                    , 25557
-                    , 25572
-                    , 25776
-                    , 25806
-                    , 26355
-                    , 26621
-                    , 27764
-                    , 28269
-                    , 28288
-                    , 28371
-                    , 28385
-                    , 28397
-                    , 28405
-                    , 28488
-                    , 28719
-                    , 28865
-                    , 29021
-                    , 29050
-                    , 29054
-                    , 29194
-                    , 29230
-                    , 29334
-                    , 29589
-                    , 29737
-                    , 30038
-                    , 30129
-                    , 30158
-                    , 30318
-                    , 30652
-                    , 30857
-                    , 30958
-                    , 31508
-                    , 32131
-                    , 32274
-                    , 32894
-                    , 32906
-                    , 32959
-                    , 32987
-                    , 33187
-                    , 33255
-                    , 33616
-                    , 33680
-                    , 33803
-                    , 33817
-                    , 33949
-                    , 34018
-                    , 34062
-                    , 34188
-                    , 34966
-                    , 35004
-                    , 35327
-                    , 35652
-                    , 35911
-                    , 35929
-                    , 35936
-                    , 36264
-                    , 36364
-                    , 36444
-                    , 36460
-                    , 36524
-                    , 36788
-                    , 36793
-                    , 36883
-                    , 37006
-                    , 37021
-                    , 37058
-                    , 37156
-                    , 38868
-                    , 38893
-                    , 39022
-                    , 39062
-                    , 39075
-                    , 40088
-                    , 40189
-                    , 40503
-                    , 40958
-                    , 41389
-                    , 41448
-                    , 41858
-                    , 42848
-                    , 43322
-                    , 44436
-                    , 46322
-                    , 48191
-                    , 49032
-                    , 49314
-                    , 50637
-                    , 50671
-                    , 51091
-                    , 54884
-                    , 56547
-                    , 57493
-                    , 57649
-                    , 58317
-                    , 59178
-                    , 62602
-                    , 62713
-                    , 62903
-                    , 62987
-                    , 63530
-                    , 66143
-                    , 66485
-                    , 68472
-                    , 69136
-                    , 71817
-                    , 72386
-                    , 72458
-                    , 73399
-                    , 75119
-                    , 76888
-                    , 77855
-                    , 78596
-                    , 78897
-                    , 80328
-                    , 80408
-                    , 80973
-                    , 82093
-                    , 82744
-                    , 82785
-                    , 83048
-                    , 83991
-                    , 85557
-                    , 86966
-                    , 87086
-                    , 87791
-                    , 88977
-                    , 90447
-                    , 92857
-                    , 92951
-                    , 93432
-                    , 93701
-                    , 99623
-                    , 99686
-                    , 101628
-                    , 107960
-                    , 108174
-                    , 110145
-                    , 115132
-                    , 118902
-                    , 119386
-                    , 125351
-                ];
-                $smsNumber = config("constants.SMS_PROVIDER_DEFAULT_NUMBER");
-                $users = User::whereHas("orderproducts" , function ($q) use ($hamayeshTalai)
-                            {
-                                $q->whereHas("order" , function ($q) use ($hamayeshTalai)
-                                {
-                                    $q->where("orderstatus_id" ,config("constants.ORDER_STATUS_CLOSED") )
-                                        ->whereIn("paymentstatus_id" , [
-                                            config("constants.PAYMENT_STATUS_PAID")
-                                        ]);
-                                })
-                                ->whereIn("product_id" , $hamayeshTalai);
-    //                        ->havingRaw('COUNT(*) > 0');
-                            })->whereDoesntHave("orderproducts" , function ($q) use ($hamayeshTalai)
-                                {
-                                    $q->whereHas("order" , function ($q) use ($hamayeshTalai)
-                                    {
-                                        $q->where("orderstatus_id" ,config("constants.ORDER_STATUS_CLOSED") )
-                                            ->whereIn("paymentstatus_id" , [
-                                                config("constants.PAYMENT_STATUS_PAID")
-                                            ]);
-                                    })
-                                    ->where("product_id" , 210);
-                                })
-                ->whereNotIn("id" , $notIncludedUsers_Shimi)
-                ->whereNotIn("id" , $notIncludedUsers_Vafadaran)
-                ->get();
-
-                echo "number of users:".$users->count();
-                echo "<br>";
-                dd("stop");
-                $couponController = new CouponController();
-                $failedCounter = 0 ;
-                $proccessed = 0 ;
-                dump($users->pluck("id")->toArray());
-
-                foreach ($users as $user)
-                {
-                    do {
-                        $couponCode = str_random(5);
-                    }while(\App\Coupon::where("code" , $couponCode)->get()->isNotEmpty());
-
-                    /** Coupon Settings */
-                    $couponName = "قرعه کشی وفاداران آلاء برای ".$user->getFullName();
-                    $couponDescription = "قرعه کشی وفاداران آلاء برای ".$user->getFullName();
-                    $validSinceDate = "2018-06-11";
-                    $validUntilDate = " 00:00:00";
-                    $validSinceTime = "2018-06-15";
-                    $validUntilTime = "12:00:00";
-                    $couponProducts = \App\Product::whereNotIn("id" , [179 , 180 , 182])->get()->pluck('id')->toArray();
-                    $discount = 55;
-                    /** Coupon Settings */
-
-                    $insertCouponRequest = new \App\Http\Requests\InsertCouponRequest() ;
-                    $insertCouponRequest->offsetSet("enable" , 1);
-                    $insertCouponRequest->offsetSet("usageNumber" , 0);
-                    $insertCouponRequest->offsetSet("limitStatus" , 0);
-                    $insertCouponRequest->offsetSet("coupontype_id" , 2);
-                    $insertCouponRequest->offsetSet("discounttype_id" , 1);
-                    $insertCouponRequest->offsetSet("name" , $couponName);
-                    $insertCouponRequest->offsetSet("description" , $couponDescription);
-                    $insertCouponRequest->offsetSet("code" , $couponCode);
-                    $insertCouponRequest->offsetSet("products" , $couponProducts);
-                    $insertCouponRequest->offsetSet("discount" , $discount);
-                    $insertCouponRequest->offsetSet("validSince" , $validSinceDate);
-                    $insertCouponRequest->offsetSet("sinceTime" , $validSinceTime);
-                    $insertCouponRequest->offsetSet("validSinceEnable" , 1);
-                    $insertCouponRequest->offsetSet("validUntil" , $validUntilDate);
-                    $insertCouponRequest->offsetSet("untilTime" , $validUntilTime);
-                    $insertCouponRequest->offsetSet("validUntilEnable" , 1);
-
-                    $storeCoupon = $couponController->store($insertCouponRequest);
-
-                    if($storeCoupon->status() == 200) {
-
-                        $message = "شما در قرعه کشی وفاداران آلاء برنده یک کد تخفیف شدید.";
-                        $message .= "\n";
-                        $message .= "کد شما:";
-                        $message .= "\n";
-                        $message .= $couponCode;
-                        $message .= "\n";
-                        $message .= "مهلت استفاده از کد: تا پنجشنبه ساعت 11 شب";
-                        $message .= "\n";
-                        $message .= "به امید اینکه با کمک دیگر همایش های آلاء در کنکور بدرخشید و برنده iphonex در قرعه کشی عید فطر آلاء باشید.";
-                        $user->notify(new GeneralNotice($message));
-                        echo "<span style='color:green'>";
-                        echo "user ".$user->id." notfied";
-                        echo "</span>";
-                        echo "<br>";
-                        
-                        $proccessed++ ;
+        try {
+            /** Points for Hamayesh Talai lottery */
+            $hamayeshTalai = [210, 211, 212, 213, 214, 216, 217, 218, 219, 220, 221, 222];
+//
+//        $orderproducts = Orderproduct::whereHas("order" , function ($q) use ($hamayeshTalai){
+//                                $q->whereIn("orderstatus_id" , [2,5,7])
+//                                  ->whereIn("paymentstatus_id" , [3]);
+//                            })->whereIn("product_id" , $hamayeshTalai)
+//                              ->get();
+//        $users = [];
+//        $successCounter = 0;
+//        $failedCounter = 0 ;
+//        $warningCounter = 0 ;
+//        foreach ($orderproducts as $orderproduct)
+//        {
+//            if(isset($orderproduct->order->user->id))
+//            {
+//                $user = $orderproduct->order->user ;
+//                if(isset($users[$user->id]))
+//                {
+//                    $users[$user->id]++;
+//                }
+//                else
+//                {
+//                    $users[$user->id] = 1 ;
+//                }
+//            }
+//            else
+//            {
+//                dump("User was not found for orderproduct ".$orderproduct->id);
+//                $warningCounter++;
+//            }
+//        }
+//
+//        // USERS WITH PLUS POINTS
+//        $orders = Order::where("completed_at" , "<" , "2018-05-18")
+//                        ->whereIn("orderstatus_id" , [2,5,7])
+//                        ->whereIn("paymentstatus_id" , [3])
+//                        ->whereHas("orderproducts" , function ($q) use ($hamayeshTalai){
+//                            $q->whereIn("product_id" , $hamayeshTalai);
+//                        })
+//                        ->pluck("user_id")
+//                        ->toArray();
+//
+//        $usersPlus = [];
+//        foreach ($orders as $userId)
+//        {
+//            if(in_array($userId , $usersPlus))
+//                continue;
+//            else
+//                array_push($usersPlus , $userId) ;
+//
+//            if(isset($users[$userId]))
+//            {
+//                $users[$userId]++ ;
+//            }
+//            else
+//            {
+//                $users[$userId] = 1 ;
+//            }
+//
+//        }
+            /** Points for Hamayesh Talai lottery */
 
 
-//                    $openOrder = $userlottery->openOrders()->get()->first();
-//                    if (isset($openOrder)) {
-//                        session()->forget("order_id");
-//                        session()->put("order_id", $openOrder->id);
-//                        $attachCouponRequest = new \App\Http\Requests\SubmitCouponRequest();
-//                        $attachCouponRequest->offsetSet("coupon", $couponCode);
-//                        $orderController = new \App\Http\Controllers\OrderController();
-//                        $orderController->submitCoupon($attachCouponRequest);
-//                        session()->forget('couponMessageError');
-//                        session()->forget('couponMessageSuccess');
+            /** Points for Eide Fetr lottery */
+//            $transactions = Transaction::where("completed_at", ">=", "2018-05-24 20:00:00")
+//                                        ->where("completed_at" , "<=" , "2018-06-14 21:30:00" )
+//                                        ->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
+//                                        ->where("cost", ">", 0)
+//                                        ->get();
+//            $users = collect();
+            $successCounter = 0;
+            $failedCounter = 0;
+            $warningCounter = 0;
+//            foreach ($transactions as $transaction) {
+//                $user = $transaction->order->user;
+//                if (isset($user)) {
+//                    $userRecord = $users->where("user_id", $user->id)->first();
+//                    if (isset($userRecord)) {
+//                        $userRecord["totalAmount"] += $transaction->cost;
+//                    } else {
+//                        $users->push([
+//                            "user_id" => $user->id,
+//                            "totalAmount" => $transaction->cost,
+//                            "point" => 1
+//                        ]);
 //                    }
-                    }
-                    else
+//                } else {
+//                    dump("User was not found for transaction " . $transaction->id);
+//                    $warningCounter++;
+//                }
+//            }
+//
+//            $users = $users->where("totalAmount", ">", 100000);
+
+//        $userbons = Userbon::where("bon_id" , 2)
+//                            ->where("created_at" , ">" , "2018-05-24 00:00:00")
+//                            ->where("totalNumber" , ">=" , "3")
+//                            ->get();
+//
+//        foreach ($userbons as $userbon)
+//        {
+//            $user = $userbon->user;
+//            $successfulTransactions = $user->orderTransactions
+//                                        ->where("completed_at" , ">" , "2018-05-24 20:00:00")
+//                                        ->where("transactionstatus_id" , config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
+//                                        ->whereIn("paymentmethod_id" , [
+//                                            config("constants.PAYMENT_METHOD_ONLINE") ,
+//                                            config("constants.PAYMENT_METHOD_ATM")
+//                                        ])
+//                                        ->where("cost" , ">" , 0);
+//            if($successfulTransactions->isNotEmpty())
+//            {
+//                $userRecord = $users->where("user_id" , $user->id)->first();
+//                if(!isset($userRecord))
+//                {
+//                    $users->push([
+//                        "user_id" => $user->id,
+//                        "totalAmount" => -1 ,
+//                        "point" => 1 ,
+//                    ]);
+//                }
+//            }
+//        }
+            $pointUnit = 150000;
+            $userbons = Userbon::where("bon_id", 2)
+                ->where("userbonstatus_id", "1")
+                ->get();
+            foreach ($userbons as $userbon)
+            {
+                $user = $userbon->user;
+                $points = 0;
+                if (!isset($user)) {
+                    $warningCounter++;
+                    echo "<span style='color:yellow'>";
+                    echo "Userbon #" . $userbon . " has no user";
+                    echo "</span>";
+                    continue;
+                }
+                $userHTBons = $user->userbons()->where("bon_id", 2)
+                    ->where("created_at",">=" ,"2018-05-23 00:00:00")
+                    ->where("created_at" , "<=" ,  "2018-05-26 00:00:00")
+                    ->where("userbonstatus_id", "3")
+                    ->get();
+                //Whether user was in Hamayesh Talai lottery or not
+                $userHTBon = $userHTBons->first();
+                if (isset($userHTBon) && $userHTBon->totalNumber >= 3)
+                {
+                    $userNewPurchases = $user->orderproducts()->whereHas("order", function ($q) use ($hamayeshTalai) {
+                        $q->where("orderstatus_id", 2);
+                        $q->where("paymentstatus_id", 3);
+                        $q->where("completed_at", ">=", "2018-05-25 00:00:30");
+                    })->whereIn("product_id", $hamayeshTalai)
+                        ->get();
+
+                    $htCount = $userNewPurchases->count();
+                    echo "New ht count user ".$user->id.":".$htCount;
+                    echo "<br>";
+                    $points += $htCount;
+                } else {
+                    echo "User ".$user->id." is new in lottery";
+                    echo "<br>";
+                    $transactionTotals = $user->orderTransactions->where("completed_at", ">=", "2018-05-24 20:00:00")
+                        ->where("completed_at", "<=", "2018-06-14 21:30:00")
+                        ->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
+                        ->where("cost", ">", 0);
+                    $totalAmount = 0 ;
+                    if($transactionTotals->isNotEmpty())
                     {
-                        $failedCounter++;
+                        $totalAmount = $transactionTotals->sum("cost");
+                    }
+                    $points += (int)($totalAmount / $pointUnit);
+                    echo "totalAmount: ".$totalAmount;
+                    echo "<br>";
+                }
+
+                $userTotalHamayesh = $user->orderproducts()->whereHas("order", function ($q) use ($hamayeshTalai) {
+                    $q->where("orderstatus_id", 2);
+                    $q->where("paymentstatus_id", 3);
+                })->whereIn("product_id", $hamayeshTalai)
+                    ->get()
+                    ->count();
+                echo "totalHamayesh user ".$user->id." ".$userTotalHamayesh;
+                echo "<br>";
+                $riyaziTotalLessons = 6;
+                $tajrobiTotalLessons = 9;
+                $ensaniTotalLessons = 4;
+                if (isset($user->major->id)) {
+                    if ($user->major->name == "ریاضی") {//6
+                        if ($userTotalHamayesh >= $riyaziTotalLessons) {
+                            $points++;
+                        }
+                    } elseif ($user->major->name == "تجربی") {//9
+                        if ($userTotalHamayesh >= $tajrobiTotalLessons) {
+                            $points++;
+                        }
+                    } elseif ($user->major->name == "انسانی") {
+                        if ($userTotalHamayesh >= $ensaniTotalLessons) {
+                            $points++;
+                        }
+                    }
+
+                }
+                else
+                {
+                    $hamayeshDif = 218;
+                    $hamayeshDifPurchases = $user->orderproducts()->whereHas("order", function ($q) use ($hamayeshDif) {
+                        $q->where("orderstatus_id", 2);
+                        $q->where("paymentstatus_id", 3);
+                    })->where("product_id", $hamayeshDif)
+                        ->get();
+                    if ($hamayeshDifPurchases->isNotEmpty()) {
+                        $user->major_id = 1;
+                        $user->update();
+                        if ($userTotalHamayesh >= $riyaziTotalLessons) {
+                            $points++;
+                        }
+                    } else {
+                        $hamayeshZist = 212;
+                        $hamayeshGenetic = 221;
+                        $hamayeshZistPurchases = $user->orderproducts()->whereHas("order", function ($q) use ($hamayeshZist) {
+                            $q->where("orderstatus_id", 2);
+                            $q->where("paymentstatus_id", 3);
+                        })->where("product_id", $hamayeshZist)
+                            ->get();
+
+                        $hamayeshGeneticPurchases = $user->orderproducts()->whereHas("order", function ($q) use ($hamayeshGenetic) {
+                            $q->where("orderstatus_id", 2);
+                            $q->where("paymentstatus_id", 3);
+                        })->where("product_id", $hamayeshGenetic)
+                            ->get();
+
+                        if ($hamayeshZistPurchases->isNotEmpty() &&
+                            $hamayeshGeneticPurchases->isNotEmpty()) {
+                            $user->major_id = 2;
+                            $user->update();
+                            if ($userTotalHamayesh >= $tajrobiTotalLessons) {
+                                $points++;
+                            }
+                        }
+                    }
+
+                    if ($hamayeshDifPurchases->isEmpty()) {
+                        $hamayeshRiyaziEnsani = 222;
+                        $hamayeshRiyaziEnsaniPurchases = $user->orderproducts()->whereHas("order", function ($q) use ($hamayeshRiyaziEnsani) {
+                            $q->where("orderstatus_id", 2);
+                            $q->where("paymentstatus_id", 3);
+                        })->where("product_id", $hamayeshRiyaziEnsani)
+                            ->get();
+                        if ($hamayeshRiyaziEnsaniPurchases->isNotEmpty()) {
+                            $user->major_id = 3;
+                            $user->update();
+                            if ($userTotalHamayesh >= $ensaniTotalLessons) {
+                                $points++;
+                            }
+                        }
                     }
                 }
 
-                dump("processed: ".$proccessed);
-                dump("failed: ".$failedCounter);
-                dd("coupons done");
-
+                echo "User " . $user->id . " points: " . $points;
+                echo "<br>";
+                if ($points > 0) {
+//                $userbon->totalNumber = $points ;
+//                $userbon->update() ;
+                }
             }
-
-            $orders = Order::whereDoesntHave("orderproducts")
-                ->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
-                ->whereIn("paymentstatus_id" , [
-                    config("constants.PAYMENT_STATUS_INDEBTED"),
-                    config("constants.PAYMENT_STATUS_PAID")
-                ]);
-            dd($orders->pluck("id")->toArray());
-
+//            dd("Done!");
+//
+//            $bonName = config("constants.BON2");
+//            $bon = Bon::where("name", $bonName)->first();
+//            if (!isset($bon))
+//                dd("Bon not found");
+//
+//            dump("Number of available users: " . $users->count());
+//            foreach ($users as $userPoint) {
+//                $userId = $userPoint["user_id"];
+//                $points = $userPoint["point"];
+//                $userBon = new Userbon();
+//                $userBon->bon_id = $bon->id;
+//                $userBon->user_id = $userId;
+//                $userBon->totalNumber = $points;
+//                $userBon->userbonstatus_id = 1;
+//                $bonResult = $userBon->save();
+//                if ($bonResult) {
+//                    $successCounter++;
+//                } else {
+//                    $failedCounter++;
+//                    dump("Userbon for user " . $userId . " was not created");
+//                }
+//            }
+//            dump("number of successfully processed users: " . $successCounter);
+//            dump("number of failed users: " . $failedCounter);
+//            dd("Done!");
         }
         catch (\Exception    $e) {
             $message = "unexpected error";
@@ -3235,7 +2824,6 @@ class HomeController extends Controller
                     "file"=>$e->getFile()
                 ]);
         }
-
         /**
          * Fixing contentset tags
 
