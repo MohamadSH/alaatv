@@ -3517,10 +3517,9 @@ class HomeController extends Controller
                 continue;
             }
             $userHTBons = $user->userbons->where("bon_id" , 2)
-                ->where("created_at" ,">=" , "2018-05-23 00:00:00" )
-                ->where("created_at" ,"<=" , "2018-05-26 00:00:00" )
-                ->where("userbonstatus_id" , "3")
-                ->isNotEmpty();
+                                        ->where("created_at" ,">=" , "2018-05-23 00:00:00" )
+                                        ->where("created_at" ,"<=" , "2018-05-26 00:00:00" )
+                                        ->where("userbonstatus_id" , "3");
             //Whether user was in Hamayesh Talai lottery or not
             $userHTBon = $userHTBons->first();
             if(isset($userHTBon) && $userHTBon->totalNumber >= 3)
