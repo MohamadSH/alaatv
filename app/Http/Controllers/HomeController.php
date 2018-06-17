@@ -3434,41 +3434,41 @@ class HomeController extends Controller
 
 
         /** Points for Eide Fetr lottery */
-        $transactions = Transaction::whereBetween("completed_at" ,  ["2018-05-24 20:00:00" , "2018-06-14 21:30:00"])
-                                    ->where("transactionstatus_id" , config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
-                                    ->where("cost" , ">" , 0)
-                                    ->get();
-        $users = collect();
+//        $transactions = Transaction::whereBetween("completed_at" ,  ["2018-05-24 20:00:00" , "2018-06-14 21:30:00"])
+//                                    ->where("transactionstatus_id" , config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
+//                                    ->where("cost" , ">" , 0)
+//                                    ->get();
+//        $users = collect();
         $successCounter = 0;
         $failedCounter = 0 ;
         $warningCounter = 0 ;
-        foreach ($transactions as $transaction)
-        {
-            $user = $transaction->order->user;
-            if(isset($user))
-            {
-                $userRecord = $users->where("user_id" , $user->id)->first();
-                if(isset($userRecord))
-                {
-                    $userRecord["totalAmount"] += $transaction->cost;
-                }
-                else
-                {
-                    $users->push([
-                        "user_id" => $user->id,
-                        "totalAmount" => $transaction->cost ,
-                        "point" => 1
-                    ]);
-                }
-            }
-            else
-            {
-                dump("User was not found for transaction ".$transaction->id);
-                $warningCounter++;
-            }
-        }
-
-        $users = $users->where("totalAmount"  , ">" , 100000);
+//        foreach ($transactions as $transaction)
+//        {
+//            $user = $transaction->order->user;
+//            if(isset($user))
+//            {
+//                $userRecord = $users->where("user_id" , $user->id)->first();
+//                if(isset($userRecord))
+//                {
+//                    $userRecord["totalAmount"] += $transaction->cost;
+//                }
+//                else
+//                {
+//                    $users->push([
+//                        "user_id" => $user->id,
+//                        "totalAmount" => $transaction->cost ,
+//                        "point" => 1
+//                    ]);
+//                }
+//            }
+//            else
+//            {
+//                dump("User was not found for transaction ".$transaction->id);
+//                $warningCounter++;
+//            }
+//        }
+//
+//        $users = $users->where("totalAmount"  , ">" , 100000);
 
 //        $userbons = Userbon::where("bon_id" , 2)
 //                            ->where("created_at" , ">" , "2018-05-24 00:00:00")
@@ -3659,35 +3659,35 @@ class HomeController extends Controller
         }
         dd("Done!");
 
-        $bonName = config("constants.BON2");
-        $bon = Bon::where("name" , $bonName)->first();
-        if(!isset($bon))
-            dd("Bon not found");
-
-        dump("Number of available users: ".$users->count());
-        foreach ($users as $userPoint)
-        {
-            $userId = $userPoint["user_id"] ;
-            $points = $userPoint["point"];
-            $userBon = new Userbon();
-            $userBon->bon_id = $bon->id ;
-            $userBon->user_id = $userId ;
-            $userBon->totalNumber = $points ;
-            $userBon->userbonstatus_id = 1 ;
-            $bonResult = $userBon->save() ;
-            if($bonResult)
-            {
-                $successCounter++;
-            }
-            else
-            {
-                $failedCounter++;
-                dump("Userbon for user ".$userId." was not created");
-            }
-        }
-        dump("number of successfully processed users: ".$successCounter);
-        dump("number of failed users: ".$failedCounter);
-        dd("Done!");
+//        $bonName = config("constants.BON2");
+//        $bon = Bon::where("name" , $bonName)->first();
+//        if(!isset($bon))
+//            dd("Bon not found");
+//
+//        dump("Number of available users: ".$users->count());
+//        foreach ($users as $userPoint)
+//        {
+//            $userId = $userPoint["user_id"] ;
+//            $points = $userPoint["point"];
+//            $userBon = new Userbon();
+//            $userBon->bon_id = $bon->id ;
+//            $userBon->user_id = $userId ;
+//            $userBon->totalNumber = $points ;
+//            $userBon->userbonstatus_id = 1 ;
+//            $bonResult = $userBon->save() ;
+//            if($bonResult)
+//            {
+//                $successCounter++;
+//            }
+//            else
+//            {
+//                $failedCounter++;
+//                dump("Userbon for user ".$userId." was not created");
+//            }
+//        }
+//        dump("number of successfully processed users: ".$successCounter);
+//        dump("number of failed users: ".$failedCounter);
+//        dd("Done!");
     }
 
     public function checkDisableContentTagBot()
