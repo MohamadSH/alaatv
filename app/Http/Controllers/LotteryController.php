@@ -195,9 +195,9 @@ class LotteryController extends Controller
                           $amount
                       ]= $lottery->prizes($counter);
 
-                      $user->notify(new LotteryWinner($lottery , $counter , $prizeName));
-                      echo "<span style='color:green;font-weight: bolder'>User notified</span>";
-                      echo "<br>";
+//                      $user->notify(new LotteryWinner($lottery , $counter , $prizeName));
+//                      echo "<span style='color:green;font-weight: bolder'>User notified</span>";
+//                      echo "<br>";
 
 
 
@@ -278,9 +278,9 @@ class LotteryController extends Controller
                     $responseText = $depositResult["responseText"];
                     if($done)
                     {
-                    $userlottery->notify(new GiftGiven($amount));
-                        echo "<span style='color:green' >"."Notification sent to user :".$userlottery->lastName."</span>";
-                        echo "<br>";
+//                    $userlottery->notify(new GiftGiven($amount));
+//                        echo "<span style='color:green' >"."Notification sent to user :".$userlottery->lastName."</span>";
+//                        echo "<br>";
                         $objectId = $depositResult["wallet"] ;
                         $prizeInfo = '
                           "objectType": "App\\\\Wallet",
