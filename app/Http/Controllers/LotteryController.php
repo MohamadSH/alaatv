@@ -150,7 +150,7 @@ class LotteryController extends Controller
                 }
             }
             dump($luckyBox);
-//          dd("stop");
+          dd("stop");
             // Draw
             $counter = 0;
             $successCounter = 0;
