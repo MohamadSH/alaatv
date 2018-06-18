@@ -29,7 +29,7 @@ class Lottery extends Model
     {
         $prizeName = "" ;
         $amount = 0;
-        if($this->id == 2)
+        if($this->id == 3)
         {
             if($rank==1)
             {//nafare aval
