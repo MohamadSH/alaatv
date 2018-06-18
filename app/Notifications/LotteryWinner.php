@@ -25,6 +25,10 @@ class LotteryWinner extends Notification implements ShouldQueue
      */
     protected  $prize;
     /**
+     * @var string
+     */
+    protected  $memorial;
+    /**
      * @var Lottery
      */
     protected  $lottery;
@@ -39,11 +43,12 @@ class LotteryWinner extends Notification implements ShouldQueue
      *
      * @param int $giftCost
      */
-    public function __construct(Lottery $lottery , $rank , $prize)
+    public function __construct(Lottery $lottery , $rank , $prize , $memorial)
     {
         $this->lottery = $lottery;
         $this->rank = $rank;
         $this->prize = $prize ;
+        $this->memorial = $memorial ;
     }
 
     /**
@@ -76,6 +81,7 @@ class LotteryWinner extends Notification implements ShouldQueue
         $lotteryName = $this->lottery->displayName;
         $rank = $this->rank;
         $prize = $this->prize;
+        $memorial = $this->memorial;
         if(isset($this->user->gender_id))
         {
             if($this->user->gender->name=="خانم")
@@ -88,13 +94,10 @@ class LotteryWinner extends Notification implements ShouldQueue
             $gender = "";
         }
 
-        if(strlen($prize) > 0)
+        if( strlen($prize) > 0 )
             $messageCore = "شما برنده ".$rank." در قرعه کشی ".$lotteryName." شده اید. جایزه شما ".$prize." می باشد و در سریع ترین زمان به شما تقدیم خواهد شد.";
-        else
-            $messageCore = "شما در قرعه کشی ".$lotteryName." شرکت داده شدید و متاسفانه چیزی برنده نشدید. به رسم یادبود کد تخفیف 70 درصد زیر تقدیمتان می شود." ;
-
-        $messageCore .= "\n";
-        $messageCore .= "ayft";
+        elseif( strlen($memorial) > 0 )
+            $messageCore = "شما در قرعه کشی ".$lotteryName." شرکت داده شدید و متاسفانه چیزی برنده نشدید. به رسم یادبود ".$memorial." تقدیمتان شده است." ;
 
         $messageCore = $messageCore
             ."\n"

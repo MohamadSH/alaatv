@@ -29,6 +29,7 @@ class Lottery extends Model
     {
         $prizeName = "" ;
         $amount = 0;
+        $memorial = "";
         if($this->id == 3)
         {
             if($rank==1)
@@ -43,8 +44,7 @@ class Lottery extends Model
             }
             else
             {
-                $amount = 70;
-                $prizeName = "کد تخفیف 70 درصد ayft";
+                $memorial = "کد تخفیف ayft با 70 درصد تخفیف";
             }
 
 //            elseif($rank > 13 && $rank <= 123 )
@@ -55,7 +55,8 @@ class Lottery extends Model
         }
         return [
             $prizeName,
-            $amount
+            $amount,
+            $memorial
             ];
     }
 }

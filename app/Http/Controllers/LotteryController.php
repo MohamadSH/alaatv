@@ -263,32 +263,47 @@ class LotteryController extends Controller
                 $rank = $userlottery->pivot->rank ;
                 [
                     $prizeName ,
-                    $amount
+                    $amount,
+                    $memorial
                 ]= $lottery->prizes($rank);
 
-                if(strlen($prizeName) == 0)
+                if(strlen($prizeName) == 0 && strlen($memorial) == 0)
                     continue;
 
                 $done = true;
                 $prizeInfo = "" ;
                 if($amount > 0)
                 {
-//                    $depositResult =  $userlottery->deposit($amount , config("constants.WALLET_TYPE_GIFT"));
-//                    $done = $depositResult["result"];
-//                    $responseText = $depositResult["responseText"];
-                        $responseText = "Coupon Error";
-//                    if($done)
-//                    {
+                    $depositResult =  $userlottery->deposit($amount , config("constants.WALLET_TYPE_GIFT"));
+                    $done = $depositResult["result"];
+                    $responseText = $depositResult["responseText"];
+
+                    if($done)
+                    {
 //                    $userlottery->notify(new GiftGiven($amount));
 //                        echo "<span style='color:green' >"."Notification sent to user :".$userlottery->lastName."</span>";
 //                        echo "<br>";
-                        $objectId = 543 ;
+
+                        $objectId = $depositResult["wallet"] ;
                         $prizeInfo = '
+                          "objectType": "App\\\\Wallet",
+                          "objectId": "'.$objectId.'"
+                          ';
+                    }
+                }elseif(strlen($memorial) > 0)
+                {
+                    $prizeName = "";
+                    $userlottery->notify(new LotteryWinner($lottery , $rank , $prizeName , $memorial));
+                    echo "<span style='color:green;font-weight: bolder'>User notified</span>";
+                    echo "<br>";
+
+                    $objectId = 543 ;
+                    $prizeInfo = '
                           "objectType": "App\\\\Coupon",
                           "objectId": "'.$objectId.'"
                           ';
-//                    }
                 }
+
                 if($done)
                 {
                     if(strlen($prizeInfo) > 0)
