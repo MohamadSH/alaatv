@@ -4074,6 +4074,7 @@ class HomeController extends Controller
             if($points > 0 )
             {
 //                $userbon->totalNumber = $points ;
+//                $userbon->userbonstatus_id = 1 ;
 //                $userbon->update() ;
             }
         }
