@@ -41,6 +41,12 @@ class Lottery extends Model
             {//7 nafare baadi
                 $prizeName = "یک دستگاه پلی استیشن 4";
             }
+            else
+            {
+                $amount = 70;
+                $prizeName = "کد تخفیف 70 درصد ayft";
+            }
+
 //            elseif($rank > 13 && $rank <= 123 )
 //            {
 //                $amount = 60000 ;
