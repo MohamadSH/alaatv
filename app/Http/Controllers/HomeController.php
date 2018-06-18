@@ -4891,4 +4891,28 @@ class HomeController extends Controller
             "mobile" , "nationalCode" , "score" , "eventRegistered"));
     }
 
+//    public function registerUserAndGiveOrderproduct(Request $request)
+//    {
+//        $mobile = $request->get("mobile");
+//        $nationalCode = $request->get("nationalCode") ;
+//
+//        $user = User::where("mobile" , $mobile)
+//                    ->where("nationalCode" , $nationalCode)
+//                    ->first();
+//        if(isset($user))
+//        {
+//
+//        }
+//        else
+//        {
+//            $registerRequest = new Request();
+//            $registerRequest->offsetSet("mobile" ,  $request->get("mobile"));
+//            $registerRequest->offsetSet("nationalCode" , $request->get("password"));
+//            $registerRequest->offsetSet("firstName" ,  null);
+//            $registerRequest->offsetSet("lastName" , null);
+//            $registerController = new \App\Http\Controllers\Auth\RegisterController();
+//            $registerController->register($registerRequest);
+//        }
+//    }
+
 }
