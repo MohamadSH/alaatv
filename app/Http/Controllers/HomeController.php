@@ -3914,7 +3914,7 @@ class HomeController extends Controller
 //        }
         $pointUnit = 150000;
         $userbons = Userbon::where("bon_id" , 2)
-            ->where("userbonstatus_id" , "1")
+            ->where("updated_at" ,">=" , "2018-06-17 00:00:00")
             ->get();
 
         foreach ($userbons as $userbon)
@@ -3927,6 +3927,7 @@ class HomeController extends Controller
                 echo "<span style='color:yellow'>";
                 echo "Userbon #".$userbon." has no user" ;
                 echo "</span>";
+                echo "<br>" ;
                 continue;
             }
             $userHTBons = $user->userbons->where("bon_id" , 2)
@@ -3938,11 +3939,12 @@ class HomeController extends Controller
             if(isset($userHTBon) && $userHTBon->totalNumber >= 3)
             {
                     $userNewPurchases = $user->orderproducts()->whereHas("order" , function ($q) use ($hamayeshTalai){
-                        $q->where("orderstatus_id" , 2);
-                        $q->where("paymentstatus_id" , 3) ;
-                        $q->where("completed_at" , ">=" , "2018-05-25 00:00:30") ;
-                    })->whereIn("product_id" , $hamayeshTalai)
-                        ->get();
+                                                                $q->where("orderstatus_id" , 2);
+                                                                $q->where("paymentstatus_id" , 3) ;
+                                                                $q->where("completed_at" , ">=" , "2018-05-25 00:00:30") ;
+                                                                $q->where("completed_at" , "<=" , "2018-06-15 00:02:00") ;
+                                                            })->whereIn("product_id" , $hamayeshTalai)
+                                                                ->get();
                     $points += $userNewPurchases->count();
             }
             else
@@ -3950,9 +3952,9 @@ class HomeController extends Controller
                 echo "User is new in lottery" ;
                 echo "</br>";
                 $totalTransactions = $user->orderTransactions->where("completed_at",">=" ,  "2018-05-24 20:00:00" )
-                                                    ->where("completed_at" , "<=" , "2018-06-14 21:30:00")
-                                                    ->where("transactionstatus_id" , config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
-                                                    ->where("cost" , ">" , 0);
+                                                                ->where("completed_at" , "<=" , "2018-06-14 21:30:00")
+                                                                ->where("transactionstatus_id" , config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
+                                                                ->where("cost" , ">" , 0);
                 $totalAmount = 0;
                 if($totalTransactions->isNotEmpty())
                 {
@@ -3965,6 +3967,7 @@ class HomeController extends Controller
             }
 
             $userTotalHamayesh = $user->orderproducts()->whereHas("order" , function ($q) use ($hamayeshTalai){
+                                            $q->where("completed_at" , "<=" , "2018-06-15 00:02:00") ;
                                             $q->where("orderstatus_id" , 2);
                                             $q->where("paymentstatus_id" , 3) ;
                                         })->whereIn("product_id" , $hamayeshTalai)
@@ -4007,7 +4010,6 @@ class HomeController extends Controller
                     $hamayeshDifPurchases = $user->orderproducts()->whereHas("order" , function ($q) use ($hamayeshDif){
                         $q->where("orderstatus_id" , 2);
                         $q->where("paymentstatus_id" , 3) ;
-                        $q->where("completed_at" , "<" , "2018-05-25 00:00:30") ;
                     })->where("product_id" , $hamayeshDif)
                         ->get();
                     if($hamayeshDifPurchases->isNotEmpty())
@@ -4025,14 +4027,12 @@ class HomeController extends Controller
                         $hamayeshZistPurchases = $user->orderproducts()->whereHas("order" , function ($q) use ($hamayeshZist){
                             $q->where("orderstatus_id" , 2);
                             $q->where("paymentstatus_id" , 3) ;
-                            $q->where("completed_at" , "<=" , "2018-05-25 00:00:30") ;
                         })->where("product_id" , $hamayeshZist)
                             ->get();
 
                         $hamayeshGeneticPurchases = $user->orderproducts()->whereHas("order" , function ($q) use ($hamayeshGenetic){
                             $q->where("orderstatus_id" , 2);
                             $q->where("paymentstatus_id" , 3) ;
-                            $q->where("completed_at" , "<" , "2018-05-25 00:00:30") ;
                         })->where("product_id" , $hamayeshGenetic)
                             ->get();
 
@@ -4054,7 +4054,6 @@ class HomeController extends Controller
                         $hamayeshRiyaziEnsaniPurchases = $user->orderproducts()->whereHas("order" , function ($q) use ($hamayeshRiyaziEnsani){
                             $q->where("orderstatus_id" , 2);
                             $q->where("paymentstatus_id" , 3) ;
-                            $q->where("completed_at" , "<=" , "2018-05-25 00:00:30") ;
                         })->where("product_id" , $hamayeshRiyaziEnsani)
                             ->get();
                         if($hamayeshRiyaziEnsaniPurchases->isNotEmpty())
