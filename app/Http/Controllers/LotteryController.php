@@ -306,12 +306,24 @@ class LotteryController extends Controller
 
                 if($done)
                 {
+                    if(strlen($prizeName) > 0 )
+                    {
+                        $itemName = $prizeName;
+                    }
+                    elseif(strlen($memorial))
+                    {
+                        $itemName = $memorial;
+                    }
+                    else
+                    {
+                        $itemName = "";
+                    }
                     if(strlen($prizeInfo) > 0)
                     {
                         $prizes = '{
                       "items": [
                         {
-                          "name": "'.$prizeName.'",'
+                          "name": "'.$itemName.'",'
                             .$prizeInfo.
                             '}
                       ]
