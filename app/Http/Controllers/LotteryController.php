@@ -106,7 +106,7 @@ class LotteryController extends Controller
      */
     public function holdLottery(Request $request)
     {
-    abort(403);
+
       try {
           // Setup
           $lotteryName = "";
@@ -133,6 +133,7 @@ class LotteryController extends Controller
 
           dump("Number of participants: " . $participants->count());
           dump("Sum of total points: " . $participants->sum("totalNumber"));
+
           $participantArray = array();
           foreach ($participants as $participant) {
               if (in_array($participant->user->id, $participantArray))
@@ -149,6 +150,7 @@ class LotteryController extends Controller
               }
           }
           dump($luckyBox);
+          dd("stop");
           // Draw
           $counter = 0;
           $successCounter = 0;
@@ -172,9 +174,9 @@ class LotteryController extends Controller
 
                   if (isset($userbon))
                   {
-                      $userbon->userbonstatus_id = 3;
-                      $userbon->usedNumber = $userbon->totalNumber;
-                      $userbon->update();
+//                      $userbon->userbonstatus_id = 3;
+//                      $userbon->usedNumber = $userbon->totalNumber;
+//                      $userbon->update();
                   }
                   else
                   {
@@ -199,8 +201,6 @@ class LotteryController extends Controller
 //                      $user->notify(new LotteryWinner($lottery , $counter , $prizeName));
 //                      echo "<span style='color:green;font-weight: bolder'>User notified</span>";
 //                      echo "<br>";
-
-
 
                       array_push($winners , $cardId) ;
                   }
