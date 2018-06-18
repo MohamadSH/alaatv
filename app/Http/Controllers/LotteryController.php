@@ -241,7 +241,6 @@ class LotteryController extends Controller
      */
     public function givePrizes(Request $request)
     {
-        abort(403);
         try
         {
             $lotteryName = "" ;
