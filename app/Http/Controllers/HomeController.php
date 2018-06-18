@@ -3781,6 +3781,7 @@ class HomeController extends Controller
 
     public function pointBot(Request $request)
     {
+        abort(404);
         /** Points for Hamayesh Talai lottery */
         $hamayeshTalai = [ 210 , 211 ,212 ,213 , 214,216,217,218,219,220,221, 222 ];
 //
