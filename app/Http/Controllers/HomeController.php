@@ -3536,7 +3536,7 @@ class HomeController extends Controller
             {
                 echo "User is new in lottery" ;
                 echo "</br>";
-                $totalTransactions = $user->transactions->where("completed_at",">=" ,  "2018-05-24 20:00:00" )
+                $totalTransactions = $user->orderTransactions->where("completed_at",">=" ,  "2018-05-24 20:00:00" )
                                                     ->where("completed_at" , "<=" , "2018-06-14 21:30:00")
                                                     ->where("transactionstatus_id" , config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
                                                     ->where("cost" , ">" , 0);
