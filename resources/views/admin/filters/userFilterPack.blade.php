@@ -62,7 +62,7 @@
 </div>
 <div class="form-group">
     <div class="col-lg-3 col-md-3">
-        @include('admin.filters.genderFilter')
+        @include('admin.filters.genderFilter' , ["genders" => $gendersWithUnknown])
     </div>
     <div class="col-lg-3 col-md-3">
         @include('admin.filters.lockProfileStatus')

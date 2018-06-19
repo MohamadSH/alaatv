@@ -36,6 +36,7 @@ class Order extends Model
         'customerDescription',
         'customerExtraInfo',
         'checkOutDateTime',
+        'completed_at'
     ];
 
     public static function orderStatusFilter($orders, $orderStatusesId)

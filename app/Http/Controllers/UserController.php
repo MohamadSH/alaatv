@@ -291,8 +291,10 @@ class UserController extends Controller
         }
         //filter by gender ,lockProfile , mobileVerification
         $genderId = Input::get("gender_id");
-        if(isset($genderId) && strlen($genderId) > 0){
-            if($genderId == 0) $users = $users->whereDoesntHave("gender");
+        if(isset($genderId) && strlen($genderId) > 0)
+        {
+            if($genderId == 0)
+                $users = $users->whereDoesntHave("gender");
             else
                 $users = $users->where("gender_id" , $genderId);
         }
@@ -539,62 +541,95 @@ class UserController extends Controller
      */
     public function store(InsertUserRequest $request)
     {
-        $softDeletedUsers = User::onlyTrashed()->where("mobile" , $request->get("mobile"))->where("nationalCode" , $request->get("nationalCode"))->get();
-        if(!$softDeletedUsers->isEmpty())
-        {
-            $softDeletedUsers->first()->restore();
-            return $this->response->setStatusCode(200);
-        }
-
-        $user = new User();
-        $user->fill($request->all());
-
-        if ($request->hasFile("photo")) {
-            $file = $request->file('photo');
-            $extension = $file->getClientOriginalExtension();
-            $fileName = basename($file->getClientOriginalName() , ".".$extension) . "_" . date("YmdHis") . '.' . $extension;
-            if (Storage::disk(Config::get('constants.DISK1'))->put($fileName, File::get($file))) {
-                $user->photo = $fileName;
+        try{
+            $softDeletedUsers = User::onlyTrashed()->where("mobile" , $request->get("mobile"))->where("nationalCode" , $request->get("nationalCode"))->get();
+            if(!$softDeletedUsers->isEmpty())
+            {
+                $softDeletedUsers->first()->restore();
+                return $this->response->setStatusCode(200);
             }
-        }else{
-            $user->photo = Config::get('constants.PROFILE_DEFAULT_IMAGE');
-        }
 
-        if(strlen($request->get("major_id")) == 0) $user->major_id = null;
-        if(strlen($request->get("gender_id")) == 0) $user->gender_id = null;
+            $user = new User();
+            $user->fill($request->all());
 
-        $user->password = bcrypt($request->get("password"));
+            if ($request->hasFile("photo")) {
+                $file = $request->file('photo');
+                $extension = $file->getClientOriginalExtension();
+                $fileName = basename($file->getClientOriginalName() , ".".$extension) . "_" . date("YmdHis") . '.' . $extension;
+                if (Storage::disk(Config::get('constants.DISK1'))->put($fileName, File::get($file))) {
+                    $user->photo = $fileName;
+                }
+            }else{
+                $user->photo = Config::get('constants.PROFILE_DEFAULT_IMAGE');
+            }
 
-        if ($user->save()) {
-            if(Auth::user()->can(Config::get('constants.INSET_USER_ROLE'))){
+            if(strlen($request->get("major_id")) == 0)
+                $user->major_id = null;
+            if(strlen($request->get("gender_id")) == 0)
+                $user->gender_id = null;
 
-                $newRoleIds = array() ;
-                if($request->has("roles"))
-                {
-                    $newRoleIds = $request->get("roles");
-                    foreach ($newRoleIds as $key => $newRoleId)
+            if ( $request->has("mobileNumberVerification"))
+                $user->mobileNumberVerification = 1;
+            else
+                $user->mobileNumberVerification = 0 ;
+
+            $user->password = bcrypt($request->get("password"));
+
+            if ($user->save()) {
+                if(Auth::user()->can(Config::get('constants.INSET_USER_ROLE'))){
+
+                    $newRoleIds = array() ;
+                    if($request->has("roles"))
                     {
-                        $newRole = Role::FindOrFail($newRoleId) ;
-                        if($newRole->isDefault) {
-                            if (!Auth::user()->can(Config::get('constants.GIVE_SYSTEM_ROLE')))
-                                unset($newRoleIds[$key]);
+                        $newRoleIds = $request->get("roles");
+                        foreach ($newRoleIds as $key => $newRoleId)
+                        {
+                            $newRole = Role::FindOrFail($newRoleId) ;
+                            if($newRole->isDefault) {
+                                if (!Auth::user()->can(Config::get('constants.GIVE_SYSTEM_ROLE')))
+                                    unset($newRoleIds[$key]);
+                            }
+                        }
+                    }
+
+                    if(!empty($newRoleIds))
+                    {
+                        foreach ($newRoleIds as $role_id)
+                        {
+                            $user->attachRole($role_id);
                         }
                     }
                 }
 
-                if(!empty($newRoleIds))
-                {
-                    foreach ($newRoleIds as $role_id)
-                    {
-                        $user->attachRole($role_id);
-                    }
-                }
+                $responseStatusCode = 200;
+                $responseContent = "درج کاربر با موفقیت انجام شد";
+                $storedUserId = $user->id;
+
             }
-            return $this->response->setStatusCode(200);
+            else{
+                $responseStatusCode = 503;
+                $responseContent = "خطا در ذخیره کاربر";
+            }
+
+            return $this->response
+                ->setStatusCode($responseStatusCode)
+                ->setContent([
+                    "message" => $responseContent ,
+                    "userId" => (isset($storedUserId)?$storedUserId:0)
+                    ]);
         }
-        else{
-            return $this->response->setStatusCode(503);
+        catch (\Exception    $e) {
+            $message = "unexpected error";
+            return $this->response
+                ->setStatusCode(500)
+                ->setContent([
+                    "message"=>$message ,
+                    "error"=>$e->getMessage() ,
+                    "line"=>$e->getLine() ,
+                    "file"=>$e->getFile()
+                ]);
         }
+
     }
 
     /**

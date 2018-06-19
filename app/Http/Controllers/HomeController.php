@@ -19,6 +19,7 @@ use App\Eventresult;
 use App\Gender;
 use App\Grade;
 use App\Http\Requests\ContactUsFormRequest;
+use App\Http\Requests\InsertUserRequest;
 use App\Http\Requests\SendSMSRequest;
 use App\Lottery;
 use App\Major;
@@ -117,7 +118,7 @@ class HomeController extends Controller
         $this->middleware('permission:' . Config::get("constants.SMS_ADMIN_PANEL_ACCESS"), ['only' => 'adminSMS']);
         $this->middleware('permission:' . Config::get("constants.REPORT_ADMIN_PANEL_ACCESS"), ['only' => 'adminReport']);
         $this->middleware('ability:' . Config::get("constants.ROLE_ADMIN") . ',' . Config::get("constants.TELEMARKETING_PANEL_ACCESS"), ['only' => 'adminTeleMarketing']);
-        $this->middleware('role:admin' , ['only' => ['bot' , 'smsBot' , 'checkDisableContentTagBot' , 'tagBot' , 'pointBot' , 'adminLottery']]);
+        $this->middleware('role:admin' , ['only' => ['bot' , 'smsBot' , 'checkDisableContentTagBot' , 'tagBot' , 'pointBot' , 'adminLottery' , 'registerUserAndGiveOrderproduct' , 'specialAddUser']]);
         $this->response = new Response();
         $this->setting = json_decode(app('setting')->setting);
 
@@ -1022,6 +1023,8 @@ class HomeController extends Controller
         $userStatuses->prepend("انتخاب وضعیت");
         $majors = Major::pluck('name', 'id');
         $genders = Gender::pluck('name', 'id');
+        $gendersWithUnknown = clone $genders;
+        $gendersWithUnknown->prepend("نامشخص");
         $permissions = Permission::pluck('display_name', 'id');
         $roles = Role::pluck('display_name', 'id');
 //        $roles = array_add($roles , 0 , "همه نقش ها");
@@ -1055,8 +1058,7 @@ class HomeController extends Controller
 
         $pageName = "admin";
 
-
-        return view("admin.index", compact("pageName", "majors", "userStatuses", "permissions", "roles", "limitStatus", "orderstatuses", "paymentstatuses", "enableStatus", "genders", "hasOrder", "products",
+        return view("admin.index", compact("pageName", "majors", "userStatuses", "permissions", "roles", "limitStatus", "orderstatuses", "paymentstatuses", "enableStatus", "genders" , "gendersWithUnknown", "hasOrder", "products",
             "lockProfileStatus", "mobileNumberVerification", "tableDefaultColumns", "sortBy", "sortType", "coupons", "addressSpecialFilter", "checkoutStatuses"));
     }
 
@@ -1297,6 +1299,8 @@ class HomeController extends Controller
         $userStatuses->prepend("انتخاب وضعیت");
         $majors = Major::pluck('name', 'id');
         $genders = Gender::pluck('name', 'id');
+        $gendersWithUnknown = clone $genders;
+        $gendersWithUnknown->prepend("نامشخص");
         $roles = Role::pluck('display_name', 'id');
 
         $orderstatuses = Orderstatus::whereNotIn('name', ['open'])->pluck('displayName', 'id');
@@ -1333,7 +1337,7 @@ class HomeController extends Controller
 //        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
 
         return view("admin.indexSMS", compact("pageName", "majors", "userStatuses",
-            "roles", "relatives", "orderstatuses", "paymentstatuses", "genders", "products", "allRootProducts", "lockProfileStatus",
+            "roles", "relatives", "orderstatuses", "paymentstatuses", "genders" , "gendersWithUnknown" , "products", "allRootProducts", "lockProfileStatus",
             "mobileNumberVerification", "sortBy", "sortType", "smsCredit", "smsProviderNumber",
             "numberOfFatherPhones", "numberOfMotherPhones", "coupons", "addressSpecialFilter", "checkoutStatuses"));
     }
@@ -1408,6 +1412,8 @@ class HomeController extends Controller
         $userStatuses->prepend("انتخاب وضعیت");
         $majors = Major::pluck('name', 'id');
         $genders = Gender::pluck('name', 'id');
+        $gendersWithUnknown = clone $genders;
+        $gendersWithUnknown->prepend("نامشخص");
         $permissions = Permission::pluck('display_name', 'id');
         $roles = Role::pluck('display_name', 'id');
 //        $roles = array_add($roles , 0 , "همه نقش ها");
@@ -1449,7 +1455,7 @@ class HomeController extends Controller
         $checkoutStatuses[0] = "نامشخص";
         $checkoutStatuses = array_sort_recursive($checkoutStatuses);
 
-        return view("admin.indexGetReport", compact("pageName", "majors", "userStatuses", "permissions", "roles", "limitStatus", "orderstatuses", "paymentstatuses", "enableStatus", "genders", "hasOrder", "products",
+        return view("admin.indexGetReport", compact("pageName", "majors", "userStatuses", "permissions", "roles", "limitStatus", "orderstatuses", "paymentstatuses", "enableStatus", "genders" , "gendersWithUnknown", "hasOrder", "products",
             "bookProducts", "lockProfileStatus", "mobileNumberVerification", "sortBy", "sortType", "coupons", "addressSpecialFilter", "lotteries", "checkoutStatuses"));
     }
 
@@ -4891,28 +4897,180 @@ class HomeController extends Controller
             "mobile" , "nationalCode" , "score" , "eventRegistered"));
     }
 
-//    public function registerUserAndGiveOrderproduct(Request $request)
-//    {
-//        $mobile = $request->get("mobile");
-//        $nationalCode = $request->get("nationalCode") ;
-//
-//        $user = User::where("mobile" , $mobile)
-//                    ->where("nationalCode" , $nationalCode)
-//                    ->first();
-//        if(isset($user))
-//        {
-//
-//        }
-//        else
-//        {
-//            $registerRequest = new Request();
-//            $registerRequest->offsetSet("mobile" ,  $request->get("mobile"));
-//            $registerRequest->offsetSet("nationalCode" , $request->get("password"));
-//            $registerRequest->offsetSet("firstName" ,  null);
-//            $registerRequest->offsetSet("lastName" , null);
-//            $registerController = new \App\Http\Controllers\Auth\RegisterController();
-//            $registerController->register($registerRequest);
-//        }
-//    }
+    public function specialAddUser(Request $request)
+    {
+        $majors = Major::pluck('name', 'id');
+        $genders = Gender::pluck('name', 'id');
+        $pageName = "admin";
+        return view("admin.insertUserAndOrderproduct" , compact("majors" , "genders" , "pageName"));
+    }
+
+    public function registerUserAndGiveOrderproduct(Request $request)
+    {
+        $mobile = $request->get("mobile");
+        $nationalCode = $request->get("nationalCode") ;
+        $firstName = $request->get("firstName") ;
+        $lastName = $request->get("lastName") ;
+        $major_id = $request->get("major_id") ;
+        $gender_id = $request->get("gender_id") ;
+        $user = User::where("mobile" , $mobile)
+                    ->where("nationalCode" , $nationalCode)
+                    ->first();
+        if(isset($user))
+        {
+            $flag = false;
+            if(!isset($user->firstName))
+            {
+                $user->firstName = $firstName;
+                $flag = true;
+            }
+            if(!isset($user->lastName))
+            {
+                $user->lastName = $lastName;
+                $flag = true;
+            }
+            if(!isset($user->major_id))
+            {
+                $user->major_id = $major_id;
+                $flag = true;
+            }
+            if(!isset($user->gender_id))
+            {
+                $user->gender_id = $gender_id;
+                $flag = true;
+            }
+
+            if($flag)
+                $user->update();
+        }
+        else
+        {
+            $registerRequest = new InsertUserRequest();
+            $registerRequest->offsetSet("mobile" ,  $mobile);
+            $registerRequest->offsetSet("nationalCode" , $nationalCode);
+            $registerRequest->offsetSet("firstName" ,  $firstName);
+            $registerRequest->offsetSet("lastName" , $lastName);
+            $registerRequest->offsetSet("password" , $nationalCode);
+            $registerRequest->offsetSet("mobileNumberVerification" , 1);
+            $registerRequest->offsetSet("major_id" , $major_id);
+            $registerRequest->offsetSet("gender_id" , $gender_id);
+            $registerRequest->offsetSet("userstatus_id" , 1);
+            $userController = new \App\Http\Controllers\UserController();
+            $response = $userController->store($registerRequest);
+            $result = json_decode($response->getContent());
+            if($response->getStatusCode() == 200)
+            {
+                $userId = $result->userId;
+                if($userId >0)
+                    $user = User::where("id" , $userId)->first();
+            }
+        }
+
+        if(isset($user))
+        {
+            $orderProductIds = [];
+
+            $arabiProduct = 214 ;
+            $hasArabiOrder = $user->orderproducts()
+                ->where("product_id" , $arabiProduct)
+                ->whereHas("order" , function ($q){
+                    $q->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"));
+                    $q->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_PAID")) ;
+                })
+                ->get();
+            if($hasArabiOrder->isEmpty())
+            {
+                array_push($orderProductIds , $arabiProduct);
+            }
+
+            $shimiProduct = 100;
+            $hasShimiOrder = $user->orderproducts()
+                ->where("product_id" , $shimiProduct)
+                ->whereHas("order" , function ($q){
+                    $q->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"));
+                    $q->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_PAID")) ;
+                })
+                ->get();
+
+            if($hasShimiOrder->isEmpty())
+            {
+                array_push($orderProductIds , $shimiProduct);
+            }
+
+            $giftOrderDone = true;
+            if(!empty($orderProductIds))
+            {
+                $orderController = new OrderController();
+                $storeOrderRequest = new Request();
+                $storeOrderRequest->offsetSet("orderstatus_id", config("constants.ORDER_STATUS_CLOSED") );
+                $storeOrderRequest->offsetSet("paymentstatus_id", config("constants.PAYMENT_STATUS_PAID"));
+                $storeOrderRequest->offsetSet("cost", 0);
+                $storeOrderRequest->offsetSet("costwithoutcoupon", 0);
+                $storeOrderRequest->offsetSet("user_id", $user->id );
+                $giftOrderCompletedAt = Carbon::now()->setTimezone("Asia/Tehran");
+                $storeOrderRequest->offsetSet("completed_at",  $giftOrderCompletedAt);
+                $giftOrder = $orderController->store($storeOrderRequest) ;
+
+                $giftOrderMessage = "ثبت سفارش با موفیت انجام شد";
+                if($giftOrder !== false)
+                {
+                    foreach ($orderProductIds as $productId)
+                    {
+                        $request->offsetSet("cost" , 0);
+                        $request->offsetSet("orderId_bhrk" , $giftOrder->id);
+                        $request->offsetSet("userId_bhrk" , $user->id);
+                        $product =  Product::where("id" , $productId)->first();
+                        if(isset($product))
+                        {
+                            $response = $orderController->addOrderproduct($request , $product) ;
+                            $responseStatus = $response->getStatusCode();
+                            $result = json_decode($response->getContent());
+                            if($responseStatus == 200)
+                            {
+
+                            }
+                            else
+                            {
+                                $giftOrderDone = false;
+                                $giftOrderMessage = "خطا در ثبت آیتم سفارش";
+                                foreach ($result as $value)
+                                {
+                                    $giftOrderMessage .= "<br>";
+                                    $giftOrderMessage .= $value;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            $giftOrderDone = false;
+                            $giftOrderMessage = "خطا در ثبت آیتم سفارش. محصول یافت نشد.";
+                        }
+                    }
+
+                }
+                else
+                {
+                    $giftOrderDone = false;
+                    $giftOrderMessage = "خطا در ثبت سفارش";
+                }
+
+            }
+            else
+            {
+                $giftOrderMessage = "کاربر مورد نظر محصولات را از قبل داشت";
+            }
+        }
+        else
+        {
+            $giftOrderMessage = "خطا در یافتن کاربر";
+        }
+
+        if($giftOrderDone)
+            session()->put("success" , $giftOrderMessage);
+        else
+            session()->put("error" , $giftOrderMessage);
+
+        return redirect()->back();
+    }
 
 }

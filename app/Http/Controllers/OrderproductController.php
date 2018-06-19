@@ -59,7 +59,15 @@ class OrderproductController extends Controller
     {
         $product_id = $request->get("product_id");
         $product = Product::FindorFail($product_id) ;
-        $user = Auth::user();
+        if($request->has("userId_bhrk"))
+        {
+            $userId = $request->get("userId_bhrk");
+            $user = User::FindOrFail($userId) ;
+        }
+        else
+        {
+            $user = Auth::user();
+        }
         $ajax = request()->ajax();
 
         if( ( Auth::check() &&
