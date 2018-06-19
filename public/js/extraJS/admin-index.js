@@ -83,7 +83,20 @@ $(document).on("click", "#userForm-submit", function (){
     $("#emailAlert > strong").html("");
 
     var formData = new FormData($("#userForm")[0]);
-
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "positionClass": "toast-top-center",
+        "onclick": null,
+        "showDuration": "1000",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    };
     $.ajax({
         type: "POST",
         url: $("#userForm").attr("action"),
@@ -92,40 +105,30 @@ $(document).on("click", "#userForm-submit", function (){
             //The status for when action was successful
             200: function (response) {
                 $("#userForm-close").trigger("click");
-                toastr.options = {
-                    "closeButton": true,
-                    "debug": false,
-                    "positionClass": "toast-top-center",
-                    "onclick": null,
-                    "showDuration": "1000",
-                    "hideDuration": "1000",
-                    "timeOut": "5000",
-                    "extendedTimeOut": "1000",
-                    "showEasing": "swing",
-                    "hideEasing": "linear",
-                    "showMethod": "fadeIn",
-                    "hideMethod": "fadeOut"
-                };
                 $("#user-portlet .reload").trigger("click");
                 $("#userPhoto-remove").trigger("click");
                 $('#userForm')[0].reset();
                 $('#user_role').multiSelect('refresh');
-                toastr["success"]("درج کاربر با موفقیت انجام شد!", "پیام سیستم");
+                var message ="";
+                if(response.message != undefined && response.message!= null)
+                    message += "<br />"+response.message;
+                toastr["success"](message, "پیام سیستم");
                 // console.log(response);
                 // console.log(response.responseText);
             },
             //The status for when the user is not authorized for making the request
             403: function (response) {
-                window.location.replace("/403");
+                toastr["error"]("کد 403!", "پیام سیستم");
             },
             404: function (response) {
-                window.location.replace("/404");
+                toastr["error"]("کد 404!", "پیام سیستم");
             },
             //The status for when form data is not valid
             422: function (response) {
+                toastr["error"]("خطای ورودی ها!", "پیام سیستم");
                 var errors = $.parseJSON(response.responseText);
-                // console.log(errors);
-                $.each(errors, function(index, value) {
+                // console.log(errors.errors);
+                $.each(errors.errors, function(index, value) {
                     switch (index) {
                         case "firstName":
                             $("#firstName").parent().addClass("has-error");
@@ -176,12 +179,17 @@ $(document).on("click", "#userForm-submit", function (){
             },
             //The status for when there is error php code
             500: function (response) {
-                // console.log(response.responseText);
+                console.log(response);
+                console.log(response.responseText);
                 toastr["error"]("خطای برنامه!", "پیام سیستم");
             },
             //The status for when there is error php code
             503: function (response) {
-                toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
+                var errors = $.parseJSON(response.responseText);
+                if(errors.message != undefined && errors.message!= null)
+                    toastr["error"](errors.message, "پیام سیستم");
+                else
+                    toastr["error"]("خطای غیر منتظره", "پیام سیستم");
             }
         },
         cache: false,

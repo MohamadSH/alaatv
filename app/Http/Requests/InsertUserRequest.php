@@ -48,13 +48,11 @@ class InsertUserRequest extends FormRequest
                                  ],
             'userstatus_id' => 'required|exists:userstatuses,id',
             'photo' => 'image|mimes:jpeg,jpg,png|max:512',
-            'postalCode'    => 'numeric',
-            'major_id' => 'exists:majors,id',
-            'gender_id' => 'exists:genders,id',
-            'email' => 'email'
+            'postalCode'    => 'sometimes|nullable|numeric',
+            'major_id' => 'sometimes|nullable|exists:majors,id',
+            'gender_id' => 'sometimes|nullable|exists:genders,id',
+            'email' => 'sometimes|nullable|email'
         ];
-
-        if(isset($_REQUEST["major_id"]) && strcmp($_REQUEST["major_id"],"0")!=0) $rules["major_id"] = "exists:majors,id";
 
         return $rules;
 
