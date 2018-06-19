@@ -106,7 +106,7 @@ class LotteryController extends Controller
      */
     public function holdLottery(Request $request)
     {
-
+        abort(404);
         try {
             // Setup
             $lotteryName = "";
@@ -241,6 +241,7 @@ class LotteryController extends Controller
      */
     public function givePrizes(Request $request)
     {
+        abort("404");
         try
         {
             $lotteryName = "" ;
