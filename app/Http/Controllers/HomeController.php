@@ -25,6 +25,7 @@ use App\Lottery;
 use App\Major;
 use App\Notifications\GeneralNotice;
 use App\Notifications\GiftGiven;
+use App\Notifications\UserRegisterd;
 use App\Order;
 use App\Orderproduct;
 use App\Orderstatus;
@@ -4962,7 +4963,10 @@ class HomeController extends Controller
             {
                 $userId = $result->userId;
                 if($userId >0)
+                {
                     $user = User::where("id" , $userId)->first();
+                    $user->notify(new UserRegisterd());
+                }
             }
         }
 
@@ -5066,7 +5070,25 @@ class HomeController extends Controller
         }
 
         if($giftOrderDone)
+        {
+            if(isset($user->gender_id))
+            {
+                if($user->gender->name=="خانم")
+                    $gender = "خانم ";
+                elseif($user->gender->name=="آقا")
+                    $gender = "آقای ";
+                else
+                    $gender = "";
+            }else{
+                $gender = "";
+            }
+            $message = $gender.$user->getfullName()."\n";
+            $message .= "همایش طلایی عربی و همایش حل مسائل شیمی به فایل های شما افزوده شد . دانلود در:";
+            $message .= "\n";
+            $message .= "sanatisharif.ir/asset/";
+            $user->notify(new GeneralNotice($message));
             session()->put("success" , $giftOrderMessage);
+        }
         else
             session()->put("error" , $giftOrderMessage);
 
