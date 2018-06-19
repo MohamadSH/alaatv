@@ -223,6 +223,11 @@
                                 <span class="title">مدیریت کاربران</span>
                             </a>
                         </li>
+                        <li class="nav-item  ">
+                            <a href="{{action("HomeController@specialAddUser")}}" class="nav-link ">
+                                <span class="title">درج کاربر با سفارش</span>
+                            </a>
+                        </li>
                         @endability
                         @permission((Config::get('constants.ORDER_ADMIN_PANEL_ACCESS')))
                         <li class="nav-item  ">

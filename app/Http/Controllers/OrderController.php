@@ -635,8 +635,10 @@ class OrderController extends Controller
     {
         $order = new Order();
         $order->fill($request->all());
-        if($order->save()) return $order;
-        else return false ;
+        if($order->save())
+            return $order;
+        else
+            return false ;
     }
 
     /**
@@ -1852,7 +1854,15 @@ class OrderController extends Controller
     {
         try
         {
-            $user = Auth::user();
+            if($request->has("userId_bhrk"))
+            {
+                $userId =  $request->get("userId_bhrk");
+                $forceUser = true;
+            }
+            else
+            {
+                $user = Auth::user();
+            }
             if($request->has("cost"))
                 $cost = $request->get("cost");
 
@@ -1915,6 +1925,9 @@ class OrderController extends Controller
                         $request->offsetSet("forceStore_bhrk" ,  true);
                     if(isset($cost))
                         $request->offsetSet("cost_bhrk" ,  $cost);
+
+                    if(isset($forceUser))
+                        $request->offsetSet("userId_bhrk" ,  $userId);
                     $orderproductController = new OrderproductController();
                     $orderproductController->store($request) ;
                 }
@@ -1944,9 +1957,9 @@ class OrderController extends Controller
         {
             $message = "unexpected error";
             return $this->response
-                ->setStatusCode(503)
+                ->setStatusCode(500)
                 ->setContent([
-                    "message"=>$message ,
+                    "errorMessage"=>$message ,
                     "error"=>$e->getMessage() ,
                     "line"=>$e->getLine() ,
                     "file"=>$e->getFile()

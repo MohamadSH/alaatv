@@ -773,22 +773,36 @@
             <div class="col-md-6">
                 <p>{!! Form::text('lastName', null, ['class' => 'form-control', 'id' => 'lastName' , 'placeholder'=>'نام خانوادگی']) !!}
                     <span class="help-block" id="lastNameAlert">
-                <strong></strong>
-            </span>
+                     <strong></strong>
+                    </span>
                 </p>
                 <p>{!! Form::text('mobile', null, ['class' => 'form-control', 'id' => 'mobile' , 'maxlength'=>'11' , 'placeholder'=>'موبایل']) !!}
                     <span class="help-block" id="mobileAlert">
-                <strong></strong>
-            </span>
+                        <strong></strong>
+                     </span>
                 </p>
                 <p>{!! Form::select('userstatus_id',$userStatuses,null,['class' => 'form-control', 'id' => 'userstatus_id']) !!}
                     <span class="help-block" id="userstatusAlert">
-                <strong></strong>
-            </span>
+                     <strong></strong>
+                    </span>
                 </p>
             </div>
             <div class="col-md-12">
                 <p class="caption-subject font-dark bold uppercase"> وارد کردن اطلاعات زیر اختیاری می باشد: </p>
+            </div>
+            <div class="col-md-12">
+                <label class="mt-checkbox mt-checkbox-outline">
+                    <div class="md-checkbox" >
+                        {!! Form::checkbox('mobileNumberVerification', '1', null,  [ 'id'=>'checkbox_insertUserMobileNumberVerification'  , 'class'=>'md-check']) !!}
+                        <label for="checkbox_insertUserMobileNumberVerification">
+                            <span></span>
+                            <span class="check"></span>
+                            <span class="box"></span>
+                            تایید شماره موبایل
+                            <span></span>
+                        </label>
+                    </div>
+                </label>
             </div>
             <div class="col-md-6">
                 <p>{!! Form::text('province', null, ['class' => 'form-control', 'id' => 'province' , 'placeholder'=>'استان']) !!}
