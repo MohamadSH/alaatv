@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Contentset;
 use App\Contenttype;
 use App\Educationalcontent;
 use App\Grade;
@@ -186,12 +187,26 @@ class EducationalContentController extends Controller
     }
 
     /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create3()
+    {
+        $contenttypes = collect();
+        $contenttypes->put("8" , "فیلم");
+        $contenttypes->put("1" , "جزوه");
+
+        return view("educationalContent.create3" , compact("contenttypes")) ;
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \App\Http\Requests\InsertEducationalContentRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(InsertEducationalContentRequest $request)
+public function store(InsertEducationalContentRequest $request)
     {
         $educationalContent = new Educationalcontent();
         $educationalContent->fill($request->all()) ;
@@ -809,5 +824,90 @@ class EducationalContentController extends Controller
         } else {
             return $this->response->setStatusCode(503) ;
         }
+     }
+
+     public function basicStore(Request $request)
+     {
+         try
+         {
+             $contentset_id = $request->get("contentset_id");
+             $contenttype_id = $request->get("contenttype_id");
+             $name = $request->get("name");
+             if($request->has("order"))
+                 $order = $request->get("order");
+             $hd = $request->get("hd");
+             $hq = $request->get("hq");
+             $_240p = $request->get("240p");
+             $thumbnail = $request->get("thumbnail");
+             $dateNow = Carbon::now();
+
+             $contentset = Contentset::FindOrFail($contentset_id);
+             $lastContent = $contentset->educationalcontents->sortByDesc("pivot.order")->first() ;
+             $newContent = $lastContent->replicate();
+             $newContent->contenttype_id = $contenttype_id ;
+             if($contenttype_id == 1)
+                 $newContent->template_id = 2 ;
+             elseif($contenttype_id == 8)
+                 $newContent->template_id = 1 ;
+
+             $newContent->name = $name;
+             $newContent->description = null;
+             $newContent->metaTitle = null;
+             $newContent->metaDescription = null;
+             $newContent->enable = 0;
+             $newContent->validSince = $dateNow;
+             $newContent->created_at = $dateNow;
+             $newContent->updated_at = $dateNow;
+             $newContent->save();
+             $fileRequest = new InsertFileRequest();
+             $fileController = new FileController();
+             if(isset($_240p))
+             {
+
+                 $fileRequest->offsetSet("name"  , $_240p );
+                 $_240pId =  $fileController->store($fileRequest);
+                 $newContent->files()->attach($_240pId , ["caption"=>"کیفیت متوسط" , "label"=>"240p"]);
+             }
+
+             if(isset($hq))
+             {
+                 $fileRequest->offsetSet("name"  , $hq );
+                 $hqId =  $fileController->store($fileRequest);
+                 $newContent->files()->attach($hqId , ["caption"=>"کیفیت بالا" , "label"=>"hq"]);
+             }
+
+             if(isset($hd))
+             {
+                 $fileRequest->offsetSet("name"  , $hd );
+                 $hdId =  $fileController->store($fileRequest);
+                 $newContent->files()->attach($hdId , ["caption"=>"کیفیت عالی" , "label"=>"hd"]);
+             }
+
+             if(isset($thumbnail))
+             {
+                 $fileRequest->offsetSet("name"  , $thumbnail );
+                 $thumbnailId =  $fileController->store($fileRequest);
+                 $newContent->files()->attach($thumbnailId , ["caption"=>"تامبنیل" , "label"=>"thumbnail"]);
+             }
+
+             if(!isset($order))
+                 $order = $lastContent->pivot->order;
+             $newContent->contentsets()->attach($contentset->id , ["order"=>$order]);
+
+             return redirect(action("EducationalContentController@edit" , $newContent->id));
+         }
+         catch (\Exception    $e)
+         {
+             $message = "unexpected error";
+             return $this->response
+                 ->setStatusCode(503)
+                 ->setContent([
+                     "message"=>$message ,
+                     "error"=>$e->getMessage() ,
+                     "line"=>$e->getLine() ,
+                     "file"=>$e->getFile()
+                 ]);
+         }
+
      }
 }
