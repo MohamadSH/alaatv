@@ -41,7 +41,7 @@
 
     <title>همایش طلایی کنکور آلاء</title>
 
-    <link rel="stylesheet" href="/assets/extra/landing3/css/stylesheet8.css" />
+    <link rel="stylesheet" href="/assets/extra/landing3/css/stylesheet9.css" />
     <!--[if lt IE 10]>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flexibility/2.0.1/flexibility.js"></script>
     <![endif]-->
@@ -87,7 +87,7 @@
     <section class="lottery-banner">
         <div class="container clearfix">
             <div class="bnra">
-                <img class="banner" src="/assets/extra/landing4/images/banner4.png" alt="قرعه کشی آلاء">
+                <img class="banner" src="/assets/extra/landing3/images/banner5.png" alt="قرعه کشی آلاء">
             </div><!-- .bnra -->
         </div><!-- .container -->
     </section>
