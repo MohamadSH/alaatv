@@ -417,16 +417,32 @@ class TransactionController extends Controller
                         $checkoutStatuses = Input::get("checkoutStatuses");
                         if(in_array(0 , $checkoutStatuses))
                         {
-                            $transactionOrderproducts = $transaction->order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->whereIn("product_id", $productsId)->whereNull("checkoutstatus_id")->get();
+                            $transactionOrderproducts = $transaction->order
+                                ->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
+                                ->where(function ($q) use ($productsId) {
+                                    $q->whereIn("product_id", $productsId)
+                                        ->whereNull("checkoutstatus_id");
+                                })
+                                ->get();
                         }else{
-                            $transactionOrderproducts = $transaction->order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->whereIn("product_id", $productsId)->whereIn("checkoutstatus_id" , $checkoutStatuses)->get();
+                            $transactionOrderproducts = $transaction->order
+                                ->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
+                                ->where(function ($q) use ($productsId) {
+                                    $q->whereIn("product_id", $productsId);
+                                })
+                                ->get();
                         }
                     }
                     else
                     {
-                        $transactionOrderproducts = $transaction->order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->whereIn("product_id", $productsId)->get();
+                        $transactionOrderproducts = $transaction->order->orderproducts()
+                            ->WhereNull("orderproducttype_id")
+                            ->whereIn("product_id", $productsId)
+                            ->get();
                     }
 
+                    $cost = 0;
+                    $extraCost = 0 ;
                     if($transactionOrderproducts->isNotEmpty())
                     {
                         $orderDiscount = $transaction->order->discount ;
@@ -457,8 +473,7 @@ class TransactionController extends Controller
 
                         $orderRefundPerItem = $orderSuccessfulTransactionRefundSum / $numOfOrderproducts; // it is a negative number
                         $orderWalletUsePerItem = $orderWalletTransactionSum/$numOfOrderproducts ;
-                        $cost = 0;
-                        $extraCost = 0 ;
+
                         foreach ($transactionOrderproducts as $orderproduct)
                         {
                             if(in_array($orderproduct->id , $checkedOrderproducts))
