@@ -118,6 +118,7 @@ Route::group(['middleware' => 'auth'], function()
     Route::get("bot" , "HomeController@bot");
     Route::get("pointBot" , "HomeController@pointBot");
     Route::post("walletBot" , "HomeController@walletBot");
+    Route::post("excelBot" , "HomeController@excelBot");
     Route::post("registerUserAndGiveOrderproduct" , "HomeController@registerUserAndGiveOrderproduct");
     Route::get("specialAddUser" , "HomeController@specialAddUser");
 

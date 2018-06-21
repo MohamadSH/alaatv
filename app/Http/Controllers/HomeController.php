@@ -27,7 +27,6 @@ use App\Notifications\GeneralNotice;
 use App\Notifications\GiftGiven;
 use App\Notifications\UserRegisterd;
 use App\Order;
-use App\Orderproduct;
 use App\Orderstatus;
 use App\Paymentmethod;
 use App\Paymentstatus;
@@ -43,6 +42,7 @@ use App\Traits\CharacterCommon;
 use App\Traits\DateCommon;
 use App\Traits\Helper;
 use App\Traits\ProductCommon;
+use App\Traits\UserCommon;
 use App\Transaction;
 use App\Transactionstatus;
 use App\User;
@@ -52,7 +52,6 @@ use App\Userstatus;
 use App\Usersurveyanswer;
 use App\Userupload;
 use App\Useruploadstatus;
-use App\Wallet;
 use App\Websitesetting;
 use App\Websitepage;
 use App\Http\Requests\Request;
@@ -70,6 +69,11 @@ use Illuminate\Support\Facades\View;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Sftp\SftpAdapter;
 
+use Maatwebsite\ExcelLight\Excel;
+use Maatwebsite\ExcelLight\Spout\Reader;
+use Maatwebsite\ExcelLight\Spout\Row;
+use Maatwebsite\ExcelLight\Spout\Sheet;
+use Maatwebsite\ExcelLight\Spout\Writer;
 use SSH;
 use Auth;
 use SEO;
@@ -85,6 +89,7 @@ class HomeController extends Controller
     use ProductCommon;
     use DateCommon;
     use CharacterCommon;
+    use UserCommon;
     /**
      * Create a new controller instance.
      *
@@ -2484,6 +2489,9 @@ class HomeController extends Controller
             case "wallet":
                 $view = "admin.bot.wallet" ;
                 break;
+            case "excel":
+                $view = "admin.bot.excel" ;
+                break;
             default:
                 break;
         }
@@ -4120,6 +4128,106 @@ class HomeController extends Controller
 //        dd("Done!");
     }
 
+    public function excelBot(Request $request)
+    {
+        $fileName  = "list_arabi_hozouri_test.xlsx" ;
+        $myReader = new Reader();
+        $myWriter = new Writer();
+        $excel = new Excel($myReader , $myWriter);
+        $counter = 0;
+        $excel->load(storage_path($fileName), function (Reader $reader) use (&$counter){
+            $reader->sheets(function (Sheet $sheet) use (&$counter) {
+                $sheet->rows(function (Row $row) use (&$counter) {
+                    // Get a column
+//                    $row->column('نام');
+
+                    // Magic get
+//                    $row->heading_key;
+
+                    // Array access
+//                    $row['heading_key'];
+                    $mobile = $row["mobile"];
+                    $nationalCode = $row["nationalcode"];
+                    $firstName = $row["firstname"];
+                    $lastName = $row["lastname"];
+                    if(strlen($lastName) > 0 )
+                    {
+//                        if(strlen($row["شماره موبایل"]) == 0 || strlen($row["شماره ملی"]) == 0)
+//                        {
+//                            $counter++ ;
+//                            dump($counter);
+//                            dump($row["نام خانوادگی"]);
+//                            if(strlen($row["شماره موبایل"]) > 0 && strlen($row["شماره ملی"]) == 0)
+//                            {
+//                                dump("OK!") ;
+//                            }
+//                        }
+
+                            if(strlen($mobile) > 0 && strlen($nationalCode) > 0)
+                            {
+                                $nationalCodeValidation = $this->validateNationalCode($nationalCode);
+                                $mobileValidation = (strlen($mobile) == 11);
+                                if($nationalCodeValidation && $mobileValidation)
+                                {
+                                    $request = new Request();
+                                    $request->offsetSet("mobile" , $mobile);
+                                    $request->offsetSet("nationalCode" , $nationalCode);
+                                    if(strlen($firstName) > 0 )
+                                        $request->offsetSet("firstName" , $firstName);
+
+                                    if(strlen($lastName) > 0 )
+                                        $request->offsetSet("lastName" , $lastName);
+
+                                    if(isset($row["major"]))
+                                    {
+                                        if($row["major"] == "r")
+                                        {
+                                            $request->offsetSet("major_id" , 1);
+                                        }elseif($row["major"] == "t")
+                                        {
+                                            $request->offsetSet("major_id" , 2);
+                                        }
+                                    }
+                                    if(isset($row["gender"]))
+                                    {
+                                        if($row["gender"] == "پسر")
+                                        {
+                                            $request->offsetSet("gender_id" , 1);
+                                        }elseif($row["gender"] == "دختر")
+                                        {
+                                            $request->offsetSet("gender_id" , 2);
+                                        }
+                                    }
+                                    $request->offsetSet("fromAPI" , true);
+                                    $response =  $this->registerUserAndGiveOrderproduct($request);
+                                    if($response->getStatusCode() == 200)
+                                    {
+                                        $counter++;
+                                        echo "User inserted: ".$lastName." ".$mobile ;
+                                        echo "<br>";
+                                    }
+                                    else
+                                    {
+                                        echo "<span style='color:red'>";
+                                        echo "Error on inserting user: ".$lastName." ".$mobile;
+                                        echo "</span>";
+                                        echo "<br>";
+                                    }
+                                }
+                            }
+                    }
+
+                });
+            });
+        });
+        echo "<span style='color:green'>";
+        echo "Inserted users: ".$counter;
+        echo "</span>";
+        echo "<br>";
+        dd("Done!");
+//        $rows = Excel::load('storage\\exports\\'. $fileName)->get();
+    }
+
     public function checkDisableContentTagBot()
     {
         $disableContents = Educationalcontent::where("enable" , 0)->get();
@@ -4908,191 +5016,223 @@ class HomeController extends Controller
 
     public function registerUserAndGiveOrderproduct(Request $request)
     {
-        $mobile = $request->get("mobile");
-        $nationalCode = $request->get("nationalCode") ;
-        $firstName = $request->get("firstName") ;
-        $lastName = $request->get("lastName") ;
-        $major_id = $request->get("major_id") ;
-        $gender_id = $request->get("gender_id") ;
-        $user = User::where("mobile" , $mobile)
-                    ->where("nationalCode" , $nationalCode)
-                    ->first();
-        if(isset($user))
+        try
         {
-            $flag = false;
-            if(!isset($user->firstName))
+            $mobile = $request->get("mobile");
+            $nationalCode = $request->get("nationalCode") ;
+            $firstName = $request->get("firstName") ;
+            $lastName = $request->get("lastName") ;
+            $major_id = $request->get("major_id") ;
+            $gender_id = $request->get("gender_id") ;
+            $user = User::where("mobile" , $mobile)
+                ->where("nationalCode" , $nationalCode)
+                ->first();
+            if(isset($user))
             {
-                $user->firstName = $firstName;
-                $flag = true;
-            }
-            if(!isset($user->lastName))
-            {
-                $user->lastName = $lastName;
-                $flag = true;
-            }
-            if(!isset($user->major_id))
-            {
-                $user->major_id = $major_id;
-                $flag = true;
-            }
-            if(!isset($user->gender_id))
-            {
-                $user->gender_id = $gender_id;
-                $flag = true;
-            }
-
-            if($flag)
-                $user->update();
-        }
-        else
-        {
-            $registerRequest = new InsertUserRequest();
-            $registerRequest->offsetSet("mobile" ,  $mobile);
-            $registerRequest->offsetSet("nationalCode" , $nationalCode);
-            $registerRequest->offsetSet("firstName" ,  $firstName);
-            $registerRequest->offsetSet("lastName" , $lastName);
-            $registerRequest->offsetSet("password" , $nationalCode);
-            $registerRequest->offsetSet("mobileNumberVerification" , 1);
-            $registerRequest->offsetSet("major_id" , $major_id);
-            $registerRequest->offsetSet("gender_id" , $gender_id);
-            $registerRequest->offsetSet("userstatus_id" , 1);
-            $userController = new \App\Http\Controllers\UserController();
-            $response = $userController->store($registerRequest);
-            $result = json_decode($response->getContent());
-            if($response->getStatusCode() == 200)
-            {
-                $userId = $result->userId;
-                if($userId >0)
+                $flag = false;
+                if(!isset($user->firstName) && isset($firstName))
                 {
-                    $user = User::where("id" , $userId)->first();
-                    $user->notify(new UserRegisterd());
+                    $user->firstName = $firstName;
+                    $flag = true;
+                }
+                if(!isset($user->lastName) && isset($lastName))
+                {
+                    $user->lastName = $lastName;
+                    $flag = true;
+                }
+                if(!isset($user->major_id) && isset($major_id))
+                {
+                    $user->major_id = $major_id;
+                    $flag = true;
+                }
+                if(!isset($user->gender_id) && isset($gender_id))
+                {
+                    $user->gender_id = $gender_id;
+                    $flag = true;
+                }
+
+                if($flag)
+                    $user->update();
+            }
+            else
+            {
+                $registerRequest = new InsertUserRequest();
+                $registerRequest->offsetSet("mobile" ,  $mobile);
+                $registerRequest->offsetSet("nationalCode" , $nationalCode);
+                $registerRequest->offsetSet("firstName" ,  $firstName);
+                $registerRequest->offsetSet("lastName" , $lastName);
+                $registerRequest->offsetSet("password" , $nationalCode);
+//                $registerRequest->offsetSet("mobileNumberVerification" , 1);
+                $registerRequest->offsetSet("major_id" , $major_id);
+                $registerRequest->offsetSet("gender_id" , $gender_id);
+                $registerRequest->offsetSet("userstatus_id" , 1);
+                $userController = new \App\Http\Controllers\UserController();
+                $response = $userController->store($registerRequest);
+                $result = json_decode($response->getContent());
+                if($response->getStatusCode() == 200)
+                {
+                    $userId = $result->userId;
+                    if($userId >0)
+                    {
+                        $user = User::where("id" , $userId)->first();
+                        $user->notify(new UserRegisterd());
+                    }
                 }
             }
-        }
 
-        if(isset($user))
-        {
-            $orderProductIds = [];
-
-            $arabiProduct = 214 ;
-            $hasArabiOrder = $user->orderproducts()
-                ->where("product_id" , $arabiProduct)
-                ->whereHas("order" , function ($q){
-                    $q->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"));
-                    $q->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_PAID")) ;
-                })
-                ->get();
-            if($hasArabiOrder->isEmpty())
+            if(isset($user))
             {
-                array_push($orderProductIds , $arabiProduct);
-            }
+                $orderProductIds = [];
 
-            $shimiProduct = 100;
-            $hasShimiOrder = $user->orderproducts()
-                ->where("product_id" , $shimiProduct)
-                ->whereHas("order" , function ($q){
-                    $q->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"));
-                    $q->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_PAID")) ;
-                })
-                ->get();
-
-            if($hasShimiOrder->isEmpty())
-            {
-                array_push($orderProductIds , $shimiProduct);
-            }
-
-            $giftOrderDone = true;
-            if(!empty($orderProductIds))
-            {
-                $orderController = new OrderController();
-                $storeOrderRequest = new Request();
-                $storeOrderRequest->offsetSet("orderstatus_id", config("constants.ORDER_STATUS_CLOSED") );
-                $storeOrderRequest->offsetSet("paymentstatus_id", config("constants.PAYMENT_STATUS_PAID"));
-                $storeOrderRequest->offsetSet("cost", 0);
-                $storeOrderRequest->offsetSet("costwithoutcoupon", 0);
-                $storeOrderRequest->offsetSet("user_id", $user->id );
-                $giftOrderCompletedAt = Carbon::now()->setTimezone("Asia/Tehran");
-                $storeOrderRequest->offsetSet("completed_at",  $giftOrderCompletedAt);
-                $giftOrder = $orderController->store($storeOrderRequest) ;
-
-                $giftOrderMessage = "ثبت سفارش با موفیت انجام شد";
-                if($giftOrder !== false)
+                $arabiProduct = 214 ;
+                $hasArabiOrder = $user->orderproducts()
+                    ->where("product_id" , $arabiProduct)
+                    ->whereHas("order" , function ($q){
+                        $q->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"));
+                        $q->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_PAID")) ;
+                    })
+                    ->get();
+                if($hasArabiOrder->isEmpty())
                 {
-                    foreach ($orderProductIds as $productId)
-                    {
-                        $request->offsetSet("cost" , 0);
-                        $request->offsetSet("orderId_bhrk" , $giftOrder->id);
-                        $request->offsetSet("userId_bhrk" , $user->id);
-                        $product =  Product::where("id" , $productId)->first();
-                        if(isset($product))
-                        {
-                            $response = $orderController->addOrderproduct($request , $product) ;
-                            $responseStatus = $response->getStatusCode();
-                            $result = json_decode($response->getContent());
-                            if($responseStatus == 200)
-                            {
+                    array_push($orderProductIds , $arabiProduct);
+                }
 
+                $shimiProduct = 100;
+                $hasShimiOrder = $user->orderproducts()
+                    ->where("product_id" , $shimiProduct)
+                    ->whereHas("order" , function ($q){
+                        $q->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"));
+                        $q->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_PAID")) ;
+                    })
+                    ->get();
+
+                if($hasShimiOrder->isEmpty())
+                {
+                    array_push($orderProductIds , $shimiProduct);
+                }
+
+                $giftOrderDone = true;
+                if(!empty($orderProductIds))
+                {
+                    $orderController = new OrderController();
+                    $storeOrderRequest = new Request();
+                    $storeOrderRequest->offsetSet("orderstatus_id", config("constants.ORDER_STATUS_CLOSED") );
+                    $storeOrderRequest->offsetSet("paymentstatus_id", config("constants.PAYMENT_STATUS_PAID"));
+                    $storeOrderRequest->offsetSet("cost", 0);
+                    $storeOrderRequest->offsetSet("costwithoutcoupon", 0);
+                    $storeOrderRequest->offsetSet("user_id", $user->id );
+                    $giftOrderCompletedAt = Carbon::now()->setTimezone("Asia/Tehran");
+                    $storeOrderRequest->offsetSet("completed_at",  $giftOrderCompletedAt);
+                    $giftOrder = $orderController->store($storeOrderRequest) ;
+
+                    $giftOrderMessage = "ثبت سفارش با موفیت انجام شد";
+                    if($giftOrder !== false)
+                    {
+                        foreach ($orderProductIds as $productId)
+                        {
+                            $request->offsetSet("cost" , 0);
+                            $request->offsetSet("orderId_bhrk" , $giftOrder->id);
+                            $request->offsetSet("userId_bhrk" , $user->id);
+                            $product =  Product::where("id" , $productId)->first();
+                            if(isset($product))
+                            {
+                                $response = $orderController->addOrderproduct($request , $product) ;
+                                $responseStatus = $response->getStatusCode();
+                                $result = json_decode($response->getContent());
+                                if($responseStatus == 200)
+                                {
+
+                                }
+                                else
+                                {
+                                    $giftOrderDone = false;
+                                    $giftOrderMessage = "خطا در ثبت آیتم سفارش";
+                                    foreach ($result as $value)
+                                    {
+                                        $giftOrderMessage .= "<br>";
+                                        $giftOrderMessage .= $value;
+                                    }
+                                }
                             }
                             else
                             {
                                 $giftOrderDone = false;
-                                $giftOrderMessage = "خطا در ثبت آیتم سفارش";
-                                foreach ($result as $value)
-                                {
-                                    $giftOrderMessage .= "<br>";
-                                    $giftOrderMessage .= $value;
-                                }
+                                $giftOrderMessage = "خطا در ثبت آیتم سفارش. محصول یافت نشد.";
                             }
                         }
-                        else
-                        {
-                            $giftOrderDone = false;
-                            $giftOrderMessage = "خطا در ثبت آیتم سفارش. محصول یافت نشد.";
-                        }
+
+                    }
+                    else
+                    {
+                        $giftOrderDone = false;
+                        $giftOrderMessage = "خطا در ثبت سفارش";
                     }
 
                 }
                 else
                 {
-                    $giftOrderDone = false;
-                    $giftOrderMessage = "خطا در ثبت سفارش";
+                    $giftOrderMessage = "کاربر مورد نظر محصولات را از قبل داشت";
                 }
-
             }
             else
             {
-                $giftOrderMessage = "کاربر مورد نظر محصولات را از قبل داشت";
+                $giftOrderMessage = "خطا در یافتن کاربر";
             }
-        }
-        else
-        {
-            $giftOrderMessage = "خطا در یافتن کاربر";
-        }
 
-        if($giftOrderDone)
-        {
-            if(isset($user->gender_id))
+            if($giftOrderDone)
             {
-                if($user->gender->name=="خانم")
-                    $gender = "خانم ";
-                elseif($user->gender->name=="آقا")
-                    $gender = "آقای ";
-                else
+                if(isset($user->gender_id))
+                {
+                    if($user->gender->name=="خانم")
+                        $gender = "خانم ";
+                    elseif($user->gender->name=="آقا")
+                        $gender = "آقای ";
+                    else
+                        $gender = "";
+                }else{
                     $gender = "";
-            }else{
-                $gender = "";
+                }
+                $message = $gender.$user->getfullName()."\n";
+                $message .= "همایش طلایی عربی و همایش حل مسائل شیمی به فایل های شما افزوده شد . دانلود در:";
+                $message .= "\n";
+                $message .= "sanatisharif.ir/asset/";
+                $user->notify(new GeneralNotice($message));
+                session()->put("success" , $giftOrderMessage);
             }
-            $message = $gender.$user->getfullName()."\n";
-            $message .= "همایش طلایی عربی و همایش حل مسائل شیمی به فایل های شما افزوده شد . دانلود در:";
-            $message .= "\n";
-            $message .= "sanatisharif.ir/asset/";
-            $user->notify(new GeneralNotice($message));
-            session()->put("success" , $giftOrderMessage);
-        }
-        else
-            session()->put("error" , $giftOrderMessage);
+            else
+                session()->put("error" , $giftOrderMessage);
 
-        return redirect()->back();
+            if($request->has("fromAPI"))
+            {
+                if($giftOrderDone)
+                {
+                    return $this->response
+                        ->setStatusCode(200);
+                }
+                else
+                {
+                    return $this->response
+                        ->setStatusCode(503);
+                }
+            }
+            else
+            {
+                return redirect()->back();
+            }
+        }
+        catch (\Exception    $e) {
+            $message = "unexpected error";
+            return $this->response
+                ->setStatusCode(500)
+                ->setContent([
+                    "message"=>$message ,
+                    "error"=>$e->getMessage() ,
+                    "line"=>$e->getLine() ,
+                    "file"=>$e->getFile()
+                ]);
+        }
+
+
     }
 
 }
