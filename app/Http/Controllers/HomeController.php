@@ -5097,7 +5097,7 @@ class HomeController extends Controller
                     if($userId >0)
                     {
                         $user = User::where("id" , $userId)->first();
-//                        $user->notify(new UserRegisterd());
+                        $user->notify(new UserRegisterd());
                     }
                 }
             }
@@ -5218,7 +5218,7 @@ class HomeController extends Controller
                 $message .= "همایش طلایی عربی و همایش حل مسائل شیمی به فایل های شما افزوده شد . دانلود در:";
                 $message .= "\n";
                 $message .= "sanatisharif.ir/asset/";
-//                $user->notify(new GeneralNotice($message));
+                $user->notify(new GeneralNotice($message));
                 session()->put("success" , $giftOrderMessage);
             }
             else
