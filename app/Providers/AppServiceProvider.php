@@ -7,6 +7,7 @@ use App\Contentset;
 use App\Contenttype;
 use App\Product;
 use App\Productfiletype;
+use App\Traits\UserCommon;
 use App\Wallettype;
 use App\Websitesetting;
 use Illuminate\Database\QueryException;
@@ -21,6 +22,7 @@ use Laravel\Horizon\Horizon;
 
 class AppServiceProvider extends ServiceProvider
 {
+    use UserCommon;
     /**
      * Bootstrap any application services.
      *
@@ -44,22 +46,7 @@ class AppServiceProvider extends ServiceProvider
         Validator::extend('validate', function($attribute, $value, $parameters, $validator) {
             if(strcmp($parameters[0],"nationalCode")==0)
             {
-                $flag = false;
-                if (!preg_match('/^[0-9]{10}$/', $value))
-                    $flag = false;
-
-                for ($i = 0; $i < 10; $i++)
-                    if (preg_match('/^' . $i . '{10}$/', $value))
-                        $flag = false;
-
-                for ($i = 0, $sum = 0; $i < 9; $i++)
-                    $sum += ((10 - $i) * intval(substr($value, $i, 1)));
-
-                $ret = $sum % 11;
-                $parity = intval(substr($value, 9, 1));
-                if (($ret < 2 && $ret == $parity) || ($ret >= 2 && $ret == 11 - $parity))
-                    $flag = true;
-
+                $flag = $this->validateNationalCode($value);
                 return $flag;
             }
             return true;
