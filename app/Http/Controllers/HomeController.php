@@ -4130,14 +4130,15 @@ class HomeController extends Controller
 
     public function excelBot(Request $request)
     {
-        $fileName  = "list_arabi_hozouri_test.xlsx" ;
+        $fileName  = "list_arabi_hozouri.xlsx" ;
         $myReader = new Reader();
         $myWriter = new Writer();
         $excel = new Excel($myReader , $myWriter);
         $counter = 0;
         $excel->load(storage_path($fileName), function (Reader $reader) use (&$counter){
             $reader->sheets(function (Sheet $sheet) use (&$counter) {
-                $sheet->rows(function (Row $row) use (&$counter) {
+                $sheetName = $sheet->name();
+                $sheet->rows(function (Row $row) use (&$counter , $sheetName) {
                     // Get a column
 //                    $row->column('نام');
 
@@ -4150,7 +4151,7 @@ class HomeController extends Controller
                     $nationalCode = $row["nationalcode"];
                     $firstName = $row["firstname"];
                     $lastName = $row["lastname"];
-                    if(strlen($lastName) > 0 )
+                    if(strlen($lastName) > 0 && $lastName!="lastname")
                     {
 //                        if(strlen($row["شماره موبایل"]) == 0 || strlen($row["شماره ملی"]) == 0)
 //                        {
@@ -4214,6 +4215,27 @@ class HomeController extends Controller
                                         echo "<br>";
                                     }
                                 }
+                                else
+                                {
+                                    $fault = "";
+                                    if(!$nationalCodeValidation)
+                                        $fault .= " wrong nationalCode ";
+
+                                    if(!$mobile)
+                                        $fault .= " wrong mobile ";
+
+                                    echo "<span style='color:orange'>";
+                                    echo "Warning! user wrong information: ".$lastName  . $fault. " ,in sheet : ".$sheetName;
+                                    echo "</span>";
+                                    echo "<br>";
+                                }
+                            }
+                            else
+                            {
+                                echo "<span style='color:orange'>";
+                                echo "Warning! user incomplete information: ".$lastName . " ,in sheet : ".$sheetName;
+                                echo "</span>";
+                                echo "<br>";
                             }
                     }
 
@@ -5075,7 +5097,7 @@ class HomeController extends Controller
                     if($userId >0)
                     {
                         $user = User::where("id" , $userId)->first();
-                        $user->notify(new UserRegisterd());
+//                        $user->notify(new UserRegisterd());
                     }
                 }
             }
@@ -5196,7 +5218,7 @@ class HomeController extends Controller
                 $message .= "همایش طلایی عربی و همایش حل مسائل شیمی به فایل های شما افزوده شد . دانلود در:";
                 $message .= "\n";
                 $message .= "sanatisharif.ir/asset/";
-                $user->notify(new GeneralNotice($message));
+//                $user->notify(new GeneralNotice($message));
                 session()->put("success" , $giftOrderMessage);
             }
             else
