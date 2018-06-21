@@ -64,26 +64,8 @@
                                 </span>
                         </div>
                         <div class="col-md-6">
-                                {!! Form::text('hd', null, ['class' => 'form-control', 'placeholder'=>'لینک HD', 'dir'=>'ltr']) !!}
+                                {!! Form::text('fileName', null, ['class' => 'form-control', 'placeholder'=>'نام کامل فایل', 'dir'=>'ltr']) !!}
                                 <span class="help-block" >
-                                    <strong></strong>
-                                </span>
-                        </div>
-                        <div class="col-md-6">
-                                {!! Form::text('hq', null, ['class' => 'form-control', 'placeholder'=>'لینک hq', 'dir'=>'ltr']) !!}
-                                <span class="help-block" >
-                                    <strong></strong>
-                                </span>
-                        </div>
-                        <div class="col-md-6">
-                                {!! Form::text('240p', null, ['class' => 'form-control', 'placeholder'=>'لینک 240p', 'dir'=>'ltr']) !!}
-                                <span class="help-block" >
-                                    <strong></strong>
-                                </span>
-                        </div>
-                        <div class="col-md-6">
-                            {!! Form::text('thumbnail', null, ['class' => 'form-control', 'placeholder'=>'لینک تامبنیل' , 'dir'=>'ltr']) !!}
-                            <span class="help-block" >
                                     <strong></strong>
                                 </span>
                         </div>
