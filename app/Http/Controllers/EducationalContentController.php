@@ -889,7 +889,7 @@ public function store(InsertEducationalContentRequest $request)
              }
 
              if(!isset($order))
-                 $order = $lastContent->pivot->order;
+                 $order = $lastContent->pivot->order + 1;
              $newContent->contentsets()->attach($contentset->id , ["order"=>$order]);
 
              return redirect(action("EducationalContentController@edit" , $newContent->id));
