@@ -659,6 +659,7 @@ class OrderproductController extends Controller
             {
                 $child->delete();
             }
+            Cache::tags('bon')->flush();
             return $this->response->setStatusCode(200)->setContent(["message"=>"محصول سفارش با موفقیت حذف شد!"]);
         }
         else
