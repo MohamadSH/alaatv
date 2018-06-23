@@ -302,8 +302,7 @@ class OrderproductController extends Controller
                         $isFreeFlag = ($simpleProduct->isFree || ($simpleProduct->hasParents() && $simpleProduct->parents()->first()->isFree)) ;
                         if(!$isFreeFlag &&
                             $simpleProduct->basePrice != 0 &&
-                            $simpleProduct->basePrice != 0 &&
-                            !$request->has("withoutBon"))
+                            $simpleProduct->basePrice != 0 )
                         {
                             /**
                              *  User bon discount for this orderproduct
