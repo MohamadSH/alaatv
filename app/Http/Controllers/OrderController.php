@@ -1993,9 +1993,14 @@ class OrderController extends Controller
             $cost = $newOpenOrder->totalCost();
 
             if($updateFlag)
+            {
                 return $this->response->setStatusCode(200)->setContent(["cost"=>$cost]);
+                Cache::tags('bon')->flush();
+            }
             else
+            {
                 return $this->response->setStatusCode(503)->setContent(["message"=>"خطای پایگاه داده"]);
+            }
         }
 
         return $this->response->setStatusCode(503)->setContent(["message"=>"خطای غیر منتظره"]);
