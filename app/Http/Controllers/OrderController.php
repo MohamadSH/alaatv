@@ -1994,8 +1994,8 @@ class OrderController extends Controller
 
             if($updateFlag)
             {
-                return $this->response->setStatusCode(200)->setContent(["cost"=>$cost]);
                 Cache::tags('bon')->flush();
+                return $this->response->setStatusCode(200)->setContent(["cost"=>$cost]);
             }
             else
             {
