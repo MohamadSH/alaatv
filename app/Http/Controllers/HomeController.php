@@ -106,7 +106,7 @@ class HomeController extends Controller
     {
         try
         {
-            $users = User::whereHas("orderproducts" , function ($q)
+            /*$users = User::whereHas("orderproducts" , function ($q)
             {
                 $q->whereIn("product_id" , [214 ,223])
                     ->whereHas('order' , function ($q2){
@@ -195,7 +195,7 @@ class HomeController extends Controller
             echo "Processed users: ".$counter;
             echo "</span>";
             echo "<br>";
-            dd("Done");
+            dd("Done");*/
         }
         catch (\Exception    $e) {
             $message = "unexpected error";
