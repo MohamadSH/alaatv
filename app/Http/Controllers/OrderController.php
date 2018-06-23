@@ -1928,6 +1928,7 @@ class OrderController extends Controller
 
                     if(isset($forceUser))
                         $request->offsetSet("userId_bhrk" ,  $userId);
+                    $request->offsetSet("withoutBon" ,  true);
                     $orderproductController = new OrderproductController();
                     $orderproductController->store($request) ;
                 }
