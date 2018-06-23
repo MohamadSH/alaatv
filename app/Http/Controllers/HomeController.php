@@ -104,6 +104,110 @@ class HomeController extends Controller
 
     public function debug(Request $request)
     {
+        try
+        {
+            $users = User::whereHas("orderproducts" , function ($q)
+            {
+                $q->whereIn("product_id" , [214 ,223])
+                    ->whereHas('order' , function ($q2){
+                        $q2->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
+                            ->where('paymentstatus_id' , config("constants.PAYMENT_STATUS_PAID"));
+                    });
+            })
+                ->whereDoesntHave("orderproducts" , function ($q3){
+                    $q3->where("product_id" , 100)
+                        ->whereHas('order' , function ($q2){
+                            $q2->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
+                                ->where('paymentstatus_id' , config("constants.PAYMENT_STATUS_PAID"));
+                        });
+                })
+                ->get();
+
+            $users = User::where("id" , 1)->get();
+            echo "<span style='color:green'>";
+            echo "Available users: ".$users->count();
+            echo "</span>";
+            echo "<br>";
+            dump($users->pluck("id")->toArray());
+            $counter = 0 ;
+            $orderProductIds = [100];
+            foreach($users as $user)
+            {
+                $orderController = new OrderController();
+                $storeOrderRequest = new Request();
+                $storeOrderRequest->offsetSet("orderstatus_id", config("constants.ORDER_STATUS_CLOSED") );
+                $storeOrderRequest->offsetSet("paymentstatus_id", config("constants.PAYMENT_STATUS_PAID"));
+                $storeOrderRequest->offsetSet("cost", 0);
+                $storeOrderRequest->offsetSet("costwithoutcoupon", 0);
+                $storeOrderRequest->offsetSet("user_id", $user->id );
+                $giftOrderCompletedAt = Carbon::now()->setTimezone("Asia/Tehran");
+                $storeOrderRequest->offsetSet("completed_at",  $giftOrderCompletedAt);
+                $giftOrder = $orderController->store($storeOrderRequest) ;
+
+                if($giftOrder !== false)
+                {
+                    foreach ($orderProductIds as $productId)
+                    {
+                        $request->offsetSet("cost" , 0);
+                        $request->offsetSet("orderId_bhrk" , $giftOrder->id);
+                        $request->offsetSet("userId_bhrk" , $user->id);
+                        $product =  Product::where("id" , $productId)->first();
+                        if(isset($product))
+                        {
+                            $response = $orderController->addOrderproduct($request , $product) ;
+                            $responseStatus = $response->getStatusCode();
+                            $result = json_decode($response->getContent());
+                            if($responseStatus == 200)
+                            {
+                                $counter++;
+//                                $message = "آلایی عزیز همایش حل مسائل شیمی به عنوان هدیه به وفاداران آلاء به فایل های شما افزوده شد";
+//                                $message .= "\n";
+//                                $message .= "sanatisharif.ir/asset";
+//                                $user->notify(new GeneralNotice($message));
+                            }
+                            else
+                            {
+                                echo "<span style='color:red'>";
+                                echo "Error in inserting order, user: ".$user->id;
+                                echo "</span>";
+                                echo "<br>";
+                            }
+                        }
+                        else
+                        {
+                            echo "<span style='color:red'>";
+                            echo "Error in inserting orderproduct, user: ".$user->id;
+                            echo "</span>";
+                            echo "<br>";
+                        }
+                    }
+
+                }
+                else
+                {
+                    echo "<span style='color:red'>";
+                    echo "Error in creating order, user: ".$user->id;
+                    echo "</span>";
+                    echo "<br>";
+                }
+            }
+            echo "<span style='color:green'>";
+            echo "Processed users: ".$counter;
+            echo "</span>";
+            echo "<br>";
+            dd("Done");
+        }
+        catch (\Exception    $e) {
+            $message = "unexpected error";
+            return $this->response
+                ->setStatusCode(503)
+                ->setContent([
+                    "message"=>$message ,
+                    "error"=>$e->getMessage() ,
+                    "line"=>$e->getLine() ,
+                    "file"=>$e->getFile()
+                ]);
+        }
         return view("errors.404");
     }
     public function __construct()
