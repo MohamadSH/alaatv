@@ -36,8 +36,8 @@ class EditProductRequest extends FormRequest
             'image' => 'image|mimes:jpeg,jpg,png',
             'file' => 'file',
             'attributeset_id' => 'required|exists:attributesets,id',
-            'bonPlus' => 'numeric',
-            'bonDiscount' => 'numeric'
+            'bonPlus' => 'nullable|numeric',
+            'bonDiscount' => 'nullable|numeric'
         ];
     }
 
