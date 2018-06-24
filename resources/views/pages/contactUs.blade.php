@@ -100,7 +100,7 @@
                 </div>
             </div>
         </div>
-        <div id="gmapbg" class="c-content-contact-1-gmap" style="height: 615px;"></div>
+        <div id="" class="c-content-contact-1-gmap" style="height: 615px;background-image: url(/img/extra/contact_us_background.png);background-size: cover;"></div>
     </div>
     <div class="c-content-feedback-1 c-option-1">
         <div class="row">
