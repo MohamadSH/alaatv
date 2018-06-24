@@ -2129,6 +2129,23 @@ class HomeController extends Controller
             ->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_PAID"))
             ->orderBy("completed_at" , "DESC")
             ->get();
+        $monthToPeriodConvert = collect([
+            ["month"=>"خرداد", "periodBegin"=>"2018-05-21" , "periodEnd"=>"2018-06-22"],
+            ["month"=>"تیر", "periodBegin"=>"2018-06-22" , "periodEnd"=>"2018-07-23"],
+            ["month"=>"مرداد", "periodBegin"=>"2018-07-23" , "periodEnd"=>"2018-08-23"],
+            ["month"=>"شهریور", "periodBegin"=>"2018-08-23" , "periodEnd"=>"2018-09-23"],
+        ]);
+        $currentGregorianDate = Carbon::now()->timezone('Asia/Tehran');
+        $delimiter = "/";
+        $currentJalaliDate = $this->gregorian_to_jalali($currentGregorianDate->year , $currentGregorianDate->month , $currentGregorianDate->day , $delimiter);
+        $currentJalaliDateSplit = explode($delimiter , $currentJalaliDate );
+        $currentJalaliYear = $currentJalaliDateSplit[0] ;
+        $currentJalaliMonth = $currentJalaliDateSplit[1];
+        $currentJalaliDay = $currentJalaliDateSplit[2];
+        $currentJalaliMonthString = $this->convertToJalaliMonth($currentJalaliMonth);
+        $currentJalaliMonthDays = $this->getJalaliMonthDays($currentJalaliMonthString);
+
+        $currentJalaliDateString = $currentJalaliDay." ".$currentJalaliMonthString;
 
 
         /** THIS WEEK/TODAY LATEST DONATES **/
@@ -2164,7 +2181,14 @@ class HomeController extends Controller
 
         /** CURRENT MONTH MAXIMUM DONATES **/
         $latestMax = 3 ;
-        $date = Carbon::createMidnightDate("2018" , "05" , "21");
+        $today = $monthToPeriodConvert->where("month" , $currentJalaliMonthString)
+                                        ->first();
+        $today = $today["periodBegin"] ;
+        $today = explode("-" , $today);
+        $todayYear = $today[0];
+        $todayMonth = $today[1];
+        $todayDay = $today[2];
+        $date = Carbon::createMidnightDate($todayYear , $todayMonth , $todayDay);
         $thisMonthDonates = $orders->where("completed_at" , ">=" , $date )
             ->pluck("id")
             ->toArray();
@@ -2197,17 +2221,7 @@ class HomeController extends Controller
 
         /** DONATES CHART **/
 
-        $currentGregorianDate = Carbon::now()->timezone('Asia/Tehran');
-        $delimiter = "/";
-        $currentJalaliDate = $this->gregorian_to_jalali($currentGregorianDate->year , $currentGregorianDate->month , $currentGregorianDate->day , $delimiter);
-        $currentJalaliDateSplit = explode($delimiter , $currentJalaliDate );
-        $currentJalaliYear = $currentJalaliDateSplit[0] ;
-        $currentJalaliMonth = $currentJalaliDateSplit[1];
-        $currentJalaliDay = $currentJalaliDateSplit[2];
-        $currentJalaliMonthString = $this->convertToJalaliMonth($currentJalaliMonth);
-        $currentJalaliMonthDays = $this->getJalaliMonthDays($currentJalaliMonthString);
 
-        $currentJalaliDateString = $currentJalaliDay." ".$currentJalaliMonthString;
 
         $allMonths = [
             "مهر",
@@ -2227,12 +2241,7 @@ class HomeController extends Controller
         $months = array_splice($allMonths , 0 , $currentMonthKey + 1) ;
 
         $chartData = collect();
-        $monthToPeriodConvert = collect([
-            ["month"=>"خرداد", "periodBegin"=>"2018-05-21" , "periodEnd"=>"2018-06-22"],
-            ["month"=>"تیر", "periodBegin"=>"2018-06-22" , "periodEnd"=>"2018-07-23"],
-            ["month"=>"مرداد", "periodBegin"=>"2018-07-23" , "periodEnd"=>"2018-08-23"],
-            ["month"=>"شهریور", "periodBegin"=>"2018-08-23" , "periodEnd"=>"2018-09-23"],
-        ]);
+
         $totalSpend = 0;
         $totalIncome = 0;
         $MONTH_SPEND = 25000000;
@@ -2329,7 +2338,7 @@ class HomeController extends Controller
 
         /** END **/
         return view("pages.donate" , compact("latestDonors" , "maxDonors" ,"months"
-            , "chartData" , "totalSpend" , "totalIncome" , "currentJalaliDateString"));
+            , "chartData" , "totalSpend" , "totalIncome" , "currentJalaliDateString" , "currentJalaliMonthString"));
     }
 
     function siteMap(Request $request)
