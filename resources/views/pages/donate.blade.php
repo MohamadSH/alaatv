@@ -64,7 +64,7 @@
             </div><!-- .recent-donators -->
 
             <div class="best-donators">
-                <h3>بیشترین کمک های خرداد</h3>
+                <h3>بیشترین کمک های {{$currentJalaliMonthString}}</h3>
                 @if($maxDonors->isEmpty())
                     <div class="hero" style="margin-bottom: 200px"> <h2>کمکی نشده</h2></div>
                 @else
