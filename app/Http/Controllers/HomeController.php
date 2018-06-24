@@ -27,6 +27,7 @@ use App\Notifications\GeneralNotice;
 use App\Notifications\GiftGiven;
 use App\Notifications\UserRegisterd;
 use App\Order;
+use App\Orderproduct;
 use App\Orderstatus;
 use App\Paymentmethod;
 use App\Paymentstatus;
@@ -2192,8 +2193,12 @@ class HomeController extends Controller
         $thisMonthDonates = $orders->where("completed_at" , ">=" , $date )
             ->pluck("id")
             ->toArray();
-        $maxDonates = Transaction::whereIn("order_id" , $thisMonthDonates)
-            ->where("transactionstatus_id" , config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
+        $maxDonates = Orderproduct::whereIn("order_id" , $thisMonthDonates)
+            ->where(function ($q){
+                $q->where("orderproducttype_id" , Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
+                    ->orWhereNull("orderproducttype_id");
+            })
+            ->whereIn("product_id" , $donateProductArray )
             ->orderBy("cost" , "DESC")
             ->take($latestMax)
             ->get();
