@@ -252,9 +252,9 @@ trait Helper
         return ["rawPassword"=>$generatedPassword , "hashPassword"=>$generatedPasswordHash];
     }
 
-    public function timeFilterQuery($list, $sinceDate, $tillDate, $by = 'created_at'){
-        $sinceDate = Carbon::parse($sinceDate)->format('Y-m-d') . " 00:00:00";
-        $tillDate = Carbon::parse($tillDate)->format('Y-m-d') . " 23:59:59";
+    public function timeFilterQuery($list, $sinceDate, $tillDate, $by = 'created_at' , $sinceTime = "00:00:00" , $tillTime = "23:59:59"){
+        $sinceDate = Carbon::parse($sinceDate)->format('Y-m-d') ." ". $sinceTime;
+        $tillDate = Carbon::parse($tillDate)->format('Y-m-d') ." ". $tillTime;
         $list = $list->whereBetween($by, [$sinceDate, $tillDate]);
         return $list;
     }
