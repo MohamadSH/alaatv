@@ -223,7 +223,9 @@ class Educationalcontent extends Model
                 $contenSets = $c->contentsets->where("pivot.isDefault" , 1)->first();
                 if(isset($contenSets))
                 {
-                    $sessionNumber = $contenSets->pivot->order;
+                    $order = $contenSets->pivot->order;
+                    if($order > 0)
+                        $sessionNumber = $contenSets->pivot->order;
                 }
                 if (isset($c->contenttype)) {
                     $displayName .=$c->contenttype->displayName." ";
