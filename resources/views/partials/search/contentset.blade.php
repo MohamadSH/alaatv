@@ -8,13 +8,17 @@
 
                                 <div class="col-lg-4 col-md-4 col-sd-4 col-xs-12">
                                     {{--<i class="fa fa-list-alt"></i>--}}
-                                    <a href="@if($contentset->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->isNotEmpty()){{action("EducationalContentController@show", $contentset->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id)}} @else #@endif">
+                                    <a href="@if($contentset->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->isNotEmpty()){{action("EducationalContentController@show", $contentset->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id)}}
+                                            @elseif($contentset->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_PAMPHLET") )->where("enable" , 1)->isNotEmpty()) {{action("EducationalContentController@show", $contentset->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_PAMPHLET") )->where("enable" , 1)->sortBy("pivot.order")->last()->id)}}
+                                            @else #@endif">
                                         <img src="{{(isset($contentset->photo))?$contentset->photo:"https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/".$contentset->id.".jpg"}}" class="contentset-thumbnail">
                                     </a>
                                 </div>
                                 <div class="col-lg-8 col-md-8 col-sd-8 col-xs-12 margin-top-10">
                                     <div class="row">
-                                        <a href="@if($contentset->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->isNotEmpty()){{action("EducationalContentController@show", $contentset->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id)}} @else #@endif">
+                                        <a href="@if($contentset->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->isNotEmpty()){{action("EducationalContentController@show", $contentset->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id)}}
+                                        @elseif($contentset->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_PAMPHLET") )->where("enable" , 1)->isNotEmpty()) {{action("EducationalContentController@show", $contentset->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_PAMPHLET") )->where("enable" , 1)->sortBy("pivot.order")->last()->id)}}
+                                        @else #@endif">
                                             {{$contentset->name}}
                                         </a>
                                         {{--<div>--}}
