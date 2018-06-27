@@ -557,28 +557,22 @@ class OrderController extends Controller
         /**
          *  obtaining orderproducts for checkout
          */
-        $myOrderproducts = collect();
+        $myOrderproducts = array();
         if(isset($productsId))
             foreach ($orders as $order)
             {
-                    $checkoutOrderproducts = $order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"));
-                    if(in_array(0, $productsId))
+                    $checkoutOrderproducts = $order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
+                                                    ->where(function ($q) {
+                                                        $q->where("checkoutstatus_id" , 1)
+                                                            ->orWhereNull("checkoutstatus_id") ;
+                                                    });
+                    if(!in_array(0, $productsId))
                     {
-                        foreach ($checkoutOrderproducts->get() as $item)
-                        {
-                            $myOrderproducts->push($item);
-                        }
-                    }else
-                    {
-                        foreach ($checkoutOrderproducts->whereHas("product", function ($q) use ($productsId) {
-                            $q->whereIn("id", $productsId)->where(function ($q2){
-                                $q2->where("checkoutstatus_id" , 1)->orWhereNull("checkoutstatus_id") ;
-                            });
-                        })->get() as $item)
-                        {
-                            $myOrderproducts->push($item);
-                        }
+                        $checkoutOrderproducts->whereIn("product_id", $productsId)
+                                                        ->get();
                     }
+
+                    $myOrderproducts = array_merge($myOrderproducts , $checkoutOrderproducts->pluck("id")->toArray());
             }
         $result =  array(
             'index' => View::make("order.index", compact('orders' , 'orderstatuses'))->render()
