@@ -679,14 +679,11 @@ class OrderproductController extends Controller
     {
         $orderproductIds = $request->get("orderproducts");
         $newCheckoutstatus_id = $request->get("checkoutStatus");
-        foreach ($orderproductIds as $orderproductId)
+        $orderproducts = Orderproduct::whereIn("id" , $orderproductIds)->get() ;
+        foreach ($orderproducts as $orderproduct)
         {
-            $orderproduct = Orderproduct::where("id" , $orderproductId["id"])->get()->first() ;
-            if(isset($orderproduct))
-            {
                 $orderproduct->checkoutstatus_id = $newCheckoutstatus_id ;
                 $orderproduct->update();
-            }
         }
         return $this->response->setStatusCode(200);
     }
