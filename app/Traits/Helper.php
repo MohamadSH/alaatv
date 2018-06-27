@@ -252,14 +252,17 @@ trait Helper
         return ["rawPassword"=>$generatedPassword , "hashPassword"=>$generatedPasswordHash];
     }
 
-    public function timeFilterQuery($list, $sinceDate, $tillDate, $by = 'created_at' , $sinceTime = "00:00:00" , $tillTime = "23:59:59"){
+    public function timeFilterQuery($list, $sinceDate, $tillDate, $by = 'created_at' , $sinceTime = "00:00:00" , $tillTime = "23:59:59" , $timeZoneConvert = true){
         $sinceDate = Carbon::parse($sinceDate)->format('Y-m-d') ." ". $sinceTime;
         $tillDate = Carbon::parse($tillDate)->format('Y-m-d') ." ". $tillTime;
 
-        $sinceDate = Carbon::parse($sinceDate , "Asia/Tehran");
-        $sinceDate->setTimezone('UTC');
-        $tillDate = Carbon::parse($tillDate , "Asia/Tehran");
-        $tillDate->setTimezone('UTC');
+        if($timeZoneConvert)
+        {
+            $sinceDate = Carbon::parse($sinceDate , "Asia/Tehran");
+            $sinceDate->setTimezone('UTC');
+            $tillDate = Carbon::parse($tillDate , "Asia/Tehran");
+            $tillDate->setTimezone('UTC');
+        }
         $list = $list->whereBetween($by, [$sinceDate, $tillDate]);
         return $list;
     }

@@ -197,7 +197,7 @@ class OrderController extends Controller
         $completedTimeEnable = Input::get('completedTimeEnable');
         if(strlen($completedSinceDate)>0 && strlen($completedTillDate)>0 && isset($completedTimeEnable))
         {
-            $orders = $this->timeFilterQuery($orders, $completedSinceDate, $completedTillDate, 'completed_at');
+            $orders = $this->timeFilterQuery($orders, $completedSinceDate, $completedTillDate, 'completed_at', $sinceTime = "00:00:00" , $tillTime = "23:59:59" , false);
         }
 
         $firstName = trim(Input::get('firstName'));
