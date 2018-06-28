@@ -759,7 +759,7 @@ class UserController extends Controller
             $userCompletion = (int)$user->completion();
             return view("user.profile.profile", compact("genders", "majors", "sideBarMode", "user" , "userPoints" ,
                 "exchangeAmount" , "userLottery" ,"prizeCollection" , "hasCompleteProfile" , "userCompletion" , "lotteryRank" , "lottery" , "lotteryMessage" ,
-                "hasHamayeshTalaiArabi" , "hasHamayeshHozouriArabi"));
+                "hasHamayeshTalaiArabi" , "hasHamayeshHozouriArabi" , "lotteryName"));
         } else {
             abort(403);
         }
