@@ -62,7 +62,7 @@
             @if(isset($userPoints) && $userPoints)
                 <div class="alert alert-block bg-dark bg-font-purple fade in">
                     <button type="button" class="close" data-dismiss="alert"></button>
-                    <h4 class="alert-heading text-center" style="line-height: normal;">برای انصرف از قرعه کشی عید فطر ، روی دکمه زیر کلیک کنید</h4>
+                    <h4 class="alert-heading text-center" style="line-height: normal;">برای انصرف از قرعه کشی {{$lotteryName}} ، روی دکمه زیر کلیک کنید</h4>
                     <h4 class="alert-heading text-center" style="line-height: normal;">در صورت انصراف مبلغ {{(isset($exchangeAmount))?number_format($exchangeAmount):""}} تومان اعتبار هدیه به رسم یاد بود به شما اهدا خواهد شد.</h4>
                     <p style="text-align: center;">
                         <button class="btn mt-sweetalert" data-title="آیا از انصراف خود مطمئنید؟" data-type="warning" data-allow-outside-click="true" data-show-confirm-button="true" data-show-cancel-button="true" data-cancel-button-class="btn-danger" data-cancel-button-text="خیر انصراف نمی دهم" data-confirm-button-text="بله انصراف می دهم" data-confirm-button-class="btn-info" style="background: #d6af18;">انصراف از قرعه کشی و دریافت مبلغ هدیه</button>
