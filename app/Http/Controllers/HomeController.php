@@ -809,6 +809,7 @@ class HomeController extends Controller
                 "ریاضی_انسانی" => collect([
                     ["index"=>"همه دبیرها" , "firstName"=>"" , "value"=>""],
                     ["lastName"=>"محمد زاده" , "firstName"=>"خسرو" , "value"=>"خسرو_محمد_زاده"],
+                    ["lastName"=>"امینی راد" , "firstName"=>"مهدی", "value"=>"مهدی_امینی_راد"],
                 ])->sortBy("lastName"),
                 "عربی" => collect([
                     ["index"=>"همه دبیرها" , "firstName"=>"" , "value"=>""],
@@ -3916,7 +3917,7 @@ class HomeController extends Controller
     {
         abort(404);
         /** Points for Hamayesh Talai lottery */
-        $hamayeshTalai = [ 210 , 211 ,212 ,213 , 214,216,217,218,219,220,221, 222 ];
+//        $hamayeshTalai = [ 210 , 211 ,212 ,213 , 214,216,217,218,219,220,221, 222 ];
 //
 //        $orderproducts = Orderproduct::whereHas("order" , function ($q) use ($hamayeshTalai){
 //                                $q->whereIn("orderstatus_id" , [2,5,7])
@@ -3980,41 +3981,45 @@ class HomeController extends Controller
 
 
         /** Points for Eide Fetr lottery */
-//        $transactions = Transaction::whereBetween("completed_at" ,  ["2018-05-24 20:00:00" , "2018-06-14 21:30:00"])
-//                                    ->where("transactionstatus_id" , config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
-//                                    ->where("cost" , ">" , 0)
-//                                    ->get();
-//        $users = collect();
+        $transactions = Transaction::whereBetween("completed_at" ,  ["2018-06-14 21:30:00" , "2018-06-30 19:30:00"])
+                                    ->where("transactionstatus_id" , config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
+                                    ->where("cost" , ">" , 0)
+                                    ->get();
+        $users = collect();
+        $amountUnit = 40000;
         $successCounter = 0;
         $failedCounter = 0 ;
         $warningCounter = 0 ;
-//        foreach ($transactions as $transaction)
-//        {
-//            $user = $transaction->order->user;
-//            if(isset($user))
-//            {
-//                $userRecord = $users->where("user_id" , $user->id)->first();
-//                if(isset($userRecord))
-//                {
-//                    $userRecord["totalAmount"] += $transaction->cost;
-//                }
-//                else
-//                {
-//                    $users->push([
-//                        "user_id" => $user->id,
-//                        "totalAmount" => $transaction->cost ,
-//                        "point" => 1
-//                    ]);
-//                }
-//            }
-//            else
-//            {
-//                dump("User was not found for transaction ".$transaction->id);
-//                $warningCounter++;
-//            }
-//        }
-//
-//        $users = $users->where("totalAmount"  , ">" , 100000);
+        foreach ($transactions as $transaction)
+        {
+            $user = $transaction->order->user;
+            if(isset($user))
+            {
+                $userRecord = $users->where("user_id" , $user->id)->first();
+                if(isset($userRecord))
+                {
+                    $userRecord["totalAmount"] += $transaction->cost;
+                    $point = (int)($userRecord["totalAmount"] / $amountUnit);
+                    $userRecord["point"] = $point;
+                }
+                else
+                {
+                    $point = (int)($transaction->cost / $amountUnit);
+                    $users->push([
+                        "user_id" => $user->id,
+                        "totalAmount" => $transaction->cost ,
+                        "point" => $point
+                    ]);
+                }
+            }
+            else
+            {
+                dump("User was not found for transaction ".$transaction->id);
+                $warningCounter++;
+            }
+        }
+
+        $users = $users->where("totalAmount"  , ">=" , $amountUnit);
 
 //        $userbons = Userbon::where("bon_id" , 2)
 //                            ->where("created_at" , ">" , "2018-05-24 00:00:00")
@@ -4045,205 +4050,36 @@ class HomeController extends Controller
 //                }
 //            }
 //        }
-        $pointUnit = 150000;
-        $userbons = Userbon::where("bon_id" , 2)
-            ->where("updated_at" ,">=" , "2018-06-17 00:00:00")
-            ->get();
 
-        foreach ($userbons as $userbon)
+        $bonName = config("constants.BON2");
+        $bon = Bon::where("name" , $bonName)->first();
+        if(!isset($bon))
+            dd("Bon not found");
+
+        dump("Number of available users: ".$users->count());
+        foreach ($users as $userPoint)
         {
-            $user = $userbon->user;
-            $points = 0 ;
-            if(!isset($user))
+            $userId = $userPoint["user_id"] ;
+            $points = $userPoint["point"];
+            $userBon = new Userbon();
+            $userBon->bon_id = $bon->id ;
+            $userBon->user_id = $userId ;
+            $userBon->totalNumber = $points ;
+            $userBon->userbonstatus_id = 1 ;
+            $bonResult = $userBon->save() ;
+            if($bonResult)
             {
-                $warningCounter++;
-                echo "<span style='color:yellow'>";
-                echo "Userbon #".$userbon." has no user" ;
-                echo "</span>";
-                echo "<br>" ;
-                continue;
-            }
-            $userHTBons = $user->userbons->where("bon_id" , 2)
-                                        ->where("created_at" ,">=" , "2018-05-23 00:00:00" )
-                                        ->where("created_at" ,"<=" , "2018-05-26 00:00:00" )
-                                        ->where("userbonstatus_id" , "3");
-            //Whether user was in Hamayesh Talai lottery or not
-            $userHTBon = $userHTBons->first();
-            if(isset($userHTBon) && $userHTBon->totalNumber >= 3)
-            {
-                    $userNewPurchases = $user->orderproducts()->whereHas("order" , function ($q) use ($hamayeshTalai){
-                                                                $q->where("orderstatus_id" , 2);
-                                                                $q->where("paymentstatus_id" , 3) ;
-                                                                $q->where("completed_at" , ">=" , "2018-05-25 00:00:30") ;
-                                                                $q->where("completed_at" , "<=" , "2018-06-15 00:02:00") ;
-                                                            })->whereIn("product_id" , $hamayeshTalai)
-                                                                ->get();
-                    $points += $userNewPurchases->count();
+                $successCounter++;
             }
             else
             {
-                echo "User is new in lottery" ;
-                echo "</br>";
-                $totalTransactions = $user->orderTransactions->where("completed_at",">=" ,  "2018-05-24 20:00:00" )
-                                                                ->where("completed_at" , "<=" , "2018-06-14 21:30:00")
-                                                                ->where("transactionstatus_id" , config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
-                                                                ->where("cost" , ">" , 0);
-                $totalAmount = 0;
-                if($totalTransactions->isNotEmpty())
-                {
-                    $totalAmount = $totalTransactions->sum('cost');
-                }
-                $points += (int)($totalAmount / $pointUnit);
-                echo "User ".$user->id." total transactions:".$totalAmount ;
-                echo "</br>";
-
-            }
-
-            $userTotalHamayesh = $user->orderproducts()->whereHas("order" , function ($q) use ($hamayeshTalai){
-                                            $q->where("completed_at" , "<=" , "2018-06-15 00:02:00") ;
-                                            $q->where("orderstatus_id" , 2);
-                                            $q->where("paymentstatus_id" , 3) ;
-                                        })->whereIn("product_id" , $hamayeshTalai)
-                                            ->get()
-                                            ->count();
-
-            if($userTotalHamayesh > 0)
-            {
-                $riyaziTotalLessons = 6;
-                $tajrobiTotalLessons = 9;
-                $ensaniTotalLessons = 4;
-                if(isset($user->major->id))
-                {
-                    if($user->major->name == "ریاضی")
-                    {//6
-                        if($userTotalHamayesh >= $riyaziTotalLessons)
-                        {
-                            $points++;
-                        }
-                    }
-                    elseif($user->major->name == "تجربی")
-                    {//9
-                        if($userTotalHamayesh >= $tajrobiTotalLessons)
-                        {
-                            $points++;
-                        }
-                    }
-                    elseif($user->major->name == "انسانی")
-                    {
-                        if($userTotalHamayesh >= $ensaniTotalLessons)
-                        {
-                            $points++;
-                        }
-                    }
-
-                }
-                else
-                {
-                    $hamayeshDif = 218;
-                    $hamayeshDifPurchases = $user->orderproducts()->whereHas("order" , function ($q) use ($hamayeshDif){
-                        $q->where("orderstatus_id" , 2);
-                        $q->where("paymentstatus_id" , 3) ;
-                    })->where("product_id" , $hamayeshDif)
-                        ->get();
-                    if($hamayeshDifPurchases->isNotEmpty())
-                    {
-                        $user->major_id = 1;
-                        $user->update();
-                        if($userTotalHamayesh >= $riyaziTotalLessons)
-                        {
-                            $points++ ;
-                        }
-                    }else
-                    {
-                        $hamayeshZist = 212 ;
-                        $hamayeshGenetic = 221;
-                        $hamayeshZistPurchases = $user->orderproducts()->whereHas("order" , function ($q) use ($hamayeshZist){
-                            $q->where("orderstatus_id" , 2);
-                            $q->where("paymentstatus_id" , 3) ;
-                        })->where("product_id" , $hamayeshZist)
-                            ->get();
-
-                        $hamayeshGeneticPurchases = $user->orderproducts()->whereHas("order" , function ($q) use ($hamayeshGenetic){
-                            $q->where("orderstatus_id" , 2);
-                            $q->where("paymentstatus_id" , 3) ;
-                        })->where("product_id" , $hamayeshGenetic)
-                            ->get();
-
-                        if($hamayeshZistPurchases->isNotEmpty() &&
-                            $hamayeshGeneticPurchases->isNotEmpty() )
-                        {
-                            $user->major_id = 2;
-                            $user->update();
-                            if($userTotalHamayesh >= $tajrobiTotalLessons)
-                            {
-                                $points++ ;
-                            }
-                        }
-                    }
-
-                    if($hamayeshDifPurchases->isEmpty())
-                    {
-                        $hamayeshRiyaziEnsani = 222;
-                        $hamayeshRiyaziEnsaniPurchases = $user->orderproducts()->whereHas("order" , function ($q) use ($hamayeshRiyaziEnsani){
-                            $q->where("orderstatus_id" , 2);
-                            $q->where("paymentstatus_id" , 3) ;
-                        })->where("product_id" , $hamayeshRiyaziEnsani)
-                            ->get();
-                        if($hamayeshRiyaziEnsaniPurchases->isNotEmpty())
-                        {
-                            $user->major_id = 3;
-                            $user->update();
-                            if($userTotalHamayesh >= $ensaniTotalLessons)
-                            {
-                                $points++ ;
-                            }
-                        }
-                    }
-                }
-            }
-
-
-            echo "User ".$user->id." points: ".$points ;
-            echo "</br>";
-            if($points > 0 )
-            {
-//                $userbon->totalNumber = $points ;
-//                $userbon->usedNumber = 0 ;
-//                $userbon->userbonstatus_id = 1 ;
-//                $userbon->update() ;
+                $failedCounter++;
+                dump("Userbon for user ".$userId." was not created");
             }
         }
+        dump("number of successfully processed users: ".$successCounter);
+        dump("number of failed users: ".$failedCounter);
         dd("Done!");
-
-//        $bonName = config("constants.BON2");
-//        $bon = Bon::where("name" , $bonName)->first();
-//        if(!isset($bon))
-//            dd("Bon not found");
-//
-//        dump("Number of available users: ".$users->count());
-//        foreach ($users as $userPoint)
-//        {
-//            $userId = $userPoint["user_id"] ;
-//            $points = $userPoint["point"];
-//            $userBon = new Userbon();
-//            $userBon->bon_id = $bon->id ;
-//            $userBon->user_id = $userId ;
-//            $userBon->totalNumber = $points ;
-//            $userBon->userbonstatus_id = 1 ;
-//            $bonResult = $userBon->save() ;
-//            if($bonResult)
-//            {
-//                $successCounter++;
-//            }
-//            else
-//            {
-//                $failedCounter++;
-//                dump("Userbon for user ".$userId." was not created");
-//            }
-//        }
-//        dump("number of successfully processed users: ".$successCounter);
-//        dump("number of failed users: ".$failedCounter);
-//        dd("Done!");
     }
 
     public function excelBot(Request $request)
