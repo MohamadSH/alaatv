@@ -4021,6 +4021,8 @@ class HomeController extends Controller
 
         $users = $users->where("totalAmount"  , ">=" , $amountUnit);
 
+        dd("Stop");
+
 //        $userbons = Userbon::where("bon_id" , 2)
 //                            ->where("created_at" , ">" , "2018-05-24 00:00:00")
 //                            ->where("totalNumber" , ">=" , "3")
