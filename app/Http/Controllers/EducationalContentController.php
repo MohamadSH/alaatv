@@ -858,35 +858,74 @@ public function store(InsertEducationalContentRequest $request)
              $newContent->save();
              $fileRequest = new InsertFileRequest();
              $fileController = new FileController();
-             $baseUrl = "https://cdn.sanatisharif.ir/media/";
-             if(isset($fileName))
+             if(strcmp($request->get("mode") , "filelink") == 0)
              {
-                 //240p
-                 $_240pUrl = $baseUrl.$contentset_id."/240p/".$fileName;
-                 $fileRequest->offsetSet("name"  , $_240pUrl );
-                 $_240pId =  $fileController->store($fileRequest);
-                 $newContent->files()->attach($_240pId , ["caption"=>"کیفیت متوسط" , "label"=>"240p"]);
+                 $hd = $request->get("hd");
+                 $hq = $request->get("hq");
+                 $_240p = $request->get("240p");
+                 $thumbnail = $request->get("thumbnail");
+                 if(isset($_240p))
+                 {
 
-                 //hq
-                 $hqUrl = $baseUrl.$contentset_id."/hq/".$fileName;
-                 $fileRequest->offsetSet("name"  , $hqUrl );
-                 $hqId =  $fileController->store($fileRequest);
-                 $newContent->files()->attach($hqId , ["caption"=>"کیفیت بالا" , "label"=>"hq"]);
+                     $fileRequest->offsetSet("name"  , $_240p );
+                     $_240pId =  $fileController->store($fileRequest);
+                     $newContent->files()->attach($_240pId , ["caption"=>"کیفیت متوسط" , "label"=>"240p"]);
+                 }
 
-                 //HD
-                 $hdUrl =  $baseUrl.$contentset_id."/HD_720p/".$fileName;
-                 $fileRequest->offsetSet("name"  , $hdUrl );
-                 $hdId =  $fileController->store($fileRequest);
-                 $newContent->files()->attach($hdId , ["caption"=>"کیفیت عالی" , "label"=>"hd"]);
+                 if(isset($hq))
+                 {
+                     $fileRequest->offsetSet("name"  , $hq );
+                     $hqId =  $fileController->store($fileRequest);
+                     $newContent->files()->attach($hqId , ["caption"=>"کیفیت بالا" , "label"=>"hq"]);
+                 }
 
-                 //thumbnail
-                 $ext = pathinfo($fileName, PATHINFO_EXTENSION);
-                 $thumbnailFileName = basename($fileName, "." . $ext);
-                 $thumbnailUrl =  $baseUrl."thumbnails/".$contentset_id."/".$thumbnailFileName.".jpg";
-                 $fileRequest->offsetSet("name"  , $thumbnailUrl );
-                 $thumbnailId =  $fileController->store($fileRequest);
-                 $newContent->files()->attach($thumbnailId , ["caption"=>"تامبنیل" , "label"=>"thumbnail"]);
+                 if(isset($hd))
+                 {
+                     $fileRequest->offsetSet("name"  , $hd );
+                     $hdId =  $fileController->store($fileRequest);
+                     $newContent->files()->attach($hdId , ["caption"=>"کیفیت عالی" , "label"=>"hd"]);
+                 }
+
+                 if(isset($thumbnail))
+                 {
+                     $fileRequest->offsetSet("name"  , $thumbnail );
+                     $thumbnailId =  $fileController->store($fileRequest);
+                     $newContent->files()->attach($thumbnailId , ["caption"=>"تامبنیل" , "label"=>"thumbnail"]);
+                 }
              }
+             elseif(strcmp($request->get("mode") , "filename") == 0)
+             {
+                 $baseUrl = "https://cdn.sanatisharif.ir/media/";
+                 if(isset($fileName))
+                 {
+                     //240p
+                     $_240pUrl = $baseUrl.$contentset_id."/240p/".$fileName;
+                     $fileRequest->offsetSet("name"  , $_240pUrl );
+                     $_240pId =  $fileController->store($fileRequest);
+                     $newContent->files()->attach($_240pId , ["caption"=>"کیفیت متوسط" , "label"=>"240p"]);
+
+                     //hq
+                     $hqUrl = $baseUrl.$contentset_id."/hq/".$fileName;
+                     $fileRequest->offsetSet("name"  , $hqUrl );
+                     $hqId =  $fileController->store($fileRequest);
+                     $newContent->files()->attach($hqId , ["caption"=>"کیفیت بالا" , "label"=>"hq"]);
+
+                     //HD
+                     $hdUrl =  $baseUrl.$contentset_id."/HD_720p/".$fileName;
+                     $fileRequest->offsetSet("name"  , $hdUrl );
+                     $hdId =  $fileController->store($fileRequest);
+                     $newContent->files()->attach($hdId , ["caption"=>"کیفیت عالی" , "label"=>"hd"]);
+
+                     //thumbnail
+                     $ext = pathinfo($fileName, PATHINFO_EXTENSION);
+                     $thumbnailFileName = basename($fileName, "." . $ext);
+                     $thumbnailUrl =  $baseUrl."thumbnails/".$contentset_id."/".$thumbnailFileName.".jpg";
+                     $fileRequest->offsetSet("name"  , $thumbnailUrl );
+                     $thumbnailId =  $fileController->store($fileRequest);
+                     $newContent->files()->attach($thumbnailId , ["caption"=>"تامبنیل" , "label"=>"thumbnail"]);
+                 }
+             }
+
 
              if(!isset($order))
                  $order = $lastContent->pivot->order + 1;
