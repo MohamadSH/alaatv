@@ -41,7 +41,7 @@
     <body>
         <div class="container">
             <div class="content">
-                <div class="title" dir="rtl">در حال به روز رسانی هستیم . از شکیبایی شما متشکریم!</div>
+                <div class="title" dir="rtl">سایت تا 48 ساعت آینده در حال بروز رسانی می باشد . از شکیبایی شما متشکریم!</div>
             </div>
         </div>
     </body>
