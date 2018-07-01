@@ -3982,13 +3982,13 @@ class HomeController extends Controller
 
         /** Points for Eide Fetr lottery */
         $transactions = Transaction::whereHas("order" , function ($q){
-                                        $q->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
-                                            ->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_PAID"));
-                                    })
-                                        ->whereBetween("completed_at" ,  ["2018-06-14 21:30:00" , "2018-06-30 19:30:00"])
-                                        ->where("transactionstatus_id" , config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
-                                        ->where("cost" , ">" , 0)
-                                        ->get();
+            $q->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
+                ->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_PAID"));
+        })
+            ->whereBetween("completed_at" ,  ["2018-06-14 21:30:00" , "2018-06-30 19:30:00"])
+            ->where("transactionstatus_id" , config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
+            ->where("cost" , ">" , 0)
+            ->get();
 
         $users = collect();
         $amountUnit = 40000;
@@ -4024,10 +4024,9 @@ class HomeController extends Controller
             }
         }
 
-        $users = $users->where("point"  , ">" , 0);
+//        $users = $users->where("point"  , ">" , 0);
 
-        dd("Stop");
-
+        dd("STOP");
 //        $userbons = Userbon::where("bon_id" , 2)
 //                            ->where("created_at" , ">" , "2018-05-24 00:00:00")
 //                            ->where("totalNumber" , ">=" , "3")
@@ -4068,6 +4067,13 @@ class HomeController extends Controller
         {
             $userId = $userPoint["user_id"] ;
             $points = $userPoint["point"];
+
+            echo "User Id: ".$userId." , Points: ".$points;
+            echo "<br>" ;
+
+            if($points == 0)
+                continue ;
+
             $userBon = new Userbon();
             $userBon->bon_id = $bon->id ;
             $userBon->user_id = $userId ;
