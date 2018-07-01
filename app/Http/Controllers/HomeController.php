@@ -4082,6 +4082,17 @@ class HomeController extends Controller
             $bonResult = $userBon->save() ;
             if($bonResult)
             {
+                $message = "شما در قرعه کشی 10 تیر شرکت داده خواهید شد.";
+                $message .= "\n";
+                $message .= "امتیاز شما:";
+                $message .= $points;
+                $message .= "\n";
+                $message .= "آلاء";
+                $user->notify(new GeneralNotice($message));
+                echo "<span style='color:green'>";
+                echo "User ".$userId." notfied";
+                echo "</span>";
+                echo "<br>";
                 $successCounter++;
             }
             else
