@@ -4019,7 +4019,7 @@ class HomeController extends Controller
             }
         }
 
-        $users = $users->where("totalAmount"  , ">=" , $amountUnit);
+        $users = $users->where("point"  , ">" , 0);
 
         dd("Stop");
 

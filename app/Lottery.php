@@ -30,22 +30,16 @@ class Lottery extends Model
         $prizeName = "" ;
         $amount = 0;
         $memorial = "";
-        if($this->id == 3)
+        if($this->id == 4)
         {
             if($rank==1)
             {//nafare aval
-                $prizeName = "یک دستگاه آیفون X";
-            }elseif($rank ==2 )
-            {//5 nafare baadi
-                $prizeName = "یک دستگاه اپل واچ";
-            }elseif($rank ==3 )
-            {//7 nafare baadi
                 $prizeName = "یک دستگاه پلی استیشن 4";
             }
-            else
-            {
-                $memorial = "کد تخفیف ayft با 70 درصد تخفیف";
-            }
+//            else
+//            {
+//                $memorial = "کد تخفیف ayft با 70 درصد تخفیف";
+//            }
 
 //            elseif($rank > 13 && $rank <= 123 )
 //            {

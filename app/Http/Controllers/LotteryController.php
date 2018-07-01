@@ -193,10 +193,10 @@ class LotteryController extends Controller
                         echo "<br>";
                         $successCounter++;
 
-                        [
-                            $prizeName ,
-                            $amount
-                        ]= $lottery->prizes($counter);
+//                        [
+//                            $prizeName ,
+//                            $amount
+//                        ]= $lottery->prizes($counter);
 
 //                      $user->notify(new LotteryWinner($lottery , $counter , $prizeName));
 //                      echo "<span style='color:green;font-weight: bolder'>User notified</span>";
@@ -268,9 +268,6 @@ class LotteryController extends Controller
                     $memorial
                 ]= $lottery->prizes($rank);
 
-                if(strlen($prizeName) == 0 && strlen($memorial) == 0)
-                    continue;
-
                 $done = true;
                 $prizeInfo = "" ;
                 if($amount > 0)
@@ -281,9 +278,9 @@ class LotteryController extends Controller
 
                     if($done)
                     {
-//                    $userlottery->notify(new GiftGiven($amount));
-//                        echo "<span style='color:green' >"."Notification sent to user :".$userlottery->lastName."</span>";
-//                        echo "<br>";
+                    $userlottery->notify(new GiftGiven($amount));
+                        echo "<span style='color:green' >"."Notification sent to user :".$userlottery->lastName."</span>";
+                        echo "<br>";
 
                         $objectId = $depositResult["wallet"] ;
                         $prizeInfo = '
@@ -293,11 +290,6 @@ class LotteryController extends Controller
                     }
                 }elseif(strlen($memorial) > 0)
                 {
-                    $prizeName = "";
-                    $userlottery->notify(new LotteryWinner($lottery , $rank , $prizeName , $memorial));
-                    echo "<span style='color:green;font-weight: bolder'>User notified</span>";
-                    echo "<br>";
-
                     $objectId = 543 ;
                     $prizeInfo = '
                           "objectType": "App\\\\Coupon",
@@ -307,6 +299,9 @@ class LotteryController extends Controller
 
                 if($done)
                 {
+                    $userlottery->notify(new LotteryWinner($lottery , $rank , $prizeName , $memorial));
+                    echo "<span style='color:green;font-weight: bolder'>User notified</span>";
+                    echo "<br>";
                     if(strlen($prizeName) > 0 )
                     {
                         $itemName = $prizeName;
@@ -319,6 +314,7 @@ class LotteryController extends Controller
                     {
                         $itemName = "";
                     }
+
                     if(strlen($prizeInfo) > 0)
                     {
                         $prizes = '{
@@ -330,26 +326,40 @@ class LotteryController extends Controller
                       ]
                     }';
                     }
-                    else
+                    elseif(strlen($itemName) > 0)
                     {
                         $prizes = '{
                       "items": [
                         {
-                          "name": "'.$prizeName.'"
+                          "name": "'.$itemName.'"
                         }
                           ]
                     }';
 
                     }
 
-                    $givePrizeResult = $userlottery->lotteries()
-                        ->where("lottery_id" , $lottery->id)
-                        ->where("pivot.rank" , $rank)
-                        ->updateExistingPivot($lottery->id ,["prizes" => $prizes]);
-                    if(!$givePrizeResult)
+                    $pivotArray = array();
+                    if(isset($prizes))
                     {
-                        dump("Failed on updating prize for user: ".$userlottery->id) ;
-                        $failedCounter++ ;
+                        $pivotArray["prizes"] =  $prizes;
+                    }
+
+                    if(!empty($pivotArray))
+                    {
+                        $givePrizeResult = $userlottery->lotteries()
+                            ->where("lottery_id" , $lottery->id)
+                            ->where("pivot.rank" , $rank)
+                            ->updateExistingPivot($lottery->id , $pivotArray );
+
+                        if(!$givePrizeResult)
+                        {
+                            dump("Failed on updating prize for user: ".$userlottery->id) ;
+                            $failedCounter++ ;
+                        }
+                        else
+                        {
+                            $successCounter++ ;
+                        }
                     }
                     else
                     {
