@@ -4088,6 +4088,7 @@ class HomeController extends Controller
                 $message .= $points;
                 $message .= "\n";
                 $message .= "آلاء";
+                $user =  $userBon->user;
                 $user->notify(new GeneralNotice($message));
                 echo "<span style='color:green'>";
                 echo "User ".$userId." notfied";
