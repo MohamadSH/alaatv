@@ -35,7 +35,7 @@ class CheckForMaintenanceMode
     public function handle($request, Closure $next)
     {
         if ($this->app->isDownForMaintenance() &&
-            !in_array($request->ip(), ['79.127.123.242','79.127.123.243','79.127.123.244']))
+            !in_array($request->ip(), ['79.127.123.242' , '79.127.123.243' , '79.127.123.244' , '79.127.123.246' , '185.49.84.106']))
         {
             return abort(503);
         }

@@ -98,6 +98,8 @@ class LotteryWinner extends Notification implements ShouldQueue
             $messageCore = "شما برنده ".$rank." در قرعه کشی ".$lotteryName." شده اید. جایزه شما ".$prize." می باشد و در سریع ترین زمان به شما تقدیم خواهد شد.";
         elseif( strlen($memorial) > 0 )
             $messageCore = "شما در قرعه کشی ".$lotteryName." شرکت داده شدید و متاسفانه چیزی برنده نشدید. به رسم یادبود ".$memorial." تقدیمتان شده است." ;
+        else
+            $messageCore = "شما در قرعه کشی ".$lotteryName." شرکت داده شدید و متاسفانه برنده نشدید." ;
 
         $messageCore = $messageCore
             ."\n"

@@ -275,385 +275,388 @@ class AppServiceProvider extends ServiceProvider
 
             }
 
+            if(Schema::hasTable('educationalcontents')) {
+                /**
+                 *  lessons
+                 */
+                $contentsetArary = [
+                    195 , 170 , 37 , 179 , 187 ,183,189,186,188,180,191,114,112,137,121,175,50,152,
+                    194 , 193 , 171 , 178 , 182 , 169 , 170 , 192,
+                    185 , 190 , 153 , 172 , 137 , 177 , 173 , 170 , 168 , 184 , 174,
+                    163 , 157 , 159 , 160 , 162 , 164 , 155 , 158
+                ];
+
+                $contentsets = Contentset::whereIn("id" , $contentsetArary)->get();
+                $contentsets->load('educationalcontents');
+                $sectionArray = [
+                    "konkoor" ,
+                    "dahom" ,
+                    "yazdahom",
+                    "hamayesh"
+                ];
+                $sections = collect();
+                foreach ($sectionArray as $section)
+                {
+                    switch ($section)
+                    {
+                        case "konkoor" :
+                            $lessons = collect([
+                                [
+                                    "displayName" => "زیست کنکور" ,
+                                    "author" => "ابوالفضل جعفری",
+                                    "pic" => $contentsets->where("id" , 195)->first()->photo,
+                                    "content_id"=>($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 195)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "آرایه های ادبی" ,
+                                    "author" => "هامون سبطی",
+                                    "pic" => $contentsets->where("id" , 170)->first()->photo,
+                                    "content_id"=>($contentsets->where("id" , 170)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 170)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "مشاوره" ,
+                                    "author" => "محمد علی امینی راد",
+                                    "pic" => $contentsets->where("id" , 37)->first()->photo,
+                                    "content_id"=>($contentsets->where("id" , 37)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 37)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ] ,
+                                [
+                                    "displayName" => "شیمی شب کنکور" ,
+                                    "author" => "مهدی صنیعی تهرانی",
+                                    "pic" => $contentsets->where("id" , 179)->first()->photo,
+                                    "content_id"=>($contentsets->where("id" , 179)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 179)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "نکته و تست فیزیک" ,
+                                    "author" => "پیمان طلوعی",
+                                    "pic" => $contentsets->where("id" , 187)->first()->photo,
+                                    "content_id"=>($contentsets->where("id" , 187)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 187)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "فیزیک 4 - کنکور" ,
+                                    "author" => "حمید فدایی فرد",
+                                    "pic" => $contentsets->where("id" , 183)->first()->photo,
+                                    "content_id"=>($contentsets->where("id" , 183)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 183)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "نکته و تست ریاضی تجربی" ,
+                                    "author" => "مهدی امینی راد",
+                                    "pic" => $contentsets->where("id" , 189)->first()->photo,
+                                    "content_id"=>($contentsets->where("id" , 189)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 189)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "ریاضی تجربی کنکور" ,
+                                    "author" => "محمد امین نباحته",
+                                    "pic" => $contentsets->where("id" , 186)->first()->photo,
+                                    "content_id"=>($contentsets->where("id" , 186)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 186)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "نکته و تست دیفرانسیل کنکور" ,
+                                    "author" => "محمد صادق ثابتی",
+                                    "pic" => $contentsets->where("id" , 188)->first()->photo,
+                                    "content_id"=>($contentsets->where("id" , 188)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 188)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "هندسه تحلیل کنکور" ,
+                                    "author" => "محمد صادق ثابتی",
+                                    "pic" => $contentsets->where("id" , 180)->first()->photo,
+                                    "content_id"=>($contentsets->where("id" , 180)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 180)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "فلسفه و منطق کنکور" ,
+                                    "author" => "سید حسام الدین جلالی",
+                                    "pic" => $contentsets->where("id" , 191)->first()->photo,
+                                    "content_id"=>($contentsets->where("id" , 191)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 191)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "تحلیلی کنکور" ,
+                                    "author" => "رضا شامیزاده",
+                                    "pic" => $contentsets->where("id" , 114)->first()->photo,
+                                    "content_id"=>($contentsets->where("id" , 114)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 114)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "گسسته کنکور" ,
+                                    "author" => "رضا شامیزاده",
+                                    "pic" => $contentsets->where("id" , 112)->first()->photo,
+                                    "content_id"=>($contentsets->where("id" , 112)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 112)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "هندسه پایه کنکور" ,
+                                    "author" => "وحید کبریایی",
+                                    "pic" => $contentsets->where("id" , 137)->first()->photo,
+                                    "content_id"=>($contentsets->where("id" , 137)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 137)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "ریاضی تجربی کنکور" ,
+                                    "author" => "محمد رضا حسینی فرد",
+                                    "pic" => $contentsets->where("id" , 121)->first()->photo,
+                                    "content_id"=>($contentsets->where("id" , 121)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 121)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "عربی کنکور" ,
+                                    "author" => "محسن آهویی",
+                                    "pic" => $contentsets->where("id" , 175)->first()->photo,
+                                    "content_id"=>($contentsets->where("id" , 175)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 175)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "زیست کنکور" ,
+                                    "author" => "محمد پازوکی",
+                                    "pic" => $contentsets->where("id" , 50)->first()->photo,
+                                    "content_id"=>($contentsets->where("id" , 50)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 50)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "آمار و مدلسازی کنکور" ,
+                                    "author" => "مهدی امینی راد",
+                                    "pic" => $contentsets->where("id" , 152)->first()->photo,
+                                    "content_id"=>($contentsets->where("id" , 152)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 152)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                            ]);
+                            $sections->push(
+                                [
+                                    "name"=>$section,
+                                    "displayName" => "کلاس های کنکور آلاء",
+                                    "lessons" => $lessons ,
+                                    "tags" => [
+                                        "کنکور"
+                                    ],
+                                    'ads' => [
+                                        //SEBTI
+                                        'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-1.jpg' => 'https://sanatisharif.ir/landing/4?utm_source=sanatisharif&utm_medium=banner&utm_campaign=khordad_sale&utm_content=small-slide-1-1',
+                                    ],
+                                    'class' =>'konkoor'
+                                ]
+                            );
+                            break;
+                        case "yazdahom" :
+                            $lessons = collect([
+                                [
+                                    "displayName" => "زیست یازدهم" ,
+                                    "author" => "عباس راستی بروجنی",
+                                    "pic" => $contentsets->where("id" , 194)->first()->photo,
+                                    "content_id"=> ($contentsets->where("id" , 194)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 194)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "فیزیک یازدهم" ,
+                                    "author" => "پیمان طلوعی",
+                                    "pic" => $contentsets->where("id" , 193)->first()->photo,
+                                    "content_id"=> ($contentsets->where("id" , 193)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 193)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "حسابان یازدهم" ,
+                                    "author" => "محمد صادق ثابتی",
+                                    "pic" => $contentsets->where("id" , 171)->first()->photo,
+                                    "content_id"=> ($contentsets->where("id" , 171)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 171)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "حسابان یازدهم" ,
+                                    "author" => "محمد رضا مقصودی",
+                                    "pic" => $contentsets->where("id" , 178)->first()->photo,
+                                    "content_id"=> ($contentsets->where("id" , 178)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 178)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "شیمی یازدهم" ,
+                                    "author" => "مهدی صنیعی تهرانی",
+                                    "pic" => $contentsets->where("id" , 182)->first()->photo,
+                                    "content_id"=> ($contentsets->where("id" , 182)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 182)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "ریاضی تجربی یازدهم" ,
+                                    "author" => "علی صدری",
+                                    "pic" => $contentsets->where("id" , 169)->first()->photo,
+                                    "content_id"=> ($contentsets->where("id" , 169)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 169)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "آرایه های ادبی" ,
+                                    "author" => "هامون سبطی",
+                                    "pic" => $contentsets->where("id" , 170)->first()->photo,
+                                    "content_id"=> ($contentsets->where("id" , 170)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 170)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "عربی یازدهم" ,
+                                    "author" => "ناصر حشمتی",
+                                    "pic" => $contentsets->where("id" , 192)->first()->photo,
+                                    "content_id"=> ($contentsets->where("id" , 192)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 192)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                            ]);
+                            $sections->push(
+                                [
+                                    "name"=>$section,
+                                    "displayName" => "مقطع یازدهم",
+                                    "lessons" => $lessons ,
+                                    "tags" => [
+                                        "یازدهم"
+                                    ],
+                                    'ads' => [
+                                        //ZIST GIAHI
+                                        'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-2.jpg' => 'https://sanatisharif.ir/landing/4?utm_source=sanatisharif&utm_medium=banner&utm_campaign=khordad_sale&utm_content=small-slide-2',
+                                    ],
+                                    'class' =>'yazdahom'
+                                ]
+                            );
+                            break;
+                        case "dahom" :
+                            $lessons = collect([
+                                [
+                                    "displayName" => "متن خوانی عربی دهم" ,
+                                    "author" => "مهدی ناصر شریعت",
+                                    "pic" => $contentsets->where("id" , 185)->first()->photo,
+                                    "content_id"=> ($contentsets->where("id" , 185)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 185)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "ریاضی دهم" ,
+                                    "author" => "مهدی امینی راد",
+                                    "pic" => $contentsets->where("id" , 190)->first()->photo,
+                                    "content_id"=> ($contentsets->where("id" , 190)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 190)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "ریاضی دهم" ,
+                                    "author" => "محمد جواد نایب کبیر",
+                                    "pic" => $contentsets->where("id" , 153)->first()->photo,
+                                    "content_id"=> ($contentsets->where("id" , 153)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 153)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "شیمی دهم" ,
+                                    "author" => "حامد پویان نظر",
+                                    "pic" => $contentsets->where("id" , 172)->first()->photo,
+                                    "content_id"=> ($contentsets->where("id" , 172)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 172)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "هندسه 1 (دهم)" ,
+                                    "author" => "وحید کبریایی",
+                                    "pic" => $contentsets->where("id" , 137)->first()->photo,
+                                    "content_id"=> ($contentsets->where("id" , 137)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 137)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "زیست 1 (دهم)" ,
+                                    "author" => "جلال موقاری",
+                                    "pic" => $contentsets->where("id" , 177)->first()->photo,
+                                    "content_id"=> ($contentsets->where("id" , 177)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 177)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "فیزیک دهم" ,
+                                    "author" => "فرشید داداشی",
+                                    "pic" => $contentsets->where("id" , 173)->first()->photo,
+                                    "content_id"=> ($contentsets->where("id" , 173)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 173)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "آرایه های ادبی" ,
+                                    "author" => "هامون سبطی",
+                                    "pic" => $contentsets->where("id" , 170)->first()->photo,
+                                    "content_id"=> ($contentsets->where("id" , 170)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 170)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "زبان انگلیسی" ,
+                                    "author" => "علی اکبر عزتی",
+                                    "pic" => $contentsets->where("id" , 168)->first()->photo,
+                                    "content_id"=> ($contentsets->where("id" , 168)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 168)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "ریاضی و آمار دهم" ,
+                                    "author" => "مهدی امینی راد",
+                                    "pic" => $contentsets->where("id" , 184)->first()->photo,
+                                    "content_id"=> ($contentsets->where("id" , 184)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 184)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "عربی" ,
+                                    "author" => "ناصر حشمتی",
+                                    "pic" => $contentsets->where("id" , 174)->first()->photo,
+                                    "content_id"=> ($contentsets->where("id" , 174)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 174)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                            ]);
+                            $sections->push(
+                                [
+                                    "name"=>$section,
+                                    "displayName" => "مقطع دهم",
+                                    "lessons" => $lessons ,
+                                    "tags" => [
+                                        "دهم"
+                                    ],
+                                    'ads' => [
+                                        //DINI KAGHAZI
+                                        'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-3.jpg' => 'https://sanatisharif.ir/landing/4?utm_source=sanatisharif&utm_medium=banner&utm_campaign=khordad_sale&utm_content=small-slide-3',
+                                    ],
+                                    'class' =>'dahom'
+                                ]
+                            );
+                            break;
+                        case "hamayesh" :
+                            $lessons = collect([
+                                [
+                                    "displayName" => "ریاضی انسانی" ,
+                                    "author" => "خسرو محمد زاده",
+                                    "pic" => $contentsets->where("id" , 163)->first()->photo,
+                                    "content_id"=> ($contentsets->where("id" , 163)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 163)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "گسسته" ,
+                                    "author" => "سروش معینی",
+                                    "pic" => $contentsets->where("id" , 157)->first()->photo,
+                                    "content_id"=> ($contentsets->where("id" , 157)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 157)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "فیزیک" ,
+                                    "author" => "نادریان",
+                                    "pic" => $contentsets->where("id" , 159)->first()->photo,
+                                    "content_id"=> ($contentsets->where("id" , 159)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 159)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "زیست شناسی" ,
+                                    "author" => "مسعود حدادی",
+                                    "pic" => $contentsets->where("id" , 160)->first()->photo,
+                                    "content_id"=> ($contentsets->where("id" , 160)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 160)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "دیفرانسیل" ,
+                                    "author" => "سیروس نصیری",
+                                    "pic" => $contentsets->where("id" , 162)->first()->photo,
+                                    "content_id"=> ($contentsets->where("id" , 162)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 162)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "ریاضی تجربی" ,
+                                    "author" => "سیروس نصیری",
+                                    "pic" => $contentsets->where("id" , 164)->first()->photo,
+                                    "content_id"=> ($contentsets->where("id" , 164)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 164)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "عربی" ,
+                                    "author" => "عمار تاج بخش",
+                                    "pic" => $contentsets->where("id" , 155)->first()->photo,
+                                    "content_id"=> ($contentsets->where("id" , 155)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 155)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "شیمی" ,
+                                    "author" => "محمد حسین انوشه",
+                                    "pic" => $contentsets->where("id" , 158)->first()->photo,
+                                    "content_id"=> ($contentsets->where("id" , 158)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 158)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
+                                ],
+                            ]);
+                            $sections->push(
+                                [
+                                    "name"=>$section,
+                                    "displayName" => "همایش و جمع بندی",
+                                    "lessons" => $lessons ,
+                                    "tags" => [
+                                        "همایش"
+                                    ],
+                                    'ads' => [
+                                        //DINI KAGHAZI
+                                        'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-1.jpg' => 'https://sanatisharif.ir/landing/4?utm_source=sanatisharif&utm_medium=banner&utm_campaign=khordad_sale&utm_content=small-slide-1-1',
+                                    ],
+                                    'class' =>'hamayesh'
+                                ]
+                            );
+                            break;
+                        default:
+                            break ;
+                    }
+                }
+
+                View::share('sections',$sections);
+            }
+
         } catch (QueryException $e) {
             return false;
         }
 
-        /**
-         *  lessons
-         */
-        $contentsetArary = [
-            195 , 170 , 37 , 179 , 187 ,183,189,186,188,180,191,114,112,137,121,175,50,152,
-            194 , 193 , 171 , 178 , 182 , 169 , 170 , 192,
-            185 , 190 , 153 , 172 , 137 , 177 , 173 , 170 , 168 , 184 , 174,
-            163 , 157 , 159 , 160 , 162 , 164 , 155 , 158
-        ];
-
-        $contentsets = Contentset::whereIn("id" , $contentsetArary)->get();
-        $contentsets->load('educationalcontents');
-        $sectionArray = [
-            "konkoor" ,
-            "dahom" ,
-            "yazdahom",
-            "hamayesh"
-        ];
-        $sections = collect();
-        foreach ($sectionArray as $section)
-        {
-            switch ($section)
-            {
-                case "konkoor" :
-                    $lessons = collect([
-                        [
-                            "displayName" => "زیست کنکور" ,
-                            "author" => "ابوالفضل جعفری",
-                            "pic" => $contentsets->where("id" , 195)->first()->photo,
-                            "content_id"=>($contentsets->where("id" , 195)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 195)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                        [
-                            "displayName" => "آرایه های ادبی" ,
-                            "author" => "هامون سبطی",
-                            "pic" => $contentsets->where("id" , 170)->first()->photo,
-                            "content_id"=>($contentsets->where("id" , 170)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 170)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                        [
-                            "displayName" => "مشاوره" ,
-                            "author" => "محمد علی امینی راد",
-                            "pic" => $contentsets->where("id" , 37)->first()->photo,
-                            "content_id"=>($contentsets->where("id" , 37)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 37)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ] ,
-                        [
-                            "displayName" => "شیمی شب کنکور" ,
-                            "author" => "مهدی صنیعی تهرانی",
-                            "pic" => $contentsets->where("id" , 179)->first()->photo,
-                            "content_id"=>($contentsets->where("id" , 179)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 179)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                        [
-                            "displayName" => "نکته و تست فیزیک" ,
-                            "author" => "پیمان طلوعی",
-                            "pic" => $contentsets->where("id" , 187)->first()->photo,
-                            "content_id"=>($contentsets->where("id" , 187)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 187)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                        [
-                            "displayName" => "فیزیک 4 - کنکور" ,
-                            "author" => "حمید فدایی فرد",
-                            "pic" => $contentsets->where("id" , 183)->first()->photo,
-                            "content_id"=>($contentsets->where("id" , 183)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 183)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                        [
-                            "displayName" => "نکته و تست ریاضی تجربی" ,
-                            "author" => "مهدی امینی راد",
-                            "pic" => $contentsets->where("id" , 189)->first()->photo,
-                            "content_id"=>($contentsets->where("id" , 189)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 189)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                        [
-                            "displayName" => "ریاضی تجربی کنکور" ,
-                            "author" => "محمد امین نباحته",
-                            "pic" => $contentsets->where("id" , 186)->first()->photo,
-                            "content_id"=>($contentsets->where("id" , 186)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 186)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                        [
-                            "displayName" => "نکته و تست دیفرانسیل کنکور" ,
-                            "author" => "محمد صادق ثابتی",
-                            "pic" => $contentsets->where("id" , 188)->first()->photo,
-                            "content_id"=>($contentsets->where("id" , 188)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 188)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                        [
-                            "displayName" => "هندسه تحلیل کنکور" ,
-                            "author" => "محمد صادق ثابتی",
-                            "pic" => $contentsets->where("id" , 180)->first()->photo,
-                            "content_id"=>($contentsets->where("id" , 180)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 180)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                        [
-                            "displayName" => "فلسفه و منطق کنکور" ,
-                            "author" => "سید حسام الدین جلالی",
-                            "pic" => $contentsets->where("id" , 191)->first()->photo,
-                            "content_id"=>($contentsets->where("id" , 191)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 191)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                        [
-                            "displayName" => "تحلیلی کنکور" ,
-                            "author" => "رضا شامیزاده",
-                            "pic" => $contentsets->where("id" , 114)->first()->photo,
-                            "content_id"=>($contentsets->where("id" , 114)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 114)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                        [
-                            "displayName" => "گسسته کنکور" ,
-                            "author" => "رضا شامیزاده",
-                            "pic" => $contentsets->where("id" , 112)->first()->photo,
-                            "content_id"=>($contentsets->where("id" , 112)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 112)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                        [
-                            "displayName" => "هندسه پایه کنکور" ,
-                            "author" => "وحید کبریایی",
-                            "pic" => $contentsets->where("id" , 137)->first()->photo,
-                            "content_id"=>($contentsets->where("id" , 137)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 137)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                        [
-                            "displayName" => "ریاضی تجربی کنکور" ,
-                            "author" => "محمد رضا حسینی فرد",
-                            "pic" => $contentsets->where("id" , 121)->first()->photo,
-                            "content_id"=>($contentsets->where("id" , 121)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 121)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                        [
-                            "displayName" => "عربی کنکور" ,
-                            "author" => "محسن آهویی",
-                            "pic" => $contentsets->where("id" , 175)->first()->photo,
-                            "content_id"=>($contentsets->where("id" , 175)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 175)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                        [
-                            "displayName" => "زیست کنکور" ,
-                            "author" => "محمد پازوکی",
-                            "pic" => $contentsets->where("id" , 50)->first()->photo,
-                            "content_id"=>($contentsets->where("id" , 50)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 50)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                        [
-                            "displayName" => "آمار و مدلسازی کنکور" ,
-                            "author" => "مهدی امینی راد",
-                            "pic" => $contentsets->where("id" , 152)->first()->photo,
-                            "content_id"=>($contentsets->where("id" , 152)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 152)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                    ]);
-                    $sections->push(
-                        [
-                            "name"=>$section,
-                            "displayName" => "کلاس های کنکور آلاء",
-                            "lessons" => $lessons ,
-                            "tags" => [
-                                "کنکور"
-                            ],
-                            'ads' => [
-                                //SEBTI
-                                'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-1.jpg' => 'https://sanatisharif.ir/landing/4?utm_source=sanatisharif&utm_medium=banner&utm_campaign=khordad_sale&utm_content=small-slide-1-1',
-                            ],
-                            'class' =>'konkoor'
-                        ]
-                    );
-                    break;
-                case "yazdahom" :
-                    $lessons = collect([
-                        [
-                            "displayName" => "زیست یازدهم" ,
-                            "author" => "عباس راستی بروجنی",
-                            "pic" => $contentsets->where("id" , 194)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 194)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 194)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                        [
-                            "displayName" => "فیزیک یازدهم" ,
-                            "author" => "پیمان طلوعی",
-                            "pic" => $contentsets->where("id" , 193)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 193)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 193)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                        [
-                            "displayName" => "حسابان یازدهم" ,
-                            "author" => "محمد صادق ثابتی",
-                            "pic" => $contentsets->where("id" , 171)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 171)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 171)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                        [
-                            "displayName" => "حسابان یازدهم" ,
-                            "author" => "محمد رضا مقصودی",
-                            "pic" => $contentsets->where("id" , 178)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 178)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 178)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                        [
-                            "displayName" => "شیمی یازدهم" ,
-                            "author" => "مهدی صنیعی تهرانی",
-                            "pic" => $contentsets->where("id" , 182)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 182)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 182)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                        [
-                            "displayName" => "ریاضی تجربی یازدهم" ,
-                            "author" => "علی صدری",
-                            "pic" => $contentsets->where("id" , 169)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 169)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 169)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                        [
-                            "displayName" => "آرایه های ادبی" ,
-                            "author" => "هامون سبطی",
-                            "pic" => $contentsets->where("id" , 170)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 170)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 170)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                        [
-                            "displayName" => "عربی یازدهم" ,
-                            "author" => "ناصر حشمتی",
-                            "pic" => $contentsets->where("id" , 192)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 192)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 192)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                    ]);
-                    $sections->push(
-                        [
-                            "name"=>$section,
-                            "displayName" => "مقطع یازدهم",
-                            "lessons" => $lessons ,
-                            "tags" => [
-                                "یازدهم"
-                            ],
-                            'ads' => [
-                                //ZIST GIAHI
-                                'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-2.jpg' => 'https://sanatisharif.ir/landing/4?utm_source=sanatisharif&utm_medium=banner&utm_campaign=khordad_sale&utm_content=small-slide-2',
-                            ],
-                            'class' =>'yazdahom'
-                        ]
-                    );
-                    break;
-                case "dahom" :
-                    $lessons = collect([
-                        [
-                            "displayName" => "متن خوانی عربی دهم" ,
-                            "author" => "مهدی ناصر شریعت",
-                            "pic" => $contentsets->where("id" , 185)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 185)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 185)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                        [
-                            "displayName" => "ریاضی دهم" ,
-                            "author" => "مهدی امینی راد",
-                            "pic" => $contentsets->where("id" , 190)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 190)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 190)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                        [
-                            "displayName" => "ریاضی دهم" ,
-                            "author" => "محمد جواد نایب کبیر",
-                            "pic" => $contentsets->where("id" , 153)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 153)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 153)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                        [
-                            "displayName" => "شیمی دهم" ,
-                            "author" => "حامد پویان نظر",
-                            "pic" => $contentsets->where("id" , 172)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 172)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 172)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                        [
-                            "displayName" => "هندسه 1 (دهم)" ,
-                            "author" => "وحید کبریایی",
-                            "pic" => $contentsets->where("id" , 137)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 137)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 137)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                        [
-                            "displayName" => "زیست 1 (دهم)" ,
-                            "author" => "جلال موقاری",
-                            "pic" => $contentsets->where("id" , 177)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 177)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 177)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                        [
-                            "displayName" => "فیزیک دهم" ,
-                            "author" => "فرشید داداشی",
-                            "pic" => $contentsets->where("id" , 173)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 173)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 173)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                        [
-                            "displayName" => "آرایه های ادبی" ,
-                            "author" => "هامون سبطی",
-                            "pic" => $contentsets->where("id" , 170)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 170)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 170)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                        [
-                            "displayName" => "زبان انگلیسی" ,
-                            "author" => "علی اکبر عزتی",
-                            "pic" => $contentsets->where("id" , 168)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 168)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 168)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                        [
-                            "displayName" => "ریاضی و آمار دهم" ,
-                            "author" => "مهدی امینی راد",
-                            "pic" => $contentsets->where("id" , 184)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 184)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 184)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                        [
-                            "displayName" => "عربی" ,
-                            "author" => "ناصر حشمتی",
-                            "pic" => $contentsets->where("id" , 174)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 174)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 174)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                    ]);
-                    $sections->push(
-                        [
-                            "name"=>$section,
-                            "displayName" => "مقطع دهم",
-                            "lessons" => $lessons ,
-                            "tags" => [
-                                "دهم"
-                            ],
-                            'ads' => [
-                                //DINI KAGHAZI
-                                'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-3.jpg' => 'https://sanatisharif.ir/landing/4?utm_source=sanatisharif&utm_medium=banner&utm_campaign=khordad_sale&utm_content=small-slide-3',
-                            ],
-                            'class' =>'dahom'
-                        ]
-                    );
-                    break;
-                case "hamayesh" :
-                    $lessons = collect([
-                        [
-                            "displayName" => "ریاضی انسانی" ,
-                            "author" => "خسرو محمد زاده",
-                            "pic" => $contentsets->where("id" , 163)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 163)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 163)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                        [
-                            "displayName" => "گسسته" ,
-                            "author" => "سروش معینی",
-                            "pic" => $contentsets->where("id" , 157)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 157)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 157)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                        [
-                            "displayName" => "فیزیک" ,
-                            "author" => "نادریان",
-                            "pic" => $contentsets->where("id" , 159)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 159)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 159)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                        [
-                            "displayName" => "زیست شناسی" ,
-                            "author" => "مسعود حدادی",
-                            "pic" => $contentsets->where("id" , 160)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 160)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 160)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                        [
-                            "displayName" => "دیفرانسیل" ,
-                            "author" => "سیروس نصیری",
-                            "pic" => $contentsets->where("id" , 162)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 162)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 162)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                        [
-                            "displayName" => "ریاضی تجربی" ,
-                            "author" => "سیروس نصیری",
-                            "pic" => $contentsets->where("id" , 164)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 164)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 164)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                        [
-                            "displayName" => "عربی" ,
-                            "author" => "عمار تاج بخش",
-                            "pic" => $contentsets->where("id" , 155)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 155)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 155)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                        [
-                            "displayName" => "شیمی" ,
-                            "author" => "محمد حسین انوشه",
-                            "pic" => $contentsets->where("id" , 158)->first()->photo,
-                            "content_id"=> ($contentsets->where("id" , 158)->first()->educationalcontents->isNotEmpty())?$contentsets->where("id" , 158)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->sortBy("pivot.order")->last()->id:0
-                        ],
-                    ]);
-                    $sections->push(
-                        [
-                            "name"=>$section,
-                            "displayName" => "همایش و جمع بندی",
-                            "lessons" => $lessons ,
-                            "tags" => [
-                                "همایش"
-                            ],
-                            'ads' => [
-                                //DINI KAGHAZI
-                                'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-1.jpg' => 'https://sanatisharif.ir/landing/4?utm_source=sanatisharif&utm_medium=banner&utm_campaign=khordad_sale&utm_content=small-slide-1-1',
-                            ],
-                            'class' =>'hamayesh'
-                        ]
-                    );
-                    break;
-                default:
-                    break ;
-            }
-        }
-
-        View::share('sections',$sections);
     }
 
     /**
