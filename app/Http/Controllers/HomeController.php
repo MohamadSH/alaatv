@@ -107,6 +107,79 @@ class HomeController extends Controller
     {
         try
         {
+            if($request->has("transaction"))
+            {
+
+                $transactions = Transaction::where("transactionstatus_id" , config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
+                    ->where("paymentmethod_id" , "<>" ,config("constants.PAYMENT_METHOD_WALLET"))
+                    ->get();
+//                echo "Total Transactions: ".$transactions->count();
+//                echo "<br>";
+                $users = collect();
+                $counter = 0;
+                $threshold = 7500;
+                foreach ($transactions as $transaction)
+                {
+                    $counter++;
+                    if($counter < $threshold)
+                        continue;
+                    $user = $transaction->order->user;
+
+                    if(isset($user->gender_id) && $user->gender->name == "خانم" )
+                        continue;
+                    if(isset($user))
+                    {
+                        $userRecord = $users->where("user_id" , $user->id)->first();
+                        if(isset($userRecord))
+                        {
+                            $userRecord["totalAmount"] += $transaction->cost;
+                        }
+                        else
+                        {
+                            $users->push([
+                                "user_id" => $user->id,
+                                "firstname" =>$user->firstName,
+                                "lastname" =>$user->lastName,
+                                "mobile" =>$user->mobile,
+                                "totalAmount" => $transaction->cost ,
+                            ]);
+                        }
+                    }
+                    else
+                    {
+                        dump("User was not found for transaction ".$transaction->id);
+                    }
+                }
+//                echo "Total users: ".$users->count();
+//                echo "<br>";
+
+                $minAmount = 500000;
+                $users = $users->where("totalAmount" , ">=" , $minAmount ) ;
+//                echo "Total filtered users: ".$users->count();
+//                echo "<br>";
+
+                echo "<table border='1' style='width: 100%; direction: rtl; font-weight: bold '>
+                     <thead style='text-align: center;font-size: larger'>
+                     <td>نام</td>
+                     <td>نام خانوادگی</td>
+                     <td>موبایل</td>
+                     <td>مجموع خرید</td>
+                     <td>توضیحات</td>
+                     </thead>";
+                foreach ($users as $user)
+                {
+                    echo "<tr style='text-align: center'>
+                        <td>".$user["firstname"]."</td>
+                        <td>".$user["lastname"]."</td>
+                        <td>".$user["mobile"]."</td>
+                        <td>".number_format($user["totalAmount"])."</td>
+                        <td></td>
+                        </tr>";
+                }
+                echo "</table>";
+
+//                dd("DONE");
+            }
             /*$users = User::whereHas("orderproducts" , function ($q)
             {
                 $q->whereIn("product_id" , [214 ,223])
@@ -2201,6 +2274,7 @@ class HomeController extends Controller
             })
             ->whereIn("product_id" , $donateProductArray )
             ->orderBy("cost" , "DESC")
+            ->orderBy("created_at" , "DESC")
             ->take($latestMax)
             ->get();
         $maxDonors = collect();

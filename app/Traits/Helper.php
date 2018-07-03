@@ -169,7 +169,7 @@ trait Helper
             default:
                 return [
                     "error"=>true ,
-                    "message"=>"پاسخ سرور نا شناخته است"
+                    "message"=>$res_data
                 ];
                 break;
         }
