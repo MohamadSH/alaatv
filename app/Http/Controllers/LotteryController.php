@@ -299,22 +299,24 @@ class LotteryController extends Controller
 
                 if($done)
                 {
-                    $userlottery->notify(new LotteryWinner($lottery , $rank , $prizeName , $memorial));
-                    echo "<span style='color:green;font-weight: bolder'>User notified</span>";
-                    echo "<br>";
+                    if(strlen($prizeName) == 0)
+                    {
+                        $userlottery->notify(new LotteryWinner($lottery , $rank , $prizeName , $memorial));
+                        echo "<span style='color:green;font-weight: bolder'>User ".$userlottery->mobile." with rank ".$rank." notified</span>";
+                        echo "<br>";
+                    }
+
+                    $itemName = "";
                     if(strlen($prizeName) > 0 )
                     {
                         $itemName = $prizeName;
                     }
-                    elseif(strlen($memorial))
+                    elseif(strlen($memorial)>0)
                     {
                         $itemName = $memorial;
                     }
-                    else
-                    {
-                        $itemName = "";
-                    }
 
+                    $prizes = "";
                     if(strlen($prizeInfo) > 0)
                     {
                         $prizes = '{
@@ -339,7 +341,7 @@ class LotteryController extends Controller
                     }
 
                     $pivotArray = array();
-                    if(isset($prizes))
+                    if(strlen($prizes) > 0)
                     {
                         $pivotArray["prizes"] =  $prizes;
                     }
