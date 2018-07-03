@@ -4056,7 +4056,6 @@ class HomeController extends Controller
 //                }
 //            }
 //        }
-
         $bonName = config("constants.BON2");
         $bon = Bon::where("name" , $bonName)->first();
         if(!isset($bon))
@@ -4082,16 +4081,16 @@ class HomeController extends Controller
             $bonResult = $userBon->save() ;
             if($bonResult)
             {
-                $message = "شما در قرعه کشی 10 تیر شرکت داده خواهید شد.";
-                $message .= "\n";
-                $message .= "امتیاز شما:";
-                $message .= $points;
-                $message .= "\n";
-                $message .= "آلاء";
+//                $message = "شما در قرعه کشی 10 تیر شرکت داده خواهید شد.";
+//                $message .= "\n";
+//                $message .= "امتیاز شما:";
+//                $message .= $points;
+//                $message .= "\n";
+//                $message .= "آلاء";
                 $user =  $userBon->user;
-                $user->notify(new GeneralNotice($message));
+//                $user->notify(new GeneralNotice($message));
                 echo "<span style='color:green'>";
-                echo "User ".$userId." notfied";
+                echo "User ".$userId." notified , ".$user->mobile;
                 echo "</span>";
                 echo "<br>";
                 $successCounter++;
