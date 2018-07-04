@@ -490,7 +490,7 @@ class TransactionController extends Controller
                             }
                             else
                             {
-                                $cost += $orderSuccessfulTransactionPaidSum ;
+                                $cost += ( $orderSuccessfulTransactionPaidSum / $numOfOrderproducts ) ;
                                 $orderSuccessfulTransactionPaidSum = 0;
                             }
 
