@@ -483,6 +483,7 @@ class TransactionController extends Controller
                             $orderproductCost = $orderproductCost - $orderDiscountPerItem ;
                             $orderproductCost = $orderproductCost + $orderRefundPerItem ;
                             if($orderSuccessfulTransactionPaidSum > $orderproductCost )
+//                            if( ($orderSuccessfulTransactionPaidSum/ $numOfOrderproducts) > $orderproductCost )
                             {
                                 $orderproductCost = $orderproductCost - $orderWalletUsePerItem ;
                                 $cost += $orderproductCost ;
