@@ -456,8 +456,26 @@ class TransactionController extends Controller
                                                                     ->transactions ;
 
                         //ToDo : Main wallet
-                        $orderWalletTransactionSum = $orderSuccessfulTransaction->where("paymentmethod_id" , config("constants.PAYMENT_METHOD_WALLET"))
-                                                                                ->sum("cost");
+                        $giftPaymentMethods = [config("constants.PAYMENT_METHOD_WALLET")];
+                        $orderChunk = 1 ; //For wallet
+                        if(isset($paymentMethodsId))
+                        {
+                            $giftPaymentMethods = array_diff( $giftPaymentMethods , $paymentMethodsId );
+                            if(empty($giftPaymentMethods))
+                            {
+                                $diff_reverse = array_diff( $paymentMethodsId , $giftPaymentMethods );
+                                if(empty($diff_reverse))
+                                {
+                                    $orderChunk = $numOfOrderproducts;
+                                }
+                            }
+
+                        }
+
+                        $orderWalletTransactionSum = 0 ;
+                        if(!empty($giftPaymentMethods))
+                            $orderWalletTransactionSum = $orderSuccessfulTransaction->where("paymentmethod_id" , config("constants.PAYMENT_METHOD_WALLET"))
+                                                                                    ->sum("cost");
 
                         if(isset($transactionStatusFilter))
                             $orderSuccessfulTransaction = $orderSuccessfulTransaction->whereIn("transactionstatus_id" , $transactionStatusFilter);
@@ -482,8 +500,7 @@ class TransactionController extends Controller
 
                             $orderproductCost = $orderproductCost - $orderDiscountPerItem ;
                             $orderproductCost = $orderproductCost + $orderRefundPerItem ;
-                            if($orderSuccessfulTransactionPaidSum > $orderproductCost )
-//                            if( ($orderSuccessfulTransactionPaidSum/ $numOfOrderproducts) > $orderproductCost )
+                            if( ($orderSuccessfulTransactionPaidSum / $orderChunk) > $orderproductCost )
                             {
                                 $orderproductCost = $orderproductCost - $orderWalletUsePerItem ;
                                 $cost += $orderproductCost ;
