@@ -460,11 +460,11 @@ class TransactionController extends Controller
                         $orderChunk = 1 ; //For wallet
                         if(isset($paymentMethodsId))
                         {
-                            $giftPaymentMethods = array_diff( $giftPaymentMethods , $paymentMethodsId );
-                            if(empty($giftPaymentMethods))
+                            $paymentMethodsDiff = array_diff( $giftPaymentMethods , $paymentMethodsId );
+                            if(empty($paymentMethodsDiff))
                             {
-                                $diff_reverse = array_diff( $paymentMethodsId , $giftPaymentMethods );
-                                if(empty($diff_reverse))
+                                $paymentMethodsDiffReverse = array_diff( $paymentMethodsId , $giftPaymentMethods );
+                                if(empty($paymentMethodsDiffReverse))
                                 {
                                     $orderChunk = $numOfOrderproducts;
                                 }
@@ -473,7 +473,7 @@ class TransactionController extends Controller
                         }
 
                         $orderWalletTransactionSum = 0 ;
-                        if(!empty($giftPaymentMethods))
+                        if(!empty($paymentMethodsDiff))
                             $orderWalletTransactionSum = $orderSuccessfulTransaction->where("paymentmethod_id" , config("constants.PAYMENT_METHOD_WALLET"))
                                                                                     ->sum("cost");
 
