@@ -3389,7 +3389,7 @@ class SanatisharifmergeController extends Controller
                             },
                         {
                             "title" : "آمادگی اردوطلایی نوروز",
-                            "url" : "https://sanatisharif.ir/ordu.php",
+                            "url" : "https://sanatisharif.ir/Alaa-App/ordu",
                             "type": 0,
                             "courses" : [
                                     {
@@ -3408,7 +3408,7 @@ class SanatisharifmergeController extends Controller
                         },
                             {
                                 "title" : "کلاس کنکور 97",
-                                "url" : "https://sanatisharif.ir/konkur96.php",
+                                "url" : "https://sanatisharif.ir/Alaa-App/konkur96",
                                 "type": 0,
                                 "courses" : [
                                     {
@@ -3523,7 +3523,7 @@ class SanatisharifmergeController extends Controller
                             },
                             {
                                 "title" : "مقطع یازدهم",
-                                "url" : "https://sanatisharif.ir/11.php",
+                                "url" : "https://sanatisharif.ir/Alaa-App/11",
                                 "type": 0,
                                 "courses" : [
                                 {
@@ -3578,7 +3578,7 @@ class SanatisharifmergeController extends Controller
                             },
                             {
                                 "title" : "مقطع دهم",
-                                "url" : "https://sanatisharif.ir/10.php",
+                                "url" : "https://sanatisharif.ir/Alaa-App/10",
                                 "type": 0,
                                 "courses" : [
                                 
@@ -3653,7 +3653,7 @@ class SanatisharifmergeController extends Controller
                             },
                             {
                                 "title" : "همایش و جمع بندی",
-                                "url" : "https://sanatisharif.ir/hamayesh.php",
+                                "url" : "https://sanatisharif.ir/Alaa-App/hamayesh",
                                 "type": 0,
                                 "courses" : [
                                 {
