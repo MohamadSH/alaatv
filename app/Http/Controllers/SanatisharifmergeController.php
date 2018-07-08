@@ -3374,7 +3374,8 @@ class SanatisharifmergeController extends Controller
         $json = null;
         switch ($mod){
             case "main":
-                $json = '[
+                $json = '
+[
                             {
                                 "title" : "تخته خاک با نظارت آلاء",
                                 "url": "",
@@ -3387,25 +3388,6 @@ class SanatisharifmergeController extends Controller
                                     }
                                 ]
                             },
-                        {
-                            "title" : "آمادگی اردوطلایی نوروز",
-                            "url" : "https://sanatisharif.ir/Alaa-App/ordu",
-                            "type": 0,
-                            "courses" : [
-                                    {
-                                        "title" : "جمع‌بندی آمار و مدلسازی",
-                                        "teacher" : "وحید کبریایی",
-                                        "image_url": "https://sanatisharif.ir/departmentlesson/180204101956.jpg?w=280&h=150",
-                                        "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/20/46/"
-                                    },
-                                    {
-                                        "title" : "جمعبندی زبان کنکور",
-                                        "teacher" : "کیاوش فراهانی",
-                                        "image_url": "https://sanatisharif.ir/lesson/140327081735.jpg?w=280&h=150",
-                                        "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/24/7/"
-                                    }
-                            ]
-                        },
                             {
                                 "title" : "کلاس کنکور 97",
                                 "url" : "https://sanatisharif.ir/Alaa-App/konkur96",
@@ -3414,109 +3396,109 @@ class SanatisharifmergeController extends Controller
                                     {
                                         "title" : "زیست کنکور",
                                         "teacher" : "ابوالفضل جعفری",
-                                        "image_url": "https://sanatisharif.ir/departmentlesson/171125105021.jpg?w=280&h=150",
+                                        "image_url": "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/171125105021.jpg?w=280&h=150",
                                         "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/15/45/"
                                     },
                                     {
                                         "title" : "آرایه های ادبی",
                                         "teacher" : " هامون سبطی",
-                                        "image_url": "https://sanatisharif.ir/departmentlesson/170917011741.jpg?w=280&h=150 ",
+                                        "image_url": "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170917011741.jpg?w=280&h=150",
                                         "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/45/39/"
                                     },
                                     {
                                         "title" : "مشاوره",
                                         "teacher" : "محمدعلی امینی راد",
-                                        "image_url": "https://sanatisharif.ir/lesson/moshavere-lesson.jpg?w=280&h=150",
+                                        "image_url": "https://cdn.sanatisharif.ir/upload/contentset/lesson/moshavere-lesson.jpg?w=280&h=150",
                                         "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/33/11/"
                                     },
                                     {
                                         "title" : "شیمی کنکور",
                                         "teacher" : "مهدی صنیعی طهرانی",
-                                        "image_url": "https://sanatisharif.ir/departmentlesson/170920034146.jpg?w=280&h=150",
+                                        "image_url": "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170920034146.jpg?w=280&h=150",
                                         "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/10/41/"
                                     },
                                     {
                                         "title" : "نکته و تست فیزیک کنکور",
                                         "teacher" : "پیمان طلوعی",
-                                        "image_url": "https://sanatisharif.ir/departmentlesson/170925055613.jpg?w=280&h=150 ",
+                                        "image_url": "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170925055613.jpg?w=280&h=150",
                                         "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/11/44/"
                                     },
                                     {
                                         "title" : "فیزیک 4 - کنکور",
                                         "teacher" : "حمید فدایی فرد",
-                                        "image_url": "https://sanatisharif.ir/departmentlesson/170920042821.jpg?w=280&h=150 ",
+                                        "image_url": "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170920042821.jpg?w=280&h=150",
                                         "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/11/42/"
                                     },
                                     {
                                         "title" : "نکته و تست ریاضی تجربی کنکور",
                                         "teacher" : " مهدی امینی راد",
-                                        "image_url": "https://sanatisharif.ir/departmentlesson/170925061125.jpg?w=280&h=150 ",
+                                        "image_url": "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170925061125.jpg?w=280&h=150",
                                         "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/32/44/"
                                     },
                                     {
                                         "title" : "ریاضی تجربی کنکور",
                                         "teacher" : "محمد امین نباخته",
-                                        "image_url": "https://sanatisharif.ir/departmentlesson/170925061125.jpg?w=280&h=150",
+                                        "image_url": "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170925061125.jpg?w=280&h=150",
                                         "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/32/41/"
                                     },
                                     {
                                         "title" : "نکته و تست دیفرانسیل کنکور",
                                         "teacher" : "محمد صادق ثابتی",
-                                        "image_url": "https://sanatisharif.ir/departmentlesson/170925061008.jpg?w=280&h=150",
+                                        "image_url": "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170925061008.jpg?w=280&h=150",
                                         "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/4/44/"
                                     },
                                     {
                                         "title" : "هندسه تحلیلی کنکور",
                                         "teacher" : "محمد صادق ثابتی",
-                                        "image_url": "/departmentlesson/170920034810.jpg?w=280&h=150",
+                                        "image_url": "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170920034810.jpg?w=280&h=150",
                                         "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/3/41/"
                                     },
                                     {
                                         "title" : "فلسفه و منطق کنکور",
                                         "teacher" : " سید حسام الدین جلالی",
-                                        "image_url": "https://sanatisharif.ir/departmentlesson/171005032754.jpg?w=280&h=150",
+                                        "image_url": "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/171005032754.jpg?w=280&h=150",
                                         "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/46/41/"
                                     },
                                     {
                                         "title" : "تحلیلی کنکور",
                                         "teacher" : " رضا شامیزاده",
-                                        "image_url": "https://sanatisharif.ir/lesson/geometry.jpg?w=280&h=150",
+                                        "image_url": "https://cdn.sanatisharif.ir/upload/contentset/lesson/geometry.jpg?w=280&h=150",
                                         "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/3/20/"
                                     },
                                     {
                                         "title" : "گسسته کنکور",
                                         "teacher" : " رضا شامیزاده",
-                                        "image_url": "https://sanatisharif.ir/lesson/gosaste.jpg?w=280&h=150",
+                                        "image_url": "https://cdn.sanatisharif.ir/upload/contentset/lesson/gosaste.jpg?w=280&h=150",
                                         "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/1/20/"
                                     },
                                     {
                                         "title" : "هندسه پایه کنکور",
                                         "teacher" : "وحید کبریایی",
-                                        "image_url": "https://sanatisharif.ir/departmentlesson/160814054658.jpg?w=280&h=150",
+                                        "image_url": "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/160814054658.jpg?w=280&h=150",
                                         "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/9/27/"
                                     },
                                     {
                                         "title" : "ریاضی تجربی کنکور",
                                         "teacher" : "محمد رضا حسینی فرد",
-                                        "image_url": "https://sanatisharif.ir/departmentlesson/151121032001.jpeg?w=280&h=150",
+                                        "image_url": "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/151121032001.jpeg?w=280&h=150",
                                         "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/32/20/"
                                     },
                                     {
                                         "title" : "عربی کنکور",
                                         "teacher" : "محسن آهویی",
-                                        "image_url": "https://sanatisharif.ir/departmentlesson/arabi2.jpg?w=280&h=150",
+                                        "image_url": "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/arabi2.jpg?w=280&h=150",
                                         "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/5/41/"
                                     },
                                     {
                                         "title" : "زیست کنکور",
                                         "teacher" : "محمد پازوکی",
-                                        "image_url": "https://sanatisharif.ir/lesson/131001125425.jpg?w=280&h=150",
+                                        "image_url": "https://cdn.sanatisharif.ir/upload/contentset/lesson/131001125425.jpg?w=280&h=150",
                                         "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/15/12/"
                                     },
                                     {
                                         "title" : "آمار و مدل سازی کنکور",
                                         "teacher" : "مهدی امینی راد",
-                                        "image_url": "https://sanatisharif.ir/departmentlesson/161231013618.jpg ?w=280&h=150",
+                                        "image_url": "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/161231013618.jpg?w=280&h=150",
                                         "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/20/26/"
                                     }
                                 ]
@@ -3529,49 +3511,49 @@ class SanatisharifmergeController extends Controller
                                 {
                                     "title" : "زیست یازدهم",
                                     "teacher" : "عباس راستی بروجنی",
-                                    "image_url": "https://sanatisharif.ir/departmentlesson/171019113948.jpg?w=280&h=150",
+                                    "image_url": "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/171019113948.jpg?w=280&h=150",
                                     "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/15/38/"
                                 },
                                 {
                                         "title" : "فیزیک یازدهم",
                                         "teacher" : "پیمان طلوعی",
-                                        "image_url": "https://sanatisharif.ir/departmentlesson/171017054931.jpg?w=280&h=150 ",
+                                        "image_url": "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/171017054931.jpg?w=280&h=150",
                                         "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/11/40/"
                                     },
                                     {
                                         "title" : "حسابان یازدهم",
                                         "teacher" : "صادق ثابتی",
-                                        "image_url": "https://sanatisharif.ir/departmentlesson/170920123654.jpg?w=280&h=150 ",
+                                        "image_url": "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170920123654.jpg?w=280&h=150",
                                         "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/13/38/"
                                     },
                                     {
                                         "title" : "حسابان یازدهم",
                                         "teacher" : "محمد رضا مقصودی",
-                                        "image_url": "https://sanatisharif.ir/departmentlesson/170920033407.jpg?w=280&h=150 ",
+                                        "image_url": "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170920033407.jpg?w=280&h=150",
                                         "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/13/40/"
                                     },
                                     {
                                         "title" : "شیمی یازدهم",
                                         "teacher" : "مهدی صنیعی طهرانی",
-                                        "image_url": "https://sanatisharif.ir/departmentlesson/170920034146.jpg?w=280&h=150",
+                                        "image_url": "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170920034146.jpg?w=280&h=150",
                                         "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/10/38/"
                                     },
                                     {
                                         "title" : "ریاضی تجربی یازدهم",
                                         "teacher" : "علی صدری",
-                                        "image_url": "https://sanatisharif.ir/departmentlesson/170917010549.jpg?w=280&h=150",
+                                        "image_url": "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170917010549.jpg?w=280&h=150",
                                         "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/32/38/"
                                     },
                                     {
                                         "title" : "آرایه های ادبی",
                                         "teacher" : " هامون سبطی",
-                                        "image_url": "https://sanatisharif.ir/departmentlesson/170917011741.jpg?w=280&h=150 ",
+                                        "image_url": "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170917011741.jpg?w=280&h=150",
                                         "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/45/39/"
                                     },
                                     {
                                         "title" : "عربی یازدهم",
                                         "teacher" : " ناصر حشمتی",
-                                        "image_url": "https://sanatisharif.ir/departmentlesson/171005033219.jpg?w=280&h=150",
+                                        "image_url": "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/171005033219.jpg?w=280&h=150",
                                         "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/5/38/"
                                     }
                                 ]
@@ -3585,67 +3567,67 @@ class SanatisharifmergeController extends Controller
                                     {
                                         "title" : "متن خوانی عربی دهم",
                                         "teacher" : "مهدی ناصر شریعت",
-                                        "image_url" : "https://sanatisharif.ir/departmentlesson/170920050758.jpg?w=280&h=150",
+                                        "image_url" : "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170920050758.jpg?w=280&h=150",
                                         "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/5/43/"
                                     },
                                     {
                                         "title" : "ریاضی دهم",
                                         "teacher" : "مهدی امینی راد",
-                                        "image_url": "https://sanatisharif.ir/departmentlesson/171003105152.jpg?w=280&h=150 ",
+                                        "image_url": "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/171003105152.jpg?w=280&h=150",
                                         "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/12/37/"
                                     },
                                     {
                                         "title" : "ریاضی دهم",
                                         "teacher" : "محمد جواد نایب کبیر",
-                                        "image_url": "https://sanatisharif.ir/departmentlesson/161231015030.jpg?w=280&h=150 ",
+                                        "image_url": "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/161231015030.jpg?w=280&h=150",
                                         "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/12/27/"
                                     },
                                     {
                                         "title" : "شیمی دهم",
                                         "teacher" : "حامد پویان نظر",
-                                        "image_url": "https://sanatisharif.ir/departmentlesson/170920125924.jpg?w=280&h=150 ",
+                                        "image_url": "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170920125924.jpg?w=280&h=150",
                                         "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/10/37/"
                                     },
                                     {
                                         "title" : "هندسه 1 (دهم)",
                                         "teacher" : "وحید کبریایی",
-                                        "image_url": "https://sanatisharif.ir/departmentlesson/160814054658.jpg?w=280&h=150 ",
+                                        "image_url": "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/160814054658.jpg?w=280&h=150",
                                         "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/9/27/"
                                     },
                                     {
                                         "title" : "زیست 1 (دهم)",
                                         "teacher" : "جلال موقاری",
-                                        "image_url": "https://sanatisharif.ir/departmentlesson/170920031050.jpg?w=280&h=150 ",
+                                        "image_url": "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170920031050.jpg?w=280&h=150",
                                         "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/15/37/"
                                     },
                                     {
                                         "title" : "فیزیک دهم",
                                         "teacher" : "فرشید داداشی",
-                                        "image_url" : "https://sanatisharif.ir/departmentlesson/170920011342.jpg?w=280&h=150",
+                                        "image_url" : "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170920011342.jpg?w=280&h=150",
                                         "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/11/37/"
                                     },
                                     {
                                         "title" : "آرایه های ادبی",
                                         "teacher" : " هامون سبطی",
-                                        "image_url": "https://sanatisharif.ir/departmentlesson/170917011741.jpg?w=280&h=150 ",
+                                        "image_url": "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170917011741.jpg?w=280&h=150",
                                         "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/45/39/"
                                     },
                                     {
                                         "title" : "زبان انگلیسی دهم",
                                         "teacher" : "علی اکبر عزتی",
-                                        "image_url" : "https://sanatisharif.ir/departmentlesson/170917125730.jpg?w=280&h=150",
+                                        "image_url" : "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170917125730.jpg?w=280&h=150",
                                         "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/8/37/"
                                     },
                                     {
                                         "title" : "ریاضی و آمار دهم",
                                         "teacher" : "مهدی امینی راد",
-                                        "image_url" : "https://sanatisharif.ir/departmentlesson/170920045708.jpg?w=280&h=150",
+                                        "image_url" : "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170920045708.jpg?w=280&h=150",
                                         "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/47/37/"
                                     },
                                     {
                                         "title" : "عربی دهم",
                                         "teacher" : "ناصر حشمتی",
-                                        "image_url" : "https://sanatisharif.ir/departmentlesson/170920012145.jpg?w=280&h=150",
+                                        "image_url" : "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170920012145.jpg?w=280&h=150",
                                         "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/5/37/"
                                     }
                                 ]
@@ -3659,49 +3641,49 @@ class SanatisharifmergeController extends Controller
                                 {
                                     "title" : "ریاضی انسانی",
                                     "teacher" : "خسرو محمدزاده",
-                                    "image_url": "https://sanatisharif.ir/departmentlesson/170408122003.jpg?w=280&h=150",
+                                    "image_url": "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170408122003.jpg?w=280&h=150",
                                     "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/43/32/"
                                 },
                                 {
                                     "title" : "گسسته",
                                     "teacher" : "سروش مویینی",
-                                    "image_url": "https://sanatisharif.ir/departmentlesson/170330105321.jpg?w=280&h=150 ",
+                                    "image_url": "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170330105321.jpg?w=280&h=150",
                                     "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/1/32/"
                                 },
                                 {
                                     "title" : "فیزیک",
                                     "teacher" : "نادریان",
-                                    "image_url": "https://sanatisharif.ir/departmentlesson/170405034314.jpg?w=280&h=150",
+                                    "image_url": "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170405034314.jpg?w=280&h=150",
                                     "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/11/32/"
                                 },
                                 {
                                     "title" : "زیست شناسی",
                                     "teacher" : "مسعود حدادی",
-                                    "image_url": "https://sanatisharif.ir/departmentlesson/170405035409.jpg?w=280&h=150",
+                                    "image_url": "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170405035409.jpg?w=280&h=150",
                                     "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/15/32/"
                                 },
                                 {
                                     "title" : "دیفرانسیل",
                                     "teacher" : "سیروس نصیری",
-                                    "image_url": "https://sanatisharif.ir/departmentlesson/170408112610.jpg?w=280&h=150 ",
+                                    "image_url": "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170408112610.jpg?w=280&h=150",
                                     "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/4/32/"
                                 },
                                 {
                                     "title" : "ریاضی تجربی",
                                     "teacher" : "سیروس نصیری",
-                                    "image_url": "https://sanatisharif.ir/departmentlesson/170415024503.gif?w=280&h=150 ",
+                                    "image_url": "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170415024503.gif?w=280&h=150",
                                     "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/32/32/"
                                 },
                                 {
                                     "title" : "عربی",
                                     "teacher" : "عمار تاج بخش",
-                                    "image_url": "https://sanatisharif.ir/departmentlesson/170327102702.jpeg?w=280&h=150 ",
+                                    "image_url": "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170327102702.jpeg?w=280&h=150",
                                     "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/5/32/"
                                 },
                                 {
                                     "title" : "شیمی",
                                     "teacher" : "محمد حسین انوشه",
-                                    "image_url": "https://sanatisharif.ir/departmentlesson/170405030131.jpg?w=280&h=150 ",
+                                    "image_url": "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170405030131.jpg?w=280&h=150",
                                     "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/10/32/"
                                 }
                                 ]
