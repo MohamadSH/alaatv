@@ -800,6 +800,7 @@ class HomeController extends Controller
                         ["lastName"=>"رمضانی", "firstName"=>"علیرضا" , "value"=>"علیرضا_رمضانی"],
                         ["lastName"=>"داداشی", "firstName"=>"فرشید" , "value"=>"فرشید_داداشی"],
                         ["lastName"=>"کازرانیان", "firstName"=>"" , "value"=>"کازرانیان"],
+                        ["lastName"=>"نادریان", "firstName"=>"" , "value"=>"نادریان"],
                         ["lastName"=>"جهانبخش", "firstName"=>"" , "value"=>"جهانبخش"],
                         ["lastName"=>"عزتی", "firstName"=>"علی اکبر" , "value"=>"علی_اکبر_عزتی"],
                         ["lastName"=>"فراهانی" , "firstName"=>"کیاوش", "value"=>"کیاوش_فراهانی"],
@@ -913,6 +914,7 @@ class HomeController extends Controller
                     ["lastName"=>"رمضانی"  , "firstName"=>"علیرضا", "value"=>"علیرضا_رمضانی"],
                     ["lastName"=>"داداشی"  , "firstName"=>"فرشید", "value"=>"فرشید_داداشی"],
                     ["lastName"=>"کازرانیان"  , "firstName"=>"", "value"=>"کازرانیان"],
+                    ["lastName"=>"نادریان"  , "firstName"=>"", "value"=>"نادریان"],
                     ["lastName"=>"جهانبخش"  , "firstName"=>"", "value"=>"جهانبخش"],
                 ])->sortBy("lastName")->values(),
                 "زبان_انگلیسی" => collect([
