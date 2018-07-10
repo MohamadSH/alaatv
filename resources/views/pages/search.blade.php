@@ -576,6 +576,24 @@
             e.preventDefault();
         });
 
+        $(document).on("change", "#gradeSelect", function (){
+            tags.push($("#gradeSelect option:selected").val());
+        });
+
+        $(document).on("change", "#majorSelect", function (){
+            tags.push($("#majorSelect option:selected").val());
+            makeLessonSelect();
+        });
+
+        $(document).on("change", "#lessonSelect", function (){
+            tags.push($("#lessonSelect option:selected").val());
+            makeTeacherSelect();
+        });
+
+        $(document).on("change", "#teacherSelect", function (){
+            tags.push($("#teacherSelect option:selected").val());
+        });
+
         $(document).on("change", ".itemFilter", function (){
             contentLoad();
         });
@@ -612,25 +630,6 @@
             });
 
             contentLoad();
-        });
-
-
-        $(document).on("change", "#gradeSelect", function (){
-            tags.push($("#gradeSelect option:selected").val());
-        });
-
-        $(document).on("change", "#majorSelect", function (){
-            tags.push($("#majorSelect option:selected").val());
-            makeLessonSelect();
-        });
-
-        $(document).on("change", "#lessonSelect", function (){
-            tags.push($("#lessonSelect option:selected").val());
-            makeTeacherSelect();
-        });
-
-        $(document).on("change", "#teacherSelect", function (){
-            tags.push($("#teacherSelect option:selected").val());
         });
 
     </script>
