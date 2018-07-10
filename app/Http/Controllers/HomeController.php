@@ -763,6 +763,7 @@ class HomeController extends Controller
                     [
                         ["index"=>"همه دبیرها" , "firstName"=>"" , "value"=>""],
                         ["lastName"=>"ثابتی" , "firstName"=>"محمد صادق" , "value"=>"محمد_صادق_ثابتی"],
+                        ["lastName"=>"نصیری" , "firstName"=>"سیروس" , "value"=>"سیروس_نصیری"],
                         ["lastName"=>"شامیزاده" , "firstName"=>"رضا" , "value"=>"رضا_شامیزاده"],
                         ["lastName"=>"شهریان" , "firstName"=>"محسن" , "value"=>"محسن_شهریان"],
                         ["lastName"=>"مؤذنی پور", "firstName"=>"بهمن" , "value"=>"بهمن_مؤذنی_پور"],
@@ -832,6 +833,7 @@ class HomeController extends Controller
                     ["lastName"=>"ثابتی" , "firstName"=>"محمد صادق", "value"=>"محمد_صادق_ثابتی"],
                     ["lastName"=>"شامیزاده" , "firstName"=>"رضا", "value"=>"رضا_شامیزاده"],
                     ["lastName"=>"شهریان" , "firstName"=>"محسن", "value"=>"محسن_شهریان"],
+                    ["lastName"=>"نصیری" , "firstName"=>"سیروس" , "value"=>"سیروس_نصیری"],
                 ])->sortBy("lastName")->values(),
                 "گسسته" => collect([
                     ["index"=>"همه دبیرها" , "firstName"=>"" , "value"=>""],
@@ -3425,13 +3427,80 @@ class HomeController extends Controller
 
             }
 
-            $orders = Order::whereDoesntHave("orderproducts")
-                ->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
-                ->whereIn("paymentstatus_id" , [
-                    config("constants.PAYMENT_STATUS_INDEBTED"),
-                    config("constants.PAYMENT_STATUS_PAID")
-                ]);
-            dd($orders->pluck("id")->toArray());
+            if($request->has("tagfix"))
+            {
+                $orders = Order::whereDoesntHave("orderproducts")
+                    ->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
+                    ->whereIn("paymentstatus_id" , [
+                        config("constants.PAYMENT_STATUS_INDEBTED"),
+                        config("constants.PAYMENT_STATUS_PAID")
+                    ]);
+                dd($orders->pluck("id")->toArray());
+
+                $contentsetId = 159;
+                $contentset = Contentset::where("id" , $contentsetId)
+                    ->first() ;
+
+                $tags = $contentset->tags->tags;
+                array_push($tags , "نادریان");
+                $bucket = "contentset";
+                $tagsJson = [
+                    "bucket" => $bucket,
+                    "tags" => $tags
+                ];
+                $contentset->tags = json_encode($tagsJson);
+
+                if($contentset->update())
+                {
+                    $params = [
+                        "tags"=> json_encode($contentset->tags->tags) ,
+                    ];
+                    if(isset($contentset->created_at) && strlen($contentset->created_at) > 0 )
+                        $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $contentset->created_at )->timestamp;
+
+                    $response =  $this->sendRequest(
+                        config("constants.TAG_API_URL")."id/$bucket/".$contentset->id ,
+                        "PUT",
+                        $params
+                    );
+                }
+                else
+                {
+                    dump("Error on updating #".$contentset->id);
+                }
+
+                $contents = $contentset->educationalcontents;
+
+                foreach ($contents as $content)
+                {
+                    $tags = $content->tags->tags;
+                    array_push($tags , "نادریان");
+                    $bucket = "content";
+                    $tagsJson = [
+                        "bucket" => $bucket,
+                        "tags" => $tags
+                    ];
+                    $content->tags = json_encode($tagsJson);
+                    if($content->update())
+                    {
+                        $params = [
+                            "tags"=> json_encode($content->tags->tags) ,
+                        ];
+                        if(isset($content->created_at) && strlen($content->created_at) > 0 )
+                            $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $content->created_at )->timestamp;
+
+                        $response =  $this->sendRequest(
+                            config("constants.TAG_API_URL")."id/$bucket/".$content->id ,
+                            "PUT",
+                            $params
+                        );
+                    }
+                    else
+                    {
+                        dump("Error on updating #".$content->id);
+                    }
+                }
+            }
 
         }
         catch (\Exception    $e) {
