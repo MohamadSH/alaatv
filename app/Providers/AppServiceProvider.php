@@ -420,7 +420,7 @@ class AppServiceProvider extends ServiceProvider
                                     ],
                                     'ads' => [
                                         //SEBTI
-                                        'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-1.jpg' => 'https://sanatisharif.ir/landing/4?utm_source=sanatisharif&utm_medium=banner&utm_campaign=khordad_sale&utm_content=small-slide-1-1',
+//                                        'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-1.jpg' => 'https://sanatisharif.ir/landing/4?utm_source=sanatisharif&utm_medium=banner&utm_campaign=khordad_sale&utm_content=small-slide-1-1',
                                     ],
                                     'class' =>'konkoor'
                                 ]
@@ -487,7 +487,7 @@ class AppServiceProvider extends ServiceProvider
                                     ],
                                     'ads' => [
                                         //ZIST GIAHI
-                                        'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-2.jpg' => 'https://sanatisharif.ir/landing/4?utm_source=sanatisharif&utm_medium=banner&utm_campaign=khordad_sale&utm_content=small-slide-2',
+//                                        'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-2.jpg' => 'https://sanatisharif.ir/landing/4?utm_source=sanatisharif&utm_medium=banner&utm_campaign=khordad_sale&utm_content=small-slide-2',
                                     ],
                                     'class' =>'yazdahom'
                                 ]
@@ -572,7 +572,7 @@ class AppServiceProvider extends ServiceProvider
                                     ],
                                     'ads' => [
                                         //DINI KAGHAZI
-                                        'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-3.jpg' => 'https://sanatisharif.ir/landing/4?utm_source=sanatisharif&utm_medium=banner&utm_campaign=khordad_sale&utm_content=small-slide-3',
+//                                        'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-3.jpg' => 'https://sanatisharif.ir/landing/4?utm_source=sanatisharif&utm_medium=banner&utm_campaign=khordad_sale&utm_content=small-slide-3',
                                     ],
                                     'class' =>'dahom'
                                 ]
@@ -639,7 +639,7 @@ class AppServiceProvider extends ServiceProvider
                                     ],
                                     'ads' => [
                                         //DINI KAGHAZI
-                                        'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-1.jpg' => 'https://sanatisharif.ir/landing/4?utm_source=sanatisharif&utm_medium=banner&utm_campaign=khordad_sale&utm_content=small-slide-1-1',
+//                                        'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-1.jpg' => 'https://sanatisharif.ir/landing/4?utm_source=sanatisharif&utm_medium=banner&utm_campaign=khordad_sale&utm_content=small-slide-1-1',
                                     ],
                                     'class' =>'hamayesh'
                                 ]

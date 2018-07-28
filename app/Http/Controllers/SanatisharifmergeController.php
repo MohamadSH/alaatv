@@ -3200,7 +3200,7 @@ class SanatisharifmergeController extends Controller
                     dump($tags);
 
                     if(!$sanatisharifRecord->$enableColumn) $storeContentReuest->offsetSet("enable" , 0);
-//            $storeContentReuest->offsetSet("validSince" , ""); //ToDo
+//            $storeContentReuest->offsetSet("validSince" , "");
 
                     $storeContentReuest->offsetSet("contenttypes" , $contentTypeId);
                     if(Contentset::where("id",$sanatisharifRecord->departmentlessonid)->get()->isNotEmpty())

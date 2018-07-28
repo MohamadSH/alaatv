@@ -86,7 +86,6 @@ class TransactionController extends Controller
                 if($response->getStatusCode() == 200) $zarinPal->redirect();
                 else dd("مشکل در برقراری ارتباط با درگاه زرین پال");
             }else{
-                //ToDo: check if this order is paid for or not
                 $request = new InsertTransactionRequest();
                 $request->offsetSet("order_id" ,  $order->id);
                 $request->offsetSet("cost" ,  $cost);

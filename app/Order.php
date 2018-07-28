@@ -84,13 +84,11 @@ class Order extends Model
 
     public function onlinetransactions()
     {
-        //ToDo : add where to get only paymentMethod = online
         return $this->hasMany('App\Transaction')->where('paymentmethod_id', 1);
     }
 
-    public function successfulTransactions()
+        public function successfulTransactions()
     {
-        //ToDo : add where to get only paymentMethod = online
         return $this->hasMany('App\Transaction')->where(function ($q){
             $q->where("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL"))
               ->orWhere("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_SUSPENDED")) ;
