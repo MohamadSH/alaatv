@@ -1372,14 +1372,16 @@ class UserController extends Controller
         $previousPath = url()->previous();
         if(strcmp($previousPath , route('login'))==0) {
 //            ToDo: config , obligating this form to the use or not
-            if(true) $formByPass = false ;
-            else $formByPass = true;
+            if(true)
+                $formByPass = false ;
+            else
+                $formByPass = true;
             $note = "برای ورود به سایت لطفا اطلاعات زیر را تکمیل نمایید";
         }
-        else $note = "برای استفاده از این خدمت سایت لطفا اطلاعات زیر را تکمیل نمایید";
+        else
+            $note = "برای استفاده از این خدمت سایت لطفا اطلاعات زیر را تکمیل نمایید";
         $formFields =Afterloginformcontrol::getFormFields();
         $tables = [];
-        //ToDo : filter highschool majors
         foreach ($formFields as $formField){
             if(strpos($formField->name, "_id")) {
                 $tableName = $formField->name;
@@ -2028,7 +2030,7 @@ class UserController extends Controller
             if($parentContacts->isEmpty())
             {
                 $storeContactRequest = new \App\Http\Requests\InsertContactRequest();
-                $storeContactRequest->offsetSet("name" , $relative); //ToDo: name ro mishe gereft
+                $storeContactRequest->offsetSet("name" , $relative);
                 $storeContactRequest->offsetSet("user_id" , $user->id);
                 $storeContactRequest->offsetSet("contacttype_id" , $simpleContact->id);
                 $storeContactRequest->offsetSet("relative_id" , $parent->id);

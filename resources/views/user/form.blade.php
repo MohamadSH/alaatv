@@ -322,7 +322,6 @@
                                 </h4>
                             </div>
                             <div id="collapse_3_1" class="panel-collapse collapse">
-                                {{--ToDo : wSetting must be set--}}
                                 <div class="panel-body" @if(isset($wSetting) && strlen($wSetting)>300)style="height:200px; overflow-y:auto;"@endif>
                                     <p> تابعیت از قوانین جمهوری اسلامی ایران برای استفاده از سایت الزامی می باشد</p>
                                 </div>

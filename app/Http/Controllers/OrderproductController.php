@@ -190,6 +190,7 @@ class OrderproductController extends Controller
                 return redirect()->back();
             }
         }
+        //ToDo : replace with better approach
         if(Auth::check()){
             /**
              * Determines it is an order by admin or by a user
@@ -368,15 +369,17 @@ class OrderproductController extends Controller
                         /**
                          * Attaching simple product gifts to the order
                          */
-                        //ToDo: what if he has added the gift before
                         $gifts = $simpleProduct->getGifts();
                         foreach ($gifts as $gift)
                         {
-                            if($attachedGifts->contains($gift->id)) continue;
-                            else $attachedGifts->push($gift->id);
+                            if($attachedGifts->contains($gift->id))
+                                continue;
+                            else
+                                $attachedGifts->push($gift->id);
                             if($order->orderproducts(Config::get("constants.ORDER_PRODUCT_GIFT"))->whereHas("product" , function($q) use($gift){
                                 $q->where("id" , $gift->id);
-                            })->get()->isNotEmpty()) continue;
+                            })->get()->isNotEmpty())
+                                continue;
                             $orderproduct->attachGift($gift) ;
                         }
                         /**
@@ -531,7 +534,6 @@ class OrderproductController extends Controller
 
         if(strlen($orderproduct->checkoutstatus_id) == 0 ) $orderproduct->checkoutstatus_id = null;
 
-        //ToDo :
         $orderproduct->attributevalues()->detach($orderproduct->attributevalues->pluck("id")->toArray());
         if($request->has("extraAttribute"))
         {
@@ -575,7 +577,7 @@ class OrderproductController extends Controller
                             $response = $userbonController->store($request);
                             if($response->getStatusCode() == 200)
                             {
-                                //ToDo
+                                //ToDo : Appropriate response
                             }else{
 
                             }

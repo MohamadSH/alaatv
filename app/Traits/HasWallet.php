@@ -65,7 +65,6 @@ trait HasWallet
 
         if(!isset($walletType))
             $walletType = config("constants.WALLET_TYPE_MAIN");
-        //ToDo agar wallet type vojood nadash: bayad wallet type az database khande shavad ta in moshkel be vojood nayayad
         $wallet = $this->wallets->where("wallettype_id" , $walletType)->first();
         if(isset($wallet))
         {
@@ -203,7 +202,6 @@ trait HasWallet
      */
     public function actualBalance()
     {
-//ToDo Implement it according to transaction system
 //        $credits = $this->wallet->transactions()
 //            ->whereIn('type', ['deposit', 'refund'])
 //            ->sum('amount');

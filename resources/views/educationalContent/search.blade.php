@@ -135,7 +135,6 @@
                                         <h5 class="bold text-center">
                                             @if(strlen($product->name)>0 ) {{$product->name}} @endif</h5>
                                         <h5 class="price-text-color bold">
-                                            {{--ToDo: add code for product discount--}}
                                             @if($product->isFree)
                                                 <div class="cbp-l-grid-projects-desc text-center bold font-red product-potfolio-free" >رایگان </div>
                                             @elseif($costCollection[$product->id]["cost"] == 0)
