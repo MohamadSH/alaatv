@@ -723,7 +723,6 @@ class OrderController extends Controller
                         $order->costwithoutcoupon = 0 ;
                     }
                 }
-                //ToDo put if
             }
         }
 
@@ -1345,7 +1344,6 @@ class OrderController extends Controller
                     $verifyTrans = $verifyTrans['return'];
                     $verifiedTotalAmount = $verifyTrans['resultTotalAmount'];
 
-                    //ToDo : what the verifiedTotalAmount is not number
                     if((int)$verifiedTotalAmount != $amount)
                     {
                         $transaction->cost = $verifiedTotalAmount/10 ;
@@ -2354,7 +2352,6 @@ class OrderController extends Controller
             if($donateOrder->save())
             {
                 $user->fresh();
-                //ToDo
             }
         }
         $request->offsetSet("mode" , "donate");
