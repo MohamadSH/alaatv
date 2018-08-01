@@ -5087,20 +5087,30 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function submitKonkurResult()
+    public function submitKonkurResult(Request $request)
     {
 
         $majors = Major::where("majortype_id" ,1)->get()->pluck("name" , "id")->toArray();
         $majors = array_add($majors , 0 , "انتخاب رشته");
         $majors = array_sort_recursive($majors);
-        $event = Event::all()->first();
+        $event = Event::where("name" , "konkur97")->first();
         $sideBarMode = "closed";
 
-        $userEventReport = Eventresult::where("user_id" ,Auth::user()->id)->where("event_id" , $event->id)->get()->first();
+        $userEventReport = Eventresult::where("user_id" ,Auth::user()->id)
+                                    ->where("event_id" , $event->id)->get()
+                                    ->first();
 
         $pageName = "submitKonkurResult";
         $user = Auth::user();
         $userCompletion = (int)$user->completion();
+        $url = $request->url();
+        $title = "آلاء|کارنامه سراسری 97";
+        SEO::setTitle($title);
+        SEO::opengraph()->setUrl($url);
+        SEO::setCanonical($url);
+        SEO::twitter()->setSite("آلاء");
+        SEO::setDescription($this->setting->site->seo->homepage->metaDescription);
+        SEO::opengraph()->addImage(route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]), ['height' => 100, 'width' => 100]);
         return view("user.submitEventResultReport" , compact("majors" , "event" , "sideBarMode" , "userEventReport" , "pageName"  , "user" , "userCompletion"));
     }
 

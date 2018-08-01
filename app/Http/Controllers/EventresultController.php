@@ -93,8 +93,10 @@ class EventresultController extends Controller
             $eventResult->user_id = $user->id ;
         }
 
-        if($request->has("enableReportPublish")) $eventResult->enableReportPublish = 1 ;
-        else $eventResult->enableReportPublish = 0;
+        if($request->has("enableReportPublish"))
+            $eventResult->enableReportPublish = 1 ;
+        else
+            $eventResult->enableReportPublish = 0;
 
         $userUpdate = false ;
         if($request->has("major_id"))
