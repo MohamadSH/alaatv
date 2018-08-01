@@ -13,10 +13,6 @@
     class="page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-sidebar-closed page-md"
 @endsection
 
-@section("title")
-    <title>آلاء|کارنامه سراسری 96</title>
-@endsection
-
 @section("pageBar")
     <div class="page-bar">
         <ul class="page-breadcrumb">
@@ -49,7 +45,7 @@
                             <div class="portlet-title tabbable-line">
                                 <div class="caption caption-md">
                                     <i class="icon-globe theme-font hide"></i>
-                                    <span class="caption-subject font-blue-madison bold uppercase">ثبت کارنامه {{$event->name}}</span>
+                                    <span class="caption-subject font-blue-madison bold uppercase">ثبت کارنامه {{$event->displayName}}</span>
                                 </div>
                             </div>
                             <div class="portlet-body">
@@ -65,7 +61,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <a target="_blank" class="btn blue" href="{{action("HomeController@download" , ["content"=>"فایل کارنامه","fileName"=>$userEventReport->reportFile ])}}">دانلود فایل کارنامه</a>
-                                        </div
+                                        </div>
 
                                     </div>
                                 @else
