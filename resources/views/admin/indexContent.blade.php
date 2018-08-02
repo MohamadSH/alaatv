@@ -399,6 +399,64 @@
                     </div>
                 </div>
                 <!-- END SAMPLE TABLE PORTLET-->
+
+            <!-- BEGIN QUESTION TABLE PORTLET-->
+            <div class="portlet box eventResult-portlet" style="background-color: #e04ea6">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-cogs bg-font-dark"></i>لیست نتایج کنکور 97 </div>
+                    <div class="tools">
+                        <img class="hidden" id="konkurResult97-portlet-loading" src="{{Config::get('constants.ADMIN_LOADING_BAR_GIF')}}"  style="width: 50px;">
+                        <a href="javascript:;" class="collapse" id="konkurResult97-expand"> </a>
+                        {{--<a href="#portlet-config" data-toggle="modal" class="config"> </a>--}}
+                        @permission((Config::get('constants.LIST_EVENTRESULT_ACCESS')))
+                        <a href="javascript:;" class="reload" data-role="eventResult"> </a>
+                        @endpermission
+                        <a href="javascript:;" class="remove"> </a>
+                    </div>
+                    <div class="tools"> </div>
+                </div>
+                <div class="portlet-body" style="display: block;">
+                    <div class="portlet box blue hidden" >
+                        <style>
+                            .form .form-row-seperated .form-group{
+                                border-bottom-color: #bfbfbf !important;
+                            }
+                        </style>
+                        <div class="portlet-body form" style="border-top: #3598dc solid 1px" >
+                            {!! Form::open(['class'=>'form-horizontal form-row-seperated' , 'id' => 'filterkonkurResult97Form']) !!}
+                            <input type="hidden" name="event_id[]" value="1">
+                            {!! Form::close() !!}
+                        </div>
+                    </div>
+                    <div class="table-toolbar">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="btn-group">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="konkurResult97_table">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th class="all"> دانش آموز </th>
+                            <th class="min-tablet"> شماره تماس </th>
+                            <th class="min-tablet"> شهر </th>
+                            <th class="min-tablet"> فایل کارنامه</th>
+                            <th class="all"> رتبه </th>
+                            <th class="min-tablet"> نظر </th>
+                            <th class="min-tablet"> تاریخ درج </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{--Loading by ajax--}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- END SAMPLE TABLE PORTLET-->
                 @endpermission
 
                 @permission((Config::get('constants.LIST_SHARIF_REGISTER_ACCESS')))
@@ -648,6 +706,7 @@
             @permission((Config::get('constants.LIST_EVENTRESULT_ACCESS')))
             $(".eventResult-portlet .reload").trigger("click");
             $("#eventResult-expand").trigger("click");
+            $("#konkurResult97-expand").trigger("click");
             @endpermission
 
             @permission((Config::get('constants.LIST_SHARIF_REGISTER_ACCESS')))
