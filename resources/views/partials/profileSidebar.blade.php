@@ -50,7 +50,7 @@
             @endif
             <li @if(strcmp(url()->current() , action("HomeController@submitKonkurResult")) == 0) class="active" @endif >
                 <a href="{{action("HomeController@submitKonkurResult")}}">
-                    <i class="fa fa-graduation-cap"></i> ثبت رتبه 96 </a>
+                    <i class="fa fa-graduation-cap"></i> ثبت رتبه 97 </a>
             </li>
         </ul>
     </div>
