@@ -65,7 +65,7 @@
 
                                                 @if(isset($userEventReport->comment) && strlen($userEventReport->comment)>0)
                                                     <h2 class="control-label ">نظر شما:</h2>
-                                                    <text class="form-control-static bold" style="font-size: medium ; color:green"  > {{$userEventReport->comment}} </text>
+                                                    <text class="form-control-static bold" style="font-size: medium ; color:green;text-align: justify"  > {{$userEventReport->comment}} </text>
                                                 @else
                                                     {!! Form::open(['method' => 'PUT','action' => ['EventresultController@update' , $userEventReport ] ]) !!}
                                                             <textarea rows="3" name="comment" placeholder="آلاء چه نقشی در نتیجه شما داشته و چطور به شما کمک کرده؟" class="form-control"></textarea>
