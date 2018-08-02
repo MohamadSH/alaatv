@@ -55,7 +55,7 @@ class InsertEventResultRequest extends FormRequest
             'rank' => 'required',
             'participationCode' => $rules["participationCode"],
             'event_id'=>'required|exists:events,id',
-            'reportFile' => 'required'
+            'reportFile' => 'required|mimes:jpeg,jpg,png,pdf,rar,zip'
         ];
     }
 
