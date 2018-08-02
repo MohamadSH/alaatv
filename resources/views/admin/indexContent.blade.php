@@ -425,7 +425,7 @@
                         </style>
                         <div class="portlet-body form" style="border-top: #3598dc solid 1px" >
                             {!! Form::open(['class'=>'form-horizontal form-row-seperated' , 'id' => 'filterkonkurResult97Form']) !!}
-                            <input type="hidden" name="event_id[]" value="1">
+                                <input type="hidden" name="event_id[]" value="3">
                             {!! Form::close() !!}
                         </div>
                     </div>
@@ -706,7 +706,7 @@
             @permission((Config::get('constants.LIST_EVENTRESULT_ACCESS')))
             $(".eventResult-portlet .reload").trigger("click");
             $("#eventResult-expand").trigger("click");
-            $("#konkurResult97-expand").trigger("click");
+                $("#konkurResult97-expand").trigger("click");
             @endpermission
 
             @permission((Config::get('constants.LIST_SHARIF_REGISTER_ACCESS')))
