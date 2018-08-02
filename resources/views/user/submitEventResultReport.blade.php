@@ -62,7 +62,7 @@
                                         <div class="col-md-6">
                                             <h2 class="control-label ">نظر شما:
                                                 @if(isset($userEventReport->comment) && strlen($userEventReport->comment)>0)
-                                                    <text class="form-control-static bold"> {{$userEventReport->comment}} </text>
+                                                    <text class="form-control-static bold" style="font-size: medium ; color:green"  > {{$userEventReport->comment}} </text>
                                                 @else
                                                     <text class="form-control-static bold font-red">نظری نداشتید</text>
                                                 @endif
