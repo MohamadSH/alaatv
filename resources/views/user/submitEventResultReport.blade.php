@@ -60,6 +60,15 @@
                                             </h2>
                                         </div>
                                         <div class="col-md-6">
+                                            <h2 class="control-label ">نظر شما:
+                                                @if(isset($userEventReport->comment) && strlen($userEventReport->comment)>0)
+                                                    <text class="form-control-static bold"> {{$userEventReport->comment}} </text>
+                                                @else
+                                                    <text class="form-control-static bold font-red">نظری نداشتید</text>
+                                                @endif
+                                            </h2>
+                                        </div>
+                                        <div class="col-md-12 text-center">
                                             <a target="_blank" class="btn blue" href="{{action("HomeController@download" , ["content"=>"فایل کارنامه","fileName"=>$userEventReport->reportFile ])}}">دانلود فایل کارنامه</a>
                                         </div>
 
