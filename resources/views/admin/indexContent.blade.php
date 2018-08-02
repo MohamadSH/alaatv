@@ -343,7 +343,7 @@
 
                 @permission((Config::get('constants.LIST_EVENTRESULT_ACCESS')))
                 <!-- BEGIN QUESTION TABLE PORTLET-->
-                <div class="portlet box" id="konkurResult96-portlet" style="background-color: #e04ea6">
+                <div class="portlet box eventResult-portlet" style="background-color: #e04ea6">
                     <div class="portlet-title">
                         <div class="caption">
                             <i class="fa fa-cogs bg-font-dark"></i>لیست نتایج کنکور 96 </div>
@@ -401,7 +401,7 @@
                 <!-- END SAMPLE TABLE PORTLET-->
 
                 <!-- BEGIN QUESTION TABLE PORTLET-->
-                <div class="portlet box" id="konkurResult97-portlet" style="background-color: #e04ea6">
+                <div class="portlet box eventResult-portlet" style="background-color: #e04ea6">
                     <div class="portlet-title">
                         <div class="caption">
                             <i class="fa fa-cogs bg-font-dark"></i>لیست نتایج کنکور 97 </div>
@@ -704,8 +704,7 @@
             @endpermission
 
             @permission((Config::get('constants.LIST_EVENTRESULT_ACCESS')))
-            $("#konkurResult96-portlet .reload").trigger("click");
-            $("#konkurResult97-portlet .reload").trigger("click");
+            $("#eventResult-portlet .reload").trigger("click");
             $("#konkurResult96-expand").trigger("click");
             $("#konkurResult97-expand").trigger("click");
             @endpermission
