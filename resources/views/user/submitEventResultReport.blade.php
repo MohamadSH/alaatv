@@ -98,7 +98,7 @@
                                                     </div>
                                                     <div class="col-md-12">
                                                         <div class="col-md-6">
-                                                            <label class="control-label" for="reportFile">فایل کارنامه</label>
+                                                            <label class="control-label" for="reportFile">فایل کارنامه(الزامی)</label>
                                                             <div class="form-group {{ $errors->has('reportFile') ? ' has-error' : '' }}">
 
                                                                     <div class="fileinput fileinput-new" data-provides="fileinput">
@@ -123,7 +123,7 @@
                                                         </div>
                                                         <div class="col-md-6">
 {{--                                                            {!! Form::textarea('comment', null, ['class' => '' , 'row'=>'2',  'placeholder' => 'نظر شما']) !!}--}}
-                                                             <textarea rows="3" name="comment" placeholder="نظر شما" class="form-control"></textarea>
+                                                             <textarea rows="3" name="comment" placeholder="آلاء چه نقشی در نتیجه شما داشته و چطور به شما کمک کرده؟" class="form-control"></textarea>
                                                         </div>
                                                     </div>
                                             </div>
