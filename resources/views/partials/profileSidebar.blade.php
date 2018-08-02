@@ -57,6 +57,7 @@
     <!-- END MENU -->
 </div>
 <!-- END PORTLET MAIN -->
+@if(isset($withInfoBox) && $withInfoBox)
 <!-- PORTLET MAIN -->
 <div class="portlet light ">
     <div>
@@ -137,7 +138,9 @@
     </div>
 </div>
 <!-- END PORTLET MAIN -->
+@endif
 
+@if(isset($withCompletionBox) && $withCompletionBox)
 <div class="portlet light ">
     <div class="portlet-title">
         <div class="caption" style="width: 100%; text-align: center">
@@ -167,3 +170,4 @@
         </div>
     </div>
 </div>
+@endif
