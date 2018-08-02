@@ -195,12 +195,18 @@ class EventresultController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  Eventresult  $eventResult
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Eventresult $eventResult)
     {
-        //
+        $eventResult->fill($request->all());
+        $updateResult = $eventResult->update();
+        if($updateResult)
+        {
+            session()->put("success" , "تغییرات با موفقیت ثبت شد");
+        }
+        return redirect()->back();
     }
 
     /**
