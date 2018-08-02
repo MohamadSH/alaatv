@@ -16,6 +16,7 @@ use App\Contact;
 use App\Coupon;
 use App\Educationalcontent;
 use App\Employeetimesheet;
+use App\Eventresult;
 use App\File;
 use App\Mbtianswer;
 use App\Order;
@@ -305,6 +306,13 @@ class RouteServiceProvider extends ServiceProvider
             $key = "Wallet:".$value;
             return Cache::remember($key,Config::get("constants.CACHE_5"),function () use ($value){
                 return Wallet::where('id', $value)->first() ?? abort(404);
+            });
+
+        });
+        Route::bind("eventresult", function($value){
+            $key = "Eventresuly:".$value;
+            return Cache::remember($key,Config::get("constants.CACHE_5"),function () use ($value){
+                return Eventresult::where('id', $value)->first() ?? abort(404);
             });
 
         });

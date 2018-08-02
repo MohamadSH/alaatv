@@ -49,31 +49,36 @@
                                 </div>
                             </div>
                             <div class="portlet-body">
-                                    {!! Form::open(['files'=>true,'method' => 'POST','action' => ['EventresultController@store'] ]) !!}
-                                        {{ csrf_field() }}
-                                    {!! Form::hidden('event_id',$event->id) !!}
                                 @if(isset($userEventReport))
                                     <div class="row">
                                         <div class="col-md-6">
+                                            <div class="col-md-12">
                                             <h2 class="control-label ">رتبه شما:
                                                 <text class="form-control-static bold"> {{$userEventReport->rank}} </text>
                                             </h2>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <a target="_blank" class="btn blue" href="{{action("HomeController@download" , ["content"=>"فایل کارنامه","fileName"=>$userEventReport->reportFile ])}}">دانلود فایل کارنامه</a>
+                                            </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <h2 class="control-label ">نظر شما:
+
                                                 @if(isset($userEventReport->comment) && strlen($userEventReport->comment)>0)
+                                                    <h2 class="control-label ">نظر شما:</h2>
                                                     <text class="form-control-static bold" style="font-size: medium ; color:green"  > {{$userEventReport->comment}} </text>
                                                 @else
-                                                    <text class="form-control-static bold font-red">نظری نداشتید</text>
+                                                    {!! Form::open(['method' => 'PUT','action' => ['EventresultController@update' , $userEventReport ] ]) !!}
+                                                            <textarea rows="3" name="comment" placeholder="آلاء چه نقشی در نتیجه شما داشته و چطور به شما کمک کرده؟" class="form-control"></textarea>
+                                                        {!! Form::submit('ثبت', ['class' => 'btn blue']) !!}
+                                                    {!! Form::close() !!}
                                                 @endif
-                                            </h2>
-                                        </div>
-                                        <div class="col-md-12 text-center">
-                                            <a target="_blank" class="btn blue" href="{{action("HomeController@download" , ["content"=>"فایل کارنامه","fileName"=>$userEventReport->reportFile ])}}">دانلود فایل کارنامه</a>
-                                        </div>
 
+                                        </div>
                                     </div>
                                 @else
+                                    {!! Form::open(['files'=>true,'method' => 'POST','action' => ['EventresultController@store'] ]) !!}
+                                    {{ csrf_field() }}
+                                    {!! Form::hidden('event_id',$event->id) !!}
                                     <div class="form-body">
                                             <div class="row">
                                                     <div class="col-md-12">

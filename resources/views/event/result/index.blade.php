@@ -51,7 +51,7 @@
         <tr >
             <th></th>
             <td>@if(isset($eventresult->user->id))
-                    @if(strlen($eventresult->user->getFullName("lastNameFirst")) > 0) <a target="_blank" href="{{action("UserController@edit" , $eventresult->user)}}">{{$eventresult->user->getFullName("lastNameFirst")}}</a> @else <span class="label label-sm label-danger"> کاربر ناشناس </span>@endif
+                    @if(strlen($eventresult->user->getFullName("lastNameFirst")) > 0) <a target="_blank" href="{{action("UserController@edit" , $eventresult->user)}}">{{$eventresult->user->getFullName()}}</a> @else <span class="label label-sm label-danger"> کاربر ناشناس </span>@endif
                 @endif
             </td>
             <td>@if(isset($eventresult->user->mobile))  {{$eventresult->user->mobile}} @else <span class="label label-sm label-danger">درج نشده </span> @endif</td>
