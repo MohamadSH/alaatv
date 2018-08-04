@@ -845,7 +845,7 @@ $(document).on("click", ".eventResult-portlet .reload", function (){
 $(document).on("click", ".eventResultUpdate", function (e){
     e.preventDefault();
     var eventresult_id = $(this).data('role');
-    var form = $("#useruploadForm_"+eventresult_id);
+    var form = $("#eventResultForm_"+eventresult_id);
     formData = form.serialize();
     url = form.attr("action");
     toastr.options = {
