@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Event;
 use App\Eventresult;
+use App\Eventresultstatus;
 use App\Http\Requests\InsertEventResultRequest;
 use Illuminate\Http\Request;
 use Auth ;
@@ -53,7 +54,8 @@ class EventresultController extends Controller
         else
             $isSharifRegisterEvent = false;
 
-        return view("event.result.index" , compact("eventresults" , "eventIds" , "isSharifRegisterEvent"));
+        $eventResultStatuses = Eventresultstatus::pluck('displayName', 'id');
+        return view("event.result.index" , compact("eventresults" , "eventIds" , "isSharifRegisterEvent" , "eventResultStatuses"));
     }
 
     /**
@@ -202,11 +204,19 @@ class EventresultController extends Controller
     {
         $eventResult->fill($request->all());
         $updateResult = $eventResult->update();
-        if($updateResult)
+        if($request->ajax())
         {
-            session()->put("success" , "تغییرات با موفقیت ثبت شد");
+            return  $this->response->setStatusCode(200);
         }
-        return redirect()->back();
+        else
+        {
+            if($updateResult)
+            {
+                session()->put("success" , "تغییرات با موفقیت ثبت شد");
+            }
+            return redirect()->back();
+        }
+
     }
 
     /**
