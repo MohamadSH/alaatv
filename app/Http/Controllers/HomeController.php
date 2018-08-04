@@ -63,6 +63,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Response;
@@ -103,6 +104,10 @@ class HomeController extends Controller
 
     private static $TAG = HomeController::class;
 
+    public function telgramAgent(Request $request)
+    {
+        Log::debug($request->headers->all());
+    }
     public function debug(Request $request)
     {
         try
@@ -291,7 +296,7 @@ class HomeController extends Controller
 //        {
 //            $authException = ['index' , 'getImage' , 'error404' , 'error403' , 'error500' , 'errorPage' , 'siteMapXML', 'download' ];
 //        }else{
-        $authException = ['index', 'getImage', 'error404', 'error403', 'error500', 'errorPage', 'aboutUs', 'contactUs', 'sendMail', 'rules', 'siteMapXML', 'uploadFile' , 'search' , 'schoolRegisterLanding'];
+        $authException = ['telgramAgent','index', 'getImage', 'error404', 'error403', 'error500', 'errorPage', 'aboutUs', 'contactUs', 'sendMail', 'rules', 'siteMapXML', 'uploadFile' , 'search' , 'schoolRegisterLanding'];
 //        }
         $this->middleware('auth', ['except' => $authException]);
         $this->middleware('ability:' . Config::get("constants.ROLE_ADMIN") . ',' . Config::get("constants.USER_ADMIN_PANEL_ACCESS"), ['only' => 'admin']);
