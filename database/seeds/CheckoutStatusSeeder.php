@@ -26,6 +26,7 @@ class CheckoutStatusSeeder extends Seeder
                 'displayName' => 'تسویه شده',
                 'description' => 'تسویه شده است',
             ),
+
         );
 
         DB::table('checkoutstatuses')->insert($data); // Query Builder
