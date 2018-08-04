@@ -73,12 +73,13 @@
     <div class="form-group">
         <label class=" col-md-4 control-label" for="validSinceDate">نمایان شدن برای کاربران</label>
         <div class="col-md-3">
-            <input  type="text" class="form-control" id="validSinceDate" value="@if(isset($educationalContent->validSince)){{$educationalContent->validSince}}@endif"  dir="ltr">
-            <input name="validSinceDate" id="validSinceDateAlt"  type="text" class="form-control hidden">
+            <input  type="text" name="validSinceDate" class="form-control"  value="@if(isset($educationalContent->validSince)){{$educationalContent->validSince}}@endif"  dir="ltr">
+            {{--<input  type="text" class="form-control" id="validSinceDate" value="@if(isset($educationalContent->validSince)){{$educationalContent->validSince}}@endif"  dir="ltr">--}}
+            {{--<input name="validSinceDate" id="validSinceDateAlt"  type="text" class="form-control hidden">--}}
         </div>
-        <div class="col-md-2">
-            <input class="form-control" name="validSinceTime" id="validSinceTime" value="@if(isset($validSinceTime)) {{$validSinceTime}} @else {{old('validSinceTime')}} @endif"  placeholder="00:00" dir="ltr">
-        </div>
+        {{--<div class="col-md-2">--}}
+            {{--<input class="form-control" name="validSinceTime" id="validSinceTime" value="@if(isset($validSinceTime)) {{$validSinceTime}} @else {{old('validSinceTime')}} @endif"  placeholder="00:00" dir="ltr">--}}
+        {{--</div>--}}
     </div>
     <div class="form-group">
         <label class="col-md-2 control-label" for="name">نام :
