@@ -58,7 +58,18 @@
             <td>@if(isset($eventresult->user->city) && strlen($eventresult->user->city)>0) {{$eventresult->user->city}} @else <span class="label label-sm label-warning"> درج نشده </span> @endif </td>
             <td>@if(isset($eventresult->reportFile[0])) <a target="_blank" href="{{action("HomeController@download" , ["content"=>"فایل کارنامه","fileName"=>$eventresult->reportFile ])}}" class="btn btn-icon-only green"><i class="fa fa-download"></i></a> @else <span class="label label-sm label-warning"> درج نشده </span> @endif </td>
             <td>@if(isset($eventresult->rank)) {{$eventresult->rank}} @else <span class="label label-sm label-danger">درج نشده </span> @endif</td>
-            <td>@if(isset($eventresult->eventresultstatus_id)) {{$eventresult->eventresultstatus->displayName}} @else <span class="label label-sm label-warning">نامشخص </span> @endif</td>
+            <td  style="width: 20%">
+                {!! Form::model($eventresult, ['method' => 'PUT', 'action' => ['EventresultController@update', $eventresult] , 'id' => 'eventResultForm_'.$eventresult->id]) !!}
+                <div class="input-group">
+                    <div class="input-icon">
+                        {!! Form::select('useruploadstatus_id', $eventResultStatuses, null, ['class' => 'form-control', 'id' => 'useruploadstatus']) !!}
+                    </div>
+                    <span class="input-group-btn">
+                        <button type="submit" class="btn grey-mint eventResultUpdate" data-role="{{$eventresult->id}}" >تأیید</button>
+                    </span>
+                </div>
+                {!! Form::close() !!}
+            </td>
             <td>@if(isset($eventresult->comment) && strlen($eventresult->comment)>0) {{$eventresult->comment}} @else <span class="label label-sm label-info">بدون نظر </span> @endif</td>
             <td>
                 @if(isset($eventresult->created_at))

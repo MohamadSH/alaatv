@@ -842,6 +842,69 @@ $(document).on("click", ".eventResult-portlet .reload", function (){
 
     return false;
 });
+$(document).on("click", ".eventResultUpdate", function (e){
+    e.preventDefault();
+    var eventresult_id = $(this).data('role');
+    var form = $("#useruploadForm_"+eventresult_id);
+    formData = form.serialize();
+    url = form.attr("action");
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "positionClass": "toast-top-center",
+        "onclick": null,
+        "showDuration": "1000",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    };
+    $.ajax({
+        type: 'PUT',
+        url: url,
+        data:formData ,
+        statusCode: {
+            //The status for when action was successful
+            200: function (response) {
+                // console.log(response);
+                // console.log(response.responseText);
+                $("#eventresult_id .reload").trigger("click");
+                toastr["success"]("اصلاح وضعیت با موفقیت انجام شد!", "پیام سیستم");
+
+            },
+            //The status for when the user is not authorized for making the request
+            403: function (response) {
+                window.location.replace("/403");
+            },
+            404: function (response) {
+                window.location.replace("/404");
+            },
+            //The status for when form data is not valid
+            422: function (response) {
+                var errors = $.parseJSON(response.responseText);
+                console.log(errors);
+                $.each(errors, function(index, value) {
+                    switch (index) {
+                    }
+                });
+            },
+            //The status for when there is error php code
+            500: function (response) {
+                toastr["error"]("خطای برنامه!", "پیام سیستم");
+            },
+            //The status for when there is error php code
+            503: function (response) {
+                toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
+            }
+        },
+        cache: false,
+        // contentType: false,
+        processData: false
+    });
+});
 
 /**
  * Educational Content Admin Ajax

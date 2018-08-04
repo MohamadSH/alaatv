@@ -1363,8 +1363,6 @@ class HomeController extends Controller
         $consultationStatuses = Consultationstatus::pluck('name', 'id');
         $consultationStatuses->prepend("انتخاب وضعیت");
 
-
-
         $pageName = "admin";
         return view("admin.indexContent", compact("pageName", "assignmentStatuses", "consultationStatuses", "majors"));
     }
