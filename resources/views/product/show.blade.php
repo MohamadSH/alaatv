@@ -425,9 +425,12 @@
                                                                                         @foreach($checkboxArray as $index => $checkbox)
                                                                                             <label>
                                                                                                 {!! Form::checkbox('attribute[]', $index, null, ['class' => 'attribute icheck' , 'data-checkbox'=>'icheckbox_square-blue']) !!}
-                                                                                                @if(isset($checkbox["index"])) {{$checkbox["index"]}} @endif @if(isset($checkbox["extraCost"][0])) (<span style="@if(isset($checkbox["extraCostWithDiscount"][0])) text-decoration: line-through;  @endif">{{$checkbox["extraCost"]}}</span> @if(isset($checkbox["extraCostWithDiscount"][0]))
-                                                                                                        <span class="bg-font-dark" style="background: #ff7272;    padding: 0px 5px 0px 5px;">برای شما </span><span class="bg-font-dark" style="background: #ee5053;    padding: 0px 5px 0px 5px;">{{$checkbox["extraCostWithDiscount"]}}</span>
-                                                                                                @endif) @endif
+                                                                                                @if(isset($checkbox["index"])) {{$checkbox["index"]}} @endif
+                                                                                                @if(isset($checkbox["extraCost"][0])) (<span style="@if(isset($checkbox["extraCostWithDiscount"][0])) text-decoration: line-through;  @endif">{{$checkbox["extraCost"]}}</span>
+                                                                                                    @if(isset($checkbox["extraCostWithDiscount"][0]))
+                                                                                                            <span class="bg-font-dark" style="background: #ff7272;    padding: 0px 5px 0px 5px;">برای شما </span><span class="bg-font-dark" style="background: #ee5053;    padding: 0px 5px 0px 5px;">{{$checkbox["extraCostWithDiscount"]}}</span>
+                                                                                                    @endif
+                                                                                                @endif
                                                                                             </label>
                                                                                         @endforeach
                                                                                     @endforeach
@@ -468,38 +471,38 @@
                 </div>
             </div>
         @endif
-        @if(isset($hamayeshTalaiVideos))
-            <div class="row">
-                <div class="col-md-12">
-                    <!-- BEGIN Portlet PORTLET-->
-                    <div class="portlet light">
-                        <div class="portlet-title">
-                            <div class="caption">
+        {{--@if(isset($hamayeshTalaiVideos))--}}
+            {{--<div class="row">--}}
+                {{--<div class="col-md-12">--}}
+                    {{--<!-- BEGIN Portlet PORTLET-->--}}
+                    {{--<div class="portlet light">--}}
+                        {{--<div class="portlet-title">--}}
+                            {{--<div class="caption">--}}
                                 {{--<i class="icon-paper-plane font-yellow-casablanca"></i>--}}
-                                <span class="caption-subject bold font-yellow-casablanca uppercase"> نمونه همایش های طلایی 97 </span>
+                                {{--<span class="caption-subject bold font-yellow-casablanca uppercase"> نمونه همایش های طلایی 97 </span>--}}
                                 {{--<span class="caption-helper">more samples...</span>--}}
-                            </div>
-                            <div class="inputs">
-                                <div class="portlet-input input-inline input-medium">
+                            {{--</div>--}}
+                            {{--<div class="inputs">--}}
+                                {{--<div class="portlet-input input-inline input-medium">--}}
                                     {{--<div class="input-group">--}}
                                         {{--<input type="text" class="form-control input-circle-left" placeholder="search...">--}}
                                         {{--<span class="input-group-btn">--}}
                                                             {{--<button class="btn btn-circle-right btn-default" type="submit">Go!</button>--}}
                                                         {{--</span>--}}
                                     {{--</div>--}}
-                                    <a href="{{action("ProductController@landing3")}}" class="btn btn-lg purple"> خرید همایش ها
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="portlet-body">
-                            @include("partials.search.video"  , ["items" => $hamayeshTalaiVideos])
-                        </div>
-                    </div>
-                    <!-- END Portlet PORTLET-->
-                </div>
-            </div>
-        @endif
+                                    {{--<a href="{{action("ProductController@landing3")}}" class="btn btn-lg purple"> خرید همایش ها--}}
+                                    {{--</a>--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                        {{--<div class="portlet-body">--}}
+                            {{--@include("partials.search.video"  , ["items" => $hamayeshTalaiVideos])--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
+                    {{--<!-- END Portlet PORTLET-->--}}
+                {{--</div>--}}
+            {{--</div>--}}
+        {{--@endif--}}
         @if(isset($product->specialDescription))
             <div class="row">
                 {!! $product->specialDescription !!}
