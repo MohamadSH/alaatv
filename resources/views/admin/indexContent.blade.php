@@ -343,7 +343,7 @@
 
                 @permission((Config::get('constants.LIST_EVENTRESULT_ACCESS')))
                 <!-- BEGIN QUESTION TABLE PORTLET-->
-                <div class="portlet box eventResult-portlet" style="background-color: #e04ea6">
+                <div class="portlet box eventResult-portlet" id="konkur96-portlet" style="background-color: #e04ea6">
                     <div class="portlet-title">
                         <div class="caption">
                             <i class="fa fa-cogs bg-font-dark"></i>لیست نتایج کنکور 96 </div>
@@ -401,7 +401,7 @@
                 <!-- END SAMPLE TABLE PORTLET-->
 
                 <!-- BEGIN QUESTION TABLE PORTLET-->
-                <div class="portlet box eventResult-portlet" style="background-color: #e04ea6">
+                <div class="portlet box eventResult-portlet" id="konkur97-portlet" style="background-color: #e04ea6">
                     <div class="portlet-title">
                         <div class="caption">
                             <i class="fa fa-cogs bg-font-dark"></i>لیست نتایج کنکور 97 </div>
@@ -462,7 +462,7 @@
 
                 @permission((Config::get('constants.LIST_SHARIF_REGISTER_ACCESS')))
                 <!-- BEGIN QUESTION TABLE PORTLET-->
-                <div class="portlet box eventResult-portlet" style="background-color: #716c6f" >
+                <div class="portlet box eventResult-portlet" id="schoolRegister-portlet" style="background-color: #716c6f" >
                     <div class="portlet-title">
                         <div class="caption">
                             <i class="fa fa-cogs bg-font-dark"></i>لیست پیش ثبت نام شریف </div>
@@ -705,13 +705,14 @@
             @endpermission
 
             @permission((Config::get('constants.LIST_EVENTRESULT_ACCESS')))
-            $(".eventResult-portlet .reload").trigger("click");
-            $("#konkurResult96-expand").trigger("click");
+            // $("#konkur96-portlet .reload").trigger("click");
+            // $("#konkurResult96-expand").trigger("click");
+            $("#konkur97-portlet .reload").trigger("click");
             $("#konkurResult97-expand").trigger("click");
             @endpermission
 
             @permission((Config::get('constants.LIST_SHARIF_REGISTER_ACCESS')))
-            $(".eventResult-portlet .reload").trigger("click");
+            $("#schoolRegister-portlet .reload").trigger("click");
             $("#sharifRegisterResult-expand").trigger("click");
             @endpermission
 
