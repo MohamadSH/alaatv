@@ -446,6 +446,7 @@
                                 <th class="min-tablet"> شهر </th>
                                 <th class="min-tablet"> فایل کارنامه</th>
                                 <th class="all"> رتبه </th>
+                                <th class="min-tablet"> وضعیت </th>
                                 <th class="min-tablet"> نظر </th>
                                 <th class="min-tablet"> تاریخ درج </th>
                             </tr>

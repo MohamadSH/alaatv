@@ -359,13 +359,13 @@ class ProductController extends Controller
         if(Auth::check() && Auth::user()->hasRole("admin") && $isLive!== false) $isLive = 0 ;
 //        return response()->make("Ok");
 
-        $hamayeshTalaiVideos = Educationalcontent::whereHas("contentsets" , function ($q)
-        {
-            $q->where("id" , 199) ;
-        })
-        ->where("enable" , 1)
-        ->orderBy("order")
-        ->get();
+//        $hamayeshTalaiVideos = Educationalcontent::whereHas("contentsets" , function ($q)
+//        {
+//            $q->where("id" , 199) ;
+//        })
+//        ->where("enable" , 1)
+//        ->orderBy("order")
+//        ->get();
 
         return view("product.show" , compact("product" , "productType" ,"productSeenCount","productIntroVideo" , "otherProductChunks"  , 'discount' , 'cost' , "selectCollection" ,"simpleInfoAttributes"
             , "checkboxInfoAttributes" , "extraSelectCollection" , "extraCheckboxCollection" , 'groupedCheckboxCollection'  , "descriptionIframe"
@@ -717,7 +717,7 @@ class ProductController extends Controller
         else
             $adminOrder = false;
 
-        $itemsPerPage = 24;
+        $itemsPerPage = 30;
         if ($adminOrder) {
             $products =  Product::getProducts()->orderBy("order")->paginate($itemsPerPage);;
         } else {
@@ -728,7 +728,7 @@ class ProductController extends Controller
             $products =  Product::getProducts(0, 1)
                 ->whereNotIn("id", $excludedProducts)
                 ->orderBy("order")
-                ->paginate($itemsPerPage);;
+                ->paginate($itemsPerPage);
         }
 
         $costCollection = $this->makeCostCollection($products);
