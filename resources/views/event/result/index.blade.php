@@ -62,7 +62,7 @@
                 {!! Form::model($eventresult, ['method' => 'PUT', 'action' => ['EventresultController@update', $eventresult] , 'id' => 'eventResultForm_'.$eventresult->id]) !!}
                 <div class="input-group">
                     <div class="input-icon">
-                        {!! Form::select('useruploadstatus_id', $eventResultStatuses, null, ['class' => 'form-control', 'id' => 'useruploadstatus']) !!}
+                        {!! Form::select('useruploadstatus_id', $eventResultStatuses, null, ['class' => 'form-control']) !!}
                     </div>
                     <span class="input-group-btn">
                         <button type="submit" class="btn grey-mint eventResultUpdate" data-role="{{$eventresult->id}}" >تأیید</button>
