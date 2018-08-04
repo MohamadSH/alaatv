@@ -646,7 +646,6 @@ public function store(InsertEducationalContentRequest $request)
         if($request->has("validSinceDate"))
         {
             $validSince = $request->get("validSinceDate");
-            dd($validSince);
             $validSince = Carbon::parse($validSince)->format('Y-m-d'); //Muhammad : added a day because it returns one day behind and IDK why!!
             if(isset($time)) $validSince = $validSince . " " . $time;
             $educationalContent->validSince = $validSince;
