@@ -60,7 +60,7 @@
                             {!! Form::model($question, ['method' => 'PUT', 'action' => ['UseruploadController@update', $question] , 'id' => 'useruploadForm_'.$question->id]) !!}
                                 <div class="input-group">
                                     <div class="input-icon">
-                                        {!! Form::select('useruploadstatus_id', $questionStatuses, null, ['class' => 'form-control', 'id' => 'useruploadstatus']) !!}
+                                        {!! Form::select('useruploadstatus_id', $questionStatuses, null, ['class' => 'form-control']) !!}
                                     </div>
                                     <span class="input-group-btn">
                                         <button type="submit" class="btn grey-mint useruploadUpdate" >تأیید</button>
