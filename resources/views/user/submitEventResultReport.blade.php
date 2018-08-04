@@ -138,7 +138,7 @@
                                                         </div>
                                                         <div class="col-md-6">
 {{--                                                            {!! Form::textarea('comment', null, ['class' => '' , 'row'=>'2',  'placeholder' => 'نظر شما']) !!}--}}
-                                                             <textarea rows="3" name="comment" placeholder="آلاء چه نقشی در نتیجه شما داشته و چطور به شما کمک کرده؟" class="form-control"></textarea>
+                                                             <textarea rows="5" name="comment" placeholder="آلاء چه نقشی در نتیجه شما داشته و چطور به شما کمک کرده؟" class="form-control"></textarea>
                                                         </div>
                                                     </div>
                                             </div>
