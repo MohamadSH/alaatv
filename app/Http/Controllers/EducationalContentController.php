@@ -51,6 +51,8 @@ class EducationalContentController extends Controller
         }else{
             $authException = ["index" ,"search"  ];
         }
+        //TODO:// preview
+        $authException = ["index" , "show" , "search" ,"embed" ];
         $this->middleware('auth', ['except' => $authException]);
 
         $this->middleware('permission:'.Config::get('constants.INSERT_EDUCATIONAL_CONTENT_ACCESS'),['only'=>['store' , 'create' , 'create2']]);
@@ -578,7 +580,7 @@ public function store(InsertEducationalContentRequest $request)
                     ->where("enable" , 1)
                     ->orderBy("order")
                     ->get();
-
+//            $adItems = null;
             return view("educationalContent.show", compact("productSeenCount","author","educationalContent", "rootContentType", "childContentType", "contentsWithSameType" , "soonContentsWithSameType" , "educationalContentSet" , "contentsWithSameSet" , "contentSetName" , "videoSources" ,
                 "files" , "tags" , "sideBarMode" , "educationalContentDisplayName" , "sessionNumber" , "fileToShow" , "userCanSeeCounter" , "adItems"));
         }
@@ -644,6 +646,7 @@ public function store(InsertEducationalContentRequest $request)
         if($request->has("validSinceDate"))
         {
             $validSince = $request->get("validSinceDate");
+            dd($validSince);
             $validSince = Carbon::parse($validSince)->format('Y-m-d'); //Muhammad : added a day because it returns one day behind and IDK why!!
             if(isset($time)) $validSince = $validSince . " " . $time;
             $educationalContent->validSince = $validSince;

@@ -27,6 +27,7 @@ Route::get('rules', 'HomeController@rules');
 Route::get('articleList', 'ArticleController@showList');
 Route::get('sitemap.xml', 'HomeController@siteMapXML');
 Route::get("debug", 'HomeController@debug');
+Route::get("telgramAgent2" , "HomeController@telgramAgent");
 Route::post('sendMail', 'HomeController@sendMail');
 Route::post('user/getPassword' , 'UserController@sendGeneratedPassword');
 Route::get('product/search', 'ProductController@search');

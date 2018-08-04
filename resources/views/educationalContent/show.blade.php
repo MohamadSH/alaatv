@@ -2,7 +2,7 @@
 
 @section("css")
     <link rel="stylesheet" href="{{ mix('/css/all.css') }}">
-    <link rel="stylesheet" href="/videojs/video.js/dist/video-js.min.css">
+    <link href="https://vjs.zencdn.net/7.1.0/video-js.css" rel="stylesheet">
     <style>
         @media screen and (max-width: 480px) {
             .google-docs {
@@ -15,6 +15,8 @@
         }
 
     </style>
+    <!-- If you'd like to support IE8 (for Video.js versions prior to v7) -->
+    <script src="https://vjs.zencdn.net/ie8/ie8-version/videojs-ie8.min.js"></script>
 @endsection
 
 @section("pageBar")
@@ -48,7 +50,7 @@
     @if(isset($educationalContent->template))
         @if($educationalContent->template->name == "video1")
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-md-12">
                     <div class="portlet light ">
                         <div class="portlet-title">
                             <div class="caption">
@@ -56,75 +58,67 @@
                                 {{ isset($educationalContentDisplayName) ? $educationalContentDisplayName : '' }}
                             </div>
                         </div>
-                        <div class="portlet-body">
-                            <div data-vjs-player>
+                        <div class="portlet-body  text-justify">
                                 <video
                                         id="video-{{$educationalContent->id}}"
-                                        poster='@if(isset($files["thumbnail"])){{$files["thumbnail"]}}@endif'
-                                        width='100%'
-                                        height='400px'
-                                        style="width: 100%"
-                                        class="video-js vjs-default-skin" controls>
+                                        class="video-js vjs-default-skin"
 
-                                    @foreach($files["videoSource"] as $source)
+                                        preload="metadata"
+                                        height='360px'
+                                        poster='@if(isset($files["thumbnail"])){{$files["thumbnail"]}}@endif'
+                                        style="height: 360px"
+                                        data-setup='{ "playbackRates" : [1, 1.5, 2] }'
+                                        controls
+                                        >
+                                    {{--"aspectRatio" : "640:360" ,--}}
+                                @foreach($files["videoSource"] as $source)
                                         <source label="{{ $source["caption"] }}" src="{{ $source["src"] }}" type='video/mp4'>
                                     @endforeach
                                     <p class="vjs-no-js">جهت پخش آنلاین فیلم، ابتدا مطمئن شوید که جاوا اسکریپت در مرور
                                         گر شما فعال است و از آخرین نسخه ی مرورگر استفاده می کنید.</p>
                                 </video>
-                                <script>
-                                    {{--$(document).ready(function(){--}}
-                                        {{--console.log( "ready!" );--}}
-                                        {{--options = {--}}
-                                            {{--controlBar: {--}}
-                                                {{--children: [--}}
-                                                    {{--'playToggle',--}}
-                                                    {{--'progressControl',--}}
-                                                    {{--'volumePanel',--}}
-                                                    {{--'fullscreenToggle',--}}
-                                                {{--],--}}
-                                            {{--},--}}
-                                        {{--};--}}
-                                        {{--var player = videojs('video-{{$educationalContent->id}}',options);--}}
 
-                                    {{--});--}}
-                                </script>
-                            </div>
-                            <div class="row">
-                                @if(isset($educationalContent->author_id))
+                                <div class="row">
+                                    <hr>
+                                    <div class="col-md-7">
+                                        <div class="caption"> <i class="fa fa-comment-o" aria-hidden="true"></i> </div>
+                                        @if(isset($educationalContent->description[0]))
+                                            <div class="scroller" style="max-height:400px ; " data-rail-visible="1" data-rail-color="black" data-handle-color="#a1b2bd">
+                                                {!! $educationalContent->description !!}
+                                            </div>
+                                        @else
+                                            به زودی ...
+                                        @endif
+                                    </div>
+
+                                    <div class="col-md-5">
+                                        @if(isset($educationalContent->author_id))
+
+                                                <ul class="list-unstyled">
+                                                    <li><i class="fa fa-user"></i>{{$author}}</li>&nbsp
+                                                    @if(isset($contentSetName))
+                                                    <li><i class="fa fa-tv"></i>{{$contentSetName}}</li>&nbsp;
+                                                    @endif
+                                                    @if($userCanSeeCounter)
+                                                     <li>
+                                                            <i class="fa fa-eye"></i>
+                                                            {{$productSeenCount}}
+                                                     </li>
+                                                    @endif
+                                                </ul>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="row">
                                     <hr>
                                     <div class="col-md-12">
-                                        <ul class="list-inline">
-                                            <li><i class="fa fa-user"></i>مدرس : {{$author}}</li>&nbsp;
-                                            @if(isset($contentSetName))
-                                                <li><i class="fa fa-user"></i>نام دوره : {{$contentSetName}}</li>&nbsp;
-                                            @endif
-                                            @if($userCanSeeCounter)
-                                                <li>
-                                                    <i class="fa fa-eye"></i>
-                                                    {{$productSeenCount}}
-                                                </li>
-                                            @endif
-                                        </ul>
+                                        @if(!empty($tags))
+                                            @include("partials.search.tagLabel" , ["tags"=>$tags])
+                                        @endif
                                     </div>
-                                @endif
-                                @foreach($files["videoSource"] as $key => $source)
-                                    <div class="col-md-4">
-                                        <a href="{{$source["src"]}}?download=1" class="btn red margin-bottom-5" style="width: 250px;">
-                                            فایل {{$source["caption"]}}{{ (isset($source["size"] )  && strlen($source["size"])  > 0 )?"(".$source["size"]. ")":""  }}
-                                        </a>
-                                    </div>
-                                @endforeach
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    @if(!empty($tags))
-                                        <hr>
-                                        @include("partials.search.tagLabel" , ["tags"=>$tags])
-                                    @endif
-                                </div>
-                            </div>
 
+
+                                </div>
                         </div>
                     </div>
                     <div class="row">
@@ -132,73 +126,89 @@
                             <div class="portlet light ">
                                 <div class="portlet-title">
                                     <div class="caption">
-                                        <i class="fa fa-comment-o" aria-hidden="true"></i>
-                                        توضیح این جلسه
+                                        <i class="fa fa-download" aria-hidden="true"></i>
+                                        لینک های دانلود
                                     </div>
                                 </div>
                                 <div class="portlet-body text-justify">
-                                    @if(isset($educationalContent->description[0]))
-                                        <div class="scroller" style="max-height:400px" data-rail-visible="1" data-rail-color="black"
-                                             data-handle-color="#a1b2bd">
-                                            {!! $educationalContent->description !!}
-                                        </div>
-                                    @else
-                                        به زودی ...
-                                    @endif
+                                    <p>
+                                    پیشنهاد می کنیم برای دانلود، از نرم افزار Internet Download Manager در ویندوز و یا ADM در اندروید و یا wget در لینوکس استفاده بفرمایید.
+                                    </p>
+                                    <p>
+                                        جهت دانلود روی یکی از دکمه های زیر کلیک کنید:
+                                    </p>
+                                    <div class="row">
+
+
+                                        @foreach($files["videoSource"] as $key => $source)
+                                            <div class="col-md-4">
+                                                <a href="{{$source["src"]}}?download=1" class="btn red margin-bottom-5" style="width: 250px;">
+                                                    فایل {{$source["caption"]}}{{ (isset($source["size"] )  && strlen($source["size"])  > 0 )?"(".$source["size"]. ")":""  }}
+                                                </a>
+                                            </div>
+                                        @endforeach
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                    <div class="col-md-4 margin-bottom-15">
-                        @if(isset($contentsWithSameSet) && $contentsWithSameSet->whereIn("type" , "video" )->isNotEmpty())
-                        <div class="mt-element-list">
-                            <div class="mt-list-head list-news ext-1 font-white bg-yellow-crusta">
-                                <div class="list-head-title-container">
-                                    <h3 class="list-title">جلسات دیگر</h3>
-                                </div>
-                                <div class="list-count pull-right bg-yellow-saffron"></div>
+            </div>
+            <div class="row">
+                <div class="col-md-8 margin-bottom-15">
+                    @if(isset($contentsWithSameSet) && $contentsWithSameSet->whereIn("type" , "video" )->isNotEmpty())
+                    <div class="mt-element-list">
+                        <div class="mt-list-head list-news ext-1 font-white bg-yellow-crusta">
+                            <div class="list-head-title-container">
+                                <h3 class="list-title">
+                                    جلسات دیگر
+                                    @if(isset($contentSetName))
+                                        {{ $contentSetName }}
+                                    @endif
+                                </h3>
                             </div>
-                            <div class="mt-list-container list-news ext-2" id="otherSessions">
-                                <div id="playListScroller" class="scroller" style="min-height: 50px; max-height:600px" data-always-visible="1" data-rail-visible="1"
-                                     data-rail-color="red" data-handle-color="green">
-                                    <ul>
-                                        @foreach($contentsWithSameSet->whereIn("type" , "video" ) as $item)
+                            <div class="list-count pull-right bg-yellow-saffron"></div>
+                        </div>
+                        <div class="mt-list-container list-news ext-1" id="otherSessions">
+                            <div id="playListScroller" class="scroller" style="min-height: 50px; max-height:950px" data-always-visible="1" data-rail-visible="1"
+                                 data-rail-color="red" data-handle-color="green">
+                                <ul>
+                                    @foreach($contentsWithSameSet->whereIn("type" , "video" ) as $item)
+                                        <li class="mt-list-item @if($item["content"]->id == $educationalContent->id) bg-grey-mint @endif " id="playlistItem_{{$item["content"]->id}}">
+                                                <div class="list-icon-container">
+                                                    <a href="{{action("EducationalContentController@show" , $item["content"])}}" >
+                                                        <i class="fa fa-angle-left"></i>
+                                                    </a>
+                                                </div>
+                                                <div class="list-thumb">
+                                                    <a href="{{action("EducationalContentController@show" , $item["content"])}}" >
+                                                        <img alt="{{$item["content"]->name}}"
+                                                             src="{{(isset($item["thumbnail"]))?$item["thumbnail"]:''}}"/>
+                                                    </a>
+                                                </div>
+                                                <div class="list-datetime bold uppercase font-yellow-casablanca" >
+                                                    <a href="{{action("EducationalContentController@show" , $item["content"])}}" >
+                                                        {{($item["content"]->getDisplayName())}}
+                                                    </a>
+                                                </div>
+                                                <div class="list-item-content">
+                                                    <h3 class="uppercase bold">
+                                                        <a href="javascript:;">&nbsp;</a>
+                                                    </h3>
+                                                </div>
+                                        </li>
+                                    @endforeach
 
-                                            <li class="mt-list-item @if($item["content"]->id == $educationalContent->id) bg-grey-mint @endif " id="playlistItem_{{$item["content"]->id}}">
-
-                                                    <div class="list-icon-container">
-                                                        <a href="{{action("EducationalContentController@show" , $item["content"])}}" >
-                                                            <i class="fa fa-angle-left"></i>
-                                                        </a>
-                                                    </div>
-                                                    <div class="list-thumb">
-                                                        <a href="{{action("EducationalContentController@show" , $item["content"])}}" >
-                                                            <img alt="{{$item["content"]->name}}"
-                                                                 src="{{(isset($item["thumbnail"]))?$item["thumbnail"]:''}}"/>
-                                                        </a>
-                                                    </div>
-                                                    <div class="list-datetime bold uppercase font-yellow-casablanca">
-                                                        <a href="{{action("EducationalContentController@show" , $item["content"])}}" >
-                                                            {{($item["content"]->getDisplayName())}}
-                                                        </a>
-                                                    </div>
-                                                    <div class="list-item-content">
-                                                        <h3 class="uppercase bold">
-                                                            <a href="javascript:;">&nbsp;</a>
-                                                        </h3>
-                                                    </div>
-                                            </li>
-
-                                        @endforeach
-
-                                    </ul>
-                                </div>
+                                </ul>
                             </div>
                         </div>
-                        @endif
-                        @if(isset($adItems) )
-                            <div class="portlet light margin-top-10">
+                    </div>
+                    @endif
+
+                </div>
+                <div class="col-md-4 margin-bottom-15">
+                    @if(isset($adItems) )
+                        <div class="portlet light margin-top-10">
                             <div class="portlet-title">
                                 <div class="caption">
                                     <i class="fa fa-video-camera" aria-hidden="true"></i>
@@ -210,10 +220,20 @@
                                 @include("educationalContent.partials.adSideBar" , ["items" => $adItems])
                             </div>
                         </div>
-                        @endif
-                    </div>
+                    @endif
+                </div>
             </div>
 
+            <style>
+                .mt-list-item{
+                    min-height: 150px;
+                }
+                .list-thumb {
+                    padding-left: 10px;
+                    width: 220px !important;
+                    height: 110px !important;
+                }
+            </style>
             @if(isset($contentsWithSameSet) && $contentsWithSameSet->whereIn("type" , "pamphlet" )->isNotEmpty())
                 <div class="row">
                     <div class="col-md-12">
@@ -655,6 +675,7 @@
 @endsection
 
 @section("extraJS")
+    <script src="https://vjs.zencdn.net/7.1.0/video.js"></script>
     <script type="text/javascript">
 
         $(document).ready(function (){
@@ -666,4 +687,25 @@
             $("#otherSessions").find(".slimScrollBar").css("top" , scrollTo.offset().top +"px");
         });
     </script>
+    {{--<script>--}}
+        {{--$(document).ready(function(){--}}
+            {{--console.log( "ready!" );--}}
+            {{--options = {--}}
+                {{--controlBar: {--}}
+                    {{--children: [--}}
+                        {{--'playToggle',--}}
+                        {{--'progressControl',--}}
+                        {{--'volumePanel',--}}
+                        {{--'fullscreenToggle',--}}
+                        {{--'playbackRates',--}}
+                    {{--],--}}
+                {{--},--}}
+                {{--playbackRates: [1, 1.5, 2],--}}
+                {{--aspectRatio: '854:480',--}}
+
+            {{--};--}}
+            {{--var player = videojs('video-{{$educationalContent->id}}',options);--}}
+
+        {{--});--}}
+    {{--</script>--}}
 @endsection
