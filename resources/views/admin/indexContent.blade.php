@@ -706,7 +706,7 @@
 
             @permission((Config::get('constants.LIST_EVENTRESULT_ACCESS')))
             // $("#konkur96-portlet .reload").trigger("click");
-            // $("#konkurResult96-expand").trigger("click");
+            $("#konkurResult96-expand").trigger("click");
             $("#konkur97-portlet .reload").trigger("click");
             $("#konkurResult97-expand").trigger("click");
             @endpermission
