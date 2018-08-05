@@ -65,6 +65,7 @@
             script.src = script_address + '?v=' + now.getFullYear().toString() + '0' + now.getMonth() + '0' + now.getDate() + '0' + now.getHours();
             head.appendChild(script);
         </script>
+
         @section("gtagJs")
 
         @show
