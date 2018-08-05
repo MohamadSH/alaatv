@@ -311,6 +311,9 @@ class Educationalcontent extends Model
 
             foreach ($sameContents as $content)
             {
+                if(!$content->isValid())
+                    continue;
+
                 $file = $content->files->where("pivot.label" , "thumbnail")->first();
                 if(isset($file))
                     $thumbnailFile = $file->name;
