@@ -751,6 +751,7 @@ class HomeController extends Controller
         }
         $totalTags = array_merge($totalTags , $majorCollection->pluck("description")->toArray()) ;
         $majors = $majorCollection->pluck(  "name" , "description")->toArray();
+        $defaultMajor = array_intersect( array_flip($majors) , $tagInput )  ;
 
         $gradeCollection = Grade::whereNotIN("name" , ['graduated' ,"haftom" ,"hashtom" , "nohom" , "davazdahom" ])->get();
         $gradeCollection->push(["displayName"=>"اول دبیرستان" , "description"=>"اول_دبیرستان"]);
@@ -760,6 +761,7 @@ class HomeController extends Controller
         $gradeCollection->push(["displayName"=>"المپیاد" , "description"=>"المپیاد_علمی"]);
         $totalTags = array_merge($totalTags , $gradeCollection->pluck("description")->toArray()) ;
         $grades = $gradeCollection->pluck('displayName' , 'description')->toArray() ;
+        $defaultGrade = array_intersect( array_flip($grades) , $tagInput )  ;
 //            $grades = array_sort_recursive($grades);
 
         $lessonTeacher = collect(
@@ -1005,6 +1007,16 @@ class HomeController extends Controller
             $extraTagArray = array_add($extraTagArray , $key , $item) ;
         }
 
+        if(!is_null(array_last($defaultMajor)))
+            $defaultMajor = array_last($defaultMajor);
+        else
+            $defaultMajor = "";
+
+        if(!is_null(array_last($defaultGrade)))
+            $defaultGrade = array_last($defaultGrade);
+        else
+            $defaultGrade = "";
+
         if(!is_null(array_last($defaultLesson)))
             $defaultLesson = array_last($defaultLesson);
         else
@@ -1043,7 +1055,8 @@ class HomeController extends Controller
                 'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-3.jpg' => 'https://sanatisharif.ir/landing/4',
             ];
             return view("pages.search" , compact("items" ,"itemTypes" ,"tagArray" , "extraTagArray",
-                "majors" , "grades"  , "defaultLesson" , "sideBarMode" , "majorLesson" , "lessonTeacher" , "defaultTeacher" , "ads1" , "ads2" , 'tagInput' ));
+                "majors" , "grades"  , "defaultLesson" , "sideBarMode" , "majorLesson" , "lessonTeacher" , "defaultTeacher"
+                , "ads1" , "ads2" , 'tagInput' ,'defaultGrade' , 'defaultMajor' ));
         }
     }
 

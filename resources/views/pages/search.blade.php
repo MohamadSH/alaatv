@@ -253,6 +253,8 @@
         {
             initialSlick($(".productSlider"));
             initialVideoPortfolio();
+            $("#gradeSelect").val("{{$defaultGrade}}");
+            $("#majorSelect").val("{{$defaultMajor}}");
             makeLessonSelect( $("#majorSelect").val());
             makeTeacherSelect($("#lessonSelect").val());
             $(".contentPortlet .portlet-title .caption").append(makeTagLabels(tags) );
