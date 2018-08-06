@@ -35,9 +35,13 @@ Route::get('showPartial/{product}' , 'ProductController@showPartial');
 Route::post('refreshPrice/{product}' , 'ProductController@refreshPrice');
 Route::get("ctag" , "EducationalContentController@retrieveTags");
 Route::get('Sanati-Sharif-Lesson/{lId?}/{dId?}','SanatisharifmergeController@redirectLesson');
+Route::get('sanati-sharif-lesson/{lId?}/{dId?}','SanatisharifmergeController@redirectLesson');
 Route::get('Sanati-Sharif-Video/{lId?}/{dId?}/{vId?}','SanatisharifmergeController@redirectVideo');
+Route::get('sanati-sharif-video/{lId?}/{dId?}/{vId?}','SanatisharifmergeController@redirectVideo');
 Route::get('SanatiSharif-Video/{lId?}/{dId?}/{vId?}','SanatisharifmergeController@redirectEmbedVideo');
+Route::get('sanatisharif-video/{lId?}/{dId?}/{vId?}','SanatisharifmergeController@redirectEmbedVideo');
 Route::get('Sanati-Sharif-Pamphlet/{lId?}/{dId?}/{pId?}','SanatisharifmergeController@redirectPamphlet');
+Route::get('sanati-sharif-pamphlet/{lId?}/{dId?}/{pId?}','SanatisharifmergeController@redirectPamphlet');
 Route::get('SanatiSharif-News', 'HomeController@home');
 Route::get('Alaa-App/{mod?}','SanatisharifmergeController@AlaaApp');
 Route::get('image/{category}/{w}/{h}/{filename}', [

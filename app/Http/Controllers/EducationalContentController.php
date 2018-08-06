@@ -572,7 +572,7 @@ public function store(InsertEducationalContentRequest $request)
 
             $sideBarMode = "closed";
 
-            if(!in_array($educationalContent->id , [7863 , 7884 , 7882 , 7885 , 7883 , ]))
+            if($educationalContent->contentsets->first()->id != 199)
                 $adItems = Educationalcontent::whereHas("contentsets" , function ($q)
                 {
                     $q->where("id" , 199) ;
