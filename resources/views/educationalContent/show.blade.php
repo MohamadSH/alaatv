@@ -154,22 +154,22 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="portlet light ">
-                        <div class="portlet-title">
-                            <div class="caption">
-                                <i class="fa fa-handshake-o" aria-hidden="true"></i>
-                           بخش تبلیغات
-                            </div>
-                        </div>
-                        <div class="portlet-body  text-justify">
+            {{--<div class="row">--}}
+                {{--<div class="col-md-12">--}}
+                    {{--<div class="portlet light ">--}}
+                        {{--<div class="portlet-title">--}}
+                            {{--<div class="caption">--}}
+                                {{--<i class="fa fa-handshake-o" aria-hidden="true"></i>--}}
+                           {{--بخش تبلیغات--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                        {{--<div class="portlet-body  text-justify">--}}
 
-                            <div id="yektanet-pos-1"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                            {{--<div id="yektanet-pos-1"></div>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+            {{--</div>--}}
             <div class="row">
                 <div class="col-md-8 margin-bottom-15">
                     @if(isset($contentsWithSameSet) && $contentsWithSameSet->whereIn("type" , "video" )->isNotEmpty())
