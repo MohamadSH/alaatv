@@ -4,6 +4,7 @@
     <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css" />
     <link href="/assets/global/plugins/bootstrap-sweetalert/sweetalert.css" rel="stylesheet" type="text/css" />
     <link href="/assets/global/plugins/bootstrap-toastr/toastr-rtl.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/extra/persian-datepicker/dist/css/persian-datepicker-0.4.5.css" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section("headPageLevelStyle")
@@ -55,7 +56,7 @@
             <!-- BEGIN PROFILE SIDEBAR -->
             <div class="profile-sidebar">
                 {{--ToDo: customzing photo layout for supporting jquery upload--}}
-                @include('partials.profileSidebar',['user'=>$user , 'withInfoBox'=>true ])
+                @include('partials.profileSidebar',['user'=>$user , 'withInfoBox'=>true , 'withPhotoUpload' => true ])
             </div>
             <!-- END BEGIN PROFILE SIDEBAR -->
             <!-- BEGIN PROFILE CONTENT -->
@@ -66,36 +67,14 @@
                             <div class="portlet-title tabbable-line">
                                 <div class="caption caption-md">
                                     <i class="icon-globe theme-font hide"></i>
-                                    <span class="caption-subject font-blue-madison bold uppercase">
-                                                    اطلاعات
+                                    <span class="caption-subject font-purple-intense bold uppercase">
+                                                    ثبت درخواست اینترنت رایگان آسیاتک
                                     </span>
                                 </div>
-                                <ul class="nav nav-tabs">
-                                    <li @if(Empty(session('tabPane')) || strcmp(session('tabPane') , "tab_1_1") == 0) {{ "class=active" }} @endif>
-                                        <a href="#tab_1_1" data-toggle="tab">
-                                                تکمیل اطلاعات شخصی
-                                        </a>
-                                    </li>
-                                </ul>
                             </div>
 
                             <div class="portlet-body">
-                                <div class="tab-content">
-                                    <!-- PERSONAL INFO TAB -->
-                                        <div class="tab-pane @if(Empty(session('tabPane')) || strcmp(session('tabPane') , "tab_1_1") == 0) active @endif" id="tab_1_1">
-                                        @if(
-                                             (!$user->lockProfile and $user->id == Auth::id()))
-
-                                            @include('user.profile.profileEditView')
-                                        @else
-                                            @include('user.profile.profileView')
-                                        @endif
-                                        @if(Session::has('belongsTo') && strcmp(Session::get('belongsTo'),"moreInfo")==0)
-                                            @include("systemMessage.flash")
-                                        @endif
-                                    </div>
-                                    <!-- END PERSONAL INFO TAB -->
-                                </div>
+                                    @include('user.profile.profileEditView' , ["withBio"=>false, "withBirthdate"=>true , "withIntroducer"=>true , "submitCaption" => "ثبت" , "text1"=>"لطفا اطلاعات خود را با دقت و صحت کامل تکمیل نمایید و سپس بر روی ثبت درخواست کلیک کنید . در صورت صحیح و کامل بودن اطلاعات در خواست شما در صف بررسی قرار می گیرد و وضعیت آن از طریق همین صفحه قابل مشاهده خواهد بود." , "text2"=>" اطلاعات وارد شده پس از ثبت درخواست قابل تغییر نیستند . <a href='#'>برای دیدن نمونه های صحیح اطلاعات اینجا کلیک کنید</a>" ])
                             </div>
                         </div>
                     </div>
@@ -111,13 +90,20 @@
     <script src="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
     <script src="/assets/global/plugins/bootstrap-sweetalert/sweetalert.min.js" type="text/javascript"></script>
     <script src="/assets/global/plugins/bootstrap-toastr/toastr.min.js" type="text/javascript"></script>
+    <script src="/assets/global/plugins/jquery.sparkline.min.js" type="text/javascript"></script>
+    <script src="/assets/global/plugins/morris/morris.min.js" type="text/javascript"></script>
+    <script src="/assets/extra/persian-datepicker/lib/persian-date.js" type="text/javascript" ></script>
 @endsection
 
 @section("footerPageLevelScript")
     <script src="/assets/pages/scripts/profile.min.js" type="text/javascript"></script>
     <script src="/assets/pages/scripts/dashboard.min.js" type="text/javascript"></script>
     <script src="/assets/pages/scripts/ui-toastr.min.js" type="text/javascript"></script>
-    <script>
+    <script src="/assets/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js" type="text/javascript" ></script>
+@endsection
+
+@section("extraJS")
+    <script type="text/javascript">
         /**
          * Set token for ajax request
          */
@@ -128,9 +114,17 @@
                 }
             });
         });
-
         jQuery(document).ready(function() {
+            $("#birthdate").persianDatepicker({
+                altField: '#birthdateAlt',
+                altFormat: "YYYY MM DD",
+                observer: true,
+                format: 'YYYY/MM/DD',
+                altFieldFormatter: function (unixDate) {
+                    var d = new Date(unixDate).toISOString();
+                    return d;
+                }
+            });
         });
-
     </script>
 @endsection

@@ -61,6 +61,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\View;
 use Monolog\Handler\ElasticSearchHandler;
 use stdClass;
+use SEO;
 
 class UserController extends Controller
 {
@@ -2214,5 +2215,29 @@ class UserController extends Controller
 //        $response = $homeController->sendSMS($sendSMSRequest);
         session()->put("success", $message);
         return redirect()->back();
+    }
+
+    /**
+     * Submit user request for voucher request
+     *
+     * @param  Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function submitVoucherRequest(Request $request)
+    {
+        $url = $request->url();
+        $title = "آلاء| درخواست اینترنت آسیاتک";
+        SEO::setTitle($title);
+        SEO::opengraph()->setUrl($url);
+        SEO::setCanonical($url);
+        SEO::twitter()->setSite("آلاء");
+        SEO::setDescription($this->setting->site->seo->homepage->metaDescription);
+        SEO::opengraph()->addImage(route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]), ['height' => 100, 'width' => 100]);
+
+        $user = Auth::user();
+        $genders = Gender::pluck('name', 'id')->prepend("نامشخص");
+        $majors = Major::pluck('name', 'id')->prepend("نامشخص");
+        $sideBarMode = "closed";
+        return view("user.submitVoucherRequest" , compact("user" , "genders" , "majors" , "sideBarMode"));
     }
 }
