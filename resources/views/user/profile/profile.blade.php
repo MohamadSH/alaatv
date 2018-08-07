@@ -177,7 +177,7 @@
                                         @if(
                                              (!$user->lockProfile and $user->id == Auth::id()))
 
-                                            @include('user.profile.profileEditView')
+                                            @include('user.profile.profileEditView' , ["withBio"=>true , "withBirthdate"=>false , "withIntroducer"=>false , "text2"=>"کاربر گرامی ، پس از تکمیل اطلاعات شخصی(فیلد های پایین) امکان اصلاح اطلاعات ثبت شده وجود نخواهد داشت. لذا خواهشمند هستیم این اطلاعات را در صحت و دقت کامل تکمیل نمایید . باتشکر"])
                                         @else
                                             @include('user.profile.profileView')
                                         @endif
