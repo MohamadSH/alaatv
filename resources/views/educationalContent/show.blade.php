@@ -87,11 +87,6 @@
                         </div>
                         <div class="portlet-body  text-justify">
                             <div class="row col-md-7">
-
-                                @foreach($files["videoSource"] as $source)
-                                    {{ var_dump($source) }}
-                                    <hr>
-                                    @endforeach
                                 <video  id="video-{{$educationalContent->id}}"
                                         class="video-js vjs-default-skin vjs-big-play-centered"
                                         preload="metadata"
