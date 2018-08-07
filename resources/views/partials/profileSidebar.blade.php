@@ -6,28 +6,14 @@
     </div>
     <!-- END SIDEBAR  USERPIC -->
     <!-- SIDEBAR USER TITLE -->
+    @if(isset($withRegisterationDate) && $withRegisterationDate)
     <div class="profile-usertitle">
         <div class="profile-usertitle-name">@if(!isset($user->firstName) && !isset($user->lastName)) کاربر ناشناس @else @if(isset($user->firstName)) {{$user->firstName}} @endif @if(isset($user->lastName)){{$user->lastName}} @endif @endif</div>
 
         <div class="profile-usertitle-job "> تاریخ عضویت: {{$user->CreatedAt_Jalali()}} </div>
     </div>
-    {{--<div class="profile-userbuttons">--}}
-
-        {{--@if($user->hasRole(Config::get('constants.ROLE_TECH')))--}}
-        {{--<button type="button" class="btn btn-circle green btn-sm">تکنسین</button>--}}
-        {{--<button type="button" class="btn btn-circle red btn-sm">--}}
-            {{--@if(isset($user->techCode))--}}
-            {{--{{ $user->techCode }}--}}
-                {{--@else--}}
-            {{--بدون کد--}}
-            {{--@endif--}}
-        {{--</button>--}}
-
-        {{--@endif--}}
-    {{--</div>--}}
+    @endif
     <!-- END SIDEBAR USER TITLE -->
-    <!-- SIDEBAR BUTTONS -->
-    <!-- END SIDEBAR BUTTONS -->
     <!-- SIDEBAR MENU -->
     <div class="profile-usermenu">
         <ul class="nav">
