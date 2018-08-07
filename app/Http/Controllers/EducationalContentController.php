@@ -842,7 +842,13 @@ public function store(InsertEducationalContentRequest $request)
 
              $contentset = Contentset::FindOrFail($contentset_id);
              $lastContent = $contentset->educationalcontents->sortByDesc("pivot.order")->first() ;
-             $newContent = $lastContent->replicate();
+             if(isset($lastContent))
+                $newContent = $lastContent->replicate();
+             else
+             {
+                 session()->put("error" , "محتوایی برای کپی یافت نشد ، برای استفاده از این پنل باید ابتدا یک محتوا برای این دوره درج کنید");
+                 return redirect()->back();
+             }
              $newContent->contenttype_id = $contenttype_id ;
              if($contenttype_id == 1)
                  $newContent->template_id = 2 ;
