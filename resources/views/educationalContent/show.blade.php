@@ -2,21 +2,48 @@
 
 @section("css")
     <link rel="stylesheet" href="{{ mix('/css/all.css') }}">
-    <link href="https://vjs.zencdn.net/7.1.0/video-js.css" rel="stylesheet">
+    <link href="/videojs/video-js.min.css" rel="stylesheet">
+    <link href="/videojs/video.js-quality/quality-selector.css" rel="stylesheet">
     <style>
         @media screen and (max-width: 480px) {
             .google-docs {
                 height: 350px;
             }
         }
-
         .mt-element-list {
             background-color: white;
         }
 
     </style>
     <!-- If you'd like to support IE8 (for Video.js versions prior to v7) -->
-    <script src="https://vjs.zencdn.net/ie8/ie8-version/videojs-ie8.min.js"></script>
+    <script src="/videojs/ie8-1.1.2/dist/videojs-ie8.min.js"></script>
+    <style>
+        .video-js .vjs-title-bar {
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+
+            /*
+              By default, do not show the title bar.
+            */
+            display: none;
+            font-size: 2em;
+            padding: .5em;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+        }
+
+        /*
+          Only show the title bar after playback has begun (so as not to hide
+          the big play button) and only when paused or when the user is
+          interacting with the player.
+        */
+        .video-js.vjs-paused.vjs-has-started .vjs-title-bar,
+        .video-js.vjs-user-active.vjs-has-started .vjs-title-bar{
+            display: block;
+        }
+    </style>
 @endsection
 
 @section("pageBar")
@@ -59,26 +86,24 @@
                             </div>
                         </div>
                         <div class="portlet-body  text-justify">
-                                <video
-                                        id="video-{{$educationalContent->id}}"
-                                        class="video-js vjs-default-skin"
-
+                            <div class="row col-md-7">
+                                <video  id="video-{{$educationalContent->id}}"
+                                        class="video-js vjs-default-skin vjs-big-play-centered"
                                         preload="metadata"
                                         height='360px'
+                                        width="640px"
                                         poster='@if(isset($files["thumbnail"])){{$files["thumbnail"]}}@endif'
-                                        style="height: 360px"
-                                        data-setup='{ "playbackRates" : [1, 1.5, 2] }'
-                                        controls
-                                        >
-                                    {{--"aspectRatio" : "640:360" ,--}}
+                                        data-setup='{ "fluid" : true ,"loop": "true", "playbackRates" : [1, 1.5, 2] }'
+                                        controls >
+
                                 @foreach($files["videoSource"] as $source)
                                         <source label="{{ $source["caption"] }}" src="{{ $source["src"] }}" type='video/mp4'>
                                     @endforeach
                                     <p class="vjs-no-js">جهت پخش آنلاین فیلم، ابتدا مطمئن شوید که جاوا اسکریپت در مرور
                                         گر شما فعال است و از آخرین نسخه ی مرورگر استفاده می کنید.</p>
                                 </video>
-
-                                <div class="row">
+                            </div>
+                            <div class="row">
                                     <hr>
                                     <div class="col-md-7">
                                         <div class="caption"> <i class="fa fa-comment-o" aria-hidden="true"></i> </div>
@@ -691,7 +716,9 @@
 @endsection
 
 @section("extraJS")
-    <script src="https://vjs.zencdn.net/7.1.0/video.js"></script>
+    {{--//v7.2--}}
+    <script src="/videojs/video.min.js"></script>
+    <script src="/videojs/video.js-quality/silvermine-videojs-quality-selector.min.js"></script>
     <script type="text/javascript">
 
         $(document).ready(function (){
@@ -703,25 +730,69 @@
             $("#otherSessions").find(".slimScrollBar").css("top" , scrollTo.offset().top +"px");
         });
     </script>
-    {{--<script>--}}
-        {{--$(document).ready(function(){--}}
-            {{--console.log( "ready!" );--}}
-            {{--options = {--}}
-                {{--controlBar: {--}}
-                    {{--children: [--}}
-                        {{--'playToggle',--}}
-                        {{--'progressControl',--}}
-                        {{--'volumePanel',--}}
-                        {{--'fullscreenToggle',--}}
-                        {{--'playbackRates',--}}
-                    {{--],--}}
-                {{--},--}}
-                {{--playbackRates: [1, 1.5, 2],--}}
-                {{--aspectRatio: '854:480',--}}
+    <script>
+        $(document).ready(function(){
+            console.log( "ready!" );
+            //
+            // Get the Component base class from Video.js
+            var Component = videojs.getComponent('Component');
 
-            {{--};--}}
-            {{--var player = videojs('video-{{$educationalContent->id}}',options);--}}
+            // The videojs.extend function is used to assist with inheritance. In
+            // an ES6 environment, `class TitleBar extends Component` would work
+            // identically.
+            var TitleBar = videojs.extend(Component, {
 
-        {{--});--}}
-    {{--</script>--}}
+                // The constructor of a component receives two arguments: the
+                // player it will be associated with and an object of options.
+                constructor: function(player, options) {
+
+                    // It is important to invoke the superclass before anything else,
+                    // to get all the features of components out of the box!
+                    Component.apply(this, arguments);
+
+                    // If a `text` option was passed in, update the text content of
+                    // the component.
+                    if (options.text) {
+                        this.updateTextContent(options.text);
+                    }
+                },
+
+                // The `createEl` function of a component creates its DOM element.
+                createEl: function() {
+                    return videojs.createEl('div', {
+
+                        // Prefixing classes of elements within a player with "vjs-"
+                        // is a convention used in Video.js.
+                        className: 'vjs-title-bar'
+                    });
+                },
+
+                // This function could be called at any time to update the text
+                // contents of the component.
+                updateTextContent: function(text) {
+
+                    // If no text was provided, default to "Title Unknown"
+                    if (typeof text !== 'string') {
+                        text = 'Title Unknown';
+                    }
+
+                    // Use Video.js utility DOM methods to manipulate the content
+                    // of the component's element.
+                    videojs.emptyEl(this.el());
+                    videojs.appendContent(this.el(), text);
+                }
+            });
+
+            // Register the component with Video.js, so it can be used in players.
+            videojs.registerComponent('TitleBar', TitleBar);
+
+            var player = videojs('video-{{$educationalContent->id}}');
+            player.controlBar.addChild('QualitySelector');
+            // Create a player.
+            // Add the TitleBar as a child of the player and provide it some text
+            // in its options.
+            player.addChild('TitleBar', {text: '{{ isset($educationalContentDisplayName) ? $educationalContentDisplayName : "" }}'});
+
+        });
+    </script>
 @endsection
