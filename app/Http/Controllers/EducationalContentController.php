@@ -433,7 +433,7 @@ public function store(InsertEducationalContentRequest $request)
                             {
                                 $url = $file->name;
                                 $size = $this->curlGetFileSize($url);
-                                $videoSources->put( "hd" , ["src"=>$url , "caption"=>$file->pivot->caption , "size"=>$size]) ;
+                                $videoSources->put( "hd" , ["src"=>$url , "caption"=>$file->pivot->caption , "size"=>$size , "index" => "hd"]) ;
                             }
 
                             $file = $educationalContent->files->where("pivot.label" , "hq")->first() ;
@@ -441,7 +441,7 @@ public function store(InsertEducationalContentRequest $request)
                             {
                                 $url = $file->name;
                                 $size = $this->curlGetFileSize($url);
-                                $videoSources->put( "hq" , ["src"=>$url , "caption"=>$file->pivot->caption, "size"=>$size]) ;
+                                $videoSources->put( "hq" , ["src"=>$url , "caption"=>$file->pivot->caption, "size"=>$size, "index" => "hq"]) ;
                             }
 
                             $file = $educationalContent->files->where("pivot.label" , "240p")->first() ;
@@ -449,7 +449,7 @@ public function store(InsertEducationalContentRequest $request)
                             {
                                 $url = $file->name;
                                 $size = $this->curlGetFileSize($url);
-                                $videoSources->put( "240p" , ["src"=>$url ,  "caption"=>$file->pivot->caption, "size"=>$size]) ;
+                                $videoSources->put( "240p" , ["src"=>$url ,  "caption"=>$file->pivot->caption, "size"=>$size, "index" => "240p"]) ;
                             }
                             $file = $educationalContent->files->where("pivot.label" , "thumbnail")->first();
                             if(isset($file))

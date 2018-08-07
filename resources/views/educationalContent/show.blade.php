@@ -87,6 +87,11 @@
                         </div>
                         <div class="portlet-body  text-justify">
                             <div class="row col-md-7">
+
+                                @foreach($files["videoSource"] as $source)
+                                    {{ var_dump($source) }}
+                                    <hr>
+                                    @endforeach
                                 <video  id="video-{{$educationalContent->id}}"
                                         class="video-js vjs-default-skin vjs-big-play-centered"
                                         preload="metadata"
@@ -97,8 +102,8 @@
                                         controls >
 
                                 @foreach($files["videoSource"] as $source)
-                                        <source label="{{ $source["caption"] }}" src="{{ $source["src"] }}" type='video/mp4'>
-                                    @endforeach
+                                        <source label="{{ $source["caption"] }}" src="{{ $source["src"] }}" type='video/mp4' @if(strcmp($source["index"],"240p") == 0) selected='true' @endif >
+                                @endforeach
                                     <p class="vjs-no-js">جهت پخش آنلاین فیلم، ابتدا مطمئن شوید که جاوا اسکریپت در مرور
                                         گر شما فعال است و از آخرین نسخه ی مرورگر استفاده می کنید.</p>
                                 </video>
