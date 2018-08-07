@@ -177,7 +177,7 @@
                                         @if(
                                              (!$user->lockProfile and $user->id == Auth::id()))
 
-                                            @include('user.profile.profileEditView')
+                                            @include('user.profile.profileEditView' , ["withBio"=>true , "withBirthdate"=>false , "withIntroducer"=>false , "text2"=>"کاربر گرامی ، پس از تکمیل اطلاعات شخصی(فیلد های پایین) امکان اصلاح اطلاعات ثبت شده وجود نخواهد داشت. لذا خواهشمند هستیم این اطلاعات را در صحت و دقت کامل تکمیل نمایید . باتشکر"])
                                         @else
                                             @include('user.profile.profileView')
                                         @endif
@@ -191,7 +191,6 @@
                                         <div class="tab-pane @if(strcmp(session('tabPane') , "tab_1_2") == 0) active @endif" id="tab_1_2">
                                             <p> می توانید عکس پروفایل خود را با استفاده از فرم زیر تغییر دهید . </p>
                                             <form method="post" role="form" action="{{ action("UserController@updatePhoto" ) }}" enctype="multipart/form-data">
-                                                <input type="hidden" name="_method" value="PUT">
                                                 {{ csrf_field() }}
                                                 <div class="form-group {{ $errors->has('photo') ? ' has-error' : '' }}">
                                                     <div class="fileinput fileinput-new" data-provides="fileinput">

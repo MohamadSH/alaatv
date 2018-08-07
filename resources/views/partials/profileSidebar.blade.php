@@ -3,6 +3,24 @@
     <!-- SIDEBAR USERPIC -->
     <div class="profile-userpic">
         <img @if(isset($user->photo))  src="{{ route('image', ['category'=>'1','w'=>'150' , 'h'=>'150' ,  'filename' => $user->photo ]) }}" @endif class="img-responsive" alt="عکس پروفایل">
+        @if(isset($withPhotoUpload) && $withPhotoUpload)
+            <div class="row text-center margin-top-10">
+                {!! Form::open(['files'=>true,'method' => 'POST','action' => ['UserController@updatePhoto']  , 'id'=>'profilePhotoAjaxForm' ]) !!}
+                    {!! Form::submit('بارگذاری', ['class' => 'btn blue' ]) !!}
+                    <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                                <span class="btn green btn-file">
+                                                                    <span class="fileinput-new"> انتخاب فایل </span>
+                                                                    <span class="fileinput-exists"> تغییر </span>
+                                                                    {!! Form::file('photo' , ['id'=>'profilePhoto']) !!}
+                                                                </span>
+                        <span class="fileinput-filename"> </span> &nbsp;
+                        <a href="javascript:;" class="close fileinput-exists" data-dismiss="fileinput"> </a>
+                    </div>
+
+                {!! Form::close() !!}
+            </div>
+            {{--<progress></progress>--}}
+        @endif
     </div>
     <!-- END SIDEBAR  USERPIC -->
     <!-- SIDEBAR USER TITLE -->
@@ -37,6 +55,10 @@
             <li @if(strcmp(url()->current() , action("HomeController@submitKonkurResult")) == 0) class="active" @endif >
                 <a href="{{action("HomeController@submitKonkurResult")}}">
                     <i class="fa fa-graduation-cap"></i> ثبت رتبه 97 </a>
+            </li>
+            <li @if(strcmp(url()->current() , action("UserController@submitVoucherRequest")) == 0) class="active" @endif >
+                <a href="{{action("UserController@submitVoucherRequest")}}">
+                    <i class="fa fa-registered"></i>ثبت درخواست اینترنت آسیاتک</a>
             </li>
         </ul>
     </div>

@@ -126,13 +126,14 @@ Route::group(['middleware' => 'auth'], function()
     Route::post("excelBot" , "HomeController@excelBot");
     Route::post("registerUserAndGiveOrderproduct" , "HomeController@registerUserAndGiveOrderproduct");
     Route::get("specialAddUser" , "HomeController@specialAddUser");
+    Route::get("v/asiatech" , "UserController@submitVoucherRequest");
 
     Route::group(['prefix' => 'user'], function () {
         Route::get('info', "UserController@informationPublicUrl");
         Route::get('{user}/info', 'UserController@information');
         Route::post('{user}/completeInfo', 'UserController@completeInformation');
         Route::put('updateProfile', 'UserController@updateProfile');
-        Route::put('updatePhoto' , 'UserController@updatePhoto');
+        Route::post('updatePhoto' , 'UserController@updatePhoto');
         Route::put('updatePassword' , 'UserController@updatePassword');
         Route::get('orders' , 'UserController@userOrders');
         Route::get('question' , 'UserController@uploads');
