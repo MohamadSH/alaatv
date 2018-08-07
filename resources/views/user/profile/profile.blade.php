@@ -191,7 +191,6 @@
                                         <div class="tab-pane @if(strcmp(session('tabPane') , "tab_1_2") == 0) active @endif" id="tab_1_2">
                                             <p> می توانید عکس پروفایل خود را با استفاده از فرم زیر تغییر دهید . </p>
                                             <form method="post" role="form" action="{{ action("UserController@updatePhoto" ) }}" enctype="multipart/form-data">
-                                                <input type="hidden" name="_method" value="PUT">
                                                 {{ csrf_field() }}
                                                 <div class="form-group {{ $errors->has('photo') ? ' has-error' : '' }}">
                                                     <div class="fileinput fileinput-new" data-provides="fileinput">
