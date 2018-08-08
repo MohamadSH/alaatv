@@ -1,4 +1,4 @@
-.env:..
+.env:...
 
 `TAG_API_URL=http://79.127.123.242/api/v1/rt/`
 
