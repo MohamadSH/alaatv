@@ -963,11 +963,27 @@ class UserController extends Controller
             $user->photo = $fileName ;
         }
         if ($user->update()) {
-            session()->put("belongsTo", "photo");
-            session()->put("success", "تغییر عکس با موفقیت انجام شد.");
+            if($request->ajax())
+            {
+                $newPhotoSrc = route('image', ['category'=>'1','w'=>'150' , 'h'=>'150' ,  'filename' => $fileName ]);
+                return $this->response->setStatusCode(200)
+                                        ->setContent(["newPhoto"=>$newPhotoSrc]);
+            }
+            else
+            {
+                session()->put("belongsTo", "photo");
+                session()->put("success", "تغییر عکس با موفقیت انجام شد.");
+            }
         } else {
-            session()->put("belongsTo", "photo");
-            session()->put("error", "خطای پایگاه داده.");
+            if($request->ajax())
+            {
+                return $this->response->setStatusCode(503);
+            }
+            else
+            {
+                session()->put("belongsTo", "photo");
+                session()->put("error", "خطای پایگاه داده.");
+            }
         }
         session()->put("tab", "tab_1_2");
         return redirect()->back();

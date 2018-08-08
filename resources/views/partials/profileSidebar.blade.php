@@ -2,22 +2,27 @@
 <div class="portlet light profile-sidebar-portlet ">
     <!-- SIDEBAR USERPIC -->
     <div class="profile-userpic">
-        <img @if(isset($user->photo))  src="{{ route('image', ['category'=>'1','w'=>'150' , 'h'=>'150' ,  'filename' => $user->photo ]) }}" @endif class="img-responsive" alt="عکس پروفایل">
+        <img @if(isset($user->photo))  src="{{ route('image', ['category'=>'1','w'=>'150' , 'h'=>'150' ,  'filename' => $user->photo ]) }}" @endif class="img-responsive" id="profilePhoto" alt="عکس پروفایل">
         @if(isset($withPhotoUpload) && $withPhotoUpload)
             <div class="row text-center margin-top-10">
                 {!! Form::open(['files'=>true,'method' => 'POST','action' => ['UserController@updatePhoto']  , 'id'=>'profilePhotoAjaxForm' ]) !!}
-                    {!! Form::submit('بارگذاری', ['class' => 'btn blue' ]) !!}
+                    {!! Form::submit('بارگذاری', ['class' => 'btn blue' , 'id'=>'uploadProfilePhotoAjaxSubmit' ]) !!}
                     <div class="fileinput fileinput-new" data-provides="fileinput">
                                                                 <span class="btn green btn-file">
                                                                     <span class="fileinput-new"> انتخاب فایل </span>
                                                                     <span class="fileinput-exists"> تغییر </span>
-                                                                    {!! Form::file('photo' , ['id'=>'profilePhoto']) !!}
+                                                                    {!! Form::file('photo' , ['id'=>'profilePhotoFile']) !!}
                                                                 </span>
                         <span class="fileinput-filename"> </span> &nbsp;
-                        <a href="javascript:;" class="close fileinput-exists" data-dismiss="fileinput"> </a>
+                        <a href="javascript:;" class="close fileinput-exists" data-dismiss="fileinput" id="profilePhotoAjaxFileInputClose"> </a>
                     </div>
-
+                    <img src="/img/loading-spinner-default.gif" style="width: 15px; display: none" id="profilePhotoAjaxLoadingSpinner">
                 {!! Form::close() !!}
+            </div>
+            <div class="row " style="margin: auto">
+                <div class="col-md-12">
+                    <p class="font-red text-justify bold "> دقت کنید که حجم عکس مورد نظر باید حداکثر 500 کیلوبایت و فرمت آن jpg و یا png باشد. </p>
+                </div>
             </div>
             {{--<progress></progress>--}}
         @endif
