@@ -141,22 +141,14 @@
             return this.file.name;
         };
         Upload.prototype.doUpload = function () {
-            var that = this;
             var formData = new FormData();
+            $("#profilePhotoAjaxLoadingSpinner").show();
             // add assoc key values, this will be posts values
             formData.append("photo", this.file, this.getName());
-            formData.append("upload_file", true);
-            console.log(formData.get("photo"));
+            // formData.append("upload_file", true);
             $.ajax({
                 type: "POST",
                 url: "{{action("UserController@updatePhoto")}}",
-                // xhr: function () {
-                //     var myXhr = $.ajaxSettings.xhr();
-                //     if (myXhr.upload) {
-                //         myXhr.upload.addEventListener('progress', that.progressHandling, false);
-                //     }
-                //     return myXhr;
-                // },
                 xhr: function() {
                     var myXhr = $.ajaxSettings.xhr();
                     if (myXhr.upload) {
@@ -172,20 +164,47 @@
                     }
                     return myXhr;
                 },
-                success: function (data) {
-                    console.log(data);
+                statusCode: {
+                    //The status for when action was successful
+                    200: function (response) {
+                        // console.log(response);
+                        $("#profilePhoto").attr("src" , response.newPhoto);
+                        $("#profilePhotoAjaxFileInputClose").trigger("click");
+                    },
+                    //The status for when the user is not authorized for making the request
+                    403: function (response) {
+                        window.location.replace("/403");
+                    },
+                    //The status for when the user is not authorized for making the request
+                    401: function (response) {
+                        window.location.replace("/403");
+                    },
+                    404: function (response) {
+                        window.location.replace("/404");
+                    },
+                    //The status for when form data is not valid
+                    422: function (response) {
+                        console.log(response);
+                    },
+                    //The status for when there is error php code
+                    500: function (response) {
+                        console.log(response.responseText);
+//                            toastr["error"]("خطای برنامه!", "پیام سیستم");
+                    },
+                    //The status for when there is error php code
+                    503: function (response) {
+//                            toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
+                    }
                 },
-                error: function (error) {
-                    console.log(error);
-                },
-                // async: true,
+                async: true,
                 data: formData,
-                // cache: false,
+                cache: false,
                 contentType: false,
                 processData: false,
                 // timeout: 60000,
-                // dataType: 'script',
             });
+
+            $("#profilePhotoAjaxLoadingSpinner").hide();
         };
 
         Upload.prototype.progressHandling = function (event) {
@@ -204,7 +223,7 @@
         //Change id to your id
         $("#profilePhotoAjaxForm").on("submit", function (e) {
             e.preventDefault();
-            var file = $("#profilePhoto")[0].files[0];
+            var file = $("#profilePhotoFile")[0].files[0];
             var upload = new Upload(file);
 
             // maby check size or type here with upload.getSize() and upload.getType()
