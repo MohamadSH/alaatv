@@ -17,6 +17,7 @@ use App\Gender;
 use App\Grade;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Requests\InsertCouponRequest;
+use App\Http\Requests\InsertVoucherRequest;
 use App\Http\Requests\PasswordRecoveryRequest;
 use App\Http\Requests\RegisterForSanatiSharifHighSchoolRequest;
 use App\Http\Requests\SubmitVerificationCode;
@@ -2239,7 +2240,7 @@ class UserController extends Controller
      * @param  Request $request
      * @return \Illuminate\Http\Response
      */
-    public function submitVoucherRequest(Request $request)
+    public function voucherRequest(Request $request)
     {
         $url = $request->url();
         $title = "آلاء| درخواست اینترنت آسیاتک";
@@ -2251,9 +2252,20 @@ class UserController extends Controller
         SEO::opengraph()->addImage(route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]), ['height' => 100, 'width' => 100]);
 
         $user = Auth::user();
-        $genders = Gender::pluck('name', 'id')->prepend("نامشخص");
-        $majors = Major::pluck('name', 'id')->prepend("نامشخص");
+        $genders = Gender::pluck('name', 'id')->prepend("انتخاب کنید");
+        $majors = Major::pluck('name', 'id')->prepend("انتخاب کنید");
         $sideBarMode = "closed";
         return view("user.submitVoucherRequest" , compact("user" , "genders" , "majors" , "sideBarMode"));
+    }
+
+    /**
+     * Submit user request for voucher request
+     *
+     * @param  \App\Http\Requests\InsertVoucherRequest InsertVoucherRequest
+     * @return \Illuminate\Http\Response
+     */
+    public function submitVoucherRequest(InsertVoucherRequest $request)
+    {
+
     }
 }

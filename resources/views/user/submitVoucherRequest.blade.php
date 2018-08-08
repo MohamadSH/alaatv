@@ -74,7 +74,25 @@
                             </div>
 
                             <div class="portlet-body">
-                                    @include('user.profile.profileEditView' , ["withBio"=>false, "withBirthdate"=>true , "withIntroducer"=>true , "submitCaption" => "ثبت" , "text1"=>"لطفا اطلاعات خود را با دقت و صحت کامل تکمیل نمایید و سپس بر روی ثبت درخواست کلیک کنید . در صورت صحیح و کامل بودن اطلاعات در خواست شما در صف بررسی قرار می گیرد و وضعیت آن از طریق همین صفحه قابل مشاهده خواهد بود." , "text2"=>" اطلاعات وارد شده پس از ثبت درخواست قابل تغییر نیستند . <a href='#'>برای دیدن نمونه های صحیح اطلاعات اینجا کلیک کنید</a>" ])
+                                    @include('user.profile.profileEditView' , ["withBio"=>false,
+                                                                                "withBirthdate"=>true ,
+                                                                                "withIntroducer"=>true ,
+                                                                                "submitCaption" => "ثبت" ,
+                                                                                "text1"=>"لطفا اطلاعات خود را با دقت و صحت کامل تکمیل نمایید و سپس بر روی ثبت درخواست کلیک کنید . در صورت صحیح و کامل بودن اطلاعات در خواست شما در صف بررسی قرار می گیرد و وضعیت آن از طریق همین صفحه قابل مشاهده خواهد بود." , "text2"=>" اطلاعات وارد شده پس از ثبت درخواست قابل تغییر نیستند . <a href='#'>برای دیدن نمونه های صحیح اطلاعات اینجا کلیک کنید</a>",
+                                                                                "formAction" => "UserController@submitVoucherRequest",
+                                                                                "requiredFields"=>["province" ,
+                                                                                                    "city" ,
+                                                                                                    "address" ,
+                                                                                                    "postalCode" ,
+                                                                                                    "gender" ,
+                                                                                                    "birthdate" ,
+                                                                                                    "school",
+                                                                                                    "major",
+                                                                                                    "introducedBy",
+                                                                                                    "email",
+                                                                                                    ],
+                                                                                ]
+                                                                    )
                             </div>
                         </div>
                     </div>

@@ -222,6 +222,11 @@ return [
         'user_id' => 'کاربر',
         'date' => 'تاریخ',
         'score' => 'نمره',
+        'province' => 'استان',
+        'city' => 'شهر',
+        'school' => 'مدرسه' ,
+        'introducedBy' => 'معرف',
+        'address' => 'آدرس'
     ],
 
 ];
