@@ -112,169 +112,6 @@ class HomeController extends Controller
     {
         try
         {
-            if($request->has("transaction"))
-            {
-
-                $transactions = Transaction::where("transactionstatus_id" , config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
-                    ->where("paymentmethod_id" , "<>" ,config("constants.PAYMENT_METHOD_WALLET"))
-                    ->get();
-//                echo "Total Transactions: ".$transactions->count();
-//                echo "<br>";
-                $users = collect();
-                $counter = 0;
-                $threshold = 7500;
-                foreach ($transactions as $transaction)
-                {
-                    $counter++;
-                    if($counter < $threshold)
-                        continue;
-                    $user = $transaction->order->user;
-
-                    if(isset($user->gender_id) && $user->gender->name == "خانم" )
-                        continue;
-                    if(isset($user))
-                    {
-                        $userRecord = $users->where("user_id" , $user->id)->first();
-                        if(isset($userRecord))
-                        {
-                            $userRecord["totalAmount"] += $transaction->cost;
-                        }
-                        else
-                        {
-                            $users->push([
-                                "user_id" => $user->id,
-                                "firstname" =>$user->firstName,
-                                "lastname" =>$user->lastName,
-                                "mobile" =>$user->mobile,
-                                "totalAmount" => $transaction->cost ,
-                            ]);
-                        }
-                    }
-                    else
-                    {
-                        dump("User was not found for transaction ".$transaction->id);
-                    }
-                }
-//                echo "Total users: ".$users->count();
-//                echo "<br>";
-
-                $minAmount = 500000;
-                $users = $users->where("totalAmount" , ">=" , $minAmount ) ;
-//                echo "Total filtered users: ".$users->count();
-//                echo "<br>";
-
-                echo "<table border='1' style='width: 100%; direction: rtl; font-weight: bold '>
-                     <thead style='text-align: center;font-size: larger'>
-                     <td>نام</td>
-                     <td>نام خانوادگی</td>
-                     <td>موبایل</td>
-                     <td>مجموع خرید</td>
-                     <td>توضیحات</td>
-                     </thead>";
-                foreach ($users as $user)
-                {
-                    echo "<tr style='text-align: center'>
-                        <td>".$user["firstname"]."</td>
-                        <td>".$user["lastname"]."</td>
-                        <td>".$user["mobile"]."</td>
-                        <td>".number_format($user["totalAmount"])."</td>
-                        <td></td>
-                        </tr>";
-                }
-                echo "</table>";
-
-//                dd("DONE");
-            }
-            /*$users = User::whereHas("orderproducts" , function ($q)
-            {
-                $q->whereIn("product_id" , [214 ,223])
-                    ->whereHas('order' , function ($q2){
-                        $q2->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
-                            ->where('paymentstatus_id' , config("constants.PAYMENT_STATUS_PAID"));
-                    });
-            })
-                ->whereDoesntHave("orderproducts" , function ($q3){
-                    $q3->where("product_id" , 100)
-                        ->whereHas('order' , function ($q2){
-                            $q2->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
-                                ->where('paymentstatus_id' , config("constants.PAYMENT_STATUS_PAID"));
-                        });
-                })
-                ->get();
-
-            $users = User::where("id" , 1)->get();
-            echo "<span style='color:green'>";
-            echo "Available users: ".$users->count();
-            echo "</span>";
-            echo "<br>";
-            dump($users->pluck("id")->toArray());
-            $counter = 0 ;
-            $orderProductIds = [100];
-            foreach($users as $user)
-            {
-                $orderController = new OrderController();
-                $storeOrderRequest = new Request();
-                $storeOrderRequest->offsetSet("orderstatus_id", config("constants.ORDER_STATUS_CLOSED") );
-                $storeOrderRequest->offsetSet("paymentstatus_id", config("constants.PAYMENT_STATUS_PAID"));
-                $storeOrderRequest->offsetSet("cost", 0);
-                $storeOrderRequest->offsetSet("costwithoutcoupon", 0);
-                $storeOrderRequest->offsetSet("user_id", $user->id );
-                $giftOrderCompletedAt = Carbon::now()->setTimezone("Asia/Tehran");
-                $storeOrderRequest->offsetSet("completed_at",  $giftOrderCompletedAt);
-                $giftOrder = $orderController->store($storeOrderRequest) ;
-
-                if($giftOrder !== false)
-                {
-                    foreach ($orderProductIds as $productId)
-                    {
-                        $request->offsetSet("cost" , 0);
-                        $request->offsetSet("orderId_bhrk" , $giftOrder->id);
-                        $request->offsetSet("userId_bhrk" , $user->id);
-                        $product =  Product::where("id" , $productId)->first();
-                        if(isset($product))
-                        {
-                            $response = $orderController->addOrderproduct($request , $product) ;
-                            $responseStatus = $response->getStatusCode();
-                            $result = json_decode($response->getContent());
-                            if($responseStatus == 200)
-                            {
-                                $counter++;
-//                                $message = "آلایی عزیز همایش حل مسائل شیمی به عنوان هدیه به وفاداران آلاء به فایل های شما افزوده شد";
-//                                $message .= "\n";
-//                                $message .= "sanatisharif.ir/asset";
-//                                $user->notify(new GeneralNotice($message));
-                            }
-                            else
-                            {
-                                echo "<span style='color:red'>";
-                                echo "Error in inserting order, user: ".$user->id;
-                                echo "</span>";
-                                echo "<br>";
-                            }
-                        }
-                        else
-                        {
-                            echo "<span style='color:red'>";
-                            echo "Error in inserting orderproduct, user: ".$user->id;
-                            echo "</span>";
-                            echo "<br>";
-                        }
-                    }
-
-                }
-                else
-                {
-                    echo "<span style='color:red'>";
-                    echo "Error in creating order, user: ".$user->id;
-                    echo "</span>";
-                    echo "<br>";
-                }
-            }
-            echo "<span style='color:green'>";
-            echo "Processed users: ".$counter;
-            echo "</span>";
-            echo "<br>";
-            dd("Done");*/
         }
         catch (\Exception    $e) {
             $message = "unexpected error";
@@ -2748,6 +2585,14 @@ class HomeController extends Controller
     {
         try
         {
+            $orders = Order::whereIn("orderstatus_id" , [ config("constants.ORDER_STATUS_CLOSED") , config("constants.ORDER_STATUS_POSTED") , config("constants.ORDER_STATUS_READY_TO_POST") ] )
+                ->whereIn("paymentstatus_id" , [ config("constants.PAYMENT_STATUS_PAID") ] )
+                ->whereDoesntHave("orderproducts" , function ($q){
+                    $q->whereNull("orderproducttype_id")->orWhere("orderproducttype_id" , config("constants.ORDER_PRODUCT_TYPE_DEFAULT")) ;
+                })
+                ->get();
+            dd($orders->pluck("id")->toArray());
+
             if($request->has("smsarabi"))
             {
                 $hamayeshTalai = [ 210 , 211 ,212 ,213 , 214,215,216,217,218,219,220,221, 222 ];
