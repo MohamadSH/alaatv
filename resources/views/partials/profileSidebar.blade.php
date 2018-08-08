@@ -56,10 +56,10 @@
                 <a href="{{action("HomeController@submitKonkurResult")}}">
                     <i class="fa fa-graduation-cap"></i> ثبت رتبه 97 </a>
             </li>
-            <li @if(strcmp(url()->current() , action("UserController@submitVoucherRequest")) == 0) class="active" @endif >
-                <a href="{{action("UserController@submitVoucherRequest")}}">
-                    <i class="fa fa-registered"></i>ثبت درخواست اینترنت آسیاتک</a>
-            </li>
+            {{--<li @if(strcmp(url()->current() , action("UserController@submitVoucherRequest")) == 0) class="active" @endif >--}}
+                {{--<a href="{{action("UserController@submitVoucherRequest")}}">--}}
+                    {{--<i class="fa fa-registered"></i>ثبت درخواست اینترنت آسیاتک</a>--}}
+            {{--</li>--}}
         </ul>
     </div>
     <!-- END MENU -->
