@@ -50,13 +50,14 @@
                 {{--</div>--}}
         {{--</div>--}}
     {{--</div>--}}
-
+    @include("systemMessage.flash")
     <div class="row">
         <div class="col-md-12">
             <!-- BEGIN PROFILE SIDEBAR -->
             <div class="profile-sidebar">
                 {{--ToDo: customzing photo layout for supporting jquery upload--}}
-                @include('partials.profileSidebar',['user'=>$user , 'withInfoBox'=>true , 'withPhotoUpload' => true ])
+                @include('partials.profileSidebar',['user'=>$user , 'withInfoBox'=>true , 'withPhotoUpload' => true  ])
+
             </div>
             <!-- END BEGIN PROFILE SIDEBAR -->
             <!-- BEGIN PROFILE CONTENT -->
@@ -77,7 +78,8 @@
                                     @include('user.profile.profileEditView' , ["withBio"=>false,
                                                                                 "withBirthdate"=>true ,
                                                                                 "withIntroducer"=>true ,
-                                                                                "submitCaption" => "ثبت" ,
+                                                                                "submitCaption" => "ثبت درخواست" ,
+                                                                                "disableSubmit" =>(!$user->mobileNumberVerification || !isset($user->photo) || strcmp($user->photo, config('constants.PROFILE_DEFAULT_IMAGE')) == 0)?true:false ,
                                                                                 "text1"=>"لطفا اطلاعات خود را با دقت و صحت کامل تکمیل نمایید و سپس بر روی ثبت درخواست کلیک کنید . در صورت صحیح و کامل بودن اطلاعات در خواست شما در صف بررسی قرار می گیرد و وضعیت آن از طریق همین صفحه قابل مشاهده خواهد بود." , "text2"=>" اطلاعات وارد شده پس از ثبت درخواست قابل تغییر نیستند . <a href='#'>برای دیدن نمونه های صحیح اطلاعات اینجا کلیک کنید</a>",
                                                                                 "formAction" => "UserController@submitVoucherRequest",
                                                                                 "requiredFields"=>["province" ,

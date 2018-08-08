@@ -490,7 +490,7 @@ class User extends Authenticatable
         $tableColumns = Schema::getColumnListing("users");
         switch ($type) {
             case "full":
-                $importantColumns = array("firstName", "lastName", "mobile", "nationalCode", "province", "city", "address", "postalCode", "gender_id", "mobileNumberVerification");
+                $importantColumns = array("firstName", "lastName", "mobile", "nationalCode", "province", "city", "address", "postalCode", "gender_id" , "mobileNumberVerification");
                 break;
             case "fullAddress":
                 $importantColumns = array("firstName", "lastName", "mobile", "nationalCode", "province", "city", "address");

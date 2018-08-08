@@ -169,7 +169,14 @@
     </div>
 </div>
 @endif
-<div class="margiv-top-10">
-    <button type="submit" class="btn green"> @if(isset($submitCaption)){{$submitCaption}} @else ثبت درخواست @endif</button>
+<div class="margiv-top-10 ">
+    <button type="submit" class="btn green" {{(isset($disableSubmit) && $disableSubmit)?"disabled":""}}> @if(isset($submitCaption)){{$submitCaption}} @else ثبت درخواست @endif</button>
 </div>
+@if(!$user->mobileNumberVerification || !isset($user->photo) || strcmp($user->photo, config('constants.PROFILE_DEFAULT_IMAGE')) == 0)
+    <div class="alert alert-danger alert-dismissable margin-top-10" style="text-align: justify">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        @if(!$user->mobileNumberVerification)لطفا شماره موبایل خود را تایید نمایید<br>@endif
+        @if(!isset($user->photo) || strcmp($user->photo, config('constants.PROFILE_DEFAULT_IMAGE')) == 0)لطفا عکس خود را آپلود نمایید@endif
+    </div>
+@endif
 {!! Form::close() !!}

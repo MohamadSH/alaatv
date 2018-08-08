@@ -796,7 +796,9 @@ class UserController extends Controller
         $photo = $user->photo;
         $password = $user->password ;
         $user->fill($request->all());
-        $user->techCode = $request->get('techCode');
+
+        if($request->has('techCode'))
+            $user->techCode = $request->get('techCode');
 
         if(strlen($user->major_id) == 0) $user->major_id = null;
         if(strlen($user->gender_id) == 0) $user->gender_id = null;
@@ -2255,6 +2257,7 @@ class UserController extends Controller
         $genders = Gender::pluck('name', 'id')->prepend("انتخاب کنید");
         $majors = Major::pluck('name', 'id')->prepend("انتخاب کنید");
         $sideBarMode = "closed";
+
         return view("user.submitVoucherRequest" , compact("user" , "genders" , "majors" , "sideBarMode"));
     }
 
@@ -2266,6 +2269,55 @@ class UserController extends Controller
      */
     public function submitVoucherRequest(InsertVoucherRequest $request)
     {
+        $user = Auth::user();
+        $updateRequest = new EditUserRequest();
+        $updateRequest->offsetSet("fromAPI" , 1);
+        $updateRequest->offsetSet("postalCode" , $request->get("postalCode"));
+        $updateRequest->offsetSet("email" , $request->get("email"));
+        $updateRequest->offsetSet("gender_id" , $request->get("gender_id"));
+        $updateRequest->offsetSet("province" , $request->get("province"));
+        $updateRequest->offsetSet("city" , $request->get("city"));
+        $updateRequest->offsetSet("address" , $request->get("address"));
+        $birthdate = Carbon::parse($request->get("birthdate") )
+                            ->setTimezone("Asia/Tehran")->format('Y-m-d');
+        $updateRequest->offsetSet("birthdate" , $birthdate);
+        $updateRequest->offsetSet("school" , $request->get("school"));
+        $updateRequest->offsetSet("major_id" , $request->get("major_id"));
+        $updateRequest->offsetSet("introducedBy" , $request->get("introducedBy"));
+        $response =  $this->update($updateRequest , $user);
+        $completionColumns = [
+                                "firstName",
+                                "lastName",
+                                "mobile",
+                                "nationalCode",
+                                "province",
+                                "city",
+                                "address",
+                                "postalCode",
+                                "gender_id" ,
+                                "birthdate",
+                                "school",
+                                "major_id",
+                                "introducedBy",
+                                "email",
+                                "mobileNumberVerification",
+                                "photo"
+                            ];
+        if($response->getStatusCode() == 200)
+        {
+            if($user->completion("custom" ,$completionColumns) < 100)
+            {
+                session()->put("error","اطلاعات شما برای ثبت درخواست کامل نمی باشند");
+                return redirect()->back();
+            }
+            else
+            {
 
+            }
+        }
+        else
+        {
+
+        }
     }
 }
