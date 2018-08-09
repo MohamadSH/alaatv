@@ -95,7 +95,7 @@
                                             در خواست شما برای اینترنت رایگان آسیاتک در صف بررسی قرار گرفته است .
                                             @if(isset($rank))
                                                 <br>
-                                            شما نفر {{$rank}} صف هستید
+                                                <span class="bold" style="font-size: larger">شما نفر <label class="font-yellow-saffron bold">{{$rank}}</label> صف هستید</span>
                                             @else
                                                 نوبت شما در صف مشخص نمی باشد
                                             @endif
