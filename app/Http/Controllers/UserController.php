@@ -2400,7 +2400,7 @@ class UserController extends Controller
                                                             ->where("product_id" , $asiatechProduct)
                                                             ->get()
                                                             ->first();
-                            if(false)
+                            if(isset($unusedVoucher))
                             {
                                 $unusedVoucher->user_id = $user->id;
                                 if($unusedVoucher->update())
