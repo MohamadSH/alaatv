@@ -13,7 +13,7 @@
 <p ><i class="fa fa-user font-yellow-gold" aria-hidden="true"></i>
     <strong  class="font-yellow-gold">جنیست: </strong><span class="bold">@if(isset($user->gender)) {{$user->gender->name}} @else <span class="label label-danger">درج نشده</span>  @endif</span>
 </p>
-<p ><i class="fa fa-graduation-cap font-yellow-gold" aria-hidden="true"></i>
+<p ><i class="fa fa-calendar-times-o font-yellow-gold" aria-hidden="true"></i>
     <strong  class="font-yellow-gold">تاریخ تولد: </strong><span class="bold">@if(isset($user->birthdate)) {{$user->Birthdate_Jalali()}} @else <span class="label label-danger">درج نشده</span>  @endif</span>
 </p>
 <p ><i class="fa fa-graduation-cap font-yellow-gold" aria-hidden="true"></i>
@@ -22,7 +22,7 @@
 <p ><i class="fa fa-graduation-cap font-yellow-gold" aria-hidden="true"></i>
     <strong  class="font-yellow-gold">رشته: </strong><span class="bold">@if(isset($user->major)) {{$user->major->name}} @else <span class="label label-danger">درج نشده</span>  @endif</span>
 </p>
-<p ><i class="fa fa-graduation-cap font-yellow-gold" aria-hidden="true"></i>
+<p ><i class="fa fa-pencil font-yellow-gold" aria-hidden="true"></i>
     <strong  class="font-yellow-gold">چگونه با آلاء آشنا شدید: </strong><span class="bold">@if(isset($user->introducedBy)) {{$user->introducedBy}} @else <span class="label label-danger">درج نشده</span>  @endif</span>
 </p>
 <p><i class="fa fa-envelope-o font-yellow-gold" aria-hidden="true"></i>
