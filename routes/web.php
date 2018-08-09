@@ -126,7 +126,8 @@ Route::group(['middleware' => 'auth'], function()
     Route::post("excelBot" , "HomeController@excelBot");
     Route::post("registerUserAndGiveOrderproduct" , "HomeController@registerUserAndGiveOrderproduct");
     Route::get("specialAddUser" , "HomeController@specialAddUser");
-    Route::get("v/asiatech" , "UserController@submitVoucherRequest");
+    Route::get("v/asiatech" , "UserController@voucherRequest");
+    Route::put("v" , "UserController@submitVoucherRequest");
 
     Route::group(['prefix' => 'user'], function () {
         Route::get('info', "UserController@informationPublicUrl");

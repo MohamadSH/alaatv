@@ -17,6 +17,7 @@ use App\Gender;
 use App\Grade;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Requests\InsertCouponRequest;
+use App\Http\Requests\InsertVoucherRequest;
 use App\Http\Requests\PasswordRecoveryRequest;
 use App\Http\Requests\RegisterForSanatiSharifHighSchoolRequest;
 use App\Http\Requests\SubmitVerificationCode;
@@ -29,6 +30,7 @@ use App\Http\Requests\EditUserRequest;
 use App\Http\Requests\InsertUserRequest;
 use App\Phone;
 use App\Product;
+use App\Productvoucher;
 use App\Province;
 use App\Relative;
 use App\Traits\CharacterCommon;
@@ -795,7 +797,9 @@ class UserController extends Controller
         $photo = $user->photo;
         $password = $user->password ;
         $user->fill($request->all());
-        $user->techCode = $request->get('techCode');
+
+        if($request->has('techCode'))
+            $user->techCode = $request->get('techCode');
 
         if(strlen($user->major_id) == 0) $user->major_id = null;
         if(strlen($user->gender_id) == 0) $user->gender_id = null;
@@ -2239,7 +2243,7 @@ class UserController extends Controller
      * @param  Request $request
      * @return \Illuminate\Http\Response
      */
-    public function submitVoucherRequest(Request $request)
+    public function voucherRequest(Request $request)
     {
         $url = $request->url();
         $title = "آلاء| درخواست اینترنت آسیاتک";
@@ -2251,9 +2255,190 @@ class UserController extends Controller
         SEO::opengraph()->addImage(route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]), ['height' => 100, 'width' => 100]);
 
         $user = Auth::user();
-        $genders = Gender::pluck('name', 'id')->prepend("نامشخص");
-        $majors = Major::pluck('name', 'id')->prepend("نامشخص");
+        $genders = Gender::pluck('name', 'id')->prepend("انتخاب کنید");
+        $majors = Major::pluck('name', 'id')->prepend("انتخاب کنید");
         $sideBarMode = "closed";
-        return view("user.submitVoucherRequest" , compact("user" , "genders" , "majors" , "sideBarMode"));
+
+        $asiatechProduct = config("constants.ASIATECH_FREE_ADSL") ;
+        $nowDateTime = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran');
+        $userHasRegistered = false;
+
+            $asitechPendingOrders = Order::whereHas("orderproducts" , function ($q) use ($asiatechProduct)
+                                            {
+                                                $q->where("product_id" , $asiatechProduct );
+                                            })
+                                                ->where("orderstatus_id" , config("constants.ORDER_STATUS_PENDING"))
+                                                ->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_PAID"))
+                                                ->orderBy("completed_at")
+                                                ->get();
+            $userAsitechPendingOrders = $asitechPendingOrders->where("user_id" , $user->id) ;
+            if($userAsitechPendingOrders->isNotEmpty())
+            {
+                $rank = $userAsitechPendingOrders->keys()->first() + 1 ;
+
+                $userHasRegistered = true;
+            }
+            else
+            {
+                $asitechApprovedOrders = $user->orders()
+                                                ->whereHas("orderproducts" , function ($q) use ($asiatechProduct)
+                                                {
+                                                    $q->where("product_id" , $asiatechProduct );
+                                                })
+                                                    ->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
+                                                    ->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_PAID"))
+                                                    ->orderBy("completed_at")
+                                                    ->get();
+                if($asitechApprovedOrders->isNotEmpty())
+                {
+                    $userVoucher = $user->productvouchers
+                                ->where("expirationdatetime" , ">" , $nowDateTime)
+                                ->where("product_id" , $asiatechProduct)
+                                ->first();
+
+                    $userHasRegistered = true;
+                }
+            }
+
+        return view("user.submitVoucherRequest" , compact("user" ,
+                                                                     "genders" ,
+                                                                         "majors" ,
+                                                                         "sideBarMode" ,
+                                                                         "userHasRegistered" ,
+                                                                         "rank" ,
+                                                                         "userVoucher"
+        ));
+    }
+
+    /**
+     * Submit user request for voucher request
+     *
+     * @param  \App\Http\Requests\InsertVoucherRequest InsertVoucherRequest
+     * @return \Illuminate\Http\Response
+     */
+    public function submitVoucherRequest(InsertVoucherRequest $request)
+    {
+        $asiatechProduct = config("constants.ASIATECH_FREE_ADSL") ;
+        $user = Auth::user();
+        $nowDateTime = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran');
+        $vouchers = $user->productvouchers
+                        ->where("expirationdatetime" , ">" , $nowDateTime)
+                        ->where("product_id" , $asiatechProduct);
+        if($vouchers->isNotEmpty())
+        {
+            session()->put("error","شما برای اینترنت رایگان ثبت نام کرده اید");
+            return redirect()->back();
+        }
+
+        $updateRequest = new EditUserRequest();
+        $updateRequest->offsetSet("fromAPI" , 1);
+        $updateRequest->offsetSet("postalCode" , $request->get("postalCode"));
+        $updateRequest->offsetSet("email" , $request->get("email"));
+        $updateRequest->offsetSet("gender_id" , $request->get("gender_id"));
+        $updateRequest->offsetSet("province" , $request->get("province"));
+        $updateRequest->offsetSet("city" , $request->get("city"));
+        $updateRequest->offsetSet("address" , $request->get("address"));
+        if($user->mobileNumberVerification )
+            $updateRequest->offsetSet("mobileNumberVerification" , 1);
+        $birthdate = Carbon::parse($request->get("birthdate") )
+                            ->setTimezone("Asia/Tehran")->format('Y-m-d');
+        $updateRequest->offsetSet("birthdate" , $birthdate);
+        $updateRequest->offsetSet("school" , $request->get("school"));
+        $updateRequest->offsetSet("major_id" , $request->get("major_id"));
+        $updateRequest->offsetSet("introducedBy" , $request->get("introducedBy"));
+        $response =  $this->update($updateRequest , $user);
+        $completionColumns = [
+                                "firstName",
+                                "lastName",
+                                "mobile",
+                                "nationalCode",
+                                "province",
+                                "city",
+                                "address",
+                                "postalCode",
+                                "gender_id" ,
+                                "birthdate",
+                                "school",
+                                "major_id",
+                                "introducedBy",
+                                "email",
+                                "mobileNumberVerification",
+                                "photo"
+                            ];
+        $done = false;
+        if($response->getStatusCode() == 200)
+        {
+            if($user->completion("custom" ,$completionColumns) < 100)
+            {
+                session()->put("error","اطلاعات شما ذخیره شد اما برای ثبت درخواست اینترنت رایگان آسیاتک کامل نمی باشند . لطفا اطلاعات خود را تکمیل نمایید.");
+                return redirect()->back();
+            }
+            else
+            {
+                $asiatechOrder = new Order();
+                $asiatechOrder->orderstatus_id = config("constants.ORDER_STATUS_PENDING") ;
+                $asiatechOrder->paymentstatus_id = config("constants.PAYMENT_STATUS_PAID") ;
+                $asiatechOrder->cost = 0 ;
+                $asiatechOrder->costwithoutcoupon = 0;
+                $asiatechOrder->user_id = $user->id ;
+                $asiatechOrder->completed_at = Carbon::now()->setTimezone("Asia/Tehran");
+                if($asiatechOrder->save())
+                {
+                    $request->offsetSet("cost" , 0);
+                    $request->offsetSet("orderId_bhrk" , $asiatechOrder->id);
+                    $product =  Product::where("id" , $asiatechProduct)->first();
+                    if(isset($product))
+                    {
+                        $orderController = new OrderController();
+                        $response = $orderController->addOrderproduct($request , $product) ;
+                        $responseStatus = $response->getStatusCode();
+                        $result = json_decode($response->getContent());
+                        if($responseStatus == 200)
+                        {
+                            $nowDateTime = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran');
+                            $unusedVoucher = Productvoucher::whereNull("user_id")
+                                                            ->where("enable" , 1)
+                                                            ->where("expirationdatetime" , ">" , $nowDateTime)
+                                                            ->where("product_id" , $asiatechProduct)
+                                                            ->get()
+                                                            ->first();
+                            if(isset($unusedVoucher))
+                            {
+                                $unusedVoucher->user_id = $user->id;
+                                if($unusedVoucher->update())
+                                {
+                                    $user->lockProfile = 1;
+                                    $user->update();
+                                    $done = true;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            $done = false;
+                        }
+                    }
+                    else
+                    {
+                        $done = false;
+                    }
+                }
+                else
+                {
+                    $done =false;
+                }
+            }
+        }
+        else
+        {
+            session()->put("error","مشکل غیر منتظره ای در ذخیره اطلاعات پیش آمد . لطفا مجددا اقدام نمایید");
+            return redirect()->back();
+        }
+
+        if($done == false)
+        {
+            session()->put("error","خطا در ثبت درخواست اینترنت. لطفا بعدا اقدام نمایید");
+        }
+        return redirect()->back();
     }
 }

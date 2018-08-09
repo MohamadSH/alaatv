@@ -205,6 +205,7 @@
                                                 @elseif(isset($order->orderstatus->id) && $order->orderstatus->id == Config::get("constants.ORDER_STATUS_POSTED") )<span class="label label-info"> {{$order->orderstatus->displayName}}</span>
                                                 @elseif(isset($order->orderstatus->id) && $order->orderstatus->id == Config::get("constants.ORDER_STATUS_REFUNDED") )<span class="label bg-grey-salsa"> {{$order->orderstatus->displayName}}</span>
                                                 @elseif(isset($order->orderstatus->id) && $order->orderstatus->id == Config::get("constants.ORDER_STATUS_READY_TO_POST") )<span class="label label-info"> {{$order->orderstatus->displayName}}</span>
+                                                @elseif(isset($order->orderstatus->id) && $order->orderstatus->id == Config::get("constants.ORDER_STATUS_PENDING") )<span class="label bg-purple"> {{$order->orderstatus->displayName}}</span>
                                                 @endif
                                             </td>
                                             <td style="text-align: center;">
