@@ -53,6 +53,11 @@
     @include("systemMessage.flash")
     <div class="row">
         <div class="col-md-12">
+            <img src="/img/extra/asiatech_internet_raygan_rsz.jpg">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
             <!-- BEGIN PROFILE SIDEBAR -->
             <div class="profile-sidebar">
                 {{--ToDo: customzing photo layout for supporting jquery upload--}}
