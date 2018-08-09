@@ -30,6 +30,7 @@ use App\Http\Requests\EditUserRequest;
 use App\Http\Requests\InsertUserRequest;
 use App\Phone;
 use App\Product;
+use App\Productvoucher;
 use App\Province;
 use App\Relative;
 use App\Traits\CharacterCommon;
@@ -2259,10 +2260,9 @@ class UserController extends Controller
         $sideBarMode = "closed";
 
         $asiatechProduct = 0 ;
-        $vouchers = $user->productvouchers ;
+        $nowDateTime = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran');
         $userHasRegistered = false;
-        if($vouchers->isNotEmpty())
-        {
+
             $asitechOrders = Order::whereHas("orderproducts" , function ($q) use ($asiatechProduct)
             {
                 $q->where("product_id" , $asiatechProduct );
@@ -2277,9 +2277,13 @@ class UserController extends Controller
                 $userAsiatechOrder = $asitechOrders->where("user_id" , $user->id) ;
                 $rank = $asitechOrders->where("user_id" , $user->id)->keys()->first() + 1 ;
                 $userAsiatechOrder = $userAsiatechOrder->first();
+                $userVoucher = $user->productvouchers
+                                ->where("expirationdatetime" , ">" , $nowDateTime)
+                                ->where("product_id" , $asiatechProduct)
+                                ->first();
+
                 $userHasRegistered = true;
             }
-        }
 
         return view("user.submitVoucherRequest" , compact("user" ,
                                                                      "genders" ,
@@ -2287,7 +2291,9 @@ class UserController extends Controller
                                                                          "sideBarMode" ,
                                                                          "userHasRegistered" ,
                                                                          "rank" ,
-                                                                         "userAsiatechOrder"));
+                                                                         "userAsiatechOrder",
+                                                                        "userVoucher"
+        ));
     }
 
     /**
@@ -2298,8 +2304,12 @@ class UserController extends Controller
      */
     public function submitVoucherRequest(InsertVoucherRequest $request)
     {
+        $asiatechProduct = 0 ;
         $user = Auth::user();
-        $vouchers = $user->productvouchers ;
+        $nowDateTime = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran');
+        $vouchers = $user->productvouchers
+                        ->where("expirationdatetime" , ">" , $nowDateTime)
+                        ->where("product_id" , $asiatechProduct);
         if(!$vouchers->isEmpty())
         {
             session()->put("error","شما برای اینترنت رایگان ثبت نام نموده اید");
@@ -2339,6 +2349,7 @@ class UserController extends Controller
                                 "mobileNumberVerification",
                                 "photo"
                             ];
+        $done = false;
         if($response->getStatusCode() == 200)
         {
             if($user->completion("custom" ,$completionColumns) < 100)
@@ -2348,12 +2359,64 @@ class UserController extends Controller
             }
             else
             {
-
+                $asiatechOrder = new Order();
+                $asiatechOrder->orderstatus_id = config("constants.ORDER_STATUS_PENDING") ;
+                $asiatechOrder->paymentstatus_id = config("constants.PAYMENT_STATUS_PAID") ;
+                $asiatechOrder->cost = 0 ;
+                $asiatechOrder->costwithoutcoupon = 0;
+                $asiatechOrder->user_id = $user->id ;
+                $asiatechOrder->completed_at = Carbon::now()->setTimezone("Asia/Tehran");
+                if($asiatechOrder->save())
+                {
+                    $request->offsetSet("cost" , 0);
+                    $request->offsetSet("orderId_bhrk" , $asiatechOrder->id);
+                    $product =  Product::where("id" , $asiatechProduct)->first();
+                    if(isset($product))
+                    {
+                        $orderController = new OrderController();
+                        $response = $orderController->addOrderproduct($request , $product) ;
+                        $responseStatus = $response->getStatusCode();
+                        $result = json_decode($response->getContent());
+                        if($responseStatus == 200)
+                        {
+                            $nowDateTime = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran');
+                            $unusedVoucher = Productvoucher::whereNull("user_id")
+                                                            ->where("enable" , 1)
+                                                            ->where("expirationdatetime" , ">" , $nowDateTime)
+                                                            ->where("product_id" , $asiatechProduct)
+                                                            ->get()
+                                                            ->first();
+                            $unusedVoucher->user_id = $user->id;
+                            if($unusedVoucher->update())
+                            {
+                                $done = true;
+                            }
+                        }
+                        else
+                        {
+                            $done = false;
+                        }
+                    }
+                    else
+                    {
+                        $done = false;
+                    }
+                }
+                else
+                {
+                    $done =false;
+                }
             }
         }
         else
         {
+            session()->put("error","مشکل غیر منتظره ای در ذخیره اطلاعات پیش آمد . لطفا مجددا اقدام نمایید");
+            return redirect()->back();
+        }
 
+        if($done == true)
+        {
+            return redirect()->back();
         }
     }
 }

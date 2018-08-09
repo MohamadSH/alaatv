@@ -57,6 +57,18 @@ class OrderStatusSeeder extends Seeder
                 'displayName' => 'آماده به ارسال',
                 'description' => 'مرسوله ی سفارش آماده برای ارسال می باشد',
             ),
+            array(
+                'id' => '8',
+                'name' => 'openDonate',
+                'displayName' => 'سفارش باز کمک مالی',
+                'description' => 'سفارشی که برای کمک مالی باز شده است',
+            ),
+            array(
+                'id' => '9',
+                'name' => 'pending',
+                'displayName' => 'در حال بررسی',
+                'description' => 'سفارش در حال بررسی توسط مسئولین سایت می باشد',
+            ),
         );
 
         DB::table('orderstatuses')->insert($data); // Query Builder
