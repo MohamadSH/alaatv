@@ -345,6 +345,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Retrieve all product vouchers of this user
+     */
+    public function productvouchers()
+    {
+        return $this->hasMany("\App\Productvoucher");
+    }
+
+    /**
      * @param string $bonName
      * @return bool|number
      * Converting Created_at field to jalali
@@ -470,6 +478,18 @@ class User extends Authenticatable
         return $this->convertDate($this->updated_at, "toJalali");
     }
 
+    /**
+     * @return string
+     * Converting Updated_at field to jalali
+     */
+    public function Birthdate_Jalali()
+    {
+        $explodedDateTime = explode(" ", $this->birthdate);
+        $explodedDate = $explodedDateTime[0];
+//        $explodedTime = $explodedDateTime[1] ;
+        return $this->convertDate($explodedDate, "toJalali");
+    }
+
     public function returnLockProfileItems()
     {
         return $this->lockProfile;
@@ -490,7 +510,7 @@ class User extends Authenticatable
         $tableColumns = Schema::getColumnListing("users");
         switch ($type) {
             case "full":
-                $importantColumns = array("firstName", "lastName", "mobile", "nationalCode", "province", "city", "address", "postalCode", "gender_id", "mobileNumberVerification");
+                $importantColumns = array("firstName", "lastName", "mobile", "nationalCode", "province", "city", "address", "postalCode", "gender_id" , "mobileNumberVerification");
                 break;
             case "fullAddress":
                 $importantColumns = array("firstName", "lastName", "mobile", "nationalCode", "province", "city", "address");

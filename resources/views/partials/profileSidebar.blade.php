@@ -21,7 +21,7 @@
             </div>
             <div class="row " style="margin: auto">
                 <div class="col-md-12">
-                    <p class="font-red text-justify bold "> دقت کنید که حجم عکس مورد نظر باید حداکثر 500 کیلوبایت و فرمت آن jpg و یا png باشد. </p>
+                    <p class="font-red text-justify bold "> دقت کنید که حجم عکس باید حداکثر 500 کیلوبایت و فرمت آن jpg یا png باشد </p>
                 </div>
             </div>
             {{--<progress></progress>--}}
@@ -61,8 +61,8 @@
                 <a href="{{action("HomeController@submitKonkurResult")}}">
                     <i class="fa fa-graduation-cap"></i> ثبت رتبه 97 </a>
             </li>
-            {{--<li @if(strcmp(url()->current() , action("UserController@submitVoucherRequest")) == 0) class="active" @endif >--}}
-                {{--<a href="{{action("UserController@submitVoucherRequest")}}">--}}
+            {{--<li @if(strcmp(url()->current() , action("UserController@voucherRequest")) == 0) class="active" @endif >--}}
+                {{--<a href="{{action("UserController@voucherRequest")}}">--}}
                     {{--<i class="fa fa-registered"></i>ثبت درخواست اینترنت آسیاتک</a>--}}
             {{--</li>--}}
         </ul>

@@ -106,6 +106,8 @@ class AppServiceProvider extends ServiceProvider
                     Config::set("constants.ORDER_STATUS_READY_TO_POST", $orderstatuses->where("name", "readyToPost")->first()->id); // id = 7
                 if ($orderstatuses->where("name", "openDonate")->isNotEmpty())
                     Config::set("constants.ORDER_STATUS_OPEN_DONATE", $orderstatuses->where("name", "openDonate")->first()->id); // id = 8
+                if ($orderstatuses->where("name", "pending")->isNotEmpty())
+                    Config::set("constants.ORDER_STATUS_PENDING", $orderstatuses->where("name", "pending")->first()->id); // id = 9
             }
 
             //=================TRANSACTION STATUSES CONSTANTS
