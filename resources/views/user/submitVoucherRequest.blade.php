@@ -97,6 +97,7 @@
                                                 <br>
                                                 <span class="bold" style="font-size: larger">شما نفر <label class="font-yellow-saffron bold">{{$rank}}</label> صف هستید</span>
                                             @else
+                                                <br>
                                                 نوبت شما در صف مشخص نمی باشد
                                             @endif
                                         </p>
