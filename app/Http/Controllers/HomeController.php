@@ -112,6 +112,16 @@ class HomeController extends Controller
     {
         try
         {
+            $asiatechProduct = 180;
+            $asitechOrders = Order::whereHas("orderproducts" , function ($q) use ($asiatechProduct)
+            {
+                $q->where("product_id" , $asiatechProduct );
+            })
+                ->orderBy("completed_at")
+                ->take(10)
+                ->get();
+
+            dd($asitechOrders->where("user_id" , 20712)->keys()->first() + 1);
         }
         catch (\Exception    $e) {
             $message = "unexpected error";

@@ -345,6 +345,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Retrieve all product vouchers of this user
+     */
+    public function productvouchers()
+    {
+        return $this->hasMany("\App\Productvoucher");
+    }
+
+    /**
      * @param string $bonName
      * @return bool|number
      * Converting Created_at field to jalali

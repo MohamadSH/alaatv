@@ -56,25 +56,27 @@
             <!-- BEGIN PROFILE SIDEBAR -->
             <div class="profile-sidebar">
                 {{--ToDo: customzing photo layout for supporting jquery upload--}}
-                @include('partials.profileSidebar',['user'=>$user , 'withInfoBox'=>true , 'withPhotoUpload' => true  ])
+                @include('partials.profileSidebar',['user'=>$user , 'withInfoBox'=>true , 'withPhotoUpload' => ($userHasRegistered)?false:true  ])
 
             </div>
             <!-- END BEGIN PROFILE SIDEBAR -->
             <!-- BEGIN PROFILE CONTENT -->
             <div class="profile-content">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="portlet light ">
-                            <div class="portlet-title tabbable-line">
-                                <div class="caption caption-md">
-                                    <i class="icon-globe theme-font hide"></i>
-                                    <span class="caption-subject font-purple-intense bold uppercase">
+                @if($userHasRegistered)
+                @else
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="portlet light ">
+                                <div class="portlet-title tabbable-line">
+                                    <div class="caption caption-md">
+                                        <i class="icon-globe theme-font hide"></i>
+                                        <span class="caption-subject font-purple-intense bold uppercase">
                                                     ثبت درخواست اینترنت رایگان آسیاتک
                                     </span>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="portlet-body">
+                                <div class="portlet-body">
                                     @include('user.profile.profileEditView' , ["withBio"=>false,
                                                                                 "withBirthdate"=>true ,
                                                                                 "withIntroducer"=>true ,
@@ -95,10 +97,12 @@
                                                                                                     ],
                                                                                 ]
                                                                     )
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                @endif
+
             </div>
             <!-- END PROFILE CONTENT -->
 

@@ -2258,7 +2258,36 @@ class UserController extends Controller
         $majors = Major::pluck('name', 'id')->prepend("انتخاب کنید");
         $sideBarMode = "closed";
 
-        return view("user.submitVoucherRequest" , compact("user" , "genders" , "majors" , "sideBarMode"));
+        $asiatechProduct = 0 ;
+        $vouchers = $user->productvouchers ;
+        $userHasRegistered = false;
+        if($vouchers->isNotEmpty())
+        {
+            $asitechOrders = Order::whereHas("orderproducts" , function ($q) use ($asiatechProduct)
+            {
+                $q->where("product_id" , $asiatechProduct );
+            })
+                ->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
+                ->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_PAID"))
+                ->orderBy("competed_at")
+                ->get();
+
+            if($asitechOrders->isNotEmpty())
+            {
+                $userAsiatechOrder = $asitechOrders->where("user_id" , $user->id) ;
+                $rank = $asitechOrders->where("user_id" , $user->id)->keys()->first() + 1 ;
+                $userAsiatechOrder = $userAsiatechOrder->first();
+                $userHasRegistered = true;
+            }
+        }
+
+        return view("user.submitVoucherRequest" , compact("user" ,
+                                                                     "genders" ,
+                                                                         "majors" ,
+                                                                         "sideBarMode" ,
+                                                                         "userHasRegistered" ,
+                                                                         "rank" ,
+                                                                         "userAsiatechOrder"));
     }
 
     /**
@@ -2270,6 +2299,13 @@ class UserController extends Controller
     public function submitVoucherRequest(InsertVoucherRequest $request)
     {
         $user = Auth::user();
+        $vouchers = $user->productvouchers ;
+        if(!$vouchers->isEmpty())
+        {
+            session()->put("error","شما برای اینترنت رایگان ثبت نام نموده اید");
+            return redirect()->back();
+        }
+
         $updateRequest = new EditUserRequest();
         $updateRequest->offsetSet("fromAPI" , 1);
         $updateRequest->offsetSet("postalCode" , $request->get("postalCode"));
