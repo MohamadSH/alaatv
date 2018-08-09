@@ -2407,6 +2407,8 @@ class UserController extends Controller
                                 $unusedVoucher->user_id = $user->id;
                                 if($unusedVoucher->update())
                                 {
+                                    $user->lockProfile = 1;
+                                    $user->update();
                                     $done = true;
                                 }
                             }
