@@ -103,7 +103,7 @@
                                     @endif
                                         <div class="alert alert-info alert-dismissable" style="text-align: justify">
                                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
-                                            <strong><a href="#">برای دانلود راهنمای استفاده از کد تخفیف آسیاتک کلیک کنید</a></strong>
+                                            <strong><a href="https://cdn.sanatisharif.ir/rahnamaye_sabtename_asiatech.pdf?download=1">برای دانلود راهنمای استفاده از کد تخفیف آسیاتک کلیک کنید</a></strong>
                                         </div>
                                 </div>
                             </div>
