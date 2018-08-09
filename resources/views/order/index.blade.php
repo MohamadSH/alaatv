@@ -157,6 +157,7 @@
             @elseif(isset($order->orderstatus->id) && $order->orderstatus->id == Config::get("constants.ORDER_STATUS_OPEN"))<span class="label label-danger"> {{$order->orderstatus->displayName}}</span>
             @elseif(isset($order->orderstatus->id) && $order->orderstatus->id == Config::get("constants.ORDER_STATUS_OPEN_BY_ADMIN"))<span class="label label-warning"> {{$order->orderstatus->displayName}}</span>
             @elseif(isset($order->orderstatus->id) && $order->orderstatus->id == Config::get("constants.ORDER_STATUS_READY_TO_POST"))<span class="label label-info"> {{$order->orderstatus->displayName}}</span>
+            @elseif(isset($order->orderstatus->id) && $order->orderstatus->id == Config::get("constants.ORDER_STATUS_PENDING") )<span class="label bg-purple"> {{$order->orderstatus->displayName}}</span>
             @endif
         </td>
         <td style="text-align: center;">

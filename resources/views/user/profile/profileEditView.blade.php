@@ -14,7 +14,7 @@
         {!!  $text2 !!}
     </div>
 @endif
-{!! Form::model($user,['method' => 'PUT','action' => [(isset($formAction))?$formAction:'UserController@updateProfile'] , 'role'=>'form']) !!}
+{!! Form::model($user,['method' => 'PUT','action' => [(isset($formAction))?$formAction:'UserController@updateProfile'] , 'role'=>'form' ]) !!}
 <div class="form-group {{ $errors->has('province') ? ' has-error' : '' }}">
     <label for="province" class="control-label ">استان</label>
     @if(isset($requiredFields) && in_array("province" , $requiredFields))
@@ -170,13 +170,15 @@
 </div>
 @endif
 <div class="margiv-top-10 ">
-    <button type="submit" class="btn green" {{(isset($disableSubmit) && $disableSubmit)?"disabled":""}}> @if(isset($submitCaption)){{$submitCaption}} @else ثبت درخواست @endif</button>
+    <button type="submit" class="btn green" id="updateProfileInfoFormButton" {{(isset($disableSubmit) && $disableSubmit)?"disabled":""}}> @if(isset($submitCaption)){{$submitCaption}} @else ثبت درخواست @endif</button>
 </div>
+@if(isset($text3))
 @if(!$user->mobileNumberVerification || !isset($user->photo) || strcmp($user->photo, config('constants.PROFILE_DEFAULT_IMAGE')) == 0)
-    <div class="alert alert-danger alert-dismissable margin-top-10" style="text-align: justify">
+    <div class="alert alert-danger alert-dismissable margin-top-10" id="profileEditViewText3" style="text-align: justify">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
         @if(!$user->mobileNumberVerification)لطفا شماره موبایل خود را تایید نمایید<br>@endif
-        @if(!isset($user->photo) || strcmp($user->photo, config('constants.PROFILE_DEFAULT_IMAGE')) == 0)لطفا عکس خود را آپلود نمایید@endif
+        @if(!isset($user->photo) || strcmp($user->photo, config('constants.PROFILE_DEFAULT_IMAGE')) == 0)<span id="profileEditViewText3-span2">لطفا عکس خود را آپلود نمایید</span>@endif
     </div>
+@endif
 @endif
 {!! Form::close() !!}

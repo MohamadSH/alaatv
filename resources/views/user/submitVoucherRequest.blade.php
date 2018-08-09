@@ -63,6 +63,70 @@
             <!-- BEGIN PROFILE CONTENT -->
             <div class="profile-content">
                 @if($userHasRegistered)
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="portlet light ">
+                                <div class="portlet-title tabbable-line">
+                                    <div class="caption caption-md">
+                                        <i class="icon-globe theme-font hide"></i>
+                                        <span class="caption-subject font-purple-intense bold uppercase">
+                                                    درخواست اینترنت رایگان آسیاتک
+                                    </span>
+                                    </div>
+                                </div>
+
+                                <div class="portlet-body">
+                                    @if(isset($userVoucher))
+                                        <p class="list-group-item  bg-green-haze bg-font-green margin-bottom-10" style="text-align: justify; line-height: normal">
+                                            درخواست شما برای دریافت اینترنت رایگان آسیاتک تایید شده است
+                                            @if(isset($userVoucher))
+                                                <br>
+                                                کد تخفیف شما:
+                                                <br>
+                                                <label class="font-dark bold" dir="ltr" style="font-size: larger">{{$userVoucher->code}}</label>
+                                                <br>
+                                                برای اطلاع از نحوه ثبت نام و استفاده از کد تخفیف فایل زیر را دانلود نمایید
+                                            @else
+                                                هنوز کد تخفیف به شما اختصاص داده نشده است . در اسرع وقت کد شما داده خواهد شد و در همین صفحه قابل مشاهده خواهد بود
+                                            @endif
+                                        </p>
+                                    @else
+                                        <p class="list-group-item  bg-blue-soft bg-font-blue-soft margin-bottom-10" style="text-align: justify; line-height: normal">
+                                            در خواست شما برای اینترنت رایگان آسیاتک در صف بررسی قرار گرفته است .
+                                            @if(isset($rank))
+                                                <br>
+                                            شما نفر {{$rank}} صف هستید
+                                            @else
+                                                نوبت شما در صف مشخص نمی باشد
+                                            @endif
+                                        </p>
+                                    @endif
+                                        <div class="alert alert-info alert-dismissable" style="text-align: justify">
+                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+                                            <strong><a href="#">برای دانلود راهنمای استفاده از کد تخفیف آسیاتک کلیک کنید</a></strong>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="portlet light ">
+                                <div class="portlet-title tabbable-line">
+                                    <div class="caption caption-md">
+                                        <i class="icon-globe theme-font hide"></i>
+                                        <span class="caption-subject font-green bold uppercase">
+                                                    اطلاعات ثبت شده شما
+                                    </span>
+                                    </div>
+                                </div>
+
+                                <div class="portlet-body">
+                                    @include('user.profile.profileView' , ["user" => $user])
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 @else
                     <div class="row">
                         <div class="col-md-12">
@@ -84,6 +148,7 @@
                                                                                 "disableSubmit" =>(!$user->mobileNumberVerification || !isset($user->photo) || strcmp($user->photo, config('constants.PROFILE_DEFAULT_IMAGE')) == 0)?true:false ,
                                                                                 "text1"=>"لطفا اطلاعات خود را با دقت و صحت کامل تکمیل نمایید و سپس بر روی ثبت درخواست کلیک کنید . در صورت صحیح و کامل بودن اطلاعات در خواست شما در صف بررسی قرار می گیرد و وضعیت آن از طریق همین صفحه قابل مشاهده خواهد بود." , "text2"=>" اطلاعات وارد شده پس از ثبت درخواست قابل تغییر نیستند . <a href='#'>برای دیدن نمونه های صحیح اطلاعات اینجا کلیک کنید</a>",
                                                                                 "formAction" => "UserController@submitVoucherRequest",
+                                                                                "text3" =>1,
                                                                                 "requiredFields"=>["province" ,
                                                                                                     "city" ,
                                                                                                     "address" ,
@@ -105,7 +170,6 @@
 
             </div>
             <!-- END PROFILE CONTENT -->
-
         </div>
     </div>
 @endsection
@@ -128,6 +192,8 @@
 
 @section("extraJS")
     <script type="text/javascript">
+        var mobileVerification = {{$user->mobileNumberVerification}};
+        var profileHasPhto = {{(strcmp($user->photo, config('constants.PROFILE_DEFAULT_IMAGE')) == 0)?0:1}}
         /**
          * Set token for ajax request
          */
@@ -168,6 +234,11 @@
             var formData = new FormData();
             $("#profilePhotoAjaxLoadingSpinner").show();
             // add assoc key values, this will be posts values
+            if(this.file == undefined)
+            {
+                $("#profilePhotoAjaxLoadingSpinner").hide();
+                return false;
+            }
             formData.append("photo", this.file, this.getName());
             // formData.append("upload_file", true);
             $.ajax({
@@ -194,6 +265,12 @@
                         // console.log(response);
                         $("#profilePhoto").attr("src" , response.newPhoto);
                         $("#profilePhotoAjaxFileInputClose").trigger("click");
+                        $("#profileEditViewText3-span2").hide();
+                        if(mobileVerification)
+                        {
+                            $("#profileEditViewText3").hide();
+                            $("#updateProfileInfoFormButton").prop("disabled" , false);
+                        }
                     },
                     //The status for when the user is not authorized for making the request
                     403: function (response) {

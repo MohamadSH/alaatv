@@ -478,6 +478,18 @@ class User extends Authenticatable
         return $this->convertDate($this->updated_at, "toJalali");
     }
 
+    /**
+     * @return string
+     * Converting Updated_at field to jalali
+     */
+    public function Birthdate_Jalali()
+    {
+        $explodedDateTime = explode(" ", $this->birthdate);
+        $explodedDate = $explodedDateTime[0];
+//        $explodedTime = $explodedDateTime[1] ;
+        return $this->convertDate($explodedDate, "toJalali");
+    }
+
     public function returnLockProfileItems()
     {
         return $this->lockProfile;

@@ -2259,30 +2259,45 @@ class UserController extends Controller
         $majors = Major::pluck('name', 'id')->prepend("انتخاب کنید");
         $sideBarMode = "closed";
 
-        $asiatechProduct = 0 ;
+        $asiatechProduct = config("constants.ASIATECH_FREE_ADSL") ;
         $nowDateTime = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran');
         $userHasRegistered = false;
 
-            $asitechOrders = Order::whereHas("orderproducts" , function ($q) use ($asiatechProduct)
+            $asitechPendingOrders = Order::whereHas("orderproducts" , function ($q) use ($asiatechProduct)
+                                            {
+                                                $q->where("product_id" , $asiatechProduct );
+                                            })
+                                                ->where("orderstatus_id" , config("constants.ORDER_STATUS_PENDING"))
+                                                ->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_PAID"))
+                                                ->orderBy("completed_at")
+                                                ->get();
+            $userAsitechPendingOrders = $asitechPendingOrders->where("user_id" , $user->id) ;
+            if($userAsitechPendingOrders->isNotEmpty())
             {
-                $q->where("product_id" , $asiatechProduct );
-            })
-                ->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
-                ->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_PAID"))
-                ->orderBy("competed_at")
-                ->get();
+                $rank = $userAsitechPendingOrders->keys()->first() + 1 ;
 
-            if($asitechOrders->isNotEmpty())
+                $userHasRegistered = true;
+            }
+            else
             {
-                $userAsiatechOrder = $asitechOrders->where("user_id" , $user->id) ;
-                $rank = $asitechOrders->where("user_id" , $user->id)->keys()->first() + 1 ;
-                $userAsiatechOrder = $userAsiatechOrder->first();
-                $userVoucher = $user->productvouchers
+                $asitechApprovedOrders = $user->orders()
+                                                ->whereHas("orderproducts" , function ($q) use ($asiatechProduct)
+                                                {
+                                                    $q->where("product_id" , $asiatechProduct );
+                                                })
+                                                    ->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
+                                                    ->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_PAID"))
+                                                    ->orderBy("completed_at")
+                                                    ->get();
+                if($asitechApprovedOrders->isNotEmpty())
+                {
+                    $userVoucher = $user->productvouchers
                                 ->where("expirationdatetime" , ">" , $nowDateTime)
                                 ->where("product_id" , $asiatechProduct)
                                 ->first();
 
-                $userHasRegistered = true;
+                    $userHasRegistered = true;
+                }
             }
 
         return view("user.submitVoucherRequest" , compact("user" ,
@@ -2291,8 +2306,7 @@ class UserController extends Controller
                                                                          "sideBarMode" ,
                                                                          "userHasRegistered" ,
                                                                          "rank" ,
-                                                                         "userAsiatechOrder",
-                                                                        "userVoucher"
+                                                                         "userVoucher"
         ));
     }
 
@@ -2304,15 +2318,15 @@ class UserController extends Controller
      */
     public function submitVoucherRequest(InsertVoucherRequest $request)
     {
-        $asiatechProduct = 0 ;
+        $asiatechProduct = config("constants.ASIATECH_FREE_ADSL") ;
         $user = Auth::user();
         $nowDateTime = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran');
         $vouchers = $user->productvouchers
                         ->where("expirationdatetime" , ">" , $nowDateTime)
                         ->where("product_id" , $asiatechProduct);
-        if(!$vouchers->isEmpty())
+        if($vouchers->isNotEmpty())
         {
-            session()->put("error","شما برای اینترنت رایگان ثبت نام نموده اید");
+            session()->put("error","شما برای اینترنت رایگان ثبت نام کرده اید");
             return redirect()->back();
         }
 
@@ -2324,6 +2338,8 @@ class UserController extends Controller
         $updateRequest->offsetSet("province" , $request->get("province"));
         $updateRequest->offsetSet("city" , $request->get("city"));
         $updateRequest->offsetSet("address" , $request->get("address"));
+        if($user->mobileNumberVerification )
+            $updateRequest->offsetSet("mobileNumberVerification" , 1);
         $birthdate = Carbon::parse($request->get("birthdate") )
                             ->setTimezone("Asia/Tehran")->format('Y-m-d');
         $updateRequest->offsetSet("birthdate" , $birthdate);
@@ -2354,7 +2370,7 @@ class UserController extends Controller
         {
             if($user->completion("custom" ,$completionColumns) < 100)
             {
-                session()->put("error","اطلاعات شما برای ثبت درخواست کامل نمی باشند");
+                session()->put("error","اطلاعات شما ذخیره شد اما برای ثبت درخواست اینترنت رایگان آسیاتک کامل نمی باشند . لطفا اطلاعات خود را تکمیل نمایید.");
                 return redirect()->back();
             }
             else
@@ -2386,10 +2402,13 @@ class UserController extends Controller
                                                             ->where("product_id" , $asiatechProduct)
                                                             ->get()
                                                             ->first();
-                            $unusedVoucher->user_id = $user->id;
-                            if($unusedVoucher->update())
+                            if(isset($unusedVoucher))
                             {
-                                $done = true;
+                                $unusedVoucher->user_id = $user->id;
+                                if($unusedVoucher->update())
+                                {
+                                    $done = true;
+                                }
                             }
                         }
                         else
@@ -2414,9 +2433,10 @@ class UserController extends Controller
             return redirect()->back();
         }
 
-        if($done == true)
+        if($done == false)
         {
-            return redirect()->back();
+            session()->put("error","خطا در ثبت درخواست اینترنت. لطفا بعدا اقدام نمایید");
         }
+        return redirect()->back();
     }
 }
