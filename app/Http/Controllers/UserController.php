@@ -2365,13 +2365,11 @@ class UserController extends Controller
                                 "mobileNumberVerification",
                                 "photo"
                             ];
-        $done = false;
         if($response->getStatusCode() == 200)
         {
             if($user->completion("custom" ,$completionColumns) < 100)
             {
                 session()->put("error","اطلاعات شما ذخیره شد اما برای ثبت درخواست اینترنت رایگان آسیاتک کامل نمی باشند . لطفا اطلاعات خود را تکمیل نمایید.");
-                return redirect()->back();
             }
             else
             {
@@ -2402,43 +2400,45 @@ class UserController extends Controller
                                                             ->where("product_id" , $asiatechProduct)
                                                             ->get()
                                                             ->first();
-                            if(isset($unusedVoucher))
+                            if(false)
                             {
                                 $unusedVoucher->user_id = $user->id;
                                 if($unusedVoucher->update())
                                 {
                                     $user->lockProfile = 1;
                                     $user->update();
-                                    $done = true;
                                 }
+                                else
+                                {
+                                    session()->put("error","خطا در تخصیص کد تخفیف");
+                                }
+                            }
+                            else
+                            {
+                                session()->put("error","کد تخفیفی برای شما یافت نشد");
                             }
                         }
                         else
                         {
-                            $done = false;
+                            session()->put("error","خطا در ثبت محصول اینرنت رایگان آسیاتک");
                         }
                     }
                     else
                     {
-                        $done = false;
+                        session()->put("error","محصول اینترنت آسیاتک یافت نشد");
                     }
                 }
                 else
                 {
-                    $done =false;
+                    session()->put("error","خطا در ثبت سفارش اینترنت رایگان. لطفا بعدا اقدام نمایید");
                 }
             }
         }
         else
         {
-            session()->put("error","مشکل غیر منتظره ای در ذخیره اطلاعات پیش آمد . لطفا مجددا اقدام نمایید");
-            return redirect()->back();
+            session()->put("error","مشکل غیر منتظره ای در ذخیره اطلاعات شما پیش آمد . لطفا مجددا اقدام نمایید");
         }
 
-        if($done == false)
-        {
-            session()->put("error","خطا در ثبت درخواست اینترنت. لطفا بعدا اقدام نمایید");
-        }
         return redirect()->back();
     }
 }
