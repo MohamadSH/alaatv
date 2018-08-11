@@ -345,5 +345,18 @@
             // execute upload
             upload.doUpload();
         });
+
+        $("#profilePhotoFile").change(function (){
+
+            var fileName = $(this).val();
+            if(fileName.length > 0)
+            {
+                $("#uploadProfilePhotoAjaxSubmit").show();
+            }
+            else
+            {
+                $("#uploadProfilePhotoAjaxSubmit").hide();
+            }
+        });
     </script>
 @endsection
