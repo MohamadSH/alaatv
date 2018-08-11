@@ -36,7 +36,11 @@
         <div class="col-md-12">
             <!-- BEGIN PROFILE SIDEBAR -->
             <div class="profile-sidebar">
-                @include('partials.profileSidebar' , ["withRegisterationDate"=>true])
+                @include('partials.profileSidebar' , [
+                                        "withRegisterationDate"=>true ,
+                                        "withNavigation" => true,
+                                        ]
+                                        )
             </div>
             <!-- END BEGIN PROFILE SIDEBAR -->
 
