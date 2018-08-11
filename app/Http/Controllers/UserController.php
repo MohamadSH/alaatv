@@ -2419,7 +2419,6 @@ class UserController extends Controller
                                 "school",
                                 "major_id",
                                 "introducedBy",
-                                "email",
                                 "mobileNumberVerification",
                                 "photo"
                             ];
