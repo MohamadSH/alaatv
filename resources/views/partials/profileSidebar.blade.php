@@ -6,10 +6,10 @@
         @if(isset($withPhotoUpload) && $withPhotoUpload)
             <div class="row text-center margin-top-10">
                 {!! Form::open(['files'=>true,'method' => 'POST','action' => ['UserController@updatePhoto']  , 'id'=>'profilePhotoAjaxForm' ]) !!}
-                    {!! Form::submit('بارگذاری', ['class' => 'btn blue' , 'id'=>'uploadProfilePhotoAjaxSubmit' ]) !!}
+                    {!! Form::submit('بارگذاری', ['class' => 'btn blue' , 'id'=>'uploadProfilePhotoAjaxSubmit' , 'style'=>'display:none' ]) !!}
                     <div class="fileinput fileinput-new" data-provides="fileinput">
                                                                 <span class="btn green btn-file">
-                                                                    <span class="fileinput-new"> انتخاب فایل </span>
+                                                                    <span class="fileinput-new"> انتخاب عکس </span>
                                                                     <span class="fileinput-exists"> تغییر </span>
                                                                     {!! Form::file('photo' , ['id'=>'profilePhotoFile']) !!}
                                                                 </span>
@@ -21,7 +21,7 @@
             </div>
             <div class="row " style="margin: auto">
                 <div class="col-md-12">
-                    <p class="font-red text-justify bold "> دقت کنید که حجم عکس باید حداکثر 500 کیلوبایت و فرمت آن jpg یا png باشد </p>
+                    <p class="font-red text-justify bold ">حجم عکس حداکثر 500 کیلوبایت و فرمت آن jpg یا png باشد</p>
                 </div>
             </div>
             {{--<progress></progress>--}}
@@ -101,7 +101,7 @@
             <div class="margin-top-20 profile-desc-link">
                 <div class="form-group form-md-line-input">
                     {!! Form::open(['method' => 'POST','action' => ['UserController@submitVerificationCode']]) !!}
-                    <input type="text" name="code" class="form-control" id="form_control_1"  placeholder="کد احراز هویت خود را وارد نمایید">
+                    <input type="text" name="code" class="form-control" id="form_control_1"  placeholder="کد تایید شماره خود را وارد نمایید">
                     <label for="form_control_1"><span class="font-red-thunderbird">تایید شماره موبایل(حساب کاربری)</span></label>
                     <span class="help-block">برای دریافت کد روی دکمه درخواست کلیک کنید</span>
                 </div>
