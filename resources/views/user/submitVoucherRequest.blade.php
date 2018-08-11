@@ -64,7 +64,7 @@
                 @include('partials.profileSidebar',[
                                             'user'=>$user ,
                                             'withInfoBox'=>true ,
-                                             'withPhotoUpload' => ($userHasRegistered)?false:true
+                                              'withPhotoUpload' => ($userHasRegistered)?false:true
                                              ]
                          )
 
