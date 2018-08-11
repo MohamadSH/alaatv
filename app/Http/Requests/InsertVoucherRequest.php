@@ -27,7 +27,7 @@ class InsertVoucherRequest extends FormRequest
     {
         $rules = [
             'postalCode' => 'required|numeric',
-            'email' => 'required|email',
+            'email' => 'sometimes|nullable|email',
             "gender_id"=>"required|exists:genders,id",
             "province" => "required",
             "city" => "required",
