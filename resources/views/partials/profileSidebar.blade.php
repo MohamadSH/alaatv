@@ -101,9 +101,11 @@
             <div class="margin-top-20 profile-desc-link">
                 <div class="form-group form-md-line-input">
                     {!! Form::open(['method' => 'POST','action' => ['UserController@submitVerificationCode']]) !!}
-                    <input type="text" name="code" class="form-control" id="form_control_1"  placeholder="کد تایید شماره خود را وارد نمایید">
-                    <label for="form_control_1"><span class="font-red-thunderbird">تایید شماره موبایل(حساب کاربری)</span></label>
-                    <span class="help-block">برای دریافت کد روی دکمه درخواست کلیک کنید</span>
+                    @if(isset($hasRequestedVerificationCode) && $hasRequestedVerificationCode)
+                        <input type="text" name="code" class="form-control" id="form_control_1"  placeholder="کد تایید شماره خود را وارد نمایید">
+                        <label for="form_control_1"><span class="font-red-thunderbird">تایید شماره موبایل(حساب کاربری)</span></label>
+                        <span class="help-block">برای دریافت کد روی دکمه درخواست کلیک کنید</span>
+                    @endif
                 </div>
                 <div class="form-actions noborder" style="text-align: center;">
                     @if(isset($hasRequestedVerificationCode) && $hasRequestedVerificationCode)
