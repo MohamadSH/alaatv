@@ -38,6 +38,7 @@
     @endif
     <!-- END SIDEBAR USER TITLE -->
     <!-- SIDEBAR MENU -->
+    @if(isset($withNavigation) && $withNavigation)
     <div class="profile-usermenu">
         <ul class="nav">
             <li @if(strcmp(url()->current() , action("UserController@show",$user)) == 0) class="active" @endif >
@@ -67,6 +68,7 @@
             {{--</li>--}}
         </ul>
     </div>
+    @endif
     <!-- END MENU -->
 </div>
 <!-- END PORTLET MAIN -->
@@ -104,8 +106,11 @@
                     <span class="help-block">برای دریافت کد روی دکمه درخواست کلیک کنید</span>
                 </div>
                 <div class="form-actions noborder" style="text-align: center;">
-                    <button type="submit" class="btn default">تایید کد</button>
-                    <a href="{{action("UserController@sendVerificationCode")}}" class="btn blue">درخواست ارسال کد</a>
+                    @if(isset($hasRequestedVerificationCode) && $hasRequestedVerificationCode)
+                        <button type="submit" class="btn green">تایید کد</button>
+                    @else
+                        <a href="{{action("UserController@sendVerificationCode")}}" class="btn blue">درخواست ارسال کد</a>
+                    @endif
                     {!! Form::close() !!}
                 </div>
                 <div class="form-group form-md-line-input" style="text-align: justify;">

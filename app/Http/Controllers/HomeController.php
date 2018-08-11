@@ -4973,7 +4973,15 @@ class HomeController extends Controller
         SEO::twitter()->setSite("آلاء");
         SEO::setDescription($this->setting->site->seo->homepage->metaDescription);
         SEO::opengraph()->addImage(route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]), ['height' => 100, 'width' => 100]);
-        return view("user.submitEventResultReport" , compact("majors" , "event" , "sideBarMode" , "userEventReport" , "pageName"  , "user" , "userCompletion"));
+
+        return view("user.submitEventResultReport" , compact("majors" ,
+                                                                        "event" ,
+                                                                            "sideBarMode" ,
+                                                                            "userEventReport" ,
+                                                                            "pageName"  ,
+                                                                            "user" ,
+                                                                            "userCompletion"
+                                                                    ));
     }
 
     public function schoolRegisterLanding(Request $request)

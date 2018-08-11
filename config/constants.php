@@ -201,7 +201,7 @@ return [
 
     //Mobile verification code wait expiration (in minutes)
     'MOBILE_VERIFICATION_TIME_LIMIT'=>'30',
-    'MOBILE_VERIFICATION_WAIT_TIME'=>'14' , //waiting time between sending two mobile verification code sms
+    'MOBILE_VERIFICATION_WAIT_TIME'=>'4' , //waiting time between sending two mobile verification code sms
     'GENERATE_PASSWORD_WAIT_TIME'=>'14' , //waiting time between sending two password sms
 
     //Number of mbti questions (it is temporary)

@@ -1,10 +1,12 @@
-@if(isset($text1))
+@if(isset($text1p1) || isset($text1p2))
 {{--<div class="alert alert-info alert-dismissable" style="text-align: justify">--}}
     {{--<button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>--}}
       {{--{{$text1}}--}}
 {{--</div>--}}
 <p class="list-group-item  bg-blue-soft bg-font-blue-soft margin-bottom-10" style="text-align: justify;">
-    {{$text1}}
+    {{$text1p1}}
+    <br>
+    {{$text1p2}}
 </p>
 @endif
 @if(isset($text2))
@@ -146,10 +148,7 @@
 </div>
 @endif
 <div class="form-group {{ $errors->has('email') ? ' has-error' : '' }}">
-    <label for="email" class="control-label">ایمیل</label>
-    @if(isset($requiredFields) && in_array("email" , $requiredFields))
-        <span class="required" aria-required="true"> * </span>
-    @endif
+    <label for="email" class="control-label">ایمیل(اختیاری)</label>
     <div class="input-icon"><i class="fa fa-envelope-o" aria-hidden="true"></i>
         <input id="email" class="form-control placeholder-no-fix" type="text" value="{{(!is_null(old("email"))?old("email"):$user->email)}}" name="email"/>
     </div>
