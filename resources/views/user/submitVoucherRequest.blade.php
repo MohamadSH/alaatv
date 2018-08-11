@@ -29,6 +29,9 @@
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
+                <span>زندگی آلایی </span>
+            </li>
+            <li>
                 <span>ثبت درخواست اینترنت آسیاتک</span>
             </li>
         </ul>
@@ -54,6 +57,20 @@
     <div class="row">
         <div class="col-md-12">
             <img src="/img/extra/asiatech_internet_raygan_rsz.jpg" width="100%">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet light ">
+                <div class="portlet-body">
+                    <p>
+                        آلایی هایی که اینترنت آسیاتک دارند، هم اکنون ترافیک آن ها از سایت آلاء رایگان می باشد.
+                    </p>
+                    <p>
+                        بقیه دوستان هم می تونند از طریق فرم زیر درخواست کد تخفیف 100% آسیاتک بدهند و رایگان ADSL آسیاتک را دریافت کنند.
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
     <div class="row">
@@ -157,9 +174,9 @@
                                                                                 "withIntroducer"=>true ,
                                                                                 "submitCaption" => "ثبت درخواست" ,
                                                                                 "disableSubmit" =>(!$user->mobileNumberVerification || !isset($user->photo) || strcmp($user->photo, config('constants.PROFILE_DEFAULT_IMAGE')) == 0)?true:false ,
-                                                                                "text1p1"=>"لطفا قسمت های ستاره دار را با دقت و صحت کامل تکمیل نمایید و سپس بر روی ثبت درخواست کلیک کنید." ,
-                                                                                "text1p2"=>"در صورت صحیح و کامل بودن اطلاعات در خواست شما در صف بررسی قرار می گیرد و وضعیت آن از طریق همین صفحه قابل مشاهده خواهد بود." ,
-                                                                                "text2" =>" اطلاعات وارد شده پس از ثبت درخواست قابل تغییر نیستند . <a href='#'>برای دیدن نمونه های نادرست اطلاعات اینجا کلیک کنید</a>",
+                                                                                "text1p1"=>"قسمت‌های ستاره دار ضروری است." ,
+                                                                                "text1p2"=>"پس از تکمیل فرم زیر، درخواست شما در صف بررسی اینترنت رایگان آسیاتک قرار خواهد گرفت." ,
+                                                                                "text2" =>" اطلاعات وارد شده پس از ثبت درخواست قابل تغییر نیستند.",
                                                                                 "formAction" => "UserController@submitVoucherRequest",
                                                                                 "text3" =>1,
                                                                                 "requiredFields"=>["province" ,
