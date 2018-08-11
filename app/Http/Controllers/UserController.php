@@ -1388,7 +1388,7 @@ class UserController extends Controller
                     $verificationMessage->verificationmessagestatus_id = $verificationMessageStatusSuccess;
                     $verificationMessage->expired_at = $now;
                     if ($verificationMessage->update()) {
-                        session()->put("verificationSuccess" , "حساب کاربری شما با موفقیت تایید شد! با تشکر.");
+                        session()->put("verificationSuccess" , "شماره موبایل شما با موفقیت تایید شد! با تشکر.");
                         return redirect()->back() ;
                     } else {
                         session()->put("verificationCodeError" , "خطای پایگاه داده در تایید حساب کاربری . لطفا کد احراز هویت را مجددا وارد نمایید");

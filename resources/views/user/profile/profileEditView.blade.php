@@ -181,6 +181,6 @@
     </div>
 @endif
 <div class="margiv-top-10 ">
-    <button type="submit" class="btn green" id="updateProfileInfoFormButton" {{(isset($disableSubmit) && $disableSubmit)?"disabled":""}}> @if(isset($submitCaption)){{$submitCaption}} @else ثبت درخواست @endif</button>
+    <button type="submit" class="btn btn-lg green" id="updateProfileInfoFormButton" {{(isset($disableSubmit) && $disableSubmit)?"disabled":""}}> @if(isset($submitCaption)){{$submitCaption}} @else ثبت درخواست @endif</button>
 </div>
 {!! Form::close() !!}
