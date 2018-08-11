@@ -760,9 +760,41 @@ class UserController extends Controller
                 $q->whereIn("product_id" , Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT"))->orwhereIn("product_id" , Config::get("constants.ORDOO_HOZOORI_NOROOZ_97_PRODUCT"));
             })->whereIn("orderstatus_id" , [Config::get("constants.ORDER_STATUS_CLOSED")])->get()->isNotEmpty();
             $userCompletion = (int)$user->completion();
-            return view("user.profile.profile", compact("genders", "majors", "sideBarMode", "user" , "userPoints" ,
-                "exchangeAmount" , "userLottery" ,"prizeCollection" , "hasCompleteProfile" , "userCompletion" , "lotteryRank" , "lottery" , "lotteryMessage" ,
-                "hasHamayeshTalaiArabi" , "hasHamayeshHozouriArabi" , "lotteryName"));
+
+            $verificationMessageStatusSent = config("constants.VERIFICATION_MESSAGE_STATUS_SENT");
+            $verificationMessage = $user->verificationmessages
+                ->where("verificationmessagestatus_id",$verificationMessageStatusSent)
+                ->sortByDesc("created_at")
+                ->first();
+            $hasRequestedVerificationCode = false;
+            if(isset($verificationMessage))
+            {
+                $hasRequestedVerificationCode = true;
+                $now = Carbon::now();
+                if($now->diffInMinutes($verificationMessage->created_at) > Config::get('constants.MOBILE_VERIFICATION_WAIT_TIME'))
+                {
+                    $hasRequestedVerificationCode = false;
+                }
+            }
+
+            return view("user.profile.profile", compact("genders",
+                                                                        "majors",
+                                                                        "sideBarMode",
+                                                                        "user" ,
+                                                                        "userPoints" ,
+                                                                        "exchangeAmount" ,
+                                                                        "userLottery" ,
+                                                                        "prizeCollection" ,
+                                                                        "hasCompleteProfile" ,
+                                                                        "userCompletion" ,
+                                                                        "lotteryRank" ,
+                                                                        "lottery" ,
+                                                                        "lotteryMessage" ,
+                                                                        "hasHamayeshTalaiArabi" ,
+                                                                        "hasHamayeshHozouriArabi" ,
+                                                                        "lotteryName",
+                                                                        "hasRequestedVerificationCode"
+                                                        ));
         } else {
             abort(403);
         }
@@ -1139,14 +1171,15 @@ class UserController extends Controller
      */
     public function sendVerificationCode()
     {
-        $verificationMessageStatusSent = Verificationmessagestatuse::all()->where("name","sent")->first();
-        $verificationMessageStatusNotDel = Verificationmessagestatuse::all()->where("name","notDelivered")->first();
-        $verificationMessageStatusExpired = Verificationmessagestatuse::all()->where("name","expired")->first();
+        $verificationMessageStatusSent = config("constants.VERIFICATION_MESSAGE_STATUS_SENT");
+        $verificationMessageStatusNotDel = config("constants.VERIFICATION_MESSAGE_STATUS_NOT_DELIVERED");
+        $verificationMessageStatusExpired = config("constants.VERIFICATION_MESSAGE_STATUS_EXPIRED");
         $now = Carbon::now();
-        $verificationMessages = collect();
 
         $user = Auth::user() ;
-        $verificationMessages = $user->verificationmessages->where("verificationmessagestatus_id",$verificationMessageStatusSent->id)->sortByDesc("created_at");
+        $verificationMessages = $user->verificationmessages
+                                    ->where("verificationmessagestatus_id",$verificationMessageStatusSent)
+                                    ->sortByDesc("created_at");
 
         if($user->mobileNumberVerification)
         {
@@ -1157,7 +1190,7 @@ class UserController extends Controller
 //        for($i=1 ; $i<=10 ; $i++)
 //        {
 //            $generatedCode = rand(1000,99999);
-//            $similarCodes = Verificationmessage::all()->where("code" , $generatedCode)->where("verificationmessagestatus_id",$verificationMessageStatusSent->id);
+//            $similarCodes = Verificationmessage::all()->where("code" , $generatedCode)->where("verificationmessagestatus_id",$verificationMessageStatusSent);
 //            if($similarCodes->isEmpty()){
 //                $verificationCode = $generatedCode;
 //                break;
@@ -1167,7 +1200,7 @@ class UserController extends Controller
 //                {
 //                    if(!isset($similarCode->expired_at) ||  $now > $similarCode->expired_at)
 //                    {
-//                        $similarCode->verificationmessagestatus_id = $verificationMessageStatusExpired->id;
+//                        $similarCode->verificationmessagestatus_id = $verificationMessageStatusExpired;
 //                        if(!isset($similarCode->expired_at)) $similarCode->expired_at = $now;
 //                        if($similarCode->update())  $verificationCode = $similarCode->code;
 //                    }
@@ -1192,7 +1225,7 @@ class UserController extends Controller
                 $request = new Request();
                 $request->offsetSet("user_id" ,  $user->id);
                 $request->offsetSet("code" ,  $verificationCode);
-                $request->offsetSet("verificationmessagestatus_id" ,  $verificationMessageStatusSent->id);
+                $request->offsetSet("verificationmessagestatus_id" ,  $verificationMessageStatusSent);
                 $request->offsetSet("expired_at" ,   Carbon::now()->addMinutes(Config::get('constants.MOBILE_VERIFICATION_TIME_LIMIT')));
                 $verificationMessageController = new VerificationmessageController();
                 if($verificationMessageController->store($request))
@@ -1215,7 +1248,7 @@ class UserController extends Controller
                     {
                         if($verificationMessage->id != $verificationMessages->first()->id)
                         {
-                            $verificationMessage->verificationmessagestatus_id = $verificationMessageStatusExpired->id;
+                            $verificationMessage->verificationmessagestatus_id = $verificationMessageStatusExpired;
                             $verificationMessage->expired_at = $now;
                             $verificationMessage->update();
                         }
@@ -1224,7 +1257,7 @@ class UserController extends Controller
                 $verificationMessage = $verificationMessages->first();
                 if($now->diffInMinutes($verificationMessage->created_at) > Config::get('constants.MOBILE_VERIFICATION_WAIT_TIME'))
                 {
-                    $verificationMessage->verificationmessagestatus_id = $verificationMessageStatusNotDel->id;
+                    $verificationMessage->verificationmessagestatus_id = $verificationMessageStatusNotDel;
                     $verificationMessage->expired_at = $now ;
                     if($verificationMessage->update())
                     {
@@ -1234,7 +1267,7 @@ class UserController extends Controller
                             $request = new Request();
                             $request->offsetSet("user_id" ,  $user->id);
                             $request->offsetSet("code" ,  $verificationCode);
-                            $request->offsetSet("verificationmessagestatus_id" ,  $verificationMessageStatusSent->id);
+                            $request->offsetSet("verificationmessagestatus_id" ,  $verificationMessageStatusSent);
                             $request->offsetSet("expired_at" ,   Carbon::now()->addMinutes(Config::get('constants.MOBILE_VERIFICATION_TIME_LIMIT')));
                             $verificationMessageController = new VerificationmessageController();
                             if($verificationMessageController->store($request))
@@ -1337,10 +1370,10 @@ class UserController extends Controller
         }
         $code = $request->get("code");
 
-        $verificationMessageStatusSent = Verificationmessagestatuse::all()->where("name","sent")->first();
-        $verificationMessageStatusExpired = Verificationmessagestatuse::all()->where("name","expired")->first();
-        $verificationMessageStatusSuccess = Verificationmessagestatuse::all()->where("name","successful")->first();
-        $verificationMessages= Auth::user()->verificationmessages->where("code",$code)->where("verificationmessagestatus_id",$verificationMessageStatusSent->id)->sortByDesc("created_at");
+        $verificationMessageStatusSent = config("constants.VERIFICATION_MESSAGE_STATUS_SENT");
+        $verificationMessageStatusExpired = config("constants.VERIFICATION_MESSAGE_STATUS_EXPIRED");
+        $verificationMessageStatusSuccess = config("constants.VERIFICATION_MESSAGE_STATUS_SUCCESSFUL");
+        $verificationMessages= Auth::user()->verificationmessages->where("code",$code)->where("verificationmessagestatus_id",$verificationMessageStatusSent)->sortByDesc("created_at");
         if($verificationMessages->isEmpty())
         {
             session()->put("verificationCodeError" , "کد وارد شده اشتباه می باشد و یا باطل شده است");
@@ -1352,7 +1385,7 @@ class UserController extends Controller
             {
                 Auth::user()->mobileNumberVerification = 1;
                 if(Auth::user()->update()) {
-                    $verificationMessage->verificationmessagestatus_id = $verificationMessageStatusSuccess->id;
+                    $verificationMessage->verificationmessagestatus_id = $verificationMessageStatusSuccess;
                     $verificationMessage->expired_at = $now;
                     if ($verificationMessage->update()) {
                         session()->put("verificationSuccess" , "حساب کاربری شما با موفقیت تایید شد! با تشکر.");
@@ -1363,7 +1396,7 @@ class UserController extends Controller
                     }
                 }
             }else{
-                $verificationMessage->verificationmessagestatus_id = $verificationMessageStatusExpired->id;
+                $verificationMessage->verificationmessagestatus_id = $verificationMessageStatusExpired;
                 if($verificationMessage->update())
                 {
                     session()->put("verificationCodeError" , "کد احراز هویت شما منقضی شده است . لطفا مجددا درخواست کد نمایید.");
@@ -1556,8 +1589,16 @@ class UserController extends Controller
 
         $isEmptyProducts = $products->isEmpty();
         $userCompletion = (int)$user->completion();
+
         return view("user.assetsList" ,
-            compact('section' , 'sideBarMode'  ,'isEmptyProducts' ,  'pamphlets' , 'videos' , 'user' , 'userCompletion')
+                        compact('section' ,
+                                    'sideBarMode'  ,
+                                       'isEmptyProducts' ,
+                                       'pamphlets' ,
+                                       'videos' ,
+                                       'user' ,
+                                       'userCompletion'
+                        )
         );
     }
 
@@ -2300,13 +2341,30 @@ class UserController extends Controller
                 }
             }
 
+        $verificationMessageStatusSent = config("constants.VERIFICATION_MESSAGE_STATUS_SENT");
+        $verificationMessage = $user->verificationmessages
+                                    ->where("verificationmessagestatus_id",$verificationMessageStatusSent)
+                                    ->sortByDesc("created_at")
+                                    ->first();
+        $hasRequestedVerificationCode = false;
+        if(isset($verificationMessage))
+        {
+            $hasRequestedVerificationCode = true;
+            $now = Carbon::now();
+            if($now->diffInMinutes($verificationMessage->created_at) > Config::get('constants.MOBILE_VERIFICATION_WAIT_TIME'))
+            {
+                $hasRequestedVerificationCode = false;
+            }
+        }
+
         return view("user.submitVoucherRequest" , compact("user" ,
                                                                      "genders" ,
                                                                          "majors" ,
                                                                          "sideBarMode" ,
                                                                          "userHasRegistered" ,
                                                                          "rank" ,
-                                                                         "userVoucher"
+                                                                         "userVoucher",
+                                                                         "hasRequestedVerificationCode"
         ));
     }
 

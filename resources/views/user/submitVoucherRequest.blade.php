@@ -53,7 +53,7 @@
     @include("systemMessage.flash")
     <div class="row">
         <div class="col-md-12">
-            <img src="/img/extra/asiatech_internet_raygan_rsz.jpg">
+            <img src="/img/extra/asiatech_internet_raygan_rsz.jpg" width="100%">
         </div>
     </div>
     <div class="row">
@@ -61,7 +61,12 @@
             <!-- BEGIN PROFILE SIDEBAR -->
             <div class="profile-sidebar">
                 {{--ToDo: customzing photo layout for supporting jquery upload--}}
-                @include('partials.profileSidebar',['user'=>$user , 'withInfoBox'=>true , 'withPhotoUpload' => ($userHasRegistered)?false:true  ])
+                @include('partials.profileSidebar',[
+                                            'user'=>$user ,
+                                            'withInfoBox'=>true ,
+                                             'withPhotoUpload' => ($userHasRegistered)?false:true
+                                             ]
+                         )
 
             </div>
             <!-- END BEGIN PROFILE SIDEBAR -->
@@ -152,7 +157,9 @@
                                                                                 "withIntroducer"=>true ,
                                                                                 "submitCaption" => "ثبت درخواست" ,
                                                                                 "disableSubmit" =>(!$user->mobileNumberVerification || !isset($user->photo) || strcmp($user->photo, config('constants.PROFILE_DEFAULT_IMAGE')) == 0)?true:false ,
-                                                                                "text1"=>"لطفا اطلاعات خود را با دقت و صحت کامل تکمیل نمایید و سپس بر روی ثبت درخواست کلیک کنید . در صورت صحیح و کامل بودن اطلاعات در خواست شما در صف بررسی قرار می گیرد و وضعیت آن از طریق همین صفحه قابل مشاهده خواهد بود." , "text2"=>" اطلاعات وارد شده پس از ثبت درخواست قابل تغییر نیستند . <a href='#'>برای دیدن نمونه های صحیح اطلاعات اینجا کلیک کنید</a>",
+                                                                                "text1p1"=>"لطفا قسمت های ستاره دار را با دقت و صحت کامل تکمیل نمایید و سپس بر روی ثبت درخواست کلیک کنید." ,
+                                                                                "text1p2"=>"در صورت صحیح و کامل بودن اطلاعات در خواست شما در صف بررسی قرار می گیرد و وضعیت آن از طریق همین صفحه قابل مشاهده خواهد بود." ,
+                                                                                "text2" =>" اطلاعات وارد شده پس از ثبت درخواست قابل تغییر نیستند . <a href='#'>برای دیدن نمونه های نادرست اطلاعات اینجا کلیک کنید</a>",
                                                                                 "formAction" => "UserController@submitVoucherRequest",
                                                                                 "text3" =>1,
                                                                                 "requiredFields"=>["province" ,
