@@ -17,6 +17,7 @@ use App\Gender;
 use App\Grade;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Requests\InsertCouponRequest;
+use App\Http\Requests\InsertVoucherRequest;
 use App\Http\Requests\PasswordRecoveryRequest;
 use App\Http\Requests\RegisterForSanatiSharifHighSchoolRequest;
 use App\Http\Requests\SubmitVerificationCode;
@@ -29,6 +30,7 @@ use App\Http\Requests\EditUserRequest;
 use App\Http\Requests\InsertUserRequest;
 use App\Phone;
 use App\Product;
+use App\Productvoucher;
 use App\Province;
 use App\Relative;
 use App\Traits\CharacterCommon;
@@ -758,9 +760,41 @@ class UserController extends Controller
                 $q->whereIn("product_id" , Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT"))->orwhereIn("product_id" , Config::get("constants.ORDOO_HOZOORI_NOROOZ_97_PRODUCT"));
             })->whereIn("orderstatus_id" , [Config::get("constants.ORDER_STATUS_CLOSED")])->get()->isNotEmpty();
             $userCompletion = (int)$user->completion();
-            return view("user.profile.profile", compact("genders", "majors", "sideBarMode", "user" , "userPoints" ,
-                "exchangeAmount" , "userLottery" ,"prizeCollection" , "hasCompleteProfile" , "userCompletion" , "lotteryRank" , "lottery" , "lotteryMessage" ,
-                "hasHamayeshTalaiArabi" , "hasHamayeshHozouriArabi" , "lotteryName"));
+
+            $verificationMessageStatusSent = config("constants.VERIFICATION_MESSAGE_STATUS_SENT");
+            $verificationMessage = $user->verificationmessages
+                ->where("verificationmessagestatus_id",$verificationMessageStatusSent)
+                ->sortByDesc("created_at")
+                ->first();
+            $hasRequestedVerificationCode = false;
+            if(isset($verificationMessage))
+            {
+                $hasRequestedVerificationCode = true;
+                $now = Carbon::now();
+                if($now->diffInMinutes($verificationMessage->created_at) > Config::get('constants.MOBILE_VERIFICATION_WAIT_TIME'))
+                {
+                    $hasRequestedVerificationCode = false;
+                }
+            }
+
+            return view("user.profile.profile", compact("genders",
+                                                                        "majors",
+                                                                        "sideBarMode",
+                                                                        "user" ,
+                                                                        "userPoints" ,
+                                                                        "exchangeAmount" ,
+                                                                        "userLottery" ,
+                                                                        "prizeCollection" ,
+                                                                        "hasCompleteProfile" ,
+                                                                        "userCompletion" ,
+                                                                        "lotteryRank" ,
+                                                                        "lottery" ,
+                                                                        "lotteryMessage" ,
+                                                                        "hasHamayeshTalaiArabi" ,
+                                                                        "hasHamayeshHozouriArabi" ,
+                                                                        "lotteryName",
+                                                                        "hasRequestedVerificationCode"
+                                                        ));
         } else {
             abort(403);
         }
@@ -795,7 +829,9 @@ class UserController extends Controller
         $photo = $user->photo;
         $password = $user->password ;
         $user->fill($request->all());
-        $user->techCode = $request->get('techCode');
+
+        if($request->has('techCode'))
+            $user->techCode = $request->get('techCode');
 
         if(strlen($user->major_id) == 0) $user->major_id = null;
         if(strlen($user->gender_id) == 0) $user->gender_id = null;
@@ -1135,14 +1171,15 @@ class UserController extends Controller
      */
     public function sendVerificationCode()
     {
-        $verificationMessageStatusSent = Verificationmessagestatuse::all()->where("name","sent")->first();
-        $verificationMessageStatusNotDel = Verificationmessagestatuse::all()->where("name","notDelivered")->first();
-        $verificationMessageStatusExpired = Verificationmessagestatuse::all()->where("name","expired")->first();
+        $verificationMessageStatusSent = config("constants.VERIFICATION_MESSAGE_STATUS_SENT");
+        $verificationMessageStatusNotDel = config("constants.VERIFICATION_MESSAGE_STATUS_NOT_DELIVERED");
+        $verificationMessageStatusExpired = config("constants.VERIFICATION_MESSAGE_STATUS_EXPIRED");
         $now = Carbon::now();
-        $verificationMessages = collect();
 
         $user = Auth::user() ;
-        $verificationMessages = $user->verificationmessages->where("verificationmessagestatus_id",$verificationMessageStatusSent->id)->sortByDesc("created_at");
+        $verificationMessages = $user->verificationmessages
+                                    ->where("verificationmessagestatus_id",$verificationMessageStatusSent)
+                                    ->sortByDesc("created_at");
 
         if($user->mobileNumberVerification)
         {
@@ -1153,7 +1190,7 @@ class UserController extends Controller
 //        for($i=1 ; $i<=10 ; $i++)
 //        {
 //            $generatedCode = rand(1000,99999);
-//            $similarCodes = Verificationmessage::all()->where("code" , $generatedCode)->where("verificationmessagestatus_id",$verificationMessageStatusSent->id);
+//            $similarCodes = Verificationmessage::all()->where("code" , $generatedCode)->where("verificationmessagestatus_id",$verificationMessageStatusSent);
 //            if($similarCodes->isEmpty()){
 //                $verificationCode = $generatedCode;
 //                break;
@@ -1163,7 +1200,7 @@ class UserController extends Controller
 //                {
 //                    if(!isset($similarCode->expired_at) ||  $now > $similarCode->expired_at)
 //                    {
-//                        $similarCode->verificationmessagestatus_id = $verificationMessageStatusExpired->id;
+//                        $similarCode->verificationmessagestatus_id = $verificationMessageStatusExpired;
 //                        if(!isset($similarCode->expired_at)) $similarCode->expired_at = $now;
 //                        if($similarCode->update())  $verificationCode = $similarCode->code;
 //                    }
@@ -1188,7 +1225,7 @@ class UserController extends Controller
                 $request = new Request();
                 $request->offsetSet("user_id" ,  $user->id);
                 $request->offsetSet("code" ,  $verificationCode);
-                $request->offsetSet("verificationmessagestatus_id" ,  $verificationMessageStatusSent->id);
+                $request->offsetSet("verificationmessagestatus_id" ,  $verificationMessageStatusSent);
                 $request->offsetSet("expired_at" ,   Carbon::now()->addMinutes(Config::get('constants.MOBILE_VERIFICATION_TIME_LIMIT')));
                 $verificationMessageController = new VerificationmessageController();
                 if($verificationMessageController->store($request))
@@ -1211,7 +1248,7 @@ class UserController extends Controller
                     {
                         if($verificationMessage->id != $verificationMessages->first()->id)
                         {
-                            $verificationMessage->verificationmessagestatus_id = $verificationMessageStatusExpired->id;
+                            $verificationMessage->verificationmessagestatus_id = $verificationMessageStatusExpired;
                             $verificationMessage->expired_at = $now;
                             $verificationMessage->update();
                         }
@@ -1220,7 +1257,7 @@ class UserController extends Controller
                 $verificationMessage = $verificationMessages->first();
                 if($now->diffInMinutes($verificationMessage->created_at) > Config::get('constants.MOBILE_VERIFICATION_WAIT_TIME'))
                 {
-                    $verificationMessage->verificationmessagestatus_id = $verificationMessageStatusNotDel->id;
+                    $verificationMessage->verificationmessagestatus_id = $verificationMessageStatusNotDel;
                     $verificationMessage->expired_at = $now ;
                     if($verificationMessage->update())
                     {
@@ -1230,7 +1267,7 @@ class UserController extends Controller
                             $request = new Request();
                             $request->offsetSet("user_id" ,  $user->id);
                             $request->offsetSet("code" ,  $verificationCode);
-                            $request->offsetSet("verificationmessagestatus_id" ,  $verificationMessageStatusSent->id);
+                            $request->offsetSet("verificationmessagestatus_id" ,  $verificationMessageStatusSent);
                             $request->offsetSet("expired_at" ,   Carbon::now()->addMinutes(Config::get('constants.MOBILE_VERIFICATION_TIME_LIMIT')));
                             $verificationMessageController = new VerificationmessageController();
                             if($verificationMessageController->store($request))
@@ -1333,10 +1370,10 @@ class UserController extends Controller
         }
         $code = $request->get("code");
 
-        $verificationMessageStatusSent = Verificationmessagestatuse::all()->where("name","sent")->first();
-        $verificationMessageStatusExpired = Verificationmessagestatuse::all()->where("name","expired")->first();
-        $verificationMessageStatusSuccess = Verificationmessagestatuse::all()->where("name","successful")->first();
-        $verificationMessages= Auth::user()->verificationmessages->where("code",$code)->where("verificationmessagestatus_id",$verificationMessageStatusSent->id)->sortByDesc("created_at");
+        $verificationMessageStatusSent = config("constants.VERIFICATION_MESSAGE_STATUS_SENT");
+        $verificationMessageStatusExpired = config("constants.VERIFICATION_MESSAGE_STATUS_EXPIRED");
+        $verificationMessageStatusSuccess = config("constants.VERIFICATION_MESSAGE_STATUS_SUCCESSFUL");
+        $verificationMessages= Auth::user()->verificationmessages->where("code",$code)->where("verificationmessagestatus_id",$verificationMessageStatusSent)->sortByDesc("created_at");
         if($verificationMessages->isEmpty())
         {
             session()->put("verificationCodeError" , "کد وارد شده اشتباه می باشد و یا باطل شده است");
@@ -1348,7 +1385,7 @@ class UserController extends Controller
             {
                 Auth::user()->mobileNumberVerification = 1;
                 if(Auth::user()->update()) {
-                    $verificationMessage->verificationmessagestatus_id = $verificationMessageStatusSuccess->id;
+                    $verificationMessage->verificationmessagestatus_id = $verificationMessageStatusSuccess;
                     $verificationMessage->expired_at = $now;
                     if ($verificationMessage->update()) {
                         session()->put("verificationSuccess" , "حساب کاربری شما با موفقیت تایید شد! با تشکر.");
@@ -1359,7 +1396,7 @@ class UserController extends Controller
                     }
                 }
             }else{
-                $verificationMessage->verificationmessagestatus_id = $verificationMessageStatusExpired->id;
+                $verificationMessage->verificationmessagestatus_id = $verificationMessageStatusExpired;
                 if($verificationMessage->update())
                 {
                     session()->put("verificationCodeError" , "کد احراز هویت شما منقضی شده است . لطفا مجددا درخواست کد نمایید.");
@@ -1552,8 +1589,16 @@ class UserController extends Controller
 
         $isEmptyProducts = $products->isEmpty();
         $userCompletion = (int)$user->completion();
+
         return view("user.assetsList" ,
-            compact('section' , 'sideBarMode'  ,'isEmptyProducts' ,  'pamphlets' , 'videos' , 'user' , 'userCompletion')
+                        compact('section' ,
+                                    'sideBarMode'  ,
+                                       'isEmptyProducts' ,
+                                       'pamphlets' ,
+                                       'videos' ,
+                                       'user' ,
+                                       'userCompletion'
+                        )
         );
     }
 
@@ -2239,7 +2284,7 @@ class UserController extends Controller
      * @param  Request $request
      * @return \Illuminate\Http\Response
      */
-    public function submitVoucherRequest(Request $request)
+    public function voucherRequest(Request $request)
     {
         $url = $request->url();
         $title = "آلاء| درخواست اینترنت آسیاتک";
@@ -2251,9 +2296,207 @@ class UserController extends Controller
         SEO::opengraph()->addImage(route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]), ['height' => 100, 'width' => 100]);
 
         $user = Auth::user();
-        $genders = Gender::pluck('name', 'id')->prepend("نامشخص");
-        $majors = Major::pluck('name', 'id')->prepend("نامشخص");
+        $genders = Gender::pluck('name', 'id')->prepend("انتخاب کنید");
+        $majors = Major::pluck('name', 'id')->prepend("انتخاب کنید");
         $sideBarMode = "closed";
-        return view("user.submitVoucherRequest" , compact("user" , "genders" , "majors" , "sideBarMode"));
+
+        $asiatechProduct = config("constants.ASIATECH_FREE_ADSL") ;
+        $nowDateTime = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran');
+        $userHasRegistered = false;
+
+            $asitechPendingOrders = Order::whereHas("orderproducts" , function ($q) use ($asiatechProduct)
+                                            {
+                                                $q->where("product_id" , $asiatechProduct );
+                                            })
+                                                ->where("orderstatus_id" , config("constants.ORDER_STATUS_PENDING"))
+                                                ->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_PAID"))
+                                                ->orderBy("completed_at")
+                                                ->get();
+            $userAsitechPendingOrders = $asitechPendingOrders->where("user_id" , $user->id) ;
+            if($userAsitechPendingOrders->isNotEmpty())
+            {
+                $rank = $userAsitechPendingOrders->keys()->first() + 1 ;
+
+                $userHasRegistered = true;
+            }
+            else
+            {
+                $asitechApprovedOrders = $user->orders()
+                                                ->whereHas("orderproducts" , function ($q) use ($asiatechProduct)
+                                                {
+                                                    $q->where("product_id" , $asiatechProduct );
+                                                })
+                                                    ->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
+                                                    ->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_PAID"))
+                                                    ->orderBy("completed_at")
+                                                    ->get();
+                if($asitechApprovedOrders->isNotEmpty())
+                {
+                    $userVoucher = $user->productvouchers
+                                ->where("expirationdatetime" , ">" , $nowDateTime)
+                                ->where("product_id" , $asiatechProduct)
+                                ->first();
+
+                    $userHasRegistered = true;
+                }
+            }
+
+        $verificationMessageStatusSent = config("constants.VERIFICATION_MESSAGE_STATUS_SENT");
+        $verificationMessage = $user->verificationmessages
+                                    ->where("verificationmessagestatus_id",$verificationMessageStatusSent)
+                                    ->sortByDesc("created_at")
+                                    ->first();
+        $hasRequestedVerificationCode = false;
+        if(isset($verificationMessage))
+        {
+            $hasRequestedVerificationCode = true;
+            $now = Carbon::now();
+            if($now->diffInMinutes($verificationMessage->created_at) > Config::get('constants.MOBILE_VERIFICATION_WAIT_TIME'))
+            {
+                $hasRequestedVerificationCode = false;
+            }
+        }
+
+        return view("user.submitVoucherRequest" , compact("user" ,
+                                                                     "genders" ,
+                                                                         "majors" ,
+                                                                         "sideBarMode" ,
+                                                                         "userHasRegistered" ,
+                                                                         "rank" ,
+                                                                         "userVoucher",
+                                                                         "hasRequestedVerificationCode"
+        ));
+    }
+
+    /**
+     * Submit user request for voucher request
+     *
+     * @param  \App\Http\Requests\InsertVoucherRequest InsertVoucherRequest
+     * @return \Illuminate\Http\Response
+     */
+    public function submitVoucherRequest(InsertVoucherRequest $request)
+    {
+        $asiatechProduct = config("constants.ASIATECH_FREE_ADSL") ;
+        $user = Auth::user();
+        $nowDateTime = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran');
+        $vouchers = $user->productvouchers
+                        ->where("expirationdatetime" , ">" , $nowDateTime)
+                        ->where("product_id" , $asiatechProduct);
+        if($vouchers->isNotEmpty())
+        {
+            session()->put("error","شما برای اینترنت رایگان ثبت نام کرده اید");
+            return redirect()->back();
+        }
+
+        $updateRequest = new EditUserRequest();
+        $updateRequest->offsetSet("fromAPI" , 1);
+        $updateRequest->offsetSet("postalCode" , $request->get("postalCode"));
+        $updateRequest->offsetSet("email" , $request->get("email"));
+        $updateRequest->offsetSet("gender_id" , $request->get("gender_id"));
+        $updateRequest->offsetSet("province" , $request->get("province"));
+        $updateRequest->offsetSet("city" , $request->get("city"));
+        $updateRequest->offsetSet("address" , $request->get("address"));
+        if($user->mobileNumberVerification )
+            $updateRequest->offsetSet("mobileNumberVerification" , 1);
+        $birthdate = Carbon::parse($request->get("birthdate") )
+                            ->setTimezone("Asia/Tehran")->format('Y-m-d');
+        $updateRequest->offsetSet("birthdate" , $birthdate);
+        $updateRequest->offsetSet("school" , $request->get("school"));
+        $updateRequest->offsetSet("major_id" , $request->get("major_id"));
+        $updateRequest->offsetSet("introducedBy" , $request->get("introducedBy"));
+        $response =  $this->update($updateRequest , $user);
+        $completionColumns = [
+                                "firstName",
+                                "lastName",
+                                "mobile",
+                                "nationalCode",
+                                "province",
+                                "city",
+                                "address",
+                                "postalCode",
+                                "gender_id" ,
+                                "birthdate",
+                                "school",
+                                "major_id",
+                                "introducedBy",
+                                "email",
+                                "mobileNumberVerification",
+                                "photo"
+                            ];
+        if($response->getStatusCode() == 200)
+        {
+            if($user->completion("custom" ,$completionColumns) < 100)
+            {
+                session()->put("error","اطلاعات شما ذخیره شد اما برای ثبت درخواست اینترنت رایگان آسیاتک کامل نمی باشند . لطفا اطلاعات خود را تکمیل نمایید.");
+            }
+            else
+            {
+                $asiatechOrder = new Order();
+                $asiatechOrder->orderstatus_id = config("constants.ORDER_STATUS_PENDING") ;
+                $asiatechOrder->paymentstatus_id = config("constants.PAYMENT_STATUS_PAID") ;
+                $asiatechOrder->cost = 0 ;
+                $asiatechOrder->costwithoutcoupon = 0;
+                $asiatechOrder->user_id = $user->id ;
+                $asiatechOrder->completed_at = Carbon::now()->setTimezone("Asia/Tehran");
+                if($asiatechOrder->save())
+                {
+                    $request->offsetSet("cost" , 0);
+                    $request->offsetSet("orderId_bhrk" , $asiatechOrder->id);
+                    $product =  Product::where("id" , $asiatechProduct)->first();
+                    if(isset($product))
+                    {
+                        $orderController = new OrderController();
+                        $response = $orderController->addOrderproduct($request , $product) ;
+                        $responseStatus = $response->getStatusCode();
+                        $result = json_decode($response->getContent());
+                        if($responseStatus == 200)
+                        {
+                            $nowDateTime = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran');
+                            $unusedVoucher = Productvoucher::whereNull("user_id")
+                                                            ->where("enable" , 1)
+                                                            ->where("expirationdatetime" , ">" , $nowDateTime)
+                                                            ->where("product_id" , $asiatechProduct)
+                                                            ->get()
+                                                            ->first();
+                            if(isset($unusedVoucher))
+                            {
+                                $unusedVoucher->user_id = $user->id;
+                                if($unusedVoucher->update())
+                                {
+                                    $user->lockProfile = 1;
+                                    $user->update();
+                                }
+                                else
+                                {
+                                    session()->put("error","خطا در تخصیص کد تخفیف");
+                                }
+                            }
+                            else
+                            {
+                                session()->put("error","کد تخفیفی برای شما یافت نشد");
+                            }
+                        }
+                        else
+                        {
+                            session()->put("error","خطا در ثبت محصول اینرنت رایگان آسیاتک");
+                        }
+                    }
+                    else
+                    {
+                        session()->put("error","محصول اینترنت آسیاتک یافت نشد");
+                    }
+                }
+                else
+                {
+                    session()->put("error","خطا در ثبت سفارش اینترنت رایگان. لطفا بعدا اقدام نمایید");
+                }
+            }
+        }
+        else
+        {
+            session()->put("error","مشکل غیر منتظره ای در ذخیره اطلاعات شما پیش آمد . لطفا مجددا اقدام نمایید");
+        }
+
+        return redirect()->back();
     }
 }

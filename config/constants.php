@@ -201,7 +201,7 @@ return [
 
     //Mobile verification code wait expiration (in minutes)
     'MOBILE_VERIFICATION_TIME_LIMIT'=>'30',
-    'MOBILE_VERIFICATION_WAIT_TIME'=>'14' , //waiting time between sending two mobile verification code sms
+    'MOBILE_VERIFICATION_WAIT_TIME'=>'4' , //waiting time between sending two mobile verification code sms
     'GENERATE_PASSWORD_WAIT_TIME'=>'14' , //waiting time between sending two password sms
 
     //Number of mbti questions (it is temporary)
@@ -266,6 +266,7 @@ return [
     'PRODUCT_SEARCH_EXCLUDED_PRODUCTS' => [119,123,127,131,135,139,143,147,151,155,159,163],
     'DONATE_PRODUCT' => [180],
     'CUSTOM_DONATE_PRODUCT' => 182,
+    'ASIATECH_FREE_ADSL' => 224,
     'LOTTERY_NAME'=> '10tir',
     'HAMAYESH_LOTTERY_EXCHANGE_AMOUNT' => 30000,
 

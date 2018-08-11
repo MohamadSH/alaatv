@@ -8,6 +8,7 @@ use App\Contenttype;
 use App\Product;
 use App\Productfiletype;
 use App\Traits\UserCommon;
+use App\Verificationmessagestatuse;
 use App\Wallettype;
 use App\Websitesetting;
 use Carbon\Carbon;
@@ -106,6 +107,8 @@ class AppServiceProvider extends ServiceProvider
                     Config::set("constants.ORDER_STATUS_READY_TO_POST", $orderstatuses->where("name", "readyToPost")->first()->id); // id = 7
                 if ($orderstatuses->where("name", "openDonate")->isNotEmpty())
                     Config::set("constants.ORDER_STATUS_OPEN_DONATE", $orderstatuses->where("name", "openDonate")->first()->id); // id = 8
+                if ($orderstatuses->where("name", "pending")->isNotEmpty())
+                    Config::set("constants.ORDER_STATUS_PENDING", $orderstatuses->where("name", "pending")->first()->id); // id = 9
             }
 
             //=================TRANSACTION STATUSES CONSTANTS
@@ -247,7 +250,6 @@ class AppServiceProvider extends ServiceProvider
                 if($productfiletypes->where("name" , "pamphlet")->isNotEmpty())
                     Config::set("constants.PRODUCT_FILE_TYPE_PAMPHLET" , $productfiletypes->where("name" , "pamphlet")->first()->id);
             }
-
 //                =============================CONTENT TYPES
             if (Schema::hasTable('contenttypes'))
             {
@@ -265,6 +267,19 @@ class AppServiceProvider extends ServiceProvider
                     Config::set("constants.WALLET_TYPE_MAIN" , $wallettypes->where("name" , "main")->first()->id);
                 if($wallettypes->where("name" , "gift")->isNotEmpty())
                     Config::set("constants.WALLET_TYPE_GIFT" , $wallettypes->where("name" , "gift")->first()->id);
+            }
+//                =============================VERIFICATION MESSAGE STATUSES
+            if (Schema::hasTable('verificationmessagestatuses'))
+            {
+                $verificationmessagestatuses = Verificationmessagestatuse::all();
+                if($verificationmessagestatuses->where("name" , "sent")->isNotEmpty())
+                    Config::set("constants.VERIFICATION_MESSAGE_STATUS_SENT" , $verificationmessagestatuses->where("name" , "sent")->first()->id);
+                if($verificationmessagestatuses->where("name" , "successful")->isNotEmpty())
+                    Config::set("constants.VERIFICATION_MESSAGE_STATUS_SUCCESSFUL" , $verificationmessagestatuses->where("name" , "successful")->first()->id);
+                if($verificationmessagestatuses->where("name" , "notDelivered")->isNotEmpty())
+                    Config::set("constants.VERIFICATION_MESSAGE_STATUS_NOT_DELIVERED" , $verificationmessagestatuses->where("name" , "notDelivered")->first()->id);
+                if($verificationmessagestatuses->where("name" , "expired")->isNotEmpty())
+                    Config::set("constants.VERIFICATION_MESSAGE_STATUS_EXPIRED" , $verificationmessagestatuses->where("name" , "expired")->first()->id);
             }
 
             if(Schema::hasTable('products'))

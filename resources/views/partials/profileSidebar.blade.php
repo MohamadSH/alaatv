@@ -21,7 +21,7 @@
             </div>
             <div class="row " style="margin: auto">
                 <div class="col-md-12">
-                    <p class="font-red text-justify bold "> دقت کنید که حجم عکس مورد نظر باید حداکثر 500 کیلوبایت و فرمت آن jpg و یا png باشد. </p>
+                    <p class="font-red text-justify bold "> دقت کنید که حجم عکس باید حداکثر 500 کیلوبایت و فرمت آن jpg یا png باشد </p>
                 </div>
             </div>
             {{--<progress></progress>--}}
@@ -38,6 +38,7 @@
     @endif
     <!-- END SIDEBAR USER TITLE -->
     <!-- SIDEBAR MENU -->
+    @if(isset($withNavigation) && $withNavigation)
     <div class="profile-usermenu">
         <ul class="nav">
             <li @if(strcmp(url()->current() , action("UserController@show",$user)) == 0) class="active" @endif >
@@ -61,12 +62,13 @@
                 <a href="{{action("HomeController@submitKonkurResult")}}">
                     <i class="fa fa-graduation-cap"></i> ثبت رتبه 97 </a>
             </li>
-            {{--<li @if(strcmp(url()->current() , action("UserController@submitVoucherRequest")) == 0) class="active" @endif >--}}
-                {{--<a href="{{action("UserController@submitVoucherRequest")}}">--}}
+            {{--<li @if(strcmp(url()->current() , action("UserController@voucherRequest")) == 0) class="active" @endif >--}}
+                {{--<a href="{{action("UserController@voucherRequest")}}">--}}
                     {{--<i class="fa fa-registered"></i>ثبت درخواست اینترنت آسیاتک</a>--}}
             {{--</li>--}}
         </ul>
     </div>
+    @endif
     <!-- END MENU -->
 </div>
 <!-- END PORTLET MAIN -->
@@ -104,8 +106,11 @@
                     <span class="help-block">برای دریافت کد روی دکمه درخواست کلیک کنید</span>
                 </div>
                 <div class="form-actions noborder" style="text-align: center;">
-                    <button type="submit" class="btn default">تایید کد</button>
-                    <a href="{{action("UserController@sendVerificationCode")}}" class="btn blue">درخواست ارسال کد</a>
+                    @if(isset($hasRequestedVerificationCode) && $hasRequestedVerificationCode)
+                        <button type="submit" class="btn green">تایید کد</button>
+                    @else
+                        <a href="{{action("UserController@sendVerificationCode")}}" class="btn blue">درخواست ارسال کد</a>
+                    @endif
                     {!! Form::close() !!}
                 </div>
                 <div class="form-group form-md-line-input" style="text-align: justify;">
