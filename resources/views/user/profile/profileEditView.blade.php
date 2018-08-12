@@ -17,121 +17,307 @@
     </div>
 @endif
 {!! Form::model($user,['method' => 'PUT','action' => [(isset($formAction))?$formAction:'UserController@updateProfile'] , 'role'=>'form' ]) !!}
-<div class="form-group {{ $errors->has('province') ? ' has-error' : '' }}">
-    <label for="province" class="control-label ">استان</label>
-    @if(isset($requiredFields) && in_array("province" , $requiredFields))
-        <span class="required" aria-required="true"> * </span>
-    @endif
-    <div class="input-icon"><i class="fa fa-location-arrow" aria-hidden="true"></i>
-        <input id="province" class="form-control placeholder-no-fix" type="text" value="{{(!is_null(old("province"))?old("province"):$user->province)}}" name="province"/>
-    </div>
-    @if ($errors->has('province'))
-        <span class="help-block">
+
+@if(isset($lockProfile) && $lockProfile )
+    @if(strlen(preg_replace('/\s+/', '', $user->province )) == 0)
+        <div class="form-group {{ $errors->has('province') ? ' has-error' : '' }}">
+            <label for="province" class="control-label ">استان</label>
+            @if(isset($requiredFields) && in_array("province" , $requiredFields))
+                <span class="required" aria-required="true"> * </span>
+            @endif
+            <div class="input-icon"><i class="fa fa-location-arrow" aria-hidden="true"></i>
+                <input id="province" class="form-control placeholder-no-fix" type="text" value="{{(!is_null(old("province"))?old("province"):$user->province)}}" name="province"/>
+            </div>
+            @if ($errors->has('province'))
+                <span class="help-block">
             <strong>{{ $errors->first('province') }}</strong>
         </span>
+            @endif
+        </div>
+    @else
+        <p ><i class="fa fa-location-arrow font-yellow-gold" aria-hidden="true"></i>
+            <strong class="font-yellow-gold">استان: </strong><span class="bold"> {{$user->province}}</span>
+        </p>
     @endif
-</div>
-<div class="form-group {{ $errors->has('city') ? ' has-error' : '' }}">
-    <label for="city" class="control-label">شهر</label>
-    @if(isset($requiredFields) && in_array("city" , $requiredFields))
-        <span class="required" aria-required="true"> * </span>
-    @endif
-    <div class="input-icon"><i class="fa fa-location-arrow" aria-hidden="true"></i>
-        <input id="city" class="form-control placeholder-no-fix" type="text" value="{{(!is_null(old("city"))?old("city"):$user->city)}}" name="city"/>
+@else
+    <div class="form-group {{ $errors->has('province') ? ' has-error' : '' }}">
+        <label for="province" class="control-label ">استان</label>
+        @if(isset($requiredFields) && in_array("province" , $requiredFields))
+            <span class="required" aria-required="true"> * </span>
+        @endif
+        <div class="input-icon"><i class="fa fa-location-arrow" aria-hidden="true"></i>
+            <input id="province" class="form-control placeholder-no-fix" type="text" value="{{(!is_null(old("province"))?old("province"):$user->province)}}" name="province"/>
+        </div>
+        @if ($errors->has('province'))
+            <span class="help-block">
+            <strong>{{ $errors->first('province') }}</strong>
+        </span>
+        @endif
     </div>
-    @if ($errors->has('city'))
-        <span class="help-block">
+@endif
+@if(isset($lockProfile) && $lockProfile )
+        @if(strlen(preg_replace('/\s+/', '', $user->city )) == 0)
+        <div class="form-group {{ $errors->has('city') ? ' has-error' : '' }}">
+            <label for="city" class="control-label">شهر</label>
+            @if(isset($requiredFields) && in_array("city" , $requiredFields))
+                <span class="required" aria-required="true"> * </span>
+            @endif
+            <div class="input-icon"><i class="fa fa-location-arrow" aria-hidden="true"></i>
+                <input id="city" class="form-control placeholder-no-fix" type="text" value="{{(!is_null(old("city"))?old("city"):$user->city)}}" name="city"/>
+            </div>
+            @if ($errors->has('city'))
+                <span class="help-block">
             <strong>{{ $errors->first('city') }}</strong>
         </span>
+            @endif
+        </div>
+    @else
+        <p ><i class="fa fa-location-arrow font-yellow-gold" aria-hidden="true"></i>
+            <strong  class="font-yellow-gold">شهر: </strong><span class="bold"> {{$user->city}}</span>
+        </p>
     @endif
-</div>
-<div class="form-group {{ $errors->has('address') ? ' has-error' : '' }}">
-    <label for="address" class="control-label">آدرس محل سکونت</label>
-    @if(isset($requiredFields) && in_array("address" , $requiredFields))
-        <span class="required" aria-required="true"> * </span>
-    @endif
-    <div class="input-icon"><i class="fa fa-map-marker" aria-hidden="true"></i>
-        <input id="address" class="form-control placeholder-no-fix" type="text" value="{{(!is_null(old("address"))?old("address"):$user->address)}}" name="address"/>
+@else
+    <div class="form-group {{ $errors->has('city') ? ' has-error' : '' }}">
+        <label for="city" class="control-label">شهر</label>
+        @if(isset($requiredFields) && in_array("city" , $requiredFields))
+            <span class="required" aria-required="true"> * </span>
+        @endif
+        <div class="input-icon"><i class="fa fa-location-arrow" aria-hidden="true"></i>
+            <input id="city" class="form-control placeholder-no-fix" type="text" value="{{(!is_null(old("city"))?old("city"):$user->city)}}" name="city"/>
+        </div>
+        @if ($errors->has('city'))
+            <span class="help-block">
+            <strong>{{ $errors->first('city') }}</strong>
+        </span>
+        @endif
     </div>
-    @if ($errors->has('address'))
-        <span class="help-block">
+@endif
+@if(isset($lockProfile) && $lockProfile )
+    @if(strlen(preg_replace('/\s+/', '', $user->address )) == 0)
+        <div class="form-group {{ $errors->has('address') ? ' has-error' : '' }}">
+            <label for="address" class="control-label">آدرس محل سکونت</label>
+            @if(isset($requiredFields) && in_array("address" , $requiredFields))
+                <span class="required" aria-required="true"> * </span>
+            @endif
+            <div class="input-icon"><i class="fa fa-map-marker" aria-hidden="true"></i>
+                <input id="address" class="form-control placeholder-no-fix" type="text" value="{{(!is_null(old("address"))?old("address"):$user->address)}}" name="address"/>
+            </div>
+            @if ($errors->has('address'))
+                <span class="help-block">
             <strong>{{ $errors->first('address') }}</strong>
         </span>
+            @endif
+        </div>
+    @else
+        <p ><i class="fa fa-map-marker font-yellow-gold" aria-hidden="true"></i>
+            <strong  class="font-yellow-gold">آدرس محل سکونت: </strong><span class="bold"> {{$user->address}}</span>
+        </p>
     @endif
-</div>
-<div class="form-group {{ $errors->has('postalCode') ? ' has-error' : '' }}">
-    <label for="postalCode" class="control-label">کد پستی</label>
-    @if(isset($requiredFields) && in_array("postalCode" , $requiredFields))
-        <span class="required" aria-required="true"> * </span>
-    @endif
-    <div class="input-icon"><i class="fa fa-envelope-open" aria-hidden="true"></i>
-        <input id="postalCode" class="form-control placeholder-no-fix" type="text" value="{{(!is_null(old("postalCode"))?old("postalCode"):$user->postalCode)}}"
-               name="postalCode"/>
+@else
+    <div class="form-group {{ $errors->has('address') ? ' has-error' : '' }}">
+        <label for="address" class="control-label">آدرس محل سکونت</label>
+        @if(isset($requiredFields) && in_array("address" , $requiredFields))
+            <span class="required" aria-required="true"> * </span>
+        @endif
+        <div class="input-icon"><i class="fa fa-map-marker" aria-hidden="true"></i>
+            <input id="address" class="form-control placeholder-no-fix" type="text" value="{{(!is_null(old("address"))?old("address"):$user->address)}}" name="address"/>
+        </div>
+        @if ($errors->has('address'))
+            <span class="help-block">
+            <strong>{{ $errors->first('address') }}</strong>
+        </span>
+        @endif
     </div>
-    @if ($errors->has('postalCode'))
-        <span class="help-block">
+@endif
+@if(isset($lockProfile) && $lockProfile )
+        @if(strlen(preg_replace('/\s+/', '', $user->postalCode )) == 0)
+        <div class="form-group {{ $errors->has('postalCode') ? ' has-error' : '' }}">
+            <label for="postalCode" class="control-label">کد پستی</label>
+            @if(isset($requiredFields) && in_array("postalCode" , $requiredFields))
+                <span class="required" aria-required="true"> * </span>
+            @endif
+            <div class="input-icon"><i class="fa fa-envelope-open" aria-hidden="true"></i>
+                <input id="postalCode" class="form-control placeholder-no-fix" type="text" value="{{(!is_null(old("postalCode"))?old("postalCode"):$user->postalCode)}}"
+                       name="postalCode"/>
+            </div>
+            @if ($errors->has('postalCode'))
+                <span class="help-block">
             <strong>{{ $errors->first('postalCode') }}</strong>
         </span>
+            @endif
+        </div>
+    @else
+        <p ><i class="fa fa-envelope-open font-yellow-gold" aria-hidden="true"></i>
+            <strong  class="font-yellow-gold">کد پستی: </strong><span class="bold"> {{$user->postalCode}}</span>
+        </p>
     @endif
-</div>
-<div class="form-group {{ $errors->has('gender_id') ? ' has-error' : '' }}">
-    <label for="gender" class="control-label">جنیست</label>
-    @if(isset($requiredFields) && in_array("gender" , $requiredFields))
-        <span class="required" aria-required="true"> * </span>
-    @endif
-    <div class="input-icon"><i class="fa fa-user" aria-hidden="true"></i>
-        {!! Form::select('gender_id',$genders,null,['class' => 'form-control', 'id' => 'gender_id']) !!}
+@else
+    <div class="form-group {{ $errors->has('postalCode') ? ' has-error' : '' }}">
+        <label for="postalCode" class="control-label">کد پستی</label>
+        @if(isset($requiredFields) && in_array("postalCode" , $requiredFields))
+            <span class="required" aria-required="true"> * </span>
+        @endif
+        <div class="input-icon"><i class="fa fa-envelope-open" aria-hidden="true"></i>
+            <input id="postalCode" class="form-control placeholder-no-fix" type="text" value="{{(!is_null(old("postalCode"))?old("postalCode"):$user->postalCode)}}"
+                   name="postalCode"/>
+        </div>
+        @if ($errors->has('postalCode'))
+            <span class="help-block">
+            <strong>{{ $errors->first('postalCode') }}</strong>
+        </span>
+        @endif
     </div>
-    @if ($errors->has('gender_id'))
-        <span class="help-block">
+@endif
+@if(isset($lockProfile) && $lockProfile )
+    @if(!isset($user->gender_id))
+        <div class="form-group {{ $errors->has('gender_id') ? ' has-error' : '' }}">
+            <label for="gender" class="control-label">جنیست</label>
+            @if(isset($requiredFields) && in_array("gender" , $requiredFields))
+                <span class="required" aria-required="true"> * </span>
+            @endif
+            <div class="input-icon"><i class="fa fa-user" aria-hidden="true"></i>
+                {!! Form::select('gender_id',$genders,null,['class' => 'form-control', 'id' => 'gender_id']) !!}
+            </div>
+            @if ($errors->has('gender_id'))
+                <span class="help-block">
             <strong>{{ $errors->first('gender_id') }}</strong>
         </span>
+            @endif
+        </div>
+    @else
+        <p ><i class="fa fa-user font-yellow-gold" aria-hidden="true"></i>
+            <strong  class="font-yellow-gold">جنیست: </strong><span class="bold">@if(isset($user->gender)) {{$user->gender->name}} @else <span class="label label-danger">درج نشده</span>  @endif</span>
+        </p>
     @endif
-</div>
-@if(isset($withBirthdate) && $withBirthdate)
-<div class="form-group {{ $errors->has('birthdate') ? ' has-error' : '' }}">
-    <label for="birthdate" class="control-label">تاریخ تولد</label>
-    @if(isset($requiredFields) && in_array("birthdate" , $requiredFields))
-        <span class="required" aria-required="true"> * </span>
-    @endif
-    <div class="input-icon"><i class="fa fa-calendar-times-o" aria-hidden="true"></i>
-        <input id="birthdate" type="text" class="form-control placeholder-no-fix" value="{{(!is_null(old("birthdate"))?old("birthdate"):$user->birthdate)}}">
-        <input name="birthdate" id="birthdateAlt" type="text" class="form-control hidden" >
+@else
+    <div class="form-group {{ $errors->has('gender_id') ? ' has-error' : '' }}">
+        <label for="gender" class="control-label">جنیست</label>
+        @if(isset($requiredFields) && in_array("gender" , $requiredFields))
+            <span class="required" aria-required="true"> * </span>
+        @endif
+        <div class="input-icon"><i class="fa fa-user" aria-hidden="true"></i>
+            {!! Form::select('gender_id',$genders,null,['class' => 'form-control', 'id' => 'gender_id']) !!}
+        </div>
+        @if ($errors->has('gender_id'))
+            <span class="help-block">
+            <strong>{{ $errors->first('gender_id') }}</strong>
+        </span>
+        @endif
     </div>
-    @if ($errors->has('birthdate'))
-        <span class="help-block">
+@endif
+@if(isset($withBirthdate) && $withBirthdate)
+    @if(isset($lockProfile) && $lockProfile )
+        @if(!isset($user->birthdate))
+            <div class="form-group {{ $errors->has('birthdate') ? ' has-error' : '' }}">
+                <label for="birthdate" class="control-label">تاریخ تولد</label>
+                @if(isset($requiredFields) && in_array("birthdate" , $requiredFields))
+                    <span class="required" aria-required="true"> * </span>
+                @endif
+                <div class="input-icon"><i class="fa fa-calendar-times-o" aria-hidden="true"></i>
+                    <input id="birthdate" type="text" class="form-control placeholder-no-fix" value="{{(!is_null(old("birthdate"))?old("birthdate"):$user->birthdate)}}">
+                    <input name="birthdate" id="birthdateAlt" type="text" class="form-control hidden" >
+                </div>
+                @if ($errors->has('birthdate'))
+                    <span class="help-block">
             <strong>{{ $errors->first('birthdate') }}</strong>
         </span>
+                @endif
+            </div>
+        @else
+            <p ><i class="fa fa-calendar-times-o font-yellow-gold" aria-hidden="true"></i>
+                <strong  class="font-yellow-gold">تاریخ تولد: </strong><span class="bold">@if(isset($user->birthdate)) {{$user->Birthdate_Jalali()}} @else <span class="label label-danger">درج نشده</span>  @endif</span>
+            </p>
+        @endif
+    @else
+        <div class="form-group {{ $errors->has('birthdate') ? ' has-error' : '' }}">
+            <label for="birthdate" class="control-label">تاریخ تولد</label>
+            @if(isset($requiredFields) && in_array("birthdate" , $requiredFields))
+                <span class="required" aria-required="true"> * </span>
+            @endif
+            <div class="input-icon"><i class="fa fa-calendar-times-o" aria-hidden="true"></i>
+                <input id="birthdate" type="text" class="form-control placeholder-no-fix" value="{{(!is_null(old("birthdate"))?old("birthdate"):$user->birthdate)}}">
+                <input name="birthdate" id="birthdateAlt" type="text" class="form-control hidden" >
+            </div>
+            @if ($errors->has('birthdate'))
+                <span class="help-block">
+            <strong>{{ $errors->first('birthdate') }}</strong>
+        </span>
+            @endif
+        </div>
     @endif
-</div>
 @endif
-<div class="form-group {{ $errors->has('school') ? ' has-error' : '' }}">
-<label for="school" class="control-label">مدرسه</label>
+@if(isset($lockProfile) && $lockProfile )
     @if(isset($requiredFields) && in_array("school" , $requiredFields))
-        <span class="required" aria-required="true"> * </span>
-    @endif
-    <div class="input-icon"><i class="fa fa-graduation-cap" aria-hidden="true"></i>
-    <input id="school" class="form-control placeholder-no-fix" type="text" value="{{(!is_null(old("school"))?old("school"):$user->school)}}"  name="school" /> </div>
-    @if ($errors->has('school'))
-        <span class="help-block">
+        <div class="form-group {{ $errors->has('school') ? ' has-error' : '' }}">
+            <label for="school" class="control-label">مدرسه</label>
+            @if(isset($requiredFields) && in_array("school" , $requiredFields))
+                <span class="required" aria-required="true"> * </span>
+            @endif
+            <div class="input-icon"><i class="fa fa-graduation-cap" aria-hidden="true"></i>
+                <input id="school" class="form-control placeholder-no-fix" type="text" value="{{(!is_null(old("school"))?old("school"):$user->school)}}"  name="school" /> </div>
+            @if ($errors->has('school'))
+                <span class="help-block">
             <strong>{{ $errors->first('school') }}</strong>
         </span>
+            @endif
+        </div>
+    @else
+        <p ><i class="fa fa-graduation-cap font-yellow-gold" aria-hidden="true"></i>
+            <strong  class="font-yellow-gold">مدرسه: </strong><span class="bold">@if(isset($user->school)) {{$user->school}} @else <span class="label label-danger">درج نشده</span>  @endif</span>
+        </p>
     @endif
-</div>
-<div class="form-group {{ $errors->has('major_id') ? ' has-error' : '' }}">
-<label for="major" class="control-label">رشته</label>
-    @if(isset($requiredFields) && in_array("major" , $requiredFields))
-        <span class="required" aria-required="true"> * </span>
-    @endif
-    <div class="input-icon"><i class="fa fa-graduation-cap" aria-hidden="true"></i>
-    {!! Form::select('major_id',$majors,null,['class' => 'form-control', 'id' => 'major_id']) !!}
+@else
+    <div class="form-group {{ $errors->has('school') ? ' has-error' : '' }}">
+        <label for="school" class="control-label">مدرسه</label>
+        @if(isset($requiredFields) && in_array("school" , $requiredFields))
+            <span class="required" aria-required="true"> * </span>
+        @endif
+        <div class="input-icon"><i class="fa fa-graduation-cap" aria-hidden="true"></i>
+            <input id="school" class="form-control placeholder-no-fix" type="text" value="{{(!is_null(old("school"))?old("school"):$user->school)}}"  name="school" /> </div>
+        @if ($errors->has('school'))
+            <span class="help-block">
+            <strong>{{ $errors->first('school') }}</strong>
+        </span>
+        @endif
     </div>
-    @if ($errors->has('major_id'))
-        <span class="help-block">
+@endif
+@if(isset($lockProfile) && $lockProfile )
+    @if(isset($requiredFields) && in_array("major_id" , $requiredFields))
+        <div class="form-group {{ $errors->has('major_id') ? ' has-error' : '' }}">
+            <label for="major" class="control-label">رشته</label>
+            @if(isset($requiredFields) && in_array("major" , $requiredFields))
+                <span class="required" aria-required="true"> * </span>
+            @endif
+            <div class="input-icon"><i class="fa fa-graduation-cap" aria-hidden="true"></i>
+                {!! Form::select('major_id',$majors,null,['class' => 'form-control', 'id' => 'major_id']) !!}
+            </div>
+            @if ($errors->has('major_id'))
+                <span class="help-block">
             <strong>{{ $errors->first('major_id') }}</strong>
         </span>
+            @endif
+        </div>
+    @else
+        <p ><i class="fa fa-graduation-cap font-yellow-gold" aria-hidden="true"></i>
+            <strong  class="font-yellow-gold">رشته: </strong><span class="bold">@if(isset($user->major)) {{$user->major->name}} @else <span class="label label-danger">درج نشده</span>  @endif</span>
+        </p>
     @endif
-</div>
+@else
+    <div class="form-group {{ $errors->has('major_id') ? ' has-error' : '' }}">
+        <label for="major" class="control-label">رشته</label>
+        @if(isset($requiredFields) && in_array("major" , $requiredFields))
+            <span class="required" aria-required="true"> * </span>
+        @endif
+        <div class="input-icon"><i class="fa fa-graduation-cap" aria-hidden="true"></i>
+            {!! Form::select('major_id',$majors,null,['class' => 'form-control', 'id' => 'major_id']) !!}
+        </div>
+        @if ($errors->has('major_id'))
+            <span class="help-block">
+            <strong>{{ $errors->first('major_id') }}</strong>
+        </span>
+        @endif
+    </div>
+@endif
 @if(isset($withIntroducer) && $withIntroducer)
 <div class="form-group {{ $errors->has('introducedBy') ? ' has-error' : '' }}">
     <label for="introducedBy" class="control-label">چگونه با آلاء آشنا شدید؟</label>

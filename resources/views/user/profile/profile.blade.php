@@ -181,13 +181,13 @@
                                 <div class="tab-content">
                                     <!-- PERSONAL INFO TAB -->
                                     <div class="tab-pane @if(Empty(session('tabPane')) || strcmp(session('tabPane') , "tab_1_1") == 0) active @endif" id="tab_1_1">
-                                        @if(
-                                             (!$user->lockProfile and $user->id == Auth::id()))
-
-                                            @include('user.profile.profileEditView' , ["withBio"=>true , "withBirthdate"=>false , "withIntroducer"=>false , "text2"=>"کاربر گرامی ، پس از تکمیل اطلاعات شخصی(فیلد های پایین) امکان اصلاح اطلاعات ثبت شده وجود نخواهد داشت. لذا خواهشمند هستیم این اطلاعات را در صحت و دقت کامل تکمیل نمایید . باتشکر"])
-                                        @else
-                                            @include('user.profile.profileView')
-                                        @endif
+                                            @include('user.profile.profileEditView' , [
+                                                                                        "withBio"=>true ,
+                                                                                        "withBirthdate"=>false ,
+                                                                                        "withIntroducer"=>false ,
+                                                                                        "text2"=>"کاربر گرامی ، پس از تکمیل اطلاعات شخصی(فیلد های پایین) امکان اصلاح اطلاعات ثبت شده وجود نخواهد داشت. لذا خواهشمند هستیم این اطلاعات را در صحت و دقت کامل تکمیل نمایید . باتشکر" ,
+                                                                                        "lockProfile" => $user->lockProfile
+                                                                                      ])
                                         @if(Session::has('belongsTo') && strcmp(Session::get('belongsTo'),"moreInfo")==0)
                                             @include("systemMessage.flash")
                                         @endif
