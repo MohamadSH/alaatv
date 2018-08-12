@@ -429,7 +429,7 @@ class AppServiceProvider extends ServiceProvider
                             $sections->push(
                                 [
                                     "name"=>$section,
-                                    "displayName" => "کلاس های کنکور آلاء",
+                                    "displayName" => "کلاس های کنکور نظام قدیم آلاء",
                                     "lessons" => $lessons ,
                                     "tags" => [
                                         "کنکور"
