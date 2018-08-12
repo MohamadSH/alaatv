@@ -93,7 +93,7 @@
                                         height='360px'
                                         width="640px"
                                         poster='@if(isset($files["thumbnail"])){{$files["thumbnail"]}}@endif'
-                                        data-setup='{ "fluid" : true ,"loop": "true", "playbackRates" : [1, 1.5, 2] }'
+                                        data-setup='{ "fluid" : true ,"loop": "true", "playbackRates" : [0.5, 1, 1.5, 2] }'
                                         controls >
 
                                 @foreach($files["videoSource"] as $source)

@@ -9,13 +9,7 @@
     {{$text1p2}}
 </p>
 @endif
-@if(isset($text2))
-    <div class="alert alert-warning alert-dismissable" style="text-align: justify">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
-        <strong>توجه!</strong>
-        {!!  $text2 !!}
-    </div>
-@endif
+
 {!! Form::model($user,['method' => 'PUT','action' => [(isset($formAction))?$formAction:'UserController@updateProfile'] , 'role'=>'form' ]) !!}
 
 @if(isset($lockProfile) && $lockProfile )
@@ -354,9 +348,8 @@
     </div>
 </div>
 @endif
-<div class="margiv-top-10 ">
-    <button type="submit" class="btn green" id="updateProfileInfoFormButton" {{(isset($disableSubmit) && $disableSubmit)?"disabled":""}}> @if(isset($submitCaption)){{$submitCaption}} @else ثبت درخواست @endif</button>
-</div>
+
+
 @if(isset($text3))
 @if(!$user->mobileNumberVerification || !isset($user->photo) || strcmp($user->photo, config('constants.PROFILE_DEFAULT_IMAGE')) == 0)
     <div class="alert alert-danger alert-dismissable margin-top-10" id="profileEditViewText3" style="text-align: justify">
@@ -366,4 +359,14 @@
     </div>
 @endif
 @endif
+@if(isset($text2))
+    <div class="alert alert-warning alert-dismissable" style="text-align: justify">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        <strong>توجه!</strong>
+        {!!  $text2 !!}
+    </div>
+@endif
+<div class="margiv-top-10 ">
+    <button type="submit" class="btn green" id="updateProfileInfoFormButton" {{(isset($disableSubmit) && $disableSubmit)?"disabled":""}}> @if(isset($submitCaption)){{$submitCaption}} @else ثبت درخواست @endif</button>
+</div>
 {!! Form::close() !!}
