@@ -45,7 +45,7 @@
 
 
     <div class="portfolio-content portfolio-1">
-        <div id="js-grid-juicy-projects" class="cbp">
+        <div id="js-grid-juicy-contentset" class="cbp">
             @foreach($items as $contentset)
                 <div class="cbp-item">
                     <div class="cbp-caption">
