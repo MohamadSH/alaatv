@@ -307,8 +307,7 @@ class AppServiceProvider extends ServiceProvider
                 $sectionArray = [
                     "konkoor" ,
                     "dahom" ,
-                    "yazdahom",
-                    "hamayesh"
+                    "yazdahom"
                 ];
                 $sections = collect();
                 foreach ($sectionArray as $section)

@@ -256,7 +256,7 @@
                                         <a href="{{(isset($lesson["content_id"]) && $lesson["content_id"]>0)?action("EducationalContentController@show", $lesson["content_id"]):""}}">
                                             <img src="
                                             @if(isset($lesson["pic"]) && strlen($lesson["pic"])>0)
-                                                    {{$lesson["pic"]}}
+                                                    {{$lesson["pic"]."?w=253&h=142"}}
                                             @else
                                                     http://via.placeholder.com/195x195
                                             @endif " />
