@@ -84,76 +84,76 @@
             text-decoration: none;
         }
     </style>
-    <div class="row">
-        <div class="col-lg-12 col-md-12 col-xs-12">
-            <div class="portlet light portlet-fit ">
-                <div class="portlet-body "  >
-                    <div class="row">
-                        <div class="col-md-3">
-                            <a  href="/landing/4">
-                                <div class="mt-element-ribbon  bg-red-flamingo">
-                                    <div class="ribbon ribbon-left ribbon-vertical-left ribbon-shadow ribbon-border-dash-vert ribbon-color-primary uppercase">
-                                        <div class="ribbon-sub ribbon-bookmark"></div>
-                                        <i class="fa fa-star"></i>
-                                    </div>
-                                    <p class="ribbon-content font-white">
-                                         آلاء - همایش طلایی کنکور(80%)
-                                    </p>
-                                </div>
-                            </a>
+    {{--<div class="row">--}}
+        {{--<div class="col-lg-12 col-md-12 col-xs-12">--}}
+            {{--<div class="portlet light portlet-fit ">--}}
+                {{--<div class="portlet-body "  >--}}
+                    {{--<div class="row">--}}
+                        {{--<div class="col-md-3">--}}
+                            {{--<a  href="/landing/4">--}}
+                                {{--<div class="mt-element-ribbon  bg-red-flamingo">--}}
+                                    {{--<div class="ribbon ribbon-left ribbon-vertical-left ribbon-shadow ribbon-border-dash-vert ribbon-color-primary uppercase">--}}
+                                        {{--<div class="ribbon-sub ribbon-bookmark"></div>--}}
+                                        {{--<i class="fa fa-star"></i>--}}
+                                    {{--</div>--}}
+                                    {{--<p class="ribbon-content font-white">--}}
+                                         {{--آلاء - همایش طلایی کنکور(80%)--}}
+                                    {{--</p>--}}
+                                {{--</div>--}}
+                            {{--</a>--}}
 
-                        </div>
-                        <div class="col-md-3">
-                            <div class="mt-element-ribbon bg-blue" >
-                                <a  href="javascript:void(0)"
-                                    onclick="$('html, body').animate({scrollTop: $('.konkoor').offset().top - 80}, 2000);">
-                                    <div class="ribbon ribbon-left ribbon-vertical-left ribbon-shadow ribbon-border-dash-vert ribbon-color-primary uppercase">
-                                        <div class="ribbon-sub ribbon-bookmark"></div>
-                                        <i class="fa fa-star"></i>
-                                    </div>
-                                    <p class="ribbon-content font-white">
-                                        آلاء - تدریس کنکور، رایگان و کامل
-                                    </p>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="mt-element-ribbon bg-green-jungle" >
-                                <a  href="javascript:void(0)"
-                                    onclick="$('html, body').animate({scrollTop: $('.dahom').offset().top  - 80}, 2000);">
-                                    <div class="ribbon ribbon-left ribbon-vertical-left ribbon-shadow ribbon-border-dash-vert ribbon-color-primary uppercase">
-                                        <div class="ribbon-sub ribbon-bookmark"></div>
-                                        <i class="fa fa-star"></i>
-                                    </div>
-                                    <p class="ribbon-content font-white">
-                                        آلاء - تدریس دهم، رایگان
-                                    </p>
-                                </a>
-                            </div>
-                        </div>
+                        {{--</div>--}}
+                        {{--<div class="col-md-3">--}}
+                            {{--<div class="mt-element-ribbon bg-blue" >--}}
+                                {{--<a  href="javascript:void(0)"--}}
+                                    {{--onclick="$('html, body').animate({scrollTop: $('.konkoor').offset().top - 80}, 2000);">--}}
+                                    {{--<div class="ribbon ribbon-left ribbon-vertical-left ribbon-shadow ribbon-border-dash-vert ribbon-color-primary uppercase">--}}
+                                        {{--<div class="ribbon-sub ribbon-bookmark"></div>--}}
+                                        {{--<i class="fa fa-star"></i>--}}
+                                    {{--</div>--}}
+                                    {{--<p class="ribbon-content font-white">--}}
+                                        {{--آلاء - تدریس کنکور، رایگان و کامل--}}
+                                    {{--</p>--}}
+                                {{--</a>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                        {{--<div class="col-md-3">--}}
+                            {{--<div class="mt-element-ribbon bg-green-jungle" >--}}
+                                {{--<a  href="javascript:void(0)"--}}
+                                    {{--onclick="$('html, body').animate({scrollTop: $('.dahom').offset().top  - 80}, 2000);">--}}
+                                    {{--<div class="ribbon ribbon-left ribbon-vertical-left ribbon-shadow ribbon-border-dash-vert ribbon-color-primary uppercase">--}}
+                                        {{--<div class="ribbon-sub ribbon-bookmark"></div>--}}
+                                        {{--<i class="fa fa-star"></i>--}}
+                                    {{--</div>--}}
+                                    {{--<p class="ribbon-content font-white">--}}
+                                        {{--آلاء - تدریس دهم، رایگان--}}
+                                    {{--</p>--}}
+                                {{--</a>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
 
-                        <div class="col-md-3">
+                        {{--<div class="col-md-3">--}}
 
-                            <div class="mt-element-ribbon bg-yellow-lemon" >
-                                <a  href="javascript:void(0)"
-                                    onclick="$('html, body').animate({scrollTop: $('.yazdahom').offset().top  - 80}, 2000);">
-                                    <div class="ribbon ribbon-left ribbon-vertical-left ribbon-shadow ribbon-border-dash-vert ribbon-color-primary uppercase">
-                                        <div class="ribbon-sub ribbon-bookmark"></div>
-                                        <i class="fa fa-star"></i>
-                                    </div>
-                                    <p class="ribbon-content font-white">
-                                        آلاء - تدریس یازدهم، رایگان
-                                    </p>
-                                </a>
-                            </div>
+                            {{--<div class="mt-element-ribbon bg-yellow-lemon" >--}}
+                                {{--<a  href="javascript:void(0)"--}}
+                                    {{--onclick="$('html, body').animate({scrollTop: $('.yazdahom').offset().top  - 80}, 2000);">--}}
+                                    {{--<div class="ribbon ribbon-left ribbon-vertical-left ribbon-shadow ribbon-border-dash-vert ribbon-color-primary uppercase">--}}
+                                        {{--<div class="ribbon-sub ribbon-bookmark"></div>--}}
+                                        {{--<i class="fa fa-star"></i>--}}
+                                    {{--</div>--}}
+                                    {{--<p class="ribbon-content font-white">--}}
+                                        {{--آلاء - تدریس یازدهم، رایگان--}}
+                                    {{--</p>--}}
+                                {{--</a>--}}
+                            {{--</div>--}}
 
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="clearfix"></div>
+                        {{--</div>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+            {{--</div>--}}
+        {{--</div>--}}
+    {{--</div>--}}
+    {{--<div class="clearfix"></div>--}}
     @include("partials.slideShow1" ,["marginBottom"=>"25"])
     <div class="clearfix"></div>
     {{--<div class="row">--}}
@@ -224,32 +224,7 @@
     <!-- END DASHBOARD STATS 1-->
 
     {{--Product Portfolio--}}
-    <div class="row">
-        <div class="col-md-12">
-            <!-- BEGIN Portlet PORTLET-->
-            <div class="portlet light">
-                <div class="portlet-body">
-                    <div class="row">
-                        <div class="col-lg-3 col-md-2 col-sd-2 col-xs-12 text-center">
-                            <img src="/assets/extra/Alaa-logo.gif" style="width: 50%;">
-                        </div>
-                        <div class="col-lg-9 col-md-10 col-sd-10 col-xs-12">
-                            <h4></h4>
-                            <p class="text-justify" style="line-height:normal">
-                                آلاء پنجره ای است رو به دور نمای آموزش کشور که می کوشد با اساتید کار بلد و مخاطبان پر تعداد و متعهد خود آموزش همگانی را
-                                در چهار گوشه ی این سرزمین در دسترس فرزندان ایران قرار دهد.
-                            </p>
-                            <p class="text-justify" style="line-height:normal">
-                                خدمات اصلی آموزش در آلاء کاملا رایگان بوده و درآمد خدمات جانبی آن صرف برپا نگه داشتن و دوام این مجموعه عام المنفعه می شود. محصولات ما پیش تر با نام های آلاء و تخته خاک در اختیار مخاطبان قرار می گرفت که
-                                برای سهولت در مدیریت و دسترسی کاربران اکنون انحصارا با نام آلاء منتشر می شود.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- END Portlet PORTLET-->
-        </div>
-    </div>
+
     {{--<div class="row">--}}
         {{--<div class="col-md-12">--}}
             {{--<div class="portfolio-content portfolio-1" >--}}
@@ -315,6 +290,33 @@
             @include('partials.bannerAds', ['img'=>$image , 'link'=>$link])
         @endforeach
     @endforeach
+
+    <div class="row margin-top-10">
+        <div class="col-md-12">
+            <!-- BEGIN Portlet PORTLET-->
+            <div class="portlet light">
+                <div class="portlet-body">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-2 col-sd-2 col-xs-12 text-center">
+                            <img src="/assets/extra/Alaa-logo.gif" style="width: 50%;">
+                        </div>
+                        <div class="col-lg-9 col-md-10 col-sd-10 col-xs-12">
+                            <h4></h4>
+                            <p class="text-justify" style="line-height:normal">
+                                آلاء پنجره ای است رو به دور نمای آموزش کشور که می کوشد با اساتید کار بلد و مخاطبان پر تعداد و متعهد خود آموزش همگانی را
+                                در چهار گوشه ی این سرزمین در دسترس فرزندان ایران قرار دهد.
+                            </p>
+                            <p class="text-justify" style="line-height:normal">
+                                خدمات اصلی آموزش در آلاء کاملا رایگان بوده و درآمد خدمات جانبی آن صرف برپا نگه داشتن و دوام این مجموعه عام المنفعه می شود. محصولات ما پیش تر با نام های آلاء و تخته خاک در اختیار مخاطبان قرار می گرفت که
+                                برای سهولت در مدیریت و دسترسی کاربران اکنون انحصارا با نام آلاء منتشر می شود.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END Portlet PORTLET-->
+        </div>
+    </div>
     {{--<div class="row">--}}
     {{--<div class="col-md-6" id="consultationColumn" >--}}
     {{--<div class="portlet light portlet-fit">--}}

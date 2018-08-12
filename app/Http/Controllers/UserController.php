@@ -1230,7 +1230,7 @@ class UserController extends Controller
                 $verificationMessageController = new VerificationmessageController();
                 if($verificationMessageController->store($request))
                 {
-                    session()->put("getVerificationCodeSuccess" , "کد احراز هویت شما با موفقیت به شماره تلفن همراهتان پیامک شد. شما ۳۰ دقیقه فرصت دارید کد دریافتی را در اینجا وارد نموده و بدین وسیله حساب کاربری خود را تایید نمایید. در صورت عدم دریافت پیامک می توانید پس از گذشت ۵ دقیقه دوباره درخواست کد نمایید.");
+                    session()->put("getVerificationCodeSuccess" , "کد تایید شماره موبایل ارسال شد. در صورت عدم دریافت پیامک، 5 دقیقه دیگر مجدد درخواست ارسال کد بدهید.");
                     return redirect()->back() ;
                 }else{
                     session()->put("verificationCodeError" , "خطای پایگاه داده در ارسال کد . لطفا چند لحظه دیگر اقدام نمایید.اگر در این فاصله پیامکی دریافت کردید لطفا آن را در نظر نگیرید");
@@ -1388,7 +1388,7 @@ class UserController extends Controller
                     $verificationMessage->verificationmessagestatus_id = $verificationMessageStatusSuccess;
                     $verificationMessage->expired_at = $now;
                     if ($verificationMessage->update()) {
-                        session()->put("verificationSuccess" , "حساب کاربری شما با موفقیت تایید شد! با تشکر.");
+                        session()->put("verificationSuccess" , "شماره موبایل شما با موفقیت تایید شد! با تشکر.");
                         return redirect()->back() ;
                     } else {
                         session()->put("verificationCodeError" , "خطای پایگاه داده در تایید حساب کاربری . لطفا کد احراز هویت را مجددا وارد نمایید");

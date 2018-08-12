@@ -426,7 +426,9 @@ class HomeController extends Controller
                 case "article":
                     $query = Educationalcontent::whereIn("id",$arrayOfId)
                         ->where('enable',1)
+                        ->valid()
                         ->orderBy("created_at" , "desc")
+
                         ->get();
                     break;
                 case "contentset":
@@ -883,15 +885,17 @@ class HomeController extends Controller
         {
 
             $sideBarMode = "closed";
-            $ads1 = [
-                //DINI SEBTI
-                'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-1.jpg' => 'https://sanatisharif.ir/landing/4',
-            ];
-            $ads2 = [
-                //DINI SEBTI
-                'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-2.jpg' => 'https://sanatisharif.ir/landing/4',
-                'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-3.jpg' => 'https://sanatisharif.ir/landing/4',
-            ];
+//            $ads1 = [
+//                //DINI SEBTI
+//                'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-1.jpg' => 'https://sanatisharif.ir/landing/4',
+//            ];
+//            $ads2 = [
+//                //DINI SEBTI
+//                'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-2.jpg' => 'https://sanatisharif.ir/landing/4',
+//                'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-3.jpg' => 'https://sanatisharif.ir/landing/4',
+//            ];
+            $ads1 = [];
+            $ads2 = [];
             return view("pages.search" , compact("items" ,"itemTypes" ,"tagArray" , "extraTagArray",
                 "majors" , "grades"  , "defaultLesson" , "sideBarMode" , "majorLesson" , "lessonTeacher" , "defaultTeacher"
                 , "ads1" , "ads2" , 'tagInput' ,'defaultGrade' , 'defaultMajor' ));

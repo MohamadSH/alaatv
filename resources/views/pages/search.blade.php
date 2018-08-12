@@ -252,7 +252,8 @@
         $(document).ready(function()
         {
             initialSlick($(".productSlider"));
-            initialVideoPortfolio();
+            initialPortfolio("#js-grid-juicy-contentset");
+            initialPortfolio("#js-grid-juicy-projects");
             $("#gradeSelect").val("{{$defaultGrade}}");
             $("#majorSelect").val("{{$defaultMajor}}");
             makeLessonSelect( $("#majorSelect").val());
@@ -381,72 +382,74 @@
             });
         }
 
-        function initialVideoPortfolio() {
-            (function($, window, document, undefined) {
-                'use strict';
+        function initialPortfolio(className) {
+            (
+                function ($, window, document, className , undefined) {
+                    'use strict';
 
-                // init cubeportfolio
-                $('#js-grid-juicy-projects').cubeportfolio({
-                    // filters: '#js-filters-juicy-projects',
-                    // loadMore: '#js-loadMore-juicy-projects',
-                    // loadMoreAction: 'click',
-                    layoutMode: 'grid',
-                    defaultFilter: '*',
-                    animationType: 'quicksand',
-                    gapHorizontal: 35,
-                    gapVertical: 30,
-                    gridAdjustment: 'responsive',
-                    mediaQueries: [{
-                        width: 1500,
-                        cols: 4
-                    }, {
-                        width: 1100,
-                        cols: 4
-                    }, {
-                        width: 800,
-                        cols: 3
-                    }, {
-                        width: 480,
-                        cols: 3
-                    }, {
-                        width: 320,
-                        cols: 1
-                    }],
-                    caption: 'overlayBottomReveal',
-                    displayType: 'sequentially',
-                    displayTypeSpeed: 80,
+                    // init cubeportfolio
+                    $(className).cubeportfolio({
+                        // filters: '#js-filters-juicy-projects',
+                        // loadMore: '#js-loadMore-juicy-projects',
+                        // loadMoreAction: 'click',
+                        layoutMode: 'grid',
+                        defaultFilter: '*',
+                        animationType: 'quicksand',
+                        gapHorizontal: 35,
+                        gapVertical: 30,
+                        gridAdjustment: 'responsive',
+                        mediaQueries: [{
+                            width: 1500,
+                            cols: 4
+                        }, {
+                            width: 1100,
+                            cols: 4
+                        }, {
+                            width: 800,
+                            cols: 3
+                        }, {
+                            width: 480,
+                            cols: 3
+                        }, {
+                            width: 320,
+                            cols: 1
+                        }],
+                        caption: 'overlayBottomReveal',
+                        displayType: 'sequentially',
+                        displayTypeSpeed: 80,
 
-                    // lightbox
-                    lightboxDelegate: '.cbp-lightbox',
-                    lightboxGallery: true,
-                    lightboxTitleSrc: 'data-title',
-                    lightboxCounter: '<div class="cbp-popup-lightbox-counter"> of </div>',
+                        // lightbox
+                        lightboxDelegate: '.cbp-lightbox',
+                        lightboxGallery: true,
+                        lightboxTitleSrc: 'data-title',
+                        lightboxCounter: '<div class="cbp-popup-lightbox-counter"> of </div>',
 
-                    // singlePage popup
-                    singlePageDelegate: '.cbp-singlePage',
-                    singlePageDeeplinking: true,
-                    singlePageStickyNavigation: true,
-                    singlePageCounter: '<div class="cbp-popup-singlePage-counter"> of </div>',
-                    singlePageCallback: function(url, element) {
-                        // to update singlePage content use the following method: this.updateSinglePage(yourContent)
-                        var t = this;
+                        // singlePage popup
+                        singlePageDelegate: '.cbp-singlePage',
+                        singlePageDeeplinking: true,
+                        singlePageStickyNavigation: true,
+                        singlePageCounter: '<div class="cbp-popup-singlePage-counter"> of </div>',
+                        singlePageCallback: function (url, element) {
+                            // to update singlePage content use the following method: this.updateSinglePage(yourContent)
+                            var t = this;
 
-                        $.ajax({
-                            url: url,
-                            type: 'GET',
-                            dataType: 'html',
-                            timeout: 10000
-                        })
-                            .done(function(result) {
-                                t.updateSinglePage(result);
+                            $.ajax({
+                                url: url,
+                                type: 'GET',
+                                dataType: 'html',
+                                timeout: 10000
                             })
-                            .fail(function() {
-                                t.updateSinglePage('AJAX Error! Please refresh the page!');
-                            });
-                    },
-                });
+                                .done(function (result) {
+                                    t.updateSinglePage(result);
+                                })
+                                .fail(function () {
+                                    t.updateSinglePage('AJAX Error! Please refresh the page!');
+                                });
+                        },
+                    });
 
-            })(jQuery, window, document);
+                }
+            )(jQuery, window, document,className);
         }
 
         function contentLoadAjaxRequest(url , formData) {
@@ -470,12 +473,15 @@
                                 var totalItems = item.totalitems;
                                 switch(item.type) {
                                     case "contentset":
+                                        // $("#tab_contentset").html(item.view);
+                                        $("#js-grid-juicy-contentset").cubeportfolio('destroy');
                                         $("#tab_contentset").html(item.view);
+                                        initialPortfolio("#js-grid-juicy-contentset");
                                         break;
                                     case "video":
                                         $("#js-grid-juicy-projects").cubeportfolio('destroy');
                                         $("#tab_content_video").html(item.view);
-                                        initialVideoPortfolio();
+                                        initialPortfolio("#js-grid-juicy-projects");
                                         break;
                                     case "pamphlet":
                                         $("#tab_content_pamphlet").html(item.view);
