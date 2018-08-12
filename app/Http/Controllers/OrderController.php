@@ -15,6 +15,7 @@ use App\Notifications\InvoicePaid;
 use App\Ordermanagercomment;
 use App\Orderpostinginfo;
 use App\Paymentmethod;
+use App\Productvoucher;
 use App\Traits\APIRequestCommon;
 use App\Traits\Helper;
 use App\Traits\ProductCommon;
@@ -813,9 +814,9 @@ class OrderController extends Controller
                         $smsRequest["users"] = $order->user_id;
                         $response = $controller->sendSMS($smsRequest);
                         if($response->getStatusCode() == 200)
-                            $smsMessageSuccess = "پیامک کد رهگیری برای کاربر ارسال شد";
+                            $smsMessageSuccess = "پیامک کد رهگیری برای کاربر ارسال شد.";
                         else
-                            $smsMessageError = "خطا در ارسال پیامک کد رهگیری";
+                            $smsMessageError = "خطا در ارسال پیامک کد رهگیری.";
 
                     }
                 }else{}
@@ -840,10 +841,54 @@ class OrderController extends Controller
             if(isset($smsMessageSuccess))
                 session()->put("success", "اطلاعات سفارش با موفقیت اصلاح شد.".$smsMessageSuccess);
             else
-                session()->put("success", "اطلاعات سفارش با موفقیت اصلاح شد");
+                session()->put("success", "اطلاعات سفارش با موفقیت اصلاح شد.");
 
             if(isset($smsMessageError))
                 session()->put("error", $smsMessageError);
+
+            $asiatechProduct = config("constants.ASIATECH_FREE_ADSL");
+            if( $order->hasProducts([ $asiatechProduct ]) &&
+                $order->orderstatus_id == config("constants.ORDER_STATUS_CLOSED"))
+            {
+                $orderUser = $order->user;
+                $nowDateTime = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
+                                        ->timezone('Asia/Tehran');
+                $userVoucher = $orderUser->productvouchers()
+                                        ->where("enable" , 1)
+                                        ->where("expirationdatetime" , ">" , $nowDateTime)
+                                        ->where("product_id" , $asiatechProduct)
+                                        ->get();
+
+                if($userVoucher->isEmpty())
+                {
+                    $unusedVoucher = Productvoucher::whereNull("user_id")
+                                                    ->where("enable" , 1)
+                                                    ->where("expirationdatetime" , ">" , $nowDateTime)
+                                                    ->where("product_id" , $asiatechProduct)
+                                                    ->get()
+                                                    ->first();
+                    if(isset($unusedVoucher))
+                    {
+                        $unusedVoucher->user_id = $orderUser->id;
+                        if($unusedVoucher->update())
+                        {
+                            session()->put("success",session()->pull("success") . " کد تخفیف آسیاتک با موفقیت این کاربر داده شد.");
+                        }
+                        else
+                        {
+                            session()->put("error","خطا در تخصیص کد تخفیف آسیاتک");
+                        }
+                    }
+                    else
+                    {
+                        session()->put("error","کد تخفیف آسیاتک برای این کاربر یافت نشد");
+                    }
+                }
+                else
+                {
+                    session()->put("error","این کاربر قبلا کد تخفیف اینترنت رایگان آسیاتک گرفته است.");
+                }
+            }
         }
         else {
         session()->put("error", "خطای پایگاه داده");

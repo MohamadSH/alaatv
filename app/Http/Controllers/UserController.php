@@ -2450,30 +2450,8 @@ class UserController extends Controller
                         $result = json_decode($response->getContent());
                         if($responseStatus == 200)
                         {
-                            $nowDateTime = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran');
-                            $unusedVoucher = Productvoucher::whereNull("user_id")
-                                                            ->where("enable" , 1)
-                                                            ->where("expirationdatetime" , ">" , $nowDateTime)
-                                                            ->where("product_id" , $asiatechProduct)
-                                                            ->get()
-                                                            ->first();
-                            if(isset($unusedVoucher))
-                            {
-                                $unusedVoucher->user_id = $user->id;
-                                if($unusedVoucher->update())
-                                {
-                                    $user->lockProfile = 1;
-                                    $user->update();
-                                }
-                                else
-                                {
-                                    session()->put("error","خطا در تخصیص کد تخفیف");
-                                }
-                            }
-                            else
-                            {
-                                session()->put("error","کد تخفیفی برای شما یافت نشد");
-                            }
+                            $user->lockProfile = 1;
+                            $user->update() ;
                         }
                         else
                         {
