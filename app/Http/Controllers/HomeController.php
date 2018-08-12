@@ -427,6 +427,7 @@ class HomeController extends Controller
                     $query = Educationalcontent::whereIn("id",$arrayOfId)
                         ->where('enable',1)
                         ->orderBy("created_at" , "desc")
+                        ->valid()
                         ->get();
                     break;
                 case "contentset":
