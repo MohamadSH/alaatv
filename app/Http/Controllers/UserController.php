@@ -2451,6 +2451,7 @@ class UserController extends Controller
                         if($responseStatus == 200)
                         {
                             $user->lockProfile = 1;
+
                             $user->update() ;
                         }
                         else

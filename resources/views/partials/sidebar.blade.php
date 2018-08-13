@@ -20,14 +20,14 @@
                     <span class="arrow "></span>
                 </a>
             </li>
-            <li class="nav-item @if(isset($pageName) && strcmp($pageName , "schoolRegisterLanding")==0)start active open @endif">
-                <a href="{{action("HomeController@schoolRegisterLanding")}}" class="nav-link nav-toggle font-red bold">
-                    <i class="fa fa-pencil" aria-hidden="true"></i>
-                    <span class="title">پیش ثبت نام دبیرستان دانشگاه شریف</span>
-                    @if(isset($pageName) && strcmp($pageName , "schoolRegisterLanding")==0)<span class="selected"></span> @endif
-                    <span class="arrow "></span>
-                </a>
-            </li>
+            {{--<li class="nav-item @if(isset($pageName) && strcmp($pageName , "schoolRegisterLanding")==0)start active open @endif">--}}
+                {{--<a href="{{action("HomeController@schoolRegisterLanding")}}" class="nav-link nav-toggle font-red bold">--}}
+                    {{--<i class="fa fa-pencil" aria-hidden="true"></i>--}}
+                    {{--<span class="title">پیش ثبت نام دبیرستان دانشگاه شریف</span>--}}
+                    {{--@if(isset($pageName) && strcmp($pageName , "schoolRegisterLanding")==0)<span class="selected"></span> @endif--}}
+                    {{--<span class="arrow "></span>--}}
+                {{--</a>--}}
+            {{--</li>--}}
             <li class="nav-item @if(isset($pageName) && strcmp($pageName , "productsPortfolio")==0)start active open @endif">
                 <a href="{{action("ProductController@search")}}" class="nav-link nav-toggle font-yellow bold">
                     <i class="icon-basket"></i>
