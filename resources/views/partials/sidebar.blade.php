@@ -115,6 +115,11 @@
                                         <span class="title">اکسل</span>
                                     </a>
                                 </li>
+                                <li class="nav-item">
+                                    <a target="_blank" href="{{action("HomeController@bot" , ["voucherbot"=>1])}}" class="nav-link ">
+                                        <span class="title">وچر</span>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                         @endrole
