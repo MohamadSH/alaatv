@@ -2649,6 +2649,7 @@ class HomeController extends Controller
                                     $message .= "\n";
                                     $message .= "https://sanatisharif.ir/v/asiatech";
                                     $orderUser->notify(new GeneralNotice($message));
+
                                     $counter++;
                                 }
                                 else
