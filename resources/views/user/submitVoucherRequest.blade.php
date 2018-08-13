@@ -4,7 +4,7 @@
     <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css" />
     <link href="/assets/global/plugins/bootstrap-sweetalert/sweetalert.css" rel="stylesheet" type="text/css" />
     <link href="/assets/global/plugins/bootstrap-toastr/toastr-rtl.min.css" rel="stylesheet" type="text/css" />
-    <link href="/assets/extra/persian-datepicker/dist/css/persian-datepicker-0.4.5.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/extra/persian-datepicker/dist/css/persian-datepicker-1.1.3.css" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section("headPageLevelStyle")
@@ -211,14 +211,14 @@
     <script src="/assets/global/plugins/bootstrap-toastr/toastr.min.js" type="text/javascript"></script>
     <script src="/assets/global/plugins/jquery.sparkline.min.js" type="text/javascript"></script>
     <script src="/assets/global/plugins/morris/morris.min.js" type="text/javascript"></script>
-    <script src="/assets/extra/persian-datepicker/lib/persian-date.js" type="text/javascript" ></script>
+    <script src="/assets/extra/persian-datepicker/lib/persian-date-1.0.5.min.js" type="text/javascript" ></script>
 @endsection
 
 @section("footerPageLevelScript")
     <script src="/assets/pages/scripts/profile.min.js" type="text/javascript"></script>
     <script src="/assets/pages/scripts/dashboard.min.js" type="text/javascript"></script>
     <script src="/assets/pages/scripts/ui-toastr.min.js" type="text/javascript"></script>
-    <script src="/assets/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js" type="text/javascript" ></script>
+    <script src="/assets/extra/persian-datepicker/dist/js/persian-datepicker-1.1.3.min.js" type="text/javascript" ></script>
 @endsection
 
 @section("extraJS")
