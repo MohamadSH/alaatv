@@ -35,6 +35,7 @@ use App\Permission;
 use App\Product;
 use App\Productfile;
 use App\Producttype;
+use App\Productvoucher;
 use App\Question;
 use App\Relative;
 use App\Role;
@@ -2562,13 +2563,95 @@ class HomeController extends Controller
     {
         try
         {
-            $orders = Order::whereIn("orderstatus_id" , [ config("constants.ORDER_STATUS_CLOSED") , config("constants.ORDER_STATUS_POSTED") , config("constants.ORDER_STATUS_READY_TO_POST") ] )
-                ->whereIn("paymentstatus_id" , [ config("constants.PAYMENT_STATUS_PAID") ] )
-                ->whereDoesntHave("orderproducts" , function ($q){
-                    $q->whereNull("orderproducttype_id")->orWhere("orderproducttype_id" , config("constants.ORDER_PRODUCT_TYPE_DEFAULT")) ;
-                })
-                ->get();
-            dd($orders->pluck("id")->toArray());
+            if($request->has("emptyorder"))
+            {
+                $orders = Order::whereIn("orderstatus_id" , [ config("constants.ORDER_STATUS_CLOSED") , config("constants.ORDER_STATUS_POSTED") , config("constants.ORDER_STATUS_READY_TO_POST") ] )
+                    ->whereIn("paymentstatus_id" , [ config("constants.PAYMENT_STATUS_PAID") ] )
+                    ->whereDoesntHave("orderproducts" , function ($q){
+                        $q->whereNull("orderproducttype_id")->orWhere("orderproducttype_id" , config("constants.ORDER_PRODUCT_TYPE_DEFAULT")) ;
+                    })
+                    ->get();
+                dd($orders->pluck("id")->toArray());
+
+            }
+
+            if($request->has("voucherbot"))
+            {
+                $asiatechProduct = config("constants.ASIATECH_FREE_ADSL") ;
+                $voucherPendingOrders = Order::where("orderstatus_id" , config("constants.ORDER_STATUS_PENDING"))
+                                            ->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_PAID"))
+                                            ->whereHas("orderproducts" , function ($q) use ($asiatechProduct)
+                                            {
+                                               $q->where("product_id" , $asiatechProduct);
+                                            })
+                                            ->get();
+                echo "<span style='color:blue'>Number of orders: ".$voucherPendingOrders->count()."</span>";
+                echo "<br>" ;
+                $counter = 0;
+                foreach ($voucherPendingOrders as $voucherOrder)
+                {
+                    $orderUser = $voucherOrder->user;
+                    $voucherOrder->orderstatus_id = config("constants.ORDER_STATUS_CLOSED");
+                    if($voucherOrder->update())
+                    {
+                        $nowDateTime = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
+                            ->timezone('Asia/Tehran');
+                        $userVoucher = $orderUser->productvouchers()
+                                                    ->where("enable" , 1)
+                                                    ->where("expirationdatetime" , ">" , $nowDateTime)
+                                                    ->where("product_id" , $asiatechProduct)
+                                                    ->get();
+
+                        if($userVoucher->isEmpty())
+                        {
+                            $unusedVoucher = Productvoucher::whereNull("user_id")
+                                                            ->where("enable" , 1)
+                                                            ->where("expirationdatetime" , ">" , $nowDateTime)
+                                                            ->where("product_id" , $asiatechProduct)
+                                                            ->get()
+                                                            ->first();
+                            if(isset($unusedVoucher))
+                            {
+                                $unusedVoucher->user_id = $orderUser->id;
+                                if($unusedVoucher->update())
+                                {
+                                    $message = "سلام، با درخواست اینترنت رایگان شما موافقت شد";
+                                    $message .= "\n";
+                                    $message .= "دریافت کد تخفیف از :";
+                                    $message .= "\n";
+                                    $message .= "https://sanatisharif.ir/v/asiatech";
+                                    $orderUser->notify(new GeneralNotice($message));
+
+                                    $counter++;
+                                }
+                                else
+                                {
+                                    echo "<span style='color:red'>Error on giving voucher to user #".$orderUser->id."</span>";
+                                    echo "<br>" ;
+                                }
+                            }
+                            else
+                            {
+                                echo "<span style='color:orangered'>Could not find voucher for user  #".$orderUser->id."</span>";
+                                echo "<br>" ;
+                            }
+                        }
+                        else
+                        {
+                            echo "<span style='color:orangered'>User  #".$orderUser->id." already has a voucher code</span>";
+                            echo "<br>" ;
+                        }
+                    }
+                    else
+                    {
+                        echo "<span style='color:red'>Error on updating order #".$voucherOrder->id." for user #".$orderUser->id."</span>";
+                        echo "<br>" ;
+                    }
+                }
+                echo "<span style='color:green'>Number of processed orders: ".$counter."</span>";
+                echo "<br>" ;
+                dd("DONE!");
+            }
 
             if($request->has("smsarabi"))
             {
