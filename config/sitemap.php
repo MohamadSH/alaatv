@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'cache_enabled' => false,
+    'cache_enabled' => true,
 
     'cache_length' => 1440
 ];

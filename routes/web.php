@@ -25,7 +25,6 @@ Route::get('aboutUs', 'HomeController@aboutUs');
 Route::get('contactUs', 'HomeController@contactUs');
 Route::get('rules', 'HomeController@rules');
 Route::get('articleList', 'ArticleController@showList');
-Route::get('sitemap.xml', 'HomeController@siteMapXML');
 Route::get("debug", 'HomeController@debug');
 Route::get("telgramAgent2" , "HomeController@telgramAgent");
 Route::post('sendMail', 'HomeController@sendMail');
@@ -50,6 +49,13 @@ Route::get('image/{category}/{w}/{h}/{filename}', [
 ]);
 Route::get("sharif" , "HomeController@schoolRegisterLanding");
 Route::post("registerForSanatiSharifHighSchool" , "UserController@registerForSanatiSharifHighSchool");
+
+Route::get('sitemap.xml', 'HomeController@siteMapXML');
+Route::group(['prefix' => 'sitemap'], function(){
+    Route::get('/index.xml', 'SitemapController@index');
+    Route::get('products.xml', 'SitemapController@products');
+    Route::get('contents.xml', 'SitemapController@eContents');
+});
 
 Route::group(['prefix' => 'checkout'], function () {
     Route::get('auth', "OrderController@checkoutAuth");
