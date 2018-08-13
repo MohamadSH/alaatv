@@ -30,6 +30,7 @@
             </li>
             <li>
                 <span>زندگی آلایی </span>
+                <i class="fa fa-angle-left"></i>
             </li>
             <li>
                 <span>ثبت درخواست اینترنت آسیاتک</span>
