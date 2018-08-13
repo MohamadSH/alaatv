@@ -4990,6 +4990,7 @@ class HomeController extends Controller
 
     public function schoolRegisterLanding(Request $request)
     {
+        abort(404);
         $eventRegistered = false;
         if(Auth::check())
         {
