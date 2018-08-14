@@ -43,21 +43,30 @@ class File extends Model
     public function getUrl()
     {
         $fileRemotePath = "";
-        $diskAdapter = Storage::disk($this->disks->first()->name)->getAdapter();
-        $diskType = class_basename($diskAdapter);
-        $sftpRoot = config("constants.SFTP_ROOT");
-        $dProtocol = config("constants.DOWNLOAD_HOST_PROTOCOL");
-        $dName = config("constants.DOWNLOAD_HOST_NAME");
+        $disk = $this->disks->first();
+        if(isset($disk))
+        {
+            $diskAdapter = Storage::disk($disk->name)->getAdapter();
+            $diskType = class_basename($diskAdapter);
+            $sftpRoot = config("constants.SFTP_ROOT");
+            $dProtocol = config("constants.DOWNLOAD_HOST_PROTOCOL");
+            $dName = config("constants.DOWNLOAD_HOST_NAME");
 
-        switch ($diskType) {
-            case "SftpAdapter" :
+            switch ($diskType) {
+                case "SftpAdapter" :
 //                $fileHost = $diskAdapter->getHost();
-                $fileRoot = $diskAdapter->getRoot();
-                $fileRemotePath = str_replace($sftpRoot , $dProtocol.$dName ,$fileRoot );
-                $fileRemotePath .= $this->name;
-                break;
+                    $fileRoot = $diskAdapter->getRoot();
+                    $fileRemotePath = str_replace($sftpRoot , $dProtocol.$dName ,$fileRoot );
+                    $fileRemotePath .= $this->name;
+                    break;
+            }
+            return $fileRemotePath;
         }
-        return $fileRemotePath;
+        else
+        {
+            return action("HomeController@error404");
+        }
+
     }
 
     public function getExtention()
