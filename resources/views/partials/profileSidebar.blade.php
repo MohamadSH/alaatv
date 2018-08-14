@@ -84,7 +84,9 @@
         <div class="margin-top-20 profile-desc-link">
             <i class="fa fa-mobile"></i> شماره موبایل:
             <span>@if(isset($user->mobile)){{ $user->mobile }} @endif</span>
-            @if(!$user->mobileNumberVerification)
+            @if($user->mobileNumberVerification)
+                <span class="label label-success">شماره موبایل تایید شده است. </span>
+            @else
                 <span class="label label-danger"> توجه! شماره موبایل تایید نشده است. </span>
             @endif
 
@@ -100,46 +102,40 @@
         @if(!$user->mobileNumberVerification )
             <div class="margin-top-20 profile-desc-link">
                 <div class="form-group form-md-line-input">
-                    {!! Form::open(['method' => 'POST','action' => ['UserController@submitVerificationCode']]) !!}
-                    @if(isset($hasRequestedVerificationCode) && $hasRequestedVerificationCode)
-                        <input type="text" name="code" class="form-control" id="form_control_1"  placeholder="کد تایید شماره خود را وارد نمایید">
-                        <label for="form_control_1"><span class="font-red-thunderbird">تایید شماره موبایل(حساب کاربری)</span></label>
-                        <span class="help-block">برای دریافت کد روی دکمه درخواست کلیک کنید</span>
-                    @endif
+                    {!! Form::open(['method' => 'POST','action' => ['UserController@submitVerificationCode'] , 'id'=>'submitVerificationCodeForm']) !!}
+                        <fieldset class="hasRequestedVerificationCode {{(isset($hasRequestedVerificationCode) && $hasRequestedVerificationCode)?"":"hidden"}}">
+                            <input type="text" name="code" class="form-control" id="form_control_1"  placeholder="کد تایید شماره خود را وارد نمایید">
+                            <label for="form_control_1"><span class="font-red-thunderbird">تایید شماره موبایل(حساب کاربری)</span></label>
+                            <span class="help-block">برای دریافت کد روی دکمه درخواست کلیک کنید</span>
+                        </fieldset>
                 </div>
                 <div class="form-actions noborder" style="text-align: center;">
-                    @if(isset($hasRequestedVerificationCode) && $hasRequestedVerificationCode)
-                        <button type="submit" class="btn green">تایید کد</button>
-                    @else
-                        <a href="{{action("UserController@sendVerificationCode")}}" class="btn blue">درخواست ارسال کد</a>
-                    @endif
+                        <fieldset class="hasRequestedVerificationCode {{(isset($hasRequestedVerificationCode) && $hasRequestedVerificationCode)?"":"hidden"}}" >
+                            <button type="submit" class="btn green">تایید کد</button>
+                        </fieldset>
+                        <fieldset id="hasntRequestedVerificationCode" class="{{(isset($hasRequestedVerificationCode) && $hasRequestedVerificationCode)?"hidden":""}}">
+                            <a href="{{action("UserController@sendVerificationCode")}}" class="btn blue" id="sendVerificationCodeButton">درخواست ارسال کد</a>
+                        </fieldset>
+                    <img src="/img/loading-spinner-default.gif" style="width: 15px; display: none" id="verificationCodeAjaxLoadingSpinner">
                     {!! Form::close() !!}
                 </div>
                 <div class="form-group form-md-line-input" style="text-align: justify;">
-                    @if (Session::has('getVerificationCodeSuccess'))
-                        <div class="alert alert-success alert-dismissable">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
-                            {{ Session::pull('getVerificationCodeSuccess') }}
-                        </div>
-                    @endif
-                    @if (Session::has('verificationCodeError'))
-                        <div class="alert alert-danger alert-dismissable">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
-                            {{ Session::pull('verificationCodeError') }}
-                        </div>
-                    @endif
-                    @if (Session::has('verificationCodeInfo'))
-                        <div class="alert alert-info alert-dismissable">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
-                            {{ Session::pull('verificationCodeInfo') }}
-                        </div>
-                    @endif
-                    @if (Session::has('verificationCodeWarning'))
-                        <div class="alert alert-warning alert-dismissable">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
-                            {{ Session::pull('verificationCodeWarning') }}
-                        </div>
-                    @endif
+                    <div class="alert alert-success alert-dismissable hidden" id="getVerificationCodeSuccess">
+                        <button type="button" class="close"  aria-hidden="true"></button>
+                        <span></span>
+                    </div>
+                    <div class="alert alert-danger alert-dismissable hidden" id="verificationCodeError">
+                        <button type="button" class="close"  aria-hidden="true"></button>
+                        <span></span>
+                    </div>
+                    <div class="alert alert-info alert-dismissable hidden" id="verificationCodeInfo">
+                        <button type="button" class="close" aria-hidden="true"></button>
+                        <span></span>
+                    </div>
+                    <div class="alert alert-warning alert-dismissable hidden" id="verificationCodeWarning">
+                        <button type="button" class="close" aria-hidden="true"></button>
+                        <span></span>
+                    </div>
                 </div>
             </div>
         @endif
