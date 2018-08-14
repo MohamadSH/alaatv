@@ -528,7 +528,7 @@ public function store(InsertEducationalContentRequest $request)
                     // video.movie
                     SEO::opengraph()->setType('video.movie')
                         ->setVideoMovie([
-                            'actor' => $author,
+                            'actor' => (isset($author))?$author:"",
                             'actor:role' => 'دبیر',
                             'director' => 'آلاء',
                             'writer' => 'آلاء',

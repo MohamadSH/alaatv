@@ -51,7 +51,8 @@ trait FileCommon
        curl_setopt( $curl, CURLOPT_HEADER, true );
        curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
        curl_setopt( $curl, CURLOPT_FOLLOWLOCATION, true );
-       curl_setopt( $curl, CURLOPT_USERAGENT, $_SERVER["HTTP_USER_AGENT"] );
+       if(isset($_SERVER["HTTP_USER_AGENT"]))
+                curl_setopt( $curl, CURLOPT_USERAGENT, $_SERVER["HTTP_USER_AGENT"] );
        curl_setopt($curl, CURLOPT_MAXREDIRS, 3);
 
        curl_exec($curl);
