@@ -11,7 +11,7 @@
                                                                 <span class="btn green btn-file">
                                                                     <span class="fileinput-new"> انتخاب عکس </span>
                                                                     <span class="fileinput-exists"> تغییر </span>
-                                                                    {!! Form::file('photo' , ['id'=>'profilePhotoFile']) !!}
+                                                                    {!! Form::file('photo' , ['id'=>'profilePhotoFile' , 'data-action'=>action("UserController@updatePhoto")]) !!}
                                                                 </span>
                         <span class="fileinput-filename"> </span> &nbsp;
                         <a href="javascript:;" class="close fileinput-exists" data-dismiss="fileinput" id="profilePhotoAjaxFileInputClose"> </a>
