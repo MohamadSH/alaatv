@@ -115,7 +115,7 @@ class OrderCheck
                                 if(in_array( $gift->id , $attachedGifts ))
                                     continue;
                                 else
-                                    $attachedGifts->push($gift->id);
+                                    array_push($attachedGifts, $gift->id);
                                 if($order->orderproducts(Config::get("constants.ORDER_PRODUCT_GIFT"))->whereHas("product" , function($q) use($gift){
                                     $q->where("id" , $gift->id);
                                 })->get()->isNotEmpty())
