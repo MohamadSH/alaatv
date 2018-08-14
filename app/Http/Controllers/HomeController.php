@@ -426,10 +426,8 @@ class HomeController extends Controller
                 case "pamphlet":
                 case "article":
                     $query = Educationalcontent::whereIn("id",$arrayOfId)
-                        ->where('enable',1)
-                        ->valid()
+                        ->active()
                         ->orderBy("created_at" , "desc")
-
                         ->get();
                     break;
                 case "contentset":
@@ -2304,33 +2302,7 @@ class HomeController extends Controller
 
     function siteMapXML()
     {
-        $products = Product::getProducts(0, 1)->orderBy("order")->get();
-        foreach ($products as $product) {
-            Sitemap::addTag(route('product.show', $product), $product->updated_at, 'daily', '0.8');
-        }
-
-//        $articlecategories = Articlecategory::where('enable', 1)->orderBy('order')->get();
-//
-//        foreach ($articlecategories as $articlecategory)
-//        {
-//            Sitemap::addTag(action('ArticleController@showList', ["categoryId"=>$articlecategory]), $articlecategory->updated_at, 'daily', '0.8');
-//            foreach ($articlecategory->articles as $article)
-//            {
-//                Sitemap::addTag(route('article.show', $article), $article->updated_at, 'daily', '0.8');
-//            }
-//        }
-//
-//        $articlesWithoutCategory = Article::where('articlecategory_id' , null)->get();
-//        foreach ($articlesWithoutCategory as $articleWithoutCategory)
-//        {
-//            Sitemap::addTag(route('article.show', $articleWithoutCategory), $articleWithoutCategory->updated_at, 'daily', '0.8');
-//
-//        }
-
-//        Sitemap::addTag(action("HomeController@contactUs"), '', 'daily', '0.8');
-//        Sitemap::addTag(action("HomeController@aboutUs"), '', 'daily', '0.8');
-//        Sitemap::addTag(action("HomeController@certificates"), '', 'daily', '0.8');
-        return Sitemap::render();
+        return redirect(action('SitemapController@index'),301);
     }
 
     /**
