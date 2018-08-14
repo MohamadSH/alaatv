@@ -183,6 +183,13 @@ class Educationalcontent extends Model
         return $query->where('validSince', '<', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'));
     }
 
+    public function scopeActive($query){
+        return $query->where('enable', 1)
+                     ->where('validSince', '<', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
+                         ->timezone('Asia/Tehran')
+                     );
+    }
+
     /**
      * Scope a query to only include EducationalContents that will come soon.
      *
