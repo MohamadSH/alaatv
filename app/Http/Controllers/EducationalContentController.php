@@ -262,6 +262,18 @@ public function store(InsertEducationalContentRequest $request)
                     break;
             }
 
+            if($request->has("tags"))
+            {
+                $tagString = $request->get("tags") ;
+                $tags = explode("," , $tagString);
+                $tags = array_filter($tags);
+                $tagsJson = [
+                    "bucket" => "content",
+                    "tags" => $tags
+                ];
+                $educationalContent->tags= json_encode($tagsJson) ;
+            }
+
             $done = false ;
             if($educationalContent->save()){
 
@@ -332,6 +344,34 @@ public function store(InsertEducationalContentRequest $request)
                     }
 
                 }
+
+                if($educationalContent->enable  &&  isset($educationalContent->tags) &&
+                    is_array($educationalContent->tags->tags) &&
+                    !empty($educationalContent->tags->tags))
+                {
+                    $itemTagsArray = $educationalContent->tags->tags ;
+                    $params = [
+                        "tags"=> json_encode($itemTagsArray) ,
+                    ];
+
+                    if(isset($educationalContent->created_at) && strlen($educationalContent->created_at) > 0 )
+                        $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $educationalContent->created_at )->timestamp;
+
+                    $response =  $this->sendRequest(
+                        config("constants.TAG_API_URL")."id/content/".$educationalContent->id ,
+                        "PUT",
+                        $params
+                    );
+
+                    if($response["statusCode"] == 200)
+                    {
+                        //
+                    }
+                    else
+                    {
+                    }
+                }
+
 
                 if($request->ajax() || $request->has("fromAPI"))
                     $done = true;
