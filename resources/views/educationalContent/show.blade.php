@@ -703,16 +703,13 @@
     </script>
     <script>
         var related_videos = [
-        @foreach($contentsWithSameSet->whereIn("type" , "video" )->random(13) as $item)
+                @foreach($contentsWithSameSet->whereIn("type" , "video" )->random(13) as $item)
                 @if($item["content"]->id == $educationalContent->id)
                 @else
-                    {thumb: '{{(isset($item["thumbnail"]))?$item["thumbnail"]:""}}',url: '{{action("EducationalContentController@show" , $item["content"])}}', title: ' {{($item["content"]->getDisplayName())}}', duration: '20:00'},
-                @endif
-        @endforeach
+            {thumb: '{{(isset($item["thumbnail"]))?$item["thumbnail"]:""}}',url: '{{action("EducationalContentController@show" , $item["content"])}}', title: ' {{($item["content"]->getDisplayName())}}', duration: '20:00'},
+            @endif
+            @endforeach
         ];
-    </script>
-    <script>
-
         var player = videojs('video-{{$educationalContent->id}}',{nuevo : true} ,function(){
             this.nuevoPlugin({
                 // plugin options here
@@ -731,7 +728,6 @@
                 shareEmbed: '<iframe src="{{action('EducationalContentController@embed' , $educationalContent)}}" width="640" height="360" frameborder="0" allowfullscreen></iframe>'
             });
         });
-
         player.on('resolutionchange', function(){
             var last_resolution = param.label;
             console.log(last_resolution);
