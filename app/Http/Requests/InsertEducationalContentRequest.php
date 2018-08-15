@@ -2,12 +2,14 @@
 
 namespace App\Http\Requests;
 
+use App\Traits\CharacterCommon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Input;
 
 class InsertEducationalContentRequest extends FormRequest
 {
+    use CharacterCommon;
     /**
      * Determine if the user is authorized to make this request.
      *
