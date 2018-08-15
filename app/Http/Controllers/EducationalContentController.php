@@ -294,7 +294,8 @@ public function store(InsertEducationalContentRequest $request)
                     foreach ($files as $file)
                     {
                         $fileName = $file["name"];
-                        if(strlen(preg_replace('/\s+/', '',  $fileName) ) == 0) continue;
+                        if(strlen(preg_replace('/\s+/', '',  $fileName) ) == 0)
+                            continue;
 
                         $fileRequest->offsetSet('name' ,$fileName ) ;
                         if(isset($file["disk_id"]))
@@ -321,8 +322,10 @@ public function store(InsertEducationalContentRequest $request)
 
                 }
 
-                if($request->ajax() || $request->has("fromAPI")) $done = true;
-                else session()->put('success', 'درج محتوا با موفقیت انجام شد');
+                if($request->ajax() || $request->has("fromAPI"))
+                    $done = true;
+                else
+                    session()->put('success', 'درج محتوا با موفقیت انجام شد');
             }
             else{
                 if($request->ajax() || $request->has("fromAPI")) $done = false ;
