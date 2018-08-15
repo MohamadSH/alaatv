@@ -11,6 +11,7 @@
     <link href="/assets/global/plugins/icheck/skins/all.css" rel="stylesheet" type="text/css" />
     <link href="/assets/global/plugins/jquery-multi-select/css/multi-select-rtl.css" rel="stylesheet" type="text/css" />
     <link href="/assets/global/plugins/bootstrap-multiselect/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/global/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css" rel="stylesheet" type="text/css" />
     <style>
         .datepicker-header{
             direction: ltr;
@@ -114,6 +115,7 @@
     <script src="/assets/global/plugins/icheck/icheck.min.js" type="text/javascript"></script>
     <script src="/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js" type="text/javascript"></script>
     <script src="/assets/global/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>
+    <script src="/assets/global/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.js" type="text/javascript"></script>
 @endsection
 
 @section("footerPageLevelScript")
@@ -130,6 +132,7 @@
     <script src="/js/extraJS/scripts/admin-makeMultiSelect.js" type="text/javascript"></script>
     <script>
         $(document).ready(function () {
+
         });
 
         var u = Dropzone.options.myAwesomeDropzone = { // The camelized version of the ID of the form element
@@ -194,6 +197,14 @@
             '                    <textarea name="description" class="form-control" rows="5"></textarea>\n' +
             '                </div>\n' +
             '            </div>\n' +
+            '<div class="form-group">\n' +
+            '                        <label class="col-md-2 control-label" for="tags">\n' +
+            '                            تگ ها :\n' +
+            '                        </label>\n' +
+            '                        <div class="col-md-9">\n' +
+            '                            <input name="tags" type="text" class="form-control input-large" value="" data-role="tagsinput">\n' +
+            '                        </div>\n' +
+            '                    </div>'+
             '           <div class="form-group">\n'+
             '           <div class="col-md-12 text-center"><button type="submit" class="btn btn-success">\n' +
             '           <i class="fa fa-check"></i> ذخیره اطلاعات</button></div>\n'+
@@ -449,6 +460,11 @@
                         // files.previewElement.querySelector('[type="submit"]').disabled=false;
                         var fileNameHidden = Dropzone.createElement("<input type='hidden' name='file' value='"+response.fileName+"'>");
                         files.previewElement.querySelector('.form-horizontal').appendChild(fileNameHidden);
+                        /**
+                         * Initialize tagsinput behaviour on inputs and selects which have
+                         * data-role=tagsinput
+                         */
+                        $("input[data-role=tagsinput]").tagsinput();
                     }else{
                         $("#my-awesome-dropzone").append("<span class='font-red'>" + "خطا در آپلود فایل "+files.name + "</span></br>"+response.toString() +"</br>");
                     }
@@ -536,7 +552,7 @@
                 processData: false
             });
 
-        })
+        });
 
     </script>
 @endsection
