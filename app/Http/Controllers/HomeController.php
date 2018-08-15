@@ -2458,8 +2458,11 @@ class HomeController extends Controller
             File::move($filePath, $newFileNameDir);
 
             if (strcmp($disk , "product") == 0) {
-                if($ext == "mp4") $directory = "video";
-                elseif($ext == "pdf") $directory = "pamphlet";
+                if($ext == "mp4")
+                    $directory = "video";
+                elseif($ext == "pdf")
+                    $directory = "pamphlet";
+
                 $adapter = new SftpAdapter([
                     'host' => config('constants.SFTP_HOST'),
                     'port' =>config('constants.SFTP_PORT'),
@@ -2481,12 +2484,31 @@ class HomeController extends Controller
                     $filesystem = $filesystem->get($directory  );
                     $path = $filesystem->getPath();
                     $filesystem->setPath($path."/".$fileName);
-                    if($filesystem->put(File::get($newFileNameDir))) $done = true;
+                    if($filesystem->put(File::get($newFileNameDir)))
+                        $done = true;
                 }else{
-                    if($filesystem->put($fileName , File::get($newFileNameDir))) $done = true;
+                    if($filesystem->put($fileName , File::get($newFileNameDir)))
+                        $done = true;
                 }
 
-            }else{
+            }
+            elseif (strcmp($disk , "video") == 0)
+            {
+                $adapter = new SftpAdapter([
+                    'host' => config('constants.SFTP_HOST'),
+                    'port' =>config('constants.SFTP_PORT'),
+                    'username' => config('constants.SFTP_USERNAME'),
+                    'password' => config('constants.SFTP_PASSSWORD'),
+                    'privateKey' => config('constants.SFTP_PRIVATE_KEY_PATH'),
+                    'root' => '/alaa_media/cdn/media/'.$contentId.'/',
+                    'timeout' => config('constants.SFTP_TIMEOUT'),
+                    'directoryPerm' => 0755
+                ]);
+                $filesystem = new Filesystem($adapter);
+                if($filesystem->put($fileName , File::get($newFileNameDir)))
+                    $done = true;
+            }
+            else{
                 $filesystem = Storage::disk($disk . "Sftp");
                 if($filesystem->put($fileName, fopen($newFileNameDir, 'r+'))) {
                     $done = true;
