@@ -65,7 +65,7 @@
                 <div class="col-md-12">
                     <div class="portlet light ">
                         <div class="portlet-body  text-justify">
-                            <div class="row">
+                            <div class="row col-md-8">
                                 <video  id="video-{{$educationalContent->id}}"
                                         class="video-js vjs-fluid vjs-default-skin vjs-big-play-centered"
                                         controls
@@ -80,6 +80,9 @@
                                     <p class="vjs-no-js">جهت پخش آنلاین فیلم، ابتدا مطمئن شوید که جاوا اسکریپت در مرور
                                         گر شما فعال است و از آخرین نسخه ی مرورگر استفاده می کنید.</p>
                                 </video>
+                            </div>
+                            <div class="row">
+
                                     <hr>
                                     <div class="col-md-7">
                                         <div class="caption"><i class="fa fa-comment-o" aria-hidden="true"></i></div>
