@@ -34,7 +34,7 @@
         <script src="/video-js/nuevo/nuevo.min.js"></script>
         <script>
             var related_videos = [
-                    @foreach($contentsWithSameSet->whereIn("type" , "video" )->random(13) as $item)
+                    @foreach($contentsWithSameSet->whereIn("type" , "video" )->random( min(13,$contentsWithSameSet->whereIn("type" , "video" )->count())) as $item)
                     @if($item["content"]->id == $video->id)
                     @else
                 {thumb: '{{(isset($item["thumbnail"]))?$item["thumbnail"]:""}}',url: '{{action("EducationalContentController@show" , $item["content"])}}', title: ' {{($item["content"]->getDisplayName())}}', duration: '20:00'},
