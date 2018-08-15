@@ -189,10 +189,9 @@ class EducationalContentController extends Controller
         $authors = User::whereHas("roles" , function ($q){
             $q->where("name" , "teacher") ;
         })->get()
-            ->sortBy("lastName")
-            ->values()
-            ->pluck("lastName" , "id");
-
+                                        ->sortBy("lastName")
+                                        ->values()
+                                        ->pluck("full_name" , "id");
         return view("educationalContent.create2" , compact("rootContentTypes" ,
                                                                         "contentsets" ,
                                                                             "authors"
@@ -250,6 +249,18 @@ public function store(InsertEducationalContentRequest $request)
                 $educationalContent->enable = 1;
             else
                 $educationalContent->enable = 0 ;
+
+            switch ($educationalContent->contenttype_id)
+            {
+                case 1 : // pamphlet
+                    $educationalContent->template_id = 2 ;
+                    break;
+                case 8 : // video
+                    $educationalContent->template_id = 1;
+                    break;
+                default:
+                    break;
+            }
 
             $done = false ;
             if($educationalContent->save()){
