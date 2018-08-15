@@ -522,6 +522,7 @@
                     },
                     //The status for when there is error php code
                     500: function (response) {
+                        console.log(response.responseText);
                     },
                     //The status for when there is error php code
                     503: function (response) {

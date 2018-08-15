@@ -38,7 +38,25 @@ class InsertEducationalContentRequest extends FormRequest
             'name'=>'required',
             'contenttype_id'=>'required|exists:contenttypes,id',
             'file'=>'required'.$fileExtraRule,
-            'file2'=> $file2ExtraRule
+            'file2'=> $file2ExtraRule,
         ];
+    }
+
+    public function prepareForValidation()
+    {
+        $this->replaceNumbers();
+        parent::prepareForValidation();
+    }
+
+    protected function replaceNumbers()
+    {
+        $input = $this->request->all() ;
+        if(isset($input["order"]))
+        {
+            $input["order"] = preg_replace('/\s+/', '', $input["order"] ) ;
+            $input["order"] = $this->convertToEnglish($input["order"]) ;
+        }
+
+        $this->replace($input) ;
     }
 }
