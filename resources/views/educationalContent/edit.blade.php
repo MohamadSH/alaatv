@@ -76,7 +76,10 @@
                             </div>
                         </div>
                         {!! Form::model($educationalContent , ['files'=>true,'method' => 'PUT','action' => ['EducationalContentController@update',$educationalContent], 'class'=>'form-horizontal' , 'id'=>'editForm' ,'accept-charset'=>'UTF-8' , 'enctype'=>'multipart/form-data']) !!}
-                        @include('educationalContent.form2')
+                            @if(isset($contentset))
+                                {!! Form::hidden('contentset', $contentset->id) !!}
+                            @endif
+                            @include('educationalContent.form2')
                         {!! Form::close() !!}
                     </div>
                 </div>
