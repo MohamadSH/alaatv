@@ -99,6 +99,11 @@
             </form>
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-12" id="messageDiv">
+
+        </div>
+    </div>
     <div id="dropzone-elements" class="dropzone dropzone-previews" style="background: none; border:none">
     </div>
 @endsection
@@ -149,7 +154,7 @@
             dictFallbackMessage:"مرورگر شما قابلیت درگ اند دراپ را پشتیبانی نمی کند!",
             dictInvalidFileType:"فرمت فایل شما باید pdf یا rar باشد.",
             dictResponseError : "خطا در آپلود",
-            acceptedFiles:".pdf,.rar",
+            acceptedFiles:".pdf,.rar,.mp4",
             previewsContainer: "#dropzone-elements",
             previewTemplate: '<div class="row"><div class="portlet light">\n' +
             '<div class="portlet-body">\n' +
@@ -445,7 +450,7 @@
                     xhr.setRequestHeader("X-Datatype",$('select[name=contenttype] :selected').attr("data-title"));
                     var contentset = $('select[name=contentset] :selected').val();
                     if(contentset.length > 0)
-                        xhr.setRequestHeader("X-Dataid", contentset);
+                        xhr.setRequestHeader("X-Dataid", contentset+"/HD_720p/");
                     xhr.setRequestHeader("X-Dataname",files.name );
                 });
 
@@ -523,6 +528,14 @@
                         submitButton.html("<i class=\"fa fa-check\"></i> ذخیره اطلاعات");
                         // console.log(response);
                         // console.log(response.responseText);
+                        var id = response.id;
+                        var message = '<div  class="custom-alerts alert alert-success fade in margin-top-10">\n' +
+                                        '        <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>\n' +
+                                        '        <i class="fa fa-check-circle"></i>\n' +
+                                        'محتوا با موفقیت ذخیره شد . آیدی محتوا : ' +
+                                        '<a href="{{action("EducationalContentController@show")}}"'+id+'>'+id+'</a>'+
+                                        '    </div>';
+                        $("#messageDiv").append(message);
                         toastr["success"]("محتوا با موقیت درج شد", "پیام سیستم");
                         form.closest('.portlet').fadeOut();
                     },
