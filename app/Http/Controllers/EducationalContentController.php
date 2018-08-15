@@ -18,6 +18,7 @@ use App\Traits\APIRequestCommon;
 use App\Traits\FileCommon;
 use App\Traits\Helper;
 use App\Traits\ProductCommon;
+use App\User;
 use App\Websitesetting;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
@@ -184,8 +185,17 @@ class EducationalContentController extends Controller
     public function create2()
     {
         $rootContentTypes = Contenttype::whereDoesntHave("parents")->get() ;
-
-        return view("educationalContent.create2" , compact("rootContentTypes")) ;
+        $contentsets = Contentset::pluck("name" , "id");
+        $authors = User::whereHas("roles" , function ($q){
+            $q->where("name" , "teacher") ;
+        })->get()
+                                        ->sortBy("lastName")
+                                        ->values()
+                                        ->pluck("full_name" , "id");
+        return view("educationalContent.create2" , compact("rootContentTypes" ,
+                                                                        "contentsets" ,
+                                                                            "authors"
+                                                                        )) ;
     }
 
     /**
@@ -210,173 +220,154 @@ class EducationalContentController extends Controller
      */
 public function store(InsertEducationalContentRequest $request)
     {
-        $educationalContent = new Educationalcontent();
-        $educationalContent->fill($request->all()) ;
 
-        $fileController = new FileController();
-        $fileRequest = new InsertFileRequest();
-
-        if($request->has("validSinceTime"))
+        try
         {
-            $time =  $request->get("validSinceTime");
-            if(strlen($time)>0) $time = Carbon::parse($time)->format('H:i:s');
-            else $time ="00:00:00" ;
-        }
+            $educationalContent = new Educationalcontent();
+            $educationalContent->fill($request->all()) ;
+            if(is_null($educationalContent->order))
+                $educationalContent->order = 0;
+            $fileController = new FileController();
+            $fileRequest = new InsertFileRequest();
 
-        if($request->has("validSinceDate"))
-        {
-            $validSince = $request->get("validSinceDate");
-            $validSince = Carbon::parse($validSince)->format('Y-m-d'); //Muhammad : added a day because it returns one day behind and IDK why!!
-            if(isset($time)) $validSince = $validSince . " " . $time;
-            $educationalContent->validSince = $validSince;
-        }
-
-        if($request->has("contenttypes"))
-        {
-            $contentTypes = $request->get("contenttypes");
-        }
-
-        if($request->has("enable"))
-            $educationalContent->enable = 1;
-        else
-            $educationalContent->enable = 0 ;
-
-        $done = false ;
-        if($educationalContent->save()){
-
-            if($request->has("contentsets"))
+            if($request->has("validSinceTime"))
             {
-                $contentSets = $request->get("contentsets");
-                foreach ($contentSets as $contentSet)
-                {
-                    $pivots = array();
-                    if(isset($contentSet["order"]))
-                        $pivots["order"] = $contentSet["order"];
-                    if(isset($contentSet["isDefault"]))
-                        $pivots["isDefault"] = $contentSet["isDefault"];
+                $time =  $request->get("validSinceTime");
+                if(strlen($time)>0) $time = Carbon::parse($time)->format('H:i:s');
+                else $time ="00:00:00" ;
+            }
 
-                    if(!empty($pivots))
-                        $educationalContent->contentsets()->attach($contentSet["id"] , $pivots);
+            if($request->has("validSinceDate"))
+            {
+                $validSince = $request->get("validSinceDate");
+                $validSince = Carbon::parse($validSince)->format('Y-m-d'); //Muhammad : added a day because it returns one day behind and IDK why!!
+                if(isset($time)) $validSince = $validSince . " " . $time;
+                $educationalContent->validSince = $validSince;
+            }
+
+            if($request->has("enable"))
+                $educationalContent->enable = 1;
+            else
+                $educationalContent->enable = 0 ;
+
+            switch ($educationalContent->contenttype_id)
+            {
+                case 1 : // pamphlet
+                    $educationalContent->template_id = 2 ;
+                    break;
+                case 8 : // video
+                    $educationalContent->template_id = 1;
+                    break;
+                default:
+                    break;
+            }
+
+            $done = false ;
+            if($educationalContent->save()){
+
+                if($request->has("contentset_id"))
+                {
+                    $contentset_id = $request->get("contentset_id");
+                    if($request->has("order"))
+                    {
+                        $order = $request->get("order");
+                        if(is_null($order))
+                             $order = 0 ;
+
+                        $pivots = [];
+                        $pivots["order"] = $order;
+                        $pivots["isDefault"] = 1;
+                    }
+
+                    if(empty($pivots))
+                        $educationalContent->contentsets()->attach($contentset_id);
                     else
-                        $educationalContent->contentsets()->attach($contentSet["id"]);
+                        $educationalContent->contentsets()->attach($contentset_id , $pivots);
                 }
-            }
 
-            if($request->has("majors"))
-            {
-                $majors = $request->get("majors") ;
-                $educationalContent->majors()->attach($majors);
-            }
-
-            if($request->has("grades"))
-            {
-                $grades = $request->get("grades") ;
-                $educationalContent->grades()->attach($grades);
-            }
-
-            if(isset($contentTypes))
-            {
-                $educationalContent->contenttypes()->attach($contentTypes);
-
-                //TODO: file1,2 ??!
-                if ($request->hasFile("file1"))
+                if($request->has("file"))
                 {
-                    $file = $request->file('file1');
-                    $extension = $file->getClientOriginalExtension();
+                    if($request->has("caption"))
+                        $caption = $request->get("caption");
+                    if(isset($caption))
+                        $files = [ 0 => ["name"=>$request->get("file"),"caption"=> $caption] ];
+                    else
+                        $files = [ 0 => [ "name"=>$request->get("file")] ];
 
-                    $fileName = basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
-                    $disk = $educationalContent->fileMultiplexer($contentTypes);
-                    if ($disk) {
-                        if (Storage::disk($disk)->put($fileName, File::get($file))) {
 
-                            $fileRequest->offsetSet('name' ,$fileName ) ;
-                            $fileRequest->offsetSet('disk' , $disk) ;
-                            $fileId = $fileController->store($fileRequest) ;
-                            if($fileId)
-                                $educationalContent->files()->attach($fileId);
+                }
+                elseif($request->has("files")) {
+                    $files = $request->get("files");
+                } //ToDo : should be merged
+
+                if(isset($files))
+                {
+                    foreach ($files as $file)
+                    {
+                        $fileName = $file["name"];
+                        if(strlen(preg_replace('/\s+/', '',  $fileName) ) == 0)
+                            continue;
+
+                        $fileRequest->offsetSet('name' ,$fileName ) ;
+                        if(isset($file["disk_id"]))
+                        {
+                            $fileRequest->offsetSet('disk_id' , $file["disk_id"]) ;
+                        }
+                        else
+                        {
+                            $disk = $educationalContent->fileMultiplexer();
+                            if($disk !== false)
+                                $fileRequest->offsetSet('disk_id' , $disk->id) ;
+                        }
+
+                        $fileId = $fileController->store($fileRequest) ;
+                        if($fileId)
+                        {
+                            $attachPivot = array();
+                            if(isset($file["caption"])) $attachPivot["caption"] = $file["caption"];
+                            if(isset($file["label"])) $attachPivot["label"] = $file["label"];
+                            if(!empty($attachPivot)) $educationalContent->files()->attach($fileId , $attachPivot);
+                            else $educationalContent->files()->attach($fileId);
                         }
                     }
+
                 }
 
-                if ($request->hasFile("file2"))
-                {
-                    $file = $request->file('file2');
-                    $extension = $file->getClientOriginalExtension();
-                    $fileName = basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
-                    $disk = $educationalContent->fileMultiplexer($contentTypes);
-                    if ($disk) {
-                        if (Storage::disk($disk)->put($fileName, File::get($file))) {
-
-                            $fileRequest->offsetSet('name' ,$fileName ) ;
-                            $fileRequest->offsetSet('disk' , $disk) ;
-                            $fileId = $fileController->store($fileRequest) ;
-                            if($fileId)
-                                $educationalContent->files()->attach($fileId);
-                        }
-                    }
-                }
-            }
-
-
-            if($request->has("file"))
-            {
-                if($request->has("caption"))
-                    $caption = $request->get("caption");
-                if(isset($caption))
-                    $files = [ 0 => ["name"=>$request->get("file"),"caption"=> $caption] ];
+                if($request->ajax() || $request->has("fromAPI"))
+                    $done = true;
                 else
-                    $files = [ 0 => [ "name"=>$request->get("file")] ];
-
-
+                    session()->put('success', 'درج محتوا با موفقیت انجام شد');
             }
-            elseif($request->has("files")) {
-                $files = $request->get("files");
-            } //ToDo : should be merged
-
-            if(isset($files))
+            else{
+                if($request->ajax() || $request->has("fromAPI")) $done = false ;
+                else session()->put('error', 'خطای پایگاه داده');
+            }
+            if(isset($done))
             {
-                foreach ($files as $file)
-                {
-                    $fileName = $file["name"];
-                    if(strlen(preg_replace('/\s+/', '',  $fileName) ) == 0) continue;
-
-                    $fileRequest->offsetSet('name' ,$fileName ) ;
-                    if(isset($file["disk_id"]))
-                    {
-                        $fileRequest->offsetSet('disk_id' , $file["disk_id"]) ;
-                    }
-                    else
-                    {
-                        $disk = $educationalContent->fileMultiplexer();
-                        if($disk !== false)
-                            $fileRequest->offsetSet('disk_id' , $disk->id) ;
-                    }
-
-                    $fileId = $fileController->store($fileRequest) ;
-                    if($fileId)
-                    {
-                        $attachPivot = array();
-                        if(isset($file["caption"])) $attachPivot["caption"] = $file["caption"];
-                        if(isset($file["label"])) $attachPivot["label"] = $file["label"];
-                        if(!empty($attachPivot)) $educationalContent->files()->attach($fileId , $attachPivot);
-                        else $educationalContent->files()->attach($fileId);
-                    }
-                }
-
+                if($done)
+                    return $this->response->setStatusCode(200 )
+                        ->setContent(["id"=>$educationalContent->id]);
+                else
+                    return $this->response->setStatusCode(503) ;
             }
+            else
+            {
+                return redirect()->back();
+            }
+        }
+        catch (\Exception    $e)
+        {
+            $message = "unexpected error";
+            return $this->response
+                ->setStatusCode(500)
+                ->setContent([
+                    "message"=>$message ,
+                    "error"=>$e->getMessage() ,
+                    "line"=>$e->getLine() ,
+                    "file"=>$e->getFile()
+                ]);
+        }
 
-            if($request->ajax() || $request->has("fromAPI")) $done = true;
-            else session()->put('success', 'درج محتوا با موفقیت انجام شد');
-        }
-        else{
-            if($request->ajax() || $request->has("fromAPI")) $done = false ;
-            else session()->put('error', 'خطای پایگاه داده');
-        }
-        if(isset($done)) {
-            if($done) return $this->response->setStatusCode(200 )->setContent(["id"=>$educationalContent->id]);
-            else return $this->response->setStatusCode(503) ;
-        }
-        else return redirect()->back();
     }
 
     /**
@@ -528,7 +519,7 @@ public function store(InsertEducationalContentRequest $request)
                     // video.movie
                     SEO::opengraph()->setType('video.movie')
                         ->setVideoMovie([
-                            'actor' => $author,
+                            'actor' => (isset($author))?$author:"",
                             'actor:role' => 'دبیر',
                             'director' => 'آلاء',
                             'writer' => 'آلاء',

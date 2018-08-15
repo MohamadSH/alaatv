@@ -125,11 +125,11 @@ class Educationalcontent extends Model
             else
                 return false;
         } else {
-            if (in_array(Contenttype::where("name", "exam")->get()->first()->id, $this->contenttypes->pluck("id")->toArray())) {
+            if ($this->contenttype_id == Contenttype::where("name", "exam")->get()->first()->id ) {
                 $disk = Config::get('constants.DISK18_CLOUD');
-            } elseif (in_array(Contenttype::where("name", "pamphlet")->get()->first()->id, $this->contenttypes->pluck("id")->toArray())) {
+            } elseif ($this->contenttype_id == Contenttype::where("name", "pamphlet")->get()->first()->id ) {
                 $disk = Config::get('constants.DISK19_CLOUD');
-            } elseif (in_array(Contenttype::where("name", "book")->get()->first()->id, $this->contenttypes->pluck("id")->toArray())) {
+            } elseif ($this->contenttype_id == Contenttype::where("name", "book")->get()->first()->id ) {
                 $disk = Config::get('constants.DISK20_CLOUD');
             }
 

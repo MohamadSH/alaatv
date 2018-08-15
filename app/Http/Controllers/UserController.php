@@ -1183,8 +1183,10 @@ class UserController extends Controller
 
         if($user->mobileNumberVerification)
         {
-            session()->put("getVerificationCodeSuccess" , "حساب کاربری شما قبلا تایید شده است.");
-            return redirect()->back() ;
+            $message = "حساب کاربری شما قبلا تایید شده است.";
+            return $this->response
+                        ->setStatusCode(406)
+                        ->setContent(["message" => $message]);
         }
 
 //        for($i=1 ; $i<=10 ; $i++)
@@ -1209,8 +1211,10 @@ class UserController extends Controller
 //        }
         $verificationCode = rand(1000,99999);
         if(!isset($verificationCode)) {
-            session()->put("verificationCodeInfo" , "در حال امکان تخصیص کد احراز هویت به شما وجود ندارد . لطفا چند لحظه دیگر اقدام نمایید");
-            return redirect()->back() ;
+            $message = "در حال امکان تخصیص کد احراز هویت به شما وجود ندارد . لطفا چند لحظه دیگر اقدام نمایید";
+            return $this->response
+                ->setStatusCode(503)
+                ->setContent(["message" => $message]);
         }
 
         $smsInfo = [];
@@ -1230,16 +1234,22 @@ class UserController extends Controller
                 $verificationMessageController = new VerificationmessageController();
                 if($verificationMessageController->store($request))
                 {
-                    session()->put("getVerificationCodeSuccess" , "کد تایید شماره موبایل ارسال شد. در صورت عدم دریافت پیامک، 5 دقیقه دیگر مجدد درخواست ارسال کد بدهید.");
-                    return redirect()->back() ;
+                    $message = "کد تایید شماره موبایل ارسال شد. در صورت عدم دریافت پیامک، 5 دقیقه دیگر مجدد درخواست ارسال کد بدهید.";
+                    return $this->response
+                        ->setStatusCode(200)
+                        ->setContent(["message" => $message]);
                 }else{
-                    session()->put("verificationCodeError" , "خطای پایگاه داده در ارسال کد . لطفا چند لحظه دیگر اقدام نمایید.اگر در این فاصله پیامکی دریافت کردید لطفا آن را در نظر نگیرید");
-                    return redirect()->back() ;
+                    $message = "خطای پایگاه داده در ارسال کد . لطفا چند لحظه دیگر اقدام نمایید.اگر در این فاصله پیامکی دریافت کردید لطفا آن را در نظر نگیرید";
+                    return $this->response
+                        ->setStatusCode(503)
+                        ->setContent(["message" => $message]);
                 }
 
             }else{
-                session()->put("verificationCodeError" , "ارسال پیامک حاوی رمز عبور با مشکل مواجه شد! لطفا دوباره درخواست ارسال پیامک نمایید.");
-                return redirect()->back() ;
+                $message = "ارسال پیامک حاوی رمز عبور با مشکل مواجه شد! لطفا دوباره درخواست ارسال پیامک نمایید.";
+                return $this->response
+                    ->setStatusCode(503)
+                    ->setContent(["message" => $message]);
             }
         }else{
                 if($verificationMessages->count()>1)
@@ -1272,27 +1282,37 @@ class UserController extends Controller
                             $verificationMessageController = new VerificationmessageController();
                             if($verificationMessageController->store($request))
                             {
-                                session()->put("getVerificationCodeSuccess" , "کد تایید شماره موبایل ارسال شد. در صورت عدم دریافت پیامک، 5 دقیقه دیگر مجدد درخواست ارسال کد بدهید.");
-                                return redirect()->back() ;
+                                $message = "کد تایید شماره موبایل ارسال شد. در صورت عدم دریافت پیامک، 5 دقیقه دیگر مجدد درخواست ارسال کد بدهید";
+                                return $this->response
+                                    ->setStatusCode(200)
+                                    ->setContent(["message" => $message]);
                             }else{
-                                session()->put("verificationCodeError" , "خطای پایگاه داده در ارسال کد . لطفا چند لحظه دیگر اقدام نمایید.اگر در این فاصله پیامکی دریافت کردید لطفا آن را در نظر نگیرید");
-                                return redirect()->back() ;
+                                $message = "خطای پایگاه داده در ارسال کد . لطفا چند لحظه دیگر اقدام نمایید.اگر در این فاصله پیامکی دریافت کردید لطفا آن را در نظر نگیرید";
+                                return $this->response
+                                    ->setStatusCode(503)
+                                    ->setContent(["message" => $message]);
                             }
 
                         }else{
-                            session()->put("verificationCodeError" , "ارسال پیامک حاوی رمز عبور با مشکل مواجه شد! لطفا دوباره درخواست ارسال پیامک نمایید.");
-                            return redirect()->back() ;
+                            $message = "ارسال پیامک حاوی رمز عبور با مشکل مواجه شد! لطفا دوباره درخواست ارسال پیامک نمایید";
+                            return $this->response
+                                ->setStatusCode(503)
+                                ->setContent(["message" => $message]);
                         }
                     }else{
-                        session()->put("verificationCodeError" , "خطای پایگاه داده در ارسال کد . لطفا چند لحظه دیگر اقدام نمایید.");
-                        return redirect()->back() ;
+                        $message = "خطای پایگاه داده در ارسال کد . لطفا چند لحظه دیگر اقدام نمایید";
+                        return $this->response
+                            ->setStatusCode(503)
+                            ->setContent(["message" => $message]);
                     }
                 }else{
                     if($now->diffInMinutes($verificationMessage->created_at) > 0 ) $timeInterval = $now->diffInMinutes($verificationMessage->created_at)." دقیقه ";
                     else $timeInterval = $now->diffInSeconds($verificationMessage->created_at)." ثانیه ";
 
-                    session()->put("verificationCodeWarning" , "شما پس از گذشت ۵ دقیقه از آخرین درخواست خود می توانید دوباره درخواست ارسال نمایید .از زمان ارسال آخرین پیامک تایید برای شما ".$timeInterval."می گذرد." );
-                    return redirect()->back() ;
+                    $message = "شما پس از گذشت ۵ دقیقه از آخرین درخواست خود می توانید دوباره درخواست ارسال نمایید .از زمان ارسال آخرین پیامک تایید برای شما ".$timeInterval."می گذرد.";
+                    return $this->response
+                        ->setStatusCode(406)
+                        ->setContent(["message" => $message]);
                 }
         }
     }
@@ -1366,7 +1386,10 @@ class UserController extends Controller
     {
         if(Auth::user()->mobileNumberVerification)
         {
-            return redirect(action("HomeController@error403"));
+            $message = "شماره موبایل شما قبلا تایید شده است";
+            return $this->response
+                ->setStatusCode(406)
+                ->setContent(["message" => $message]);
         }
         $code = $request->get("code");
 
@@ -1376,8 +1399,10 @@ class UserController extends Controller
         $verificationMessages= Auth::user()->verificationmessages->where("code",$code)->where("verificationmessagestatus_id",$verificationMessageStatusSent)->sortByDesc("created_at");
         if($verificationMessages->isEmpty())
         {
-            session()->put("verificationCodeError" , "کد وارد شده اشتباه می باشد و یا باطل شده است");
-            return redirect()->back() ;
+            $message = "کد وارد شده اشتباه می باشد و یا باطل شده است";
+            return $this->response
+                ->setStatusCode(503)
+                ->setContent(["message" => $message]);
         }else{
             $verificationMessage = $verificationMessages->first();
             $now = Carbon::now();
@@ -1388,22 +1413,30 @@ class UserController extends Controller
                     $verificationMessage->verificationmessagestatus_id = $verificationMessageStatusSuccess;
                     $verificationMessage->expired_at = $now;
                     if ($verificationMessage->update()) {
-                        session()->put("verificationSuccess" , "شماره موبایل شما با موفقیت تایید شد! با تشکر.");
-                        return redirect()->back() ;
+                        $message = "شماره موبایل شما با موفقیت تایید شد";
+                        return $this->response
+                            ->setStatusCode(200)
+                            ->setContent(["message" => $message]);
                     } else {
-                        session()->put("verificationCodeError" , "خطای پایگاه داده در تایید حساب کاربری . لطفا کد احراز هویت را مجددا وارد نمایید");
-                        return redirect()->back() ;
+                        $message = "خطای پایگاه داده در تایید حساب کاربری . لطفا کد احراز هویت را مجددا وارد نمایید";
+                        return $this->response
+                            ->setStatusCode(503)
+                            ->setContent(["message" => $message]);
                     }
                 }
             }else{
                 $verificationMessage->verificationmessagestatus_id = $verificationMessageStatusExpired;
                 if($verificationMessage->update())
                 {
-                    session()->put("verificationCodeError" , "کد احراز هویت شما منقضی شده است . لطفا مجددا درخواست کد نمایید.");
-                    return redirect()->back() ;
+                    $message = "کد احراز هویت شما منقضی شده است . لطفا مجددا درخواست کد نمایید";
+                    return $this->response
+                        ->setStatusCode(503)
+                        ->setContent(["message" => $message]);
                 }else{
-                    session()->put("verificationCodeError" , "خطای پایگاه داده در تایید حساب کاربری . لطفا کد احراز هویت را مجددا وارد نمایید");
-                    return redirect()->back() ;
+                    $message = "خطای پایگاه داده در تایید حساب کاربری . لطفا کد احراز هویت را مجددا وارد نمایید";
+                    return $this->response
+                        ->setStatusCode(503)
+                        ->setContent(["message" => $message]);
                 }
             }
         }

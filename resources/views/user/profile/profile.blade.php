@@ -130,6 +130,7 @@
                                                  'withCompletionBox'=>true ,
                                                   "withRegisterationDate"=>true,
                                                   "withNavigation" => true,
+                                                  "withPhotoUpload" => true ,
                                                   ]
                                                   )
             </div>
@@ -162,11 +163,11 @@
 
                                         </a>
                                     </li>
-                                    @if(($user->id == Auth::id()))
-                                        <li @if(strcmp(session('tabPane') , "tab_1_2") == 0) {{ "class=active" }} @endif>
-                                            <a href="#tab_1_2" data-toggle="tab">تغییر عکس</a>
-                                        </li>
-                                    @endif
+                                    {{--@if(($user->id == Auth::id()))--}}
+                                        {{--<li @if(strcmp(session('tabPane') , "tab_1_2") == 0) {{ "class=active" }} @endif>--}}
+                                            {{--<a href="#tab_1_2" data-toggle="tab">تغییر عکس</a>--}}
+                                        {{--</li>--}}
+                                    {{--@endif--}}
                                     @permission((Config::get('constants.EDIT_USER_ACCESS')))
                                     @if($user->id == Auth::id())
                                         <li @if(strcmp(session('tabPane') , "tab_1_3") == 0) {{ "class=active" }} @endif>
@@ -195,41 +196,41 @@
                                     <!-- END PERSONAL INFO TAB -->
                                     <!-- CHANGE AVATAR TAB -->
                                     @if(($user->id == Auth::id()))
-                                        <div class="tab-pane @if(strcmp(session('tabPane') , "tab_1_2") == 0) active @endif" id="tab_1_2">
-                                            <p> می توانید عکس پروفایل خود را با استفاده از فرم زیر تغییر دهید . </p>
-                                            <form method="post" role="form" action="{{ action("UserController@updatePhoto" ) }}" enctype="multipart/form-data">
-                                                {{ csrf_field() }}
-                                                <div class="form-group {{ $errors->has('photo') ? ' has-error' : '' }}">
-                                                    <div class="fileinput fileinput-new" data-provides="fileinput">
-                                                        <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">
-                                                            <img  @if(isset($user->photo)) src="{{ route('image', ['category'=>'1','w'=>'140' , 'h'=>'140' ,  'filename' =>  $user->photo ]) }}" @endif  alt="عکس پروفایل" />
-                                                        </div>
-                                                        <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"> </div>
-                                                        <div>
-                                                                        <span class="btn default btn-file">
-                                                                            <span class="fileinput-new"> انتخاب عکس </span>
-                                                                            <span class="fileinput-exists"> تغییر </span>
-                                                                            <input type="file" name="photo"> </span>
-                                                            <a href="javascript:;" class="btn default fileinput-exists" data-dismiss="fileinput"> حذف </a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="clearfix margin-top-10">
-                                                        <span class="label label-danger">توجه! </span>
-                                                        <span> دقت نمایید که حجم عکس مورد نظر باید حداکثر 500 کیلوبایت و فرمت آن jpg و یا png باشد. </span>
-                                                    </div>
-                                                </div>
-                                                <div class="margin-top-10">
-                                                    <button type="submit"  class="btn green"> ذخیره </button>
-                                                </div>
-                                                @if($errors->has('photo'))
-                                                    @include("systemMessage.flash",array("error"=>$errors->first('photo')))
-                                                @else
-                                                    @if(Session::has('belongsTo') && strcmp(Session::get('belongsTo'),"photo")==0)
-                                                        @include("systemMessage.flash")
-                                                    @endif
-                                                @endif
-                                            </form>
-                                        </div>
+                                        {{--<div class="tab-pane @if(strcmp(session('tabPane') , "tab_1_2") == 0) active @endif" id="tab_1_2">--}}
+                                            {{--<p> می توانید عکس پروفایل خود را با استفاده از فرم زیر تغییر دهید . </p>--}}
+                                            {{--<form method="post" role="form" action="{{ action("UserController@updatePhoto" ) }}" enctype="multipart/form-data">--}}
+                                                {{--{{ csrf_field() }}--}}
+                                                {{--<div class="form-group {{ $errors->has('photo') ? ' has-error' : '' }}">--}}
+                                                    {{--<div class="fileinput fileinput-new" data-provides="fileinput">--}}
+                                                        {{--<div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">--}}
+                                                            {{--<img  @if(isset($user->photo)) src="{{ route('image', ['category'=>'1','w'=>'140' , 'h'=>'140' ,  'filename' =>  $user->photo ]) }}" @endif  alt="عکس پروفایل" />--}}
+                                                        {{--</div>--}}
+                                                        {{--<div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"> </div>--}}
+                                                        {{--<div>--}}
+                                                                        {{--<span class="btn default btn-file">--}}
+                                                                            {{--<span class="fileinput-new"> انتخاب عکس </span>--}}
+                                                                            {{--<span class="fileinput-exists"> تغییر </span>--}}
+                                                                            {{--<input type="file" name="photo"> </span>--}}
+                                                            {{--<a href="javascript:;" class="btn default fileinput-exists" data-dismiss="fileinput"> حذف </a>--}}
+                                                        {{--</div>--}}
+                                                    {{--</div>--}}
+                                                    {{--<div class="clearfix margin-top-10">--}}
+                                                        {{--<span class="label label-danger">توجه! </span>--}}
+                                                        {{--<span> دقت نمایید که حجم عکس مورد نظر باید حداکثر 500 کیلوبایت و فرمت آن jpg و یا png باشد. </span>--}}
+                                                    {{--</div>--}}
+                                                {{--</div>--}}
+                                                {{--<div class="margin-top-10">--}}
+                                                    {{--<button type="submit"  class="btn green"> ذخیره </button>--}}
+                                                {{--</div>--}}
+                                                {{--@if($errors->has('photo'))--}}
+                                                    {{--@include("systemMessage.flash",array("error"=>$errors->first('photo')))--}}
+                                                {{--@else--}}
+                                                    {{--@if(Session::has('belongsTo') && strcmp(Session::get('belongsTo'),"photo")==0)--}}
+                                                        {{--@include("systemMessage.flash")--}}
+                                                    {{--@endif--}}
+                                                {{--@endif--}}
+                                            {{--</form>--}}
+                                        {{--</div>--}}
                                         <!-- END CHANGE AVATAR TAB -->
                                         <!-- CHANGE PASSWORD TAB -->
                                         <div class="tab-pane @if(strcmp(session('tabPane') , "tab_1_3") == 0) active @endif" id="tab_1_3">
@@ -362,6 +363,8 @@
     <script src="/assets/pages/scripts/profile.min.js" type="text/javascript"></script>
     <script src="/assets/pages/scripts/dashboard.min.js" type="text/javascript"></script>
     <script src="/assets/pages/scripts/ui-toastr.min.js" type="text/javascript"></script>
+    <script src="/js/extraJS/scripts/profileUploadPhoto.js" type="text/javascript"></script>
+    <script src="/js/extraJS/scripts/verificationCode.js" type="text/javascript"></script>
     <script>
         /**
          * Set token for ajax request
@@ -482,111 +485,110 @@
             SweetAlert.init();
         });
 
-        $(document).on("click", "#bt-register-hamayesh-arabi", function (){
-            toastr.options = {
-                "closeButton": true,
-                "debug": false,
-                "positionClass": "toast-top-center",
-                "onclick": null,
-                "showDuration": "1000",
-                "hideDuration": "1000",
-                "timeOut": "5000",
-                "extendedTimeOut": "1000",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
-            };
+        {{--$(document).on("click", "#bt-register-hamayesh-arabi", function (){--}}
+            {{--toastr.options = {--}}
+                {{--"closeButton": true,--}}
+                {{--"debug": false,--}}
+                {{--"positionClass": "toast-top-center",--}}
+                {{--"onclick": null,--}}
+                {{--"showDuration": "1000",--}}
+                {{--"hideDuration": "1000",--}}
+                {{--"timeOut": "5000",--}}
+                {{--"extendedTimeOut": "1000",--}}
+                {{--"showEasing": "swing",--}}
+                {{--"hideEasing": "linear",--}}
+                {{--"showMethod": "fadeIn",--}}
+                {{--"hideMethod": "fadeOut"--}}
+            {{--};--}}
 
-            if(userAjax) {
-                userAjax.abort();
-            }
-            userAjax = $.ajax({
-                type: "POST",
-                url: "{{action("OrderController@addToArabiHozouri")}}",
-                contentType: "application/json",
-                dataType: "json",
-                statusCode: {
-                    200:function (response) {
-                        location.reload();
-                    },
-                    //The status for when the user is not authorized for making the request
-                    401:function (ressponse) {
-                    },
-                    403: function (response) {
-                    },
-                    404: function (response) {
-                    },
-                    //The status for when form data is not valid
-                    422: function (response) {
-                        //
-                    },
-                    //The status for when there is error php code
-                    500: function (response) {
-                        console.log(response);
-                    },
-                    //The status for when there is error php code
-                    503: function (response) {
-                        // console.log("503 Error");
-                        console.log(response);
-                        toastr["error"]("خطا", "پیام سیستم");
-                    }
-                }
-            });
-        });
+            {{--if(userAjax) {--}}
+                {{--userAjax.abort();--}}
+            {{--}--}}
+            {{--userAjax = $.ajax({--}}
+                {{--type: "POST",--}}
+                {{--url: "{{action("OrderController@addToArabiHozouri")}}",--}}
+                {{--contentType: "application/json",--}}
+                {{--dataType: "json",--}}
+                {{--statusCode: {--}}
+                    {{--200:function (response) {--}}
+                        {{--location.reload();--}}
+                    {{--},--}}
+                    {{--//The status for when the user is not authorized for making the request--}}
+                    {{--401:function (ressponse) {--}}
+                    {{--},--}}
+                    {{--403: function (response) {--}}
+                    {{--},--}}
+                    {{--404: function (response) {--}}
+                    {{--},--}}
+                    {{--//The status for when form data is not valid--}}
+                    {{--422: function (response) {--}}
+                        {{--//--}}
+                    {{--},--}}
+                    {{--//The status for when there is error php code--}}
+                    {{--500: function (response) {--}}
+                        {{--console.log(response);--}}
+                    {{--},--}}
+                    {{--//The status for when there is error php code--}}
+                    {{--503: function (response) {--}}
+                        {{--// console.log("503 Error");--}}
+                        {{--console.log(response);--}}
+                        {{--toastr["error"]("خطا", "پیام سیستم");--}}
+                    {{--}--}}
+                {{--}--}}
+            {{--});--}}
+        {{--});--}}
 
-        $(document).on("click", "#bt-cancel-hamayesh-arabi", function (){
-            toastr.options = {
-                "closeButton": true,
-                "debug": false,
-                "positionClass": "toast-top-center",
-                "onclick": null,
-                "showDuration": "1000",
-                "hideDuration": "1000",
-                "timeOut": "5000",
-                "extendedTimeOut": "1000",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
-            };
+        {{--$(document).on("click", "#bt-cancel-hamayesh-arabi", function (){--}}
+            {{--toastr.options = {--}}
+                {{--"closeButton": true,--}}
+                {{--"debug": false,--}}
+                {{--"positionClass": "toast-top-center",--}}
+                {{--"onclick": null,--}}
+                {{--"showDuration": "1000",--}}
+                {{--"hideDuration": "1000",--}}
+                {{--"timeOut": "5000",--}}
+                {{--"extendedTimeOut": "1000",--}}
+                {{--"showEasing": "swing",--}}
+                {{--"hideEasing": "linear",--}}
+                {{--"showMethod": "fadeIn",--}}
+                {{--"hideMethod": "fadeOut"--}}
+            {{--};--}}
 
-            if(userAjax) {
-                userAjax.abort();
-            }
-            userAjax = $.ajax({
-                type: "POST",
-                url: "{{action("OrderController@removeArabiHozouri")}}",
-                contentType: "application/json",
-                dataType: "json",
-                statusCode: {
-                    200:function (response) {
-                        location.reload();
-                    },
-                    //The status for when the user is not authorized for making the request
-                    401:function (ressponse) {
-                    },
-                    403: function (response) {
-                    },
-                    404: function (response) {
-                    },
-                    //The status for when form data is not valid
-                    422: function (response) {
-                        //
-                    },
-                    //The status for when there is error php code
-                    500: function (response) {
-                        console.log(response);
-                    },
-                    //The status for when there is error php code
-                    503: function (response) {
-                        // console.log("503 Error");
-                        console.log(response);
-                        toastr["error"]("خطا", "پیام سیستم");
-                    }
-                }
-            });
-        });
-
+            {{--if(userAjax) {--}}
+                {{--userAjax.abort();--}}
+            {{--}--}}
+            {{--userAjax = $.ajax({--}}
+                {{--type: "POST",--}}
+                {{--url: "{{action("OrderController@removeArabiHozouri")}}",--}}
+                {{--contentType: "application/json",--}}
+                {{--dataType: "json",--}}
+                {{--statusCode: {--}}
+                    {{--200:function (response) {--}}
+                        {{--location.reload();--}}
+                    {{--},--}}
+                    {{--//The status for when the user is not authorized for making the request--}}
+                    {{--401:function (ressponse) {--}}
+                    {{--},--}}
+                    {{--403: function (response) {--}}
+                    {{--},--}}
+                    {{--404: function (response) {--}}
+                    {{--},--}}
+                    {{--//The status for when form data is not valid--}}
+                    {{--422: function (response) {--}}
+                        {{--//--}}
+                    {{--},--}}
+                    {{--//The status for when there is error php code--}}
+                    {{--500: function (response) {--}}
+                        {{--console.log(response);--}}
+                    {{--},--}}
+                    {{--//The status for when there is error php code--}}
+                    {{--503: function (response) {--}}
+                        {{--// console.log("503 Error");--}}
+                        {{--console.log(response);--}}
+                        {{--toastr["error"]("خطا", "پیام سیستم");--}}
+                    {{--}--}}
+                {{--}--}}
+            {{--});--}}
+        {{--});--}}
     </script>
 @endsection

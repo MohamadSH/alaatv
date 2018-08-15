@@ -2,12 +2,14 @@
 
 namespace App\Http\Requests;
 
+use App\Traits\CharacterCommon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Input;
 
 class InsertEducationalContentRequest extends FormRequest
 {
+    use CharacterCommon;
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -36,11 +38,27 @@ class InsertEducationalContentRequest extends FormRequest
         return [
 //            'order' => 'required|numeric',
             'name'=>'required',
-            'grades'=>'required|exists:grades,id',
-            'majors'=>'required|exists:majors,id',
-            'contenttypes'=>'required|exists:contenttypes,id',
+            'contenttype_id'=>'required|exists:contenttypes,id',
             'file'=>'required'.$fileExtraRule,
-            'file2'=> $file2ExtraRule
+            'file2'=> $file2ExtraRule,
         ];
+    }
+
+    public function prepareForValidation()
+    {
+        $this->replaceNumbers();
+        parent::prepareForValidation();
+    }
+
+    protected function replaceNumbers()
+    {
+        $input = $this->request->all() ;
+        if(isset($input["order"]))
+        {
+            $input["order"] = preg_replace('/\s+/', '', $input["order"] ) ;
+            $input["order"] = $this->convertToEnglish($input["order"]) ;
+        }
+
+        $this->replace($input) ;
     }
 }
