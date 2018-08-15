@@ -1,0 +1,58 @@
+<VAST version="4.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.iab.com/VAST">
+  <Ad id="20001" sequence="1" conditionalAd="false">
+    <InLine>
+      <AdSystem version="4.0">IAB TechLab</AdSystem>
+      <Error>https://www.nuevolab.com/error</Error>
+      <Extensions>
+        <Extension type="iab-Count">
+          <total_available>
+            <![CDATA[ 2 ]]>
+          </total_available>
+        </Extension>
+      </Extensions>
+      <Impression id="Impression-ID">https://www.nuevolab.com/tracking/impression</Impression>
+      <Pricing model="cpm" currency="USD">
+        <![CDATA[ 25.00 ]]>
+      </Pricing>
+      <AdTitle>IAB TechLab Video Ad</AdTitle>
+      <Advertiser>IAB Sample Company</Advertiser>
+      <Category/>
+      <Creatives>
+        <Creative id="5480" sequence="1" adId="2447226">
+          <UniversalAdId idRegistry="Ad-ID" idValue="8465">8465</UniversalAdId>
+          <Linear skipoffset="00:00:05">
+            <TrackingEvents>
+              <Tracking event="start">https://www.nuevolab.com/tracking/start</Tracking>
+              <Tracking event="firstQuartile">https://www.nuevolab.com/tracking/firstQuartile</Tracking>
+              <Tracking event="midpoint">https://www.nuevolab.com/tracking/midpoint</Tracking>
+              <Tracking event="thirdQuartile">https://www.nuevolab.com/tracking/thirdQuartile</Tracking>
+              <Tracking event="complete">https://www.nuevolab.com/tracking/complete</Tracking>
+			  <Tracking event="pause">https://www.nuevolab.com/tracking/pause</Tracking>
+			  <Tracking event="resume">https://www.nuevolab.com/tracking/resume</Tracking>
+			  <Tracking event="skip">https://www.nuevolab.com/tracking/skip</Tracking>
+			  <Tracking event="clickthrough">https://www.nuevolab.com/tracking/clickthrough</Tracking>
+
+            </TrackingEvents>
+            <Duration>00:00:16</Duration>
+            <MediaFiles>
+              <MediaFile id="5241" delivery="progressive" type="video/mp4" bitrate="2000" width="1280" height="720" minBitrate="1500" maxBitrate="2500" scalable="1" maintainAspectRatio="1" codec="0">
+                <![CDATA[https://iabtechlab.com/wp-content/uploads/2016/07/VAST-4.0-Short-Intro.mp4]]>
+              </MediaFile>
+              <MediaFile id="5244" delivery="progressive" type="video/mp4" bitrate="1000" width="854" height="480" minBitrate="700" maxBitrate="1500" scalable="1" maintainAspectRatio="1" codec="0">
+                <![CDATA[https://iabtechlab.com/wp-content/uploads/2017/12/VAST-4.0-Short-Intro-mid-resolution.mp4]]>
+              </MediaFile>
+              <MediaFile id="5246" delivery="progressive" type="video/mp4" bitrate="600" width="640" height="360" minBitrate="500" maxBitrate="700" scalable="1" maintainAspectRatio="1" codec="0">
+                <![CDATA[https://iabtechlab.com/wp-content/uploads/2017/12/VAST-4.0-Short-Intro-low-resolution.mp4]]>
+              </MediaFile>
+            </MediaFiles>
+            <VideoClicks>
+              <ClickThrough id="blog">
+                <![CDATA[https://www.nuevolab.com/videojs/order]]>
+              </ClickThrough>
+            </VideoClicks>
+          </Linear>
+        </Creative>
+      </Creatives>
+    </InLine>
+  </Ad>
+</VAST>
