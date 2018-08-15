@@ -65,9 +65,7 @@
                     {{--</div>--}}
                 {{--</div>--}}
                 <div class="row">
-                    <div class="col-md-4"></div>
-                    <div class="col-md-4">
-                        {{--{!! Form::select('contenttype', $rootContentTypes , null, ['class' => 'form-control', 'id' => 'rootContentTypes' , 'placeholder' => 'انتخاب نوع محتوا'  ]) !!}--}}
+                    <div class="col-md-6">
                         <select name="contenttype" class="form-control" id="rootContentTypes" >
                             <option value="" selected>انتخاب نوع محتوا</option>
                             @foreach($rootContentTypes as $rootContentType)
@@ -75,9 +73,15 @@
                             @endforeach
                         </select>
                     </div>
-                    {{--<div class="col-md-2">--}}
-                        {{--{!! Form::select(null, $childContentTypes , null, ['class' => 'form-control', 'id' => 'childContentTypes' , 'placeholder' => 'انتخاب زیر شاخه' , 'disabled' ]) !!}--}}
-                    {{--</div>--}}
+
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        {!! Form::select('contentset', $contentsets , null, ['class' => 'form-control', 'id' => 'contentSets' , 'placeholder' => 'انتخاب پلی لیست'  ]) !!}
+                    </div>
+                    <div class="col-md-6">
+                        {!! Form::select('author', $authors , null, ['class' => 'form-control', 'id' => 'authors' , 'placeholder' => 'انتخاب دبیر'  ]) !!}
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
@@ -183,10 +187,10 @@
             '                </div>\n' +
             '            </div>\n' +
 
-            '            <div class="form-group">\n' +
+            '            <div class="form-group description-group">\n' +
             '                <label class="col-md-2 control-label" for="description">توضیح:\n' +
             '                </label>\n' +
-            '                <div class="col-md-9">\n' +
+            '                <div class="col-md-9 description-group-textarea-column">\n' +
             '                    <textarea name="description" class="form-control" rows="5"></textarea>\n' +
             '                </div>\n' +
             '            </div>\n' +
@@ -213,7 +217,7 @@
                     $("#rootContentTypes").parent("div .col-md-2").removeClass("has-error");
 
                     if($("#rootContentTypes option:selected").val().length === 0)  {
-                        $("#rootContentTypes").parent("div .col-md-2").addClass("has-error");
+                        $("#rootContentTypes").parent("div .col-md-6").addClass("has-error");
                         this.removeFile(file);
                     }
 
@@ -269,8 +273,26 @@
                     file.previewElement.querySelector('.dz-file-preview').appendChild(removeButton);
 
                     var rootContentTypeValue = $("#rootContentTypes option:selected").val() ;
-                    var rootContentTypeHidden = Dropzone.createElement("<input type='hidden' name='contenttypes[]' value='"+rootContentTypeValue+"'>");
+                    var rootContentTypeHidden = Dropzone.createElement("<input type='hidden' name='contenttype_id' value='"+rootContentTypeValue+"'>");
                     file.previewElement.querySelector('.form-horizontal').appendChild(rootContentTypeHidden);
+
+                    var contentSetValue = $("#contentSets option:selected").val() ;
+                    if(contentSetValue.length > 0)
+                    {
+                        var contentSetHidden = Dropzone.createElement("<input type='hidden' name='contentset_id[]' value='"+contentSetValue+"'>");
+                        file.previewElement.querySelector('.form-horizontal').appendChild(contentSetHidden);
+
+                        var orderInput = Dropzone.createElement("<input type='text' placeholder='ترتیب' name='order' value=''>");
+                        file.previewElement.querySelector('.form-horizontal .description-group .description-group-textarea-column').appendChild(orderInput);
+                    }
+
+                    var authorValue = $("#authors option:selected").val() ;
+                    if(authorValue.length > 0)
+                    {
+                        var authorHidden = Dropzone.createElement("<input type='hidden' name='author_id' value='"+authorValue+"'>");
+                        file.previewElement.querySelector('.form-horizontal').appendChild(authorHidden);
+
+                    }
 
                     //CODE SNIPPET
 //                     if($("#childContentTypes").is(':enabled')) {

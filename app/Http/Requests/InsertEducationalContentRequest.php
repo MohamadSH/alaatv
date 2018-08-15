@@ -36,9 +36,7 @@ class InsertEducationalContentRequest extends FormRequest
         return [
 //            'order' => 'required|numeric',
             'name'=>'required',
-            'grades'=>'required|exists:grades,id',
-            'majors'=>'required|exists:majors,id',
-            'contenttypes'=>'required|exists:contenttypes,id',
+            'contenttype_id'=>'required|exists:contenttypes,id',
             'file'=>'required'.$fileExtraRule,
             'file2'=> $file2ExtraRule
         ];
