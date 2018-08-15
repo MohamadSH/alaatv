@@ -74,7 +74,6 @@
                             @endforeach
                         </select>
                     </div>
-
                 </div>
                 <div class="row">
                     <div class="col-md-6">
@@ -444,6 +443,9 @@
 //                    console.log(files);
 //                    console.log(xhr);
                     xhr.setRequestHeader("X-Datatype",$('select[name=contenttype] :selected').attr("data-title"));
+                    var contentset = $('select[name=contentset] :selected').val();
+                    if(contentset.length > 0)
+                        xhr.setRequestHeader("X-Dataid", contentset);
                     xhr.setRequestHeader("X-Dataname",files.name );
                 });
 
