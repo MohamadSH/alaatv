@@ -18,6 +18,7 @@ use App\Traits\APIRequestCommon;
 use App\Traits\FileCommon;
 use App\Traits\Helper;
 use App\Traits\ProductCommon;
+use App\User;
 use App\Websitesetting;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
@@ -184,8 +185,18 @@ class EducationalContentController extends Controller
     public function create2()
     {
         $rootContentTypes = Contenttype::whereDoesntHave("parents")->get() ;
+        $contentsets = Contentset::pluck("name" , "id");
+        $authors = User::whereHas("roles" , function ($q){
+            $q->where("name" , "teacher") ;
+        })->get()
+            ->sortBy("lastName")
+            ->values()
+            ->pluck("lastName" , "id");
 
-        return view("educationalContent.create2" , compact("rootContentTypes")) ;
+        return view("educationalContent.create2" , compact("rootContentTypes" ,
+                                                                        "contentsets" ,
+                                                                            "authors"
+                                                                        )) ;
     }
 
     /**
@@ -231,11 +242,6 @@ public function store(InsertEducationalContentRequest $request)
             $educationalContent->validSince = $validSince;
         }
 
-        if($request->has("contenttypes"))
-        {
-            $contentTypes = $request->get("contenttypes");
-        }
-
         if($request->has("enable"))
             $educationalContent->enable = 1;
         else
@@ -244,79 +250,22 @@ public function store(InsertEducationalContentRequest $request)
         $done = false ;
         if($educationalContent->save()){
 
-            if($request->has("contentsets"))
+            if($request->has("contentset_id"))
             {
-                $contentSets = $request->get("contentsets");
-                foreach ($contentSets as $contentSet)
+                $contentset_id = $request->get("contentset_id");
+                if($request->has("order"))
                 {
-                    $pivots = array();
-                    if(isset($contentSet["order"]))
-                        $pivots["order"] = $contentSet["order"];
-                    if(isset($contentSet["isDefault"]))
-                        $pivots["isDefault"] = $contentSet["isDefault"];
-
-                    if(!empty($pivots))
-                        $educationalContent->contentsets()->attach($contentSet["id"] , $pivots);
-                    else
-                        $educationalContent->contentsets()->attach($contentSet["id"]);
-                }
-            }
-
-            if($request->has("majors"))
-            {
-                $majors = $request->get("majors") ;
-                $educationalContent->majors()->attach($majors);
-            }
-
-            if($request->has("grades"))
-            {
-                $grades = $request->get("grades") ;
-                $educationalContent->grades()->attach($grades);
-            }
-
-            if(isset($contentTypes))
-            {
-                $educationalContent->contenttypes()->attach($contentTypes);
-
-                //TODO: file1,2 ??!
-                if ($request->hasFile("file1"))
-                {
-                    $file = $request->file('file1');
-                    $extension = $file->getClientOriginalExtension();
-
-                    $fileName = basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
-                    $disk = $educationalContent->fileMultiplexer($contentTypes);
-                    if ($disk) {
-                        if (Storage::disk($disk)->put($fileName, File::get($file))) {
-
-                            $fileRequest->offsetSet('name' ,$fileName ) ;
-                            $fileRequest->offsetSet('disk' , $disk) ;
-                            $fileId = $fileController->store($fileRequest) ;
-                            if($fileId)
-                                $educationalContent->files()->attach($fileId);
-                        }
-                    }
+                    $order = $request->get("order");
+                    $pivots = [];
+                    $pivots["order"] = $order;
+                    $pivots["isDefault"] = 1;
                 }
 
-                if ($request->hasFile("file2"))
-                {
-                    $file = $request->file('file2');
-                    $extension = $file->getClientOriginalExtension();
-                    $fileName = basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
-                    $disk = $educationalContent->fileMultiplexer($contentTypes);
-                    if ($disk) {
-                        if (Storage::disk($disk)->put($fileName, File::get($file))) {
-
-                            $fileRequest->offsetSet('name' ,$fileName ) ;
-                            $fileRequest->offsetSet('disk' , $disk) ;
-                            $fileId = $fileController->store($fileRequest) ;
-                            if($fileId)
-                                $educationalContent->files()->attach($fileId);
-                        }
-                    }
-                }
+                if(empty($pivots))
+                    $educationalContent->contentsets()->attach($contentset_id);
+                else
+                    $educationalContent->contentsets()->attach($contentset_id , $pivots);
             }
-
 
             if($request->has("file"))
             {
