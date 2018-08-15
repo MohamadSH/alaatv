@@ -2500,7 +2500,7 @@ class HomeController extends Controller
                     'username' => config('constants.SFTP_USERNAME'),
                     'password' => config('constants.SFTP_PASSSWORD'),
                     'privateKey' => config('constants.SFTP_PRIVATE_KEY_PATH'),
-                    'root' => '/alaa_media/cdn/media/'.$contentId.'/',
+                    'root' => '/alaa_media/cdn/media/'.$contentId.'/HD_720p/',
                     'timeout' => config('constants.SFTP_TIMEOUT'),
                     'directoryPerm' => 0755
                 ]);
@@ -2512,7 +2512,6 @@ class HomeController extends Controller
                 $filesystem = Storage::disk($disk . "Sftp");
                 if($filesystem->put($fileName, fopen($newFileNameDir, 'r+'))) {
                     $done = true;
-//                    dd($done);
                 }
 
             }
