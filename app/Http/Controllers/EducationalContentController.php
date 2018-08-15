@@ -153,8 +153,12 @@ class EducationalContentController extends Controller
         if($educationalcontent->template_id != 1)
             return redirect('/',301);
         $video = $educationalcontent;
+        [
+            $contentsWithSameSet ,
+            $contentSetName
+        ]  = $video->getSetMates();
         $files = $video->files;
-        return view("educationalContent.embed",compact('video','files'));
+        return view("educationalContent.embed",compact('video','files','contentsWithSameSet','contentSetName'));
     }
     /**
      * Show the form for creating a new resource.

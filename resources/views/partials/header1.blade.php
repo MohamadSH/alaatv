@@ -39,16 +39,16 @@
         <div class="page-top">
             <!-- BEGIN HEADER SEARCH BOX -->
             <!-- DOC: Apply "search-form-expanded" right after the "search-form" class to have half expanded search box -->
-            {{--<form class="search-form search-form-expanded" action="{{ action("HomeController@search") }}" method="GET">--}}
-                {{--<div class="input-group">--}}
-                    {{--<input type="text" class="form-control" placeholder="جستجو ..." name="search">--}}
-                    {{--<span class="input-group-btn">--}}
-                                {{--<a href="javascript:;" class="btn submit">--}}
-                                    {{--<i class="icon-magnifier"></i>--}}
-                                {{--</a>--}}
-                            {{--</span>--}}
-                {{--</div>--}}
-            {{--</form>--}}
+            <form class="search-form search-form-expanded" action="{{ action("HomeController@search") }}" method="GET">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="جستجو ..." name="search">
+                    <span class="input-group-btn">
+                                <a href="javascript:;" class="btn submit">
+                                    <i class="icon-magnifier"></i>
+                                </a>
+                            </span>
+                </div>
+            </form>
             <!-- END HEADER SEARCH BOX -->
             {{--<div class="col-md-2 col-md-offset-1" style="margin-top: 0.5%;">--}}
                 {{--<a href="#" ><img style="width: 45px;height: 45px;" src="/assets/extra/namad.jpg" alt="نماد اعتماد الکترونیکی" onclick='window.open("https://trustseal.enamad.ir/Verify.aspx?id=58663&p=yncraqgwhwmbhwmbfuix", "Popup","toolbar=no, location=no, statusbar=no, menubar=no, scrollbars=1, resizable=0, width=580, height=600, top=30")' height="60" width="60"></a>--}}
@@ -72,7 +72,7 @@
                         @if(isset($bonName))
                             <li class="dropdown dropdown-extended dropdown-notification">
                                 <a href="javascript:;" class="dropdown-toggle" >
-                                    <span >تعداد {{$bonName}} شما</span>
+                                    <span > {{$bonName}} </span>
                                     <span class="badge badge-default"> {{Auth::user()->userHasBon(Config::get("constants.BON1"))}} </span>
                                 </a>
                                 <ul class="dropdown-menu">
@@ -81,7 +81,7 @@
                         @endif
                         <li class="dropdown dropdown-extended dropdown-notification">
                             <a href="javascript:;" class="dropdown-toggle" >
-                                <span >کیف پول شما</span>
+                                <span >کیف پول</span>
                                 <span class="badge badge-default"> {{number_format(Auth::user()->getTotalWalletBalance())}} تومان </span>
                             </a>
                             <ul class="dropdown-menu">

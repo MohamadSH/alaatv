@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Videojs/Nuevo - Keyboard shortcuts</title>
+<link href="css/style.css" rel="stylesheet" type="text/css">
+<link href="../video-js.min.css" rel="stylesheet" type="text/css" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script src="../videojs-ie8.min.js"></script>
+</head>
+
+<body>
+<div class="header">
+	<div class="menu">
+		<a href="https://www.nuevolab.com/videojs/"><img src="images/nuevolab.png"></a>
+		<div class="browse">&larr; <a href="index.html">Back to examples</a></div>
+	</div>
+</div>
+
+<div class="container">
+	<h1>Keyboard shortcuts</h1>
+
+	<div class="media-parent">
+		<div class="media-child">
+			<video id="player_one" class="video-js vjs-fluid vjs-default-skin" controls preload="auto" poster="images/poster.jpg">
+				<source src="//cdn.nuevolab.com/media/demo_240.mp4" res="240" label="240p" type="video/mp4">
+				<source src="//cdn.nuevolab.com/media/demo_360.mp4" res="360" label="360p" type="video/mp4">
+				<source src="//cdn.nuevolab.com/media/demo_480.mp4" res="480" default label="480p" type="video/mp4">
+				<source src="//cdn.nuevolab.com/media/demo_720.mp4" res="720" label="720p" type="video/mp4">
+			</video>
+		</div>
+	</div>
+
+
+	<script type="text/javascript" src="//vjs.zencdn.net/6.6.3/video.min.js"></script>
+	<script type="text/javascript" src="../nuevo.min.js"></script>
+	<script type="text/javascript" src="../plugins/videojs.hotkeys.min.js"></script>
+
+	<script>
+	var player = videojs('player_one',{},function(){ 
+		this.nuevoPlugin({ 
+			logotitle:'Nuevo plugin for Videojs',
+			logo: 'images/logo.png',
+			logoposition:'RT',
+			logourl:'https://www.nuevolab.com'
+		}); 
+		this.hotkeys({
+			volumeStep: 0.1,
+			seekStep: 5,
+			alwaysCaptureHotkeys: true
+		});
+	});
+	</script>
+
+
+<ul>
+<li>Space bar - toggle play/pause.</li>
+<li>Right and Left Arrow - seek the video forwards and back.</li>
+<li>Up and Down Arrow - increase and decrease the volume.</li>
+<li>M key - toggle mute/unmute.</li>
+<li>F key - toggle fullscreen off and on.</li>
+</ul>
+
+<h2>Code Setup</h2>
+<pre>
+&lt;script type="text/javascript" src="//vjs.zencdn.net/6.6.3/video.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="../nuevo.min.js"&gt;&lt;/script&gt;
+<span class="mark">&lt;script type="text/javascript" src="../plugins/videojs.hotkeys.min.js"&gt;&lt;/script&gt;</span>
+&lt;script&gt;
+	var player = videojs('player_one',{},function(){ 
+		this.nuevoPlugin({ 
+			logotitle:'Nuevo plugin for Videojs',
+			logo: 'images/logo.png',
+			logoposition:'RT',
+			logourl:'https://www.nuevolab.com'
+		}); 
+		<span class="mark">this.hotkeys({
+			volumeStep: 0.1,
+			seekStep: 5,
+			alwaysCaptureHotkeys: true
+		});</span>
+	});
+&lt;/script&gt;
+</pre>
+
+</div>
+<div class="footer">
+&copy; 2008 - 2018, <a href="https://www.nuevolab.com">Nuevolab Software</a>. All rights reserved.
+</div>
+
+</body>
+</html>
