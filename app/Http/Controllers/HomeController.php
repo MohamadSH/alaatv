@@ -2500,7 +2500,7 @@ class HomeController extends Controller
                     'username' => config('constants.SFTP_USERNAME'),
                     'password' => config('constants.SFTP_PASSSWORD'),
                     'privateKey' => config('constants.SFTP_PRIVATE_KEY_PATH'),
-                    'root' => '/alaa_media/cdn/media/'.$contentId.'/HD_720p/',
+                    'root' => '/alaa_media/cdn/media/'.$contentId,
                     'timeout' => config('constants.SFTP_TIMEOUT'),
                     'directoryPerm' => 0755
                 ]);
@@ -2605,34 +2605,36 @@ class HomeController extends Controller
                                             {
                                                $q->where("product_id" , $asiatechProduct);
                                             })
+                                            ->orderBy("completed_at")
                                             ->get();
                 echo "<span style='color:blue'>Number of orders: ".$voucherPendingOrders->count()."</span>";
                 echo "<br>" ;
                 $counter = 0;
+                $nowDateTime = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
+                    ->timezone('Asia/Tehran');
                 foreach ($voucherPendingOrders as $voucherOrder)
                 {
                     $orderUser = $voucherOrder->user;
-                    $voucherOrder->orderstatus_id = config("constants.ORDER_STATUS_CLOSED");
-                    if($voucherOrder->update())
-                    {
-                        $nowDateTime = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
-                            ->timezone('Asia/Tehran');
-                        $userVoucher = $orderUser->productvouchers()
+                    $unusedVoucher = Productvoucher::whereNull("user_id")
                                                     ->where("enable" , 1)
                                                     ->where("expirationdatetime" , ">" , $nowDateTime)
                                                     ->where("product_id" , $asiatechProduct)
-                                                    ->get();
-
-                        if($userVoucher->isEmpty())
+                                                    ->get()
+                                                    ->first();
+                    if(isset($unusedVoucher))
+                    {
+                        $voucherOrder->orderstatus_id = config("constants.ORDER_STATUS_CLOSED");
+                        if($voucherOrder->update())
                         {
-                            $unusedVoucher = Productvoucher::whereNull("user_id")
-                                                            ->where("enable" , 1)
-                                                            ->where("expirationdatetime" , ">" , $nowDateTime)
-                                                            ->where("product_id" , $asiatechProduct)
-                                                            ->get()
-                                                            ->first();
-                            if(isset($unusedVoucher))
+                            $userVoucher = $orderUser->productvouchers()
+                                                        ->where("enable" , 1)
+                                                        ->where("expirationdatetime" , ">" , $nowDateTime)
+                                                        ->where("product_id" , $asiatechProduct)
+                                                        ->get();
+
+                            if($userVoucher->isEmpty())
                             {
+
                                 $unusedVoucher->user_id = $orderUser->id;
                                 if($unusedVoucher->update())
                                 {
@@ -2653,19 +2655,19 @@ class HomeController extends Controller
                             }
                             else
                             {
-                                echo "<span style='color:orangered'>Could not find voucher for user  #".$orderUser->id."</span>";
+                                echo "<span style='color:orangered'>User  #".$orderUser->id." already has a voucher code</span>";
                                 echo "<br>" ;
                             }
                         }
                         else
                         {
-                            echo "<span style='color:orangered'>User  #".$orderUser->id." already has a voucher code</span>";
+                            echo "<span style='color:red'>Error on updating order #".$voucherOrder->id." for user #".$orderUser->id."</span>";
                             echo "<br>" ;
                         }
                     }
                     else
                     {
-                        echo "<span style='color:red'>Error on updating order #".$voucherOrder->id." for user #".$orderUser->id."</span>";
+                        echo "<span style='color:orangered'>Could not find voucher for user  #".$orderUser->id."</span>";
                         echo "<br>" ;
                     }
                 }

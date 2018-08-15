@@ -68,7 +68,7 @@ var u = Dropzone.options.myAwesomeDropzone = { // The camelized version of the I
     dictFallbackMessage:"مرورگر شما قابلیت درگ اند دراپ را پشتیبانی نمی کند!",
     dictInvalidFileType:"فرمت فایل شما باید mp3 باشد.",
     dictResponseError : "خطا در آپلود",
-    acceptedFiles:".pdf,.rar",
+    acceptedFiles:".pdf,.rar,.mp4",
 
     // The setting up of the dropzone
     init: function() {
@@ -123,6 +123,14 @@ var u = Dropzone.options.myAwesomeDropzone = { // The camelized version of the I
         this.on("sending", function(files, xhr, formData){
 //                    console.log(files);
 //                    console.log(xhr);
+            var contentset = $('input[name=contentset]').val();
+            if(contentset.length > 0)
+            {
+                var quality = $("#fileQuality").val();
+                if(quality.length > 0 )
+                    contentset += "/"+quality+"/";
+                xhr.setRequestHeader("X-Dataid", contentset);
+            }
             xhr.setRequestHeader("X-Datatype",$('#rootContentTypes :selected').attr("data-title"));
             xhr.setRequestHeader("X-Dataname",files.name );
         });
