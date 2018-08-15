@@ -584,6 +584,11 @@ class User extends Authenticatable
         return $fullName;
     }
 
+    public function getFullNameAttribute($value)
+    {
+        return ucfirst($this->firstName) . ' ' . ucfirst($this->lastName);
+    }
+
     public function routeNotificationForPhoneNumber()
     {
         return ltrim($this->mobile, '0');
