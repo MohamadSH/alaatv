@@ -149,7 +149,7 @@
             dictFallbackMessage:"مرورگر شما قابلیت درگ اند دراپ را پشتیبانی نمی کند!",
             dictInvalidFileType:"فرمت فایل شما باید pdf یا rar باشد.",
             dictResponseError : "خطا در آپلود",
-            acceptedFiles:".pdf,.rar",
+            acceptedFiles:".pdf,.rar,.mp4",
             previewsContainer: "#dropzone-elements",
             previewTemplate: '<div class="row"><div class="portlet light">\n' +
             '<div class="portlet-body">\n' +
