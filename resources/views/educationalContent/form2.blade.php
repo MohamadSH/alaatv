@@ -56,6 +56,9 @@
             </li>
         @endif
     </ul>
+    <div class="col-md-12">
+        <input id="fileQuality"  type="text" name="quality" class="form-control"  value=""  placeholder="نام کیفیت(در صورت وجود)">
+    </div>
     <div id="my-awesome-dropzone" class="dropzone dropzone-file-area needsclick dz-clickable" >
                 <div class="fallback">
                     <input name="file" type="file" multiple />

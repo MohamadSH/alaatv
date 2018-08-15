@@ -218,7 +218,7 @@ class EducationalContentController extends Controller
      * @param  \App\Http\Requests\InsertEducationalContentRequest  $request
      * @return \Illuminate\Http\Response
      */
-public function store(InsertEducationalContentRequest $request)
+    public function store(InsertEducationalContentRequest $request)
     {
 
         try
@@ -629,15 +629,6 @@ public function store(InsertEducationalContentRequest $request)
     {
         $rootContentTypes = Contenttype::whereDoesntHave("parents")->get() ;
 
-        $childContentTypes = Contenttype::whereHas("parents" , function ($q) {
-            $q->where("name" , "exam") ;
-        })->pluck("displayName" , "id") ;
-
-        $highSchoolType = Majortype::where("name" , "highschool")->get()->first();
-        $majors = Major::where("majortype_id" , $highSchoolType->id)->pluck('name', 'id');
-
-        $grades = Grade::pluck('displayName', 'id');
-
         if(isset($educationalContent->validSince))
         {
             $validSinceTime = explode(" " , $educationalContent->validSince);
@@ -648,8 +639,14 @@ public function store(InsertEducationalContentRequest $request)
         if(isset($educationalContent->tags->tags))
             $tags = $strTags = implode(",",$educationalContent->tags->tags);
 
-        return view("educationalContent.edit" , compact("educationalContent" ,"rootContentTypes" , "childContentTypes" ,
-            "majors" , "grades" , 'validSinceTime' , 'tags')) ;
+        $contentset = $educationalContent->contentsets
+                                        ->first();
+        return view("educationalContent.edit" , compact("educationalContent" ,
+                                                                    "rootContentTypes" ,
+                                                                    'validSinceTime' ,
+                                                                    'tags' ,
+                                                                    'contentset'
+        )) ;
     }
 
     /**
