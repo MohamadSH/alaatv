@@ -189,7 +189,8 @@ class EducationalContentController extends Controller
     public function create2()
     {
         $rootContentTypes = Contenttype::whereDoesntHave("parents")->get() ;
-        $contentsets = Contentset::pluck("name" , "id");
+        $contentsets = Contentset::sortBy("created_at" , "DESC")
+                                ->pluck("name" , "id");
         $authors = User::whereHas("roles" , function ($q){
             $q->where("name" , "teacher") ;
         })->get()
@@ -303,14 +304,7 @@ class EducationalContentController extends Controller
 
                 if($request->has("file"))
                 {
-                    if($request->has("caption"))
-                        $caption = $request->get("caption");
-                    if(isset($caption))
-                        $files = [ 0 => ["name"=>$request->get("file"),"caption"=> $caption] ];
-                    else
-                        $files = [ 0 => [ "name"=>$request->get("file")] ];
-
-
+                    $files = $request->get("file") ;
                 }
                 elseif($request->has("files")) {
                     $files = $request->get("files");
@@ -318,16 +312,17 @@ class EducationalContentController extends Controller
 
                 if(isset($files))
                 {
-                    foreach ($files as $file)
+                    foreach ($files as $key => $file)
                     {
-                        $fileName = $file["name"];
+                        $fileName = $file;
                         if(strlen(preg_replace('/\s+/', '',  $fileName) ) == 0)
                             continue;
 
                         $fileRequest->offsetSet('name' ,$fileName ) ;
-                        if(isset($file["disk_id"]))
+                        $disk = $request->get("disk")[$key];
+                        if(isset($disk))
                         {
-                            $fileRequest->offsetSet('disk_id' , $file["disk_id"]) ;
+                            $fileRequest->offsetSet('disk_id' , $disk) ;
                         }
                         else
                         {
@@ -340,10 +335,18 @@ class EducationalContentController extends Controller
                         if($fileId)
                         {
                             $attachPivot = array();
-                            if(isset($file["caption"])) $attachPivot["caption"] = $file["caption"];
-                            if(isset($file["label"])) $attachPivot["label"] = $file["label"];
-                            if(!empty($attachPivot)) $educationalContent->files()->attach($fileId , $attachPivot);
-                            else $educationalContent->files()->attach($fileId);
+                            $caption = $request->get("caption")[$key];
+                            if(isset($caption))
+                                $attachPivot["caption"] = $caption;
+
+                            $label = $request->get("label")[$key];
+                            if(isset($label))
+                                $attachPivot["label"] = $label;
+
+                            if(empty($attachPivot))
+                                $educationalContent->files()->attach($fileId);
+                            else
+                                $educationalContent->files()->attach($fileId , $attachPivot);
                         }
                     }
 
@@ -739,17 +742,44 @@ class EducationalContentController extends Controller
                 $files = $request->get("files");
             } //ToDo : should be merged
 
-            if(isset($files)){
-//                dd($request->all());
-                foreach ($files as $file)
+            if(isset($files))
+            {
+                foreach ($files as $key => $file)
                 {
                     $fileName = $file;
+                    if(strlen(preg_replace('/\s+/', '',  $fileName) ) == 0)
+                        continue;
+
                     $fileRequest->offsetSet('name' ,$fileName ) ;
-                    $disk = $educationalContent->fileMultiplexer();
-                    $fileRequest->offsetSet('disk_id' , $disk->id) ;
+                    $disk = $request->get("disk")[$key];
+                    if(isset($disk))
+                    {
+                        $fileRequest->offsetSet('disk_id' , $disk) ;
+                    }
+                    else
+                    {
+                        $disk = $educationalContent->fileMultiplexer();
+                        if($disk !== false)
+                            $fileRequest->offsetSet('disk_id' , $disk->id) ;
+                    }
+
                     $fileId = $fileController->store($fileRequest) ;
                     if($fileId)
-                        $educationalContent->files()->attach($fileId);
+                    {
+                        $attachPivot = array();
+                        $caption = $request->get("caption")[$key];
+                        if(isset($caption))
+                            $attachPivot["caption"] = $caption;
+
+                        $label = $request->get("label")[$key];
+                        if(isset($label))
+                            $attachPivot["label"] = $label;
+
+                        if(empty($attachPivot))
+                            $educationalContent->files()->attach($fileId);
+                        else
+                            $educationalContent->files()->attach($fileId , $attachPivot);
+                    }
                 }
             }
 

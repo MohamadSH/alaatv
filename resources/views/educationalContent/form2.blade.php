@@ -57,7 +57,9 @@
         @endif
     </ul>
     <div class="col-md-12">
-        <input id="fileQuality"  type="text" name="quality" class="form-control"  value=""  placeholder="نام کیفیت(در صورت وجود)">
+        <input  type="text" name="fileQuality" class="form-control"  value=""  placeholder="نام کیفیت(در صورت وجود)">
+        <input  type="text" name="fileCaption" class="form-control"  value=""  placeholder="نام کیفیت(در صورت وجود)">
+        <input  type="text" name="fileLabel" class="form-control"  value=""  placeholder="نام کیفیت(در صورت وجود)">
     </div>
     <div id="my-awesome-dropzone" class="dropzone dropzone-file-area needsclick dz-clickable" >
                 <div class="fallback">

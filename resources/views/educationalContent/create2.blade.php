@@ -465,8 +465,12 @@
 //                    files.previewElement.querySelector('.form-horizontal').appendChild(methodInput);
                     if(response.fileName.length > 0){
                         // files.previewElement.querySelector('[type="submit"]').disabled=false;
-                        var fileNameHidden = Dropzone.createElement("<input type='hidden' name='file' value='"+response.fileName+"'>");
+                        var fileNameHidden = Dropzone.createElement("<input type='hidden' name='file[]' value='"+response.fileName+"'>");
                         files.previewElement.querySelector('.form-horizontal').appendChild(fileNameHidden);
+                        var fileCaptionHidden = Dropzone.createElement("<input type='hidden' name='caption[]' value='کیفیت عالی'>");
+                        files.previewElement.querySelector('.form-horizontal').appendChild(fileCaptionHidden);
+                        var fileLabelHidden = Dropzone.createElement("<input type='hidden' name='label[]' value='hd'>");
+                        files.previewElement.querySelector('.form-horizontal').appendChild(fileLabelHidden);
                         /**
                          * Initialize tagsinput behaviour on inputs and selects which have
                          * data-role=tagsinput
@@ -533,7 +537,7 @@
                                         '        <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>\n' +
                                         '        <i class="fa fa-check-circle"></i>\n' +
                                         'محتوا با موفقیت ذخیره شد . آیدی محتوا : ' +
-                                        '<a href="{{action("EducationalContentController@show")}}"'+id+'>'+id+'</a>'+
+                                        '<a href="{{action("HomeController@search")}}/'+id+'/edit">'+id+'</a>'+
                                         '    </div>';
                         $("#messageDiv").append(message);
                         toastr["success"]("محتوا با موقیت درج شد", "پیام سیستم");

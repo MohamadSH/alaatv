@@ -126,7 +126,7 @@ var u = Dropzone.options.myAwesomeDropzone = { // The camelized version of the I
             var contentset = $('input[name=contentset]').val();
             if(contentset.length > 0)
             {
-                var quality = $("#fileQuality").val();
+                var quality = $('input[name=fileQuality]').val();
                 if(quality.length > 0 )
                     contentset += "/"+quality+"/";
                 xhr.setRequestHeader("X-Dataid", contentset);
@@ -142,6 +142,12 @@ var u = Dropzone.options.myAwesomeDropzone = { // The camelized version of the I
             $("#editForm").find(':submit').prop("disabled" , false);
             var fileNameHidden = "<input type='hidden' name='file[]' value='"+response.fileName+"'>";
             $("#editForm").append(fileNameHidden);
+            var fileCaption = $("input[name=fileCaption]").val();
+            var fileCaptionHidden = "<input type='hidden' name='caption[]' value='"+fileCaption+"'>";
+            $("#editForm").append(fileCaptionHidden);
+            var fileLabel = $("input[name=fileLabel]").val();
+            var fileLabelHidden = "<input type='hidden' name='label[]' value='"+fileLabel+"'>";
+            $("#editForm").append(fileLabelHidden);
         });
         this.on("error", function(files, response) {
             // Gets triggered when there was an  error sending the files.
