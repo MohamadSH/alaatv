@@ -57,9 +57,13 @@
         @endif
     </ul>
     <div class="col-md-12">
-        <input  type="text" name="fileQuality" class="form-control"  value=""  placeholder="نام کیفیت(در صورت وجود)">
-        <input  type="text" name="fileCaption" class="form-control"  value=""  placeholder="نام کیفیت(در صورت وجود)">
-        <input  type="text" name="fileLabel" class="form-control"  value=""  placeholder="نام کیفیت(در صورت وجود)">
+        <select name="fileQuality" class="form-control">
+            <option value="">انتخاب کیفیت(در صورت وجود)</option>
+            <option value="HD_720p" data-role="hd" data-action="کیفیت عالی">کیفیت عالی</option>
+            <option value="hq" data-role="hq" data-action="کیفیت بالا">کیفیت بالا</option>
+            <option value="240p" data-role="240p" data-action="کیفیت متوسط">کیفیت متوسط</option>
+            <option value="thumbnail" data-role="thumbnail" data-action="تامبنیل">تامبنیل</option>
+        </select>
     </div>
     <div id="my-awesome-dropzone" class="dropzone dropzone-file-area needsclick dz-clickable" >
                 <div class="fallback">

@@ -189,7 +189,7 @@ class EducationalContentController extends Controller
     public function create2()
     {
         $rootContentTypes = Contenttype::whereDoesntHave("parents")->get() ;
-        $contentsets = Contentset::sortBy("created_at" , "DESC")
+        $contentsets = Contentset::orderBy("created_at" , "DESC")
                                 ->pluck("name" , "id");
         $authors = User::whereHas("roles" , function ($q){
             $q->where("name" , "teacher") ;

@@ -2439,16 +2439,16 @@ class HomeController extends Controller
     {
 
         $filePath = $request->header("X-File-Name");
-        $fileName = $request->header("X-Dataname");
+        $originalFileName = $request->header("X-Dataname");
         $filePrefix="";
-        $contentId = $request->header("X-Dataid");
+        $setId = $request->header("X-Dataid");
         $disk = $request->header("X-Datatype");
         $done = false;
 
         try {
             $dirname = pathinfo($filePath, PATHINFO_DIRNAME);
-            $ext = pathinfo($fileName, PATHINFO_EXTENSION);
-            $fileName = basename($fileName, "." . $ext) . "_" . date("YmdHis") . '.' . $ext;
+            $ext = pathinfo($originalFileName, PATHINFO_EXTENSION);
+            $fileName = basename($originalFileName, "." . $ext) . "_" . date("YmdHis") . '.' . $ext;
 
             $newFileNameDir = $dirname . '/' . $fileName;
 
@@ -2469,7 +2469,7 @@ class HomeController extends Controller
                     'username' => config('constants.SFTP_USERNAME'),
                     'password' => config('constants.SFTP_PASSSWORD'),
                     'privateKey' => config('constants.SFTP_PRIVATE_KEY_PATH'),
-                    'root' =>config('constants.SFTP_ROOT') . '/private/'.$contentId.'/',
+                    'root' =>config('constants.SFTP_ROOT') . '/private/'.$setId.'/',
                     'timeout' => config('constants.SFTP_TIMEOUT'),
                     'directoryPerm' => 0755
                 ]);
@@ -2500,13 +2500,25 @@ class HomeController extends Controller
                     'username' => config('constants.SFTP_USERNAME'),
                     'password' => config('constants.SFTP_PASSSWORD'),
                     'privateKey' => config('constants.SFTP_PRIVATE_KEY_PATH'),
-                    'root' => '/alaa_media/cdn/media/'.$contentId,
+                    // example:  /alaa_media/cdn/media/203/HD_720p , /alaa_media/cdn/media/thumbnails/203/
+                    'root' =>       config("constants.DOWNLOAD_SERVER_ROOT").
+                                    config("constants.DOWNLOAD_SERVER_MEDIA_PARTIAL_PATH").
+                                    $setId,
                     'timeout' => config('constants.SFTP_TIMEOUT'),
                     'directoryPerm' => 0755
                 ]);
                 $filesystem = new Filesystem($adapter);
-                if($filesystem->put($fileName , File::get($newFileNameDir)))
+                if($filesystem->put($originalFileName , File::get($newFileNameDir)))
+                {
                     $done = true;
+                    // example:  https://cdn.sanatisharif.ir/media/203/hq/203001dtgr.mp4
+                    $fileName = config("constants.DOWNLOAD_SERVER_PROTOCOL").
+                                config("constants.DOWNLOAD_SERVER_NAME").
+                                config("constants.DOWNLOAD_SERVER_MEDIA_PARTIAL_PATH").
+                                $setId.
+                                $originalFileName
+                                ;
+                }
             }
             else{
                 $filesystem = Storage::disk($disk . "Sftp");
@@ -2516,7 +2528,8 @@ class HomeController extends Controller
 
             }
             if($done)
-                return $this->response->setStatusCode(200)->setContent(["fileName"=>$fileName , "prefix"=>$filePrefix]);
+                return $this->response->setStatusCode(200)
+                            ->setContent(["fileName"=>$fileName , "prefix"=>$filePrefix]);
             else
                 return $this->response->setStatusCode(503);
         } catch (\Exception $e) {
