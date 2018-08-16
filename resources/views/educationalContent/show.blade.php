@@ -19,13 +19,13 @@
 
 @endsection
 
-@section("pageBar")
 
-@endsection
 @section("bodyClass")
     class = "page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-sidebar-closed page-md"
 @endsection
 
+@section("pageBar")
+@endsection
 @section("pageBar")
     <div class="page-bar">
         <ul class="page-breadcrumb">
@@ -36,11 +36,11 @@
             </li>
             <li>
                 <i class="fa fa-list-ul" aria-hidden="true"></i>
-                <a href="{{action("EducationalContentController@search")}}">محتوای آموزشی</a>
+                <a href="{{action("HomeController@search")}}">محتوای آموزشی آلاء</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
-                <span>نمایش @if(isset($rootContentType->displayName[0])){{$rootContentType->displayName}}@endif</span>
+                <span>نمایش {{ isset($educationalContentDisplayName) ? $educationalContentDisplayName : '' }}</span>
             </li>
         </ul>
     </div>
@@ -49,15 +49,21 @@
 @section("content")
     @if(isset($educationalContent->template))
         @if($educationalContent->template->name == "video1")
+            {{--<div class="row">--}}
+                {{--<div class="col-md-8">--}}
+                    {{--<div class="portlet light ">--}}
+                        {{--<div class="portlet-body">--}}
+                            {{--<div class="row">--}}
+                                {{----}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
+
+                {{--</div>--}}
+            {{--</div>--}}
             <div class="row">
                 <div class="col-md-12">
                     <div class="portlet light ">
-                        <div class="portlet-title">
-                            <div class="caption">
-                                <i class="fa fa-video-camera" aria-hidden="true"></i>
-                                {{ isset($educationalContentDisplayName) ? $educationalContentDisplayName : '' }}
-                            </div>
-                        </div>
                         <div class="portlet-body  text-justify">
                             <div class="row col-md-8">
                                 <video  id="video-{{$educationalContent->id}}"
@@ -68,17 +74,20 @@
                                         width="640"
                                         poster='@if(isset($files["thumbnail"])){{$files["thumbnail"]}}@endif'>
 
-                                @foreach($files["videoSource"] as $source)
+                                    @foreach($files["videoSource"] as $source)
                                         <source src="{{ $source["src"] }}" type='video/mp4' res="{{ $source["index"] }}" @if(strcmp($source["index"],"240p") == 0) default  @endif label="{{ $source["caption"] }}" />
-                                @endforeach
+                                    @endforeach
                                     <p class="vjs-no-js">جهت پخش آنلاین فیلم، ابتدا مطمئن شوید که جاوا اسکریپت در مرور
                                         گر شما فعال است و از آخرین نسخه ی مرورگر استفاده می کنید.</p>
                                 </video>
                             </div>
                             <div class="row">
+
                                     <hr>
                                     <div class="col-md-7">
-                                        <div class="caption"> <i class="fa fa-comment-o" aria-hidden="true"></i> </div>
+                                        <div class="caption"><i class="fa fa-comment-o" aria-hidden="true"></i></div>
+                                           <h2 style="font-size: 20px; font-weight: 500;">{{ isset($educationalContentDisplayName) ? $educationalContentDisplayName : '' }}</h2>
+
                                         @if(isset($educationalContent->description[0]))
                                             <div class="scroller" style="max-height:400px ; " data-rail-visible="1" data-rail-color="black" data-handle-color="#a1b2bd">
                                                 {!! $educationalContent->description !!}
@@ -709,7 +718,7 @@
             {thumb: '{{(isset($item["thumbnail"]))?$item["thumbnail"]:""}}',url: '{{action("EducationalContentController@show" , $item["content"])}}', title: ' {{($item["content"]->getDisplayName())}}', duration: '20:00'},
             @endif
             @endforeach
-        ];
+        ]; 
         var player = videojs('video-{{$educationalContent->id}}',{nuevo : true} ,function(){
             this.nuevoPlugin({
                 // plugin options here
