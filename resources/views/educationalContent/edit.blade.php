@@ -110,7 +110,6 @@
     <script src="/assets/pages/scripts/components-bootstrap-multiselect.min.js" type="text/javascript"></script>
     <script src="/assets/pages/scripts/ui-extended-modals.min.js" type="text/javascript"></script>
     <script src="/assets/pages/scripts/ui-toastr.min.js" type="text/javascript"></script>
-    <script src="/assets/pages/scripts/components-bootstrap-tagsinput.min.js" type="text/javascript"></script>
 @endsection
 
 

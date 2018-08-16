@@ -63,10 +63,10 @@ var u = Dropzone.options.myAwesomeDropzone = { // The camelized version of the I
     maxFiles: 5 ,
     maxFilesize: 500,
     timeout: 3600000,
-    dictFileTooBig:"حجم فایل شما  حداکثر می تواند 500 مگابایت باشد",
+    dictFileTooBig:"حجم فایل شما حداکثر می تواند 500 مگابایت باشد",
     dictMaxFilesExceeded : "حداکثر تعداد مجاز انتخاب شما تمام شد",
     dictFallbackMessage:"مرورگر شما قابلیت درگ اند دراپ را پشتیبانی نمی کند!",
-    dictInvalidFileType:"فرمت فایل شما باید mp3 باشد.",
+    dictInvalidFileType:"فرمت فایل معتبر نمی باشد.",
     dictResponseError : "خطا در آپلود",
     acceptedFiles:".pdf,.rar,.mp4",
 
@@ -138,7 +138,7 @@ var u = Dropzone.options.myAwesomeDropzone = { // The camelized version of the I
                     }
                 xhr.setRequestHeader("X-Dataid", contentset);
             }
-            xhr.setRequestHeader("X-Datatype",$('#rootContentTypes :selected').attr("data-title"));
+            xhr.setRequestHeader("X-Datatype",$('select[name=contenttype] :selected').attr("data-title"));
             xhr.setRequestHeader("X-Dataname",files.name );
         });
 
@@ -159,7 +159,7 @@ var u = Dropzone.options.myAwesomeDropzone = { // The camelized version of the I
         this.on("error", function(files, response) {
             // Gets triggered when there was an  error sending the files.
             // Maybe show form again, and notify user of error
-
+            console.log(response);
             $("#editForm").find(':submit').prop("disabled" , false);
         });
     }

@@ -648,12 +648,17 @@ class EducationalContentController extends Controller
 
         $contentset = $educationalContent->contentsets
                                         ->first();
+
+        $rootContentTypes = Contenttype::whereDoesntHave("parents")
+                                        ->get() ;
+
         return view("educationalContent.edit" , compact("educationalContent" ,
                                                                     "rootContentTypes" ,
                                                                     'validSinceTime' ,
                                                                     'tags' ,
-                                                                    'contentset'
-        )) ;
+                                                                    'contentset' ,
+                                                                    'rootContentTypes'
+                                                        )) ;
     }
 
     /**
