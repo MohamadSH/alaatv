@@ -64,6 +64,12 @@
             <option value="240p" data-role="240p" data-action="کیفیت متوسط">کیفیت متوسط</option>
             <option value="thumbnail" data-role="thumbnail" data-action="تامبنیل">تامبنیل</option>
         </select>
+        <select name="contenttype" class="form-control">
+            <option value="" selected>انتخاب نوع فایل</option>
+            @foreach($rootContentTypes as $rootContentType)
+                <option value="{{$rootContentType->id}}" data-title="{{$rootContentType->name}}">{{$rootContentType->displayName}}</option>
+            @endforeach
+        </select>
     </div>
     <div id="my-awesome-dropzone" class="dropzone dropzone-file-area needsclick dz-clickable" >
                 <div class="fallback">

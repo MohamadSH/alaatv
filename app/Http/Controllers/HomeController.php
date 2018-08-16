@@ -2534,7 +2534,15 @@ class HomeController extends Controller
                 return $this->response->setStatusCode(503);
         } catch (\Exception $e) {
             //            return $this->TAG.' '.$e->getMessage();
-            return $this->response->setStatusCode(503)->setContent(["message"=>"خطای غیرمنتظره در آپلود فایل"]);
+            $message = "unexpected error";
+            return $this->response
+                ->setStatusCode(503)
+                ->setContent([
+                    "message"=>$message ,
+                    "error"=>$e->getMessage() ,
+                    "line"=>$e->getLine() ,
+                    "file"=>$e->getFile()
+                ]);
         }
     }
 
