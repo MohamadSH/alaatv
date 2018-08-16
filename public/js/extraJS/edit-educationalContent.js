@@ -126,9 +126,16 @@ var u = Dropzone.options.myAwesomeDropzone = { // The camelized version of the I
             var contentset = $('input[name=contentset]').val();
             if(contentset.length > 0)
             {
-                var quality = $('input[name=fileQuality]').val();
+                var quality = $('select[name=fileQuality] :selected').val();
                 if(quality.length > 0 )
-                    contentset += "/"+quality+"/";
+                    if(quality == "thumbnail")
+                    {
+                        contentset = "thumbnails/"+contentset+"/";
+                    }
+                    else
+                    {
+                        contentset += "/"+quality+"/";
+                    }
                 xhr.setRequestHeader("X-Dataid", contentset);
             }
             xhr.setRequestHeader("X-Datatype",$('#rootContentTypes :selected').attr("data-title"));
@@ -142,10 +149,10 @@ var u = Dropzone.options.myAwesomeDropzone = { // The camelized version of the I
             $("#editForm").find(':submit').prop("disabled" , false);
             var fileNameHidden = "<input type='hidden' name='file[]' value='"+response.fileName+"'>";
             $("#editForm").append(fileNameHidden);
-            var fileCaption = $("input[name=fileCaption]").val();
+            var fileCaption = $('select[name=fileQuality] :selected').data("role");
             var fileCaptionHidden = "<input type='hidden' name='caption[]' value='"+fileCaption+"'>";
             $("#editForm").append(fileCaptionHidden);
-            var fileLabel = $("input[name=fileLabel]").val();
+            var fileLabel = $('select[name=fileQuality] :selected').data("action");
             var fileLabelHidden = "<input type='hidden' name='label[]' value='"+fileLabel+"'>";
             $("#editForm").append(fileLabelHidden);
         });
