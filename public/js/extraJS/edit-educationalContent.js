@@ -68,7 +68,7 @@ var u = Dropzone.options.myAwesomeDropzone = { // The camelized version of the I
     dictFallbackMessage:"مرورگر شما قابلیت درگ اند دراپ را پشتیبانی نمی کند!",
     dictInvalidFileType:"فرمت فایل معتبر نمی باشد.",
     dictResponseError : "خطا در آپلود",
-    acceptedFiles:".pdf,.rar,.mp4",
+    acceptedFiles:".pdf,.rar,.mp4,.jpg,.png,.jpeg",
 
     // The setting up of the dropzone
     init: function() {
@@ -95,6 +95,13 @@ var u = Dropzone.options.myAwesomeDropzone = { // The camelized version of the I
 
             // Add the button to the file preview element.
             file.previewElement.appendChild(removeButton);
+
+            var fileCaption = $('select[name=fileQuality] :selected').data("action");
+            var fileCaptionHidden = "<input type='hidden' name='caption[]' value='"+fileCaption+"'>";
+            $("#editForm").append(fileCaptionHidden);
+            var fileLabel = $('select[name=fileQuality] :selected').data("role");
+            var fileLabelHidden = "<input type='hidden' name='label[]' value='"+fileLabel+"'>";
+            $("#editForm").append(fileLabelHidden);
         });
 
         var myDropzone = this;
@@ -149,12 +156,7 @@ var u = Dropzone.options.myAwesomeDropzone = { // The camelized version of the I
             $("#editForm").find(':submit').prop("disabled" , false);
             var fileNameHidden = "<input type='hidden' name='file[]' value='"+response.fileName+"'>";
             $("#editForm").append(fileNameHidden);
-            var fileCaption = $('select[name=fileQuality] :selected').data("role");
-            var fileCaptionHidden = "<input type='hidden' name='caption[]' value='"+fileCaption+"'>";
-            $("#editForm").append(fileCaptionHidden);
-            var fileLabel = $('select[name=fileQuality] :selected').data("action");
-            var fileLabelHidden = "<input type='hidden' name='label[]' value='"+fileLabel+"'>";
-            $("#editForm").append(fileLabelHidden);
+
         });
         this.on("error", function(files, response) {
             // Gets triggered when there was an  error sending the files.
