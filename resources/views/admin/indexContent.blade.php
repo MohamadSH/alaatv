@@ -73,6 +73,7 @@
                                         @permission((Config::get('constants.INSERT_EDUCATIONAL_CONTENT_ACCESS')))
 {{--                                        <a  class="btn btn-outline red" target="_blank" href="{{action("EducationalContentController@create2")}}"><i class="fa fa-plus"></i> افزودن محتوا </a>--}}
                                         <a  class="btn btn-outline red" target="_blank" href="{{action("EducationalContentController@create3")}}"><i class="fa fa-plus"></i> افزودن محتوا </a>
+                                        <a  class="btn btn-outline red-flamingo" target="_blank" href="{{action("EducationalContentController@create2")}}"><i class="fa fa-plus"></i> آپلود محتوا </a>
                                         @endpermission
                                     </div>
                                 </div>
