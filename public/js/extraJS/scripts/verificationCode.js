@@ -91,6 +91,7 @@ $(document).on('submit', '#submitVerificationCodeForm', function(e){
             200: function (response) {
                 // console.log(response);
                 // console.log(response.responseText);
+                $("#verificationCodeAjaxLoadingSpinner").hide();
                 location.reload();
             },
             //The status for when the user is not authorized for making the request
@@ -124,7 +125,6 @@ $(document).on('submit', '#submitVerificationCodeForm', function(e){
         // contentType: false,
         processData: false
     });
-    $("#verificationCodeAjaxLoadingSpinner").hide();
 });
 
 $(document).on("click", ".close", function (e){
