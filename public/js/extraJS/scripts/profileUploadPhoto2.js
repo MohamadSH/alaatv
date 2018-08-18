@@ -53,6 +53,8 @@ Upload.prototype.doUpload = function () {
                     $("#profileEditViewText3").hide();
                     $("#updateProfileInfoFormButton").prop("disabled" , false);
                 }
+
+                $("#profilePhotoAjaxLoadingSpinner").hide();
             },
             //The status for when the user is not authorized for making the request
             403: function (response) {
@@ -86,8 +88,6 @@ Upload.prototype.doUpload = function () {
         processData: false,
         // timeout: 60000,
     });
-
-    $("#profilePhotoAjaxLoadingSpinner").hide();
 };
 
 Upload.prototype.progressHandling = function (event) {
