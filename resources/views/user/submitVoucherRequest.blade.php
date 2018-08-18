@@ -219,7 +219,7 @@
     <script src="/assets/pages/scripts/dashboard.min.js" type="text/javascript"></script>
     <script src="/assets/pages/scripts/ui-toastr.min.js" type="text/javascript"></script>
     <script src="/assets/extra/persian-datepicker/dist/js/persian-datepicker-1.1.3.min.js" type="text/javascript" ></script>
-    <script src="/js/extraJS/scripts/profileUploadPhoto2.js" type="text/javascript"></script>
+    <script src="/js/extraJS/scripts/profileUploadPhoto3.js" type="text/javascript"></script>
     <script src="/js/extraJS/scripts/verificationCode.js" type="text/javascript"></script>
 @endsection
 
