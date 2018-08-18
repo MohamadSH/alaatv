@@ -7,6 +7,30 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 use Webpatser\Uuid\Uuid;
 
+/**
+ * App\File
+ *
+ * @property int $id
+ * @property string|null $uuid شناسه منحصر به فرد سراسری
+ * @property string $name نام فایل
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Disk[] $disks
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Educationalcontent[] $educationalcontents
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\File onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\File whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\File whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\File whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\File whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\File whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\File whereUuid($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\File withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\File withoutTrashed()
+ * @mixin \Eloquent
+ */
 class File extends Model
 {
     use SoftDeletes;

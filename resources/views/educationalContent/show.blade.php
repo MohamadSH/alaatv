@@ -80,6 +80,7 @@
                                     <p class="vjs-no-js">جهت پخش آنلاین فیلم، ابتدا مطمئن شوید که جاوا اسکریپت در مرور
                                         گر شما فعال است و از آخرین نسخه ی مرورگر استفاده می کنید.</p>
                                 </video>
+
                             </div>
                             <div class="row">
 
@@ -122,11 +123,10 @@
                                             @include("partials.search.tagLabel" , ["tags"=>$tags])
                                         @endif
                                     </div>
-
-
                                 </div>
                         </div>
                     </div>
+
                     <div class="row">
                         <div class="col-md-12">
                             <div class="portlet light ">
@@ -158,6 +158,39 @@
                             </div>
                         </div>
                     </div>
+                    {{--<div class="row">--}}
+                        {{--<div class="col-md-12">--}}
+                            {{--<div class="portlet light ">--}}
+                                {{--<div class="portlet-body text-justify">--}}
+                                    {{--<h4>جلسات دیگر--}}
+                                        {{--@if(isset($contentSetName))--}}
+                                            {{--{{ $contentSetName }}--}}
+                                        {{--@endif--}}
+                                    {{--</h4>--}}
+                                    {{--<nav aria-label="Page navigation">--}}
+                                        {{--<ul class="pagination pagination-sm ">--}}
+                                            {{--<li class="page-item">--}}
+                                                {{--<a class="page-link" href="#" aria-label="Previous">--}}
+                                                    {{--<span aria-hidden="true">&laquo;</span>--}}
+                                                    {{--<span class="sr-only">Previous</span>--}}
+                                                {{--</a>--}}
+                                            {{--</li>--}}
+                                            {{--@foreach($contentsWithSameSet->whereIn("type" , "video" ) as $item)--}}
+                                                {{--<li class="page-item @if($item["content"]->id == $educationalContent->id) active @endif"><a class="page-link" href="{{action("EducationalContentController@show" , $item["content"])}}">{{ $item["content"]->getOrder() }}</a></li>--}}
+                                            {{--@endforeach--}}
+                                            {{--<li class="page-item">--}}
+                                                {{--<a class="page-link" href="#" aria-label="Next">--}}
+                                                    {{--<span aria-hidden="true">&raquo;</span>--}}
+                                                    {{--<span class="sr-only">Next</span>--}}
+                                                {{--</a>--}}
+                                            {{--</li>--}}
+                                        {{--</ul>--}}
+                                    {{--</nav>--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+
+                        {{--</div>--}}
+                    {{--</div>--}}
                 </div>
             </div>
             {{--<div class="row">--}}

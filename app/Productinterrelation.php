@@ -4,6 +4,25 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Productinterrelation
+ *
+ * @property int $id
+ * @property string|null $name نام
+ * @property string|null $displayName نام قابل نمایش
+ * @property string|null $description توضیح
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property string|null $deleted_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Productinterrelation whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Productinterrelation whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Productinterrelation whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Productinterrelation whereDisplayName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Productinterrelation whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Productinterrelation whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Productinterrelation whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class Productinterrelation extends Model
 {
     //

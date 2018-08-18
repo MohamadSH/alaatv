@@ -5,6 +5,37 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * App\Contentset
+ *
+ * @property int $id
+ * @property string|null $name نام
+ * @property string|null $description توضیح
+ * @property string|null $photo عکس پوستر
+ * @property string|null $tags تگ ها
+ * @property int $enable فعال/غیرفعال
+ * @property int $display نمایش/عدم نمایش
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Educationalcontent[] $educationalcontents
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\Contentset onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset whereDisplay($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset whereEnable($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset wherePhoto($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset whereTags($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Contentset withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Contentset withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Contentset extends Model
 {
     use SoftDeletes;

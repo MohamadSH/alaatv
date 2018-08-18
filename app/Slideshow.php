@@ -5,6 +5,39 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * App\Slideshow
+ *
+ * @property int $id
+ * @property int|null $websitepage_id آی دی مشخص کننده صفحه محل نمایش اسلاید
+ * @property string|null $title
+ * @property string|null $shortDescription
+ * @property string|null $photo
+ * @property string|null $link
+ * @property int $order
+ * @property int $isEnable
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
+ * @property-read \App\Websitepage|null $websitepage
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\Slideshow onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Slideshow whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Slideshow whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Slideshow whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Slideshow whereIsEnable($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Slideshow whereLink($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Slideshow whereOrder($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Slideshow wherePhoto($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Slideshow whereShortDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Slideshow whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Slideshow whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Slideshow whereWebsitepageId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Slideshow withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Slideshow withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Slideshow extends Model
 {
     use SoftDeletes;

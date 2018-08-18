@@ -619,6 +619,7 @@ class EducationalContentController extends Controller
                     ->orderBy("order")
                     ->get();
 //            $adItems = null;
+//            dd($contentsWithSameSet->whereIn("type" , "video" ));
             return view("educationalContent.show", compact("productSeenCount","author","educationalContent", "rootContentType", "childContentType", "contentsWithSameType" , "soonContentsWithSameType" , "educationalContentSet" , "contentsWithSameSet" , "contentSetName" , "videoSources" ,
                 "files" , "tags" , "sideBarMode" , "educationalContentDisplayName" , "sessionNumber" , "fileToShow" , "userCanSeeCounter" , "adItems"));
         }

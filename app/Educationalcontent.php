@@ -13,6 +13,63 @@ use Illuminate\Support\Facades\Config;
 use Auth;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * App\Educationalcontent
+ *
+ * @property int $id
+ * @property int|null $author_id آی دی مشخص کننده به وجود آورنده اثر
+ * @property int|null $contenttype_id آی دی مشخص کننده نوع محتوا
+ * @property int|null $template_id آی دی مشخص کننده قالب این گرافیکی این محتوا
+ * @property string|null $name نام محتوا
+ * @property string|null $description توضیح درباره محتوا
+ * @property string|null $metaTitle متا تایتل محتوا
+ * @property string|null $metaDescription متا دیسکریپشن محتوا
+ * @property string|null $metaKeywords متای کلمات کلیدی محتوا
+ * @property string|null $tags تگ ها
+ * @property string|null $context محتوا
+ * @property int $order ترتیب
+ * @property int $enable فعال یا غیر فعال بودن محتوا
+ * @property string|null $validSince تاریخ شروع استفاده از محتوا
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Contentset[] $contentsets
+ * @property-read \App\Contenttype|null $contenttype
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Contenttype[] $contenttypes
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\File[] $files
+ * @property-read mixed $file
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Grade[] $grades
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Major[] $majors
+ * @property-read \App\Template|null $template
+ * @property-read \App\User|null $user
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Educationalcontent active()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Educationalcontent enable($enable = 1)
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\Educationalcontent onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Educationalcontent soon()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Educationalcontent valid()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Educationalcontent whereAuthorId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Educationalcontent whereContenttypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Educationalcontent whereContext($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Educationalcontent whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Educationalcontent whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Educationalcontent whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Educationalcontent whereEnable($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Educationalcontent whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Educationalcontent whereMetaDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Educationalcontent whereMetaKeywords($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Educationalcontent whereMetaTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Educationalcontent whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Educationalcontent whereOrder($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Educationalcontent whereTags($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Educationalcontent whereTemplateId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Educationalcontent whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Educationalcontent whereValidSince($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Educationalcontent withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Educationalcontent withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Educationalcontent extends Model
 {
     use APIRequestCommon;
@@ -219,6 +276,23 @@ class Educationalcontent extends Model
      * @return mixed
      * @throws Exception
      */
+
+    public  function getOrder(){
+        $key = "content:Order"
+            .$this->cacheKey();
+        $c = $this;
+        return Cache::remember($key,Config::get("constants.CACHE_60"),function () use($c) {
+            $sessionNumber = -1;
+            $contenSets = $c->contentsets->where("pivot.isDefault" , 1)->first();
+            if(isset($contenSets))
+            {
+                $order = $contenSets->pivot->order;
+                if($order >= 0)
+                    $sessionNumber = $contenSets->pivot->order;
+            }
+            return $sessionNumber;
+        });
+    }
     public function getDisplayName()
     {
         try {
@@ -227,17 +301,11 @@ class Educationalcontent extends Model
             $c = $this;
             return Cache::remember($key,Config::get("constants.CACHE_60"),function () use($c) {
                 $displayName = "";
-                $contenSets = $c->contentsets->where("pivot.isDefault" , 1)->first();
-                if(isset($contenSets))
-                {
-                    $order = $contenSets->pivot->order;
-                    if($order > 0)
-                        $sessionNumber = $contenSets->pivot->order;
-                }
+                $sessionNumber = $c->getOrder();
                 if (isset($c->contenttype)) {
                     $displayName .=$c->contenttype->displayName." ";
                 }
-                $displayName .= ( isset($sessionNumber)? "جلسه ".$sessionNumber." - ":"" )." ".(isset($c->name) ? $c->name : $c->user->name);
+                $displayName .= ( isset($sessionNumber) && $sessionNumber > -1 ? "جلسه ".$sessionNumber." - ":"" )." ".(isset($c->name) ? $c->name : $c->user->name);
                 return $displayName;
             });
 

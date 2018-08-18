@@ -5,6 +5,29 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * App\Attributecontrol
+ *
+ * @property int $id
+ * @property string|null $name نام کنترل صفت
+ * @property string|null $description توضیح درباره کنترل
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Attribute[] $attributes
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\Attributecontrol onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributecontrol whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributecontrol whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributecontrol whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributecontrol whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributecontrol whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributecontrol whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Attributecontrol withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Attributecontrol withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Attributecontrol extends Model
 {
     use SoftDeletes;

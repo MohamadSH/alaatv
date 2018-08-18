@@ -14,6 +14,77 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Laravel\Scout\Searchable;
 
+/**
+ * App\Product
+ *
+ * @property int $id
+ * @property string|null $name نام  کالا
+ * @property int $basePrice قیمت پایه  کالا
+ * @property float $discount میزان تخفیف کالا برای همه به درصد
+ * @property int $isFree رایگان بودن یا نبودن محصول
+ * @property int|null $amount تعدا موجود از این محصول - نال به معنای بینهایت است
+ * @property string|null $shortDescription توضیحات مختصر کالا
+ * @property string|null $longDescription توضیحات کالا
+ * @property string|null $specialDescription توضیحات خاص برای محصول
+ * @property string|null $tags تگ ها
+ * @property string|null $slogan یک جمله ی خاص درباره این کالا
+ * @property string|null $image تصویر اصلی کالا
+ * @property string|null $file فایل مربوط به کالا
+ * @property string|null $introVideo فیلم معرفی محصول
+ * @property string|null $validSince تاریخ شروع فروش کالا
+ * @property string|null $validUntil تاریخ پایان فروش کالا
+ * @property int $enable فعال بودن یا نبودن کالا
+ * @property int $order ترتیب کالا - در صورت نیاز به استفاده
+ * @property int|null $producttype_id آی دی مشخص کننده نوع کالا
+ * @property int|null $attributeset_id آی دی مشخص کننده دسته صفتهای کالا
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
+ * @property-read \App\Attributeset|null $attributeset
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Attributevalue[] $attributevalues
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Bon[] $bons
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Product[] $children
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Product[] $complimentaryproducts
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Coupon[] $coupons
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Product[] $gifts
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Orderproduct[] $orderproducts
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Product[] $parents
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Productphoto[] $photos
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Productfile[] $productfiles
+ * @property-read \App\Producttype|null $producttype
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Product configurable()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Product enable()
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\Product onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Product simple()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereAttributesetId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereBasePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereDiscount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereEnable($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereFile($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereImage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereIntroVideo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereIsFree($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereLongDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereOrder($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereProducttypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereShortDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereSlogan($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereSpecialDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereTags($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereValidSince($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereValidUntil($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Product withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Product withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Product extends Model
 {
     use SoftDeletes;

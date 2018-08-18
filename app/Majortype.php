@@ -5,6 +5,31 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * App\Majortype
+ *
+ * @property int $id
+ * @property string|null $name نام رشته
+ * @property string|null $displayName نام قابل نمایش رشته
+ * @property string|null $description توضیج درباره نوع رشته
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Major[] $majors
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\Majortype onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Majortype whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Majortype whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Majortype whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Majortype whereDisplayName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Majortype whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Majortype whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Majortype whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Majortype withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Majortype withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Majortype extends Model
 {
     use SoftDeletes;

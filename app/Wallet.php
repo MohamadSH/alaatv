@@ -8,6 +8,32 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 
+/**
+ * App\Wallet
+ *
+ * @property int $id
+ * @property int|null $user_id آیدی مشخص کننده کاربر صاحب کیف پول
+ * @property int|null $wallettype_id آیدی مشخص کننده نوع کیف پول
+ * @property int $balance اعتبار کیف پول
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[] $transactions
+ * @property-read \App\User|null $user
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\Wallet onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet whereBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet whereWallettypeId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Wallet withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Wallet withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Wallet extends Model
 {
     use SoftDeletes;

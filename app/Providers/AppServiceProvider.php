@@ -8,7 +8,7 @@ use App\Contenttype;
 use App\Product;
 use App\Productfiletype;
 use App\Traits\UserCommon;
-use App\Verificationmessagestatuse;
+use App\Verificationmessagestatus;
 use App\Wallettype;
 use App\Websitesetting;
 use Carbon\Carbon;
@@ -271,7 +271,7 @@ class AppServiceProvider extends ServiceProvider
 //                =============================VERIFICATION MESSAGE STATUSES
             if (Schema::hasTable('verificationmessagestatuses'))
             {
-                $verificationmessagestatuses = Verificationmessagestatuse::all();
+                $verificationmessagestatuses = Verificationmessagestatus::all();
                 if($verificationmessagestatuses->where("name" , "sent")->isNotEmpty())
                     Config::set("constants.VERIFICATION_MESSAGE_STATUS_SENT" , $verificationmessagestatuses->where("name" , "sent")->first()->id);
                 if($verificationmessagestatuses->where("name" , "successful")->isNotEmpty())
@@ -681,6 +681,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+
+         if ($this->app->environment() !== 'production') {
+             $this->app->register(\Barryvdh\Debugbar\ServiceProvider::class);
+             $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
+         }
     }
 }
