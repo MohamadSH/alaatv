@@ -23,6 +23,20 @@ Upload.prototype.doUpload = function () {
     formData.append("photo", this.file, this.getName());
     var action = $("#profilePhotoFile").data("action");
     // formData.append("upload_file", true);
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "positionClass": "toast-top-center",
+        "onclick": null,
+        "showDuration": "1000",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    };
     $.ajax({
         type: "POST",
         url: action,
@@ -53,6 +67,7 @@ Upload.prototype.doUpload = function () {
                     $("#profileEditViewText3").hide();
                     $("#updateProfileInfoFormButton").prop("disabled" , false);
                 }
+                $("#profilePhotoAjaxLoadingSpinner").hide();
             },
             //The status for when the user is not authorized for making the request
             403: function (response) {
@@ -67,7 +82,14 @@ Upload.prototype.doUpload = function () {
             },
             //The status for when form data is not valid
             422: function (response) {
-                console.log(response);
+                var responseJson = $.parseJSON(response.responseText);
+                var errors = responseJson.errors;
+                var errorMessage = "";
+                $.each(errors, function(index, value) {
+                    errorMessage += value;
+                });
+                toastr["error"]( errorMessage , "پیام سیستم");
+                // console.log(errors);
             },
             //The status for when there is error php code
             500: function (response) {
@@ -86,8 +108,6 @@ Upload.prototype.doUpload = function () {
         processData: false,
         // timeout: 60000,
     });
-
-    $("#profilePhotoAjaxLoadingSpinner").hide();
 };
 
 Upload.prototype.progressHandling = function (event) {
