@@ -230,7 +230,7 @@
                                                 <div class="list-thumb">
                                                     <a href="{{action("EducationalContentController@show" , $item["content"])}}" >
                                                         <img alt="{{$item["content"]->name}}"
-                                                             src="{{(isset($item["thumbnail"]))?$item["thumbnail"]:''}}"/>
+                                                             src="{{(isset($item["thumbnail"]))?$item["thumbnail"]."?w=210&h=118":''}}"/>
                                                     </a>
                                                 </div>
                                                 <div class="list-datetime bold uppercase font-yellow-casablanca" >
