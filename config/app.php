@@ -176,9 +176,6 @@ return [
         Artesaos\SEOTools\Providers\SEOToolsServiceProvider::class,
 
     ],
-    'development-providers' => [
-        Barryvdh\Debugbar\ServiceProvider::class,
-    ],
     /*
     |--------------------------------------------------------------------------
     | Class Aliases

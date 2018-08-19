@@ -21,6 +21,7 @@ use App\Traits\ProductCommon;
 use App\User;
 use App\Websitesetting;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use SEO;
 use Illuminate\Http\Response;
@@ -427,8 +428,7 @@ class EducationalContentController extends Controller
      */
     public function show(Request $request, Educationalcontent $educationalContent)
     {
-        if($educationalContent->isValid() && $educationalContent->isEnable())
-        {
+        if($educationalContent->isValid() && $educationalContent->isEnable()) {
 
             $educationalContentDisplayName = $educationalContent->getDisplayName();
 
@@ -439,65 +439,64 @@ class EducationalContentController extends Controller
 
             //TODO: replace metaTag Mod with contentType
             $metaTagMod = 1;
-            if (isset($educationalContent->template))
-            {
-                $key = "content:show".$educationalContent->cacheKey();
+            if (isset($educationalContent->template)) {
+                $key = "content:show" . $educationalContent->cacheKey();
                 [
                     $author,
                     $educationalContent,
                     $contentsWithSameSet,
+                    $videosWithSameSet,
+                    $pamphletsWithSameSet,
                     $contentSetName,
                     $videoSources,
                     $files,
                     $fileToShow,
                     $metaTagMod
-                ] =  Cache::remember($key,Config::get("constants.CACHE_60"),function () use($educationalContent) {
-                    $contentsWithSameSet = null ;
-                    $contentSetName = null ;
-                    $videoSources = null ;
+                ] = Cache::remember($key, Config::get("constants.CACHE_60"), function () use ($educationalContent) {
+                    $contentsWithSameSet = null;
+                    $videosWithSameSet = null;
+                    $pamphletsWithSameSet = null;
+                    $contentSetName = null;
+                    $videoSources = null;
                     $files = null;
                     $fileToShow = null;
 
-                    switch($educationalContent->template->name)
-                    {
+                    switch ($educationalContent->template->name) {
                         case "video1":
                             $metaTagMod = 1;
                             $files = collect();
                             $videoSources = collect();
                             //                    $time_now = date('Hi');
 
-                            $file = $educationalContent->files->where("pivot.label" , "hd")->first() ;
-                            if(isset($file))
-                            {
+                            $file = $educationalContent->files->where("pivot.label", "hd")->first();
+                            if (isset($file)) {
                                 $url = $file->name;
                                 $size = $this->curlGetFileSize($url);
-                                $videoSources->put( "hd" , ["src"=>$url , "caption"=>$file->pivot->caption , "size"=>$size , "index" => "hd"]) ;
+                                $videoSources->put("hd", ["src" => $url, "caption" => $file->pivot->caption, "size" => $size, "index" => "hd"]);
                             }
 
-                            $file = $educationalContent->files->where("pivot.label" , "hq")->first() ;
-                            if(isset($file))
-                            {
+                            $file = $educationalContent->files->where("pivot.label", "hq")->first();
+                            if (isset($file)) {
                                 $url = $file->name;
                                 $size = $this->curlGetFileSize($url);
-                                $videoSources->put( "hq" , ["src"=>$url , "caption"=>$file->pivot->caption, "size"=>$size, "index" => "hq"]) ;
+                                $videoSources->put("hq", ["src" => $url, "caption" => $file->pivot->caption, "size" => $size, "index" => "hq"]);
                             }
 
-                            $file = $educationalContent->files->where("pivot.label" , "240p")->first() ;
-                            if(isset($file))
-                            {
+                            $file = $educationalContent->files->where("pivot.label", "240p")->first();
+                            if (isset($file)) {
                                 $url = $file->name;
                                 $size = $this->curlGetFileSize($url);
-                                $videoSources->put( "240p" , ["src"=>$url ,  "caption"=>$file->pivot->caption, "size"=>$size, "index" => "240p"]) ;
+                                $videoSources->put("240p", ["src" => $url, "caption" => $file->pivot->caption, "size" => $size, "index" => "240p"]);
                             }
-                            $file = $educationalContent->files->where("pivot.label" , "thumbnail")->first();
-                            if(isset($file))
-                                $files->put("thumbnail" , $file->name);
-                            $files->put("videoSource" , $videoSources);
+                            $file = $educationalContent->files->where("pivot.label", "thumbnail")->first();
+                            if (isset($file))
+                                $files->put("thumbnail", $file->name);
+                            $files->put("videoSource", $videoSources);
 
-                        [
-                            $contentsWithSameSet ,
-                            $contentSetName
-                        ]  = $educationalContent->getSetMates();
+                            [
+                                $contentsWithSameSet,
+                                $contentSetName
+                            ] = $educationalContent->getSetMates();
 
                             break;
                         case  "pamphlet1":
@@ -505,9 +504,9 @@ class EducationalContentController extends Controller
                             $files = $educationalContent->files;
                             $fileToShow = $educationalContent->file;
                             [
-                                $contentsWithSameSet ,
+                                $contentsWithSameSet,
                                 $contentSetName
-                            ]  = $educationalContent->getSetMates();
+                            ] = $educationalContent->getSetMates();
                             break;
                         case "article" :
                             $metaTagMod = 3;
@@ -522,10 +521,14 @@ class EducationalContentController extends Controller
                         $author = $educationalContent->user->getfullName();
                     }
 
+                    $videosWithSameSet = optional($contentsWithSameSet)->whereIn("type", "video");
+                    $pamphletsWithSameSet = optional($contentsWithSameSet)->whereIn("type" , "pamphlet" );
                     return [
                         $author,
                         $educationalContent,
                         $contentsWithSameSet,
+                        $videosWithSameSet,
+                        $pamphletsWithSameSet,
                         $contentSetName,
                         $videoSources,
                         $files,
@@ -540,33 +543,33 @@ class EducationalContentController extends Controller
             $url = $request->url();
 
             SEO::setTitle($educationalContentDisplayName);
-            if(isset($educationalContent->metaDescription) && strlen($educationalContent->metaDescription) > 0)
+            if (isset($educationalContent->metaDescription) && strlen($educationalContent->metaDescription) > 0)
                 SEO::setDescription($educationalContent->metaDescription);
             else
                 if (isset($tags)) {
-                    SEO::setDescription(implode(",",$tags));
+                    SEO::setDescription(implode(",", $tags));
                 }
 
             SEO::opengraph()->setUrl($url);
             SEO::setCanonical($url);
             SEO::twitter()->setSite("آلاء");
             //TODO: move thumbnails to sftp storage
-            if(isset($files['thumbnail']))
+            if (isset($files['thumbnail']))
                 SEO::opengraph()->addImage($files['thumbnail'], ['height' => 720, 'width' => 1280]);
             else
-                SEO::opengraph()->addImage(route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]), ['height' => 100, 'width' => 100]);
+                SEO::opengraph()->addImage(route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]), ['height' => 100, 'width' => 100]);
 
 
-            switch ($metaTagMod){
+            switch ($metaTagMod) {
                 case 1: // video
 
-                    SEO::twitter()->addValue('player',action('EducationalContentController@embed',$educationalContent));
-                    SEO::twitter()->addValue('player:width',"854");
-                    SEO::twitter()->addValue('player:height',"480");
+                    SEO::twitter()->addValue('player', action('EducationalContentController@embed', $educationalContent));
+                    SEO::twitter()->addValue('player:width', "854");
+                    SEO::twitter()->addValue('player:height', "480");
                     // video.movie
                     SEO::opengraph()->setType('video.movie')
                         ->setVideoMovie([
-                            'actor' => (isset($author))?$author:"",
+                            'actor' => (isset($author)) ? $author : "",
                             'actor:role' => 'دبیر',
                             'director' => 'آلاء',
                             'writer' => 'آلاء',
@@ -597,30 +600,34 @@ class EducationalContentController extends Controller
                     break;
             }
 
-            $userCanSeeCounter = false ;
-            if(Auth::check())
-            {
+            $userCanSeeCounter = false;
+            if (Auth::check()) {
                 $user = Auth::user();
                 $baseUrl = url("/");
-                $contentPath = str_replace($baseUrl , "" , action("EducationalContentController@show" , $educationalContent));
+                $contentPath = str_replace($baseUrl, "", action("EducationalContentController@show", $educationalContent));
                 $productSeenCount = $this->userSeen($contentPath);
-                if($user->hasRole("admin"))
-                    $userCanSeeCounter = true ;
+                if ($user->hasRole("admin"))
+                    $userCanSeeCounter = true;
             }
 
             $sideBarMode = "closed";
 
-            if($educationalContent->contentsets->isNotEmpty() && $educationalContent->contentsets->first()->id != 199)
-                $adItems = Educationalcontent::whereHas("contentsets" , function ($q)
-                {
-                    $q->where("id" , 199) ;
+            if ($educationalContent->contentsets->isNotEmpty() && $educationalContent->contentsets->first()->id != 199)
+                $adItems = Educationalcontent::whereHas("contentsets", function ($q) {
+                    $q->where("id", 199);
                 })
-                    ->where("enable" , 1)
+                    ->where("enable", 1)
                     ->orderBy("order")
                     ->get();
-//            $adItems = null;
-            return view("educationalContent.show", compact("productSeenCount","author","educationalContent", "rootContentType", "childContentType", "contentsWithSameType" , "soonContentsWithSameType" , "educationalContentSet" , "contentsWithSameSet" , "contentSetName" , "videoSources" ,
-                "files" , "tags" , "sideBarMode" , "educationalContentDisplayName" , "sessionNumber" , "fileToShow" , "userCanSeeCounter" , "adItems"));
+
+            $videosWithSameSetL = null;
+            $videosWithSameSetR = null;
+            if(isset($videosWithSameSet) && $videosWithSameSet instanceof Collection)
+                [$videosWithSameSetL , $videosWithSameSetR] = $videosWithSameSet->partition(function ($i) use($educationalContent) {
+                    return $i["content"]->id < $educationalContent->id;
+                });
+            return view("educationalContent.show", compact("productSeenCount","author","educationalContent", "rootContentType", "childContentType", "contentsWithSameType" , "soonContentsWithSameType" , "educationalContentSet" , "contentsWithSameSet","videosWithSameSet","pamphletsWithSameSet" , "contentSetName" , "videoSources" ,
+                "files" , "tags" , "sideBarMode" , "educationalContentDisplayName" , "sessionNumber" , "fileToShow" , "userCanSeeCounter" , "adItems","videosWithSameSetL","videosWithSameSetR"));
         }
         else
             abort(404);

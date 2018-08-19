@@ -4,6 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Locate
+ *
+ * @mixin \Eloquent
+ */
 class Locate extends Model
 {
     /**

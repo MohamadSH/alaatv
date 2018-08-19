@@ -7,6 +7,65 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Config;
 
+/**
+ * App\Transaction
+ *
+ * @property int $id
+ * @property int|null $order_id آیدی مشخص کننده سفارشی که تراکنش متعلق به آن است
+ * @property int|null $wallet_id آیدی مشخص کننده کیف پولی که تراکنش متعلق به آن است
+ * @property int|null $cost مبلغ تراکنش
+ * @property string|null $authority شماره اتوریتی تولید شده از طرف درگاه
+ * @property string|null $transactionID کد پیگیری تراکنش
+ * @property string|null $traceNumber شماره پیگیری
+ * @property string|null $referenceNumber شماره مرجع
+ * @property string|null $paycheckNumber شماره چک (در صورت پرداخت با چک بانکی)
+ * @property string|null $managerComment توضیح مسئول درباره تراکنش
+ * @property int|null $sourceBankAccount_id آی دی مشخص کننده شماره حساب مبدا
+ * @property int|null $destinationBankAccount_id آی دی مشخص کننده شماره حساب مقصد
+ * @property int|null $paymentmethod_id آی دی مشخص کننده روش پرداخت
+ * @property int|null $transactiongateway_id آیدی مشخص کننده درگاه تراکنش
+ * @property int|null $transactionstatus_id آیدی مشخص کننده وضعیت تراکنش
+ * @property \Carbon\Carbon|null $created_at
+ * @property string|null $deadline_at مهلت پرداخت
+ * @property string|null $completed_at تاریخ پرداخت
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[] $children
+ * @property-read \App\Bankaccount $destinationBankAccount
+ * @property-read \App\Order|null $order
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[] $parents
+ * @property-read \App\Paymentmethod|null $paymentmethod
+ * @property-read \App\Bankaccount $sourceBankAccount
+ * @property-read \App\Transactiongateway|null $transactiongateway
+ * @property-read \App\Transactionstatus|null $transactionstatus
+ * @property-read \App\Wallet|null $wallet
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\Transaction onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereAuthority($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereCompletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereCost($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereDeadlineAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereDestinationBankAccountId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereManagerComment($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereOrderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction wherePaycheckNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction wherePaymentmethodId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereReferenceNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereSourceBankAccountId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereTraceNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereTransactionID($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereTransactiongatewayId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereTransactionstatusId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereWalletId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Transaction withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Transaction withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Transaction extends Model
 {
     use Helper;

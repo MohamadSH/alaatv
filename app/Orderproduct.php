@@ -9,6 +9,51 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 
+/**
+ * App\Orderproduct
+ *
+ * @property int $id
+ * @property int|null $orderproducttype_id آیدی مشخص کننده نوع آیتم سبد
+ * @property int $order_id
+ * @property int $product_id
+ * @property int|null $checkoutstatus_id آی دی مشحص کننده وضعیت تسویه حساب این آیتم
+ * @property int|null $cost مبلغ این آیتم سبد
+ * @property float $discountPercentage تخفیف این آیتم سبد(به درصد)
+ * @property int $discountAmount تخفیف این آیتم سبد(مبلغ)
+ * @property int $includedInCoupon مشخص کننده اینکه آیا این آیتم مشمول کپن بوده یا نه(در صورت کپن داشتن سفارش)
+ * @property int $quantity تعداد سفارش داده شده
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Attributevalue[] $attributevalues
+ * @property-read \App\Checkoutstatus|null $checkoutstatus
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Orderproduct[] $children
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Userbon[] $insertedUserbons
+ * @property-read \App\Order $order
+ * @property-read \App\Orderproducttype|null $orderproducttype
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Orderproduct[] $parents
+ * @property-read \App\Product $product
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Userbon[] $userbons
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\Orderproduct onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct whereCheckoutstatusId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct whereCost($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct whereDiscountAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct whereDiscountPercentage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct whereIncludedInCoupon($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct whereOrderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct whereOrderproducttypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct whereProductId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct whereQuantity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Orderproduct withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Orderproduct withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Orderproduct extends Model
 {
     use SoftDeletes;

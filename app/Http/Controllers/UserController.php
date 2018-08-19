@@ -45,7 +45,7 @@ use App\Order;
 use App\Role;
 use App\User;
 use App\Userstatus;
-use App\Verificationmessagestatuse;
+use App\Verificationmessagestatus;
 use App\Websitesetting;
 use Carbon\Carbon;
 use Illuminate\Http\Request;

@@ -5,6 +5,35 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * App\Lottery
+ *
+ * @property int $id
+ * @property string|null $name نام قرعه کشی
+ * @property string|null $displayName نام قابل نمایش قرعه کشی
+ * @property string|null $holdingDate تاریخ برگزاری
+ * @property int $essentialPoints تعداد امتیاز لازم برای شرکت در قرعه کشی
+ * @property string|null $prizes جوایز قرعه کشی
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\User[] $users
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\Lottery onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Lottery whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Lottery whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Lottery whereDisplayName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Lottery whereEssentialPoints($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Lottery whereHoldingDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Lottery whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Lottery whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Lottery wherePrizes($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Lottery whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Lottery withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Lottery withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Lottery extends Model
 {
     use SoftDeletes;

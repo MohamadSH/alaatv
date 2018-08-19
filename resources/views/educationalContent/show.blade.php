@@ -80,9 +80,35 @@
                                     <p class="vjs-no-js">جهت پخش آنلاین فیلم، ابتدا مطمئن شوید که جاوا اسکریپت در مرور
                                         گر شما فعال است و از آخرین نسخه ی مرورگر استفاده می کنید.</p>
                                 </video>
+
                             </div>
                             <div class="row">
-
+                                <div class="col-md-12">
+                                    <nav aria-label="Page navigation">
+                                        <ul class="pagination pagination-sm ">
+                                            <li class="page-item">
+                                                <a class="page-link" href="{{action("EducationalContentController@show" , $videosWithSameSet->first()["content"])}}" aria-label="اولین">
+                                                    <span aria-hidden="true">&laquo;</span>
+                                                    <span class="sr-only">اولین</span>
+                                                </a>
+                                            </li>
+                                            @foreach($videosWithSameSetL->take(-5) as $item)
+                                                {{--@if($item->number )--}}
+                                                <li class="page-item @if($item["content"]->id == $educationalContent->id) active @endif"><a class="page-link" href="{{action("EducationalContentController@show" , $item["content"])}}">{{ $item["content"]->getOrder() }}</a></li>
+                                            @endforeach
+                                            @foreach($videosWithSameSetR->take(6) as $item)
+                                                {{--@if($item->number )--}}
+                                                <li class="page-item @if($item["content"]->id == $educationalContent->id) active @endif"><a class="page-link" href="{{action("EducationalContentController@show" , $item["content"])}}">{{ $item["content"]->getOrder() }}</a></li>
+                                            @endforeach
+                                            <li class="page-item">
+                                                <a class="page-link" href="{{action("EducationalContentController@show" , $videosWithSameSet->last()["content"])}}" aria-label="آخرین">
+                                                    <span aria-hidden="true">&raquo;</span>
+                                                    <span class="sr-only">آخرین</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
                                     <hr>
                                     <div class="col-md-7">
                                         <div class="caption"><i class="fa fa-comment-o" aria-hidden="true"></i></div>
@@ -122,11 +148,10 @@
                                             @include("partials.search.tagLabel" , ["tags"=>$tags])
                                         @endif
                                     </div>
-
-
                                 </div>
                         </div>
                     </div>
+
                     <div class="row">
                         <div class="col-md-12">
                             <div class="portlet light ">
@@ -178,7 +203,7 @@
             {{--</div>--}}
             <div class="row">
                 <div class="col-md-8 margin-bottom-15">
-                    @if(isset($contentsWithSameSet) && $contentsWithSameSet->whereIn("type" , "video" )->isNotEmpty())
+                    @if(isset($videosWithSameSet) && $videosWithSameSet->isNotEmpty())
                     <div class="mt-element-list">
                         <div class="mt-list-head list-news ext-1 font-white bg-yellow-crusta">
                             <div class="list-head-title-container">
@@ -195,7 +220,7 @@
                             <div id="playListScroller" class="scroller" style="min-height: 50px; max-height:950px" data-always-visible="1" data-rail-visible="1"
                                  data-rail-color="red" data-handle-color="green">
                                 <ul>
-                                    @foreach($contentsWithSameSet->whereIn("type" , "video" ) as $item)
+                                    @foreach($videosWithSameSet as $item)
                                         <li class="mt-list-item @if($item["content"]->id == $educationalContent->id) bg-grey-mint @endif " id="playlistItem_{{$item["content"]->id}}">
                                                 <div class="list-icon-container">
                                                     <a href="{{action("EducationalContentController@show" , $item["content"])}}" >
@@ -256,7 +281,7 @@
                     height: 110px !important;
                 }
             </style>
-            @if(isset($contentsWithSameSet) && $contentsWithSameSet->whereIn("type" , "pamphlet" )->isNotEmpty())
+            @if(isset($pamphletsWithSameSet) && $pamphletsWithSameSet->isNotEmpty())
                 <div class="row">
                     <div class="col-md-12">
                         <div class="portlet light ">
@@ -268,7 +293,7 @@
                             </div>
                             <div class="portlet-body text-justify">
                                 <div class="m-grid m-grid-demo">
-                                    @foreach($contentsWithSameSet->whereIn("type" , "pamphlet" )->chunk(5) as $chunk)
+                                    @foreach($pamphletsWithSameSet->chunk(5) as $chunk)
                                         <div class="m-grid-row">
                                             @foreach($chunk as $item)
                                                 <div class="m-grid-col m-grid-col-middle m-grid-col-center">
@@ -324,7 +349,7 @@
                         {{--<div class="scroller" style="height:500px" data-always-visible="1" data-rail-visible="1"--}}
                         {{--data-rail-color="red" data-handle-color="green">--}}
                         {{--<ul>--}}
-                        {{--@foreach($contentsWithSameSet->whereIn("type" , "pamphlet" ) as $item)--}}
+                        {{--@foreach($pamphletsWithSameSet as $item)--}}
                         {{--<li class="mt-list-item @if($item["content"]->id == $educationalContent->id) bg-grey-mint @endif ">--}}
                         {{--<div class="list-icon-container">--}}
                         {{--<a href="{{action("EducationalContentController@show" , $item["content"])}}">--}}
@@ -427,7 +452,7 @@
                     </div>
                 </div>
                     <div class="col-md-4 margin-bottom-15">
-                        @if(isset($contentsWithSameSet) && $contentsWithSameSet->whereIn("type" , "video" )->isNotEmpty())
+                        @if(isset($videosWithSameSet) && $videosWithSameSet->isNotEmpty())
                             <div class="mt-element-list">
                             <div class="mt-list-head list-news ext-1 font-white bg-yellow-crusta">
                                 <div class="list-head-title-container">
@@ -440,7 +465,7 @@
                                      data-rail-color="red" data-handle-color="green">
                                     <ul>
 
-                                        @foreach($contentsWithSameSet->whereIn("type" , "video" ) as $item)
+                                        @foreach($videosWithSameSet as $item)
                                             <li class="mt-list-item @if($item["content"]->id == $educationalContent->id) bg-grey-mint @endif " id="playlistItem_{{$item["content"]->id}}">
                                                 <div class="list-icon-container">
                                                     <a href="{{action("EducationalContentController@show" , $item["content"])}}">
@@ -514,7 +539,7 @@
                     {{--@endif--}}
                 {{--</div>--}}
             </div>
-            @if(isset($contentsWithSameSet) && $contentsWithSameSet->whereIn("type" , "pamphlet" )->where("content.id" , "<>",$educationalContent->id)->isNotEmpty())
+            @if(isset($pamphletsWithSameSet) && $pamphletsWithSameSet->where("content.id" , "<>",$educationalContent->id)->isNotEmpty())
                 <div class="row">
                     <div class="col-md-12">
                         <div class="portlet light ">
@@ -526,7 +551,7 @@
                             </div>
                             <div class="portlet-body text-justify">
                                 <div class="m-grid m-grid-demo">
-                                    @foreach($contentsWithSameSet->whereIn("type" , "pamphlet" )->chunk(5) as $chunk)
+                                    @foreach($pamphletsWithSameSet->chunk(5) as $chunk)
                                         <div class="m-grid-row">
                                             @foreach($chunk as $item)
                                                 <div class="m-grid-col m-grid-col-middle m-grid-col-center">
@@ -582,7 +607,7 @@
                         {{--<div class="scroller" style="height:500px" data-always-visible="1" data-rail-visible="1"--}}
                         {{--data-rail-color="red" data-handle-color="green">--}}
                         {{--<ul>--}}
-                        {{--@foreach($contentsWithSameSet->whereIn("type" , "pamphlet" ) as $item)--}}
+                        {{--@foreach($pamphletsWithSameSet as $item)--}}
                         {{--<li class="mt-list-item @if($item["content"]->id == $educationalContent->id) bg-grey-mint @endif ">--}}
                         {{--<div class="list-icon-container">--}}
                         {{--<a href="{{action("EducationalContentController@show" , $item["content"])}}">--}}
@@ -712,7 +737,7 @@
     </script>
     <script>
         var related_videos = [
-                @foreach($contentsWithSameSet->whereIn("type" , "video" )->random( min(13,$contentsWithSameSet->whereIn("type" , "video" )->count())) as $item)
+                @foreach($videosWithSameSet->random( min(13,$videosWithSameSet->count())) as $item)
                 @if($item["content"]->id == $educationalContent->id)
                 @else
             {thumb: '{{(isset($item["thumbnail"]))?$item["thumbnail"]:""}}',url: '{{action("EducationalContentController@show" , $item["content"])}}', title: ' {{($item["content"]->getDisplayName())}}', duration: '20:00'},

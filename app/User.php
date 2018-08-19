@@ -17,6 +17,120 @@ use Laratrust\Traits\LaratrustUserTrait;
 use Illuminate\Support\Facades\Config;
 
 
+/**
+ * App\User
+ *
+ * @property int $id
+ * @property string|null $firstName نام کوچک
+ * @property string|null $lastName نام خانوادگی
+ * @property string|null $mobile شماره موبایل
+ * @property string|null $phone شماره تلفن ثابت
+ * @property string|null $whatsapp اکانت واتس اپ
+ * @property string|null $skype اکانت اسکایپ
+ * @property int $mobileNumberVerification شماره تماس تایید شده است یا خیر
+ * @property string|null $nationalCode کد ملی
+ * @property string $password رمز عبور
+ * @property int $userstatus_id آیدی مشخص کننده وضعیت کاربر
+ * @property int $lockProfile قفل بودن با نبودن پروفایل
+ * @property string|null $photo عکس شخصی
+ * @property string|null $province استان محل سکونت
+ * @property string|null $city شهر محل سکونت
+ * @property string|null $address آدرس محل سکونت
+ * @property string|null $postalCode کد پستی محل سکونت
+ * @property string|null $school مدرسه ی محل تحصیل
+ * @property int|null $major_id آیدی رشته تحصیل کاربر
+ * @property int|null $grade_id آی دی مشخص کننده مقطع
+ * @property int|null $gender_id آیدی جنیست کاربر
+ * @property string|null $birthdate تاریخ تولد
+ * @property string|null $remember_token
+ * @property string|null $passwordRegenerated_at تاریخ آخرین تولید خودکار(بازیابی) رمز عبور
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
+ * @property string|null $email ایمیل کاربر
+ * @property string|null $bio معرفی کاربر
+ * @property string|null $introducedBy نحوه ی آشنایی با شرکت
+ * @property int|null $bloodtype_id گروه خونی
+ * @property string|null $allergy آلرژی به ماده خاص
+ * @property string|null $medicalCondition بیماری یا شرایط پزشکی خاص
+ * @property string|null $diet رژیم غذایی خاص
+ * @property string|null $techCode کد تکنسین
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Bankaccount[] $bankaccounts
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Belonging[] $belongings
+ * @property-read \App\Bloodtype|null $bloodtype
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Contact[] $contacts
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Educationalcontent[] $contents
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Employeeschedule[] $employeeschedules
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Employeetimesheet[] $employeetimesheets
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Eventresult[] $eventresults
+ * @property-read \App\Gender|null $gender
+ * @property-read mixed $full_name
+ * @property-read \App\Grade|null $grade
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Lottery[] $lotteries
+ * @property-read \App\Major|null $major
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Mbtianswer[] $mbtianswers
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Order[] $openOrders
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[] $orderTransactions
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Ordermanagercomment[] $ordermanagercomments
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Orderproduct[] $orderproducts
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Order[] $orders
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Permission[] $permissions
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Productvoucher[] $productvouchers
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Role[] $roles
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Websitepage[] $seensitepages
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[] $transactions
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Userbon[] $userbons
+ * @property-read \App\Userstatus $userstatus
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Usersurveyanswer[] $usersurveyanswers
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Userupload[] $useruploads
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Verificationmessage[] $verificationmessages
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[] $walletTransactions
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Wallet[] $wallets
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\User onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereAddress($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereAllergy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereBio($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereBirthdate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereBloodtypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereCity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereDiet($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereFirstName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereGenderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereGradeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereIntroducedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereLastName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereLockProfile($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereMajorId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereMedicalCondition($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereMobile($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereMobileNumberVerification($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereNationalCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User wherePassword($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User wherePasswordRegeneratedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User wherePermissionIs($permission = '')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User wherePhone($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User wherePhoto($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User wherePostalCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereProvince($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereRememberToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereRoleIs($role = '')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereSchool($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereSkype($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereTechCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereUserstatusId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereWhatsapp($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\User withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\User withoutTrashed()
+ * @mixin \Eloquent
+ */
 class User extends Authenticatable
 {
     use Helper;

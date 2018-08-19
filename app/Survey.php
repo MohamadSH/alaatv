@@ -5,6 +5,31 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * App\Survey
+ *
+ * @property int $id
+ * @property string|null $name نام مصاحبه
+ * @property string|null $description توضیح درباره مصاحبه
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Event[] $events
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Question[] $questions
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Usersurveyanswer[] $usersurveyanswer
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\Survey onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Survey whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Survey whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Survey whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Survey whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Survey whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Survey whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Survey withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Survey withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Survey extends Model
 {
     use SoftDeletes;
