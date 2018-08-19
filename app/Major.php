@@ -5,6 +5,42 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * App\Major
+ *
+ * @property int $id
+ * @property string|null $name نام رشته
+ * @property int|null $majortype_id آی دی مشخص کننده نوع رشته
+ * @property string|null $description توضیح درباره رشته
+ * @property int $enable فعال بودن یا نبودن رشته
+ * @property int $order ترتیب نمایش رشته - در صورت نیاز به استفاده
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Major[] $accessibles
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Assignment[] $assignments
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Major[] $children
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Consultation[] $consultations
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Educationalcontent[] $educationalcontents
+ * @property-read \App\Majortype|null $majortype
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Major[] $parents
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\User[] $users
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\Major onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Major whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Major whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Major whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Major whereEnable($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Major whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Major whereMajortypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Major whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Major whereOrder($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Major whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Major withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Major withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Major extends Model
 {
     use SoftDeletes;

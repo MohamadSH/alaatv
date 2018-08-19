@@ -9,6 +9,71 @@ use function GuzzleHttp\Psr7\str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * App\Employeetimesheet
+ *
+ * @property int $id
+ * @property int $user_id آیدی مشخص کننده کارمند
+ * @property string $date تاریخ ساعت کاری
+ * @property string|null $userBeginTime ساعت شروع شیفت کارمند
+ * @property string|null $userFinishTime ساعت پایان شیفت کارمند
+ * @property int|null $allowedLunchBreakInSec مدت زمان مجاز برای استراحت ناهار
+ * @property string|null $clockIn زمان ورود به محل کار
+ * @property string|null $beginLunchBreak زمان خروج برای استراحت ناهار
+ * @property string|null $finishLunchBreak زمان پایان استراحت ناهار
+ * @property string|null $clockOut زمان خروج از مجل کار
+ * @property int $breakDurationInSeconds زمان استراحت و کسری ساعت کاری بر حسب ثانیه
+ * @property int $timeSheetLock قفل بودن ساعت کاری
+ * @property int|null $workdaytype_id نوع روز کاری
+ * @property int $isPaid مشخص کننده تسویه یا تسویه ساعت کاری
+ * @property string|null $managerComment توضیحات مدیر
+ * @property string|null $employeeComment توضیح کارمند
+ * @property int|null $modifier_id آیدی مشخص کننده کاربری که آخرین بار رکورد را اصلاح کرده است
+ * @property string $created_at
+ * @property string $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
+ * @property string $allowedlunchbreakinsec
+ * @property string $beginlunchbreak
+ * @property string $breakdurationinseconds
+ * @property string $clockin
+ * @property string $clockout
+ * @property string $finishlunchbreak
+ * @property-read string $ispaid
+ * @property-read string $timesheetlock
+ * @property string $userbegintime
+ * @property string $userfinishtime
+ * @property-read \App\User|null $modifier
+ * @property-write mixed $employeecomment
+ * @property-write mixed $managercomment
+ * @property-read \App\User $user
+ * @property-read \App\Workdaytype|null $workdaytype
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\Employeetimesheet onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereAllowedLunchBreakInSec($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereBeginLunchBreak($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereBreakDurationInSeconds($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereClockIn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereClockOut($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereEmployeeComment($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereFinishLunchBreak($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereIsPaid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereManagerComment($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereModifierId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereTimeSheetLock($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereUserBeginTime($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereUserFinishTime($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereWorkdaytypeId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Employeetimesheet withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Employeetimesheet withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Employeetimesheet extends Model
 {
     use SoftDeletes;

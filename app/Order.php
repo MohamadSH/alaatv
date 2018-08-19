@@ -11,6 +11,66 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Auth;
 use Illuminate\Support\Facades\Config;
 
+/**
+ * App\Order
+ *
+ * @property int $id
+ * @property int|null $user_id آیدی مشخص کننده کاربر سفارش دهنده
+ * @property int|null $orderstatus_id آیدی مشخص کننده وضعیت سفارش
+ * @property int|null $paymentstatus_id آیدی مشخص کننده وضعیت پرداخت سفارش
+ * @property int|null $coupon_id آیدی مشخص کننده کپن استفاده شده برای سفارش
+ * @property float $couponDiscount میزان تخفیف کپن برای سفارش به درصد
+ * @property int $couponDiscountAmount میزان تخفیف کپن(به تومان)
+ * @property int|null $cost مبلغ قابل پرداخت توسط کاربر
+ * @property int|null $costwithoutcoupon بخشی از قیمت که مشمول کپن تخفیف نمی شود
+ * @property int $discount تخفیف خاص برای این سفارش به تومان
+ * @property string|null $customerDescription توضیحات مشتری درباره سفارش
+ * @property string|null $customerExtraInfo اطلاعات تکمیلی مشتری برای این سفارش
+ * @property string|null $checkOutDateTime تاریخ تسویه حساب کامل
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property string|null $completed_at مشخص کننده زمان تکمیل سفارش کاربر
+ * @property \Carbon\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[] $archivedSuccessfulTransactions
+ * @property-read \App\Coupon|null $coupon
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Orderfile[] $files
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Orderproduct[] $normalOrderproducts
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[] $onlinetransactions
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Ordermanagercomment[] $ordermanagercomments
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Orderpostinginfo[] $orderpostinginfos
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Orderproduct[] $orderproducts
+ * @property-read \App\Orderstatus|null $orderstatus
+ * @property-read \App\Paymentstatus|null $paymentstatus
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[] $pendingTransactions
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[] $successfulTransactions
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[] $suspendedTransactions
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[] $transactions
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[] $unpaidTransactions
+ * @property-read \App\User|null $user
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\Order onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Order whereCheckOutDateTime($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Order whereCompletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Order whereCost($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Order whereCostwithoutcoupon($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Order whereCouponDiscount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Order whereCouponDiscountAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Order whereCouponId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Order whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Order whereCustomerDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Order whereCustomerExtraInfo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Order whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Order whereDiscount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Order whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Order whereOrderstatusId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Order wherePaymentstatusId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Order whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Order whereUserId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Order withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Order withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Order extends Model
 {
     use SoftDeletes, CascadeSoftDeletes;

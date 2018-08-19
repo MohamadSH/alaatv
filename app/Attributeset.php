@@ -10,6 +10,32 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * App\Attributeset
+ *
+ * @property int $id
+ * @property string|null $name نام دسته
+ * @property string|null $description توضیح دسته
+ * @property int $order ترتیب دسته صفت
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Attributegroup[] $attributegroups
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Product[] $products
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\Attributeset onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributeset whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributeset whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributeset whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributeset whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributeset whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributeset whereOrder($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributeset whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Attributeset withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Attributeset withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Attributeset extends Model
 {
     use SoftDeletes;

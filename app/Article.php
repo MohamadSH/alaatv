@@ -8,6 +8,42 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
 
+/**
+ * App\Article
+ *
+ * @property int $id
+ * @property int|null $user_id آی دی مشخص کننده فرد ایجاد کننده مقاله
+ * @property int|null $articlecategory_id آی دی مشخص کننده دسته بندی مقاله
+ * @property int $order ترتیب مقاله
+ * @property string|null $title عنوان مقاله
+ * @property string|null $keyword کلمات کلیدی مقاله
+ * @property string|null $brief خلاصه مقاله
+ * @property string|null $body متن مقاله
+ * @property string|null $image تصویر مقاله
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
+ * @property-read \App\Articlecategory|null $articlecategory
+ * @property-read \App\User|null $user
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\Article onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Article whereArticlecategoryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Article whereBody($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Article whereBrief($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Article whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Article whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Article whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Article whereImage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Article whereKeyword($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Article whereOrder($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Article whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Article whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Article whereUserId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Article withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Article withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Article extends Model
 {
     use SoftDeletes;

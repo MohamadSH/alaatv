@@ -8,6 +8,29 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Auth;
 use Illuminate\Support\Facades\Config;
 
+/**
+ * App\Mbtianswer
+ *
+ * @property int $id
+ * @property int $user_id آی دی مشخص کننده کاربری که آزمون داده است
+ * @property string|null $answers آرایه ی مشخص کننده گزینه های انتخاب شده
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
+ * @property-read \App\User $user
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\Mbtianswer onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Mbtianswer whereAnswers($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Mbtianswer whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Mbtianswer whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Mbtianswer whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Mbtianswer whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Mbtianswer whereUserId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Mbtianswer withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Mbtianswer withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Mbtianswer extends Model
 {
     use SoftDeletes;

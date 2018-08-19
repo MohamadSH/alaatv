@@ -5,6 +5,30 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * App\Disk
+ *
+ * @property int $id
+ * @property int|null $disktype_id آی دی مشخص کننده نوع دیسک
+ * @property string $name نام دیسک
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
+ * @property-read \App\Disktype|null $disktype
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\File[] $files
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\Disk onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Disk whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Disk whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Disk whereDisktypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Disk whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Disk whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Disk whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Disk withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Disk withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Disk extends Model
 {
     use SoftDeletes;

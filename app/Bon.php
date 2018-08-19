@@ -5,6 +5,41 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * App\Bon
+ *
+ * @property int $id
+ * @property string|null $name نام بن
+ * @property string|null $displayName نام قابل نمایش بن
+ * @property int|null $bontype_id آی دی مشحص کننده نوع بن
+ * @property string|null $description توضیح درباره بن
+ * @property int $isEnable فعال/غیرفعال
+ * @property int $order ترتیب بن
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
+ * @property-read \App\Bontype|null $bontype
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Product[] $products
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Userbon[] $userbons
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\User[] $users
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Bon enable()
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\Bon onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Bon whereBontypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Bon whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Bon whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Bon whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Bon whereDisplayName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Bon whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Bon whereIsEnable($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Bon whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Bon whereOrder($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Bon whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Bon withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Bon withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Bon extends Model
 {
     use SoftDeletes;

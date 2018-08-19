@@ -5,6 +5,27 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * App\Template
+ *
+ * @property int $id
+ * @property string|null $name نام
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Educationalcontent[] $educationalcontents
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\Template onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Template whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Template whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Template whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Template whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Template whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Template withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Template withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Template extends Model
 {
     use SoftDeletes;
