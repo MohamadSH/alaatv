@@ -737,7 +737,7 @@
     </script>
     <script>
         var related_videos = [
-                @foreach($videosWithSameSet->random(optional(min(13,$videosWithSameSet->count()))) as $item)
+                @foreach($videosWithSameSet->random(min(13,$videosWithSameSet->count())) as $item)
                 @if($item["content"]->id == $educationalContent->id)
                 @else
             {thumb: '{{(isset($item["thumbnail"]))?$item["thumbnail"]:""}}',url: '{{action("EducationalContentController@show" , $item["content"])}}', title: ' {{($item["content"]->getDisplayName())}}', duration: '20:00'},
