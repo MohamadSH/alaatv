@@ -113,7 +113,18 @@ class HomeController extends Controller
     {
         try
         {
-
+            $asiatechProduct = config("constants.ASIATECH_FREE_ADSL") ;
+            $voucherPendingOrders = User::whereHas("orders" , function ($q) use ($asiatechProduct){
+                $q->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
+                    ->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_PAID"))
+                    ->whereHas("orderproducts" , function ($q) use ($asiatechProduct)
+                    {
+                        $q->where("product_id" , $asiatechProduct);
+                    })
+                    ->havingRaw('COUNT(*) > 1');
+            })
+                ->get();
+            dd($voucherPendingOrders->pluck("id"));
         }
         catch (\Exception    $e) {
             $message = "unexpected error";
