@@ -737,7 +737,7 @@
     </script>
     <script>
         var related_videos = [
-        @if(isset(min(13,$videosWithSameSet->count()))
+        @if(!is_null(min(13,$videosWithSameSet->count()))
                 @foreach($videosWithSameSet->random(min(13,$videosWithSameSet->count())) as $item)
                 @if($item["content"]->id == $educationalContent->id)
                 @else
