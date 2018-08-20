@@ -5,8 +5,25 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Response;
 
-class Minify
-{
+class Minify {
+
+    /**
+     * @var array
+     */
+    protected $search = [
+        '/\>[^\S ]+/s',
+        '/[^\S ]+\</s',
+        '/(\s)+/s',
+    ];
+    /**
+     * @var array
+     */
+    protected $replace = [
+        '>',
+        '<',
+        '\\1',
+    ];
+
     /**
      * Handle an incoming request.
      *
@@ -17,36 +34,24 @@ class Minify
     public function handle($request, Closure $next)
     {
         $response = $next($request);
-        if ($this->isResponseObject($response) && $this->isHtmlResponse($response)) {
-            $replace = [
-                '/\>[^\S ]+/s'                                                      => '>',
-                '/[^\S ]+\</s'                                                      => '<',
-                '/([\t ])+/s'                                                       => ' ',
-                '/^([\t ])+/m'                                                      => '',
-                '/([\t ])+$/m'                                                      => '',
-                '~//[a-zA-Z0-9 ]+$~m'                                               => '',
-                '/[\r\n]+([\t ]?[\r\n]+)+/s'                                        => "\n",
-                '/\>[\r\n\t ]+\</s'                                                 => '><',
-                '/}[\r\n\t ]+/s'                                                    => '}',
-                '/}[\r\n\t ]+,[\r\n\t ]+/s'                                         => '},',
-                '/\)[\r\n\t ]?{[\r\n\t ]+/s'                                        => '){',
-                '/,[\r\n\t ]?{[\r\n\t ]+/s'                                         => ',{',
-                '/\),[\r\n\t ]+/s'                                                  => '),',
-                '~([\r\n\t ])?([a-zA-Z0-9]+)=\"([a-zA-Z0-9_\\-]+)\"([\r\n\t ])?~s'  => '$1$2=$3$4',
-            ];
-
-            $response->setContent(preg_replace(array_keys($replace), array_values($replace), $response->getContent()));
-        }
-
+        $response->setContent(
+            $this->filterContent($response->getContent())
+        );
         return $response;
     }
-    protected function isResponseObject($response)
-    {
-        return is_object($response) && $response instanceof Response;
-    }
 
-    protected function isHtmlResponse(Response $response)
+    /**
+     * Filter the spaces in the DOM.
+     *
+     * @param $content
+     *
+     * @return mixed
+     */
+    protected function filterContent($content)
     {
-        return strcmp(strtolower(strtok($response->headers->get('Content-Type'), ';')) ,'text/html') == 0 ? 1 : 0;
+        if (preg_match("/\<html/i", $content) == 1 && preg_match("/\<\/html\>/i", $content) == 1) {
+            return preg_replace($this->search, $this->replace, $content);
+        }
+        return $content;
     }
 }

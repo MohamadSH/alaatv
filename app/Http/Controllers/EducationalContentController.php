@@ -567,7 +567,7 @@ class EducationalContentController extends Controller
                     SEO::twitter()->addValue('player:width', "854");
                     SEO::twitter()->addValue('player:height', "480");
                     // video.movie
-                    SEO::opengraph()->setType('video.movie')
+                    SEO::opengraph()->setType('video')
                         ->setVideoMovie([
                             'actor' => (isset($author)) ? $author : "",
                             'actor:role' => 'دبیر',
