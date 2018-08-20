@@ -467,10 +467,13 @@
                         // files.previewElement.querySelector('[type="submit"]').disabled=false;
                         var fileNameHidden = Dropzone.createElement("<input type='hidden' name='file[]' value='"+response.fileName+"'>");
                         files.previewElement.querySelector('.form-horizontal').appendChild(fileNameHidden);
-                        var fileCaptionHidden = Dropzone.createElement("<input type='hidden' name='caption[]' value='کیفیت عالی'>");
-                        files.previewElement.querySelector('.form-horizontal').appendChild(fileCaptionHidden);
-                        var fileLabelHidden = Dropzone.createElement("<input type='hidden' name='label[]' value='hd'>");
-                        files.previewElement.querySelector('.form-horizontal').appendChild(fileLabelHidden);
+                        if($("#rootContentTypes").data("title") == "video")
+                        {
+                            var fileCaptionHidden = Dropzone.createElement("<input type='hidden' name='caption[]' value='کیفیت عالی'>");
+                            files.previewElement.querySelector('.form-horizontal').appendChild(fileCaptionHidden);
+                            var fileLabelHidden = Dropzone.createElement("<input type='hidden' name='label[]' value='hd'>");
+                            files.previewElement.querySelector('.form-horizontal').appendChild(fileLabelHidden);
+                        }
                         /**
                          * Initialize tagsinput behaviour on inputs and selects which have
                          * data-role=tagsinput
