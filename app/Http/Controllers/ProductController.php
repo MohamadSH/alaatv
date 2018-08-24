@@ -587,8 +587,7 @@ class ProductController extends Controller
                     $result =  json_encode(
                         [
                             'totalExtraCost' => $totalExtraCost
-                        ]
-                    );
+                        ], JSON_UNESCAPED_UNICODE);
                     break;
                 case "mainAttribute":
                     if($product->hasChildren()) {
@@ -623,7 +622,7 @@ class ProductController extends Controller
                             [
                                 "cost"=>$cost ,
                                 "costForCustomer"=>$costForCustomer
-                            ]
+                            ], JSON_UNESCAPED_UNICODE
                         );
                     }
                     elseif(!isset($simpleProduct))
@@ -631,14 +630,14 @@ class ProductController extends Controller
                         $result = json_encode(
                             [
                                 'productWarning' => "محصول مورد نظر یافت نشد"
-                            ]
+                            ], JSON_UNESCAPED_UNICODE
                         );
                     }
                     else
                         $result = json_encode(
                             [
                                 'productWarning' => "محصول مورد نظر تمام شده است"
-                            ]
+                            ], JSON_UNESCAPED_UNICODE
                         );
                     break;
                 case "productSelection":
@@ -679,7 +678,7 @@ class ProductController extends Controller
                         [
                             "cost"=>$cost ,
                             "costForCustomer"=> $costForCustomer
-                        ]
+                        ], JSON_UNESCAPED_UNICODE
                     );
                     break;
                 default:

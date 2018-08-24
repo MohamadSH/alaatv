@@ -6,33 +6,29 @@ use App\Afterloginformcontrol;
 use App\Bankaccount;
 use App\Bloodtype;
 use App\Bon;
-use App\Checkoutstatus;
 use App\Contact;
-use App\Coupon;
 use App\Employeeschedule;
 use App\Employeetimesheet;
 use App\Event;
-use App\Eventresult;
 use App\Gender;
 use App\Grade;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Requests\InsertCouponRequest;
+use App\Http\Requests\EditProfileInfoRequest;
+use App\Http\Requests\EditProfilePasswordRequest;
+use App\Http\Requests\EditProfilePhotoRequest;
+use App\Http\Requests\EditUserRequest;
+use App\Http\Requests\InsertUserRequest;
 use App\Http\Requests\InsertVoucherRequest;
 use App\Http\Requests\PasswordRecoveryRequest;
 use App\Http\Requests\RegisterForSanatiSharifHighSchoolRequest;
 use App\Http\Requests\SubmitVerificationCode;
 use App\Lottery;
 use App\Major;
-use App\Http\Requests\EditProfileInfoRequest;
-use App\Http\Requests\EditProfilePasswordRequest;
-use App\Http\Requests\EditProfilePhotoRequest;
-use App\Http\Requests\EditUserRequest;
-use App\Http\Requests\InsertUserRequest;
+use App\Order;
 use App\Phone;
 use App\Product;
-use App\Productvoucher;
 use App\Province;
-use App\Relative;
+use App\Role;
 use App\Traits\CharacterCommon;
 use App\Traits\DateCommon;
 use App\Traits\Helper;
@@ -41,16 +37,13 @@ use App\Traits\RequestCommon;
 use App\Traits\UserCommon;
 use App\Transaction;
 use App\Transactiongateway;
-use App\Order;
-use App\Role;
 use App\User;
 use App\Userstatus;
-use App\Verificationmessagestatus;
-use App\Websitesetting;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Auth;
+use Carbon\Carbon;
 use Hash;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
@@ -59,11 +52,9 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\View;
-use Monolog\Handler\ElasticSearchHandler;
-use stdClass;
 use SEO;
+use stdClass;
 
 class UserController extends Controller
 {
@@ -523,7 +514,7 @@ class UserController extends Controller
             "numberOfFatherPhones" => $numberOfFatherPhones , "numberOfMotherPhones" => $numberOfMotherPhones
         );
 
-        return response(json_encode($result),200)->header('Content-Type','application/json') ;
+        return response(json_encode($result, JSON_UNESCAPED_UNICODE), 200)->header('Content-Type', 'application/json');
     }
 
     /**
@@ -2193,9 +2184,9 @@ class UserController extends Controller
             if(strlen(preg_replace('/\s+/', '', $customerExtraInfoAnswers[$key])) > 0 ) $obj->info = $customerExtraInfoAnswers[$key] ;
             else $obj->info = null;
             if(strlen($jsonConcats) > 0 )
-                $jsonConcats = $jsonConcats . ',' . json_encode($obj) ;
+                $jsonConcats = $jsonConcats . ',' . json_encode($obj, JSON_UNESCAPED_UNICODE);
             else
-                $jsonConcats = json_encode($obj) ;
+                $jsonConcats = json_encode($obj, JSON_UNESCAPED_UNICODE);
         }
         $customerExtraInfo = "[" . $jsonConcats . "]";
         $updateOrderRequest->offsetSet("customerExtraInfo", $customerExtraInfo );

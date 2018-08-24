@@ -144,7 +144,7 @@ trait Helper
             'pass'=>config("services.medianaSMS.normal.password"),
             'from'=>$from,
             'message'=>$params["message"],
-            'to'=>json_encode($rcpt_nm),
+            'to' => json_encode($rcpt_nm, JSON_UNESCAPED_UNICODE),
             'op'=>'send'
         ];
 

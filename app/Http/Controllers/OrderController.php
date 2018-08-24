@@ -8,13 +8,19 @@ use App\Bon;
 use App\Coupon;
 use App\Helpers\ENPayment;
 use App\Http\Requests\DonateRequest;
+use App\Http\Requests\EditOrderRequest;
 use App\Http\Requests\InsertTransactionRequest;
 use App\Http\Requests\SendSMSRequest;
 use App\Http\Requests\SubmitCouponRequest;
 use App\Notifications\InvoicePaid;
+use App\Order;
 use App\Ordermanagercomment;
 use App\Orderpostinginfo;
+use App\Orderproduct;
+use App\Orderstatus;
 use App\Paymentmethod;
+use App\Paymentstatus;
+use App\Product;
 use App\Productvoucher;
 use App\Traits\APIRequestCommon;
 use App\Traits\Helper;
@@ -22,30 +28,23 @@ use App\Traits\ProductCommon;
 use App\Traits\RequestCommon;
 use App\Transaction;
 use App\Transactiongateway;
-use App\Order;
-use App\Orderproduct;
-use App\Orderstatus;
-use App\Paymentstatus;
-use App\Product;
 use App\Transactionstatus;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use App\Http\Requests\EditOrderRequest;
-use App\Http\Requests;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
+use SEO;
 use Zarinpal\Drivers\SoapDriver;
 use Zarinpal\Zarinpal;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\DB;
-use SEO;
 
 class OrderController extends Controller
 {
@@ -580,7 +579,7 @@ class OrderController extends Controller
         , 'myOrderproducts'=>$myOrderproducts,
         );
 
-        return response(json_encode($result),200)->header('Content-Type','application/json') ;
+        return response(json_encode($result, JSON_UNESCAPED_UNICODE), 200)->header('Content-Type', 'application/json');
     }
 
     /**

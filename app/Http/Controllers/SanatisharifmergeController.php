@@ -2947,7 +2947,7 @@ class SanatisharifmergeController extends Controller
                     "bucket" => "contentset",
                     "tags" => $tags
                 ];
-                $request->offsetSet("tags" , json_encode($tagsJson));
+                $request->offsetSet("tags", json_encode($tagsJson, JSON_UNESCAPED_UNICODE));
                 dump($tags);
 
                 $request->offsetSet("name" , $name);
@@ -3195,7 +3195,7 @@ class SanatisharifmergeController extends Controller
                         "bucket" => "content",
                         "tags" => $tags
                     ];
-                    $storeContentReuest->offsetSet("tags" , json_encode($tagsJson));
+                    $storeContentReuest->offsetSet("tags", json_encode($tagsJson, JSON_UNESCAPED_UNICODE));
 
                     dump($tags);
 

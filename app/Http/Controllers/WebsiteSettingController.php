@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Websitesetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class WebsiteSettingController extends Controller
 {
@@ -137,7 +137,7 @@ class WebsiteSettingController extends Controller
                 $wSetting->site->siteLogo = $fileName;
             }
         }
-        $setting->setting = json_encode($wSetting);
+        $setting->setting = json_encode($wSetting, JSON_UNESCAPED_UNICODE);
         if($setting->update()) {
             session()->put("success", "تنظیمات سایت با موفقیت اصلاح شد");
         }

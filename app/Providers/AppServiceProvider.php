@@ -3,22 +3,17 @@
 namespace App\Providers;
 
 
-use App\Contentset;
-use App\Contenttype;
-use App\Product;
-use App\Productfiletype;
-use App\Traits\UserCommon;
-use App\Verificationmessagestatus;
-use App\Wallettype;
+use App\{
+    Adapter\AlaaSftpAdapter, Contentset, Contenttype, Product, Productfiletype, Traits\UserCommon, Verificationmessagestatus, Wallettype
+};
 use Carbon\Carbon;
 use Illuminate\Database\QueryException;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\{
+    Auth, Config, Schema, Storage, Validator, View
+};
 use Illuminate\Support\ServiceProvider;
 use Laravel\Horizon\Horizon;
+use League\Flysystem\Filesystem;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -30,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+
         Horizon::auth(function ($request) {
             if( Auth::check() && Auth::user()->hasRole("admin") ){
                 return true;
@@ -39,6 +35,10 @@ class AppServiceProvider extends ServiceProvider
             }
         });
         Schema::defaultStringLength(191);
+
+        Storage::extend('sftp', function ($app, $config) {
+            return new Filesystem(new AlaaSftpAdapter($config));
+        });
 
         /**
          *  National code validation for registration form

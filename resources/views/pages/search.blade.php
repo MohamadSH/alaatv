@@ -247,8 +247,8 @@
         var lessonTeacher = {!!  $lessonTeacher->toJson()!!};
         var defaultLesson = "{!!$defaultLesson!!}";
         var defaultTeacher = "{!!$defaultTeacher!!}";
-        var tags = {!! json_encode($tagInput) !!};
-         var extraTags = {!! json_encode($extraTagArray) !!} ;
+        var tags = {!! json_encode($tagInput,JSON_UNESCAPED_UNICODE ) !!};
+        var extraTags = {!! json_encode($extraTagArray,JSON_UNESCAPED_UNICODE ) !!} ;
         $(document).ready(function()
         {
             initialSlick($(".productSlider"));

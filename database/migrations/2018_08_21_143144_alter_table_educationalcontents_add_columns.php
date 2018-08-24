@@ -2,7 +2,9 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\{
+    Log, Schema
+};
 
 class AlterTableEducationalcontentsAddColumns extends Migration
 {
@@ -15,15 +17,33 @@ class AlterTableEducationalcontentsAddColumns extends Migration
     public function up()
     {
         Schema::table('educationalcontents', function (Blueprint $table) {
-            $table->text('file')
-                ->nullable()
-                ->comment("فایل های هر محتوا")
-                ->after("context");
-
-            $table->time('duration')
-                ->comment("مدت زمان فیلم")
-                ->after("file");
+            if (!Schema::hasColumn('educationalcontents', 'file')) {
+                $table->text('file')
+                    ->nullable()
+                    ->comment("فایل های هر محتوا")
+                    ->after("context");
+            }
+            if (!Schema::hasColumn('educationalcontents', 'duration')) {
+                $table->time('duration')
+                    ->comment("مدت زمان فیلم")
+                    ->after("file");
+            }
+            if (!Schema::hasColumn('educationalcontents', 'thumbnail')) {
+                $table->text('thumbnail')
+                    ->nullable()
+                    ->comment("عکس هر محتوا")
+                    ->after("file");
+            }
         });
+
+        $contents = \App\Educationalcontent::all();
+        foreach ($contents as $content) {
+            try {
+                $content->fixFiles();
+            } catch (Exception $e) {
+                Log::error("Content-" . $content->id . ":\n\r" . $e->getMessage());
+            }
+        }
     }
 
     /**
@@ -39,6 +59,9 @@ class AlterTableEducationalcontentsAddColumns extends Migration
             }
             if (Schema::hasColumn('educationalcontents', 'duration')) {
                 $table->dropColumn('duration');
+            }
+            if (Schema::hasColumn('educationalcontents', 'thumbnail')) {
+                $table->dropColumn('thumbnail');
             }
         });
     }

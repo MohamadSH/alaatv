@@ -62,6 +62,15 @@ return [
             'driver' => 'local',
             'root'   => storage_path('app/public/profile/images'),
             'visibility' => 'public',
+
+/*            'driver'     => 'sftp',
+            'host'       => env('SFTP_HOST', ''),
+            'port'       => env('SFTP_PORT', '22'),
+            'username'   => env('SFTP_USERNAME', ''),
+            'password'   => env('SFTP_PASSSWORD', ''),
+            'privateKey' => env('SFTP_PRIVATE_KEY_PATH', ''),
+            'root'       => env('SFTP_ROOT', '').'/public/c/pamphlet/',
+            'timeout'    => env('SFTP_TIMEOUT', '10'),*/
         ],
 
         'assignmentQuestionFile' => [
@@ -134,6 +143,19 @@ return [
             'root'   => storage_path('app/public/product/files'),
             'visibility' => 'public',
         ],
+        'productFileSFTP' => [
+            'driver'     => 'sftp',
+            'host'       => env('SFTP_HOST', ''),
+            'port'       => env('SFTP_PORT', '22'),
+            'username'   => env('SFTP_USERNAME', ''),
+            'password'   => env('SFTP_PASSSWORD', ''),
+            'privateKey' => env('SFTP_PRIVATE_KEY_PATH', ''),
+            'root'       => env('SFTP_ROOT', ''),
+            'timeout'    => env('SFTP_TIMEOUT', '10'),
+            'prefix'     => null,
+            'dHost'      => "dl.takhtekhak.com/",
+            'dProtocol'  => "https://",
+        ],
 
         'eventReport' => [
             'driver' => 'local',
@@ -160,8 +182,11 @@ return [
             'username'   => env('SFTP_USERNAME', ''),
             'password'   => env('SFTP_PASSSWORD', ''),
             'privateKey' => env('SFTP_PRIVATE_KEY_PATH', ''),
-            'root'       => env('SFTP_ROOT', '').'/public/c/exam/',
+            'root'       => env('SFTP_ROOT', ''),
             'timeout'    => env('SFTP_TIMEOUT', '10'),
+            'prefix'     => '/public/c/exam/',
+            'dHost'      => "dl.takhtekhak.com/",
+            'dProtocol'  => "https://",
         ],
 
 
@@ -178,8 +203,13 @@ return [
             'username'   => env('SFTP_USERNAME', ''),
             'password'   => env('SFTP_PASSSWORD', ''),
             'privateKey' => env('SFTP_PRIVATE_KEY_PATH', ''),
-            'root'       => env('SFTP_ROOT', '').'/public/c/pamphlet/',
+            'root'       => env('SFTP_ROOT', ''),
             'timeout'    => env('SFTP_TIMEOUT', '10'),
+
+            'dHost'      => "dl.takhtekhak.com/",
+            'dProtocol'  => "https://",
+            'prefix'     => '/public/c/pamphlet/',
+
         ],
 
         'book' => [
@@ -195,8 +225,11 @@ return [
             'username'   => env('SFTP_USERNAME', ''),
             'password'   => env('SFTP_PASSSWORD', ''),
             'privateKey' => env('SFTP_PRIVATE_KEY_PATH', ''),
-            'root'       => env('SFTP_ROOT', '').'/public/c/book/',
+            'root'       => env('SFTP_ROOT', ''),
             'timeout'    => env('SFTP_TIMEOUT', '10'),
+            'prefix'     => '/public/c/book/',
+            'dHost'      => "dl.takhtekhak.com/",
+            'dProtocol'  => "https://",
         ],
 
         'digitalSignatureCertificates' => [

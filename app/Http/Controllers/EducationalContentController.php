@@ -256,7 +256,7 @@ class EducationalContentController extends Controller
                     "bucket" => "content",
                     "tags" => $tags
                 ];
-                $educationalContent->tags= json_encode($tagsJson) ;
+                $educationalContent->tags = json_encode($tagsJson, JSON_UNESCAPED_UNICODE);
             }
 
             $done = false ;
@@ -338,7 +338,7 @@ class EducationalContentController extends Controller
                 {
                     $itemTagsArray = $educationalContent->tags->tags ;
                     $params = [
-                        "tags"=> json_encode($itemTagsArray) ,
+                        "tags" => json_encode($itemTagsArray, JSON_UNESCAPED_UNICODE),
                     ];
 
                     if(isset($educationalContent->created_at) && strlen($educationalContent->created_at) > 0 )
@@ -701,7 +701,7 @@ class EducationalContentController extends Controller
                 "bucket" => "content",
                 "tags" => $tags
             ];
-            $educationalContent->tags= json_encode($tagsJson) ;
+            $educationalContent->tags = json_encode($tagsJson, JSON_UNESCAPED_UNICODE);
         }
 
         if($educationalContent->update()){
@@ -785,7 +785,7 @@ class EducationalContentController extends Controller
             {
                 $itemTagsArray = $educationalContent->tags->tags ;
                 $params = [
-                    "tags"=> json_encode($itemTagsArray) ,
+                    "tags" => json_encode($itemTagsArray, JSON_UNESCAPED_UNICODE),
                 ];
 
                 if(isset($educationalContent->created_at) && strlen($educationalContent->created_at) > 0 )

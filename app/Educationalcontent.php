@@ -121,6 +121,7 @@ class Educationalcontent extends Model implements Advertisable, Taggable
     {
         $educationalContent = $this;
         $files = collect();
+        $this->timestamps = false;
         switch ($educationalContent->template->name) {
             case "video1":
                 $file = $educationalContent->files->where("pivot.label", "hd")->first();
@@ -187,19 +188,24 @@ class Educationalcontent extends Model implements Advertisable, Taggable
 
 
                 $file = optional($educationalContent->files->where("pivot.label", "thumbnail")->first());
+
                 $url = $file->name;
-                $size = $educationalContent->curlGetFileSize($url);
-                $type = "thumbnail";
-                $files->push([
-                    "uuid" => $file->uuid,
-                    "disk" => null,
-                    "url" => $url,
-                    "fileName" => basename($url),
-                    "size" => $size,
-                    "caption" => null,
-                    "res" => null,
-                    "type" => $type
-                ]);
+                if(isset($url))
+                {
+                    $size = $educationalContent->curlGetFileSize($url);
+                    $type = "thumbnail";
+
+                    $this->thumbnail = [
+                        "uuid" => $file->uuid,
+                        "disk" => null,
+                        "url" => $url,
+                        "fileName" => basename($url),
+                        "size" => $size,
+                        "caption" => null,
+                        "res" => null,
+                        "type" => $type
+                    ];
+                }
                 break;
 
             case  "pamphlet1":
@@ -232,7 +238,7 @@ class Educationalcontent extends Model implements Advertisable, Taggable
 
         }
 
-        $this->timestamps = false;
+
 //        dd($files);
         $this->file = $files;
         $this->update();
@@ -247,12 +253,13 @@ class Educationalcontent extends Model implements Advertisable, Taggable
      */
     public function test()
     {
-        $l = new LinkGenerator($this->file[0]);
-        try {
-            return $l->getLinks();
-        } catch (Exception $e) {
-            throw $e;
-        }
+
+//        $l = new LinkGenerator($this->file[0]);
+//        try {
+//            return $l->getLinks();
+//        } catch (Exception $e) {
+//            throw $e;
+//        }
     }
 
     public function grades()
@@ -265,14 +272,48 @@ class Educationalcontent extends Model implements Advertisable, Taggable
         return $this->belongsToMany('App\Major');
     }
 
+    /**
+     * @param $value
+     * @return Collection
+     */
     public function getFileAttribute($value)
     {
-        return collect(json_decode($value));
+        $key = "Content:File".$this->cacheKey();
+        return Cache::tags('content')->remember($key,Config::get("constants.CACHE_60"),function () use($value) {
+            $fileCollection = collect(json_decode($value));
+            $fileCollection->transform(function ($item, $key) {
+                $l = new LinkGenerator($item);
+                $item->link = $l->getLinks();
+//                unset($item->url);
+                return $item;
+            });
+
+            return $fileCollection;
+        });
+    }
+
+    /**
+     * @param $value
+     * @return array|null|string
+     * @throws Exception
+     */
+    public function getThumbnailAttribute($value){
+        $t = json_decode($value);
+        $link = new LinkGenerator($t);
+        try {
+            return $link->getLinks();
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
+    public function setThumbnailAttribute($input){
+        $this->attributes['thumbnail'] = json_encode($input,JSON_UNESCAPED_UNICODE);
     }
 
     public function setFileAttribute(Collection $input)
     {
-        $this->attributes['file'] = $input->toJson();
+        $this->attributes['file'] = $input->toJson(JSON_UNESCAPED_UNICODE);
     }
 
     public function files()
@@ -541,11 +582,6 @@ class Educationalcontent extends Model implements Advertisable, Taggable
             $key,
             $time
         );
-    }
-
-    public function getThumbnailAttribute()
-    {
-        return optional($this->files->where("pivot.label", "thumbnail")->first())->name;
     }
 
     public function getContentsetAttribute()

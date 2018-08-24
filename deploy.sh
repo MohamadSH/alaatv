@@ -1,4 +1,5 @@
 cd /home/alaa/project/sohrab/alaaTv
+php artisan down
  echo -e "x57par" | sudo -S service php7.1-fpm reload
  # perform any migrations                                                                                
  php artisan migrate --force                                                                             
@@ -12,3 +13,4 @@ cd /home/alaa/project/sohrab/alaaTv
                                                                                                          
  php artisan route:cache                                                                                 
  php artisan config:cache                                                                                
+php artisan up

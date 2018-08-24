@@ -7,14 +7,14 @@ use App\Traits\Helper;
 use Carbon\Carbon;
 use Iatstuti\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
-use Schema;
-use Laratrust\Traits\LaratrustUserTrait;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
+use Laratrust\Traits\LaratrustUserTrait;
+use Schema;
 
 
 /**
@@ -543,7 +543,7 @@ class User extends Authenticatable
                     "email" => $this->mobile . "@takhtekhak.com",
                 );
             }
-            $message = base64_encode(json_encode($data));
+            $message = base64_encode(json_encode($data, JSON_UNESCAPED_UNICODE));
             $timestamp = time();
             $data = $message . ' ' . $timestamp;
             $key = config('constants.DISQUS_PRIVATE_KEY');

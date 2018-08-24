@@ -1332,7 +1332,7 @@ class HomeController extends Controller
         $userId = $request->get("user");
         $user = User::FindOrFail($userId);
         $parentMajor = $request->get("parentMajor");
-        $majorCodes = json_encode($request->get("majorCodes"));
+        $majorCodes = json_encode($request->get("majorCodes"), JSON_UNESCAPED_UNICODE);
 
         Storage::disk('entekhabReshte')->delete($userId . '-' . $parentMajor . '.txt');
         Storage::disk('entekhabReshte')->put($userId . "-" . $parentMajor . ".txt", $majorCodes);
@@ -1685,6 +1685,10 @@ class HomeController extends Controller
         }
     }
 
+    public function newDownload($data){
+
+    }
+
     function download()
     {
         $fileName = Input::get('fileName');
@@ -1897,19 +1901,6 @@ class HomeController extends Controller
         else
         {
             if ( isset($diskName) && Storage::disk($diskName)->exists($fileName)) {
-//            Other download method :  problem => it changes the file name to download
-//            $file = Storage::disk($diskName)->get($fileName);
-//            return (new Response($file, 200))
-//                ->header('Content-Type', $contentMime)
-//                ->header('Content-Disposition'  , 'attachment')
-//                ->header('filename',$fileName);
-
-//                $filePrefixPath =Storage::drive($diskName)->getAdapter()->getPathPrefix() ;
-//                if(isset($filePrefixPath))
-//                    return response()->download(Storage::drive($diskName)->path($fileName));
-//                else
-//                    return response()->download(Storage::drive($diskName)->getAdapter()->getRoot() . $fileName);
-//
                 $diskAdapter = Storage::disk($diskName)->getAdapter();
                 $diskType = class_basename($diskAdapter);
                 switch ($diskType) {
@@ -1938,6 +1929,15 @@ class HomeController extends Controller
 
                         break;
                     case "Local" :
+                        $fs = Storage::disk($diskName)->getDriver();
+                        $stream = $fs->readStream($fileName);
+                        return \Illuminate\Support\Facades\Response::stream(function () use ($stream) {
+                            fpassthru($stream);
+                        }, 200, [
+                            "Content-Type" => $fs->getMimetype($fileName),
+                            "Content-Length" => $fs->getSize($fileName),
+                            "Content-disposition" => "attachment; filename=\"" . basename($fileName) . "\"",
+                        ]);
                         break;
                     default:
                         break;
@@ -3407,12 +3407,12 @@ class HomeController extends Controller
                     "bucket" => $bucket,
                     "tags" => $tags
                 ];
-                $contentset->tags = json_encode($tagsJson);
+                $contentset->tags = json_encode($tagsJson, JSON_UNESCAPED_UNICODE);
 
                 if($contentset->update())
                 {
                     $params = [
-                        "tags"=> json_encode($contentset->tags->tags) ,
+                        "tags" => json_encode($contentset->tags->tags, JSON_UNESCAPED_UNICODE),
                     ];
                     if(isset($contentset->created_at) && strlen($contentset->created_at) > 0 )
                         $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $contentset->created_at )->timestamp;
@@ -3439,11 +3439,11 @@ class HomeController extends Controller
                         "bucket" => $bucket,
                         "tags" => $tags
                     ];
-                    $content->tags = json_encode($tagsJson);
+                    $content->tags = json_encode($tagsJson, JSON_UNESCAPED_UNICODE);
                     if($content->update())
                     {
                         $params = [
-                            "tags"=> json_encode($content->tags->tags) ,
+                            "tags" => json_encode($content->tags->tags, JSON_UNESCAPED_UNICODE),
                         ];
                         if(isset($content->created_at) && strlen($content->created_at) > 0 )
                             $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $content->created_at )->timestamp;
@@ -3476,64 +3476,64 @@ class HomeController extends Controller
 
         /**
          * Fixing contentset tags
-
-        if(Input::has("id"))
-        $contentsetId = Input::get("id");
-        else
-        dd("Wring inputs, Please pass id as input");
-
-        if(!is_array($contentsetId))
-        dd("The id input must be an array!");
-        $contentsets = Contentset::whereIn("id" , $contentsetId)->get();
-        dump("number of contentsets:".$contentsets->count());
-        $contentCounter = 0;
-        foreach ($contentsets as $contentset)
-        {
-        $baseTime = Carbon::createFromDate("2017" , "06" , "01" , "Asia/Tehran");
-        $contents = $contentset->educationalcontents->sortBy("pivot.order");
-        $contentCounter += $contents->count();
-        foreach ($contents as $content)
-        {
-        $content->created_at = $baseTime;
-        if($content->update())
-        {
-        if(isset($content->tags))
-        {
-        $params = [
-        "tags"=> json_encode($content->tags->tags) ,
-        ];
-        if(isset($content->created_at) && strlen($content->created_at) > 0 )
-        $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $content->created_at )->timestamp;
-
-        $response =  $this->sendRequest(
-        config("constants.AG_API_URL")."id/content/".$content->id ,
-        "PUT",
-        $params
-        );
-
-        if($response["statusCode"] == 200)
-        {
-        }
-        else
-        {
-        dump("tag request for content id ".$content->id." failed. response : ".$response["statusCode"]);
-        }
-        }
-        else
-        {
-        dump("content id ".$content->id."did not have ant tags!");
-        }
-        }
-        else
-        {
-        dump("content id ".$content->id." was not updated");
-        }
-        $baseTime = $baseTime->addDay();
-        }
-
-        }
-        dump("number of total processed contents: ".$contentCounter);
-        dd("done!");
+ *
+* if(Input::has("id"))
+        * $contentsetId = Input::get("id");
+        * else
+        * dd("Wring inputs, Please pass id as input");
+ *
+* if(!is_array($contentsetId))
+        * dd("The id input must be an array!");
+        * $contentsets = Contentset::whereIn("id" , $contentsetId)->get();
+        * dump("number of contentsets:".$contentsets->count());
+        * $contentCounter = 0;
+        * foreach ($contentsets as $contentset)
+        * {
+        * $baseTime = Carbon::createFromDate("2017" , "06" , "01" , "Asia/Tehran");
+        * $contents = $contentset->educationalcontents->sortBy("pivot.order");
+        * $contentCounter += $contents->count();
+        * foreach ($contents as $content)
+        * {
+        * $content->created_at = $baseTime;
+        * if($content->update())
+        * {
+        * if(isset($content->tags))
+         * {
+         * $params = [
+         * "tags"=> json_encode($content->tags->tags,JSON_UNESCAPED_UNICODE ) ,
+         * ];
+         * if(isset($content->created_at) && strlen($content->created_at) > 0 )
+        * $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $content->created_at )->timestamp;
+ *
+* $response =  $this->sendRequest(
+        * config("constants.AG_API_URL")."id/content/".$content->id ,
+        * "PUT",
+        * $params
+        * );
+ *
+* if($response["statusCode"] == 200)
+        * {
+        * }
+        * else
+        * {
+        * dump("tag request for content id ".$content->id." failed. response : ".$response["statusCode"]);
+        * }
+        * }
+        * else
+        * {
+        * dump("content id ".$content->id."did not have ant tags!");
+        * }
+        * }
+        * else
+        * {
+        * dump("content id ".$content->id." was not updated");
+        * }
+        * $baseTime = $baseTime->addDay();
+        * }
+ *
+* }
+        * dump("number of total processed contents: ".$contentCounter);
+        * dd("done!");
          */
 
         /***
@@ -4559,7 +4559,7 @@ class HomeController extends Controller
                             "bucket" => $bucket,
                             "tags" => $myTags
                         ];
-                        $item->tags = json_encode($tagsJson);
+                        $item->tags = json_encode($tagsJson,JSON_UNESCAPED_UNICODE );
                         $item->update();
                     }
                     break;
@@ -4696,7 +4696,7 @@ class HomeController extends Controller
                             "bucket" => $bucket,
                             "tags" => $myTags
                         ];
-                        $item->tags = json_encode($tagsJson);
+                        $item->tags = json_encode($tagsJson,JSON_UNESCAPED_UNICODE );
                         $item->update();
                     }
                     break;
@@ -4723,7 +4723,7 @@ class HomeController extends Controller
                             "bucket" => $bucket,
                             "tags" => $myTags
                         ];
-                        $item->tags = json_encode($tagsJson);
+                        $item->tags = json_encode($tagsJson,JSON_UNESCAPED_UNICODE );
                         $item->update();
                     }
                     break;
@@ -4784,7 +4784,7 @@ class HomeController extends Controller
                             "bucket" => $bucket,
                             "tags" => $myTags
                         ];
-                        $item->tags = json_encode($tagsJson);
+                        $item->tags = json_encode($tagsJson,JSON_UNESCAPED_UNICODE );
                         $item->update();
                     }
                     break;
@@ -4822,7 +4822,7 @@ class HomeController extends Controller
                             "bucket" => $bucket,
                             "tags" => $myTags
                         ];
-                        $item->tags = json_encode($tagsJson);
+                        $item->tags = json_encode($tagsJson,JSON_UNESCAPED_UNICODE );
                         $item->update();
                     }
                     break;
@@ -4961,7 +4961,7 @@ class HomeController extends Controller
                             "bucket" => $bucket,
                             "tags" => $myTags
                         ];
-                        $item->tags = json_encode($tagsJson);
+                        $item->tags = json_encode($tagsJson,JSON_UNESCAPED_UNICODE );
                         $item->update();
                     }
                     break;
@@ -4995,10 +4995,9 @@ class HomeController extends Controller
                     }
                 }
 
-                if(is_array($itemTagsArray) && !empty($itemTagsArray) && isset($item["id"]))
-                {
+                if(is_array($itemTagsArray) && !empty($itemTagsArray) && isset($item["id"])) {
                     $params = [
-                        "tags"=> json_encode($itemTagsArray) ,
+                        "tags"=> json_encode($itemTagsArray,JSON_UNESCAPED_UNICODE ) ,
                     ];
                     if(isset($item->created_at) && strlen($item->created_at) > 0 )
                         $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $item->created_at )->timestamp;

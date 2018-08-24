@@ -9,39 +9,63 @@
 namespace App\Classes;
 
 
-use Illuminate\Support\Collection;
+use App\Adapter\AlaaSftpAdapter;
+use App\File;
 use Illuminate\Support\Facades\Storage;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\FileNotFoundException;
 use League\Flysystem\Sftp\SftpAdapter;
 
+/**
+ * Class LinkGenerator
+ * @package App\Classes
+ */
 class LinkGenerator
 {
     protected $uuid;
     protected $disk;
     protected $url;
-    protected $type;
     protected $fileName;
 
+    protected const DOWNLOAD_CONTROLLER_NAME = "HomeController@newDownload";
+
     /**
-     * PHP 5 allows developers to declare constructor methods for classes.
-     * Classes which have a constructor method call this method on each newly-created object,
-     * so it is suitable for any initialization that the object may need before it is used.
-     *
-     * Note: Parent constructors are not called implicitly if the child class defines a constructor.
-     * In order to run a parent constructor, a call to parent::__construct() within the child constructor is required.
-     *
-     * param [ mixed $args [, $... ]]
-     * @param Collection $file
-     * @link http://php.net/manual/en/language.oop5.decon.php
+     * LinkGenerator constructor.
+     * @param $file
      */
-    public function __construct($file)
+    public function __construct(\stdClass $file)
     {
         $this->setDisk($file->disk)
             ->setUuid($file->uuid)
-            ->setType($file->type)
             ->setUrl($file->url)
             ->setFileName($file->fileName);
+    }
+
+    /**
+     * LinkGenerator constructor.
+     * @param $uuid
+     * @param $disk
+     * @param $url
+     * @param $fileName
+     * @return LinkGenerator
+     */
+    public static function create($uuid, $disk, $url, $fileName)
+    {
+        $input = new \stdClass();
+//        dd("0");
+        $input->disk = null;
+//        dd("1");
+        if (isset($disk))
+            $input->disk = $disk;
+        else if (isset($uuid)) {
+            $input->disk = self::findDiskNameFromUUID($uuid);
+        }
+//        dd("2");
+        $input->uuid = $uuid;
+        $input->url = $url;
+        $input->fileName = $fileName;
+//        dd($input);
+        return new LinkGenerator($input);
     }
 
     /**
@@ -61,16 +85,6 @@ class LinkGenerator
     public function setUrl($url)
     {
         $this->url = $url;
-        return $this;
-    }
-
-    /**
-     * @param mixed $type
-     * @return LinkGenerator
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
         return $this;
     }
 
@@ -95,41 +109,51 @@ class LinkGenerator
     }
 
     /**
-     *
+     * @param $uuid
+     * @return null | string
+     */
+    private static function findDiskNameFromUUID($uuid)
+    {
+        $file = File::where("uuid", $uuid)->get();
+        if ($file->isNotEmpty() && $file->count() == 1) {
+            $file = $file->first();
+            if ($file->disks->isNotEmpty()) {
+                return $file->disks->first()->name;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @param array|null $paid
+     * @return array|null|string
      * @throws \Exception
      */
-    public function getLinks()
+    public function getLinks(array $paid = null)
     {
         if (isset($this->url))
             return $this->url;
         if (isset($this->disk) && isset($this->fileName)) {
-            if (Storage::disk($this->disk)->exists($this->fileName)) {
-                $diskAdapter = Storage::disk($this->disk)->getAdapter();
-                if ($diskAdapter instanceof SftpAdapter) {
-                    return $this->makeSftpUrl($diskAdapter);
-                } else if ($diskAdapter instanceof Local) {
-                    dd("Hello4");
-                    //TODO:// remove after file transfer to SFTP Disk
-                    return $this->stream();
-                }
+
+            $diskAdapter = Storage::disk($this->disk)->getAdapter();
+            $url = $this->fetchUrl($diskAdapter,$this->fileName);
+            if(isset($paid)){
+                $data = encrypt([
+                    $url,
+                    $paid['content_id']
+                ]);
+                return action(self::DOWNLOAD_CONTROLLER_NAME,$data);
+
+            }else{
+                return $url;
             }
-            return null;
         } else {
             throw new \Exception("DiskName and FileName should be set \n File uuid=" . $this->uuid);
         }
     }
-
-    private function makeSftpUrl(SftpAdapter $diskAdapter): string
-    {
-        $sftpRoot = config("constants.SFTP_ROOT");
-        $dProtocol = config("constants.DOWNLOAD_HOST_PROTOCOL");
-        $dName = config("constants.DOWNLOAD_HOST_NAME");
-
-        $fileRoot = $diskAdapter->getRoot();
-
-        return str_replace($sftpRoot, $dProtocol . $dName, $fileRoot) . $this->fileName;
+    private function fetchUrl(AlaaSftpAdapter $diskAdapter , $fileName){
+        return $diskAdapter->getUrl($fileName);
     }
-
     /**
      * @return array
      */
