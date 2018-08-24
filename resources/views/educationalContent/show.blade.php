@@ -235,7 +235,7 @@
                                                 </div>
                                                 <div class="list-datetime bold uppercase font-yellow-casablanca" >
                                                     <a href="{{action("EducationalContentController@show" , $item["content"])}}" >
-                                                        {{($item["content"]->getDisplayName())}}
+                                                        {{($item["content"]->display_name)}}
                                                     </a>
                                                 </div>
                                                 <div class="list-item-content">
@@ -478,7 +478,7 @@
                                                              src="{{(isset($item["thumbnail"]))?$item["thumbnail"]:''}}"/>
                                                     </a>
                                                 </div>
-                                                <div class="list-datetime bold uppercase font-yellow-casablanca"> {{($item["content"]->getDisplayName())}} </div>
+                                                <div class="list-datetime bold uppercase font-yellow-casablanca"> {{($item["content"]->display_name)}} </div>
                                                 <div class="list-item-content">
                                                     <h3 class="uppercase bold">
                                                         <a href="javascript:;">&nbsp;</a>
@@ -528,7 +528,7 @@
                                             {{--<div class="list-datetime"> @if($content->grades->isNotEmpty()){{$content->grades->first()->displayName}}@endif</div>--}}
                                             {{--<div class="list-item-content">--}}
                                                 {{--<h5 class="uppercase">--}}
-                                                    {{--<a href="{{action("EducationalContentController@show" , $content)}}">{{$content->getDisplayName()}}</a>--}}
+                {{--<a href="{{action("EducationalContentController@show" , $content)}}">{{$content->display_name}}</a>--}}
                                                 {{--</h5>--}}
                                             {{--</div>--}}
                                         {{--</li>--}}
@@ -698,7 +698,7 @@
                                             {{--<div class="list-datetime"> @if($content->grades->isNotEmpty()){{$content->grades->first()->displayName}}@endif</div>--}}
                                             {{--<div class="list-item-content">--}}
                                                 {{--<h5 class="uppercase">--}}
-                                                    {{--<a href="{{action("EducationalContentController@show" , $content)}}">{{$content->getDisplayName()}}</a>--}}
+                    {{--<a href="{{action("EducationalContentController@show" , $content)}}">{{$content->display_name}}</a>--}}
                                                 {{--</h5>--}}
                                             {{--</div>--}}
                                         {{--</li>--}}
@@ -740,7 +740,12 @@
                 @foreach($videosWithSameSet->random( min(13,$videosWithSameSet->count())) as $item)
                 @if($item["content"]->id == $educationalContent->id)
                 @else
-            {thumb: '{{(isset($item["thumbnail"]))?$item["thumbnail"]:""}}',url: '{{action("EducationalContentController@show" , $item["content"])}}', title: ' {{($item["content"]->getDisplayName())}}', duration: '20:00'},
+            {
+                thumb: '{{(isset($item["thumbnail"]))?$item["thumbnail"]:""}}',
+                url: '{{action("EducationalContentController@show" , $item["content"])}}',
+                title: ' {{($item["content"]->display_name)}}',
+                duration: '20:00'
+            },
             @endif
             @endforeach
         ]; 

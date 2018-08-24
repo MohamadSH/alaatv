@@ -1070,7 +1070,7 @@
 
             })(jQuery, window, document);
         </script>
-        <script src="/js/extraJS/product-show-v12.js" type="text/javascript"></script>
+        <script src="/js/extraJS/product-show-v13.js" type="text/javascript"></script>
 
     @endif
 @endsection

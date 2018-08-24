@@ -7,7 +7,6 @@ use App\Attributeset;
 use App\Attributetype;
 use App\Attributevalue;
 use App\Bon;
-use App\Educationalcontent;
 use App\Http\Requests\AddComplimentaryProductRequest;
 use App\Http\Requests\EditProductRequest;
 use App\Http\Requests\InsertProductRequest;
@@ -16,23 +15,14 @@ use App\Productfiletype;
 use App\Traits\Helper;
 use App\Traits\ProductCommon;
 use App\User;
-use App\Websitepage;
-
-use App\Websitesetting;
-use Carbon\Carbon;
-
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Input;
-
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Facades\Image;
 use SEO;
 
 class ProductController extends Controller
@@ -264,13 +254,12 @@ class ProductController extends Controller
         });
 //        $disqusPayload = Auth::user()->disqusSSO();
 
-        if(Auth::check())
-        {
-            $baseUrl = url("/");
-            $productPath = str_replace($baseUrl , "" , action("ProductController@show" , $product));
-            $productSeenCount = $this->userSeen($productPath);
-
+        if (Auth::check()) {
+            $user = Auth::user();
+            $contentPath = "/" . $request->path();
+            $productSeenCount = $this->userSeen($contentPath, $user);
         }
+
         if(isset($product->introVideo) && strlen($product->introVideo) > 0)
              $productIntroVideo = $product->introVideo;
 

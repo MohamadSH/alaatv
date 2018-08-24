@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Classes\Taggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -36,7 +37,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Contentset withoutTrashed()
  * @mixin \Eloquent
  */
-class Contentset extends Model
+class Contentset extends Model implements Taggable
 {
     use SoftDeletes;
     /**      * The attributes that should be mutated to dates.        */
@@ -62,6 +63,7 @@ class Contentset extends Model
             "edc_id")
             ->withPivot("order", "isDefault");
     }
+
     public function getTagsAttribute($value)
     {
         return json_decode($value);
@@ -71,4 +73,23 @@ class Contentset extends Model
 //    {
 //        return json_encode($value);
 //    }
+    public function retrievingTags()
+    {
+        /**
+         *      Retrieving Tags
+         */
+        $response = $this->sendRequest(
+            config("constants.TAG_API_URL") . "id/contentset/" . $this->id,
+            "GET"
+        );
+
+        if ($response["statusCode"] == 200) {
+            $result = json_decode($response["result"]);
+            $tags = $result->data->tags;
+        } else {
+            $tags = [];
+        }
+
+        return $tags;
+    }
 }

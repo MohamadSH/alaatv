@@ -76,7 +76,6 @@ Route::group(['prefix' => 'content'], function () {
     Route::get('/' , 'EducationalContentController@index');
     Route::get('search', 'EducationalContentController@search');
     Route::get('create2', 'EducationalContentController@create2');
-    Route::get('create3', 'EducationalContentController@create3');
 });
 Route::post('basicStore' , 'EducationalContentController@basicStore') ;
 

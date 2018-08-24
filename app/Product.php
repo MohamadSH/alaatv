@@ -2,17 +2,18 @@
 
 namespace App;
 
+use App\Classes\Advertisable;
+use App\Classes\Taggable;
 use App\Traits\Helper;
 use App\Traits\ProductCommon;
-
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Auth;
 use Carbon\Carbon;
+use Exception;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
-use Laravel\Scout\Searchable;
 
 /**
  * App\Product
@@ -85,7 +86,7 @@ use Laravel\Scout\Searchable;
  * @method static \Illuminate\Database\Query\Builder|\App\Product withoutTrashed()
  * @mixin \Eloquent
  */
-class Product extends Model
+class Product extends Model implements Advertisable, Taggable
 {
     use SoftDeletes;
 //    use Searchable;
@@ -152,7 +153,6 @@ class Product extends Model
     }
 
 
-
     public static function recentProducts($number)
     {
         return self::getProducts(0, 1)->take($number)->orderBy('created_at', 'Desc');
@@ -186,14 +186,14 @@ class Product extends Model
     public function children()
     {
         return $this->belongsToMany('App\Product',
-                                    'childproduct_parentproduct',
-                                    'parent_id',
-                                    'child_id')
-                    ->withPivot("isDefault",
-                                        "control_id",
-                                        "description",
-                                        "parent_id")
-                    ->with('children');
+            'childproduct_parentproduct',
+            'parent_id',
+            'child_id')
+            ->withPivot("isDefault",
+                "control_id",
+                "description",
+                "parent_id")
+            ->with('children');
     }
 
     public function parents()
@@ -270,8 +270,7 @@ class Product extends Model
 
             $grandParent = $this->getGrandParent();
             if ($grandParent !== false) {
-                foreach ($grandParent->gifts as $gift)
-                {
+                foreach ($grandParent->gifts as $gift) {
                     $gifts->push($gift);
                 }
             }
@@ -334,7 +333,7 @@ class Product extends Model
                 $attributeType = Attributetype::all()->where("name", $attributeType)->first();
                 $attributesArray = array();
                 foreach ($this->attributeset->attributes()->where("attributetype_id", $attributeType->id) as $attribute) {
-                        array_push($attributesArray, $attribute->id);
+                    array_push($attributesArray, $attribute->id);
                 }
             }
             $parentArray = $this->makeParentArray($this) ;
@@ -699,6 +698,7 @@ class Product extends Model
         if (!empty($infoAttributeArray))
             $simpleInfoAttributes->put($attribute->displayName, $infoAttributeArray);
     }
+
     private function makeSelectAttributes(&$attributevalues, &$result){
         foreach ($attributevalues as $attributevalue) {
             $attributevalueIndex = $attributevalue->name;
@@ -737,7 +737,7 @@ class Product extends Model
 
             $attributes->load('attributetype','attributecontrol');
 
-            foreach ( $attributes as $attribute) {
+            foreach ($attributes as $attribute) {
                 $attributeType = $attribute->attributetype;
                 $controlName = $attribute->attributecontrol->name;
                 $attributevalues = $product->attributevalues->where("attribute_id", $attribute->id)->sortBy("pivot.order");
@@ -760,8 +760,7 @@ class Product extends Model
                                     if (!empty($select))
                                         $selectCollection->put($attribute->pivot->description, $select);
                                 }
-                            }
-                            else{ // 1
+                            } else{ // 1
                                 $this->makeSimpleInfoAttributes($attributevalues,$attribute,$attributeType,$simpleInfoAttributes);
                             }
                             break;
@@ -785,8 +784,7 @@ class Product extends Model
                                 if (!empty($groupedCheckbox))
                                     $extraCheckboxCollection->put($attribute->displayName, $groupedCheckbox);
 
-                            }
-                            else {
+                            } else {
                                 if ($product->producttype->id == Config::get("constants.PRODUCT_TYPE_CONFIGURABLE")) {
                                     if($attributeType->name == "information"){
                                         $this->makeSimpleInfoAttributes($attributevalues,$attribute,$attributeType,$checkboxInfoAttributes);
@@ -911,4 +909,33 @@ class Product extends Model
         return json_decode($value);
     }
 
+    /**
+     * @return Collection
+     * @throws Exception
+     */
+    public function getAddItems(): Collection
+    {
+        // TODO: Implement getAddItems() method.
+        throw new Exception("product Advertisable should be impediment");
+    }
+
+    public function retrievingTags()
+    {
+        /**
+         *      Retrieving Tags
+         */
+        $response = $this->sendRequest(
+            config("constants.TAG_API_URL") . "id/product/" . $this->id,
+            "GET"
+        );
+
+        if ($response["statusCode"] == 200) {
+            $result = json_decode($response["result"]);
+            $tags = $result->data->tags;
+        } else {
+            $tags = [];
+        }
+
+        return $tags;
+    }
 }

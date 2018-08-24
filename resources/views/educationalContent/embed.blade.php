@@ -37,7 +37,12 @@
                     @foreach($contentsWithSameSet->whereIn("type" , "video" )->random( min(13,$contentsWithSameSet->whereIn("type" , "video" )->count())) as $item)
                     @if($item["content"]->id == $video->id)
                     @else
-                {thumb: '{{(isset($item["thumbnail"]))?$item["thumbnail"]:""}}',url: '{{action("EducationalContentController@show" , $item["content"])}}', title: ' {{($item["content"]->getDisplayName())}}', duration: '20:00'},
+                {
+                    thumb: '{{(isset($item["thumbnail"]))?$item["thumbnail"]:""}}',
+                    url: '{{action("EducationalContentController@show" , $item["content"])}}',
+                    title: ' {{($item["content"]->display_name)}}',
+                    duration: '20:00'
+                },
                 @endif
                 @endforeach
             ];
@@ -54,7 +59,7 @@
                     related: related_videos,
                     endAction: 'related',
 
-                    shareTitle: '{{ $video->getDisplayName() }}',
+                    shareTitle: '{{ $video->display_name }}',
                     shareUrl: '{{action("EducationalContentController@show" , $video)}}',
                     shareEmbed: '<iframe src="{{action('EducationalContentController@embed' , $video)}}" width="640" height="360" frameborder="0" allowfullscreen></iframe>'
                 });

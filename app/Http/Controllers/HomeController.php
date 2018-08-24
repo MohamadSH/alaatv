@@ -20,6 +20,7 @@ use App\Gender;
 use App\Grade;
 use App\Http\Requests\ContactUsFormRequest;
 use App\Http\Requests\InsertUserRequest;
+use App\Http\Requests\Request;
 use App\Http\Requests\SendSMSRequest;
 use App\Lottery;
 use App\Major;
@@ -54,10 +55,11 @@ use App\Userstatus;
 use App\Usersurveyanswer;
 use App\Userupload;
 use App\Useruploadstatus;
-use App\Websitesetting;
 use App\Websitepage;
-use App\Http\Requests\Request;
+use App\Websitesetting;
+use Auth;
 use Carbon\Carbon;
+use Illuminate\Http\Response;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
@@ -67,21 +69,16 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\View;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Sftp\SftpAdapter;
-
 use Maatwebsite\ExcelLight\Excel;
 use Maatwebsite\ExcelLight\Spout\Reader;
 use Maatwebsite\ExcelLight\Spout\Row;
 use Maatwebsite\ExcelLight\Spout\Sheet;
 use Maatwebsite\ExcelLight\Spout\Writer;
-use SSH;
-use Auth;
 use SEO;
-
-use Watson\Sitemap\Facades\Sitemap;
+use SSH;
 
 //use Jenssegers\Agent\Agent;
 
@@ -135,7 +132,7 @@ class HomeController extends Controller
 //        {
 //            $authException = ['index' , 'getImage' , 'error404' , 'error403' , 'error500' , 'errorPage' , 'siteMapXML', 'download' ];
 //        }else{
-        $authException = ['telgramAgent','index', 'getImage', 'error404', 'error403', 'error500', 'errorPage', 'aboutUs', 'contactUs', 'sendMail', 'rules', 'siteMapXML', 'uploadFile' , 'search' , 'schoolRegisterLanding'];
+        $authException = ['download', 'telgramAgent', 'index', 'getImage', 'error404', 'error403', 'error500', 'errorPage', 'aboutUs', 'contactUs', 'sendMail', 'rules', 'siteMapXML', 'uploadFile', 'search', 'schoolRegisterLanding'];
 //        }
         $this->middleware('auth', ['except' => $authException]);
         $this->middleware('ability:' . Config::get("constants.ROLE_ADMIN") . ',' . Config::get("constants.USER_ADMIN_PANEL_ACCESS"), ['only' => 'admin']);
@@ -308,7 +305,7 @@ class HomeController extends Controller
                 $response->push(
                     [
                         "videoId" => $item->id,
-                        "name" => $item->getDisplayName(),
+                        "name" => $item->display_name,
                         "videoDescribe" => $item->description,
                         "url" => action('EducationalContentController@show',$item),
                         "videoLink480" => $hq,
@@ -939,7 +936,7 @@ class HomeController extends Controller
 //            $educationalContentCollection
 //                ->push([
 //                    "id" => $educationalContent->id,
-//                    "displayName" => $educationalContent->getDisplayName(),
+//                    "displayName" => $educationalContent->display_name,
 //                    "validSince_Jalali" => explode(" ", $educationalContent->validSince_Jalali())[0]
 //                ]);
 //        }
@@ -1930,15 +1927,6 @@ class HomeController extends Controller
 
                         break;
                     case "Local" :
-                        $fs = Storage::disk($diskName)->getDriver();
-                        $stream = $fs->readStream($fileName);
-                        return \Illuminate\Support\Facades\Response::stream(function () use ($stream) {
-                            fpassthru($stream);
-                        }, 200, [
-                            "Content-Type" => $fs->getMimetype($fileName),
-                            "Content-Length" => $fs->getSize($fileName),
-                            "Content-disposition" => "attachment; filename=\"" . basename($fileName) . "\"",
-                        ]);
                         break;
                     default:
                         break;
@@ -2266,15 +2254,10 @@ class HomeController extends Controller
 
         }
 
-        $userCanSeeCounter = false ;
-        if(Auth::check())
-        {
+        if (Auth::check()) {
             $user = Auth::user();
-            $baseUrl = url("/");
-            $contentPath = str_replace($baseUrl , "" , action("HomeController@donate"));
-            $seenCount = $this->userSeen($contentPath);
-            if($user->hasRole("admin"))
-                $userCanSeeCounter = true ;
+            $contentPath = "/" . $request->path();
+            $this->userSeen($contentPath, $user);
         }
 
         /** END **/

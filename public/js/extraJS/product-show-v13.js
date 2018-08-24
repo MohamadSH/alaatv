@@ -4,10 +4,11 @@
 $(function() {
     $.ajaxSetup({
         headers: {
-            'X-CSRF-Token': $('meta[name="_token"]').attr('content')
+            'X-CSRF-TOKEN': window.Laravel.csrfToken,
         }
     });
     refreshPrice(refreshPriceType);
+    $(".extraAttribute").change();
 });
 
 function refreshPrice(type) {
@@ -24,7 +25,11 @@ function refreshPrice(type) {
             return $(this).val();
     }).get();
 
-    var productsState = $('input[type=checkbox][name="products[]"]:enabled:checked').map(function(){
+    // var productsState = $('input[type=checkbox][name="products[]"]:enabled:checked').map(function(){
+    //     if ($(this).val())
+    //         return $(this).val();
+    // }).get();
+    var productsState = $('input[type=checkbox][name="products[]"]:checked').map(function(){
         if ($(this).val())
             return $(this).val();
     }).get();
@@ -35,8 +40,8 @@ function refreshPrice(type) {
     var product = $("input[name=product_id]").val();
     $.ajax({
         type: "POST",
-        url: "/refreshPrice",
-        data: { attributeState: attributeState ,  product: product , products:productsState ,  type:type  },
+        url: "/refreshPrice/"+product,
+        data: { attributeState: attributeState , products:productsState ,  type:type  },
         statusCode: {
             //The status for when action was successful
             200: function (response) {
@@ -129,14 +134,79 @@ $(document).on("ifChanged", ".extraAttribute", function (){
 
     $.ajax({
         type: "POST",
-        url: "/refreshPrice",
-        data: { attributeState: attributeState   ,   product: product  , type:"extraAttribute" },
+        url: "/refreshPrice/"+product,
+        data: { attributeState: attributeState  , type:"extraAttribute" },
         statusCode: {
             //The status for when action was successful
             200: function (response) {
                 // console.log(response);
                 response = $.parseJSON(response);
+                // console.log(response);
+                totalExtraCost = parseInt(response.totalExtraCost);
+
+                var currentPrice = parseInt($("#price").attr("value"));
+                var currentCustomerPrice = parseInt($("#customerPrice").attr("value"));
+                if(currentPrice>0){
+                    if(currentPrice+parseInt(totalExtraCost) === 0 ) $("#price").text("پس از انتخاب محصول");
+                    else $("#price").text(currentPrice+parseInt(totalExtraCost)).number(true).append("تومان");
+                    $("#customerPrice").text(currentCustomerPrice+parseInt(totalExtraCost)).number(true).append("تومان");
+                }
+            },
+            //The status for when the user is not authorized for making the request
+            403: function (response) {
+                window.location.replace("/403");
+            },
+            //The status for when the user is not authorized for making the request
+            401: function (response) {
+                window.location.replace("/403");
+            },
+            404: function (response) {
+                window.location.replace("/404");
+            },
+            //The status for when form data is not valid
+            422: function (response) {
                 console.log(response);
+            },
+            //The status for when there is error php code
+            500: function (response) {
+                console.log(response.responseText);
+//                            toastr["error"]("خطای برنامه!", "پیام سیستم");
+            },
+            //The status for when there is error php code
+            503: function (response) {
+//                            toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
+            }
+        },
+    });
+});
+
+$(document).on("change", ".extraAttribute", function (){
+    var selectAttributeState = $('select[name="extraAttribute[]"]').map(function(){
+        if ($(this).val())
+            return $(this).val();
+    }).get();
+
+    var checkboxAttributeState = $('input[type=checkbox][name="extraAttribute[]"]:checked').map(function(){
+        if ($(this).val())
+            return $(this).val();
+    }).get();
+
+
+    var c = $.merge(selectAttributeState , checkboxAttributeState);
+    var attributeState= c.filter(function (item, pos) {return c.indexOf(item) == pos});
+
+    var product = $("input[name=product_id]").val();
+
+    $.ajax({
+        type: "POST",
+        url: "/refreshPrice/"+product,
+        data: { attributeState: attributeState  , type:"extraAttribute" },
+        statusCode: {
+            //The status for when action was successful
+            200: function (response) {
+                // console.log(response);
+                response = $.parseJSON(response);
+                // console.log(response);
                 totalExtraCost = parseInt(response.totalExtraCost);
 
                 var currentPrice = parseInt($("#price").attr("value"));
@@ -223,7 +293,8 @@ $(document).on("ifChanged", ".hasChildren", function ()
     childElements = $(".children_"+parentId).find("input");
     childElements.each(function()
     {
-        if($(this).hasClass("icheck"))
+        if($(this).is(':enabled'))
+        {   if($(this).hasClass("icheck"))
         {
             if(parentElement.prop('checked')) {
                 $(this).closest(".icheckbox_minimal-blue").addClass('checked');
@@ -242,6 +313,12 @@ $(document).on("ifChanged", ".hasChildren", function ()
                 $(this).bootstrapSwitch('state', false);
             }
         }
+        }
+        // if(!$(this).is(':enabled')){
+        //     $(this).iCheck('enable');
+        //     $(this).closest(".icheckbox_minimal-blue").find(".iCheck-helper").click();
+        //     $(this).iCheck('disable');
+        // }
     });
 });
 
@@ -300,4 +377,3 @@ $(document).on("switchChange.bootstrapSwitch", ".product", function () {
 $(document).on("click", "#orderButton2", function (){
     $( "#orderButton1" ).trigger("click");
 });
-

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Educationalcontent;
 use App\Product;
-use Illuminate\Http\Request;
 use Watson\Sitemap\Facades\Sitemap;
 
 class SitemapController extends Controller
@@ -38,7 +37,7 @@ class SitemapController extends Controller
             ->get();
         $contents->load('files');
         foreach ($contents as $content) {
-            $caption = $content->getDisplayName();
+            $caption = $content->display_name;
             $image = $content->files->where("pivot.label" , "thumbnail")->first();
             $tag  = Sitemap::addTag(route('c.show', $content), $content->updated_at, 'monthly', '0.9');
             if(isset($image)){

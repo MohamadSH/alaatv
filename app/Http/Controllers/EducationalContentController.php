@@ -5,34 +5,26 @@ namespace App\Http\Controllers;
 use App\Contentset;
 use App\Contenttype;
 use App\Educationalcontent;
-use App\Grade;
 use App\Http\Requests\EditEducationalContentRequest;
 use App\Http\Requests\InsertEducationalContentFileCaption;
 use App\Http\Requests\InsertEducationalContentRequest;
 use App\Http\Requests\InsertFileRequest;
 use App\Http\Requests\Request;
-use App\Major;
-use App\Majortype;
-use App\Product;
 use App\Traits\APIRequestCommon;
 use App\Traits\FileCommon;
 use App\Traits\Helper;
 use App\Traits\ProductCommon;
 use App\User;
-use App\Websitesetting;
+use Auth;
 use Carbon\Carbon;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Cache;
-use SEO;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Input;
-use Auth;
 use Jenssegers\Agent\Agent;
+use SEO;
 use SSH;
-
 
 
 class EducationalContentController extends Controller
@@ -40,13 +32,13 @@ class EducationalContentController extends Controller
     use APIRequestCommon;
     protected $response ;
     protected $setting ;
+
     use ProductCommon ;
     use Helper;
     use FileCommon ;
 
-    public function __construct()
+    private function getAuthExceptionArray(Agent $agent): array
     {
-        $agent = new Agent();
         if ($agent->isRobot())
         {
             $authException = ["index" , "show" , "search" ,"embed" ];
@@ -55,14 +47,19 @@ class EducationalContentController extends Controller
         }
         //TODO:// preview
         $authException = ["index" , "show" , "search" ,"embed" ];
-        $this->middleware('auth', ['except' => $authException]);
+        return $authException;
+    }
 
+    public function __construct(Agent $agent, Response $response)
+    {
+//        dd($setting);
+        $this->response = $response;
+        $this->setting = json_decode(app('setting')->setting);
+        $authException = $this->getAuthExceptionArray($agent);
+        $this->middleware('auth', ['except' => $authException]);
         $this->middleware('permission:'.Config::get('constants.INSERT_EDUCATIONAL_CONTENT_ACCESS'),['only'=>['store' , 'create' , 'create2']]);
         $this->middleware('permission:'.Config::get("constants.EDIT_EDUCATIONAL_CONTENT"),['only'=>['update' , 'edit']]);
         $this->middleware('permission:'.Config::get("constants.REMOVE_EDUCATIONAL_CONTENT_ACCESS"),['only'=>'destroy']);
-
-        $this->response = new Response();
-        $this->setting = json_decode(app('setting')->setting);
     }
 
     /**
@@ -143,22 +140,23 @@ class EducationalContentController extends Controller
     }
 
     public function embed(Request $request , Educationalcontent $educationalcontent){
-        $url = $request->url();
+        $url = action('EducationalContentController@show', $educationalcontent);
+        //TODO:// $this->generateSeoMetaTags
         SEO::opengraph()->setUrl($url);
         SEO::setCanonical($url);
         SEO::twitter()->setSite("آلاء");
-        //TODO: Authentication
 
         //TODO: use Content Type instead of template_id
-
         if($educationalcontent->template_id != 1)
-            return redirect('/',301);
+            return redirect($url, 301);
         $video = $educationalcontent;
+
         [
             $contentsWithSameSet ,
             $contentSetName
         ]  = $video->getSetMates();
         $files = $video->files;
+
         return view("educationalContent.embed",compact('video','files','contentsWithSameSet','contentSetName'));
     }
     /**
@@ -168,36 +166,17 @@ class EducationalContentController extends Controller
      */
     public function create()
     {
-        $rootContentTypes = Contenttype::whereDoesntHave("parents")->pluck("displayName" , "id") ;
-
-        $childContentTypes = Contenttype::whereHas("parents" , function ($q) {
-            $q->where("name" , "exam") ;
-        })->pluck("displayName" , "id") ;
-
-        $highSchoolType = Majortype::where("name" , "highschool")->get()->first();
-        $majors = Major::where("majortype_id" , $highSchoolType->id)->pluck('name', 'id');
-
-        $grades = Grade::pluck('displayName', 'id');
-
-        return view("educationalContent.create" , compact("rootContentTypes" , "childContentTypes" , "majors" , "grades")) ;
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create2()
-    {
-        $rootContentTypes = Contenttype::whereDoesntHave("parents")->get() ;
-        $contentsets = Contentset::orderBy("created_at" , "DESC")
+        $rootContentTypes = Contenttype::whereDoesntHave("parents")
+            ->get();
+        $contentsets = Contentset::latest()
                                 ->pluck("name" , "id");
         $authors = User::whereHas("roles" , function ($q){
-            $q->where("name" , "teacher") ;
+            $q->where("name", "teacher");
         })->get()
-                                        ->sortBy("lastName")
-                                        ->values()
-                                        ->pluck("full_name" , "id");
+            ->sortBy("lastName")
+            ->values()
+            ->pluck("full_name", "id");
+
         return view("educationalContent.create2" , compact("rootContentTypes" ,
                                                                         "contentsets" ,
                                                                             "authors"
@@ -209,7 +188,7 @@ class EducationalContentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create3()
+    public function create2()
     {
         $contenttypes = collect();
         $contenttypes->put("8" , "فیلم");
@@ -428,17 +407,23 @@ class EducationalContentController extends Controller
      */
     public function show(Request $request, Educationalcontent $educationalContent)
     {
-        if($educationalContent->isValid() && $educationalContent->isEnable()) {
+        $url = $request->url();
+        if ($educationalContent->isActive()) {
+            //TODO: replace metaTag Mod with contentType
+            $metaTagMod = 1;
+            $userCanSeeCounter = false;
+            $sideBarMode = "closed";
+            $videosWithSameSetL = null;
+            $videosWithSameSetR = null;
 
-            $educationalContentDisplayName = $educationalContent->getDisplayName();
+            $educationalContentDisplayName = $educationalContent->display_name;
 
             /**
              *      Retrieving Tags
              */
             $tags = $educationalContent->retrievingTags();
 
-            //TODO: replace metaTag Mod with contentType
-            $metaTagMod = 1;
+
             if (isset($educationalContent->template)) {
                 $key = "content:show" . $educationalContent->cacheKey();
                 [
@@ -446,6 +431,8 @@ class EducationalContentController extends Controller
                     $educationalContent,
                     $contentsWithSameSet,
                     $videosWithSameSet,
+                    $videosWithSameSetL,
+                    $videosWithSameSetR,
                     $pamphletsWithSameSet,
                     $contentSetName,
                     $videoSources,
@@ -455,6 +442,8 @@ class EducationalContentController extends Controller
                 ] = Cache::remember($key, Config::get("constants.CACHE_60"), function () use ($educationalContent) {
                     $contentsWithSameSet = null;
                     $videosWithSameSet = null;
+                    $videosWithSameSetL = null;
+                    $videosWithSameSetR = null;
                     $pamphletsWithSameSet = null;
                     $contentSetName = null;
                     $videoSources = null;
@@ -488,9 +477,7 @@ class EducationalContentController extends Controller
                                 $size = $this->curlGetFileSize($url);
                                 $videoSources->put("240p", ["src" => $url, "caption" => $file->pivot->caption, "size" => $size, "index" => "240p"]);
                             }
-                            $file = $educationalContent->files->where("pivot.label", "thumbnail")->first();
-                            if (isset($file))
-                                $files->put("thumbnail", $file->name);
+                            $files->put("thumbnail", $educationalContent->thumbnail);
                             $files->put("videoSource", $videoSources);
 
                             [
@@ -502,7 +489,7 @@ class EducationalContentController extends Controller
                         case  "pamphlet1":
                             $metaTagMod = 2;
                             $files = $educationalContent->files;
-                            $fileToShow = $educationalContent->file;
+                            $fileToShow = $educationalContent->files->first();
                             [
                                 $contentsWithSameSet,
                                 $contentSetName
@@ -521,13 +508,25 @@ class EducationalContentController extends Controller
                         $author = $educationalContent->user->getfullName();
                     }
 
+                    $contentsWithSameSet = $contentsWithSameSet->normalMates();
                     $videosWithSameSet = optional($contentsWithSameSet)->whereIn("type", "video");
                     $pamphletsWithSameSet = optional($contentsWithSameSet)->whereIn("type" , "pamphlet" );
+
+
+                    [
+                        $videosWithSameSetL,
+                        $videosWithSameSetR
+                    ] = optional($videosWithSameSet)->partition(function ($i) use ($educationalContent) {
+                        return $i["content"]->id < $educationalContent->id;
+                    });
+
                     return [
                         $author,
                         $educationalContent,
                         $contentsWithSameSet,
                         $videosWithSameSet,
+                        $videosWithSameSetL,
+                        $videosWithSameSetR,
                         $pamphletsWithSameSet,
                         $contentSetName,
                         $videoSources,
@@ -539,100 +538,85 @@ class EducationalContentController extends Controller
                 });
 
             }
-
-            $url = $request->url();
-
-            SEO::setTitle($educationalContentDisplayName);
-            if (isset($educationalContent->metaDescription) && strlen($educationalContent->metaDescription) > 0)
-                SEO::setDescription($educationalContent->metaDescription);
-            else
-                if (isset($tags)) {
-                    SEO::setDescription(implode(",", $tags));
-                }
-
-            SEO::opengraph()->setUrl($url);
-            SEO::setCanonical($url);
-            SEO::twitter()->setSite("آلاء");
-            //TODO: move thumbnails to sftp storage
-            if (isset($files['thumbnail']))
-                SEO::opengraph()->addImage($files['thumbnail'], ['height' => 720, 'width' => 1280]);
-            else
-                SEO::opengraph()->addImage(route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]), ['height' => 100, 'width' => 100]);
+//            dd($videosWithSameSet);
+            //dd(compact('educationalContentDisplayName','educationalContent','tags','url','files','metaTagMod','author'));
+            $this->generateSeoMetaTags($educationalContentDisplayName, $educationalContent, $tags, $url, $files, $metaTagMod, $author, $videoSources);
 
 
-            switch ($metaTagMod) {
-                case 1: // video
-
-                    SEO::twitter()->addValue('player', action('EducationalContentController@embed', $educationalContent));
-                    SEO::twitter()->addValue('player:width', "854");
-                    SEO::twitter()->addValue('player:height', "480");
-                    // video.movie
-                    SEO::opengraph()->setType('video')
-                        ->setVideoMovie([
-                            'actor' => (isset($author)) ? $author : "",
-                            'actor:role' => 'دبیر',
-                            'director' => 'آلاء',
-                            'writer' => 'آلاء',
-                            'duration' => null,
-                            'release_date' => $educationalContent->creat_at,
-                            'tag' => $tags
-                        ]);
-                    // og:video
-                    SEO::opengraph()->addVideo($videoSources->get('hq')["src"], [
-                        'secure_url' => $videoSources->get('hq')["src"],
-                        'type' => 'video/mp4',
-                        'width' => 854,
-                        'height' => 480
-                    ]);
-
-                    break;
-                case 2://pdf
-                    SEO::opengraph()->setType('website');
-                    break;
-                case 3: //article
-                    SEO::opengraph()->setType('article')
-                        ->setArticle([
-                            'published_time' => $educationalContent->creat_at,
-                            'modified_time' => $educationalContent->update_at,
-                            'author' => $author,
-                            'tag' => $tags
-                        ]);
-                    break;
-            }
-
-            $userCanSeeCounter = false;
             if (Auth::check()) {
                 $user = Auth::user();
-                $baseUrl = url("/");
-                $contentPath = str_replace($baseUrl, "", action("EducationalContentController@show", $educationalContent));
-                $productSeenCount = $this->userSeen($contentPath);
+                $contentPath = "/" . $request->path();
+                $productSeenCount = $this->userSeen($contentPath, $user);
                 if ($user->hasRole("admin"))
                     $userCanSeeCounter = true;
             }
+            $adItems = $educationalContent->getAddItems();
 
-            $sideBarMode = "closed";
 
-            if ($educationalContent->contentsets->isNotEmpty() && $educationalContent->contentsets->first()->id != 199)
-                $adItems = Educationalcontent::whereHas("contentsets", function ($q) {
-                    $q->where("id", 199);
-                })
-                    ->where("enable", 1)
-                    ->orderBy("order")
-                    ->get();
-
-            $videosWithSameSetL = null;
-            $videosWithSameSetR = null;
-            if(isset($videosWithSameSet) && $videosWithSameSet instanceof Collection)
-                [$videosWithSameSetL , $videosWithSameSetR] = $videosWithSameSet->partition(function ($i) use($educationalContent) {
-                    return $i["content"]->id < $educationalContent->id;
-                });
-            return view("educationalContent.show", compact("productSeenCount","author","educationalContent", "rootContentType", "childContentType", "contentsWithSameType" , "soonContentsWithSameType" , "educationalContentSet" , "contentsWithSameSet","videosWithSameSet","pamphletsWithSameSet" , "contentSetName" , "videoSources" ,
-                "files" , "tags" , "sideBarMode" , "educationalContentDisplayName" , "sessionNumber" , "fileToShow" , "userCanSeeCounter" , "adItems","videosWithSameSetL","videosWithSameSetR"));
-        }
-        else
-            abort(404);
+            return view("educationalContent.show", compact("productSeenCount", "author", "educationalContent", "rootContentType", "childContentType", "contentsWithSameType", "soonContentsWithSameType", "educationalContentSet", "contentsWithSameSet", "videosWithSameSet", "pamphletsWithSameSet", "contentSetName", "videoSources",
+                "files", "tags", "sideBarMode", "educationalContentDisplayName", "sessionNumber", "fileToShow", "userCanSeeCounter", "adItems", "videosWithSameSetL", "videosWithSameSetR"));
+        } else
+            abort(403);
     }
 
+    private function generateSeoMetaTags($educationalContentDisplayName, $educationalContent, $tags, $url, $files, $metaTagMod, $author, $videoSources)
+    {
+        SEO::setTitle($educationalContentDisplayName);
+        if (isset($educationalContent->metaDescription) && strlen($educationalContent->metaDescription) > 0)
+            SEO::setDescription($educationalContent->metaDescription);
+        else
+            if (isset($tags)) {
+                SEO::setDescription(implode(",", $tags));
+            }
+
+        SEO::opengraph()->setUrl($url);
+        SEO::setCanonical($url);
+        SEO::twitter()->setSite("آلاء");
+        //TODO: move thumbnails to sftp storage
+        if (isset($files['thumbnail']))
+            SEO::opengraph()->addImage($files['thumbnail'], ['height' => 720, 'width' => 1280]);
+        else
+            SEO::opengraph()->addImage(route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]), ['height' => 100, 'width' => 100]);
+        switch ($metaTagMod) {
+            case 1: // video
+
+                SEO::twitter()->addValue('player', action('EducationalContentController@embed', $educationalContent));
+                SEO::twitter()->addValue('player:width', "854");
+                SEO::twitter()->addValue('player:height', "480");
+                // video.movie
+                SEO::opengraph()->setType('video')
+                    ->setVideoMovie([
+                        'actor' => (isset($author)) ? $author : "",
+                        'actor:role' => 'دبیر',
+                        'director' => 'آلاء',
+                        'writer' => 'آلاء',
+                        'duration' => null,
+                        'release_date' => $educationalContent->creat_at,
+                        'tag' => $tags
+                    ]);
+                // og:video
+                SEO::opengraph()->addVideo($videoSources->get('hq')["src"], [
+                    'secure_url' => $videoSources->get('hq')["src"],
+                    'type' => 'video/mp4',
+                    'width' => 854,
+                    'height' => 480
+                ]);
+
+                break;
+            case 2://pdf
+                SEO::opengraph()->setType('website');
+                break;
+            case 3: //article
+                SEO::opengraph()->setType('article')
+                    ->setArticle([
+                        'published_time' => $educationalContent->creat_at,
+                        'modified_time' => $educationalContent->update_at,
+                        'author' => $author,
+                        'tag' => $tags
+                    ]);
+                break;
+        }
+    }
     /**
      * Show the form for editing the specified resource.
      *

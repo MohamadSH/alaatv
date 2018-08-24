@@ -2,16 +2,20 @@
 
 namespace App;
 
+use App\Classes\Advertisable;
+use App\Classes\LinkGenerator;
+use App\Classes\Taggable;
+use App\Collection\ContentCollection;
 use App\Traits\APIRequestCommon;
 use App\Traits\Helper;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
-use Auth;
-use Illuminate\Support\Facades\Storage;
 
 /**
  * App\Educationalcontent
@@ -69,20 +73,26 @@ use Illuminate\Support\Facades\Storage;
  * @method static \Illuminate\Database\Query\Builder|\App\Educationalcontent withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Educationalcontent withoutTrashed()
  * @mixin \Eloquent
+ * @property-read mixed $display_name
  */
-class Educationalcontent extends Model
+class Educationalcontent extends Model implements Advertisable, Taggable
 {
     use APIRequestCommon;
     use SoftDeletes;
     use Helper;
 
     /**      * The attributes that should be mutated to dates.        */
-    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
 
     protected $fillable = [
         'name',
         'description',
         'context',
+        'file',
         'order',
         'validSince',
         'template_id',
@@ -94,6 +104,157 @@ class Educationalcontent extends Model
         'contenttype_id'
     ];
 
+
+    /**
+     * Create a new Eloquent Collection instance.
+     *
+     * @param  array $models
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function newCollection(array $models = [])
+    {
+        return new ContentCollection($models);
+    }
+
+
+    public function fixFiles()
+    {
+        $educationalContent = $this;
+        $files = collect();
+        switch ($educationalContent->template->name) {
+            case "video1":
+                $file = $educationalContent->files->where("pivot.label", "hd")->first();
+                if (isset($file)) {
+                    $url = $file->name;
+                    $size = $educationalContent->curlGetFileSize($url);
+                    $caption = $file->pivot->caption;
+                    $res = "720p";
+                    $type = "video";
+
+
+                    $files->push([
+                        "uuid" => $file->uuid,
+                        "disk" => null,
+                        "url" => $url,
+                        "fileName" => basename($url),
+                        "size" => $size,
+                        "caption" => $caption,
+                        "res" => $res,
+                        "type" => $type
+                    ]);
+                }
+
+                $file = $educationalContent->files->where("pivot.label", "hq")->first();
+                if (isset($file)) {
+                    $url = $file->name;
+                    $size = $educationalContent->curlGetFileSize($url);
+                    $caption = $file->pivot->caption;
+                    $res = "480p";
+                    $type = "video";
+
+                    $files->push([
+                        "uuid" => $file->uuid,
+                        "disk" => null,
+                        "url" => $url,
+                        "fileName" => basename($url),
+                        "size" => $size,
+                        "caption" => $caption,
+                        "res" => $res,
+                        "type" => $type
+                    ]);
+                }
+
+
+                $file = $educationalContent->files->where("pivot.label", "240p")->first();
+                if (isset($file)) {
+                    $url = $file->name;
+                    $size = $educationalContent->curlGetFileSize($url);
+                    $caption = $file->pivot->caption;
+                    $res = "240p";
+                    $type = "video";
+
+                    $files->push([
+                        "uuid" => $file->uuid,
+                        "disk" => null,
+                        "url" => $url,
+                        "fileName" => basename($url),
+                        "size" => $size,
+                        "caption" => $caption,
+                        "res" => $res,
+                        "type" => $type
+                    ]);
+                }
+
+
+                $file = optional($educationalContent->files->where("pivot.label", "thumbnail")->first());
+                $url = $file->name;
+                $size = $educationalContent->curlGetFileSize($url);
+                $type = "thumbnail";
+                $files->push([
+                    "uuid" => $file->uuid,
+                    "disk" => null,
+                    "url" => $url,
+                    "fileName" => basename($url),
+                    "size" => $size,
+                    "caption" => null,
+                    "res" => null,
+                    "type" => $type
+                ]);
+                break;
+
+            case  "pamphlet1":
+                $pFiles = $educationalContent->files;
+                foreach ($pFiles as $file) {
+                    $type = "pdf";
+                    $res = null;
+                    $caption = "فایل" . $file->pivot->caption;
+                    if ($file->disks->isNotEmpty()) {
+                        $disk = $file->disks->first();
+                        $diskName = $disk->name;
+                    }
+
+                    $files->push([
+                        "uuid" => $file->uuid,
+                        "disk" => (isset($diskName) ? $diskName : null),
+                        "url" => null,
+                        "fileName" => $file->name,
+                        "size" => null,
+                        "caption" => $caption,
+                        "res" => $res,
+                        "type" => $type
+                    ]);
+                }
+                break;
+            case "article" :
+                break;
+            default:
+                break;
+
+        }
+
+        $this->timestamps = false;
+//        dd($files);
+        $this->file = $files;
+        $this->update();
+        $this->timestamps = true;
+
+        Artisan::call('cache:clear');
+    }
+
+    /**
+     * @return null|string|\Symfony\Component\HttpFoundation\StreamedResponse
+     * @throws Exception
+     */
+    public function test()
+    {
+        $l = new LinkGenerator($this->file[0]);
+        try {
+            return $l->getLinks();
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
     public function grades()
     {
         return $this->belongsToMany('App\Grade');
@@ -104,6 +265,16 @@ class Educationalcontent extends Model
         return $this->belongsToMany('App\Major');
     }
 
+    public function getFileAttribute($value)
+    {
+        return collect(json_decode($value));
+    }
+
+    public function setFileAttribute(Collection $input)
+    {
+        $this->attributes['file'] = $input->toJson();
+    }
+
     public function files()
     {
         return $this->belongsToMany(
@@ -112,9 +283,11 @@ class Educationalcontent extends Model
             'content_id',
             'file_id')->withPivot("caption", "label");
     }
+
     public function thumbnails(){
         return $this->files()->where('label','=','thumbnail');
     }
+
     public function sources(){
         return $this->files()->where('label','<>','thumbnail');
     }
@@ -202,6 +375,11 @@ class Educationalcontent extends Model
         return false;
     }
 
+    public function isActive(): bool
+    {
+        return ($this->isEnable() && $this->isValid() ? true : false);
+    }
+
     public function isValid(): bool
     {
         if ($this->validSince < Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'))
@@ -242,9 +420,9 @@ class Educationalcontent extends Model
 
     public function scopeActive($query){
         return $query->where('enable', 1)
-                     ->where('validSince', '<', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
-                         ->timezone('Asia/Tehran')
-                     );
+            ->where('validSince', '<', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
+                ->timezone('Asia/Tehran')
+            );
     }
 
     /**
@@ -284,8 +462,7 @@ class Educationalcontent extends Model
         return Cache::remember($key,Config::get("constants.CACHE_60"),function () use($c) {
             $sessionNumber = -1;
             $contenSets = $c->contentsets->where("pivot.isDefault" , 1)->first();
-            if(isset($contenSets))
-            {
+            if(isset($contenSets)) {
                 $order = $contenSets->pivot->order;
                 if($order >= 0)
                     $sessionNumber = $contenSets->pivot->order;
@@ -293,7 +470,8 @@ class Educationalcontent extends Model
             return $sessionNumber;
         });
     }
-    public function getDisplayName()
+
+    public function getDisplayNameAttribute()
     {
         try {
             $key = "content:getDisplayName"
@@ -318,6 +496,7 @@ class Educationalcontent extends Model
     {
         return $this->belongsToMany('App\Contenttype', 'educationalcontent_contenttype', 'content_id', 'contenttype_id');
     }
+
     public function contenttype()
     {
         return $this->belongsTo('App\Contenttype');
@@ -333,13 +512,6 @@ class Educationalcontent extends Model
                 $displayMajors .= $major->name . " ";
         }
         return $displayMajors;
-    }
-
-    public function getFileAttribute()
-    {
-        if (!is_null($this->files))
-            return $this->files->first();
-        return null;
     }
 
     public function getFilesUrl()
@@ -371,48 +543,38 @@ class Educationalcontent extends Model
         );
     }
 
+    public function getThumbnailAttribute()
+    {
+        return optional($this->files->where("pivot.label", "thumbnail")->first())->name;
+    }
+
+    public function getContentsetAttribute()
+    {
+        return $this->contentsets->where("pivot.isDefault", 1)->first();
+    }
+
+    public function getSessionAttribute()
+    {
+
+        $cs = $this->contentset;
+        return isset($cs) ? $cs->pivot->order : null;
+    }
+
     public function getSetMates()
     {
-        $contentSets = $this->contentsets->where("pivot.isDefault" , 1);
-        $contentsWithSameSet = collect();
-        $contentSetName = "" ;
-        if($contentSets->isNotEmpty())
-        {
-            $contentSet = $contentSets->first();
-            $contentSetName = $contentSet->name;
-            $sameContents =  $contentSet->educationalcontents->where("enable" , 1)->sortBy("pivot.order") ;
-            $sameContents->load('files');
-            $sameContents->load('contenttype');
+        $contentSet = $this->contentset;
 
-            foreach ($sameContents as $content)
-            {
-                if(!$content->isValid())
-                    continue;
+        $sameContents = optional($contentSet)->educationalcontents()
+            ->active()
+            ->get()
+            ->sortBy("pivot.order")
+            ->load('files')
+            ->load('contenttype');
 
-                $file = $content->files->where("pivot.label" , "thumbnail")->first();
-                if(isset($file))
-                    $thumbnailFile = $file->name;
-                else
-                    $thumbnailFile = "" ;
-
-                if (isset($content->contenttype)) {
-                    $myContentType = $content->contenttype->name;
-                }else{
-                    $myContentType ="";
-                }
-                $session = $content->pivot->order;
-                $contentsWithSameSet->push([
-                    "type"=> $myContentType ,
-                    "content"=>$content ,
-                    "thumbnail"=>$thumbnailFile ,
-                    "session"=>$session
-                ]);
-            }
-        }
         return [
-            $contentsWithSameSet ,
-            $contentSetName ,
-            ];
+            $sameContents,
+            optional($contentSet)->name,
+        ];
     }
 
     public function retrievingTags()
@@ -425,22 +587,31 @@ class Educationalcontent extends Model
             "GET"
         );
 
-        if($response["statusCode"] == 200)
-        {
+        if($response["statusCode"] == 200) {
             $result = json_decode($response["result"]);
             $tags = $result->data->tags;
-        } else
-        {
+        } else {
             $tags =[];
         }
 
         return $tags ;
     }
 
-//    public function setTagsAttribute($value)
-//    {
-//        return json_encode($value);
-//    }
+    public function getAddItems(): Collection
+    {
+        $adItems = collect();
+        if ($this->contentsets->isNotEmpty() && $this->contentsets->first()->id != 199)
+            $adItems = Educationalcontent::whereHas("contentsets", function ($q) {
+                $q->where("id", 199);
+            })
+                ->where("enable", 1)
+                ->orderBy("order")
+                ->get();
+        return $adItems;
+    }
 
-
+    private function curlGetFileSize($url)
+    {
+        return 0;
+    }
 }

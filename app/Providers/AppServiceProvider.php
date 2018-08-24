@@ -10,16 +10,14 @@ use App\Productfiletype;
 use App\Traits\UserCommon;
 use App\Verificationmessagestatus;
 use App\Wallettype;
-use App\Websitesetting;
 use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Schema;
 use Laravel\Horizon\Horizon;
 
 class AppServiceProvider extends ServiceProvider
@@ -62,22 +60,6 @@ class AppServiceProvider extends ServiceProvider
 
         //try catch For migration
         try {
-            if(Schema::hasTable('websitesettings')) {
-                $key="AppServiceProvider:websitesettings";
-
-                $setting  = Cache::remember($key,Config::get("constants.CACHE_600"),function () {
-                    return Websitesetting::where("version" , 1)->get()->first();
-                });
-
-                $wSetting = json_decode($setting->setting);
-                view()->share('wSetting', $wSetting);
-                view()->share('setting', $setting);
-                if(isset($wSetting->site->name))
-                    Config::set("constants.SITE_NAME" , $wSetting->site->name);
-                $this->app->singleton('setting', function () use ($setting){
-                    return $setting;
-                });
-            }
 
             if(Schema::hasTable('bons')) {
                 $myBone = \App\Bon::where("name",Config::get("constants.BON1"))->get();
