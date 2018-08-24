@@ -737,6 +737,7 @@
     </script>
     <script>
         var related_videos = [
+          @if(!is_null(min(13,$videosWithSameSet->count())))
                 @foreach($videosWithSameSet->random( min(13,$videosWithSameSet->count())) as $item)
                 @if($item["content"]->id == $educationalContent->id)
                 @else
@@ -748,7 +749,7 @@
             },
             @endif
             @endforeach
-        ]; 
+            @endif        ]; 
         var player = videojs('video-{{$educationalContent->id}}',{nuevo : true} ,function(){
             this.nuevoPlugin({
                 // plugin options here
