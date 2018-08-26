@@ -2,81 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Assignmentstatus;
-use App\Attribute;
-use App\Attributecontrol;
-use App\Attributeset;
-use App\Bon;
-use App\Checkoutstatus;
-use App\Consultationstatus;
-use App\Contentset;
-use App\Contenttype;
-use App\Coupon;
-use App\Coupontype;
-use App\Educationalcontent;
-use App\Event;
-use App\Eventresult;
-use App\Gender;
-use App\Grade;
-use App\Http\Requests\ContactUsFormRequest;
-use App\Http\Requests\InsertUserRequest;
-use App\Http\Requests\Request;
-use App\Http\Requests\SendSMSRequest;
-use App\Lottery;
-use App\Major;
-use App\Notifications\GeneralNotice;
-use App\Notifications\GiftGiven;
-use App\Notifications\UserRegisterd;
-use App\Order;
-use App\Orderproduct;
-use App\Orderstatus;
-use App\Paymentmethod;
-use App\Paymentstatus;
-use App\Permission;
-use App\Product;
-use App\Productfile;
-use App\Producttype;
-use App\Productvoucher;
-use App\Question;
-use App\Relative;
-use App\Role;
-use App\Traits\APIRequestCommon;
-use App\Traits\CharacterCommon;
-use App\Traits\DateCommon;
-use App\Traits\Helper;
-use App\Traits\ProductCommon;
-use App\Traits\UserCommon;
-use App\Transaction;
-use App\Transactionstatus;
-use App\User;
-use App\Userbon;
-use App\Userbonstatus;
-use App\Userstatus;
-use App\Usersurveyanswer;
-use App\Userupload;
-use App\Useruploadstatus;
-use App\Websitepage;
-use App\Websitesetting;
+use App\{
+    Assignmentstatus, Attribute, Attributecontrol, Attributeset, Bon, Checkoutstatus, Consultationstatus, Contentset, Contenttype, Coupon, Coupontype, Educationalcontent, Event, Eventresult, Gender, Grade, Http\Requests\ContactUsFormRequest, Http\Requests\InsertUserRequest, Http\Requests\Request, Http\Requests\SendSMSRequest, Lottery, Major, Notifications\GeneralNotice, Notifications\GiftGiven, Notifications\UserRegisterd, Order, Orderproduct, Orderstatus, Paymentmethod, Paymentstatus, Permission, Product, Productfile, Producttype, Productvoucher, Question, Relative, Role, Traits\APIRequestCommon, Traits\CharacterCommon, Traits\DateCommon, Traits\Helper, Traits\ProductCommon, Traits\UserCommon, Transaction, Transactionstatus, User, Userbon, Userbonstatus, Userstatus, Usersurveyanswer, Userupload, Useruploadstatus, Websitepage, Websitesetting
+};
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Response;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\{
+    Cache, Config, File, Input, Log, Route, Storage, View
+};
 use League\Flysystem\Filesystem;
 use League\Flysystem\Sftp\SftpAdapter;
 use Maatwebsite\ExcelLight\Excel;
-use Maatwebsite\ExcelLight\Spout\Reader;
-use Maatwebsite\ExcelLight\Spout\Row;
-use Maatwebsite\ExcelLight\Spout\Sheet;
-use Maatwebsite\ExcelLight\Spout\Writer;
+use Maatwebsite\ExcelLight\Spout\{
+    Reader, Row, Sheet, Writer
+};
 use SEO;
 use SSH;
 
@@ -110,18 +52,17 @@ class HomeController extends Controller
     {
         try
         {
-            $asiatechProduct = config("constants.ASIATECH_FREE_ADSL") ;
-            $voucherPendingOrders = User::whereHas("orders" , function ($q) use ($asiatechProduct){
-                $q->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
-                    ->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_PAID"))
-                    ->whereHas("orderproducts" , function ($q) use ($asiatechProduct)
-                    {
-                        $q->where("product_id" , $asiatechProduct);
-                    })
-                    ->havingRaw('COUNT(*) > 1');
-            })
-                ->get();
-            dd($voucherPendingOrders->pluck("id"));
+            $e = Educationalcontent::find(6560);
+//            dd($e->thumbnail);
+//            dd( parse_url("https://cdn.sanatisharif.ir/media/156/HD_720p/008uuui.mp4")['path']);
+            $b = \App\Classes\LinkGenerator::create(null,"productFileSFTP",null,"/paid/85/fizik-1.mp4");
+            $a = \App\Classes\LinkGenerator::create("bee26d8a-f739-4372-98a7-856b8b1d2621",null,null,"sanatish/140/160923111124.pdf");
+
+            $c = \App\Classes\LinkGenerator::create("bb1ef4e5-a572-46da-b4cc-1574f08ce903","alaaCdnSFTP",null,"/media/156/HD_720p/008uuui.mp4");
+            $d = \App\Classes\LinkGenerator::create("bb1ef4e5-a572-46da-b4cc-1574f08ce903","alaaCdnSFTP","https://cdn.sanatisharif.ir/media/156/HD_720p/008uuui.mp4","/media/156/HD_720p/008uuui.mp4");
+            return [
+                "userSeen" => $c->getLinks(['content_id' => 1])
+            ];
         }
         catch (\Exception    $e) {
             $message = "unexpected error";
@@ -143,7 +84,7 @@ class HomeController extends Controller
 //        {
 //            $authException = ['index' , 'getImage' , 'error404' , 'error403' , 'error500' , 'errorPage' , 'siteMapXML', 'download' ];
 //        }else{
-        $authException = ['download', 'telgramAgent', 'index', 'getImage', 'error404', 'error403', 'error500', 'errorPage', 'aboutUs', 'contactUs', 'sendMail', 'rules', 'siteMapXML', 'uploadFile', 'search', 'schoolRegisterLanding'];
+        $authException = ['newDownload','debug','download', 'telgramAgent', 'index', 'getImage', 'error404', 'error403', 'error500', 'errorPage', 'aboutUs', 'contactUs', 'sendMail', 'rules', 'siteMapXML', 'uploadFile', 'search', 'schoolRegisterLanding'];
 //        }
         $this->middleware('auth', ['except' => $authException]);
         $this->middleware('ability:' . Config::get("constants.ROLE_ADMIN") . ',' . Config::get("constants.USER_ADMIN_PANEL_ACCESS"), ['only' => 'admin']);
@@ -1687,13 +1628,26 @@ class HomeController extends Controller
 
     public function newDownload($data){
 
+        if(isset($data))
+        {
+            $data =(array) decrypt($data);
+            $url = $data["url"];
+            $contentId = $data["data"]["content_id"];
+            $user = auth()->user();
+            if($user->hasContent($contentId))
+            {
+                return redirect($url) ;
+            }
+        }
+        abort(403);
     }
 
-    function download()
+    function download(Request $request)
     {
-        $fileName = Input::get('fileName');
-        $contentType = Input::get('content');
+        $fileName = $request->get("fileName");
+        $contentType = $request->get("content");
         $user = Auth::user();
+
         switch ($contentType) {
             case "عکس پروفایل":
                 $diskName = Config::get('constants.DISK1');

@@ -32,7 +32,13 @@ class AlterTableEducationalcontentsAddColumns extends Migration
                 $table->text('thumbnail')
                     ->nullable()
                     ->comment("عکس هر محتوا")
-                    ->after("file");
+                    ->after("duration");
+            }
+            if (!Schema::hasColumn('educationalcontents', 'isFree')) {
+                $table->boolean('isFree')
+                    ->default(true)
+                    ->comment("عکس هر محتوا")
+                    ->after("thumbnail");
             }
         });
 
@@ -62,6 +68,9 @@ class AlterTableEducationalcontentsAddColumns extends Migration
             }
             if (Schema::hasColumn('educationalcontents', 'thumbnail')) {
                 $table->dropColumn('thumbnail');
+            }
+            if (Schema::hasColumn('educationalcontents', 'isFree')) {
+                $table->dropColumn('isFree');
             }
         });
     }

@@ -277,11 +277,9 @@ trait Helper
 
     public function userSeen(string $path, User $user)
     {
-        $websitepage = Websitepage::firstOrNew(["url"=>$path ]);
+
         $productSeenCount = 0 ;
-        if(!isset($websitepage->id)) {
-            $websitepage->save();
-        }
+
         if(isset($websitepage->id)) {
             if (!$user->seensitepages->contains($websitepage->id))
                 $user->seensitepages()->attach($websitepage->id);

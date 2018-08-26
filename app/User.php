@@ -707,4 +707,36 @@ class User extends Authenticatable
     {
         return ltrim($this->mobile, '0');
     }
+
+
+    /**  Determines whether user has this content or not
+     * @param  $contentId
+     * @return bool
+     */
+    public function hasContent($contentId)
+    {
+        return true ;
+    }
+
+    public function seen($path){
+        $path = "/".ltrim($path,"/");
+        $SeenCount = 0;
+
+        $websitepage = Websitepage::firstOrNew(["url"=>$path ]);
+        if(!isset($websitepage->id)) {
+            $websitepage->save();
+        }
+        if(isset($websitepage->id)) {
+            if (!$this->seensitepages->contains($websitepage->id))
+                $this->seensitepages()->attach($websitepage->id);
+            else {
+                $this->seensitepages()->updateExistingPivot($websitepage->id, [
+                    "numberOfVisit" => $this->seensitepages()->where("id", $websitepage->id)->first()->pivot->numberOfVisit + 1, "updated_at" => Carbon::now()
+                ]);
+            }
+            $SeenCount = $websitepage->userschecked()->count();
+        }
+
+        return $SeenCount;
+    }
 }

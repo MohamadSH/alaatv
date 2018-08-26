@@ -7,6 +7,7 @@ use App\Classes\LinkGenerator;
 use App\Classes\Taggable;
 use App\Collection\ContentCollection;
 use App\Traits\APIRequestCommon;
+use App\Traits\FileCommon;
 use App\Traits\Helper;
 use Carbon\Carbon;
 use Exception;
@@ -16,6 +17,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\URL;
 
 /**
  * App\Educationalcontent
@@ -80,7 +82,6 @@ class Educationalcontent extends Model implements Advertisable, Taggable
     use APIRequestCommon;
     use SoftDeletes;
     use Helper;
-
     /**      * The attributes that should be mutated to dates.        */
     protected $dates = [
         'created_at',
@@ -117,6 +118,9 @@ class Educationalcontent extends Model implements Advertisable, Taggable
     }
 
 
+    /**
+     *
+     */
     public function fixFiles()
     {
         $educationalContent = $this;
@@ -127,7 +131,7 @@ class Educationalcontent extends Model implements Advertisable, Taggable
                 $file = $educationalContent->files->where("pivot.label", "hd")->first();
                 if (isset($file)) {
                     $url = $file->name;
-                    $size = $educationalContent->curlGetFileSize($url);
+                    $size = null;
                     $caption = $file->pivot->caption;
                     $res = "720p";
                     $type = "video";
@@ -135,9 +139,9 @@ class Educationalcontent extends Model implements Advertisable, Taggable
 
                     $files->push([
                         "uuid" => $file->uuid,
-                        "disk" => null,
+                        "disk" => "alaaCdnSFTP",
                         "url" => $url,
-                        "fileName" => basename($url),
+                        "fileName" =>parse_url($url)['path'],
                         "size" => $size,
                         "caption" => $caption,
                         "res" => $res,
@@ -148,16 +152,16 @@ class Educationalcontent extends Model implements Advertisable, Taggable
                 $file = $educationalContent->files->where("pivot.label", "hq")->first();
                 if (isset($file)) {
                     $url = $file->name;
-                    $size = $educationalContent->curlGetFileSize($url);
+                    $size = null;
                     $caption = $file->pivot->caption;
                     $res = "480p";
                     $type = "video";
 
                     $files->push([
                         "uuid" => $file->uuid,
-                        "disk" => null,
+                        "disk" => "alaaCdnSFTP",
                         "url" => $url,
-                        "fileName" => basename($url),
+                        "fileName" =>parse_url($url)['path'],
                         "size" => $size,
                         "caption" => $caption,
                         "res" => $res,
@@ -169,16 +173,16 @@ class Educationalcontent extends Model implements Advertisable, Taggable
                 $file = $educationalContent->files->where("pivot.label", "240p")->first();
                 if (isset($file)) {
                     $url = $file->name;
-                    $size = $educationalContent->curlGetFileSize($url);
+                    $size = null;
                     $caption = $file->pivot->caption;
                     $res = "240p";
                     $type = "video";
 
                     $files->push([
                         "uuid" => $file->uuid,
-                        "disk" => null,
+                        "disk" => "alaaCdnSFTP",
                         "url" => $url,
-                        "fileName" => basename($url),
+                        "fileName" =>parse_url($url)['path'],
                         "size" => $size,
                         "caption" => $caption,
                         "res" => $res,
@@ -192,14 +196,14 @@ class Educationalcontent extends Model implements Advertisable, Taggable
                 $url = $file->name;
                 if(isset($url))
                 {
-                    $size = $educationalContent->curlGetFileSize($url);
+                    $size = null;
                     $type = "thumbnail";
 
                     $this->thumbnail = [
                         "uuid" => $file->uuid,
-                        "disk" => null,
+                        "disk" => "alaaCdnSFTP",
                         "url" => $url,
-                        "fileName" => basename($url),
+                        "fileName" =>parse_url($url)['path'],
                         "size" => $size,
                         "caption" => null,
                         "res" => null,
@@ -213,7 +217,7 @@ class Educationalcontent extends Model implements Advertisable, Taggable
                 foreach ($pFiles as $file) {
                     $type = "pdf";
                     $res = null;
-                    $caption = "فایل" . $file->pivot->caption;
+                    $caption = "فایل" .' '. $file->pivot->caption;
                     if ($file->disks->isNotEmpty()) {
                         $disk = $file->disks->first();
                         $diskName = $disk->name;
@@ -283,12 +287,14 @@ class Educationalcontent extends Model implements Advertisable, Taggable
             $fileCollection = collect(json_decode($value));
             $fileCollection->transform(function ($item, $key) {
                 $l = new LinkGenerator($item);
-                $item->link = $l->getLinks();
+                $item->link = $this->isFree ? $l->getLinks() : $l->getLinks([
+                                                                    "content_id" => $this->id
+                                                                ]);
 //                unset($item->url);
                 return $item;
             });
 
-            return $fileCollection;
+            return $fileCollection->groupBy('type');
         });
     }
 
@@ -644,10 +650,5 @@ class Educationalcontent extends Model implements Advertisable, Taggable
                 ->orderBy("order")
                 ->get();
         return $adItems;
-    }
-
-    private function curlGetFileSize($url)
-    {
-        return 0;
     }
 }

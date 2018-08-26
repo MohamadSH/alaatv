@@ -135,12 +135,14 @@ class LinkGenerator
             return $this->url;
         if (isset($this->disk) && isset($this->fileName)) {
 
+//            dd("here");
             $diskAdapter = Storage::disk($this->disk)->getAdapter();
+//            dd($diskAdapter);
             $url = $this->fetchUrl($diskAdapter,$this->fileName);
             if(isset($paid)){
                 $data = encrypt([
-                    $url,
-                    $paid['content_id']
+                    "url" => $url,
+                    "data" => $paid
                 ]);
                 return action(self::DOWNLOAD_CONTROLLER_NAME,$data);
 
