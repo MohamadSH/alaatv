@@ -253,7 +253,7 @@
                             <div class="col-md-4">
                                 <div class="tile-container">
                                     <div class="tile-thumbnail">
-                                        <a href="{{(isset($lesson["content_id"]) && $lesson["content_id"]>0)?action("EducationalContentController@show", $lesson["content_id"]):""}}">
+                                        <a href="{{(isset($lesson["content_id"]) && $lesson["content_id"]>0)?action("ContentController@show", $lesson["content_id"]):""}}">
                                             <img src="
                                             @if(isset($lesson["pic"]) && strlen($lesson["pic"])>0)
                                                     {{$lesson["pic"]."?w=253&h=142"}}
@@ -264,7 +264,7 @@
                                     </div>
                                     <div class="tile-title" style="height: 145px;">
                                         <h5 class="bold">
-                                            <a href="{{(isset($lesson["content_id"]) && $lesson["content_id"]>0)?action("EducationalContentController@show", $lesson["content_id"]):""}}">{{$lesson["displayName"]}}</a>
+                                            <a href="{{(isset($lesson["content_id"]) && $lesson["content_id"]>0)?action("ContentController@show", $lesson["content_id"]):""}}">{{$lesson["displayName"]}}</a>
                                         </h5>
                                         {{--<a href="javascript:;">--}}
                                             {{--<i class="icon-question font-blue"></i>--}}
@@ -346,14 +346,14 @@
     {{--<div class="caption">--}}
 
     {{--<i class="fa fa-book font-red"></i>--}}
-    {{--<a href="{{action("EducationalContentController@search")}}"><span class="caption-subject bold font-red "> آخرین مطالب </span></a>--}}
+    {{--<a href="{{action("ContentController@search")}}"><span class="caption-subject bold font-red "> آخرین مطالب </span></a>--}}
     {{--<span class="caption-helper">جزوه ، کتاب ، آزمون</span>--}}
 
     {{--</div>--}}
     {{--</div>--}}
 
     {{--<div class="portlet-body">--}}
-    {{--@if($educationalContents->isEmpty())--}}
+    {{--@if($contents->isEmpty())--}}
     {{--<div class="timeline  white-bg white-bg">--}}
     {{--<h4 class="block bold text-center" >کاربر گرامی در حال حاضر مطلبی برای مشاهده وجود ندارد.</h4>--}}
     {{--</div>--}}
@@ -362,7 +362,7 @@
 
     {{--</div>--}}
     {{--<div class="scroller" data-always-visible="1" data-rail-visible="0">--}}
-    {{--@include("educationalContent.index" , ["pageName"=>"dashboard"])--}}
+    {{--@include("content.index" , ["pageName"=>"dashboard"])--}}
     {{--</div>--}}
     {{--@endif--}}
     {{--</div>--}}

@@ -3046,7 +3046,7 @@ class SanatisharifmergeController extends Controller
                         continue;
                     }
                     $request = new Request();
-                    $storeContentReuest = new \App\Http\Requests\InsertEducationalContentRequest();
+                    $storeContentReuest = new \App\Http\Requests\InsertContentRequest();
                     dump($contentTypeLable."id ".$sanatisharifRecord->$idColumn." started");
                     switch ($contentType)
                     {
@@ -3214,14 +3214,14 @@ class SanatisharifmergeController extends Controller
                     }
                     $storeContentReuest->offsetSet("fromAPI" , true);
 
-                    $controller = new EducationalContentController();
+                    $controller = new ContentController();
                     $response = $controller->store($storeContentReuest);
                     $responseContent =  json_decode($response->getContent());
                     if($response->getStatusCode() == 200)
                     {
                         $request->offsetSet($contentTypeLable."Transferred" , 1);
                         if(isset($responseContent->id))
-                            $request->offsetSet("educationalcontent_id" , $responseContent->id);
+                            $request->offsetSet("content_id" , $responseContent->id);
                         $response = $this->update($request , $sanatisharifRecord);
                         if($response->getStatusCode() == 200)
                         {
@@ -3314,8 +3314,8 @@ class SanatisharifmergeController extends Controller
             if( isset($vId) ) {
                 $v = Sanatisharifmerge::where('videoid','=',$vId)->first();
                 if (isset($v)) {
-                    if (isset($v->educationalcontent)) {
-                        return action('EducationalContentController@show',$v->educationalcontent);
+                    if (isset($v->content)) {
+                        return action('ContentController@show',$v->content);
                     }
                 }
             }
@@ -3339,8 +3339,8 @@ class SanatisharifmergeController extends Controller
             if( isset($vId) ) {
                 $v = Sanatisharifmerge::where('videoid','=',$vId)->first();
                 if (isset($v)) {
-                    if (isset($v->educationalcontent)) {
-                        return action('EducationalContentController@embed',$v->educationalcontent);
+                    if (isset($v->content)) {
+                        return action('ContentController@embed',$v->content);
                     }
                 }
             }
@@ -3357,8 +3357,8 @@ class SanatisharifmergeController extends Controller
             if( isset($pId) ) {
                 $p = Sanatisharifmerge::where('pamphletid','=',$pId)->first();
                 if (isset($p)) {
-                    if (isset($p->educationalcontent)) {
-                        return action('EducationalContentController@show',$p->educationalcontent);
+                    if (isset($p->content)) {
+                        return action('ContentController@show',$p->content);
                     }
                 }
             }

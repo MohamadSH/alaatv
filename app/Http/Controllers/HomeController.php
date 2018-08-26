@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\{
-    Assignmentstatus, Attribute, Attributecontrol, Attributeset, Bon, Checkoutstatus, Consultationstatus, Contentset, Contenttype, Coupon, Coupontype, Educationalcontent, Event, Eventresult, Gender, Grade, Http\Requests\ContactUsFormRequest, Http\Requests\InsertUserRequest, Http\Requests\Request, Http\Requests\SendSMSRequest, Lottery, Major, Notifications\GeneralNotice, Notifications\GiftGiven, Notifications\UserRegisterd, Order, Orderproduct, Orderstatus, Paymentmethod, Paymentstatus, Permission, Product, Productfile, Producttype, Productvoucher, Question, Relative, Role, Traits\APIRequestCommon, Traits\CharacterCommon, Traits\DateCommon, Traits\Helper, Traits\ProductCommon, Traits\UserCommon, Transaction, Transactionstatus, User, Userbon, Userbonstatus, Userstatus, Usersurveyanswer, Userupload, Useruploadstatus, Websitepage, Websitesetting
+    Assignmentstatus, Attribute, Attributecontrol, Attributeset, Bon, Checkoutstatus, Consultationstatus, Contentset, Contenttype, Coupon, Coupontype, Content, Event, Eventresult, Gender, Grade, Http\Requests\ContactUsFormRequest, Http\Requests\InsertUserRequest, Http\Requests\Request, Http\Requests\SendSMSRequest, Lottery, Major, Notifications\GeneralNotice, Notifications\GiftGiven, Notifications\UserRegisterd, Order, Orderproduct, Orderstatus, Paymentmethod, Paymentstatus, Permission, Product, Productfile, Producttype, Productvoucher, Question, Relative, Role, Traits\APIRequestCommon, Traits\CharacterCommon, Traits\DateCommon, Traits\Helper, Traits\ProductCommon, Traits\UserCommon, Transaction, Transactionstatus, User, Userbon, Userbonstatus, Userstatus, Usersurveyanswer, Userupload, Useruploadstatus, Websitepage, Websitesetting
 };
 use Auth;
 use Carbon\Carbon;
@@ -52,7 +52,7 @@ class HomeController extends Controller
     {
         try
         {
-            $e = Educationalcontent::find(6560);
+            $e = Content::find(6560);
 //            dd($e->thumbnail);
 //            dd( parse_url("https://cdn.sanatisharif.ir/media/156/HD_720p/008uuui.mp4")['path']);
             $b = \App\Classes\LinkGenerator::create(null,"productFileSFTP",null,"/paid/85/fizik-1.mp4");
@@ -75,7 +75,6 @@ class HomeController extends Controller
                     "file"=>$e->getFile()
                 ]);
         }
-        return view("errors.404");
     }
     public function __construct()
     {
@@ -210,7 +209,7 @@ class HomeController extends Controller
             case "article":
                 break;
             case "contentset":
-                $query->load('educationalcontents');
+                $query->load('contents');
                 break;
             case "product":
                 break;
@@ -259,7 +258,7 @@ class HomeController extends Controller
                         "videoId" => $item->id,
                         "name" => $item->display_name,
                         "videoDescribe" => $item->description,
-                        "url" => action('EducationalContentController@show',$item),
+                        "url" => action('ContentController@show',$item),
                         "videoLink480" => $hq,
                         "videoLink240" => $h240,
                         "videoviewcounter" =>"0",
@@ -374,7 +373,7 @@ class HomeController extends Controller
                 case "video":
                 case "pamphlet":
                 case "article":
-                    $query = Educationalcontent::whereIn("id",$arrayOfId)
+                    $query = Content::whereIn("id",$arrayOfId)
                         ->active()
                         ->orderBy("created_at" , "desc")
                         ->get();
@@ -878,18 +877,18 @@ class HomeController extends Controller
 //        $currentDay = $todayDate[2];
 //        $currentMonth = $todayDate[1];
 //        $currentYear = $todayDate[0];
-//        $educationalContents = Educationalcontent::enable()
+//        $contents = Content::enable()
 //            ->valid()
 //            ->orderBy("validSince", "DESC")
 //            ->take(10)
 //            ->get();
-//        $educationalContentCollection = collect();
-//        foreach ($educationalContents as $educationalContent) {
-//            $educationalContentCollection
+//        $contentCollection = collect();
+//        foreach ($contents as $content) {
+//            $contentCollection
 //                ->push([
-//                    "id" => $educationalContent->id,
-//                    "displayName" => $educationalContent->display_name,
-//                    "validSince_Jalali" => explode(" ", $educationalContent->validSince_Jalali())[0]
+//                    "id" => $content->id,
+//                    "displayName" => $content->display_name,
+//                    "validSince_Jalali" => explode(" ", $content->validSince_Jalali())[0]
 //                ]);
 //        }
 
@@ -1627,15 +1626,16 @@ class HomeController extends Controller
     }
 
     public function newDownload($data){
-
         if(isset($data))
         {
             $data =(array) decrypt($data);
+//            dd($data);
             $url = $data["url"];
             $contentId = $data["data"]["content_id"];
-            $user = auth()->user();
-            if($user->hasContent($contentId))
+            if(Auth::check())
             {
+                $user = auth()->user();
+                $user->hasContent($contentId);
                 return redirect($url) ;
             }
         }
@@ -3382,7 +3382,7 @@ class HomeController extends Controller
                     dump("Error on updating #".$contentset->id);
                 }
 
-                $contents = $contentset->educationalcontents;
+                $contents = $contentset->contents;
 
                 foreach ($contents as $content)
                 {
@@ -3444,7 +3444,7 @@ class HomeController extends Controller
         * foreach ($contentsets as $contentset)
         * {
         * $baseTime = Carbon::createFromDate("2017" , "06" , "01" , "Asia/Tehran");
-        * $contents = $contentset->educationalcontents->sortBy("pivot.order");
+        * $contents = $contentset->contents->sortBy("pivot.order");
         * $contentCounter += $contents->count();
         * foreach ($contents as $content)
         * {
@@ -3491,16 +3491,16 @@ class HomeController extends Controller
          */
 
         /***
-        $contents = Educationalcontent::where("contenttype_id" , 8);
+        $contents = Content::where("contenttype_id" , 8);
         $contentArray = $contents->pluck("id")->toArray();
-        $sanatishRecords = Sanatisharifmerge::whereIn("educationalcontent_id" , $contentArray)->get();
+        $sanatishRecords = Sanatisharifmerge::whereIn("content_id" , $contentArray)->get();
         $contents = $contents->get();
         $successCounter = 0 ;
         $failedCounter = 0 ;
         dump("number of contents: ".$contents->count());
         foreach ($contents as $content)
         {
-        $myRecord =  $sanatishRecords->where("educationalcontent_id" , $content->id)->first();
+        $myRecord =  $sanatishRecords->where("content_id" , $content->id)->first();
         if(isset($myRecord))
         if(isset($myRecord->videoEnable))
         {
@@ -3523,7 +3523,7 @@ class HomeController extends Controller
          */
 
         /**
-        $contents =  Educationalcontent::where("id" , "<" , 158)->get();
+        $contents =  Content::where("id" , "<" , 158)->get();
         dump("number of contents: ".$contents->count());
         $successCounter= 0 ;
         $failedCounter = 0;
@@ -4288,7 +4288,7 @@ class HomeController extends Controller
 
     public function checkDisableContentTagBot()
     {
-        $disableContents = Educationalcontent::where("enable" , 0)->get();
+        $disableContents = Content::where("enable" , 0)->get();
         $counter = 0;
         foreach ($disableContents as $content)
         {
@@ -4317,7 +4317,7 @@ class HomeController extends Controller
             {
                 case "v": //Video
                     $bucket = "content";
-                    $items = Educationalcontent::where("contenttype_id" , 8)->where("enable" , 1);
+                    $items = Content::where("contenttype_id" , 8)->where("enable" , 1);
                     if(Input::has("id"))
                     {
                         $contentId = Input::get("id");
@@ -4519,7 +4519,7 @@ class HomeController extends Controller
                     break;
                 case "p": //Pamphlet
                     $bucket = "content";
-                    $items = Educationalcontent::where("contenttype_id" , 1)->where("enable" , 1);
+                    $items = Content::where("contenttype_id" , 1)->where("enable" , 1);
                     if(Input::has("id"))
                     {
                         $contentId = Input::get("id");
@@ -4656,7 +4656,7 @@ class HomeController extends Controller
                     break;
                 case "b": //Book
                     $bucket = "content";
-                    $items = Educationalcontent::where("contenttype_id" , 7)->where("enable" , 1);
+                    $items = Content::where("contenttype_id" , 7)->where("enable" , 1);
                     $items = $items->get();
                     foreach ($items->where("tags" , null) as $item)
                     {
@@ -4683,7 +4683,7 @@ class HomeController extends Controller
                     break;
                 case "e": //Exam
                     $bucket = "content";
-                    $items = Educationalcontent::where("contenttype_id" , 2)->where("enable" , 1);
+                    $items = Content::where("contenttype_id" , 2)->where("enable" , 1);
                     $items = $items->get();
                     foreach ($items->where("tags" , null) as $item)
                     {
@@ -4744,7 +4744,7 @@ class HomeController extends Controller
                     break;
                 case "a": //Article
                     $bucket = "content";
-                    $items = Educationalcontent::where("contenttype_id" , 9)->where("enable" , 1);
+                    $items = Content::where("contenttype_id" , 9)->where("enable" , 1);
                     $items = $items->get();
                     foreach ($items->where("tags" , null) as $item)
                     {

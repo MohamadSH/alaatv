@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AlterTableEducationalcontentAddBody extends Migration
+class AlterTableContentAddBody extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class AlterTableEducationalcontentAddBody extends Migration
      */
     public function up()
     {
-        Schema::table('educationalcontents', function (Blueprint $table) {
+        Schema::table('contents', function (Blueprint $table) {
             $table->longText("context")->nullable()->comment("محتوا")->after("description");
         });
     }
@@ -25,8 +25,8 @@ class AlterTableEducationalcontentAddBody extends Migration
      */
     public function down()
     {
-        Schema::table('educationalcontents', function (Blueprint $table) {
-            if (Schema::hasColumn('educationalcontents', 'context')) {
+        Schema::table('contents', function (Blueprint $table) {
+            if (Schema::hasColumn('contents', 'context')) {
                 $table->dropColumn('context');
             }
 

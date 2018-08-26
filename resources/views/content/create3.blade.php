@@ -32,7 +32,7 @@
             <div class="portlet light">
                 <div class="portlet-body">
                     <div class="row">
-                        {!! Form::open(['method' => 'POST', 'action' => 'EducationalContentController@basicStore']) !!}
+                        {!! Form::open(['method' => 'POST', 'action' => 'ContentController@basicStore']) !!}
                         <div class="col-md-6">
                                 {!! Form::text('contentset_id', null, ['class' => 'form-control', 'placeholder'=>'شماره درس', 'dir'=>'ltr']) !!}
                                 <span class="help-block" >

@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property \Carbon\Carbon|null $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Educationalcontent[] $educationalcontents
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Content[] $contents
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Contentset onlyTrashed()
  * @method static bool|null restore()
@@ -54,10 +54,10 @@ class Contentset extends Model implements Taggable
     ];
 
 
-    public function educationalcontents()
+    public function contents()
     {
         return $this->belongsToMany(
-            "\App\Educationalcontent",
+            "\App\Content",
             "contentset_educationalcontent",
             "contentset_id",
             "edc_id")

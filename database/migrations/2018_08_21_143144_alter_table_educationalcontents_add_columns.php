@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\{
     Log, Schema
 };
 
-class AlterTableEducationalcontentsAddColumns extends Migration
+class AlterTableContentsAddColumns extends Migration
 {
     /**
      * Run the migrations.
@@ -16,25 +16,25 @@ class AlterTableEducationalcontentsAddColumns extends Migration
      */
     public function up()
     {
-        Schema::table('educationalcontents', function (Blueprint $table) {
-            if (!Schema::hasColumn('educationalcontents', 'file')) {
+        Schema::table('contents', function (Blueprint $table) {
+            if (!Schema::hasColumn('contents', 'file')) {
                 $table->text('file')
                     ->nullable()
                     ->comment("فایل های هر محتوا")
                     ->after("context");
             }
-            if (!Schema::hasColumn('educationalcontents', 'duration')) {
+            if (!Schema::hasColumn('contents', 'duration')) {
                 $table->time('duration')
                     ->comment("مدت زمان فیلم")
                     ->after("file");
             }
-            if (!Schema::hasColumn('educationalcontents', 'thumbnail')) {
+            if (!Schema::hasColumn('contents', 'thumbnail')) {
                 $table->text('thumbnail')
                     ->nullable()
                     ->comment("عکس هر محتوا")
                     ->after("duration");
             }
-            if (!Schema::hasColumn('educationalcontents', 'isFree')) {
+            if (!Schema::hasColumn('contents', 'isFree')) {
                 $table->boolean('isFree')
                     ->default(true)
                     ->comment("عکس هر محتوا")
@@ -42,7 +42,7 @@ class AlterTableEducationalcontentsAddColumns extends Migration
             }
         });
 
-        $contents = \App\Educationalcontent::all();
+        $contents = \App\Content::all();
         foreach ($contents as $content) {
             try {
                 $content->fixFiles();
@@ -59,17 +59,17 @@ class AlterTableEducationalcontentsAddColumns extends Migration
      */
     public function down()
     {
-        Schema::table('educationalcontents', function (Blueprint $table) {
-            if (Schema::hasColumn('educationalcontents', 'file')) {
+        Schema::table('contents', function (Blueprint $table) {
+            if (Schema::hasColumn('contents', 'file')) {
                 $table->dropColumn('file');
             }
-            if (Schema::hasColumn('educationalcontents', 'duration')) {
+            if (Schema::hasColumn('contents', 'duration')) {
                 $table->dropColumn('duration');
             }
-            if (Schema::hasColumn('educationalcontents', 'thumbnail')) {
+            if (Schema::hasColumn('contents', 'thumbnail')) {
                 $table->dropColumn('thumbnail');
             }
-            if (Schema::hasColumn('educationalcontents', 'isFree')) {
+            if (Schema::hasColumn('contents', 'isFree')) {
                 $table->dropColumn('isFree');
             }
         });

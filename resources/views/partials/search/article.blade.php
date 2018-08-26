@@ -3,7 +3,7 @@
     @foreach($items as $content)
         <!-- TIMELINE ITEM -->
             <li>
-                <a href="{{action("EducationalContentController@show", $content->id)}}">
+                <a href="{{action("ContentController@show", $content->id)}}">
                     <div class="col1">
                         <div class="cont">
                             <div class="cont-col1">

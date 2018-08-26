@@ -46,8 +46,8 @@
                      لطفا خطاهای ورودی را بطرف نمایید
                 </div>
             @endif
-            {!! Form::open(['files'=>true,'method' => 'POST','action' => 'EducationalContentController@store', 'class'=>'form-horizontal']) !!}
-                    @include('educationalContent.form')
+            {!! Form::open(['files'=>true,'method' => 'POST','action' => 'ContentController@store', 'class'=>'form-horizontal']) !!}
+                    @include('content.form')
             {!! Form::close() !!}
         </div>
     </div>

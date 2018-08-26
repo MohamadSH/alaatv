@@ -43,7 +43,7 @@
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
-                <span><a target="_blank" href="{{action("EducationalContentController@show" , $educationalContent->id)}}">{{$educationalContent->name}}</a></span>
+                <span><a target="_blank" href="{{action("ContentController@show" , $content->id)}}">{{$content->name}}</a></span>
             </li>
         </ul>
     </div>
@@ -68,18 +68,18 @@
                             <div class="modal-body">
                                 <p> آیا مطمئن هستید؟ </p>
                                 {!! Form::hidden('file_id', null) !!}
-                                {!! Form::hidden('educationalContent_id', null) !!}
+                                {!! Form::hidden('content_id', null) !!}
                             </div>
                             <div class="modal-footer">
                                 <button type="button" data-dismiss="modal" class="btn btn-outline dark">خیر</button>
                                 <button type="button" data-dismiss="modal"  class="btn green" id="removeFileSubmit" >بله</button>
                             </div>
                         </div>
-                        {!! Form::model($educationalContent , ['files'=>true,'method' => 'PUT','action' => ['EducationalContentController@update',$educationalContent], 'class'=>'form-horizontal' , 'id'=>'editForm' ,'accept-charset'=>'UTF-8' , 'enctype'=>'multipart/form-data']) !!}
+                        {!! Form::model($content , ['files'=>true,'method' => 'PUT','action' => ['ContentController@update',$content], 'class'=>'form-horizontal' , 'id'=>'editForm' ,'accept-charset'=>'UTF-8' , 'enctype'=>'multipart/form-data']) !!}
                             @if(isset($contentset))
                                 {!! Form::hidden('contentset', $contentset->id) !!}
                             @endif
-                            @include('educationalContent.form2')
+                            @include('content.form2')
                         {!! Form::close() !!}
                     </div>
                 </div>
@@ -115,6 +115,6 @@
 
 @section("extraJS")
     <script src="/js/extraJS/scripts/admin-makeMultiSelect.js" type="text/javascript"></script>
-    <script src="/js/extraJS/edit-educationalContent.js" type="text/javascript"></script>
+    <script src="/js/extraJS/edit-content.js" type="text/javascript"></script>
 @endsection
 @endpermission

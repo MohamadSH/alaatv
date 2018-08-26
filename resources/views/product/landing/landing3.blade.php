@@ -842,7 +842,7 @@
 
     <footer class="site-footer site-footer-lading" role="contentinfo">
         <section class="sec-dwon-sample">
-            <a href="{{ action('EducationalContentController@show',7884) }}" class="down-sample" title="دانلود نمونه فیلم">
+            <a href="{{ action('ContentController@show',7884) }}" class="down-sample" title="دانلود نمونه فیلم">
                         <span>
                            دانلود نمونه فیلم همایش
                         </span>

@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use App\{
-    Afterloginformcontrol, Article, Articlecategory, Assignment, Attribute, Attributegroup, Attributeset, Attributevalue, City, Consultation, Contact, Coupon, Educationalcontent, Employeetimesheet, Eventresult, File, Mbtianswer, Order, Orderproduct, Permission, Phone, Product, Productfile, Productphoto, Role, Slideshow, User, Userbon, Userupload, Verificationmessage, Wallet, Websitesetting
+    Afterloginformcontrol, Article, Articlecategory, Assignment, Attribute, Attributegroup, Attributeset, Attributevalue, City, Consultation, Contact, Coupon, Content, Employeetimesheet, Eventresult, File, Mbtianswer, Order, Orderproduct, Permission, Phone, Product, Productfile, Productphoto, Role, Slideshow, User, Userbon, Userupload, Verificationmessage, Wallet, Websitesetting
 };
 use Illuminate\Support\Facades\{
     Cache, Config, Route
@@ -220,10 +220,10 @@ class RouteServiceProvider extends ServiceProvider
             });
 
         });
-        Route::bind('educationalContent', function($value){
-            $key = "Educationalcontent:".$value;
+        Route::bind('content', function($value){
+            $key = "Content:".$value;
            return Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($value){
-               $c = Educationalcontent::where('id', $value)->first();
+               $c = Content::where('id', $value)->first();
                if (isset($c)) {
                    if (!$c->relationLoaded('template'))
                        $c->load("template");
@@ -237,9 +237,9 @@ class RouteServiceProvider extends ServiceProvider
 
         });
         Route::bind('c', function($value){
-            $key = "Educationalcontent:".$value;
+            $key = "Content:".$value;
             return Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($value){
-                $c = Educationalcontent::where('id', $value)->first();
+                $c = Content::where('id', $value)->first();
                 if (isset($c)) {
                     if (!$c->relationLoaded('template'))
                         $c->load("template");

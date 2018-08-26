@@ -205,7 +205,7 @@ return [
 
         'pamphlet' => [
             'driver' => 'local',
-            'root'   => storage_path('app/public/educationalContent/pamphlet'),
+            'root'   => storage_path('app/public/content/pamphlet'),
             'visibility' => 'public',
         ],
 
@@ -227,7 +227,7 @@ return [
 
         'book' => [
             'driver' => 'local',
-            'root'   => storage_path('app/public/educationalContent/book'),
+            'root'   => storage_path('app/public/content/book'),
             'visibility' => 'public',
         ],
 

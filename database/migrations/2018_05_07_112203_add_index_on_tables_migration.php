@@ -22,14 +22,14 @@ class AddIndexOnTablesMigration extends Migration
             if (! $dbSchemaManager->listTableDetails('products')->hasIndex('products_order_index'))
                 $table->index('order');
         });
-        Schema::table('educationalcontents', function(Blueprint $table) use($conn,$dbSchemaManager)
+        Schema::table('contents', function(Blueprint $table) use($conn,$dbSchemaManager)
         {
-            if (! $dbSchemaManager->listTableDetails('educationalcontents')->hasIndex('educationalcontents_created_at_index'))
+            if (! $dbSchemaManager->listTableDetails('contents')->hasIndex('contents_created_at_index'))
                 $table->index('created_at');
         });
-        Schema::table('contentset_educationalcontent', function(Blueprint $table) use ($conn,$dbSchemaManager)
+        Schema::table('contentset_content', function(Blueprint $table) use ($conn,$dbSchemaManager)
         {
-            if (! $dbSchemaManager->listTableDetails('contentset_educationalcontent')->hasIndex('contentset_educationalcontent_order_index'))
+            if (! $dbSchemaManager->listTableDetails('contentset_content')->hasIndex('contentset_content_order_index'))
                 $table->index('order');
         });
         Schema::table('contentsets', function(Blueprint $table) use ($conn,$dbSchemaManager)
@@ -77,15 +77,15 @@ class AddIndexOnTablesMigration extends Migration
             if ($dbSchemaManager->listTableDetails('products')->hasIndex('products_order_index'))
                 $table->dropIndex('products_order_index');
         });
-        Schema::table('educationalcontents', function(Blueprint $table) use($conn,$dbSchemaManager)
+        Schema::table('contents', function(Blueprint $table) use($conn,$dbSchemaManager)
         {
-            if ($dbSchemaManager->listTableDetails('educationalcontents')->hasIndex('educationalcontents_created_at_index'))
-                $table->dropIndex('educationalcontents_created_at_index');
+            if ($dbSchemaManager->listTableDetails('contents')->hasIndex('contents_created_at_index'))
+                $table->dropIndex('contents_created_at_index');
         });
-        Schema::table('contentset_educationalcontent', function(Blueprint $table) use ($conn,$dbSchemaManager)
+        Schema::table('contentset_content', function(Blueprint $table) use ($conn,$dbSchemaManager)
         {
-            if ($dbSchemaManager->listTableDetails('contentset_educationalcontent')->hasIndex('contentset_educationalcontent_order_index'))
-                $table->dropIndex('contentset_educationalcontent_order_index');
+            if ($dbSchemaManager->listTableDetails('contentset_content')->hasIndex('contentset_content_order_index'))
+                $table->dropIndex('contentset_content_order_index');
         });
         Schema::table('contentsets', function(Blueprint $table) use ($conn,$dbSchemaManager)
         {

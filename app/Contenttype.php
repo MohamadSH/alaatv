@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Carbon\Carbon|null $updated_at
  * @property \Carbon\Carbon|null $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Contenttype[] $children
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Educationalcontent[] $educationalcontents
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Content[] $contents
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Contenttype[] $parents
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Contenttype onlyTrashed()
@@ -51,9 +51,9 @@ class Contenttype extends Model
         'enable',
     ];
 
-    public function educationalcontents()
+    public function contents()
     {
-        return $this->belongsToMany('App\Educationalcontent', 'educationalcontent_contenttype', 'contenttype_id', 'content_id');
+        return $this->belongsToMany('App\Content', 'educationalcontent_contenttype', 'contenttype_id', 'content_id');
     }
 
     public function parents()

@@ -59,7 +59,7 @@ use Schema;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Belonging[] $belongings
  * @property-read \App\Bloodtype|null $bloodtype
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Contact[] $contacts
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Educationalcontent[] $contents
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Content[] $contents
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Employeeschedule[] $employeeschedules
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Employeetimesheet[] $employeetimesheets
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Eventresult[] $eventresults
@@ -397,7 +397,7 @@ class User extends Authenticatable
 
     public function contents()
     {
-        return $this->hasMany("\App\Educationalcontent" , "author_id" , "id");
+        return $this->hasMany("\App\Content" , "author_id" , "id");
     }
 
     public function products(){

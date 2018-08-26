@@ -1,7 +1,7 @@
 <div class="col-md-4">
     <label class="mt-checkbox mt-checkbox-outline">
         <div class="md-checkbox" >
-            @if($educationalContent->enable)
+            @if($content->enable)
                 {!! Form::checkbox('enable', '1', null,  ['value' => '1' , 'id' => 'checkbox_enable' , 'class'=>'md-check' , 'checked']) !!}
             @else
                 {!! Form::checkbox('enable', '1', null,  ['value' => '1' , 'id' => 'checkbox_enable' , 'class'=>'md-check' ]) !!}
@@ -15,21 +15,21 @@
             </label>
         </div>
     </label>
-    {{--{!! Form::select('grades[]',$grades,$educationalContent->grades,['multiple' => 'multiple','class' => 'mt-multiselect btn btn-default', 'id' => 'grades' , "data-label" => "left" , "data-width" => "100%" , "data-filter" => "true" , "data-height" => "200" , "title" => "مقطع ها"]) !!}--}}
+    {{--{!! Form::select('grades[]',$grades,$content->grades,['multiple' => 'multiple','class' => 'mt-multiselect btn btn-default', 'id' => 'grades' , "data-label" => "left" , "data-width" => "100%" , "data-filter" => "true" , "data-height" => "200" , "title" => "مقطع ها"]) !!}--}}
 
-    {{--{!! Form::select('majors[]',$majors,$educationalContent->majors,['multiple' => 'multiple','class' => 'mt-multiselect btn btn-default', 'id' => 'majors' , "data-label" => "left" , "data-width" => "100%" , "data-filter" => "true" , "data-height" => "200" , "title" => "رشته ها"]) !!}--}}
+    {{--{!! Form::select('majors[]',$majors,$content->majors,['multiple' => 'multiple','class' => 'mt-multiselect btn btn-default', 'id' => 'majors' , "data-label" => "left" , "data-width" => "100%" , "data-filter" => "true" , "data-height" => "200" , "title" => "رشته ها"]) !!}--}}
     {{--<select name="contenttype_id" class="form-control" id="rootContentTypes" >--}}
         {{--<option value="" selected>انتخاب نوع محتوا</option>--}}
         {{--@foreach($rootContentTypes as $rootContentType)--}}
-            {{--<option value="{{$rootContentType->id}}" data-title="{{$rootContentType->name}}" @if(in_array($rootContentType->id,$educationalContent->contenttypes->pluck('id')->toArray())) selected @endif >{{$rootContentType->displayName}}</option>--}}
+            {{--<option value="{{$rootContentType->id}}" data-title="{{$rootContentType->name}}" @if(in_array($rootContentType->id,$content->contenttypes->pluck('id')->toArray())) selected @endif >{{$rootContentType->displayName}}</option>--}}
         {{--@endforeach--}}
     {{--</select>--}}
     {{--{!! Form::select("contenttypes[]", $childContentTypes , null, ['class' => 'form-control', 'id'=>'childContentTypes' , 'placeholder' => 'انتخاب زیر شاخه' ]) !!}--}}
     <ul class="list-group margin-top-20 text-center">
         <li class="list-group-item bold" style="font-size: small">فایل های موجود
         </li>
-        @if($educationalContent->files->isNotEmpty())
-            @foreach($educationalContent->files as $file)
+        @if($content->files->isNotEmpty())
+            @foreach($content->files as $file)
                 <li class="list-group-item" style="font-size: small">
                     <div class="row margin-bottom-5">
                         <span class="badge badge-danger" dir="ltr"> {{basename($file->name, "." . pathinfo($file->name, PATHINFO_EXTENSION)) }} </span>
@@ -39,13 +39,13 @@
                                 <a target="_blank" href="{{action("HomeController@download" , ["fileName"=>$file->uuid ])}}" class="btn blue-dark"><i class="fa fa-download"></i></a>
                             </span>
                             <span class="input-group-btn">
-                                    <a  class="btn btn-icon-only btn-outline red removeFile" data-target="#deleteFileConfirmationModal" data-toggle="modal" data-id="{{$file->id}}" data-to="{{$educationalContent->id}}">
+                                    <a  class="btn btn-icon-only btn-outline red removeFile" data-target="#deleteFileConfirmationModal" data-toggle="modal" data-id="{{$file->id}}" data-to="{{$content->id}}">
                                         <i class="fa fa-times"></i>
                                     </a>
                             </span>
                             <input type="text" value="@if(isset($file->pivot->caption[0])){{$file->pivot->caption}}@endif" id="caption_{{$file->id}}"  class="form-control" maxlength="50" placeholder="کپشن">
                             <span class="input-group-btn">
-                                    <button type="button" class="btn blue fileCaptionSubmit" id="captionSubmit_{{$file->id}}" data-to="{{$educationalContent->id}}">ذخیره کپشن</button>
+                                    <button type="button" class="btn blue fileCaptionSubmit" id="captionSubmit_{{$file->id}}" data-to="{{$content->id}}">ذخیره کپشن</button>
                             </span>
                         </div>
                         <!-- /input-group -->
@@ -88,8 +88,8 @@
     <div class="form-group">
         <label class=" col-md-4 control-label" for="validSinceDate">نمایان شدن برای کاربران</label>
         <div class="col-md-3">
-            <input  type="text" name="validSinceDate" class="form-control"  value="@if(isset($educationalContent->validSince)){{$educationalContent->validSince}}@endif"  dir="ltr">
-            {{--<input  type="text" class="form-control" id="validSinceDate" value="@if(isset($educationalContent->validSince)){{$educationalContent->validSince}}@endif"  dir="ltr">--}}
+            <input  type="text" name="validSinceDate" class="form-control"  value="@if(isset($content->validSince)){{$content->validSince}}@endif"  dir="ltr">
+            {{--<input  type="text" class="form-control" id="validSinceDate" value="@if(isset($content->validSince)){{$content->validSince}}@endif"  dir="ltr">--}}
             {{--<input name="validSinceDate" id="validSinceDateAlt"  type="text" class="form-control hidden">--}}
         </div>
         {{--<div class="col-md-2">--}}

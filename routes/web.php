@@ -13,7 +13,7 @@
  
  
 Route::get('c',"HomeController@search");
-Route::get('embed/c/{educationalcontent}',"EducationalContentController@embed");
+Route::get('embed/c/{content}',"ContentController@embed");
 Route::get( '/' , 'HomeController@index');
 Route::get( 'home' , 'HomeController@home');
 Route::get('404', 'HomeController@error404');
@@ -33,7 +33,7 @@ Route::post('user/getPassword' , 'UserController@sendGeneratedPassword');
 Route::get('product/search', 'ProductController@search');
 Route::get('showPartial/{product}' , 'ProductController@showPartial');
 Route::post('refreshPrice/{product}' , 'ProductController@refreshPrice');
-Route::get("ctag" , "EducationalContentController@retrieveTags");
+Route::get("ctag" , "ContentController@retrieveTags");
 Route::get('Sanati-Sharif-Lesson/{lId?}/{dId?}','SanatisharifmergeController@redirectLesson');
 Route::get('sanati-sharif-lesson/{lId?}/{dId?}','SanatisharifmergeController@redirectLesson');
 Route::get('Sanati-Sharif-Video/{lId?}/{dId?}/{vId?}','SanatisharifmergeController@redirectVideo');
@@ -74,11 +74,11 @@ Route::group(['prefix' => 'orderproduct'], function () {
     Route::post('checkout' , 'OrderproductController@checkOutOrderproducts') ;
 });
 Route::group(['prefix' => 'content'], function () {
-    Route::get('/' , 'EducationalContentController@index');
-    Route::get('search', 'EducationalContentController@search');
-    Route::get('create2', 'EducationalContentController@create2');
+    Route::get('/' , 'ContentController@index');
+    Route::get('search', 'ContentController@search');
+    Route::get('create2', 'ContentController@create2');
 });
-Route::post('basicStore' , 'EducationalContentController@basicStore') ;
+Route::post('basicStore' , 'ContentController@basicStore') ;
 
 Route::group(['prefix' => 'landing'], function () {
     Route::get('1' , 'ProductController@landing1') ;
@@ -121,8 +121,8 @@ Route::group(['middleware' => 'auth'], function()
     Route::post('exchangeOrderproduct/{order}' , 'OrderController@exchangeOrderproduct');
     Route::get('MBTI-Participation' , "MbtianswerController@create");
     Route::get('MBTI-Introduction' , "MbtianswerController@introduction");
-    Route::post('storeContentFileCaption/{c}/{file}' , 'EducationalContentController@storeFileCaption');
-    Route::post('detachContentFile/{c}/{file}' , 'EducationalContentController@detachFile');
+    Route::post('storeContentFileCaption/{c}/{file}' , 'ContentController@storeFileCaption');
+    Route::post('detachContentFile/{c}/{file}' , 'ContentController@detachFile');
     Route::get('holdlottery' , "LotteryController@holdLottery");
     Route::get('givePrize', "LotteryController@givePrizes");
     Route::get('smsbot' , "HomeController@smsBot");
@@ -221,7 +221,7 @@ Route::group(['middleware' => 'auth'], function()
 
 Route::resource('product', 'ProductController');
 Route::resource('orderproduct', 'OrderproductController');
-Route::resource('c', 'EducationalContentController', [
+Route::resource('c', 'ContentController', [
     'except' => [
         'index'
     ]

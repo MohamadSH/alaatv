@@ -45,11 +45,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string|null $teacherlastname نام خانوادگی دبیر
  * @property string|null $pageOldAddress آدرس قدیم صفحه
  * @property string|null $pageNewAddress آدرس جدید صفحه
- * @property int|null $educationalcontent_id آدرس محتوای نظیر در صورت وجود
+ * @property int|null $content_id آدرس محتوای نظیر در صورت وجود
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property \Carbon\Carbon|null $deleted_at
- * @property-read \App\Educationalcontent|null $educationalcontent
+ * @property-read \App\Content|null $content
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Sanatisharifmerge onlyTrashed()
  * @method static bool|null restore()
@@ -62,7 +62,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge whereDepid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge whereDepname($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge whereDepyear($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge whereEducationalcontentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge whereContentId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge whereIsexercise($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge whereKeywords($value)
@@ -143,10 +143,10 @@ class Sanatisharifmerge extends Model
         'teacherlastname',
         'pageOldAddress',
         'pageNewAddress',
-        'educationalcontent_id',
+        'content_id',
     ];
 
-    public function  educationalcontent(){
-        return $this->belongsTo('App\Educationalcontent');
+    public function  content(){
+        return $this->belongsTo('App\Content');
     }
 }

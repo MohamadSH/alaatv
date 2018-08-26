@@ -159,7 +159,7 @@
             previewTemplate: '<div class="row"><div class="portlet light">\n' +
             '<div class="portlet-body">\n' +
             '<div class="row">\n '+
-            '<form method="POST" action="{{action('EducationalContentController@store')}}" accept-charset="UTF-8" class="contentInformationForm form-horizontal" enctype="multipart/form-data">\n' +
+            '<form method="POST" action="{{action('ContentController@store')}}" accept-charset="UTF-8" class="contentInformationForm form-horizontal" enctype="multipart/form-data">\n' +
             "<input name='_token' type='hidden' value='{{csrf_token()}}'>\n" +
             "<div class=\"col-md-2\">"+
             '<div class="input-group">\n' +
@@ -459,7 +459,7 @@
                     // Gets triggered when the files have successfully been sent.
                     // Redirect user or notify of success
 
-                    {{--files.previewElement.querySelector('.form-horizontal').action="{{action("EducationalContentController@store")}}"+"/"+response;--}}
+                    {{--files.previewElement.querySelector('.form-horizontal').action="{{action("ContentController@store")}}"+"/"+response;--}}
 //                    files.previewElement.querySelector('.form-horizontal').method="POST";
 //                    var methodInput = Dropzone.createElement("<input type='hidden' name='_method' value='PUT'>");
 //                    files.previewElement.querySelector('.form-horizontal').appendChild(methodInput);

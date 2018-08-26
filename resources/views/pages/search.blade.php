@@ -74,7 +74,7 @@
         <div class="search-bar bordered">
             <div class="row">
 
-                {!! Form::open(['action'=> 'EducationalContentController@index'  ,'role'=>'form' , 'id' => 'itemFilterForm'  ]) !!}
+                {!! Form::open(['action'=> 'ContentController@index'  ,'role'=>'form' , 'id' => 'itemFilterForm'  ]) !!}
                 <div class="form-body" id="itemFilterFormBody">
                     {{--CHECKBOXES FOR BUCKETS--}}
                     {{--<div class="form-group form-md-line-input form-md-floating-label has-info">--}}

@@ -34,7 +34,7 @@
 
                 {{--</div>--}}
                 <div class="portlet-body" >
-                    {!! Form::open(['action'=> 'EducationalContentController@index'  ,'class'=>'form-horizontal form-row-seperated' , 'id' => 'educationalContentFilterForm'  ]) !!}
+                    {!! Form::open(['action'=> 'ContentController@index'  ,'class'=>'form-horizontal form-row-seperated' , 'id' => 'contentFilterForm'  ]) !!}
                     <div class="form-body">
                         <div class="form-group form-md-line-input has-info form-md-floating-label">
                             <div class="col-md-12">
@@ -53,18 +53,18 @@
                             <div class="col-md-12">
                                 @include('admin.filters.gradeFilter', [
                                      "dropdown"=>true ,
-                                     'dropdownClass'=>'educationalContentFilter'
+                                     'dropdownClass'=>'contentFilter'
                                   ])
                             </div>
                         </div>
                         <div class="form-group form-md-line-input form-md-floating-label has-info">
                             <div class="col-md-12">
-                                @include('admin.filters.majorFilter' , ["dropdown"=>true , 'dropdownClass'=>'educationalContentFilter'])
+                                @include('admin.filters.majorFilter' , ["dropdown"=>true , 'dropdownClass'=>'contentFilter'])
                             </div>
                         </div>
                         <div class="form-group form-md-line-input form-md-floating-label has-info">
                             <div class="col-md-12">
-                                @include("admin.filters.contentTypeFilter" , ['dropdownClass'=>'educationalContentFilter'])
+                                @include("admin.filters.contentTypeFilter" , ['dropdownClass'=>'contentFilter'])
                             </div>
                         </div>
                         {{--<div class="form-group">--}}
@@ -80,11 +80,11 @@
                     </div>
                 </div>
             </div>
-            @if($soonEducationalContents->isNotEmpty())
+            @if($soonContents->isNotEmpty())
                 <div class="row">
                     <div class="col-md-12 margin-top-20">
-                        @include("educationalContent.partials.similarContent" , [
-                            "soonContentsWithSameType"=>$soonEducationalContents
+                        @include("content.partials.similarContent" , [
+                            "soonContentsWithSameType"=>$soonContents
                         ])
 
                     </div>
@@ -104,7 +104,7 @@
 
                 </div>
                 <div class="portlet-body" >
-                        <table class="table table-striped table-bordered table-hover dt-responsive"  id="educationalContent_table">
+                        <table class="table table-striped table-bordered table-hover dt-responsive"  id="content_table">
                             <thead>
                             <tr>
                                 <th></th>
@@ -187,9 +187,9 @@
     <script src="/js/extraJS/scripts/admin-makeDataTable.js" type="text/javascript"></script>
     <script type="text/javascript">
 
-        makeDataTableWithoutButton("educationalContent_table");
+        makeDataTableWithoutButton("content_table");
 
-        $(document).on("change", ".educationalContentFilter", function (){
+        $(document).on("change", ".contentFilter", function (){
             contentLoad();
         });
 
@@ -202,21 +202,21 @@
         });
 
         function contentLoad() {
-            var formData = $("#educationalContentFilterForm").serialize();
+            var formData = $("#contentFilterForm").serialize();
             var columns= [ "columns[]=name" , "columns[]=show" , "columns[]=grade" , "columns[]=major" , "columns[]=contentType" ] ;
             formData = formData + "&" + columns.join('&') ;
             $("#content-table-loading").removeClass("hidden");
             $.ajax({
                 type: "GET",
-                url: "{{action("EducationalContentController@index")}}",
+                url: "{{action("ContentController@index")}}",
                 data:formData,
                 success: function (result) {
                     // console.log(result);
                     // console.log(result.responseText);
-                    var newDataTable =$("#educationalContent_table").DataTable();
+                    var newDataTable =$("#content_table").DataTable();
                     newDataTable.destroy();
-                    $('#educationalContent_table > tbody').html(result);
-                    makeDataTableWithoutButton("educationalContent_table");
+                    $('#content_table > tbody').html(result);
+                    makeDataTableWithoutButton("content_table");
                     $("#content-table-loading").addClass("hidden");
                 },
                 error: function (result) {

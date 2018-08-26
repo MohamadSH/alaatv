@@ -39,7 +39,7 @@
                     @else
                 {
                     thumb: '{{(isset($item["thumbnail"]))?$item["thumbnail"]:""}}',
-                    url: '{{action("EducationalContentController@show" , $item["content"])}}',
+                    url: '{{action("ContentController@show" , $item["content"])}}',
                     title: ' {{($item["content"]->display_name)}}',
                     duration: '20:00'
                 },
@@ -60,8 +60,8 @@
                     endAction: 'related',
 
                     shareTitle: '{{ $video->display_name }}',
-                    shareUrl: '{{action("EducationalContentController@show" , $video)}}',
-                    shareEmbed: '<iframe src="{{action('EducationalContentController@embed' , $video)}}" width="640" height="360" frameborder="0" allowfullscreen></iframe>'
+                    shareUrl: '{{action("ContentController@show" , $video)}}',
+                    shareEmbed: '<iframe src="{{action('ContentController@embed' , $video)}}" width="640" height="360" frameborder="0" allowfullscreen></iframe>'
                 });
             });
             player.on('resolutionchange', function(){

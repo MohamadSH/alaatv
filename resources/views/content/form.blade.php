@@ -1,12 +1,12 @@
 <div class="portlet">
     <div class="portlet-title">
         <div class="caption">
-            <i class="fa fa-file-text"></i>@if(isset($educationalContent))اصلاح@elseدرج@endif محتوای آموزشی </div>
+            <i class="fa fa-file-text"></i>@if(isset($content))اصلاح@elseدرج@endif محتوای آموزشی </div>
         <div class="actions btn-set">
             <label class="mt-checkbox mt-checkbox-outline">
                 <div class="md-checkbox" >
-                    @if(isset($educationalContent))
-                        @if($educationalContent->enable)
+                    @if(isset($content))
+                        @if($content->enable)
                             {!! Form::checkbox('enable', '1', null,  ['value' => '1' , 'id' => 'checkbox_enable' , 'class'=>'md-check' , 'checked']) !!}
                         @else
                             {!! Form::checkbox('enable', '1', null,  ['value' => '1' , 'id' => 'checkbox_enable' , 'class'=>'md-check' ]) !!}
@@ -25,7 +25,7 @@
                 </div>
             </label>
             <button type="submit" class="btn btn-success">
-                <i class="fa fa-check"></i> @if(isset($educationalContent))اصلاح@elseذخیره@endif </button>
+                <i class="fa fa-check"></i> @if(isset($content))اصلاح@elseذخیره@endif </button>
             <a href="{{action("HomeController@adminContent")}}" type="button" title="back" class="btn btn-dark btn-secondary-outline">
                 <i class="fa fa-angle-left"></i> بازگشت </a>
         </div>

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Educationalcontent;
+use App\Content;
 use App\Product;
 use Watson\Sitemap\Facades\Sitemap;
 
@@ -31,7 +31,7 @@ class SitemapController extends Controller
     }
 
     public function eContents(){
-        $contents = Educationalcontent::select()
+        $contents = Content::select()
             ->active()
             ->orderBy("created_at" , "desc")
             ->get();

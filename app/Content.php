@@ -17,10 +17,9 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\URL;
 
 /**
- * App\Educationalcontent
+ * App\Content
  *
  * @property int $id
  * @property int|null $author_id آی دی مشخص کننده به وجود آورنده اثر
@@ -48,36 +47,36 @@ use Illuminate\Support\Facades\URL;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Major[] $majors
  * @property-read \App\Template|null $template
  * @property-read \App\User|null $user
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Educationalcontent active()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Educationalcontent enable($enable = 1)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Content active()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Content enable($enable = 1)
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|\App\Educationalcontent onlyTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Content onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Educationalcontent soon()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Educationalcontent valid()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Educationalcontent whereAuthorId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Educationalcontent whereContenttypeId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Educationalcontent whereContext($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Educationalcontent whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Educationalcontent whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Educationalcontent whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Educationalcontent whereEnable($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Educationalcontent whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Educationalcontent whereMetaDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Educationalcontent whereMetaKeywords($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Educationalcontent whereMetaTitle($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Educationalcontent whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Educationalcontent whereOrder($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Educationalcontent whereTags($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Educationalcontent whereTemplateId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Educationalcontent whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Educationalcontent whereValidSince($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Educationalcontent withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Educationalcontent withoutTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Content soon()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Content valid()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereAuthorId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereContenttypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereContext($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereEnable($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereMetaDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereMetaKeywords($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereMetaTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereOrder($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereTags($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereTemplateId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereValidSince($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Content withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Content withoutTrashed()
  * @mixin \Eloquent
  * @property-read mixed $display_name
  */
-class Educationalcontent extends Model implements Advertisable, Taggable
+class Content extends Model implements Advertisable, Taggable
 {
     use APIRequestCommon;
     use SoftDeletes;
@@ -88,6 +87,8 @@ class Educationalcontent extends Model implements Advertisable, Taggable
         'updated_at',
         'deleted_at'
     ];
+
+    protected $table = "educationalcontents";
 
     protected $fillable = [
         'name',
@@ -123,12 +124,12 @@ class Educationalcontent extends Model implements Advertisable, Taggable
      */
     public function fixFiles()
     {
-        $educationalContent = $this;
+        $content = $this;
         $files = collect();
         $this->timestamps = false;
-        switch ($educationalContent->template->name) {
+        switch ($content->template->name) {
             case "video1":
-                $file = $educationalContent->files->where("pivot.label", "hd")->first();
+                $file = $content->files->where("pivot.label", "hd")->first();
                 if (isset($file)) {
                     $url = $file->name;
                     $size = null;
@@ -149,7 +150,7 @@ class Educationalcontent extends Model implements Advertisable, Taggable
                     ]);
                 }
 
-                $file = $educationalContent->files->where("pivot.label", "hq")->first();
+                $file = $content->files->where("pivot.label", "hq")->first();
                 if (isset($file)) {
                     $url = $file->name;
                     $size = null;
@@ -170,7 +171,7 @@ class Educationalcontent extends Model implements Advertisable, Taggable
                 }
 
 
-                $file = $educationalContent->files->where("pivot.label", "240p")->first();
+                $file = $content->files->where("pivot.label", "240p")->first();
                 if (isset($file)) {
                     $url = $file->name;
                     $size = null;
@@ -191,7 +192,7 @@ class Educationalcontent extends Model implements Advertisable, Taggable
                 }
 
 
-                $file = optional($educationalContent->files->where("pivot.label", "thumbnail")->first());
+                $file = optional($content->files->where("pivot.label", "thumbnail")->first());
 
                 $url = $file->name;
                 if(isset($url))
@@ -213,7 +214,7 @@ class Educationalcontent extends Model implements Advertisable, Taggable
                 break;
 
             case  "pamphlet1":
-                $pFiles = $educationalContent->files;
+                $pFiles = $content->files;
                 foreach ($pFiles as $file) {
                     $type = "pdf";
                     $res = null;
@@ -442,7 +443,7 @@ class Educationalcontent extends Model implements Advertisable, Taggable
     }
 
     /**
-     * Scope a query to only include enable(or disable) EducationalContents.
+     * Scope a query to only include enable(or disable) Contents.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param int $enable
@@ -455,7 +456,7 @@ class Educationalcontent extends Model implements Advertisable, Taggable
     }
 
     /**
-     * Scope a query to only include Valid EducationalContents.
+     * Scope a query to only include Valid Contents.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder
@@ -473,7 +474,7 @@ class Educationalcontent extends Model implements Advertisable, Taggable
     }
 
     /**
-     * Scope a query to only include EducationalContents that will come soon.
+     * Scope a query to only include Contents that will come soon.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder
@@ -485,7 +486,7 @@ class Educationalcontent extends Model implements Advertisable, Taggable
 
     public function contentsWithSameType($enable = 1, $valid = 1)
     {
-        $contentsWithSameType = Educationalcontent::where("id", "<>", $this->id);
+        $contentsWithSameType = Content::where("id", "<>", $this->id);
         if ($enable) $contentsWithSameType = $contentsWithSameType->enable();
         if ($valid) $contentsWithSameType = $contentsWithSameType->valid();
         $contentTypes = $this->contenttypes->pluck("id")->toArray();
@@ -606,7 +607,7 @@ class Educationalcontent extends Model implements Advertisable, Taggable
     {
         $contentSet = $this->contentset;
 
-        $sameContents = optional($contentSet)->educationalcontents()
+        $sameContents = optional($contentSet)->contents()
             ->active()
             ->get()
             ->sortBy("pivot.order")
@@ -643,7 +644,7 @@ class Educationalcontent extends Model implements Advertisable, Taggable
     {
         $adItems = collect();
         if ($this->contentsets->isNotEmpty() && $this->contentsets->first()->id != 199)
-            $adItems = Educationalcontent::whereHas("contentsets", function ($q) {
+            $adItems = Content::whereHas("contentsets", function ($q) {
                 $q->where("id", 199);
             })
                 ->where("enable", 1)

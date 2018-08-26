@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Contentset;
 use App\Contenttype;
-use App\Educationalcontent;
-use App\Http\Requests\EditEducationalContentRequest;
-use App\Http\Requests\InsertEducationalContentFileCaption;
-use App\Http\Requests\InsertEducationalContentRequest;
+use App\Content;
+use App\Http\Requests\EditContentRequest;
+use App\Http\Requests\InsertContentFileCaption;
+use App\Http\Requests\InsertContentRequest;
 use App\Http\Requests\InsertFileRequest;
 use App\Http\Requests\Request;
 use App\Traits\APIRequestCommon;
@@ -27,7 +27,7 @@ use SEO;
 use SSH;
 
 
-class EducationalContentController extends Controller
+class ContentController extends Controller
 {
     use APIRequestCommon;
     protected $response ;
@@ -71,11 +71,11 @@ class EducationalContentController extends Controller
     {
         if(Input::has("controlPanel")){
             if(Auth::check()&& Auth::user()->can(Config::get('constants.LIST_EDUCATIONAL_CONTENT_ACCESS')))
-                $educationalContents = Educationalcontent::orderBy("created_at" , "DESC");
+                $contents = Content::orderBy("created_at" , "DESC");
             else abort(403) ;
         }
         else
-            $educationalContents = Educationalcontent::enable()->valid()->orderBy("validSince","DESC");
+            $contents = Content::enable()->valid()->orderBy("validSince","DESC");
 
         if(Input::has("searchText"))
         {
@@ -83,7 +83,7 @@ class EducationalContentController extends Controller
             if(strlen(preg_replace('/\s+/', '', $text)) >0)
             {
                 $words = explode(" " , $text);
-                $educationalContents = $educationalContents->where(function ($q) use ($words) {
+                $contents = $contents->where(function ($q) use ($words) {
                 foreach ($words as $word)
                 {
                     $q->orwhere('name', 'like', '%' . $word . '%')->orWhere('description', 'like', '%' . $word . '%');
@@ -97,7 +97,7 @@ class EducationalContentController extends Controller
         {
             $majorsId = Input::get("majors");
             if(!in_array(  0 , $majorsId))
-                $educationalContents = $educationalContents->whereHas("majors" , function ($q) use ($majorsId){
+                $contents = $contents->whereHas("majors" , function ($q) use ($majorsId){
                     $q->whereIn("id" , $majorsId);
                 });
         }
@@ -106,7 +106,7 @@ class EducationalContentController extends Controller
         {
             $gradesId = Input::get("grades");
             if(!in_array(  0 , $gradesId))
-                $educationalContents = $educationalContents->whereHas("grades", function ($q) use ($gradesId) {
+                $contents = $contents->whereHas("grades", function ($q) use ($gradesId) {
                     $q->whereIn("id", $gradesId);
                 });
         }
@@ -124,7 +124,7 @@ class EducationalContentController extends Controller
                 }
                 foreach ($contentTypes as $id)
                 {
-                    $educationalContents = $educationalContents->whereHas("contenttypes" , function ($q) use ($id)
+                    $contents = $contents->whereHas("contenttypes" , function ($q) use ($id)
                     {
                         $q->where("id" , $id ) ;
                     });
@@ -133,23 +133,23 @@ class EducationalContentController extends Controller
 
         }
 
-        $educationalContents = $educationalContents->get();
+        $contents = $contents->get();
         if(Input::has("columns"))
             $columns = Input::get("columns");
-        return view("educationalContent.index" , compact("educationalContents" , "columns"));
+        return view("content.index" , compact("contents" , "columns"));
     }
 
-    public function embed(Request $request , Educationalcontent $educationalcontent){
-        $url = action('EducationalContentController@show', $educationalcontent);
+    public function embed(Request $request , Content $content){
+        $url = action('ContentController@show', $content);
         //TODO:// $this->generateSeoMetaTags
         SEO::opengraph()->setUrl($url);
         SEO::setCanonical($url);
         SEO::twitter()->setSite("آلاء");
 
         //TODO: use Content Type instead of template_id
-        if($educationalcontent->template_id != 1)
+        if($content->template_id != 1)
             return redirect($url, 301);
-        $video = $educationalcontent;
+        $video = $content;
 
         [
             $contentsWithSameSet ,
@@ -157,7 +157,7 @@ class EducationalContentController extends Controller
         ]  = $video->getSetMates();
         $files = $video->files;
 
-        return view("educationalContent.embed",compact('video','files','contentsWithSameSet','contentSetName'));
+        return view("content.embed",compact('video','files','contentsWithSameSet','contentSetName'));
     }
     /**
      * Show the form for creating a new resource.
@@ -177,7 +177,7 @@ class EducationalContentController extends Controller
             ->values()
             ->pluck("full_name", "id");
 
-        return view("educationalContent.create2" , compact("rootContentTypes" ,
+        return view("content.create2" , compact("rootContentTypes" ,
                                                                         "contentsets" ,
                                                                             "authors"
                                                                         )) ;
@@ -194,24 +194,24 @@ class EducationalContentController extends Controller
         $contenttypes->put("8" , "فیلم");
         $contenttypes->put("1" , "جزوه");
 
-        return view("educationalContent.create3" , compact("contenttypes")) ;
+        return view("content.create3" , compact("contenttypes")) ;
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\InsertEducationalContentRequest  $request
+     * @param  \App\Http\Requests\InsertContentRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(InsertEducationalContentRequest $request)
+    public function store(InsertContentRequest $request)
     {
 
         try
         {
-            $educationalContent = new Educationalcontent();
-            $educationalContent->fill($request->all()) ;
-            if(is_null($educationalContent->order))
-                $educationalContent->order = 0;
+            $content = new Content();
+            $content->fill($request->all()) ;
+            if(is_null($content->order))
+                $content->order = 0;
             $fileController = new FileController();
             $fileRequest = new InsertFileRequest();
 
@@ -227,21 +227,21 @@ class EducationalContentController extends Controller
                 $validSince = $request->get("validSinceDate");
                 $validSince = Carbon::parse($validSince)->format('Y-m-d'); //Muhammad : added a day because it returns one day behind and IDK why!!
                 if(isset($time)) $validSince = $validSince . " " . $time;
-                $educationalContent->validSince = $validSince;
+                $content->validSince = $validSince;
             }
 
             if($request->has("enable"))
-                $educationalContent->enable = 1;
+                $content->enable = 1;
             else
-                $educationalContent->enable = 0 ;
+                $content->enable = 0 ;
 
-            switch ($educationalContent->contenttype_id)
+            switch ($content->contenttype_id)
             {
                 case 1 : // pamphlet
-                    $educationalContent->template_id = 2 ;
+                    $content->template_id = 2 ;
                     break;
                 case 8 : // video
-                    $educationalContent->template_id = 1;
+                    $content->template_id = 1;
                     break;
                 default:
                     break;
@@ -256,11 +256,11 @@ class EducationalContentController extends Controller
                     "bucket" => "content",
                     "tags" => $tags
                 ];
-                $educationalContent->tags = json_encode($tagsJson, JSON_UNESCAPED_UNICODE);
+                $content->tags = json_encode($tagsJson, JSON_UNESCAPED_UNICODE);
             }
 
             $done = false ;
-            if($educationalContent->save()){
+            if($content->save()){
 
                 if($request->has("contentset_id"))
                 {
@@ -277,9 +277,9 @@ class EducationalContentController extends Controller
                     }
 
                     if(empty($pivots))
-                        $educationalContent->contentsets()->attach($contentset_id);
+                        $content->contentsets()->attach($contentset_id);
                     else
-                        $educationalContent->contentsets()->attach($contentset_id , $pivots);
+                        $content->contentsets()->attach($contentset_id , $pivots);
                 }
 
                 if($request->has("file"))
@@ -306,7 +306,7 @@ class EducationalContentController extends Controller
                         }
                         else
                         {
-                            $disk = $educationalContent->fileMultiplexer();
+                            $disk = $content->fileMultiplexer();
                             if($disk !== false)
                                 $fileRequest->offsetSet('disk_id' , $disk->id) ;
                         }
@@ -324,28 +324,28 @@ class EducationalContentController extends Controller
                                 $attachPivot["label"] = $label;
 
                             if(empty($attachPivot))
-                                $educationalContent->files()->attach($fileId);
+                                $content->files()->attach($fileId);
                             else
-                                $educationalContent->files()->attach($fileId , $attachPivot);
+                                $content->files()->attach($fileId , $attachPivot);
                         }
                     }
 
                 }
 
-                if($educationalContent->enable  &&  isset($educationalContent->tags) &&
-                    is_array($educationalContent->tags->tags) &&
-                    !empty($educationalContent->tags->tags))
+                if($content->enable  &&  isset($content->tags) &&
+                    is_array($content->tags->tags) &&
+                    !empty($content->tags->tags))
                 {
-                    $itemTagsArray = $educationalContent->tags->tags ;
+                    $itemTagsArray = $content->tags->tags ;
                     $params = [
                         "tags" => json_encode($itemTagsArray, JSON_UNESCAPED_UNICODE),
                     ];
 
-                    if(isset($educationalContent->created_at) && strlen($educationalContent->created_at) > 0 )
-                        $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $educationalContent->created_at )->timestamp;
+                    if(isset($content->created_at) && strlen($content->created_at) > 0 )
+                        $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $content->created_at )->timestamp;
 
                     $response =  $this->sendRequest(
-                        config("constants.TAG_API_URL")."id/content/".$educationalContent->id ,
+                        config("constants.TAG_API_URL")."id/content/".$content->id ,
                         "PUT",
                         $params
                     );
@@ -373,7 +373,7 @@ class EducationalContentController extends Controller
             {
                 if($done)
                     return $this->response->setStatusCode(200 )
-                        ->setContent(["id"=>$educationalContent->id]);
+                        ->setContent(["id"=>$content->id]);
                 else
                     return $this->response->setStatusCode(503) ;
             }
@@ -401,28 +401,28 @@ class EducationalContentController extends Controller
      * Display the specified resource.
      *
      * @param Request $request
-     * @param  \App\Educationalcontent $educationalContent
+     * @param  \App\Content $content
      * @return \Illuminate\Http\Response
      * @throws \Exception
      */
-    public function show(Request $request, Educationalcontent $educationalContent)
+    public function show(Request $request, Content $content)
     {
         $url = $request->url();
-        if ($educationalContent->isActive()) {
+        if ($content->isActive()) {
             $userCanSeeCounter = false;
             $sideBarMode = "closed";
-            $educationalContentDisplayName = $educationalContent->display_name;
-            $adItems = $educationalContent->getAddItems();
+            $contentDisplayName = $content->display_name;
+            $adItems = $content->getAddItems();
 
             /**
              *      Retrieving Tags
              */
-            $tags = $educationalContent->retrievingTags();
+            $tags = $content->retrievingTags();
             [
-                $author, $educationalContent, $contentsWithSameSet, $videosWithSameSet, $videosWithSameSetL, $videosWithSameSetR, $pamphletsWithSameSet, $contentSetName, $metaTagMod
-            ] = $this->getContentInformation($educationalContent);
+                $author, $content, $contentsWithSameSet, $videosWithSameSet, $videosWithSameSetL, $videosWithSameSetR, $pamphletsWithSameSet, $contentSetName, $metaTagMod
+            ] = $this->getContentInformation($content);
 
-            $this->generateSeoMetaTags($educationalContentDisplayName, $educationalContent, $tags, $url, $metaTagMod, $author);
+            $this->generateSeoMetaTags($contentDisplayName, $content, $tags, $url, $metaTagMod, $author);
 
 
             if (Auth::check()) {
@@ -435,17 +435,17 @@ class EducationalContentController extends Controller
 
 
 
-            return view("educationalContent.show", compact("productSeenCount", "author", "educationalContent", "rootContentType", "childContentType", "contentsWithSameType", "soonContentsWithSameType", "educationalContentSet", "contentsWithSameSet", "videosWithSameSet", "pamphletsWithSameSet", "contentSetName", "videoSources",
-                "files", "tags", "sideBarMode", "educationalContentDisplayName", "sessionNumber", "fileToShow", "userCanSeeCounter", "adItems", "videosWithSameSetL", "videosWithSameSetR"));
+            return view("content.show", compact("productSeenCount", "author", "content", "rootContentType", "childContentType", "contentsWithSameType", "soonContentsWithSameType", "contentSet", "contentsWithSameSet", "videosWithSameSet", "pamphletsWithSameSet", "contentSetName", "videoSources",
+                "files", "tags", "sideBarMode", "contentDisplayName", "sessionNumber", "fileToShow", "userCanSeeCounter", "adItems", "videosWithSameSetL", "videosWithSameSetR"));
         } else
             abort(403);
     }
 
-    private function generateSeoMetaTags($educationalContentDisplayName, $educationalContent, $tags, $url, $metaTagMod, $author)
+    private function generateSeoMetaTags($contentDisplayName, $content, $tags, $url, $metaTagMod, $author)
     {
-        SEO::setTitle($educationalContentDisplayName);
-        if (isset($educationalContent->metaDescription) && strlen($educationalContent->metaDescription) > 0)
-            SEO::setDescription($educationalContent->metaDescription);
+        SEO::setTitle($contentDisplayName);
+        if (isset($content->metaDescription) && strlen($content->metaDescription) > 0)
+            SEO::setDescription($content->metaDescription);
         else
             if (isset($tags)) {
                 SEO::setDescription(implode(",", $tags));
@@ -462,7 +462,7 @@ class EducationalContentController extends Controller
         switch ($metaTagMod) {
             case 1: // video
 
-                SEO::twitter()->addValue('player', action('EducationalContentController@embed', $educationalContent));
+                SEO::twitter()->addValue('player', action('ContentController@embed', $content));
                 SEO::twitter()->addValue('player:width', "854");
                 SEO::twitter()->addValue('player:height', "480");
                 // video.movie
@@ -473,7 +473,7 @@ class EducationalContentController extends Controller
                         'director' => 'آلاء',
                         'writer' => 'آلاء',
                         'duration' => null,
-                        'release_date' => $educationalContent->creat_at,
+                        'release_date' => $content->creat_at,
                         'tag' => $tags
                     ]);
                 // og:video
@@ -491,8 +491,8 @@ class EducationalContentController extends Controller
             case 3: //article
                 SEO::opengraph()->setType('article')
                     ->setArticle([
-                        'published_time' => $educationalContent->creat_at,
-                        'modified_time' => $educationalContent->update_at,
+                        'published_time' => $content->creat_at,
+                        'modified_time' => $content->update_at,
                         'author' => $author,
                         'tag' => $tags
                     ]);
@@ -502,30 +502,30 @@ class EducationalContentController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Educationalcontent   $educationalContent
+     * @param  \App\Content   $content
      * @return \Illuminate\Http\Response
      */
-    public function edit($educationalContent)
+    public function edit($content)
     {
         $rootContentTypes = Contenttype::whereDoesntHave("parents")->get() ;
 
-        if(isset($educationalContent->validSince))
+        if(isset($content->validSince))
         {
-            $validSinceTime = explode(" " , $educationalContent->validSince);
+            $validSinceTime = explode(" " , $content->validSince);
             $validSinceTime = $validSinceTime[1] ;
         }
 
         $tags = "";
-        if(isset($educationalContent->tags->tags))
-            $tags = $strTags = implode(",",$educationalContent->tags->tags);
+        if(isset($content->tags->tags))
+            $tags = $strTags = implode(",",$content->tags->tags);
 
-        $contentset = $educationalContent->contentsets
+        $contentset = $content->contentsets
                                         ->first();
 
         $rootContentTypes = Contenttype::whereDoesntHave("parents")
                                         ->get() ;
 
-        return view("educationalContent.edit" , compact("educationalContent" ,
+        return view("content.edit" , compact("content" ,
                                                                     "rootContentTypes" ,
                                                                     'validSinceTime' ,
                                                                     'tags' ,
@@ -537,13 +537,13 @@ class EducationalContentController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\EditEducationalContentRequest  $request
-     * @param  \App\Educationalcontent   $educationalContent
+     * @param  \App\Http\Requests\EditContentRequest  $request
+     * @param  \App\Content   $content
      * @return \Illuminate\Http\Response
      */
-    public function update(EditEducationalContentRequest $request, $educationalContent)
+    public function update(EditContentRequest $request, $content)
     {
-        $educationalContent->fill($request->all()) ;
+        $content->fill($request->all()) ;
 
         $fileController = new FileController();
         $fileRequest = new InsertFileRequest();
@@ -561,18 +561,18 @@ class EducationalContentController extends Controller
             $validSince = $request->get("validSinceDate");
             $validSince = Carbon::parse($validSince)->format('Y-m-d'); //Muhammad : added a day because it returns one day behind and IDK why!!
             if(isset($time)) $validSince = $validSince . " " . $time;
-            $educationalContent->validSince = $validSince;
+            $content->validSince = $validSince;
         }
 
 //        if($request->has("contenttype_id"))
 //        {
-//            $educationalContent->contenttype_id = $request->get("contenttype_id");
+//            $content->contenttype_id = $request->get("contenttype_id");
 //        }
 
         if($request->has("enable"))
-            $educationalContent->enable = 1;
+            $content->enable = 1;
         else
-            $educationalContent->enable = 0 ;
+            $content->enable = 0 ;
 
         if($request->has("tags"))
         {
@@ -583,10 +583,10 @@ class EducationalContentController extends Controller
                 "bucket" => "content",
                 "tags" => $tags
             ];
-            $educationalContent->tags = json_encode($tagsJson, JSON_UNESCAPED_UNICODE);
+            $content->tags = json_encode($tagsJson, JSON_UNESCAPED_UNICODE);
         }
 
-        if($educationalContent->update()){
+        if($content->update()){
 
 //            if($request->has("contentsets"))
 //            {
@@ -594,22 +594,22 @@ class EducationalContentController extends Controller
 //                foreach ($contentSets as $contentSet)
 //                {
 //                    if(isset($contentSet["order"]))
-//                        $educationalContent->contentsets()->sync($contentSet["id"] , ["order"=>$contentSet["order"]]);
+//                        $content->contentsets()->sync($contentSet["id"] , ["order"=>$contentSet["order"]]);
 //                    else
-//                        $educationalContent->contentsets()->sync($contentSet["id"]);
+//                        $content->contentsets()->sync($contentSet["id"]);
 //                }
 //            }
 
 //            if($request->has("majors"))
 //            {
 //                $majors = $request->get("majors") ;
-//                $educationalContent->majors()->sync($majors);
+//                $content->majors()->sync($majors);
 //            }
 //
 //            if($request->has("grades"))
 //            {
 //                $grades = $request->get("grades") ;
-//                $educationalContent->grades()->sync($grades);
+//                $content->grades()->sync($grades);
 //            }
 
             if ($request->has("file"))
@@ -636,7 +636,7 @@ class EducationalContentController extends Controller
                     }
                     else
                     {
-                        $disk = $educationalContent->fileMultiplexer();
+                        $disk = $content->fileMultiplexer();
                         if($disk !== false)
                             $fileRequest->offsetSet('disk_id' , $disk->id) ;
                     }
@@ -654,27 +654,27 @@ class EducationalContentController extends Controller
                             $attachPivot["label"] = $label;
 
                         if(empty($attachPivot))
-                            $educationalContent->files()->attach($fileId);
+                            $content->files()->attach($fileId);
                         else
-                            $educationalContent->files()->attach($fileId , $attachPivot);
+                            $content->files()->attach($fileId , $attachPivot);
                     }
                 }
             }
 
-            if($educationalContent->enable  &&  isset($educationalContent->tags) &&
-                is_array($educationalContent->tags->tags) &&
-                !empty($educationalContent->tags->tags))
+            if($content->enable  &&  isset($content->tags) &&
+                is_array($content->tags->tags) &&
+                !empty($content->tags->tags))
             {
-                $itemTagsArray = $educationalContent->tags->tags ;
+                $itemTagsArray = $content->tags->tags ;
                 $params = [
                     "tags" => json_encode($itemTagsArray, JSON_UNESCAPED_UNICODE),
                 ];
 
-                if(isset($educationalContent->created_at) && strlen($educationalContent->created_at) > 0 )
-                    $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $educationalContent->created_at )->timestamp;
+                if(isset($content->created_at) && strlen($content->created_at) > 0 )
+                    $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $content->created_at )->timestamp;
 
                 $response =  $this->sendRequest(
-                    config("constants.TAG_API_URL")."id/content/".$educationalContent->id ,
+                    config("constants.TAG_API_URL")."id/content/".$content->id ,
                     "PUT",
                     $params
                 );
@@ -700,13 +700,13 @@ class EducationalContentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Educationalcontent $educationalContent
+     * @param  \App\Content $content
      * @return \Illuminate\Http\Response
      * @throws \Exception
      */
-    public function destroy($educationalContent)
+    public function destroy($content)
     {
-        if ($educationalContent->delete()){
+        if ($content->delete()){
 
             return $this->response->setStatusCode(200) ;
         }
@@ -731,13 +731,13 @@ class EducationalContentController extends Controller
     /**
      * Search for an educational content
      *
-     * @param \App\Educationalcontent $educationalContent
+     * @param \App\Content $content
      * @param \App\File $file
      * @return \Illuminate\Http\Response
      */
-    public function detachFile($educationalContent , $file)
+    public function detachFile($content , $file)
     {
-        if($educationalContent->files()->detach($file))
+        if($content->files()->detach($file))
         {
             session()->put('success', 'فایل محتوا با موفقیت حذف شد');
             return $this->response->setStatusCode(200) ;
@@ -749,17 +749,17 @@ class EducationalContentController extends Controller
     /**
      * String the caption of content file
      *
-     * @param \App\Http\Requests\InsertEducationalContentFileCaption $request
-     * @param \App\Educationalcontent $educationalContent
+     * @param \App\Http\Requests\InsertContentFileCaption $request
+     * @param \App\Content $content
      * @param \App\File $file
      * @return \Illuminate\Http\Response
      */
-    public function storeFileCaption(InsertEducationalContentFileCaption $request , Educationalcontent $educationalContent , File $file)
+    public function storeFileCaption(InsertContentFileCaption $request , Content $content , File $file)
     {
         $caption = $request->get("caption");
-        if(strcmp($educationalContent->files()->where("id" , $file->id)->get()->first()->pivot->caption , $caption) == 0)
+        if(strcmp($content->files()->where("id" , $file->id)->get()->first()->pivot->caption , $caption) == 0)
             return $this->response->setStatusCode(501)->setContent("لطفا کپشن جدید وارد نمایید");
-        if($educationalContent->files()->updateExistingPivot($file->id ,["caption" => $caption]))
+        if($content->files()->updateExistingPivot($file->id ,["caption" => $caption]))
         {
             session()->put('success', 'عنوان با موفقیت اصلاح شد');
             return $this->response->setStatusCode(200) ;
@@ -781,7 +781,7 @@ class EducationalContentController extends Controller
              $dateNow = Carbon::now();
 
              $contentset = Contentset::FindOrFail($contentset_id);
-             $lastContent = $contentset->educationalcontents->sortByDesc("pivot.order")->first() ;
+             $lastContent = $contentset->contents->sortByDesc("pivot.order")->first() ;
              if(isset($lastContent))
                 $newContent = $lastContent->replicate();
              else
@@ -879,7 +879,7 @@ class EducationalContentController extends Controller
                  $order = $lastContent->pivot->order + 1;
              $newContent->contentsets()->attach($contentset->id , ["order"=>$order , "isDefault"=>1]);
 
-             return redirect(action("EducationalContentController@edit" , $newContent->id));
+             return redirect(action("ContentController@edit" , $newContent->id));
          }
          catch (\Exception    $e)
          {
@@ -897,15 +897,15 @@ class EducationalContentController extends Controller
      }
 
     /**
-     * @param Educationalcontent $educationalContent
+     * @param Content $content
      * @return array
      */
-    private function getContentInformation(Educationalcontent $educationalContent): array
+    private function getContentInformation(Content $content): array
     {
-        $key = "content:show" . $educationalContent->cacheKey();
+        $key = "content:show" . $content->cacheKey();
         [
             $author,
-            $educationalContent,
+            $content,
             $contentsWithSameSet,
             $videosWithSameSet,
             $videosWithSameSetL,
@@ -913,30 +913,30 @@ class EducationalContentController extends Controller
             $pamphletsWithSameSet,
             $contentSetName,
             $metaTagMod
-        ] = Cache::tags(["content", "c" . $educationalContent->id])->remember($key, Config::get("constants.CACHE_60"), function () use ($educationalContent) {
+        ] = Cache::tags(["content", "c" . $content->id])->remember($key, Config::get("constants.CACHE_60"), function () use ($content) {
 
             $videosWithSameSetL = null;
             $videosWithSameSetR = null;
 
             $contentSetName = null;
-            $author = optional($educationalContent->user)->getfullName();
+            $author = optional($content->user)->getfullName();
 
             [
                 $contentsWithSameSet,
                 $contentSetName
-            ] = $educationalContent->getSetMates();
+            ] = $content->getSetMates();
             $contentsWithSameSet = $contentsWithSameSet->normalMates();
             $videosWithSameSet = optional($contentsWithSameSet)->whereIn("type", "video");
             $pamphletsWithSameSet = optional($contentsWithSameSet)->whereIn("type", "pamphlet");
             [
                 $videosWithSameSetL,
                 $videosWithSameSetR
-            ] = optional($videosWithSameSet)->partition(function ($i) use ($educationalContent) {
-                return $i["content"]->id < $educationalContent->id;
+            ] = optional($videosWithSameSet)->partition(function ($i) use ($content) {
+                return $i["content"]->id < $content->id;
             });
 
             //TODO: replace metaTag Mod with contentType
-            switch (optional($educationalContent->template)->name) {
+            switch (optional($content->template)->name) {
                 case "video1":
                     $metaTagMod = 1;
                     break;
@@ -953,7 +953,7 @@ class EducationalContentController extends Controller
 
             return [
                 $author,
-                $educationalContent,
+                $content,
                 $contentsWithSameSet,
                 $videosWithSameSet,
                 $videosWithSameSetL,
@@ -965,7 +965,7 @@ class EducationalContentController extends Controller
 
         });
         return [
-            $author, $educationalContent, $contentsWithSameSet, $videosWithSameSet, $videosWithSameSetL, $videosWithSameSetR, $pamphletsWithSameSet, $contentSetName, $metaTagMod
+            $author, $content, $contentsWithSameSet, $videosWithSameSet, $videosWithSameSetL, $videosWithSameSetR, $pamphletsWithSameSet, $contentSetName, $metaTagMod
         ];
     }
 }

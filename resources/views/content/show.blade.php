@@ -40,15 +40,15 @@
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
-                <span>نمایش {{ isset($educationalContentDisplayName) ? $educationalContentDisplayName : '' }}</span>
+                <span>نمایش {{ isset($contentDisplayName) ? $contentDisplayName : '' }}</span>
             </li>
         </ul>
     </div>
 @endsection
 
 @section("content")
-    @if(isset($educationalContent->template))
-        @if($educationalContent->template->name == "video1")
+    @if(isset($content->template))
+        @if($content->template->name == "video1")
             {{--<div class="row">--}}
                 {{--<div class="col-md-8">--}}
                     {{--<div class="portlet light ">--}}
@@ -66,7 +66,7 @@
                     <div class="portlet light ">
                         <div class="portlet-body  text-justify">
                             <div class="row col-md-8">
-                                <video  id="video-{{$educationalContent->id}}"
+                                <video  id="video-{{$content->id}}"
                                         class="video-js vjs-fluid vjs-default-skin vjs-big-play-centered"
                                         controls
                                         preload="auto"
@@ -87,21 +87,21 @@
                                     <nav aria-label="Page navigation">
                                         <ul class="pagination pagination-sm ">
                                             <li class="page-item">
-                                                <a class="page-link" href="{{action("EducationalContentController@show" , $videosWithSameSet->first()["content"])}}" aria-label="اولین">
+                                                <a class="page-link" href="{{action("ContentController@show" , $videosWithSameSet->first()["content"])}}" aria-label="اولین">
                                                     <span aria-hidden="true">&laquo;</span>
                                                     <span class="sr-only">اولین</span>
                                                 </a>
                                             </li>
                                             @foreach($videosWithSameSetL->take(-5) as $item)
                                                 {{--@if($item->number )--}}
-                                                <li class="page-item @if($item["content"]->id == $educationalContent->id) active @endif"><a class="page-link" href="{{action("EducationalContentController@show" , $item["content"])}}">{{ $item["content"]->getOrder() }}</a></li>
+                                                <li class="page-item @if($item["content"]->id == $content->id) active @endif"><a class="page-link" href="{{action("ContentController@show" , $item["content"])}}">{{ $item["content"]->getOrder() }}</a></li>
                                             @endforeach
                                             @foreach($videosWithSameSetR->take(6) as $item)
                                                 {{--@if($item->number )--}}
-                                                <li class="page-item @if($item["content"]->id == $educationalContent->id) active @endif"><a class="page-link" href="{{action("EducationalContentController@show" , $item["content"])}}">{{ $item["content"]->getOrder() }}</a></li>
+                                                <li class="page-item @if($item["content"]->id == $content->id) active @endif"><a class="page-link" href="{{action("ContentController@show" , $item["content"])}}">{{ $item["content"]->getOrder() }}</a></li>
                                             @endforeach
                                             <li class="page-item">
-                                                <a class="page-link" href="{{action("EducationalContentController@show" , $videosWithSameSet->last()["content"])}}" aria-label="آخرین">
+                                                <a class="page-link" href="{{action("ContentController@show" , $videosWithSameSet->last()["content"])}}" aria-label="آخرین">
                                                     <span aria-hidden="true">&raquo;</span>
                                                     <span class="sr-only">آخرین</span>
                                                 </a>
@@ -112,11 +112,11 @@
                                     <hr>
                                     <div class="col-md-7">
                                         <div class="caption"><i class="fa fa-comment-o" aria-hidden="true"></i></div>
-                                           <h2 style="font-size: 20px; font-weight: 500;">{{ isset($educationalContentDisplayName) ? $educationalContentDisplayName : '' }}</h2>
+                                           <h2 style="font-size: 20px; font-weight: 500;">{{ isset($contentDisplayName) ? $contentDisplayName : '' }}</h2>
 
-                                        @if(isset($educationalContent->description[0]))
+                                        @if(isset($content->description[0]))
                                             <div class="scroller" style="max-height:400px ; " data-rail-visible="1" data-rail-color="black" data-handle-color="#a1b2bd">
-                                                {!! $educationalContent->description !!}
+                                                {!! $content->description !!}
                                             </div>
                                         @else
                                             به زودی ...
@@ -124,7 +124,7 @@
                                     </div>
 
                                     <div class="col-md-5">
-                                        @if(isset($educationalContent->author_id))
+                                        @if(isset($content->author_id))
 
                                                 <ul class="list-unstyled">
                                                     <li><i class="fa fa-user"></i>{{$author}}</li>&nbsp
@@ -221,20 +221,20 @@
                                  data-rail-color="red" data-handle-color="green">
                                 <ul>
                                     @foreach($videosWithSameSet as $item)
-                                        <li class="mt-list-item @if($item["content"]->id == $educationalContent->id) bg-grey-mint @endif " id="playlistItem_{{$item["content"]->id}}">
+                                        <li class="mt-list-item @if($item["content"]->id == $content->id) bg-grey-mint @endif " id="playlistItem_{{$item["content"]->id}}">
                                                 <div class="list-icon-container">
-                                                    <a href="{{action("EducationalContentController@show" , $item["content"])}}" >
+                                                    <a href="{{action("ContentController@show" , $item["content"])}}" >
                                                         <i class="fa fa-angle-left"></i>
                                                     </a>
                                                 </div>
                                                 <div class="list-thumb">
-                                                    <a href="{{action("EducationalContentController@show" , $item["content"])}}" >
+                                                    <a href="{{action("ContentController@show" , $item["content"])}}" >
                                                         <img alt="{{$item["content"]->name}}"
                                                              src="{{(isset($item["thumbnail"]))?$item["thumbnail"]."?w=210&h=118":''}}"/>
                                                     </a>
                                                 </div>
                                                 <div class="list-datetime bold uppercase font-yellow-casablanca" >
-                                                    <a href="{{action("EducationalContentController@show" , $item["content"])}}" >
+                                                    <a href="{{action("ContentController@show" , $item["content"])}}" >
                                                         {{($item["content"]->display_name)}}
                                                     </a>
                                                 </div>
@@ -264,7 +264,7 @@
                             </div>
 
                             <div class="portlet-body">
-                                @include("educationalContent.partials.adSideBar" , ["items" => $adItems])
+                                @include("content.partials.adSideBar" , ["items" => $adItems])
                             </div>
                         </div>
                     @endif
@@ -300,20 +300,20 @@
 
                                                     <img width="80" alt="{{$item["content"]->name}}" src="{{( ( isset($item["thumbnail"]) && ( strlen($item["thumbnail"]) > 0 ) ) ? $item["thumbnail"] : '/img/extra/orange-pdf-icon-32.png' )}}"/>
                                                     <br/>
-                                                    <a href="{{action("EducationalContentController@show" , $item["content"])}}">
+                                                    <a href="{{action("ContentController@show" , $item["content"])}}">
                                                         <i class="fa fa-angle-left"></i>
                                                         {{$item["content"]->name}}
                                                     </a>
 
                                                 </div>
-                                                {{--<li class="mt-list-item @if($item["content"]->id == $educationalContent->id) bg-grey-mint @endif ">--}}
+                                                {{--<li class="mt-list-item @if($item["content"]->id == $content->id) bg-grey-mint @endif ">--}}
                                                 {{--<div class="list-icon-container">--}}
-                                                {{--<a href="{{action("EducationalContentController@show" , $item["content"])}}">--}}
+                                                {{--<a href="{{action("ContentController@show" , $item["content"])}}">--}}
                                                 {{--<i class="fa fa-angle-left"></i>--}}
                                                 {{--</a>--}}
                                                 {{--</div>--}}
                                                 {{--<div class="list-thumb">--}}
-                                                {{--<a href="{{action("EducationalContentController@show" , $item["content"])}}">--}}
+                                                {{--<a href="{{action("ContentController@show" , $item["content"])}}">--}}
                                                 {{--<img alt="{{$item["content"]->name}}"--}}
                                                 {{--src="{{(isset($item["thumbnail"]))?$item["thumbnail"]:''}}"/>--}}
                                                 {{--</a>--}}
@@ -350,14 +350,14 @@
                         {{--data-rail-color="red" data-handle-color="green">--}}
                         {{--<ul>--}}
                         {{--@foreach($pamphletsWithSameSet as $item)--}}
-                        {{--<li class="mt-list-item @if($item["content"]->id == $educationalContent->id) bg-grey-mint @endif ">--}}
+                        {{--<li class="mt-list-item @if($item["content"]->id == $content->id) bg-grey-mint @endif ">--}}
                         {{--<div class="list-icon-container">--}}
-                        {{--<a href="{{action("EducationalContentController@show" , $item["content"])}}">--}}
+                        {{--<a href="{{action("ContentController@show" , $item["content"])}}">--}}
                         {{--<i class="fa fa-angle-left"></i>--}}
                         {{--</a>--}}
                         {{--</div>--}}
                         {{--<div class="list-thumb">--}}
-                        {{--<a href="{{action("EducationalContentController@show" , $item["content"])}}">--}}
+                        {{--<a href="{{action("ContentController@show" , $item["content"])}}">--}}
                         {{--<img alt="{{$item["content"]->name}}"--}}
                         {{--src="{{(isset($item["thumbnail"]))?$item["thumbnail"]:''}}"/>--}}
                         {{--</a>--}}
@@ -378,14 +378,14 @@
                     </div>
                 </div>
             @endif
-        @elseif($educationalContent->template->name == "pamphlet1" )
+        @elseif($content->template->name == "pamphlet1" )
             <div class="row">
                 <div class="col-md-8">
                     <div class="portlet light ">
                         <div class="portlet-title">
                             <div class="caption">
                                 <i class="fa fa-file-text-o" aria-hidden="true"></i>
-                                    {{isset($educationalContentDisplayName) ? $educationalContentDisplayName : "" }}
+                                    {{isset($contentDisplayName) ? $contentDisplayName : "" }}
                             </div>
                             <div class="actions">
                                 @if($files->count() == 1)
@@ -441,8 +441,8 @@
                         <div class="portlet-body text-justify">
                             <div class="scroller" style="height:200px" data-rail-visible="1" data-rail-color="black"
                                  data-handle-color="#a1b2bd">
-                                @if(isset($educationalContent->description[0]))
-                                    {!! $educationalContent->description !!}
+                                @if(isset($content->description[0]))
+                                    {!! $content->description !!}
                                 @else
                                     به زودی ...
                                 @endif
@@ -466,14 +466,14 @@
                                     <ul>
 
                                         @foreach($videosWithSameSet as $item)
-                                            <li class="mt-list-item @if($item["content"]->id == $educationalContent->id) bg-grey-mint @endif " id="playlistItem_{{$item["content"]->id}}">
+                                            <li class="mt-list-item @if($item["content"]->id == $content->id) bg-grey-mint @endif " id="playlistItem_{{$item["content"]->id}}">
                                                 <div class="list-icon-container">
-                                                    <a href="{{action("EducationalContentController@show" , $item["content"])}}">
+                                                    <a href="{{action("ContentController@show" , $item["content"])}}">
                                                         <i class="fa fa-angle-left"></i>
                                                     </a>
                                                 </div>
                                                 <div class="list-thumb">
-                                                    <a href="{{action("EducationalContentController@show" , $item["content"])}}">
+                                                    <a href="{{action("ContentController@show" , $item["content"])}}">
                                                         <img alt="{{$item["content"]->name}}"
                                                              src="{{(isset($item["thumbnail"]))?$item["thumbnail"]:''}}"/>
                                                     </a>
@@ -502,7 +502,7 @@
                                 </div>
 
                                 <div class="portlet-body">
-                                    @include("educationalContent.partials.adSideBar" , ["items" => $adItems])
+                                    @include("content.partials.adSideBar" , ["items" => $adItems])
                                 </div>
                             </div>
                         @endif
@@ -528,7 +528,7 @@
                                             {{--<div class="list-datetime"> @if($content->grades->isNotEmpty()){{$content->grades->first()->displayName}}@endif</div>--}}
                                             {{--<div class="list-item-content">--}}
                                                 {{--<h5 class="uppercase">--}}
-                {{--<a href="{{action("EducationalContentController@show" , $content)}}">{{$content->display_name}}</a>--}}
+                {{--<a href="{{action("ContentController@show" , $content)}}">{{$content->display_name}}</a>--}}
                                                 {{--</h5>--}}
                                             {{--</div>--}}
                                         {{--</li>--}}
@@ -539,7 +539,7 @@
                     {{--@endif--}}
                 {{--</div>--}}
             </div>
-            @if(isset($pamphletsWithSameSet) && $pamphletsWithSameSet->where("content.id" , "<>",$educationalContent->id)->isNotEmpty())
+            @if(isset($pamphletsWithSameSet) && $pamphletsWithSameSet->where("content.id" , "<>",$content->id)->isNotEmpty())
                 <div class="row">
                     <div class="col-md-12">
                         <div class="portlet light ">
@@ -558,20 +558,20 @@
 
                                                     <img width="80" alt="{{$item["content"]->name}}" src="{{( ( isset($item["thumbnail"]) && ( strlen($item["thumbnail"]) > 0 ) ) ? $item["thumbnail"] : '/img/extra/orange-pdf-icon-32.png' )}}"/>
                                                     <br/>
-                                                    <a href="{{action("EducationalContentController@show" , $item["content"])}}">
+                                                    <a href="{{action("ContentController@show" , $item["content"])}}">
                                                         <i class="fa fa-angle-left"></i>
                                                         {{$item["content"]->name}}
                                                     </a>
 
                                                 </div>
-                                                {{--<li class="mt-list-item @if($item["content"]->id == $educationalContent->id) bg-grey-mint @endif ">--}}
+                                                {{--<li class="mt-list-item @if($item["content"]->id == $content->id) bg-grey-mint @endif ">--}}
                                                 {{--<div class="list-icon-container">--}}
-                                                {{--<a href="{{action("EducationalContentController@show" , $item["content"])}}">--}}
+                                                {{--<a href="{{action("ContentController@show" , $item["content"])}}">--}}
                                                 {{--<i class="fa fa-angle-left"></i>--}}
                                                 {{--</a>--}}
                                                 {{--</div>--}}
                                                 {{--<div class="list-thumb">--}}
-                                                {{--<a href="{{action("EducationalContentController@show" , $item["content"])}}">--}}
+                                                {{--<a href="{{action("ContentController@show" , $item["content"])}}">--}}
                                                 {{--<img alt="{{$item["content"]->name}}"--}}
                                                 {{--src="{{(isset($item["thumbnail"]))?$item["thumbnail"]:''}}"/>--}}
                                                 {{--</a>--}}
@@ -608,14 +608,14 @@
                         {{--data-rail-color="red" data-handle-color="green">--}}
                         {{--<ul>--}}
                         {{--@foreach($pamphletsWithSameSet as $item)--}}
-                        {{--<li class="mt-list-item @if($item["content"]->id == $educationalContent->id) bg-grey-mint @endif ">--}}
+                        {{--<li class="mt-list-item @if($item["content"]->id == $content->id) bg-grey-mint @endif ">--}}
                         {{--<div class="list-icon-container">--}}
-                        {{--<a href="{{action("EducationalContentController@show" , $item["content"])}}">--}}
+                        {{--<a href="{{action("ContentController@show" , $item["content"])}}">--}}
                         {{--<i class="fa fa-angle-left"></i>--}}
                         {{--</a>--}}
                         {{--</div>--}}
                         {{--<div class="list-thumb">--}}
-                        {{--<a href="{{action("EducationalContentController@show" , $item["content"])}}">--}}
+                        {{--<a href="{{action("ContentController@show" , $item["content"])}}">--}}
                         {{--<img alt="{{$item["content"]->name}}"--}}
                         {{--src="{{(isset($item["thumbnail"]))?$item["thumbnail"]:''}}"/>--}}
                         {{--</a>--}}
@@ -636,18 +636,18 @@
                     </div>
                 </div>
             @endif
-        @elseif($educationalContent->template->name == "article1")
+        @elseif($content->template->name == "article1")
             <div class="row">
                 <div class="col-md-8">
                     <div class="portlet light ">
                         <div class="portlet-title">
                             <div class="caption">
                                 <i class="fa fa-file-text-o" aria-hidden="true"></i>
-                                    {{$educationalContent->name}}
+                                    {{$content->name}}
                             </div>
                         </div>
                         <div class="portlet-body">
-                                {!! $educationalContent->context !!}
+                                {!! $content->context !!}
                                 <div class="row">
                                     <div class="col-md-12">
                                         @if(!empty($tags))
@@ -671,7 +671,7 @@
                         <div class="portlet-body text-justify">
                             <div class="scroller" style="height:200px" data-rail-visible="1" data-rail-color="black"
                                  data-handle-color="#a1b2bd">
-                                @if(isset($educationalContent->description[0])) {!! $educationalContent->description !!} @endif
+                                @if(isset($content->description[0])) {!! $content->description !!} @endif
                             </div>
 
                         </div>
@@ -698,7 +698,7 @@
                                             {{--<div class="list-datetime"> @if($content->grades->isNotEmpty()){{$content->grades->first()->displayName}}@endif</div>--}}
                                             {{--<div class="list-item-content">--}}
                                                 {{--<h5 class="uppercase">--}}
-                    {{--<a href="{{action("EducationalContentController@show" , $content)}}">{{$content->display_name}}</a>--}}
+                    {{--<a href="{{action("ContentController@show" , $content)}}">{{$content->display_name}}</a>--}}
                                                 {{--</h5>--}}
                                             {{--</div>--}}
                                         {{--</li>--}}
@@ -728,7 +728,7 @@
     <script type="text/javascript">
         $(document).ready(function (){
             var container = $("#playListScroller"),
-                scrollTo = $("#playlistItem_"+"{{$educationalContent->id}}");
+                scrollTo = $("#playlistItem_"+"{{$content->id}}");
             container.scrollTop(
                 scrollTo.offset().top - container.offset().top + container.scrollTop() - 100
             );
@@ -739,18 +739,18 @@
         var related_videos = [
           @if(!is_null(min(13,$videosWithSameSet->count())))
                 @foreach($videosWithSameSet->random( min(13,$videosWithSameSet->count())) as $item)
-                @if($item["content"]->id == $educationalContent->id)
+                @if($item["content"]->id == $content->id)
                 @else
             {
                 thumb: '{{(isset($item["thumbnail"]))?$item["thumbnail"]:""}}',
-                url: '{{action("EducationalContentController@show" , $item["content"])}}',
+                url: '{{action("ContentController@show" , $item["content"])}}',
                 title: ' {{($item["content"]->display_name)}}',
                 duration: '20:00'
             },
             @endif
             @endforeach
             @endif        ]; 
-        var player = videojs('video-{{$educationalContent->id}}',{nuevo : true} ,function(){
+        var player = videojs('video-{{$content->id}}',{nuevo : true} ,function(){
             this.nuevoPlugin({
                 // plugin options here
                 logocontrolbar: '/assets/extra/Alaa-logo.gif',
@@ -763,9 +763,9 @@
                 related: related_videos,
                 endAction: 'related',
 
-                shareTitle: '{{ $educationalContentDisplayName }}',
-                shareUrl: '{{action("EducationalContentController@show" , $educationalContent)}}',
-                shareEmbed: '<iframe src="{{action('EducationalContentController@embed' , $educationalContent)}}" width="640" height="360" frameborder="0" allowfullscreen></iframe>'
+                shareTitle: '{{ $contentDisplayName }}',
+                shareUrl: '{{action("ContentController@show" , $content)}}',
+                shareEmbed: '<iframe src="{{action('ContentController@embed' , $content)}}" width="640" height="360" frameborder="0" allowfullscreen></iframe>'
             });
         });
         player.on('resolutionchange', function(){

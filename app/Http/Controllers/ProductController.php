@@ -348,7 +348,7 @@ class ProductController extends Controller
         if(Auth::check() && Auth::user()->hasRole("admin") && $isLive!== false) $isLive = 0 ;
 //        return response()->make("Ok");
 
-//        $hamayeshTalaiVideos = Educationalcontent::whereHas("contentsets" , function ($q)
+//        $hamayeshTalaiVideos = Content::whereHas("contentsets" , function ($q)
 //        {
 //            $q->where("id" , 199) ;
 //        })

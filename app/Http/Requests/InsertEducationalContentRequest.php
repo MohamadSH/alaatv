@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Input;
 
-class InsertEducationalContentRequest extends FormRequest
+class InsertContentRequest extends FormRequest
 {
     use CharacterCommon;
     /**

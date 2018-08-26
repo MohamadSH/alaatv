@@ -909,11 +909,11 @@ $(document).on("click", ".eventResultUpdate", function (e){
 /**
  * Educational Content Admin Ajax
  */
-$(document).on("click", "#educationalContent-portlet .reload", function (){
-    $("#educationalContent-portlet-loading").removeClass("hidden");
-    $('#educationalContent_table > tbody').html("");
+$(document).on("click", "#content-portlet .reload", function (){
+    $("#content-portlet-loading").removeClass("hidden");
+    $('#content_table > tbody').html("");
     var columns = ["name" ,  "enable",  "description" , "grade" , "major" , "contentType" , "file" , "created_at" , "updated_at" , "validSince" , "action"] ;
-    var url = $("#educationalContent-portlet-action").text();
+    var url = $("#content-portlet-action").text();
     $.ajax({
         type: "GET",
         url: url,
@@ -921,11 +921,11 @@ $(document).on("click", "#educationalContent-portlet .reload", function (){
         success: function (result) {
             // console.log(result);
             // console.log(result.responseText);
-            var newDataTable =$("#educationalContent_table").DataTable();
+            var newDataTable =$("#content_table").DataTable();
             newDataTable.destroy();
-            $('#educationalContent_table > tbody').html(result);
-            makeDataTable("educationalContent_table");
-            $("#educationalContent-portlet-loading").addClass("hidden");
+            $('#content_table > tbody').html(result);
+            makeDataTable("content_table");
+            $("#content-portlet-loading").addClass("hidden");
         },
         error: function (result) {
             // console.log(result);
@@ -935,7 +935,7 @@ $(document).on("click", "#educationalContent-portlet .reload", function (){
 
     return false;
 });
-function removeEducationalContent(url){
+function removeContent(url){
     toastr.options = {
         "closeButton": true,
         "debug": false,
@@ -961,7 +961,7 @@ function removeEducationalContent(url){
                 // console.log(result.responseText);
 //                    toastr["success"]("فایل با موفقیت حذف شد!", "پیام سیستم");
                 toastr["success"]("محتوای آموزشی با موفقیت حذف شد!", "پیام سیستم");
-                $("#educationalContent-portlet .reload").trigger("click");
+                $("#content-portlet .reload").trigger("click");
             },
             //The status for when the user is not authorized for making the request
             403: function (response) {
