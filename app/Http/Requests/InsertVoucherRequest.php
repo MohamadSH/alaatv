@@ -34,7 +34,7 @@ class InsertVoucherRequest extends FormRequest
             "address" => "required",
             "birthdate" => "required",
             "school" => "required",
-            "major_id" => "required|exists:genders,id",
+            "major_id" => "required|exists:majors,id",
             "introducedBy" => "required",
         ];
 
