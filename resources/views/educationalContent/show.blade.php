@@ -737,15 +737,14 @@
     </script>
     <script>
         var related_videos = [
-            @if(!is_null(min(13,$videosWithSameSet->count())))
+          @if(!is_null(min(13,$videosWithSameSet->count())))
                 @foreach($videosWithSameSet->random( min(13,$videosWithSameSet->count())) as $item)
                 @if($item["content"]->id == $educationalContent->id)
                 @else
             {thumb: '{{(isset($item["thumbnail"]))?$item["thumbnail"]:""}}',url: '{{action("EducationalContentController@show" , $item["content"])}}', title: ' {{($item["content"]->getDisplayName())}}', duration: '20:00'},
             @endif
             @endforeach
-            @endif
-        ]; 
+            @endif        ]; 
         var player = videojs('video-{{$educationalContent->id}}',{nuevo : true} ,function(){
             this.nuevoPlugin({
                 // plugin options here
