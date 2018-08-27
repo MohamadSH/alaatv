@@ -7,6 +7,7 @@ use App\{
 };
 use Auth;
 use Carbon\Carbon;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Response;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
@@ -52,7 +53,10 @@ class HomeController extends Controller
     {
         try
         {
+
+
             $e = Content::find(6560);
+            dd($e->validSince);
 //            dd($e->thumbnail);
 //            dd( parse_url("https://cdn.sanatisharif.ir/media/156/HD_720p/008uuui.mp4")['path']);
             $b = \App\Classes\LinkGenerator::create(null,"productFileSFTP",null,"/paid/85/fizik-1.mp4");
@@ -83,7 +87,7 @@ class HomeController extends Controller
 //        {
 //            $authException = ['index' , 'getImage' , 'error404' , 'error403' , 'error500' , 'errorPage' , 'siteMapXML', 'download' ];
 //        }else{
-        $authException = ['newDownload','debug','download', 'telgramAgent', 'index', 'getImage', 'error404', 'error403', 'error500', 'errorPage', 'aboutUs', 'contactUs', 'sendMail', 'rules', 'siteMapXML', 'uploadFile', 'search', 'schoolRegisterLanding'];
+        $authException = ['debug','download', 'telgramAgent', 'index', 'getImage', 'error404', 'error403', 'error500', 'errorPage', 'aboutUs', 'contactUs', 'sendMail', 'rules', 'siteMapXML', 'uploadFile', 'search', 'schoolRegisterLanding'];
 //        }
         $this->middleware('auth', ['except' => $authException]);
         $this->middleware('ability:' . Config::get("constants.ROLE_ADMIN") . ',' . Config::get("constants.USER_ADMIN_PANEL_ACCESS"), ['only' => 'admin']);
@@ -1625,11 +1629,20 @@ class HomeController extends Controller
         }
     }
 
+    /**
+     * @param $data
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function newDownload($data){
         if(isset($data))
         {
-            $data =(array) decrypt($data);
-//            dd($data);
+            try {
+                $data =(array) decrypt($data);
+            }
+            catch (DecryptException $e)
+            {
+                abort(403);
+            }
             $url = $data["url"];
             $contentId = $data["data"]["content_id"];
             if(Auth::check())

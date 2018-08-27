@@ -1,7 +1,7 @@
 <?php
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.6.33 on 2018-08-19 12:42:35.
+ * Generated for Laravel 5.6.34 on 2018-08-26 16:48:42.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -1528,9 +1528,9 @@ namespace Illuminate\Support\Facades {
          *
          * @static 
          */ 
-        public static function userSeen($path)
+        public static function userSeen($path, $user)
         {
-            return \App\Console\Kernel::userSeen($path);
+            return \App\Console\Kernel::userSeen($path, $user);
         }
         
         /**
@@ -4441,6 +4441,7 @@ namespace Illuminate\Support\Facades {
          *
          * @param int|null $toLevel
          * @return void 
+         * @throws \Exception
          * @static 
          */ 
         public static function rollBack($toLevel = null)
@@ -16225,6 +16226,68 @@ namespace Laravel\Horizon {
  
 }
 
+namespace Stevebauman\Purify\Facades { 
+
+    class Purify {
+        
+        /**
+         * Cleans the specified input.
+         * 
+         * If a configuration array is given, it **will not**
+         * merge your current configuration.
+         *
+         * @param array|string $input
+         * @param array|null $config
+         * @return array|string 
+         * @static 
+         */ 
+        public static function clean($input, $config = null)
+        {
+            return \Stevebauman\Purify\Purify::clean($input, $config);
+        }
+        
+        /**
+         * Sets the current purifier to
+         * the specified purifier object.
+         *
+         * @param \HTMLPurifier $purifier
+         * @return $this 
+         * @static 
+         */ 
+        public static function setPurifier($purifier)
+        {
+            return \Stevebauman\Purify\Purify::setPurifier($purifier);
+        }
+        
+        /**
+         * Returns the HTML purifier object.
+         *
+         * @return \HTMLPurifier 
+         * @static 
+         */ 
+        public static function getPurifier()
+        {
+            return \Stevebauman\Purify\Purify::getPurifier();
+        }
+        
+        /**
+         * Returns the configuration settings for HTML Purifier.
+         * 
+         * If no configuration settings are retrieved, a default
+         * configuration schema is returned.
+         *
+         * @return array 
+         * @static 
+         */ 
+        public static function getSettings()
+        {
+            return \Stevebauman\Purify\Purify::getSettings();
+        }
+         
+    }
+ 
+}
+
 namespace Webpatser\Uuid { 
 
     class Uuid {
@@ -18692,6 +18755,8 @@ namespace  {
     class Twitter extends \Artesaos\SEOTools\Facades\TwitterCard {}
 
     class Horizon extends \Laravel\Horizon\Horizon {}
+
+    class Purify extends \Stevebauman\Purify\Facades\Purify {}
 
     class Uuid extends \Webpatser\Uuid\Uuid {}
 

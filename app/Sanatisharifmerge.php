@@ -97,6 +97,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Sanatisharifmerge withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Sanatisharifmerge withoutTrashed()
  * @mixin \Eloquent
+ * @property int|null $educationalcontent_id آدرس محتوای نظیر در صورت وجود
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge whereEducationalcontentId($value)
  */
 class Sanatisharifmerge extends Model
 {

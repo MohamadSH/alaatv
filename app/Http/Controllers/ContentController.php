@@ -2,29 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Classes\SEO\SeoMetaTagsGenerator;
 use App\Contentset;
 use App\Contenttype;
 use App\Content;
-use App\Http\Requests\EditContentRequest;
-use App\Http\Requests\InsertContentFileCaption;
-use App\Http\Requests\InsertContentRequest;
-use App\Http\Requests\InsertFileRequest;
-use App\Http\Requests\Request;
-use App\Traits\APIRequestCommon;
-use App\Traits\FileCommon;
-use App\Traits\Helper;
-use App\Traits\ProductCommon;
 use App\User;
+use App\Http\Requests\{
+    EditContentRequest, InsertContentFileCaption, InsertContentRequest, InsertFileRequest, Request
+};
+use App\Traits\{
+    APIRequestCommon, FileCommon, Helper, ProductCommon, UserSeenTrait
+};
+
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\{
+    Config, File, Input
+};
 use Jenssegers\Agent\Agent;
-use SEO;
-use SSH;
 
 
 class ContentController extends Controller
@@ -36,7 +33,7 @@ class ContentController extends Controller
     use ProductCommon ;
     use Helper;
     use FileCommon ;
-
+    use UserSeenTrait;
     private function getAuthExceptionArray(Agent $agent): array
     {
         if ($agent->isRobot())
@@ -52,14 +49,10 @@ class ContentController extends Controller
 
     public function __construct(Agent $agent, Response $response)
     {
-//        dd($setting);
         $this->response = $response;
         $this->setting = json_decode(app('setting')->setting);
         $authException = $this->getAuthExceptionArray($agent);
-        $this->middleware('auth', ['except' => $authException]);
-        $this->middleware('permission:'.Config::get('constants.INSERT_EDUCATIONAL_CONTENT_ACCESS'),['only'=>['store' , 'create' , 'create2']]);
-        $this->middleware('permission:'.Config::get("constants.EDIT_EDUCATIONAL_CONTENT"),['only'=>['update' , 'edit']]);
-        $this->middleware('permission:'.Config::get("constants.REMOVE_EDUCATIONAL_CONTENT_ACCESS"),['only'=>'destroy']);
+        $this->callMiddlewares($authException);
     }
 
     /**
@@ -141,11 +134,7 @@ class ContentController extends Controller
 
     public function embed(Request $request , Content $content){
         $url = action('ContentController@show', $content);
-        //TODO:// $this->generateSeoMetaTags
-        SEO::opengraph()->setUrl($url);
-        SEO::setCanonical($url);
-        SEO::twitter()->setSite("آلاء");
-
+        $this->generateSeoMetaTags($content);
         //TODO: use Content Type instead of template_id
         if($content->template_id != 1)
             return redirect($url, 301);
@@ -166,16 +155,10 @@ class ContentController extends Controller
      */
     public function create()
     {
-        $rootContentTypes = Contenttype::whereDoesntHave("parents")
-            ->get();
+        $rootContentTypes = $this->getRootsContentTypes();
         $contentsets = Contentset::latest()
                                 ->pluck("name" , "id");
-        $authors = User::whereHas("roles" , function ($q){
-            $q->where("name", "teacher");
-        })->get()
-            ->sortBy("lastName")
-            ->values()
-            ->pluck("full_name", "id");
+        $authors = $this->getTeachers();
 
         return view("content.create2" , compact("rootContentTypes" ,
                                                                         "contentsets" ,
@@ -195,6 +178,65 @@ class ContentController extends Controller
         $contenttypes->put("1" , "جزوه");
 
         return view("content.create3" , compact("contenttypes")) ;
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param Request $request
+     * @param  \App\Content $content
+     * @return \Illuminate\Http\Response
+     * @throws \Exception
+     */
+    public function show(Request $request, Content $content)
+    {
+        if ($content->isActive()) {
+
+            $sideBarMode = "closed";
+            $adItems = $content->getAddItems();
+            $tags = $content->retrievingTags();
+            [
+                $author, $content, $contentsWithSameSet, $videosWithSameSet, $videosWithSameSetL, $videosWithSameSetR, $pamphletsWithSameSet, $contentSetName
+            ] = $this->getContentInformation($content);
+
+            $this->generateSeoMetaTags($content);
+
+            $seenCount = $this->getSeenCountFromRequest($request);
+
+            $userCanSeeCounter = optional(auth()->user())->CanSeeCounter();
+
+            $result = compact( "seenCount","author", "content", "rootContentType", "childContentType", "contentsWithSameType", "soonContentsWithSameType", "contentSet", "contentsWithSameSet", "videosWithSameSet", "pamphletsWithSameSet", "contentSetName", "videoSources",
+                "files", "tags", "sideBarMode", "contentDisplayName", "sessionNumber", "fileToShow", "userCanSeeCounter", "adItems", "videosWithSameSetL", "videosWithSameSetR");
+
+            dd($result);
+            return view("content.show", $result);
+        } else
+            abort(403);
+    }
+
+    private function generateSeoMetaTags(Content $content)
+    {
+        try {
+            $seo = new SeoMetaTagsGenerator($content);
+        } catch (\Exception $e) {
+        }
+    }
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Content   $content
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($content)
+    {
+        $validSinceTime = optional($content->validSince)->format('H:i:s');
+        $tags = optional($content->tags)->tags;
+        $tags = implode(",", isset($tags) ? $tags : []);
+        $contentset = $content->contentset;
+        $rootContentTypes = $this->getRootsContentTypes();
+
+        $result = compact("content" ,"rootContentTypes" ,"validSinceTime" ,"tags" ,"contentset" ,"rootContentTypes" );
+        return view("content.edit" , $result) ;
     }
 
     /**
@@ -269,7 +311,7 @@ class ContentController extends Controller
                     {
                         $order = $request->get("order");
                         if(is_null($order))
-                             $order = 0 ;
+                            $order = 0 ;
 
                         $pivots = [];
                         $pivots["order"] = $order;
@@ -396,144 +438,6 @@ class ContentController extends Controller
         }
 
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param Request $request
-     * @param  \App\Content $content
-     * @return \Illuminate\Http\Response
-     * @throws \Exception
-     */
-    public function show(Request $request, Content $content)
-    {
-        $url = $request->url();
-        if ($content->isActive()) {
-            $userCanSeeCounter = false;
-            $sideBarMode = "closed";
-            $contentDisplayName = $content->display_name;
-            $adItems = $content->getAddItems();
-
-            /**
-             *      Retrieving Tags
-             */
-            $tags = $content->retrievingTags();
-            [
-                $author, $content, $contentsWithSameSet, $videosWithSameSet, $videosWithSameSetL, $videosWithSameSetR, $pamphletsWithSameSet, $contentSetName, $metaTagMod
-            ] = $this->getContentInformation($content);
-
-            $this->generateSeoMetaTags($contentDisplayName, $content, $tags, $url, $metaTagMod, $author);
-
-
-            if (Auth::check()) {
-                $user = Auth::user();
-                $contentPath = "/" . $request->path();
-                $productSeenCount = $this->userSeen($contentPath, $user);
-                if ($user->hasRole("admin"))
-                    $userCanSeeCounter = true;
-            }
-
-
-
-            return view("content.show", compact("productSeenCount", "author", "content", "rootContentType", "childContentType", "contentsWithSameType", "soonContentsWithSameType", "contentSet", "contentsWithSameSet", "videosWithSameSet", "pamphletsWithSameSet", "contentSetName", "videoSources",
-                "files", "tags", "sideBarMode", "contentDisplayName", "sessionNumber", "fileToShow", "userCanSeeCounter", "adItems", "videosWithSameSetL", "videosWithSameSetR"));
-        } else
-            abort(403);
-    }
-
-    private function generateSeoMetaTags($contentDisplayName, $content, $tags, $url, $metaTagMod, $author)
-    {
-        SEO::setTitle($contentDisplayName);
-        if (isset($content->metaDescription) && strlen($content->metaDescription) > 0)
-            SEO::setDescription($content->metaDescription);
-        else
-            if (isset($tags)) {
-                SEO::setDescription(implode(",", $tags));
-            }
-
-        SEO::opengraph()->setUrl($url);
-        SEO::setCanonical($url);
-        SEO::twitter()->setSite("آلاء");
-        //TODO: move thumbnails to sftp storage
-        if (isset($files['thumbnail']))
-            SEO::opengraph()->addImage($files['thumbnail'], ['height' => 720, 'width' => 1280]);
-        else
-            SEO::opengraph()->addImage(route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]), ['height' => 100, 'width' => 100]);
-        switch ($metaTagMod) {
-            case 1: // video
-
-                SEO::twitter()->addValue('player', action('ContentController@embed', $content));
-                SEO::twitter()->addValue('player:width', "854");
-                SEO::twitter()->addValue('player:height', "480");
-                // video.movie
-                SEO::opengraph()->setType('video')
-                    ->setVideoMovie([
-                        'actor' => (isset($author)) ? $author : "",
-                        'actor:role' => 'دبیر',
-                        'director' => 'آلاء',
-                        'writer' => 'آلاء',
-                        'duration' => null,
-                        'release_date' => $content->creat_at,
-                        'tag' => $tags
-                    ]);
-                // og:video
-                SEO::opengraph()->addVideo($videoSources->get('hq')["src"], [
-                    'secure_url' => $videoSources->get('hq')["src"],
-                    'type' => 'video/mp4',
-                    'width' => 854,
-                    'height' => 480
-                ]);
-
-                break;
-            case 2://pdf
-                SEO::opengraph()->setType('website');
-                break;
-            case 3: //article
-                SEO::opengraph()->setType('article')
-                    ->setArticle([
-                        'published_time' => $content->creat_at,
-                        'modified_time' => $content->update_at,
-                        'author' => $author,
-                        'tag' => $tags
-                    ]);
-                break;
-        }
-    }
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Content   $content
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($content)
-    {
-        $rootContentTypes = Contenttype::whereDoesntHave("parents")->get() ;
-
-        if(isset($content->validSince))
-        {
-            $validSinceTime = explode(" " , $content->validSince);
-            $validSinceTime = $validSinceTime[1] ;
-        }
-
-        $tags = "";
-        if(isset($content->tags->tags))
-            $tags = $strTags = implode(",",$content->tags->tags);
-
-        $contentset = $content->contentsets
-                                        ->first();
-
-        $rootContentTypes = Contenttype::whereDoesntHave("parents")
-                                        ->get() ;
-
-        return view("content.edit" , compact("content" ,
-                                                                    "rootContentTypes" ,
-                                                                    'validSinceTime' ,
-                                                                    'tags' ,
-                                                                    'contentset' ,
-                                                                    'rootContentTypes'
-                                                        )) ;
-    }
-
     /**
      * Update the specified resource in storage.
      *
@@ -707,13 +611,11 @@ class ContentController extends Controller
     public function destroy($content)
     {
         if ($content->delete()){
-
-            return $this->response->setStatusCode(200) ;
+            return $this->response->setStatusCode(Response::HTTP_OK) ;
         }
         else {
-            return $this->response->setStatusCode(503) ;
+            return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE) ;
         }
-
     }
 
     /**
@@ -724,7 +626,7 @@ class ContentController extends Controller
      */
     public function search()
     {
-        return redirect('/c',301);
+        return redirect('/c',Response::HTTP_MOVED_PERMANENTLY);
     }
 
 
@@ -739,10 +641,10 @@ class ContentController extends Controller
     {
         if($content->files()->detach($file))
         {
-            session()->put('success', 'فایل محتوا با موفقیت حذف شد');
-            return $this->response->setStatusCode(200) ;
+            session()->put('success', __('content.File Removed Successful'));
+            return $this->response->setStatusCode(Response::HTTP_OK ) ;
         }else{
-            return $this->response->setStatusCode(503) ;
+            return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE) ;
         }
     }
 
@@ -902,70 +804,60 @@ class ContentController extends Controller
      */
     private function getContentInformation(Content $content): array
     {
-        $key = "content:show" . $content->cacheKey();
+        $author = $content->author;
+
         [
-            $author,
-            $content,
             $contentsWithSameSet,
-            $videosWithSameSet,
+            $contentSetName
+        ] = $content->getSetMates();
+        $contentsWithSameSet = $contentsWithSameSet->normalMates();
+        $videosWithSameSet = optional($contentsWithSameSet)->whereIn("type", "video");
+        $pamphletsWithSameSet = optional($contentsWithSameSet)->whereIn("type", "pamphlet");
+        [
             $videosWithSameSetL,
-            $videosWithSameSetR,
-            $pamphletsWithSameSet,
-            $contentSetName,
-            $metaTagMod
-        ] = Cache::tags(["content", "c" . $content->id])->remember($key, Config::get("constants.CACHE_60"), function () use ($content) {
-
-            $videosWithSameSetL = null;
-            $videosWithSameSetR = null;
-
-            $contentSetName = null;
-            $author = optional($content->user)->getfullName();
-
-            [
-                $contentsWithSameSet,
-                $contentSetName
-            ] = $content->getSetMates();
-            $contentsWithSameSet = $contentsWithSameSet->normalMates();
-            $videosWithSameSet = optional($contentsWithSameSet)->whereIn("type", "video");
-            $pamphletsWithSameSet = optional($contentsWithSameSet)->whereIn("type", "pamphlet");
-            [
-                $videosWithSameSetL,
-                $videosWithSameSetR
-            ] = optional($videosWithSameSet)->partition(function ($i) use ($content) {
-                return $i["content"]->id < $content->id;
-            });
-
-            //TODO: replace metaTag Mod with contentType
-            switch (optional($content->template)->name) {
-                case "video1":
-                    $metaTagMod = 1;
-                    break;
-                case  "pamphlet1":
-                    $metaTagMod = 2;
-                    break;
-                case "article" :
-                    $metaTagMod = 3;
-                    break;
-                default:
-                    $metaTagMod = 4;
-                    break;
-            }
-
-            return [
-                $author,
-                $content,
-                $contentsWithSameSet,
-                $videosWithSameSet,
-                $videosWithSameSetL,
-                $videosWithSameSetR,
-                $pamphletsWithSameSet,
-                $contentSetName,
-                $metaTagMod
-            ];
-
+            $videosWithSameSetR
+        ] = optional($videosWithSameSet)->partition(function ($i) use ($content) {
+            return $i["content"]->id < $content->id;
         });
+
         return [
-            $author, $content, $contentsWithSameSet, $videosWithSameSet, $videosWithSameSetL, $videosWithSameSetR, $pamphletsWithSameSet, $contentSetName, $metaTagMod
+            $author, $content, $contentsWithSameSet, $videosWithSameSet, $videosWithSameSetL, $videosWithSameSetR, $pamphletsWithSameSet, $contentSetName
         ];
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
+    private function getRootsContentTypes()
+    {
+        $rootContentTypes = Contenttype::whereDoesntHave("parents")->get();
+        return $rootContentTypes;
+    }
+
+    /**
+     * @return Collection
+     */
+    private function getTeachers(): Collection
+    {
+        $authors = User::whereHas("roles", function ($q) {
+            $q->where("name", "teacher");
+        })->get()
+            ->sortBy("lastName")
+            ->values()
+            ->pluck("full_name", "id");
+        return $authors;
+    }
+
+    /**
+     * @param $authException
+     */
+    private function callMiddlewares($authException): void
+    {
+        $this->middleware('auth', ['except' => $authException]);
+        $this->middleware('permission:' . Config::get('constants.INSERT_EDUCATIONAL_CONTENT_ACCESS'), ['only' => ['store', 'create', 'create2']]);
+        $this->middleware('permission:' . Config::get("constants.EDIT_EDUCATIONAL_CONTENT"), ['only' => ['update', 'edit']]);
+        $this->middleware('permission:' . Config::get("constants.REMOVE_EDUCATIONAL_CONTENT_ACCESS"), ['only' => 'destroy']);
+    }
+
+
 }

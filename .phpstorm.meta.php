@@ -3,7 +3,7 @@ namespace PHPSTORM_META {
 
    /**
     * PhpStorm Meta file, to provide autocomplete information for PhpStorm
-    * Generated on 2018-08-19 13:37:04.
+    * Generated on 2018-08-27 09:07:45.
     *
     * @author Barry vd. Heuvel <barryvdh@gmail.com>
     * @see https://github.com/barryvdh/laravel-ide-helper
@@ -69,6 +69,7 @@ namespace PHPSTORM_META {
         'command.laratrust.setup-teams' => \Laratrust\Commands\SetupTeamsCommand::class,
         'command.laratrust.seeder' => \Laratrust\Commands\MakeSeederCommand::class,
         'command.laratrust.upgrade' => \Laratrust\Commands\UpgradeCommand::class,
+        'purify' => \Stevebauman\Purify\Purify::class,
         'sitemap' => \Watson\Sitemap\Sitemap::class,
         'Yab\MySQLScout\Services\ModelService' => \Yab\MySQLScout\Services\ModelService::class,
         'Yab\MySQLScout\Services\IndexService' => \Yab\MySQLScout\Services\IndexService::class,
@@ -256,6 +257,7 @@ namespace PHPSTORM_META {
         'command.laratrust.setup-teams' => \Laratrust\Commands\SetupTeamsCommand::class,
         'command.laratrust.seeder' => \Laratrust\Commands\MakeSeederCommand::class,
         'command.laratrust.upgrade' => \Laratrust\Commands\UpgradeCommand::class,
+        'purify' => \Stevebauman\Purify\Purify::class,
         'sitemap' => \Watson\Sitemap\Sitemap::class,
         'Yab\MySQLScout\Services\ModelService' => \Yab\MySQLScout\Services\ModelService::class,
         'Yab\MySQLScout\Services\IndexService' => \Yab\MySQLScout\Services\IndexService::class,
@@ -443,6 +445,7 @@ namespace PHPSTORM_META {
         'command.laratrust.setup-teams' => \Laratrust\Commands\SetupTeamsCommand::class,
         'command.laratrust.seeder' => \Laratrust\Commands\MakeSeederCommand::class,
         'command.laratrust.upgrade' => \Laratrust\Commands\UpgradeCommand::class,
+        'purify' => \Stevebauman\Purify\Purify::class,
         'sitemap' => \Watson\Sitemap\Sitemap::class,
         'Yab\MySQLScout\Services\ModelService' => \Yab\MySQLScout\Services\ModelService::class,
         'Yab\MySQLScout\Services\IndexService' => \Yab\MySQLScout\Services\IndexService::class,
@@ -630,6 +633,7 @@ namespace PHPSTORM_META {
         'command.laratrust.setup-teams' => \Laratrust\Commands\SetupTeamsCommand::class,
         'command.laratrust.seeder' => \Laratrust\Commands\MakeSeederCommand::class,
         'command.laratrust.upgrade' => \Laratrust\Commands\UpgradeCommand::class,
+        'purify' => \Stevebauman\Purify\Purify::class,
         'sitemap' => \Watson\Sitemap\Sitemap::class,
         'Yab\MySQLScout\Services\ModelService' => \Yab\MySQLScout\Services\ModelService::class,
         'Yab\MySQLScout\Services\IndexService' => \Yab\MySQLScout\Services\IndexService::class,
@@ -817,6 +821,7 @@ namespace PHPSTORM_META {
         'command.laratrust.setup-teams' => \Laratrust\Commands\SetupTeamsCommand::class,
         'command.laratrust.seeder' => \Laratrust\Commands\MakeSeederCommand::class,
         'command.laratrust.upgrade' => \Laratrust\Commands\UpgradeCommand::class,
+        'purify' => \Stevebauman\Purify\Purify::class,
         'sitemap' => \Watson\Sitemap\Sitemap::class,
         'Yab\MySQLScout\Services\ModelService' => \Yab\MySQLScout\Services\ModelService::class,
         'Yab\MySQLScout\Services\IndexService' => \Yab\MySQLScout\Services\IndexService::class,
@@ -1004,6 +1009,7 @@ namespace PHPSTORM_META {
         'command.laratrust.setup-teams' => \Laratrust\Commands\SetupTeamsCommand::class,
         'command.laratrust.seeder' => \Laratrust\Commands\MakeSeederCommand::class,
         'command.laratrust.upgrade' => \Laratrust\Commands\UpgradeCommand::class,
+        'purify' => \Stevebauman\Purify\Purify::class,
         'sitemap' => \Watson\Sitemap\Sitemap::class,
         'Yab\MySQLScout\Services\ModelService' => \Yab\MySQLScout\Services\ModelService::class,
         'Yab\MySQLScout\Services\IndexService' => \Yab\MySQLScout\Services\IndexService::class,
@@ -1191,6 +1197,7 @@ namespace PHPSTORM_META {
         'command.laratrust.setup-teams' => \Laratrust\Commands\SetupTeamsCommand::class,
         'command.laratrust.seeder' => \Laratrust\Commands\MakeSeederCommand::class,
         'command.laratrust.upgrade' => \Laratrust\Commands\UpgradeCommand::class,
+        'purify' => \Stevebauman\Purify\Purify::class,
         'sitemap' => \Watson\Sitemap\Sitemap::class,
         'Yab\MySQLScout\Services\ModelService' => \Yab\MySQLScout\Services\ModelService::class,
         'Yab\MySQLScout\Services\IndexService' => \Yab\MySQLScout\Services\IndexService::class,

@@ -17,12 +17,12 @@ class ContentCollection extends Collection
 {
     public function videos()
     {
-
+        return $this->whereIn("type", "video");
     }
 
     public function pamphlets()
     {
-
+        return $this->whereIn("type", "pamphlet");
     }
 
     public function articles()
@@ -39,7 +39,9 @@ class ContentCollection extends Collection
     {
         $items = $this;
         $result = collect();
+
         foreach ($items as $content) {
+
             $myContentType = optional($content->contenttype)->name;
             $result->push([
                 "content" => $content,

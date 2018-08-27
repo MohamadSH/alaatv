@@ -2,11 +2,13 @@
 
 namespace App\Http\Middleware;
 
+use App\Traits\UserSeenTrait;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 
 class UserTracker
 {
+    use UserSeenTrait;
     /**
      * Handle an incoming request.
      *
@@ -16,9 +18,13 @@ class UserTracker
      */
     public function handle($request, Closure $next)
     {
+        $seenCount = optional($request->user())->seen($request->path());
+
+        $this->setSeenCountInRequestBody($request, $seenCount);
 
         $response = $next($request);
-        optional($request->user())->seen($request->path());
         return $response;
     }
+
+
 }

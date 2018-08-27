@@ -33,7 +33,7 @@ class OrderCheck
             /**
              * Making an open order for the user or retrieving the existing one
              */
-            $openOrder = Auth::user()->openOrders()->get();
+            $openOrder = $request->user()->openOrders()->get();
             if($openOrder->isEmpty()){
                 $request = new Request();
                 $request->offsetSet("paymentstatus_id" , Config::get("constants.PAYMENT_STATUS_UNPAID"));

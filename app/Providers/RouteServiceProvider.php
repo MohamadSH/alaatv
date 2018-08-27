@@ -229,8 +229,6 @@ class RouteServiceProvider extends ServiceProvider
                        $c->load("template");
                    if (!$c->relationLoaded('contentsets'))
                        $c->load("contentsets");
-                   if (!$c->relationLoaded('files'))
-                       $c->load("files");
                }
                 return  $c ?? abort(404);
             });
@@ -245,8 +243,6 @@ class RouteServiceProvider extends ServiceProvider
                         $c->load("template");
                     if (!$c->relationLoaded('contentsets'))
                         $c->load("contentsets");
-                    if (!$c->relationLoaded('files'))
-                        $c->load("files");
                 }
                 return  $c ?? abort(404);
             });

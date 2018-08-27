@@ -9,10 +9,9 @@ use Iatstuti\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\{
+    Auth, Cache, Config, DB
+};
 use Laratrust\Traits\LaratrustUserTrait;
 use Schema;
 
@@ -720,8 +719,8 @@ class User extends Authenticatable
 
     public function seen($path){
         $path = "/".ltrim($path,"/");
-        $SeenCount = 0;
 
+        $SeenCount = 0;
         $websitepage = Websitepage::firstOrNew(["url"=>$path ]);
         if(!isset($websitepage->id)) {
             $websitepage->save();
@@ -738,5 +737,10 @@ class User extends Authenticatable
         }
 
         return $SeenCount;
+    }
+
+    public function CanSeeCounter(): bool
+    {
+        return $this->hasRole("admin") ? true : false;
     }
 }

@@ -158,7 +158,8 @@ return [
         /*
          * Package Service Providers...
          */
-
+        Backup\BackupServiceProvider::class,
+        Artesaos\SEOTools\Providers\SEOToolsServiceProvider::class,
 
 //        Laravel\Scout\ScoutServiceProvider::class,
 //        Yab\MySQLScout\Providers\MySQLScoutServiceProvider::class,
@@ -173,8 +174,7 @@ return [
         App\Providers\WebsiteSettingProvider::class,
 
         App\Providers\MedianaServiceProvider::class,
-        Backup\BackupServiceProvider::class,
-        Artesaos\SEOTools\Providers\SEOToolsServiceProvider::class,
+
 
     ],
     /*

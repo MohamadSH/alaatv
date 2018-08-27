@@ -4,6 +4,8 @@ namespace App;
 
 use App\Classes\Advertisable;
 use App\Classes\LinkGenerator;
+use App\Classes\SEO\SeoInterface;
+use App\Classes\SEO\SeoMetaTagsGenerator;
 use App\Classes\Taggable;
 use App\Collection\ContentCollection;
 use App\Traits\APIRequestCommon;
@@ -17,6 +19,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
+use Stevebauman\Purify\Facades\Purify;
 
 /**
  * App\Content
@@ -75,17 +78,33 @@ use Illuminate\Support\Facades\Config;
  * @method static \Illuminate\Database\Query\Builder|\App\Content withoutTrashed()
  * @mixin \Eloquent
  * @property-read mixed $display_name
+ * @property string $duration مدت زمان فیلم
+ * @property array|null|string $thumbnail عکس هر محتوا
+ * @property int $isFree عکس هر محتوا
+ * @property-read mixed $contentset
+ * @property-read mixed $session
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereDuration($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereFile($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereIsFree($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereThumbnail($value)
+ * @property-read mixed $author
+ * @property-read mixed $meta_description
+ * @property-read mixed $meta_title
+ * @property-read mixed $title
  */
-class Content extends Model implements Advertisable, Taggable
+class Content extends Model implements Advertisable, Taggable, SeoInterface
 {
     use APIRequestCommon;
     use SoftDeletes;
     use Helper;
+    protected static $purifyNullConfig = ['HTML.Allowed' => ''];
+
     /**      * The attributes that should be mutated to dates.        */
     protected $dates = [
         'created_at',
         'updated_at',
-        'deleted_at'
+        'deleted_at',
+        'validSince'
     ];
 
     protected $table = "educationalcontents";
@@ -252,6 +271,29 @@ class Content extends Model implements Advertisable, Taggable
         Artisan::call('cache:clear');
     }
 
+    public function getTitleAttribute($value){
+        return Purify::clean($value,self::$purifyNullConfig);
+    }
+    public function getDescriptionAttribute($value){
+        return Purify::clean($value);
+    }
+    public function getNameAttribute($value){
+        return Purify::clean($value,self::$purifyNullConfig);
+    }
+    public function getMetaTitleAttribute($value){
+        if(isset($value[0]))
+            return Purify::clean($value,self::$purifyNullConfig);
+        else{
+            return Purify::clean(mb_substr($this->display_name,0,config("constants.META_TITLE_LIMIT"), "utf-8"),self::$purifyNullConfig);
+        }
+    }
+    public function getMetaDescriptionAttribute($value){
+        if(isset($value[0]))
+            return Purify::clean($value,self::$purifyNullConfig);
+        else{
+            return Purify::clean(mb_substr($this->description,0,config("constants.META_DESCRIPTION_LIMIT"), "utf-8"),self::$purifyNullConfig);
+        }
+    }
     /**
      * @return null|string|\Symfony\Component\HttpFoundation\StreamedResponse
      * @throws Exception
@@ -302,16 +344,15 @@ class Content extends Model implements Advertisable, Taggable
     /**
      * @param $value
      * @return array|null|string
+     *
      * @throws Exception
      */
     public function getThumbnailAttribute($value){
         $t = json_decode($value);
-        $link = new LinkGenerator($t);
-        try {
-            return $link->getLinks();
-        } catch (Exception $e) {
-            throw $e;
-        }
+        $link = null;
+        if(isset($t))
+            $link = new LinkGenerator($t);
+        return optional($link)->getLinks();
     }
 
     public function setThumbnailAttribute($input){
@@ -386,41 +427,6 @@ class Content extends Model implements Advertisable, Taggable
         $explodedDateTime = explode(" ", $this->validSince);
         $explodedTime = $explodedDateTime[1];
         return $this->convertDate($this->validSince, "toJalali") . " " . $explodedTime;
-    }
-
-    public function fileMultiplexer($contentTypes = array())
-    {
-        if (!empty($contentTypes)) {
-            if (in_array(Contenttype::where("name", "exam")->get()->first()->id, $contentTypes)) {
-                $disk = Config::get('constants.DISK18_CLOUD');
-            } elseif (in_array(Contenttype::where("name", "pamphlet")->get()->first()->id, $contentTypes)) {
-                $disk = Config::get('constants.DISK19_CLOUD');
-            } elseif (in_array(Contenttype::where("name", "book")->get()->first()->id, $contentTypes)) {
-                $disk = Config::get('constants.DISK20_CLOUD');
-            }
-            if (isset($disk))
-                return $disk;
-            else
-                return false;
-        } else {
-            if ($this->contenttype_id == Contenttype::where("name", "exam")->get()->first()->id ) {
-                $disk = Config::get('constants.DISK18_CLOUD');
-            } elseif ($this->contenttype_id == Contenttype::where("name", "pamphlet")->get()->first()->id ) {
-                $disk = Config::get('constants.DISK19_CLOUD');
-            } elseif ($this->contenttype_id == Contenttype::where("name", "book")->get()->first()->id ) {
-                $disk = Config::get('constants.DISK20_CLOUD');
-            }
-
-            if (isset($disk)) {
-
-                $disk = Disk::where("name", $disk)->get()->first();
-                return $disk;
-            } else {
-                return false;
-            }
-        }
-
-        return false;
     }
 
     public function isActive(): bool
@@ -519,6 +525,10 @@ class Content extends Model implements Advertisable, Taggable
         });
     }
 
+    /**
+     * @return mixed
+     * @throws Exception
+     */
     public function getDisplayNameAttribute()
     {
         try {
@@ -538,11 +548,6 @@ class Content extends Model implements Advertisable, Taggable
         } catch (Exception $e) {
             throw $e;
         }
-    }
-
-    public function contenttypes()
-    {
-        return $this->belongsToMany('App\Contenttype', 'educationalcontent_contenttype', 'content_id', 'contenttype_id');
     }
 
     public function contenttype()
@@ -593,31 +598,48 @@ class Content extends Model implements Advertisable, Taggable
 
     public function getContentsetAttribute()
     {
-        return $this->contentsets->where("pivot.isDefault", 1)->first();
+        $content = $this;
+        $key = "content:contentSet:" . $this->cacheKey();
+        $contentset = Cache::tags(["content"])->remember($key, Config::get("constants.CACHE_60"), function () use ($content) {
+            return $content->contentsets->where("pivot.isDefault", 1)->first();
+        });
+        return $contentset;
     }
 
     public function getSessionAttribute()
     {
+        $content = $this;
+        $order = optional($this->pivot)->order;
+        if(isset($order))
+            return $order;
 
-        $cs = $this->contentset;
-        return isset($cs) ? $cs->pivot->order : null;
+        $key = "content:session:" . $this->cacheKey();
+        $session = Cache::tags(["content"])->remember($key, Config::get("constants.CACHE_60"), function () use ($content) {
+            $cs = $content->contentset;
+            return isset($cs) ? $cs->pivot->order : null;
+        });
+        return $session;
     }
 
     public function getSetMates()
     {
-        $contentSet = $this->contentset;
+        $content = $this;
+        $key = "content:setMates:" . $this->cacheKey();
 
-        $sameContents = optional($contentSet)->contents()
-            ->active()
-            ->get()
-            ->sortBy("pivot.order")
-            ->load('files')
-            ->load('contenttype');
+        $setMates = Cache::tags(["content"])->remember($key, Config::get("constants.CACHE_60"), function () use ($content) {
+            $contentSet = $content->contentset;
+            $sameContents = optional($contentSet)->contents()
+                ->active()
+                ->get()
+                ->sortBy("pivot.order")
+                ->load('contenttype');
+            return [
+                $sameContents,
+                optional($contentSet)->name,
+            ];
+        });
+        return $setMates;
 
-        return [
-            $sameContents,
-            optional($contentSet)->name,
-        ];
     }
 
     public function retrievingTags()
@@ -642,14 +664,61 @@ class Content extends Model implements Advertisable, Taggable
 
     public function getAddItems(): Collection
     {
-        $adItems = collect();
-        if ($this->contentsets->isNotEmpty() && $this->contentsets->first()->id != 199)
-            $adItems = Content::whereHas("contentsets", function ($q) {
-                $q->where("id", 199);
-            })
-                ->where("enable", 1)
-                ->orderBy("order")
-                ->get();
+        $content = $this;
+        $key = "content:getAddItems" . $content->cacheKey();
+
+        $adItems = Cache::tags(["content"])->remember($key, Config::get("constants.CACHE_60"), function () use ($content) {
+            $adItems = collect();
+            if ($content->contentsets->isNotEmpty() && $content->contentsets->first()->id != 199)
+                $adItems = Content::whereHas("contentsets", function ($q) {
+                    $q->where("id", 199);
+                })
+                    ->where("enable", 1)
+                    ->orderBy("order")
+                    ->get();
+            return $adItems;
+        });
+
         return $adItems;
+    }
+
+    public function getAuthorAttribute(){
+        $content = $this;
+        $key = "content:author" . $content->cacheKey();
+        $author = Cache::tags(["user"])->remember($key, Config::get("constants.CACHE_60"), function () use ($content) {
+            return optional($this->user)->getfullName();
+        });
+        return isset($author) ? $author : "";
+    }
+    public function getMetaTags(): array
+    {
+        return [
+                'title' => $this->metaTitle,
+                'description' => $this->metaDescription,
+                'url' => action('ContentController@show',$this),
+                'canonical' => action('ContentController@show',$this),
+                'site' => 'آلاء',
+                'imageUrl' => $this->thumbnail,
+                'imageWidth' => '1280',
+                'imageHeight' => '720',
+                'seoMod' => SeoMetaTagsGenerator::SEO_MOD_VIDEO_TAGS,
+                'playerUrl' => action('ContentController@embed',$this),
+                'playerWidth' => '854',
+                'playerHeight' => '480',
+                'videoDirectUrl' => $this->file->first()->where('res','480p')->first()->link,
+                'videoActorName' => $this->author,
+                'videoActorRole' => 'دبیر',
+                'videoDirector' => 'آلاء',
+                'videoWriter' => 'آلاء',
+                'videoDuration' => $this->duration,
+                'videoReleaseDate' => $this->validSince,
+                'tags' => $this->tags,
+                'videoWidth' => '854',
+                'videoHeight' => '480',
+                'videoType' => 'video/mp4',
+                'articleAuthor' => $this->author,
+                'articleModifiedTime' => $this->updated_at,
+                'articlePublishedTime' => $this->validSince,
+        ];
     }
 }

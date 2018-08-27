@@ -20,7 +20,6 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         \App\Http\Middleware\TrustProxies::class,
-        \App\Http\Middleware\UserTracker::class,
     ];
 
     /**
@@ -38,6 +37,7 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\OrderCheck::class,
+            \App\Http\Middleware\UserTracker::class,
 //            \App\Http\Middleware\Minify::class,
         ],
 
