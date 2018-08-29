@@ -259,7 +259,7 @@
                                                     {{$lesson["pic"]."?w=253&h=142"}}
                                             @else
                                                     http://via.placeholder.com/195x195
-                                            @endif " />
+                                            @endif " alt="{{$lesson["displayName"]}}"/> 
                                         </a>
                                     </div>
                                     <div class="tile-title" style="height: 145px;">
@@ -298,7 +298,7 @@
                 <div class="portlet-body">
                     <div class="row">
                         <div class="col-lg-3 col-md-2 col-sd-2 col-xs-12 text-center">
-                            <img src="/assets/extra/Alaa-logo.gif" style="width: 50%;">
+                            <img src="/assets/extra/Alaa-logo.gif" style="width: 50%;" alt="فیلم کنکور آلاء" />
                         </div>
                         <div class="col-lg-9 col-md-10 col-sd-10 col-xs-12">
                             <h4></h4>
