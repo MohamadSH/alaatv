@@ -429,6 +429,7 @@ class AppServiceProvider extends ServiceProvider
                                 [
                                     "name"=>$section,
                                     "displayName" => "نظام قدیم",
+                                    "descriptiveName" => "کنکور نظام قدیم" ,
                                     "lessons" => $lessons ,
                                     "tags" => [
                                         "کنکور"
@@ -496,6 +497,7 @@ class AppServiceProvider extends ServiceProvider
                                 [
                                     "name"=>$section,
                                     "displayName" => "مقطع یازدهم",
+                                    "descriptiveName" => "مقطع یازدهم" ,
                                     "lessons" => $lessons ,
                                     "tags" => [
                                         "یازدهم"
@@ -581,6 +583,7 @@ class AppServiceProvider extends ServiceProvider
                                 [
                                     "name"=>$section,
                                     "displayName" => "مقطع دهم",
+                                    "descriptiveName" => "مقطع دهم" ,
                                     "lessons" => $lessons ,
                                     "tags" => [
                                         "دهم"
@@ -648,6 +651,7 @@ class AppServiceProvider extends ServiceProvider
                                 [
                                     "name"=>$section,
                                     "displayName" => "همایش و جمع بندی",
+                                    "descriptiveName" => "همایش و جمع بندی" ,
                                     "lessons" => $lessons ,
                                     "tags" => [
                                         "همایش"
