@@ -2444,7 +2444,7 @@ class HomeController extends Controller
         $disk = $request->header("X-Datatype");
         $done = false;
 
-        dd($request->headers->all());
+//        dd($request->headers->all());
         try {
             $dirname = pathinfo($filePath, PATHINFO_DIRNAME);
             $ext = pathinfo($originalFileName, PATHINFO_EXTENSION);
@@ -2452,6 +2452,10 @@ class HomeController extends Controller
 
             $newFileNameDir = $dirname . '/' . $fileName;
 
+            dd([
+                "filePath"=>$filePath,
+                "newFileNameDir"=>$newFileNameDir
+            ]);
             if (File::exists($newFileNameDir)) {
                 File::delete($newFileNameDir);
             }
