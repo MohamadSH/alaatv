@@ -16,17 +16,19 @@ use App\Traits\{
 
 use Auth;
 use Carbon\Carbon;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\{
     Config, File, Input
 };
+use Illuminate\Support\Str;
 use Jenssegers\Agent\Agent;
 
 
 class ContentController extends Controller
 {
-    use APIRequestCommon;
+
     protected $response ;
     protected $setting ;
 
@@ -245,152 +247,21 @@ class ContentController extends Controller
      */
     public function store(InsertContentRequest $request)
     {
+        //TODO:// validate Data Format in Requests
         $content = new Content();
-        $time =  $request->get("validSinceTime");
-        $validSince = $request->get("validSinceDate");
-        $enabled = $request->has("enable");
-        $tagString = $request->get("tags") ;
         $contentset_id = $request->get("contentset_id");
         $order = $request->get("order");
-        $inputData = $request->all();
-        try
-        {
-            $content->fill($inputData) ;
-            $content->validSince = $this->getValidSinceDateTime($time, $validSince);
-            $content->enable = $enabled ? 1 : 0;
-            $content->template_id = $this->findTemplateIdOfaContent($content);
+        $this->fillContentFromRequest($request, $content);
 
-            if($tagString)
-            {
-                $tags = $this->getTagsArrayFromTagString($tagString);
-                $tagsJson = [
-                    "bucket" => "content",
-                    "tags" => $tags
-                ];
-                $content->tags = json_encode($tagsJson, JSON_UNESCAPED_UNICODE);
-            }
-
-            $done = false ;
-            if($content->save()){
-                if(isset($contentset_id))
-                {
-                    $pivots = [];
-                    $pivots["order"] = isset($order) ? $order : 0;
-                    $pivots["isDefault"] = 1;
-                    if(empty($pivots))
-                        $content->contentsets()->attach($contentset_id);
-                    else
-                        $content->contentsets()->attach($contentset_id , $pivots);
-                }
-
-                if($request->has("file"))
-                {
-                    $files = $request->get("file") ;
-                }
-                elseif($request->has("files")) {
-                    $files = $request->get("files");
-                } //ToDo : should be merged
-
-                if(isset($files))
-                {
-                    foreach ($files as $key => $file)
-                    {
-                        $fileName = $file;
-                        if(strlen(preg_replace('/\s+/', '',  $fileName) ) == 0)
-                            continue;
-
-                        $fileRequest->offsetSet('name' ,$fileName ) ;
-                        $disk = $request->get("disk")[$key];
-                        if(isset($disk))
-                        {
-                            $fileRequest->offsetSet('disk_id' , $disk) ;
-                        }
-                        else
-                        {
-                            $disk = $content->fileMultiplexer();
-                            if($disk !== false)
-                                $fileRequest->offsetSet('disk_id' , $disk->id) ;
-                        }
-
-                        $fileId = $fileController->store($fileRequest) ;
-                        if($fileId)
-                        {
-                            $attachPivot = array();
-                            $caption = $request->get("caption")[$key];
-                            if(isset($caption))
-                                $attachPivot["caption"] = $caption;
-
-                            $label = $request->get("label")[$key];
-                            if(isset($label))
-                                $attachPivot["label"] = $label;
-
-                            if(empty($attachPivot))
-                                $content->files()->attach($fileId);
-                            else
-                                $content->files()->attach($fileId , $attachPivot);
-                        }
-                    }
-                }
-
-                if($content->enable  &&
-                    isset($content->tags) &&
-                    is_array($content->tags->tags) &&
-                    !empty($content->tags->tags))
-                {
-                    $itemTagsArray = $content->tags->tags ;
-                    $params = [
-                        "tags" => json_encode($itemTagsArray, JSON_UNESCAPED_UNICODE),
-                    ];
-
-                    if(isset($content->created_at) && strlen($content->created_at) > 0 )
-                        $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $content->created_at )->timestamp;
-
-                    $response =  $this->sendRequest(
-                        config("constants.TAG_API_URL")."id/content/".$content->id ,
-                        "PUT",
-                        $params
-                    );
-
-                    if($response["statusCode"] == 200)
-                    {
-                        //
-                    }
-                    else
-                    {
-                    }
-                }
-
-
-                if($request->ajax() || $request->has("fromAPI"))
-                    $done = true;
-                else
-                    session()->put('success', 'درج محتوا با موفقیت انجام شد');
-            }
-            else{
-                if($request->ajax() || $request->has("fromAPI"))
-                    $done = false ;
-                else
-                    session()->put('error', 'خطای پایگاه داده');
-            }
-            if(isset($done))
-            {
-                if($done)
-                    return $this->response->setStatusCode(200 )
-                        ->setContent(["id"=>$content->id]);
-                else
-                    return $this->response->setStatusCode(503) ;
-            }
-            else
-            {
-                return redirect()->back();
-            }
+        if($content->save()){
+            if(isset($contentset_id))
+                $this->attachContentSetToContent($content, $contentset_id,$order);
+            return $this->response
+                ->setStatusCode(Response::HTTP_OK )
+                ->setContent(["id"=>$content->id]);
         }
-        catch (\Exception    $e)
-        {
-            $message = "unexpected error";
-            return $this->makeExceptionLogError($message, $e,$this->response);;
-        }
-
+        return $this->response
+            ->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE) ;
     }
     /**
      * Update the specified resource in storage.
@@ -401,151 +272,10 @@ class ContentController extends Controller
      */
     public function update(EditContentRequest $request, $content)
     {
-        $content->fill($request->all()) ;
+        $this->fillContentFromRequest($request, $content);
 
-        $fileController = new FileController();
-        $fileRequest = new InsertFileRequest();
-
-
-        if($request->has("validSinceTime"))
-        {
-            $time =  $request->get("validSinceTime");
-            if(strlen($time)>0) $time = Carbon::parse($time)->format('H:i:s');
-            else $time ="00:00:00" ;
-        }
-
-        if($request->has("validSinceDate"))
-        {
-            $validSince = $request->get("validSinceDate");
-            $validSince = Carbon::parse($validSince)->format('Y-m-d'); //Muhammad : added a day because it returns one day behind and IDK why!!
-            if(isset($time)) $validSince = $validSince . " " . $time;
-            $content->validSince = $validSince;
-        }
-
-//        if($request->has("contenttype_id"))
-//        {
-//            $content->contenttype_id = $request->get("contenttype_id");
-//        }
-
-        if($request->has("enable"))
-            $content->enable = 1;
-        else
-            $content->enable = 0 ;
-
-        if($request->has("tags"))
-        {
-            $tagString = $request->get("tags") ;
-            $tags = $this->getTagsArrayFromTagString($tagString);
-            $tagsJson = [
-                "bucket" => "content",
-                "tags" => $tags
-            ];
-            $content->tags = json_encode($tagsJson, JSON_UNESCAPED_UNICODE);
-        }
-
+        //TODO:// update default contentset
         if($content->update()){
-
-//            if($request->has("contentsets"))
-//            {
-//                $contentSets = $request->get("contentsets");
-//                foreach ($contentSets as $contentSet)
-//                {
-//                    if(isset($contentSet["order"]))
-//                        $content->contentsets()->sync($contentSet["id"] , ["order"=>$contentSet["order"]]);
-//                    else
-//                        $content->contentsets()->sync($contentSet["id"]);
-//                }
-//            }
-
-//            if($request->has("majors"))
-//            {
-//                $majors = $request->get("majors") ;
-//                $content->majors()->sync($majors);
-//            }
-//
-//            if($request->has("grades"))
-//            {
-//                $grades = $request->get("grades") ;
-//                $content->grades()->sync($grades);
-//            }
-
-            if ($request->has("file"))
-            {
-                $files = $request->get("file") ;
-
-            }elseif($request->has("files")) {
-                $files = $request->get("files");
-            } //ToDo : should be merged
-
-            if(isset($files))
-            {
-                foreach ($files as $key => $file)
-                {
-                    $fileName = $file;
-                    if(strlen(preg_replace('/\s+/', '',  $fileName) ) == 0)
-                        continue;
-
-                    $fileRequest->offsetSet('name' ,$fileName ) ;
-                    $disk = $request->get("disk")[$key];
-                    if(isset($disk))
-                    {
-                        $fileRequest->offsetSet('disk_id' , $disk) ;
-                    }
-                    else
-                    {
-                        $disk = $content->fileMultiplexer();
-                        if($disk !== false)
-                            $fileRequest->offsetSet('disk_id' , $disk->id) ;
-                    }
-
-                    $fileId = $fileController->store($fileRequest) ;
-                    if($fileId)
-                    {
-                        $attachPivot = array();
-                        $caption = $request->get("caption")[$key];
-                        if(isset($caption))
-                            $attachPivot["caption"] = $caption;
-
-                        $label = $request->get("label")[$key];
-                        if(isset($label))
-                            $attachPivot["label"] = $label;
-
-                        if(empty($attachPivot))
-                            $content->files()->attach($fileId);
-                        else
-                            $content->files()->attach($fileId , $attachPivot);
-                    }
-                }
-            }
-
-            if($content->enable  &&  isset($content->tags) &&
-                is_array($content->tags->tags) &&
-                !empty($content->tags->tags))
-            {
-                $itemTagsArray = $content->tags->tags ;
-                $params = [
-                    "tags" => json_encode($itemTagsArray, JSON_UNESCAPED_UNICODE),
-                ];
-
-                if(isset($content->created_at) && strlen($content->created_at) > 0 )
-                    $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $content->created_at )->timestamp;
-
-                $response =  $this->sendRequest(
-                    config("constants.TAG_API_URL")."id/content/".$content->id ,
-                    "PUT",
-                    $params
-                );
-
-                if($response["statusCode"] == 200)
-                {
-                    //
-                }
-                else
-                {
-                    session()->put('error', 'خطا در ریکوئست تگ ها');
-                }
-            }
-
             session()->put('success', 'اصلاح محتوا با موفقیت انجام شد');
         }
         else{
@@ -563,6 +293,7 @@ class ContentController extends Controller
      */
     public function destroy($content)
     {
+        //TODO:// remove Tags From Redis, ( Do it in ContentObserver)
         if ($content->delete()){
             return $this->response->setStatusCode(Response::HTTP_OK) ;
         }
@@ -581,47 +312,6 @@ class ContentController extends Controller
     {
         return redirect('/c',Response::HTTP_MOVED_PERMANENTLY);
     }
-
-
-    /**
-     * Search for an educational content
-     *
-     * @param \App\Content $content
-     * @param \App\File $file
-     * @return \Illuminate\Http\Response
-     */
-    public function detachFile($content , $file)
-    {
-        if($content->files()->detach($file))
-        {
-            session()->put('success', __('content.File Removed Successful'));
-            return $this->response->setStatusCode(Response::HTTP_OK ) ;
-        }else{
-            return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE) ;
-        }
-    }
-
-    /**
-     * String the caption of content file
-     *
-     * @param \App\Http\Requests\InsertContentFileCaption $request
-     * @param \App\Content $content
-     * @param \App\File $file
-     * @return \Illuminate\Http\Response
-     */
-    public function storeFileCaption(InsertContentFileCaption $request , Content $content , File $file)
-    {
-        $caption = $request->get("caption");
-        if(strcmp($content->files()->where("id" , $file->id)->get()->first()->pivot->caption , $caption) == 0)
-            return $this->response->setStatusCode(501)->setContent("لطفا کپشن جدید وارد نمایید");
-        if($content->files()->updateExistingPivot($file->id ,["caption" => $caption]))
-        {
-            session()->put('success', 'عنوان با موفقیت اصلاح شد');
-            return $this->response->setStatusCode(200) ;
-        } else {
-            return $this->response->setStatusCode(503) ;
-        }
-     }
 
      public function basicStore(Request $request)
      {
@@ -812,23 +502,7 @@ class ContentController extends Controller
         $this->middleware('permission:' . Config::get("constants.REMOVE_EDUCATIONAL_CONTENT_ACCESS"), ['only' => 'destroy']);
     }
 
-    /**
-     * @param $content
-     * @return int|null
-     */
-    private function findTemplateIdOfaContent($content)
-    {
-        switch ($content->contenttype_id) {
-            case 1 : // pamphlet
-                return 2;
-                break;
-            case 8 : // video
-                return 1;
-                break;
-            default:
-                return null;
-        }
-    }
+
 
     /**
      * @param $time
@@ -864,23 +538,82 @@ class ContentController extends Controller
     }
 
     /**
-     * @param $message
-     * @param $e
-     * @param Response $response
-     * @return Response
+     * @param Content $content
+     * @param $contentset_id
+     * @param $order
+     * @param int $isDefault
      */
-    private function makeExceptionLogError($message, $e, Response $response): Response
+    private function attachContentSetToContent(Content &$content, $contentset_id,$order, $isDefault = 1): void
     {
-        $exceptionLog = $response
-            ->setStatusCode(500)
-            ->setContent([
-                "message" => $message,
-                "error" => $e->getMessage(),
-                "line" => $e->getLine(),
-                "file" => $e->getFile()
-            ]);
-        return $exceptionLog;
+        //TODO:// handle Not Default ContentSets Like WatchLater ContentSet or Favorite ContentSet For a User
+        $pivots = [];
+        $pivots["order"] = isset($order) ? $order : 0;
+        $pivots["isDefault"] = $isDefault;
+        $content->contentsets()->attach($contentset_id, $pivots);
     }
 
+    /**
+     * @param $fileName
+     * @return boolean
+     */
+    private function strIsEmpty($str):bool
+    {
+        return strlen(preg_replace('/\s+/', '', $str)) == 0 ;
+    }
 
+    /**
+     * @param Content $content
+     *
+     * @param array $files
+     */
+    private function storeFilesOfContent(Content &$content, array $files):void
+    {
+        $disk = $content->isFree ? config("constants.DISK_FREE_CONTENT") : config("constants.DISK_PRODUCT_CONTENT");
+
+        $fileCollection = collect();
+
+        foreach ($files as $key => $file) {
+            $fileName = $file->name;
+            $caption = $file->caption;
+            $res = $file->res;
+            $type = $file->type;
+            if ($this->strIsEmpty($fileName))
+                continue;
+            $fileCollection->push([
+                "uuid" => Str::uuid()->toString(),
+                "disk" => $disk,
+                "url" => null,
+                "fileName" => $fileName,
+                "size" => null,
+                "caption" => $caption,
+                "res" => $res,
+                "type" => $type,
+                "ext" => pathinfo($fileName, PATHINFO_EXTENSION)
+            ]);
+        }
+        $content->file = $fileCollection;
+    }
+
+    /**
+     * @param FormRequest $request
+     * @param Content $content
+     * @return void
+     */
+    private function fillContentFromRequest(FormRequest $request, Content &$content):void
+    {
+        $inputData = $request->all();
+        $time = $request->get("validSinceTime");
+        $validSince = $request->get("validSinceDate");
+        $enabled = $request->has("enable");
+        $tagString = $request->get("tags");
+        $files = $request->get("files");
+
+        $content->fill($inputData);
+        $content->validSince = $this->getValidSinceDateTime($time, $validSince);
+        $content->enable = $enabled ? 1 : 0;
+        $content->tags = $this->getTagsArrayFromTagString($tagString);
+
+        if (isset($files))
+            $this->storeFilesOfContent($content, $files);
+    }
 }

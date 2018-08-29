@@ -37,7 +37,7 @@
                 </a>
             </li>
             <li class="nav-item start active open">
-                <a href="{{action("EducationalContentController@search")}}" class="nav-link nav-toggle font-yellow bold">
+                <a href="{{action("ContentController@search")}}" class="nav-link nav-toggle font-yellow bold">
                     <i class="fa fa-video-camera" aria-hidden="true"></i>
                     <span class="title">فیلم های آلاء</span>
                     @if(isset($pageName) && strcmp($pageName , "content")==0)<span class="selected"></span> @endif

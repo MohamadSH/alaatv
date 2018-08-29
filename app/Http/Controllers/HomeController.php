@@ -78,10 +78,18 @@ class HomeController extends Controller
     }*/
     public function debug(Request $request)
     {
+        dd( Str::uuid()->toString());
 
         try
         {
-
+            $files = [
+                "s"=>"m"
+            ];
+            foreach (optional($files) as $key => $file)
+            {
+                dump($file);
+            }
+            dd("s");
             $time =  $request->get("sohrab");
             dd($time);
 
@@ -2452,10 +2460,10 @@ class HomeController extends Controller
 
             $newFileNameDir = $dirname . '/' . $fileName;
 
-            dd([
-                "filePath"=>$filePath,
-                "newFileNameDir"=>$newFileNameDir
-            ]);
+//            dd([
+//                "filePath"=>$filePath,
+//                "newFileNameDir"=>$newFileNameDir
+//            ]);
             if (File::exists($newFileNameDir)) {
                 File::delete($newFileNameDir);
             }
@@ -2489,10 +2497,10 @@ class HomeController extends Controller
                     $filesystem = $filesystem->get($directory  );
                     $path = $filesystem->getPath();
                     $filesystem->setPath($path."/".$fileName);
-                    if($filesystem->put(File::get($newFileNameDir)))
+                    if($filesystem->put(fopen($newFileNameDir, 'r+')))
                         $done = true;
                 }else{
-                    if($filesystem->put($fileName , File::get($newFileNameDir)))
+                    if($filesystem->put($fileName , fopen($newFileNameDir, 'r+')))
                         $done = true;
                 }
 
@@ -2513,7 +2521,7 @@ class HomeController extends Controller
                     'directoryPerm' => 0755
                 ]);
                 $filesystem = new Filesystem($adapter);
-                if($filesystem->put($originalFileName , File::get($newFileNameDir)))
+                if($filesystem->put($originalFileName , fopen($newFileNameDir, 'r+')))
                 {
                     $done = true;
                     // example:  https://cdn.sanatisharif.ir/media/203/hq/203001dtgr.mp4
@@ -2534,7 +2542,7 @@ class HomeController extends Controller
 
             }
             if($done)
-                return $this->response->setStatusCode(200)
+                return $this->response->setStatusCode(Response::HTTP_OK)
                             ->setContent(["fileName"=>$fileName , "prefix"=>$filePrefix]);
             else
                 return $this->response->setStatusCode(503);

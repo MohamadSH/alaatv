@@ -121,8 +121,8 @@ Route::group(['middleware' => 'auth'], function()
     Route::post('exchangeOrderproduct/{order}' , 'OrderController@exchangeOrderproduct');
     Route::get('MBTI-Participation' , "MbtianswerController@create");
     Route::get('MBTI-Introduction' , "MbtianswerController@introduction");
-    Route::post('storeContentFileCaption/{c}/{file}' , 'ContentController@storeFileCaption');
-    Route::post('detachContentFile/{c}/{file}' , 'ContentController@detachFile');
+
+
     Route::get('holdlottery' , "LotteryController@holdLottery");
     Route::get('givePrize', "LotteryController@givePrizes");
     Route::get('smsbot' , "HomeController@smsBot");

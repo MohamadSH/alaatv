@@ -16,9 +16,9 @@ use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\{
+    Artisan, Cache, Config
+};
 use Stevebauman\Purify\Facades\Purify;
 
 /**
@@ -122,7 +122,8 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface
         'metaKeywords',
         'tags',
         'author_id',
-        'contenttype_id'
+        'contenttype_id',
+        'isFree'
     ];
 
 
@@ -588,6 +589,17 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface
     public function getTagsAttribute($value)
     {
         return json_decode($value);
+    }
+
+    public function setTagsAttribute(array $value){
+        $tags = null;
+        if(!empty($value))
+            $tags = json_encode([
+                "bucket" => "content",
+                "tags" => $value
+            ], JSON_UNESCAPED_UNICODE);
+
+        $this->attributes['tags'] = $tags;
     }
 
     public function cacheKey()

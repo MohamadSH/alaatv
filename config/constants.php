@@ -194,6 +194,9 @@ return [
     'DISK20'=>'book',
     'DISK20_CLOUD'=>'bookSftp',
 
+    'DISK_FREE_CONTENT' => 'alaaCdnSFTP',
+    'DISK_PRODUCT_CONTENT' => 'productFileSFTP',
+
     //Profile default image
     'PROFILE_DEFAULT_IMAGE' => 'default_avatar.png',
     'CONSULTATION_DEFAULT_IMAGE' => 'default_consultant_thumbnail.jpg',

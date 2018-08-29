@@ -17,7 +17,8 @@ class InsertContentRequest extends FormRequest
      */
     public function authorize()
     {
-        if(Auth()->user()->can(Config::get('constants.INSERT_EDUCATIONAL_CONTENT_ACCESS'))) return true;
+        if(Auth()->user()->can(Config::get('constants.INSERT_EDUCATIONAL_CONTENT_ACCESS')))
+            return true;
         return false;
     }
 
@@ -25,9 +26,11 @@ class InsertContentRequest extends FormRequest
      * Get the validation rules that apply to the request.
      *
      * @return array
+     * @throws \Exception
      */
     public function rules()
     {
+        throw new \Exception("update File Format Request!");
         $fileExtraRule = "";
         if(Input::hasFile("file")) $fileExtraRule = "|mimes:pdf,rar";
 
