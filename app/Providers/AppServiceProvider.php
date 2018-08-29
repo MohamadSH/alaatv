@@ -4,7 +4,7 @@ namespace App\Providers;
 
 
 use App\{
-    Adapter\AlaaSftpAdapter, Contentset, Contenttype, Product, Productfiletype, Traits\UserCommon, Verificationmessagestatus, Wallettype
+    Adapter\AlaaSftpAdapter, Content, Contentset, Contenttype, Observers\ContentObserver, Product, Productfiletype, Traits\UserCommon, Verificationmessagestatus, Wallettype
 };
 use Carbon\Carbon;
 use Illuminate\Database\QueryException;
@@ -25,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Content::observe(ContentObserver::class);
 
         Horizon::auth(function ($request) {
             if( Auth::check() && Auth::user()->hasRole("admin") ){

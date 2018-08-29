@@ -200,15 +200,13 @@ class ContentController extends Controller
             ] = $this->getContentInformation($content);
 
             $this->generateSeoMetaTags($content);
-
             $seenCount = $this->getSeenCountFromRequest($request);
-
             $userCanSeeCounter = optional(auth()->user())->CanSeeCounter();
 
-            $result = compact( "seenCount","author", "content", "rootContentType", "childContentType", "contentsWithSameType", "soonContentsWithSameType", "contentSet", "contentsWithSameSet", "videosWithSameSet", "pamphletsWithSameSet", "contentSetName", "videoSources",
-                "files", "tags", "sideBarMode", "contentDisplayName", "sessionNumber", "fileToShow", "userCanSeeCounter", "adItems", "videosWithSameSetL", "videosWithSameSetR");
+            $result = compact( "seenCount","author", "content", "rootContentType", "childContentType", "contentsWithSameType", "soonContentsWithSameType", "contentSet", "contentsWithSameSet", "videosWithSameSet", "pamphletsWithSameSet", "contentSetName", "videoSources"
+              , "tags", "sideBarMode", "userCanSeeCounter", "adItems", "videosWithSameSetL", "videosWithSameSetR","contentId");
 
-            dd($result);
+//            return ("sohrab");
             return view("content.show", $result);
         } else
             abort(403);
@@ -247,53 +245,24 @@ class ContentController extends Controller
      */
     public function store(InsertContentRequest $request)
     {
-
+        $content = new Content();
+        $time =  $request->get("validSinceTime");
+        $validSince = $request->get("validSinceDate");
+        $enabled = $request->has("enable");
+        $tagString = $request->get("tags") ;
+        $contentset_id = $request->get("contentset_id");
+        $order = $request->get("order");
+        $inputData = $request->all();
         try
         {
-            $content = new Content();
-            $content->fill($request->all()) ;
-            if(is_null($content->order))
-                $content->order = 0;
-            $fileController = new FileController();
-            $fileRequest = new InsertFileRequest();
+            $content->fill($inputData) ;
+            $content->validSince = $this->getValidSinceDateTime($time, $validSince);
+            $content->enable = $enabled ? 1 : 0;
+            $content->template_id = $this->findTemplateIdOfaContent($content);
 
-            if($request->has("validSinceTime"))
+            if($tagString)
             {
-                $time =  $request->get("validSinceTime");
-                if(strlen($time)>0) $time = Carbon::parse($time)->format('H:i:s');
-                else $time ="00:00:00" ;
-            }
-
-            if($request->has("validSinceDate"))
-            {
-                $validSince = $request->get("validSinceDate");
-                $validSince = Carbon::parse($validSince)->format('Y-m-d'); //Muhammad : added a day because it returns one day behind and IDK why!!
-                if(isset($time)) $validSince = $validSince . " " . $time;
-                $content->validSince = $validSince;
-            }
-
-            if($request->has("enable"))
-                $content->enable = 1;
-            else
-                $content->enable = 0 ;
-
-            switch ($content->contenttype_id)
-            {
-                case 1 : // pamphlet
-                    $content->template_id = 2 ;
-                    break;
-                case 8 : // video
-                    $content->template_id = 1;
-                    break;
-                default:
-                    break;
-            }
-
-            if($request->has("tags"))
-            {
-                $tagString = $request->get("tags") ;
-                $tags = explode("," , $tagString);
-                $tags = array_filter($tags);
+                $tags = $this->getTagsArrayFromTagString($tagString);
                 $tagsJson = [
                     "bucket" => "content",
                     "tags" => $tags
@@ -303,21 +272,11 @@ class ContentController extends Controller
 
             $done = false ;
             if($content->save()){
-
-                if($request->has("contentset_id"))
+                if(isset($contentset_id))
                 {
-                    $contentset_id = $request->get("contentset_id");
-                    if($request->has("order"))
-                    {
-                        $order = $request->get("order");
-                        if(is_null($order))
-                            $order = 0 ;
-
-                        $pivots = [];
-                        $pivots["order"] = $order;
-                        $pivots["isDefault"] = 1;
-                    }
-
+                    $pivots = [];
+                    $pivots["order"] = isset($order) ? $order : 0;
+                    $pivots["isDefault"] = 1;
                     if(empty($pivots))
                         $content->contentsets()->attach($contentset_id);
                     else
@@ -371,10 +330,10 @@ class ContentController extends Controller
                                 $content->files()->attach($fileId , $attachPivot);
                         }
                     }
-
                 }
 
-                if($content->enable  &&  isset($content->tags) &&
+                if($content->enable  &&
+                    isset($content->tags) &&
                     is_array($content->tags->tags) &&
                     !empty($content->tags->tags))
                 {
@@ -408,8 +367,10 @@ class ContentController extends Controller
                     session()->put('success', 'درج محتوا با موفقیت انجام شد');
             }
             else{
-                if($request->ajax() || $request->has("fromAPI")) $done = false ;
-                else session()->put('error', 'خطای پایگاه داده');
+                if($request->ajax() || $request->has("fromAPI"))
+                    $done = false ;
+                else
+                    session()->put('error', 'خطای پایگاه داده');
             }
             if(isset($done))
             {
@@ -427,14 +388,7 @@ class ContentController extends Controller
         catch (\Exception    $e)
         {
             $message = "unexpected error";
-            return $this->response
-                ->setStatusCode(500)
-                ->setContent([
-                    "message"=>$message ,
-                    "error"=>$e->getMessage() ,
-                    "line"=>$e->getLine() ,
-                    "file"=>$e->getFile()
-                ]);
+            return $this->makeExceptionLogError($message, $e,$this->response);;
         }
 
     }
@@ -481,8 +435,7 @@ class ContentController extends Controller
         if($request->has("tags"))
         {
             $tagString = $request->get("tags") ;
-            $tags = explode("," , $tagString);
-            $tags = array_filter($tags);
+            $tags = $this->getTagsArrayFromTagString($tagString);
             $tagsJson = [
                 "bucket" => "content",
                 "tags" => $tags
@@ -857,6 +810,76 @@ class ContentController extends Controller
         $this->middleware('permission:' . Config::get('constants.INSERT_EDUCATIONAL_CONTENT_ACCESS'), ['only' => ['store', 'create', 'create2']]);
         $this->middleware('permission:' . Config::get("constants.EDIT_EDUCATIONAL_CONTENT"), ['only' => ['update', 'edit']]);
         $this->middleware('permission:' . Config::get("constants.REMOVE_EDUCATIONAL_CONTENT_ACCESS"), ['only' => 'destroy']);
+    }
+
+    /**
+     * @param $content
+     * @return int|null
+     */
+    private function findTemplateIdOfaContent($content)
+    {
+        switch ($content->contenttype_id) {
+            case 1 : // pamphlet
+                return 2;
+                break;
+            case 8 : // video
+                return 1;
+                break;
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * @param $time
+     * @param $validSince
+     * @return null|string
+     */
+    private function getValidSinceDateTime($time, $validSince): string
+    {
+        if (isset($time)) {
+            if (strlen($time) > 0)
+                $time = Carbon::parse($time)->format('H:i:s');
+            else
+                $time = "00:00:00";
+        }
+        if (isset($validSince)) {
+            $validSince = Carbon::parse($validSince)->format('Y-m-d'); //Muhammad : added a day because it returns one day behind and IDK why!!
+            if (isset($time))
+                $validSince = $validSince . " " . $time;
+            return $validSince;
+        }
+        return null;
+    }
+
+    /**
+     * @param $tagString
+     * @return array
+     */
+    private function getTagsArrayFromTagString($tagString): array
+    {
+        $tags = explode(",", $tagString);
+        $tags = array_filter($tags);
+        return $tags;
+    }
+
+    /**
+     * @param $message
+     * @param $e
+     * @param Response $response
+     * @return Response
+     */
+    private function makeExceptionLogError($message, $e, Response $response): Response
+    {
+        $exceptionLog = $response
+            ->setStatusCode(500)
+            ->setContent([
+                "message" => $message,
+                "error" => $e->getMessage(),
+                "line" => $e->getLine(),
+                "file" => $e->getFile()
+            ]);
+        return $exceptionLog;
     }
 
 

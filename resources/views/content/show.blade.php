@@ -31,16 +31,16 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{{action("HomeController@index")}}">خانه</a>
+                <a href="{{action("HomeController@index")}}">@lang('content.Home')</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
                 <i class="fa fa-list-ul" aria-hidden="true"></i>
-                <a href="{{action("HomeController@search")}}">محتوای آموزشی آلاء</a>
+                <a href="{{action("HomeController@search")}}">@lang('content.Educational Content Of Alaa')</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
-                <span>نمایش {{ isset($contentDisplayName) ? $contentDisplayName : '' }}</span>
+                <span>@lang('content.show'){{ " ".$content->displayName }}</span>
             </li>
         </ul>
     </div>
@@ -48,19 +48,7 @@
 
 @section("content")
     @if(isset($content->template))
-        @if($content->template->name == "video1")
-            {{--<div class="row">--}}
-                {{--<div class="col-md-8">--}}
-                    {{--<div class="portlet light ">--}}
-                        {{--<div class="portlet-body">--}}
-                            {{--<div class="row">--}}
-                                {{----}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                    {{--</div>--}}
-
-                {{--</div>--}}
-            {{--</div>--}}
+        @if(optional($content->template)->name == "video1")
             <div class="row">
                 <div class="col-md-12">
                     <div class="portlet light ">
@@ -72,13 +60,12 @@
                                         preload="auto"
                                         height='360'
                                         width="640"
-                                        poster='@if(isset($files["thumbnail"])){{$files["thumbnail"]}}@endif'>
+                                        poster='{{$content->thumbnail}}'>
 
-                                    @foreach($files["videoSource"] as $source)
-                                        <source src="{{ $source["src"] }}" type='video/mp4' res="{{ $source["index"] }}" @if(strcmp($source["index"],"240p") == 0) default  @endif label="{{ $source["caption"] }}" />
+                                    @foreach($content->getVideos() as $source)
+                                        <source src="{{ $source->link }}" type='video/mp4' res="{{ $source->res }}" @if(strcmp( $source->res,"240p") == 0) default  @endif label="{{ $source->caption }}" />
                                     @endforeach
-                                    <p class="vjs-no-js">جهت پخش آنلاین فیلم، ابتدا مطمئن شوید که جاوا اسکریپت در مرور
-                                        گر شما فعال است و از آخرین نسخه ی مرورگر استفاده می کنید.</p>
+                                    <p class="vjs-no-js">@lang('content.javascript is disables! we need it to play a video')</p>
                                 </video>
 
                             </div>
@@ -112,7 +99,7 @@
                                     <hr>
                                     <div class="col-md-7">
                                         <div class="caption"><i class="fa fa-comment-o" aria-hidden="true"></i></div>
-                                           <h2 style="font-size: 20px; font-weight: 500;">{{ isset($contentDisplayName) ? $contentDisplayName : '' }}</h2>
+                                           <h2 style="font-size: 20px; font-weight: 500;">{{ $content->displayName }}</h2>
 
                                         @if(isset($content->description[0]))
                                             <div class="scroller" style="max-height:400px ; " data-rail-visible="1" data-rail-color="black" data-handle-color="#a1b2bd">
@@ -134,7 +121,7 @@
                                                     @if($userCanSeeCounter)
                                                      <li>
                                                             <i class="fa fa-eye"></i>
-                                                            {{$productSeenCount}}
+                                                            {{$seenCount}}
                                                      </li>
                                                     @endif
                                                 </ul>
@@ -171,10 +158,10 @@
                                     <div class="row">
 
 
-                                        @foreach($files["videoSource"] as $key => $source)
+                                        @foreach(optional($content->file)->get('video') as $file)
                                             <div class="col-md-4">
-                                                <a href="{{$source["src"]}}?download=1" class="btn red margin-bottom-5" style="width: 250px;">
-                                                    فایل {{$source["caption"]}}{{ (isset($source["size"] )  && strlen($source["size"])  > 0 )?"(".$source["size"]. ")":""  }}
+                                                <a href="{{$file->link}}?download=1" class="btn red margin-bottom-5" style="width: 250px;">
+                                                    فایل {{$file->caption}}{{ isset($file->size[0]) ? "(".$file->size. ")":""  }}
                                                 </a>
                                             </div>
                                         @endforeach
@@ -185,22 +172,6 @@
                     </div>
                 </div>
             </div>
-            {{--<div class="row">--}}
-                {{--<div class="col-md-12">--}}
-                    {{--<div class="portlet light ">--}}
-                        {{--<div class="portlet-title">--}}
-                            {{--<div class="caption">--}}
-                                {{--<i class="fa fa-handshake-o" aria-hidden="true"></i>--}}
-                           {{--بخش تبلیغات--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                        {{--<div class="portlet-body  text-justify">--}}
-
-                            {{--<div id="yektanet-pos-1"></div>--}}
-                        {{--</div>--}}
-                    {{--</div>--}}
-                {{--</div>--}}
-            {{--</div>--}}
             <div class="row">
                 <div class="col-md-8 margin-bottom-15">
                     @if(isset($videosWithSameSet) && $videosWithSameSet->isNotEmpty())
@@ -306,25 +277,6 @@
                                                     </a>
 
                                                 </div>
-                                                {{--<li class="mt-list-item @if($item["content"]->id == $content->id) bg-grey-mint @endif ">--}}
-                                                {{--<div class="list-icon-container">--}}
-                                                {{--<a href="{{action("ContentController@show" , $item["content"])}}">--}}
-                                                {{--<i class="fa fa-angle-left"></i>--}}
-                                                {{--</a>--}}
-                                                {{--</div>--}}
-                                                {{--<div class="list-thumb">--}}
-                                                {{--<a href="{{action("ContentController@show" , $item["content"])}}">--}}
-                                                {{--<img alt="{{$item["content"]->name}}"--}}
-                                                {{--src="{{(isset($item["thumbnail"]))?$item["thumbnail"]:''}}"/>--}}
-                                                {{--</a>--}}
-                                                {{--</div>--}}
-                                                {{--<div class="list-datetime bold uppercase font-yellow-casablanca"> {{$item["content"]->name}} </div>--}}
-                                                {{--<div class="list-item-content">--}}
-                                                {{--<h3 class="uppercase bold">--}}
-                                                {{--<a href="javascript:;">&nbsp;</a>--}}
-                                                {{--</h3>--}}
-                                                {{--</div>--}}
-                                                {{--</li>--}}
                                             @endforeach
                                         </div>
 
@@ -338,59 +290,23 @@
                                 </div>
                             </div>
                         </div>
-                        {{--<div class="mt-element-list">--}}
-                        {{--<div class="mt-list-head list-news ext-1 font-white bg-blue">--}}
-                        {{--<div class="list-head-title-container">--}}
-                        {{--<h3 class="list-title">جزوات مرتبط</h3>--}}
-                        {{--</div>--}}
-                        {{--<div class="list-count pull-right bg-blue-chambray"></div>--}}
-                        {{--</div>--}}
-                        {{--<div class="mt-list-container list-news ext-2">--}}
-                        {{--<div class="scroller" style="height:500px" data-always-visible="1" data-rail-visible="1"--}}
-                        {{--data-rail-color="red" data-handle-color="green">--}}
-                        {{--<ul>--}}
-                        {{--@foreach($pamphletsWithSameSet as $item)--}}
-                        {{--<li class="mt-list-item @if($item["content"]->id == $content->id) bg-grey-mint @endif ">--}}
-                        {{--<div class="list-icon-container">--}}
-                        {{--<a href="{{action("ContentController@show" , $item["content"])}}">--}}
-                        {{--<i class="fa fa-angle-left"></i>--}}
-                        {{--</a>--}}
-                        {{--</div>--}}
-                        {{--<div class="list-thumb">--}}
-                        {{--<a href="{{action("ContentController@show" , $item["content"])}}">--}}
-                        {{--<img alt="{{$item["content"]->name}}"--}}
-                        {{--src="{{(isset($item["thumbnail"]))?$item["thumbnail"]:''}}"/>--}}
-                        {{--</a>--}}
-                        {{--</div>--}}
-                        {{--<div class="list-datetime bold uppercase font-yellow-casablanca"> {{$item["content"]->name}} </div>--}}
-                        {{--<div class="list-item-content">--}}
-                        {{--<h3 class="uppercase bold">--}}
-                        {{--<a href="javascript:;">&nbsp;</a>--}}
-                        {{--</h3>--}}
-                        {{--</div>--}}
-                        {{--</li>--}}
-                        {{--@endforeach--}}
-
-                        {{--</ul>--}}
-                        {{--</div>--}}
-                        {{--</div>--}}
-                        {{--</div>--}}
                     </div>
                 </div>
             @endif
-        @elseif($content->template->name == "pamphlet1" )
+        @elseif(optional($content->template)->name == "pamphlet1" )
             <div class="row">
                 <div class="col-md-8">
                     <div class="portlet light ">
                         <div class="portlet-title">
                             <div class="caption">
                                 <i class="fa fa-file-text-o" aria-hidden="true"></i>
-                                    {{isset($contentDisplayName) ? $contentDisplayName : "" }}
+                                    {{ $content->displayName  }}
                             </div>
                             <div class="actions">
-                                @if($files->count() == 1)
+                                @if($content->file->count() == 1)
+
                                     <a target="_blank"
-                                       href="{{action("HomeController@download" , ["fileName"=>$files->first()->uuid ])}}"
+                                       href="{{ $content->getPamphlets()->first()->link }}"
                                        class="btn btn-circle green btn-outline btn-sm"><i class="fa fa-download"></i>
                                         دانلود </a>
                                 @else
@@ -400,11 +316,9 @@
                                             <i class="fa fa-angle-down"></i>
                                         </button>
                                         <ul class="dropdown-menu">
-                                            @foreach($files as $file)
+                                            @foreach($content->getPamphlets() as $file)
                                                 <li>
-                                                    <a target="_blank"
-                                                       href="{{action("HomeController@download" , ["fileName"=>$file->uuid ])}}">
-                                                        فایل {{$file->pivot->caption}}</a>
+                                                    <a target="_blank" href="{{ $file->link }}">{{ $file->caption }}</a>
                                                 </li>
                                             @endforeach
                                         </ul>
@@ -413,11 +327,13 @@
                             </div>
                         </div>
                         <div class="portlet-body">
-                                @if(isset($fileToShow) && $fileToShow->getExtention() === "pdf")
-                                    <iframe class="google-docs"
-                                            src='https://docs.google.com/viewer?url={{$fileToShow->getUrl()}}&embedded=true'
-                                            width='100%' height='760' style='border: none;'></iframe>
-                                @endif
+                            @if($content->getPamphlets()->first()->ext === 'pdf')
+                                <iframe class="google-docs"
+                                        src='https://docs.google.com/viewer?url={{$content->getPamphlets()->first()->link}}&embedded=true'
+                                        width='100%' height='760' style='border: none;'>
+
+                                </iframe>
+                            @endif
                             <div class="row">
                                 <div class="col-md-12">
                                     @if(!empty($tags))
@@ -507,37 +423,6 @@
                             </div>
                         @endif
                     </div>
-                {{--<div class="col-md-4">--}}
-                    {{--@if($contentsWithSameType->isNotEmpty())--}}
-                        {{--<div class="mt-element-list">--}}
-                            {{--<div class="mt-list-head list-simple ext-1 font-white bg-green-sharp">--}}
-                                {{--<div class="list-head-title-container">--}}
-                                    {{--<div class="list-date">Nov 8, 2015</div>--}}
-                                    {{--<h3 class="list-title">@if(isset($rootContentType->displayName[0])){{$rootContentType->displayName}}@endif--}}
-                                        {{--های @if(isset($childContentType->displayName[0])){{$childContentType->displayName}}@endif--}}
-                                        {{--دیگر</h3>--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-                            {{--<div class="mt-list-container list-simple ext-1">--}}
-                                {{--<ul>--}}
-                                    {{--@foreach($contentsWithSameType as $content)--}}
-                                        {{--<li class="mt-list-item">--}}
-                                            {{--<div class="list-icon-container">--}}
-                                                {{--<i class="fa fa-file-pdf-o" aria-hidden="true"></i>--}}
-                                            {{--</div>--}}
-                                            {{--<div class="list-datetime"> @if($content->grades->isNotEmpty()){{$content->grades->first()->displayName}}@endif</div>--}}
-                                            {{--<div class="list-item-content">--}}
-                                                {{--<h5 class="uppercase">--}}
-                {{--<a href="{{action("ContentController@show" , $content)}}">{{$content->display_name}}</a>--}}
-                                                {{--</h5>--}}
-                                            {{--</div>--}}
-                                        {{--</li>--}}
-                                    {{--@endforeach--}}
-                                {{--</ul>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                    {{--@endif--}}
-                {{--</div>--}}
             </div>
             @if(isset($pamphletsWithSameSet) && $pamphletsWithSameSet->where("content.id" , "<>",$content->id)->isNotEmpty())
                 <div class="row">
@@ -564,25 +449,6 @@
                                                     </a>
 
                                                 </div>
-                                                {{--<li class="mt-list-item @if($item["content"]->id == $content->id) bg-grey-mint @endif ">--}}
-                                                {{--<div class="list-icon-container">--}}
-                                                {{--<a href="{{action("ContentController@show" , $item["content"])}}">--}}
-                                                {{--<i class="fa fa-angle-left"></i>--}}
-                                                {{--</a>--}}
-                                                {{--</div>--}}
-                                                {{--<div class="list-thumb">--}}
-                                                {{--<a href="{{action("ContentController@show" , $item["content"])}}">--}}
-                                                {{--<img alt="{{$item["content"]->name}}"--}}
-                                                {{--src="{{(isset($item["thumbnail"]))?$item["thumbnail"]:''}}"/>--}}
-                                                {{--</a>--}}
-                                                {{--</div>--}}
-                                                {{--<div class="list-datetime bold uppercase font-yellow-casablanca"> {{$item["content"]->name}} </div>--}}
-                                                {{--<div class="list-item-content">--}}
-                                                {{--<h3 class="uppercase bold">--}}
-                                                {{--<a href="javascript:;">&nbsp;</a>--}}
-                                                {{--</h3>--}}
-                                                {{--</div>--}}
-                                                {{--</li>--}}
                                             @endforeach
                                         </div>
 
@@ -596,43 +462,6 @@
                                 </div>
                             </div>
                         </div>
-                        {{--<div class="mt-element-list">--}}
-                        {{--<div class="mt-list-head list-news ext-1 font-white bg-blue">--}}
-                        {{--<div class="list-head-title-container">--}}
-                        {{--<h3 class="list-title">جزوات مرتبط</h3>--}}
-                        {{--</div>--}}
-                        {{--<div class="list-count pull-right bg-blue-chambray"></div>--}}
-                        {{--</div>--}}
-                        {{--<div class="mt-list-container list-news ext-2">--}}
-                        {{--<div class="scroller" style="height:500px" data-always-visible="1" data-rail-visible="1"--}}
-                        {{--data-rail-color="red" data-handle-color="green">--}}
-                        {{--<ul>--}}
-                        {{--@foreach($pamphletsWithSameSet as $item)--}}
-                        {{--<li class="mt-list-item @if($item["content"]->id == $content->id) bg-grey-mint @endif ">--}}
-                        {{--<div class="list-icon-container">--}}
-                        {{--<a href="{{action("ContentController@show" , $item["content"])}}">--}}
-                        {{--<i class="fa fa-angle-left"></i>--}}
-                        {{--</a>--}}
-                        {{--</div>--}}
-                        {{--<div class="list-thumb">--}}
-                        {{--<a href="{{action("ContentController@show" , $item["content"])}}">--}}
-                        {{--<img alt="{{$item["content"]->name}}"--}}
-                        {{--src="{{(isset($item["thumbnail"]))?$item["thumbnail"]:''}}"/>--}}
-                        {{--</a>--}}
-                        {{--</div>--}}
-                        {{--<div class="list-datetime bold uppercase font-yellow-casablanca"> {{$item["content"]->name}} </div>--}}
-                        {{--<div class="list-item-content">--}}
-                        {{--<h3 class="uppercase bold">--}}
-                        {{--<a href="javascript:;">&nbsp;</a>--}}
-                        {{--</h3>--}}
-                        {{--</div>--}}
-                        {{--</li>--}}
-                        {{--@endforeach--}}
-
-                        {{--</ul>--}}
-                        {{--</div>--}}
-                        {{--</div>--}}
-                        {{--</div>--}}
                     </div>
                 </div>
             @endif
@@ -678,35 +507,6 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    {{--@if($contentsWithSameType->isNotEmpty())--}}
-                        {{--<div class="mt-element-list">--}}
-                            {{--<div class="mt-list-head list-simple ext-1 font-white bg-green-sharp">--}}
-                                {{--<div class="list-head-title-container">--}}
-                                    {{--<div class="list-date">Nov 8, 2015</div>--}}
-                                    {{--<h3 class="list-title">@if(isset($rootContentType->displayName[0])){{$rootContentType->displayName}}@endif--}}
-                                        {{--های @if(isset($childContentType->displayName[0])){{$childContentType->displayName}}@endif--}}
-                                        {{--دیگر</h3>--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-                            {{--<div class="mt-list-container list-simple ext-1">--}}
-                                {{--<ul>--}}
-                                    {{--@foreach($contentsWithSameType as $content)--}}
-                                        {{--<li class="mt-list-item">--}}
-                                            {{--<div class="list-icon-container">--}}
-                                                {{--<i class="fa fa-file-pdf-o" aria-hidden="true"></i>--}}
-                                            {{--</div>--}}
-                                            {{--<div class="list-datetime"> @if($content->grades->isNotEmpty()){{$content->grades->first()->displayName}}@endif</div>--}}
-                                            {{--<div class="list-item-content">--}}
-                                                {{--<h5 class="uppercase">--}}
-                    {{--<a href="{{action("ContentController@show" , $content)}}">{{$content->display_name}}</a>--}}
-                                                {{--</h5>--}}
-                                            {{--</div>--}}
-                                        {{--</li>--}}
-                                    {{--@endforeach--}}
-                                {{--</ul>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                    {{--@endif--}}
                 </div>
             </div>
         @endif
@@ -763,7 +563,7 @@
                 related: related_videos,
                 endAction: 'related',
 
-                shareTitle: '{{ $contentDisplayName }}',
+                shareTitle: '{{ $content->displayName }}',
                 shareUrl: '{{action("ContentController@show" , $content)}}',
                 shareEmbed: '<iframe src="{{action('ContentController@embed' , $content)}}" width="640" height="360" frameborder="0" allowfullscreen></iframe>'
             });

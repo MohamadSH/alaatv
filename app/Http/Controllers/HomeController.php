@@ -14,6 +14,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\{
     Cache, Config, File, Input, Log, Route, Storage, View
 };
+use Illuminate\Support\Str;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Sftp\SftpAdapter;
 use Maatwebsite\ExcelLight\Excel;
@@ -49,12 +50,49 @@ class HomeController extends Controller
     {
         Log::debug($request->headers->all());
     }
+    /*private function slug($title, $separator = '-')
+    {
+        $title = str_replace("‌",' ',$title);
+        $title = mb_strtolower($title, "utf-8");
+        // Convert all dashes/underscores into separator
+        $flip = $separator == '-' ? '_' : '-';
+
+        $title = preg_replace('!['.preg_quote($flip).']+!u', $separator, $title);
+
+        // Replace @ with the word 'at'
+        $title = str_replace('@', $separator.'at'.$separator, $title);
+
+        // Remove all characters that are not the separator, letters, numbers, or whitespace.
+        $title = preg_replace('![^'.preg_quote($separator).'\pL\pN\s]+!u', '', mb_strtolower($title));
+
+        // Replace all separator characters and whitespace by a single separator
+        $title = preg_replace('!['.preg_quote($separator).'\s]+!u', $separator, $title);
+
+        $title = trim($title, $separator);
+        $title = preg_replace("/[^a-z0-9_\s-ء-يپچژکگیۃۂۀہ]/u", '', $title);
+        $title = preg_replace("/[^a-z0-9_\s-ءاآؤئبپتثجچحخدذرزژسشصضطظعغفقكکگلمنوهی]/u", '', $title);
+
+        $title = preg_replace("/[\s-_]+/", ' ', $title);
+        $title = preg_replace("/[\s_]/", $separator, $title);
+        return $title;
+    }*/
     public function debug(Request $request)
     {
+
         try
         {
 
+            $time =  $request->get("sohrab");
+            dd($time);
 
+//            $adItems = Contentset::find(199)->contents;
+            $adItems = Content::whereHas("contentsets", function ($q) {
+                $q->where("id", 199);
+            })
+                ->where("enable", 1)
+                ->orderBy("order")
+                ->get();
+            return ("so");
             $e = Content::find(6560);
             dd($e->validSince);
 //            dd($e->thumbnail);
@@ -2402,10 +2440,11 @@ class HomeController extends Controller
         $filePath = $request->header("X-File-Name");
         $originalFileName = $request->header("X-Dataname");
         $filePrefix="";
-        $setId = $request->header("X-Dataid");
+        $contentSetId = $request->header("X-Dataid");
         $disk = $request->header("X-Datatype");
         $done = false;
 
+        dd($request->headers->all());
         try {
             $dirname = pathinfo($filePath, PATHINFO_DIRNAME);
             $ext = pathinfo($originalFileName, PATHINFO_EXTENSION);
@@ -2417,6 +2456,7 @@ class HomeController extends Controller
                 File::delete($newFileNameDir);
             }
             File::move($filePath, $newFileNameDir);
+
 
             if (strcmp($disk , "product") == 0) {
                 if($ext == "mp4")
@@ -2430,7 +2470,7 @@ class HomeController extends Controller
                     'username' => config('constants.SFTP_USERNAME'),
                     'password' => config('constants.SFTP_PASSSWORD'),
                     'privateKey' => config('constants.SFTP_PRIVATE_KEY_PATH'),
-                    'root' =>config('constants.SFTP_ROOT') . '/private/'.$setId.'/',
+                    'root' =>config('constants.SFTP_ROOT') . '/private/'.$contentSetId.'/',
                     'timeout' => config('constants.SFTP_TIMEOUT'),
                     'directoryPerm' => 0755
                 ]);
@@ -2464,7 +2504,7 @@ class HomeController extends Controller
                     // example:  /alaa_media/cdn/media/203/HD_720p , /alaa_media/cdn/media/thumbnails/203/
                     'root' =>       config("constants.DOWNLOAD_SERVER_ROOT").
                                     config("constants.DOWNLOAD_SERVER_MEDIA_PARTIAL_PATH").
-                                    $setId,
+                                    $contentSetId,
                     'timeout' => config('constants.SFTP_TIMEOUT'),
                     'directoryPerm' => 0755
                 ]);
@@ -2476,13 +2516,14 @@ class HomeController extends Controller
                     $fileName = config("constants.DOWNLOAD_SERVER_PROTOCOL").
                                 config("constants.DOWNLOAD_SERVER_NAME").
                                 config("constants.DOWNLOAD_SERVER_MEDIA_PARTIAL_PATH").
-                                $setId.
+                                $contentSetId.
                                 $originalFileName
                                 ;
                 }
             }
             else{
                 $filesystem = Storage::disk($disk . "Sftp");
+//                Storage::putFileAs('photos', new File('/path/to/photo'), 'photo.jpg');
                 if($filesystem->put($fileName, fopen($newFileNameDir, 'r+'))) {
                     $done = true;
                 }

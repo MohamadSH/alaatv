@@ -138,6 +138,12 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface
     }
 
 
+    public function getPamphlets() :Collection{
+        return optional($this->file)->get('pamphlet');
+    }
+    public function getVideos() :Collection{
+        return optional($this->file)->get('video');
+    }
     /**
      *
      */
@@ -165,7 +171,8 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface
                         "size" => $size,
                         "caption" => $caption,
                         "res" => $res,
-                        "type" => $type
+                        "type" => $type,
+                        "ext"  => pathinfo(parse_url($url)['path'],PATHINFO_EXTENSION)
                     ]);
                 }
 
@@ -185,7 +192,8 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface
                         "size" => $size,
                         "caption" => $caption,
                         "res" => $res,
-                        "type" => $type
+                        "type" => $type,
+                        "ext"  => pathinfo(parse_url($url)['path'],PATHINFO_EXTENSION)
                     ]);
                 }
 
@@ -206,7 +214,8 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface
                         "size" => $size,
                         "caption" => $caption,
                         "res" => $res,
-                        "type" => $type
+                        "type" => $type,
+                        "ext"  => pathinfo(parse_url($url)['path'],PATHINFO_EXTENSION)
                     ]);
                 }
 
@@ -227,7 +236,8 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface
                         "size" => $size,
                         "caption" => null,
                         "res" => null,
-                        "type" => $type
+                        "type" => $type,
+                        "ext"  => pathinfo(parse_url($url)['path'],PATHINFO_EXTENSION)
                     ];
                 }
                 break;
@@ -235,9 +245,10 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface
             case  "pamphlet1":
                 $pFiles = $content->files;
                 foreach ($pFiles as $file) {
-                    $type = "pdf";
+                    $type = "pamphlet";
                     $res = null;
                     $caption = "فایل" .' '. $file->pivot->caption;
+
                     if ($file->disks->isNotEmpty()) {
                         $disk = $file->disks->first();
                         $diskName = $disk->name;
@@ -250,9 +261,11 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface
                         "fileName" => $file->name,
                         "size" => null,
                         "caption" => $caption,
-                        "res" => $res,
-                        "type" => $type
+                        "res"  => $res,
+                        "type" => $type,
+                        "ext"     => pathinfo($file->name,PATHINFO_EXTENSION)
                     ]);
+
                 }
                 break;
             case "article" :
@@ -333,7 +346,6 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface
                 $item->link = $this->isFree ? $l->getLinks() : $l->getLinks([
                                                                     "content_id" => $this->id
                                                                 ]);
-//                unset($item->url);
                 return $item;
             });
 
@@ -513,15 +525,9 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface
         $key = "content:Order"
             .$this->cacheKey();
         $c = $this;
-        return Cache::remember($key,Config::get("constants.CACHE_60"),function () use($c) {
-            $sessionNumber = -1;
-            $contenSets = $c->contentsets->where("pivot.isDefault" , 1)->first();
-            if(isset($contenSets)) {
-                $order = $contenSets->pivot->order;
-                if($order >= 0)
-                    $sessionNumber = $contenSets->pivot->order;
-            }
-            return $sessionNumber;
+        return Cache::tags("content")->remember($key,Config::get("constants.CACHE_60"),function () use($c) {
+            $order = optional($c->contentset)->pivot->order;
+            return  $order >= 0 ? $order : -1;
         });
     }
 
@@ -669,13 +675,14 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface
 
         $adItems = Cache::tags(["content"])->remember($key, Config::get("constants.CACHE_60"), function () use ($content) {
             $adItems = collect();
-            if ($content->contentsets->isNotEmpty() && $content->contentsets->first()->id != 199)
+            if (optional($content->contentset)->id != 199) {
                 $adItems = Content::whereHas("contentsets", function ($q) {
                     $q->where("id", 199);
                 })
                     ->where("enable", 1)
                     ->orderBy("order")
                     ->get();
+            }
             return $adItems;
         });
 
