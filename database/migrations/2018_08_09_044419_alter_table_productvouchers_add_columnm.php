@@ -34,7 +34,7 @@ class AlterTableProductvouchersAddColumnm extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('productvouchers', function (Blueprint $table) {
             if (Schema::hasColumn('productvouchers', 'user_id'))
             {
                 $table->dropForeign('productvouchers_user_id_foreign');
