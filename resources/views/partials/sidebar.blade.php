@@ -36,8 +36,8 @@
                     <span class="arrow "></span>
                 </a>
             </li>
-            <li class="nav-item @if(isset($pageName) && strcmp($pageName , "content")==0)start active open @endif nav-toggle">
-                <a href="{{action("ContentController@search")}}" class="nav-link nav-toggle font-yellow bold">
+            <li class="nav-item start active open">
+                <a href="{{action("EducationalContentController@search")}}" class="nav-link nav-toggle font-yellow bold">
                     <i class="fa fa-video-camera" aria-hidden="true"></i>
                     <span class="title">فیلم های آلاء</span>
                     @if(isset($pageName) && strcmp($pageName , "content")==0)<span class="selected"></span> @endif
