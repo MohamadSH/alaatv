@@ -540,7 +540,7 @@
                                         '        <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>\n' +
                                         '        <i class="fa fa-check-circle"></i>\n' +
                                         'محتوا با موفقیت ذخیره شد . آیدی محتوا : ' +
-                                        '<a target="_blank" href="{{action("HomeController@search")}}/'+id+'/edit">'+id+'</a>'+
+                                        '<a target="_blank" href="{{action("ContentController@index")}}/'+id+'/edit">'+id+'</a>'+
                                         '    </div>';
                         $("#messageDiv").append(message);
                         toastr["success"]("محتوا با موقیت درج شد", "پیام سیستم");

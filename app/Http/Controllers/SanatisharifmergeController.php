@@ -3300,7 +3300,7 @@ class SanatisharifmergeController extends Controller
 
     public function redirectLesson(Request $request , $lId = null , $dId = null){
         $tag = $this->getDepLessonTags($lId, $dId);
-        $newUri = urldecode(action("HomeController@search" , ["tags"=>$tag]));
+        $newUri = urldecode(action("ContentController@index" , ["tags"=>$tag]));
         $isApp = ( strlen(strstr($request->header('User-Agent'),"Alaa")) > 0 )? true : false ;
         $app = null;
         if($isApp)
@@ -3321,7 +3321,7 @@ class SanatisharifmergeController extends Controller
             }
             $tag = $this->getDepLessonTags( $lId, $dId);
 
-            return action("HomeController@search" , ["tags"=>$tag]);
+            return action("ContentController@index" , ["tags"=>$tag]);
 
         });
         $app = null;
@@ -3345,7 +3345,7 @@ class SanatisharifmergeController extends Controller
                 }
             }
             $tag = $this->getDepLessonTags($lId, $dId);
-            return urldecode(action("HomeController@search" , ["tags"=>$tag]));
+            return urldecode(action("ContentController@index" , ["tags"=>$tag]));
 
         });
         return redirect($newUri,301);
@@ -3363,7 +3363,7 @@ class SanatisharifmergeController extends Controller
                 }
             }
             $tag = $this->getDepLessonTags($lId, $dId);
-            return urldecode(action("HomeController@search" , ["tags"=>$tag]));
+            return urldecode(action("ContentController@index" , ["tags"=>$tag]));
 
         });
         return redirect($newUri,301);

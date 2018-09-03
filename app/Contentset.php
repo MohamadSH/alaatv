@@ -5,6 +5,8 @@ namespace App;
 use App\Classes\Taggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Config;
 
 /**
  * App\Contentset
@@ -64,6 +66,16 @@ class Contentset extends Model implements Taggable
             ->withPivot("order", "isDefault");
     }
 
+    public function getLastContent() :Content
+    {
+        $key = "ContentSet:getLastContent".$this->cacheKey();
+        return Cache::tags('set')->remember($key,Config::get("constants.CACHE_60"),function () {
+            return $this->contents
+                ->sortByDesc("pivot.order")->first();
+        });
+
+    }
+
     public function getTagsAttribute($value)
     {
         return json_decode($value);
@@ -91,5 +103,17 @@ class Contentset extends Model implements Taggable
         }
 
         return $tags;
+    }
+
+    public function cacheKey()
+    {
+        $key = $this->getKey();
+        $time= isset($this->update) ? $this->updated_at->timestamp : $this->created_at->timestamp;
+        return sprintf(
+            "%s-%s",
+            //$this->getTable(),
+            $key,
+            $time
+        );
     }
 }

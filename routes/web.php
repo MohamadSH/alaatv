@@ -12,7 +12,7 @@
 */
  
  
-Route::get('c',"HomeController@search");
+
 Route::get('embed/c/{content}',"ContentController@embed");
 Route::get( '/' , 'HomeController@index');
 Route::get( 'home' , 'HomeController@home');
@@ -78,7 +78,7 @@ Route::group(['prefix' => 'content'], function () {
     Route::get('search', 'ContentController@search');
     Route::get('create2', 'ContentController@create2');
 });
-Route::post('basicStore' , 'ContentController@basicStore') ;
+
 
 Route::group(['prefix' => 'landing'], function () {
     Route::get('1' , 'ProductController@landing1') ;
@@ -219,13 +219,17 @@ Route::group(['middleware' => 'auth'], function()
     Route::post("donateOrder" , "OrderController@donateOrder") ;
 });
 
+Route::group(['prefix' => 'c'], function () {
+    Route::post('basicStore' , 'ContentController@basicStore') ;
+    Route::group(['prefix' => '{c}/attach'], function () {
+        Route::post('set/{set}' , 'ContentController@attachContentToContentSet');
+        Route::put('set/{set}' , 'ContentController@updateContentSetPivots');
+    });
+});
+
 Route::resource('product', 'ProductController');
 Route::resource('orderproduct', 'OrderproductController');
-Route::resource('c', 'ContentController', [
-    'except' => [
-        'index'
-    ]
-]);
+Route::resource('c', 'ContentController');
 Route::resource( "sanatisharifmerge" , "SanatisharifmergeController");
 Route::resource('article', 'ArticleController');
 Auth::routes();

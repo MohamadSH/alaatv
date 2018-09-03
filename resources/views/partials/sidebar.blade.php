@@ -45,7 +45,7 @@
                     <ul class="sub-menu">
                         @foreach($sections as $section)
                             <li class="nav-item  ">
-                                <a href="{{urldecode(action("HomeController@search" , ["tags" => $section["tags"]]))}}" class="nav-link ">
+                                <a href="{{urldecode(action("ContentController@index" , ["tags" => $section["tags"]]))}}" class="nav-link ">
                                     <span class="title">{{$section["displayName"]}}</span>
                                 </a>
                             </li>

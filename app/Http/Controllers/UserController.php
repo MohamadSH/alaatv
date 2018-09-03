@@ -147,7 +147,7 @@ class UserController extends Controller
         $rolesId = Input::get('roles');
         if(isset($roleEnable) && isset($rolesId))
         {
-            $users = User::roleFilter($users, $rolesId);
+            $users = $users->hasRole($rolesId);
         }
 
         $majorEnable = Input::get('majorEnable');

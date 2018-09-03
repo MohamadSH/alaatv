@@ -271,7 +271,7 @@
                     var label = '<span class="tag label label-info tag_'+key+'" style="display: inline-block; margin: 2px; padding: 10px;">\n'  ;
                     label += '<a class="removeTagLabel" data-role="'+key+'" style="padding-left: 10px"><i class="fa fa-remove"></i></a>\n' ;
                     label += '<span >\n' ;
-                    label += '<a href="{{action("HomeController@search")}}?tags[]='+value+'"  class="font-white">'+value+'</a>\n' ;
+                    label += '<a href="{{action("ContentController@index")}}?tags[]='+value+'"  class="font-white">'+value+'</a>\n' ;
                     label += '</span>\n' ;
                     if(withInput)
                     {
@@ -562,13 +562,13 @@
             }
 
             // console.log(formData);
-            contentLoadAjaxRequest('{{action("HomeController@search")}}',formData);
+            contentLoadAjaxRequest('{{action("ContentController@index")}}',formData);
             return false;
         }
 
         function changeUrl(appendUrl)
         {
-            var newUrl = "{{action("HomeController@search")}}"+"?"+appendUrl;
+            var newUrl = "{{action("ContentController@index")}}"+"?"+appendUrl;
             window.history.pushState({formData: appendUrl},"Title",newUrl);
             document.title=newUrl;
         }

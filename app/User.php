@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Collection\UserCollection;
 use App\Traits\HasWallet;
 use App\Traits\Helper;
 use Carbon\Carbon;
@@ -9,6 +10,7 @@ use Iatstuti\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection as BaseCollection;
 use Illuminate\Support\Facades\{
     Auth, Cache, Config, DB
 };
@@ -230,6 +232,18 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    /**
+     * Create a new Eloquent Collection instance.
+     *
+     * @param  array $models
+     * @return UserCollection
+     */
+    public function newCollection(array $models = [])
+    {
+        return new UserCollection($models);
+    }
+
+
     public function cacheKey()
     {
         $key = $this->getKey();
@@ -242,12 +256,11 @@ class User extends Authenticatable
         );
     }
 
-    public static function roleFilter( $users,  $rolesId)
+    public function scopeHasRole($query, array $roles)
     {
-            $users = $users->whereHas('roles', function ($q) use ($rolesId) {
-                $q->whereIn("id", $rolesId);
-            });
-            return $users;
+        return $query->whereHas('roles', function ($q) use ($roles) {
+            $q->whereIn("id", $roles);
+        });
     }
 
     public static function majorFilter($users, $majorsId)
@@ -266,6 +279,20 @@ class User extends Authenticatable
         });
 
 
+    }
+
+    /**
+     * @return BaseCollection
+     */
+    public static function getTeachers() :BaseCollection
+    {
+        $authors = User::select()
+            ->hasRole([config('constants.ROLE_TEACHER')])
+            ->get()
+            ->sortBy("lastName")
+            ->values()
+            ->pluck("full_name", "id");
+        return $authors;
     }
 
     public static function orderStatusFilter($users, $orderStatusesId)

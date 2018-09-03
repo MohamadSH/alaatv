@@ -99,6 +99,16 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface
     use Helper;
     protected static $purifyNullConfig = ['HTML.Allowed' => ''];
 
+    public const CONTENT_TYPE_PAMPHLET = 1;
+    public const CONTENT_TYPE_EXAM = 2;
+    public const CONTENT_TYPE_BOOK = 7;
+    public const CONTENT_TYPE_VIDEO = 8;
+    public const CONTENT_TYPE_ARTICLE = 9;
+
+    public const CONTENT_TEMPLATE_VIDEO = 1;
+    public const CONTENT_TEMPLATE_PAMPHLET = 2;
+    public const CONTENT_TEMPLATE_EXAM = 2;
+
     /**      * The attributes that should be mutated to dates.        */
     protected $dates = [
         'created_at',
@@ -459,6 +469,14 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface
         if ($this->enable)
             return true;
         return false;
+    }
+    public static function videoFileCaptionTable(): array
+    {
+        return [
+            "240p" => "کیفیت متوسط",
+            "480p" => "کیفیت بالا",
+            "720p" => "کیفیت عالی"
+        ];
     }
 
     /**

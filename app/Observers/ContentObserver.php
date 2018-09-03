@@ -65,6 +65,13 @@ class ContentObserver
         //
     }
 
+
+    /**
+     * When issuing a mass update via Eloquent,
+     * the saved and updated model events will not be fired for the updated models.
+     * This is because the models are never actually retrieved when issuing a mass update.
+     * @param Content $content
+     */
     public function saving(Content $content){
         $content->template_id = $this->findTemplateIdOfaContent($content);
         $this->sendTagsOfContentToRedis($content);
@@ -104,11 +111,14 @@ class ContentObserver
     private function findTemplateIdOfaContent($content)
     {
         switch ($content->contenttype_id) {
-            case 1 : // pamphlet
-                return 2;
+            case Content::CONTENT_TYPE_PAMPHLET : // pamphlet
+                return Content::CONTENT_TEMPLATE_PAMPHLET;
                 break;
-            case 8 : // video
-                return 1;
+            case Content::CONTENT_TYPE_EXAM : // exam
+                return Content::CONTENT_TEMPLATE_EXAM;
+                break;
+            case Content::CONTENT_TYPE_VIDEO : // video
+                return Content::CONTENT_TEMPLATE_VIDEO;
                 break;
             default:
                 return null;

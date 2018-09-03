@@ -243,7 +243,7 @@
         <div class="row">
             <div class="col-md-12 {{$section["class"]}}">
                 <h4 style="font-weight: bold">{{$section["descriptiveName"]}}
-                    <a style="float: left; padding: 10px; width: 15%" href="{{urldecode(action("HomeController@search" , ["tags" => $section["tags"]]))}}" class="btn btn-success">بیشتر</a>
+                    <a style="float: left; padding: 10px; width: 15%" href="{{urldecode(action("ContentController@index" , ["tags" => $section["tags"]]))}}" class="btn btn-success">بیشتر</a>
                 </h4>
 
                 <hr style="border-color: #17233a">

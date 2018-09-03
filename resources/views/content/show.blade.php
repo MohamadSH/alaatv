@@ -36,7 +36,7 @@
             </li>
             <li>
                 <i class="fa fa-list-ul" aria-hidden="true"></i>
-                <a href="{{action("HomeController@search")}}">@lang('content.Educational Content Of Alaa')</a>
+                <a href="{{action("ContentController@index")}}">@lang('content.Educational Content Of Alaa')</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>

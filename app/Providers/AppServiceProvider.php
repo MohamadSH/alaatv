@@ -54,11 +54,6 @@ class AppServiceProvider extends ServiceProvider
 
         });
 
-//        Validator::extend('without_spaces', function($attribute, $value  , $validator){
-//            dd(preg_match('/^\S*$/u', $value));
-//            return preg_match('/^\S*$/u', $value);
-//        });
-
         //try catch For migration
         try {
 
@@ -165,6 +160,8 @@ class AppServiceProvider extends ServiceProvider
                 $roles = \App\Role::all();
                 if ($roles->where("name", "employee")->isNotEmpty())
                     Config::set("constants.ROLE_EMPLOYEE", $roles->where("name", "employee")->first()->id);
+                if ($roles->where("name", "teacher")->isNotEmpty())
+                    Config::set("constants.ROLE_TEACHER", $roles->where("name", "teacher")->first()->id);
             }
             //======================CONTROLS CONSTANTS
             if (Schema::hasTable('attributecontrols')) {

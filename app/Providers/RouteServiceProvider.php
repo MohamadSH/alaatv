@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use App\{
-    Afterloginformcontrol, Article, Articlecategory, Assignment, Attribute, Attributegroup, Attributeset, Attributevalue, City, Consultation, Contact, Coupon, Content, Employeetimesheet, Eventresult, File, Mbtianswer, Order, Orderproduct, Permission, Phone, Product, Productfile, Productphoto, Role, Slideshow, User, Userbon, Userupload, Verificationmessage, Wallet, Websitesetting
+    Afterloginformcontrol, Article, Articlecategory, Assignment, Attribute, Attributegroup, Attributeset, Attributevalue, City, Consultation, Contact, Contentset, Coupon, Content, Employeetimesheet, Eventresult, File, Mbtianswer, Order, Orderproduct, Permission, Phone, Product, Productfile, Productphoto, Role, Slideshow, User, Userbon, Userupload, Verificationmessage, Wallet, Websitesetting
 };
 use Illuminate\Support\Facades\{
     Cache, Config, Route
@@ -248,13 +248,16 @@ class RouteServiceProvider extends ServiceProvider
             });
 
         });
-        Route::bind('file', function($value){
-            $key = "File:".$value;
-           return Cache::remember($key,Config::get("constants.CACHE_5"),function () use ($value){
-                return File::where('id', $value)->first() ?? abort(404);
-            });
 
+        Route::bind('set', function($value){
+            //TODO:// Caching . . .
+            /*$key = "Set:".$value;
+            return Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($value){
+                return Contentset::where('id', $value)->first() ?? abort(404);
+            });*/
+            return Contentset::where('id', $value)->first() ?? abort(404);
         });
+
         Route::bind("employeetimesheet", function($value){
             $key = "Employeetimesheet:".$value;
            return Cache::remember($key,Config::get("constants.CACHE_5"),function () use ($value){
