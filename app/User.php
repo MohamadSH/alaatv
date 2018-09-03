@@ -256,30 +256,14 @@ class User extends Authenticatable
         );
     }
 
-    public function scopeHasRole($query, array $roles)
+    public function scopeRole($query, array $roles)
     {
         return $query->whereHas('roles', function ($q) use ($roles) {
             $q->whereIn("id", $roles);
         });
     }
 
-    public static function majorFilter($users, $majorsId)
-    {
-        $key="user:majorFilter:".implode($users->pluck('id')->toArray())."-".$majorsId;
 
-        return Cache::remember($key,Config::get("constants.CACHE_3"),function () use($users, $majorsId) {
-
-            if (in_array(0, $majorsId))
-                $users = $users->whereDoesntHave("major");
-            else
-                $users = $users->whereIn("major_id", $majorsId);
-
-            return $users;
-
-        });
-
-
-    }
 
     /**
      * @return BaseCollection
@@ -287,7 +271,7 @@ class User extends Authenticatable
     public static function getTeachers() :BaseCollection
     {
         $authors = User::select()
-            ->hasRole([config('constants.ROLE_TEACHER')])
+            ->role([config('constants.ROLE_TEACHER')])
             ->get()
             ->sortBy("lastName")
             ->values()

@@ -13,11 +13,21 @@ use Illuminate\Database\Eloquent\Collection;
 
 class UserCollection  extends Collection
 {
-    public function roleFilter( $rolesId)
+    public function roleFilter( array $rolesId) :UserCollection
     {
         $users = $this->whereHas('roles', function ($q) use ($rolesId) {
             $q->whereIn("id", $rolesId);
         });
+        return $users;
+    }
+
+    public function majorFilter($majorsId) :UserCollection
+    {
+        if (in_array(0, $majorsId))
+            $users = $this->whereDoesntHave("major");
+        else
+            $users = $this->whereIn("major_id", $majorsId);
+
         return $users;
     }
 

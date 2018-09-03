@@ -112,7 +112,7 @@ class EmployeetimesheetController extends Controller
             $formVisible = true ;
         }
         $employees  = User::select()
-                        ->hasRole([Config::get("constants.ROLE_EMPLOYEE")])
+                        ->role([Config::get("constants.ROLE_EMPLOYEE")])
                         ->pluck("lastName" , "id");
         $workdayTypes = Workdaytype::all()->pluck("displayName" , "id");
         return view("employeeTimeSheet.create" , compact("employeetimesheet" , "employeeSchedule" , "isTimeSheetExtra" , "toDay" , "employees" , "formVisible" , "workdayTypes"));

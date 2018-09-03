@@ -147,14 +147,14 @@ class UserController extends Controller
         $rolesId = Input::get('roles');
         if(isset($roleEnable) && isset($rolesId))
         {
-            $users = $users->hasRole($rolesId);
+            $users = $users->roleFilter($rolesId);
         }
 
         $majorEnable = Input::get('majorEnable');
         $majorsId = Input::get('majors');
         if(isset($majorEnable) && isset($majorsId))
         {
-            $users = User::majorFilter($users, $majorsId);
+            $users = $users->majorFilter($majorsId);
         }
 
         $couponEnable = Input::get('couponEnable');
