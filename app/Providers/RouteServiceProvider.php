@@ -220,6 +220,7 @@ class RouteServiceProvider extends ServiceProvider
             });
 
         });
+/*
         Route::bind('content', function($value){
             $key = "Content:".$value;
            return Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($value){
@@ -234,6 +235,7 @@ class RouteServiceProvider extends ServiceProvider
             });
 
         });
+*/
         Route::bind('c', function($value){
             $key = "Content:".$value;
             return Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($value){

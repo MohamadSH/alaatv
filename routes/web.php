@@ -33,7 +33,6 @@ Route::post('user/getPassword' , 'UserController@sendGeneratedPassword');
 Route::get('product/search', 'ProductController@search');
 Route::get('showPartial/{product}' , 'ProductController@showPartial');
 Route::post('refreshPrice/{product}' , 'ProductController@refreshPrice');
-Route::get("ctag" , "ContentController@retrieveTags");
 Route::get('Sanati-Sharif-Lesson/{lId?}/{dId?}','SanatisharifmergeController@redirectLesson');
 Route::get('sanati-sharif-lesson/{lId?}/{dId?}','SanatisharifmergeController@redirectLesson');
 Route::get('Sanati-Sharif-Video/{lId?}/{dId?}/{vId?}','SanatisharifmergeController@redirectVideo');
@@ -73,12 +72,6 @@ Route::group(['prefix' => 'checkout'], function () {
 Route::group(['prefix' => 'orderproduct'], function () {
     Route::post('checkout' , 'OrderproductController@checkOutOrderproducts') ;
 });
-Route::group(['prefix' => 'content'], function () {
-    Route::get('/' , 'ContentController@index');
-    Route::get('search', 'ContentController@search');
-    Route::get('create2', 'ContentController@create2');
-});
-
 
 Route::group(['prefix' => 'landing'], function () {
     Route::get('1' , 'ProductController@landing1') ;
@@ -219,13 +212,24 @@ Route::group(['middleware' => 'auth'], function()
     Route::post("donateOrder" , "OrderController@donateOrder") ;
 });
 
+/*
+Route::group(['prefix' => 'content'], function () {
+
+});
+*/
+
 Route::group(['prefix' => 'c'], function () {
+
+    Route::get('search', 'ContentController@search');
+    Route::get('create2', 'ContentController@create2');
+
     Route::post('basicStore' , 'ContentController@basicStore') ;
     Route::group(['prefix' => '{c}/attach'], function () {
         Route::post('set/{set}' , 'ContentController@attachContentToContentSet');
         Route::put('set/{set}' , 'ContentController@updateContentSetPivots');
     });
 });
+Route::get("ctag" , "ContentController@retrieveTags");
 
 Route::resource('product', 'ProductController');
 Route::resource('orderproduct', 'OrderproductController');
