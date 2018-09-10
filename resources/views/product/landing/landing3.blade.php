@@ -84,13 +84,13 @@
 
 <body>
 <div class="wrapper" id="main-page">
-    <section class="lottery-banner">
+    {{--<section class="lottery-banner">
         <div class="container clearfix">
             <div class="bnra">
                 <img class="banner" src="/assets/extra/landing3/images/banner5.png" alt="قرعه کشی آلاء">
             </div><!-- .bnra -->
         </div><!-- .container -->
-    </section>
+    </section>--}}
     <main>
         <div class="container main-landing">
             <section class="res-gold-fest">

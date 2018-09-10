@@ -4,6 +4,7 @@ namespace App;
 
 use App\Classes\Advertisable;
 use App\Classes\LinkGenerator;
+use App\Classes\Search\Tag\ContentTagManagerViaApi;
 use App\Classes\SEO\SeoInterface;
 use App\Classes\SEO\SeoMetaTagsGenerator;
 use App\Classes\Taggable;
@@ -680,22 +681,7 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface
 
     public function retrievingTags()
     {
-        /**
-         *      Retrieving Tags
-         */
-        $response = $this->sendRequest(
-            config("constants.TAG_API_URL")."id/content/".$this->id,
-            "GET"
-        );
-
-        if($response["statusCode"] == 200) {
-            $result = json_decode($response["result"]);
-            $tags = $result->data->tags;
-        } else {
-            $tags =[];
-        }
-
-        return $tags ;
+        return (new ContentTagManagerViaApi())->getTags($this->id);
     }
 
     public function getAddItems(): Collection

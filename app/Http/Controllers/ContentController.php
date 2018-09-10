@@ -1131,45 +1131,39 @@ class ContentController extends Controller
         return $thumbnailUrl;
     }
 
+
     private function getRedisRequestSubPath(Request $request, $itemType , $paginationSetting){
 
         $requestSubPath = "&withscores=1";
         $bucket = "content";
+        $perPage = $paginationSetting->where("itemType" , "video")->first()["itemPerPage"];
+        $pageName = $paginationSetting->where("itemType" , "video")->first()["pageName"];
         switch ($itemType)
         {
             case "video":
-                $perPage = $paginationSetting->where("itemType" , "video")->first()["itemPerPage"];
-                $pageName = $paginationSetting->where("itemType" , "video")->first()["pageName"];
                 $itemTypeTag = "فیلم";
                 break;
             case "pamphlet":
-                $perPage = $paginationSetting->where("itemType" , "pamphlet")->first()["itemPerPage"];
-                $pageName = $paginationSetting->where("itemType" , "pamphlet")->first()["pageName"];
                 $itemTypeTag = "جزوه";
                 break;
             case "article":
-                $perPage = $paginationSetting->where("itemType" , "article")->first()["itemPerPage"];
-                $pageName = $paginationSetting->where("itemType" , "article")->first()["pageName"];
                 $itemTypeTag = "مقاله";
-                $pageNum = $request->get($pageName);
                 break;
             case "contentset":
-                $perPage = $paginationSetting->where("itemType" , "contentset")->first()["itemPerPage"];
-                $pageName = $paginationSetting->where("itemType" , "contentset")->first()["pageName"];
                 $bucket = "contentset";
                 $itemTypeTag = "دوره_آموزشی";
                 break;
             case "product":
                 $perPage = 16;
+                $pageName = "other";
                 $bucket = "product";
                 $itemTypeTag = "محصول";
-                $pageName = "other";
                 break;
             default:
                 $perPage = 16;
+                $pageName = "other";
                 $bucket = $itemType;
                 $itemTypeTag = "other";
-                $pageName = "other";
                 break;
         }
         $requestSubPath .= "&limit=".(int)$perPage;
