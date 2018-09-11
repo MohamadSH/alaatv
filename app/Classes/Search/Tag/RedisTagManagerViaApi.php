@@ -32,7 +32,7 @@ abstract class RedisTagManagerViaApi implements TaggingInterface
      */
     public function __construct()
     {
-        if(!isset($this->attribute))
+        if(!isset($this->bucket))
             throw new LogicException(get_class($this) . ' must have a $bucket');
 
 

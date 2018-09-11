@@ -9,6 +9,7 @@
 namespace App\Collection;
 
 
+use App\Content;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Collection as BaseCollection;
 
@@ -17,22 +18,22 @@ class ContentCollection extends Collection
 {
     public function videos()
     {
-        return $this->whereIn("type", "video");
+        return $this->where("contenttype_id", Content::CONTENT_TYPE_VIDEO);
     }
 
     public function pamphlets()
     {
-        return $this->whereIn("type", "pamphlet");
+        return $this->where("contenttype_id", Content::CONTENT_TYPE_PAMPHLET);
     }
 
     public function articles()
     {
-
+        return $this->where("contenttype_id", Content::CONTENT_TYPE_ARTICLE);
     }
 
     public function flashcards()
     {
-
+        throw new \LogicException('define Content::CONTENT_TYPE_FLASHCARD');
     }
 
     public function normalMates(): BaseCollection

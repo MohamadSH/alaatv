@@ -17,7 +17,11 @@ use Illuminate\Database\Eloquent\Builder;
 class ContentSearch
 {
 
-    protected const MODEL = "App\Content" ;
+    protected $validFilters = [
+      'name',
+      'tag'
+    ];
+    protected $model = "App\Content" ;
     protected $dummyFilterCallBack;
 
     public function __construct()
@@ -26,7 +30,7 @@ class ContentSearch
     }
 
     public function apply(array $filters){
-        $query = $this->applyDecoratorsFromFiltersArray($filters, (new (self::MODEL))->newQuery());
+        $query = $this->applyDecoratorsFromFiltersArray($filters, (new $this->model)->newQuery());
         return $this->getResults($query);
     }
 
@@ -34,7 +38,7 @@ class ContentSearch
     {
         foreach ($filters as $filterName => $value) {
             $decorator = $this->createFilterDecorator($filterName);
-            if ($this->isValidDecorator($decorator)) {
+            if ($this->isValidFilter($filterName) && $this->isValidDecorator($decorator)) {
                 $decorator = $this->setupDecorator($decorator);
 
                 if($this->isFilterDecorator($decorator))
@@ -46,6 +50,9 @@ class ContentSearch
     private function createFilterDecorator($name)
     {
         return __NAMESPACE__ . '\\Filters\\' . studly_case($name);
+    }
+    private function isValidFilter($filterName){
+        return in_array($filterName,$this->validFilters);
     }
     private function isValidDecorator($decorator)
     {

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\{
-    Assignmentstatus, Attribute, Attributecontrol, Attributeset, Bon, Checkoutstatus, Consultationstatus, Contentset, Contenttype, Coupon, Coupontype, Content, Event, Eventresult, Gender, Grade, Http\Requests\ContactUsFormRequest, Http\Requests\InsertUserRequest, Http\Requests\Request, Http\Requests\SendSMSRequest, Lottery, Major, Notifications\GeneralNotice, Notifications\GiftGiven, Notifications\UserRegisterd, Order, Orderproduct, Orderstatus, Paymentmethod, Paymentstatus, Permission, Product, Productfile, Producttype, Productvoucher, Question, Relative, Role, Traits\APIRequestCommon, Traits\CharacterCommon, Traits\DateCommon, Traits\Helper, Traits\ProductCommon, Traits\UserCommon, Transaction, Transactionstatus, User, Userbon, Userbonstatus, Userstatus, Usersurveyanswer, Userupload, Useruploadstatus, Websitepage, Websitesetting
+    Assignmentstatus, Attribute, Attributecontrol, Attributeset, Bon, Checkoutstatus, Classes\Search\ContentSearch, Consultationstatus, Contentset, Contenttype, Coupon, Coupontype, Content, Event, Eventresult, Gender, Grade, Http\Requests\ContactUsFormRequest, Http\Requests\InsertUserRequest, Http\Requests\Request, Http\Requests\SendSMSRequest, Lottery, Major, Notifications\GeneralNotice, Notifications\GiftGiven, Notifications\UserRegisterd, Order, Orderproduct, Orderstatus, Paymentmethod, Paymentstatus, Permission, Product, Productfile, Producttype, Productvoucher, Question, Relative, Role, Traits\APIRequestCommon, Traits\CharacterCommon, Traits\DateCommon, Traits\Helper, Traits\ProductCommon, Traits\UserCommon, Transaction, Transactionstatus, User, Userbon, Userbonstatus, Userstatus, Usersurveyanswer, Userupload, Useruploadstatus, Websitepage, Websitesetting
 };
 use Auth;
 use Carbon\Carbon;
@@ -48,7 +48,8 @@ class HomeController extends Controller
 
     public function telgramAgent(Request $request)
     {
-        Log::debug($request->headers->all());
+//        Log::debug($request->headers->all());
+
     }
     /*private function slug($title, $separator = '-')
     {
@@ -78,6 +79,15 @@ class HomeController extends Controller
     }*/
     public function debug(Request $request)
     {
+        $filters = [
+          'tag' => [
+              'جلال_موقاری'
+          ],
+            'name' => 'شناسی، دیروز، امروز و فردا (قسمت 1)-گفتار1: زیست شناسی',
+            'order' => 1
+        ];
+        $a = new ContentSearch();
+        dd( $a->apply($filters)->take(5)->videos());
         dd( Str::uuid()->toString());
 
         try
