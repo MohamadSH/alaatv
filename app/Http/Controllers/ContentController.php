@@ -11,7 +11,7 @@ use App\Major;
 use App\Product;
 use App\User;
 use App\Http\Requests\{
-    EditContentRequest, InsertContentRequest, Request
+    ContentIndexRequest, EditContentRequest, InsertContentRequest, Request
 };
 use App\Traits\{
     APIRequestCommon, FileCommon, Helper, ProductCommon, UserSeenTrait
@@ -67,40 +67,18 @@ class ContentController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param Request $request
+     * @param ContentIndexRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(ContentIndexRequest $request)
     {
-        $itemTypes = $request->get('itemTypes');
-        $tagInput  = $request->get('tags');
+        $itemTypes = array_filter($request->get('itemTypes',
+            ["video" , "pamphlet" , "contentset", "product" , "article"]
+        ));
+        $tagInput = array_filter($request->get('tags',
+            []
+        ));
 
-        if(isset($itemTypes))
-        {
-            if(!is_array($itemTypes))
-                return $this->response
-                    ->setStatusCode(422)
-                    ->setContent(["message"=>"bad input: itemTypes"]) ;
-            $itemTypes = array_filter($itemTypes);
-        }
-        else
-        {
-            $itemTypes = ["video" , "pamphlet" , "contentset", "product" , "article"];
-        }
-
-        //ToDo: Appropriate error page
-        if (isset($tagInput)) {
-            if(!is_array($tagInput)){
-                return $this->response
-                    ->setStatusCode(422)
-                    ->setContent([
-                        "message"=>"bad input: tags"
-                    ]) ;
-            }
-            $tagInput = array_filter($tagInput);
-        }else{
-            $tagInput = [];
-        }
         $isApp = ( strlen(strstr($request->header('User-Agent'),"Alaa")) > 0 )? true : false ;
         $items = collect();
         if($isApp)
@@ -110,57 +88,29 @@ class ContentController extends Controller
 
         $paginationSetting = collect([
             [
-                "itemType"=>"video" ,
+                "itemType"=> "video" ,
                 "pageName" => "videopage",
                 "itemPerPage" => $itemPerPage
             ],
             [
-                "itemType"=>"pamphlet" ,
+                "itemType"=> "pamphlet" ,
                 "pageName" => "pamphletpage",
                 "itemPerPage" => $itemPerPage
             ],
             [
-                "itemType"=>"article" ,
+                "itemType"=> "article" ,
                 "pageName" => "articlepage",
                 "itemPerPage" => $itemPerPage
             ],
             [
-                "itemType"=>"contentset" ,
+                "itemType"=> "contentset" ,
                 "pageName" => "contentsetpage",
                 "itemPerPage" => $itemPerPage
             ]
         ]);
+        //TODO:// add itemType Filter
         foreach ($itemTypes as $itemType)
         {
-            [
-                $requestSubPath,
-                $bucket,
-                $itemTypeTag,
-                $perPage,
-                $pageName
-            ] = $this->getRedisRequestSubPath($request,$itemType,$paginationSetting);
-
-            $bucketTags = $tagInput ;
-            try {
-                if(!in_array($itemTypeTag , $tagInput)){
-                    array_push($bucketTags, $itemTypeTag);
-                }
-                [
-                    $total_items_db,
-                    $arrayOfId
-                ] = $this->getIdFromRedis($bucket,$bucketTags,$requestSubPath);
-            }
-            catch (\Exception    $e) {
-                $message = "unexpected error";
-                return $this->response
-                    ->setStatusCode(503)
-                    ->setContent([
-                        "message"=>$message ,
-                        "error"=>$e->getMessage() ,
-                        "line"=>$e->getLine() ,
-                        "file"=>$e->getFile()
-                    ]);
-            }
 
             switch ($itemType)
             {

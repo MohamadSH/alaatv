@@ -11,13 +11,13 @@ namespace App\Classes\Search\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
 
-class PublishAt extends FilterAbstract
+class IsFree extends FilterAbstract
 {
-    protected $attribute = 'validSince';
+    protected $attribute = 'isFree';
 
     public function apply(Builder $builder, $value, FilterCallback $callback): Builder
     {
-        throw new \LogicException("implements publishAt");
+        return $builder->where($this->attribute, $value);
     }
 
 }

@@ -23,7 +23,7 @@ class ContentTagManagerViaApi extends RedisTagManagerViaApi
     {
         parent::__construct();
         $this->apiUrl = config("constants.TAG_API_URL");
-        $this->limit_PerPage = 100000;
+        $this->limit_PerPage = 1000000;
         $this->limit_WithScores = 1;
         $this->limit_PageNum = 1;
     }
