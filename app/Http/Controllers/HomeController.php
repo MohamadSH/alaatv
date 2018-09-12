@@ -80,6 +80,21 @@ class HomeController extends Controller
 
     public function debug(Request $request)
     {
+
+        $nodes = Category::get()->toTree();
+
+        $traverse = function ($categories, $prefix = '-') use (&$traverse) {
+            foreach ($categories as $category) {
+                if($category->enable == false )
+                    continue;
+                echo PHP_EOL.$prefix.' '.(isset($category->name) ? $category->name : '!!!'). '<br>';
+
+                $traverse($category->children, $prefix.'-');
+            }
+        };
+
+        dd($traverse($nodes));
+
         dd(
             (new AuthorTagManagerViaApi())->getTags(37227)
         );
