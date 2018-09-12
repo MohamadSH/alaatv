@@ -131,6 +131,7 @@ use Schema;
  * @method static \Illuminate\Database\Query\Builder|\App\User withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\User withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User role($roles)
  */
 class User extends Authenticatable
 {
@@ -264,18 +265,16 @@ class User extends Authenticatable
     }
 
 
-
     /**
-     * @return BaseCollection
+     * @return UserCollection
      */
-    public static function getTeachers() :BaseCollection
+    public static function getTeachers() :UserCollection
     {
         $authors = User::select()
             ->role([config('constants.ROLE_TEACHER')])
             ->get()
             ->sortBy("lastName")
-            ->values()
-            ->pluck("full_name", "id");
+            ->values();
         return $authors;
     }
 

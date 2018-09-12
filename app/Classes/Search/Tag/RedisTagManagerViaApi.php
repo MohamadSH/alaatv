@@ -14,6 +14,7 @@ use App\Classes\Search\Filters\Tag;
 use App\Classes\Search\Tag\ContentTagManagerViaApi;
 use App\Classes\Taggable;
 use App\Traits\APIRequestCommon;
+use Illuminate\Http\Response;
 use LogicException;
 
 abstract class RedisTagManagerViaApi implements TaggingInterface
@@ -32,10 +33,25 @@ abstract class RedisTagManagerViaApi implements TaggingInterface
      */
     public function __construct()
     {
+        $this->apiUrl = config("constants.TAG_API_URL");
         if(!isset($this->bucket))
             throw new LogicException(get_class($this) . ' must have a $bucket');
+    }
+    public function setTags($taggableId , array $tags, $score = 0){
+        $url = $this->apiUrl."id/".$this->bucket."/".$taggableId;
+        $method = "PUT";
 
 
+        $params = [
+            "tags" => json_encode($tags, JSON_UNESCAPED_UNICODE),
+
+        ];
+        if(isset($score))
+            $params["score"] = $score;
+        $response = $this->sendRequest($url,$method,$params);
+        if ($response["statusCode"] == Response::HTTP_OK) {
+            //TODO:// Redis Response
+        }
     }
     /**
      * @param $taggableId

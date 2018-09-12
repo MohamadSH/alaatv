@@ -618,7 +618,7 @@ class ContentController extends Controller
         $rootContentTypes = $this->getRootsContentTypes();
         $contentsets = Contentset::latest()
                                 ->pluck("name" , "id");
-        $authors =User::getTeachers();
+        $authors =User::getTeachers()->pluck("full_name", "id");
 
         return view("content.create2" , compact("rootContentTypes" ,
                                                                         "contentsets" ,

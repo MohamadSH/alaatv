@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\{
-    Assignmentstatus, Attribute, Attributecontrol, Attributeset, Bon, Checkoutstatus, Classes\Search\ContentSearch, Consultationstatus, Contentset, Contenttype, Coupon, Coupontype, Content, Event, Eventresult, Gender, Grade, Http\Requests\ContactUsFormRequest, Http\Requests\InsertUserRequest, Http\Requests\Request, Http\Requests\SendSMSRequest, Lottery, Major, Notifications\GeneralNotice, Notifications\GiftGiven, Notifications\UserRegisterd, Order, Orderproduct, Orderstatus, Paymentmethod, Paymentstatus, Permission, Product, Productfile, Producttype, Productvoucher, Question, Relative, Role, Traits\APIRequestCommon, Traits\CharacterCommon, Traits\DateCommon, Traits\Helper, Traits\ProductCommon, Traits\UserCommon, Transaction, Transactionstatus, User, Userbon, Userbonstatus, Userstatus, Usersurveyanswer, Userupload, Useruploadstatus, Websitepage, Websitesetting
+    Assignmentstatus, Attribute, Attributecontrol, Attributeset, Bon, Category, Checkoutstatus, Classes\Search\ContentSearch, Classes\Search\Tag\AuthorTagManagerViaApi, Consultationstatus, Contentset, Contenttype, Coupon, Coupontype, Content, Event, Eventresult, Gender, Grade, Http\Requests\ContactUsFormRequest, Http\Requests\InsertUserRequest, Http\Requests\Request, Http\Requests\SendSMSRequest, Lottery, Major, Notifications\GeneralNotice, Notifications\GiftGiven, Notifications\UserRegisterd, Order, Orderproduct, Orderstatus, Paymentmethod, Paymentstatus, Permission, Product, Productfile, Producttype, Productvoucher, Question, Relative, Role, Traits\APIRequestCommon, Traits\CharacterCommon, Traits\DateCommon, Traits\Helper, Traits\ProductCommon, Traits\UserCommon, Transaction, Transactionstatus, User, Userbon, Userbonstatus, Userstatus, Usersurveyanswer, Userupload, Useruploadstatus, Websitepage, Websitesetting
 };
 use Auth;
 use Carbon\Carbon;
@@ -77,8 +77,37 @@ class HomeController extends Controller
         $title = preg_replace("/[\s_]/", $separator, $title);
         return $title;
     }*/
+
     public function debug(Request $request)
     {
+        dd(
+            (new AuthorTagManagerViaApi())->getTags(37227)
+        );
+        $c = Content::create(
+            [
+                'name' => 'test8',
+                'tags'=>  [
+                    "فیلم",
+                    "رشته_ریاضی",
+                    "متوسطه2",
+                    "کنکور",
+                    "ضبط_کلاس_درس",
+                    "نظام_آموزشی_قدیم",
+                    "پیش",
+                    "شبیه_ساز_کلاس_درس",
+                    "گسسته",
+                    "رضا_شامیزاده",
+                ],
+                'enable' => 1,
+                'contenttype_id' => 8
+            ]
+        );
+
+        dd($c);
+
+
+        $nodes = Category::get();
+        dd($nodes->toTree());
         $filters = [
           'tag' => [
               'جلال_موقاری'

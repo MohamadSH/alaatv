@@ -8,7 +8,6 @@
 
 namespace App\Classes\Search\Filters;
 
-use App\Classes\Search\Tag\ContentTagManagerViaApi;
 use App\Classes\Search\TaggingInterface;
 use Illuminate\Database\Eloquent\Builder;
 use LogicException;

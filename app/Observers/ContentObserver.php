@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Classes\Search\Tag\ContentTagManagerViaApi;
 use App\Content;
 use App\Traits\APIRequestCommon;
 use Illuminate\Http\Response;
@@ -9,7 +10,6 @@ use Illuminate\Support\Facades\Artisan;
 
 class ContentObserver
 {
-    use APIRequestCommon;
     /**
      * Handle the content "created" event.
      *
@@ -29,7 +29,6 @@ class ContentObserver
      */
     public function updated(Content $content)
     {
-        Artisan::call('cache:clear');
     }
 
     /**
@@ -73,8 +72,14 @@ class ContentObserver
      * @param Content $content
      */
     public function saving(Content $content){
+
         $content->template_id = $this->findTemplateIdOfaContent($content);
+
+    }
+
+    public function saved(Content $content){
         $this->sendTagsOfContentToRedis($content);
+        Artisan::call('cache:clear');
     }
     /**
      * @param $content
@@ -84,23 +89,11 @@ class ContentObserver
         if ($content->enable &&
             isset($content->tags) &&
             !empty($content->tags->tags)) {
-            $itemTagsArray = $content->tags->tags;
-            $params = [
-                "tags" => json_encode($itemTagsArray, JSON_UNESCAPED_UNICODE),
-            ];
 
-            if (isset($content->created_at))
-                $params["score"] = $content->created_at->timestamp;
-
-            $response = $this->sendRequest(
-                config("constants.TAG_API_URL") . "id/content/" . $content->id,
-                "PUT",
-                $params
+            (new ContentTagManagerViaApi())->setTags($content->id,
+                $content->tags->tags,
+                optional($content->created_at)->timestamp
             );
-
-            if ($response["statusCode"] == Response::HTTP_OK) {
-                //TODO:// Redis Response
-            }
         }
     }
 

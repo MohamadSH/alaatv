@@ -26,6 +26,7 @@ class AlterTableEducationalContentsAddColumns extends Migration
             if (!Schema::hasColumn('educationalcontents', 'duration')) {
                 $table->time('duration')
                     ->comment("مدت زمان فیلم")
+                    ->nullable()
                     ->after("file");
             }
             if (!Schema::hasColumn('educationalcontents', 'thumbnail')) {

@@ -134,7 +134,8 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface
         'tags',
         'author_id',
         'contenttype_id',
-        'isFree'
+        'isFree',
+        'enable'
     ];
 
 
@@ -150,11 +151,16 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface
     }
 
 
-    public function getPamphlets() :Collection{
-        return optional($this->file)->get('pamphlet');
+
+    public function getPamphlets() :Collection {
+        $pamphlet = optional($this->file)->get('pamphlet');
+        return isset($pamphlet) ? $pamphlet : collect();
     }
-    public function getVideos() :Collection{
-        return optional($this->file)->get('video');
+
+
+    public function getVideos() :Collection {
+        $video = optional($this->file)->get('video');
+        return isset($video) ? $video : collect();
     }
     /**
      *
@@ -546,7 +552,7 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface
             .$this->cacheKey();
         $c = $this;
         return Cache::tags("content")->remember($key,Config::get("constants.CACHE_60"),function () use($c) {
-            $order = optional($c->contentset)->pivot->order;
+            $order = optional(optional($c->contentset)->pivot)->order;
             return  $order >= 0 ? $order : -1;
         });
     }
@@ -665,14 +671,18 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface
 
         $setMates = Cache::tags(["content"])->remember($key, Config::get("constants.CACHE_60"), function () use ($content) {
             $contentSet = $content->contentset;
-            $sameContents = optional($contentSet)->contents()
-                ->active()
-                ->get()
-                ->sortBy("pivot.order")
-                ->load('contenttype');
+            $contentSetName = optional($contentSet)->name;
+            if (isset($contentSet)) {
+                $sameContents = $contentSet->contents()
+                    ->active()
+                    ->get()
+                    ->sortBy("pivot.order")
+                    ->load('contenttype');
+            }else
+                $sameContents = new ContentCollection([]);
             return [
                 $sameContents,
-                optional($contentSet)->name,
+                $contentSetName,
             ];
         });
         return $setMates;
@@ -728,7 +738,7 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface
                 'playerUrl' => action('ContentController@embed',$this),
                 'playerWidth' => '854',
                 'playerHeight' => '480',
-                'videoDirectUrl' => $this->file->first()->where('res','480p')->first()->link,
+                'videoDirectUrl' => optional(optional(optional($this->file->first())->where('res','480p'))->first())->link,
                 'videoActorName' => $this->author,
                 'videoActorRole' => 'دبیر',
                 'videoDirector' => 'آلاء',

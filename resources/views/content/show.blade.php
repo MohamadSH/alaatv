@@ -69,6 +69,7 @@
                                 </video>
 
                             </div>
+                           @if(isset($videosWithSameSet) and $videosWithSameSet->isNotEmpty())
                             <div class="row">
                                 <div class="col-md-12">
                                     <nav aria-label="Page navigation">
@@ -80,12 +81,14 @@
                                                 </a>
                                             </li>
                                             @foreach($videosWithSameSetL->take(-5) as $item)
-                                                {{--@if($item->number )--}}
+
                                                 <li class="page-item @if($item["content"]->id == $content->id) active @endif"><a class="page-link" href="{{action("ContentController@show" , $item["content"])}}">{{ $item["content"]->getOrder() }}</a></li>
+
                                             @endforeach
                                             @foreach($videosWithSameSetR->take(6) as $item)
-                                                {{--@if($item->number )--}}
+
                                                 <li class="page-item @if($item["content"]->id == $content->id) active @endif"><a class="page-link" href="{{action("ContentController@show" , $item["content"])}}">{{ $item["content"]->getOrder() }}</a></li>
+
                                             @endforeach
                                             <li class="page-item">
                                                 <a class="page-link" href="{{action("ContentController@show" , $videosWithSameSet->last()["content"])}}" aria-label="آخرین">
@@ -128,14 +131,16 @@
                                         @endif
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <hr>
-                                    <div class="col-md-12">
-                                        @if(!empty($tags))
-                                            @include("partials.search.tagLabel" , ["tags"=>$tags])
-                                        @endif
-                                    </div>
+                           @endif
+
+                            <div class="row">
+                                <hr>
+                                <div class="col-md-12">
+                                    @if(!empty($tags))
+                                        @include("partials.search.tagLabel" , ["tags"=>$tags])
+                                    @endif
                                 </div>
+                            </div>
                         </div>
                     </div>
 
@@ -148,6 +153,8 @@
                                         لینک های دانلود
                                     </div>
                                 </div>
+
+                                @if(isset($content->file) and $content->file->isNotEmpty())
                                 <div class="portlet-body text-justify">
                                     <p>
                                     پیشنهاد می کنیم برای دانلود، از نرم افزار Internet Download Manager در ویندوز و یا ADM در اندروید و یا wget در لینوکس استفاده بفرمایید.
@@ -158,7 +165,8 @@
                                     <div class="row">
 
 
-                                        @foreach(optional($content->file)->get('video') as $file)
+
+                                        @foreach($content->file->get('video') as $file)
                                             <div class="col-md-4">
                                                 <a href="{{$file->link}}?download=1" class="btn red margin-bottom-5" style="width: 250px;">
                                                     فایل {{$file->caption}}{{ isset($file->size[0]) ? "(".$file->size. ")":""  }}
@@ -167,6 +175,7 @@
                                         @endforeach
                                     </div>
                                 </div>
+                                @endif
                             </div>
                         </div>
                     </div>
