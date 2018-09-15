@@ -10,71 +10,72 @@ namespace App\Classes\Search;
 
 
 use App\Classes\Search\Filters\Filter;
-use App\Classes\Search\Filters\Tag;
+use App\Classes\Search\Filters\Tags;
 use App\Classes\Search\Tag\ContentTagManagerViaApi;
+use App\Collection\ContentCollection;
+use function foo\func;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Cache;
 
-class ContentSearch
+class ContentSearch extends SearchAbstract
 {
-
+    protected $pageName = 'contentPage';
     protected $validFilters = [
       'name',
-      'tag'
+      'tags'
     ];
     protected $model = "App\Content" ;
-    protected $dummyFilterCallBack;
 
     public function __construct()
     {
-        $this->dummyFilterCallBack = new DummyFilterCallBack();
+        parent::__construct();
+        $this->model = (new $this->model);
     }
 
-    public function apply(array $filters){
-        $query = $this->applyDecoratorsFromFiltersArray($filters, (new $this->model)->newQuery());
-        return $this->getResults($query);
+
+    public function apply(array $filters ) :LengthAwarePaginator {
+        $this->pageNum = $this->setPageNum($filters);
+        $key = $this->makeCacheKey($filters);
+
+//        dump("before cache");
+        return Cache::tags(['content','search'])->remember($key,$this->cacheTime,function () use( $filters ) {
+//            dump("in cache");
+            $query = $this->applyDecoratorsFromFiltersArray($filters, $this->model->newQuery());
+            return $this->getResults($query);
+        });
     }
 
-    private function applyDecoratorsFromFiltersArray(array $filters, Builder $query)
+    protected function getResults(Builder $query)
     {
-        foreach ($filters as $filterName => $value) {
-            $decorator = $this->createFilterDecorator($filterName);
-            if ($this->isValidFilter($filterName) && $this->isValidDecorator($decorator)) {
-                $decorator = $this->setupDecorator($decorator);
+//        dump("getResults");
+//        dump($this->pageName , $this->pageNum);
+        $result = $query ->active()
+                      ->orderBy("created_at" , "desc")
+                      ->paginate(25,['*'],$this->pageName,$this->pageNum);
+        return $result;
 
-                if($this->isFilterDecorator($decorator))
-                    $query = $decorator->apply($query, $value ,$this->dummyFilterCallBack);
-            }
-        }
-        return $query;
-    }
-    private function createFilterDecorator($name)
-    {
-        return __NAMESPACE__ . '\\Filters\\' . studly_case($name);
-    }
-    private function isValidFilter($filterName){
-        return in_array($filterName,$this->validFilters);
-    }
-    private function isValidDecorator($decorator)
-    {
-        return class_exists($decorator) ;
-    }
-    private function isFilterDecorator($decorator){
-        return ( $decorator instanceof Filter);
-    }
-    public function getResults(Builder $query)
-    {
-        return $query->get();
     }
 
     /**
      * @param $decorator
      * @return mixed
      */
-    private function setupDecorator($decorator)
+    protected function setupDecorator($decorator)
     {
         $decorator = (new $decorator);
-        if ($decorator instanceof Tag)
+        if ($decorator instanceof Tags)
             $decorator->setTagManager(new ContentTagManagerViaApi());
         return $decorator;
+    }
+
+    /**
+     * @param array $filters
+     * @return int|mixed
+     */
+    private function setPageNum(array $filters)
+    {
+        return isset($filters[$this->pageName]) ? $filters[$this->pageName] : 1;
+
     }
 }

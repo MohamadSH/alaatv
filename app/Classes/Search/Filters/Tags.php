@@ -12,7 +12,7 @@ use App\Classes\Search\TaggingInterface;
 use Illuminate\Database\Eloquent\Builder;
 use LogicException;
 
-class Tag extends FilterAbstract
+class Tags extends FilterAbstract
 {
     protected $attribute = 'tags';
     protected $tagManager;
@@ -33,7 +33,7 @@ class Tag extends FilterAbstract
 
     /**
      * @param TaggingInterface $tagManager
-     * @return Tag
+     * @return Tags
      */
     public function setTagManager(TaggingInterface $tagManager)
     {

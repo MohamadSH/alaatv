@@ -10,7 +10,7 @@ namespace App\Classes\Search;
 
 
 use App\Classes\Search\Filters\Filter;
-use App\Classes\Search\Filters\Tag;
+use App\Classes\Search\Filters\Tags;
 use App\Classes\Search\Tag\ContentTagManagerViaApi;
 use App\Classes\Taggable;
 use App\Traits\APIRequestCommon;

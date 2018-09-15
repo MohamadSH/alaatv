@@ -80,7 +80,7 @@ class HomeController extends Controller
 
     public function debug(Request $request)
     {
-        $categories = Category::get()->toTree();
+/*        $categories = Category::get()->toTree();
         return view('partials.tree',compact('categories'));
 
         $nodes = Category::get()->toTree();
@@ -124,7 +124,7 @@ class HomeController extends Controller
 
 
         $nodes = Category::get();
-        dd($nodes->toTree());
+        dd($nodes->toTree());*/
         $filters = [
           'tag' => [
               'جلال_موقاری'
