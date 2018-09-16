@@ -25,15 +25,38 @@ abstract class SearchAbstract
     protected $dummyFilterCallBack;
     protected $pageName = 'page';
     protected $pageNum;
+    protected const DEFAULT_PAGE_NUMBER = 1;
+    protected $numberOfItemInEachPage = 25;
+
     public function __construct()
     {
         $this->dummyFilterCallBack = new DummyFilterCallBack();
         $this->cacheKey = get_class($this).':';
-        $this->cacheTime = Config::get("constants.CACHE_5");
-        $this->pageNum = 1;
+        $this->cacheTime = Config::get("constants.CACHE_60");
+        $this->pageNum = self::DEFAULT_PAGE_NUMBER;
     }
 
     abstract public function apply(array $filters);
+
+    /**
+     * @param int $numberOfItemInEachPage
+     * @return SearchAbstract
+     */
+    public function setNumberOfItemInEachPage(int $numberOfItemInEachPage): SearchAbstract
+    {
+        $this->numberOfItemInEachPage = $numberOfItemInEachPage;
+        return $this;
+    }
+
+    /**
+     * @param string $pageName
+     * @return SearchAbstract
+     */
+    public function setPageName(string $pageName): SearchAbstract
+    {
+        $this->pageName = $pageName;
+        return $this;
+    }
 
     protected function applyDecoratorsFromFiltersArray(array $filters, Builder $query)
     {
@@ -78,7 +101,7 @@ abstract class SearchAbstract
      */
     protected function makeCacheKey(array $array): string
     {
-        $key = $this->cacheKey . $this->pageNum . ':'.md5(serialize($this->validFilters).serialize($array));
+        $key = $this->cacheKey . $this->pageName.'-' .$this->pageNum . ':'.md5(serialize($this->validFilters).serialize($array));
         return $key;
     }
 }

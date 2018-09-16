@@ -5,7 +5,7 @@
             <div class="cbp-item">
                 <div class="cbp-caption">
                     <div class="cbp-caption-defaultWrap">
-                        <img src="{{($content->files->where("pivot.label" , "thumbnail")->isNotEmpty())?$content->files->where("pivot.label" , "thumbnail")->first()->name:"" }}" alt="@if(isset($content->name[0])){{$content->name}} @endif"> </div>
+                        <img src="{{$content->thumbnail}}" alt="@if(isset($content->name[0])){{$content->name}} @endif"> </div>
                     <div class="cbp-caption-activeWrap">
                         <div class="cbp-l-caption-alignCenter">
                             <div class="cbp-l-caption-body">

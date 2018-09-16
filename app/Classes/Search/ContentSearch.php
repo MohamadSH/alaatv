@@ -23,7 +23,8 @@ class ContentSearch extends SearchAbstract
     protected $pageName = 'contentPage';
     protected $validFilters = [
       'name',
-      'tags'
+      'tags',
+      'contentType'
     ];
     protected $model = "App\Content" ;
 
@@ -38,7 +39,6 @@ class ContentSearch extends SearchAbstract
         $this->pageNum = $this->setPageNum($filters);
         $key = $this->makeCacheKey($filters);
 
-//        dump("before cache");
         return Cache::tags(['content','search'])->remember($key,$this->cacheTime,function () use( $filters ) {
 //            dump("in cache");
             $query = $this->applyDecoratorsFromFiltersArray($filters, $this->model->newQuery());
@@ -48,14 +48,17 @@ class ContentSearch extends SearchAbstract
 
     protected function getResults(Builder $query)
     {
-//        dump("getResults");
-//        dump($this->pageName , $this->pageNum);
         $result = $query ->active()
                       ->orderBy("created_at" , "desc")
-                      ->paginate(25,['*'],$this->pageName,$this->pageNum);
+                      ->paginate($this->numberOfItemInEachPage,
+                          ['*'],
+                          $this->pageName,
+                          $this->pageNum
+                      );
         return $result;
-
     }
+
+
 
     /**
      * @param $decorator
@@ -75,7 +78,7 @@ class ContentSearch extends SearchAbstract
      */
     private function setPageNum(array $filters)
     {
-        return isset($filters[$this->pageName]) ? $filters[$this->pageName] : 1;
+        return isset($filters[$this->pageName]) ? $filters[$this->pageName] : self::DEFAULT_PAGE_NUMBER;
 
     }
 }

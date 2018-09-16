@@ -174,7 +174,7 @@ return [
         App\Providers\WebsiteSettingProvider::class,
 
         App\Providers\MedianaServiceProvider::class,
-
+        App\Providers\ComposerServiceProvider::class,
 
     ],
     /*

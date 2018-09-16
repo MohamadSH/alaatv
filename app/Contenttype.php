@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * App\Contenttype
@@ -73,4 +74,9 @@ class Contenttype extends Model
             ->where("relationtype_id", 1);
     }
 
+    public static function getRootContentType(){
+        return Cache::tags('contentType')->remember('ContentType:getRootContentType', config('constants.CACHE_600'),function (){
+            return Contenttype::whereDoesntHave("parents")->get();
+        });
+    }
 }

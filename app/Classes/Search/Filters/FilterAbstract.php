@@ -25,6 +25,7 @@ class FilterAbstract implements Filter
 
     public function apply(Builder $builder, $value,  FilterCallback $callback ): Builder
     {
+        $value = $this->getSearchValue($value);
         return $builder->where($this->attribute,'LIKE', "%".$value."%");
     }
 
@@ -42,5 +43,9 @@ class FilterAbstract implements Filter
     protected function getValueShouldBeArrayMessage()
     {
         return trans("filter.value should be array", ["filter" => get_class($this)]);
+    }
+
+    protected function getSearchValue($value){
+        return $value;
     }
 }

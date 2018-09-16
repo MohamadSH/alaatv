@@ -23,7 +23,7 @@
                     style="width: 100%"
                     class="video-js vjs-default-skin" controls>
 
-                @foreach($files as $source)
+                @foreach($video->files as $source)
                     <source label="{{ $source->label }}" src="{{ $source->name }}" type='video/mp4'>
                 @endforeach
                 <p class="vjs-no-js">جهت پخش آنلاین فیلم، ابتدا مطمئن شوید که جاوا اسکریپت در مرور

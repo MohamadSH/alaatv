@@ -7,9 +7,6 @@ use App\Classes\SEO\SeoMetaTagsGenerator;
 use App\Contentset;
 use App\Contenttype;
 use App\Content;
-use App\Grade;
-use App\Major;
-use App\Product;
 use App\User;
 use App\Http\Requests\{
     ContentIndexRequest, EditContentRequest, InsertContentRequest, Request
@@ -17,16 +14,13 @@ use App\Http\Requests\{
 use App\Traits\{
     APIRequestCommon, FileCommon, Helper, ProductCommon, UserSeenTrait
 };
-
-use Auth;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\{
-    Config, Input, View
+    Cache, Config, View
 };
 use Illuminate\Support\Str;
 use Jenssegers\Agent\Agent;
@@ -44,18 +38,7 @@ class ContentController extends Controller
     use UserSeenTrait;
     use APIRequestCommon;
 
-    private function getAuthExceptionArray(Agent $agent): array
-    {
-        if ($agent->isRobot())
-        {
-            $authException = ["index" , "show" , "search" ,"embed" ];
-        }else{
-            $authException = ["index" ,"search"  ];
-        }
-        //TODO:// preview(Telegram)
-        $authException = ["index" , "show" , "search" ,"embed","attachContentToContentSet" ];
-        return $authException;
-    }
+
 
     public function __construct(Agent $agent, Response $response)
     {
@@ -73,139 +56,68 @@ class ContentController extends Controller
      */
     public function index(ContentIndexRequest $request)
     {
-        $itemTypes = array_filter($request->get('itemTypes',
+        $contentTypes = array_filter($request->get('contentType',
             ["video" , "pamphlet" , "article"]
         ));
-        $isApp = ( strlen(strstr($request->header('User-Agent'),"Alaa")) > 0 )? true : false ;
-        $queryResult = ( new ContentSearch )->apply($request->all());
+        $tags = $request->get('tags');
+        $filters = $request->all();
+        $isApp = $this->isRequestFromApp($request);
 
-        dump($queryResult);
-        dump($queryResult->currentPage());
-        dump($queryResult->nextPageUrl());
-        $contents = $queryResult->onlyItemTypes($itemTypes);
-        //VideoSearch, PamphletSearch
-        return $contents;
-        dd($contents);
-
-        //TODO:// add itemType Filter
-        foreach ($itemTypes as $itemType)
+        $items = collect();
+        foreach ($contentTypes as $contentType)
         {
-            // $arrayOfId get from Redis ( add itemType tags to redis request )
-            $arrayOfId = [];
-            $query = Content::whereIn("id",$arrayOfId)
-                ->active()
-                ->orderBy("created_at" , "desc")
-                ->get();
-            if($isApp){
-                $items->push($query);
-            }else {
-                if ($total_items_db > 0)
-                    $partialSearch = $this->getPartialSearchFromIds($request, $query, $itemType, $perPage, $total_items_db, $pageName);
+            $filters['contentType'] = [$contentType];
+            ${$contentType.'Result'} = ( new ContentSearch )
+                                        ->setPageName($contentType.'Page')
+                                        ->apply($filters);
+
+            if($isApp)
+            {
+                    $items->push(${$contentType . 'Result'}->getCollection());
+            }
+            else {
+                if (${$contentType . 'Result'}->total() > 0)
+                    $partialSearch = $this->getPartialSearchFromIds( ${$contentType . 'Result'}, $contentType);
                 else
                     $partialSearch = null;
                 $items->push([
-                    "type"=>$itemType,
-                    "totalitems"=> $total_items_db,
+                    "type"=>$contentType,
+                    "totalitems"=> ${$contentType . 'Result'}->total(),
                     "view"=>$partialSearch,
                 ]);
             }
-
         }
+
         if($isApp){
             $response = $this->makeJsonForAndroidApp($items);
             return response()->json($response,200);
         }
-        /**
-        //درسی که به عنوان انتخاب شده در صفحه نشان داده میشه
-        //["value"=>"آمار_و_مدلسازی"]
-        $defaultLesson = null;
-        $majorCollection = collect([
-            [
-                "name"=>"همه رشته ها" ,
-                "description"=>""//قراره تگ قرار بگیره
-            ]
-        ]);
-        $lessons= $lessons->merge(collect([
-                [
-                    "value"=>"",  // تگ درس
-                    "initialIndex"=>"همه دروس"
-                ]
-            ]
-        ));
-        $majorLesson = collect();
-        $majorLesson->put( $major["description"], $lessons);
-
-         * $defaultMajor
-         * $gradeCollection->push(["displayName"=>"اول دبیرستان" , "description"=>"اول_دبیرستان"]);
-         * $defaultGrade
-         * $defaultTeacher
-         *
-         * $lessonTeacher
-        **/
-        /**
-        $lessonTeacher = collect(
-            [
-                "" => collect(
-                    [
-                        ["index"=>"همه دبیرها" , "firstName"=>"" , "value"=>""],
-                        ["lastName"=>"ثابتی" , "firstName"=>"محمد صادق" , "value"=>"محمد_صادق_ثابتی"],
-                    ]
-                )
-            ]
-        );
-         * **/
-
-
-        /**
-         * End of page inputs
-         */
-
         if(request()->ajax())
         {
             return $this->response
-                ->setStatusCode(200)
-                ->setContent([
-                    "items"=>$items ,
-                    "itemTypes"=>$itemTypes ,
-                    "tagLabels" => $tagInput ,
-                ]);
+                        ->setStatusCode(200)
+                        ->setContent([
+                            "items"=>$items ,
+                            "itemTypes"=>$contentTypes ,
+                            "tagLabels" => $tags ,
+                        ]);
         }
-        else
-        {
-
-            $sideBarMode = "closed";
-//            $ads1 = [
-//                //DINI SEBTI
-//                'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-1.jpg' => 'https://sanatisharif.ir/landing/4',
-//            ];
-//            $ads2 = [
-//                //DINI SEBTI
-//                'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-2.jpg' => 'https://sanatisharif.ir/landing/4',
-//                'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-3.jpg' => 'https://sanatisharif.ir/landing/4',
-//            ];
-            $ads1 = [];
-            $ads2 = [];
-            return view("pages.search" , compact("items" ,"itemTypes" ,"tagArray" , "extraTagArray",
-                "majors" , "grades"  , "defaultLesson" , "sideBarMode" , "majorLesson" , "lessonTeacher" , "defaultTeacher"
-                , "ads1" , "ads2" , 'tagInput' ,'defaultGrade' , 'defaultMajor' ));
-        }
+        return view("pages.search" , compact("items" ,"contentTypes"  , 'tags' ));
     }
 
     public function embed(Request $request , Content $content){
         $url = action('ContentController@show', $content);
         $this->generateSeoMetaTags($content);
         if($content->contenttype_id != Content::CONTENT_TYPE_VIDEO)
-            return redirect($url, 301);
+            return redirect($url, Response::HTTP_MOVED_PERMANENTLY);
         $video = $content;
-
         [
             $contentsWithSameSet ,
             $contentSetName
         ]  = $video->getSetMates();
-        $files = $video->files;
-
-        return view("content.embed",compact('video','files','contentsWithSameSet','contentSetName'));
+        return view("content.embed",compact('video','contentsWithSameSet','contentSetName'));
     }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -213,15 +125,11 @@ class ContentController extends Controller
      */
     public function create()
     {
-        $rootContentTypes = $this->getRootsContentTypes();
-        $contentsets = Contentset::latest()
-                                ->pluck("name" , "id");
-        $authors =User::getTeachers()->pluck("full_name", "id");
+        $rootContentTypes = Contenttype::getRootContentType();
+        $contentsets = Contentset::latest()->pluck("name" , "id");
+        $authors = User::getTeachers()->pluck("full_name", "id");
 
-        return view("content.create2" , compact("rootContentTypes" ,
-                                                                        "contentsets" ,
-                                                                            "authors"
-                                                                        )) ;
+        return view("content.create2" , compact("rootContentTypes" ,"contentsets" ,"authors")) ;
     }
 
     /**
@@ -231,9 +139,7 @@ class ContentController extends Controller
      */
     public function create2()
     {
-        $contenttypes = collect();
-        $contenttypes->put(Content::CONTENT_TYPE_VIDEO , "فیلم");
-        $contenttypes->put(Content::CONTENT_TYPE_PAMPHLET , "جزوه");
+        $contenttypes = Contenttype::getRootContentType()->pluck('displayName','id');
 
         return view("content.create3" , compact("contenttypes")) ;
     }
@@ -250,7 +156,6 @@ class ContentController extends Controller
     {
         if ($content->isActive()) {
 
-            $sideBarMode = "closed";
             $adItems = $content->getAddItems();
             $tags = $content->retrievingTags();
             [
@@ -467,16 +372,6 @@ class ContentController extends Controller
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Collection|static[]
-     */
-    private function getRootsContentTypes()
-    {
-        $rootContentTypes = Contenttype::whereDoesntHave("parents")->get();
-        return $rootContentTypes;
-    }
-
-
-    /**
      * @param $authException
      */
     private function callMiddlewares($authException): void
@@ -591,6 +486,7 @@ class ContentController extends Controller
                 "ext" => pathinfo($fileName, PATHINFO_EXTENSION)
             ]);
         }
+        /** @var TYPE_NAME $content */
         $content->file = $fileCollection;
     }
 
@@ -680,31 +576,7 @@ class ContentController extends Controller
     }
 
 
-    private function getPartialSearchFromIds(Request $request, $query, string $itemType, int $perPage, int $total_items_db,string $pageName){
-        $options = [
-            "pageName" => $pageName
-        ];
-        $query = new LengthAwarePaginator(
-            $query,
-            $total_items_db,
-            $perPage,
-            null  ,
-            $options
-        );
-        switch ($itemType)
-        {
-            case "video":
-                $query->load('files');
-                break;
-            case "pamphlet":
-            case "article":
-                break;
-            case "contentset":
-                $query->load('contents');
-                break;
-            case "product":
-                break;
-        }
+    private function getPartialSearchFromIds($query , string $itemType ){
         $partialSearch = View::make(
             'partials.search.'.$itemType,
             [
@@ -714,6 +586,8 @@ class ContentController extends Controller
         return $partialSearch;
     }
     private function makeJsonForAndroidApp(Collection $items){
+
+//        dd($items);
         $items = $items->pop();
         $key = md5($items->pluck("id")->implode(","));
         $response = Cache::remember($key,Config::get("constants.CACHE_60"),function () use($items){
@@ -762,5 +636,27 @@ class ContentController extends Controller
             return $response;
         });
         return $response;
+    }
+
+    /**
+     * @param FormRequest $request
+     * @return bool
+     */
+    private function isRequestFromApp(FormRequest $request): bool
+    {
+        $isApp = (strlen(strstr($request->header('User-Agent'), "Alaa")) > 0) ? true : false;
+        return $isApp;
+    }
+    private function getAuthExceptionArray(Agent $agent): array
+    {
+        if ($agent->isRobot())
+        {
+            $authException = ["index" , "show" , "embed" ];
+        }else{
+            $authException = ["index"];
+        }
+        //TODO:// preview(Telegram)
+        $authException = ["index" , "show" , "search" ,"embed","attachContentToContentSet" ];
+        return $authException;
     }
 }

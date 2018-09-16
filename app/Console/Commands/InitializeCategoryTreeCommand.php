@@ -636,19 +636,19 @@ class InitializeCategoryTreeCommand extends Command
         ];
         $reshteh = [
             [
-                'name' => 'ریاضی',
+                'name' => 'رشته ریاضی',
                 'tags' => json_encode(["رشته_ریاضی"], JSON_UNESCAPED_UNICODE),
 
                 'children' => $riazi,
             ],
             [
-                'name' => 'تجربی',
+                'name' => 'رشته تجربی',
                 'tags' => json_encode(["رشته_تجربی"], JSON_UNESCAPED_UNICODE),
 
                 'children' => $tajrobi,
             ],
             [
-                'name' => 'انسانی',
+                'name' => 'رشته انسانی',
                 'tags' => json_encode(["رشته_انسانی"], JSON_UNESCAPED_UNICODE),
 
                 'children' => $ensani,

@@ -3304,7 +3304,7 @@ class SanatisharifmergeController extends Controller
         $isApp = ( strlen(strstr($request->header('User-Agent'),"Alaa")) > 0 )? true : false ;
         $app = null;
         if($isApp)
-            $app ="&itemTypes[]=video";
+            $app ="&contentType[]=video";
         return redirect($newUri.$app,301);
     }
 
@@ -3327,7 +3327,7 @@ class SanatisharifmergeController extends Controller
         $app = null;
         $isApp = ( strlen(strstr($request->header('User-Agent'),"Alaa")) > 0 )? true : false ;
         if($isApp)
-            $app ="&itemTypes[]=video";
+            $app ="&contentType[]=video";
         $newUri .= $app;
         $newUri = urldecode($newUri);
         return redirect($newUri,301);

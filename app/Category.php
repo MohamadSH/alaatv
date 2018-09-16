@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 use Kalnoy\Nestedset\NodeTrait;
 
 /**
@@ -49,4 +50,15 @@ class Category extends Model
         'updated_at',
     ];
 
+    public function scopeActive($query){
+        return $query->where('enable', 1);
+    }
+
+    public function getWithDepth(){
+        return Cache::tags('tree')->remember('tree',config('constants.CACHE_600'),function (){
+            return Category::withDepth()
+                    ->active()
+                    ->get();
+        });
+    }
 }
