@@ -12,7 +12,7 @@ use App\Http\Requests\{
     ContentIndexRequest, EditContentRequest, InsertContentRequest, Request
 };
 use App\Traits\{
-    APIRequestCommon, FileCommon, Helper, ProductCommon, UserSeenTrait
+    APIRequestCommon, CharacterCommon, FileCommon, Helper, ProductCommon, RequestCommon, UserSeenTrait
 };
 use Carbon\Carbon;
 use Exception;
@@ -36,7 +36,9 @@ class ContentController extends Controller
     use Helper;
     use FileCommon ;
     use UserSeenTrait;
+    use RequestCommon;
     use APIRequestCommon;
+    use CharacterCommon;
 
 
 
@@ -95,7 +97,7 @@ class ContentController extends Controller
         if(request()->ajax())
         {
             return $this->response
-                        ->setStatusCode(200)
+                        ->setStatusCode(Response::HTTP_OK)
                         ->setContent([
                             "items"=>$items ,
                             "itemTypes"=>$contentTypes ,
@@ -169,6 +171,12 @@ class ContentController extends Controller
             $result = compact( "seenCount","author", "content", "rootContentType", "childContentType", "contentsWithSameType", "soonContentsWithSameType", "contentSet", "contentsWithSameSet", "videosWithSameSet", "pamphletsWithSameSet", "contentSetName", "videoSources"
               , "tags", "sideBarMode", "userCanSeeCounter", "adItems", "videosWithSameSetL", "videosWithSameSetR","contentId");
 
+            if(request()->ajax())
+            {
+                return $this->response
+                    ->setStatusCode(Response::HTTP_OK)
+                    ->setContent($result);
+            }
             return view("content.show", $result);
         } else
             abort(403);
@@ -447,14 +455,7 @@ class ContentController extends Controller
             ], false);*/
     }
 
-    /**
-     * @param $fileName
-     * @return boolean
-     */
-    private function strIsEmpty($str):bool
-    {
-        return strlen(preg_replace('/\s+/', '', $str)) == 0 ;
-    }
+
 
     /**
      * @param Content $content
@@ -638,15 +639,7 @@ class ContentController extends Controller
         return $response;
     }
 
-    /**
-     * @param FormRequest $request
-     * @return bool
-     */
-    private function isRequestFromApp(FormRequest $request): bool
-    {
-        $isApp = (strlen(strstr($request->header('User-Agent'), "Alaa")) > 0) ? true : false;
-        return $isApp;
-    }
+
     private function getAuthExceptionArray(Agent $agent): array
     {
         if ($agent->isRobot())

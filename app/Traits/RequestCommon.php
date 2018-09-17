@@ -1,9 +1,19 @@
 <?php namespace App\Traits;
 
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 
 trait RequestCommon
 {
+    /**
+     * @param FormRequest $request
+     * @return bool
+     */
+    public function isRequestFromApp(FormRequest $request): bool
+    {
+        $isApp = (strlen(strstr($request->header('User-Agent'), "Alaa")) > 0) ? true : false;
+        return $isApp;
+    }
     public function requestHasFile(Request $request , $index)
     {
         $hasFile = true;
