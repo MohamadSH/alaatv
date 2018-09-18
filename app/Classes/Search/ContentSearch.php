@@ -8,32 +8,21 @@
 
 namespace App\Classes\Search;
 
-
-use App\Classes\Search\Filters\Filter;
 use App\Classes\Search\Filters\Tags;
 use App\Classes\Search\Tag\ContentTagManagerViaApi;
-use App\Collection\ContentCollection;
-use function foo\func;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Cache;
 
 class ContentSearch extends SearchAbstract
 {
+    protected $model = "App\Content" ;
     protected $pageName = 'contentPage';
     protected $validFilters = [
       'name',
       'tags',
       'contentType'
     ];
-    protected $model = "App\Content" ;
-
-    public function __construct()
-    {
-        parent::__construct();
-        $this->model = (new $this->model);
-    }
-
 
     public function apply(array $filters ) :LengthAwarePaginator {
         $this->pageNum = $this->setPageNum($filters);
@@ -70,15 +59,5 @@ class ContentSearch extends SearchAbstract
         if ($decorator instanceof Tags)
             $decorator->setTagManager(new ContentTagManagerViaApi());
         return $decorator;
-    }
-
-    /**
-     * @param array $filters
-     * @return int|mixed
-     */
-    private function setPageNum(array $filters)
-    {
-        return isset($filters[$this->pageName]) ? $filters[$this->pageName] : self::DEFAULT_PAGE_NUMBER;
-
     }
 }

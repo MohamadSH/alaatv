@@ -151,6 +151,24 @@ class Product extends Model implements Advertisable, Taggable
             $time
         );
     }
+    public function scopeActive($query){
+        return $query->where('enable', 1);
+    }
+
+    public function scopeEnable($query)
+    {
+        return $query->where('enable', '=', 1);
+    }
+
+    public function scopeConfigurable($query)
+    {
+        return $query->where('producttype_id', '=', 2);
+    }
+
+    public function scopeSimple($query)
+    {
+        return $query->where('producttype_id', '=', 1);
+    }
 
 
     public static function recentProducts($number)
@@ -354,20 +372,6 @@ class Product extends Model implements Advertisable, Taggable
 
     }
 
-    public function scopeEnable($query)
-    {
-        return $query->where('enable', '=', 1);
-    }
-
-    public function scopeConfigurable($query)
-    {
-        return $query->where('producttype_id', '=', 2);
-    }
-
-    public function scopeSimple($query)
-    {
-        return $query->where('producttype_id', '=', 1);
-    }
 
     public function title()
     {

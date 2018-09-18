@@ -14,6 +14,7 @@ use App\Classes\Search\Filters\Tags;
 use App\Classes\Search\Tag\ContentTagManagerViaApi;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Config;
+use LogicException;
 
 abstract class SearchAbstract
 {
@@ -30,10 +31,14 @@ abstract class SearchAbstract
 
     public function __construct()
     {
+        if(!isset($this->model))
+            throw new LogicException(get_class($this) . ' must have a $model');
+
         $this->dummyFilterCallBack = new DummyFilterCallBack();
         $this->cacheKey = get_class($this).':';
         $this->cacheTime = Config::get("constants.CACHE_60");
         $this->pageNum = self::DEFAULT_PAGE_NUMBER;
+        $this->model = (new $this->model);
     }
 
     abstract public function apply(array $filters);
@@ -95,6 +100,7 @@ abstract class SearchAbstract
     abstract protected function getResults(Builder $query);
     abstract protected function setupDecorator($decorator);
 
+
     /**
      * @param array $array
      * @return string
@@ -103,5 +109,15 @@ abstract class SearchAbstract
     {
         $key = $this->cacheKey . $this->pageName.'-' .$this->pageNum . ':'.md5(serialize($this->validFilters).serialize($array));
         return $key;
+    }
+
+    /**
+     * @param array $filters
+     * @return int|mixed
+     */
+    protected function setPageNum(array $filters)
+    {
+        return isset($filters[$this->pageName]) ? $filters[$this->pageName] : SearchAbstract::DEFAULT_PAGE_NUMBER;
+
     }
 }

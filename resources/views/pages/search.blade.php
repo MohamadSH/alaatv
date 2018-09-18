@@ -87,22 +87,22 @@
                     <div class="row">
                         <div class="col-lg-3 col-md-3 col-sd-3 col-xs-12">
                             <div class="form-group form-md-line-input form-md-floating-label has-info">
-                                {!! Form::select('tags[]',$grades,null,['class' => 'form-control itemFilter' , 'id'=>'gradeSelect' , 'placeholder'=>'همه مقاطع' ]) !!}
+                                {!! Form::select('tags[]',$majors,null,['class' => 'form-control itemFilter' , 'id'=>'majorSelect' , 'placeholder'=>'همه رشته ها' ]) !!}
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sd-3 col-xs-12">
                             <div class="form-group form-md-line-input form-md-floating-label has-info">
-                                {!! Form::select('tags[]',$majors,null,['class' => 'form-control itemFilter' , 'id'=>'majorSelect' , 'placeHolder'=>'همه رشته ها' ]) !!}
+                                {!! Form::select('tags[]',$grades,null,['class' => 'form-control itemFilter' , 'id'=>'gradeSelect' , 'placeholder'=>'همه مقطع ها' ]) !!}
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sd-3 col-xs-12">
                             <div class="form-group form-md-line-input form-md-floating-label has-info">
-                                {!! Form::select('tags[]',["همه دروس"],null,['class' => 'form-control itemFilter'  , 'id'=> 'lessonSelect'  ]) !!}
+                                {!! Form::select('tags[]',$lessons,null,['class' => 'form-control itemFilter'  , 'id'=> 'lessonSelect' , 'placeholder'=>'همه درس ها' ]) !!}
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sd-3 col-xs-12">
                             <div class="form-group form-md-line-input form-md-floating-label has-info">
-                                {!! Form::select('tags[]',["همه دبیرها"],null,['class' => 'form-control itemFilter' , 'id'=> 'teacherSelect' ]) !!}
+                                {!! Form::select('tags[]',$teachers,null,['class' => 'form-control itemFilter' , 'id'=> 'teacherSelect'  , 'placeholder'=>'همه دبیرها']) !!}
                             </div>
                         </div>
                     </div>
@@ -243,8 +243,6 @@
     <script src="/assets/pages/scripts/search.min.js" type="text/javascript"></script>
     <script src="/assets/extra/slick/slick/slick.min.js" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript">
-        var majorLesson = {!!  $majorLesson->toJson()!!};
-        var lessonTeacher = {!!  $lessonTeacher->toJson()!!};
         var defaultLesson = "{!!$defaultLesson!!}";
         var defaultTeacher = "{!!$defaultTeacher!!}";
         var tags = {!! json_encode($tags,JSON_UNESCAPED_UNICODE ) !!};
@@ -256,8 +254,11 @@
             initialPortfolio("#js-grid-juicy-projects");
             $("#gradeSelect").val("{{$defaultGrade}}");
             $("#majorSelect").val("{{$defaultMajor}}");
-            makeLessonSelect( $("#majorSelect").val());
-            makeTeacherSelect($("#lessonSelect").val());
+            $("#lessonSelect").val("{{$defaultLesson}}");
+            $("#teacherSelect").val("{{$defaultTeacher}}");
+            makeGradeSelect($("#majorSelect").val());
+            makeLessonSelect( $("#gradeSelect").val());
+            // makeTeacherSelect($("#lessonSelect").val());
             $(".contentPortlet .portlet-title .caption").append(makeTagLabels(tags) );
             $("#itemFilterFormBody").append(makeTagLabels(extraTags ,true ) );
         });

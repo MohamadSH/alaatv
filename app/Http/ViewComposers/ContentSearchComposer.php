@@ -5,6 +5,7 @@ namespace App\Http\ViewComposers;
 
 use App\Category;
 use App\Traits\CharacterCommon;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -43,13 +44,14 @@ class ContentSearchComposer
         $tree = $this->category->getWithDepth();
         $majors = $tree->where('depth',2)->pluck('name','id')->unique();
         $grades = $tree->where('depth',3)->pluck('name', 'id')->unique();
-        $lessonTeacher  = $majorLesson  = $tree->where('depth',4)->pluck('name', 'id')->unique();
-
+        $lessons  = $tree->where('depth',4)->pluck('name', 'id')->unique();
+        $teachers = User::getTeachers()->pluck("full_name_reverse", "id");
 
         $defaultMajor  = $this->findDefault($tags, $majors->toArray());
         $defaultGrade =$this->findDefault($tags, $grades->toArray());
-        $defaultTeacher =$this->findDefault($tags, $lessonTeacher->toArray());
-        $defaultLesson = $this->findDefault($tags, $majorLesson->toArray());;
+        $defaultLesson = $this->findDefault($tags, $lessons->toArray());
+        $defaultTeacher =$this->findDefault($tags, $teachers->toArray());
+
 
         $sideBarMode = "closed";
 //            $ads1 = [
@@ -64,7 +66,7 @@ class ContentSearchComposer
         $ads1 = [];
         $ads2 = [];
 
-        $view->with(compact('grades','majors','majorLesson','lessonTeacher','defaultLesson','defaultTeacher','defaultGrade','defaultMajor','sideBarMode','ads1','ads2'));
+        $view->with(compact('grades','majors','lessons','teachers','defaultLesson','defaultTeacher','defaultGrade','defaultMajor','sideBarMode','ads1','ads2'));
 
     }
 

@@ -197,6 +197,7 @@ class User extends Authenticatable
     protected $fillable = [
         'firstName',
         'lastName',
+        'nameSlug',
         'mobile',
         'password',
         'nationalCode',
@@ -710,6 +711,11 @@ class User extends Authenticatable
     public function getFullNameAttribute($value)
     {
         return ucfirst($this->firstName) . ' ' . ucfirst($this->lastName);
+    }
+
+    public function getFullNameReverseAttribute($value)
+    {
+        return ucfirst($this->lastName) . ' ' . ucfirst($this->firstName);
     }
 
     public function routeNotificationForPhoneNumber()
