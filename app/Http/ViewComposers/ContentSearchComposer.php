@@ -39,7 +39,9 @@ class ContentSearchComposer
      */
     public function compose(View $view)
     {
-        $tags =  $this->request->all()['tags'];
+        $tags = [] ;
+        if($this->request->has("tags"))
+            $tags =  $this->request->tags;
 
         $tree = $this->category->getWithDepth();
         $majors = $tree->where('depth',2)->pluck('name','id')->unique();
@@ -77,11 +79,15 @@ class ContentSearchComposer
      */
     private function findDefault(array $tags, array $inputs)
     {
-        $default = array_intersect($tags, array_map(function ($input) {
+        $inputSlug =  array_map(function ($input) {
             return  $this->make_slug($input, '_');
-        }, $inputs));
+        }, $inputs);
+        $default = array_intersect($tags, $inputSlug);
         if(is_array($default))
-            return array_first($default);
+        {
+            $default = array_first($default);
+            return array_search($default, $inputSlug);
+        }
         return null;
     }
 }
