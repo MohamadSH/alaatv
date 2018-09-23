@@ -10,11 +10,15 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Category $category
+     * @return void
      */
-    public function index()
+    public function index(Request $request,Category $category)
     {
-        //
+        $id = $request->id ;
+        $result  = $category->newQuery()->active()->descendantsOf($id)->toTree();
+        dd($result);
     }
 
     /**
