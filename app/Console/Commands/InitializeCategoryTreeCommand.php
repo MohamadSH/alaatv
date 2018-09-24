@@ -658,25 +658,24 @@ class InitializeCategoryTreeCommand extends Command
             [
                 'name' => 'ابتدایی',
                 'tags' => json_encode(["ابتدایی"], JSON_UNESCAPED_UNICODE),
-
+                'enable' => false,
                 'children' => [],
             ],
             [
                 'name' => 'متوسطه1',
                 'tags' => json_encode(["متوسطه1"], JSON_UNESCAPED_UNICODE),
-
+                'enable' => false,
                 'children' => [],
             ],
             [
                 'name' => 'متوسطه2',
                 'tags' => json_encode(["متوسطه2"], JSON_UNESCAPED_UNICODE),
-
                 'children' => $reshteh,
             ],
             [
                 'name' => 'مهارتی',
                 'tags' => json_encode(["مهارتی"], JSON_UNESCAPED_UNICODE),
-
+                'enable' => false,
                 'children' => [],
             ],
 

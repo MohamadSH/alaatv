@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Traits\Helper;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -85,5 +86,19 @@ class Productfile extends Model
         $explodedDateTime = explode(" ", $this->validSince);
         $explodedTime = $explodedDateTime[1];
         return $this->convertDate($this->validSince, "toJalali") . " " . $explodedTime;
+    }
+
+    public function scopeEnable($query)
+    {
+        return $query->where('enable', '=', 1);
+    }
+
+    public function scopeValid($query)
+    {
+        return $query->where(function ($q) {
+            $q->where('validSince', '<', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
+                ->timezone('Asia/Tehran'))
+                ->orwhereNull('validSince');
+        });
     }
 }

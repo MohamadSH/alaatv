@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Classes\Search\ContentSearch;
-use App\Classes\SEO\SeoMetaTagsGenerator;
 use App\Contentset;
 use App\Contenttype;
 use App\Content;
@@ -12,7 +11,7 @@ use App\Http\Requests\{
     ContentIndexRequest, EditContentRequest, InsertContentRequest, Request
 };
 use App\Traits\{
-    APIRequestCommon, CharacterCommon, FileCommon, Helper, ProductCommon, RequestCommon, UserSeenTrait
+    APIRequestCommon, CharacterCommon, FileCommon, Helper, MetaCommon, ProductCommon, RequestCommon, UserSeenTrait
 };
 use Carbon\Carbon;
 use Exception;
@@ -39,6 +38,7 @@ class ContentController extends Controller
     use RequestCommon;
     use APIRequestCommon;
     use CharacterCommon;
+    use MetaCommon;
 
 
 
@@ -182,13 +182,6 @@ class ContentController extends Controller
             abort(403);
     }
 
-    private function generateSeoMetaTags(Content $content)
-    {
-        try {
-            $seo = new SeoMetaTagsGenerator($content);
-        } catch (\Exception $e) {
-        }
-    }
     /**
      * Show the form for editing the specified resource.
      *

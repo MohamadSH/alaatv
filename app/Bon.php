@@ -87,8 +87,20 @@ class Bon extends Model
     {
         return $this->belongsTo("\App\BonType");
     }
+
     public function scopeEnable($query)
     {
         return $query->where('isEnable', '=', 1);
     }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param mixed $name
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOfName($query , $name)
+    {
+        return $query->where("name" , $name) ;
+    }
+
 }

@@ -17,6 +17,8 @@ class SeoMetaTagsGenerator
     public const SEO_MOD_VIDEO_TAGS  = 1;
     public const SEO_MOD_PDF_TAGS  = 2;
     public const SEO_MOD_ARTICLE_TAGS  = 3;
+    public const SEO_MOD_PRODUCT_TAGS  = 4;
+    public const SEO_MOD_GENERAL_TAGS  = 5;
 
     private const SEO_TYPE_VIDEO = "video";
     private const SEO_TYPE_WEBSITE = "website";
@@ -104,6 +106,9 @@ class SeoMetaTagsGenerator
                 'tag' => $this->tags
             ]);
     }
+    protected function generateProductTags(){
+        SEO::opengraph()->setType(self::SEO_TYPE_WEBSITE);
+    }
 
     /**
      * @throws \Exception
@@ -120,6 +125,12 @@ class SeoMetaTagsGenerator
                 break;
             case self::SEO_MOD_ARTICLE_TAGS:
                 $this->generateArticleTags();
+                break;
+            case self::SEO_MOD_PRODUCT_TAGS:
+                $this->generateProductTags();
+                break;
+            case self::SEO_MOD_GENERAL_TAGS:
+                SEO::opengraph()->setType(self::SEO_TYPE_WEBSITE);
                 break;
             default:
                 throw new \Exception("seoMod should be set!");

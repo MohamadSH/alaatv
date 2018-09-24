@@ -3,6 +3,8 @@
 namespace App;
 
 use App\Classes\Advertisable;
+use App\Classes\SEO\SeoInterface;
+use App\Classes\SEO\SeoMetaTagsGenerator;
 use App\Classes\Taggable;
 use App\Traits\Helper;
 use App\Traits\ProductCommon;
@@ -86,12 +88,22 @@ use Illuminate\Support\Facades\Config;
  * @method static \Illuminate\Database\Query\Builder|\App\Product withoutTrashed()
  * @mixin \Eloquent
  */
-class Product extends Model implements Advertisable, Taggable
+class Product extends Model implements Advertisable, Taggable , SeoInterface
 {
     use SoftDeletes;
 //    use Searchable;
     use ProductCommon;
     use Helper;
+
+    public const AMOUNT_LIMIT = [
+                            'نامحدود',
+                            'محدود'
+                        ];
+
+    public const ENABLE_STATUS= [
+        'نامحدود',
+        'محدود'
+    ];
 
     /**
      * The attributes that should be mutated to dates.
@@ -170,13 +182,22 @@ class Product extends Model implements Advertisable, Taggable
         return $query->where('producttype_id', '=', 1);
     }
 
+    public function scopeValid($query)
+    {
+        return $query->where(function ($q) {
+            $q->where('validSince', '<', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
+                ->timezone('Asia/Tehran'))
+                ->orwhereNull('validSince');
+        });
+    }
+
 
     public static function recentProducts($number)
     {
         return self::getProducts(0, 1)->take($number)->orderBy('created_at', 'Desc');
     }
 
-    public static function getProducts($configurable = 0, $enable = 0)
+    public static function getProducts($configurable = 0, $enable = 0 , $excluded = [] , $orderBy = "")
     {
         if ($configurable == 1) {
             $products = Product::configurable();
@@ -187,6 +208,13 @@ class Product extends Model implements Advertisable, Taggable
             if ($enable == 1)
                 $products->enable();
         }
+
+        if(!empty($excluded))
+            $products->whereNotIn("id", $excluded) ;
+
+        if(strlen($orderBy) > 0)
+            $products->orderBy("order");
+
 
         return $products;
     }
@@ -319,18 +347,17 @@ class Product extends Model implements Advertisable, Taggable
 
     }
 
-    public function validProductfiles($fileType = "")
+    public function validProductfiles($fileType = "" , $getValid = 1)
     {
         $product = $this;
 
-        $files = $product->hasMany('\App\Productfile')
-            ->where('enable', 1)
-            ->where(function ($query) {
-                $query->where('validSince', '<', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
-                    ->timezone('Asia/Tehran'))
-                    ->orwhereNull('validSince');
-            })
-            ->orderBy("order");
+        $files = $product->hasMany('\App\Productfile')->getQuery()
+                         ->enable();
+        if($getValid)
+            $files->valid() ;
+
+        $files->orderBy("order");
+
 
         if($fileType == "video")
             $fileTypeId = Config::get("constants.PRODUCT_FILE_TYPE_VIDEO");
@@ -941,5 +968,50 @@ class Product extends Model implements Advertisable, Taggable
         }
 
         return $tags;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isLimited(): bool
+    {
+        return isset($this->amount);
+    }
+
+    public function getMetaTags(): array
+    {
+        return [
+            'title' => $this->name,
+            'description' => $this->shortDescription,
+            'url' => action('ProductController@show',$this),
+            'canonical' => action('ProductController@show',$this),
+            'site' => 'آلاء',
+            'imageUrl' => $this->image,
+            'imageWidth' => '338',
+            'imageHeight' => '338',
+            'tags' => $this->tags,
+            'seoMod' => SeoMetaTagsGenerator::SEO_MOD_PRODUCT_TAGS,
+        ];
+    }
+
+    /**
+     * @param $productFileTypes
+     * @return Collection
+     */
+    public function productFileTypesOrder(): collection
+    {
+        $defaultProductFileOrders = collect();
+        $productFileTypes = Productfiletype::pluck('displayName', 'id')->toArray();
+
+        foreach ($productFileTypes as $key => $productFileType) {
+            $lastProductFile = $this->validProductfiles($key, 0)->get()->first();
+            if (isset($lastProductFile)) {
+                $lastOrderNumber = $lastProductFile->order + 1;
+                $defaultProductFileOrders->push(["fileTypeId" => $key, "lastOrder" => $lastOrderNumber]);
+            } else {
+                $defaultProductFileOrders->push(["fileTypeId" => $key, "lastOrder" => 1]);
+            }
+        }
+        return $defaultProductFileOrders;
     }
 }
