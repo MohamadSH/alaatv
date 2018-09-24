@@ -154,7 +154,6 @@ return [
         Watson\Sitemap\SitemapServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
         Neoxia\Filesystem\SftpServiceProvider::class,
-        Maatwebsite\ExcelLight\LaravelExcelServiceProvider::class,
         /*
          * Package Service Providers...
          */

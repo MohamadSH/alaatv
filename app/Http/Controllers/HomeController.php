@@ -2616,6 +2616,62 @@ class HomeController extends Controller
     {
         try
         {
+            if($request->has("userseen"))
+            {
+                $websitepages = Websitepage::where('url', 'like', '%/c/%')
+                    ->pluck("id")
+                    ->toArray();
+
+                $userseen = \Illuminate\Support\Facades\DB::table('userseensitepages')
+                    ->whereIn("websitepage_id" , $websitepages)
+                    ->limit(5000)
+                    ->offset(0)
+                    ->get();
+                $outputCollection = collect() ;
+                foreach ($userseen as $value)
+                {
+                    $user = User::Find($value->user_id);
+                    $lastVisit = $value->updated_at ;
+
+                    $websitepage = Websitepage::Find($value->websitepage_id);
+                    $url = optional($websitepage)->url;
+                    $urlExplode = explode("/",$url );
+                    $contentId = isset($urlExplode[2])?$urlExplode[2] : 0 ;
+
+                    $content = Educationalcontent::find($contentId);
+
+                    $outputCollection->push([
+                        "name" => optional($user)->firstName,
+                        "lastName" => optional($user)->lastName,
+                        "url" => $url,
+                        "title" => optional($content)->name,
+                        "description" => optional($content)->description,
+                        "lastSeen" => isset($lastVisit)?$lastVisit:"ثبت نشده",
+                    ]);
+                }
+
+                $headers = array(
+                    "Content-type" => "application/csv; charset=UTF-8",
+                    "Content-Encoding" => "UTF-8",
+                    "Content-Disposition" => "attachment; filename=file.csv",
+                    "Pragma" => "no-cache",
+                    "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+                    "Expires" => "0",
+                );
+
+                $columns = array('نام', 'نام خانوادگی', 'آدرس صفحه', 'عنوان محتوا', 'توضیح محتوا', 'آخرین بازدید');
+
+                $file = fopen('/home/alaa/test.csv', 'w');
+                fputcsv($file, $columns);
+
+                foreach($outputCollection as $item) {
+                    $row = $this->convertArray(array($item["name"], $item["lastName"], $item["url"], $item["title"], $item["description"], $item["lastSeen"]));
+                    fputcsv($file, $row);
+                }
+                fclose($file);
+                dd($file);
+            }
+
             if($request->has("emptyorder"))
             {
                 $orders = Order::whereIn("orderstatus_id" , [ config("constants.ORDER_STATUS_CLOSED") , config("constants.ORDER_STATUS_POSTED") , config("constants.ORDER_STATUS_READY_TO_POST") ] )
@@ -3405,17 +3461,9 @@ class HomeController extends Controller
 
             if($request->has("tagfix"))
             {
-                $orders = Order::whereDoesntHave("orderproducts")
-                    ->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
-                    ->whereIn("paymentstatus_id" , [
-                        config("constants.PAYMENT_STATUS_INDEBTED"),
-                        config("constants.PAYMENT_STATUS_PAID")
-                    ]);
-                dd($orders->pluck("id")->toArray());
-
                 $contentsetId = 159;
                 $contentset = Contentset::where("id" , $contentsetId)
-                    ->first() ;
+                                            ->first() ;
 
                 $tags = $contentset->tags->tags;
                 array_push($tags , "نادریان");
@@ -5373,6 +5421,27 @@ class HomeController extends Controller
         }
 
 
+    }
+
+    /**
+     * @param $result
+     * @return string
+     */
+    public function convert($result): string
+    {
+        return iconv(mb_detect_encoding($result, mb_detect_order(), true), "UTF-8", $result);
+//         return iconv('windows-1250', 'utf-8', $result) ;
+//        return chr(255) . chr(254).mb_convert_encoding($result, 'UTF-16LE', 'UTF-8');
+//        return utf8_encode($result);
+    }
+
+    public function convertArray(array  $input)
+    {
+        foreach ($input as $key => $value)
+        {
+            $input[$key] = $this->convert($value);
+        }
+        return $input;
     }
 
 }
