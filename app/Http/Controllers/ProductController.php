@@ -78,7 +78,7 @@ class ProductController extends Controller
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
-     */ 
+     */
     public function index()
     {
         $products = Product::getProducts()->orderBy('created_at' , 'Desc')->get() ;
