@@ -2,10 +2,11 @@
 namespace App\Traits;
 
 
+use App\User;
 use App\Websitepage;
 use Carbon\Carbon;
 use Illuminate\Http\Response;
-use Auth;
+
 trait Helper
 {
     protected $response;
@@ -103,8 +104,7 @@ trait Helper
     }
 
     public  function convertDate($date , $convertType){
-        if(strcmp($convertType , 'toJalali') == 0 && strlen($date)>0)
-        {
+        if(strcmp($convertType , 'toJalali') == 0 && strlen($date)>0) {
             $explodedDate = explode(" " ,$date);
             $explodedDate= $explodedDate[0];
             $explodedDate = explode("-" , $explodedDate);
@@ -144,7 +144,7 @@ trait Helper
             'pass'=>config("services.medianaSMS.normal.password"),
             'from'=>$from,
             'message'=>$params["message"],
-            'to'=>json_encode($rcpt_nm),
+            'to' => json_encode($rcpt_nm, JSON_UNESCAPED_UNICODE),
             'op'=>'send'
         ];
 
@@ -158,8 +158,7 @@ trait Helper
         $res_code = $response[0];
         $res_data = $response[1];
 
-        switch ($res_code)
-        {
+        switch ($res_code) {
             case 0 :
                 return [
                     "error"=>false ,
@@ -227,8 +226,7 @@ trait Helper
         $response =  json_decode($response);
         $res_code = $response[0];
         $res_data = $response[1];
-        switch ($res_code)
-        {
+        switch ($res_code) {
             case 0 :
                 return $res_data;
                 break;
@@ -256,8 +254,7 @@ trait Helper
         $sinceDate = Carbon::parse($sinceDate)->format('Y-m-d') ." ". $sinceTime;
         $tillDate = Carbon::parse($tillDate)->format('Y-m-d') ." ". $tillTime;
 
-        if($timeZoneConvert)
-        {
+        if($timeZoneConvert) {
             $sinceDate = Carbon::parse($sinceDate , "Asia/Tehran");
             $sinceDate->setTimezone('UTC');
             $tillDate = Carbon::parse($tillDate , "Asia/Tehran");
@@ -267,7 +264,7 @@ trait Helper
         return $list;
     }
 
-    public function generateSecurePathHash($expires , $client_IP ,  $secret , $url)
+    public function generateSecurePathHash($expires , $client_IP , $secret , $url)
     {
         $str =$expires.$url.$client_IP." ".$secret;
         $str = base64_encode(md5($str,true));
@@ -278,20 +275,16 @@ trait Helper
         return $str;
     }
 
-    public function userSeen(string $path){
-        $websitepage = Websitepage::firstOrNew(["url"=>$path ]);
+    public function userSeen(string $path, User $user)
+    {
+
         $productSeenCount = 0 ;
-        if(!isset($websitepage->id))
-        {
-            $websitepage->save();
-        }
-        if(isset($websitepage->id))
-        {
-            if(!Auth::user()->seensitepages->contains($websitepage->id))
-                Auth::user()->seensitepages()->attach($websitepage->id );
-            else
-            {
-                Auth::user()->seensitepages()->updateExistingPivot($websitepage->id, ["numberOfVisit"=> Auth::user()->seensitepages()->where("id" , $websitepage->id)->first()->pivot->numberOfVisit+1 , "updated_at"=>Carbon::now()]);
+
+        if(isset($websitepage->id)) {
+            if (!$user->seensitepages->contains($websitepage->id))
+                $user->seensitepages()->attach($websitepage->id);
+            else {
+                $user->seensitepages()->updateExistingPivot($websitepage->id, ["numberOfVisit" => $user->seensitepages()->where("id", $websitepage->id)->first()->pivot->numberOfVisit + 1, "updated_at" => Carbon::now()]);
             }
             $productSeenCount = $websitepage->userschecked()->count();
         }

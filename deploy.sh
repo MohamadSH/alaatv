@@ -1,8 +1,14 @@
+#!/bin/bash
+
 cd /home/alaa/project/sohrab/alaaTv
- echo -e "x57par" | sudo -S service php7.1-fpm reload
+echo -e "x57par" | sudo -S service php7.2-fpm reload
+
+#php artisan down
  # perform any migrations                                                                                
  php artisan migrate --force                                                                             
  php artisan cache:clear                                                                                 
+ php artisan route:clear
+ php artisan config:clear
  echo -e "x57par" | sudo -S php artisan view:clear
  echo -e "x57par" | sudo -S php artisan view:cache                                
                                                                                                          
@@ -12,3 +18,4 @@ cd /home/alaa/project/sohrab/alaaTv
                                                                                                          
  php artisan route:cache                                                                                 
  php artisan config:cache                                                                                
+#php artisan up

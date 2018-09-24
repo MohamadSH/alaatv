@@ -2,6 +2,14 @@
 
 trait CharacterCommon
 {
+    /**
+     * @param $fileName
+     * @return boolean
+     */
+    public function strIsEmpty($str):bool
+    {
+        return strlen(preg_replace('/\s+/', '', $str)) == 0 ;
+    }
     public function convertToEnglish($string) {
         $newNumbers = range(0, 9);
         // 1. Persian HTML decimal

@@ -14,14 +14,14 @@ class CreateTableEducationalcontenContenttype extends Migration
      */
     public function up()
     {
-        Schema::create('educationalcontent_contenttype', function (Blueprint $table) {
+        Schema::create('content_contenttype', function (Blueprint $table) {
             $table->unsignedInteger('content_id');
             $table->unsignedInteger('contenttype_id');
             $table->primary(['content_id','contenttype_id' ]);
 
             $table->foreign('content_id')
                 ->references('id')
-                ->on('educationalcontents')
+                ->on('contents')
                 ->onDelete('cascade')
                 ->onupdate('cascade');
 
@@ -32,7 +32,7 @@ class CreateTableEducationalcontenContenttype extends Migration
                 ->onupdate('cascade');
 
         });
-        DB::statement("ALTER TABLE `educationalcontent_contenttype` comment 'رابطه چند به چند محتواهای آموزشی با نوع محتوا'");
+        DB::statement("ALTER TABLE `content_contenttype` comment 'رابطه چند به چند محتواهای آموزشی با نوع محتوا'");
     }
 
     /**
@@ -42,6 +42,6 @@ class CreateTableEducationalcontenContenttype extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('educationalcontent_contenttype');
+        Schema::dropIfExists('content_contenttype');
     }
 }

@@ -84,13 +84,13 @@
 
 <body>
 <div class="wrapper" id="main-page">
-    <section class="lottery-banner">
+    {{--<section class="lottery-banner">
         <div class="container clearfix">
             <div class="bnra">
                 <img class="banner" src="/assets/extra/landing3/images/banner5.png" alt="قرعه کشی آلاء">
             </div><!-- .bnra -->
         </div><!-- .container -->
-    </section>
+    </section>--}}
     <main>
         <div class="container main-landing">
             <section class="res-gold-fest">
@@ -842,7 +842,7 @@
 
     <footer class="site-footer site-footer-lading" role="contentinfo">
         <section class="sec-dwon-sample">
-            <a href="{{ action('EducationalContentController@show',7884) }}" class="down-sample" title="دانلود نمونه فیلم">
+            <a href="{{ action('ContentController@show',7884) }}" class="down-sample" title="دانلود نمونه فیلم">
                         <span>
                            دانلود نمونه فیلم همایش
                         </span>

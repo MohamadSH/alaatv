@@ -308,7 +308,7 @@
                     // Gets triggered when the files have successfully been sent.
                     // Redirect user or notify of success
 
-                    {{--files.previewElement.querySelector('.form-horizontal').action="{{action("EducationalContentController@store")}}"+"/"+response;--}}
+                    {{--files.previewElement.querySelector('.form-horizontal').action="{{action("ContentController@store")}}"+"/"+response;--}}
                     //                    files.previewElement.querySelector('.form-horizontal').method="POST";
                     //                    var methodInput = Dropzone.createElement("<input type='hidden' name='_method' value='PUT'>");
                     //                    files.previewElement.querySelector('.form-horizontal').appendChild(methodInput);

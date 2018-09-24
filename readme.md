@@ -158,3 +158,61 @@ php7.2-intl php7.2-readline
 
 sudo apt-get install php7.2-dba php7.2-json php7.2-mysql php7.2-readline php7.2-fpm php7.2-imap php7.2-tidy
 ```
+
+**Categorise:**
+
+
+//Making a root from existing node
+
+```
+$node->makeRoot()->save();
+```
+
+//Appending and prepending to the specified parent
+```
+$parent->appendNode($node);
+```
+
+//Inserting before or after specified node
+```
+$node->afterNode($neighbor)->save();
+$node->beforeNode($neighbor)->save();
+```
+
+//Both ancestors and descendants can be eagerly loaded.
+```
+$node->ancestors;  // Accessing ancestors
+$node->descendants;  // Accessing descendants
+$categories = Category::with('ancestors')->paginate(30); //A collection of ancestors can be eagerly loaded
+```
+
+//retrive
+```
+$result = Category::ancestorsOf($id);
+$result = Category::ancestorsAndSelf($id);
+$result = Category::descendantsOf($id);
+$result = Category::descendantsAndSelf($id);
+```
+
+//Siblings
+```
+$result = $node->siblings()->get();
+
+$result = $node->nextSiblings()->get(); // Get all siblings that are after the node
+$result = $node->prevSiblings()->get(); // Get all siblings that are before the node
+```
+
+//Building a tree
+```
+$nodes = Category::get()->toTree();
+
+$traverse = function ($categories, $prefix = '-') use (&$traverse) {
+    foreach ($categories as $category) {
+        echo PHP_EOL.$prefix.' '.$category->name;
+
+        $traverse($category->children, $prefix.'-');
+    }
+};
+
+$traverse($nodes);
+```

@@ -51,16 +51,16 @@ class CreateSanatisharifmergesTable extends Migration
             $table->string('teacherlastname')->nullable()->comment("نام خانوادگی دبیر");
             $table->string('pageOldAddress')->nullable()->comment("آدرس قدیم صفحه");
             $table->string('pageNewAddress')->nullable()->comment("آدرس جدید صفحه");
-            $table->unsignedInteger('educationalcontent_id')->nullable()->comment("آدرس محتوای نظیر در صورت وجود");
+            $table->unsignedInteger('content_id')->nullable()->comment("آدرس محتوای نظیر در صورت وجود");
             $table->unique(['videoid','pamphletid','lessonid','depid','departmentlessonid'] , 'unique_columns_set');
             $table->unique(['videoid','departmentlessonid'] );
             $table->unique(['pamphletid','departmentlessonid']);
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('educationalcontent_id')
+            $table->foreign('content_id')
                 ->references('id')
-                ->on('educationalcontents')
+                ->on('contents')
                 ->onDelete('cascade')
                 ->onupdate('cascade');
 

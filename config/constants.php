@@ -194,6 +194,9 @@ return [
     'DISK20'=>'book',
     'DISK20_CLOUD'=>'bookSftp',
 
+    'DISK_FREE_CONTENT' => 'alaaCdnSFTP',
+    'DISK_PRODUCT_CONTENT' => 'productFileSFTP',
+
     //Profile default image
     'PROFILE_DEFAULT_IMAGE' => 'default_avatar.png',
     'CONSULTATION_DEFAULT_IMAGE' => 'default_consultant_thumbnail.jpg',
@@ -271,27 +274,15 @@ return [
     'HAMAYESH_LOTTERY_EXCHANGE_AMOUNT' => 30000,
 
     //Cache
-    'CACHE_600' => 60,
+    'CACHE_600' => 600,
     'CACHE_60' => 60,
-    'CACHE_10' => 0,
-    'CACHE_5' => 0,
-    'CACHE_3' => 0,
-    'CACHE_1' =>0 ,
+    'CACHE_10' => 10,
+    'CACHE_5' => 5,
+    'CACHE_3' => 3,
+    'CACHE_1' =>1 ,
 
     //
     'TAG_API_URL' => env("TAG_API_URL",null),
-    'SFTP_ROOT' => env("SFTP_ROOT", null),
-    'DOWNLOAD_HOST_PROTOCOL' =>env("DOWNLOAD_HOST_PROTOCOL","https://"),
-    'DOWNLOAD_HOST_NAME' => env('DOWNLOAD_HOST_NAME',"dl.takhtekhak.com"),
-    'DISQUS_PRIVATE_KEY' => env('DISQUS_PRIVATE_KEY'),
-    'SMS_PROVIDER_DEFAULT_NUMBER' => env('SMS_PROVIDER_DEFAULT_NUMBER'),
-    'MAIL_USERNAME' => env('MAIL_USERNAME'),
-    'SFTP_HOST' => env('SFTP_HOST'),
-    'SFTP_PORT' => env('SFTP_PORT', 22 ),
-    'SFTP_USERNAME' => env('SFTP_USERNAME', ''),
-    'SFTP_PASSSWORD' => env('SFTP_PASSSWORD', ''),
-    'SFTP_PRIVATE_KEY_PATH' => env('SFTP_PRIVATE_KEY_PATH',''),
-    'SFTP_TIMEOUT' => env('SFTP_TIMEOUT', ''),
     'SERVER' => env('SERVER'),
     'DOWNLOAD_SERVER_NAME' => env('DOWNLOAD_SERVER_NAME' , null),
     'DOWNLOAD_SERVER_ROOT' => env('DOWNLOAD_SERVER_ROOT' , null),

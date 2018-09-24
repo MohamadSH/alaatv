@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Assignment[] $assignments
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Major[] $children
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Consultation[] $consultations
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Educationalcontent[] $educationalcontents
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Content[] $contents
  * @property-read \App\Majortype|null $majortype
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Major[] $parents
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\User[] $users
@@ -104,8 +104,8 @@ class Major extends Model
             ->where("relationtype_id", 2);
     }
 
-    public function educationalcontents()
+    public function contents()
     {
-        return $this->belongsToMany('App\Educationalcontent');
+        return $this->belongsToMany('App\Content');
     }
 }

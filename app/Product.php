@@ -2,17 +2,20 @@
 
 namespace App;
 
+use App\Classes\Advertisable;
+use App\Classes\SEO\SeoInterface;
+use App\Classes\SEO\SeoMetaTagsGenerator;
+use App\Classes\Taggable;
 use App\Traits\Helper;
 use App\Traits\ProductCommon;
-
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Auth;
 use Carbon\Carbon;
+use Exception;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
-use Laravel\Scout\Searchable;
 
 /**
  * App\Product
@@ -85,12 +88,22 @@ use Laravel\Scout\Searchable;
  * @method static \Illuminate\Database\Query\Builder|\App\Product withoutTrashed()
  * @mixin \Eloquent
  */
-class Product extends Model
+class Product extends Model implements Advertisable, Taggable , SeoInterface
 {
     use SoftDeletes;
 //    use Searchable;
     use ProductCommon;
     use Helper;
+
+    public const AMOUNT_LIMIT = [
+                            'نامحدود',
+                            'محدود'
+                        ];
+
+    public const ENABLE_STATUS= [
+        'نامحدود',
+        'محدود'
+    ];
 
     /**
      * The attributes that should be mutated to dates.
@@ -150,7 +163,33 @@ class Product extends Model
             $time
         );
     }
+    public function scopeActive($query){
+        return $query->where('enable', 1);
+    }
 
+    public function scopeEnable($query)
+    {
+        return $query->where('enable', '=', 1);
+    }
+
+    public function scopeConfigurable($query)
+    {
+        return $query->where('producttype_id', '=', 2);
+    }
+
+    public function scopeSimple($query)
+    {
+        return $query->where('producttype_id', '=', 1);
+    }
+
+    public function scopeValid($query)
+    {
+        return $query->where(function ($q) {
+            $q->where('validSince', '<', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
+                ->timezone('Asia/Tehran'))
+                ->orwhereNull('validSince');
+        });
+    }
 
 
     public static function recentProducts($number)
@@ -158,7 +197,7 @@ class Product extends Model
         return self::getProducts(0, 1)->take($number)->orderBy('created_at', 'Desc');
     }
 
-    public static function getProducts($configurable = 0, $enable = 0)
+    public static function getProducts($configurable = 0, $enable = 0 , $excluded = [] , $orderBy = "")
     {
         if ($configurable == 1) {
             $products = Product::configurable();
@@ -169,6 +208,13 @@ class Product extends Model
             if ($enable == 1)
                 $products->enable();
         }
+
+        if(!empty($excluded))
+            $products->whereNotIn("id", $excluded) ;
+
+        if(strlen($orderBy) > 0)
+            $products->orderBy("order");
+
 
         return $products;
     }
@@ -186,14 +232,14 @@ class Product extends Model
     public function children()
     {
         return $this->belongsToMany('App\Product',
-                                    'childproduct_parentproduct',
-                                    'parent_id',
-                                    'child_id')
-                    ->withPivot("isDefault",
-                                        "control_id",
-                                        "description",
-                                        "parent_id")
-                    ->with('children');
+            'childproduct_parentproduct',
+            'parent_id',
+            'child_id')
+            ->withPivot("isDefault",
+                "control_id",
+                "description",
+                "parent_id")
+            ->with('children');
     }
 
     public function parents()
@@ -270,8 +316,7 @@ class Product extends Model
 
             $grandParent = $this->getGrandParent();
             if ($grandParent !== false) {
-                foreach ($grandParent->gifts as $gift)
-                {
+                foreach ($grandParent->gifts as $gift) {
                     $gifts->push($gift);
                 }
             }
@@ -302,18 +347,17 @@ class Product extends Model
 
     }
 
-    public function validProductfiles($fileType = "")
+    public function validProductfiles($fileType = "" , $getValid = 1)
     {
         $product = $this;
 
-        $files = $product->hasMany('\App\Productfile')
-            ->where('enable', 1)
-            ->where(function ($query) {
-                $query->where('validSince', '<', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
-                    ->timezone('Asia/Tehran'))
-                    ->orwhereNull('validSince');
-            })
-            ->orderBy("order");
+        $files = $product->hasMany('\App\Productfile')->getQuery()
+                         ->enable();
+        if($getValid)
+            $files->valid() ;
+
+        $files->orderBy("order");
+
 
         if($fileType == "video")
             $fileTypeId = Config::get("constants.PRODUCT_FILE_TYPE_VIDEO");
@@ -334,7 +378,7 @@ class Product extends Model
                 $attributeType = Attributetype::all()->where("name", $attributeType)->first();
                 $attributesArray = array();
                 foreach ($this->attributeset->attributes()->where("attributetype_id", $attributeType->id) as $attribute) {
-                        array_push($attributesArray, $attribute->id);
+                    array_push($attributesArray, $attribute->id);
                 }
             }
             $parentArray = $this->makeParentArray($this) ;
@@ -355,20 +399,6 @@ class Product extends Model
 
     }
 
-    public function scopeEnable($query)
-    {
-        return $query->where('enable', '=', 1);
-    }
-
-    public function scopeConfigurable($query)
-    {
-        return $query->where('producttype_id', '=', 2);
-    }
-
-    public function scopeSimple($query)
-    {
-        return $query->where('producttype_id', '=', 1);
-    }
 
     public function title()
     {
@@ -699,6 +729,7 @@ class Product extends Model
         if (!empty($infoAttributeArray))
             $simpleInfoAttributes->put($attribute->displayName, $infoAttributeArray);
     }
+
     private function makeSelectAttributes(&$attributevalues, &$result){
         foreach ($attributevalues as $attributevalue) {
             $attributevalueIndex = $attributevalue->name;
@@ -737,7 +768,7 @@ class Product extends Model
 
             $attributes->load('attributetype','attributecontrol');
 
-            foreach ( $attributes as $attribute) {
+            foreach ($attributes as $attribute) {
                 $attributeType = $attribute->attributetype;
                 $controlName = $attribute->attributecontrol->name;
                 $attributevalues = $product->attributevalues->where("attribute_id", $attribute->id)->sortBy("pivot.order");
@@ -760,8 +791,7 @@ class Product extends Model
                                     if (!empty($select))
                                         $selectCollection->put($attribute->pivot->description, $select);
                                 }
-                            }
-                            else{ // 1
+                            } else{ // 1
                                 $this->makeSimpleInfoAttributes($attributevalues,$attribute,$attributeType,$simpleInfoAttributes);
                             }
                             break;
@@ -785,8 +815,7 @@ class Product extends Model
                                 if (!empty($groupedCheckbox))
                                     $extraCheckboxCollection->put($attribute->displayName, $groupedCheckbox);
 
-                            }
-                            else {
+                            } else {
                                 if ($product->producttype->id == Config::get("constants.PRODUCT_TYPE_CONFIGURABLE")) {
                                     if($attributeType->name == "information"){
                                         $this->makeSimpleInfoAttributes($attributevalues,$attribute,$attributeType,$checkboxInfoAttributes);
@@ -911,4 +940,78 @@ class Product extends Model
         return json_decode($value);
     }
 
+    /**
+     * @return Collection
+     * @throws Exception
+     */
+    public function getAddItems(): Collection
+    {
+        // TODO: Implement getAddItems() method.
+        throw new Exception("product Advertisable should be impediment");
+    }
+
+    public function retrievingTags()
+    {
+        /**
+         *      Retrieving Tags
+         */
+        $response = $this->sendRequest(
+            config("constants.TAG_API_URL") . "id/product/" . $this->id,
+            "GET"
+        );
+
+        if ($response["statusCode"] == 200) {
+            $result = json_decode($response["result"]);
+            $tags = $result->data->tags;
+        } else {
+            $tags = [];
+        }
+
+        return $tags;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isLimited(): bool
+    {
+        return isset($this->amount);
+    }
+
+    public function getMetaTags(): array
+    {
+        return [
+            'title' => $this->name,
+            'description' => $this->shortDescription,
+            'url' => action('ProductController@show',$this),
+            'canonical' => action('ProductController@show',$this),
+            'site' => 'آلاء',
+            'imageUrl' => $this->image,
+            'imageWidth' => '338',
+            'imageHeight' => '338',
+            'tags' => $this->tags,
+            'seoMod' => SeoMetaTagsGenerator::SEO_MOD_PRODUCT_TAGS,
+        ];
+    }
+
+    /**
+     * @param $productFileTypes
+     * @return Collection
+     */
+    public function productFileTypesOrder(): collection
+    {
+        $defaultProductFileOrders = collect();
+        $productFileTypes = Productfiletype::pluck('displayName', 'id')->toArray();
+
+        foreach ($productFileTypes as $key => $productFileType) {
+            $lastProductFile = $this->validProductfiles($key, 0)->get()->first();
+            if (isset($lastProductFile)) {
+                $lastOrderNumber = $lastProductFile->order + 1;
+                $defaultProductFileOrders->push(["fileTypeId" => $key, "lastOrder" => $lastOrderNumber]);
+            } else {
+                $defaultProductFileOrders->push(["fileTypeId" => $key, "lastOrder" => 1]);
+            }
+        }
+        return $defaultProductFileOrders;
+    }
 }

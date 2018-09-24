@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Mbtianswer;
 use App\Product;
 use App\User;
-use Illuminate\Http\Request;
 use Auth;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Input;
@@ -200,7 +200,7 @@ class MbtianswerController extends Controller
             {
                 $mbtiAnswer = new Mbtianswer();
                 $mbtiAnswer->user_id = Auth::user()->id;
-                $mbtiAnswer->answers = json_encode($answers);
+                $mbtiAnswer->answers = json_encode($answers, JSON_UNESCAPED_UNICODE);
                 if($mbtiAnswer->save()) return $this->response->setStatusCode(200);
                 else return $this->response->setStatusCode(503);
             }else return $this->response->setStatusCode(422);

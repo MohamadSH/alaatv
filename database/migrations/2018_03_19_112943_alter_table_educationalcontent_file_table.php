@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AlterTableEducationalcontentFileTable extends Migration
+class AlterTableContentFileTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class AlterTableEducationalcontentFileTable extends Migration
      */
     public function up()
     {
-        Schema::table('educationalcontent_file', function (Blueprint $table)
+        Schema::table('content_file', function (Blueprint $table)
         {
             $table->string("label")->nullable()->comment("لیبل فایل");
         });
@@ -26,9 +26,9 @@ class AlterTableEducationalcontentFileTable extends Migration
      */
     public function down()
     {
-        Schema::table('educationalcontent_file', function (Blueprint $table)
+        Schema::table('content_file', function (Blueprint $table)
         {
-            if (Schema::hasColumn('educationalcontent_file', 'label'))
+            if (Schema::hasColumn('content_file', 'label'))
             {
                 $table->dropColumn('label');
             }

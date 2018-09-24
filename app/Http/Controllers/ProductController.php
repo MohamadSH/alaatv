@@ -7,32 +7,25 @@ use App\Attributeset;
 use App\Attributetype;
 use App\Attributevalue;
 use App\Bon;
-use App\Educationalcontent;
+use App\Classes\SEO\SeoDummyTags;
 use App\Http\Requests\AddComplimentaryProductRequest;
 use App\Http\Requests\EditProductRequest;
 use App\Http\Requests\InsertProductRequest;
 use App\Product;
 use App\Productfiletype;
 use App\Traits\Helper;
+use App\Traits\MathCommon;
+use App\Traits\MetaCommon;
 use App\Traits\ProductCommon;
 use App\User;
-use App\Websitepage;
-
-use App\Websitesetting;
-use Carbon\Carbon;
-
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Input;
-
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Facades\Image;
 use SEO;
 
 class ProductController extends Controller
@@ -41,30 +34,51 @@ class ProductController extends Controller
     protected $response ;
     protected $setting ;
     use ProductCommon;
+    use MetaCommon;
+    use MathCommon;
 
     function __construct()
     {
-        $this->middleware('permission:'.Config::get('constants.LIST_PRODUCT_ACCESS'),['only'=>'index']);
-        $this->middleware('permission:'.Config::get('constants.INSERT_PRODUCT_ACCESS'),['only'=>'create']);
-        $this->middleware('permission:'.Config::get('constants.REMOVE_PRODUCT_ACCESS'),['only'=>'destroy']);
-        $this->middleware('permission:'.Config::get('constants.SHOW_PRODUCT_ACCESS'),['only'=>'edit']);
-        $this->middleware('permission:'.Config::get('constants.EDIT_PRODUCT_ACCESS'),['only'=>'update']);
-        $this->middleware('permission:'.Config::get('constants.EDIT_CONFIGURE_PRODUCT_ACCESS'),['only'=> ['childProductEnable' , 'completeEachChildPivot']]);
-        $this->middleware('permission:'.Config::get('constants.INSERT_CONFIGURE_PRODUCT_ACCESS'),['only'=>'makeConfiguration' , 'createConfiguration']);
-        $this->middleware('auth', ['except' => ['show' , 'refreshPrice' , 'search' , 'showPartial' , 'landing1' , 'landing2' , 'landing3' , 'landing4' ]]);
+        $this->callMiddlewares();
 
         $this->response = new Response();
         $this->setting = json_decode(app('setting')->setting);
 
     }
 
+    private function callMiddlewares(): void
+    {
+        $this->middleware('permission:' . Config::get('constants.LIST_PRODUCT_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:' . Config::get('constants.INSERT_PRODUCT_ACCESS'), ['only' => 'create']);
+        $this->middleware('permission:' . Config::get('constants.REMOVE_PRODUCT_ACCESS'), ['only' => 'destroy']);
+        $this->middleware('permission:' . Config::get('constants.SHOW_PRODUCT_ACCESS'), ['only' => 'edit']);
+        $this->middleware('permission:' . Config::get('constants.EDIT_PRODUCT_ACCESS'), ['only' => 'update']);
+        $this->middleware('permission:' . Config::get('constants.EDIT_CONFIGURE_PRODUCT_ACCESS'), ['only' => ['childProductEnable', 'completeEachChildPivot']]);
+        $this->middleware('permission:' . Config::get('constants.INSERT_CONFIGURE_PRODUCT_ACCESS'), ['only' => 'makeConfiguration', 'createConfiguration']);
+        $this->middleware('auth', ['except' => ['show', 'refreshPrice', 'search', 'showPartial', 'landing1', 'landing2', 'landing3', 'landing4']]);
+    }
 
+    private function addSimpleInfoAttributes(Product &$product){
+        $productsArray = [];
+        array_push($productsArray, $product);
+
+        while (count($productsArray)){
+            $pop = array_pop($productsArray);
+            if(!isset($pop['simpleInfoAttributes'])){
+                $allAttributeCollection = $pop->getAllAttributes() ;
+                $pop['simpleInfoAttributes'] = $allAttributeCollection["simpleInfoAttributes"];
+            }
+            foreach ($pop->children as &$p){
+                array_push($productsArray, $p);
+            }
+        }
+    }
 
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
-     */
+     */ 
     public function index()
     {
         $products = Product::getProducts()->orderBy('created_at' , 'Desc')->get() ;
@@ -155,22 +169,6 @@ class ProductController extends Controller
         }
     }
 
-
-    private function addSimpleInfoAttributes(Product &$product){
-        $productsArray = [];
-        array_push($productsArray, $product);
-
-        while (count($productsArray)){
-            $pop = array_pop($productsArray);
-            if(!isset($pop['simpleInfoAttributes'])){
-                $allAttributeCollection = $pop->getAllAttributes() ;
-                $pop['simpleInfoAttributes'] = $allAttributeCollection["simpleInfoAttributes"];
-            }
-            foreach ($pop->children as &$p){
-                array_push($productsArray, $p);
-            }
-        }
-    }
     /**
      * Display the specified resource.
      *
@@ -186,20 +184,11 @@ class ProductController extends Controller
             array_push($defaultProducts , (int)$request->dp);
         }
 
+        //ToDo : middreware
         if(in_array($product->id , [193,194,195]))
             return redirect(action("ProductController@show" , 184), 301);
 
-        $url = $request->url();
-        SEO::opengraph()->setUrl($url);
-        SEO::setCanonical($url);
-        SEO::twitter()->setSite("آلاء");
-        SEO::setTitle($product->name);
-        SEO::setDescription($product->shortDescription);
-        if(isset($files['thumbnail']))
-            SEO::opengraph()->addImage(route('image', ['category'=>'4','w'=>'338' , 'h'=>'338' ,  'filename' =>  $product->image ]), ['height' => 338, 'width' => 338]);
-        else
-            SEO::opengraph()->addImage(route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]), ['height' => 100, 'width' => 100]);
-        SEO::opengraph()->setType('website');
+        $this->generateSeoMetaTags($product);
 
 
         $descriptionIframe = $request->partial;
@@ -264,13 +253,12 @@ class ProductController extends Controller
         });
 //        $disqusPayload = Auth::user()->disqusSSO();
 
-        if(Auth::check())
-        {
-            $baseUrl = url("/");
-            $productPath = str_replace($baseUrl , "" , action("ProductController@show" , $product));
-            $productSeenCount = $this->userSeen($productPath);
-
+        if (Auth::check()) {
+            $user = Auth::user();
+            $contentPath = "/" . $request->path();
+            $productSeenCount = $this->userSeen($contentPath, $user);
         }
+
         if(isset($product->introVideo) && strlen($product->introVideo) > 0)
              $productIntroVideo = $product->introVideo;
 
@@ -359,7 +347,7 @@ class ProductController extends Controller
         if(Auth::check() && Auth::user()->hasRole("admin") && $isLive!== false) $isLive = 0 ;
 //        return response()->make("Ok");
 
-//        $hamayeshTalaiVideos = Educationalcontent::whereHas("contentsets" , function ($q)
+//        $hamayeshTalaiVideos = Content::whereHas("contentsets" , function ($q)
 //        {
 //            $q->where("id" , 199) ;
 //        })
@@ -391,54 +379,57 @@ class ProductController extends Controller
      */
     public function edit($product)
     {
-        $amountLimit = [
-            0 => 'نامحدود',
-            1 => 'محدود'
-        ];
-        if(isset($product->amount)){$defaultAmountLimit = 1;}
-        else{$defaultAmountLimit = 0;}
+        $bonName = config("constants.BON1");
+        $amountLimit = Product::AMOUNT_LIMIT;
+        $defaultProductPhotoOrder = 0;
+        $defaultAmountLimit = 0;
+        $defaultEnableStatus = 0;
+        $enableStatus = Product::ENABLE_STATUS;
 
-        $enableStatus = [
-            0 => 'غیرفعال',
-            1 => 'فعال'
-        ];
-        if(isset($product->enable) && $product->enable){$defaultEnableStatus = 1;}
-        else{$defaultEnableStatus = 0;}
+        if($product->isLimited())
+            $defaultAmountLimit = 1;
+
+        if($product->enable)
+            $defaultEnableStatus = 1;
 
         $attributesets = Attributeset::pluck('name' , 'id')->toArray();
 
-        $bonName = Config::get("constants.BON1");
-        $bons = $product->bons->where("name" , $bonName)->where("isEnable" , 1);
-        if($bons->isEmpty()) $bons = Bon::where('name', $bonName)->first();
-        else $bons = $bons->first();
+        $bons = $product->bons();
+        $bons->enable() ;
+        $bons->ofName($bonName);
+        $bons = $bons->get()->first();
+
+        if(!isset($bons))
+            $bons = Bon::ofName($bonName)->first();
 
         $productFiles = $product->productfiles->sortBy("order");
-        $productFileTypes = Productfiletype::pluck('displayName', 'id')->toArray();
-        $defaultProductFileOrders = collect();
-        foreach ($productFileTypes as $key=>$productFileType)
-        {
-            $lastProductFile = $product->productfiles->where("productfiletype_id" , $key)->sortByDesc("order")->first();
-            if(isset($lastProductFile))
-            {
-                $lastOrderNumber = $lastProductFile->order + 1;
-                $defaultProductFileOrders->push(["fileTypeId"=>$key , "lastOrder"=>$lastOrderNumber]);
-            }else{
-                $defaultProductFileOrders->push(["fileTypeId"=>$key , "lastOrder"=>1]);
-            }
-        }
-        $productFileTypes = array_add($productFileTypes , 0 , "انتخاب کنید");
-        $productFileTypes = array_sort_recursive($productFileTypes);
+        $defaultProductFileOrders = $product->productFileTypesOrder();
+
+        $productFileTypes = Productfiletype::makeSelectArray();
 
         $products = $this->makeProductCollection();
 
         $producttype = $product->producttype->displayName ;
 
-        $productPhotos = $product->photos->sortBy("order") ;
-        if($product->photos->isNotEmpty())
-            $defaultProductPhotoOrder = $product->photos->sortByDesc("order")->first()->order + 1    ;
-        else $defaultProductPhotoOrder = 0;
+        $productPhotos = $product->photos->sortByDesc("order") ;
+        if($productPhotos->isNotEmpty())
+            $defaultProductPhotoOrder = $productPhotos->first()->order + 1    ;
 
-        return view("product.edit" , compact("product" , "amountLimit" , "defaultAmountLimit" , "enableStatus" , "defaultEnableStatus" , "attributesets", "bons" , "productFiles" , "productFileTypes"  , "products" , "defaultProductFileOrders" , "producttype" , "productPhotos" , "defaultProductPhotoOrder")) ;
+        return view("product.edit" , compact("product" ,
+                                                "amountLimit" ,
+                                                "defaultAmountLimit" ,
+                                                "enableStatus" ,
+                                                "defaultEnableStatus" ,
+                                                "attributesets",
+                                                "bons" ,
+                                                "productFiles" ,
+                                                "productFileTypes"  ,
+                                                "defaultProductFileOrders" ,
+                                                "products" ,
+                                                "producttype" ,
+                                                "productPhotos" ,
+                                                "defaultProductPhotoOrder"
+        )) ;
     }
 
     /**
@@ -598,8 +589,7 @@ class ProductController extends Controller
                     $result =  json_encode(
                         [
                             'totalExtraCost' => $totalExtraCost
-                        ]
-                    );
+                        ], JSON_UNESCAPED_UNICODE);
                     break;
                 case "mainAttribute":
                     if($product->hasChildren()) {
@@ -634,7 +624,7 @@ class ProductController extends Controller
                             [
                                 "cost"=>$cost ,
                                 "costForCustomer"=>$costForCustomer
-                            ]
+                            ], JSON_UNESCAPED_UNICODE
                         );
                     }
                     elseif(!isset($simpleProduct))
@@ -642,14 +632,14 @@ class ProductController extends Controller
                         $result = json_encode(
                             [
                                 'productWarning' => "محصول مورد نظر یافت نشد"
-                            ]
+                            ], JSON_UNESCAPED_UNICODE
                         );
                     }
                     else
                         $result = json_encode(
                             [
                                 'productWarning' => "محصول مورد نظر تمام شده است"
-                            ]
+                            ], JSON_UNESCAPED_UNICODE
                         );
                     break;
                 case "productSelection":
@@ -690,7 +680,7 @@ class ProductController extends Controller
                         [
                             "cost"=>$cost ,
                             "costForCustomer"=> $costForCustomer
-                        ]
+                        ], JSON_UNESCAPED_UNICODE
                     );
                     break;
                 default:
@@ -710,44 +700,38 @@ class ProductController extends Controller
      */
     public function search(Request $request)
     {
-        if (session()->has("adminOrder_id")) {
+        if (session()->has("adminOrder_id"))
             $adminOrder = true;
-
-        }
         else
             $adminOrder = false;
-
         $itemsPerPage = 30;
+
+
         if ($adminOrder) {
-            $products =  Product::getProducts()->orderBy("order")->paginate($itemsPerPage);;
+            $products =  Product::getProducts(0,0,[],"order")->paginate($itemsPerPage);;
         } else {
             if (Config::has("constants.PRODUCT_SEARCH_EXCLUDED_PRODUCTS"))
                 $excludedProducts = Config::get("constants.PRODUCT_SEARCH_EXCLUDED_PRODUCTS");
             else
                 $excludedProducts = [];
-            $products =  Product::getProducts(0, 1)
-                ->whereNotIn("id", $excludedProducts)
-                ->orderBy("order")
-                ->paginate($itemsPerPage);
+            $products =  Product::getProducts(0, 1 , $excludedProducts)
+                                ->paginate($itemsPerPage);
         }
 
         $costCollection = $this->makeCostCollection($products);
 
-        $metaKeywords = "";
-        $metaDescription = "" ;
-        foreach ($products as $product)
-        {
-            $metaKeywords .= $product->name."-";
-            $metaDescription .= $product->name."-" ;
-        }
         $url = $request->url();
-        SEO::opengraph()->setUrl($url);
-        SEO::setCanonical($url);
-        SEO::twitter()->setSite("آلاء");
-        SEO::setTitle("محصولات ".$this->setting->site->name);
-        SEO::setDescription($metaDescription);
-        SEO::opengraph()->addImage(route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]), ['height' => 100, 'width' => 100]);
-        SEO::opengraph()->setType('website');
+
+
+        $this->generateSeoMetaTags(new SeoDummyTags("محصولات ".$this->setting->site->name,
+                'کارگاه تست کنکور، همایش، جمع بندی و اردوطلایی نوروز آلاء',
+                $url,
+                $url,
+                route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]),
+                '100',
+                '100',
+                null)
+        );
 
         return view("product.portfolio" , compact("products" , "costCollection")) ;
     }
@@ -883,8 +867,10 @@ class ProductController extends Controller
             $i++;
         }
 
-        if(sizeof($matrix) == 0) return redirect()->back();
-        if(sizeof($matrix) == 1) $productConfigurations = current($matrix);
+        if(sizeof($matrix) == 0)
+            return redirect()->back();
+        if(sizeof($matrix) == 1)
+            $productConfigurations = current($matrix);
         elseif(sizeof($matrix) >= 2) {
             $vertex = array_pop($matrix);
             $productConfigurations =  $this->cartesianProduct($matrix, $vertex)[0];
@@ -934,31 +920,6 @@ class ProductController extends Controller
         return redirect(action("ProductController@edit", $product));
     }
 
-    /**
-     * make cartesian product
-     *
-     * @param  $matrix
-     * @param  $vertex
-     * @return $result
-     */
-    function cartesianProduct($matrix, $vertex){
-        if(sizeof($matrix) == 0) {$result[0][0] = $vertex; return $result;}
-        elseif(sizeof($matrix) == 1) {
-            $result = [];
-            $index = 0;
-            foreach (current($matrix) as $firstItem) {
-                foreach ($vertex as $secondItem) {
-                    $result[0][$index] = $firstItem.",".$secondItem;
-                    $index++;
-                }
-            }
-            return $result;
-        }
-        elseif(sizeof($matrix) >= 2){
-            $vertex2 = array_pop($matrix);
-            return $this->cartesianProduct($this->cartesianProduct($matrix, $vertex2), $vertex);
-        }
-    }
 
     /**
      * Show the form for setting pivots for attributevalues
@@ -1335,4 +1296,5 @@ class ProductController extends Controller
             return $this->response->setStatusCode(503)->setContent(["message"=>"خطا در کپی از اطلاعات پایه ای محصول . لطفا دوباره اقدام نمایید"]);
         }
     }
+
 }

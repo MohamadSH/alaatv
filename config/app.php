@@ -153,11 +153,12 @@ return [
         Laratrust\LaratrustServiceProvider::class,
         Watson\Sitemap\SitemapServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
-        Neoxia\Filesystem\SftpServiceProvider::class,
+
         /*
          * Package Service Providers...
          */
-
+        Backup\BackupServiceProvider::class,
+        Artesaos\SEOTools\Providers\SEOToolsServiceProvider::class,
 
 //        Laravel\Scout\ScoutServiceProvider::class,
 //        Yab\MySQLScout\Providers\MySQLScoutServiceProvider::class,
@@ -169,10 +170,10 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\WebsiteSettingProvider::class,
 
         App\Providers\MedianaServiceProvider::class,
-        Backup\BackupServiceProvider::class,
-        Artesaos\SEOTools\Providers\SEOToolsServiceProvider::class,
+        App\Providers\ComposerServiceProvider::class,
 
     ],
     /*

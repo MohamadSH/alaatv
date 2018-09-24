@@ -20,9 +20,9 @@ class AlterDropTablesColumns extends Migration
                 $table->dropColumn('attributetype_id');
             }
         });
-        Schema::dropIfExists('educationalcontent_grade');
-        Schema::dropIfExists('educationalcontent_major');
-        Schema::dropIfExists('educationalcontent_contenttype');
+        Schema::dropIfExists('content_grade');
+        Schema::dropIfExists('content_major');
+        Schema::dropIfExists('content_contenttype');
     }
 
     /**

@@ -145,4 +145,10 @@ return [
 
     'attributes' => [],
 
+    "FileArray" => [
+        'name should be set' =>  'name should be set',
+        'each field should be string' => 'each field should be string',
+        'each item in array should be instance of std class' => 'each item in array should be instance of std class',
+        'should be An array' => ':attribute should be An array'
+    ]
 ];

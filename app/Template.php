@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property \Carbon\Carbon|null $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Educationalcontent[] $educationalcontents
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Content[] $contents
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Template onlyTrashed()
  * @method static bool|null restore()
@@ -39,8 +39,8 @@ class Template extends Model
         'name',
     ];
 
-    public function educationalcontents()
+    public function contents()
     {
-        return $this->hasMany('\App\Educationalcontent');
+        return $this->hasMany('\App\Content');
     }
 }

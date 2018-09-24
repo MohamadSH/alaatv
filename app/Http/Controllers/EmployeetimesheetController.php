@@ -9,10 +9,10 @@ use App\Traits\DateCommon;
 use App\Traits\EmployeeWorkSheetCommon;
 use App\User;
 use App\Workdaytype;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Auth;
-use Config ;
+use Carbon\Carbon;
+use Config;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\View;
@@ -80,7 +80,7 @@ class EmployeetimesheetController extends Controller
             "employeeRealWorkTime" => $employeeSumRealWorkTime
         );
 
-        return response(json_encode($result),200)->header('Content-Type','application/json') ;
+        return response(json_encode($result, JSON_UNESCAPED_UNICODE), 200)->header('Content-Type', 'application/json');
     }
 
     /**
@@ -111,7 +111,9 @@ class EmployeetimesheetController extends Controller
             }
             $formVisible = true ;
         }
-        $employees  = User::roleFilter(User::select(), [Config::get("constants.ROLE_EMPLOYEE")])->pluck("lastName" , "id");
+        $employees  = User::select()
+                        ->role([Config::get("constants.ROLE_EMPLOYEE")])
+                        ->pluck("lastName" , "id");
         $workdayTypes = Workdaytype::all()->pluck("displayName" , "id");
         return view("employeeTimeSheet.create" , compact("employeetimesheet" , "employeeSchedule" , "isTimeSheetExtra" , "toDay" , "employees" , "formVisible" , "workdayTypes"));
     }

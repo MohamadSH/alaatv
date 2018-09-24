@@ -82,7 +82,7 @@ class MedianaChannel
 
         ]);
         $param = array_merge([
-            'to'           => json_encode([$to]),
+            'to' => json_encode([$to], JSON_UNESCAPED_UNICODE),
             'message'      => trim(data_get($message , 'content')),
             'op'           =>'send',
 //            'pattern_code' => trim(data_get($message , 'pattern_code')),

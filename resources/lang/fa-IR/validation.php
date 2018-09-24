@@ -78,6 +78,7 @@ return [
     'uploaded'  => 'آپلود :attribute نا موفق بود.',
     'url' => 'معتبر نمی باشد :attribute فرمت',
     'validate' => 'مقدار :attribute معتبر نمی باشد.' ,
+    'array2d' => 'مقدار :attribute باید آرایه دو بعدی باشد.' ,
     "recaptcha" => 'مقدار :attribute معتبر نمی باشد.',
 
     /*
@@ -212,6 +213,7 @@ return [
         'complimentaryproducts' => 'اشانتیون',
         'producttype_id' => 'نوع محصول',
         'file'=>'فایل',
+        'files'=>'فایل',
         'rank'=>'رتبه',
         'participationCode'=>'کد داوطلبی',
         'reportFile'=>'فایل کارنامه',
@@ -229,4 +231,10 @@ return [
         'address' => 'آدرس'
     ],
 
+    "FileArray" => [
+        'name should be set' => 'برای هر آیتم، name باید مقدار دهی شده باشد. ',
+        'each field should be string' => 'مقادیر هر آیتم باید string باشد.',
+        'each item in array should be instance of std class' => 'هر آیتم باید از نوع stdclass باشد.',
+        'should be An array' => ':attribute باید آرایه باشد.'
+    ]
 ];

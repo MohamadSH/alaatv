@@ -2947,7 +2947,7 @@ class SanatisharifmergeController extends Controller
                     "bucket" => "contentset",
                     "tags" => $tags
                 ];
-                $request->offsetSet("tags" , json_encode($tagsJson));
+                $request->offsetSet("tags", json_encode($tagsJson, JSON_UNESCAPED_UNICODE));
                 dump($tags);
 
                 $request->offsetSet("name" , $name);
@@ -3046,7 +3046,7 @@ class SanatisharifmergeController extends Controller
                         continue;
                     }
                     $request = new Request();
-                    $storeContentReuest = new \App\Http\Requests\InsertEducationalContentRequest();
+                    $storeContentReuest = new \App\Http\Requests\InsertContentRequest();
                     dump($contentTypeLable."id ".$sanatisharifRecord->$idColumn." started");
                     switch ($contentType)
                     {
@@ -3195,7 +3195,7 @@ class SanatisharifmergeController extends Controller
                         "bucket" => "content",
                         "tags" => $tags
                     ];
-                    $storeContentReuest->offsetSet("tags" , json_encode($tagsJson));
+                    $storeContentReuest->offsetSet("tags", json_encode($tagsJson, JSON_UNESCAPED_UNICODE));
 
                     dump($tags);
 
@@ -3214,14 +3214,14 @@ class SanatisharifmergeController extends Controller
                     }
                     $storeContentReuest->offsetSet("fromAPI" , true);
 
-                    $controller = new EducationalContentController();
+                    $controller = new ContentController();
                     $response = $controller->store($storeContentReuest);
                     $responseContent =  json_decode($response->getContent());
                     if($response->getStatusCode() == 200)
                     {
                         $request->offsetSet($contentTypeLable."Transferred" , 1);
                         if(isset($responseContent->id))
-                            $request->offsetSet("educationalcontent_id" , $responseContent->id);
+                            $request->offsetSet("content_id" , $responseContent->id);
                         $response = $this->update($request , $sanatisharifRecord);
                         if($response->getStatusCode() == 200)
                         {
@@ -3300,11 +3300,11 @@ class SanatisharifmergeController extends Controller
 
     public function redirectLesson(Request $request , $lId = null , $dId = null){
         $tag = $this->getDepLessonTags($lId, $dId);
-        $newUri = urldecode(action("HomeController@search" , ["tags"=>$tag]));
+        $newUri = urldecode(action("ContentController@index" , ["tags"=>$tag]));
         $isApp = ( strlen(strstr($request->header('User-Agent'),"Alaa")) > 0 )? true : false ;
         $app = null;
         if($isApp)
-            $app ="&itemTypes[]=video";
+            $app ="&contentType[]=video";
         return redirect($newUri.$app,301);
     }
 
@@ -3314,20 +3314,20 @@ class SanatisharifmergeController extends Controller
             if( isset($vId) ) {
                 $v = Sanatisharifmerge::where('videoid','=',$vId)->first();
                 if (isset($v)) {
-                    if (isset($v->educationalcontent)) {
-                        return action('EducationalContentController@show',$v->educationalcontent);
+                    if (isset($v->content)) {
+                        return action('ContentController@show',$v->content);
                     }
                 }
             }
             $tag = $this->getDepLessonTags( $lId, $dId);
 
-            return action("HomeController@search" , ["tags"=>$tag]);
+            return action("ContentController@index" , ["tags"=>$tag]);
 
         });
         $app = null;
         $isApp = ( strlen(strstr($request->header('User-Agent'),"Alaa")) > 0 )? true : false ;
         if($isApp)
-            $app ="&itemTypes[]=video";
+            $app ="&contentType[]=video";
         $newUri .= $app;
         $newUri = urldecode($newUri);
         return redirect($newUri,301);
@@ -3339,13 +3339,13 @@ class SanatisharifmergeController extends Controller
             if( isset($vId) ) {
                 $v = Sanatisharifmerge::where('videoid','=',$vId)->first();
                 if (isset($v)) {
-                    if (isset($v->educationalcontent)) {
-                        return action('EducationalContentController@embed',$v->educationalcontent);
+                    if (isset($v->content)) {
+                        return action('ContentController@embed',$v->content);
                     }
                 }
             }
             $tag = $this->getDepLessonTags($lId, $dId);
-            return urldecode(action("HomeController@search" , ["tags"=>$tag]));
+            return urldecode(action("ContentController@index" , ["tags"=>$tag]));
 
         });
         return redirect($newUri,301);
@@ -3357,13 +3357,13 @@ class SanatisharifmergeController extends Controller
             if( isset($pId) ) {
                 $p = Sanatisharifmerge::where('pamphletid','=',$pId)->first();
                 if (isset($p)) {
-                    if (isset($p->educationalcontent)) {
-                        return action('EducationalContentController@show',$p->educationalcontent);
+                    if (isset($p->content)) {
+                        return action('ContentController@show',$p->content);
                     }
                 }
             }
             $tag = $this->getDepLessonTags($lId, $dId);
-            return urldecode(action("HomeController@search" , ["tags"=>$tag]));
+            return urldecode(action("ContentController@index" , ["tags"=>$tag]));
 
         });
         return redirect($newUri,301);

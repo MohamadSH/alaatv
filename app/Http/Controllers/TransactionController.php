@@ -5,26 +5,26 @@ namespace App\Http\Controllers;
 use App\Helpers\ENPayment;
 use App\Http\Requests\EditTransactionRequest;
 use App\Http\Requests\InsertTransactionRequest;
+use App\Order;
 use App\Orderproduct;
 use App\Paymentmethod;
+use App\Product;
 use App\Traits\Helper;
 use App\Traits\OrderCommon;
 use App\Transaction;
 use App\Transactiongateway;
-use App\Order;
-use App\Product;
 use App\Transactionstatus;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use Zarinpal\Drivers\SoapDriver;
 use Zarinpal\Zarinpal;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Http\Response;
 
 class TransactionController extends Controller
 {
@@ -527,7 +527,13 @@ class TransactionController extends Controller
             }
 
             $totaolCost = number_format($transactions->sum("cost"));
-            return json_encode(array('index' => View::make('transaction.index', compact('transactions' , "transactionOrderproductCost" ))->render() , "totalCost" => $totaolCost , "orderproductTotalCost"=>$transactionOrderproductTotalCost , "orderproductTotalExtraCost"=>$transactionOrderproductTotalExtraCost));
+            return json_encode(
+                [
+                    'index' => View::make('transaction.index', compact('transactions', "transactionOrderproductCost"))->render(),
+                    "totalCost" => $totaolCost,
+                    "orderproductTotalCost" => $transactionOrderproductTotalCost,
+                    "orderproductTotalExtraCost" => $transactionOrderproductTotalExtraCost
+                ], JSON_UNESCAPED_UNICODE);
         }
         catch (\Exception    $e) {
             $message = "unexpected error";

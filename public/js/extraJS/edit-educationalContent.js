@@ -4,7 +4,7 @@
 $(function() {
     $.ajaxSetup({
         headers: {
-            'X-CSRF-Token': $('meta[name="_token"]').attr('content')
+            'X-CSRF-TOKEN': window.Laravel.csrfToken,
         }
     });
 });
@@ -171,12 +171,12 @@ $(document).on("click", ".removeFile", function (){
     var file_id = $(this).data('id');
     var content_id = $(this).data('to');
     $("input[name=file_id]").val(file_id);
-    $("input[name=educationalContent_id]").val(content_id);
+    $("input[name=content_id]").val(content_id);
 });
 
 $(document).on("click", "#removeFileSubmit", function (){
     var file_id = $("input[name=file_id]").val();
-    var content_id = $("input[name=educationalContent_id]").val();
+    var content_id = $("input[name=content_id]").val();
 //            toastr.options = {
 //                "closeButton": true,
 //                "debug": false,

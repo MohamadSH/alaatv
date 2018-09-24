@@ -14,24 +14,26 @@ use Illuminate\Support\Facades\Config;
 class OrderCheck
 {
     use ProductCommon;
+
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Closure $next
+     * @param null $guard
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle($request, Closure $next, $guard = null)
     {
         /**
          * Initiating an order for the user
          * at the moment he opens the website
          */
-        if(Auth::check()){
+        if (Auth::guard($guard)->check()){
             /**
              * Making an open order for the user or retrieving the existing one
              */
-            $openOrder = Auth::user()->openOrders()->get();
+            $openOrder = $request->user()->openOrders()->get();
             if($openOrder->isEmpty()){
                 $request = new Request();
                 $request->offsetSet("paymentstatus_id" , Config::get("constants.PAYMENT_STATUS_UNPAID"));

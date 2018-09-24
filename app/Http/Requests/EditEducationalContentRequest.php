@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Input;
 
-class EditEducationalContentRequest extends FormRequest
+class EditContentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

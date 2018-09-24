@@ -2,19 +2,20 @@
 
 namespace App;
 
+use App\Collection\UserCollection;
 use App\Traits\HasWallet;
 use App\Traits\Helper;
 use Carbon\Carbon;
 use Iatstuti\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
-use Schema;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection as BaseCollection;
+use Illuminate\Support\Facades\{
+    Auth, Cache, Config, DB
+};
 use Laratrust\Traits\LaratrustUserTrait;
-use Illuminate\Support\Facades\Config;
+use Schema;
 
 
 /**
@@ -59,7 +60,7 @@ use Illuminate\Support\Facades\Config;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Belonging[] $belongings
  * @property-read \App\Bloodtype|null $bloodtype
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Contact[] $contacts
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Educationalcontent[] $contents
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Content[] $contents
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Employeeschedule[] $employeeschedules
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Employeetimesheet[] $employeetimesheets
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Eventresult[] $eventresults
@@ -130,6 +131,7 @@ use Illuminate\Support\Facades\Config;
  * @method static \Illuminate\Database\Query\Builder|\App\User withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\User withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User role($roles)
  */
 class User extends Authenticatable
 {
@@ -195,6 +197,7 @@ class User extends Authenticatable
     protected $fillable = [
         'firstName',
         'lastName',
+        'nameSlug',
         'mobile',
         'password',
         'nationalCode',
@@ -231,6 +234,18 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    /**
+     * Create a new Eloquent Collection instance.
+     *
+     * @param  array $models
+     * @return UserCollection
+     */
+    public function newCollection(array $models = [])
+    {
+        return new UserCollection($models);
+    }
+
+
     public function cacheKey()
     {
         $key = $this->getKey();
@@ -243,30 +258,25 @@ class User extends Authenticatable
         );
     }
 
-    public static function roleFilter( $users,  $rolesId)
+    public function scopeRole($query, array $roles)
     {
-            $users = $users->whereHas('roles', function ($q) use ($rolesId) {
-                $q->whereIn("id", $rolesId);
-            });
-            return $users;
+        return $query->whereHas('roles', function ($q) use ($roles) {
+            $q->whereIn("id", $roles);
+        });
     }
 
-    public static function majorFilter($users, $majorsId)
+
+    /**
+     * @return UserCollection
+     */
+    public static function getTeachers() :UserCollection
     {
-        $key="user:majorFilter:".implode($users->pluck('id')->toArray())."-".$majorsId;
-
-        return Cache::remember($key,Config::get("constants.CACHE_3"),function () use($users, $majorsId) {
-
-            if (in_array(0, $majorsId))
-                $users = $users->whereDoesntHave("major");
-            else
-                $users = $users->whereIn("major_id", $majorsId);
-
-            return $users;
-
-        });
-
-
+        $authors = User::select()
+            ->role([config('constants.ROLE_TEACHER')])
+            ->get()
+            ->sortBy("lastName")
+            ->values();
+        return $authors;
     }
 
     public static function orderStatusFilter($users, $orderStatusesId)
@@ -397,7 +407,7 @@ class User extends Authenticatable
 
     public function contents()
     {
-        return $this->hasMany("\App\Educationalcontent" , "author_id" , "id");
+        return $this->hasMany("\App\Content" , "author_id" , "id");
     }
 
     public function products(){
@@ -543,7 +553,7 @@ class User extends Authenticatable
                     "email" => $this->mobile . "@takhtekhak.com",
                 );
             }
-            $message = base64_encode(json_encode($data));
+            $message = base64_encode(json_encode($data, JSON_UNESCAPED_UNICODE));
             $timestamp = time();
             $data = $message . ' ' . $timestamp;
             $key = config('constants.DISQUS_PRIVATE_KEY');
@@ -703,8 +713,50 @@ class User extends Authenticatable
         return ucfirst($this->firstName) . ' ' . ucfirst($this->lastName);
     }
 
+    public function getFullNameReverseAttribute($value)
+    {
+        return ucfirst($this->lastName) . ' ' . ucfirst($this->firstName);
+    }
+
     public function routeNotificationForPhoneNumber()
     {
         return ltrim($this->mobile, '0');
+    }
+
+
+    /**  Determines whether user has this content or not
+     * @param  $contentId
+     * @return bool
+     */
+    public function hasContent($contentId)
+    {
+        return true ;
+    }
+
+    public function seen($path){
+        $path = "/".ltrim($path,"/");
+
+        $SeenCount = 0;
+        $websitepage = Websitepage::firstOrNew(["url"=>$path ]);
+        if(!isset($websitepage->id)) {
+            $websitepage->save();
+        }
+        if(isset($websitepage->id)) {
+            if (!$this->seensitepages->contains($websitepage->id))
+                $this->seensitepages()->attach($websitepage->id);
+            else {
+                $this->seensitepages()->updateExistingPivot($websitepage->id, [
+                    "numberOfVisit" => $this->seensitepages()->where("id", $websitepage->id)->first()->pivot->numberOfVisit + 1, "updated_at" => Carbon::now()
+                ]);
+            }
+            $SeenCount = $websitepage->userschecked()->count();
+        }
+
+        return $SeenCount;
+    }
+
+    public function CanSeeCounter(): bool
+    {
+        return $this->hasRole("admin") ? true : false;
     }
 }

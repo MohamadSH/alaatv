@@ -18,7 +18,10 @@ trait APIRequestCommon
         } catch (GuzzleException $e) {
             dd($e);
         }
-        return ["statusCode"=>$res->getStatusCode() , "result"=>$res->getBody()->getContents()];
+        return [
+            "statusCode"=>$res->getStatusCode(),
+            "result"=>$res->getBody()->getContents()
+        ];
     }
 
 }

@@ -2,8 +2,11 @@
 
 namespace App;
 
+use App\Classes\Taggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Config;
 
 /**
  * App\Contentset
@@ -18,7 +21,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property \Carbon\Carbon|null $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Educationalcontent[] $educationalcontents
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Content[] $contents
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Contentset onlyTrashed()
  * @method static bool|null restore()
@@ -36,7 +39,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Contentset withoutTrashed()
  * @mixin \Eloquent
  */
-class Contentset extends Model
+class Contentset extends Model implements Taggable
 {
     use SoftDeletes;
     /**      * The attributes that should be mutated to dates.        */
@@ -53,15 +56,26 @@ class Contentset extends Model
     ];
 
 
-    public function educationalcontents()
+    public function contents()
     {
         return $this->belongsToMany(
-            "\App\Educationalcontent",
+            "\App\Content",
             "contentset_educationalcontent",
             "contentset_id",
             "edc_id")
             ->withPivot("order", "isDefault");
     }
+
+    public function getLastContent() :Content
+    {
+        $key = "ContentSet:getLastContent".$this->cacheKey();
+        return Cache::tags('set')->remember($key,Config::get("constants.CACHE_60"),function () {
+            return $this->contents
+                ->sortByDesc("pivot.order")->first();
+        });
+
+    }
+
     public function getTagsAttribute($value)
     {
         return json_decode($value);
@@ -71,4 +85,35 @@ class Contentset extends Model
 //    {
 //        return json_encode($value);
 //    }
+    public function retrievingTags()
+    {
+        /**
+         *      Retrieving Tags
+         */
+        $response = $this->sendRequest(
+            config("constants.TAG_API_URL") . "id/contentset/" . $this->id,
+            "GET"
+        );
+
+        if ($response["statusCode"] == 200) {
+            $result = json_decode($response["result"]);
+            $tags = $result->data->tags;
+        } else {
+            $tags = [];
+        }
+
+        return $tags;
+    }
+
+    public function cacheKey()
+    {
+        $key = $this->getKey();
+        $time= isset($this->update) ? $this->updated_at->timestamp : $this->created_at->timestamp;
+        return sprintf(
+            "%s-%s",
+            //$this->getTable(),
+            $key,
+            $time
+        );
+    }
 }
