@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\ModifyRequestInputMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -37,6 +38,7 @@ class Kernel extends HttpKernel
 //            \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\OrderCheck::class,
+//            \App\Http\Middleware\UserTracker::class,
 //            \App\Http\Middleware\Minify::class,
         ],
 
@@ -65,5 +67,7 @@ class Kernel extends HttpKernel
         'role' => \Laratrust\Middleware\LaratrustRole::class,
         'permission' => \Laratrust\Middleware\LaratrustPermission::class,
         'ability' => \Laratrust\Middleware\LaratrustAbility::class,
+        'convert' => ModifyRequestInputMiddleware::class,
+
     ];
 }

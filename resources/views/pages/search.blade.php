@@ -74,35 +74,27 @@
         <div class="search-bar bordered">
             <div class="row">
 
-                {!! Form::open(['action'=> 'EducationalContentController@index'  ,'role'=>'form' , 'id' => 'itemFilterForm'  ]) !!}
+                {!! Form::open(['action'=> 'ContentController@index'  ,'role'=>'form' , 'id' => 'itemFilterForm'  ]) !!}
                 <div class="form-body" id="itemFilterFormBody">
-                    {{--CHECKBOXES FOR BUCKETS--}}
-                    {{--<div class="form-group form-md-line-input form-md-floating-label has-info">--}}
-                    {{--<div class="col-md-12 itemType hidden">--}}
-                    {{--<input type="checkbox" name="itemTypes[]" value="contentset" >دسته محتوا--}}
-                    {{--<input type="checkbox" name="itemTypes[]" value="content">محتوا--}}
-                    {{--<input type="checkbox" name="itemTypes[]" value="product">محصول--}}
-                    {{--</div>--}}
-                    {{--</div>--}}
                     <div class="row">
                         <div class="col-lg-3 col-md-3 col-sd-3 col-xs-12">
                             <div class="form-group form-md-line-input form-md-floating-label has-info">
-                                {!! Form::select('tags[]',$grades,null,['class' => 'form-control itemFilter' , 'id'=>'gradeSelect' , 'placeholder'=>'همه مقاطع' ]) !!}
+                                {!! Form::select('tags[]',$majors,$defaultMajor,['class' => 'form-control itemFilter' , 'id'=>'majorSelect' , 'placeholder'=>'همه رشته ها' ]) !!}
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sd-3 col-xs-12">
                             <div class="form-group form-md-line-input form-md-floating-label has-info">
-                                {!! Form::select('tags[]',$majors,null,['class' => 'form-control itemFilter' , 'id'=>'majorSelect' , 'placeHolder'=>'همه رشته ها' ]) !!}
+                                {!! Form::select('tags[]',$grades,$defaultGrade,['class' => 'form-control itemFilter' , 'id'=>'gradeSelect' , 'placeholder'=>'همه مقطع ها' ]) !!}
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sd-3 col-xs-12">
                             <div class="form-group form-md-line-input form-md-floating-label has-info">
-                                {!! Form::select('tags[]',["همه دروس"],null,['class' => 'form-control itemFilter'  , 'id'=> 'lessonSelect'  ]) !!}
+                                {!! Form::select('tags[]',$lessons,$defaultLesson,['class' => 'form-control itemFilter'  , 'id'=> 'lessonSelect' , 'placeholder'=>'همه درس ها' ]) !!}
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sd-3 col-xs-12">
                             <div class="form-group form-md-line-input form-md-floating-label has-info">
-                                {!! Form::select('tags[]',["همه دبیرها"],null,['class' => 'form-control itemFilter' , 'id'=> 'teacherSelect' ]) !!}
+                                {!! Form::select('tags[]',$teachers,$defaultTeacher,['class' => 'form-control itemFilter' , 'id'=> 'teacherSelect'  , 'placeholder'=>'همه دبیرها']) !!}
                             </div>
                         </div>
                     </div>
@@ -242,25 +234,64 @@
     <script src="/assets/global/plugins/fancybox/source/jquery.fancybox.pack.js" type="text/javascript"></script>
     <script src="/assets/pages/scripts/search.min.js" type="text/javascript"></script>
     <script src="/assets/extra/slick/slick/slick.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/js/extraJS/slugify/text2slug.js" type="text/javascript" charset="utf-8"></script>
+
     <script type="text/javascript">
-        var majorLesson = {!!  $majorLesson->toJson()!!};
-        var lessonTeacher = {!!  $lessonTeacher->toJson()!!};
-        var defaultLesson = "{!!$defaultLesson!!}";
-        var defaultTeacher = "{!!$defaultTeacher!!}";
-        var tags = {!! json_encode($tagInput) !!};
-         var extraTags = {!! json_encode($extraTagArray) !!} ;
+        var tags = {!! json_encode($tags,JSON_UNESCAPED_UNICODE ) !!};
+
         $(document).ready(function()
         {
+
             initialSlick($(".productSlider"));
             initialPortfolio("#js-grid-juicy-contentset");
             initialPortfolio("#js-grid-juicy-projects");
-            $("#gradeSelect").val("{{$defaultGrade}}");
-            $("#majorSelect").val("{{$defaultMajor}}");
-            makeLessonSelect( $("#majorSelect").val());
-            makeTeacherSelect($("#lessonSelect").val());
+            // makeGradeSelect($("#majorSelect").val());
+            // makeLessonSelect( $("#gradeSelect").val());
+            // makeTeacherSelect();
+            // makeTeacherSelect($("#lessonSelect").val());
             $(".contentPortlet .portlet-title .caption").append(makeTagLabels(tags) );
-            $("#itemFilterFormBody").append(makeTagLabels(extraTags ,true ) );
+            // $("#itemFilterFormBody").append(makeTagLabels(extraTags ,true ) );
         });
+
+        function makeGradeSelect(majorId) {
+
+            //ToDo : Ajax to get grades of this major
+            // console.log(lessons);
+
+            var grades = [];  // ToDo : comes from ajax
+            $("#gradeSelect").empty();
+            $.each(grades , function (index , value)
+            {
+                var caption = "" ;
+                if(value != null && value != undefined)
+                    caption = value;
+
+                $("#gradeSelect").append($("<option></option>")
+                    .attr("value", index).text(caption));
+            });
+        }
+
+        function makeLessonSelect(gradeId) {
+
+            //ToDo : Ajax to get grades of this major
+            // console.log(lessons);
+
+            var lessons = [];  // ToDo : comes from ajax
+            $("#lessonSelect").empty();
+            $.each(lessons , function (index , value)
+            {
+                var caption = "" ;
+                if(value != null && value != undefined)
+                    caption = value;
+
+                $("#lessonSelect").append($("<option></option>")
+                    .attr("value", index).text(caption));
+            });
+        }
+
+        function makeTeacherSelect() {
+            //ToDo
+        }
 
         function makeTagLabels(tags , withInput) {
             var labels = "";
@@ -268,73 +299,20 @@
                 withInput = false;
             $.each(tags , function (key , value)
             {
-                    var label = '<span class="tag label label-info tag_'+key+'" style="display: inline-block; margin: 2px; padding: 10px;">\n'  ;
-                    label += '<a class="removeTagLabel" data-role="'+key+'" style="padding-left: 10px"><i class="fa fa-remove"></i></a>\n' ;
-                    label += '<span >\n' ;
-                    label += '<a href="{{action("HomeController@search")}}?tags[]='+value+'"  class="font-white">'+value+'</a>\n' ;
-                    label += '</span>\n' ;
-                    if(withInput)
-                    {
-                        label += '<input id="tagInput_'+key+'" name="tags[]" type="hidden" value="'+value+'">\n' ;
-                    }
-                    label += '</span>';
+                var label = '<span class="tag label label-info tag_'+key+'" style="display: inline-block; margin: 2px; padding: 10px;">\n'  ;
+                label += '<a class="removeTagLabel" data-role="'+key+'" style="padding-left: 10px"><i class="fa fa-remove"></i></a>\n' ;
+                label += '<span >\n' ;
+                label += '<a href="{{action("ContentController@index")}}?tags[]='+value+'"  class="font-white">'+value+'</a>\n' ;
+                label += '</span>\n' ;
+                if(withInput)
+                {
+                    label += '<input id="tagInput_'+key+'" name="tags[]" type="hidden" value="'+value+'">\n' ;
+                }
+                label += '</span>';
 
-                    labels += label
+                labels += label
             });
             return labels ;
-        }
-
-        function makeLessonSelect() {
-            var major = $("#majorSelect").val() ;
-            var lessons = majorLesson[major];
-            // console.log(lessons);
-            $("#lessonSelect").empty();
-            $.each(lessons , function (index , value)
-            {
-                var caption = "" ;
-                if(value.index != null && value.index != undefined)
-                {
-                    caption = value.index;
-                }
-                else if(value.initialIndex != null && value.initialIndex != undefined)
-                {
-                    caption = value.initialIndex;
-                }
-
-                $("#lessonSelect").append($("<option></option>")
-                    .attr("value", value.value).text(caption));
-            });
-            if(defaultLesson.length > 0)
-                $("#lessonSelect").val(defaultLesson);
-        }
-
-        function makeTeacherSelect() {
-            var lesson = $("#lessonSelect").val() ;
-            var teachers = lessonTeacher[lesson];
-            $("#teacherSelect").empty();
-            $.each(teachers , function (index , value)
-            {
-                var lastName = "" ;
-                var firstName = "" ;
-                if(value.lastName != null && value.lastName != undefined)
-                {
-                    lastName = value.lastName;
-                }
-                else if(value.index != null && value.index != undefined)
-                {
-                    lastName = value.index;
-                }
-
-                if(value.firstName != null && value.firstName != undefined)
-                {
-                    firstName = value.firstName;
-                }
-
-                $("#teacherSelect").append($("<option></option>")
-                    .attr("value", value.value).text(firstName + " " + lastName));
-            });
-            if(defaultTeacher.length > 0)
-                $("#teacherSelect").val(defaultTeacher);
         }
 
         function destroySlick(element) {
@@ -467,7 +445,6 @@
                             $(".tag").remove();
                             $(".contentPortlet .portlet-title .caption").append(makeTagLabels(tags));
                             $("#itemFilterFormBody").append(makeTagLabels(extraTags , true));
-                            // var itemTypes = response.itemTypes;
                             // location.hash = page;
                             $.each(items , function (key , item) {
                                 var totalItems = item.totalitems;
@@ -531,11 +508,15 @@
             });
         }
 
-        function contentLoad(pageName , pageNumber, itemType) {
+        function contentLoad(pageName , pageNumber, contentType) {
             // initiated from url
-            var formData = $("#itemFilterForm").find(':not(input[name=_token])').filter(function(index, element) {
-                return $(element).val() != '';
-            }).serialize();
+            var formData = "";
+            $("#itemFilterForm").find(':not(input[name=_token])').filter(':input').each(function () {
+                var elementId = $(this).attr("id");
+                var selectedText = $("#"+elementId+" option:selected").text();
+                if($("#"+elementId+" option:selected").val() != '')
+                    formData += "tags[]="+ string_to_slug(selectedText)+"&";
+            });
             formData =  decodeURIComponent(formData);
             if( pageNumber != undefined && pageNumber > 0 )
             {
@@ -555,20 +536,20 @@
             }
 
             changeUrl(formData);
-            if( itemType != undefined &&  itemType.length > 0 )
+            if( contentType != undefined &&  contentType.length > 0 )
             {
-                var typesQuery = [ "itemTypes[]="+itemType ] ;
+                var typesQuery = [ "contentType[]="+contentType ] ;
                 formData = formData + "&" + typesQuery.join('&') ;
             }
 
-            // console.log(formData);
-            contentLoadAjaxRequest('{{action("HomeController@search")}}',formData);
+            console.log(formData);
+            contentLoadAjaxRequest('{{action("ContentController@index")}}',formData);
             return false;
         }
 
         function changeUrl(appendUrl)
         {
-            var newUrl = "{{action("HomeController@search")}}"+"?"+appendUrl;
+            var newUrl = "{{action("ContentController@index")}}"+"?"+appendUrl;
             window.history.pushState({formData: appendUrl},"Title",newUrl);
             document.title=newUrl;
         }
@@ -579,34 +560,30 @@
             var query = $(this).attr('href').split('?')[1];
             var parameters = query.split('=');
             var pageName = parameters[0];
-            var itemType = pageName.split('page');
-            contentLoad(parameters[0] , parameters[1] , itemType[0]);
+            var contentType = pageName.split('Page');
+            contentLoad(parameters[0] , parameters[1] , contentType[0]);
             e.preventDefault();
         });
 
-        $(document).on("change", "#gradeSelect", function (){
-            tags.push($("#gradeSelect option:selected").val());
-        });
-
-        $(document).on("change", "#majorSelect", function (){
-            tags.push($("#majorSelect option:selected").val());
-            makeLessonSelect();
-        });
-
-        $(document).on("change", "#lessonSelect", function (){
-            tags.push($("#lessonSelect option:selected").val());
-            makeTeacherSelect();
-        });
-
-        $(document).on("change", "#teacherSelect", function (){
-            tags.push($("#teacherSelect option:selected").val());
-        });
+        // $(document).on("change", "#gradeSelect", function (){
+        //     tags.push($("#gradeSelect option:selected").val());
+        // });
+        //
+        // $(document).on("change", "#majorSelect", function (){
+        //     tags.push($("#majorSelect option:selected").val());
+        //     makeLessonSelect();
+        // });
+        //
+        // $(document).on("change", "#lessonSelect", function (){
+        //     tags.push($("#lessonSelect option:selected").val());
+        //     makeTeacherSelect();
+        // });
+        //
+        // $(document).on("change", "#teacherSelect", function (){
+        //     tags.push($("#teacherSelect option:selected").val());
+        // });
 
         $(document).on("change", ".itemFilter", function (){
-            contentLoad();
-        });
-
-        $(document).on("click", ".itemType", function (){
             contentLoad();
         });
 

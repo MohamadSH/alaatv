@@ -10,13 +10,14 @@ class CompleteInfo
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Closure $next
+     * @param null $guard
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle($request, Closure $next, $guard = null)
     {
-        if(Auth::check() && Auth::user()->completion("afterLoginForm") != 100) {
+        if(Auth::guard($guard)->check() && $request->user()->completion("afterLoginForm") != 100) {
             switch ($request->fullUrl())
             {
                 case action("OrderController@checkoutReview") :

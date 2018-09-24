@@ -1,0 +1,27 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: sohrab
+ * Date: 2018-09-10
+ * Time: 16:05
+ */
+
+namespace App\Classes\Search;
+
+
+use App\Classes\Taggable;
+
+interface TaggingInterface
+{
+    /**
+     * @param $taggableId
+     * @return array
+     */
+    public function getTags($taggableId):array;
+
+    /**
+     * @param array $tags
+     * @return Taggable
+     */
+    public function getTaggable(array $tags) :array ;
+}

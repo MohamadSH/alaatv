@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableEducationalcontentGrade extends Migration
+class CreateTableContentGrade extends Migration
 {
     /**
      * Run the migrations.
@@ -14,14 +14,14 @@ class CreateTableEducationalcontentGrade extends Migration
      */
     public function up()
     {
-        Schema::create('educationalcontent_grade', function (Blueprint $table) {
-            $table->unsignedInteger('educationalcontent_id');
+        Schema::create('content_grade', function (Blueprint $table) {
+            $table->unsignedInteger('content_id');
             $table->unsignedInteger('grade_id');
-            $table->primary(['educationalcontent_id','grade_id' ]);
+            $table->primary(['content_id','grade_id' ]);
 
-            $table->foreign('educationalcontent_id')
+            $table->foreign('content_id')
                 ->references('id')
-                ->on('educationalcontents')
+                ->on('contents')
                 ->onDelete('cascade')
                 ->onupdate('cascade');
 
@@ -32,7 +32,7 @@ class CreateTableEducationalcontentGrade extends Migration
                 ->onupdate('cascade');
 
         });
-        DB::statement("ALTER TABLE `educationalcontent_grade` comment 'رابطه چند به چند محتواهای آموزشی با مقطع'");
+        DB::statement("ALTER TABLE `content_grade` comment 'رابطه چند به چند محتواهای آموزشی با مقطع'");
     }
 
     /**
@@ -42,6 +42,6 @@ class CreateTableEducationalcontentGrade extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('educationalcontent_grade');
+        Schema::dropIfExists('content_grade');
     }
 }

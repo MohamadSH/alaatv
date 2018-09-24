@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property \Carbon\Carbon|null $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Educationalcontent[] $educationalcontents
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Content[] $contents
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Grade onlyTrashed()
  * @method static bool|null restore()
@@ -43,8 +43,8 @@ class Grade extends Model
         'description',
     ];
 
-    public function educationalcontents()
+    public function contents()
     {
-        return $this->belongsToMany('App\Educationalcontent');
+        return $this->belongsToMany('App\Content');
     }
 }

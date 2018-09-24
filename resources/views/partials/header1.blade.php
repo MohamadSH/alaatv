@@ -39,7 +39,7 @@
         <div class="page-top">
             <!-- BEGIN HEADER SEARCH BOX -->
             <!-- DOC: Apply "search-form-expanded" right after the "search-form" class to have half expanded search box -->
-            <form class="search-form search-form-expanded" action="{{ action("HomeController@search") }}" method="GET">
+            <form class="search-form search-form-expanded" action="{{ action("ContentController@index") }}" method="GET">
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="جستجو ..." name="search">
                     <span class="input-group-btn">

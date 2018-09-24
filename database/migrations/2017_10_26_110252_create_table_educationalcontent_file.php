@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableEducationalcontentFile extends Migration
+class CreateTableContentFile extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateTableEducationalcontentFile extends Migration
      */
     public function up()
     {
-        Schema::create('educationalcontent_file', function (Blueprint $table) {
+        Schema::create('content_file', function (Blueprint $table) {
             $table->unsignedInteger('content_id');
             $table->unsignedInteger('file_id');
             $table->string('caption')->nullable()->comment("کپشن مورد نظر جهت نمایش برای این فایل");
@@ -21,7 +21,7 @@ class CreateTableEducationalcontentFile extends Migration
 
             $table->foreign('content_id')
                 ->references('id')
-                ->on('educationalcontents')
+                ->on('contents')
                 ->onDelete('cascade')
                 ->onupdate('cascade');
 
@@ -40,6 +40,6 @@ class CreateTableEducationalcontentFile extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('educationalcontent_file');
+        Schema::dropIfExists('content_file');
     }
 }

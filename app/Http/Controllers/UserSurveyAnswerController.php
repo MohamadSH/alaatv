@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
 use App\Usersurveyanswer;
-use Illuminate\Http\Request;
 use Auth;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 
 class UserSurveyAnswerController extends Controller
@@ -83,12 +82,12 @@ class UserSurveyAnswerController extends Controller
             $userSurveyAnswer = new Usersurveyanswer();
             $userSurveyAnswer->fill($request->all());
             $userSurveyAnswer->user_id = $userId ;
-            $userSurveyAnswer->answer = json_encode($request->get("answer"));
+            $userSurveyAnswer->answer = json_encode($request->get("answer"), JSON_UNESCAPED_UNICODE);
             $userSurveyAnswer->save();
         }
         else
         {
-            $userSurveyAnswer->answer = json_encode($request->get("answer"));
+            $userSurveyAnswer->answer = json_encode($request->get("answer"), JSON_UNESCAPED_UNICODE);
             $userSurveyAnswer->update();
         }
 

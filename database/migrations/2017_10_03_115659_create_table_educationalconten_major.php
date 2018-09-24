@@ -14,14 +14,14 @@ class CreateTableEducationalcontenMajor extends Migration
      */
     public function up()
     {
-        Schema::create('educationalcontent_major', function (Blueprint $table) {
-            $table->unsignedInteger('educationalcontent_id');
+        Schema::create('content_major', function (Blueprint $table) {
+            $table->unsignedInteger('content_id');
             $table->unsignedInteger('major_id');
-            $table->primary(['educationalcontent_id','major_id' ]);
+            $table->primary(['content_id','major_id' ]);
 
-            $table->foreign('educationalcontent_id')
+            $table->foreign('content_id')
                 ->references('id')
-                ->on('educationalcontents')
+                ->on('contents')
                 ->onDelete('cascade')
                 ->onupdate('cascade');
 
@@ -32,7 +32,7 @@ class CreateTableEducationalcontenMajor extends Migration
                 ->onupdate('cascade');
 
         });
-        DB::statement("ALTER TABLE `educationalcontent_major` comment 'رابطه چند به چند محتواهای آموزشی با رشته'");
+        DB::statement("ALTER TABLE `content_major` comment 'رابطه چند به چند محتواهای آموزشی با رشته'");
     }
 
     /**
@@ -42,6 +42,6 @@ class CreateTableEducationalcontenMajor extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('educationalcontent_major');
+        Schema::dropIfExists('content_major');
     }
 }

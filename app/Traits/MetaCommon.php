@@ -1,5 +1,7 @@
 <?php namespace App\Traits;
 
+use App\Classes\SEO\SeoInterface;
+use App\Classes\SEO\SeoMetaTagsGenerator;
 use \App\Helpers\colossalMindMbKeywordGen;
 
 trait MetaCommon
@@ -25,6 +27,7 @@ trait MetaCommon
      * @param int $min_3words_phrase_occur
      * @param string $encoding
      * @param string $lang
+     * @return string
      */
 
 
@@ -87,5 +90,13 @@ trait MetaCommon
         $keywords = $keyword->removeDuplicateKw($keywords);
 
         return $keywords;
+    }
+
+    public function generateSeoMetaTags(SeoInterface $item)
+    {
+        try {
+            $seo = new SeoMetaTagsGenerator($item);
+        } catch (\Exception $e) {
+        }
     }
 }

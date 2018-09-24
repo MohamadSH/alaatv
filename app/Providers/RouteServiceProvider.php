@@ -2,41 +2,12 @@
 
 namespace App\Providers;
 
-use App\Afterloginformcontrol;
-use App\Article;
-use App\Articlecategory;
-use App\Assignment;
-use App\Attribute;
-use App\Attributegroup;
-use App\Attributeset;
-use App\Attributevalue;
-use App\City;
-use App\Consultation;
-use App\Contact;
-use App\Coupon;
-use App\Educationalcontent;
-use App\Employeetimesheet;
-use App\Eventresult;
-use App\File;
-use App\Mbtianswer;
-use App\Order;
-use App\Orderproduct;
-use App\Permission;
-use App\Phone;
-use App\Product;
-use App\Productfile;
-use App\Productphoto;
-use App\Role;
-use App\Slideshow;
-use App\User;
-use App\Userbon;
-use App\Userupload;
-use App\Verificationmessage;
-use App\Wallet;
-use App\Websitesetting;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Route;
+use App\{
+    Afterloginformcontrol, Article, Articlecategory, Assignment, Attribute, Attributegroup, Attributeset, Attributevalue, City, Consultation, Contact, Contentset, Coupon, Content, Employeetimesheet, Eventresult, File, Mbtianswer, Order, Orderproduct, Permission, Phone, Product, Productfile, Productphoto, Role, Slideshow, User, Userbon, Userupload, Verificationmessage, Wallet, Websitesetting
+};
+use Illuminate\Support\Facades\{
+    Cache, Config, Route
+};
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
 class RouteServiceProvider extends ServiceProvider
@@ -249,45 +220,46 @@ class RouteServiceProvider extends ServiceProvider
             });
 
         });
-        Route::bind('educationalContent', function($value){
-            $key = "Educationalcontent:".$value;
+/*
+        Route::bind('content', function($value){
+            $key = "Content:".$value;
            return Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($value){
-               $c = Educationalcontent::where('id', $value)->first();
+               $c = Content::where('id', $value)->first();
                if (isset($c)) {
                    if (!$c->relationLoaded('template'))
                        $c->load("template");
                    if (!$c->relationLoaded('contentsets'))
                        $c->load("contentsets");
-                   if (!$c->relationLoaded('files'))
-                       $c->load("files");
                }
                 return  $c ?? abort(404);
             });
 
         });
+*/
         Route::bind('c', function($value){
-            $key = "Educationalcontent:".$value;
+            $key = "Content:".$value;
             return Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($value){
-                $c = Educationalcontent::where('id', $value)->first();
+                $c = Content::where('id', $value)->first();
                 if (isset($c)) {
                     if (!$c->relationLoaded('template'))
                         $c->load("template");
                     if (!$c->relationLoaded('contentsets'))
                         $c->load("contentsets");
-                    if (!$c->relationLoaded('files'))
-                        $c->load("files");
                 }
                 return  $c ?? abort(404);
             });
 
         });
-        Route::bind('file', function($value){
-            $key = "File:".$value;
-           return Cache::remember($key,Config::get("constants.CACHE_5"),function () use ($value){
-                return File::where('id', $value)->first() ?? abort(404);
-            });
 
+        Route::bind('set', function($value){
+            //TODO:// Caching . . .
+            /*$key = "Set:".$value;
+            return Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($value){
+                return Contentset::where('id', $value)->first() ?? abort(404);
+            });*/
+            return Contentset::where('id', $value)->first() ?? abort(404);
         });
+
         Route::bind("employeetimesheet", function($value){
             $key = "Employeetimesheet:".$value;
            return Cache::remember($key,Config::get("constants.CACHE_5"),function () use ($value){

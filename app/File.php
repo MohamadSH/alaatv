@@ -17,7 +17,7 @@ use Webpatser\Uuid\Uuid;
  * @property \Carbon\Carbon|null $updated_at
  * @property \Carbon\Carbon|null $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Disk[] $disks
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Educationalcontent[] $educationalcontents
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Content[] $contents
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\File onlyTrashed()
  * @method static bool|null restore()
@@ -54,9 +54,9 @@ class File extends Model
         });
     }
 
-    public function educationalcontents()
+    public function contents()
     {
-        return $this->belongsToMany('App\Educationalcontent', 'educationalcontent_file', 'file_id', 'content_id')->withPivot("caption");
+        return $this->belongsToMany('App\Content', 'educationalcontent_file', 'file_id', 'content_id')->withPivot("caption");
     }
 
     public function disks()

@@ -2,86 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Assignmentstatus;
-use App\Attribute;
-use App\Attributecontrol;
-use App\Attributeset;
-use App\Bon;
-use App\Checkoutstatus;
-use App\Consultationstatus;
-use App\Contentset;
-use App\Contenttype;
-use App\Coupon;
-use App\Coupontype;
-use App\Educationalcontent;
-use App\Event;
-use App\Eventresult;
-use App\Gender;
-use App\Grade;
-use App\Http\Requests\ContactUsFormRequest;
-use App\Http\Requests\InsertUserRequest;
-use App\Http\Requests\SendSMSRequest;
-use App\Lottery;
-use App\Major;
-use App\Notifications\GeneralNotice;
-use App\Notifications\GiftGiven;
-use App\Notifications\UserRegisterd;
-use App\Order;
-use App\Orderproduct;
-use App\Orderstatus;
-use App\Paymentmethod;
-use App\Paymentstatus;
-use App\Permission;
-use App\Product;
-use App\Productfile;
-use App\Producttype;
-use App\Productvoucher;
-use App\Question;
-use App\Relative;
-use App\Role;
-use App\Traits\APIRequestCommon;
-use App\Traits\CharacterCommon;
-use App\Traits\DateCommon;
-use App\Traits\Helper;
-use App\Traits\ProductCommon;
-use App\Traits\UserCommon;
-use App\Transaction;
-use App\Transactionstatus;
-use App\User;
-use App\Userbon;
-use App\Userbonstatus;
-use App\Userstatus;
-use App\Usersurveyanswer;
-use App\Userupload;
-use App\Useruploadstatus;
-use App\Websitesetting;
-use App\Websitepage;
-use App\Http\Requests\Request;
+use App\{
+    Assignmentstatus, Attribute, Attributecontrol, Attributeset, Bon, Category, Checkoutstatus, Classes\Search\ContentSearch, Classes\Search\Tag\AuthorTagManagerViaApi, Consultationstatus, Contentset, Contenttype, Coupon, Coupontype, Content, Event, Eventresult, Gender, Grade, Http\Requests\ContactUsFormRequest, Http\Requests\InsertUserRequest, Http\Requests\Request, Http\Requests\SendSMSRequest, Lottery, Major, Notifications\GeneralNotice, Notifications\GiftGiven, Notifications\UserRegisterd, Order, Orderproduct, Orderstatus, Paymentmethod, Paymentstatus, Permission, Product, Productfile, Producttype, Productvoucher, Question, Relative, Role, Traits\APIRequestCommon, Traits\CharacterCommon, Traits\DateCommon, Traits\Helper, Traits\ProductCommon, Traits\UserCommon, Transaction, Transactionstatus, User, Userbon, Userbonstatus, Userstatus, Usersurveyanswer, Userupload, Useruploadstatus, Websitepage, Websitesetting
+};
+use Auth;
 use Carbon\Carbon;
+use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Http\Response;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\{
+    Cache, Config, File, Input, Log, Route, Storage, View
+};
+use Illuminate\Support\Str;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Sftp\SftpAdapter;
-
 use Maatwebsite\ExcelLight\Excel;
-use Maatwebsite\ExcelLight\Spout\Reader;
-use Maatwebsite\ExcelLight\Spout\Row;
-use Maatwebsite\ExcelLight\Spout\Sheet;
-use Maatwebsite\ExcelLight\Spout\Writer;
-use SSH;
-use Auth;
+use Maatwebsite\ExcelLight\Spout\{
+    Reader, Row, Sheet, Writer
+};
 use SEO;
-
-use Watson\Sitemap\Facades\Sitemap;
+use SSH;
 
 //use Jenssegers\Agent\Agent;
 
@@ -107,24 +48,127 @@ class HomeController extends Controller
 
     public function telgramAgent(Request $request)
     {
-        Log::debug($request->headers->all());
+//        Log::debug($request->headers->all());
+
     }
+    /*private function slug($title, $separator = '-')
+    {
+        $title = str_replace("‌",' ',$title);
+        $title = mb_strtolower($title, "utf-8");
+        // Convert all dashes/underscores into separator
+        $flip = $separator == '-' ? '_' : '-';
+
+        $title = preg_replace('!['.preg_quote($flip).']+!u', $separator, $title);
+
+        // Replace @ with the word 'at'
+        $title = str_replace('@', $separator.'at'.$separator, $title);
+
+        // Remove all characters that are not the separator, letters, numbers, or whitespace.
+        $title = preg_replace('![^'.preg_quote($separator).'\pL\pN\s]+!u', '', mb_strtolower($title));
+
+        // Replace all separator characters and whitespace by a single separator
+        $title = preg_replace('!['.preg_quote($separator).'\s]+!u', $separator, $title);
+
+        $title = trim($title, $separator);
+        $title = preg_replace("/[^a-z0-9_\s-ء-يپچژکگیۃۂۀہ]/u", '', $title);
+        $title = preg_replace("/[^a-z0-9_\s-ءاآؤئبپتثجچحخدذرزژسشصضطظعغفقكکگلمنوهی]/u", '', $title);
+
+        $title = preg_replace("/[\s-_]+/", ' ', $title);
+        $title = preg_replace("/[\s_]/", $separator, $title);
+        return $title;
+    }*/
+
     public function debug(Request $request)
     {
+        $categories = Category::active()->get()->toTree();
+        return view('partials.tree',compact('categories'));
+
+/*        $nodes = Category::get()->toTree();
+
+        $traverse = function ($categories, $prefix = '-') use (&$traverse) {
+            foreach ($categories as $category) {
+                if($category->enable == false )
+                    continue;
+                echo PHP_EOL.$prefix.' '.(isset($category->name) ? $category->name : '!!!'). '<br>';
+
+                $traverse($category->children, $prefix.'-');
+            }
+        };
+
+        dd($traverse($nodes));
+
+        dd(
+            (new AuthorTagManagerViaApi())->getTags(37227)
+        );
+        $c = Content::create(
+            [
+                'name' => 'test8',
+                'tags'=>  [
+                    "فیلم",
+                    "رشته_ریاضی",
+                    "متوسطه2",
+                    "کنکور",
+                    "ضبط_کلاس_درس",
+                    "نظام_آموزشی_قدیم",
+                    "پیش",
+                    "شبیه_ساز_کلاس_درس",
+                    "گسسته",
+                    "رضا_شامیزاده",
+                ],
+                'enable' => 1,
+                'contenttype_id' => 8
+            ]
+        );
+
+        dd($c);
+
+
+        $nodes = Category::get();
+        dd($nodes->toTree());*/
+        $filters = [
+          'tag' => [
+              'جلال_موقاری'
+          ],
+            'name' => 'شناسی، دیروز، امروز و فردا (قسمت 1)-گفتار1: زیست شناسی',
+            'order' => 1
+        ];
+        $a = new ContentSearch();
+        dd( $a->apply($filters)->take(5)->videos());
+        dd( Str::uuid()->toString());
+
         try
         {
-            $asiatechProduct = config("constants.ASIATECH_FREE_ADSL") ;
-            $voucherPendingOrders = User::whereHas("orders" , function ($q) use ($asiatechProduct){
-                $q->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
-                    ->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_PAID"))
-                    ->whereHas("orderproducts" , function ($q) use ($asiatechProduct)
-                    {
-                        $q->where("product_id" , $asiatechProduct);
-                    })
-                    ->havingRaw('COUNT(*) > 1');
+            $files = [
+                "s"=>"m"
+            ];
+            foreach (optional($files) as $key => $file)
+            {
+                dump($file);
+            }
+            dd("s");
+            $time =  $request->get("sohrab");
+            dd($time);
+
+//            $adItems = Contentset::find(199)->contents;
+            $adItems = Content::whereHas("contentsets", function ($q) {
+                $q->where("id", 199);
             })
+                ->where("enable", 1)
+                ->orderBy("order")
                 ->get();
-            dd($voucherPendingOrders->pluck("id"));
+            return ("so");
+            $e = Content::find(6560);
+            dd($e->validSince);
+//            dd($e->thumbnail);
+//            dd( parse_url("https://cdn.sanatisharif.ir/media/156/HD_720p/008uuui.mp4")['path']);
+            $b = \App\Classes\LinkGenerator::create(null,"productFileSFTP",null,"/paid/85/fizik-1.mp4");
+            $a = \App\Classes\LinkGenerator::create("bee26d8a-f739-4372-98a7-856b8b1d2621",null,null,"sanatish/140/160923111124.pdf");
+
+            $c = \App\Classes\LinkGenerator::create("bb1ef4e5-a572-46da-b4cc-1574f08ce903","alaaCdnSFTP",null,"/media/156/HD_720p/008uuui.mp4");
+            $d = \App\Classes\LinkGenerator::create("bb1ef4e5-a572-46da-b4cc-1574f08ce903","alaaCdnSFTP","https://cdn.sanatisharif.ir/media/156/HD_720p/008uuui.mp4","/media/156/HD_720p/008uuui.mp4");
+            return [
+                "userSeen" => $c->getLinks(['content_id' => 1])
+            ];
         }
         catch (\Exception    $e) {
             $message = "unexpected error";
@@ -137,7 +181,6 @@ class HomeController extends Controller
                     "file"=>$e->getFile()
                 ]);
         }
-        return view("errors.404");
     }
     public function __construct()
     {
@@ -146,7 +189,7 @@ class HomeController extends Controller
 //        {
 //            $authException = ['index' , 'getImage' , 'error404' , 'error403' , 'error500' , 'errorPage' , 'siteMapXML', 'download' ];
 //        }else{
-        $authException = ['telgramAgent','index', 'getImage', 'error404', 'error403', 'error500', 'errorPage', 'aboutUs', 'contactUs', 'sendMail', 'rules', 'siteMapXML', 'uploadFile' , 'search' , 'schoolRegisterLanding'];
+        $authException = ['debug','download', 'telgramAgent', 'index', 'getImage', 'error404', 'error403', 'error500', 'errorPage', 'aboutUs', 'contactUs', 'sendMail', 'rules', 'siteMapXML', 'uploadFile', 'search', 'schoolRegisterLanding'];
 //        }
         $this->middleware('auth', ['except' => $authException]);
         $this->middleware('ability:' . Config::get("constants.ROLE_ADMIN") . ',' . Config::get("constants.USER_ADMIN_PANEL_ACCESS"), ['only' => 'admin']);
@@ -163,753 +206,11 @@ class HomeController extends Controller
 
     }
 
-    private function getRedisRequestSubPath(Request $request, $itemType , $paginationSetting){
 
-        $requestSubPath = "&withscores=1";
-        $bucket = "content";
-        switch ($itemType)
-        {
-            case "video":
-                $perPage = $paginationSetting->where("itemType" , "video")->first()["itemPerPage"];
-                $pageName = $paginationSetting->where("itemType" , "video")->first()["pageName"];
-                $itemTypeTag = "فیلم";
-                break;
-            case "pamphlet":
-                $perPage = $paginationSetting->where("itemType" , "pamphlet")->first()["itemPerPage"];
-                $pageName = $paginationSetting->where("itemType" , "pamphlet")->first()["pageName"];
-                $itemTypeTag = "جزوه";
-                break;
-            case "article":
-                $perPage = $paginationSetting->where("itemType" , "article")->first()["itemPerPage"];
-                $pageName = $paginationSetting->where("itemType" , "article")->first()["pageName"];
-                $itemTypeTag = "مقاله";
-                $pageNum = $request->get($pageName);
-                break;
-            case "contentset":
-                $perPage = $paginationSetting->where("itemType" , "contentset")->first()["itemPerPage"];
-                $pageName = $paginationSetting->where("itemType" , "contentset")->first()["pageName"];
-                $bucket = "contentset";
-                $itemTypeTag = "دوره_آموزشی";
-                break;
-            case "product":
-                $perPage = 16;
-                $bucket = "product";
-                $itemTypeTag = "محصول";
-                $pageName = "other";
-                break;
-            default:
-                $perPage = 16;
-                $bucket = $itemType;
-                $itemTypeTag = "other";
-                $pageName = "other";
-                break;
-        }
-        $requestSubPath .= "&limit=".(int)$perPage;
-
-        if(isset($pageName))
-        {
-            $pageNum = $request->get($pageName);
-            if(!isset($pageNum))
-                $pageNum = 1;
-            $offset = (int)$perPage * ((int)$pageNum - 1);
-            $requestSubPath .= "&offset=".$offset;
-        }
-        else
-        {
-
-            $requestSubPath .= "&offset=0";
-            $pageName = "other";
-        }
-        return [
-            $requestSubPath,
-            $bucket,
-            $itemTypeTag,
-            $perPage,
-            $pageName
-        ];
-    }
-
-    private function getIdFromRedis(string  $bucket , array  $bucketTags, string $requestSubPath){
-
-        $strTags = implode("\",\"",$bucketTags);
-        $strTags = "[\"$strTags\"]";
-        $requestBasePath = config('constants.TAG_API_URL') . "tags/";
-        $bucketRequestPath = $requestBasePath . $bucket . "?tags=".$strTags. $requestSubPath;
-        $response = $this->sendRequest($bucketRequestPath, "GET");
-        if ($response["statusCode"] == 200) {
-            $result = json_decode($response["result"]);
-            $total_items_db = $result->data->total_items_db;
-            $arrayOfId = [];
-            foreach ($result->data->items as $item) {
-                array_push($arrayOfId, $item->id);
-            }
-            return [
-                $total_items_db,
-                $arrayOfId
-            ];
-        }
-
-
-    }
-
-    private function getPartialSearchFromIds(Request $request, $query, string $itemType, int $perPage, int $total_items_db,string $pageName){
-        $options = [
-            "pageName" => $pageName
-        ];
-        $query = new LengthAwarePaginator(
-            $query,
-            $total_items_db,
-            $perPage,
-            null  ,
-            $options
-        );
-        switch ($itemType)
-        {
-            case "video":
-                $query->load('files');
-                break;
-            case "pamphlet":
-            case "article":
-                break;
-            case "contentset":
-                $query->load('educationalcontents');
-                break;
-            case "product":
-                break;
-        }
-        $partialSearch = View::make(
-            'partials.search.'.$itemType,
-            [
-                'items' => $query
-            ]
-        )->render();
-        return $partialSearch;
-    }
-    private function getJsonFromIds(Request $request, $query){
-        return $query;
-    }
-    private function makeJsonForAndroidApp(Collection $items){
-        $items = $items->pop();
-        $key = md5($items->pluck("id")->implode(","));
-        $response = Cache::remember($key,Config::get("constants.CACHE_60"),function () use($items){
-            $response = collect();
-            $items->load('files');
-            foreach ($items as $item){
-                $hq = "";
-                $h240 ="" ;
-                if (isset($item->files)) {
-                    $hq= $item->files->where('pivot.label','hq')->first();
-
-                    if (isset($hq)) {
-                        $hq = $hq->name;
-                        $h240 = $hq;
-                    }
-                }
-
-                if (isset($item->files)) {
-                    $temp = $item->files->where('pivot.label','240p')->first();
-                    if (isset($temp)) {
-                        $h240 = $temp->name;
-                    }
-                }
-
-                $thumbnail = $item->files->where('pivot.label','thumbnail')->first();
-                $contenSets = $item->contentsets->where("pivot.isDefault" , 1)->first();
-                $sessionNumber = $contenSets->pivot->order;
-                $response->push(
-                    [
-                        "videoId" => $item->id,
-                        "name" => $item->getDisplayName(),
-                        "videoDescribe" => $item->description,
-                        "url" => action('EducationalContentController@show',$item),
-                        "videoLink480" => $hq,
-                        "videoLink240" => $h240,
-                        "videoviewcounter" =>"0",
-                        "videoDuration" => 0,
-                        "session" => $sessionNumber."",
-                        "thumbnail" => (isset($thumbnail->name))?$thumbnail->name:""
-                    ]
-                );
-                //dd($response);
-                //return response()->make("ok");
-            }
-            $response->push(json_decode("{}"));
-            return $response;
-        });
-        return $response;
-    }
 
     public function search( Request $request )
     {
-        $itemTypes = $request->get('itemTypes');
-        $tagInput  = $request->get('tags');
-
-        if(isset($itemTypes))
-        {
-            if(!is_array($itemTypes))
-                return $this->response
-                    ->setStatusCode(422)
-                    ->setContent(["message"=>"bad input: itemTypes"]) ;
-            $itemTypes = array_filter($itemTypes);
-        }
-        else
-        {
-            $itemTypes = ["video" , "pamphlet" , "contentset", "product" , "article"];
-        }
-
-        //ToDo: Appropriate error page
-        if (isset($tagInput)) {
-            if(!is_array($tagInput)){
-                return $this->response
-                    ->setStatusCode(422)
-                    ->setContent([
-                        "message"=>"bad input: tags"
-                    ]) ;
-            }
-            $tagInput = array_filter($tagInput);
-        }else{
-            $tagInput = [];
-        }
-        $isApp = ( strlen(strstr($request->header('User-Agent'),"Alaa")) > 0 )? true : false ;
-        $items = collect();
-        if($isApp)
-            $itemPerPage = "200" ;
-        else
-            $itemPerPage = "12" ;
-
-        $paginationSetting = collect([
-            [
-                "itemType"=>"video" ,
-                "pageName" => "videopage",
-                "itemPerPage" => $itemPerPage
-            ],
-            [
-                "itemType"=>"pamphlet" ,
-                "pageName" => "pamphletpage",
-                "itemPerPage" => $itemPerPage
-            ],
-            [
-                "itemType"=>"article" ,
-                "pageName" => "articlepage",
-                "itemPerPage" => $itemPerPage
-            ],
-            [
-                "itemType"=>"contentset" ,
-                "pageName" => "contentsetpage",
-                "itemPerPage" => $itemPerPage
-            ]
-        ]);
-        foreach ($itemTypes as $itemType)
-        {
-            [
-                $requestSubPath,
-                $bucket,
-                $itemTypeTag,
-                $perPage,
-                $pageName
-            ] = $this->getRedisRequestSubPath($request,$itemType,$paginationSetting);
-
-            $bucketTags = $tagInput ;
-            try {
-                if(!in_array($itemTypeTag , $tagInput)){
-                    array_push($bucketTags, $itemTypeTag);
-                }
-                [
-                    $total_items_db,
-                    $arrayOfId
-                ] = $this->getIdFromRedis($bucket,$bucketTags,$requestSubPath);
-            }
-            catch (\Exception    $e) {
-                $message = "unexpected error";
-                return $this->response
-                    ->setStatusCode(503)
-                    ->setContent([
-                        "message"=>$message ,
-                        "error"=>$e->getMessage() ,
-                        "line"=>$e->getLine() ,
-                        "file"=>$e->getFile()
-                    ]);
-            }
-
-            switch ($itemType)
-            {
-                case "video":
-                case "pamphlet":
-                case "article":
-                    $query = Educationalcontent::whereIn("id",$arrayOfId)
-                        ->active()
-                        ->orderBy("created_at" , "desc")
-                        ->get();
-                    break;
-                case "contentset":
-                    $query = Contentset::whereIn("id",$arrayOfId)
-                        ->where('enable',1)
-                        ->orderBy("created_at" , "desc")
-                        ->get();
-                    break;
-                case "product":
-                    $query = Product::getProducts(0,1)->whereIn("id" , $arrayOfId)
-                        ->orderBy("order")->get();
-                    break;
-                default:
-                    continue 2;
-                    break;
-            }
-            if($isApp){
-                $items->push($this->getJsonFromIds($request, $query));
-            }else {
-                if ($total_items_db > 0)
-                    $partialSearch = $this->getPartialSearchFromIds($request, $query, $itemType, $perPage, $total_items_db, $pageName);
-                else
-                    $partialSearch = null;
-                $items->push([
-                    "type"=>$itemType,
-                    "totalitems"=> $total_items_db,
-                    "view"=>$partialSearch,
-                ]);
-            }
-
-        }
-        if($isApp){
-            $response = $this->makeJsonForAndroidApp($items);
-            return response()->json($response,200);
-        }
-
-//        $tagLabels = View::make(
-//            'partials.search.tagLabel',
-//            [
-//                'tags' => $tagInput,
-//                "spanClass"=>"portlet-tag"
-//            ]
-//        )->render();
-
-        /**
-         * Page inputs
-         */
-        $totalTags = array();
-        $majorCollection = collect([
-            [
-                "name"=>"همه رشته ها" ,
-                "description"=>""
-            ]
-        ]);
-        $majorCollection = $majorCollection->merge(Major::all());
-        $majorLesson = collect();
-        $defaultLesson = [];
-        foreach ($majorCollection as $major)
-        {
-            $lessons = collect([]);
-            switch ($major["name"])
-            {
-                case "همه رشته ها":
-                    $lessons= $lessons->merge(collect([
-                        ["value"=>"", "initialIndex"=>"همه دروس"] ,
-                        ["value"=>"مشاوره", "index"=>"مشاوره"] ,
-                        ["value"=>"دیفرانسیل", "index"=>"دیفرانسیل"] ,
-                        ["value"=>"تحلیلی", "index"=>"تحلیلی"] ,
-                        ["value"=>"گسسته", "index"=>"گسسته"] ,
-                        ["value"=>"حسابان", "index"=>"حسابان"] ,
-                        ["value"=>"جبر_و_احتمال", "index"=>"جبر و احتمال"] ,
-                        ["value"=>"ریاضی_پایه", "index"=>"ریاضی پایه"] ,
-                        ["value"=>"هندسه_پایه", "index"=>"هندسه پایه"] ,
-                        ["value"=>"فیزیک", "index"=>"فیزیک"] ,
-                        ["value"=>"شیمی", "index"=>"شیمی" ],
-                        ["value"=>"عربی", "index"=>"عربی" ],
-                        ["value"=>"زبان_و_ادبیات_فارسی", "index"=>"زبان و ادبیات فارسی" ],
-                        ["value"=>"دین_و_زندگی", "index"=>"دین و زندگی" ],
-                        ["value"=>"زبان_انگلیسی", "index"=>"زبان انگلیسی" ],
-                        ["value"=>"آمار_و_مدلسازی", "index"=>"آمار و مدلسازی"] ,
-                        ["value"=>"زیست_شناسی", "index"=>"زیست شناسی"] ,
-                        ["value"=>"ریاضی_تجربی", "index"=>"ریاضی تجربی"] ,
-                        ["value"=>"ریاضی_انسانی", "index"=>"ریاضی انسانی"] ,
-                        ["value"=>"ریاضی_و_آمار", "index"=>"ریاضی و آمار"] ,
-                        ["value"=>"منطق", "index"=>"منطق"] ,
-                        ["value"=>"اخلاق", "index"=>"اخلاق"] ,
-                        ["value"=>"المپیاد_نجوم", "index"=>"المپیاد نجوم"] ,
-                        ["value"=>"المپیاد_فیزیک", "index"=>"المپیاد فیزیک"] ,
-                    ])->sortBy("index")->values()
-                    );
-                    $defaultLesson = array_merge($defaultLesson , array_intersect( $lessons->pluck("value")->toArray() , $tagInput ))  ;
-                    break ;
-                case "ریاضی":
-                    $lessons= $lessons->merge(collect([
-                        ["value"=>"", "initialIndex"=>"همه دروس"] ,
-                        ["value"=>"مشاوره", "index"=>"مشاوره"] ,
-                        ["value"=>"دیفرانسیل", "index"=>"دیفرانسیل"] ,
-                        ["value"=>"تحلیلی", "index"=>"تحلیلی"] ,
-                        ["value"=>"گسسته", "index"=>"گسسته"] ,
-                        ["value"=>"حسابان", "index"=>"حسابان"] ,
-                        ["value"=>"جبر_و_احتمال", "index"=>"جبر و احتمال"] ,
-                        ["value"=>"ریاضی_پایه", "index"=>"ریاضی پایه"] ,
-                        ["value"=>"هندسه_پایه", "index"=>"هندسه پایه"] ,
-                        ["value"=>"فیزیک", "index"=>"فیزیک"] ,
-                        ["value"=>"شیمی", "index"=>"شیمی" ],
-                        ["value"=>"عربی", "index"=>"عربی" ],
-                        ["value"=>"زبان_و_ادبیات_فارسی", "index"=>"زبان و ادبیات فارسی" ],
-                        ["value"=>"دین_و_زندگی", "index"=>"دین و زندگی" ],
-                        ["value"=>"زبان_انگلیسی", "index"=>"زبان انگلیسی" ],
-                        ["value"=>"آمار_و_مدلسازی", "index"=>"آمار و مدلسازی"] ,
-                        ["value"=>"المپیاد_نجوم", "index"=>"المپیاد نجوم"] ,
-                        ["value"=>"المپیاد_فیزیک", "index"=>"المپیاد فیزیک"] ,
-                    ])->sortBy("index")->values()
-                    );
-                    $defaultLesson = array_merge($defaultLesson , array_intersect( $lessons->pluck("value")->toArray() , $tagInput ))  ;
-                    break;
-                case "تجربی":
-                    $lessons= $lessons->merge(collect([
-                        ["value"=>"", "initialIndex"=>"همه دروس"] ,
-                        ["value"=>"مشاوره", "index"=>"مشاوره"] ,
-                        ["value"=>"زیست_شناسی", "index"=>"زیست شناسی"] ,
-                        ["value"=>"ریاضی_تجربی", "index"=>"ریاضی تجربی"] ,
-                        ["value"=>"ریاضی_پایه", "index"=>"ریاضی پایه"] ,
-                        ["value"=>"هندسه_پایه", "index"=>"هندسه پایه"] ,
-                        ["value"=>"فیزیک", "index"=>"فیزیک"] ,
-                        ["value"=>"شیمی", "index"=>"شیمی" ],
-                        ["value"=>"عربی", "index"=>"عربی" ],
-                        ["value"=>"زبان_و_ادبیات_فارسی", "index"=>"زبان و ادبیات فارسی" ],
-                        ["value"=>"دین_و_زندگی", "index"=>"دین و زندگی" ],
-                        ["value"=>"زبان_انگلیسی", "index"=>"زبان انگلیسی" ],
-                        ["value"=>"آمار_و_مدلسازی", "index"=>"آمار و مدلسازی"] ,
-                        ["value"=>"المپیاد_نجوم", "index"=>"المپیاد نجوم"] ,
-                        ["value"=>"المپیاد_فیزیک", "index"=>"المپیاد فیزیک"] ,
-                    ])->sortBy("index")->values()
-                    );
-                    $defaultLesson = array_merge($defaultLesson , array_intersect( $lessons->pluck("value")->toArray() , $tagInput ))  ;
-                    break;
-                case "انسانی":
-                    $lessons= $lessons->merge(collect([
-                        ["value"=>"", "initialIndex"=>"همه دروس"] ,
-                        ["value"=>"مشاوره", "index"=>"مشاوره"] ,
-                        ["value"=>"ریاضی_انسانی", "index"=>"ریاضی انسانی"] ,
-                        ["value"=>"ریاضی_و_آمار", "index"=>"ریاضی و آمار"] ,
-                        ["value"=>"منطق", "index"=>"منطق"] ,
-                        ["value"=>"اخلاق", "index"=>"اخلاق"] ,
-                        ["value"=>"عربی", "index"=>"عربی" ],
-                        ["value"=>"زبان_و_ادبیات_فارسی", "index"=>"زبان و ادبیات فارسی" ],
-                        ["value"=>"دین_و_زندگی", "index"=>"دین و زندگی" ],
-                        ["value"=>"زبان_انگلیسی", "index"=>"زبان انگلیسی" ],
-                        ["value"=>"آمار_و_مدلسازی", "index"=>"آمار و مدلسازی"] ,
-                    ])->sortBy("index")->values()
-                    );
-                    $defaultLesson = array_merge($defaultLesson , array_intersect( $lessons->pluck("value")->toArray() , $tagInput ))  ;
-                    break;
-                default:
-                    break;
-            }
-            $totalTags = array_merge($totalTags , $lessons->pluck("value")->toArray()) ;
-            $majorLesson->put( $major["description"], $lessons);
-        }
-        $totalTags = array_merge($totalTags , $majorCollection->pluck("description")->toArray()) ;
-        $majors = $majorCollection->pluck(  "name" , "description")->toArray();
-        $defaultMajor = array_intersect( array_flip($majors) , $tagInput )  ;
-
-        $gradeCollection = Grade::whereNotIN("name" , ['graduated' ,"haftom" ,"hashtom" , "nohom" , "davazdahom" ])->get();
-        $gradeCollection->push(["displayName"=>"اول دبیرستان" , "description"=>"اول_دبیرستان"]);
-        $gradeCollection->push(["displayName"=>"دوم دبیرستان" , "description"=>"دوم_دبیرستان"]);
-        $gradeCollection->push(["displayName"=>"سوم دبیرستان" , "description"=>"سوم_دبیرستان"]);
-        $gradeCollection->push(["displayName"=>"چهارم دبیرستان" , "description"=>"چهارم_دبیرستان"]);
-        $gradeCollection->push(["displayName"=>"المپیاد" , "description"=>"المپیاد_علمی"]);
-        $totalTags = array_merge($totalTags , $gradeCollection->pluck("description")->toArray()) ;
-        $grades = $gradeCollection->pluck('displayName' , 'description')->toArray() ;
-        $defaultGrade = array_intersect( array_flip($grades) , $tagInput )  ;
-//            $grades = array_sort_recursive($grades);
-
-        $lessonTeacher = collect(
-            [
-                "" => collect(
-                    [
-                        ["index"=>"همه دبیرها" , "firstName"=>"" , "value"=>""],
-                        ["lastName"=>"ثابتی" , "firstName"=>"محمد صادق" , "value"=>"محمد_صادق_ثابتی"],
-                        ["lastName"=>"نصیری" , "firstName"=>"سیروس" , "value"=>"سیروس_نصیری"],
-                        ["lastName"=>"شامیزاده" , "firstName"=>"رضا" , "value"=>"رضا_شامیزاده"],
-                        ["lastName"=>"شهریان" , "firstName"=>"محسن" , "value"=>"محسن_شهریان"],
-                        ["lastName"=>"مؤذنی پور", "firstName"=>"بهمن" , "value"=>"بهمن_مؤذنی_پور"],
-                        ["lastName"=>"معینی" , "firstName"=>"سروش" , "value"=>"سروش_معینی"],
-                        ["lastName"=>"شاه محمدی" , "firstName"=>"" , "value"=>"شاه_محمدی"],
-                        ["lastName"=>"حسینی فرد" , "firstName"=>"محمد رضا" , "value"=>"محمد_رضا_حسینی_فرد"],
-                        ["lastName"=>"کبریایی" , "firstName"=>"وحید" , "value"=>"وحید_کبریایی"],
-                        ["lastName"=>"مرصعی" , "firstName"=>"حسن" , "value"=>"حسن_مرصعی"],
-                        ["lastName"=>"مقصودی" , "firstName"=>"محمدرضا" , "value"=>"محمدرضا_مقصودی"],
-                        ["lastName"=>"رحیمی", "firstName"=>"شهروز" , "value"=>"شهروز_رحیمی"],
-                        ["lastName"=>"کرد", "firstName"=>"حسین" , "value"=>"حسین_کرد"],
-                        ["lastName"=>"امینی راد", "firstName"=>"مهدی" , "value"=>"مهدی_امینی_راد"],
-                        ["lastName"=>"نایب کبیر", "firstName"=>"جواد" , "value"=>"جواد_نایب_کبیر"],
-                        ["lastName"=>"نباخته", "firstName"=>"محمدامین" , "value"=>"محمدامین_نباخته"],
-                        ["lastName"=>"صدری" , "firstName"=>"علی", "value"=>"علی_صدری"],
-                        ["lastName"=>"محمد زاده", "firstName"=>"خسرو" , "value"=>"خسرو_محمد_زاده"],
-                        ["lastName"=>"علیمرادی", "firstName"=>"پدرام" , "value"=>"پدرام_علیمرادی"],
-                        ["lastName"=>"ناصح زاده", "firstName"=>"میلاد" , "value"=>"میلاد_ناصح_زاده"],
-                        ["lastName"=>"جلادتی", "firstName"=>"مهدی" , "value"=>"مهدی_جلادتی"],
-                        ["lastName"=>"ناصر شریعت" , "firstName"=>"مهدی", "value"=>"مهدی_ناصر_شریعت"],
-                        ["lastName"=>"تاج بخش", "firstName"=>"عمار" , "value"=>"عمار_تاج_بخش"],
-                        ["lastName"=>"حشمتی" , "firstName"=>"ناصر", "value"=>"ناصر_حشمتی"],
-                        ["lastName"=>"آهویی" , "firstName"=>"محسن", "value"=>"محسن_آهویی"],
-                        ["lastName"=>"رنجبرزاده", "firstName"=>"جعفر" , "value"=>"جعفر_رنجبرزاده"],
-                        ["lastName"=>"آقاجانی", "firstName"=>"محمد رضا" , "value"=>"محمد_رضا_آقاجانی"],
-                        ["lastName"=>"صنیعی طهرانی", "firstName"=>"مهدی" , "value"=>"مهدی_صنیعی_طهرانی"],
-                        ["lastName"=>"حسین انوشه", "firstName"=>"محمد" , "value"=>"محمد_حسین_انوشه"],
-                        ["lastName"=>"حسین شکیباییان" , "firstName"=>"محمد", "value"=>"محمد_حسین_شکیباییان"],
-                        ["lastName"=>"پویان نظر" , "firstName"=>"حامد", "value"=>"حامد_پویان_نظر"],
-                        ["lastName"=>"حاجی سلیمانی", "firstName"=>"روح الله" , "value"=>"روح_الله_حاجی_سلیمانی"],
-                        ["lastName"=>"معینی" , "firstName"=>"محسن", "value"=>"محسن_معینی"],
-                        ["lastName"=>"جعفری" , "firstName"=>"", "value"=>"جعفری"],
-                        ["lastName"=>"طلوعی" , "firstName"=>"پیمان", "value"=>"پیمان_طلوعی"],
-                        ["lastName"=>"فدایی فرد" , "firstName"=>"حمید", "value"=>"حمید_فدایی_فرد"],
-                        ["lastName"=>"رمضانی", "firstName"=>"علیرضا" , "value"=>"علیرضا_رمضانی"],
-                        ["lastName"=>"داداشی", "firstName"=>"فرشید" , "value"=>"فرشید_داداشی"],
-                        ["lastName"=>"کازرانیان", "firstName"=>"" , "value"=>"کازرانیان"],
-                        ["lastName"=>"نادریان", "firstName"=>"" , "value"=>"نادریان"],
-                        ["lastName"=>"جهانبخش", "firstName"=>"" , "value"=>"جهانبخش"],
-                        ["lastName"=>"عزتی", "firstName"=>"علی اکبر" , "value"=>"علی_اکبر_عزتی"],
-                        ["lastName"=>"فراهانی" , "firstName"=>"کیاوش", "value"=>"کیاوش_فراهانی"],
-                        ["lastName"=>"درویش", "firstName"=>"" , "value"=>"درویش"],
-                        ["lastName"=>"تفتی", "firstName"=>"مهدی" , "value"=>"مهدی_تفتی"],
-                        ["lastName"=>"سبطی" , "firstName"=>"هامون", "value"=>"هامون_سبطی"],
-                        ["lastName"=>"راوش", "firstName"=>"داریوش" , "value"=>"داریوش_راوش"],
-                        ["lastName"=>"مرادی", "firstName"=>"عبدالرضا" , "value"=>"عبدالرضا_مرادی"],
-                        ["lastName"=>"صادقی", "firstName"=>"محمد" , "value"=>"محمد_صادقی"],
-                        ["lastName"=>"کاظمی", "firstName"=>"کاظم" , "value"=>"کاظم_کاظمی"],
-                        ["lastName"=>"حسین خانی", "firstName"=>"میثم" , "value"=>"میثم__حسین_خانی"],
-                        ["lastName"=>"امینی راد", "firstName"=>"محمد علی" , "value"=>"محمد_علی_امینی_راد"],
-                        ["lastName"=>"پازوکی" , "firstName"=>"محمد", "value"=>"محمد_پازوکی"],
-                        ["lastName"=>"راستی بروجنی", "firstName"=>"عباس" , "value"=>"عباس_راستی_بروجنی"],
-                        ["lastName"=>"جعفری", "firstName"=>"ابوالفضل" , "value"=>"ابوالفضل_جعفری"],
-                        ["lastName"=>"موقاری" , "firstName"=>"جلال", "value"=>"جلال_موقاری"],
-                        ["lastName"=>"رحیمی"  , "firstName"=>"پوریا", "value"=>"پوریا_رحیمی"],
-                        ["lastName"=>"حدادی" , "firstName"=>"مسعود", "value"=>"مسعود_حدادی"],
-                        ["lastName"=>"ارشی", "firstName"=>"" , "value"=>"ارشی"],
-                        ["lastName"=>"آقاجانی", "firstName"=>"رضا" , "value"=>"رضا_آقاجانی"],
-                        ["lastName"=>"جلالی", "firstName"=>"سید حسام الدین" , "value"=>"سید_حسام_الدین_جلالی"],
-                        ["lastName"=>"بهمند" , "firstName"=>"یاشار", "value"=>"یاشار_بهمند"],
-                        ["lastName"=>"جعفری نژاد" , "firstName"=>"مصطفی", "value"=>"مصطفی_جعفری_نژاد"],
-                        ["lastName"=>"زاهدی", "firstName"=>"امید" , "value"=>"امید_زاهدی"],
-                    ]
-                )->sortBy("lastName")->values(),
-                "دیفرانسیل" => collect([
-                    ["index"=>"همه دبیرها" , "firstName"=>"" , "value"=>""],
-                    ["lastName"=>"ثابتی" , "firstName"=>"محمد صادق", "value"=>"محمد_صادق_ثابتی"],
-                    ["lastName"=>"شامیزاده" , "firstName"=>"رضا", "value"=>"رضا_شامیزاده"],
-                    ["lastName"=>"شهریان" , "firstName"=>"محسن", "value"=>"محسن_شهریان"],
-                    ["lastName"=>"نصیری" , "firstName"=>"سیروس" , "value"=>"سیروس_نصیری"],
-                ])->sortBy("lastName")->values(),
-                "گسسته" => collect([
-                    ["index"=>"همه دبیرها" , "firstName"=>"" , "value"=>""],
-                    ["lastName"=>"شامیزاده" , "firstName"=>"رضا", "value"=>"رضا_شامیزاده"],
-                    ["lastName"=>"مؤذنی پور" , "firstName"=>"بهمن", "value"=>"بهمن_مؤذنی_پور"],
-                    ["lastName"=>"معینی" , "firstName"=>"سروش", "value"=>"سروش_معینی"],
-                    ["lastName"=>"محمدی" , "firstName"=>"شاه", "value"=>"شاه_محمدی"],
-                ])->sortBy("lastName")->values(),
-                "تحلیلی" => collect([
-                    ["index"=>"همه دبیرها" , "firstName"=>"" , "value"=>""],
-                    ["lastName"=>"شامیزاده", "firstName"=>"رضا" , "value"=>"رضا_شامیزاده"],
-                    ["lastName"=>"ثابتی" , "firstName"=>"محمد صادق", "value"=>"محمد_صادق_ثابتی"],
-                    ["lastName"=>"حسینی فرد" , "firstName"=>"محمد رضا", "value"=>"محمد_رضا_حسینی_فرد"],
-                ])->sortBy("lastName")->values(),
-                "هندسه_پایه" => collect([
-                    ["index"=>"همه دبیرها" , "firstName"=>"" , "value"=>""],
-                    ["lastName"=>"کبریایی" , "firstName"=>"وحید", "value"=>"وحید_کبریایی"],
-                    ["lastName"=>"شامیزاده" , "firstName"=>"رضا", "value"=>"رضا_شامیزاده"],
-                    ["lastName"=>"حسینی فرد", "firstName"=>"محمد رضا" , "value"=>"محمد_رضا_حسینی_فرد"],
-                    ["lastName"=>"مرصعی" , "firstName"=>"حسن", "value"=>"حسن_مرصعی"],
-                ])->sortBy("lastName")->values(),
-                "حسابان" => collect([
-                    ["index"=>"همه دبیرها" , "firstName"=>"" , "value"=>""],
-                    ["lastName"=>"ثابتی", "firstName"=>"محمد صادق" , "value"=>"محمد_صادق_ثابتی"],
-                    ["lastName"=>"مقصودی" , "firstName"=>"محمدرضا", "value"=>"محمدرضا_مقصودی"],
-                    ["lastName"=>"رحیمی" , "firstName"=>"شهروز", "value"=>"شهروز_رحیمی"],
-                ])->sortBy("lastName")->values(),
-                "جبر_و_احتمال" => collect([
-                    ["index"=>"همه دبیرها" , "firstName"=>"" , "value"=>""],
-                    ["lastName"=>"کرد" , "firstName"=>"حسین", "value"=>"حسین_کرد"],
-                    ["lastName"=>"شامیزاده", "firstName"=>"رضا" , "value"=>"رضا_شامیزاده"],
-                ])->sortBy("lastName")->values(),
-                "ریاضی_پایه" => collect([
-                    ["index"=>"همه دبیرها" , "firstName"=>"" , "value"=>""],
-                    ["lastName"=>"شامیزاده" , "firstName"=>"رضا", "value"=>"رضا_شامیزاده"],
-                    ["lastName"=>"امینی راد" , "firstName"=>"مهدی", "value"=>"مهدی_امینی_راد"],
-                    ["lastName"=>"نایب کبیر" , "firstName"=>"جواد", "value"=>"جواد_نایب_کبیر"],
-                    ["lastName"=>"شهریان" , "firstName"=>"محسن", "value"=>"محسن_شهریان"],
-                    ["lastName"=>"مقصودی", "firstName"=>"محمدرضا" , "value"=>"محمدرضا_مقصودی"],
-                ])->sortBy("lastName")->values(),
-                "ریاضی_تجربی" => collect([
-                    ["index"=>"همه دبیرها" , "firstName"=>"" , "value"=>""],
-                    ["lastName"=>"شامیزاده" , "firstName"=>"رضا", "value"=>"رضا_شامیزاده"],
-                    ["lastName"=>"امینی راد" , "firstName"=>"مهدی", "value"=>"مهدی_امینی_راد"],
-                    ["lastName"=>"نباخته" , "firstName"=>"محمدامین", "value"=>"محمدامین_نباخته"],
-                    ["lastName"=>"حسینی فرد" , "firstName"=>"محمد رضا", "value"=>"محمد_رضا_حسینی_فرد"],
-                    ["lastName"=>"صدری" , "firstName"=>"علی", "value"=>"علی_صدری"],
-                ])->sortBy("lastName")->values(),
-                "ریاضی_انسانی" => collect([
-                    ["index"=>"همه دبیرها" , "firstName"=>"" , "value"=>""],
-                    ["lastName"=>"محمد زاده" , "firstName"=>"خسرو" , "value"=>"خسرو_محمد_زاده"],
-                    ["lastName"=>"امینی راد" , "firstName"=>"مهدی", "value"=>"مهدی_امینی_راد"],
-                ])->sortBy("lastName"),
-                "عربی" => collect([
-                    ["index"=>"همه دبیرها" , "firstName"=>"" , "value"=>""],
-                    ["lastName"=>"علیمرادی" , "firstName"=>"پدرام", "value"=>"پدرام_علیمرادی"],
-                    ["lastName"=>"ناصح زاده" , "firstName"=>"میلاد", "value"=>"میلاد_ناصح_زاده"],
-                    ["lastName"=>"جلادتی" , "firstName"=>"مهدی", "value"=>"مهدی_جلادتی"],
-                    ["lastName"=>"ناصر شریعت" , "firstName"=>"مهدی", "value"=>"مهدی_ناصر_شریعت"],
-                    ["lastName"=>"تاج بخش" , "firstName"=>"عمار", "value"=>"عمار_تاج_بخش"],
-                    ["lastName"=>"حشمتی" , "firstName"=>"ناصر", "value"=>"ناصر_حشمتی"],
-                    ["lastName"=>"آهویی" , "firstName"=>"محسن", "value"=>"محسن_آهویی"],
-                    ["lastName"=>"رنجبرزاده", "firstName"=>"جعفر" , "value"=>"جعفر_رنجبرزاده"],
-                ])->sortBy("lastName")->values(),
-                "شیمی" => collect([
-                    ["index"=>"همه دبیرها" , "firstName"=>"" , "value"=>""],
-                    ["lastName"=>"آقاجانی"  , "firstName"=>"محمد رضا", "value"=>"محمد_رضا_آقاجانی"],
-                    ["lastName"=>"طهرانی"  , "firstName"=>"مهدی صنیعی", "value"=>"مهدی_صنیعی_طهرانی"],
-                    ["lastName"=>"انوشه"  , "firstName"=>"محمد حسین", "value"=>"محمد_حسین_انوشه"],
-                    ["lastName"=>"شکیباییان"  , "firstName"=>"محمد حسین ", "value"=>"محمد_حسین_شکیباییان"],
-                    ["lastName"=>"پویان نظر"  , "firstName"=>"حامد ", "value"=>"حامد_پویان_نظر"],
-                    ["lastName"=>"حاجی سلیمانی"  , "firstName"=>"روح الله ", "value"=>"روح_الله_حاجی_سلیمانی"],
-                    ["lastName"=>"معینی"  , "firstName"=>"محسن ", "value"=>"محسن_معینی"],
-                    ["lastName"=>"جعفری"  , "firstName"=>"", "value"=>"جعفری"],
-                ])->sortBy("lastName")->values(),
-                "فیزیک" =>collect( [
-                    ["index"=>"همه دبیرها" , "firstName"=>"" , "value"=>""],
-                    ["lastName"=>"طلوعی"  , "firstName"=>"پیمان", "value"=>"پیمان_طلوعی"],
-                    ["lastName"=>"فدایی فرد"  , "firstName"=>"حمید", "value"=>"حمید_فدایی_فرد"],
-                    ["lastName"=>"رمضانی"  , "firstName"=>"علیرضا", "value"=>"علیرضا_رمضانی"],
-                    ["lastName"=>"داداشی"  , "firstName"=>"فرشید", "value"=>"فرشید_داداشی"],
-                    ["lastName"=>"کازرانیان"  , "firstName"=>"", "value"=>"کازرانیان"],
-                    ["lastName"=>"نادریان"  , "firstName"=>"", "value"=>"نادریان"],
-                    ["lastName"=>"جهانبخش"  , "firstName"=>"", "value"=>"جهانبخش"],
-                ])->sortBy("lastName")->values(),
-                "زبان_انگلیسی" => collect([
-                    ["index"=>"همه دبیرها" , "firstName"=>"" , "value"=>""],
-                    ["lastName"=>"عزتی", "firstName"=>"علی اکبر" , "value"=>"علی_اکبر_عزتی"],
-                    ["lastName"=>"فراهانی" , "firstName"=>"کیاوش", "value"=>"کیاوش_فراهانی"],
-                    ["lastName"=>"درویش", "firstName"=>"" , "value"=>"درویش"],
-                ])->sortBy("lastName")->values(),
-                "دین_و_زندگی" => collect([
-                    ["index"=>"همه دبیرها" , "firstName"=>"" , "value"=>""],
-                    ["lastName"=>"تفتی" , "firstName"=>"مهدی", "value"=>"مهدی_تفتی"],
-                    ["lastName"=>"رنجبرزاده", "firstName"=>"جعفر" , "value"=>"جعفر_رنجبرزاده"],
-                ])->sortBy("lastName")->values(),
-                "زبان_و_ادبیات_فارسی" => collect([
-                    ["index"=>"همه دبیرها" , "firstName"=>"" , "value"=>""],
-                    ["lastName"=>"سبطی" , "firstName"=>"هامون" , "value"=>"هامون_سبطی"],
-                    ["lastName"=>"راوش" , "firstName"=>"داریوش" , "value"=>"داریوش_راوش"],
-                    ["lastName"=>"مرادی" , "firstName"=>"عبدالرضا" , "value"=>"عبدالرضا_مرادی"],
-                    ["lastName"=>"صادقی", "firstName"=>"محمد"  , "value"=>"محمد_صادقی"],
-                    ["lastName"=>"کاظمی" , "firstName"=>"کاظم" , "value"=>"کاظم_کاظمی"],
-                    ["lastName"=>"خانی حسین" , "firstName"=>"میثم" , "value"=>"میثم__حسین_خانی"],
-                ])->sortBy("lastName")->values(),
-                "آمار_و_مدلسازی" => collect([
-                    ["index"=>"همه دبیرها" , "firstName"=>"" , "value"=>""],
-                    ["lastName"=>"شامیزاده" , "firstName"=>"رضا", "value"=>"رضا_شامیزاده"],
-                    ["lastName"=>"کبریایی" , "firstName"=>"وحید", "value"=>"وحید_کبریایی"],
-                    ["lastName"=>"امینی راد" , "firstName"=>"مهدی", "value"=>"مهدی_امینی_راد"],
-                ])->sortBy("lastName")->values(),
-                "زیست_شناسی" => collect([
-                    ["index"=>"همه دبیرها" , "firstName"=>"" , "value"=>""],
-                    ["lastName"=>"امینی راد"  , "firstName"=>"محمد علی", "value"=>"محمد_علی_امینی_راد"],
-                    ["lastName"=>"پازوکی"  , "firstName"=>"محمد", "value"=>"محمد_پازوکی"],
-                    ["lastName"=>"راستی بروجنی"  , "firstName"=>"عباس", "value"=>"عباس_راستی_بروجنی"],
-                    ["lastName"=>"جعفری"  , "firstName"=>"ابوالفضل", "value"=>"ابوالفضل_جعفری"],
-                    ["lastName"=>"موقاری"  , "firstName"=>"جلال", "value"=>"جلال_موقاری"],
-                    ["lastName"=>"رحیمی"  , "firstName"=>"پوریا", "value"=>"پوریا_رحیمی"],
-                    ["lastName"=>"حدادی"  , "firstName"=>"مسعود", "value"=>"مسعود_حدادی"],
-                    ["lastName"=>"ارشی"  , "firstName"=>"", "value"=>"ارشی"],
-                ])->sortBy("lastName")->values(),
-                "ریاضی_و_آمار" => collect([
-                    ["index"=>"همه دبیرها" , "firstName"=>"" , "value"=>""],
-                    ["lastName"=>"امینی راد", "firstName"=>"مهدی" , "value"=>"مهدی_امینی_راد"],
-                ])->sortBy("lastName")->values(),
-                "منطق" => collect([
-                    ["index"=>"همه دبیرها" , "firstName"=>"" , "value"=>""],
-                    ["lastName"=>"آقاجانی" , "firstName"=>"رضا", "value"=>"رضا_آقاجانی"],
-                    ["lastName"=>"الدین جلالی" , "firstName"=>"سید حسام", "value"=>"سید_حسام_الدین_جلالی"],
-                ])->sortBy("lastName")->values(),
-                "المپیاد_فیزیک" => collect([
-                    ["index"=>"همه دبیرها" , "firstName"=>"" , "value"=>""],
-                    ["lastName"=>"جعفری نژاد" , "firstName"=>"مصطفی", "value"=>"مصطفی_جعفری_نژاد"],
-                ])->sortBy("lastName")->values(),
-                "المپیاد_نجوم" => collect([
-                    ["index"=>"همه دبیرها" , "firstName"=>"" , "value"=>""],
-                    ["lastName"=>"بهمند" , "firstName"=>"یاشار", "value"=>"یاشار_بهمند"],
-                ])->sortBy("lastName")->values(),
-                "مشاوره" => collect([
-                    ["index"=>"همه دبیرها" , "firstName"=>"" , "value"=>""],
-                    ["lastName"=>"امینی راد" , "firstName"=>"محمد علی", "value"=>"محمد_علی_امینی_راد"],
-                    ["lastName"=>"زاهدی", "firstName"=>"امید" , "value"=>"امید_زاهدی"],
-                ])->sortBy("lastName")->values(),
-            ]
-        );
-        $teacherTags =  [];
-        foreach ($lessonTeacher as $item)
-        {
-            foreach ($item as $value)
-            {
-                array_push($teacherTags , $value["value"]);
-            }
-        }
-        $totalTags = array_merge($totalTags , $teacherTags) ;
-        $defaultTeacher = array_intersect( $teacherTags , $tagInput )  ;
-
-
-        $extraTagDiff  = array_diff($tagInput , $totalTags );
-        $extraTagArray = [];
-        foreach ($extraTagDiff as $item)
-        {
-            $key = array_search($item , $tagInput);
-            $extraTagArray = array_add($extraTagArray , $key , $item) ;
-        }
-
-        if(!is_null(array_last($defaultMajor)))
-            $defaultMajor = array_last($defaultMajor);
-        else
-            $defaultMajor = "";
-
-        if(!is_null(array_last($defaultGrade)))
-            $defaultGrade = array_last($defaultGrade);
-        else
-            $defaultGrade = "";
-
-        if(!is_null(array_last($defaultLesson)))
-            $defaultLesson = array_last($defaultLesson);
-        else
-            $defaultLesson = "";
-
-        if(!is_null(array_last($defaultTeacher)))
-            $defaultTeacher = array_last($defaultTeacher);
-        else
-            $defaultTeacher = "";
-        /**
-         * End of page inputs
-         */
-
-        if(request()->ajax())
-        {
-            return $this->response
-                ->setStatusCode(200)
-                ->setContent([
-                    "items"=>$items ,
-                    "itemTypes"=>$itemTypes ,
-                    "tagLabels" => $tagInput ,
-                    "extraTags" => $extraTagArray
-                ]);
-        }
-        else
-        {
-
-            $sideBarMode = "closed";
-//            $ads1 = [
-//                //DINI SEBTI
-//                'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-1.jpg' => 'https://sanatisharif.ir/landing/4',
-//            ];
-//            $ads2 = [
-//                //DINI SEBTI
-//                'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-2.jpg' => 'https://sanatisharif.ir/landing/4',
-//                'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-3.jpg' => 'https://sanatisharif.ir/landing/4',
-//            ];
-            $ads1 = [];
-            $ads2 = [];
-            return view("pages.search" , compact("items" ,"itemTypes" ,"tagArray" , "extraTagArray",
-                "majors" , "grades"  , "defaultLesson" , "sideBarMode" , "majorLesson" , "lessonTeacher" , "defaultTeacher"
-                , "ads1" , "ads2" , 'tagInput' ,'defaultGrade' , 'defaultMajor' ));
-        }
+        dd("ContentController@index");
     }
 
     /**
@@ -940,18 +241,18 @@ class HomeController extends Controller
 //        $currentDay = $todayDate[2];
 //        $currentMonth = $todayDate[1];
 //        $currentYear = $todayDate[0];
-//        $educationalContents = Educationalcontent::enable()
+//        $contents = Content::enable()
 //            ->valid()
 //            ->orderBy("validSince", "DESC")
 //            ->take(10)
 //            ->get();
-//        $educationalContentCollection = collect();
-//        foreach ($educationalContents as $educationalContent) {
-//            $educationalContentCollection
+//        $contentCollection = collect();
+//        foreach ($contents as $content) {
+//            $contentCollection
 //                ->push([
-//                    "id" => $educationalContent->id,
-//                    "displayName" => $educationalContent->getDisplayName(),
-//                    "validSince_Jalali" => explode(" ", $educationalContent->validSince_Jalali())[0]
+//                    "id" => $content->id,
+//                    "displayName" => $content->display_name,
+//                    "validSince_Jalali" => explode(" ", $content->validSince_Jalali())[0]
 //                ]);
 //        }
 
@@ -1335,7 +636,7 @@ class HomeController extends Controller
         $userId = $request->get("user");
         $user = User::FindOrFail($userId);
         $parentMajor = $request->get("parentMajor");
-        $majorCodes = json_encode($request->get("majorCodes"));
+        $majorCodes = json_encode($request->get("majorCodes"), JSON_UNESCAPED_UNICODE);
 
         Storage::disk('entekhabReshte')->delete($userId . '-' . $parentMajor . '.txt');
         Storage::disk('entekhabReshte')->put($userId . "-" . $parentMajor . ".txt", $majorCodes);
@@ -1688,11 +989,38 @@ class HomeController extends Controller
         }
     }
 
-    function download()
+    /**
+     * @param $data
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function newDownload($data){
+        if(isset($data))
+        {
+            try {
+                $data =(array) decrypt($data);
+            }
+            catch (DecryptException $e)
+            {
+                abort(403);
+            }
+            $url = $data["url"];
+            $contentId = $data["data"]["content_id"];
+            if(Auth::check())
+            {
+                $user = auth()->user();
+                $user->hasContent($contentId);
+                return redirect($url) ;
+            }
+        }
+        abort(403);
+    }
+
+    function download(Request $request)
     {
-        $fileName = Input::get('fileName');
-        $contentType = Input::get('content');
+        $fileName = $request->get("fileName");
+        $contentType = $request->get("content");
         $user = Auth::user();
+
         switch ($contentType) {
             case "عکس پروفایل":
                 $diskName = Config::get('constants.DISK1');
@@ -1900,19 +1228,6 @@ class HomeController extends Controller
         else
         {
             if ( isset($diskName) && Storage::disk($diskName)->exists($fileName)) {
-//            Other download method :  problem => it changes the file name to download
-//            $file = Storage::disk($diskName)->get($fileName);
-//            return (new Response($file, 200))
-//                ->header('Content-Type', $contentMime)
-//                ->header('Content-Disposition'  , 'attachment')
-//                ->header('filename',$fileName);
-
-//                $filePrefixPath =Storage::drive($diskName)->getAdapter()->getPathPrefix() ;
-//                if(isset($filePrefixPath))
-//                    return response()->download(Storage::drive($diskName)->path($fileName));
-//                else
-//                    return response()->download(Storage::drive($diskName)->getAdapter()->getRoot() . $fileName);
-//
                 $diskAdapter = Storage::disk($diskName)->getAdapter();
                 $diskType = class_basename($diskAdapter);
                 switch ($diskType) {
@@ -2277,15 +1592,10 @@ class HomeController extends Controller
 
         }
 
-        $userCanSeeCounter = false ;
-        if(Auth::check())
-        {
+        if (Auth::check()) {
             $user = Auth::user();
-            $baseUrl = url("/");
-            $contentPath = str_replace($baseUrl , "" , action("HomeController@donate"));
-            $seenCount = $this->userSeen($contentPath);
-            if($user->hasRole("admin"))
-                $userCanSeeCounter = true ;
+            $contentPath = "/" . $request->path();
+            $this->userSeen($contentPath, $user);
         }
 
         /** END **/
@@ -2452,10 +1762,11 @@ class HomeController extends Controller
         $filePath = $request->header("X-File-Name");
         $originalFileName = $request->header("X-Dataname");
         $filePrefix="";
-        $setId = $request->header("X-Dataid");
+        $contentSetId = $request->header("X-Dataid");
         $disk = $request->header("X-Datatype");
         $done = false;
 
+//        dd($request->headers->all());
         try {
             $dirname = pathinfo($filePath, PATHINFO_DIRNAME);
             $ext = pathinfo($originalFileName, PATHINFO_EXTENSION);
@@ -2463,10 +1774,15 @@ class HomeController extends Controller
 
             $newFileNameDir = $dirname . '/' . $fileName;
 
+//            dd([
+//                "filePath"=>$filePath,
+//                "newFileNameDir"=>$newFileNameDir
+//            ]);
             if (File::exists($newFileNameDir)) {
                 File::delete($newFileNameDir);
             }
             File::move($filePath, $newFileNameDir);
+
 
             if (strcmp($disk , "product") == 0) {
                 if($ext == "mp4")
@@ -2480,7 +1796,7 @@ class HomeController extends Controller
                     'username' => config('constants.SFTP_USERNAME'),
                     'password' => config('constants.SFTP_PASSSWORD'),
                     'privateKey' => config('constants.SFTP_PRIVATE_KEY_PATH'),
-                    'root' =>config('constants.SFTP_ROOT') . '/private/'.$setId.'/',
+                    'root' =>config('constants.SFTP_ROOT') . '/private/'.$contentSetId.'/',
                     'timeout' => config('constants.SFTP_TIMEOUT'),
                     'directoryPerm' => 0755
                 ]);
@@ -2495,10 +1811,10 @@ class HomeController extends Controller
                     $filesystem = $filesystem->get($directory  );
                     $path = $filesystem->getPath();
                     $filesystem->setPath($path."/".$fileName);
-                    if($filesystem->put(File::get($newFileNameDir)))
+                    if($filesystem->put(fopen($newFileNameDir, 'r+')))
                         $done = true;
                 }else{
-                    if($filesystem->put($fileName , File::get($newFileNameDir)))
+                    if($filesystem->put($fileName , fopen($newFileNameDir, 'r+')))
                         $done = true;
                 }
 
@@ -2514,32 +1830,33 @@ class HomeController extends Controller
                     // example:  /alaa_media/cdn/media/203/HD_720p , /alaa_media/cdn/media/thumbnails/203/
                     'root' =>       config("constants.DOWNLOAD_SERVER_ROOT").
                                     config("constants.DOWNLOAD_SERVER_MEDIA_PARTIAL_PATH").
-                                    $setId,
+                                    $contentSetId,
                     'timeout' => config('constants.SFTP_TIMEOUT'),
                     'directoryPerm' => 0755
                 ]);
                 $filesystem = new Filesystem($adapter);
-                if($filesystem->put($originalFileName , File::get($newFileNameDir)))
+                if($filesystem->put($originalFileName , fopen($newFileNameDir, 'r+')))
                 {
                     $done = true;
                     // example:  https://cdn.sanatisharif.ir/media/203/hq/203001dtgr.mp4
                     $fileName = config("constants.DOWNLOAD_SERVER_PROTOCOL").
                                 config("constants.DOWNLOAD_SERVER_NAME").
                                 config("constants.DOWNLOAD_SERVER_MEDIA_PARTIAL_PATH").
-                                $setId.
+                                $contentSetId.
                                 $originalFileName
                                 ;
                 }
             }
             else{
                 $filesystem = Storage::disk($disk . "Sftp");
+//                Storage::putFileAs('photos', new File('/path/to/photo'), 'photo.jpg');
                 if($filesystem->put($fileName, fopen($newFileNameDir, 'r+'))) {
                     $done = true;
                 }
 
             }
             if($done)
-                return $this->response->setStatusCode(200)
+                return $this->response->setStatusCode(Response::HTTP_OK)
                             ->setContent(["fileName"=>$fileName , "prefix"=>$filePrefix]);
             else
                 return $this->response->setStatusCode(503);
@@ -3424,12 +2741,12 @@ class HomeController extends Controller
                     "bucket" => $bucket,
                     "tags" => $tags
                 ];
-                $contentset->tags = json_encode($tagsJson);
+                $contentset->tags = json_encode($tagsJson, JSON_UNESCAPED_UNICODE);
 
                 if($contentset->update())
                 {
                     $params = [
-                        "tags"=> json_encode($contentset->tags->tags) ,
+                        "tags" => json_encode($contentset->tags->tags, JSON_UNESCAPED_UNICODE),
                     ];
                     if(isset($contentset->created_at) && strlen($contentset->created_at) > 0 )
                         $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $contentset->created_at )->timestamp;
@@ -3445,7 +2762,7 @@ class HomeController extends Controller
                     dump("Error on updating #".$contentset->id);
                 }
 
-                $contents = $contentset->educationalcontents;
+                $contents = $contentset->contents;
 
                 foreach ($contents as $content)
                 {
@@ -3456,11 +2773,11 @@ class HomeController extends Controller
                         "bucket" => $bucket,
                         "tags" => $tags
                     ];
-                    $content->tags = json_encode($tagsJson);
+                    $content->tags = json_encode($tagsJson, JSON_UNESCAPED_UNICODE);
                     if($content->update())
                     {
                         $params = [
-                            "tags"=> json_encode($content->tags->tags) ,
+                            "tags" => json_encode($content->tags->tags, JSON_UNESCAPED_UNICODE),
                         ];
                         if(isset($content->created_at) && strlen($content->created_at) > 0 )
                             $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $content->created_at )->timestamp;
@@ -3493,77 +2810,77 @@ class HomeController extends Controller
 
         /**
          * Fixing contentset tags
-
-        if(Input::has("id"))
-        $contentsetId = Input::get("id");
-        else
-        dd("Wring inputs, Please pass id as input");
-
-        if(!is_array($contentsetId))
-        dd("The id input must be an array!");
-        $contentsets = Contentset::whereIn("id" , $contentsetId)->get();
-        dump("number of contentsets:".$contentsets->count());
-        $contentCounter = 0;
-        foreach ($contentsets as $contentset)
-        {
-        $baseTime = Carbon::createFromDate("2017" , "06" , "01" , "Asia/Tehran");
-        $contents = $contentset->educationalcontents->sortBy("pivot.order");
-        $contentCounter += $contents->count();
-        foreach ($contents as $content)
-        {
-        $content->created_at = $baseTime;
-        if($content->update())
-        {
-        if(isset($content->tags))
-        {
-        $params = [
-        "tags"=> json_encode($content->tags->tags) ,
-        ];
-        if(isset($content->created_at) && strlen($content->created_at) > 0 )
-        $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $content->created_at )->timestamp;
-
-        $response =  $this->sendRequest(
-        config("constants.AG_API_URL")."id/content/".$content->id ,
-        "PUT",
-        $params
-        );
-
-        if($response["statusCode"] == 200)
-        {
-        }
-        else
-        {
-        dump("tag request for content id ".$content->id." failed. response : ".$response["statusCode"]);
-        }
-        }
-        else
-        {
-        dump("content id ".$content->id."did not have ant tags!");
-        }
-        }
-        else
-        {
-        dump("content id ".$content->id." was not updated");
-        }
-        $baseTime = $baseTime->addDay();
-        }
-
-        }
-        dump("number of total processed contents: ".$contentCounter);
-        dd("done!");
+ *
+* if(Input::has("id"))
+        * $contentsetId = Input::get("id");
+        * else
+        * dd("Wring inputs, Please pass id as input");
+ *
+* if(!is_array($contentsetId))
+        * dd("The id input must be an array!");
+        * $contentsets = Contentset::whereIn("id" , $contentsetId)->get();
+        * dump("number of contentsets:".$contentsets->count());
+        * $contentCounter = 0;
+        * foreach ($contentsets as $contentset)
+        * {
+        * $baseTime = Carbon::createFromDate("2017" , "06" , "01" , "Asia/Tehran");
+        * $contents = $contentset->contents->sortBy("pivot.order");
+        * $contentCounter += $contents->count();
+        * foreach ($contents as $content)
+        * {
+        * $content->created_at = $baseTime;
+        * if($content->update())
+        * {
+        * if(isset($content->tags))
+         * {
+         * $params = [
+         * "tags"=> json_encode($content->tags->tags,JSON_UNESCAPED_UNICODE ) ,
+         * ];
+         * if(isset($content->created_at) && strlen($content->created_at) > 0 )
+        * $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $content->created_at )->timestamp;
+ *
+* $response =  $this->sendRequest(
+        * config("constants.AG_API_URL")."id/content/".$content->id ,
+        * "PUT",
+        * $params
+        * );
+ *
+* if($response["statusCode"] == 200)
+        * {
+        * }
+        * else
+        * {
+        * dump("tag request for content id ".$content->id." failed. response : ".$response["statusCode"]);
+        * }
+        * }
+        * else
+        * {
+        * dump("content id ".$content->id."did not have ant tags!");
+        * }
+        * }
+        * else
+        * {
+        * dump("content id ".$content->id." was not updated");
+        * }
+        * $baseTime = $baseTime->addDay();
+        * }
+ *
+* }
+        * dump("number of total processed contents: ".$contentCounter);
+        * dd("done!");
          */
 
         /***
-        $contents = Educationalcontent::where("contenttype_id" , 8);
+        $contents = Content::where("contenttype_id" , 8);
         $contentArray = $contents->pluck("id")->toArray();
-        $sanatishRecords = Sanatisharifmerge::whereIn("educationalcontent_id" , $contentArray)->get();
+        $sanatishRecords = Sanatisharifmerge::whereIn("content_id" , $contentArray)->get();
         $contents = $contents->get();
         $successCounter = 0 ;
         $failedCounter = 0 ;
         dump("number of contents: ".$contents->count());
         foreach ($contents as $content)
         {
-        $myRecord =  $sanatishRecords->where("educationalcontent_id" , $content->id)->first();
+        $myRecord =  $sanatishRecords->where("content_id" , $content->id)->first();
         if(isset($myRecord))
         if(isset($myRecord->videoEnable))
         {
@@ -3586,7 +2903,7 @@ class HomeController extends Controller
          */
 
         /**
-        $contents =  Educationalcontent::where("id" , "<" , 158)->get();
+        $contents =  Content::where("id" , "<" , 158)->get();
         dump("number of contents: ".$contents->count());
         $successCounter= 0 ;
         $failedCounter = 0;
@@ -4351,7 +3668,7 @@ class HomeController extends Controller
 
     public function checkDisableContentTagBot()
     {
-        $disableContents = Educationalcontent::where("enable" , 0)->get();
+        $disableContents = Content::where("enable" , 0)->get();
         $counter = 0;
         foreach ($disableContents as $content)
         {
@@ -4380,7 +3697,7 @@ class HomeController extends Controller
             {
                 case "v": //Video
                     $bucket = "content";
-                    $items = Educationalcontent::where("contenttype_id" , 8)->where("enable" , 1);
+                    $items = Content::where("contenttype_id" , 8)->where("enable" , 1);
                     if(Input::has("id"))
                     {
                         $contentId = Input::get("id");
@@ -4576,13 +3893,13 @@ class HomeController extends Controller
                             "bucket" => $bucket,
                             "tags" => $myTags
                         ];
-                        $item->tags = json_encode($tagsJson);
+                        $item->tags = json_encode($tagsJson,JSON_UNESCAPED_UNICODE );
                         $item->update();
                     }
                     break;
                 case "p": //Pamphlet
                     $bucket = "content";
-                    $items = Educationalcontent::where("contenttype_id" , 1)->where("enable" , 1);
+                    $items = Content::where("contenttype_id" , 1)->where("enable" , 1);
                     if(Input::has("id"))
                     {
                         $contentId = Input::get("id");
@@ -4713,13 +4030,13 @@ class HomeController extends Controller
                             "bucket" => $bucket,
                             "tags" => $myTags
                         ];
-                        $item->tags = json_encode($tagsJson);
+                        $item->tags = json_encode($tagsJson,JSON_UNESCAPED_UNICODE );
                         $item->update();
                     }
                     break;
                 case "b": //Book
                     $bucket = "content";
-                    $items = Educationalcontent::where("contenttype_id" , 7)->where("enable" , 1);
+                    $items = Content::where("contenttype_id" , 7)->where("enable" , 1);
                     $items = $items->get();
                     foreach ($items->where("tags" , null) as $item)
                     {
@@ -4740,13 +4057,13 @@ class HomeController extends Controller
                             "bucket" => $bucket,
                             "tags" => $myTags
                         ];
-                        $item->tags = json_encode($tagsJson);
+                        $item->tags = json_encode($tagsJson,JSON_UNESCAPED_UNICODE );
                         $item->update();
                     }
                     break;
                 case "e": //Exam
                     $bucket = "content";
-                    $items = Educationalcontent::where("contenttype_id" , 2)->where("enable" , 1);
+                    $items = Content::where("contenttype_id" , 2)->where("enable" , 1);
                     $items = $items->get();
                     foreach ($items->where("tags" , null) as $item)
                     {
@@ -4801,13 +4118,13 @@ class HomeController extends Controller
                             "bucket" => $bucket,
                             "tags" => $myTags
                         ];
-                        $item->tags = json_encode($tagsJson);
+                        $item->tags = json_encode($tagsJson,JSON_UNESCAPED_UNICODE );
                         $item->update();
                     }
                     break;
                 case "a": //Article
                     $bucket = "content";
-                    $items = Educationalcontent::where("contenttype_id" , 9)->where("enable" , 1);
+                    $items = Content::where("contenttype_id" , 9)->where("enable" , 1);
                     $items = $items->get();
                     foreach ($items->where("tags" , null) as $item)
                     {
@@ -4839,7 +4156,7 @@ class HomeController extends Controller
                             "bucket" => $bucket,
                             "tags" => $myTags
                         ];
-                        $item->tags = json_encode($tagsJson);
+                        $item->tags = json_encode($tagsJson,JSON_UNESCAPED_UNICODE );
                         $item->update();
                     }
                     break;
@@ -4978,7 +4295,7 @@ class HomeController extends Controller
                             "bucket" => $bucket,
                             "tags" => $myTags
                         ];
-                        $item->tags = json_encode($tagsJson);
+                        $item->tags = json_encode($tagsJson,JSON_UNESCAPED_UNICODE );
                         $item->update();
                     }
                     break;
@@ -5012,10 +4329,9 @@ class HomeController extends Controller
                     }
                 }
 
-                if(is_array($itemTagsArray) && !empty($itemTagsArray) && isset($item["id"]))
-                {
+                if(is_array($itemTagsArray) && !empty($itemTagsArray) && isset($item["id"])) {
                     $params = [
-                        "tags"=> json_encode($itemTagsArray) ,
+                        "tags"=> json_encode($itemTagsArray,JSON_UNESCAPED_UNICODE ) ,
                     ];
                     if(isset($item->created_at) && strlen($item->created_at) > 0 )
                         $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $item->created_at )->timestamp;

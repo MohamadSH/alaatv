@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AlterTableEducationalcontentsAddContenttypeId extends Migration
+class AlterTableContentsAddContenttypeId extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class AlterTableEducationalcontentsAddContenttypeId extends Migration
      */
     public function up()
     {
-        Schema::table('educationalcontents', function (Blueprint $table) {
+        Schema::table('contents', function (Blueprint $table) {
             $table->unsignedInteger("contenttype_id")->nullable()->comment("آی دی مشخص کننده نوع محتوا")->after("author_id");
 
             $table->foreign('contenttype_id')
@@ -31,11 +31,11 @@ class AlterTableEducationalcontentsAddContenttypeId extends Migration
      */
     public function down()
     {
-        Schema::table('educationalcontents', function (Blueprint $table)
+        Schema::table('contents', function (Blueprint $table)
         {
-            if (Schema::hasColumn('educationalcontents', 'contenttype_id'))
+            if (Schema::hasColumn('contents', 'contenttype_id'))
             {
-                $table->dropForeign('educationalcontents_contenttype_id_foreign');
+                $table->dropForeign('contents_contenttype_id_foreign');
                 $table->dropColumn('contenttype_id');
             }
         });

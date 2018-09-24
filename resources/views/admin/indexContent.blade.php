@@ -49,14 +49,14 @@
             {{--</div>--}}
 
                 @permission((Config::get('constants.LIST_EDUCATIONAL_CONTENT_ACCESS')))
-                <div class="portlet box red" id="educationalContent-portlet">
-                    <span class="hidden" id="educationalContent-portlet-action">{{action("EducationalContentController@index")}}</span>
+                <div class="portlet box red" id="content-portlet">
+                    <span class="hidden" id="content-portlet-action">{{action("ContentController@index")}}</span>
                     <div class="portlet-title">
                         <div class="caption">
                             <i class="fa fa-cogs"></i>مدیریت محتوای آموزشی </div>
                         <div class="tools">
-                            <img class="hidden" id="educationalContent-portlet-loading" src="{{Config::get('constants.ADMIN_LOADING_BAR_GIF')}}" alt="loading"  style="width: 50px;">
-                            <a href="javascript:;" class="collapse" id="educationalContent-expand"> </a>
+                            <img class="hidden" id="content-portlet-loading" src="{{Config::get('constants.ADMIN_LOADING_BAR_GIF')}}" alt="loading"  style="width: 50px;">
+                            <a href="javascript:;" class="collapse" id="content-expand"> </a>
                             {{--<a href="#portlet-config" data-toggle="modal" class="config"> </a>--}}
                             <a href="javascript:;" class="reload"> </a>
                             <a href="javascript:;" class="remove"> </a>
@@ -71,15 +71,15 @@
 
                                     <div class="btn-group">
                                         @permission((Config::get('constants.INSERT_EDUCATIONAL_CONTENT_ACCESS')))
-{{--                                        <a  class="btn btn-outline red" target="_blank" href="{{action("EducationalContentController@create2")}}"><i class="fa fa-plus"></i> افزودن محتوا </a>--}}
-                                        <a  class="btn btn-outline red" target="_blank" href="{{action("EducationalContentController@create3")}}"><i class="fa fa-plus"></i> افزودن محتوا </a>
-                                        <a  class="btn btn-outline red-flamingo" target="_blank" href="{{action("EducationalContentController@create2")}}"><i class="fa fa-plus"></i> آپلود محتوا </a>
+{{--                                        <a  class="btn btn-outline red" target="_blank" href="{{action("ContentController@create2")}}"><i class="fa fa-plus"></i> افزودن محتوا </a>--}}
+                                        <a  class="btn btn-outline red" target="_blank" href="{{action("ContentController@create3")}}"><i class="fa fa-plus"></i> افزودن محتوا </a>
+                                        <a  class="btn btn-outline red-flamingo" target="_blank" href="{{action("ContentController@create2")}}"><i class="fa fa-plus"></i> آپلود محتوا </a>
                                         @endpermission
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <table class="table table-striped table-bordered table-hover dt-responsive " width="100%" id="educationalContent_table">
+                        <table class="table table-striped table-bordered table-hover dt-responsive " width="100%" id="content_table">
                             <thead>
                             <tr>
                                 <th></th>
@@ -718,8 +718,8 @@
             @endpermission
 
             @permission((Config::get('constants.LIST_EDUCATIONAL_CONTENT_ACCESS')))
-            // $("#educationalContent-portlet .reload").trigger("click");
-            $("#educationalContent-expand").trigger("click");
+            // $("#content-portlet .reload").trigger("click");
+            $("#content-expand").trigger("click");
             @endpermission
 
 
