@@ -105,6 +105,11 @@ class HomeController extends Controller
 
     private static $TAG = HomeController::class;
 
+    public function contentSetListTest(Request $request, Contentset $set){
+        $contents = $set->educationalcontents()->get();
+        return view('listTest',compact('set','contents'));
+    }
+
     public function telgramAgent(Request $request)
     {
         Log::debug($request->headers->all());
@@ -156,6 +161,7 @@ class HomeController extends Controller
         $this->middleware('permission:' . Config::get("constants.LIST_ORDER_ACCESS"), ['only' => 'adminOrder']);
         $this->middleware('permission:' . Config::get("constants.SMS_ADMIN_PANEL_ACCESS"), ['only' => 'adminSMS']);
         $this->middleware('permission:' . Config::get("constants.REPORT_ADMIN_PANEL_ACCESS"), ['only' => 'adminReport']);
+        $this->middleware('permission:' . Config::get("constants.LIST_EDUCATIONAL_CONTENT_ACCESS"), ['only' => 'contentSetListTest']);
         $this->middleware('ability:' . Config::get("constants.ROLE_ADMIN") . ',' . Config::get("constants.TELEMARKETING_PANEL_ACCESS"), ['only' => 'adminTeleMarketing']);
         $this->middleware('role:admin' , ['only' => ['bot' , 'smsBot' , 'checkDisableContentTagBot' , 'tagBot' , 'pointBot' , 'adminLottery' , 'registerUserAndGiveOrderproduct' , 'specialAddUser']]);
         $this->response = new Response();

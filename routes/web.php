@@ -217,6 +217,8 @@ Route::group(['middleware' => 'auth'], function()
 
     Route::get("donate" , "HomeController@donate") ;
     Route::post("donateOrder" , "OrderController@donateOrder") ;
+
+    Route::get('cTest/{set}', "HomeController@contentSetListTest");
 });
 
 Route::resource('product', 'ProductController');
