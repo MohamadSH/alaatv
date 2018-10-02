@@ -8,8 +8,9 @@
 
 namespace App\Classes\Search;
 
-use App\Classes\Search\Filters\Tags;
-use App\Classes\Search\Tag\ContentTagManagerViaApi;
+use App\Classes\Search\{
+    Filters\Tags, Tag\ContentTagManagerViaApi
+};
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Cache;

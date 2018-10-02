@@ -2,15 +2,21 @@
 
 trait CharacterCommon
 {
-    /**
-     * @param $fileName
+    /** Checks whether a string is empty or not
+     * @param $str
      * @return boolean
      */
     public function strIsEmpty($str):bool
     {
         return strlen(preg_replace('/\s+/', '', $str)) == 0 ;
     }
-    public function convertToEnglish($string) {
+
+    /** Converts Persian numbers in a string to English numbers
+     * @param string $string
+     * @return string
+     */
+    public function convertToEnglish($string) : string
+    {
         $newNumbers = range(0, 9);
         // 1. Persian HTML decimal
         $persianDecimal = array('&#1776;', '&#1777;', '&#1778;', '&#1779;', '&#1780;', '&#1781;', '&#1782;', '&#1783;', '&#1784;', '&#1785;');
@@ -27,7 +33,12 @@ trait CharacterCommon
         return str_replace($persian, $newNumbers, $string);
     }
 
-    function make_slug($string, $separator = '-')
+    /** Converts a string to slug form
+     * @param string $string
+     * @param string $separator
+     * @return string
+     */
+    function make_slug($string, $separator = '-') : string
     {
         $string = trim($string);
         $string = mb_strtolower($string, 'UTF-8');
@@ -46,4 +57,16 @@ trait CharacterCommon
         return $string;
     }
 
+    /**
+     * @param string $string
+     * @param string $protocol
+     * @return string
+     */
+    function makeValidUrl($string , $protocol = "https") :string
+    {
+        if(!preg_match("/^http:\/\//", $string) && !preg_match("/^https:\/\//", $string) )
+            $string = $protocol."://" . $string ;
+
+        return $string ;
+    }
 }

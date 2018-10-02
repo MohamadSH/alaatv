@@ -1004,7 +1004,7 @@ class OrderController extends Controller
             {
                 $costArray  = $orderproduct->obtainOrderproductCost(false);
                 $costCollection->put( $orderproduct->id , ["cost"=>$costArray["cost"] , 'extraCost'=>$costArray["extraCost"] , 'bonDiscount'=>$costArray['bonDiscount'] , "productDiscount"=>$costArray['productDiscount'] , "productDiscountAmount"=>$costArray['productDiscountAmount']]);
-                $orderproductLink = $this->makeProductLink($orderproduct->product);
+                $orderproductLink = $orderproduct->product->makeProductLink();
                 if(strlen($orderproductLink) > 0)
                     $orderproductLinks->put($orderproduct->id , $orderproductLink);
             }

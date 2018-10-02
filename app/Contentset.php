@@ -55,6 +55,28 @@ class Contentset extends Model implements Taggable
         'photo'
     ];
 
+    /*
+    |--------------------------------------------------------------------------
+    | Scopes
+    |--------------------------------------------------------------------------
+    */
+
+        /**
+         * Scope a query to only include active Contentsets.
+         *
+         * @param \Illuminate\Database\Eloquent\Builder $query
+         * @return \Illuminate\Database\Eloquent\Builder
+         */
+        public function scopeActive($query)
+        {
+            return $query->where('enable', 1);
+        }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relations
+    |--------------------------------------------------------------------------
+    */
 
     public function contents()
     {
@@ -65,6 +87,12 @@ class Contentset extends Model implements Taggable
             "edc_id")
             ->withPivot("order", "isDefault");
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    |
+    |--------------------------------------------------------------------------
+    */
 
     public function getLastContent() :Content
     {
@@ -81,10 +109,6 @@ class Contentset extends Model implements Taggable
         return json_decode($value);
     }
 
-//    public function setTagsAttribute($value)
-//    {
-//        return json_encode($value);
-//    }
     public function retrievingTags()
     {
         /**

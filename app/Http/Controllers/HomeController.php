@@ -1392,10 +1392,13 @@ class HomeController extends Controller
             ->orderBy("completed_at" , "DESC")
             ->get();
         $monthToPeriodConvert = collect([
-            ["month"=>"خرداد", "periodBegin"=>"2018-05-21" , "periodEnd"=>"2018-06-22"],
-            ["month"=>"تیر", "periodBegin"=>"2018-06-22" , "periodEnd"=>"2018-07-23"],
-            ["month"=>"مرداد", "periodBegin"=>"2018-07-23" , "periodEnd"=>"2018-08-23"],
-            ["month"=>"شهریور", "periodBegin"=>"2018-08-23" , "periodEnd"=>"2018-09-23"],
+//            ["month"=>"خرداد", "periodBegin"=>"2018-05-21" , "periodEnd"=>"2018-06-22"],
+//            ["month"=>"تیر", "periodBegin"=>"2018-06-22" , "periodEnd"=>"2018-07-23"],
+//            ["month"=>"مرداد", "periodBegin"=>"2018-07-23" , "periodEnd"=>"2018-08-23"],
+//            ["month"=>"شهریور", "periodBegin"=>"2018-08-23" , "periodEnd"=>"2018-09-23"],
+            ["month"=>"مهر", "periodBegin"=>"2018-09-23" , "periodEnd"=>"2018-10-23"],
+            ["month"=>"آبان", "periodBegin"=>"2018-10-23" , "periodEnd"=>"2018-11-22"],
+            ["month"=>"آذر", "periodBegin"=>"2018-11-22" , "periodEnd"=>"2018-12-22"],
         ]);
         $currentGregorianDate = Carbon::now()->timezone('Asia/Tehran');
         $delimiter = "/";
@@ -1428,9 +1431,9 @@ class HomeController extends Controller
 //                        ->sum("cost");
 
             $donateAmount = $donate->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
-                                    ->whereIn("product_id" , $donateProductArray )
-                                    ->get()
-                                    ->sum("cost");
+                ->whereIn("product_id" , $donateProductArray )
+                ->get()
+                ->sum("cost");
 
             $latestDonors->push([
                 "firstName" => (isset($firstName))?$firstName:"",
@@ -1444,7 +1447,7 @@ class HomeController extends Controller
         /** CURRENT MONTH MAXIMUM DONATES **/
         $latestMax = 3 ;
         $today = $monthToPeriodConvert->where("month" , $currentJalaliMonthString)
-                                        ->first();
+            ->first();
         $today = $today["periodBegin"] ;
         $today = explode("-" , $today);
         $todayYear = $today[0];
@@ -1516,38 +1519,39 @@ class HomeController extends Controller
         {
             switch ($month)
             {
-                case "مهر" :
-                    $totalMonthIncome = 2491700;
-                    $totalMonthSpend = $MONTH_SPEND;
-                    break;
-                case "آبان" :
-                    $totalMonthIncome = 1563186;
-                    $totalMonthSpend = $MONTH_SPEND;
-                    break;
-                case "آذر" :
-                    $totalMonthIncome = 2339988;
-                    $totalMonthSpend = $MONTH_SPEND;
-                    break;
-                case "دی" :
-                    $totalMonthIncome = 1270397;
-                    $totalMonthSpend = $MONTH_SPEND;
-                    break;
-                case "بهمن" :
-                    $totalMonthIncome = 1270397;
-                    $totalMonthSpend = $MONTH_SPEND;
-                    break;
-                case "اسفند" :
-                    $totalMonthIncome = 1270397;
-                    $totalMonthSpend = $MONTH_SPEND;
-                    break;
-                case "فروردین" :
-                    $totalMonthIncome = 823600;
-                    $totalMonthSpend = $MONTH_SPEND;
-                    break;
-                case "اردیبهشت" :
-                    $totalMonthIncome = 1000000;
-                    $totalMonthSpend = $MONTH_SPEND;
-                    break;
+                // Cases used for year 1396-1397
+//                case "مهر" :
+//                    $totalMonthIncome = 2491700;
+//                    $totalMonthSpend = $MONTH_SPEND;
+//                    break;
+//                case "آبان" :
+//                    $totalMonthIncome = 1563186;
+//                    $totalMonthSpend = $MONTH_SPEND;
+//                    break;
+//                case "آذر" :
+//                    $totalMonthIncome = 2339988;
+//                    $totalMonthSpend = $MONTH_SPEND;
+//                    break;
+//                case "دی" :
+//                    $totalMonthIncome = 1270397;
+//                    $totalMonthSpend = $MONTH_SPEND;
+//                    break;
+//                case "بهمن" :
+//                    $totalMonthIncome = 1270397;
+//                    $totalMonthSpend = $MONTH_SPEND;
+//                    break;
+//                case "اسفند" :
+//                    $totalMonthIncome = 1270397;
+//                    $totalMonthSpend = $MONTH_SPEND;
+//                    break;
+//                case "فروردین" :
+//                    $totalMonthIncome = 823600;
+//                    $totalMonthSpend = $MONTH_SPEND;
+//                    break;
+//                case "اردیبهشت" :
+//                    $totalMonthIncome = 1000000;
+//                    $totalMonthSpend = $MONTH_SPEND;
+//                    break;
                 default:
                     $date = $monthToPeriodConvert->where("month" , $month)
                         ->first();
@@ -1592,10 +1596,15 @@ class HomeController extends Controller
 
         }
 
-        if (Auth::check()) {
+        $userCanSeeCounter = false ;
+        if(Auth::check())
+        {
             $user = Auth::user();
-            $contentPath = "/" . $request->path();
-            $this->userSeen($contentPath, $user);
+            $baseUrl = url("/");
+            $contentPath = str_replace($baseUrl , "" , action("HomeController@donate"));
+            $seenCount = $this->userSeen($contentPath);
+            if($user->hasRole("admin"))
+                $userCanSeeCounter = true ;
         }
 
         /** END **/
@@ -1939,10 +1948,11 @@ class HomeController extends Controller
                     ->pluck("id")
                     ->toArray();
 
+                $outputFileName = "userseen_part11.csv";
                 $userseen = \Illuminate\Support\Facades\DB::table('userseensitepages')
                     ->whereIn("websitepage_id" , $websitepages)
-                    ->limit(5000)
-                    ->offset(0)
+                    ->limit(2000 )
+                    ->offset(20000)
                     ->get();
                 $outputCollection = collect() ;
                 foreach ($userseen as $value)
@@ -1955,15 +1965,37 @@ class HomeController extends Controller
                     $urlExplode = explode("/",$url );
                     $contentId = isset($urlExplode[2])?$urlExplode[2] : 0 ;
 
-                    $content = Educationalcontent::find($contentId);
+                    $content = Content::find($contentId);
+
+                    $mobile = substr(optional($user)->mobile , 0 , 4)."*******";
+                    $contentset = $content->contentsets->first();
+                    if(isset($content->user))
+                        $author = $content->user->firstName ." " . $content->user->lastName;
+                    else
+                        $author = "";
+                    $tags = implode(" , " , optional($content->tags)->tags);
+
+                    $seenCount =  optional($websitepage)->userschecked()->count() ;
 
                     $outputCollection->push([
                         "name" => optional($user)->firstName,
                         "lastName" => optional($user)->lastName,
+                        'mobile' =>$mobile,
+                        'city' =>optional($user)->city,
+                        'province' =>optional($user)->province,
+                        'school' =>optional($user)->school,
+                        'major' =>optional($user->major)->name,
+                        'grade' =>optional($user->grade)->displayName,
+                        'gender' =>optional($user->gender)->name,
+                        'email' =>optional($user)->email,
                         "url" => $url,
                         "title" => optional($content)->name,
                         "description" => optional($content)->description,
-                        "lastSeen" => isset($lastVisit)?$lastVisit:"ثبت نشده",
+                        "contentset" => optional($contentset)->name ,
+                        "teacher" => $author,
+                        "tags" => $tags ,
+                        "seenCount" => $seenCount,
+                        "lastSeen" => isset($lastVisit)?$lastVisit:"",
                     ]);
                 }
 
@@ -1976,13 +2008,13 @@ class HomeController extends Controller
                     "Expires" => "0",
                 );
 
-                $columns = array('نام', 'نام خانوادگی', 'آدرس صفحه', 'عنوان محتوا', 'توضیح محتوا', 'آخرین بازدید');
+                $columns = array('نام', 'نام خانوادگی','شماره موبایل','شهر','استان','مدرسه','رشته','مقطع','جنسیت','ایمیل', 'آدرس صفحه', 'عنوان محتوا', 'توضیح محتوا','نام درس','نام معلم','تگ ها','تعداد کل بازدیدهای این محتوا', 'آخرین بازدید');
 
-                $file = fopen('/home/alaa/test.csv', 'w');
+                $file = fopen('/home/alaa/'.$outputFileName, 'w');
                 fputcsv($file, $columns);
 
                 foreach($outputCollection as $item) {
-                    $row = $this->convertArray(array($item["name"], $item["lastName"], $item["url"], $item["title"], $item["description"], $item["lastSeen"]));
+                    $row = $this->convertArray(array($item["name"], $item["lastName"],$item["mobile"],$item["city"],$item["province"],$item["school"],$item["major"],$item["grade"],$item["gender"],$item["email"], $item["url"], $item["title"], $item["description"], $item["contentset"], $item["teacher"], $item["tags"], $item["seenCount"], $item["lastSeen"]));
                     fputcsv($file, $row);
                 }
                 fclose($file);
