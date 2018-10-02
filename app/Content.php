@@ -512,8 +512,10 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface
 
     public function scopeActive($query){
         return $query->where('enable', 1)
-            ->where('validSince', '<', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
-                ->timezone('Asia/Tehran')
+            ->where(function ($q){
+                $q->where('validSince', '<', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'))
+                    ->orWhereNull('validSince');
+            }
             );
     }
 

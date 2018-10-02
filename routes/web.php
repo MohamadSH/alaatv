@@ -199,6 +199,7 @@ Route::group(['middleware' => 'auth'], function()
     Route::resource('employeetimesheet' , 'EmployeetimesheetController') ;
     Route::resource('lottery' , 'LotteryController') ;
     Route::resource('cat' , 'CategoryController') ;
+    Route::resource('cs' , 'ContentsetController') ;
 
     Route::get( "copylessonfromremote" , "RemoteDataCopyController@copyLesson");
     Route::get( "copydepartmentfromremote" , "RemoteDataCopyController@copyDepartment");

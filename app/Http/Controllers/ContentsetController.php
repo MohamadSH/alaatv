@@ -2,26 +2,152 @@
 
 namespace App\Http\Controllers;
 
+use App\Classes\Search\ContentsetSearch;
 use App\Contentset;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use App\Http\Requests\ContentsetIndexRequest;
+use App\Http\Requests\InsertContentsetRequest;
+use App\Http\Requests\ProductIndexRequest;
+use App\Traits\RequestCommon;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\{
+    Request, Response
+};
+use Illuminate\Support\{
+    Collection, Facades\Cache, Facades\View
+};
 
 class ContentsetController extends Controller
 {
-    protected $response;
+    /*
+   |--------------------------------------------------------------------------
+   | Traits
+   |--------------------------------------------------------------------------
+   */
+
+    use RequestCommon;
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Properties
+    |--------------------------------------------------------------------------
+    */
+
+    protected $response ;
+    protected $setting ;
+    const PARTIAL_SEARCH_TEMPLATE = "partials.search.contentset";
+
     public function __construct()
     {
         $this->response = new Response();
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | Private methods
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * @param FormRequest $request
+     * @param Contentset $contentset
+     * @return void
+     */
+    private function fillContentFromRequest(FormRequest $request, Contentset &$contentset):void
+    {
+        $inputData = $request->all();
+        $enabled = $request->has("enable");
+        $display = $request->has("display");
+
+        $contentset->fill($inputData);
+        if($request->has("id"))
+            $contentset->id = $request->id;
+
+        $contentset->enable = $enabled ? 1 : 0;
+        $contentset->display = $display ? 1 : 0;
+    }
+
+    /**
+     * @param $query
+     * @return string
+     */
+    private function getPartialSearchFromIds($query ){
+        $partialSearch = View::make(
+            self::PARTIAL_SEARCH_TEMPLATE,
+            [
+                'items' => $query
+            ]
+        )->render();
+        return $partialSearch;
+    }
+
+    /**
+     * @param Collection $items
+     * @return \Illuminate\Http\Response
+     */
+    private function makeJsonForAndroidApp(Collection $items){
+        $items = $items->pop();
+        $key = md5($items->pluck("id")->implode(","));
+        $response = Cache::remember($key,config("constants.CACHE_60"),function () use($items){
+            $response = collect();
+
+        });
+        return $response;
+    }
+
+    /*
+   |--------------------------------------------------------------------------
+   | Public methods
+   |--------------------------------------------------------------------------
+   */
+
     /**
      * Display a listing of the resource.
      *
+     * @param ContentsetIndexRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(ContentsetIndexRequest $request)
     {
-        //
+        $tags = $request->get('tags');
+        $filters = $request->all();
+        $isApp = $this->isRequestFromApp($request);
+        $items = collect();
+        $pageName = 'contentsetPage' ;
+        $contentsetResult = ( new ContentsetSearch() )
+            ->setPageName($pageName)
+            ->apply($filters);
+
+        if($isApp)
+        {
+            $items->push($contentsetResult->getCollection());
+        }
+        else {
+            if ($contentsetResult->total() > 0)
+                $partialSearch = $this->getPartialSearchFromIds( $contentsetResult);
+            else
+                $partialSearch = null;
+            $items->push([
+                "totalitems"=> $contentsetResult->total(),
+                "view"=>$partialSearch,
+            ]);
+        }
+
+        if($isApp){
+            $response = $this->makeJsonForAndroidApp($items);
+            return response()->json($response,Response::HTTP_OK);
+        }
+        if(request()->ajax())
+        {
+            return $this->response
+                ->setStatusCode(Response::HTTP_OK)
+                ->setContent([
+                    "items"=>$items ,
+                    "tagLabels" => $tags ,
+                ]);
+        }
+
+        return redirect()->back() ;
     }
 
     /**
@@ -40,17 +166,15 @@ class ContentsetController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(InsertContentsetRequest $request)
     {
         $contentSet = new Contentset();
-        $contentSet->fill($request->all());
-        if($request->has("id")) $contentSet->id = $request->get("id");
-        if($request->has("enable")) $contentSet->enable = 1;
-        else $contentSet->enable = 0;
-        if($request->has("display")) $contentSet->display = 1;
-        else $contentSet->display = 0;
-        if($contentSet->save()) return $this->response->setStatusCode(200);
-        else return $this->response->setStatusCode(503);
+        $this->fillContentFromRequest($request, $content);
+
+        if($contentSet->save())
+            return $this->response->setStatusCode(Response::HTTP_OK);
+        else
+            return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
     }
 
     /**

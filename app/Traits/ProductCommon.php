@@ -1,6 +1,8 @@
 <?php namespace App\Traits;
 
 use App\Product;
+use App\Productfiletype;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 
@@ -84,26 +86,6 @@ trait ProductCommon
 
     }
 
-    protected function makeProductLink($product)
-    {
-        $key="product:makeProductLink:".$product->cacheKey();
-        return Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($product){
-            $link = "" ;
-            $grandParent = $product->getGrandParent() ;
-            if( $grandParent !== false )
-            {
-                if($grandParent->enable)
-                    $link = action("ProductController@show" , $product->getGrandParent()) ;
-            }else
-            {
-                if($product->enable)
-                    $link = action("ProductController@show" , $product) ;
-            }
-            return $link;
-        });
-
-    }
-
     protected function makeParentArray($myProduct)
     {
         $key="product:makeParentArray:".$myProduct->cacheKey();
@@ -116,5 +98,35 @@ trait ProductCommon
             }
             return $parentsArray;
         });
+    }
+
+    /**
+     * @param Product $product
+     * @return Collection
+     */
+    function makeAllFileCollection(Product $product) : Collection
+    {
+        $productfiletypes = Productfiletype::all();
+        $allFilesCollection = collect();
+        foreach ($productfiletypes as $productfiletype)
+        {
+            $fileCollection = collect();
+            $filesArray = $product->makeFileArray($productfiletype->name);
+            if (!empty($filesArray))
+                $fileCollection->put($product->name, $filesArray);
+
+            foreach ($product->children as $child) {
+                $filesArray = $child->makeFileArray($productfiletype->name);
+
+                if (!empty($filesArray))
+                    $fileCollection->put($product->name, $filesArray);
+            }
+            $allFilesCollection->push([
+                "typeName"=>$productfiletype->name,
+                "typeDisplayName" => $productfiletype->displayName,
+                "files"=>$fileCollection
+            ]);
+        }
+        return $allFilesCollection;
     }
 }

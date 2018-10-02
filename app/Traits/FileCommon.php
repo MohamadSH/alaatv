@@ -4,7 +4,11 @@
 trait FileCommon
 {
 
-    function FileSizeConvert($bytes)
+    /** Converts file size to Persian string
+     * @param $bytes
+     * @return string
+     */
+    function FileSizeConvert($bytes) : string
     {
         $result = "";
         $bytes = floatval($bytes);
@@ -43,7 +47,12 @@ trait FileCommon
         return $result;
     }
 
-   public function curlGetFileSize( $url ) {
+    /** Obtains file size based on it's url
+     * @param string $url
+     * @return string
+     */
+    public function curlGetFileSize($url ): string
+    {
        $curl = curl_init( $url );
 
        // Issue a HEAD request and follow any redirects.

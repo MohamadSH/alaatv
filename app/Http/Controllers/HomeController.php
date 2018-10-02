@@ -1398,10 +1398,13 @@ class HomeController extends Controller
             ->orderBy("completed_at" , "DESC")
             ->get();
         $monthToPeriodConvert = collect([
-            ["month"=>"خرداد", "periodBegin"=>"2018-05-21" , "periodEnd"=>"2018-06-22"],
-            ["month"=>"تیر", "periodBegin"=>"2018-06-22" , "periodEnd"=>"2018-07-23"],
-            ["month"=>"مرداد", "periodBegin"=>"2018-07-23" , "periodEnd"=>"2018-08-23"],
-            ["month"=>"شهریور", "periodBegin"=>"2018-08-23" , "periodEnd"=>"2018-09-23"],
+//            ["month"=>"خرداد", "periodBegin"=>"2018-05-21" , "periodEnd"=>"2018-06-22"],
+//            ["month"=>"تیر", "periodBegin"=>"2018-06-22" , "periodEnd"=>"2018-07-23"],
+//            ["month"=>"مرداد", "periodBegin"=>"2018-07-23" , "periodEnd"=>"2018-08-23"],
+//            ["month"=>"شهریور", "periodBegin"=>"2018-08-23" , "periodEnd"=>"2018-09-23"],
+            ["month"=>"مهر", "periodBegin"=>"2018-09-23" , "periodEnd"=>"2018-10-23"],
+            ["month"=>"آبان", "periodBegin"=>"2018-10-23" , "periodEnd"=>"2018-11-22"],
+            ["month"=>"آذر", "periodBegin"=>"2018-11-22" , "periodEnd"=>"2018-12-22"],
         ]);
         $currentGregorianDate = Carbon::now()->timezone('Asia/Tehran');
         $delimiter = "/";
@@ -1434,9 +1437,9 @@ class HomeController extends Controller
 //                        ->sum("cost");
 
             $donateAmount = $donate->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
-                                    ->whereIn("product_id" , $donateProductArray )
-                                    ->get()
-                                    ->sum("cost");
+                ->whereIn("product_id" , $donateProductArray )
+                ->get()
+                ->sum("cost");
 
             $latestDonors->push([
                 "firstName" => (isset($firstName))?$firstName:"",
@@ -1450,7 +1453,7 @@ class HomeController extends Controller
         /** CURRENT MONTH MAXIMUM DONATES **/
         $latestMax = 3 ;
         $today = $monthToPeriodConvert->where("month" , $currentJalaliMonthString)
-                                        ->first();
+            ->first();
         $today = $today["periodBegin"] ;
         $today = explode("-" , $today);
         $todayYear = $today[0];
@@ -1522,38 +1525,39 @@ class HomeController extends Controller
         {
             switch ($month)
             {
-                case "مهر" :
-                    $totalMonthIncome = 2491700;
-                    $totalMonthSpend = $MONTH_SPEND;
-                    break;
-                case "آبان" :
-                    $totalMonthIncome = 1563186;
-                    $totalMonthSpend = $MONTH_SPEND;
-                    break;
-                case "آذر" :
-                    $totalMonthIncome = 2339988;
-                    $totalMonthSpend = $MONTH_SPEND;
-                    break;
-                case "دی" :
-                    $totalMonthIncome = 1270397;
-                    $totalMonthSpend = $MONTH_SPEND;
-                    break;
-                case "بهمن" :
-                    $totalMonthIncome = 1270397;
-                    $totalMonthSpend = $MONTH_SPEND;
-                    break;
-                case "اسفند" :
-                    $totalMonthIncome = 1270397;
-                    $totalMonthSpend = $MONTH_SPEND;
-                    break;
-                case "فروردین" :
-                    $totalMonthIncome = 823600;
-                    $totalMonthSpend = $MONTH_SPEND;
-                    break;
-                case "اردیبهشت" :
-                    $totalMonthIncome = 1000000;
-                    $totalMonthSpend = $MONTH_SPEND;
-                    break;
+                // Cases used for year 1396-1397
+//                case "مهر" :
+//                    $totalMonthIncome = 2491700;
+//                    $totalMonthSpend = $MONTH_SPEND;
+//                    break;
+//                case "آبان" :
+//                    $totalMonthIncome = 1563186;
+//                    $totalMonthSpend = $MONTH_SPEND;
+//                    break;
+//                case "آذر" :
+//                    $totalMonthIncome = 2339988;
+//                    $totalMonthSpend = $MONTH_SPEND;
+//                    break;
+//                case "دی" :
+//                    $totalMonthIncome = 1270397;
+//                    $totalMonthSpend = $MONTH_SPEND;
+//                    break;
+//                case "بهمن" :
+//                    $totalMonthIncome = 1270397;
+//                    $totalMonthSpend = $MONTH_SPEND;
+//                    break;
+//                case "اسفند" :
+//                    $totalMonthIncome = 1270397;
+//                    $totalMonthSpend = $MONTH_SPEND;
+//                    break;
+//                case "فروردین" :
+//                    $totalMonthIncome = 823600;
+//                    $totalMonthSpend = $MONTH_SPEND;
+//                    break;
+//                case "اردیبهشت" :
+//                    $totalMonthIncome = 1000000;
+//                    $totalMonthSpend = $MONTH_SPEND;
+//                    break;
                 default:
                     $date = $monthToPeriodConvert->where("month" , $month)
                         ->first();
@@ -1598,10 +1602,15 @@ class HomeController extends Controller
 
         }
 
-        if (Auth::check()) {
+        $userCanSeeCounter = false ;
+        if(Auth::check())
+        {
             $user = Auth::user();
-            $contentPath = "/" . $request->path();
-            $this->userSeen($contentPath, $user);
+            $baseUrl = url("/");
+            $contentPath = str_replace($baseUrl , "" , action("HomeController@donate"));
+            $seenCount = $this->userSeen($contentPath);
+            if($user->hasRole("admin"))
+                $userCanSeeCounter = true ;
         }
 
         /** END **/
@@ -1939,6 +1948,85 @@ class HomeController extends Controller
     {
         try
         {
+            if($request->has("userseen"))
+            {
+                $websitepages = Websitepage::where('url', 'like', '%/c/%')
+                    ->pluck("id")
+                    ->toArray();
+
+                $outputFileName = "userseen_part11.csv";
+                $userseen = \Illuminate\Support\Facades\DB::table('userseensitepages')
+                    ->whereIn("websitepage_id" , $websitepages)
+                    ->limit(2000 )
+                    ->offset(20000)
+                    ->get();
+                $outputCollection = collect() ;
+                foreach ($userseen as $value)
+                {
+                    $user = User::Find($value->user_id);
+                    $lastVisit = $value->updated_at ;
+
+                    $websitepage = Websitepage::Find($value->websitepage_id);
+                    $url = optional($websitepage)->url;
+                    $urlExplode = explode("/",$url );
+                    $contentId = isset($urlExplode[2])?$urlExplode[2] : 0 ;
+
+                    $content = Content::find($contentId);
+
+                    $mobile = substr(optional($user)->mobile , 0 , 4)."*******";
+                    $contentset = $content->contentsets->first();
+                    if(isset($content->user))
+                        $author = $content->user->firstName ." " . $content->user->lastName;
+                    else
+                        $author = "";
+                    $tags = implode(" , " , optional($content->tags)->tags);
+
+                    $seenCount =  optional($websitepage)->userschecked()->count() ;
+
+                    $outputCollection->push([
+                        "name" => optional($user)->firstName,
+                        "lastName" => optional($user)->lastName,
+                        'mobile' =>$mobile,
+                        'city' =>optional($user)->city,
+                        'province' =>optional($user)->province,
+                        'school' =>optional($user)->school,
+                        'major' =>optional($user->major)->name,
+                        'grade' =>optional($user->grade)->displayName,
+                        'gender' =>optional($user->gender)->name,
+                        'email' =>optional($user)->email,
+                        "url" => $url,
+                        "title" => optional($content)->name,
+                        "description" => optional($content)->description,
+                        "contentset" => optional($contentset)->name ,
+                        "teacher" => $author,
+                        "tags" => $tags ,
+                        "seenCount" => $seenCount,
+                        "lastSeen" => isset($lastVisit)?$lastVisit:"",
+                    ]);
+                }
+
+                $headers = array(
+                    "Content-type" => "application/csv; charset=UTF-8",
+                    "Content-Encoding" => "UTF-8",
+                    "Content-Disposition" => "attachment; filename=file.csv",
+                    "Pragma" => "no-cache",
+                    "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+                    "Expires" => "0",
+                );
+
+                $columns = array('نام', 'نام خانوادگی','شماره موبایل','شهر','استان','مدرسه','رشته','مقطع','جنسیت','ایمیل', 'آدرس صفحه', 'عنوان محتوا', 'توضیح محتوا','نام درس','نام معلم','تگ ها','تعداد کل بازدیدهای این محتوا', 'آخرین بازدید');
+
+                $file = fopen('/home/alaa/'.$outputFileName, 'w');
+                fputcsv($file, $columns);
+
+                foreach($outputCollection as $item) {
+                    $row = $this->convertArray(array($item["name"], $item["lastName"],$item["mobile"],$item["city"],$item["province"],$item["school"],$item["major"],$item["grade"],$item["gender"],$item["email"], $item["url"], $item["title"], $item["description"], $item["contentset"], $item["teacher"], $item["tags"], $item["seenCount"], $item["lastSeen"]));
+                    fputcsv($file, $row);
+                }
+                fclose($file);
+                dd($file);
+            }
+
             if($request->has("emptyorder"))
             {
                 $orders = Order::whereIn("orderstatus_id" , [ config("constants.ORDER_STATUS_CLOSED") , config("constants.ORDER_STATUS_POSTED") , config("constants.ORDER_STATUS_READY_TO_POST") ] )
@@ -2728,17 +2816,9 @@ class HomeController extends Controller
 
             if($request->has("tagfix"))
             {
-                $orders = Order::whereDoesntHave("orderproducts")
-                    ->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
-                    ->whereIn("paymentstatus_id" , [
-                        config("constants.PAYMENT_STATUS_INDEBTED"),
-                        config("constants.PAYMENT_STATUS_PAID")
-                    ]);
-                dd($orders->pluck("id")->toArray());
-
                 $contentsetId = 159;
                 $contentset = Contentset::where("id" , $contentsetId)
-                    ->first() ;
+                                            ->first() ;
 
                 $tags = $contentset->tags->tags;
                 array_push($tags , "نادریان");
@@ -4695,6 +4775,27 @@ class HomeController extends Controller
         }
 
 
+    }
+
+    /**
+     * @param $result
+     * @return string
+     */
+    public function convert($result): string
+    {
+        return iconv(mb_detect_encoding($result, mb_detect_order(), true), "UTF-8", $result);
+//         return iconv('windows-1250', 'utf-8', $result) ;
+//        return chr(255) . chr(254).mb_convert_encoding($result, 'UTF-16LE', 'UTF-8');
+//        return utf8_encode($result);
+    }
+
+    public function convertArray(array  $input)
+    {
+        foreach ($input as $key => $value)
+        {
+            $input[$key] = $this->convert($value);
+        }
+        return $input;
     }
 
 }

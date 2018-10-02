@@ -2,40 +2,52 @@
 
 namespace App\Http\Controllers;
 
-use App\Attribute;
-use App\Attributeset;
-use App\Attributetype;
-use App\Attributevalue;
-use App\Bon;
-use App\Classes\SEO\SeoDummyTags;
-use App\Http\Requests\AddComplimentaryProductRequest;
-use App\Http\Requests\EditProductRequest;
-use App\Http\Requests\InsertProductRequest;
-use App\Product;
-use App\Productfiletype;
-use App\Traits\Helper;
-use App\Traits\MathCommon;
-use App\Traits\MetaCommon;
-use App\Traits\ProductCommon;
-use App\User;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Storage;
-use SEO;
+use App\{
+    Attribute, Attributeset, Attributetype, Attributevalue, Bon, Classes\Search\ProductSearch, Classes\SEO\SeoDummyTags, Http\Requests\AddComplimentaryProductRequest, Http\Requests\EditProductRequest, Http\Requests\InsertProductRequest, Http\Requests\ProductIndexRequest, Product, Productfiletype, Traits\CharacterCommon, Traits\Helper, Traits\MathCommon, Traits\MetaCommon, Traits\ProductCommon, Traits\RequestCommon, Traits\UserSeenTrait, User
+};
+use Illuminate\Http\{
+    Request, Response
+};
+use Illuminate\Foundation\Http\{
+    FormRequest
+};
+use Illuminate\Support\{
+    Collection, Facades\Auth, Facades\Cache, Facades\Config, Facades\File, Facades\Input, Facades\Storage, Facades\View
+};
 
 class ProductController extends Controller
 {
+
+    /*
+    |--------------------------------------------------------------------------
+    | Traits
+    |--------------------------------------------------------------------------
+    */
+
     use Helper;
-    protected $response ;
-    protected $setting ;
     use ProductCommon;
     use MetaCommon;
     use MathCommon;
+    use UserSeenTrait;
+    use CharacterCommon;
+    use RequestCommon;
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Properties
+    |--------------------------------------------------------------------------
+    */
+
+    protected $response ;
+    protected $setting ;
+    const PARTIAL_SEARCH_TEMPLATE = 'partials.search.product' ;
+
+    /*
+    |--------------------------------------------------------------------------
+    | Private methods
+    |--------------------------------------------------------------------------
+    */
 
     function __construct()
     {
@@ -48,23 +60,28 @@ class ProductController extends Controller
 
     private function callMiddlewares(): void
     {
-        $this->middleware('permission:' . Config::get('constants.LIST_PRODUCT_ACCESS'), ['only' => 'index']);
-        $this->middleware('permission:' . Config::get('constants.INSERT_PRODUCT_ACCESS'), ['only' => 'create']);
-        $this->middleware('permission:' . Config::get('constants.REMOVE_PRODUCT_ACCESS'), ['only' => 'destroy']);
-        $this->middleware('permission:' . Config::get('constants.SHOW_PRODUCT_ACCESS'), ['only' => 'edit']);
-        $this->middleware('permission:' . Config::get('constants.EDIT_PRODUCT_ACCESS'), ['only' => 'update']);
-        $this->middleware('permission:' . Config::get('constants.EDIT_CONFIGURE_PRODUCT_ACCESS'), ['only' => ['childProductEnable', 'completeEachChildPivot']]);
-        $this->middleware('permission:' . Config::get('constants.INSERT_CONFIGURE_PRODUCT_ACCESS'), ['only' => 'makeConfiguration', 'createConfiguration']);
+        $this->middleware('permission:' . config('constants.LIST_PRODUCT_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:' . config('constants.INSERT_PRODUCT_ACCESS'), ['only' => 'create']);
+        $this->middleware('permission:' . config('constants.REMOVE_PRODUCT_ACCESS'), ['only' => 'destroy']);
+        $this->middleware('permission:' . config('constants.SHOW_PRODUCT_ACCESS'), ['only' => 'edit']);
+        $this->middleware('permission:' . config('constants.EDIT_PRODUCT_ACCESS'), ['only' => 'update']);
+        $this->middleware('permission:' . config('constants.EDIT_CONFIGURE_PRODUCT_ACCESS'), ['only' => ['childProductEnable', 'completeEachChildPivot']]);
+        $this->middleware('permission:' . config('constants.INSERT_CONFIGURE_PRODUCT_ACCESS'), ['only' => 'makeConfiguration', 'createConfiguration']);
         $this->middleware('auth', ['except' => ['show', 'refreshPrice', 'search', 'showPartial', 'landing1', 'landing2', 'landing3', 'landing4']]);
     }
 
+    /**
+     * @param Product $product
+     */
     private function addSimpleInfoAttributes(Product &$product){
         $productsArray = [];
         array_push($productsArray, $product);
 
-        while (count($productsArray)){
+        while (count($productsArray))
+        {
             $pop = array_pop($productsArray);
-            if(!isset($pop['simpleInfoAttributes'])){
+            if(!isset($pop['simpleInfoAttributes']))
+            {
                 $allAttributeCollection = $pop->getAllAttributes() ;
                 $pop['simpleInfoAttributes'] = $allAttributeCollection["simpleInfoAttributes"];
             }
@@ -74,15 +91,196 @@ class ProductController extends Controller
         }
     }
 
+    /** Stores catalog file of the product
+     * @param Product $product
+     *
+     * @param array $files
+     * @return array
+     */
+    private function storeCatalogOfProduct(Product &$product, array $files): array
+    {
+        $done = [];
+        foreach ($files as $key => $file) {
+            $extension = $file->getClientOriginalExtension();
+            $fileName = basename($file->getClientOriginalName() , ".".$extension) . "_" . date("YmdHis") . '.' . $extension;
+            $done[$key] = false;
+            if (Storage::disk(config('constants.DISK5'))->put($fileName, File::get($file))) {
+                $product->file = $fileName;
+                $done[$key]   = true;
+            }
+        }
+
+        return $done ;
+    }
+
+    /** Stores image file of the product
+     * @param Product $product
+     *
+     * @param array $files
+     * @return array
+     */
+    private function storeImageOfProduct(Product &$product, array $files): array
+    {
+        $done = [] ;
+        foreach ($files as $key => $file) {
+            $extension = $file->getClientOriginalExtension();
+            $fileName = basename($file->getClientOriginalName() , ".".$extension) . "_" . date("YmdHis") . '.' . $extension;
+            $done[$key] = false;
+            if (Storage::disk(config('constants.DISK4'))->put($fileName, File::get($file))) {
+                $done[$key] = true ;
+                $product->image = $fileName;
+
+                /**
+                 *  Snippet code : resizing the image using the ........ package
+
+                    $img = Image::make(Storage::disk(config('constants.DISK4'))->getAdapter()->getPathPrefix().$fileName);
+                    $img->resize(256, 256);
+                    $img->save(Storage::disk(config('constants.DISK4'))->getAdapter()->getPathPrefix().$fileName);
+                 * */
+            }
+        }
+
+        return $done;
+    }
+
+
+    /**
+     * @param FormRequest $request
+     * @param Product $product
+     * @return void
+     */
+    private function fillProductFromRequest(FormRequest $request, Product &$product):void
+    {
+        $inputData = $request->all();
+        $files = [$request->file] ;
+        $images = [$request->image];
+        $isFree = $request->has("isFree");
+        
+        $product->fill($inputData);
+
+        $product->isFree = $isFree;
+        if(!$this->strIsEmpty($product->introVideo))
+            $this->makeValidUrl($product->introVideo) ;
+        //Storing product's catalog
+        $storeFileResult = $this->storeCatalogOfProduct($product,$files);
+        //ToDo : delete the file if it is an update
+
+        //Storing product's image
+        $storeImageResult =$this->storeImageOfProduct($product,$images);
+        //ToDo : delete the file if it is an update
+    }
+
+    /**
+     * @return User|null
+     */
+    private function getCustomer() :User
+    {
+        if (session()->has("adminOrder_id"))
+            $user = User::find(session()->get("customer_id"));
+        elseif (Auth::check())
+            $user = Auth::user();
+
+        if (isset($user))
+            return $user;
+        else
+            return null;
+    }
+
+    /**
+     * @param $product
+     * @param $bonId
+     * @param $bonDiscount
+     * @param $bonPlus
+     */
+    private function attachBonToProduct(Product $product, $bonId, $bonDiscount, $bonPlus): void
+    {
+        $product->bons()->attach($bonId, [
+            'discount' => $bonDiscount,
+            'bonPlus' => $bonPlus
+        ]);
+    }
+
+    /**
+     * @param $query
+     * @return string
+     */
+    private function getPartialSearchFromIds($query ){
+        $partialSearch = View::make(
+            self::PARTIAL_SEARCH_TEMPLATE,
+            [
+                'items' => $query
+            ]
+        )->render();
+        return $partialSearch;
+    }
+
+    /**
+     * @param Collection $items
+     * @return \Illuminate\Http\Response
+     */
+    private function makeJsonForAndroidApp(Collection $items){
+        $items = $items->pop();
+        $key = md5($items->pluck("id")->implode(","));
+        $response = Cache::remember($key,config("constants.CACHE_60"),function () use($items){
+            $response = collect();
+
+        });
+        return $response;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Public methods
+    |--------------------------------------------------------------------------
+    */
+
     /**
      * Display a listing of the resource.
      *
+     * @param ProductIndexRequest $request
      * @return \Illuminate\Http\Response
-     */ 
-    public function index()
+     */
+    public function index(ProductIndexRequest $request)
     {
-        $products = Product::getProducts()->orderBy('created_at' , 'Desc')->get() ;
-        return view("product.index" , compact("products" ));
+        $tags = $request->get('tags');
+        $filters = $request->all();
+        $isApp = $this->isRequestFromApp($request);
+        $items = collect();
+        $pageName = 'productPage' ;
+        $productResult = ( new ProductSearch )
+                            ->setPageName($pageName)
+                            ->apply($filters);
+
+        if($isApp)
+        {
+            $items->push($productResult->getCollection());
+        }
+        else {
+            if ($productResult->total() > 0)
+                $partialSearch = $this->getPartialSearchFromIds( $productResult);
+            else
+                $partialSearch = null;
+            $items->push([
+                "totalitems"=> $productResult->total(),
+                "view"=>$partialSearch,
+            ]);
+        }
+
+        if($isApp){
+            $response = $this->makeJsonForAndroidApp($items);
+            return response()->json($response,Response::HTTP_OK);
+        }
+        if(request()->ajax())
+        {
+            return $this->response
+                ->setStatusCode(Response::HTTP_OK)
+                ->setContent([
+                    "items"=>$items ,
+                    "tagLabels" => $tags ,
+                ]);
+        }
+
+        return redirect()->back() ;
     }
 
     /**
@@ -98,74 +296,34 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param InsertProductRequest $request
      * @return \Illuminate\Http\Response
      */
     public function store(InsertProductRequest $request)
     {
         $product = new Product();
-        $product->fill($request->all());
 
-        if(strlen($request->get("introVideo"))>0)
-            if(!preg_match("/^http:\/\//", $product->introVideo) && !preg_match("/^https:\/\//", $product->introVideo) )
-                 $product->introVideo = "https://". $product->introVideo ;
+        if($this->strIsEmpty($request->get('bonPlus')))
+            $bonPlus = 0;
+        else
+            $bonPlus = $request->get('bonPlus');
 
-        if ($request->hasFile("file")) {
-            $file = $request->file('file');
-            $extension = $file->getClientOriginalExtension();
-            $fileName = basename($file->getClientOriginalName() , ".".$extension) . "_" . date("YmdHis") . '.' . $extension;
-            if (Storage::disk(Config::get('constants.DISK5'))->put($fileName, File::get($file))) {
-                $product->file = $fileName;
-            }
-        }
+        if($this->strIsEmpty($request->get('bonDiscount')))
+            $bonDiscount = 0;
+        else
+            $bonDiscount = $request->get('bonDiscount');
+        $bonId = $request->get('bon_id') ;
 
-        if ($request->hasFile("image")) {
-            $file = $request->file('image');
-            $extension = $file->getClientOriginalExtension();
-            $fileName = basename($file->getClientOriginalName() , ".".$extension) . "_" . date("YmdHis") . '.' . $extension;
-            if (Storage::disk(Config::get('constants.DISK4'))->put($fileName, File::get($file))) {
-                $product->image = $fileName;
-//                $img = Image::make(Storage::disk(Config::get('constants.DISK4'))->getAdapter()->getPathPrefix().$fileName);
-//                $img->resize(256, 256);
-//                $img->save(Storage::disk(Config::get('constants.DISK4'))->getAdapter()->getPathPrefix().$fileName);
-            }
+        $this->fillProductFromRequest($request, $product);
 
-        }
-
-        if ($request->get('amountLimit') == 0){
-            $product->amount = null;
-        }
-        $bon = Bon::where('id', $request->get('bon_id'))->first();
-        if(strlen($request->get('bonPlus')) == 0) $bonPlus = 0; else $bonPlus = $request->get('bonPlus');
-        if(strlen($request->get('bonDiscount')) == 0) $bonDiscount = 0; else $bonDiscount = $request->get('bonDiscount');
-
-        if($request->has("isFree")) $product->isFree = 1;
-        else $product->isFree = 0;
-
-        if(strlen(preg_replace('/\s+/', '', $product->discount)) == 0) $product->discount = 0;
-
-        if($request->has("order"))
+        if ($product->save())
         {
-            if(strlen(preg_replace('/\s+/', '', $request->get("order"))) == 0) $product->order = 0;
-            $productsWithSameOrder = Product::getProducts(0 , 1)->where("order" , $product->order)->get();
-            if(!$productsWithSameOrder->isEmpty())
-            {
-                $productsWithGreaterOrder =  Product::getProducts(0 , 1)->where("order" ,">=" ,$product->order)->get();
-                foreach ($productsWithGreaterOrder as $graterProduct)
-                {
-                    $graterProduct->order = $graterProduct->order + 1 ;
-                    $graterProduct->update();
-                }
-            }
-        }
-
-        if ($product->save()) {
             if($bonPlus || $bonDiscount)
-                $product->bons()->attach($bon->id, ['discount' => $bonDiscount, 'bonPlus' => $bonPlus]);
-            return $this->response->setStatusCode(200);
+                $this->attachBonToProduct($product, $bonId, $bonDiscount, $bonPlus);
+            return $this->response->setStatusCode(Response::HTTP_OK);
         }
         else{
-            return $this->response->setStatusCode(503);
+            return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
 
@@ -176,29 +334,16 @@ class ProductController extends Controller
      * @param  \App\Product $product
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $product)
+    public function show(Request $request, Product $product)
     {
-        $defaultProducts = null;
-        if($request->has("dp")) {
-            $defaultProducts = [];
-            array_push($defaultProducts , (int)$request->dp);
-        }
-
-        //ToDo : middreware
-        if(in_array($product->id , [193,194,195]))
-            return redirect(action("ProductController@show" , 184), 301);
-
         $this->generateSeoMetaTags($product);
-
 
         $descriptionIframe = $request->partial;
         $productType = $product->producttype->id;
+        $user = $this->getCustomer();
 
         $allAttributeCollection = $product->getAllAttributes() ;
-
-        $this->addSimpleInfoAttributes($product);
-        //return $product;
-
+        $this->addSimpleInfoAttributes($product); // ToDo : $product["simpleInfoAttributes"] has not been used
         $selectCollection = $allAttributeCollection["selectCollection"];
         $groupedCheckboxCollection = $allAttributeCollection["groupedCheckboxCollection"];
         $extraSelectCollection = $allAttributeCollection["extraSelectCollection"];
@@ -206,160 +351,76 @@ class ProductController extends Controller
         $simpleInfoAttributes = $allAttributeCollection["simpleInfoAttributes"];
         $checkboxInfoAttributes = $allAttributeCollection["checkboxInfoAttributes"];
 
-
-//        return $checkboxInfoAttributes;
-
-        if(session()->has("adminOrder_id"))
-            $user = User::where("id" , session()->get("customer_id"))->first();
-        elseif(Auth::check())
-            $user = Auth::user();
-
-//        return response()->make("Ok".$product->id.":".$productType);
-
-        if(isset($user))
-            $costArray = $product->calculatePayablePrice( $user );
-        else
-            $costArray = $product->calculatePayablePrice( );
-
+        $costArray = $product->calculatePayablePrice( $user );
         $discount = $costArray["bonDiscount"]+$costArray["productDiscount"];
         $cost = $costArray["cost"];
 
         if(Config::has("constants.EXCLUDED_RELATED_PRODUCTS"))
-            $excludedProducts = Config::get("constants.EXCLUDED_RELATED_PRODUCTS");
+            $excludedProducts = config("constants.EXCLUDED_RELATED_PRODUCTS");
         else
             $excludedProducts = [] ;
 
 
         $key="product:otherProducts:".$product->cacheKey();
-        $otherProducts = Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($product,$excludedProducts){
-            $otherProducts = Product::getProducts(0,1)
-                ->whereNotIn("id",$excludedProducts)
-                ->orderBy('created_at' , 'Desc')
-                ->where("id","<>" , $product->id)->get();
-            return $otherProducts;
+        $otherProducts = Cache::remember($key,config("constants.CACHE_60"),function () use ($product,$excludedProducts){
+            return $product->getOtherProducts($excludedProducts)->get();
         });
         $otherProductChunks = $otherProducts->chunk(4);
 
         if(Config::has("constants.EXCLUSIVE_RELATED_PRODUCTS"))
-            $exclusiveOtherProductIds = Config::get("constants.EXCLUSIVE_RELATED_PRODUCTS");
+            $exclusiveOtherProductIds = config("constants.EXCLUSIVE_RELATED_PRODUCTS");
         else
             $exclusiveOtherProductIds = [] ;
 
         $key="product:exclusiveOtherProducts:".md5(implode(".",$exclusiveOtherProductIds));
-        $exclusiveOtherProducts = Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($exclusiveOtherProductIds){
-            $exclusiveOtherProducts = Product::whereIn("id" , $exclusiveOtherProductIds)->get();
-            return $exclusiveOtherProducts;
-
+        $exclusiveOtherProducts = Cache::remember($key,config("constants.CACHE_60"),function () use ($exclusiveOtherProductIds){
+            return  Product::getExclusiveOtherProducts($exclusiveOtherProductIds);
         });
-//        $disqusPayload = Auth::user()->disqusSSO();
 
-        if (Auth::check()) {
-            $user = Auth::user();
-            $contentPath = "/" . $request->path();
-            $productSeenCount = $this->userSeen($contentPath, $user);
-        }
-
-        if(isset($product->introVideo) && strlen($product->introVideo) > 0)
-             $productIntroVideo = $product->introVideo;
+        $productSeenCount = $this->getSeenCountFromRequest($request);
 
         $key="product:validProductfiles:pamphlet|video".$product->cacheKey();
 
-        [$productsWithPamphlet,$productsWithVideo] = Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($product){
+        $productAllFiles = Cache::remember(/**
+         * @return array
+         */
+            $key,config("constants.CACHE_60"),function () use ($product){
 
             /** Product files */
-            $productsWithPamphlet = collect();
-            //////////////////////////////PAMPHLETS////////////////////////////////////
-            $filesArray = [];
-            $productsFiles = $product->validProductfiles("pamphlet")->get();
-            foreach($productsFiles as $productfile)
-            {
-                array_push($filesArray, ["file" => $productfile->file, "name" => $productfile->name , "product_id"=>$productfile->product_id]);
-            }
-            if(!empty($filesArray))
-                $productsWithPamphlet->put($product->name,$filesArray);
+            $productAllFiles = $this->makeAllFileCollection($product);
 
-            foreach ($product->children as $child)
-            {
-                $filesArray = [];
-                $productsFiles = $child->validProductfiles("pamphlet")->get();
-                foreach( $productsFiles as $productfile)
-                {
-                    array_push($filesArray, ["file" => $productfile->file, "name" => $productfile->name , "product_id"=>$productfile->product_id]);
-                }
-                if(!empty($filesArray))
-                    $productsWithPamphlet->put($child->name,$filesArray);
-            }
-
-            ////////////////////////////    VIDEOS /////////////////////////
-            $productsWithVideo = collect();
-            $filesArray = array();
-            foreach($product->validProductfiles("video")->get() as $productfile)
-            {
-                array_push($filesArray, ["file" => $productfile->file, "name" => $productfile->name , "product_id"=>$productfile->product_id]);
-            }
-            if(!empty($filesArray)) $productsWithVideo->put($product->name,$filesArray);
-            foreach ($product->children as $child)
-            {
-                $filesArray = array();
-                foreach($child->validProductfiles("video")->get() as $productfile)
-                {
-                    array_push($filesArray, ["file" => $productfile->file, "name" => $productfile->name , "product_id"=>$productfile->product_id]);
-                }
-                if(!empty($filesArray)) $productsWithVideo->put($child->name,$filesArray);
-            }
-
-            return [$productsWithPamphlet,$productsWithVideo];
+            return $productAllFiles;
         });
-
-        /**
-         * Product sample photos
-         */
         $key="product:SamplePhotos:".$product->cacheKey();
-        $productSamplePhotos = Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($product){
-            return $product->photos->where("enable" , 1)->sortBy("order");
+        $productSamplePhotos = Cache::remember($key,config("constants.CACHE_60"),function () use ($product){
+            return $product->photos(1)->get()->sortBy("order");
         });
 
-        /**
-         * end of product sample photos
-         */
-
-        /**
-         * Product gifts
-         */
         $key="product:Gifts:".$product->cacheKey();
-        $giftCollection =  Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($product){
-            $gCollection = collect();
-            $gifts = $product->gifts;
-
-            foreach ($gifts as $gift)
-            {
-                $gCollection->push(["product"=>$gift , "link"=>$this->makeProductLink($gift)]);
-            }
-            return $gCollection;
+        $giftCollection =  Cache::remember($key,config("constants.CACHE_60"),function () use ($product){
+            return $product->getGifts();
         });
 
-        /**
-         * end of product gifts
-         */
 
-
-        $isLive = $product->isHappening();
-        if(Auth::check() && Auth::user()->hasRole("admin") && $isLive!== false) $isLive = 0 ;
-//        return response()->make("Ok");
-
-//        $hamayeshTalaiVideos = Content::whereHas("contentsets" , function ($q)
-//        {
-//            $q->where("id" , 199) ;
-//        })
-//        ->where("enable" , 1)
-//        ->orderBy("order")
-//        ->get();
-
-        return view("product.show" , compact("product" , "productType" ,"productSeenCount","productIntroVideo" , "otherProductChunks"  , 'discount' , 'cost' , "selectCollection" ,"simpleInfoAttributes"
-            , "checkboxInfoAttributes" , "extraSelectCollection" , "extraCheckboxCollection" , 'groupedCheckboxCollection'  , "descriptionIframe"
-            , "isProductExistInOrder"  , "productsWithVideo" , "productsWithPamphlet" , "exclusiveOtherProducts" , "productSamplePhotos" , "giftCollection" , "isLive"
-         , "hamayeshTalaiVideos"));
-    }
+        return view("product.show" , compact("product" ,
+                                                         "productType" ,
+                                                            "productSeenCount",
+                                                            "otherProductChunks"  ,
+                                                            'discount' ,
+                                                            'cost' ,
+                                                            "selectCollection" ,
+                                                            "simpleInfoAttributes" ,
+                                                            "checkboxInfoAttributes" ,
+                                                            "extraSelectCollection" ,
+                                                            "extraCheckboxCollection" ,
+                                                            'groupedCheckboxCollection'  ,
+                                                            "descriptionIframe" ,
+                                                            "productAllFiles" ,
+                                                            "exclusiveOtherProducts" ,
+                                                            "productSamplePhotos" ,
+                                                            "giftCollection"
+                    ));
+                }
 
     /**
      * Display partial information of the specified resource.
@@ -367,9 +428,20 @@ class ProductController extends Controller
      * @param  \App\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function showPartial($product){
+    public function showPartial(Product $product){
         return redirect(action("ProductController@show" , $product)."?partial=true");
     }
+
+    /**
+     * Show live view page for this product(In case it has one!)
+     *
+     * @param Product $product
+     * @return \Illuminate\Http\Response
+     */
+    public function showLive(Product $product){
+        return redirect(action("ProductController@show" , $product));
+    }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -435,110 +507,71 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \app\Product  $product
+     * @param EditProductRequest $request
+     * @param  \app\Product $product
      * @return \Illuminate\Http\Response
      */
-    public function update(EditProductRequest $request, $product)
+    public function update(EditProductRequest $request, Product $product)
     {
-        $oldFile = $product->file;
-        $oldImage = $product->image;
+        $bonId = $request->get('bon_id');
+        if($this->strIsEmpty($request->get('bonPlus')))
+            $bonPlus = 0;
+        else
+            $bonPlus = $request->get('bonPlus');
 
-        $product->fill($request->all());
+        if($this->strIsEmpty($request->get('bonDiscount')))
+            $bonDiscount = 0;
+        else
+            $bonDiscount = $request->get('bonDiscount');
+        $childrenPriceEqualizer =  $request->has("changeChildrenPrice");
 
-        if(strlen($request->get("introVideo"))>0)
-            if(!preg_match("/^http:\/\//", $product->introVideo) && !preg_match("/^https:\/\//", $product->introVideo) )
-                $product->introVideo = "https://". $product->introVideo ;
 
-        if($request->has("changeChildrenPrice"))
-            if($product->hasChildren())
-            {
-                foreach ($product->children as $child)
-                {
-                    $child->basePrice = $product->basePrice ;
-                    $child->update();
-                }
-            }
+        $this->fillProductFromRequest($request, $product);
 
-        if ($request->hasFile("file")) {
-            $file = $request->file('file');
-            $extension = $file->getClientOriginalExtension();
-            $fileName = basename($file->getClientOriginalName() , ".".$extension) . "_" . date("YmdHis") . '.' . $extension;
-            if (Storage::disk(Config::get('constants.DISK5'))->put($fileName, File::get($file))) {
-                Storage::disk(Config::get('constants.DISK5'))->delete($oldFile);
-                $product->file = $fileName;
-            }
-        }
+        if($childrenPriceEqualizer)
+            $product->equalizingChildrenPrice();
 
-        if ($request->hasFile("image")) {
-            $file = $request->file('image');
-            $extension = $file->getClientOriginalExtension();
-            $fileName = basename($file->getClientOriginalName() , ".".$extension) . "_" . date("YmdHis") . '.' . $extension;
-            if (Storage::disk(Config::get('constants.DISK4'))->put($fileName, File::get($file))) {
-                Storage::disk(Config::get('constants.DISK4'))->delete($oldImage);
-                $product->image = $fileName;
-//                $img = Image::make(Storage::disk(Config::get('constants.DISK4'))->getAdapter()->getPathPrefix().$fileName);
-//                $img->resize(256, 256);
-//                $img->save(Storage::disk(Config::get('constants.DISK4'))->getAdapter()->getPathPrefix().$fileName);
-            }
-        }
+        if($bonPlus || $bonDiscount)
+            $this->attachBonToProduct($product, $bonId, $bonDiscount, $bonPlus);
 
-        if ($request->get('amountLimit') == 0){
-            $product->amount = null;
-        }
-
-        $bon = Bon::where('id', $request->get('bon_id'))->first();
-        if(strlen($request->get('bonPlus')) == 0) $bonPlus = 0; else $bonPlus = $request->get('bonPlus');
-        if(strlen($request->get('bonDiscount')) == 0) $bonDiscount = 0; else $bonDiscount = $request->get('bonDiscount');
-
-        if($bonPlus || $bonDiscount){
-            $product->bons()->sync([$bon->id, ['discount' => $bonDiscount , 'bonPlus' => $bonPlus]]);
-        }
-
-        if($request->has("isFree")) $product->isFree = 1;
-        else $product->isFree = 0;
-
-        if(strlen(preg_replace('/\s+/', '', $product->discount)) == 0) $product->discount = 0;
-        if(strlen(preg_replace('/\s+/', '', $product->shortDescription)) == 0) $product->shortDescription = null;
-        if(strlen(preg_replace('/\s+/', '', $product->longDescription)) == 0) $product->longDescription = null;
-        if(strlen(preg_replace('/\s+/', '', $product->specialDescription)) == 0) $product->specialDescription = null;
-
-        if($request->has("order"))
-        {
-            if(strlen(preg_replace('/\s+/', '', $request->get("order"))) == 0) $product->order = 0;
-            $productsWithSameOrder = Product::getProducts(0 , 1)->where("id" , "<>" , $product->id)->where("order" , $product->order)->get();
-            if(!$productsWithSameOrder->isEmpty())
-            {
-                $productsWithGreaterOrder =  Product::getProducts(0 , 1)->where("id" , "<>" , $product->id)->where("order" ,">=" ,$product->order)->get();
-                foreach ($productsWithGreaterOrder as $graterProduct)
-                {
-                    $graterProduct->order = $graterProduct->order + 1 ;
-                    $graterProduct->update();
-                }
-            }
-        }
-
-        if ($product->update()) {
+        if ($product->update())
             session()->put('success', 'اصلاح محصول با موفقیت انجام شد');
-        }
-        else{
+        else
             session()->put('error', 'خطای پایگاه داده');
-        }
+
         return redirect()->back();
     }
 
     /**
      * Remove the specified resource from storage.
      *
+     * @param  Request $request
      * @param  \app\Product $product
      * @return \Illuminate\Http\Response
      * @throws \Exception
      */
-    public function destroy($product)
+    public function destroy(Request $request , Product $product)
     {
-        if ($product->delete()) session()->put('success', 'محصول با موفقیت اصلاح شد');
-        else session()->put('error', 'خطای پایگاه داده');
-        return redirect()->back() ;
+        $done = false ;
+        if ($product->delete())
+            $done = true ;
+
+        if($request->ajax())
+        {
+            if($done)
+                return $this->response->setStatusCode(Response::HTTP_OK);
+            else
+                return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
+        }
+        else
+        {
+            if($done)
+                session()->put('success', 'محصول با موفقیت اصلاح شد');
+            else
+                session()->put('error', 'خطای پایگاه داده');
+
+            return redirect()->back() ;
+        }
     }
 
     /**
@@ -553,11 +586,7 @@ class ProductController extends Controller
         $productIds = $request->get("products");
         $inputType = $request->get("type");
         $attributevalues = $request->get("attributeState");
-        $user = null ;
-        if(session()->has("adminOrder_id"))
-            $user = User::where("id" , session()->get("customer_id"))->first();
-        elseif(Auth::check())
-            $user = Auth::user();
+        $user = $this->getCustomer();
 
         $key="product:refreshPrice:Type"
             .$inputType
@@ -570,7 +599,7 @@ class ProductController extends Controller
             .( isset($productIds) ? implode("",$productIds) : "");
 
 
-        return Cache::tags('bon')->remember($key,  Config::get("constants.CACHE_60") , function () use($inputType,$attributevalues,$user,$product,$productIds){
+        return Cache::tags('bon')->remember($key,  config("constants.CACHE_60") , function () use($inputType,$attributevalues,$user,$product,$productIds){
             switch ($inputType)
             {
                 case  "extraAttribute":
@@ -695,7 +724,7 @@ class ProductController extends Controller
     /**
      * Search for a product
      *
-     * @param
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
     public function search(Request $request)
@@ -706,12 +735,11 @@ class ProductController extends Controller
             $adminOrder = false;
         $itemsPerPage = 30;
 
-
         if ($adminOrder) {
             $products =  Product::getProducts(0,0,[],"order")->paginate($itemsPerPage);;
         } else {
             if (Config::has("constants.PRODUCT_SEARCH_EXCLUDED_PRODUCTS"))
-                $excludedProducts = Config::get("constants.PRODUCT_SEARCH_EXCLUDED_PRODUCTS");
+                $excludedProducts = config("constants.PRODUCT_SEARCH_EXCLUDED_PRODUCTS");
             else
                 $excludedProducts = [];
             $products =  Product::getProducts(0, 1 , $excludedProducts)
@@ -721,8 +749,6 @@ class ProductController extends Controller
         $costCollection = $this->makeCostCollection($products);
 
         $url = $request->url();
-
-
         $this->generateSeoMetaTags(new SeoDummyTags("محصولات ".$this->setting->site->name,
                 'کارگاه تست کنکور، همایش، جمع بندی و اردوطلایی نوروز آلاء',
                 $url,
@@ -784,7 +810,7 @@ class ProductController extends Controller
      * @param  \app\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function createConfiguration($product){
+    public function createConfiguration( Product $product){
             $attributeCollection = collect();
             $attributeGroups = $product->attributeset->attributeGroups ;
             foreach ($attributeGroups as $attributeGroup)
@@ -818,23 +844,6 @@ class ProductController extends Controller
         $matrix = [];
         $array = [] ; // checkbox attribute values
 
-        //attach attributevalues that are chosen for the product
-//        foreach ($product->attributeset->attributegroups as $attributegroup)
-//        {
-//            $i = 0;
-//            foreach ($attributegroup->attributes as $attribute){
-//                if(isset($request->all()[$attribute->id])){
-//                    $j = 0;
-//                    foreach ($request->all()[$attribute->id] as $value){
-//                        $attributevalue = Attributevalue::findOrFail($value);
-//                        $product->attributevalues()->attach($attributevalue);
-//                        $matrix[$i][$j] = $attributevalue->id;
-//                        $j++;
-//                    }
-//                    $i++;
-//                }
-//            }
-//        }
         $attributeIds = $request->get("attributevalues");
         $extraCosts = $request->get("extraCost");
         $orders = $request->get("order");
@@ -927,7 +936,7 @@ class ProductController extends Controller
      * @param  \app\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function editAttributevalues($product)
+    public function editAttributevalues(Product $product)
     {
 
         $attributeValuesCollection = collect() ;
@@ -958,7 +967,7 @@ class ProductController extends Controller
      * @param  \app\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function updateAttributevalues(Request $request, $product){
+    public function updateAttributevalues(Request $request, Product $product){
         dd($request->all());
         $product->attributevalues()->detach($product->attributevalues->pluck("id")->toArray()) ;
         $newAttributevalues = $request->get("attributevalues");
@@ -982,22 +991,13 @@ class ProductController extends Controller
     }
 
     /**
-     * Show live view page for this product(In case it has one!)
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function showLive(Product $product){
-        return redirect(action("ProductController@show" , $product));
-    }
-
-    /**
      * Attach a complimentary product to a product
      *
      * @param \App\Product $product
      * @param \App\Http\Requests\AddComplimentaryProductRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function addComplimentary(AddComplimentaryProductRequest $request , $product){
+    public function addComplimentary(AddComplimentaryProductRequest $request , Product $product){
         $complimentary = Product::findOrFail($request->get("complimentaryproducts"));
 
         if($product->complimentaryproducts->contains($complimentary))
@@ -1033,7 +1033,7 @@ class ProductController extends Controller
      * @param \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function addGift(Request $request , $product){
+    public function addGift(Request $request , Product $product){
         $gift = Product::findOrFail($request->get("giftProducts"));
 
         if($product->gifts->contains($gift))
@@ -1042,7 +1042,7 @@ class ProductController extends Controller
         }
         else
         {
-            $product->gifts()->attach($gift, ["relationtype_id"=>Config::get("constants.PRODUCT_INTERRELATION_GIFT")]);
+            $product->gifts()->attach($gift, ["relationtype_id"=>config("constants.PRODUCT_INTERRELATION_GIFT")]);
             session()->put('success', 'هدیه با موفقیت به محصول اضافه شد');
         }
         return redirect()->back();
@@ -1076,15 +1076,19 @@ class ProductController extends Controller
     public function landing1(Request $request)
     {
         $url = $request->url();
-        SEO::opengraph()->setUrl($url);
-        SEO::setCanonical($url);
-        SEO::twitter()->setSite("آلاء");
-        SEO::setTitle("آلاء| جمع بندی نیم سال اول");
-        SEO::setDescription("همایش ویژه دی ماه آلاء حمع بندی کنکور اساتید آلاء تست درسنامه تخفیف");
-        SEO::opengraph()->addImage(route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]), ['height' => 100, 'width' => 100]);
-        SEO::opengraph()->setType('website');
 
-        $productIds = Config::get("constants.HAMAYESH_PRODUCT");
+        $this->generateSeoMetaTags(new SeoDummyTags(
+                "آلاء| جمع بندی نیم سال اول",
+                'همایش ویژه دی ماه آلاء حمع بندی کنکور اساتید آلاء تست درسنامه تخفیف',
+                $url,
+                $url,
+                route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]),
+                '100',
+                '100',
+                null)
+        );
+
+        $productIds = config("constants.HAMAYESH_PRODUCT");
         $products = Product::whereIn("id" , $productIds)->orderBy("order")->where("enable" , 1)->get();
         $attribute = Attribute::where("name" , "major")->get()->first();
         $withFilter = true;
@@ -1113,24 +1117,24 @@ class ProductController extends Controller
     public function landing2()
     {
         return redirect("/landing/4",302);
-        $gheireHozoori = Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_ALLTOGHETHER") ;
+        $gheireHozoori = config("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_ALLTOGHETHER") ;
         if(Input::has("utm_term"))
         {
             $utm_term = Input::get("utm_term");
             switch ($utm_term)
             {
                 case "700":
-                    $gheireHozoori = Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_ALLTOGHETHER");
+                    $gheireHozoori = config("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_ALLTOGHETHER");
                     break;
                 case "260":
-                    $gheireHozoori = Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_DEFAULT");
+                    $gheireHozoori = config("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_DEFAULT");
                     break;
                 default:
                     break;
             }
         }
 
-        $products = Product::whereIn("id" , Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT"))->orwhereIn("id" , Config::get("constants.ORDOO_HOZOORI_NOROOZ_97_PRODUCT"))->orderBy("order")->where("enable" , 1)->get();
+        $products = Product::whereIn("id" , config("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT"))->orwhereIn("id" , config("constants.ORDOO_HOZOORI_NOROOZ_97_PRODUCT"))->orderBy("order")->where("enable" , 1)->get();
 
         $landingProducts = collect();
         foreach ($products as $product)
@@ -1150,13 +1154,17 @@ class ProductController extends Controller
     public function landing3(Request $request)
     {
         $url = $request->url();
-        SEO::opengraph()->setUrl($url);
-        SEO::setCanonical($url);
-        SEO::twitter()->setSite("آلاء");
-        SEO::setTitle("آلاء | همایش های طلایی کنکور 97");
-        SEO::setDescription("وقتی همه کنکوری ها گیج و سرگردانند، شما مرور کنید. چالشی ترین نکات کنکوری در همایش های آلاء");
-        SEO::opengraph()->addImage(route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]), ['height' => 100, 'width' => 100]);
-        SEO::opengraph()->setType('website');
+        $this->generateSeoMetaTags(new SeoDummyTags(
+                "آلاء | همایش های طلایی کنکور 97",
+                'وقتی همه کنکوری ها گیج و سرگردانند، شما مرور کنید. چالشی ترین نکات کنکوری در همایش های آلاء',
+                $url,
+                $url,
+                route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]),
+                '100',
+                '100',
+                null)
+        );
+
         return view("product.landing.landing3" );
     }
 
@@ -1168,17 +1176,19 @@ class ProductController extends Controller
      */
     public function landing4(Request $request)
     {
-//        dd($request->all());
         return redirect()->route('landing.3',$request->all());
-        $url = $request->url();
-        SEO::opengraph()->setUrl($url);
-        SEO::setCanonical($url);
-        SEO::twitter()->setSite("آلاء");
-        SEO::setTitle("آلاء | همایش های طلایی کنکور 97");
-        SEO::setDescription("وقتی همه کنکوری ها گیج و سرگردانند، شما مرور کنید. چالشی ترین نکات کنکوری در همایش های آلاء");
-        SEO::opengraph()->addImage(route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]), ['height' => 100, 'width' => 100]);
-        SEO::opengraph()->setType('website');
 
+        $url = $request->url();
+        $this->generateSeoMetaTags(new SeoDummyTags(
+                "آلاء | همایش های طلایی کنکور 97",
+                'وقتی همه کنکوری ها گیج و سرگردانند، شما مرور کنید. چالشی ترین نکات کنکوری در همایش های آلاء',
+                $url,
+                $url,
+                route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]),
+                '100',
+                '100',
+                null)
+        );
         return view("product.landing.landing4" );
     }
 
@@ -1261,7 +1271,7 @@ class ProductController extends Controller
                 $flag = $this->haveSameFamily(collect([$product , $gift]));
                 if(!$flag)
                 {
-                        $newProduct->gifts()->attach($gift->id , ["relationtype_id"=>Config::get("constants.PRODUCT_INTERRELATION_GIFT")]);
+                        $newProduct->gifts()->attach($gift->id , ["relationtype_id"=>config("constants.PRODUCT_INTERRELATION_GIFT")]);
                 }
             }
 
@@ -1296,5 +1306,4 @@ class ProductController extends Controller
             return $this->response->setStatusCode(503)->setContent(["message"=>"خطا در کپی از اطلاعات پایه ای محصول . لطفا دوباره اقدام نمایید"]);
         }
     }
-
 }

@@ -24,7 +24,6 @@
         "laravel/tinker": "^1.0",
         "laravelcollective/html": "^5.3",
         "league/flysystem-sftp": "~1.0",
-        "maatwebsite/laravel-excel-light": "dev-master",
         "paulvl/backup": "3.*",
         "santigarcor/laratrust": "5.0.*",
         "stevebauman/purify": "2.0.*",
