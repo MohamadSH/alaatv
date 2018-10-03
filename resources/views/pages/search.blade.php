@@ -133,7 +133,7 @@
     {{--</div>--}}
     <div class="row" >
 
-        @if($items->where("type" , "product")->first()["totalitems"] > 0)
+        {{--@if($items->where("type" , "product")->first()["totalitems"] > 0)--}}
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
             <!-- BEGIN PORTLET-->
                 <div class="portlet light " id="productPortlet">
@@ -153,8 +153,8 @@
                 </div>
                 <!-- END PORTLET-->
             </div>
-        @endif
-        @if($items->where("type" , "contentset")->first()["totalitems"] > 0)
+        {{--@endif--}}
+{{--        @if($items->where("type" , "contentset")->first()["totalitems"] > 0)--}}
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
                     <div class="portlet light contentPortlet">
                         <div class="portlet-title tabbable-line">
@@ -169,7 +169,7 @@
                         </div>
                     </div>
                 </div>
-        @endif
+        {{--@endif--}}
     </div>
         @foreach($ads1 as $image => $link)
             @include('partials.bannerAds', ['img'=>$image , 'link'=>$link])
@@ -238,6 +238,10 @@
 
     <script type="text/javascript">
         var tags = {!! json_encode($tags,JSON_UNESCAPED_UNICODE ) !!};
+        var actionUrl = [];
+        actionUrl["content"] = "{{action('ContentController@index')}}";
+        actionUrl["product"] = "{{action('ProductController@index')}}";
+        actionUrl["contentset"] = "{{action('ContentsetController@index')}}";
 
         $(document).ready(function()
         {
@@ -430,7 +434,7 @@
             )(jQuery, window, document,className);
         }
 
-        function contentLoadAjaxRequest(url , formData) {
+        function contentLoadAjaxRequest(url , formData,type) {
             $.ajax({
                 type: "GET",
                 cache: false,
@@ -448,20 +452,40 @@
                             // location.hash = page;
                             $.each(items , function (key , item) {
                                 var totalItems = item.totalitems;
-                                switch(item.type) {
+                                console.log(totalItems);
+                                console.log(type);
+                                switch(type) {
                                     case "contentset":
                                         // $("#tab_contentset").html(item.view);
                                         $("#js-grid-juicy-contentset").cubeportfolio('destroy');
                                         $("#tab_contentset").html(item.view);
                                         initialPortfolio("#js-grid-juicy-contentset");
                                         break;
-                                    case "video":
-                                        $("#js-grid-juicy-projects").cubeportfolio('destroy');
-                                        $("#tab_content_video").html(item.view);
-                                        initialPortfolio("#js-grid-juicy-projects");
-                                        break;
-                                    case "pamphlet":
-                                        $("#tab_content_pamphlet").html(item.view);
+                                    case "content":
+                                        if(item.type === "video")
+                                        {
+                                            $("#js-grid-juicy-projects").cubeportfolio('destroy');
+                                            $("#tab_content_video").html(item.view);
+                                            initialPortfolio("#js-grid-juicy-projects");
+                                        }
+                                        else if(item.type === "pamphlet")
+                                        {
+                                            $("#tab_content_pamphlet").html(item.view);
+                                        }
+                                        else if(item.type === "article")
+                                        {
+                                            if(totalItems > 0)
+                                            {
+                                                $("#tab_content_article").html(item.view);
+                                                $("#tab_content_article").show();
+                                                $('a[href^="#tab_content_article]').show();
+                                            }
+                                            else
+                                            {
+                                                $("#tab_content_article").hide();
+                                                $('a[href^="#tab_content_article]').hide();
+                                            }
+                                        }
                                         break;
                                     case "product":
                                         if(totalItems > 0)
@@ -477,19 +501,6 @@
                                             $("#productPortlet").hide();
                                         }
 
-                                        break;
-                                    case "article":
-                                        if(totalItems > 0)
-                                        {
-                                            $("#tab_content_article").html(item.view);
-                                            $("#tab_content_article").show();
-                                            $('a[href^="#tab_content_article]').show();
-                                        }
-                                        else
-                                        {
-                                            $("#tab_content_article").hide();
-                                            $('a[href^="#tab_content_article]').hide();
-                                        }
                                         break;
                                     default:
                                         break;
@@ -508,42 +519,44 @@
             });
         }
 
-        function contentLoad(pageName , pageNumber, contentType) {
-            // initiated from url
+        function contentLoad(itemType ,pageName, pageNumber , url)
+        {
             var formData = "";
+
             $("#itemFilterForm").find(':not(input[name=_token])').filter(':input').each(function () {
                 var elementId = $(this).attr("id");
                 var selectedText = $("#"+elementId+" option:selected").text();
                 if($("#"+elementId+" option:selected").val() != '')
                     formData += "tags[]="+ string_to_slug(selectedText)+"&";
             });
-            formData =  decodeURIComponent(formData);
-            if( pageNumber != undefined && pageNumber > 0 )
-            {
-                var numberQuery  ;
-                if (pageName.length > 0)
-                {
-                    numberQuery = [ pageName+"="+pageNumber ] ;
-                }
-                else
-                {
-                    numberQuery = [ "page="+pageNumber ] ;
-                }
-                formData = formData + "&" + numberQuery.join('&') ;
-            }else
-            {
-                $("#content-search-loading").show();
-            }
 
-            changeUrl(formData);
-            if( contentType != undefined &&  contentType.length > 0 )
+            $.each( pageName, function( key, value )
             {
-                var typesQuery = [ "contentType[]="+contentType ] ;
-                formData = formData + "&" + typesQuery.join('&') ;
-            }
+                if( pageNumber != undefined && pageNumber > 0 )
+                {
+                    var numberQuery  ;
+                    numberQuery = [ pageName+"Page="+pageNumber ] ;
+                    formData = formData + "&" + numberQuery.join('&') ;
+                }else
+                {
+                    $("#content-search-loading").show();
+                }
+
+                if( value != undefined &&  value.length > 0 )
+                {
+                    var typesQuery = [ "contentType[]="+value ] ;
+                    formData = formData + "&" + typesQuery.join('&') ;
+                }
+            });
+
+            formData =  decodeURIComponent(formData);
+            changeUrl(formData);
 
             console.log(formData);
-            contentLoadAjaxRequest('{{action("ContentController@index")}}',formData);
+            console.log(url);
+            if(itemType === "video" || itemType === "pamphlet" || itemType === "article")
+                        itemType = "content";
+            contentLoadAjaxRequest(url,formData,itemType);
             return false;
         }
 
@@ -556,12 +569,16 @@
         $(window).on("popstate", function(e) {
             window.location.reload();
         });
+
         $(document).on('click', '.pagination a', function (e) {
             var query = $(this).attr('href').split('?')[1];
             var parameters = query.split('=');
             var pageName = parameters[0];
-            var contentType = pageName.split('Page');
-            contentLoad(parameters[0] , parameters[1] , contentType[0]);
+            var pageNumber = parameters[1];
+            parameters= pageName.split('Page');
+            var itemType = parameters[0];
+
+            contentLoad(itemType   , [itemType],pageNumber , actionUrl[itemType] );
             e.preventDefault();
         });
 
@@ -584,7 +601,9 @@
         // });
 
         $(document).on("change", ".itemFilter", function (){
-            contentLoad();
+            contentLoad( "content" , ["video","pamphlet","article"],null  , actionUrl["content"]);
+            contentLoad( "product" , ["product"],null , actionUrl["product"]);
+            contentLoad("contentset" , ["contentset"] , null , actionUrl["contentset"]);
         });
 
         $(document).on("click", ".removeTagLabel", function (){
