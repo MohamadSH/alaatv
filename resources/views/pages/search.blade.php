@@ -255,6 +255,8 @@
             // makeTeacherSelect($("#lessonSelect").val());
             $(".contentPortlet .portlet-title .caption").append(makeTagLabels(tags) );
             // $("#itemFilterFormBody").append(makeTagLabels(extraTags ,true ) );
+            contentLoad( "product" , ["product"],null , actionUrl["product"]);
+            contentLoad("contentset" , ["contentset"] , null , actionUrl["contentset"]);
         });
 
         function makeGradeSelect(majorId) {
@@ -452,8 +454,6 @@
                             // location.hash = page;
                             $.each(items , function (key , item) {
                                 var totalItems = item.totalitems;
-                                console.log(totalItems);
-                                console.log(type);
                                 switch(type) {
                                     case "contentset":
                                         // $("#tab_contentset").html(item.view);
@@ -529,7 +529,7 @@
                 if($("#"+elementId+" option:selected").val() != '')
                     formData += "tags[]="+ string_to_slug(selectedText)+"&";
             });
-
+            var addressBarAppend = formData;
             $.each( pageName, function( key, value )
             {
                 if( pageNumber != undefined && pageNumber > 0 )
@@ -550,7 +550,7 @@
             });
 
             formData =  decodeURIComponent(formData);
-            changeUrl(formData);
+            changeUrl(addressBarAppend);
 
             console.log(formData);
             console.log(url);
