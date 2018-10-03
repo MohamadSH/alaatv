@@ -280,7 +280,39 @@ class ProductController extends Controller
                 ]);
         }
 
-        return redirect()->back() ;
+        if (session()->has("adminOrder_id"))
+            $adminOrder = true;
+        else
+            $adminOrder = false;
+        $itemsPerPage = 30;
+
+        if ($adminOrder) {
+            $products =  Product::getProducts(0,0,[],"order")->paginate($itemsPerPage);;
+        } else {
+//            if (Config::has("constants.PRODUCT_SEARCH_EXCLUDED_PRODUCTS"))
+//                $excludedProducts = config("constants.PRODUCT_SEARCH_EXCLUDED_PRODUCTS");
+//            else
+//                $excludedProducts = [];
+//            $products =  Product::getProducts(0, 1 , $excludedProducts)
+//                ->paginate($itemsPerPage);
+
+            $products = $productResult;
+        }
+
+        $costCollection = $this->makeCostCollection($products);
+
+        $url = $request->url();
+        $this->generateSeoMetaTags(new SeoDummyTags("محصولات ".$this->setting->site->name,
+                'کارگاه تست کنکور، همایش، جمع بندی و اردوطلایی نوروز آلاء',
+                $url,
+                $url,
+                route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]),
+                '100',
+                '100',
+                null)
+        );
+
+        return view("product.portfolio" , compact("products" , "costCollection")) ;
     }
 
     /**
@@ -729,37 +761,7 @@ class ProductController extends Controller
      */
     public function search(Request $request)
     {
-        if (session()->has("adminOrder_id"))
-            $adminOrder = true;
-        else
-            $adminOrder = false;
-        $itemsPerPage = 30;
-
-        if ($adminOrder) {
-            $products =  Product::getProducts(0,0,[],"order")->paginate($itemsPerPage);;
-        } else {
-            if (Config::has("constants.PRODUCT_SEARCH_EXCLUDED_PRODUCTS"))
-                $excludedProducts = config("constants.PRODUCT_SEARCH_EXCLUDED_PRODUCTS");
-            else
-                $excludedProducts = [];
-            $products =  Product::getProducts(0, 1 , $excludedProducts)
-                                ->paginate($itemsPerPage);
-        }
-
-        $costCollection = $this->makeCostCollection($products);
-
-        $url = $request->url();
-        $this->generateSeoMetaTags(new SeoDummyTags("محصولات ".$this->setting->site->name,
-                'کارگاه تست کنکور، همایش، جمع بندی و اردوطلایی نوروز آلاء',
-                $url,
-                $url,
-                route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]),
-                '100',
-                '100',
-                null)
-        );
-
-        return view("product.portfolio" , compact("products" , "costCollection")) ;
+        return redirect(action("ProductController@index") , 301);
     }
 
     /**
