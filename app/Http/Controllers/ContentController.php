@@ -86,6 +86,7 @@ class ContentController extends Controller
                     "type"=>$contentType,
                     "totalitems"=> ${$contentType . 'Result'}->total(),
                     "view"=>$partialSearch,
+                    "tagLabels" => $tags
                 ]);
             }
         }

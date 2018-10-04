@@ -279,26 +279,23 @@ class ProductController extends Controller
                     "tagLabels" => $tags ,
                 ]);
         }
+//        if (session()->has("adminOrder_id"))
+//            $adminOrder = true;
+//        else
+//            $adminOrder = false;
 
-        if (session()->has("adminOrder_id"))
-            $adminOrder = true;
-        else
-            $adminOrder = false;
-        $itemsPerPage = 30;
-
-        if ($adminOrder) {
-            $products =  Product::getProducts(0,0,[],"order")->paginate($itemsPerPage);;
-        } else {
-//            if (Config::has("constants.PRODUCT_SEARCH_EXCLUDED_PRODUCTS"))
+//        if ($adminOrder)
+//        {
+//            $itemsPerPage = 30;
+//            $products =  Product::getProducts(0,0,[],"order")->paginate($itemsPerPage);
+//        } else {
+//            if (config()->has("constants.PRODUCT_SEARCH_EXCLUDED_PRODUCTS"))
 //                $excludedProducts = config("constants.PRODUCT_SEARCH_EXCLUDED_PRODUCTS");
 //            else
 //                $excludedProducts = [];
-//            $products =  Product::getProducts(0, 1 , $excludedProducts)
-//                ->paginate($itemsPerPage);
+//        }
 
-            $products = $productResult;
-        }
-
+        $products = $productResult;
         $costCollection = $this->makeCostCollection($products);
 
         $url = $request->url();

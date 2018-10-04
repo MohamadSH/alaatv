@@ -42,6 +42,7 @@ class ContentSearchComposer
         $tags = [] ;
         if($this->request->has("tags"))
             $tags =  $this->request->tags;
+        $extraTags = $tags;
 
         $tree = $this->category->getWithDepth();
         $majors = $tree->where('depth',2)->pluck('name','id')->unique();
@@ -50,10 +51,21 @@ class ContentSearchComposer
         $teachers = User::getTeachers()->pluck("full_name_reverse", "id");
 
         $defaultMajor  = $this->findDefault($tags, $majors->toArray());
+        if ($defaultMajor && ($key = array_search($this->make_slug($majors[$defaultMajor] , "_"), $extraTags)) !== false) {
+            unset($extraTags[$key]);
+        }
         $defaultGrade =$this->findDefault($tags, $grades->toArray());
+        if ($defaultGrade && ($key = array_search($this->make_slug($grades[$defaultGrade] , "_"), $extraTags)) !== false) {
+            unset($extraTags[$key]);
+        }
         $defaultLesson = $this->findDefault($tags, $lessons->toArray());
+        if ($defaultLesson && ($key = array_search($this->make_slug($lessons[$defaultLesson] , "_"), $extraTags)) !== false) {
+            unset($extraTags[$key]);
+        }
         $defaultTeacher =$this->findDefault($tags, $teachers->toArray());
-
+        if ($defaultTeacher && ($key = array_search($this->make_slug($teachers->toArray()[$defaultTeacher] , "_"), $extraTags)) !== false) {
+            unset($extraTags[$key]);
+        }
 
         $sideBarMode = "closed";
 //            $ads1 = [
@@ -67,8 +79,7 @@ class ContentSearchComposer
 //            ];
         $ads1 = [];
         $ads2 = [];
-
-        $view->with(compact('grades','majors','lessons','teachers','defaultLesson','defaultTeacher','defaultGrade','defaultMajor','sideBarMode','ads1','ads2'));
+        $view->with(compact('grades','majors','lessons','teachers','defaultLesson','defaultTeacher','defaultGrade','defaultMajor','sideBarMode','ads1','ads2' , 'tags' , 'extraTags'));
 
     }
 
