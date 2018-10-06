@@ -607,7 +607,8 @@
             contentLoad("contentset" , ["contentset"] , null , actionUrl["contentset"], true);
         });
 
-        $(document).on("click", ".removeTagLabel", function (){
+        $(document).on("click", ".removeTagLabel", function ()
+        {
             var id = $(this).data("role");
             $(".tag_"+id).remove();
             tags.splice(id, 1);
@@ -634,7 +635,9 @@
                 });
             });
 
-            contentLoad();
+            contentLoad( "content" , ["video","pamphlet","article"],null  , actionUrl["content"] , true);
+            contentLoad( "product" , ["product"],null , actionUrl["product"], true);
+            contentLoad("contentset" , ["contentset"] , null , actionUrl["contentset"], true);
         });
 
     </script>
