@@ -92,17 +92,28 @@ use Exception;
  */
 class Product extends Model implements Advertisable, Taggable , SeoInterface
 {
+    /*
+    |--------------------------------------------------------------------------
+    | Traits
+    |--------------------------------------------------------------------------
+    */
+
     use SoftDeletes;
 //    use Searchable;
     use ProductCommon;
     use CharacterCommon;
     use Helper;
 
+    /*
+    |--------------------------------------------------------------------------
+    | Properties
+    |--------------------------------------------------------------------------
+    */
+
     public const AMOUNT_LIMIT = [
                             'نامحدود',
                             'محدود'
                         ];
-
     public const ENABLE_STATUS= [
         'نامحدود',
         'محدود'
@@ -153,6 +164,125 @@ class Product extends Model implements Advertisable, Taggable , SeoInterface
         'attributevalues',
         'gifts'
     ];
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Private Methods
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Obtains product's cost
+     *
+     * @param \App\User $intendedUser
+     * @return array
+     */
+    private function obtainProductCost(User $intendedUser = null) :array
+    {
+
+        if (isset($intendedUser))
+            $user = $intendedUser;
+        elseif (Auth::check())
+            $user = Auth::user();
+        else
+            $user = null;
+
+        $key = "product:obtainProductCost:"
+            .$this->cacheKey()
+            ."-user:"
+            .(isset($user) ? $user->cacheKey() : "");
+
+        return Cache::tags('bon')->remember($key,Config::get("constants.CACHE_60"),function () use($user) {
+            // Obtaining discount
+            $bonDiscount = 0;
+            $productDiscount = 0;
+            $productDiscountAmount = 0;
+            $bonName = Config::get("constants.BON1");
+
+            $totalBonNumber = 0;
+            if (isset($user)) {
+                $totalBonNumber = $user->userHasBon($bonName);
+                $bons = $this->BoneName($bonName);
+                if ($bons->isEmpty()) {
+                    $parentsArray = $this->makeParentArray($this);
+
+                    if (!empty($parentsArray)) {
+                        foreach ($parentsArray as $parent) {
+                            $bons = $parent->BoneName($bonName);
+                            if (!$bons->isEmpty())
+                                break;
+                        }
+                    }
+                }
+                if ($bons->isNotEmpty()) {
+                    $bonDiscount += $bons->first()->pivot->discount * $totalBonNumber;
+                }
+            }
+
+            //////////////////////////////
+
+            $cost = 0;
+            //Adding product base price
+
+            if ($this->hasChildren()) {
+                if ($this->basePrice == 0) {
+                    $children = $this->children;
+                    $childBonDiscount = 0;
+                    foreach ($children as $child) {
+                        if ($bonDiscount == 0) {
+                            $childBons = $child->bons->where("name", $bonName)->where("isEnable", 1);
+                            if ($childBons->isNotEmpty())
+                                $childBonDiscount += $childBons->first()->pivot->discount * $totalBonNumber;
+                        }
+                        $cost += $child->basePrice;
+                        $productDiscountAmount += ($child->discount / 100) * $child->basePrice;
+                    }
+                    $bonDiscount = $childBonDiscount;
+                } else {
+                    $cost += $this->basePrice;
+                    $productDiscount += $this->discount;
+                }
+            } else {
+                if (isset($this->discount) && $this->discount > 0)
+                    $productDiscount += $this->discount;
+                elseif (!$this->parents->where("producttype_id", Config::get("constants.PRODUCT_TYPE_CONFIGURABLE"))->isEmpty() && isset($this->parents->first()->discount)) $productDiscount += $this->parents->first()->discount;
+                if ($this->hasParents()) {
+                    if ($this->basePrice != 0 && $this->basePrice != $this->parents->first()->basePrice)
+                        $cost += $this->basePrice;
+                    else  $cost += $this->parents->first()->basePrice;
+
+                } else {
+                    $cost += $this->basePrice;
+                }
+            }
+            /////////////////////////////////
+
+            // Adding attributes extra cost
+            if ($this->producttype_id != Config::get("constants.PRODUCT_TYPE_CONFIGURABLE")) {
+                $attributevalues = $this->attributevalues('main')->get();
+                foreach ($attributevalues as $attributevalue) {
+                    if (isset($attributevalue->pivot->extraCost)) $cost += $attributevalue->pivot->extraCost;
+                }
+            }
+
+            //////////////////////////////
+
+            return [
+                "cost" => (int)$cost,
+                "productDiscount" => $productDiscount,
+                'bonDiscount' => $bonDiscount,
+                "productDiscountAmount" => $productDiscountAmount,
+                'CustomerCost' =>(int)(((int)$cost * (1 - ($productDiscount / 100))) * (1 - ($bonDiscount / 100)) - $productDiscountAmount)
+            ];
+        });
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    |  Cache
+    |--------------------------------------------------------------------------
+    */
 
 
     public function cacheKey()
@@ -240,6 +370,269 @@ class Product extends Model implements Advertisable, Taggable , SeoInterface
                 ->timezone('Asia/Tehran'))
                 ->orwhereNull('validSince');
         });
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Accessor
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Gets product's all attributes
+     *
+     * @return array
+     */
+    public function getAllAttributes() : array
+    {
+        $product = $this;
+        $key = 'product:'."getAllAttributes:".$product->id;
+
+        return Cache::remember($key,Config::get("constants.CACHE_600"),function () use ($product){
+
+            $selectCollection = collect();
+            $groupedCheckboxCollection = collect();
+            $extraSelectCollection = collect();
+            $extraCheckboxCollection = collect();
+            $simpleInfoAttributes = collect();
+            $checkboxInfoAttributes = collect();
+            $attributeset = $product->attributeset;
+            $attributes = $attributeset->attributes();
+            $productType = $product->producttype->id;
+            if (!$product->relationLoaded('attributevalues'))
+                $product->load('attributevalues');
+
+            $attributes->load('attributetype','attributecontrol');
+
+            foreach ($attributes as $attribute) {
+                $attributeType = $attribute->attributetype;
+                $controlName = $attribute->attributecontrol->name;
+                $attributevalues = $product->attributevalues->where("attribute_id", $attribute->id)->sortBy("pivot.order");
+
+                if (!$attributevalues->isEmpty()) {
+                    switch ($controlName) {
+                        case "select":
+                            if($attributeType->name == "extra"){
+                                $select = array();
+                                $this->makeSelectAttributes($attributevalues,$select);
+                                if (!empty($select))
+                                    $extraSelectCollection->put($attribute->id, ["attributeDescription" => $attribute->displayName, "attributevalues" => $select]);
+
+                            }elseif($attributeType->name == "main"&&  $productType == Config::get("constants.PRODUCT_TYPE_CONFIGURABLE")){
+                                if ($attributevalues->count() == 1) {
+                                    $this->makeSimpleInfoAttributes($attributevalues,$attribute,$attributeType,$simpleInfoAttributes);
+                                } else {
+                                    $select = array();
+                                    $this->makeSelectAttributes($attributevalues,$select);
+                                    if (!empty($select))
+                                        $selectCollection->put($attribute->pivot->description, $select);
+                                }
+                            } else{ // 1
+                                $this->makeSimpleInfoAttributes($attributevalues,$attribute,$attributeType,$simpleInfoAttributes);
+                            }
+                            break;
+                        case "groupedCheckbox":
+                            if($attributeType->name == "extra"){
+                                $groupedCheckbox = collect();
+                                foreach ($attributevalues as $attributevalue) {
+                                    $attributevalueIndex = $attributevalue->name;
+                                    if (isset($attributevalue->pivot->description) && strlen($attributevalue->pivot->description) > 0)
+                                        $attributevalueIndex .= "( " . $attributevalue->pivot->description . " )";
+
+                                    if (isset($attributevalue->pivot->extraCost)) {
+                                        if ($attributevalue->pivot->extraCost > 0)
+                                            $attributevalueIndex .= "(+" . number_format($attributevalue->pivot->extraCost) . " تومان)";
+                                        if ($attributevalue->pivot->extraCost < 0)
+                                            $attributevalueIndex .= "(-" . number_format($attributevalue->pivot->extraCost) . " تومان)";
+                                    }
+
+                                    $groupedCheckbox->put($attributevalue->id, ["index" => $attributevalueIndex,"value" => $attributevalue->id, "type" => $attributeType->name, "productType" => $product->producttype->name]);
+                                }
+                                if (!empty($groupedCheckbox))
+                                    $extraCheckboxCollection->put($attribute->displayName, $groupedCheckbox);
+
+                            } else {
+                                if ($product->producttype->id == Config::get("constants.PRODUCT_TYPE_CONFIGURABLE")) {
+                                    if($attributeType->name == "information"){
+                                        $this->makeSimpleInfoAttributes($attributevalues,$attribute,$attributeType,$checkboxInfoAttributes);
+                                    }else {
+                                        $groupedCheckbox = array();
+                                        foreach ($attributevalues as $attributevalue) {
+                                            $attributevalueIndex = $attributevalue->name;
+                                            if (isset($attributevalue->pivot->description) && strlen($attributevalue->pivot->description) > 0)
+                                                $attributevalueIndex .= "( " . $attributevalue->pivot->description . " )";
+
+                                            $attributevalueExtraCost = "";
+                                            $attributevalueExtraCostWithDiscount = "";
+                                            if (isset($attributevalue->pivot->extraCost)) {
+                                                if ($attributevalue->pivot->extraCost > 0) {
+                                                    $attributevalueExtraCost = "+" . number_format($attributevalue->pivot->extraCost) . " تومان";
+                                                    if ($product->discount > 0)
+                                                        $attributevalueExtraCostWithDiscount = number_format("+" . $attributevalue->pivot->extraCost * (1 - ($product->discount / 100))) . " تومان";
+                                                    else
+                                                        $attributevalueExtraCostWithDiscount = 0;
+                                                } elseif ($attributevalue->pivot->extraCost < 0) {
+                                                    $attributevalueExtraCost = "-" . number_format($attributevalue->pivot->extraCost) . " تومان";
+                                                    if ($product->discount > 0)
+                                                        $attributevalueExtraCostWithDiscount = number_format("-" . $attributevalue->pivot->extraCost * (1 - ($product->discount / 100))) . " تومان";
+                                                    else
+                                                        $attributevalueExtraCostWithDiscount = 0;
+                                                }
+
+                                            }
+                                            $groupedCheckbox = array_add($groupedCheckbox, $attributevalue->id, ["index" => $attributevalueIndex, "extraCost" => $attributevalueExtraCost, "extraCostWithDiscount" => $attributevalueExtraCostWithDiscount, "value" => $attributevalue->id, "type" => $attributeType->name, "productType" => $product->producttype->name]);
+                                        }
+                                        if (!empty($groupedCheckbox))
+                                            $groupedCheckboxCollection->put($attribute->pivot->description, $groupedCheckbox);
+                                    }
+                                } else {
+                                    $this->makeSimpleInfoAttributes($attributevalues,$attribute,$attributeType,$checkboxInfoAttributes);
+                                }
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+            }
+
+            return [
+                "selectCollection" => $selectCollection,
+                "groupedCheckboxCollection" => $groupedCheckboxCollection,
+                "extraSelectCollection" => $extraSelectCollection,
+                "extraCheckboxCollection" => $extraCheckboxCollection,
+                "simpleInfoAttributes" => $simpleInfoAttributes,
+                "checkboxInfoAttributes" => $checkboxInfoAttributes,
+            ];
+
+        });
+    }
+
+
+    /**
+     * Gets product's root image (image from it's grand parent)
+     *
+     * @return string
+     */
+    public function getRootImage() :string
+    {
+        $key="product:getRootImage:".$this->cacheKey();
+        return Cache::remember($key,Config::get("constants.CACHE_600"),function (){
+            $image = "";
+            $grandParent = $this->getGrandParent();
+            if ($grandParent !== false) {
+                if (isset($grandParent->image))
+                    $image = $grandParent->image;
+            } else {
+                if (isset($this->image))
+                    $image = $this->image;
+            }
+            return $image;
+        });
+    }
+
+    /**
+     * Makes product's title
+     *
+     * @return string
+     */
+    public function title() :string
+    {
+        if (isset($this->slogan) && strlen($this->slogan) > 0)
+            return $this->name . ":" . $this->slogan;
+        else
+            return $this->name;
+    }
+
+    /**
+     * Gets product's tags
+     *
+     * @param $value
+     * @return mixed
+     */
+    public function getTagsAttribute($value)
+    {
+        return json_decode($value);
+    }
+
+    /**
+     * Gets product's meta tags array
+     *
+     * @return array
+     */
+    public function getMetaTags(): array
+    {
+        return [
+            'title' => $this->name,
+            'description' => $this->shortDescription,
+            'url' => action('ProductController@show',$this),
+            'canonical' => action('ProductController@show',$this),
+            'site' => 'آلاء',
+            'imageUrl' => $this->image,
+            'imageWidth' => '338',
+            'imageHeight' => '338',
+            'tags' => $this->tags,
+            'seoMod' => SeoMetaTagsGenerator::SEO_MOD_PRODUCT_TAGS,
+        ];
+    }
+
+    /**
+     * @param array $excludedProducts
+     * @return Builder
+     */
+    public function getOtherProducts(array $excludedProducts) : Builder
+    {
+        $otherProducts = self::getProducts(0, 1, $excludedProducts, "created_at", "desc")
+                              ->where("id", "<>", $this->id);
+        return $otherProducts;
+    }
+
+    /**
+     * Converts content's created_at to Jalali
+     *
+     * @return string
+     */
+    public function CreatedAt_Jalali() :string
+    {
+        $explodedDateTime = explode(" ", $this->created_at);
+//        $explodedTime = $explodedDateTime[1] ;
+        return $this->convertDate($this->created_at, "toJalali");
+    }
+
+    /**
+     * Converts content's updated_at to Jalali
+     * @return string
+     */
+    public function UpdatedAt_Jalali() : string
+    {
+        $explodedDateTime = explode(" ", $this->updated_at);
+//        $explodedTime = $explodedDateTime[1] ;
+        return $this->convertDate($this->updated_at, "toJalali");
+    }
+
+    /**
+     * Converts content's validSince to Jalali
+     *
+     * @return string
+     */
+    public function validSince_Jalali() : string
+    {
+        $explodedDateTime = explode(" ", $this->validSince);
+//        $explodedTime = $explodedDateTime[1] ;
+        return $this->convertDate($this->validSince, "toJalali");
+    }
+
+    /**
+     * Converts content's validUntil to Jalali
+     *
+     * @return string
+     */
+    public function validUntil_Jalali() :string
+    {
+        $explodedDateTime = explode(" ", $this->validUntil);
+//        $explodedTime = $explodedDateTime[1] ;
+        return $this->convertDate($this->validUntil, "toJalali");
     }
 
     /*
@@ -572,15 +965,49 @@ class Product extends Model implements Advertisable, Taggable , SeoInterface
 
     /*
     |--------------------------------------------------------------------------
-    |
+    | Static methods
     |--------------------------------------------------------------------------
     */
 
-    public static function recentProducts($number)
+    /**
+     *
+     *
+     * @param int $order
+     * @return void
+     */
+    public static function shiftProductOrders( $order ): void
     {
-        return self::getProducts(0, 1)->take($number)->orderBy('created_at', 'Desc');
+        $productsWithSameOrder = self::getProducts(0, 0)
+                                        ->where("order", $order)
+                                        ->get();
+        foreach( $productsWithSameOrder as $productWithSameOrder)
+        {
+            $productWithSameOrder->order = $productWithSameOrder->order + 1;
+            $productWithSameOrder->update();
+        }
     }
 
+    /**
+     *
+     *
+     * @param array $exclusiveOtherProductIds
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
+    public static function getExclusiveOtherProducts(array $exclusiveOtherProductIds):Collection
+    {
+        return Product::whereIn("id" , $exclusiveOtherProductIds)->get() ;
+    }
+
+    /**
+     * Gets desirable products
+     *
+     * @param int $configurable
+     * @param int $enable
+     * @param array $excluded
+     * @param string $orderBy
+     * @param string $orderMethod
+     * @return $this|Product|Builder
+     */
     public static function getProducts($configurable = 0, $enable = 0 , $excluded = [] , $orderBy = "" , $orderMethod = "")
     {
         if ($configurable == 1) {
@@ -622,6 +1049,22 @@ class Product extends Model implements Advertisable, Taggable , SeoInterface
 
         return $products;
     }
+
+    /**
+     * Gets specific number of products
+     * @param $number
+     * @return $this
+     */
+    public static function recentProducts($number)
+    {
+        return self::getProducts(0, 1)->take($number)->orderBy('created_at', 'Desc');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Other
+    |--------------------------------------------------------------------------
+    */
+
 
     public function getGrandParent()
     {
@@ -694,14 +1137,6 @@ class Product extends Model implements Advertisable, Taggable , SeoInterface
 
     }
 
-    public function title()
-    {
-        if (isset($this->slogan) && strlen($this->slogan) > 0)
-            return $this->name . ":" . $this->slogan;
-        else
-            return $this->name;
-    }
-
     public function BoneName($bonName){
         $key="product:BoneName:".$this->cacheKey()."-bone:".$bonName;
         return Cache::remember($key,Config::get("constants.CACHE_600"),function () use ($bonName){
@@ -748,157 +1183,6 @@ class Product extends Model implements Advertisable, Taggable , SeoInterface
         $costArray = $this->obtainProductCost($user);
         array_push($costArray, []);
         return $costArray;
-    }
-
-    /**
-     * Obtain order total cost
-     *
-     * @param bool $withBon
-     * @param \App\User $intendedUser
-     * @return array
-     */
-    private function obtainProductCost(User $intendedUser = null)
-    {
-
-        if (isset($intendedUser))
-            $user = $intendedUser;
-        elseif (Auth::check())
-            $user = Auth::user();
-        else
-            $user = null;
-
-        $key = "product:obtainProductCost:"
-            .$this->cacheKey()
-            ."-user:"
-            .(isset($user) ? $user->cacheKey() : "");
-
-        return Cache::tags('bon')->remember($key,Config::get("constants.CACHE_60"),function () use($user) {
-            // Obtaining discount
-            $bonDiscount = 0;
-            $productDiscount = 0;
-            $productDiscountAmount = 0;
-            $bonName = Config::get("constants.BON1");
-
-            $totalBonNumber = 0;
-            if (isset($user)) {
-                $totalBonNumber = $user->userHasBon($bonName);
-                $bons = $this->BoneName($bonName);
-                if ($bons->isEmpty()) {
-                    $parentsArray = $this->makeParentArray($this);
-
-                    if (!empty($parentsArray)) {
-                        foreach ($parentsArray as $parent) {
-                            $bons = $parent->BoneName($bonName);
-                            if (!$bons->isEmpty())
-                                break;
-                        }
-                    }
-                }
-                if ($bons->isNotEmpty()) {
-                    $bonDiscount += $bons->first()->pivot->discount * $totalBonNumber;
-                }
-            }
-
-            //////////////////////////////
-
-            $cost = 0;
-            //Adding product base price
-
-            if ($this->hasChildren()) {
-                if ($this->basePrice == 0) {
-                    $children = $this->children;
-                    $childBonDiscount = 0;
-                    foreach ($children as $child) {
-                        if ($bonDiscount == 0) {
-                            $childBons = $child->bons->where("name", $bonName)->where("isEnable", 1);
-                            if ($childBons->isNotEmpty())
-                                $childBonDiscount += $childBons->first()->pivot->discount * $totalBonNumber;
-                        }
-                        $cost += $child->basePrice;
-                        $productDiscountAmount += ($child->discount / 100) * $child->basePrice;
-                    }
-                    $bonDiscount = $childBonDiscount;
-                } else {
-                    $cost += $this->basePrice;
-                    $productDiscount += $this->discount;
-                }
-            } else {
-                if (isset($this->discount) && $this->discount > 0)
-                    $productDiscount += $this->discount;
-                elseif (!$this->parents->where("producttype_id", Config::get("constants.PRODUCT_TYPE_CONFIGURABLE"))->isEmpty() && isset($this->parents->first()->discount)) $productDiscount += $this->parents->first()->discount;
-                if ($this->hasParents()) {
-                    if ($this->basePrice != 0 && $this->basePrice != $this->parents->first()->basePrice)
-                        $cost += $this->basePrice;
-                    else  $cost += $this->parents->first()->basePrice;
-
-                } else {
-                    $cost += $this->basePrice;
-                }
-            }
-            /////////////////////////////////
-
-            // Adding attributes extra cost
-            if ($this->producttype_id != Config::get("constants.PRODUCT_TYPE_CONFIGURABLE")) {
-                $attributevalues = $this->attributevalues('main')->get();
-                foreach ($attributevalues as $attributevalue) {
-                    if (isset($attributevalue->pivot->extraCost)) $cost += $attributevalue->pivot->extraCost;
-                }
-            }
-
-            //////////////////////////////
-
-            return [
-                "cost" => (int)$cost,
-                "productDiscount" => $productDiscount,
-                'bonDiscount' => $bonDiscount,
-                "productDiscountAmount" => $productDiscountAmount,
-                'CustomerCost' =>(int)(((int)$cost * (1 - ($productDiscount / 100))) * (1 - ($bonDiscount / 100)) - $productDiscountAmount)
-            ];
-        });
-    }
-
-    /**
-     * @return string
-     * Converting Created_at field to jalali
-     */
-    public function CreatedAt_Jalali()
-    {
-        $explodedDateTime = explode(" ", $this->created_at);
-//        $explodedTime = $explodedDateTime[1] ;
-        return $this->convertDate($this->created_at, "toJalali");
-    }
-
-    /**
-     * @return string
-     * Converting Updated_at field to jalali
-     */
-    public function UpdatedAt_Jalali()
-    {
-        $explodedDateTime = explode(" ", $this->updated_at);
-//        $explodedTime = $explodedDateTime[1] ;
-        return $this->convertDate($this->updated_at, "toJalali");
-    }
-
-    /**
-     * @return string
-     * Converting Created_at field to jalali
-     */
-    public function validSince_Jalali()
-    {
-        $explodedDateTime = explode(" ", $this->validSince);
-//        $explodedTime = $explodedDateTime[1] ;
-        return $this->convertDate($this->validSince, "toJalali");
-    }
-
-    /**
-     * @return string
-     * Converting Created_at field to jalali
-     */
-    public function validUntil_Jalali()
-    {
-        $explodedDateTime = explode(" ", $this->validUntil);
-//        $explodedTime = $explodedDateTime[1] ;
-        return $this->convertDate($this->validUntil, "toJalali");
     }
 
     /**
@@ -970,152 +1254,6 @@ class Product extends Model implements Advertisable, Taggable , SeoInterface
         }
     }
 
-    public function getAllAttributes()
-    {
-        $product = $this;
-        $key = 'product:'."getAllAttributes:".$product->id;
-
-        return Cache::remember($key,Config::get("constants.CACHE_600"),function () use ($product){
-
-            $selectCollection = collect();
-            $groupedCheckboxCollection = collect();
-            $extraSelectCollection = collect();
-            $extraCheckboxCollection = collect();
-            $simpleInfoAttributes = collect();
-            $checkboxInfoAttributes = collect();
-            $attributeset = $product->attributeset;
-            $attributes = $attributeset->attributes();
-            $productType = $product->producttype->id;
-            if (!$product->relationLoaded('attributevalues'))
-                $product->load('attributevalues');
-
-            $attributes->load('attributetype','attributecontrol');
-
-            foreach ($attributes as $attribute) {
-                $attributeType = $attribute->attributetype;
-                $controlName = $attribute->attributecontrol->name;
-                $attributevalues = $product->attributevalues->where("attribute_id", $attribute->id)->sortBy("pivot.order");
-
-                if (!$attributevalues->isEmpty()) {
-                    switch ($controlName) {
-                        case "select":
-                            if($attributeType->name == "extra"){
-                                $select = array();
-                                $this->makeSelectAttributes($attributevalues,$select);
-                                if (!empty($select))
-                                    $extraSelectCollection->put($attribute->id, ["attributeDescription" => $attribute->displayName, "attributevalues" => $select]);
-
-                            }elseif($attributeType->name == "main"&&  $productType == Config::get("constants.PRODUCT_TYPE_CONFIGURABLE")){
-                                if ($attributevalues->count() == 1) {
-                                    $this->makeSimpleInfoAttributes($attributevalues,$attribute,$attributeType,$simpleInfoAttributes);
-                                } else {
-                                    $select = array();
-                                    $this->makeSelectAttributes($attributevalues,$select);
-                                    if (!empty($select))
-                                        $selectCollection->put($attribute->pivot->description, $select);
-                                }
-                            } else{ // 1
-                                $this->makeSimpleInfoAttributes($attributevalues,$attribute,$attributeType,$simpleInfoAttributes);
-                            }
-                            break;
-                        case "groupedCheckbox":
-                            if($attributeType->name == "extra"){
-                                $groupedCheckbox = collect();
-                                foreach ($attributevalues as $attributevalue) {
-                                    $attributevalueIndex = $attributevalue->name;
-                                    if (isset($attributevalue->pivot->description) && strlen($attributevalue->pivot->description) > 0)
-                                        $attributevalueIndex .= "( " . $attributevalue->pivot->description . " )";
-
-                                    if (isset($attributevalue->pivot->extraCost)) {
-                                        if ($attributevalue->pivot->extraCost > 0)
-                                            $attributevalueIndex .= "(+" . number_format($attributevalue->pivot->extraCost) . " تومان)";
-                                        if ($attributevalue->pivot->extraCost < 0)
-                                            $attributevalueIndex .= "(-" . number_format($attributevalue->pivot->extraCost) . " تومان)";
-                                    }
-
-                                    $groupedCheckbox->put($attributevalue->id, ["index" => $attributevalueIndex,"value" => $attributevalue->id, "type" => $attributeType->name, "productType" => $product->producttype->name]);
-                                }
-                                if (!empty($groupedCheckbox))
-                                    $extraCheckboxCollection->put($attribute->displayName, $groupedCheckbox);
-
-                            } else {
-                                if ($product->producttype->id == Config::get("constants.PRODUCT_TYPE_CONFIGURABLE")) {
-                                    if($attributeType->name == "information"){
-                                        $this->makeSimpleInfoAttributes($attributevalues,$attribute,$attributeType,$checkboxInfoAttributes);
-                                    }else {
-                                        $groupedCheckbox = array();
-                                        foreach ($attributevalues as $attributevalue) {
-                                            $attributevalueIndex = $attributevalue->name;
-                                            if (isset($attributevalue->pivot->description) && strlen($attributevalue->pivot->description) > 0)
-                                                $attributevalueIndex .= "( " . $attributevalue->pivot->description . " )";
-
-                                            $attributevalueExtraCost = "";
-                                            $attributevalueExtraCostWithDiscount = "";
-                                            if (isset($attributevalue->pivot->extraCost)) {
-                                                if ($attributevalue->pivot->extraCost > 0) {
-                                                    $attributevalueExtraCost = "+" . number_format($attributevalue->pivot->extraCost) . " تومان";
-                                                    if ($product->discount > 0)
-                                                        $attributevalueExtraCostWithDiscount = number_format("+" . $attributevalue->pivot->extraCost * (1 - ($product->discount / 100))) . " تومان";
-                                                    else
-                                                        $attributevalueExtraCostWithDiscount = 0;
-                                                } elseif ($attributevalue->pivot->extraCost < 0) {
-                                                    $attributevalueExtraCost = "-" . number_format($attributevalue->pivot->extraCost) . " تومان";
-                                                    if ($product->discount > 0)
-                                                        $attributevalueExtraCostWithDiscount = number_format("-" . $attributevalue->pivot->extraCost * (1 - ($product->discount / 100))) . " تومان";
-                                                    else
-                                                        $attributevalueExtraCostWithDiscount = 0;
-                                                }
-
-                                            }
-                                            $groupedCheckbox = array_add($groupedCheckbox, $attributevalue->id, ["index" => $attributevalueIndex, "extraCost" => $attributevalueExtraCost, "extraCostWithDiscount" => $attributevalueExtraCostWithDiscount, "value" => $attributevalue->id, "type" => $attributeType->name, "productType" => $product->producttype->name]);
-                                        }
-                                        if (!empty($groupedCheckbox))
-                                            $groupedCheckboxCollection->put($attribute->pivot->description, $groupedCheckbox);
-                                    }
-                                } else {
-                                    $this->makeSimpleInfoAttributes($attributevalues,$attribute,$attributeType,$checkboxInfoAttributes);
-                                }
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-                }
-
-            }
-
-            return [
-                "selectCollection" => $selectCollection,
-                "groupedCheckboxCollection" => $groupedCheckboxCollection,
-                "extraSelectCollection" => $extraSelectCollection,
-                "extraCheckboxCollection" => $extraCheckboxCollection,
-                "simpleInfoAttributes" => $simpleInfoAttributes,
-                "checkboxInfoAttributes" => $checkboxInfoAttributes,
-            ];
-
-        });
-
-    }
-
-    public function getRootImage()
-    {
-        $key="product:getRootImage:".$this->cacheKey();
-        return Cache::remember($key,Config::get("constants.CACHE_600"),function (){
-            $image = "";
-            $grandParent = $this->getGrandParent();
-            if ($grandParent !== false) {
-                if (isset($grandParent->image))
-                    $image = $grandParent->image;
-            } else {
-                if (isset($this->image))
-                    $image = $this->image;
-            }
-            return $image;
-        });
-
-
-    }
-
     public function isHappening()
     {
         $isHappening = false;
@@ -1130,11 +1268,6 @@ class Product extends Model implements Advertisable, Taggable , SeoInterface
                 $isHappening = $now->diffInMinutes($productEndTime, false);
         }
         return $isHappening;
-    }
-
-    public function getTagsAttribute($value)
-    {
-        return json_decode($value);
     }
 
     /**
@@ -1167,22 +1300,6 @@ class Product extends Model implements Advertisable, Taggable , SeoInterface
         return $tags;
     }
 
-    public function getMetaTags(): array
-    {
-        return [
-            'title' => $this->name,
-            'description' => $this->shortDescription,
-            'url' => action('ProductController@show',$this),
-            'canonical' => action('ProductController@show',$this),
-            'site' => 'آلاء',
-            'imageUrl' => $this->image,
-            'imageWidth' => '338',
-            'imageHeight' => '338',
-            'tags' => $this->tags,
-            'seoMod' => SeoMetaTagsGenerator::SEO_MOD_PRODUCT_TAGS,
-        ];
-    }
-
     /**
      * @param $productFileTypes
      * @return Collection
@@ -1202,41 +1319,6 @@ class Product extends Model implements Advertisable, Taggable , SeoInterface
             }
         }
         return $defaultProductFileOrders;
-    }
-
-    /**
-     * @param array $excludedProducts
-     * @return Builder
-     */
-    function getOtherProducts(array $excludedProducts) : Builder
-    {
-        $otherProducts = self::getProducts(0, 1, $excludedProducts, "created_at", "desc")
-                                ->where("id", "<>", $this->id);
-        return $otherProducts;
-    }
-
-    /**
-     * @param array $exclusiveOtherProductIds
-     * @return \Illuminate\Database\Eloquent\Collection|static[]
-     */
-    public static function getExclusiveOtherProducts(array $exclusiveOtherProductIds):Collection
-    {
-        return Product::whereIn("id" , $exclusiveOtherProductIds)->get() ;
-    }
-
-    /**
-     * @param int $order
-     */
-    public static function shiftProductOrders( $order): void
-    {
-        $productsWithSameOrder = self::getProducts(0, 0)
-                                        ->where("order", $order)
-                                        ->get();
-        foreach( $productsWithSameOrder as $productWithSameOrder)
-        {
-            $productWithSameOrder->order = $productWithSameOrder->order + 1;
-            $productWithSameOrder->update();
-        }
     }
 
     /** Equalizing this product's children to him
@@ -1279,7 +1361,7 @@ class Product extends Model implements Advertisable, Taggable , SeoInterface
      * @param string $type
      * @return array
      */
-    function makeFileArray($type): array
+    public function makeFileArray($type): array
     {
         $filesArray = [];
         $productsFiles = $this->validProductfiles($type)->get();

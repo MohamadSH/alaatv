@@ -45,7 +45,7 @@
             <td>@if($content->grades->isNotEmpty()) @foreach($content->grades as $grade){{$grade->displayName}} @endforeach @else<span class="label label-sm label-danger">  درج نشده </span>@endif</td>
         @endif
         @if(isset($columns) && in_array("major",$columns))
-            <td>@if($content->majors->isNotEmpty()) {{$content->displayMajors()}} @else<span class="label label-sm label-danger">  درج نشده </span>@endif</td>
+            <td>@if($content->majors->isNotEmpty()) {{$content->major->name}} @else<span class="label label-sm label-danger">  درج نشده </span>@endif</td>
         @endif
         @if(isset($columns) && in_array("contentType",$columns))
             <td>@if($content->contenttypes->isNotEmpty()) @foreach($content->contenttypes as $contenttype){{$contenttype->displayName}} @endforeach @else<span class="label label-sm label-danger">  درج نشده </span>@endif</td>
