@@ -2,6 +2,7 @@
 
 namespace App;
 
+
 use App\Classes\Taggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -55,6 +56,28 @@ class Contentset extends Model implements Taggable
         'photo'
     ];
 
+    /*
+    |--------------------------------------------------------------------------
+    | Scopes
+    |--------------------------------------------------------------------------
+    */
+
+        /**
+         * Scope a query to only include active Contentsets.
+         *
+         * @param \Illuminate\Database\Eloquent\Builder $query
+         * @return \Illuminate\Database\Eloquent\Builder
+         */
+        public function scopeActive($query)
+        {
+            return $query->where('enable', 1);
+        }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relations
+    |--------------------------------------------------------------------------
+    */
 
     public function contents()
     {
@@ -66,6 +89,15 @@ class Contentset extends Model implements Taggable
             ->withPivot("order", "isDefault");
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    |
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * @return mixed
+     */
     public function getLastContent() :Content
     {
         $key = "ContentSet:getLastContent".$this->cacheKey();
@@ -81,10 +113,6 @@ class Contentset extends Model implements Taggable
         return json_decode($value);
     }
 
-//    public function setTagsAttribute($value)
-//    {
-//        return json_encode($value);
-//    }
     public function retrievingTags()
     {
         /**

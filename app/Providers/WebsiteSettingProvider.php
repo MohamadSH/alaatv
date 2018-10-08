@@ -17,26 +17,20 @@ class WebsiteSettingProvider extends ServiceProvider
      */
     public function boot()
     {
-        if (Schema::hasTable('websitesettings')) {
-            $key = "AppServiceProvider:websitesettings";
+        $key = "AppServiceProvider:websitesettings";
+        $setting = Cache::remember($key, Config::get("constants.CACHE_600"), function () {
+            return Websitesetting::where("version", 1)->get()->first();
+        });
 
-            $setting = Cache::remember($key, Config::get("constants.CACHE_600"), function () {
-                return Websitesetting::where("version", 1)->get()->first();
-            });
+        view()->share('wSetting', $setting->setting);
+        view()->share('setting', $setting);
 
-            $wSetting = json_decode($setting->setting);
-            view()->share('wSetting', $wSetting);
-            view()->share('setting', $setting);
-            if (isset($wSetting->site->name))
-                Config::set("constants.SITE_NAME", $wSetting->site->name);
-            $this->app->singleton('setting', function () use ($setting) {
-                return $setting;
-            });
+        if (isset($wSetting->site->name))
+            Config::set("constants.SITE_NAME", $setting->setting->site->name);
 
-//            $this->app->bind("\App\Setting", function ($app){
-//                return $app['setting'];
-//            });
-        }
+        $this->app->singleton('App\Websitesetting', function ($app) use ($setting) {
+            return $setting;
+        });
     }
 
     /**

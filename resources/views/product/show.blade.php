@@ -303,14 +303,14 @@
                                     </div>
 
                                     <div class="col-md-4">
-                                        @if(isset($productIntroVideo))
+                                        @if(isset($product->introVideo))
                                             <div class="portlet solid light grey-mint">
                                                 <div class="portlet-title">
                                                     <div class="caption bg-font-dark sbold">کلیپ معرفی</div>
                                                 </div>
                                                 <div class="portlet-body">
                                                     <video controls style="width: 100%">
-                                                        <source src="{{$productIntroVideo}}" type="video/mp4">
+                                                        <source src="{{$product->introVideo}}" type="video/mp4">
                                                         <span class="bold font-red">مرورگر شما HTML5 را پشتیبانی نمی کند</span>
                                                     </video>
                                                 </div>
@@ -326,11 +326,7 @@
                                                     <ul class="list-unstyled">
                                                         @foreach($giftCollection as $gift)
                                                             <li class="text-center bold">
-                                                                @if(strlen($gift["link"])>0)
-                                                                    <a target="_blank" href="{{$gift["link"]}}">{{$gift["product"]->name}}</a>
-                                                                @else
-                                                                    {{$gift["product"]->name}}
-                                                                @endif
+                                                                <a target="_blank" href="{{(strlen($gift->makeProductLink())>0)?$gift->makeProductLink() :"#" }}">{{$gift->name}}</a>
                                                             </li>
                                                         @endforeach
                                                     </ul>
@@ -508,7 +504,7 @@
                 {!! $product->specialDescription !!}
             </div>
         @endif
-        @if( isset($product->longDescription[0] ) || ($productsWithVideo->isNotEmpty() || $productsWithPamphlet->isNotEmpty()))
+        @if( isset($product->longDescription[0] ) || $productAllFiles->isNotEmpty())
             <div class="row">
                 <div class="col-md-12">
                     <div class="portlet box yellow">
@@ -531,7 +527,7 @@
                                         {{--@endrole--}}
 
                                     @endif
-                                    @if($productsWithVideo->isNotEmpty() || $productsWithPamphlet->isNotEmpty())
+                                    @if($productAllFiles->isNotEmpty())
                                         <li>
                                             <a href="#tab_15_3" data-toggle="tab" class="bold  uppercase {{(!isset($product->longDescription) || strlen($product->longDescription) <= 0)?"active":""}}">دانلود فیلم ها
                                                 و جزوات</a>
@@ -638,37 +634,6 @@
                                                     display: inherit !important;
                                                     background-color: #5f5c5c !important;
                                                 }
-                                            </style>
-                                            @foreach($productsWithVideo as $key => $productVideos)
-                                                <div class="col-md-6 videoList" style="margin-bottom: 10px">
-                                                    <div class="mt-element-list">
-                                                        <div class="mt-list-head list-simple font-white bg-blue">
-                                                            <div class="list-head-title-container">
-                                                                <h4 class="list-title">فیلمهای {{$key}}</h4>
-                                                            </div>
-                                                        </div>
-                                                        <div class="mt-list-container list-simple scroller"
-                                                             style="height: 200px">
-                                                            <ul>
-                                                                @foreach($productVideos as $video)
-                                                                    <li class="mt-list-item">
-                                                                        <div class="list-icon-container">
-                                                                            <i class="fa fa-download"></i>
-                                                                        </div>
-                                                                        <div class="list-item-content">
-                                                                            <p class="uppercase"
-                                                                               style="    font-size: 16px;">
-                                                                                <a href="{{action("HomeController@download" , ["content"=>"فایل محصول","fileName"=>$video["file"], "pId"=>$video["product_id"]  ])}}">دانلود {{$video["name"]}}</a>
-                                                                            </p>
-                                                                        </div>
-                                                                    </li>
-                                                                @endforeach
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @endforeach
-                                            <style>
                                                 .pamphletList .slimScrollBar {
                                                     background: rgb(181, 73, 61) !important;
                                                     height: 30px;
@@ -679,34 +644,37 @@
                                                     background-color: #5f5c5c !important;
                                                 }
                                             </style>
-                                            @foreach($productsWithPamphlet as $key => $productPamphlets)
-                                                <div class="col-md-6 pamphletList" style="margin-bottom: 10px">
-                                                    <div class="mt-element-list">
-                                                        <div class="mt-list-head list-simple font-white bg-red-flamingo-opacity">
-                                                            <div class="list-head-title-container">
-                                                                <h4 class="list-title">جزوه های {{$key}}</h4>
+
+                                            @foreach($productAllFiles as $productAllFile)
+                                                @foreach($productAllFile["files"] as $key => $productFiles)
+                                                    <div class="col-md-6 {{$productAllFile["typeName"]}}List" style="margin-bottom: 10px">
+                                                        <div class="mt-element-list">
+                                                            <div class="mt-list-head list-simple font-white {{($productAllFile["typeName"]=="video")?"bg-blue":"bg-red-flamingo-opacity"}}">
+                                                                <div class="list-head-title-container">
+                                                                    <h4 class="list-title">{{$productAllFile["typeDisplayName"]}} های {{$key}}</h4>
+                                                                </div>
+                                                            </div>
+                                                            <div class="mt-list-container list-simple scroller"
+                                                                 style="height: 200px">
+                                                                <ul>
+                                                                    @foreach($productFiles as $file)
+                                                                        <li class="mt-list-item">
+                                                                            <div class="list-icon-container">
+                                                                                <i class="fa fa-download"></i>
+                                                                            </div>
+                                                                            <div class="list-item-content">
+                                                                                <p class="uppercase"
+                                                                                   style="    font-size: 16px;">
+                                                                                    <a href="{{action("HomeController@download" , ["content"=>"فایل محصول","fileName"=>$file["file"], "pId"=>$file["product_id"]  ])}}">دانلود {{$file["name"]}}</a>
+                                                                                </p>
+                                                                            </div>
+                                                                        </li>
+                                                                    @endforeach
+                                                                </ul>
                                                             </div>
                                                         </div>
-                                                        <div class="mt-list-container list-simple scroller"
-                                                             style="height: 100px">
-                                                            <ul>
-                                                                @foreach($productPamphlets as $pamphlet)
-                                                                    <li class="mt-list-item">
-                                                                        <div class="list-icon-container">
-                                                                            <i class="fa fa-download"></i>
-                                                                        </div>
-                                                                        <div class="list-item-content">
-                                                                            <p class="uppercase"
-                                                                               style="    font-size: 16px;">
-                                                                                <a href="{{action("HomeController@download" , ["content"=>"فایل محصول","fileName"=>$pamphlet["file"] , "pId"=>$pamphlet["product_id"] ])}}">دانلود {{$pamphlet["name"]}}</a>
-                                                                            </p>
-                                                                        </div>
-                                                                    </li>
-                                                                @endforeach
-                                                            </ul>
-                                                        </div>
                                                     </div>
-                                                </div>
+                                                @endforeach
                                             @endforeach
                                         </div>
 
