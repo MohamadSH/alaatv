@@ -87,6 +87,7 @@ class ContentController extends Controller
                     "type"=>$contentType,
                     "totalitems"=> ${$contentType . 'Result'}->total(),
                     "view"=>$partialSearch,
+                    "tagLabels" => $tags
                 ]);
             }
         }
@@ -169,7 +170,7 @@ class ContentController extends Controller
             $seenCount = $this->getSeenCountFromRequest($request);
             $userCanSeeCounter = optional(auth()->user())->CanSeeCounter();
 
-            $result = compact( "seenCount","author", "content", "rootContentType", "childContentType", "contentsWithSameType", "soonContentsWithSameType", "contentSet", "contentsWithSameSet", "videosWithSameSet", "pamphletsWithSameSet", "contentSetName", "videoSources"
+            $result = compact( "seenCount","author", "content", "rootContentType", "childContentType", "contentSet", "contentsWithSameSet", "videosWithSameSet", "pamphletsWithSameSet", "contentSetName", "videoSources"
               , "tags", "sideBarMode", "userCanSeeCounter", "adItems", "videosWithSameSetL", "videosWithSameSetR","contentId");
 
             if(request()->ajax())

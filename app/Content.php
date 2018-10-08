@@ -95,9 +95,22 @@ use Stevebauman\Purify\Facades\Purify;
  */
 class Content extends Model implements Advertisable, Taggable, SeoInterface
 {
+    /*
+    |--------------------------------------------------------------------------
+    | Traits
+    |--------------------------------------------------------------------------
+    */
+
     use APIRequestCommon;
     use SoftDeletes;
     use Helper;
+
+    /*
+    |--------------------------------------------------------------------------
+    | Properties
+    |--------------------------------------------------------------------------
+    */
+
     protected static $purifyNullConfig = ['HTML.Allowed' => ''];
 
     public const CONTENT_TYPE_PAMPHLET = 1;
@@ -138,6 +151,605 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface
         'enable'
     ];
 
+    /*
+    |--------------------------------------------------------------------------
+    | Private methods
+    |--------------------------------------------------------------------------
+    */
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Cache
+    |--------------------------------------------------------------------------
+    */
+
+    public function cacheKey()
+    {
+        $key = $this->getKey();
+        $time= isset($this->update) ? $this->updated_at->timestamp : $this->created_at->timestamp;
+        return sprintf(
+            "%s-%s",
+            //$this->getTable(),
+            $key,
+            $time
+        );
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Scopes
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Scope a query to only include enable(or disable) Contents.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param int $enable
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeEnable($query, $enable = 1)
+    {
+        return $query->where('enable', $enable);
+    }
+
+    /**
+     * Scope a query to only include Valid Contents.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeValid($query)
+    {
+        return $query->where('validSince', '<', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'));
+    }
+
+    /**
+     * Scope a query to only include active Contents.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeActive($query){
+        return $query->where('enable', 1)
+            ->where(function ($q){
+                $q->where('validSince', '<', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'))
+                    ->orWhereNull('validSince');
+            }
+            );
+    }
+
+    /**
+     * Scope a query to only include Contents that will come soon.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeSoon($query)
+    {
+        return $query->where('validSince', '>', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'));
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Accessor
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Get the content's title .
+     *
+     * @param $value
+     * @return string
+     */
+    public function getTitleAttribute($value) :string
+    {
+        return Purify::clean($value,self::$purifyNullConfig);
+    }
+
+    /**
+     * Get the content's description .
+     *
+     * @param $value
+     * @return string
+     */
+    public function getDescriptionAttribute($value) : string
+    {
+        return Purify::clean($value);
+    }
+
+    /**
+     * Get the content's name .
+     *
+     * @param $value
+     * @return string
+     */
+    public function getNameAttribute($value):string
+    {
+        return Purify::clean($value,self::$purifyNullConfig);
+    }
+
+    /**
+     * Get the content's meta title .
+     *
+     * @param $value
+     * @return string
+     */
+    public function getMetaTitleAttribute($value) :string
+    {
+        if(isset($value[0]))
+            return Purify::clean($value,self::$purifyNullConfig);
+        else{
+            return Purify::clean(mb_substr($this->display_name,0,config("constants.META_TITLE_LIMIT"), "utf-8"),self::$purifyNullConfig);
+        }
+    }
+
+    /**
+     * Get the content's meta description .
+     *
+     * @param $value
+     * @return string
+     */
+    public function getMetaDescriptionAttribute($value) : string
+    {
+        if(isset($value[0]))
+            return Purify::clean($value,self::$purifyNullConfig);
+        else{
+            return Purify::clean(mb_substr($this->description,0,config("constants.META_DESCRIPTION_LIMIT"), "utf-8"),self::$purifyNullConfig);
+        }
+    }
+
+    /**
+     * Get the content's files .
+     *
+     * @param $value
+     * @return Collection
+     */
+    public function getFileAttribute($value) : Collection
+    {
+        $key = "Content:File".$this->cacheKey();
+        return Cache::tags('content')->remember($key,Config::get("constants.CACHE_60"),function () use($value) {
+            $fileCollection = collect(json_decode($value));
+            $fileCollection->transform(function ($item, $key) {
+                $l = new LinkGenerator($item);
+                $item->link = $this->isFree ? $l->getLinks() : $l->getLinks([
+                    "content_id" => $this->id
+                ]);
+                return $item;
+            });
+
+            return $fileCollection->groupBy('type');
+        });
+    }
+
+    /**
+     * Get the content's thumbnail .
+     *
+     * @param $value
+     * @return array|null|string
+     *
+     * @throws Exception
+     */
+    public function getThumbnailAttribute($value) : string
+    {
+        $t = json_decode($value);
+        $link = null;
+        if(isset($t))
+            $link = new LinkGenerator($t);
+        return optional($link)->getLinks();
+    }
+
+    /**
+     * Get the content's author .
+     *
+     * @return string
+     */
+    public function getAuthorAttribute() : string
+    {
+        $content = $this;
+        $key = "content:author" . $content->cacheKey();
+        $author = Cache::tags(["user"])->remember($key, Config::get("constants.CACHE_60"), function () use ($content) {
+            return optional($this->user)->getfullName();
+        });
+        return isset($author) ? $author : "";
+    }
+
+    /**
+     * Get the content's tags .
+     *
+     * @param $value
+     * @return mixed
+     */
+    public function getTagsAttribute($value)
+    {
+        return json_decode($value);
+    }
+
+    /**
+     * Get the content's contentset .
+     *
+     * @return Contentset
+     */
+    public function getContentsetAttribute() :Contentset
+    {
+        $content = $this;
+        $key = "content:contentSet:" . $this->cacheKey();
+        $contentset = Cache::tags(["content"])->remember($key, Config::get("constants.CACHE_60"), function () use ($content) {
+            return $content->contentsets->where("pivot.isDefault", 1)->first();
+        });
+        return $contentset;
+    }
+
+    /**
+     * Get the content's session .
+     *
+     * @return int|null
+     */
+    public function getSessionAttribute()
+    {
+        $content = $this;
+        $order = optional($this->pivot)->order;
+        if(isset($order))
+            return $order;
+
+        $key = "content:session:" . $this->cacheKey();
+        $session = Cache::tags(["content"])->remember($key, Config::get("constants.CACHE_60"), function () use ($content) {
+            $cs = $content->contentset;
+            return isset($cs) ? $cs->pivot->order : null;
+        });
+        return $session;
+    }
+
+    /**
+     * Gets content's pamphlets
+     * @return Collection
+     */
+    public function getPamphlets() :Collection {
+        $pamphlet = optional($this->file)->get('pamphlet');
+        return isset($pamphlet) ? $pamphlet : collect();
+    }
+
+    /**
+     * Gets content's videos
+     * @return Collection
+     */
+    public function getVideos() :Collection {
+        $video = optional($this->file)->get('video');
+        return isset($video) ? $video : collect();
+    }
+
+    /**
+     * Gets content's set mates (contents which has same content set as this content
+     *
+     * @return mixed
+     */
+    public function getSetMates()
+    {
+        $content = $this;
+        $key = "content:setMates:" . $this->cacheKey();
+
+        $setMates = Cache::tags(["content"])->remember($key, Config::get("constants.CACHE_60"), function () use ($content) {
+            $contentSet = $content->contentset;
+            $contentSetName = optional($contentSet)->name;
+            if (isset($contentSet)) {
+                $sameContents = $contentSet->contents()
+                    ->active()
+                    ->get()
+                    ->sortBy("pivot.order")
+                    ->load('contenttype');
+            }else
+                $sameContents = new ContentCollection([]);
+            return [
+                $sameContents,
+                $contentSetName,
+            ];
+        });
+        return $setMates;
+
+    }
+
+    /**
+     * Gets content's order in it's default content set
+     *
+     * @return int
+     */
+    public  function getOrder():int
+    {
+        $key = "content:Order"
+            .$this->cacheKey();
+        $c = $this;
+        return Cache::tags("content")->remember($key,Config::get("constants.CACHE_60"),function () use($c) {
+            $order = optional(optional($c->contentset)->pivot)->order;
+            return  $order >= 0 ? $order : -1;
+        });
+    }
+
+    /**
+     * Gets content's display name
+     *
+     * @return string
+     * @throws Exception
+     */
+    public function getDisplayNameAttribute() :string
+    {
+        try {
+            $key = "content:getDisplayName"
+                .$this->cacheKey();
+            $c = $this;
+            return Cache::remember($key,Config::get("constants.CACHE_60"),function () use($c) {
+                $displayName = "";
+                $sessionNumber = $c->getOrder();
+                if (isset($c->contenttype)) {
+                    $displayName .=$c->contenttype->displayName." ";
+                }
+                $displayName .= ( isset($sessionNumber) && $sessionNumber > -1 ? "جلسه ".$sessionNumber." - ":"" )." ".(isset($c->name) ? $c->name : $c->user->name);
+                return $displayName;
+            });
+
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
+    /**
+     * Gets content's advertisement items
+     *
+     * @return Collection
+     */
+    public function getAddItems(): Collection
+    {
+        $content = $this;
+        $key = "content:getAddItems" . $content->cacheKey();
+
+        $adItems = Cache::tags(["content"])->remember($key, Config::get("constants.CACHE_60"), function () use ($content) {
+            $adItems = collect();
+            if (optional($content->contentset)->id != 199) {
+                $adItems = Content::whereHas("contentsets", function ($q) {
+                    $q->where("id", 199);
+                })
+                    ->where("enable", 1)
+                    ->orderBy("order")
+                    ->get();
+            }
+            return $adItems;
+        });
+
+        return $adItems;
+    }
+
+    /**
+     * Gets content's meta tags array
+     *
+     * @return array
+     */
+    public function getMetaTags(): array
+    {
+        return [
+            'title' => $this->metaTitle,
+            'description' => $this->metaDescription,
+            'url' => action('ContentController@show',$this),
+            'canonical' => action('ContentController@show',$this),
+            'site' => 'آلاء',
+            'imageUrl' => $this->thumbnail,
+            'imageWidth' => '1280',
+            'imageHeight' => '720',
+            'seoMod' => SeoMetaTagsGenerator::SEO_MOD_VIDEO_TAGS,
+            'playerUrl' => action('ContentController@embed',$this),
+            'playerWidth' => '854',
+            'playerHeight' => '480',
+            'videoDirectUrl' => optional(optional(optional($this->file->first())->where('res','480p'))->first())->link,
+            'videoActorName' => $this->author,
+            'videoActorRole' => 'دبیر',
+            'videoDirector' => 'آلاء',
+            'videoWriter' => 'آلاء',
+            'videoDuration' => $this->duration,
+            'videoReleaseDate' => $this->validSince,
+            'tags' => $this->tags,
+            'videoWidth' => '854',
+            'videoHeight' => '480',
+            'videoType' => 'video/mp4',
+            'articleAuthor' => $this->author,
+            'articleModifiedTime' => $this->updated_at,
+            'articlePublishedTime' => $this->validSince,
+        ];
+    }
+
+    /**
+     * Converts content's created_at to Jalali
+     *
+     * @return string
+     */
+    public function CreatedAt_Jalali(): string
+    {
+        $explodedDateTime = explode(" ", $this->created_at);
+//        $explodedTime = $explodedDateTime[1] ;
+        return $this->convertDate($this->created_at, "toJalali");
+    }
+
+    /**
+     * Converts content's updated_at to Jalali
+     *
+     * @return string
+     */
+    public function UpdatedAt_Jalali(): string
+    {
+        $explodedDateTime = explode(" ", $this->updated_at);
+//        $explodedTime = $explodedDateTime[1] ;
+        return $this->convertDate($this->updated_at, "toJalali");
+    }
+
+    /**
+     *  Converts content's validSince to Jalali
+     *
+     * @return string
+     */
+    public function validSince_Jalali() : string
+    {
+        $explodedDateTime = explode(" ", $this->validSince);
+        $explodedTime = $explodedDateTime[1];
+        return $this->convertDate($this->validSince, "toJalali") . " " . $explodedTime;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Mutator
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Set the content's thumbnail.
+     *
+     * @param $input
+     * @return void
+     */
+    public function setThumbnailAttribute($input){
+        $this->attributes['thumbnail'] = json_encode($input,JSON_UNESCAPED_UNICODE);
+    }
+
+    /**
+     * Set the content's file.
+     *
+     * @param Collection $input
+     * @return void
+     */
+    public function setFileAttribute(Collection $input)
+    {
+        $this->attributes['file'] = $input->toJson(JSON_UNESCAPED_UNICODE);
+    }
+
+    /**
+     * Set the content's tag.
+     *
+     * @param array $value
+     * @return void
+     */
+    public function setTagsAttribute(array $value){
+        $tags = null;
+        if(!empty($value))
+            $tags = json_encode([
+                "bucket" => "content",
+                "tags" => $value
+            ], JSON_UNESCAPED_UNICODE);
+
+        $this->attributes['tags'] = $tags;
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relations
+    |--------------------------------------------------------------------------
+    */
+
+    public function grades()
+    {
+        return $this->belongsToMany('App\Grade');
+    }
+
+    public function majors()
+    {
+        return $this->belongsToMany('App\Major');
+    }
+
+    public function files()
+    {
+        return $this->belongsToMany(
+            'App\File',
+            'educationalcontent_file',
+            'content_id',
+            'file_id')->withPivot("caption", "label");
+    }
+
+    public function thumbnails(){
+        return $this->files()->where('label','=','thumbnail');
+    }
+
+    public function contentsets()
+    {
+        return $this->belongsToMany("\App\Contentset", "contentset_educationalcontent", "edc_id", "contentset_id")->withPivot("order", "isDefault");
+    }
+
+    public function template()
+    {
+        return $this->belongsTo("\App\Template");
+    }
+
+    public function contenttype()
+    {
+        return $this->belongsTo('App\Contenttype');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo("\App\User" , "author_id" ,"id");
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    |  Checkers (boolean)
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Checks whether the content is active or not .
+     *
+     * @return bool
+     */
+    public function isActive(): bool
+    {
+        return ($this->isEnable() && $this->isValid() ? true : false);
+    }
+
+    /**
+     * Checks whether the content is valid or not .
+     *
+     * @return bool
+     */
+    public function isValid(): bool
+    {
+        if ($this->validSince < Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'))
+            return true;
+        return false;
+    }
+
+    /**
+     * Checks whether the content is enable or not .
+     *
+     * @return bool
+     */
+    public function isEnable(): bool
+    {
+        if ($this->enable)
+            return true;
+        return false;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Static methods
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * @return array
+     */
+    public static function videoFileCaptionTable(): array
+    {
+        return [
+            "240p" => "کیفیت متوسط",
+            "480p" => "کیفیت بالا",
+            "720p" => "کیفیت عالی"
+        ];
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Other
+    |--------------------------------------------------------------------------
+    */
 
     /**
      * Create a new Eloquent Collection instance.
@@ -150,22 +762,11 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface
         return new ContentCollection($models);
     }
 
-
-
-    public function getPamphlets() :Collection {
-        $pamphlet = optional($this->file)->get('pamphlet');
-        return isset($pamphlet) ? $pamphlet : collect();
-    }
-
-
-    public function getVideos() :Collection {
-        $video = optional($this->file)->get('video');
-        return isset($video) ? $video : collect();
-    }
     /**
-     *
+     * Fixes contents files (used in /database/migrations/2018_08_21_143144_alter_table_educationalcontents_add_columns.php)
+     * @retuen void
      */
-    public function fixFiles()
+    public function fixFiles():void
     {
         $content = $this;
         $files = collect();
@@ -302,458 +903,13 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface
         Artisan::call('cache:clear');
     }
 
-    public function getTitleAttribute($value){
-        return Purify::clean($value,self::$purifyNullConfig);
-    }
-    public function getDescriptionAttribute($value){
-        return Purify::clean($value);
-    }
-    public function getNameAttribute($value){
-        return Purify::clean($value,self::$purifyNullConfig);
-    }
-    public function getMetaTitleAttribute($value){
-        if(isset($value[0]))
-            return Purify::clean($value,self::$purifyNullConfig);
-        else{
-            return Purify::clean(mb_substr($this->display_name,0,config("constants.META_TITLE_LIMIT"), "utf-8"),self::$purifyNullConfig);
-        }
-    }
-    public function getMetaDescriptionAttribute($value){
-        if(isset($value[0]))
-            return Purify::clean($value,self::$purifyNullConfig);
-        else{
-            return Purify::clean(mb_substr($this->description,0,config("constants.META_DESCRIPTION_LIMIT"), "utf-8"),self::$purifyNullConfig);
-        }
-    }
     /**
-     * @return null|string|\Symfony\Component\HttpFoundation\StreamedResponse
-     * @throws Exception
-     */
-    public function test()
-    {
-
-//        $l = new LinkGenerator($this->file[0]);
-//        try {
-//            return $l->getLinks();
-//        } catch (Exception $e) {
-//            throw $e;
-//        }
-    }
-
-    public function grades()
-    {
-        return $this->belongsToMany('App\Grade');
-    }
-
-    public function majors()
-    {
-        return $this->belongsToMany('App\Major');
-    }
-
-    /**
-     * @param $value
-     * @return Collection
-     */
-    public function getFileAttribute($value)
-    {
-        $key = "Content:File".$this->cacheKey();
-        return Cache::tags('content')->remember($key,Config::get("constants.CACHE_60"),function () use($value) {
-            $fileCollection = collect(json_decode($value));
-            $fileCollection->transform(function ($item, $key) {
-                $l = new LinkGenerator($item);
-                $item->link = $this->isFree ? $l->getLinks() : $l->getLinks([
-                                                                    "content_id" => $this->id
-                                                                ]);
-                return $item;
-            });
-
-            return $fileCollection->groupBy('type');
-        });
-    }
-
-    /**
-     * @param $value
-     * @return array|null|string
+     * Retrieves content's tags
      *
-     * @throws Exception
+     * @return array
      */
-    public function getThumbnailAttribute($value){
-        $t = json_decode($value);
-        $link = null;
-        if(isset($t))
-            $link = new LinkGenerator($t);
-        return optional($link)->getLinks();
-    }
-
-    public function setThumbnailAttribute($input){
-        $this->attributes['thumbnail'] = json_encode($input,JSON_UNESCAPED_UNICODE);
-    }
-
-    public function setFileAttribute(Collection $input)
-    {
-        $this->attributes['file'] = $input->toJson(JSON_UNESCAPED_UNICODE);
-    }
-
-    public function files()
-    {
-        return $this->belongsToMany(
-            'App\File',
-            'educationalcontent_file',
-            'content_id',
-            'file_id')->withPivot("caption", "label");
-    }
-
-    public function thumbnails(){
-        return $this->files()->where('label','=','thumbnail');
-    }
-
-    public function sources(){
-        return $this->files()->where('label','<>','thumbnail');
-    }
-
-    public function contentsets()
-    {
-        return $this->belongsToMany("\App\Contentset", "contentset_educationalcontent", "edc_id", "contentset_id")->withPivot("order", "isDefault");
-    }
-
-    public function template()
-    {
-        return $this->belongsTo("\App\Template");
-    }
-
-    public function user()
-    {
-        return $this->belongsTo("\App\User" , "author_id" ,"id");
-    }
-
-    /**
-     * @return string
-     * Converting Created_at field to jalali
-     */
-    public function CreatedAt_Jalali()
-    {
-        $explodedDateTime = explode(" ", $this->created_at);
-//        $explodedTime = $explodedDateTime[1] ;
-        return $this->convertDate($this->created_at, "toJalali");
-    }
-
-    /**
-     * @return string
-     * Converting Updated_at field to jalali
-     */
-    public function UpdatedAt_Jalali()
-    {
-        $explodedDateTime = explode(" ", $this->updated_at);
-//        $explodedTime = $explodedDateTime[1] ;
-        return $this->convertDate($this->updated_at, "toJalali");
-    }
-
-    /**
-     * @return string
-     * Converting Created_at field to jalali
-     */
-    public function validSince_Jalali()
-    {
-        $explodedDateTime = explode(" ", $this->validSince);
-        $explodedTime = $explodedDateTime[1];
-        return $this->convertDate($this->validSince, "toJalali") . " " . $explodedTime;
-    }
-
-    public function isActive(): bool
-    {
-        return ($this->isEnable() && $this->isValid() ? true : false);
-    }
-
-    public function isValid(): bool
-    {
-        if ($this->validSince < Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'))
-            return true;
-        return false;
-    }
-
-    public function isEnable(): bool
-    {
-        if ($this->enable)
-            return true;
-        return false;
-    }
-    public static function videoFileCaptionTable(): array
-    {
-        return [
-            "240p" => "کیفیت متوسط",
-            "480p" => "کیفیت بالا",
-            "720p" => "کیفیت عالی"
-        ];
-    }
-
-    /**
-     * Scope a query to only include enable(or disable) Contents.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param int $enable
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-
-    public function scopeEnable($query, $enable = 1)
-    {
-        return $query->where('enable', $enable);
-    }
-
-    /**
-     * Scope a query to only include Valid Contents.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeValid($query)
-    {
-        return $query->where('validSince', '<', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'));
-    }
-
-    public function scopeActive($query){
-        return $query->where('enable', 1)
-                ->where(function ($q){
-                    $q->where('validSince', '<', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'))
-                        ->orWhereNull('validSince');
-                }
-            );
-    }
-
-    /**
-     * Scope a query to only include Contents that will come soon.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeSoon($query)
-    {
-        return $query->where('validSince', '>', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'));
-    }
-
-    public function contentsWithSameType($enable = 1, $valid = 1)
-    {
-        $contentsWithSameType = Content::where("id", "<>", $this->id);
-        if ($enable) $contentsWithSameType = $contentsWithSameType->enable();
-        if ($valid) $contentsWithSameType = $contentsWithSameType->valid();
-        $contentTypes = $this->contenttypes->pluck("id")->toArray();
-        foreach ($contentTypes as $id) {
-            $contentsWithSameType = $contentsWithSameType->whereHas("contenttypes", function ($q) use ($id) {
-                $q->where("id", $id);
-            });
-        }
-        return $contentsWithSameType;
-    }
-
-    /**
-     * @return mixed
-     * @throws Exception
-     */
-
-    public  function getOrder(){
-        $key = "content:Order"
-            .$this->cacheKey();
-        $c = $this;
-        return Cache::tags("content")->remember($key,Config::get("constants.CACHE_60"),function () use($c) {
-            $order = optional(optional($c->contentset)->pivot)->order;
-            return  $order >= 0 ? $order : -1;
-        });
-    }
-
-    /**
-     * @return mixed
-     * @throws Exception
-     */
-    public function getDisplayNameAttribute()
-    {
-        try {
-            $key = "content:getDisplayName"
-                .$this->cacheKey();
-            $c = $this;
-            return Cache::remember($key,Config::get("constants.CACHE_60"),function () use($c) {
-                $displayName = "";
-                $sessionNumber = $c->getOrder();
-                if (isset($c->contenttype)) {
-                    $displayName .=$c->contenttype->displayName." ";
-                }
-                $displayName .= ( isset($sessionNumber) && $sessionNumber > -1 ? "جلسه ".$sessionNumber." - ":"" )." ".(isset($c->name) ? $c->name : $c->user->name);
-                return $displayName;
-            });
-
-        } catch (Exception $e) {
-            throw $e;
-        }
-    }
-
-    public function contenttype()
-    {
-        return $this->belongsTo('App\Contenttype');
-    }
-
-    public function displayMajors()
-    {
-        $displayMajors = "";
-        foreach ($this->majors as $major) {
-            if (count($this->majors) > 1 && $major->id != $this->majors->last()->id)
-                $displayMajors .= $major->name . " / ";
-            else
-                $displayMajors .= $major->name . " ";
-        }
-        return $displayMajors;
-    }
-
-    public function getFilesUrl()
-    {
-        $files = $this->files;
-        $links = collect();
-        foreach ($files as $file) {
-            $url = $file->getUrl();
-            if (isset($url[0]))
-                $links->push($url);
-        }
-        return $links;
-    }
-
-    public function getTagsAttribute($value)
-    {
-        return json_decode($value);
-    }
-
-    public function setTagsAttribute(array $value){
-        $tags = null;
-        if(!empty($value))
-            $tags = json_encode([
-                "bucket" => "content",
-                "tags" => $value
-            ], JSON_UNESCAPED_UNICODE);
-
-        $this->attributes['tags'] = $tags;
-    }
-
-    public function cacheKey()
-    {
-        $key = $this->getKey();
-        $time= isset($this->update) ? $this->updated_at->timestamp : $this->created_at->timestamp;
-        return sprintf(
-            "%s-%s",
-            //$this->getTable(),
-            $key,
-            $time
-        );
-    }
-
-    public function getContentsetAttribute()
-    {
-        $content = $this;
-        $key = "content:contentSet:" . $this->cacheKey();
-        $contentset = Cache::tags(["content"])->remember($key, Config::get("constants.CACHE_60"), function () use ($content) {
-            return $content->contentsets->where("pivot.isDefault", 1)->first();
-        });
-        return $contentset;
-    }
-
-    public function getSessionAttribute()
-    {
-        $content = $this;
-        $order = optional($this->pivot)->order;
-        if(isset($order))
-            return $order;
-
-        $key = "content:session:" . $this->cacheKey();
-        $session = Cache::tags(["content"])->remember($key, Config::get("constants.CACHE_60"), function () use ($content) {
-            $cs = $content->contentset;
-            return isset($cs) ? $cs->pivot->order : null;
-        });
-        return $session;
-    }
-
-    public function getSetMates()
-    {
-        $content = $this;
-        $key = "content:setMates:" . $this->cacheKey();
-
-        $setMates = Cache::tags(["content"])->remember($key, Config::get("constants.CACHE_60"), function () use ($content) {
-            $contentSet = $content->contentset;
-            $contentSetName = optional($contentSet)->name;
-            if (isset($contentSet)) {
-                $sameContents = $contentSet->contents()
-                    ->active()
-                    ->get()
-                    ->sortBy("pivot.order")
-                    ->load('contenttype');
-            }else
-                $sameContents = new ContentCollection([]);
-            return [
-                $sameContents,
-                $contentSetName,
-            ];
-        });
-        return $setMates;
-
-    }
-
-    public function retrievingTags()
+    public function retrievingTags() : array
     {
         return (new ContentTagManagerViaApi())->getTags($this->id);
-    }
-
-    public function getAddItems(): Collection
-    {
-        $content = $this;
-        $key = "content:getAddItems" . $content->cacheKey();
-
-        $adItems = Cache::tags(["content"])->remember($key, Config::get("constants.CACHE_60"), function () use ($content) {
-            $adItems = collect();
-            if (optional($content->contentset)->id != 199) {
-                $adItems = Content::whereHas("contentsets", function ($q) {
-                    $q->where("id", 199);
-                })
-                    ->where("enable", 1)
-                    ->orderBy("order")
-                    ->get();
-            }
-            return $adItems;
-        });
-
-        return $adItems;
-    }
-
-    public function getAuthorAttribute(){
-        $content = $this;
-        $key = "content:author" . $content->cacheKey();
-        $author = Cache::tags(["user"])->remember($key, Config::get("constants.CACHE_60"), function () use ($content) {
-            return optional($this->user)->getfullName();
-        });
-        return isset($author) ? $author : "";
-    }
-    public function getMetaTags(): array
-    {
-        return [
-                'title' => $this->metaTitle,
-                'description' => $this->metaDescription,
-                'url' => action('ContentController@show',$this),
-                'canonical' => action('ContentController@show',$this),
-                'site' => 'آلاء',
-                'imageUrl' => $this->thumbnail,
-                'imageWidth' => '1280',
-                'imageHeight' => '720',
-                'seoMod' => SeoMetaTagsGenerator::SEO_MOD_VIDEO_TAGS,
-                'playerUrl' => action('ContentController@embed',$this),
-                'playerWidth' => '854',
-                'playerHeight' => '480',
-                'videoDirectUrl' => optional(optional(optional($this->file->first())->where('res','480p'))->first())->link,
-                'videoActorName' => $this->author,
-                'videoActorRole' => 'دبیر',
-                'videoDirector' => 'آلاء',
-                'videoWriter' => 'آلاء',
-                'videoDuration' => $this->duration,
-                'videoReleaseDate' => $this->validSince,
-                'tags' => $this->tags,
-                'videoWidth' => '854',
-                'videoHeight' => '480',
-                'videoType' => 'video/mp4',
-                'articleAuthor' => $this->author,
-                'articleModifiedTime' => $this->updated_at,
-                'articlePublishedTime' => $this->validSince,
-        ];
     }
 }

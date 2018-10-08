@@ -46,7 +46,7 @@
             <div class="search-page">
                 <div class="search-pagination">
                     <ul class="pagination">
-                        {{--{{ $products->links() }}--}}
+                        {{ $products->links() }}
                     </ul>
 
                 </div>

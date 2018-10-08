@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\{
-    Attribute, Attributeset, Attributetype, Attributevalue, Bon, Classes\Search\ProductSearch, Classes\SEO\SeoDummyTags, Http\Requests\AddComplimentaryProductRequest, Http\Requests\EditProductRequest, Http\Requests\InsertProductRequest, Http\Requests\ProductIndexRequest, Product, Productfiletype, Traits\CharacterCommon, Traits\Helper, Traits\MathCommon, Traits\MetaCommon, Traits\ProductCommon, Traits\RequestCommon, Traits\UserSeenTrait, User, Websitesetting
+    Attribute, Attributeset, Attributetype, Attributevalue, Bon, Classes\Search\ProductSearch, Classes\SEO\SeoDummyTags, Http\Requests\AddComplimentaryProductRequest, Http\Requests\EditProductRequest, Http\Requests\InsertProductRequest, Http\Requests\ProductIndexRequest, Product, Productfiletype, Traits\CharacterCommon, Traits\Helper, Traits\MathCommon, Traits\MetaCommon, Traits\ProductCommon, Traits\RequestCommon, Traits\UserSeenTrait, User
 };
 use Illuminate\Http\{
     Request, Response
@@ -42,6 +42,12 @@ class ProductController extends Controller
     protected $response ;
     protected $setting ;
     const PARTIAL_SEARCH_TEMPLATE = 'partials.search.product' ;
+
+    /*
+    |--------------------------------------------------------------------------
+    | Private methods
+    |--------------------------------------------------------------------------
+    */
 
     /*
     |--------------------------------------------------------------------------
@@ -277,8 +283,37 @@ class ProductController extends Controller
                     "tagLabels" => $tags ,
                 ]);
         }
+//        if (session()->has("adminOrder_id"))
+//            $adminOrder = true;
+//        else
+//            $adminOrder = false;
 
-        return redirect()->back() ;
+//        if ($adminOrder)
+//        {
+//            $itemsPerPage = 30;
+//            $products =  Product::getProducts(0,0,[],"order")->paginate($itemsPerPage);
+//        } else {
+//            if (config()->has("constants.PRODUCT_SEARCH_EXCLUDED_PRODUCTS"))
+//                $excludedProducts = config("constants.PRODUCT_SEARCH_EXCLUDED_PRODUCTS");
+//            else
+//                $excludedProducts = [];
+//        }
+
+        $products = $productResult;
+        $costCollection = $this->makeCostCollection($products);
+
+        $url = $request->url();
+        $this->generateSeoMetaTags(new SeoDummyTags("محصولات ".$this->setting->site->name,
+                'کارگاه تست کنکور، همایش، جمع بندی و اردوطلایی نوروز آلاء',
+                $url,
+                $url,
+                route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]),
+                '100',
+                '100',
+                null)
+        );
+
+        return view("product.portfolio" , compact("products" , "costCollection")) ;
     }
 
     /**
@@ -337,14 +372,11 @@ class ProductController extends Controller
         $this->generateSeoMetaTags($product);
 
         $descriptionIframe = $request->partial;
-
         $productType = $product->producttype->id;
-
         $user = $this->getCustomer();
 
         $allAttributeCollection = $product->getAllAttributes() ;
-        $this->addSimpleInfoAttributes($product); //ToDo : $product["simpleInfoAttributes"] has not been used
-
+        $this->addSimpleInfoAttributes($product); // ToDo : $product["simpleInfoAttributes"] has not been used
         $selectCollection = $allAttributeCollection["selectCollection"];
         $groupedCheckboxCollection = $allAttributeCollection["groupedCheckboxCollection"];
         $extraSelectCollection = $allAttributeCollection["extraSelectCollection"];
@@ -730,37 +762,7 @@ class ProductController extends Controller
      */
     public function search(Request $request)
     {
-        if (session()->has("adminOrder_id"))
-            $adminOrder = true;
-        else
-            $adminOrder = false;
-        $itemsPerPage = 30;
-
-        if ($adminOrder) {
-            $products =  Product::getProducts(0,0,[],"order")->paginate($itemsPerPage);;
-        } else {
-            if (Config::has("constants.PRODUCT_SEARCH_EXCLUDED_PRODUCTS"))
-                $excludedProducts = config("constants.PRODUCT_SEARCH_EXCLUDED_PRODUCTS");
-            else
-                $excludedProducts = [];
-            $products =  Product::getProducts(0, 1 , $excludedProducts)
-                                ->paginate($itemsPerPage);
-        }
-
-        $costCollection = $this->makeCostCollection($products);
-
-        $url = $request->url();
-        $this->generateSeoMetaTags(new SeoDummyTags("محصولات ".$this->setting->site->name,
-                'کارگاه تست کنکور، همایش، جمع بندی و اردوطلایی نوروز آلاء',
-                $url,
-                $url,
-                route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]),
-                '100',
-                '100',
-                null)
-        );
-
-        return view("product.portfolio" , compact("products" , "costCollection")) ;
+        return redirect(action("ProductController@index") , 301);
     }
 
     /**

@@ -95,9 +95,6 @@ class Contentset extends Model implements Taggable
     |--------------------------------------------------------------------------
     */
 
-    /**
-     * @return mixed
-     */
     public function getLastContent() :Content
     {
         $key = "ContentSet:getLastContent".$this->cacheKey();

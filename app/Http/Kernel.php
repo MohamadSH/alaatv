@@ -38,7 +38,7 @@ class Kernel extends HttpKernel
 //            \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\OrderCheck::class,
-//            \App\Http\Middleware\UserTracker::class,
+            \App\Http\Middleware\UserTracker::class,
 //            \App\Http\Middleware\Minify::class,
         ],
 

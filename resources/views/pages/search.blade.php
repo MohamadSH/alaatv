@@ -99,41 +99,28 @@
                         </div>
                     </div>
                 </div>
+                @if(isset($extraTags))
+                    @foreach($extraTags as $key => $extraTag)
+                        <span class="tag label label-info tag_{{$key}}" style="display: inline-block; margin: 2px; padding: 10px;">
+                            <a class="removeTagLabel" data-role="{{$key}}" style="padding-left: 10px">
+                                <i class="fa fa-remove"></i>
+                            </a>
+                        <span>
+                                <a href="{{action("ContentController@index")}}?tags[]={{$extraTag}}"  class="font-white">{{$extraTag}}</a>
+                        </span>
+                            <input id="tagInput_{{$key}}" class="extraTag" name="tags[]" type="hidden" value="{{$extraTag}}">
+                        </span>
+                    @endforeach
+                @endif
                 {!! Form::close() !!}
                 <div class="row text-center">
                     <img id="content-search-loading" src="/assets/extra/load2.GIF" alt="loading"  style="display: none ; width: 20px;">
                 </div>
             </div>
-            {{--TEXT SEARCH--}}
-            {{--<div class="row">--}}
-                {{--<div class="col-md-12">--}}
-                    {{--<div class="input-group " >--}}
-                        {{--<input type="text" class="form-control" placeholder="اینجا بنویسید . . . ">--}}
-                        {{--<span class="input-group-btn">--}}
-                            {{--<button class="btn blue uppercase bold" type="button">بگرد</button>--}}
-                        {{--</span>--}}
-                    {{--</div>--}}
-                {{--</div>--}}
-            {{--</div>--}}
         </div>
     </div>
-    {{--<div class="search-page search-content-2">--}}
-        {{--<div class="search-bar ">--}}
-            {{--<div class="row">--}}
-                {{--<div class="col-md-12">--}}
-                    {{--<div class="input-group">--}}
-                        {{--<input type="text" class="form-control" placeholder="Search for...">--}}
-                        {{--<span class="input-group-btn">--}}
-                                            {{--<button class="btn blue uppercase bold" type="button">Search</button>--}}
-                                        {{--</span>--}}
-                    {{--</div>--}}
-                {{--</div>--}}
-            {{--</div>--}}
-        {{--</div>--}}
-    {{--</div>--}}
     <div class="row" >
 
-        {{--@if($items->where("type" , "product")->first()["totalitems"] > 0)--}}
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
             <!-- BEGIN PORTLET-->
                 <div class="portlet light " id="productPortlet">
@@ -146,30 +133,25 @@
                     <div class="portlet-body" id="productDiv">
                         <div class="row">
                             <section class="productSlider slider" style="width: 95%;margin-top: 0px ; margin-bottom: 15px;">
-                                {!!  $items->where("type" , "product")->first()["view"]  !!}
                             </section>
                         </div>
                     </div>
                 </div>
                 <!-- END PORTLET-->
             </div>
-        {{--@endif--}}
-{{--        @if($items->where("type" , "contentset")->first()["totalitems"] > 0)--}}
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
                     <div class="portlet light contentPortlet">
                         <div class="portlet-title tabbable-line">
                             <div class="caption">
                                 <i class="icon-globe font-dark hide"></i>
                                 <span class="caption-subject font-dark bold uppercase">دوره های آموزشی آلاء</span>
-{{--                                {!! $tagLabels !!}--}}
+                                {{--{!! $tagLabels !!}--}}
                             </div>
                         </div>
                         <div class="portlet-body " id="tab_contentset" >
-                            {!! $items->where("type" , "contentset")->first()["view"]  !!}
                         </div>
                     </div>
                 </div>
-        {{--@endif--}}
     </div>
         @foreach($ads1 as $image => $link)
             @include('partials.bannerAds', ['img'=>$image , 'link'=>$link])
@@ -238,6 +220,7 @@
 
     <script type="text/javascript">
         var tags = {!! json_encode($tags,JSON_UNESCAPED_UNICODE ) !!};
+        var extraTags = {!! json_encode($extraTags,JSON_UNESCAPED_UNICODE ) !!};
         var actionUrl = [];
         actionUrl["content"] = "{{action('ContentController@index')}}";
         actionUrl["product"] = "{{action('ProductController@index')}}";
@@ -252,8 +235,10 @@
             // makeGradeSelect($("#majorSelect").val());
             // makeLessonSelect( $("#gradeSelect").val());
             // makeTeacherSelect();
-            // makeTeacherSelect($("#lessonSelect").val());
-            $(".contentPortlet .portlet-title .caption").append(makeTagLabels(tags) );
+
+            contentLoad( "product" , ["product"],null , actionUrl["product"] , false);
+            contentLoad("contentset" , ["contentset"] , null , actionUrl["contentset"] , false);
+            $(".contentPortlet .portlet-title .caption").append(makeTagLabels(tags));
             // $("#itemFilterFormBody").append(makeTagLabels(extraTags ,true ) );
         });
 
@@ -310,7 +295,7 @@
                 label += '</span>\n' ;
                 if(withInput)
                 {
-                    label += '<input id="tagInput_'+key+'" name="tags[]" type="hidden" value="'+value+'">\n' ;
+                    label += '<input id="tagInput_'+key+'" class="extraTag" name="tags[]" type="hidden" value="'+value+'">\n' ;
                 }
                 label += '</span>';
 
@@ -434,7 +419,7 @@
             )(jQuery, window, document,className);
         }
 
-        function contentLoadAjaxRequest(url , formData,type) {
+        function contentLoadAjaxRequest(url , formData,type ) {
             $.ajax({
                 type: "GET",
                 cache: false,
@@ -444,16 +429,11 @@
                     {
                         200:function (response) {
                             var items = response.items;
-                            tags = response.tagLabels;
-                            extraTags = response.extraTags;
-                            $(".tag").remove();
-                            $(".contentPortlet .portlet-title .caption").append(makeTagLabels(tags));
-                            $("#itemFilterFormBody").append(makeTagLabels(extraTags , true));
+                            // tags = response.tagLabels;
+
                             // location.hash = page;
                             $.each(items , function (key , item) {
                                 var totalItems = item.totalitems;
-                                console.log(totalItems);
-                                console.log(type);
                                 switch(type) {
                                     case "contentset":
                                         // $("#tab_contentset").html(item.view);
@@ -519,17 +499,39 @@
             });
         }
 
-        function contentLoad(itemType ,pageName, pageNumber , url)
+        function contentLoad(itemType ,pageName, pageNumber , url , setTagLabel)
         {
             var formData = "";
 
-            $("#itemFilterForm").find(':not(input[name=_token])').filter(':input').each(function () {
+            var extraTags = [] ;
+            var tags = [];
+            $("#itemFilterForm").find(':not(input[name=_token])').filter(':input').each(function ()
+            {
                 var elementId = $(this).attr("id");
-                var selectedText = $("#"+elementId+" option:selected").text();
-                if($("#"+elementId+" option:selected").val() != '')
-                    formData += "tags[]="+ string_to_slug(selectedText)+"&";
-            });
+                var element = $("#"+elementId);
 
+                if(element.hasClass("extraTag"))
+                {
+                    var tagText = element.val();
+                    formData += "tags[]="+ tagText;
+                    extraTags.push(tagText);
+                    tags.push(tagText);
+                }
+                else if($("#"+elementId+" option:selected").val() != '')
+                {
+                    var selectedText = $("#"+elementId+" option:selected").text();
+                    var extraTagText = string_to_slug(selectedText);
+                    formData += "tags[]="+ extraTagText +"&";
+                    tags.push(extraTagText);
+                }
+            });
+            if(setTagLabel)
+            {
+                $(".tag").remove();
+                $(".contentPortlet .portlet-title .caption").append(makeTagLabels(tags));
+                $("#itemFilterFormBody").append(makeTagLabels(extraTags , true));
+            }
+            var addressBarAppend = formData;
             $.each( pageName, function( key, value )
             {
                 if( pageNumber != undefined && pageNumber > 0 )
@@ -550,13 +552,12 @@
             });
 
             formData =  decodeURIComponent(formData);
-            changeUrl(formData);
+            changeUrl(addressBarAppend);
 
-            console.log(formData);
-            console.log(url);
             if(itemType === "video" || itemType === "pamphlet" || itemType === "article")
                         itemType = "content";
-            contentLoadAjaxRequest(url,formData,itemType);
+            console.log(formData);
+            contentLoadAjaxRequest(url,formData,itemType,setTagLabel);
             return false;
         }
 
@@ -578,7 +579,7 @@
             parameters= pageName.split('Page');
             var itemType = parameters[0];
 
-            contentLoad(itemType   , [itemType],pageNumber , actionUrl[itemType] );
+            contentLoad(itemType   , [itemType],pageNumber , actionUrl[itemType],false );
             e.preventDefault();
         });
 
@@ -601,12 +602,13 @@
         // });
 
         $(document).on("change", ".itemFilter", function (){
-            contentLoad( "content" , ["video","pamphlet","article"],null  , actionUrl["content"]);
-            contentLoad( "product" , ["product"],null , actionUrl["product"]);
-            contentLoad("contentset" , ["contentset"] , null , actionUrl["contentset"]);
+            contentLoad( "content" , ["video","pamphlet","article"],null  , actionUrl["content"] , true);
+            contentLoad( "product" , ["product"],null , actionUrl["product"], true);
+            contentLoad("contentset" , ["contentset"] , null , actionUrl["contentset"], true);
         });
 
-        $(document).on("click", ".removeTagLabel", function (){
+        $(document).on("click", ".removeTagLabel", function ()
+        {
             var id = $(this).data("role");
             $(".tag_"+id).remove();
             tags.splice(id, 1);
@@ -633,7 +635,9 @@
                 });
             });
 
-            contentLoad();
+            contentLoad( "content" , ["video","pamphlet","article"],null  , actionUrl["content"] , true);
+            contentLoad( "product" , ["product"],null , actionUrl["product"], true);
+            contentLoad("contentset" , ["contentset"] , null , actionUrl["contentset"], true);
         });
 
     </script>
