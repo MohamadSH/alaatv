@@ -106,7 +106,7 @@ class HomeController extends Controller
     private static $TAG = HomeController::class;
 
     public function contentSetListTest(Request $request, Contentset $set){
-        $contents = $set->educationalcontents()->get();
+        $contents = $set->educationalcontents->sortBy("pivot.order");
         return view('listTest',compact('set','contents'));
     }
 
@@ -2083,10 +2083,13 @@ class HomeController extends Controller
             ->orderBy("completed_at" , "DESC")
             ->get();
         $monthToPeriodConvert = collect([
-            ["month"=>"خرداد", "periodBegin"=>"2018-05-21" , "periodEnd"=>"2018-06-22"],
-            ["month"=>"تیر", "periodBegin"=>"2018-06-22" , "periodEnd"=>"2018-07-23"],
-            ["month"=>"مرداد", "periodBegin"=>"2018-07-23" , "periodEnd"=>"2018-08-23"],
-            ["month"=>"شهریور", "periodBegin"=>"2018-08-23" , "periodEnd"=>"2018-09-23"],
+//            ["month"=>"خرداد", "periodBegin"=>"2018-05-21" , "periodEnd"=>"2018-06-22"],
+//            ["month"=>"تیر", "periodBegin"=>"2018-06-22" , "periodEnd"=>"2018-07-23"],
+//            ["month"=>"مرداد", "periodBegin"=>"2018-07-23" , "periodEnd"=>"2018-08-23"],
+//            ["month"=>"شهریور", "periodBegin"=>"2018-08-23" , "periodEnd"=>"2018-09-23"],
+            ["month"=>"مهر", "periodBegin"=>"2018-09-23" , "periodEnd"=>"2018-10-23"],
+            ["month"=>"آبان", "periodBegin"=>"2018-10-23" , "periodEnd"=>"2018-11-22"],
+            ["month"=>"آذر", "periodBegin"=>"2018-11-22" , "periodEnd"=>"2018-12-22"],
         ]);
         $currentGregorianDate = Carbon::now()->timezone('Asia/Tehran');
         $delimiter = "/";
@@ -2195,8 +2198,44 @@ class HomeController extends Controller
             "مرداد",
             "شهریور",
         ];
+
+        $allDays = [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "15",
+          "16",
+          "17",
+          "18",
+          "19",
+          "20",
+          "21",
+          "22",
+          "23",
+          "24",
+          "25",
+          "26",
+          "27",
+          "28",
+          "29",
+          "30",
+        ];
+
         $currentMonthKey = array_search($currentJalaliMonthString , $allMonths);
-        $months = array_splice($allMonths , 0 , $currentMonthKey + 1) ;
+        $currentDayKey = array_search($currentJalaliDay , $allDays);
+//        $months = array_splice($allMonths , 0 , $currentMonthKey + 1) ;
+        $months = array_splice($allDays , 0 , $currentDayKey + 1) ;
 
         $chartData = collect();
 
@@ -2207,43 +2246,61 @@ class HomeController extends Controller
         {
             switch ($month)
             {
-                case "مهر" :
-                    $totalMonthIncome = 2491700;
-                    $totalMonthSpend = $MONTH_SPEND;
-                    break;
-                case "آبان" :
-                    $totalMonthIncome = 1563186;
-                    $totalMonthSpend = $MONTH_SPEND;
-                    break;
-                case "آذر" :
-                    $totalMonthIncome = 2339988;
-                    $totalMonthSpend = $MONTH_SPEND;
-                    break;
-                case "دی" :
-                    $totalMonthIncome = 1270397;
-                    $totalMonthSpend = $MONTH_SPEND;
-                    break;
-                case "بهمن" :
-                    $totalMonthIncome = 1270397;
-                    $totalMonthSpend = $MONTH_SPEND;
-                    break;
-                case "اسفند" :
-                    $totalMonthIncome = 1270397;
-                    $totalMonthSpend = $MONTH_SPEND;
-                    break;
-                case "فروردین" :
-                    $totalMonthIncome = 823600;
-                    $totalMonthSpend = $MONTH_SPEND;
-                    break;
-                case "اردیبهشت" :
-                    $totalMonthIncome = 1000000;
-                    $totalMonthSpend = $MONTH_SPEND;
-                    break;
+                // Cases used for year 1396-1397
+//                case "مهر" :
+//                    $totalMonthIncome = 2491700;
+//                    $totalMonthSpend = $MONTH_SPEND;
+//                    break;
+//                case "آبان" :
+//                    $totalMonthIncome = 1563186;
+//                    $totalMonthSpend = $MONTH_SPEND;
+//                    break;
+//                case "آذر" :
+//                    $totalMonthIncome = 2339988;
+//                    $totalMonthSpend = $MONTH_SPEND;
+//                    break;
+//                case "دی" :
+//                    $totalMonthIncome = 1270397;
+//                    $totalMonthSpend = $MONTH_SPEND;
+//                    break;
+//                case "بهمن" :
+//                    $totalMonthIncome = 1270397;
+//                    $totalMonthSpend = $MONTH_SPEND;
+//                    break;
+//                case "اسفند" :
+//                    $totalMonthIncome = 1270397;
+//                    $totalMonthSpend = $MONTH_SPEND;
+//                    break;
+//                case "فروردین" :
+//                    $totalMonthIncome = 823600;
+//                    $totalMonthSpend = $MONTH_SPEND;
+//                    break;
+//                case "اردیبهشت" :
+//                    $totalMonthIncome = 1000000;
+//                    $totalMonthSpend = $MONTH_SPEND;
+//                    break;
                 default:
-                    $date = $monthToPeriodConvert->where("month" , $month)
-                        ->first();
-                    $donates = $orders->where("completed_at" ,">=" , $date["periodBegin"] )
-                        ->where("completed_at" , "<=" , $date["periodEnd"]);
+//                    $date = $monthToPeriodConvert->where("month" , $month)
+//                             ->first();
+                    $date = $monthToPeriodConvert->where("month" , "مهر")
+                             ->first();
+//                    $donates = $orders->where("completed_at" ,">=" , $date["periodBegin"] )
+//                        ->where("completed_at" , "<=" , $date["periodEnd"]);
+                    $day = Carbon::createFromFormat("Y-m-d",$date["periodEnd"])
+                                    ->setTimezone("Asia/Tehran")
+                                    ->day + ($month - 1) ;
+                    $thisMonth = 9 ;
+                    if($day > 30)
+                    {
+                        $thisMonth++ ;
+                        $day = $day - 30  ;
+                        $day = "0".$day;
+                    }
+                    if($thisMonth<10)
+                        $thisMonth = "0".$thisMonth ;
+
+                    $donates = $orders->where("completed_at" ,">=" , "2018-$thisMonth-$day 00:00:00" )
+                        ->where("completed_at" , "<=" , "2018-$thisMonth-$day 23:59:59");
                     $totalMonthIncome = 0 ;
                     foreach ($donates as $donate)
                     {
@@ -2258,23 +2315,25 @@ class HomeController extends Controller
 
                         $totalMonthIncome += $amount ;
                     }
-                    if($month == $currentJalaliMonthString)
-                    {
-                        $dayRatio = $currentJalaliDay/$currentJalaliMonthDays ;
+//                    if($month == $currentJalaliMonthString)
+//                    {
+//                        $dayRatio = $currentJalaliDay/$currentJalaliMonthDays ;
+                        $dayRatio = 1/$currentJalaliMonthDays ;
                         $totalMonthSpend = (int)round($MONTH_SPEND * $dayRatio );
-                    }
-                    else
-                    {
-                        $totalMonthSpend = $MONTH_SPEND;
-                    }
+//                    }
+//                    else
+//                    {
+//                        $totalMonthSpend = $MONTH_SPEND;
+//                    }
                     break;
             }
             $totalIncome += $totalMonthIncome;
             $totalSpend += $totalMonthSpend;
-            if($month == $currentJalaliMonthString)
-                $monthData = $currentJalaliDay . " ". $month;
-            else
-                $monthData = $month;
+//            if($month == $currentJalaliMonthString)
+//                $monthData = $currentJalaliDay . " ". $month;
+//            else
+//                $monthData = $month;
+            $monthData = $month . " " . $currentJalaliMonthString ;
             $chartData->push([
                 "month"=>$monthData ,
                 "totalIncome"=> $totalMonthIncome ,
@@ -2282,7 +2341,6 @@ class HomeController extends Controller
             ]);
 
         }
-
         $userCanSeeCounter = false ;
         if(Auth::check())
         {
@@ -3411,52 +3469,45 @@ class HomeController extends Controller
 
             if($request->has("tagfix"))
             {
-                $orders = Order::whereDoesntHave("orderproducts")
-                    ->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
-                    ->whereIn("paymentstatus_id" , [
-                        config("constants.PAYMENT_STATUS_INDEBTED"),
-                        config("constants.PAYMENT_STATUS_PAID")
-                    ]);
-                dd($orders->pluck("id")->toArray());
 
-                $contentsetId = 159;
+                $contentsetId = 181;
                 $contentset = Contentset::where("id" , $contentsetId)
                     ->first() ;
 
-                $tags = $contentset->tags->tags;
-                array_push($tags , "نادریان");
-                $bucket = "contentset";
-                $tagsJson = [
-                    "bucket" => $bucket,
-                    "tags" => $tags
-                ];
-                $contentset->tags = json_encode($tagsJson);
-
-                if($contentset->update())
-                {
-                    $params = [
-                        "tags"=> json_encode($contentset->tags->tags) ,
-                    ];
-                    if(isset($contentset->created_at) && strlen($contentset->created_at) > 0 )
-                        $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $contentset->created_at )->timestamp;
-
-                    $response =  $this->sendRequest(
-                        config("constants.TAG_API_URL")."id/$bucket/".$contentset->id ,
-                        "PUT",
-                        $params
-                    );
-                }
-                else
-                {
-                    dump("Error on updating #".$contentset->id);
-                }
+//                $tags = $contentset->tags->tags;
+//                array_push($tags , "نادریان");
+//                $bucket = "contentset";
+//                $tagsJson = [
+//                    "bucket" => $bucket,
+//                    "tags" => $tags
+//                ];
+//                $contentset->tags = json_encode($tagsJson);
+//
+//                if($contentset->update())
+//                {
+//                    $params = [
+//                        "tags"=> json_encode($contentset->tags->tags) ,
+//                    ];
+//                    if(isset($contentset->created_at) && strlen($contentset->created_at) > 0 )
+//                        $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $contentset->created_at )->timestamp;
+//
+//                    $response =  $this->sendRequest(
+//                        config("constants.TAG_API_URL")."id/$bucket/".$contentset->id ,
+//                        "PUT",
+//                        $params
+//                    );
+//                }
+//                else
+//                {
+//                    dump("Error on updating #".$contentset->id);
+//                }
 
                 $contents = $contentset->educationalcontents;
 
                 foreach ($contents as $content)
                 {
                     $tags = $content->tags->tags;
-                    array_push($tags , "نادریان");
+                    array_push($tags , "صفر_تا_صد");
                     $bucket = "content";
                     $tagsJson = [
                         "bucket" => $bucket,

@@ -296,6 +296,7 @@ class AppServiceProvider extends ServiceProvider
                  *  lessons
                  */
                 $contentsetArary = [
+                    181 , 202 , 203 , 204 , 208 , 214 ,215, 216 , 217, 218,220,221,
                     195 , 170 , 37 , 179 , 187 ,183,189,186,188,180,191,114,112,137,121,175,50,152,
                     194 , 193 , 171 , 178 , 182 , 169 , 170 , 192,
                     185 , 190 , 153 , 172 , 137 , 177 , 173 , 170 , 168 , 184 , 174,
@@ -305,6 +306,7 @@ class AppServiceProvider extends ServiceProvider
                 $contentsets = Contentset::whereIn("id" , $contentsetArary)->get();
                 $contentsets->load('educationalcontents');
                 $sectionArray = [
+                    "jadid",
                     "konkoor" ,
                     "dahom" ,
                     "yazdahom"
@@ -432,7 +434,8 @@ class AppServiceProvider extends ServiceProvider
                                     "descriptiveName" => "کنکور نظام قدیم" ,
                                     "lessons" => $lessons ,
                                     "tags" => [
-                                        "کنکور"
+                                        "کنکور",
+                                        "نظام_آموزشی_قدیم"
                                     ],
                                     'ads' => [
                                         //SEBTI
@@ -661,6 +664,105 @@ class AppServiceProvider extends ServiceProvider
 //                                        'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-1.jpg' => 'https://sanatisharif.ir/landing/4?utm_source=sanatisharif&utm_medium=banner&utm_campaign=khordad_sale&utm_content=small-slide-1-1',
                                     ],
                                     'class' =>'hamayesh'
+                                ]
+                            );
+                            break;
+                        case "jadid":
+                            $lessons = collect([
+                                [
+                                    "displayName" => "کارگاه تست زیست دهم" ,
+                                    "author" => "جلال موقاری",
+                                    "pic" => $contentsets->where("id" , 203)->first()->photo,
+                                    "content_id"=>($contentsets->where("id" , 203)->first()->educationalcontents->where("enable" , 1)->where('validSince' , '<' , Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'))->isNotEmpty())?$contentsets->where("id" , 203)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->where('validSince' , '<' , Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'))->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "صفر تا صد فیزیک کنکور" ,
+                                    "author" => "کازرانیان",
+                                    "pic" => $contentsets->where("id" , 202)->first()->photo,
+                                    "content_id"=>($contentsets->where("id" , 202)->first()->educationalcontents->where("enable" , 1)->where('validSince' , '<' , Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'))->isNotEmpty())?$contentsets->where("id" , 202)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->where('validSince' , '<' , Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'))->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "صفر تا صد شیمی کنکور" ,
+                                    "author" => "مهدی صنیعی طهرانی",
+                                    "pic" => $contentsets->where("id" , 208)->first()->photo,
+                                    "content_id"=>($contentsets->where("id" , 208)->first()->educationalcontents->where("enable" , 1)->where('validSince' , '<' , Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'))->isNotEmpty())?$contentsets->where("id" , 208)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->where('validSince' , '<' , Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'))->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "صفر تا صد حسابان کنکور" ,
+                                    "author" => "محمد صادق ثابتی",
+                                    "pic" => $contentsets->where("id" , 214)->first()->photo,
+                                    "content_id"=>($contentsets->where("id" , 214)->first()->educationalcontents->where("enable" , 1)->where('validSince' , '<' , Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'))->isNotEmpty())?$contentsets->where("id" , 214)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->where('validSince' , '<' , Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'))->sortBy("pivot.order")->last()->id:0
+                                ] ,
+                                [
+                                    "displayName" => "صفر تا صد ریاضی تجربی کنکور" ,
+                                    "author" => "محمد صادق ثابتی",
+                                    "pic" => $contentsets->where("id" , 217)->first()->photo,
+                                    "content_id"=>($contentsets->where("id" , 217)->first()->educationalcontents->where("enable" , 1)->where('validSince' , '<' , Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'))->isNotEmpty())?$contentsets->where("id" , 217)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->where('validSince' , '<' , Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'))->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "صفر تا صد عربی کنکور" ,
+                                    "author" => "پدرام علیمرادی",
+                                    "pic" => $contentsets->where("id" , 216)->first()->photo,
+                                    "content_id"=>($contentsets->where("id" , 216)->first()->educationalcontents->where("enable" , 1)->where('validSince' , '<' , Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'))->isNotEmpty())?$contentsets->where("id" , 216)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->where('validSince' , '<' , Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'))->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "تخته نگار زیست دهم" ,
+                                    "author" => "مهدی ناصر شریعت",
+                                    "pic" => $contentsets->where("id" , 215)->first()->photo,
+                                    "content_id"=>($contentsets->where("id" , 215)->first()->educationalcontents->where("enable" , 1)->where('validSince' , '<' , Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'))->isNotEmpty())?$contentsets->where("id" , 215)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->where('validSince' , '<' , Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'))->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "زیست یازدهم" ,
+                                    "author" => "جلال موقاری",
+                                    "pic" => $contentsets->where("id" , 204)->first()->photo,
+                                    "content_id"=>($contentsets->where("id" , 204)->first()->educationalcontents->where("enable" , 1)->where('validSince' , '<' , Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'))->isNotEmpty())?$contentsets->where("id" , 204)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->where('validSince' , '<' , Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'))->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "صفر تا صد منطق کنکور" ,
+                                    "author" => "سید حسام الدین جلالی",
+                                    "pic" => $contentsets->where("id" , 191)->first()->photo,
+                                    "content_id"=>($contentsets->where("id" , 191)->first()->educationalcontents->where("enable" , 1)->where('validSince' , '<' , Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'))->isNotEmpty())?$contentsets->where("id" , 191)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->where('validSince' , '<' , Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'))->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "صفر تا صد زیست دوازدهم" ,
+                                    "author" => "محمد علی امینی راد",
+                                    "pic" => $contentsets->where("id" , 220)->first()->photo,
+                                    "content_id"=>($contentsets->where("id" , 220)->first()->educationalcontents->where("enable" , 1)->where('validSince' , '<' , Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'))->isNotEmpty())?$contentsets->where("id" , 220)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->where('validSince' , '<' , Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'))->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "صفر تا صد زبان یازدهم" ,
+                                    "author" => "علی اکبر عزتی",
+                                    "pic" => $contentsets->where("id" , 218)->first()->photo,
+                                    "content_id"=>($contentsets->where("id" , 218)->first()->educationalcontents->where("enable" , 1)->where('validSince' , '<' , Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'))->isNotEmpty())?$contentsets->where("id" , 218)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->where('validSince' , '<' , Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'))->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "صفر تا صد فیزیک یازدهم" ,
+                                    "author" => "فرشید داداشی",
+                                    "pic" => $contentsets->where("id" , 181)->first()->photo,
+                                    "content_id"=>($contentsets->where("id" , 181)->first()->educationalcontents->where("enable" , 1)->where('validSince' , '<' , Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'))->isNotEmpty())?$contentsets->where("id" , 181)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->where('validSince' , '<' , Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'))->sortBy("pivot.order")->last()->id:0
+                                ],
+                                [
+                                    "displayName" => "صفر تا صد ریاضی تجربی کنکور" ,
+                                    "author" => "مهدی امینی راد",
+                                    "pic" => $contentsets->where("id" , 221)->first()->photo,
+                                    "content_id"=>($contentsets->where("id" , 221)->first()->educationalcontents->where("enable" , 1)->where('validSince' , '<' , Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'))->isNotEmpty())?$contentsets->where("id" , 221)->first()->educationalcontents->where("contenttype_id",Config::get("constants.CONTENT_TYPE_VIDEO") )->where("enable" , 1)->where('validSince' , '<' , Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'))->sortBy("pivot.order")->last()->id:0
+                                ],
+                            ]);
+                            $sections->push(
+                                [
+                                    "name"=>$section,
+                                    "displayName" => "نظام جدید",
+                                    "descriptiveName" => "کنکور نظام جدید" ,
+                                    "lessons" => $lessons ,
+                                    "tags" => [
+                                        "کنکور",
+                                        "نظام_آموزشی_جدید"
+                                    ],
+                                    'ads' => [
+                                        //SEBTI
+//                                        'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-1.jpg' => 'https://sanatisharif.ir/landing/4?utm_source=sanatisharif&utm_medium=banner&utm_campaign=khordad_sale&utm_content=small-slide-1-1',
+                                    ],
+                                    'class' =>'konkoor'
                                 ]
                             );
                             break;

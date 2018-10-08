@@ -62,6 +62,25 @@
             {{--@endif--}}
             <div class="portlet light">
                 <div class="portlet-body">
+                    <div class="col-md-12">
+                        <h4>تغییر اسم فایل ها</h4>
+                    </div>
+                    <div class="row">
+                        {!! Form::open(['method' => 'POST','action' => ['EducationalContentController@basicStore'], 'class'=>'form-horizontal'  ,'accept-charset'=>'UTF-8']) !!}
+                        {!! Form::hidden('educationalContentId',$educationalContent->id) !!}
+                        <div class="col-md-6">
+                            {!! Form::text('newFileFullName', null, ['class' => 'form-control', 'placeholder'=>'نام فایل کامل ( با دات ام پی فر)', 'dir'=>'ltr']) !!}
+                            {!! Form::text('newContetnsetId', optional($contentset)->id, ['class' => 'form-control', 'placeholder'=>'شماره درس', 'dir'=>'ltr']) !!}
+                        </div>
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-success">ذخیره</button>
+                        </div>
+                        {!! Form::close() !!}
+                    </div>
+                </div>
+            </div>
+            <div class="portlet light">
+                <div class="portlet-body">
                     <div class="row">
                         <div id="deleteFileConfirmationModal" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
                             <div class="modal-header">حذف فایل </div>

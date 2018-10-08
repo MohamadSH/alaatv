@@ -32,6 +32,7 @@ use Illuminate\Support\Facades\Input;
 use Auth;
 use Jenssegers\Agent\Agent;
 use SSH;
+use Illuminate\Support\Facades\Artisan;
 
 
 
@@ -693,9 +694,16 @@ class EducationalContentController extends Controller
         if($request->has("validSinceDate"))
         {
             $validSince = $request->get("validSinceDate");
-            $validSince = Carbon::parse($validSince)->format('Y-m-d'); //Muhammad : added a day because it returns one day behind and IDK why!!
-            if(isset($time)) $validSince = $validSince . " " . $time;
+            $validSince = Carbon::parse($validSince)->format('Y-m-d H:i:s'); //Muhammad : added a day because it returns one day behind and IDK why!!
+//            if(isset($time)) $validSince = $validSince . " " . $time;
             $educationalContent->validSince = $validSince;
+        }
+
+        if($request->has("created_at"))
+        {
+            $created_at = $request->get("created_at");
+            $created_at = Carbon::parse($created_at)->format('Y-m-d H:i:s');
+            $educationalContent->created_at = $created_at;
         }
 
 //        if($request->has("contenttype_id"))
@@ -804,8 +812,8 @@ class EducationalContentController extends Controller
                     "tags"=> json_encode($itemTagsArray) ,
                 ];
 
-                if(isset($educationalContent->created_at) && strlen($educationalContent->created_at) > 0 )
-                    $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $educationalContent->created_at )->timestamp;
+                if(isset($educationalContent->validSince) && strlen($educationalContent->validSince) > 0 )
+                    $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $educationalContent->validSince )->timestamp;
 
                 $response =  $this->sendRequest(
                     config("constants.TAG_API_URL")."id/content/".$educationalContent->id ,
@@ -822,7 +830,7 @@ class EducationalContentController extends Controller
                     session()->put('error', 'خطا در ریکوئست تگ ها');
                 }
             }
-
+            Artisan::call('cache:clear');
             session()->put('success', 'اصلاح محتوا با موفقیت انجام شد');
         }
         else{
@@ -906,6 +914,56 @@ class EducationalContentController extends Controller
      {
          try
          {
+
+             if($request->has("newContetnsetId"))
+             {
+                 $educationalContentId =  $request->get("educationalContentId");
+                 $newContetnsetId = $request->get("newContetnsetId");
+                 $newFileFullName = $request->get("newFileFullName") ;
+
+                 $educationalContent = Educationalcontent::FindOrFail($educationalContentId);
+                 $currentContentset = $educationalContent->contentsets->first();
+                 $order = $currentContentset->pivot->order;
+                 if($newContetnsetId != $currentContentset->id)
+                 {
+                     $educationalContent->contentsets()->detach($currentContentset->id);
+                    $educationalContent->contentsets()->attach($newContetnsetId , ["order"=>$order , "isDefault"=>1]);
+                 }
+
+                 if(isset($newFileFullName[0]))
+                 {
+                     $basePath = "https://cdn.sanatisharif.ir/media/";
+                     $files = $educationalContent->files;
+                     foreach ($files as $file)
+                     {
+                         $fileLabel = $file->pivot->label;
+                         switch ($fileLabel)
+                         {
+                             case "thumbnail":
+                                 $thumbnailFullName = pathinfo($newFileFullName , PATHINFO_FILENAME);
+                                 $file->name = $basePath . "thumbnails/".$newContetnsetId . "/" . $thumbnailFullName . ".jpg";
+                                 break;
+                             case "240p":
+                                 $file->name = $basePath . $newContetnsetId ."/240p/" . $newFileFullName;
+                                 break;
+                             case "hq":
+                                 $file->name = $basePath . $newContetnsetId ."/hq/" . $newFileFullName;
+                                 break;
+                             case "hd":
+                                 $file->name = $basePath . $newContetnsetId ."/HD_720p/" . $newFileFullName;
+                                 break;
+                             default:
+                                 break;
+                         }
+                         $file->update();
+                     }
+                 }
+
+                 Artisan::call('cache:clear');
+                 session()->put('success', 'تغییر نام با موفقیت انجام شد');
+                 return redirect()->back();
+             }
+
              $contentset_id = $request->get("contentset_id");
              $contenttype_id = $request->get("contenttype_id");
              $name = $request->get("name");
