@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\{
-    Attribute, Attributeset, Attributetype, Attributevalue, Bon, Classes\Search\ProductSearch, Classes\SEO\SeoDummyTags, Http\Requests\AddComplimentaryProductRequest, Http\Requests\EditProductRequest, Http\Requests\InsertProductRequest, Http\Requests\ProductIndexRequest, Product, Productfiletype, Traits\CharacterCommon, Traits\Helper, Traits\MathCommon, Traits\MetaCommon, Traits\ProductCommon, Traits\RequestCommon, Traits\UserSeenTrait, User
+    Attribute, Attributeset, Attributetype, Attributevalue, Bon, Classes\Search\ProductSearch, Classes\SEO\SeoDummyTags, Http\Requests\AddComplimentaryProductRequest, Http\Requests\EditProductRequest, Http\Requests\InsertProductRequest, Http\Requests\ProductIndexRequest, Product, Productfiletype, Traits\CharacterCommon, Traits\Helper, Traits\MathCommon, Traits\MetaCommon, Traits\ProductCommon, Traits\RequestCommon, Traits\UserSeenTrait, User, Websitesetting
 };
 use Illuminate\Http\{
     Request, Response

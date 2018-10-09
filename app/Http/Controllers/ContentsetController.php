@@ -8,6 +8,7 @@ use App\Http\Requests\ContentsetIndexRequest;
 use App\Http\Requests\InsertContentsetRequest;
 use App\Http\Requests\ProductIndexRequest;
 use App\Traits\RequestCommon;
+use App\Websitesetting;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\{
     Request, Response
