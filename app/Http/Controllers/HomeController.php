@@ -216,7 +216,7 @@ class HomeController extends Controller
 
     public function search( Request $request )
     {
-        dd("ContentController@index");
+        return redirect(action("ContentController@index"),Response::HTTP_REDIRECT_PERM);
     }
 
     /**
@@ -1513,8 +1513,44 @@ class HomeController extends Controller
             "مرداد",
             "شهریور",
         ];
+
+        $allDays = [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "15",
+          "16",
+          "17",
+          "18",
+          "19",
+          "20",
+          "21",
+          "22",
+          "23",
+          "24",
+          "25",
+          "26",
+          "27",
+          "28",
+          "29",
+          "30",
+        ];
+
         $currentMonthKey = array_search($currentJalaliMonthString , $allMonths);
-        $months = array_splice($allMonths , 0 , $currentMonthKey + 1) ;
+        $currentDayKey = array_search($currentJalaliDay , $allDays);
+//        $months = array_splice($allMonths , 0 , $currentMonthKey + 1) ;
+        $months = array_splice($allDays , 0 , $currentDayKey + 1) ;
 
         $chartData = collect();
 
@@ -1559,10 +1595,27 @@ class HomeController extends Controller
 //                    $totalMonthSpend = $MONTH_SPEND;
 //                    break;
                 default:
-                    $date = $monthToPeriodConvert->where("month" , $month)
-                        ->first();
-                    $donates = $orders->where("completed_at" ,">=" , $date["periodBegin"] )
-                        ->where("completed_at" , "<=" , $date["periodEnd"]);
+//                    $date = $monthToPeriodConvert->where("month" , $month)
+//                             ->first();
+                    $date = $monthToPeriodConvert->where("month" , "مهر")
+                             ->first();
+//                    $donates = $orders->where("completed_at" ,">=" , $date["periodBegin"] )
+//                        ->where("completed_at" , "<=" , $date["periodEnd"]);
+                    $day = Carbon::createFromFormat("Y-m-d",$date["periodEnd"])
+                                    ->setTimezone("Asia/Tehran")
+                                    ->day + ($month - 1) ;
+                    $thisMonth = 9 ;
+                    if($day > 30)
+                    {
+                        $thisMonth++ ;
+                        $day = $day - 30  ;
+                        $day = "0".$day;
+                    }
+                    if($thisMonth<10)
+                        $thisMonth = "0".$thisMonth ;
+
+                    $donates = $orders->where("completed_at" ,">=" , "2018-$thisMonth-$day 00:00:00" )
+                        ->where("completed_at" , "<=" , "2018-$thisMonth-$day 23:59:59");
                     $totalMonthIncome = 0 ;
                     foreach ($donates as $donate)
                     {
@@ -1577,23 +1630,25 @@ class HomeController extends Controller
 
                         $totalMonthIncome += $amount ;
                     }
-                    if($month == $currentJalaliMonthString)
-                    {
-                        $dayRatio = $currentJalaliDay/$currentJalaliMonthDays ;
+//                    if($month == $currentJalaliMonthString)
+//                    {
+//                        $dayRatio = $currentJalaliDay/$currentJalaliMonthDays ;
+                        $dayRatio = 1/$currentJalaliMonthDays ;
                         $totalMonthSpend = (int)round($MONTH_SPEND * $dayRatio );
-                    }
-                    else
-                    {
-                        $totalMonthSpend = $MONTH_SPEND;
-                    }
+//                    }
+//                    else
+//                    {
+//                        $totalMonthSpend = $MONTH_SPEND;
+//                    }
                     break;
             }
             $totalIncome += $totalMonthIncome;
             $totalSpend += $totalMonthSpend;
-            if($month == $currentJalaliMonthString)
-                $monthData = $currentJalaliDay . " ". $month;
-            else
-                $monthData = $month;
+//            if($month == $currentJalaliMonthString)
+//                $monthData = $currentJalaliDay . " ". $month;
+//            else
+//                $monthData = $month;
+            $monthData = $month . " " . $currentJalaliMonthString ;
             $chartData->push([
                 "month"=>$monthData ,
                 "totalIncome"=> $totalMonthIncome ,
@@ -1601,7 +1656,6 @@ class HomeController extends Controller
             ]);
 
         }
-
         $userCanSeeCounter = false ;
         if(Auth::check())
         {
@@ -2879,6 +2933,7 @@ class HomeController extends Controller
                         dump("Error on updating #".$content->id);
                     }
                 }
+                dd("Tags DONE!");
             }
 
         }
