@@ -444,7 +444,7 @@ class HomeController extends Controller
                 case "article":
                     $query = Educationalcontent::whereIn("id",$arrayOfId)
                         ->active()
-                        ->orderBy("created_at" , "desc")
+                        ->orderBy("validSince" , "desc")
                         ->get();
                     break;
                 case "contentset":
@@ -3469,13 +3469,13 @@ class HomeController extends Controller
 
             if($request->has("tagfix"))
             {
-
-                $contentsetId = 181;
+                dd("Access Denied");
+                $contentsetId = 202;
                 $contentset = Contentset::where("id" , $contentsetId)
                     ->first() ;
 
 //                $tags = $contentset->tags->tags;
-//                array_push($tags , "نادریان");
+//                array_push($tags , "پایه");
 //                $bucket = "contentset";
 //                $tagsJson = [
 //                    "bucket" => $bucket,
@@ -3502,12 +3502,12 @@ class HomeController extends Controller
 //                    dump("Error on updating #".$contentset->id);
 //                }
 
-                $contents = $contentset->educationalcontents;
+                $contents = $contentset->educationalcontents->where("pivot.order" , ">" , 50)->sortBy("pivot.order");
 
                 foreach ($contents as $content)
                 {
                     $tags = $content->tags->tags;
-                    array_push($tags , "صفر_تا_صد");
+                    array_push($tags , "دوازدهم");
                     $bucket = "content";
                     $tagsJson = [
                         "bucket" => $bucket,
@@ -3516,23 +3516,24 @@ class HomeController extends Controller
                     $content->tags = json_encode($tagsJson);
                     if($content->update())
                     {
-                        $params = [
-                            "tags"=> json_encode($content->tags->tags) ,
-                        ];
-                        if(isset($content->created_at) && strlen($content->created_at) > 0 )
-                            $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $content->created_at )->timestamp;
-
-                        $response =  $this->sendRequest(
-                            config("constants.TAG_API_URL")."id/$bucket/".$content->id ,
-                            "PUT",
-                            $params
-                        );
+//                        $params = [
+//                            "tags"=> json_encode($content->tags->tags) ,
+//                        ];
+//                        if(isset($content->created_at) && strlen($content->created_at) > 0 )
+//                            $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $content->created_at )->timestamp;
+//
+//                        $response =  $this->sendRequest(
+//                            config("constants.TAG_API_URL")."id/$bucket/".$content->id ,
+//                            "PUT",
+//                            $params
+//                        );
                     }
                     else
                     {
                         dump("Error on updating #".$content->id);
                     }
                 }
+                dd("Tags DONE!");
             }
 
         }

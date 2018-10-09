@@ -455,7 +455,7 @@
         function contentLoadAjaxRequest(url , formData) {
             $.ajax({
                 type: "GET",
-                cache: false,
+                cache: true,
                 url: url ,
                 data:formData,
                 statusCode:

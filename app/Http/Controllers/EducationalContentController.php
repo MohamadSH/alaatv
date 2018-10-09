@@ -679,7 +679,7 @@ class EducationalContentController extends Controller
     public function update(EditEducationalContentRequest $request, $educationalContent)
     {
         $educationalContent->fill($request->all()) ;
-
+        $dateNow = Carbon::now();
         $fileController = new FileController();
         $fileRequest = new InsertFileRequest();
 
@@ -712,9 +712,17 @@ class EducationalContentController extends Controller
 //        }
 
         if($request->has("enable"))
+        {
+            if($educationalContent->enable == 0)
+            {
+                $educationalContent->validSince = $dateNow;
+            }
             $educationalContent->enable = 1;
+        }
         else
+        {
             $educationalContent->enable = 0 ;
+        }
 
         if($request->has("tags"))
         {
