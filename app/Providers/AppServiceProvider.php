@@ -240,10 +240,10 @@ class AppServiceProvider extends ServiceProvider
                 $contentsets = Contentset::whereIn("id" , $contentsetArary)->get();
                 $contentsets->load('contents');
                 $sectionArray = [
-                    "jadid",
+/*                    "jadid",
                     "konkoor" ,
                     "yazdahom",
-                    "dahom"
+                    "dahom"*/
                 ];
                 $sections = collect();
                 foreach ($sectionArray as $section)
