@@ -513,7 +513,7 @@
                 if(element.hasClass("extraTag"))
                 {
                     var extraTagText = element.val();
-                    formData += "tags[]="+ extraTagText;
+                    formData += "tags[]="+ extraTagText+"&";
                     extraTags.push(extraTagText);
                     tags.push(extraTagText);
                 }
@@ -525,6 +525,8 @@
                     tags.push(tagText);
                 }
             });
+
+            formData = formData.slice(0,-1);
             if(setTagLabel)
             {
                 $(".tag").remove();
@@ -556,7 +558,7 @@
 
             if(itemType === "video" || itemType === "pamphlet" || itemType === "article")
                         itemType = "content";
-            console.log(formData);
+            // console.log(formData);
             contentLoadAjaxRequest(url,formData,itemType,setTagLabel);
             return false;
         }
