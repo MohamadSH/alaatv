@@ -149,7 +149,7 @@ class ContentsetController extends Controller
                 ]);
         }
 
-        return redirect(action("ContentController@index" , $tags)) ;
+        return redirect(action("ContentController@index" , ["tags"=>$tags])) ;
     }
 
     /**
