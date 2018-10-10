@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\{
-    Attribute, Attributeset, Attributetype, Attributevalue, Bon, Classes\Search\ProductSearch, Classes\SEO\SeoDummyTags, Http\Requests\AddComplimentaryProductRequest, Http\Requests\EditProductRequest, Http\Requests\InsertProductRequest, Http\Requests\ProductIndexRequest, Product, Productfiletype, Traits\CharacterCommon, Traits\Helper, Traits\MathCommon, Traits\MetaCommon, Traits\ProductCommon, Traits\RequestCommon, Traits\UserSeenTrait, User
+    Attribute, Attributeset, Attributetype, Attributevalue, Bon, Classes\Search\ProductSearch, Classes\SEO\SeoDummyTags, Http\Requests\AddComplimentaryProductRequest, Http\Requests\EditProductRequest, Http\Requests\InsertProductRequest, Http\Requests\ProductIndexRequest, Product, Productfiletype, Traits\CharacterCommon, Traits\Helper, Traits\MathCommon, Traits\MetaCommon, Traits\ProductCommon, Traits\RequestCommon, Traits\UserSeenTrait, User, Websitesetting
 };
 use Illuminate\Http\{
     Request, Response
@@ -49,13 +49,17 @@ class ProductController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    function __construct()
+    /*
+    |--------------------------------------------------------------------------
+    | Private methods
+    |--------------------------------------------------------------------------
+    */
+
+    function __construct(Response $response , Websitesetting $setting)
     {
+        $this->response = $response;
+        $this->setting = $setting->setting;
         $this->callMiddlewares();
-
-        $this->response = new Response();
-        $this->setting = json_decode(app('setting')->setting);
-
     }
 
     private function callMiddlewares(): void
@@ -70,6 +74,36 @@ class ProductController extends Controller
         $this->middleware('auth', ['except' => ['show', 'refreshPrice', 'search', 'showPartial', 'landing1', 'landing2', 'landing3', 'landing4']]);
     }
 
+
+    /**
+     * @return array|\Illuminate\Config\Repository|mixed
+     */
+    private function getExcludedProducts()
+    {
+        if (Config::has("constants.EXCLUDED_RELATED_PRODUCTS"))
+            $excludedProducts = config("constants.EXCLUDED_RELATED_PRODUCTS");
+        else
+            $excludedProducts = [];
+        return $excludedProducts;
+    }
+
+    /**
+     * @param Product $product
+     * @param $chunk
+     * @return array
+     */
+    private function getOtherProducts(Product $product , $chunk)
+    {
+        $key = "product:otherProducts:" . $product->cacheKey();
+        $excludedProducts = $this->getExcludedProducts();
+        $otherProducts = Cache::remember($key, config("constants.CACHE_60"), function () use ($product, $excludedProducts) {
+            return $product->getOtherProducts($excludedProducts)->get();
+        });
+        $otherProductChunks = $otherProducts->chunk($chunk);
+
+        return $otherProductChunks;
+    }
+    
     /**
      * @param Product $product
      */
@@ -155,7 +189,7 @@ class ProductController extends Controller
         $files = [$request->file] ;
         $images = [$request->image];
         $isFree = $request->has("isFree");
-        
+
         $product->fill($inputData);
 
         $product->isFree = $isFree;
@@ -381,20 +415,10 @@ class ProductController extends Controller
         $checkboxInfoAttributes = $allAttributeCollection["checkboxInfoAttributes"];
 
         $costArray = $product->calculatePayablePrice( $user );
-        $discount = $costArray["bonDiscount"]+$costArray["productDiscount"];
+        $discount = $costArray["bonDiscount"] + $costArray["productDiscount"];
         $cost = $costArray["cost"];
 
-        if(Config::has("constants.EXCLUDED_RELATED_PRODUCTS"))
-            $excludedProducts = config("constants.EXCLUDED_RELATED_PRODUCTS");
-        else
-            $excludedProducts = [] ;
-
-
-        $key="product:otherProducts:".$product->cacheKey();
-        $otherProducts = Cache::remember($key,config("constants.CACHE_60"),function () use ($product,$excludedProducts){
-            return $product->getOtherProducts($excludedProducts)->get();
-        });
-        $otherProductChunks = $otherProducts->chunk(4);
+        $otherProductChunks = $this->getOtherProducts($product,4);
 
         if(Config::has("constants.EXCLUSIVE_RELATED_PRODUCTS"))
             $exclusiveOtherProductIds = config("constants.EXCLUSIVE_RELATED_PRODUCTS");
@@ -1305,4 +1329,5 @@ class ProductController extends Controller
             return $this->response->setStatusCode(503)->setContent(["message"=>"خطا در کپی از اطلاعات پایه ای محصول . لطفا دوباره اقدام نمایید"]);
         }
     }
+
 }

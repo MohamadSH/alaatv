@@ -8,6 +8,7 @@ use App\Http\Requests\ContentsetIndexRequest;
 use App\Http\Requests\InsertContentsetRequest;
 use App\Http\Requests\ProductIndexRequest;
 use App\Traits\RequestCommon;
+use App\Websitesetting;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\{
     Request, Response
@@ -37,9 +38,10 @@ class ContentsetController extends Controller
     protected $setting ;
     const PARTIAL_SEARCH_TEMPLATE = "partials.search.contentset";
 
-    public function __construct()
+    public function __construct(Response $response , Websitesetting $setting)
     {
-        $this->response = new Response();
+        $this->response = $response;
+        $this->setting = $setting->setting;
     }
 
     /*

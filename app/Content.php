@@ -333,7 +333,7 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface
      *
      * @throws Exception
      */
-    public function getThumbnailAttribute($value) : string
+    public function getThumbnailAttribute($value)
     {
         $t = json_decode($value);
         $link = null;
