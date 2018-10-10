@@ -6,7 +6,7 @@ use App\Classes\{
     Advertisable, SEO\SeoInterface, SEO\SeoMetaTagsGenerator, Taggable
 };
 use App\Traits\{
-    CharacterCommon, Helper, ProductCommon
+    APIRequestCommon, CharacterCommon, Helper, ProductCommon
 };
 use Illuminate\Database\{
     Eloquent\Model, Eloquent\SoftDeletes, Eloquent\Builder
@@ -103,6 +103,7 @@ class Product extends Model implements Advertisable, Taggable , SeoInterface
     use ProductCommon;
     use CharacterCommon;
     use Helper;
+    use APIRequestCommon;
 
     /*
     |--------------------------------------------------------------------------
@@ -1370,5 +1371,61 @@ class Product extends Model implements Advertisable, Taggable , SeoInterface
         }
 
         return $filesArray;
+    }
+
+    public function getTaggableTags()
+    {
+        return $this->tags->tags;
+    }
+
+    public function getTaggableId() :int
+    {
+        return $this->id;
+    }
+
+    public function getTaggableScore()
+    {
+        return optional($this->created_at)->timestamp;
+    }
+
+    public function isTaggableActive(): bool
+    {
+        if ($this->isActive() &&
+            isset($this->tags) &&
+            !empty($this->tags->tags)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Checks whether the product is active or not .
+     *
+     * @return bool
+     */
+    public function isActive(): bool
+    {
+        return ($this->isEnable() && $this->isValid() ? true : false);
+    }
+
+    /**
+     * Checks whether the product is valid or not .
+     *
+     * @return bool
+     */
+    public function isValid(): bool
+    {
+        if ( ( $this->validSince < Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran')  || is_null($this->validSince) ) &&
+            ( $this->validUntil >  Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran') || is_null($this->validUntil) )
+            )
+            return true;
+        return false;
+    }
+
+    public function isEnable(): bool
+    {
+        if ($this->enable)
+            return true;
+        return false;
     }
 }

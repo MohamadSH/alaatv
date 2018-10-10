@@ -2,7 +2,10 @@
 
 namespace App;
 
+use App\Classes\Taggable;
+use App\Collection\ContentCollection;
 use App\Collection\UserCollection;
+use App\Traits\APIRequestCommon;
 use App\Traits\HasWallet;
 use App\Traits\Helper;
 use Carbon\Carbon;
@@ -132,14 +135,18 @@ use Schema;
  * @method static \Illuminate\Database\Query\Builder|\App\User withoutTrashed()
  * @mixin \Eloquent
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User role($roles)
+ * @property string|null $nameSlug اسلاگ شده نام
+ * @property-read mixed $full_name_reverse
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereNameSlug($value)
  */
-class User extends Authenticatable
+class User extends Authenticatable implements Taggable
 {
     use Helper;
     use SoftDeletes, CascadeSoftDeletes;
     use LaratrustUserTrait;
     use HasWallet;
     use Notifiable;
+    use APIRequestCommon;
 
 
     protected $cascadeDeletes = [
@@ -758,5 +765,63 @@ class User extends Authenticatable
     public function CanSeeCounter(): bool
     {
         return $this->hasRole("admin") ? true : false;
+    }
+
+    public function retrievingTags()
+    {
+        /**
+         *      Retrieving Tags
+         */
+        $response = $this->sendRequest(
+            config("constants.TAG_API_URL") . "id/author/" . $this->id,
+            "GET"
+        );
+
+        if ($response["statusCode"] == 200) {
+            $result = json_decode($response["result"]);
+            $tags = $result->data->tags;
+        } else {
+            $tags = [];
+        }
+
+        return $tags;
+    }
+
+    public function getTaggableTags()
+    {
+        $userContents = $this->contents ;
+        return $this->mergeContentTags($userContents);
+    }
+
+    public function getTaggableId()
+    {
+        return $this->id;
+    }
+
+    public function getTaggableScore()
+    {
+        return null;
+    }
+
+    public function isTaggableActive(): bool
+    {
+        $userContents = $this->contents ;
+        if(count($userContents) == 0){
+            return false;
+        }
+        return true;
+    }
+    /**
+     * @param $userContents
+     * @return array
+     */
+    private function mergeContentTags(ContentCollection $userContents): array
+    {
+        $tags = [];
+        foreach ($userContents as $content) {
+            $tags = array_merge($tags, $content->tags->tags);
+        }
+        $tags = array_values(array_unique($tags));
+        return $tags;
     }
 }

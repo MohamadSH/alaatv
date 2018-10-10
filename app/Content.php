@@ -373,7 +373,7 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface
      *
      * @return Contentset
      */
-    public function getContentsetAttribute() :Contentset
+    public function getContentsetAttribute() : ?Contentset
     {
         $content = $this;
         $key = "content:contentSet:" . $this->cacheKey();
@@ -456,7 +456,7 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface
      *
      * @return int
      */
-    public  function getOrder():int
+    public  function getOrder():?int
     {
         $key = "content:Order"
             .$this->cacheKey();
@@ -710,7 +710,8 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface
      */
     public function isValid(): bool
     {
-        if ($this->validSince < Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'))
+        if ($this->validSince < Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran')
+            || is_null($this->validSince))
             return true;
         return false;
     }
@@ -911,5 +912,30 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface
     public function retrievingTags() : array
     {
         return (new ContentTagManagerViaApi())->getTags($this->id);
+    }
+
+    public function getTaggableTags()
+    {
+        return $this->tags->tags;
+    }
+
+    public function getTaggableId() :int
+    {
+        return $this->id;
+    }
+
+    public function getTaggableScore()
+    {
+        return optional($this->created_at)->timestamp;
+    }
+
+    public function isTaggableActive() :bool
+    {
+        if ($this->isActive() &&
+            isset($this->tags) &&
+            !empty($this->tags->tags)) {
+            return true;
+        }
+        return false;
     }
 }
