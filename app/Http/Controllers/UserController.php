@@ -39,6 +39,7 @@ use App\Transaction;
 use App\Transactiongateway;
 use App\User;
 use App\Userstatus;
+use App\Websitesetting;
 use Auth;
 use Carbon\Carbon;
 use Hash;
@@ -68,7 +69,7 @@ class UserController extends Controller
     use Helper;
     use UserCommon;
 
-    function __construct()
+    function __construct(Websitesetting $setting)
     {
         /** setting permissions
          *
@@ -79,7 +80,7 @@ class UserController extends Controller
         $this->middleware('permission:'.Config::get('constants.SHOW_USER_ACCESS'),['only'=>'edit']);
 
         $this->response = new Response();
-        $this->setting = json_decode(app('setting')->setting);
+        $this->setting = $setting->setting;
     }
 
     public function findTech(Request $request){
