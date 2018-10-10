@@ -89,23 +89,6 @@ class ProductController extends Controller
 
     /**
      * @param Product $product
-     * @param $chunk
-     * @return array
-     */
-    private function getOtherProducts(Product $product , $chunk)
-    {
-        $key = "product:otherProducts:" . $product->cacheKey();
-        $excludedProducts = $this->getExcludedProducts();
-        $otherProducts = Cache::remember($key, config("constants.CACHE_60"), function () use ($product, $excludedProducts) {
-            return $product->getOtherProducts($excludedProducts)->get();
-        });
-        $otherProductChunks = $otherProducts->chunk($chunk);
-
-        return $otherProductChunks;
-    }
-    
-    /**
-     * @param Product $product
      */
     private function addSimpleInfoAttributes(Product &$product){
         $productsArray = [];
@@ -260,6 +243,56 @@ class ProductController extends Controller
 
         });
         return $response;
+    }
+
+    /**
+     * @param Product $product
+     * @param $chunk
+     * @return Collection
+     */
+    private function makeOtherProducts(Product $product , $chunk)
+    {
+        $otherProducts = $this->getOtherProducts($product);
+
+        $exclusiveOtherProducts = $this->getExclusiveOtherProducts();
+
+        $totalOtherProducts = $exclusiveOtherProducts->toBase()->merge($otherProducts);
+
+        $otherProductChunks = $totalOtherProducts->chunk($chunk);
+
+        return $otherProductChunks;
+    }
+
+    /**
+     * @param Product $product
+     * @return Collection
+     */
+    private function getOtherProducts(Product $product): Collection
+    {
+        $key = "product:otherProducts:" . $product->cacheKey();
+        $excludedProducts = $this->getExcludedProducts();
+        $otherProducts = Cache::remember($key, config("constants.CACHE_60"), function () use ($product, $excludedProducts) {
+            return $product->getOtherProducts($excludedProducts)->get();
+        });
+        return $otherProducts;
+    }
+
+    /**
+     * @return Collection
+     */
+    private function getExclusiveOtherProducts(): Collection
+    {
+        if (Config::has("constants.EXCLUSIVE_RELATED_PRODUCTS"))
+            $exclusiveOtherProductIds = config("constants.EXCLUSIVE_RELATED_PRODUCTS");
+        else
+            $exclusiveOtherProductIds = [];
+
+        $key = "product:exclusiveOtherProducts:" . md5(implode(".", $exclusiveOtherProductIds));
+        $exclusiveOtherProducts = Cache::remember($key, config("constants.CACHE_60"), function () use ($exclusiveOtherProductIds) {
+            return Product::whereIn("id", $exclusiveOtherProductIds)->get();
+        });
+
+        return $exclusiveOtherProducts;
     }
 
     /*
@@ -418,17 +451,7 @@ class ProductController extends Controller
         $discount = $costArray["bonDiscount"] + $costArray["productDiscount"];
         $cost = $costArray["cost"];
 
-        $otherProductChunks = $this->getOtherProducts($product,4);
-
-        if(Config::has("constants.EXCLUSIVE_RELATED_PRODUCTS"))
-            $exclusiveOtherProductIds = config("constants.EXCLUSIVE_RELATED_PRODUCTS");
-        else
-            $exclusiveOtherProductIds = [] ;
-
-        $key="product:exclusiveOtherProducts:".md5(implode(".",$exclusiveOtherProductIds));
-        $exclusiveOtherProducts = Cache::remember($key,config("constants.CACHE_60"),function () use ($exclusiveOtherProductIds){
-            return  Product::getExclusiveOtherProducts($exclusiveOtherProductIds);
-        });
+        $otherProductChunks = $this->makeOtherProducts($product,4);
 
         $productSeenCount = $this->getSeenCountFromRequest($request);
 
@@ -1329,5 +1352,4 @@ class ProductController extends Controller
             return $this->response->setStatusCode(503)->setContent(["message"=>"خطا در کپی از اطلاعات پایه ای محصول . لطفا دوباره اقدام نمایید"]);
         }
     }
-
 }

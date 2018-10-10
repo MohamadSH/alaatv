@@ -988,17 +988,6 @@ class Product extends Model implements Advertisable, Taggable , SeoInterface
     }
 
     /**
-     *
-     *
-     * @param array $exclusiveOtherProductIds
-     * @return \Illuminate\Database\Eloquent\Collection|static[]
-     */
-    public static function getExclusiveOtherProducts(array $exclusiveOtherProductIds):Collection
-    {
-        return Product::whereIn("id" , $exclusiveOtherProductIds)->get() ;
-    }
-
-    /**
      * Gets desirable products
      *
      * @param int $configurable

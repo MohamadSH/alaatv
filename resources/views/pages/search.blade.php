@@ -512,19 +512,21 @@
 
                 if(element.hasClass("extraTag"))
                 {
-                    var tagText = element.val();
-                    formData += "tags[]="+ tagText;
-                    extraTags.push(tagText);
-                    tags.push(tagText);
+                    var extraTagText = element.val();
+                    formData += "tags[]="+ extraTagText+"&";
+                    extraTags.push(extraTagText);
+                    tags.push(extraTagText);
                 }
                 else if($("#"+elementId+" option:selected").val() != '')
                 {
                     var selectedText = $("#"+elementId+" option:selected").text();
-                    var extraTagText = string_to_slug(selectedText);
-                    formData += "tags[]="+ extraTagText +"&";
-                    tags.push(extraTagText);
+                    var tagText = string_to_slug(selectedText);
+                    formData += "tags[]="+ tagText +"&";
+                    tags.push(tagText);
                 }
             });
+
+            formData = formData.slice(0,-1);
             if(setTagLabel)
             {
                 $(".tag").remove();
@@ -556,7 +558,7 @@
 
             if(itemType === "video" || itemType === "pamphlet" || itemType === "article")
                         itemType = "content";
-            console.log(formData);
+            // console.log(formData);
             contentLoadAjaxRequest(url,formData,itemType,setTagLabel);
             return false;
         }
@@ -612,7 +614,7 @@
             var id = $(this).data("role");
             $(".tag_"+id).remove();
             tags.splice(id, 1);
-            var elemets = [
+            var elements = [
                     "gradeSelect" ,
                     "majorSelect" ,
                     "lessonSelect",
@@ -620,15 +622,13 @@
             ];
 
 
-            $.each(elemets , function (key , value)
+            $.each(elements , function (key , value)
             {
                 $("#"+value).each(function ()
                 {
-                    if ($.inArray($(this).val(), tags) != -1)
-                    {
-                        $(this).prop('selected', true);
-                    }
-                    else
+                    var selectedText = $("#"+value+" option:selected").text();
+                    var slugifiedSelectedText = string_to_slug(selectedText);
+                    if ($.inArray(slugifiedSelectedText , tags) == -1)
                     {
                         $("#"+value).val($("#"+value+" option:first").val());
                     }

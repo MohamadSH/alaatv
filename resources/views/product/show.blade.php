@@ -756,39 +756,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                @foreach($exclusiveOtherProducts as $otherProduct)
-                                    <div class="col-md-3">
-                                        <div class="col-item">
-                                            <div class="photo">
-                                                <img  src="{{ route('image', ['category'=>'4' , 'w'=>'254' , 'h'=>'254', 'filename' =>  $otherProduct->image ]) }}"  class="img-responsive" alt="عکس محصول@if(isset($otherProduct[0])) {{$otherProduct->name}} @endif" />
-                                            </div>
-                                            <div class="info">
-                                                <div class="row">
-                                                    <div class="price col-md-12">
-                                                        <h5 class="bold text-center">
-                                                            @if(strlen($otherProduct->name)>0 ) {{$otherProduct->name}} @endif</h5>
-                                                        <h5 class="price-text-color bold">
-                                                            @if($otherProduct->isFree)
-                                                                <div class="text-center bold font-red" style="font-size: inherit">رایگان </div>
-                                                            @elseif($otherProduct->calculatePayablePrice()["productDiscount"]+$otherProduct->calculatePayablePrice()["bonDiscount"]>0)
-                                                                <div class="text-center bold font-red" style=" text-decoration: line-through;font-size: inherit">@if(isset($otherProduct->basePrice)){{number_format($otherProduct->basePrice)}} تومان@endif</div>
-                                                                <div class="text-center bold font-green " style="font-size: inherit"> @if(Auth::check()) {{number_format((1-(($otherProduct->discount+$otherProduct->calculatePayablePrice()["bonDiscount"])/100))*$otherProduct->calculatePayablePrice()["cost"])}} @else @if(isset($otherProduct->basePrice)){{number_format(((1-($otherProduct->discount/100))*$otherProduct->basePrice))}} تومان@endif @endif</div>
-                                                            @else
-                                                                <div class="text-center bold font-green" style="padding-bottom: 28px;font-size: inherit">@if(isset($otherProduct->basePrice)){{number_format($otherProduct->basePrice)}} تومان@endif </div>
-                                                            @endif
-                                                        </h5>
-                                                    </div>
-                                                </div>
-                                                <div class="separator clear-left">
-                                                    <p class="">
-                                                        <a  href="{{action("ProductController@show" , $otherProduct)}}" class="btn btn-lg green hidden-sm"><i class="fa fa-cart-plus"></i>سفارش</a></p>
-                                                </div>
-                                                <div class="clearfix">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
                             </div>
                         </div>
                         @foreach($otherProductChunks as $key=>$otherProductChunk)
