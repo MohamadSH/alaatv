@@ -13,6 +13,7 @@ use App\Http\Requests\{
 use App\Traits\{
     APIRequestCommon, CharacterCommon, FileCommon, Helper, MetaCommon, ProductCommon, RequestCommon, UserSeenTrait
 };
+use App\Websitesetting;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Foundation\Http\FormRequest;
@@ -42,10 +43,10 @@ class ContentController extends Controller
 
 
 
-    public function __construct(Agent $agent, Response $response)
+    public function __construct(Agent $agent, Response $response ,Websitesetting $setting)
     {
         $this->response = $response;
-        $this->setting = json_decode(app('setting')->setting);
+        $this->setting = $setting->setting;
         $authException = $this->getAuthExceptionArray($agent);
         $this->callMiddlewares($authException);
     }

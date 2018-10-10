@@ -97,6 +97,12 @@
         {{--</div>--}}
     </div>
     <div class="form-group">
+        <label class=" col-md-4 control-label" for="created_at">تاریخ درج</label>
+        <div class="col-md-3">
+            <input  type="text" name="created_at" class="form-control"  value="@if(isset($educationalContent->created_at)){{$educationalContent->created_at}}@endif"  dir="ltr">
+        </div>
+    </div>
+    <div class="form-group">
         <label class="col-md-2 control-label" for="name">نام :
             <span class="required"> * </span>
         </label>

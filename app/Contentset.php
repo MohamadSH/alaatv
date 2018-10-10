@@ -2,6 +2,7 @@
 
 namespace App;
 
+
 use App\Classes\Taggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;

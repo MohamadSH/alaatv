@@ -315,11 +315,16 @@
                     ticks: {
                         callback: function(label, index, labels) {
                             var amount = label / 1000000;
+                            if(amount < 1)
+                            {
+                                amount = amount * 1000;
+                                return amount + " هزار تومان";
+                            }
                             return amount + " میلیون تومان" ;
 
                             },
                         beginAtZero:true,
-                        max: 30000000 ,
+                        max: 1000000 ,
                     },
 
                 }]
