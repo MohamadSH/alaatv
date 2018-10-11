@@ -558,8 +558,8 @@ class InitializeCategoryTreeCommand extends Command
 
         $riazi = [
             [
-                'name' => 'نظام قدیم',
-                'tags' => json_encode(["دهم"], JSON_UNESCAPED_UNICODE),
+                'name' => 'نظام آموزشی قدیم',
+                'tags' => json_encode(["نظام_آموزشی_قدیم"], JSON_UNESCAPED_UNICODE),
 
                 'children' => $ghadimR,
             ],
@@ -584,8 +584,8 @@ class InitializeCategoryTreeCommand extends Command
         ];
         $tajrobi = [
             [
-                'name' => 'نظام قدیم',
-                'tags' => json_encode(["دهم"], JSON_UNESCAPED_UNICODE),
+                'name' => 'نظام آموزشی قدیم',
+                'tags' => json_encode(["نظام_آموزشی_قدیم"], JSON_UNESCAPED_UNICODE),
 
                 'children' => $ghadimT,
             ],
@@ -610,8 +610,8 @@ class InitializeCategoryTreeCommand extends Command
         ];
         $ensani = [
             [
-                'name' => 'نظام قدیم',
-                'tags' => json_encode(["دهم"], JSON_UNESCAPED_UNICODE),
+                'name' => 'نظام آموزشی قدیم',
+                'tags' => json_encode(["نظام_آموزشی_قدیم"], JSON_UNESCAPED_UNICODE),
 
                 'children' => $ghadimE,
             ],
