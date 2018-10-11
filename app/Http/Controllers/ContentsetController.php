@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Agent;
 use App\Classes\Search\ContentsetSearch;
 use App\Contentset;
 use App\Http\Requests\ContentsetIndexRequest;
@@ -38,10 +39,12 @@ class ContentsetController extends Controller
     protected $setting ;
     const PARTIAL_SEARCH_TEMPLATE = "partials.search.contentset";
 
-    public function __construct(Response $response , Websitesetting $setting)
+    public function __construct(Response $response , Websitesetting $setting )
     {
         $this->response = $response;
         $this->setting = $setting->setting;
+        $authException = $this->getAuthExceptionArray();
+        $this->callMiddlewares($authException);
     }
 
     /*
@@ -97,6 +100,23 @@ class ContentsetController extends Controller
         return $response;
     }
 
+    /**
+     * @return array
+     */
+    private function getAuthExceptionArray(): array
+    {
+        $authException = ["index" , "show" ];
+        return $authException;
+    }
+
+    /**
+     * @param $authException
+     */
+    private function callMiddlewares($authException): void
+    {
+        $this->middleware('auth', ['except' => $authException]);
+    }
+
     /*
    |--------------------------------------------------------------------------
    | Public methods
@@ -149,7 +169,10 @@ class ContentsetController extends Controller
                 ]);
         }
 
-        return redirect(action("ContentController@index" , ["tags"=>$tags])) ;
+//        return back()->withInput();
+        return redirect()->action(
+                "ContentController@index"
+        )->withInput($request->input());
     }
 
     /**
