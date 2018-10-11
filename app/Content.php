@@ -9,6 +9,7 @@ use App\Classes\SEO\SeoInterface;
 use App\Classes\SEO\SeoMetaTagsGenerator;
 use App\Classes\Taggable;
 use App\Collection\ContentCollection;
+use App\Collection\ProductCollection;
 use App\Traits\APIRequestCommon;
 use App\Traits\FileCommon;
 use App\Traits\Helper;
@@ -158,6 +159,24 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface
     */
 
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | overwrite methods
+    |--------------------------------------------------------------------------
+    */
+
+
+    /**
+     * Create a new Eloquent Collection instance.
+     *
+     * @param  array $models
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function newCollection(array $models = [])
+    {
+        return new ProductCollection($models);
+    }
 
 
     /*
@@ -752,16 +771,7 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface
     |--------------------------------------------------------------------------
     */
 
-    /**
-     * Create a new Eloquent Collection instance.
-     *
-     * @param  array $models
-     * @return \Illuminate\Database\Eloquent\Collection
-     */
-    public function newCollection(array $models = [])
-    {
-        return new ContentCollection($models);
-    }
+
 
     /**
      * Fixes contents files (used in /database/migrations/2018_08_21_143144_alter_table_educationalcontents_add_columns.php)
