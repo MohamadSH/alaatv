@@ -74,19 +74,6 @@ class ProductController extends Controller
         $this->middleware('auth', ['except' => ['show', 'refreshPrice', 'search', 'showPartial', 'landing1', 'landing2', 'landing3', 'landing4']]);
     }
 
-
-    /**
-     * @return array|\Illuminate\Config\Repository|mixed
-     */
-    private function getExcludedProducts()
-    {
-        if (Config::has("constants.EXCLUDED_RELATED_PRODUCTS"))
-            $excludedProducts = config("constants.EXCLUDED_RELATED_PRODUCTS");
-        else
-            $excludedProducts = [];
-        return $excludedProducts;
-    }
-
     /**
      * @param Product $product
      */
@@ -243,56 +230,6 @@ class ProductController extends Controller
 
         });
         return $response;
-    }
-
-    /**
-     * @param Product $product
-     * @param $chunk
-     * @return Collection
-     */
-    private function makeOtherProducts(Product $product , $chunk)
-    {
-        $otherProducts = $this->getOtherProducts($product);
-
-        $exclusiveOtherProducts = $this->getExclusiveOtherProducts();
-
-        $totalOtherProducts = $exclusiveOtherProducts->toBase()->merge($otherProducts);
-
-        $otherProductChunks = $totalOtherProducts->chunk($chunk);
-
-        return $otherProductChunks;
-    }
-
-    /**
-     * @param Product $product
-     * @return Collection
-     */
-    private function getOtherProducts(Product $product): Collection
-    {
-        $key = "product:otherProducts:" . $product->cacheKey();
-        $excludedProducts = $this->getExcludedProducts();
-        $otherProducts = Cache::remember($key, config("constants.CACHE_60"), function () use ($product, $excludedProducts) {
-            return $product->getOtherProducts($excludedProducts)->get();
-        });
-        return $otherProducts;
-    }
-
-    /**
-     * @return Collection
-     */
-    private function getExclusiveOtherProducts(): Collection
-    {
-        if (Config::has("constants.EXCLUSIVE_RELATED_PRODUCTS"))
-            $exclusiveOtherProductIds = config("constants.EXCLUSIVE_RELATED_PRODUCTS");
-        else
-            $exclusiveOtherProductIds = [];
-
-        $key = "product:exclusiveOtherProducts:" . md5(implode(".", $exclusiveOtherProductIds));
-        $exclusiveOtherProducts = Cache::remember($key, config("constants.CACHE_60"), function () use ($exclusiveOtherProductIds) {
-            return Product::whereIn("id", $exclusiveOtherProductIds)->get();
-        });
-
-        return $exclusiveOtherProducts;
     }
 
     /*
