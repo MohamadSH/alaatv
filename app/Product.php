@@ -2,9 +2,7 @@
 
 namespace App;
 
-use App\Classes\{
-    Advertisable, SEO\SeoInterface, SEO\SeoMetaTagsGenerator, Taggable
-};
+use App\Classes\{Advertisable, Pricing\Alaa\AlaaCostCentre, SEO\SeoInterface, SEO\SeoMetaTagsGenerator, Taggable};
 use App\Traits\{
     APIRequestCommon, CharacterCommon, Helper, ProductCommon
 };
@@ -189,18 +187,11 @@ class Product extends Model implements Advertisable, Taggable , SeoInterface
     /**
      * Obtains product's cost
      *
-     * @param \App\User $intendedUser
+     * @param User|null $user
      * @return array
      */
-    private function obtainProductCost(User $intendedUser = null) :array
+    private function obtainProductCost(User $user = null) :array
     {
-
-        if (isset($intendedUser))
-            $user = $intendedUser;
-        elseif (Auth::check())
-            $user = Auth::user();
-        else
-            $user = null;
 
         $key = "product:obtainProductCost:"
             .$this->cacheKey()
@@ -282,12 +273,16 @@ class Product extends Model implements Advertisable, Taggable , SeoInterface
 
             //////////////////////////////
 
+            $cost = (int)$cost ;
+            $costCalculator = new AlaaCostCentre($cost , $productDiscount , $bonDiscount , $productDiscountAmount);
+            $customerCost = $costCalculator->calculatePrice();
+
             return [
-                "cost" => (int)$cost,
+                "cost" => $cost,
                 "productDiscount" => $productDiscount,
                 'bonDiscount' => $bonDiscount,
                 "productDiscountAmount" => $productDiscountAmount,
-                'CustomerCost' =>(int)(((int)$cost * (1 - ($productDiscount / 100))) * (1 - ($bonDiscount / 100)) - $productDiscountAmount)
+                'CustomerCost' => $customerCost
             ];
         });
     }
@@ -1068,15 +1063,15 @@ class Product extends Model implements Advertisable, Taggable , SeoInterface
     }
 
     /**
-     * @return Builder
+     * @return Collection
      */
-    public static function getExclusiveOtherProducts() : Builder
+    public static function getExclusiveOtherProducts() : Collection
     {
         $exclusiveOtherProductIds = self::EXCLUSIVE_RELATED_PRODUCTS;
 
-        $key = "product:exclusiveOtherProducts:" . md5(implode(".", $exclusiveOtherProductIds));
-        $exclusiveOtherProducts = Cache::remember($key, config("constants.CACHE_60"), function () use ($exclusiveOtherProductIds) {
-            return self::whereIn("id", $exclusiveOtherProductIds);
+        $key = "product:exclusiveOtherProducts:" . md5(implode(",", $exclusiveOtherProductIds));
+        $exclusiveOtherProducts = Cache::remember($key, config("constants.CACHE_600"), function () use ($exclusiveOtherProductIds) {
+            return self::whereIn("id", $exclusiveOtherProductIds)->get();
         });
 
         return $exclusiveOtherProducts ;
