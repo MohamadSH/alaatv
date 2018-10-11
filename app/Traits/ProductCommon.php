@@ -129,4 +129,22 @@ trait ProductCommon
         }
         return $allFilesCollection;
     }
+
+    /**
+     * @param Product $product
+     * @param $chunk
+     * @return Collection
+     */
+    public function makeOtherProducts(Product $product , $chunk)
+    {
+        $exclusiveOtherProducts = Product::getExclusiveOtherProducts()->get();
+
+        $otherProducts = $product->getOtherProducts()->get();
+
+        $totalOtherProducts = $this->mergeCollections($exclusiveOtherProducts , $otherProducts);
+
+        $otherProductChunks = $totalOtherProducts->chunk($chunk);
+
+        return $otherProductChunks;
+    }
 }

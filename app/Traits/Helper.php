@@ -6,6 +6,7 @@ use App\User;
 use App\Websitepage;
 use Carbon\Carbon;
 use Illuminate\Http\Response;
+use Illuminate\Support\Collection;
 
 trait Helper
 {
@@ -289,5 +290,12 @@ trait Helper
             $productSeenCount = $websitepage->userschecked()->count();
         }
         return $productSeenCount;
+    }
+
+    public function mergeCollections($firstCollection , $secondCollection) : Collection
+    {
+        $merge = $firstCollection->toBase()->merge($secondCollection);
+
+        return $merge ;
     }
 }
