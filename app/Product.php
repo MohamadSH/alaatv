@@ -189,18 +189,11 @@ class Product extends Model implements Advertisable, Taggable , SeoInterface
     /**
      * Obtains product's cost
      *
-     * @param \App\User $intendedUser
+     * @param User|null $user
      * @return array
      */
-    private function obtainProductCost(User $intendedUser = null) :array
+    private function obtainProductCost(User $user = null) :array
     {
-
-        if (isset($intendedUser))
-            $user = $intendedUser;
-        elseif (Auth::check())
-            $user = Auth::user();
-        else
-            $user = null;
 
         $key = "product:obtainProductCost:"
             .$this->cacheKey()
@@ -281,6 +274,8 @@ class Product extends Model implements Advertisable, Taggable , SeoInterface
             }
 
             //////////////////////////////
+
+
 
             return [
                 "cost" => (int)$cost,
