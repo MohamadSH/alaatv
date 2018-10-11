@@ -39,6 +39,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Bon withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Bon withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Bon ofName($name)
  */
 class Bon extends Model
 {

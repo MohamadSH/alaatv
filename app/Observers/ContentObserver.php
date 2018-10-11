@@ -2,14 +2,22 @@
 
 namespace App\Observers;
 
-use App\Classes\Search\Tag\ContentTagManagerViaApi;
+use App\Classes\Search\TaggingInterface;
 use App\Content;
-use App\Traits\APIRequestCommon;
-use Illuminate\Http\Response;
+use App\Traits\TaggableTrait;
 use Illuminate\Support\Facades\Artisan;
 
 class ContentObserver
 {
+    private $tagging;
+    use TaggableTrait;
+
+    public function __construct(TaggingInterface $tagging)
+    {
+        $this->tagging = $tagging;
+    }
+
+
     /**
      * Handle the content "created" event.
      *
@@ -78,24 +86,10 @@ class ContentObserver
     }
 
     public function saved(Content $content){
-        $this->sendTagsOfContentToRedis($content);
+        $this->sendTagsOfTaggableToApi($content , $this->tagging);
         Artisan::call('cache:clear');
     }
-    /**
-     * @param $content
-     */
-    private function sendTagsOfContentToRedis($content): void
-    {
-        if ($content->enable &&
-            isset($content->tags) &&
-            !empty($content->tags->tags)) {
 
-            (new ContentTagManagerViaApi())->setTags($content->id,
-                $content->tags->tags,
-                optional($content->created_at)->timestamp
-            );
-        }
-    }
 
     /**
      * @param $content

@@ -33,6 +33,7 @@ use Kalnoy\Nestedset\NodeTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Category whereRgt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Category whereTags($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Category whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Category active()
  */
 class Category extends Model
 {

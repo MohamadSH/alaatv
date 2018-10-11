@@ -44,6 +44,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Productfile withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Productfile withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Productfile enable()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Productfile valid()
  */
 class Productfile extends Model
 {

@@ -39,6 +39,7 @@ use Illuminate\Support\Facades\Config;
  * @method static \Illuminate\Database\Query\Builder|\App\Contentset withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Contentset withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset active()
  */
 class Contentset extends Model implements Taggable
 {
@@ -62,16 +63,16 @@ class Contentset extends Model implements Taggable
     |--------------------------------------------------------------------------
     */
 
-        /**
-         * Scope a query to only include active Contentsets.
-         *
-         * @param \Illuminate\Database\Eloquent\Builder $query
-         * @return \Illuminate\Database\Eloquent\Builder
-         */
-        public function scopeActive($query)
-        {
-            return $query->where('enable', 1);
-        }
+    /**
+     * Scope a query to only include active Contentsets.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('enable', 1);
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -140,5 +141,41 @@ class Contentset extends Model implements Taggable
             $key,
             $time
         );
+    }
+
+    public function getTaggableTags()
+    {
+        return $this->tags->tags;
+    }
+
+    public function getTaggableId() :int
+    {
+        return $this->id;
+    }
+
+    public function getTaggableScore()
+    {
+        return optional($this->created_at)->timestamp;
+    }
+
+    public function isTaggableActive(): bool
+    {
+        if ($this->isActive() &&
+            isset($this->tags) &&
+            !empty($this->tags->tags)) {
+            return true;
+        }
+        return false;
+    }
+
+    public function isActive()
+    {
+        return $this->isEnable();
+    }
+    public function isEnable(): bool
+    {
+        if ($this->enable)
+            return true;
+        return false;
     }
 }

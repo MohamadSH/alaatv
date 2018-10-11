@@ -13,6 +13,7 @@ use App\Classes\Taggable;
 
 interface TaggingInterface
 {
+    public function setTags($taggableId , array $tags, $score = 0);
     /**
      * @param $taggableId
      * @return array

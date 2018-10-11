@@ -3,16 +3,24 @@
 namespace App\Console\Commands;
 
 use App\Classes\Search\Tag\AuthorTagManagerViaApi;
+use App\Classes\Search\TaggingInterface;
 use App\Collection\ContentCollection;
-use App\Collection\UserCollection;
-use App\Content;
+use App\Traits\TaggableTrait;
 use App\User;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Collection;
 
 class AuthorTagCommand extends Command
 {
+    private $tagging;
+    use TaggableTrait;
+
+    public function __construct(TaggingInterface $tagging)
+    {
+        parent::__construct();
+        $this->tagging = $tagging;
+    }
+
     /**
      * The name and signature of the console command.
      *
@@ -58,33 +66,16 @@ class AuthorTagCommand extends Command
      */
     private function performTaggingTaskForAnAuthor(User $user)
     {
-
         $userContents = $user->contents ;
-
         if(count($userContents) == 0){
             $this->error("user ".$user->getfullName()." has no content.");
 
         }else{
-            $tags = $this->mergeContentTags($userContents);
-            (new AuthorTagManagerViaApi())->setTags($user->id, $tags );
+            $this->sendTagsOfTaggableToApi($user, $this->tagging);
         }
     }
 
-    /**
-     * @param $userContents
-     * @return array
-     */
-    private function mergeContentTags(ContentCollection $userContents): array
-    {
-        $tags = [];
-        foreach ($userContents as $content) {
-//            if($content->id == 7971)
-//                dd($content->tags->tags);
-            $tags = array_merge($tags, $content->tags->tags);
-        }
-        $tags = array_values(array_unique($tags));
-        return $tags;
-    }
+
 
     private function performTaggingTaskForAllAuthors(): void
     {
