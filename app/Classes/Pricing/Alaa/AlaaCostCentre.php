@@ -14,16 +14,30 @@ use App\Classes\Abstracts\CostCentre;
 class AlaaCostCentre Extends CostCentre
 {
     /**
-     * @return int
+     * @return mixed
      */
-    public function calculatePrice():int
+    public function calculatePrice()
     {
-        return (int)(((int)$this->getRawCost() * (1 - ($this->getDiscountPercentage() / 100))) * (1 - ($this->getBonDiscountPercentage() / 100)) - $this->getDiscountCashAmount());
+        return self::priceFormula($this->getRawCost() , $this->getBonDiscountPercentage() , $this->getBonDiscountPercentage() , $this->getDiscountCashAmount());
     }
 
-    public function priceFormula()
+    /**
+     * @param $rawCost
+     * @param $discountPercentage
+     * @param $bonDiscountPercentage
+     * @param $discountCashAmount
+     * @return int
+     */
+    public function priceFormula($rawCost , $discountPercentage , $bonDiscountPercentage , $discountCashAmount) :int
     {
-        // TODO: Implement priceFormula() method.
+        $intRawCost = (int)$rawCost;
+        $payablePercentage = 1 - ($discountPercentage / 100);
+        $payableBonPercentage = 1 - ($bonDiscountPercentage / 100) ;
+
+        $result =  (($intRawCost*$payablePercentage) - $payableBonPercentage) - $discountCashAmount ;
+        $result = (int)$result;
+
+        return $result ;
     }
 
 

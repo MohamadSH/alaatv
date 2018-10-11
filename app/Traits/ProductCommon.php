@@ -137,7 +137,7 @@ trait ProductCommon
      */
     public function makeOtherProducts(Product $product , $chunk)
     {
-        $exclusiveOtherProducts = Product::getExclusiveOtherProducts()->get();
+        $exclusiveOtherProducts = Product::getExclusiveOtherProducts();
 
         $otherProducts = $product->getOtherProducts()->get();
 

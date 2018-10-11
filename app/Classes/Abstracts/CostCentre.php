@@ -43,9 +43,23 @@ abstract class CostCentre
     |--------------------------------------------------------------------------
     */
 
-    abstract public function calculatePrice() ;
+    /**
+     * Calculates the price
+     *
+     * @return mixed
+     */
+    abstract public function calculatePrice();
 
-    abstract public function priceFormula();
+    /**
+     * Holds the formula for calculating the price
+     *
+     * @param $rawCost
+     * @param $discountPercentage
+     * @param $bonDiscountPercentage
+     * @param $discountCashAmount
+     * @return mixed
+     */
+    abstract public function priceFormula($rawCost , $discountPercentage , $bonDiscountPercentage , $discountCashAmount);
 
     /*
     |--------------------------------------------------------------------------
@@ -54,6 +68,7 @@ abstract class CostCentre
     */
 
     /**
+     *
      * @return mixed
      */
     public function getRawCost()
