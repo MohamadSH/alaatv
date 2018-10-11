@@ -199,7 +199,7 @@ Route::group(['middleware' => 'auth'], function()
     Route::resource('employeetimesheet' , 'EmployeetimesheetController') ;
     Route::resource('lottery' , 'LotteryController') ;
     Route::resource('cat' , 'CategoryController') ;
-    Route::resource('set' , 'ContentsetController') ;
+
 
     Route::get( "copylessonfromremote" , "RemoteDataCopyController@copyLesson");
     Route::get( "copydepartmentfromremote" , "RemoteDataCopyController@copyDepartment");
@@ -234,7 +234,7 @@ Route::group(['prefix' => 'c'], function () {
     });
 });
 Route::get("ctag" , "ContentController@retrieveTags");
-
+Route::resource('set' , 'ContentsetController') ;
 Route::resource('product', 'ProductController');
 Route::resource('orderproduct', 'OrderproductController');
 Route::resource('c', 'ContentController');
