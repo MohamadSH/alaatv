@@ -73,25 +73,6 @@ class RouteServiceProvider extends ServiceProvider
             });
 
         });
-        Route::bind('p', function($value){
-            $key = "Product:".$value;
-            return Cache::remember($key,Config::get("constants.CACHE_5"),function () use ($value){
-                $product =  Product::where('id', $value)->first() ;
-                if(!isset($product) || is_null($product)){
-                    abort(404);
-                }
-                if (!$product->relationLoaded('producttype'))
-                    $product->load('producttype');
-                if (!$product->relationLoaded('attributeset'))
-                    $product->load('attributeset');
-                if($product->producttype_id == Config::get("constants.PRODUCT_TYPE_SELECTABLE"))
-                    $product->load('children');
-                if (!$product->relationLoaded('bons'))
-                    $product->load('bons');
-                return $product;
-            });
-
-        });
         Route::bind('orderproduct', function($value){
             $key = "Orderproduct:".$value;
            return Cache::remember($key,Config::get("constants.CACHE_5"),function () use ($value){

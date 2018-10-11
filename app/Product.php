@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Classes\{Advertisable, Pricing\Alaa\AlaaCostCentre, SEO\SeoInterface, SEO\SeoMetaTagsGenerator, Taggable};
+use App\Collection\ProductCollection;
 use App\Traits\{
     APIRequestCommon, CharacterCommon, Helper, ProductCommon
 };
@@ -177,6 +178,23 @@ class Product extends Model implements Advertisable, Taggable , SeoInterface
         'gifts'
     ];
 
+    /*
+    |--------------------------------------------------------------------------
+    | overwrite methods
+    |--------------------------------------------------------------------------
+    */
+
+
+    /**
+     * Create a new Eloquent Collection instance.
+     *
+     * @param  array $models
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function newCollection(array $models = [])
+    {
+        return new ProductCollection($models);
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -587,16 +605,16 @@ class Product extends Model implements Advertisable, Taggable , SeoInterface
     }
 
     /**
-     * @return Builder
+     * @return ProductCollection
      */
-    public function getOtherProducts(): Builder
+    public function getOtherProducts(): ProductCollection
     {
         $key = "product:otherProducts:" . $this->cacheKey();
         $excludedProducts = self::EXCLUDED_RELATED_PRODUCTS;
 
         $otherProducts = Cache::remember($key, config("constants.CACHE_60"), function () use ($excludedProducts) {
             return  $otherProducts = self::getProducts(0, 1, $excludedProducts, "created_at", "desc")
-                                            ->where("id", "<>", $this->id);
+                                            ->where("id", "<>", $this->id)->get();
         });
         return $otherProducts;
     }
@@ -802,13 +820,19 @@ class Product extends Model implements Advertisable, Taggable , SeoInterface
         return $this->hasMany('\App\Productfile');
     }
 
-    public function photos($enable = null)
+    public function photos()
     {
-        $photos = $this->hasMany('\App\Productphoto')  ;
-        if(isset($enable))
-            $photos = $photos->where("enable" , $enable) ;
-
+        $photos = $this->hasMany('\App\Productphoto');
         return $photos ;
+    }
+
+    public function getSamplePhotosAttribute(){
+        $key = "product:SamplePhotos:" . $this->cacheKey();
+        $productSamplePhotos = Cache::remember($key, config("constants.CACHE_60"), function ()  {
+            return $this->photos()->get()->sortBy("order");
+        });
+
+        return $productSamplePhotos;
     }
 
     public function attributevalues($attributeType = null)
@@ -1063,9 +1087,9 @@ class Product extends Model implements Advertisable, Taggable , SeoInterface
     }
 
     /**
-     * @return Collection
+     * @return ProductCollection
      */
-    public static function getExclusiveOtherProducts() : Collection
+    public static function getExclusiveOtherProducts() : ProductCollection
     {
         $exclusiveOtherProductIds = self::EXCLUSIVE_RELATED_PRODUCTS;
 
@@ -1120,10 +1144,8 @@ class Product extends Model implements Advertisable, Taggable , SeoInterface
                     $gifts->push($gift);
                 }
             }
-
             return $gifts;
         });
-
     }
 
     public function attributevalueTree($attributeType = null)

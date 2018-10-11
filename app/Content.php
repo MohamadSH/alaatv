@@ -152,20 +152,6 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface
         'enable'
     ];
 
-    /*
-    |--------------------------------------------------------------------------
-    | Private methods
-    |--------------------------------------------------------------------------
-    */
-
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | overwrite methods
-    |--------------------------------------------------------------------------
-    */
-
 
     /**
      * Create a new Eloquent Collection instance.
@@ -175,8 +161,15 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface
      */
     public function newCollection(array $models = [])
     {
-        return new ProductCollection($models);
+        return new ContentCollection($models);
     }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Private methods
+    |--------------------------------------------------------------------------
+    */
 
 
     /*
