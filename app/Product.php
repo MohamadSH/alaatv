@@ -115,10 +115,23 @@ class Product extends Model implements Advertisable, Taggable , SeoInterface
                             'نامحدود',
                             'محدود'
                         ];
-    public const ENABLE_STATUS= [
+    public const ENABLE_STATUS = [
         'نامحدود',
         'محدود'
     ];
+    public const EXCLUSIVE_RELATED_PRODUCTS = [
+                                    91 ,
+                                    92 ,
+                                    104
+                                    ] ;
+
+    public const EXCLUDED_RELATED_PRODUCTS = [
+                            110 ,
+                            112 ,
+                            104 ,
+                            91 ,
+                            92
+        ] ;
 
     /**
      * The attributes that should be mutated to dates.
@@ -579,13 +592,17 @@ class Product extends Model implements Advertisable, Taggable , SeoInterface
     }
 
     /**
-     * @param array $excludedProducts
      * @return Builder
      */
-    public function getOtherProducts(array $excludedProducts) : Builder
+    public function getOtherProducts(): Builder
     {
-        $otherProducts = self::getProducts(0, 1, $excludedProducts, "created_at", "desc")
-                              ->where("id", "<>", $this->id);
+        $key = "product:otherProducts:" . $this->cacheKey();
+        $excludedProducts = self::EXCLUDED_RELATED_PRODUCTS;
+
+        $otherProducts = Cache::remember($key, config("constants.CACHE_60"), function () use ($excludedProducts) {
+            return  $otherProducts = self::getProducts(0, 1, $excludedProducts, "created_at", "desc")
+                                            ->where("id", "<>", $this->id);
+        });
         return $otherProducts;
     }
 
@@ -1049,6 +1066,22 @@ class Product extends Model implements Advertisable, Taggable , SeoInterface
     {
         return self::getProducts(0, 1)->take($number)->orderBy('created_at', 'Desc');
     }
+
+    /**
+     * @return Builder
+     */
+    public static function getExclusiveOtherProducts() : Builder
+    {
+        $exclusiveOtherProductIds = self::EXCLUSIVE_RELATED_PRODUCTS;
+
+        $key = "product:exclusiveOtherProducts:" . md5(implode(".", $exclusiveOtherProductIds));
+        $exclusiveOtherProducts = Cache::remember($key, config("constants.CACHE_60"), function () use ($exclusiveOtherProductIds) {
+            return self::whereIn("id", $exclusiveOtherProductIds);
+        });
+
+        return $exclusiveOtherProducts ;
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Other
