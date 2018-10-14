@@ -45,9 +45,9 @@ class ContentSearchComposer
         $extraTags = $tags;
 
         $tree = $this->category->getWithDepth();
-        $majors = $tree->where('depth',2)->pluck('name','id')->unique();
+        $majors = $tree->where('depth',2)->sortBy("name",SORT_LOCALE_STRING)->pluck('name','id')->unique();
         $grades = $tree->where('depth',3)->pluck('name', 'id')->unique();
-        $lessons  = $tree->where('depth',4)->pluck('name', 'id')->unique();
+        $lessons  = $tree->where('depth',4)->sortBy("name",SORT_LOCALE_STRING)->pluck('name', 'id')->unique();
         $teachers = User::getTeachers()->pluck("full_name_reverse", "id");
 
         $defaultMajor  = $this->findDefault($tags, $majors->toArray());

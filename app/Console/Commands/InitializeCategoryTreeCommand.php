@@ -12,7 +12,7 @@ class InitializeCategoryTreeCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'alaaTv:seed:categorise';
+    protected $signature = 'alaaTv:seed:init:categorise';
 
     /**
      * The console command description.
@@ -564,10 +564,10 @@ class InitializeCategoryTreeCommand extends Command
                 'children' => $ghadimR,
             ],
             [
-                'name' => 'دهم',
+                'name' => 'دوازدهم',
                 'tags' => json_encode(["دهم"], JSON_UNESCAPED_UNICODE),
 
-                'children' => $dahomR,
+                'children' => $davazdahomR,
             ],
             [
                 'name' => 'یازدهم',
@@ -576,11 +576,13 @@ class InitializeCategoryTreeCommand extends Command
                 'children' => $yazdahomR,
             ],
             [
-                'name' => 'دوازدهم',
+                'name' => 'دهم',
                 'tags' => json_encode(["دهم"], JSON_UNESCAPED_UNICODE),
 
-                'children' => $davazdahomR,
+                'children' => $dahomR,
             ],
+
+
         ];
         $tajrobi = [
             [
@@ -590,10 +592,10 @@ class InitializeCategoryTreeCommand extends Command
                 'children' => $ghadimT,
             ],
             [
-                'name' => 'دهم',
+                'name' => 'دوازدهم',
                 'tags' => json_encode(["دهم"], JSON_UNESCAPED_UNICODE),
 
-                'children' => $dahomT,
+                'children' => $davazdahomT,
             ],
             [
                 'name' => 'یازدهم',
@@ -602,11 +604,13 @@ class InitializeCategoryTreeCommand extends Command
                 'children' => $yazdahomT,
             ],
             [
-                'name' => 'دوازدهم',
+                'name' => 'دهم',
                 'tags' => json_encode(["دهم"], JSON_UNESCAPED_UNICODE),
 
-                'children' => $davazdahomT,
+                'children' => $dahomT,
             ],
+
+
         ];
         $ensani = [
             [
@@ -615,11 +619,12 @@ class InitializeCategoryTreeCommand extends Command
 
                 'children' => $ghadimE,
             ],
+
             [
-                'name' => 'دهم',
+                'name' => 'دوازدهم',
                 'tags' => json_encode(["دهم"], JSON_UNESCAPED_UNICODE),
 
-                'children' => $dahomE,
+                'children' => $davazdahomE,
             ],
             [
                 'name' => 'یازدهم',
@@ -628,25 +633,27 @@ class InitializeCategoryTreeCommand extends Command
                 'children' => $yazdahomE,
             ],
             [
-                'name' => 'دوازدهم',
+                'name' => 'دهم',
                 'tags' => json_encode(["دهم"], JSON_UNESCAPED_UNICODE),
 
-                'children' => $davazdahomE,
+                'children' => $dahomE,
             ],
+
         ];
         $reshteh = [
-            [
-                'name' => 'رشته ریاضی',
-                'tags' => json_encode(["رشته_ریاضی"], JSON_UNESCAPED_UNICODE),
-
-                'children' => $riazi,
-            ],
             [
                 'name' => 'رشته تجربی',
                 'tags' => json_encode(["رشته_تجربی"], JSON_UNESCAPED_UNICODE),
 
                 'children' => $tajrobi,
             ],
+            [
+                'name' => 'رشته ریاضی',
+                'tags' => json_encode(["رشته_ریاضی"], JSON_UNESCAPED_UNICODE),
+
+                'children' => $riazi,
+            ],
+
             [
                 'name' => 'رشته انسانی',
                 'tags' => json_encode(["رشته_انسانی"], JSON_UNESCAPED_UNICODE),

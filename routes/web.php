@@ -217,7 +217,7 @@ Route::group(['middleware' => 'auth'], function()
 });
 
 /*
-Route::group(['prefix' => 'content'], function () {
+Route::group(['prefix' => 'product'], function () {
 
 });
 */

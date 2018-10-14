@@ -90,6 +90,12 @@ class Productfile extends Model
         return $this->convertDate($this->validSince, "toJalali") . " " . $explodedTime;
     }
 
+    /**
+     * Scope a query to only include enable(or disable) Products.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function scopeEnable($query)
     {
         return $query->where('enable', '=', 1);
