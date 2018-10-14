@@ -151,4 +151,5 @@ trait ProductCommon
 
         return $otherProductChunks;
     }
+
 }
