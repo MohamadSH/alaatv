@@ -16,6 +16,7 @@ use Illuminate\Support\{
 use Auth;
 use Carbon\Carbon;
 use Exception;
+use App\Collection\ProductCollection;
 
 /**
  * App\Product

@@ -21,10 +21,11 @@ class AlaaCashier Extends Cashier
         $intRawCost = self::getRawCost();
         $discountPercentage = self::getDiscountPercentage() ;
         $bonDiscountPercentage = self::getBonDiscountPercentage() ;
+        $totalBonNumber = self::getTotalBonNumber();
         $discountCashAmount = self::getDiscountCashAmount();
 
         $payablePercentage = 1 - $discountPercentage ;
-        $payableBonPercentage = 1 - $bonDiscountPercentage ;
+        $payableBonPercentage = 1 - ($bonDiscountPercentage * $totalBonNumber) ;
 
         $result =  (($intRawCost*$payablePercentage) * $payableBonPercentage) - $discountCashAmount ;
 
@@ -50,9 +51,12 @@ class AlaaCashier Extends Cashier
         $intRawCost = self::getRawCost();
         $discountPercentage = self::getDiscountPercentage() ;
         $bonDiscountPercentage = self::getBonDiscountPercentage() ;
+        $totalBonNumber = self::getTotalBonNumber();
         $discountCashAmount = self::getDiscountCashAmount();
 
-        return (($intRawCost*$discountPercentage) * $bonDiscountPercentage) + $discountCashAmount ;
+        $totalBonDiscount = $totalBonNumber * $bonDiscountPercentage;
+        
+        return (($intRawCost*$discountPercentage) * $totalBonDiscount) + $discountCashAmount ;
     }
 
 }
