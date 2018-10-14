@@ -106,28 +106,32 @@ trait ProductCommon
      */
     function makeAllFileCollection(Product $product) : Collection
     {
-        $productfiletypes = Productfiletype::all();
-        $allFilesCollection = collect();
-        foreach ($productfiletypes as $productfiletype)
-        {
-            $fileCollection = collect();
-            $filesArray = $product->makeFileArray($productfiletype->name);
-            if (!empty($filesArray))
-                $fileCollection->put($product->name, $filesArray);
+        $key = "product:validProductfiles:pamphlet|video" . $product->cacheKey();
 
-            foreach ($product->children as $child) {
-                $filesArray = $child->makeFileArray($productfiletype->name);
-
+        return Cache::remember($key, config("constants.CACHE_60"), function () use ($product) {
+            $productfiletypes = Productfiletype::all();
+            $allFilesCollection = collect();
+            foreach ($productfiletypes as $productfiletype)
+            {
+                $fileCollection = collect();
+                $filesArray = $product->makeFileArray($productfiletype->name);
                 if (!empty($filesArray))
                     $fileCollection->put($product->name, $filesArray);
+
+                foreach ($product->children as $child) {
+                    $filesArray = $child->makeFileArray($productfiletype->name);
+
+                    if (!empty($filesArray))
+                        $fileCollection->put($product->name, $filesArray);
+                }
+                $allFilesCollection->push([
+                    "typeName"=>$productfiletype->name,
+                    "typeDisplayName" => $productfiletype->displayName,
+                    "files"=>$fileCollection
+                ]);
             }
-            $allFilesCollection->push([
-                "typeName"=>$productfiletype->name,
-                "typeDisplayName" => $productfiletype->displayName,
-                "files"=>$fileCollection
-            ]);
-        }
-        return $allFilesCollection;
+            return $allFilesCollection;
+        });
     }
 
     /**
@@ -139,7 +143,7 @@ trait ProductCommon
     {
         $exclusiveOtherProducts = Product::getExclusiveOtherProducts();
 
-        $otherProducts = $product->getOtherProducts()->get();
+        $otherProducts = $product->getOtherProducts();
 
         $totalOtherProducts = $this->mergeCollections($exclusiveOtherProducts , $otherProducts);
 

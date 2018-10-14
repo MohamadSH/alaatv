@@ -172,7 +172,7 @@ class ContentsetController extends Controller
 //        return back()->withInput();
         return redirect()->action(
                 "ContentController@index"
-        )->withInput($request->input());
+        ,$filters);
     }
 
     /**

@@ -56,4 +56,15 @@ class Productphoto extends Model
     {
         return $this->belongsTo('\App\Product');
     }
+
+    /**
+     * Scope a query to only include enable(or disable) Products.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeEnable($query)
+    {
+        return $query->where('enable', '=', 1);
+    }
 }

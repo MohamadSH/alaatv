@@ -26,7 +26,7 @@ class AuthorTagCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'alaaTv:seed:author:tag {author : The ID of the teacher}';
+    protected $signature = 'alaaTv:seed:tag:author {author : The ID of the teacher}';
 
     /**
      * The console command description.

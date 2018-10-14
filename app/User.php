@@ -278,12 +278,17 @@ class User extends Authenticatable implements Taggable
      */
     public static function getTeachers() :UserCollection
     {
-        $authors = User::select()
-            ->role([config('constants.ROLE_TEACHER')])
-            ->get()
-            ->sortBy("lastName")
-            ->values();
-        return $authors;
+        $key = "getTeachers";
+        return Cache::tags(["teachers"])->remember($key,config("constants.CACHE_600"),function (){
+            $authors = User::select()
+                ->role([config('constants.ROLE_TEACHER')])
+                ->orderBy('lastName')
+                ->get();
+
+//                ->sortBy("lastName")
+//                ->values();
+            return $authors;
+        });
     }
 
     public static function orderStatusFilter($users, $orderStatusesId)

@@ -29,7 +29,7 @@ class ContentTagCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'alaaTv:seed:content:tag {content : The ID of the content}';
+    protected $signature = 'alaaTv:seed:tag:content {content : The ID of the content}';
 
     /**
      * The console command description.

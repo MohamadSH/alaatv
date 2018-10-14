@@ -102,10 +102,18 @@ abstract class Cashier
     }
 
     /**
+     * @return int
+     */
+    public function getTotalBonNumber(): int
+    {
+        return $this->totalBonNumber;
+    }
+
+    /**
      * @param int $rawCost
      * @return Cashier
      */
-    public function setRawCost(int $rawCost): Cashier
+    public function setRawCost( $rawCost): Cashier
     {
         $this->rawCost = $rawCost;
         return $this;
@@ -115,7 +123,7 @@ abstract class Cashier
      * @param int $discountPercentage
      * @return Cashier
      */
-    public function setDiscountPercentage(int $discountPercentage): Cashier
+    public function setDiscountPercentage( $discountPercentage): Cashier
     {
         $this->discountPercentage = $discountPercentage;
         return $this;
@@ -125,7 +133,7 @@ abstract class Cashier
      * @param int $bonDiscountPercentage
      * @return Cashier
      */
-    public function setBonDiscountPercentage(int $bonDiscountPercentage): Cashier
+    public function setBonDiscountPercentage( $bonDiscountPercentage): Cashier
     {
         $this->bonDiscountPercentage = $bonDiscountPercentage;
         return $this;
@@ -145,18 +153,10 @@ abstract class Cashier
      * @param int $discountCashAmount
      * @return Cashier
      */
-    public function setDiscountCashAmount(int $discountCashAmount): Cashier
+    public function setDiscountCashAmount( $discountCashAmount): Cashier
     {
         $this->discountCashAmount = $discountCashAmount;
         return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getTotalBonNumber(): int
-    {
-        return $this->totalBonNumber;
     }
 
 }

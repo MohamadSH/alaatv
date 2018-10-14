@@ -11,9 +11,7 @@ use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Response;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\{
-    Cache, Config, File, Input, Log, Route, Storage, View
-};
+use Illuminate\Support\Facades\{App, Cache, Config, File, Input, Log, Route, Storage, View};
 use Illuminate\Support\Str;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Sftp\SftpAdapter;
@@ -85,6 +83,10 @@ class HomeController extends Controller
 
     public function debug(Request $request)
     {
+
+        dd( App::getLocale());
+        $pr = Product::find(181);
+        dd($pr->sample_photos);
         $categories = Category::active()->get()->toTree();
         return view('partials.tree',compact('categories'));
 
