@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\Classes\{Advertisable, Pricing\Alaa\AlaaCostCentre, SEO\SeoInterface, SEO\SeoMetaTagsGenerator, Taggable};
+use App\Classes\{Advertisable, Pricing\Alaa\AlaaCashier, SEO\SeoInterface, SEO\SeoMetaTagsGenerator, Taggable};
 use App\Traits\{
     APIRequestCommon, CharacterCommon, Helper, ProductCommon
 };
@@ -190,99 +190,47 @@ class Product extends Model implements Advertisable, Taggable , SeoInterface
      * @param User|null $user
      * @return array
      */
-    private function obtainProductCost(User $user = null) :array
+    private function obtainCostInfo(User $user = null) :array
     {
 
-        $key = "product:obtainProductCost:"
+        $key = "product:obtainCostInfo:"
             .$this->cacheKey()
             ."-user:"
             .(isset($user) ? $user->cacheKey() : "");
 
-        return Cache::tags('bon')->remember($key,Config::get("constants.CACHE_60"),function () use($user) {
-            // Obtaining discount
-            $bonDiscount = 0;
-            $productDiscount = 0;
-            $productDiscountAmount = 0;
-            $bonName = Config::get("constants.BON1");
+        return Cache::tags('bon')->remember($key,config("constants.CACHE_60"),function () use($user) {
+            $bonName = config("constants.BON1");
+            $costCalculator = new AlaaCashier();
 
-            $totalBonNumber = 0;
-            if (isset($user)) {
-                $totalBonNumber = $user->userHasBon($bonName);
-                $bons = $this->BoneName($bonName);
-                if ($bons->isEmpty()) {
-                    $parentsArray = $this->makeParentArray($this);
+            // Bon
+            $totalBonNumber = optional($user)->userHasBon($bonName);
+            $bonPercentage = $this->obtainBonDiscount($bonName);
+            $costCalculator->setBonDiscountPercentage($bonPercentage)->setTotalBonNumber((int)$totalBonNumber);
+            $bonDiscountPercentage =  $costCalculator->calculateBonDiscount();
 
-                    if (!empty($parentsArray)) {
-                        foreach ($parentsArray as $parent) {
-                            $bons = $parent->BoneName($bonName);
-                            if (!$bons->isEmpty())
-                                break;
-                        }
-                    }
-                }
-                if ($bons->isNotEmpty()) {
-                    $bonDiscount += $bons->first()->pivot->discount * $totalBonNumber;
-                }
-            }
+            // Discount
+            $discountPercentage = $this->obtainDiscount();
+            $costCalculator->setDiscountPercentage($discountPercentage) ;
 
-            //////////////////////////////
+            // Discount Amount
+            $discountAmount =  $this->obtainDiscountAmount();
+            $costCalculator->setDiscountCashAmount($discountAmount);
 
-            $cost = 0;
-            //Adding product base price
+            // Cost
+            $cost = (int)$this->obtainPrice();
+            $costCalculator->setRawCost($cost);
 
-            if ($this->hasChildren()) {
-                if ($this->basePrice == 0) {
-                    $children = $this->children;
-                    $childBonDiscount = 0;
-                    foreach ($children as $child) {
-                        if ($bonDiscount == 0) {
-                            $childBons = $child->bons->where("name", $bonName)->where("isEnable", 1);
-                            if ($childBons->isNotEmpty())
-                                $childBonDiscount += $childBons->first()->pivot->discount * $totalBonNumber;
-                        }
-                        $cost += $child->basePrice;
-                        $productDiscountAmount += ($child->discount / 100) * $child->basePrice;
-                    }
-                    $bonDiscount = $childBonDiscount;
-                } else {
-                    $cost += $this->basePrice;
-                    $productDiscount += $this->discount;
-                }
-            } else {
-                if (isset($this->discount) && $this->discount > 0)
-                    $productDiscount += $this->discount;
-                elseif (!$this->parents->where("producttype_id", Config::get("constants.PRODUCT_TYPE_CONFIGURABLE"))->isEmpty() && isset($this->parents->first()->discount)) $productDiscount += $this->parents->first()->discount;
-                if ($this->hasParents()) {
-                    if ($this->basePrice != 0 && $this->basePrice != $this->parents->first()->basePrice)
-                        $cost += $this->basePrice;
-                    else  $cost += $this->parents->first()->basePrice;
-
-                } else {
-                    $cost += $this->basePrice;
-                }
-            }
-            /////////////////////////////////
-
-            // Adding attributes extra cost
-            if ($this->producttype_id != Config::get("constants.PRODUCT_TYPE_CONFIGURABLE")) {
-                $attributevalues = $this->attributevalues('main')->get();
-                foreach ($attributevalues as $attributevalue) {
-                    if (isset($attributevalue->pivot->extraCost)) $cost += $attributevalue->pivot->extraCost;
-                }
-            }
-
-            //////////////////////////////
-
-            $cost = (int)$cost ;
-            $costCalculator = new AlaaCostCentre($cost , $productDiscount , $bonDiscount , $productDiscountAmount);
+            ///////////CALCULATE THE PRICE/////////////
             $customerCost = $costCalculator->calculatePrice();
+            $customerTotalDiscount = $costCalculator->calculateTotalDiscountAmount();
 
             return [
                 "cost" => $cost,
-                "productDiscount" => $productDiscount,
-                'bonDiscount' => $bonDiscount,
-                "productDiscountAmount" => $productDiscountAmount,
-                'CustomerCost' => $customerCost
+                "productDiscount" => $discountPercentage,
+                "bonDiscount" => $bonDiscountPercentage,
+                "productDiscountAmount" => $discountAmount,
+                "customerDiscount" => $customerTotalDiscount,
+                "CustomerCost" => (int)$customerCost
             ];
         });
     }
@@ -595,10 +543,64 @@ class Product extends Model implements Advertisable, Taggable , SeoInterface
         $excludedProducts = self::EXCLUDED_RELATED_PRODUCTS;
 
         $otherProducts = Cache::remember($key, config("constants.CACHE_60"), function () use ($excludedProducts) {
-            return  $otherProducts = self::getProducts(0, 1, $excludedProducts, "created_at", "desc")
+            return self::getProducts(0, 1, $excludedProducts, "created_at", "desc")
                                             ->where("id", "<>", $this->id);
         });
+
         return $otherProducts;
+    }
+
+    /**
+     *
+     */
+    public function getDiscount()
+    {
+
+    }
+
+    /**
+     * Gets products total bons = also checks whether his parents have any bons or not
+     *
+     * @param $bonName
+     * @return Collection
+     */
+    public function getTotalBons($bonName): Collection
+    {
+        $bons = $this->getBons($bonName);
+        if ($bons->isEmpty()) {
+            $parentsArray = $this->makeParentArray($this);
+            if (!empty($parentsArray)) {
+                foreach ($parentsArray as $parent) {
+                    // ToDo : It does not check parents in a hierarchy to the root
+                    $bons = $parent->getBons($bonName);
+                    if (!$bons->isEmpty())
+                        break;
+                }
+            }
+        }
+        return $bons;
+    }
+
+    /**
+     * Gets product's bon collection and filters it by bon name and enable/disable
+     *
+     * @param string $bonName
+     * @return Collection
+     */
+    public function getBons($bonName="" , $enable = 1) : Collection
+    {
+        $key="product:BoneName:".$this->cacheKey()."-bone:".$bonName;
+        return Cache::remember($key,Config::get("constants.CACHE_600"),function () use ($bonName , $enable){
+            $bons = $this->bons ;
+            if(strlen($bonName) > 0 )
+                $bons= $bons->where("name", $bonName);
+
+            if($enable)
+                $bons = $bons->where("isEnable", $enable);
+
+            return $bons ;
+        });
+
     }
 
     /**
@@ -976,6 +978,47 @@ class Product extends Model implements Advertisable, Taggable , SeoInterface
         return isset($this->amount);
     }
 
+    public function isTaggableActive(): bool
+    {
+        if ($this->isActive() &&
+            isset($this->tags) &&
+            !empty($this->tags->tags)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Checks whether the product is active or not .
+     *
+     * @return bool
+     */
+    public function isActive(): bool
+    {
+        return ($this->isEnable() && $this->isValid() ? true : false);
+    }
+
+    /**
+     * Checks whether the product is valid or not .
+     *
+     * @return bool
+     */
+    public function isValid(): bool
+    {
+        if ( ( $this->validSince < Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran')  || is_null($this->validSince) ) &&
+            ( $this->validUntil >  Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran') || is_null($this->validUntil) )
+        )
+            return true;
+        return false;
+    }
+
+    public function isEnable(): bool
+    {
+        if ($this->enable)
+            return true;
+        return false;
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Static methods
@@ -1023,7 +1066,7 @@ class Product extends Model implements Advertisable, Taggable , SeoInterface
         }
 
         if(!empty($excluded))
-            $products->whereNotIn("id", $excluded) ;
+            optional($products)->whereNotIn("id", $excluded) ;
 
         //ToDo do it via in product search class
         if(strlen($orderBy) > 0)
@@ -1047,7 +1090,6 @@ class Product extends Model implements Advertisable, Taggable , SeoInterface
                 $products->orderBy("order");
             }
         }
-
 
         return $products;
     }
@@ -1155,14 +1197,6 @@ class Product extends Model implements Advertisable, Taggable , SeoInterface
 
     }
 
-    public function BoneName($bonName){
-        $key="product:BoneName:".$this->cacheKey()."-bone:".$bonName;
-        return Cache::remember($key,Config::get("constants.CACHE_600"),function () use ($bonName){
-            return $this->bons->where("name", $bonName)->where("isEnable", 1);
-        });
-
-    }
-
     public function calculateBonPlus($bonId)
     {
         $key="product:calculateBonPlus:".$bonId.$this->cacheKey();
@@ -1198,7 +1232,7 @@ class Product extends Model implements Advertisable, Taggable , SeoInterface
 
     public function calculatePayablePrice(User $user = null)
     {
-        $costArray = $this->obtainProductCost($user);
+        $costArray = $this->obtainCostInfo($user);
         array_push($costArray, []);
         return $costArray;
     }
@@ -1405,44 +1439,146 @@ class Product extends Model implements Advertisable, Taggable , SeoInterface
         return optional($this->created_at)->timestamp;
     }
 
-    public function isTaggableActive(): bool
+    /**
+     * Obtains product's price
+     *
+     * @return int
+     */
+    public function obtainPrice()
     {
-        if ($this->isActive() &&
-            isset($this->tags) &&
-            !empty($this->tags->tags)) {
-            return true;
+        $cost = 0 ;
+        if($this->hasParents())
+        {
+            $parent = $this->parents->first();
+            $parentProductType = $parent->producttype_id;
+            if( $parentProductType == config("constants.PRODUCT_TYPE_CONFIGURABLE"))
+            {
+                if ($this->basePrice != 0 && $this->basePrice != $parent->basePrice)
+                    $cost += $this->basePrice;
+                else
+                    $cost += $parent->basePrice;
+            }elseif( $parentProductType == config("constants.PRODUCT_TYPE_SELECTABLE"))
+            {
+                if ($this->basePrice == 0)
+                {
+                    $children = $this->children;
+                    foreach ($children as $child)
+                    {
+                        $cost += $child->basePrice;
+                    }
+                }else
+                {
+                    $cost += $this->basePrice;
+                }
+            }
         }
-        return false;
+        else
+        {
+            $cost += $this->basePrice;
+        }
+
+        // Adding attributes extra cost
+        $attributevalues = $this->attributevalues('main')->get();
+        foreach ($attributevalues as $attributevalue)
+        {
+            if (isset($attributevalue->pivot->extraCost))
+                    $cost += $attributevalue->pivot->extraCost;
+        }
+
+        return $cost ;
     }
 
     /**
-     * Checks whether the product is active or not .
+     * Obtains product's discount percentage
      *
-     * @return bool
+     * @return float|int
      */
-    public function isActive(): bool
+    public function obtainDiscount()
     {
-        return ($this->isEnable() && $this->isValid() ? true : false);
+        $discount = 0;
+        if($this->hasParents())
+        {
+            $parent = $this->parents->first();
+            $parentProductType = $parent->producttype_id;
+            if( $parentProductType == config("constants.PRODUCT_TYPE_CONFIGURABLE"))
+            {
+                if ($this->discount > 0)
+                    $discount += $this->discount;
+                elseif ($parent->discount > 0 )
+                    $discount += $this->parents->first()->discount;
+            }
+            elseif( $parentProductType == config("constants.PRODUCT_TYPE_SELECTABLE"))
+            {
+                if ($this->basePrice != 0) {
+                    $discount = $this->discount ;
+                }
+            }
+        }
+        else
+        {
+            $discount = $this->discount ;
+        }
+
+        return $discount / 100 ;
     }
 
     /**
-     * Checks whether the product is valid or not .
-     *
-     * @return bool
+     * Obtains product's bon discount percentage
+     * @param $bonName
+     * @return float|int
      */
-    public function isValid(): bool
+    public  function obtainBonDiscount($bonName)
     {
-        if ( ( $this->validSince < Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran')  || is_null($this->validSince) ) &&
-            ( $this->validUntil >  Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran') || is_null($this->validUntil) )
-            )
-            return true;
-        return false;
+        $discount = 0;
+        $bons = $this->getBons($bonName);
+        if ($bons->isEmpty()) {
+            $parentsArray = $this->makeParentArray($this);
+            if (!empty($parentsArray)) {
+                foreach ($parentsArray as $parent)
+                {
+                    // ToDo : It does not check parents in a hierarchy to the root
+                    $bons = $parent->getBons($bonName);
+                    if ($bons->isNotEmpty())
+                    {
+                        $bon = $bons->first();
+                        $discount = $bon->pivot->discount;
+                        break;
+                    }
+                }
+            }
+        }
+        else
+        {
+            $bon = $bons->first();
+            $discount = $bon->pivot->discount;
+        }
+        return $discount / 100;
     }
 
-    public function isEnable(): bool
+    /**
+     * Obtains product's discount amount in cash
+     *
+     * @return int
+     */
+    public function obtainDiscountAmount() : int
     {
-        if ($this->enable)
-            return true;
-        return false;
+        $discountAmount = 0 ;
+        if($this->hasParents())
+        {
+            $parent = $this->parents->first();
+            $parentProductType = $parent->producttype_id;
+            if( $parentProductType == config("constants.PRODUCT_TYPE_SELECTABLE"))
+            {
+                if ($this->basePrice == 0)
+                {
+                    $children = $this->children;
+                    foreach ($children as $child) {
+                        $discountAmount += ($child->discount / 100) * $child->basePrice;
+                    }
+                }
+            }
+        }
+
+        return $discountAmount;
     }
 }

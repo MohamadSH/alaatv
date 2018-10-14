@@ -147,4 +147,5 @@ trait ProductCommon
 
         return $otherProductChunks;
     }
+
 }

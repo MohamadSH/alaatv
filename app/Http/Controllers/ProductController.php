@@ -362,9 +362,8 @@ class ProductController extends Controller
         $checkboxInfoAttributes = $allAttributeCollection["checkboxInfoAttributes"];
 
         $costArray = $product->calculatePayablePrice($user);
-        $discount = $costArray["bonDiscount"] + $costArray["productDiscount"];
+        $discount = $costArray["customerDiscount"];
         $cost = $costArray["cost"];
-
         $otherProductChunks = $this->makeOtherProducts($product, 4);
 
         $productSeenCount = $this->getSeenCountFromRequest($request);

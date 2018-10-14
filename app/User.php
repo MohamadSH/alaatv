@@ -485,10 +485,9 @@ class User extends Authenticatable implements Taggable
 
     /**
      * @param string $bonName
-     * @return bool|number
-     * Converting Created_at field to jalali
+     * @return int
      */
-    public function userHasBon($bonName)
+    public function userHasBon($bonName) :int
     {
         $key="user:userHasBon:".$this->cacheKey()."-".$bonName;
 
