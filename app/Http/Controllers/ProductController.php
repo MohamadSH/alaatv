@@ -260,6 +260,7 @@ class ProductController extends Controller
         $pageName = 'productPage';
         $productResult = (new ProductSearch)->setPageName($pageName)->apply($filters);
 
+//        dd($productResult->where('enable','=',0));
         if ($isApp) {
             $items->push($productResult->getCollection());
         } else {
@@ -368,27 +369,11 @@ class ProductController extends Controller
 
         $productSeenCount = $this->getSeenCountFromRequest($request);
 
-        $key = "product:validProductfiles:pamphlet|video" . $product->cacheKey();
+        $productAllFiles = $this->makeAllFileCollection($product);
 
-        $productAllFiles = Cache::remember(/**
-         * @return array
-         */
-            $key, config("constants.CACHE_60"), function () use ($product) {
+        $productSamplePhotos = $product->sample_photos;
 
-            /** Product files */
-            $productAllFiles = $this->makeAllFileCollection($product);
-
-            return $productAllFiles;
-        });
-        $key = "product:SamplePhotos:" . $product->cacheKey();
-        $productSamplePhotos = Cache::remember($key, config("constants.CACHE_60"), function () use ($product) {
-            return $product->photos(1)->get()->sortBy("order");
-        });
-
-        $key = "product:Gifts:" . $product->cacheKey();
-        $giftCollection = Cache::remember($key, config("constants.CACHE_60"), function () use ($product) {
-            return $product->getGifts();
-        });
+        $giftCollection = $product->getGifts();
 
 
         return view("product.show", compact("product", "productType", "productSeenCount", "otherProductChunks", 'discount', 'cost', "selectCollection", "simpleInfoAttributes", "checkboxInfoAttributes", "extraSelectCollection", "extraCheckboxCollection", 'groupedCheckboxCollection', "descriptionIframe", "productAllFiles", "exclusiveOtherProducts", "productSamplePhotos", "giftCollection"));

@@ -49,6 +49,8 @@ class ProductSearch extends SearchAbstract
     protected function getResults(Builder $query)
     {
         $result = $query->active()
+                        ->doesntHave('parents')
+                        ->whereNull('deleted_at')
                         ->orderBy("created_at" , "desc")
                         ->paginate($this->numberOfItemInEachPage,
                             ['*'],
