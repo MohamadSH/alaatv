@@ -19,9 +19,9 @@
                             <span > @if(count($simpleInfoAttribute)>1 && $key < (sizeof($simpleInfoAttribute)-1)) , @endif {{$info["name"]}}</span>
                         @endforeach
                     @endforeach
-                @endif @if((int)$product->cost > 0) : {{number_format((int)$product->cost)}} تومان@endif
+                @endif @if((int)$product->basePrice > 0) : {{number_format((int)$product->basePrice)}} تومان@endif
             @endif
-            @if(isset($product["description"][0])) <span class="help-block font-red bold" style="font-size: smaller;text-align: justify">{{$product["description"]}}</span>@endif
+            @if(isset($product->pivot->description[0])) <span class="help-block font-red bold" style="font-size: smaller;text-align: justify">{{$product->pivot->description}}</span>@endif
     </label>
 
 </li>
