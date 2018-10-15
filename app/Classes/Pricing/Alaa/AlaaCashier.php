@@ -13,50 +13,34 @@ use App\Classes\Abstracts\Cashier;
 
 class AlaaCashier Extends Cashier
 {
-    /**
-     * @return mixed
-     */
-    public function calculatePrice()
-    {
-        $intRawCost = self::getRawCost();
-        $discountPercentage = self::getDiscountPercentage() ;
-        $bonDiscountPercentage = self::getBonDiscountPercentage() ;
-        $totalBonNumber = self::getTotalBonNumber();
-        $discountCashAmount = self::getDiscountCashAmount();
-
-        $payablePercentage = 1 - $discountPercentage ;
-        $payableBonPercentage = 1 - ($bonDiscountPercentage * $totalBonNumber) ;
-
-        $result =  (($intRawCost*$payablePercentage) * $payableBonPercentage) - $discountCashAmount ;
-
-        return $result ;
-    }
-
-
-    /**
-     * @return mixed
-     */
-    public function calculateBonDiscount()
-    {
-        $discount = self::getBonDiscountPercentage();
-        $totalBonNumber = self::getTotalBonNumber() ;
-        return $discount * $totalBonNumber;
-    }
-
-    /**
-     * @return float|int|mixed
-     */
-    public function calculateTotalDiscountAmount()
-    {
-        $intRawCost = self::getRawCost();
-        $discountPercentage = self::getDiscountPercentage() ;
-        $bonDiscountPercentage = self::getBonDiscountPercentage() ;
-        $totalBonNumber = self::getTotalBonNumber();
-        $discountCashAmount = self::getDiscountCashAmount();
-
-        $totalBonDiscount = $totalBonNumber * $bonDiscountPercentage;
-        
-        return (($intRawCost*$discountPercentage) * $totalBonDiscount) + $discountCashAmount ;
+    public function getPrice() :array {
+        return [
+            'price' => $this->calculatePrice(),
+            'info' => [
+                'productCost' => $this->rawCost,
+                'discount' => [
+                    'totalAmount' => $this->calculateTotalDiscountAmount(),
+                    'info' => [
+                        'bon' => [
+                            'totalAmount' => $this->getBonDiscount(),
+                            'info' => [
+                                $this->bonName => [
+                                    'number' => $this->totalBonNumber,
+                                    'percentage' => $this->bonDiscountPercentage
+                                ]
+                            ]
+                        ],
+                        'product' => [
+                            'totalAmount' => $this->getProductDiscount(),
+                            'info' => [
+                                'amount' => $this->discountCashAmount,
+                                'percentage' => $this->discountPercentage
+                            ]
+                        ],
+                    ]
+                ]
+            ],
+        ];
     }
 
 }

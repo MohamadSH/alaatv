@@ -210,37 +210,15 @@ class Product extends Model implements Advertisable, Taggable , SeoInterface
      */
     private function obtainCostInfo(User $user = null) :array
     {
-
         $key = "product:obtainCostInfo:"
             .$this->cacheKey()
             ."-user:"
             .(isset($user) ? $user->cacheKey() : "");
 
         return Cache::tags('bon')->remember($key,config("constants.CACHE_60"),function () use($user) {
-            $bonName = config("constants.BON1");
-            $costCalculator = new AlaaCashier();
+            $cost = new AlaaCashier($this, $user);
 
-            // Bon
-            $totalBonNumber = optional($user)->userHasBon($bonName);
-            $bonPercentage = $this->obtainBonDiscount($bonName);
-            $costCalculator->setBonDiscountPercentage($bonPercentage)->setTotalBonNumber((int)$totalBonNumber);
-            $bonDiscountPercentage =  $costCalculator->calculateBonDiscount();
-
-            // Discount
-            $discountPercentage = $this->obtainDiscount();
-            $costCalculator->setDiscountPercentage($discountPercentage) ;
-
-            // Discount Amount
-            $discountAmount =  $this->obtainDiscountAmount();
-            $costCalculator->setDiscountCashAmount($discountAmount);
-
-            // Cost
-            $cost = (int)$this->obtainPrice();
-            $costCalculator->setRawCost($cost);
-
-            ///////////CALCULATE THE PRICE/////////////
-            $customerCost = $costCalculator->calculatePrice();
-            $customerTotalDiscount = $costCalculator->calculateTotalDiscountAmount();
+            return $cost->getPrice();/*
 
             return [
                 "cost" => $cost,
@@ -249,7 +227,7 @@ class Product extends Model implements Advertisable, Taggable , SeoInterface
                 "productDiscountAmount" => $discountAmount,
                 "customerDiscount" => $customerTotalDiscount,
                 "CustomerCost" => (int)$customerCost
-            ];
+            ];*/
         });
     }
 
@@ -1461,7 +1439,7 @@ class Product extends Model implements Advertisable, Taggable , SeoInterface
     }
 
     /**
-     * Obtains product's price
+     * Obtains product's price (rawCost)
      *
      * @return int
      */
