@@ -2,20 +2,22 @@
 
 namespace App\Notifications;
 
-use App\Broadcasting\MedianaChannel;
+
+use App\Broadcasting\MedianaPatternChannel;
 use App\Classes\sms\MedianaMessage;
 use App\Order;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Notification;
 use Illuminate\Queue\SerializesModels;
 
 class InvoicePaid extends Notification implements ShouldQueue
 {
     use Queueable , SerializesModels;
 
+    protected const MEDIANA_PATTERN_CODE_INVOICE_PAID = 315;
     /**
      * @var Order
      */
@@ -41,7 +43,7 @@ class InvoicePaid extends Notification implements ShouldQueue
     public function via($notifiable)
     {
         return [
-            MedianaChannel::class,
+            MedianaPatternChannel::class,
         ];
     }
 
@@ -53,7 +55,8 @@ class InvoicePaid extends Notification implements ShouldQueue
     {
 
         return (new MedianaMessage())
-            ->content($this->msg())
+            ->setInputData($this->msg())
+            ->setPatternCode(self::MEDIANA_PATTERN_CODE_INVOICE_PAID)
             ->sendAt(Carbon::now());
     }
 
@@ -62,31 +65,11 @@ class InvoicePaid extends Notification implements ShouldQueue
         return $user;
     }
 
-    private function msg() : string {
-        $user = $this->getInvoiceUser();
-        if(isset($user->gender_id))
-        {
-            if($user->gender->name=="خانم")
-                $gender = "خانم ";
-            elseif($user->gender->name=="آقا")
-                $gender = "آقای ";
-            else
-                $gender = "";
-        }else{
-            $gender = "";
-        }
-        $messageCore = "سفارش شما با موفقیت ثبت شد."
-            ."\n"
-            ."شماره سفارش:"
-            ."\n"
-            .$this->invoice->id
-            ."\n"
-            ."پشتیبانی:"
-            ."\n"
-            ."https://goo.gl/jme5VU";
-        $message = "سلام ".$gender.$user->getfullName()."\n".$messageCore;
-
-        return $message;
+    private function msg(): array
+    {
+        return [
+            'code' => $this->invoice->id
+        ];
     }
 
 }

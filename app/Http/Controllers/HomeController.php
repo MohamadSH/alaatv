@@ -2,23 +2,72 @@
 
 namespace App\Http\Controllers;
 
-use App\{
-    Assignmentstatus, Attribute, Attributecontrol, Attributeset, Bon, Category, Checkoutstatus, Classes\Search\ContentSearch, Classes\Search\Tag\AuthorTagManagerViaApi, Consultationstatus, Contentset, Contenttype, Coupon, Coupontype, Content, Event, Eventresult, Gender, Grade, Http\Requests\ContactUsFormRequest, Http\Requests\InsertUserRequest, Http\Requests\Request, Http\Requests\SendSMSRequest, Lottery, Major, Notifications\GeneralNotice, Notifications\GiftGiven, Notifications\UserRegisterd, Order, Orderproduct, Orderstatus, Paymentmethod, Paymentstatus, Permission, Product, Productfile, Producttype, Productvoucher, Question, Relative, Role, Traits\APIRequestCommon, Traits\CharacterCommon, Traits\DateCommon, Traits\Helper, Traits\ProductCommon, Traits\UserCommon, Transaction, Transactionstatus, User, Userbon, Userbonstatus, Userstatus, Usersurveyanswer, Userupload, Useruploadstatus, Websitepage, Websitesetting
-};
+use App\{Assignmentstatus,
+    Attribute,
+    Attributecontrol,
+    Attributeset,
+    Bon,
+    Category,
+    Checkoutstatus,
+    Classes\Search\ContentSearch,
+    Consultationstatus,
+    Content,
+    Contentset,
+    Contenttype,
+    Coupon,
+    Coupontype,
+    Event,
+    Eventresult,
+    Gender,
+    Http\Requests\ContactUsFormRequest,
+    Http\Requests\InsertUserRequest,
+    Http\Requests\Request,
+    Http\Requests\SendSMSRequest,
+    Lottery,
+    Major,
+    Notifications\GeneralNotice,
+    Notifications\GiftGiven,
+    Notifications\UserRegisterd,
+    Order,
+    Orderproduct,
+    Orderstatus,
+    Paymentmethod,
+    Paymentstatus,
+    Permission,
+    Product,
+    Productfile,
+    Producttype,
+    Productvoucher,
+    Question,
+    Relative,
+    Role,
+    Traits\APIRequestCommon,
+    Traits\CharacterCommon,
+    Traits\DateCommon,
+    Traits\Helper,
+    Traits\ProductCommon,
+    Traits\UserCommon,
+    Transaction,
+    Transactionstatus,
+    User,
+    Userbon,
+    Userbonstatus,
+    Userstatus,
+    Usersurveyanswer,
+    Userupload,
+    Useruploadstatus,
+    Websitepage,
+    Websitesetting};
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Response;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\{App, Cache, Config, File, Input, Log, Route, Storage, View};
+use Illuminate\Support\Facades\{App, Config, File, Input, Route, Storage};
 use Illuminate\Support\Str;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Sftp\SftpAdapter;
 use Maatwebsite\ExcelLight\Excel;
-use Maatwebsite\ExcelLight\Spout\{
-    Reader, Row, Sheet, Writer
-};
+use Maatwebsite\ExcelLight\Spout\{Reader, Row, Sheet, Writer};
 use SEO;
 use SSH;
 
@@ -83,7 +132,14 @@ class HomeController extends Controller
 
     public function debug(Request $request)
     {
-
+        /*        return json_encode([
+                    'username' => 'u',
+                    'password' => 'p'
+                ]);*/
+//        dd($ch);
+        $user = User::findOrFail(1);
+        $user->notify(new UserRegisterd());
+        dd("Done!");
         dd( App::getLocale());
         $pr = Product::find(181);
         dd($pr->sample_photos);
