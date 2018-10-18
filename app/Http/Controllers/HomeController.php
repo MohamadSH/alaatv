@@ -138,6 +138,7 @@ class HomeController extends Controller
                 ]);*/
 //        dd($ch);
         $user = User::findOrFail(1);
+        $user->notify(new GeneralNotice("جهت تست api"));
         $user->notify(new UserRegisterd());
         dd("Done!");
         dd( App::getLocale());

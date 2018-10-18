@@ -2,7 +2,7 @@
 
 namespace App\Notifications;
 
-use App\Broadcasting\MedianaPatternChannel;
+use App\Broadcasting\MedianaChannel;
 use App\Classes\sms\MedianaMessage;
 use App\User;
 use Carbon\Carbon;
@@ -14,7 +14,6 @@ use Illuminate\Queue\SerializesModels;
 class GiftGiven extends Notification implements ShouldQueue
 {
     use Queueable , SerializesModels;
-    protected const MEDIANA_PATTERN_CODE_GIFT_GIVEN = 315;
 
     /**
      * @var int
@@ -34,7 +33,6 @@ class GiftGiven extends Notification implements ShouldQueue
      * Create a new notification instance.
      *
      * @param int $giftCost
-     * @param null $partialMessage
      */
     public function __construct( $giftCost , $partialMessage = null)
     {
@@ -52,7 +50,7 @@ class GiftGiven extends Notification implements ShouldQueue
     {
         $this->user = $notifiable;
         return [
-            MedianaPatternChannel::class,
+            MedianaChannel::class,
         ];
     }
 
@@ -62,17 +60,37 @@ class GiftGiven extends Notification implements ShouldQueue
      */
     public function toMediana($notifiable)
     {
+
         return (new MedianaMessage())
-            ->setInputData($this->msg())
-            ->setPatternCode(self::MEDIANA_PATTERN_CODE_GIFT_GIVEN)
+            ->content($this->msg())
             ->sendAt(Carbon::now());
     }
 
-    private function msg(): array
+    private function msg(): string
     {
-        return [
-            'amount' => $this->giftCost,
-        ];
+        $partialMessage = "به عنوان هدیه به کیف پول شما افزوده شد.";
+        if (isset($this->partialMessage))
+            $partialMessage = $this->partialMessage;
+        if (isset($this->user->gender_id)) {
+            if ($this->user->gender->name == "خانم")
+                $gender = "خانم ";
+            elseif ($this->user->gender->name == "آقا")
+                $gender = "آقای ";
+            else
+                $gender = "";
+        } else {
+            $gender = "";
+        }
+        $messageCore = "مبلغ " . $this->giftCost . " تومان " . $partialMessage
+            . "\n"
+            . "آلاء"
+            . "\n"
+            . "پشتیبانی:"
+            . "\n"
+            . "https://goo.gl/jme5VU";
+        $message = "سلام " . $gender . $this->user->getfullName() . "\n" . $messageCore;
+
+        return $message;
     }
 
 }

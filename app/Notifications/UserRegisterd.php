@@ -16,7 +16,7 @@ class UserRegisterd extends Notification  implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    const MEDIANA_PATTERN_CODE_USER_REGISTERD = 114;
+    const MEDIANA_PATTERN_CODE_USER_REGISTERD = 799;
     public $timeout = 120;
     /**
      * @var User
@@ -59,6 +59,7 @@ class UserRegisterd extends Notification  implements ShouldQueue
         return [
             'username' => $this->user->mobile,
             'password' => $this->user->nationalCode,
+            "https://goo.gl/jme5VU" => "https://goo.gl/jme5VU",
         ];
     }
 }

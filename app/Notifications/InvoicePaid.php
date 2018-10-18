@@ -17,7 +17,7 @@ class InvoicePaid extends Notification implements ShouldQueue
 {
     use Queueable , SerializesModels;
 
-    protected const MEDIANA_PATTERN_CODE_INVOICE_PAID = 315;
+    protected const MEDIANA_PATTERN_CODE_INVOICE_PAID = 800;
     /**
      * @var Order
      */
