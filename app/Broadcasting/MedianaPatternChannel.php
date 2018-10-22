@@ -75,9 +75,11 @@ class MedianaPatternChannel
     protected function buildParams(MedianaMessage $message, $to)
     {
         $param = [
-            'to' => json_encode([$to], JSON_UNESCAPED_UNICODE),
-            'pattern_code' => trim(data_get($message, 'pattern_code')),
-            'input_data' => json_encode(data_get($message, 'input_data'), JSON_UNESCAPED_UNICODE)
+//            'to' => json_encode([$to], JSON_UNESCAPED_UNICODE),
+            'toNum' => $to,
+            'patternCode' => trim(data_get($message, 'pattern_code')),
+            'inputData' => data_get($message, 'input_data'),
+            'op' => 'patternV2',
         ];
         if (isset($message->from))
             $param['from'] = $message->from;
