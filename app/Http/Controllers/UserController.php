@@ -1215,34 +1215,8 @@ class UserController extends Controller
 
         if($verificationMessages->isEmpty())
         {
-            $response = $this->medianaSendSMS($smsInfo);
-//                  $response = array("error"=>false , "message"=>"ارسال موفقیت آمیز بود");
-            if(!$response["error"]){
-                $request = new Request();
-                $request->offsetSet("user_id" ,  $user->id);
-                $request->offsetSet("code" ,  $verificationCode);
-                $request->offsetSet("verificationmessagestatus_id" ,  $verificationMessageStatusSent);
-                $request->offsetSet("expired_at" ,   Carbon::now()->addMinutes(Config::get('constants.MOBILE_VERIFICATION_TIME_LIMIT')));
-                $verificationMessageController = new VerificationmessageController();
-                if($verificationMessageController->store($request))
-                {
-                    $message = "کد تایید شماره موبایل ارسال شد. در صورت عدم دریافت پیامک، 5 دقیقه دیگر مجدد درخواست ارسال کد بدهید.";
-                    return $this->response
-                        ->setStatusCode(200)
-                        ->setContent(["message" => $message]);
-                }else{
-                    $message = "خطای پایگاه داده در ارسال کد . لطفا چند لحظه دیگر اقدام نمایید.اگر در این فاصله پیامکی دریافت کردید لطفا آن را در نظر نگیرید";
-                    return $this->response
-                        ->setStatusCode(503)
-                        ->setContent(["message" => $message]);
-                }
-
-            }else{
-                $message = "ارسال پیامک حاوی رمز عبور با مشکل مواجه شد! لطفا دوباره درخواست ارسال پیامک نمایید.";
-                return $this->response
-                    ->setStatusCode(503)
-                    ->setContent(["message" => $message]);
-            }
+            $this->medianaSendSMS($smsInfo);
+            return $this->saveVerificationCode($user, $verificationCode, $verificationMessageStatusSent);
         }else{
                 if($verificationMessages->count()>1)
                 {
@@ -1263,34 +1237,8 @@ class UserController extends Controller
                     $verificationMessage->expired_at = $now ;
                     if($verificationMessage->update())
                     {
-                        $response = $this->medianaSendSMS($smsInfo);
-//                  $response = array("error"=>false , "message"=>"ارسال موفقیت آمیز بود");
-                        if(!$response["error"]){
-                            $request = new Request();
-                            $request->offsetSet("user_id" ,  $user->id);
-                            $request->offsetSet("code" ,  $verificationCode);
-                            $request->offsetSet("verificationmessagestatus_id" ,  $verificationMessageStatusSent);
-                            $request->offsetSet("expired_at" ,   Carbon::now()->addMinutes(Config::get('constants.MOBILE_VERIFICATION_TIME_LIMIT')));
-                            $verificationMessageController = new VerificationmessageController();
-                            if($verificationMessageController->store($request))
-                            {
-                                $message = "کد تایید شماره موبایل ارسال شد. در صورت عدم دریافت پیامک، 5 دقیقه دیگر مجدد درخواست ارسال کد بدهید";
-                                return $this->response
-                                    ->setStatusCode(200)
-                                    ->setContent(["message" => $message]);
-                            }else{
-                                $message = "خطای پایگاه داده در ارسال کد . لطفا چند لحظه دیگر اقدام نمایید.اگر در این فاصله پیامکی دریافت کردید لطفا آن را در نظر نگیرید";
-                                return $this->response
-                                    ->setStatusCode(503)
-                                    ->setContent(["message" => $message]);
-                            }
-
-                        }else{
-                            $message = "ارسال پیامک حاوی رمز عبور با مشکل مواجه شد! لطفا دوباره درخواست ارسال پیامک نمایید";
-                            return $this->response
-                                ->setStatusCode(503)
-                                ->setContent(["message" => $message]);
-                        }
+                        $this->medianaSendSMS($smsInfo);
+                        return $this->saveVerificationCode($user, $verificationCode, $verificationMessageStatusSent);
                     }else{
                         $message = "خطای پایگاه داده در ارسال کد . لطفا چند لحظه دیگر اقدام نمایید";
                         return $this->response
@@ -2501,5 +2449,32 @@ class UserController extends Controller
         }
 
         return redirect()->back();
+    }
+
+    /**
+     * @param $user
+     * @param $verificationCode
+     * @param $verificationMessageStatusSent
+     * @return Response
+     */
+    private function saveVerificationCode($user, $verificationCode, $verificationMessageStatusSent): UserController
+    {
+        $request = new Request();
+        $request->offsetSet("user_id", $user->id);
+        $request->offsetSet("code", $verificationCode);
+        $request->offsetSet("verificationmessagestatus_id", $verificationMessageStatusSent);
+        $request->offsetSet("expired_at", Carbon::now()->addMinutes(Config::get('constants.MOBILE_VERIFICATION_TIME_LIMIT')));
+        $verificationMessageController = new VerificationmessageController();
+        if ($verificationMessageController->store($request)) {
+            $message = "کد تایید شماره موبایل ارسال شد. در صورت عدم دریافت پیامک، 5 دقیقه دیگر مجدد درخواست ارسال کد بدهید";
+            return $this->response
+                ->setStatusCode(200)
+                ->setContent(["message" => $message]);
+        } else {
+            $message = "خطای پایگاه داده در ارسال کد . لطفا چند لحظه دیگر اقدام نمایید.اگر در این فاصله پیامکی دریافت کردید لطفا آن را در نظر نگیرید";
+            return $this->response
+                ->setStatusCode(503)
+                ->setContent(["message" => $message]);
+        }
     }
 }

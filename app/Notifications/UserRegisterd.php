@@ -48,12 +48,43 @@ class UserRegisterd extends Notification  implements ShouldQueue
             $this->user = $notifiable;
 
         return (new MedianaMessage())
-            ->setInputData($this->msg())
+            ->content($this->msg())
+            ->setInputData($this->getInputData())
             ->setPatternCode(self::MEDIANA_PATTERN_CODE_USER_REGISTERD)
             ->sendAt(Carbon::now());
     }
 
-    private function msg(): array
+    private function msg(): string
+    {
+        if (isset($this->user->gender_id)) {
+            if ($this->user->gender->name == "خانم")
+                $gender = "خانم ";
+            elseif ($this->user->gender->name == "آقا")
+                $gender = "آقای ";
+            else
+                $gender = "";
+        } else {
+            $gender = "";
+        }
+        $messageCore = "به آلاء خوش آمدید، اطلاعات کاربری شما:"
+            . "\n"
+            . "نام کاربری:"
+            . "\n"
+            . $this->user->mobile
+            . "\n"
+            . "رمز عبور:"
+            . "\n"
+            . $this->user->nationalCode
+            . "\n"
+            . "پشتیبانی:"
+            . "\n"
+            . "https://goo.gl/jme5VU";
+        $message = "سلام " . $gender . $this->user->getfullName() . "\n" . $messageCore;
+
+        return $message;
+    }
+
+    private function getInputData(): array
     {
 
         return [

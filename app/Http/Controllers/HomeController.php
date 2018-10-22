@@ -130,16 +130,15 @@ class HomeController extends Controller
         return $title;
     }*/
 
-    public function debug(Request $request)
+    public function debug(Request $request, $id)
     {
         /*        return json_encode([
                     'username' => 'u',
                     'password' => 'p'
                 ]);*/
 //        dd($ch);
-        $user = User::findOrFail(1);
-        $user->notify(new GeneralNotice("جهت تست api"));
-        $user->notify(new UserRegisterd());
+        dump($id);
+        dump($request->route('ab'));
         dd("Done!");
         dd( App::getLocale());
         $pr = Product::find(181);

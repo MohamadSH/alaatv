@@ -55,7 +55,8 @@ class InvoicePaid extends Notification implements ShouldQueue
     {
 
         return (new MedianaMessage())
-            ->setInputData($this->msg())
+            ->content($this->msg())
+            ->setInputData($this->getInputData())
             ->setPatternCode(self::MEDIANA_PATTERN_CODE_INVOICE_PAID)
             ->sendAt(Carbon::now());
     }
@@ -65,10 +66,38 @@ class InvoicePaid extends Notification implements ShouldQueue
         return $user;
     }
 
-    private function msg(): array
+    private function msg(): string
+    {
+        $user = $this->getInvoiceUser();
+        if (isset($user->gender_id)) {
+            if ($user->gender->name == "خانم")
+                $gender = "خانم ";
+            elseif ($user->gender->name == "آقا")
+                $gender = "آقای ";
+            else
+                $gender = "";
+        } else {
+            $gender = "";
+        }
+        $messageCore = "سفارش شما با موفقیت ثبت شد."
+            . "\n"
+            . "شماره سفارش:"
+            . "\n"
+            . $this->invoice->id
+            . "\n"
+            . "پشتیبانی:"
+            . "\n"
+            . "https://goo.gl/jme5VU";
+        $message = "سلام " . $gender . $user->getfullName() . "\n" . $messageCore;
+
+        return $message;
+    }
+
+    private function getInputData(): array
     {
         return [
-            'code' => $this->invoice->id
+            'code' => $this->invoice->id,
+            "https://goo.gl/jme5VU " => "https://goo.gl/jme5VU",
         ];
     }
 

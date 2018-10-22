@@ -241,3 +241,9 @@ Route::resource('c', 'ContentController');
 Route::resource( "sanatisharifmerge" , "SanatisharifmergeController");
 Route::resource('article', 'ArticleController');
 Auth::routes();
+
+Route::group(['prefix' => 'mobile'], function () {
+    Route::get("verify", "MobileVerificationController@show")->name('mobile.verification.notice');
+    Route::get("verify/{code}", "MobileVerificationController@verify")->name('mobile.verification.verify');
+    Route::get("resend", "MobileVerificationController@resend")->name('mobile.verification.resend');
+});

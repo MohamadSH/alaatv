@@ -3,20 +3,19 @@
 namespace App;
 
 use App\Classes\Taggable;
+use App\Classes\Verification\MustVerifyMobileNumber;
 use App\Collection\ContentCollection;
 use App\Collection\UserCollection;
 use App\Traits\APIRequestCommon;
 use App\Traits\HasWallet;
 use App\Traits\Helper;
+use App\Traits\MustVerifyMobileNumberTrait;
 use Carbon\Carbon;
 use Iatstuti\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Collection as BaseCollection;
-use Illuminate\Support\Facades\{
-    Auth, Cache, Config, DB
-};
+use Illuminate\Support\Facades\{Auth, Cache, Config, DB};
 use Laratrust\Traits\LaratrustUserTrait;
 use Schema;
 
@@ -139,8 +138,9 @@ use Schema;
  * @property-read mixed $full_name_reverse
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereNameSlug($value)
  */
-class User extends Authenticatable implements Taggable
+class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
 {
+    use MustVerifyMobileNumberTrait;
     use Helper;
     use SoftDeletes, CascadeSoftDeletes;
     use LaratrustUserTrait;
