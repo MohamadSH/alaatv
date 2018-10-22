@@ -148,6 +148,11 @@ class User extends Authenticatable implements Taggable
     use Notifiable;
     use APIRequestCommon;
 
+    /*
+    |--------------------------------------------------------------------------
+    | Properties
+    |--------------------------------------------------------------------------
+    */
 
     protected $cascadeDeletes = [
         'orders',
@@ -162,7 +167,8 @@ class User extends Authenticatable implements Taggable
     protected $dates = [
         'created_at',
         'updated_at',
-        'deleted_at'
+        'deleted_at',
+        'birthdate'
     ];
     protected $lockProfile = [
         "province",
@@ -173,7 +179,8 @@ class User extends Authenticatable implements Taggable
         "gender_id",
         "major_id",
         "email"
-    ]; //columns being used for locking user's profile
+    ]; 
+    //columns being used for locking user's profile
     protected $completeInfo = [
         "photo",
         "province",
@@ -241,81 +248,24 @@ class User extends Authenticatable implements Taggable
         'remember_token',
     ];
 
-    /**
-     * Create a new Eloquent Collection instance.
-     *
-     * @param  array $models
-     * @return UserCollection
-     */
-    public function newCollection(array $models = [])
-    {
-        return new UserCollection($models);
-    }
-
-
-    public function cacheKey()
-    {
-        $key = $this->getKey();
-        $time= isset($this->update) ? $this->updated_at->timestamp : $this->created_at->timestamp;
-        return sprintf(
-            "%s-%s",
-            //$this->getTable(),
-            $key,
-            $time
-        );
-    }
-
+    /*
+    |--------------------------------------------------------------------------
+    | scope methods
+    |--------------------------------------------------------------------------
+    */
+    
     public function scopeRole($query, array $roles)
     {
         return $query->whereHas('roles', function ($q) use ($roles) {
             $q->whereIn("id", $roles);
         });
     }
-
-
-    /**
-     * @return UserCollection
-     */
-    public static function getTeachers() :UserCollection
-    {
-        $key = "getTeachers";
-        return Cache::tags(["teachers"])->remember($key,config("constants.CACHE_600"),function (){
-            $authors = User::select()
-                ->role([config('constants.ROLE_TEACHER')])
-                ->orderBy('lastName')
-                ->get();
-
-//                ->sortBy("lastName")
-//                ->values();
-            return $authors;
-        });
-    }
-
-    public static function orderStatusFilter($users, $orderStatusesId)
-    {
-        $key="user:orderStatusFilter:".implode($users->pluck('id')->toArray())."-".$orderStatusesId;
-
-        return Cache::remember($key,Config::get("constants.CACHE_3"),function () use($users, $orderStatusesId) {
-
-            return $users->whereIn('id', Order::whereIn("orderstatus_id", $orderStatusesId)->pluck('user_id'));
-        });
-
-    }
-
-    public function getRememberToken()
-    {
-        return $this->remember_token;
-    }
-
-    public function setRememberToken($value)
-    {
-        $this->remember_token = $value;
-    }
-
-    public function getRememberTokenName()
-    {
-        return 'remember_token';
-    }
+ 
+    /*
+    |--------------------------------------------------------------------------
+    | relations
+    |--------------------------------------------------------------------------
+    */
 
     public function major()
     {
@@ -339,7 +289,8 @@ class User extends Authenticatable implements Taggable
 
     public function openOrders()
     {
-        return $this->hasMany('App\Order')->where("orderstatus_id", Config::get("constants.ORDER_STATUS_OPEN"));
+        return $this->hasMany('App\Order')
+            ->where("orderstatus_id", Config::get("constants.ORDER_STATUS_OPEN"));
     }
 
     public function userbons()
@@ -372,9 +323,11 @@ class User extends Authenticatable implements Taggable
         return $this->hasMany('\App\Mbtianswer');
     }
 
+    //Site pages that user has seen
     public function seensitepages()
-    {//Site pages that user has seen
-        return $this->belongsToMany('\App\Websitepage', 'userseensitepages', 'user_id', 'websitepage_id')->withPivot("created_at", "numberOfVisit");
+    {
+        return $this->belongsToMany('\App\Websitepage', 'userseensitepages', 'user_id', 'websitepage_id')
+            ->withPivot("created_at", "numberOfVisit");
     }
 
     public function usersurveyanswers()
@@ -404,7 +357,8 @@ class User extends Authenticatable implements Taggable
 
     public function lotteries()
     {
-        return $this->belongsToMany("\App\Lottery")->withPivot("rank", "prizes");
+        return $this->belongsToMany("\App\Lottery")
+            ->withPivot("rank", "prizes");
     }
 
     public function bloodtype()
@@ -420,35 +374,6 @@ class User extends Authenticatable implements Taggable
     public function contents()
     {
         return $this->hasMany("\App\Content" , "author_id" , "id");
-    }
-
-    public function products(){
-        $result = DB::table('products')
-            ->join('orderproducts', function ($join){
-                $join->on('products.id', '=', 'orderproducts.product_id')
-                    ->whereNull('orderproducts.deleted_at');
-            })
-            ->join('orders',function ($join){
-                $join->on( 'orders.id', '=', 'orderproducts.order_id')
-                    ->whereIn('orders.orderstatus_id',[
-                        Config::get("constants.ORDER_STATUS_CLOSED"),
-                        Config::get("constants.ORDER_STATUS_POSTED"),
-                        Config::get("constants.ORDER_STATUS_READY_TO_POST")
-                    ])
-                    ->whereNull('orders.deleted_at');
-            })
-            ->join('users','users.id', '=', 'orders.user_id')
-            ->select([
-
-                "products.*"
-            ])
-            ->where('users.id','=',$this->getKey())
-            ->whereNull('products.deleted_at')
-            ->distinct()
-            ->get();
-        $result = Product::hydrate($result->toArray());
-
-        return $result;
     }
 
     public function orderproducts()
@@ -487,6 +412,107 @@ class User extends Authenticatable implements Taggable
     {
         return $this->hasMany("\App\Productvoucher");
     }
+    
+    public function ordermanagercomments()
+    {
+        return $this->hasMany('App\Ordermanagercomment');
+    }    
+    
+    /**
+     * Create a new Eloquent Collection instance.
+     *
+     * @param  array $models
+     * @return UserCollection
+     */
+    public function newCollection(array $models = [])
+    {
+        return new UserCollection($models);
+    }
+
+
+    public function cacheKey()
+    {
+        $key = $this->getKey();
+        $time= isset($this->update) ? $this->updated_at->timestamp : $this->created_at->timestamp;
+        return sprintf(
+            "%s-%s",
+            //$this->getTable(),
+            $key,
+            $time
+        );
+    }
+
+    /**
+     * @return UserCollection
+     */
+    public static function getTeachers() :UserCollection
+    {
+        $key = "getTeachers";
+        return Cache::tags(["teachers"])->remember($key,config("constants.CACHE_600"),function (){
+            $authors = User::select()
+                ->role([config('constants.ROLE_TEACHER')])
+                ->orderBy('lastName')
+                ->get();
+            return $authors;
+        });
+    }
+
+    public static function orderStatusFilter($users, $orderStatusesId)
+    {
+        $key="user:orderStatusFilter:".implode($users->pluck('id')->toArray())."-".$orderStatusesId;
+
+        return Cache::remember($key,Config::get("constants.CACHE_3"),function () use($users, $orderStatusesId) {
+
+            return $users->whereIn('id', Order::whereIn("orderstatus_id", $orderStatusesId)->pluck('user_id'));
+        });
+
+    }
+
+    public function getRememberToken()
+    {
+        return $this->remember_token;
+    }
+
+    public function setRememberToken($value)
+    {
+        $this->remember_token = $value;
+    }
+
+    public function getRememberTokenName()
+    {
+        return 'remember_token';
+    }
+
+    //TODO:// add cache
+    public function products(){
+        $result = DB::table('products')
+            ->join('orderproducts', function ($join){
+                $join->on('products.id', '=', 'orderproducts.product_id')
+                    ->whereNull('orderproducts.deleted_at');
+            })
+            ->join('orders',function ($join){
+                $join->on( 'orders.id', '=', 'orderproducts.order_id')
+                    ->whereIn('orders.orderstatus_id',[
+                        Config::get("constants.ORDER_STATUS_CLOSED"),
+                        Config::get("constants.ORDER_STATUS_POSTED"),
+                        Config::get("constants.ORDER_STATUS_READY_TO_POST")
+                    ])
+                    ->whereNull('orders.deleted_at');
+            })
+            ->join('users','users.id', '=', 'orders.user_id')
+            ->select([
+
+                "products.*"
+            ])
+            ->where('users.id','=',$this->getKey())
+            ->whereNull('products.deleted_at')
+            ->distinct()
+            ->get();
+        $result = Product::hydrate($result->toArray());
+
+        return $result;
+    }
+
 
     /**
      * @param string $bonName
@@ -690,10 +716,6 @@ class User extends Authenticatable implements Taggable
 
     }
 
-    public function ordermanagercomments()
-    {
-        return $this->hasMany('App\Ordermanagercomment');
-    }
 
     public function getfullName($mode = "firstNameFirst")
     {
