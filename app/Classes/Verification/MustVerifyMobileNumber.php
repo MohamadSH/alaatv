@@ -26,11 +26,18 @@ interface MustVerifyMobileNumber
     public function markMobileAsVerified();
 
     /**
-     * Send the email verification notification.
+     * Send the mobile verification notification.
      *
      * @return void
      */
     public function sendMobileVerificationNotification();
+
+    /**
+     * Send the mobile verified notification.
+     *
+     * @return void
+     */
+    public function sendMobileVerifiedNotification();
 
     /**
      * get user's verification code

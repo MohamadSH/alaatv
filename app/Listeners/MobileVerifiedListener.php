@@ -2,26 +2,18 @@
 
 namespace App\Listeners;
 
+use App\Events\MobileVerified;
+
 class MobileVerifiedListener
 {
     /**
-     * Create the event listener.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
      * Handle the event.
      *
-     * @param  object $event
+     * @param MobileVerified $event
      * @return void
      */
-    public function handle($event)
+    public function handle(MobileVerified $event)
     {
-        //
+        $event->user->sendMobileVerifiedNotification();
     }
 }

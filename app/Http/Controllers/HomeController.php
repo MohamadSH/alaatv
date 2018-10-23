@@ -18,6 +18,7 @@ use App\{Assignmentstatus,
     Coupontype,
     Event,
     Eventresult,
+    Events\FreeInternetAccept,
     Gender,
     Http\Requests\ContactUsFormRequest,
     Http\Requests\InsertUserRequest,
@@ -130,8 +131,10 @@ class HomeController extends Controller
         return $title;
     }*/
 
-    public function debug(Request $request, $id)
+    public function debug(Request $request)
     {
+        event(new FreeInternetAccept(User::findOrFail(2)));
+        dd(".");
         /*        return json_encode([
                     'username' => 'u',
                     'password' => 'p'
@@ -2193,13 +2196,8 @@ class HomeController extends Controller
                                 $unusedVoucher->user_id = $orderUser->id;
                                 if($unusedVoucher->update())
                                 {
-                                    $message = "سلام، با درخواست اینترنت رایگان شما موافقت شد";
-                                    $message .= "\n";
-                                    $message .= "دریافت کد تخفیف از :";
-                                    $message .= "\n";
-                                    $message .= "https://sanatisharif.ir/v/asiatech";
-                                    $orderUser->notify(new GeneralNotice($message));
 
+                                    event(new FreeInternetAccept($orderUser));
                                     $counter++;
                                 }
                                 else

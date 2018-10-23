@@ -17,5 +17,6 @@ return [
     'A fresh verification code has been sent to your mobile number.' => 'A fresh verification code has been sent to your mobile number.',
     'Before proceeding, please check your mobile for a verification code.' => 'Before proceeding, please check your mobile for a verification code.',
     'If you did not receive the code' => 'If you did not receive the code',
-    'click here to request another' => 'click here to request another'
+    'click here to request another' => 'click here to request another',
+    'Your mobile number is not verified.' => 'Your mobile number is not verified.'
 ];

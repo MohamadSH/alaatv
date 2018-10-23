@@ -9,6 +9,7 @@
 namespace App\Traits;
 
 
+use App\Notifications\MobileVerified;
 use App\Notifications\VerifyMobile;
 
 trait MustVerifyMobileNumberTrait
@@ -42,18 +43,28 @@ trait MustVerifyMobileNumberTrait
      */
     public function sendMobileVerificationNotification()
     {
-        //TODO:// Generate Verification Code,
-        $this->notify(new VerifyMobile());
+        if ($this->setMobileVerificationCode())
+            $this->notify(new VerifyMobile());
+    }
+
+    /**
+     * Send the mobile verified notification.
+     *
+     * @return void
+     */
+    public function sendMobileVerifiedNotification()
+    {
+        $this->notify(new MobileVerified());
     }
 
     /**
      * get user's verification code
      *
-     * @return void
+     * @return string
      */
     public function getMobileVerificationCode()
     {
-
+        return $this->mobile_verified_code;
     }
 
     /**
@@ -61,8 +72,11 @@ trait MustVerifyMobileNumberTrait
      *
      * @return bool
      */
-    public function setMobileVerificationCode()
+    public function setMobileVerificationCode(): bool
     {
-
+        $verificationCode = rand(1000, 99999);
+        return $this->forceFill([
+            'mobile_verified_code' => $verificationCode,
+        ])->save();
     }
 }
