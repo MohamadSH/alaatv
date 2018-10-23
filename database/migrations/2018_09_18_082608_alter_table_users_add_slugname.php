@@ -1,8 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 class AlterTableUsersAddSlugname extends Migration
 {
@@ -636,7 +638,9 @@ class AlterTableUsersAddSlugname extends Migration
         });
 
         $teachers =  \App\User::getTeachers();
-
+        $output = new ConsoleOutput();
+        $output->writeln('insert teacher slug....');
+        $progress = new ProgressBar($output, $teachers->count());
         foreach ($teachers as $teacher)
         {
             $oldTeacher = $this->oldTeachers->where("mobile" , $teacher->mobile)->first();
@@ -654,7 +658,10 @@ class AlterTableUsersAddSlugname extends Migration
                 echo "Error on updating teacher #".$teacher->id;
                 echo "<br>";
             }
+            $progress->advance();
         }
+        $progress->finish();
+        $output->writeln('Done!');
     }
 
     /**

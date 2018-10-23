@@ -110,7 +110,7 @@
                                             @if($product->isFree)
                                                 <li>
                                                     <li style="text-align: center;">
-                                                        <a class="bg-blue bg-font-blue" href="javascript:;">رایگان</a>
+                                                        <a class="bg-blue bg-font-blue" href="javascript:">رایگان</a>
                                                     </li>
                                                 </li>
                                             @else
@@ -119,12 +119,16 @@
                                                     @if(!session()->has("adminOrder_id"))
                                                         {{--<li style="text-align: center;"><a class="bg-red-flamingo bg-font-red-flamingo" href="javascript:;"><i class="fa fa-plus-circle" aria-hidden="true"></i>{{$product->bons->where("name" , "alaa")->first()->pivot->bonPlus}} {{$product->bons->where("name" , "alaa")->first()->displayName}} به {{Session::get("customer_firstName")}} {{Session::get("customer_lastName")}}</a> </li>--}}
                                                         {{--@else--}}
-                                                        <li style="text-align: center;"><a class="bg-red-flamingo bg-font-red-flamingo" href="javascript:;"><i class="fa fa-plus-circle" aria-hidden="true"></i>{{$product->bons->where("name" , Config::get("constants.BON1"))->first()->pivot->bonPlus}} {{$product->bons->where("name" ,Config::get("constants.BON1"))->first()->displayName}}</a> </li>
+                                                            <li style="text-align: center;"><a
+                                                                        class="bg-red-flamingo bg-font-red-flamingo"
+                                                                        href="javascript:"><i class="fa fa-plus-circle"
+                                                                                              aria-hidden="true"></i>{{$product->bons->where("name" , Config::get("constants.BON1"))->first()->pivot->bonPlus}} {{$product->bons->where("name" ,Config::get("constants.BON1"))->first()->displayName}}
+                                                                </a></li>
                                                     @endif
                                                 @endif
 
                                                 <li >
-                                                    <a href="javascript:;" > قیمت
+                                                    <a href="javascript:"> قیمت
                                                         <span class="bg-green" style="width: 53%;height: 100%; text-align: center;" id="price" value="{{$product->basePrice}}">@if($product->basePrice == 0) پس از انتخاب محصول @else {{number_format($product->basePrice)}}تومان @endif</span>
                                                     </a>
                                                 </li>
@@ -132,14 +136,18 @@
                                                     @if(!$product->bons->where("name" , Config::get("constants.BON1"))->where("isEnable" , 1)->isEmpty())
                                                         @if(session()->has("adminOrder_id"))
                                                             <li>
-                                                                <a href="javascript:;">{{$product->bons->where("name" , Config::get("constants.BON1"))->first()->displayName}} {{Session::get("customer_firstName")}} {{Session::get("customer_lastName")}}<span class="bg-grey-salsa bg-font-grey-salsa" style="width: 53%;height: 100% ;text-align: center">
+                                                                <a href="javascript:">{{$product->bons->where("name" , Config::get("constants.BON1"))->first()->displayName}} {{Session::get("customer_firstName")}} {{Session::get("customer_lastName")}}
+                                                                    <span class="bg-grey-salsa bg-font-grey-salsa"
+                                                                          style="width: 53%;height: 100% ;text-align: center">
                                                                 {{ \App\User::where("id" , Session::get("customer_id"))->first()->userHasBon(Config::get("constants.BON1"))  }}
                                                                 </span>
                                                                 </a>
                                                             </li>
                                                         @elseif(Auth::user()->userHasBon(Config::get("constants.BON1")) > 0)
                                                             <li>
-                                                                <a href="javascript:;">{{$product->bons->where("name" , Config::get("constants.BON1"))->first()->displayName}} شما<span class="bg-grey-salsa bg-font-grey-salsa" style="width: 53%;height: 100% ;text-align: center">
+                                                                <a href="javascript:">{{$product->bons->where("name" , Config::get("constants.BON1"))->first()->displayName}}
+                                                                    شما<span class="bg-grey-salsa bg-font-grey-salsa"
+                                                                             style="width: 53%;height: 100% ;text-align: center">
                                                                 {{ Auth::user()->userHasBon(Config::get("constants.BON1"))  }}
                                                                 </span>
                                                                 </a>
@@ -148,25 +156,27 @@
                                                     @endif
                                                 @endif
                                                 <li>
-                                                    <a href="javascript:;" > تخفیف
+                                                    <a href="javascript:"> تخفیف
                                                         <span class="bg-yellow-gold" id="discount"  style="width: 53%;height: 100% ;text-align: center">
                                                         </span>
                                                     </a>
                                                 </li>
                                                 @if(Auth::check() && $product->bons->where("name" , Config::get("constants.BON1"))->where("pivot.discount",">","0")->where("isEnable" , 1)->isEmpty())
-                                                    <li style="text-align: center;"><a class="bg-yellow bg-font-yellow" href="javascript:;">این محصول تخفیف بن ندارد</a> </li>
+                                                        <li style="text-align: center;"><a
+                                                                    class="bg-yellow bg-font-yellow" href="javascript:">این
+                                                                محصول تخفیف بن ندارد</a></li>
                                                 {{--@elseif(!Auth::check())--}}
                                                     {{--<li style="text-align: center;"><a class="bg-yellow bg-font-yellow" href="{{route("login")}}">برای دیدن تخفیف بن وارد شوید</a> </li>--}}
                                                 @endif
                                                 @if(session()->has("adminOrder_id"))
                                                     <li>
-                                                        <a href="javascript:;" > قیمت تمام شده
+                                                        <a href="javascript:"> قیمت تمام شده
                                                             <span  style="width: 53%;height: 100% ;text-align: center" id="customerPrice" value=""></span>
                                                         </a>
                                                     </li>
                                                 @else
                                                     <li>
-                                                        <a href="javascript:;" > قیمت برای شما
+                                                        <a href="javascript:"> قیمت برای شما
                                                             <span  style="width: 53%;height: 100% ;text-align: center" id="customerPrice"></span>
                                                         </a>
                                                     </li>
@@ -178,85 +188,98 @@
                                             @else
                                                 @if($product->enable || (Auth::check() && Auth::user()->can(Config::get('constants.ORDER_ANY_THING')) ) )
                                                     @if($product->isFree && isset($isProductExistInOrder) && $isProductExistInOrder)
-                                                        <a href="javascript:;" class="btn btn-lg default col-md-12 col-xs-12 col-sm-12 font-red">موجود در سبد</a>
+                                                        <a href="javascript:"
+                                                           class="btn btn-lg default col-md-12 col-xs-12 col-sm-12 font-red">موجود
+                                                            در سبد</a>
                                                     @else
                                                         <button type="submit" id="orderButton1" class="btn btn-lg green col-md-12 col-xs-12 col-sm-12" ><i class="fa fa-cart-plus"></i>افزودن به سبد</button>
                                                     @endif
                                                 @else
-                                                    <a href="javascript:;" class="btn btn-lg default col-md-12 col-xs-12 col-sm-12 font-red">@if($product->id==183) این محصول رایگان است @else این محصول غیرفعال است@endif</a>
+                                                    <a href="javascript:"
+                                                       class="btn btn-lg default col-md-12 col-xs-12 col-sm-12 font-red">@if($product->id==183)
+                                                            این محصول رایگان است @else این محصول غیرفعال است@endif</a>
                                                 @endif
                                             @endif
 
                                         </ul>
                                     </div>
 
-                                    <div class="col-md-4">
-                                            @if(in_array($productType ,[Config::get("constants.PRODUCT_TYPE_SIMPLE") , Config::get("constants.PRODUCT_TYPE_CONFIGURABLE")]))
-                                                @if(isset($simpleInfoAttributes) && !$simpleInfoAttributes->isEmpty())
-                                                    <div class="portlet sale-summary">
-                                                        <div class="portlet-title">
-                                                            <div class="caption font-red sbold">ویژگی ها</div>
-                                                        </div>
-                                                        <div class="portlet-body">
-                                                            <ul class="list-unstyled">
-                                                                @foreach($simpleInfoAttributes as $key => $simpleInfoAttribute)
-                                                                    <li>
-                                                                        <span class="sale-info"> {{$key}}
-                                                                            <i class="fa fa-img-up"></i>
-                                                                            </span>
-                                                                        @foreach($simpleInfoAttribute as $key => $info)
-                                                                            <span class="sale-num bold"> @if(count($simpleInfoAttribute)>1 && $key < (sizeof($simpleInfoAttribute)-1)) , @endif {{$info["name"]}}</span>
-                                                                            @if(isset($info["type"]) && strcmp($info["type"],"information") != 0 )<input type="hidden" value="{{$info["value"]}}" name="attribute[]">@endif
-                                                                        @endforeach
-                                                                    </li>
-                                                                @endforeach
-                                                            </ul>
-                                                        </div>
+                                <div class="col-md-8">
+                                    <div class="col-md-6">
+                                        @if(in_array($productType ,[Config::get("constants.PRODUCT_TYPE_SIMPLE") , Config::get("constants.PRODUCT_TYPE_CONFIGURABLE")]))
+                                            @if(isset($simpleInfoAttributes) && !$simpleInfoAttributes->isEmpty())
+                                                <div class="portlet sale-summary">
+                                                    <div class="portlet-title">
+                                                        <div class="caption font-red sbold">ویژگی ها</div>
                                                     </div>
-                                                @endif
-                                            @elseif(in_array($productType ,[Config::get("constants.PRODUCT_TYPE_SELECTABLE")]))
-                                                @if(isset($simpleInfoAttributes) && !$simpleInfoAttributes->isEmpty() ||
-                                                     isset($checkboxInfoAttributes) && !$checkboxInfoAttributes->isEmpty())
-                                                    <div class="portlet sale-summary">
-                                                        <div class="portlet-title">
-                                                            <div class="caption font-red sbold">ویژگی ها</div>
-                                                        </div>
-                                                        <div class="portlet-body">
-                                                            <ul class="list-unstyled">
-                                                                @foreach($simpleInfoAttributes as $key => $simpleInfoAttribute)
-                                                                    <li>
-                                                                        <span class="sale-info"> {{$key}}
-                                                                            <i class="fa fa-img-up"></i>
-                                                                            </span>
-                                                                        @foreach($simpleInfoAttribute as $key => $info)
-                                                                            <span class="sale-num bold"> @if(count($simpleInfoAttribute)>1 && $key < (sizeof($simpleInfoAttribute)-1)) , @endif {{$info["name"]}}</span>
-                                                                            @if(isset($info["type"]) && strcmp($info["type"],"information") != 0 )<input type="hidden" value="{{$info["value"]}}" name="attribute[]">@endif
-                                                                        @endforeach
-                                                                    </li>
-                                                                @endforeach
-                                                                @if(isset($checkboxInfoAttributes) && !$checkboxInfoAttributes->isEmpty())
-                                                                    <li style="margin: 0% 5% 0% 5%">
-                                                                        <div class="form-group">
-                                                                            <div class="input-group">
-                                                                                <div class="icheck-list">
-                                                                                    @foreach($checkboxInfoAttributes as $checkboxArray)
-                                                                                        @foreach($checkboxArray as $info)
-                                                                                            <label>
-                                                                                                {!! Form::checkbox('', null, null, ['class' => 'attribute icheck' , 'data-checkbox'=>'icheckbox_square-blue', 'checked' , 'disabled' ]) !!}{{$info["index"]}}
-                                                                                            </label>
-                                                                                        @endforeach
+                                                    <div class="portlet-body">
+                                                        <ul class="list-unstyled">
+                                                            @foreach($simpleInfoAttributes as $key => $simpleInfoAttribute)
+                                                                <li>
+                                                                            <span class="sale-info"> {{$key}}
+                                                                                <i class="fa fa-img-up"></i>
+                                                                                </span>
+                                                                    @foreach($simpleInfoAttribute as $key => $info)
+                                                                        <span class="sale-num bold"> @if(count($simpleInfoAttribute)>1 && $key < (sizeof($simpleInfoAttribute)-1))
+                                                                                , @endif {{$info["name"]}}</span>
+                                                                        @if(isset($info["type"]) && strcmp($info["type"],"information") != 0 )
+                                                                            <input type="hidden"
+                                                                                   value="{{$info["value"]}}"
+                                                                                   name="attribute[]">@endif
+                                                                    @endforeach
+                                                                </li>
+                                                            @endforeach
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        @elseif(in_array($productType ,[Config::get("constants.PRODUCT_TYPE_SELECTABLE")]))
+                                            @if(isset($simpleInfoAttributes) && !$simpleInfoAttributes->isEmpty() ||
+                                                 isset($checkboxInfoAttributes) && !$checkboxInfoAttributes->isEmpty())
+                                                <div class="portlet sale-summary">
+                                                    <div class="portlet-title">
+                                                        <div class="caption font-red sbold">ویژگی ها</div>
+                                                    </div>
+                                                    <div class="portlet-body">
+                                                        <ul class="list-unstyled">
+                                                            @foreach($simpleInfoAttributes as $key => $simpleInfoAttribute)
+                                                                <li>
+                                                                            <span class="sale-info"> {{$key}}
+                                                                                <i class="fa fa-img-up"></i>
+                                                                                </span>
+                                                                    @foreach($simpleInfoAttribute as $key => $info)
+                                                                        <span class="sale-num bold"> @if(count($simpleInfoAttribute)>1 && $key < (sizeof($simpleInfoAttribute)-1))
+                                                                                , @endif {{$info["name"]}}</span>
+                                                                        @if(isset($info["type"]) && strcmp($info["type"],"information") != 0 )
+                                                                            <input type="hidden"
+                                                                                   value="{{$info["value"]}}"
+                                                                                   name="attribute[]">@endif
+                                                                    @endforeach
+                                                                </li>
+                                                            @endforeach
+                                                            @if(isset($checkboxInfoAttributes) && !$checkboxInfoAttributes->isEmpty())
+                                                                <li style="margin: 0% 5% 0% 5%">
+                                                                    <div class="form-group">
+                                                                        <div class="input-group">
+                                                                            <div class="icheck-list">
+                                                                                @foreach($checkboxInfoAttributes as $checkboxArray)
+                                                                                    @foreach($checkboxArray as $info)
+                                                                                        <label>
+                                                                                            {!! Form::checkbox('', null, null, ['class' => 'attribute icheck' , 'data-checkbox'=>'icheckbox_square-blue', 'checked' , 'disabled' ]) !!}{{$info["index"]}}
+                                                                                        </label>
                                                                                     @endforeach
-                                                                                </div>
+                                                                                @endforeach
                                                                             </div>
                                                                         </div>
-                                                                    </li>
-                                                                @endif
-                                                            </ul>
-                                                        </div>
+                                                                    </div>
+                                                                </li>
+                                                            @endif
+                                                        </ul>
                                                     </div>
-                                                @endif
+                                                </div>
                                             @endif
-
+                                        @endif
+                                        @if(isset($productIntroVideo))
                                             @if(isset($productSamplePhotos) && $productSamplePhotos->isNotEmpty())
                                                 <div class="portlet sale-summary">
                                                     <div class="portlet-title">
@@ -264,44 +287,57 @@
                                                     </div>
                                                     <div class="portlet-body" style="padding: 0px">
                                                         <div class="portfolio-content portfolio-2">
-                                                        <div id="js-grid-mosaic2" class="cbp cbp-l-grid-mosaic">
-                                                            @foreach($productSamplePhotos as $samplePhoto)
-                                                                <div class="cbp-item">
-                                                                    <a href="{{ route('image', ['category'=>'4','w'=>'1400' , 'h'=>'2000' ,  'filename' =>  $samplePhoto->file ]) }}" class="cbp-caption cbp-lightbox" data-title="@if(isset($samplePhoto->title[0])) {{$samplePhoto->title}} @else نمونه عکس {{$product->name}} @endif<br>@if(isset($samplePhoto->description[0])) {{$samplePhoto->description}} @endif">
-                                                                        <div class="cbp-caption-defaultWrap">
-                                                                            <img src="{{ route('image', ['category'=>'4','w'=>'100' , 'h'=>'135' ,  'filename' =>  $samplePhoto->file ]) }}" alt="@if(isset($samplePhoto->title[0])) {{$samplePhoto->title}} @else نمونه عکس {{$product->name}} @endif" > </div>
-                                                                        <div class="cbp-caption-activeWrap">
-                                                                            <div class="cbp-l-caption-alignCenter">
-                                                                                <div class="cbp-l-caption-body">
-                                                                                    <div class="cbp-l-caption-title" style="font-size: medium">@if(isset($samplePhoto->title[0])) {{$samplePhoto->title}} @endif</div>
-                                                                                    <div class="cbp-l-caption-desc" style="font-size: 12px">@if(isset($samplePhoto->description[0])) {{$samplePhoto->description}} @endif</div>
+                                                            <div id="js-grid-mosaic2" class="cbp cbp-l-grid-mosaic">
+                                                                @foreach($productSamplePhotos as $samplePhoto)
+                                                                    <div class="cbp-item">
+                                                                        <a href="{{ route('image', ['category'=>'4','w'=>'1400' , 'h'=>'2000' ,  'filename' =>  $samplePhoto->file ]) }}"
+                                                                           class="cbp-caption cbp-lightbox"
+                                                                           data-title="@if(isset($samplePhoto->title[0])) {{$samplePhoto->title}} @else نمونه عکس {{$product->name}} @endif<br>@if(isset($samplePhoto->description[0])) {{$samplePhoto->description}} @endif">
+                                                                            <div class="cbp-caption-defaultWrap">
+                                                                                <img src="{{ route('image', ['category'=>'4','w'=>'100' , 'h'=>'135' ,  'filename' =>  $samplePhoto->file ]) }}"
+                                                                                     alt="@if(isset($samplePhoto->title[0])) {{$samplePhoto->title}} @else نمونه عکس {{$product->name}} @endif">
+                                                                            </div>
+                                                                            <div class="cbp-caption-activeWrap">
+                                                                                <div class="cbp-l-caption-alignCenter">
+                                                                                    <div class="cbp-l-caption-body">
+                                                                                        <div class="cbp-l-caption-title"
+                                                                                             style="font-size: medium">@if(isset($samplePhoto->title[0])) {{$samplePhoto->title}} @endif</div>
+                                                                                        <div class="cbp-l-caption-desc"
+                                                                                             style="font-size: 12px">@if(isset($samplePhoto->description[0])) {{$samplePhoto->description}} @endif</div>
+                                                                                    </div>
                                                                                 </div>
                                                                             </div>
-                                                                        </div>
-                                                                    </a>
-                                                                </div>
-                                                            @endforeach
+                                                                        </a>
+                                                                    </div>
+                                                                @endforeach
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    </div>
                                                 </div>
                                             @endif
+                                        @endif
 
-                                            @if(strlen($product->file)>0)
-                                                <div class="portlet sale-summary">
-                                                    <div class="portlet-title">
-                                                        <div class="caption font-red sbold">دانلود کاتالوگ</div>
-                                                    </div>
-                                                    <div class="portlet-body" style="text-align: center; padding-bottom: 6%;">
-                                                        <a target="_blank" href="{{action("HomeController@download" , ["content"=>"کاتالوگ محصول","fileName"=>$product->file ])}}" class="icon-btn" style="background-color: #8E44AD ; "><div><i class="fa fa-download fa-3x bg-font-purple-sharp" aria-hidden="true"></i></div></a>
-                                                    </div>
+                                        @if(strlen($product->file)>0)
+                                            <div class="portlet sale-summary">
+                                                <div class="portlet-title">
+                                                    <div class="caption font-red sbold">دانلود کاتالوگ</div>
                                                 </div>
-                                            @endif
+                                                <div class="portlet-body"
+                                                     style="text-align: center; padding-bottom: 6%;">
+                                                    <a target="_blank"
+                                                       href="{{action("HomeController@download" , ["content"=>"کاتالوگ محصول","fileName"=>$product->file ])}}"
+                                                       class="icon-btn" style="background-color: #8E44AD ; ">
+                                                        <div><i class="fa fa-download fa-3x bg-font-purple-sharp"
+                                                                aria-hidden="true"></i></div>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                    @endif
 
                                     <!--end row-->
                                     </div>
 
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         @if(isset($product->introVideo))
                                             <div class="portlet solid light grey-mint">
                                                 <div class="portlet-title">
@@ -315,17 +351,61 @@
                                                 </div>
                                             </div>
                                             {{--<video controls style="width: 100%" preload="none">--}}
+                                        @else
+                                            @if(isset($productSamplePhotos) && $productSamplePhotos->isNotEmpty())
+                                                <div class="portlet sale-summary">
+                                                    <div class="portlet-title">
+                                                        <div class="caption font-red sbold">نمونه صفحات جزوه</div>
+                                                    </div>
+                                                    <div class="portlet-body" style="padding: 0px">
+                                                        <div class="portfolio-content portfolio-2">
+                                                            <div id="js-grid-mosaic2" class="cbp cbp-l-grid-mosaic">
+                                                                @foreach($productSamplePhotos as $samplePhoto)
+                                                                    <div class="cbp-item">
+                                                                        <a href="{{ route('image', ['category'=>'4','w'=>'1400' , 'h'=>'2000' ,  'filename' =>  $samplePhoto->file ]) }}"
+                                                                           class="cbp-caption cbp-lightbox"
+                                                                           data-title="@if(isset($samplePhoto->title[0])) {{$samplePhoto->title}} @else نمونه عکس {{$product->name}} @endif<br>@if(isset($samplePhoto->description[0])) {{$samplePhoto->description}} @endif">
+                                                                            <div class="cbp-caption-defaultWrap">
+                                                                                <img src="{{ route('image', ['category'=>'4','w'=>'100' , 'h'=>'135' ,  'filename' =>  $samplePhoto->file ]) }}"
+                                                                                     alt="@if(isset($samplePhoto->title[0])) {{$samplePhoto->title}} @else نمونه عکس {{$product->name}} @endif">
+                                                                            </div>
+                                                                            <div class="cbp-caption-activeWrap">
+                                                                                <div class="cbp-l-caption-alignCenter">
+                                                                                    <div class="cbp-l-caption-body">
+                                                                                        <div class="cbp-l-caption-title"
+                                                                                             style="font-size: medium">@if(isset($samplePhoto->title[0])) {{$samplePhoto->title}} @endif</div>
+                                                                                        <div class="cbp-l-caption-desc"
+                                                                                             style="font-size: 12px">@if(isset($samplePhoto->description[0])) {{$samplePhoto->description}} @endif</div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </a>
+                                                                    </div>
+                                                                @endforeach
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
                                         @endif
                                         @if(isset($giftCollection) && $giftCollection->isNotEmpty())
                                             <div class="portlet sale-summary">
                                                 <div class="portlet-title">
-                                                    <div class="caption font-red sbold"><img src="/assets/extra/gift-box.png" width="25"> محصولات هدیه</div>
+                                                    <div class="caption font-red sbold"><img
+                                                                src="/assets/extra/gift-box.png" width="25"> محصولات
+                                                        هدیه
+                                                    </div>
                                                 </div>
                                                 <div class="portlet-body" style="padding: 0px">
                                                     <ul class="list-unstyled">
                                                         @foreach($giftCollection as $gift)
                                                             <li class="text-center bold">
-                                                                <a target="_blank" href="{{(strlen($gift->makeProductLink())>0)?$gift->makeProductLink() :"#" }}">{{$gift->name}}</a>
+                                                                @if(strlen($gift["link"])>0)
+                                                                    <a target="_blank"
+                                                                       href="{{$gift["link"]}}">{{$gift["product"]->name}}</a>
+                                                                @else
+                                                                    {{$gift["product"]->name}}
+                                                                @endif
                                                             </li>
                                                         @endforeach
                                                     </ul>
@@ -333,124 +413,131 @@
                                             </div>
                                         @endif
                                     </div>
+                                    <div class="col-md-8 profile-info" id="productShortDescription">
+                                        {!! $product->shortDescription !!}
+                                    </div>
                                     @if(in_array($productType ,[Config::get("constants.PRODUCT_TYPE_SELECTABLE")]))
                                         <div class="col-md-8">
-                                                    @if((isset($extraSelectCollection) && !$extraSelectCollection->isEmpty()) ||
-                                                    (isset($extraCheckboxCollection) && !$extraCheckboxCollection->isEmpty()))
-                                                        <div class="portlet sale-summary">
-                                                            <div class="portlet-title">
-                                                                <div class="caption font-red sbold">انتخاب خدمت</div>
-                                                            </div>
-                                                            <div class="portlet-body">
-                                                                <ul class="list-unstyled">
-                                                                    @if((isset($extraSelectCollection) && !$extraSelectCollection->isEmpty()) ||
-                                                                     (isset($extraCheckboxCollection) && !$extraCheckboxCollection->isEmpty()))
-                                                                        <li style="margin: 0% 5% 0% 5%">
-                                                                            @include("product.partials.extraSelectCollection")
-                                                                            @include("product.partials.extraCheckboxCollection" , ["withExtraCost"])
-                                                                        </li>
-                                                                    @endif
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    @endif
-                                                    <div class="portlet sale-summary">
-                                                        <div class="portlet-title">
-                                                            <div class="caption font-red sbold">انتخاب محصول</div>
-                                                        </div>
-                                                        <div class="portlet-body">
-                                                            <ul class="list-unstyled">
-                                                                @if(isset($product->children) && !empty($product->children))
-                                                                    @each('product.partials.showChildren', $product->children, 'product')
-                                                                @endif
-                                                            </ul>
-                                                        </div>
-
+                                            @if((isset($extraSelectCollection) && !$extraSelectCollection->isEmpty()) ||
+                                            (isset($extraCheckboxCollection) && !$extraCheckboxCollection->isEmpty()))
+                                                <div class="portlet sale-summary">
+                                                    <div class="portlet-title">
+                                                        <div class="caption font-red sbold">انتخاب خدمت</div>
                                                     </div>
+                                                    <div class="portlet-body">
+                                                        <ul class="list-unstyled">
+                                                            @if((isset($extraSelectCollection) && !$extraSelectCollection->isEmpty()) ||
+                                                             (isset($extraCheckboxCollection) && !$extraCheckboxCollection->isEmpty()))
+                                                                <li style="margin: 0% 5% 0% 5%">
+                                                                    @include("product.partials.extraSelectCollection")
+                                                                    @include("product.partials.extraCheckboxCollection" , ["withExtraCost"])
+                                                                </li>
+                                                            @endif
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                            <div class="portlet sale-summary">
+                                                <div class="portlet-title">
+                                                    <div class="caption font-red sbold">انتخاب محصول</div>
+                                                </div>
+                                                <div class="portlet-body">
+                                                    <ul class="list-unstyled">
+                                                        @if(isset($product->children) && !empty($product->children))
+                                                            @each('product.partials.showChildren', $product->children, 'product')
+                                                        @endif
+                                                    </ul>
+                                                </div>
+
+                                            </div>
                                         </div>
                                     @endif
 
                                     @if(in_array($productType ,[Config::get("constants.PRODUCT_TYPE_SIMPLE") , Config::get("constants.PRODUCT_TYPE_CONFIGURABLE")]))
                                         <div class="col-md-8">
-                                                @if(isset($selectCollection) && !$selectCollection->isEmpty() ||
-                                                isset($extraSelectCollection) && !$extraSelectCollection->isEmpty() ||
-                                                isset($extraCheckboxCollection) && !$extraCheckboxCollection->isEmpty() ||
-                                                isset($groupedCheckboxCollection) && !$groupedCheckboxCollection->isEmpty() ||
-                                                isset($checkboxInfoAttributes) && !$checkboxInfoAttributes->isEmpty())
-                                                    <div class="portlet sale-summary">
-                                                        <div class="portlet-title">
-                                                            <div class="caption font-red sbold">انتخاب گزینه ها</div>
-                                                        </div>
-                                                        <div class="portlet-body">
-                                                            <ul class="list-unstyled">
-                                                                @if(isset($checkboxInfoAttributes) && !$checkboxInfoAttributes->isEmpty())
-                                                                    <li style="margin: 0% 5% 0% 5%">
-                                                                        <div class="form-group">
-                                                                            <div class="input-group">
-                                                                                <div class="icheck-list">
-                                                                                    @foreach($checkboxInfoAttributes as $checkboxArray)
-                                                                                        @foreach($checkboxArray as $info)
-                                                                                            <label>
-                                                                                                {!! Form::checkbox('', null, null, ['class' => 'attribute icheck' , 'data-checkbox'=>'icheckbox_square-blue', 'checked' , 'disabled' ]) !!}{{$info["index"]}}
-                                                                                            </label>
-                                                                                        @endforeach
+                                            @if(isset($selectCollection) && !$selectCollection->isEmpty() ||
+                                            isset($extraSelectCollection) && !$extraSelectCollection->isEmpty() ||
+                                            isset($extraCheckboxCollection) && !$extraCheckboxCollection->isEmpty() ||
+                                            isset($groupedCheckboxCollection) && !$groupedCheckboxCollection->isEmpty() ||
+                                            isset($checkboxInfoAttributes) && !$checkboxInfoAttributes->isEmpty())
+                                                <div class="portlet sale-summary">
+                                                    <div class="portlet-title">
+                                                        <div class="caption font-red sbold">انتخاب گزینه ها</div>
+                                                    </div>
+                                                    <div class="portlet-body">
+                                                        <ul class="list-unstyled">
+                                                            @if(isset($checkboxInfoAttributes) && !$checkboxInfoAttributes->isEmpty())
+                                                                <li style="margin: 0% 5% 0% 5%">
+                                                                    <div class="form-group">
+                                                                        <div class="input-group">
+                                                                            <div class="icheck-list">
+                                                                                @foreach($checkboxInfoAttributes as $checkboxArray)
+                                                                                    @foreach($checkboxArray as $info)
+                                                                                        <label>
+                                                                                            {!! Form::checkbox('', null, null, ['class' => 'attribute icheck' , 'data-checkbox'=>'icheckbox_square-blue', 'checked' , 'disabled' ]) !!}{{$info["index"]}}
+                                                                                        </label>
                                                                                     @endforeach
-                                                                                </div>
+                                                                                @endforeach
                                                                             </div>
                                                                         </div>
-                                                                    </li>
-                                                                @endif
-                                                                @if((isset($selectCollection) && !$selectCollection->isEmpty()) ||
-                                                                     (isset($groupedCheckboxCollection) && !$groupedCheckboxCollection->isEmpty()))
-                                                                    <li style="margin: 0% 5% 0% 5%">
-                                                                        @if(isset($selectCollection))
-                                                                            @foreach($selectCollection as $index => $select)
+                                                                    </div>
+                                                                </li>
+                                                            @endif
+                                                            @if((isset($selectCollection) && !$selectCollection->isEmpty()) ||
+                                                                 (isset($groupedCheckboxCollection) && !$groupedCheckboxCollection->isEmpty()))
+                                                                <li style="margin: 0% 5% 0% 5%">
+                                                                    @if(isset($selectCollection))
+                                                                        @foreach($selectCollection as $index => $select)
 
-                                                                                <span class="sale-info"> {{ $index }}
-                                                                                    <i class="fa fa-img-up"></i>
-                                                                                                                </span>
-                                                                                {!! Form::select('attribute[]',$select,null,['class' => 'form-control attribute']) !!}
+                                                                            <span class="sale-info"> {{ $index }}
+                                                                                <i class="fa fa-img-up"></i>
+                                                                                                                    </span>
+                                                                            {!! Form::select('attribute[]',$select,null,['class' => 'form-control attribute']) !!}
 
-                                                                            @endforeach
-                                                                        @endif
-                                                                        @if(isset($groupedCheckboxCollection))
-                                                                            <div class="input-group">
-                                                                                <div class="icheck-list">
-                                                                                    @foreach($groupedCheckboxCollection as $checkboxArray)
-                                                                                        @foreach($checkboxArray as $index => $checkbox)
-                                                                                            <label>
-                                                                                                {!! Form::checkbox('attribute[]', $index, null, ['class' => 'attribute icheck' , 'data-checkbox'=>'icheckbox_square-blue']) !!}
-                                                                                                @if(isset($checkbox["index"])) {{$checkbox["index"]}} @endif
-                                                                                                @if(isset($checkbox["extraCost"][0])) (<span style="@if(isset($checkbox["extraCostWithDiscount"][0])) text-decoration: line-through;  @endif">{{$checkbox["extraCost"]}}</span>
-                                                                                                    @if(isset($checkbox["extraCostWithDiscount"][0]))
-                                                                                                            <span class="bg-font-dark" style="background: #ff7272;    padding: 0px 5px 0px 5px;">برای شما </span><span class="bg-font-dark" style="background: #ee5053;    padding: 0px 5px 0px 5px;">{{$checkbox["extraCostWithDiscount"]}}</span>
-                                                                                                    @endif
+                                                                        @endforeach
+                                                                    @endif
+                                                                    @if(isset($groupedCheckboxCollection))
+                                                                        <div class="input-group">
+                                                                            <div class="icheck-list">
+                                                                                @foreach($groupedCheckboxCollection as $checkboxArray)
+                                                                                    @foreach($checkboxArray as $index => $checkbox)
+                                                                                        <label>
+                                                                                            {!! Form::checkbox('attribute[]', $index, null, ['class' => 'attribute icheck' , 'data-checkbox'=>'icheckbox_square-blue']) !!}
+                                                                                            @if(isset($checkbox["index"])) {{$checkbox["index"]}} @endif
+                                                                                            @if(isset($checkbox["extraCost"][0]))
+                                                                                                (
+                                                                                                <span style="@if(isset($checkbox["extraCostWithDiscount"][0])) text-decoration: line-through;  @endif">{{$checkbox["extraCost"]}}</span>
+                                                                                                @if(isset($checkbox["extraCostWithDiscount"][0]))
+                                                                                                    <span class="bg-font-dark"
+                                                                                                          style="background: #ff7272;    padding: 0px 5px 0px 5px;">برای شما </span>
+                                                                                                    <span class="bg-font-dark"
+                                                                                                          style="background: #ee5053;    padding: 0px 5px 0px 5px;">{{$checkbox["extraCostWithDiscount"]}}</span>
                                                                                                 @endif
-                                                                                            </label>
-                                                                                        @endforeach
+                                                                                            @endif
+                                                                                        </label>
                                                                                     @endforeach
-                                                                                </div>
+                                                                                @endforeach
                                                                             </div>
-                                                                        @endif
-                                                                    </li>
-                                                                @endif
-                                                                @if((isset($extraSelectCollection) && !$extraSelectCollection->isEmpty()) ||
-                                                                 (isset($extraCheckboxCollection) && !$extraCheckboxCollection->isEmpty()))
-                                                                    <li style="margin: 0% 5% 0% 5%">
-                                                                        @include("product.partials.extraSelectCollection")
-                                                                        @include("product.partials.extraCheckboxCollection")
-                                                                    </li>
-                                                                @endif
-                                                            </ul>
-                                                        </div>
+                                                                        </div>
+                                                                    @endif
+                                                                </li>
+                                                            @endif
+                                                            @if((isset($extraSelectCollection) && !$extraSelectCollection->isEmpty()) ||
+                                                             (isset($extraCheckboxCollection) && !$extraCheckboxCollection->isEmpty()))
+                                                                <li style="margin: 0% 5% 0% 5%">
+                                                                    @include("product.partials.extraSelectCollection")
+                                                                    @include("product.partials.extraCheckboxCollection")
+                                                                </li>
+                                                            @endif
+                                                        </ul>
                                                     </div>
-                                                @endif
+                                                </div>
+                                            @endif
                                         </div>
                                     @endif
-                                    <div class="col-md-8 profile-info" id="productShortDescription">
-                                        {!! $product->shortDescription !!}
+
+                                    {!! Form::hidden('product_id',$product->id) !!}
                                     </div>
-                                {!! Form::hidden('product_id',$product->id) !!}
                                 {!! Form::close() !!}
                             </div>
                             @if(isset($productSeenCount) && $productSeenCount > 0)
@@ -528,8 +615,13 @@
                                     @endif
                                     @if($productAllFiles->isNotEmpty())
                                         <li>
-                                            <a href="#tab_15_3" data-toggle="tab" class="bold  uppercase {{(!isset($product->longDescription) || strlen($product->longDescription) <= 0)?"active":""}}">دانلود فیلم ها
-                                                و جزوات</a>
+                                            <a href="#tab_15_3" data-toggle="tab"
+                                               class="bold  uppercase {{(!isset($product->longDescription) || strlen($product->longDescription) <= 0)?"active":""}}">
+                                                دانلود @if($productsWithVideo->isNotEmpty())فیلم
+                                                ها @endif @if($productsWithVideo->isNotEmpty() && $productsWithPamphlet->isNotEmpty())
+                                                    و @endif @if($productsWithPamphlet->isNotEmpty()) جزوه های @endif
+                                                محصول
+                                            </a>
                                         </li>
                                     @endif
                                     @if(isset($descriptionIframe) && $descriptionIframe)
@@ -684,7 +776,7 @@
                             @if(!isset($descriptionIframe) || !$descriptionIframe)
                                 @if($product->enable)
                                     @if($product->isFree && isset($isProductExistInOrder) && $isProductExistInOrder)
-                                        <a href="javascript:;"
+                                        <a href="javascript:"
                                            class="btn btn-lg default col-md-12 col-xs-12 col-sm-12 font-red">موجود در
                                             سبد</a>
                                     @else
@@ -694,7 +786,7 @@
                                         </button>
                                     @endif
                                 @else
-                                    <a href="javascript:;"
+                                    <a href="javascript:"
                                        class="btn btn-lg default col-md-12 col-xs-12 col-sm-12 font-red"> این محصول غیر
                                         فعال است</a>
                                 @endif

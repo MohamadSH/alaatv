@@ -21,7 +21,7 @@
                     @endforeach
                 @endif @if((int)$product->basePrice > 0) : {{number_format((int)$product->basePrice)}} تومان@endif
             @endif
-            @if(isset($product->pivot->description[0])) <span class="help-block font-red bold" style="font-size: smaller;text-align: justify">{{$product->pivot->description}}</span>@endif
+                @if(isset($product->pivot->description[0])) <span class="help-block font-red bold" style="font-size: smaller;text-align: justify">{{$product->pivot->description}}</span>@endif
     </label>
 
 </li>

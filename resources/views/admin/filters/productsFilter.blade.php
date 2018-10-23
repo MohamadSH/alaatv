@@ -88,6 +88,18 @@
             @endif
             @foreach($product->children as $child)
                     <option value="{{$child->id}}" @if(isset($defaultProductFilter) && in_array($child->id, $defaultProductFilter)) selected="selected" @endif>{{$child->name}}</option>
+                    @if($child->hasChildren())
+                        @foreach($product->children as $grandChild)
+                            <option value="{{$grandChild->id}}"
+                                    @if(isset($defaultProductFilter) && in_array($grandChild->id, $defaultProductFilter)) selected="selected" @endif>{{$grandChild->name}}</option>
+                            @if($child->hasChildren())
+                                @foreach($grandChild->children as $grandgrandChild)
+                                    <option value="{{$grandgrandChild->id}}"
+                                            @if(isset($defaultProductFilter) && in_array($grandgrandChild->id, $defaultProductFilter)) selected="selected" @endif>{{$grandgrandChild->name}}</option>
+                                @endforeach
+                            @endif
+                        @endforeach
+                    @endif
             @endforeach
         @endforeach
     </select>
