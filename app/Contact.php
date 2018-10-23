@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Traits\Helper;
+use App\Traits\DateTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -40,8 +41,13 @@ class Contact extends Model
 {
     use SoftDeletes;
     use Helper;
+    use DateTrait;
     /**      * The attributes that should be mutated to dates.        */
-    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
 
     /**
      * @var array
@@ -71,27 +77,5 @@ class Contact extends Model
     public function phones()
     {
         return $this->hasMany('\App\Phone');
-    }
-
-    /**
-     * @return string
-     * Converting Created_at field to jalali
-     */
-    public function CreatedAt_Jalali()
-    {
-        $explodedDateTime = explode(" ", $this->created_at);
-//        $explodedTime = $explodedDateTime[1] ;
-        return $this->convertDate($this->created_at, "toJalali");
-    }
-
-    /**
-     * @return string
-     * Converting Updated_at field to jalali
-     */
-    public function UpdatedAt_Jalali()
-    {
-        $explodedDateTime = explode(" ", $this->updated_at);
-//        $explodedTime = $explodedDateTime[1] ;
-        return $this->convertDate($this->updated_at, "toJalali");
     }
 }
