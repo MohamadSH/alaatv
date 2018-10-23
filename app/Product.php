@@ -3,20 +3,12 @@
 namespace App;
 
 use App\Classes\{Advertisable, Pricing\Alaa\AlaaCashier, SEO\SeoInterface, SEO\SeoMetaTagsGenerator, Taggable};
-use App\Traits\{
-    APIRequestCommon, CharacterCommon, Helper, ProductCommon
-};
-use Illuminate\Database\{
-    Eloquent\Model, Eloquent\SoftDeletes, Eloquent\Builder
-};
-
-use Illuminate\Support\{
-    Collection, Facades\Cache, Facades\Config
-};
-use Auth;
+use App\Collection\ProductCollection;
+use App\Traits\{APIRequestCommon, CharacterCommon, Helper, ProductCommon};
 use Carbon\Carbon;
 use Exception;
-use App\Collection\ProductCollection;
+use Illuminate\Database\{Eloquent\Builder, Eloquent\Model, Eloquent\SoftDeletes};
+use Illuminate\Support\{Collection, Facades\Cache, Facades\Config};
 
 /**
  * App\Product
@@ -169,18 +161,7 @@ class Product extends Model implements Advertisable, Taggable , SeoInterface
 
         return Cache::tags('bon')->remember($key, config("constants.CACHE_60"), function () use ($user) {
             $cost = new AlaaCashier($this, $user);
-
             return json_decode($cost->getPrice());
-
-            /*
-            return [
-                "cost" => $cost, //mablaghe kham
-                "productDiscount" => $discountPercentage,
-                "bonDiscount" => $bonDiscountPercentage,
-                "productDiscountAmount" => $discountAmount,
-                "customerDiscount" => $customerTotalDiscount, // percentage
-                "CustomerCost" => (int)$customerCost
-            ];*/
         });
     }
 

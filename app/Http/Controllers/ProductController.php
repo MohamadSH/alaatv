@@ -24,16 +24,9 @@ use App\{Attribute,
     Traits\UserSeenTrait,
     User,
     Websitesetting};
-use Illuminate\Http\{Request, Response};
 use Illuminate\Foundation\Http\{FormRequest};
-use Illuminate\Support\{Collection,
-    Facades\Auth,
-    Facades\Cache,
-    Facades\Config,
-    Facades\File,
-    Facades\Input,
-    Facades\Storage,
-    Facades\View};
+use Illuminate\Http\{Request, Response};
+use Illuminate\Support\{Collection, Facades\Cache, Facades\File, Facades\Input, Facades\Storage, Facades\View};
 
 class ProductController extends Controller
 {
@@ -526,11 +519,12 @@ class ProductController extends Controller
      */
     public function refreshPrice(Request $request, Product $product)
     {
+
         $mainAttributeValues = $request->get("mainAttributeValues");
         $selectedSubProductIds = $request->get("products");
         $extraAttributeValues = $request->get("extraAttributeValues");
         $user = $this->getCustomer($request);
-
+//        return (new AlaaCashier($product,$user))->getPrice();
 
 
         $key = "product:refreshPrice:Product"
@@ -589,6 +583,7 @@ class ProductController extends Controller
                     $cost += $costArray["cost"];
                     $costForCustomer += $costArray["CustomerCost"];
                 }
+                //TODO:// age mahsool tamumshod ya yaft nashod chi?
 //            elseif (!isset($simpleProduct))
 //            {
 //                $result = ['productWarning' => "محصول مورد نظر یافت نشد"];
@@ -605,10 +600,7 @@ class ProductController extends Controller
 
             $result = array_add($result , 'totalExtraCost' , $totalExtraCost);
 
-            $result = json_encode($result, JSON_UNESCAPED_UNICODE);
-
-
-            return $result;
+            return json_encode($result, JSON_UNESCAPED_UNICODE);
         });
 
     }

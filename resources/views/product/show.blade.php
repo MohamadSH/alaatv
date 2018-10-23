@@ -617,10 +617,7 @@
                                         <li>
                                             <a href="#tab_15_3" data-toggle="tab"
                                                class="bold  uppercase {{(!isset($product->longDescription) || strlen($product->longDescription) <= 0)?"active":""}}">
-                                                دانلود @if($productsWithVideo->isNotEmpty())فیلم
-                                                ها @endif @if($productsWithVideo->isNotEmpty() && $productsWithPamphlet->isNotEmpty())
-                                                    و @endif @if($productsWithPamphlet->isNotEmpty()) جزوه های @endif
-                                                محصول
+                                                فیلم ها و یا جزواتی که بعد از خرید محصول دریافت می کنید
                                             </a>
                                         </li>
                                     @endif
