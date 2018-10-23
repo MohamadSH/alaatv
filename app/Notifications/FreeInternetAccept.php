@@ -2,7 +2,7 @@
 
 namespace App\Notifications;
 
-use App\Broadcasting\MedianaChannel;
+use App\Broadcasting\MedianaPatternChannel;
 use App\Classes\sms\MedianaMessage;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
@@ -15,7 +15,7 @@ class FreeInternetAccept extends Notification implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    const MEDIANA_PATTERN_CODE_FREE_INTERNET_ACCEPT = 0;
+    const MEDIANA_PATTERN_CODE_FREE_INTERNET_ACCEPT = 812;
     public $timeout = 120;
 
     /**
@@ -28,7 +28,7 @@ class FreeInternetAccept extends Notification implements ShouldQueue
     {
         $this->user = $notifiable;
         return [
-            MedianaChannel::class,
+            MedianaPatternChannel::class,
             'mail'
         ];
 
