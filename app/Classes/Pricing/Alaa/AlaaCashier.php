@@ -13,8 +13,8 @@ use App\Classes\Abstracts\Cashier;
 
 class AlaaCashier Extends Cashier
 {
-    public function getPrice() :array {
-        return [
+    public function getPrice() :string {
+        $priceInfo =  [
             'price' => $this->calculatePrice(),
             'info' => [
                 'productCost' => $this->rawCost,
@@ -26,7 +26,8 @@ class AlaaCashier Extends Cashier
                             'info' => [
                                 $this->bonName => [
                                     'number' => $this->totalBonNumber,
-                                    'percentage' => $this->bonDiscountPercentage
+                                    'perUnitPercentage' => $this->bonDiscountPercentage,
+                                    'totalPercentage' => $this->getBonTotalPercentage(),
                                 ]
                             ]
                         ],
@@ -41,6 +42,8 @@ class AlaaCashier Extends Cashier
                 ]
             ],
         ];
+
+        return json_encode($priceInfo);
     }
 
 }

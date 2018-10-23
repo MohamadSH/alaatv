@@ -150,8 +150,7 @@
                                                 <li>
                                                     <a href="javascript:;" > تخفیف
                                                         <span class="bg-yellow-gold" id="discount"  style="width: 53%;height: 100% ;text-align: center">
-                                                                    {{--{{number_format( ($discount/100) * $cost)}}تومان--}}
-                                                            </span>
+                                                        </span>
                                                     </a>
                                                 </li>
                                                 @if(Auth::check() && $product->bons->where("name" , Config::get("constants.BON1"))->where("pivot.discount",">","0")->where("isEnable" , 1)->isEmpty())
@@ -909,35 +908,14 @@
 @section("extraJS")
     <script src="/js/extraJS/jQueryNumberFormat/jquery.number.min.js" type="text/javascript"></script>
     @if(!isset($descriptionIframe) || !$descriptionIframe)
+        <script src="/js/extraJS/product-show-v13.js" type="text/javascript"></script>
         <script>
-            var liveNationalServer ="http://185.49.84.107:9092/index3.html";
-            var liveYoutubeServer ="https://www.youtube.com/embed/Tjxys29-bKM";
+            $(".isDefault").trigger('change').attr('checked', 'checked');
             @if( $productType == Config::get("constants.PRODUCT_TYPE_SELECTABLE"))
                      @if(isset($childrenArray) && count($childrenArray)==1 && empty($childrenArray[0]["children"]))
-                        $(".product").trigger('change').attr('checked', 'checked');
-                    @endif
-                var refreshPriceType= "productSelection";
-            @else
-                var refreshPriceType= "mainAttribute";
+                            $(".product").trigger('change').attr('checked', 'checked');
+                     @endif
             @endif
-            $(".isDefault").trigger('change').attr('checked', 'checked');
-            @if($product->id == Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_ROOT"))
-                $(":checkbox[value="+{{Config::get('constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_DEFAULT')}}+"]").iCheck('disable');
-                $( ".children_"+{{Config::get('constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_ALLTOGHETHER')}} ).append( "<input type='hidden' name='products[]' value='"+{{Config::get('constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_DEFAULT')}}+"'>" );
-            @endif
-
-            $("#liveFrame").attr("src", liveNationalServer);
-            $(".chooseServerButton").click(function () {
-                if($(this).attr("id") == "nationalServer")
-                {
-                    $("#liveFrame").attr("src", liveNationalServer);
-                }else if($(this).attr("id") == "youtubeServer")
-                {
-                    $("#liveFrame").attr("src", liveYoutubeServer);
-                }
-                // $(".chooseServer").hide();
-                // $("#liveFrame").fadeIn(3000);
-            });
 
             (function($, window, document, undefined) {
                 'use strict';
@@ -1004,8 +982,24 @@
                 });
 
             })(jQuery, window, document);
+
+            /*
+                  LIVE PRODUCT SNPPET
+          var liveNationalServer ="http://185.49.84.107:9092/index3.html";
+          var liveYoutubeServer ="https://www.youtube.com/embed/Tjxys29-bKM";
+          $("#liveFrame").attr("src", liveNationalServer);
+          $(".chooseServerButton").click(function () {
+              if($(this).attr("id") == "nationalServer")
+              {
+                  $("#liveFrame").attr("src", liveNationalServer);
+              }else if($(this).attr("id") == "youtubeServer")
+              {
+                  $("#liveFrame").attr("src", liveYoutubeServer);
+              }
+              // $(".chooseServer").hide();
+              // $("#liveFrame").fadeIn(3000);
+          });*/
         </script>
-        <script src="/js/extraJS/product-show-v13.js" type="text/javascript"></script>
 
     @endif
 @endsection

@@ -152,4 +152,63 @@ trait ProductCommon
         return $otherProductChunks;
     }
 
+    /**
+     * @param Product $product
+     * @param $extraAttributeValues
+     * @return int|float
+     */
+    public function productExtraCostFromAttributes(Product $product, $extraAttributeValues)
+    {
+        $key = "product:productExtraCostFromAttributes:Product"
+                . "\\"
+                . $product->cacheKey()
+                ."\\extraAttributeValues:"
+                .(isset($extraAttributeValues) ? implode("", $extraAttributeValues) : "-");
+        return Cache::tags('bon')->remember($key, config("constants.CACHE_60"), function () use ($product , $extraAttributeValues) {
+            $totalExtraCost = 0 ;
+            foreach ($extraAttributeValues as $attributevalueId) {
+                $extraCost = 0;
+                $attributevalue = $product->attributevalues->where("id", $attributevalueId)->first();
+
+                if (isset($attributevalue) && isset($attributevalue->pivot->extraCost))
+                    $extraCost = $attributevalue->pivot->extraCost;
+
+                $totalExtraCost += $extraCost;
+            }
+            return $totalExtraCost;
+        });
+
+    }
+
+    /**
+     * Finds product intended child based on specified attribute values
+     *
+     * @param Product $product
+     * @param array $mainAttributeValues
+     * @return Product
+     */
+    public function findProductChildViaAttributes(Product $product, array $mainAttributeValues) :?Product
+    {
+        foreach ($product->children as $child)
+        {
+            $childAttributevalues = $child->attributevalues;
+            $flag = true;
+            if (isset($mainAttributeValues)) foreach ($mainAttributeValues as $attributevalue)
+            {
+                if (!$childAttributevalues->contains($attributevalue))
+                {
+                    $flag = false;
+                    break;
+                }
+            }
+
+            if ($flag && $childAttributevalues->count() == count($mainAttributeValues))
+            {
+                $simpleProduct = $child;
+                break;
+            }
+        }
+        return $simpleProduct;
+    }
+
 }

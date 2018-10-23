@@ -119,6 +119,7 @@ class ProductController extends Controller
      *
      * @param array $files
      * @return array
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     private function storeCatalogOfProduct(Product &$product, array $files): array
     {
@@ -141,6 +142,7 @@ class ProductController extends Controller
      *
      * @param array $files
      * @return array
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     private function storeImageOfProduct(Product &$product, array $files): array
     {
@@ -171,6 +173,7 @@ class ProductController extends Controller
      * @param FormRequest $request
      * @param Product $product
      * @return void
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     private function fillProductFromRequest(FormRequest $request, Product &$product): void
     {
@@ -193,14 +196,16 @@ class ProductController extends Controller
     }
 
     /**
-     * @return User|null
+     * Gets intended customer user account
+     *
+     * @return User
      */
-    private function getCustomer(): User
+    private function getCustomer(Request $request): ?User
     {
-        if (session()->has("adminOrder_id")) $user = User::find(session()->get("customer_id")); elseif (Auth::check()) $user = Auth::user();
+        if (session()->has("adminOrder_id"))
+           return User::find(session()->get("customer_id"));
+            return $request->user();
 
-        if (isset($user)) return $user; else
-            return null;
     }
 
     /**
@@ -316,6 +321,7 @@ class ProductController extends Controller
      *
      * @param InsertProductRequest $request
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     public function store(InsertProductRequest $request)
     {
@@ -351,7 +357,6 @@ class ProductController extends Controller
 
         $descriptionIframe = $request->partial;
         $productType = $product->producttype->id;
-        $user = $this->getCustomer();
 
         $allAttributeCollection = $product->getAllAttributes();
         $this->addSimpleInfoAttributes($product); // ToDo : $product["simpleInfoAttributes"] has not been used
@@ -362,9 +367,6 @@ class ProductController extends Controller
         $simpleInfoAttributes = $allAttributeCollection["simpleInfoAttributes"];
         $checkboxInfoAttributes = $allAttributeCollection["checkboxInfoAttributes"];
 
-        $costArray = $product->calculatePayablePrice($user);
-        $discount = $costArray["customerDiscount"];
-        $cost = $costArray["cost"];
         $otherProductChunks = $this->makeOtherProducts($product, 4);
 
         $productSeenCount = $this->getSeenCountFromRequest($request);
@@ -376,7 +378,22 @@ class ProductController extends Controller
         $giftCollection = $product->getGifts();
 
 
-        return view("product.show", compact("product", "productType", "productSeenCount", "otherProductChunks", 'discount', 'cost', "selectCollection", "simpleInfoAttributes", "checkboxInfoAttributes", "extraSelectCollection", "extraCheckboxCollection", 'groupedCheckboxCollection', "descriptionIframe", "productAllFiles", "exclusiveOtherProducts", "productSamplePhotos", "giftCollection"));
+        return view("product.show", compact("product",
+                                                        "productType",
+                                                            "productSeenCount",
+                                                            "otherProductChunks",
+                                                            "selectCollection",
+                                                            "simpleInfoAttributes",
+                                                            "checkboxInfoAttributes",
+                                                            "extraSelectCollection",
+                                                            "extraCheckboxCollection",
+                                                            'groupedCheckboxCollection',
+                                                            "descriptionIframe",
+                                                            "productAllFiles",
+                                                            "exclusiveOtherProducts",
+                                                            "productSamplePhotos",
+                                                            "giftCollection"
+                                                        ));
     }
 
     /**
@@ -451,6 +468,7 @@ class ProductController extends Controller
      * @param EditProductRequest $request
      * @param  \app\Product $product
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     public function update(EditProductRequest $request, Product $product)
     {
@@ -508,93 +526,88 @@ class ProductController extends Controller
      */
     public function refreshPrice(Request $request, Product $product)
     {
-        $productIds = $request->get("products");
-        $inputType = $request->get("type");
-        $attributevalues = $request->get("attributeState");
-        $user = $this->getCustomer();
-
-        $key = "product:refreshPrice:Type" . $inputType . "\\" . $product->cacheKey() . "-user" . (isset($user) && !is_null($user) ? $user->cacheKey() : "") . "\\attrValues:" . (isset($attributevalues) ? implode("", $attributevalues) : "-") . "products:" . (isset($productIds) ? implode("", $productIds) : "");
+        $mainAttributeValues = $request->get("mainAttributeValues");
+        $selectedSubProductIds = $request->get("products");
+        $extraAttributeValues = $request->get("extraAttributeValues");
+        $user = $this->getCustomer($request);
 
 
-        return Cache::tags('bon')->remember($key, config("constants.CACHE_60"), function () use ($inputType, $attributevalues, $user, $product, $productIds) {
-            switch ($inputType) {
-                case  "extraAttribute":
-                    $totalExtraCost = 0;
-                    if (isset($attributevalues)) {
-                        foreach ($attributevalues as $attributevalueId) {
 
-                            $attributevalue = $product->attributevalues->where("id", $attributevalueId)->first();
-                            if (isset($attributevalue->pivot->extraCost)) $extraCost = $attributevalue->pivot->extraCost; else
-                                $extraCost = 0;
-                            $totalExtraCost = $totalExtraCost + $extraCost;
-                        }
-                    }
-                    $result = json_encode(['totalExtraCost' => $totalExtraCost], JSON_UNESCAPED_UNICODE);
+        $key = "product:refreshPrice:Product"
+                                        . "\\"
+                                        . $product->cacheKey()
+                                        . "-user"
+                                        .(isset($user) && !is_null($user) ? $user->cacheKey() : "")
+                                        ."\\mainAttributeValues:"
+                                        .(isset($mainAttributeValues) ? implode("", $mainAttributeValues) : "-")
+                                        ."\\subProducts:"
+                                        .(isset($selectedSubProductIds) ? implode("", $selectedSubProductIds) : "-")
+                                        ."\\extraAttributeValues:"
+                                        .(isset($extraAttributeValues) ? implode("", $extraAttributeValues) : "-");
+
+        return Cache::tags('bon')->remember($key, config("constants.CACHE_60"), function () use ($product , $user , $mainAttributeValues , $selectedSubProductIds , $extraAttributeValues) {
+            $productType = optional($product->producttype)->id;
+            $intendedProducts = collect();
+            switch ($productType)
+            {
+                case config("constants.PRODUCT_TYPE_SIMPLE"):
+                    $intendedProducts->push($product);
                     break;
-                case "mainAttribute":
-                    if ($product->hasChildren()) {
-                        // find the child ( selected by user )
-                        foreach ($product->children as $child) {
-                            $childAttributevalues = $child->attributevalues;
-                            $flag = true;
-                            foreach ($attributevalues as $attributevalue) {
-                                if (!$childAttributevalues->contains($attributevalue)) {
-                                    $flag = false;
-                                    break;
-                                }
-                            }
-                            if ($flag && $childAttributevalues->count() == count($attributevalues)) {
-                                $simpleProduct = $child;
-                                break;
-                            }
-                        }
-                    } else {
-
-                        $simpleProduct = $product;
+                case config("constants.PRODUCT_TYPE_CONFIGURABLE"):
+                    $simpleProduct = $this->findProductChildViaAttributes($product, $mainAttributeValues);
+                    if (isset($simpleProduct))
+                    {
+                        $intendedProducts->push($simpleProduct);
                     }
-                    if (isset($simpleProduct) && (!isset($simpleProduct->quantity) || $simpleProduct->quantity > 0)) {
-                        if (isset($user)) $costArray = $simpleProduct->calculatePayablePrice($user); else
-                            $costArray = $simpleProduct->calculatePayablePrice();
-                        $cost = $costArray["cost"];
-                        $costForCustomer = $costArray['CustomerCost'];
-                        $result = json_encode(["cost" => $cost, "costForCustomer" => $costForCustomer], JSON_UNESCAPED_UNICODE);
-                    } elseif (!isset($simpleProduct)) {
-                        $result = json_encode(['productWarning' => "محصول مورد نظر یافت نشد"], JSON_UNESCAPED_UNICODE);
-                    } else
-                        $result = json_encode(['productWarning' => "محصول مورد نظر تمام شده است"], JSON_UNESCAPED_UNICODE);
-                    break;
-                case "productSelection":
 
-                    $cost = 0;
-                    $costForCustomer = 0;
-                    if (isset($productIds)) {
-                        $productIds = Product::whereIn('id', $productIds)->get();
-                        $productIds->load('parents');
-                        foreach ($productIds as $key => $simpleProduct) {
-                            if ($simpleProduct->hasParents()) {
-                                if ($productIds->contains($simpleProduct->parents->first())) {
-                                    $productIds->forget($key);
-                                    $childrenArray = $simpleProduct->children;
-                                    foreach ($childrenArray as $child) {
-                                        $ck = $productIds->search($child);
-                                        $productIds->forget($ck);
-                                    }
-                                }
-                            }
-                        }
-                        foreach ($productIds as $simpleProduct) {
-                            if (isset($user)) $costArray = $simpleProduct->calculatePayablePrice($user); else
-                                $costArray = $simpleProduct->calculatePayablePrice();
-                            $cost += $costArray["cost"];
-                            $costForCustomer += $costArray["CustomerCost"];
-                        }
-                    }
-                    $result = json_encode(["cost" => $cost, "costForCustomer" => $costForCustomer], JSON_UNESCAPED_UNICODE);
                     break;
-                default:
-                    $result = [];
+                case config("constants.PRODUCT_TYPE_SELECTABLE"):
+                    if(isset($selectedSubProductIds))
+                    {
+                        $selectedSubProducts = Product::whereIn('id', $selectedSubProductIds)->get();
+                        $selectedSubProducts->load('parents');
+                        $selectedSubProducts->keepOnlyParents();
+
+                        $intendedProducts = $selectedSubProducts;
+                    }
+                    break;
+                default :
                     break;
             }
+
+            $cost = 0;
+            $costForCustomer = 0;
+            foreach ($intendedProducts as $product)
+            {
+                if($product->isInStock())
+                {
+                    if (isset($user))
+                        $costArray = $product->calculatePayablePrice($user);
+                    else
+                        $costArray = $product->calculatePayablePrice();
+
+                    $cost += $costArray["cost"];
+                    $costForCustomer += $costArray["CustomerCost"];
+                }
+//            elseif (!isset($simpleProduct))
+//            {
+//                $result = ['productWarning' => "محصول مورد نظر یافت نشد"];
+//            } else
+//            {
+//                $result = ['productWarning' => "محصول مورد نظر تمام شده است"];
+//            }
+            }
+            $result = ["cost" => $cost, "costForCustomer" => $costForCustomer];
+
+            $totalExtraCost = 0;
+            if(is_array($extraAttributeValues))
+                $totalExtraCost = $this->productExtraCostFromAttributes($product, $extraAttributeValues);
+
+            $result = array_add($result , 'totalExtraCost' , $totalExtraCost);
+
+            $result = json_encode($result, JSON_UNESCAPED_UNICODE);
+
+
             return $result;
         });
 
@@ -1092,4 +1105,5 @@ class ProductController extends Controller
             return $this->response->setStatusCode(503)->setContent(["message" => "خطا در کپی از اطلاعات پایه ای محصول . لطفا دوباره اقدام نمایید"]);
         }
     }
+
 }
