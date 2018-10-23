@@ -51,7 +51,12 @@ abstract class Cashier
     */
 
 
-    abstract public function getPrice() :array ;
+    /**
+     * Returns price info array
+     *
+     * @return array
+     */
+    abstract public function getPrice() :string ;
 
     /*
     |--------------------------------------------------------------------------
@@ -83,11 +88,26 @@ abstract class Cashier
      * @return mixed
      */
     protected function getBonDiscount() :int {
-        return ($this->bonDiscountPercentage * $this->totalBonNumber) * $this->rawCost;
+        return $this->getBonTotalPercentage() * $this->rawCost;
     }
 
+    /**
+     * Obtains total discount product percentage based on product discount
+     *
+     * @return int
+     */
     protected function getProductDiscount() :int {
         return max($this->discountPercentage * $this->rawCost , $this->discountCashAmount);
+    }
+
+    /**
+     * Obtains total bon percentage
+     *
+     * @return float|int
+     */
+    protected function getBonTotalPercentage()
+    {
+        return $this->bonDiscountPercentage * $this->totalBonNumber;
     }
 
     /*

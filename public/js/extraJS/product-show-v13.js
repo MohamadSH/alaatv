@@ -1,53 +1,48 @@
-/**
- * Set token for ajax request
- */
 $(function() {
+    /**
+     * Set token for ajax request
+     */
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': window.Laravel.csrfToken,
         }
     });
-    refreshPrice(refreshPriceType);
-    $(".extraAttribute").change();
 });
 
-function refreshPrice(type) {
-    var staticAttributeState = $('input[type=hidden][name="attribute[]"]').map(function(){
-        if ($(this).val())
-            return $(this).val();
-    }).get();
-    var selectAttributeState = $('select[name="attribute[]"]').map(function(){
-        if ($(this).val())
-            return $(this).val();
-    }).get();
-    var checkboxAttributeState = $('input[type=checkbox][name="attribute[]"]:checked').map(function(){
-        if ($(this).val())
-            return $(this).val();
-    }).get();
+var totalExtraCost = 0 ;
+var bonDiscount = 0 ;
+var productDiscount = 0 ;
+// var productShortDescription = "";
+// var productLongDescription = "";
 
-    // var productsState = $('input[type=checkbox][name="products[]"]:enabled:checked').map(function(){
-    //     if ($(this).val())
-    //         return $(this).val();
-    // }).get();
-    var productsState = $('input[type=checkbox][name="products[]"]:checked').map(function(){
-        if ($(this).val())
-            return $(this).val();
-    }).get();
-
-
-    var c = $.merge($.merge(selectAttributeState , checkboxAttributeState) , staticAttributeState);
-    var attributeState= c.filter(function (item, pos) {return c.indexOf(item) == pos});
+function refreshPrice(mainAttributeState , productState , extraAttributeState) {
     var product = $("input[name=product_id]").val();
     $.ajax({
         type: "POST",
         url: "/refreshPrice/"+product,
-        data: { attributeState: attributeState , products:productsState ,  type:type  },
+        data: { mainAttributeValues: mainAttributeState , products: productState , extraAttributeValues: extraAttributeState },
         statusCode: {
             //The status for when action was successful
             200: function (response) {
 
+                // console.log(response);
                 response = $.parseJSON(response);
                 // console.log(response);
+
+                totalExtraCost = parseInt(response.totalExtraCost);
+
+                var currentPrice = parseInt($("#price").attr("value"));
+                var currentCustomerPrice = parseInt($("#customerPrice").attr("value"));
+                if(currentPrice>0)
+                {
+                    if(currentPrice+parseInt(totalExtraCost) === 0 )
+                        $("#price").text("پس از انتخاب محصول");
+                    else
+                        $("#price").text(currentPrice+parseInt(totalExtraCost)).number(true).append("تومان");
+
+                    $("#customerPrice").text(currentCustomerPrice+parseInt(totalExtraCost)).number(true).append("تومان");
+                }
+
                 if(response.productWarning)
                 {
                     toastr["warning"]("توجه!",response.productWarning);
@@ -73,6 +68,7 @@ function refreshPrice(type) {
                     // $("#productLongDescription").html(productLongDescription);
                 }
 
+
             },
             //The status for when the user is not authorized for making the request
             403: function (response) {
@@ -83,7 +79,7 @@ function refreshPrice(type) {
                 window.location.replace("/403");
             },
             404: function (response) {
-                // window.location.replace("/404");
+                window.location.replace("/404");
             },
             //The status for when form data is not valid
             422: function (response) {
@@ -102,20 +98,29 @@ function refreshPrice(type) {
     });
 }
 
-var totalExtraCost = 0 ;
-var bonDiscount = 0 ;
-var productDiscount = 0 ;
-// var productShortDescription = "";
-// var productLongDescription = "";
-$(document).on("ifChanged", ".attribute", function (){
-    refreshPrice("mainAttribute");
-});
+function getMainAttributeStates()
+{
+    var staticAttributeState = $('input[type=hidden][name="attribute[]"]').map(function(){
+        if ($(this).val())
+            return $(this).val();
+    }).get();
+    var selectAttributeState = $('select[name="attribute[]"]').map(function(){
+        if ($(this).val())
+            return $(this).val();
+    }).get();
+    var checkboxAttributeState = $('input[type=checkbox][name="attribute[]"]:checked').map(function(){
+        if ($(this).val())
+            return $(this).val();
+    }).get();
 
-$(document).on("change", ".attribute", function (){
-    refreshPrice("mainAttribute");
-});
+    var c = $.merge($.merge(selectAttributeState , checkboxAttributeState) , staticAttributeState);
+    var attributeState= c.filter(function (item, pos) {return c.indexOf(item) == pos});
 
-$(document).on("ifChanged", ".extraAttribute", function (){
+    return attributeState ;
+}
+
+function getExtraAttributeStates()
+{
     var selectAttributeState = $('select[name="extraAttribute[]"]').map(function(){
         if ($(this).val())
             return $(this).val();
@@ -130,119 +135,38 @@ $(document).on("ifChanged", ".extraAttribute", function (){
     var c = $.merge(selectAttributeState , checkboxAttributeState);
     var attributeState= c.filter(function (item, pos) {return c.indexOf(item) == pos});
 
-    var product = $("input[name=product_id]").val();
+    return attributeState;
+}
 
-    $.ajax({
-        type: "POST",
-        url: "/refreshPrice/"+product,
-        data: { attributeState: attributeState  , type:"extraAttribute" },
-        statusCode: {
-            //The status for when action was successful
-            200: function (response) {
-                // console.log(response);
-                response = $.parseJSON(response);
-                // console.log(response);
-                totalExtraCost = parseInt(response.totalExtraCost);
+function getProductSelectValues()
+{
+    // var productsState = $('input[type=checkbox][name="products[]"]:enabled:checked').map(function(){
+    //     if ($(this).val())
+    //         return $(this).val();
+    // }).get();
+    var productsState = $('input[type=checkbox][name="products[]"]:checked').map(function(){
+        if ($(this).val())
+            return $(this).val();
+    }).get();
+    return productsState;
+}
 
-                var currentPrice = parseInt($("#price").attr("value"));
-                var currentCustomerPrice = parseInt($("#customerPrice").attr("value"));
-                if(currentPrice>0){
-                    if(currentPrice+parseInt(totalExtraCost) === 0 ) $("#price").text("پس از انتخاب محصول");
-                    else $("#price").text(currentPrice+parseInt(totalExtraCost)).number(true).append("تومان");
-                    $("#customerPrice").text(currentCustomerPrice+parseInt(totalExtraCost)).number(true).append("تومان");
-                }
-            },
-            //The status for when the user is not authorized for making the request
-            403: function (response) {
-                window.location.replace("/403");
-            },
-            //The status for when the user is not authorized for making the request
-            401: function (response) {
-                window.location.replace("/403");
-            },
-            404: function (response) {
-                window.location.replace("/404");
-            },
-            //The status for when form data is not valid
-            422: function (response) {
-                console.log(response);
-            },
-            //The status for when there is error php code
-            500: function (response) {
-                console.log(response.responseText);
-//                            toastr["error"]("خطای برنامه!", "پیام سیستم");
-            },
-            //The status for when there is error php code
-            503: function (response) {
-//                            toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
-            }
-        },
-    });
+$(document).on("ifChanged change", ".attribute", function ()
+{
+    var attributeState = getMainAttributeStates();
+    refreshPrice(attributeState , [] ,[]);
 });
 
-$(document).on("change", ".extraAttribute", function (){
-    var selectAttributeState = $('select[name="extraAttribute[]"]').map(function(){
-        if ($(this).val())
-            return $(this).val();
-    }).get();
+$(document).on("ifChanged change", ".extraAttribute", function ()
+{
+    var attributeState = getExtraAttributeStates();
+    refreshPrice([] , [] , attributeState);
+});
 
-    var checkboxAttributeState = $('input[type=checkbox][name="extraAttribute[]"]:checked').map(function(){
-        if ($(this).val())
-            return $(this).val();
-    }).get();
-
-
-    var c = $.merge(selectAttributeState , checkboxAttributeState);
-    var attributeState= c.filter(function (item, pos) {return c.indexOf(item) == pos});
-
-    var product = $("input[name=product_id]").val();
-
-    $.ajax({
-        type: "POST",
-        url: "/refreshPrice/"+product,
-        data: { attributeState: attributeState  , type:"extraAttribute" },
-        statusCode: {
-            //The status for when action was successful
-            200: function (response) {
-                // console.log(response);
-                response = $.parseJSON(response);
-                // console.log(response);
-                totalExtraCost = parseInt(response.totalExtraCost);
-
-                var currentPrice = parseInt($("#price").attr("value"));
-                var currentCustomerPrice = parseInt($("#customerPrice").attr("value"));
-                if(currentPrice>0){
-                    if(currentPrice+parseInt(totalExtraCost) === 0 ) $("#price").text("پس از انتخاب محصول");
-                    else $("#price").text(currentPrice+parseInt(totalExtraCost)).number(true).append("تومان");
-                    $("#customerPrice").text(currentCustomerPrice+parseInt(totalExtraCost)).number(true).append("تومان");
-                }
-            },
-            //The status for when the user is not authorized for making the request
-            403: function (response) {
-                window.location.replace("/403");
-            },
-            //The status for when the user is not authorized for making the request
-            401: function (response) {
-                window.location.replace("/403");
-            },
-            404: function (response) {
-                window.location.replace("/404");
-            },
-            //The status for when form data is not valid
-            422: function (response) {
-                console.log(response);
-            },
-            //The status for when there is error php code
-            500: function (response) {
-                console.log(response.responseText);
-//                            toastr["error"]("خطای برنامه!", "پیام سیستم");
-            },
-            //The status for when there is error php code
-            503: function (response) {
-//                            toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
-            }
-        },
-    });
+$(document).on("ifChanged switchChange.bootstrapSwitch", ".product", function ()
+{
+    var productsState = getProductSelectValues() ;
+    refreshPrice([] , productsState , []);
 });
 
 function childClick( explicitClassName) {
@@ -366,14 +290,13 @@ $(document).on("switchChange.bootstrapSwitch", "[class^='hasParent']", function 
     childClick(className);
 });
 
-$(document).on("ifChanged", ".product", function () {
-    refreshPrice("productSelection");
-});
-
-$(document).on("switchChange.bootstrapSwitch", ".product", function () {
-    refreshPrice("productSelection");
-});
-
 $(document).on("click", "#orderButton2", function (){
     $( "#orderButton1" ).trigger("click");
+});
+
+$(document).ready(function () {
+    var mainAttributeStates = getMainAttributeStates();
+    var productSelectStates = getProductSelectValues();
+    var extraAttributeStates = getExtraAttributeStates();
+    refreshPrice(mainAttributeStates, productSelectStates, extraAttributeStates);
 });
