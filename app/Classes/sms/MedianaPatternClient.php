@@ -5,12 +5,16 @@
  * Date: 2018-04-23
  * Time: 21:24
  */
+
 namespace App\Classes\sms;
+
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Exception\GuzzleException;
 
-class MedianaClient implements SmsSenderClient
+
+class MedianaPatternClient implements SmsSenderClient
 {
+
     /**
      * The SMS Number to send the message from.
      *
@@ -42,7 +46,7 @@ class MedianaClient implements SmsSenderClient
      */
     protected $http;
 
-    public function __construct(HttpClient $http, $userName, $password, $number , $url)
+    public function __construct(HttpClient $http, $userName, $password, $number, $url)
     {
         $this->number = $number;
         $this->userName = $userName;
@@ -50,36 +54,38 @@ class MedianaClient implements SmsSenderClient
         $this->password = $password;
         $this->url = $url;
 
+
     }
 
     /**
      * @param array $params
      *
      * @return array
-     * @throws GuzzleException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function send(array $params)
     {
         $url = $this->url;
         $base = [
-            'uname' => $this->userName,
+            'user' => $this->userName,
             'pass' => $this->password,
-            'from' => $this->number,
+            'fromNum' => $this->number,
         ];
-        if(isset($params['from']))
+        if (isset($params['from']))
             unset($base["from"]);
 
         $params = array_merge($base, $params);
-//        dd($params);
-
         try {
-            $response = $this->http->request('POST', $url, [
-                'form_params' => $params
+            $response = $this->http->post( $url, [
+                'headers' => [
+                    'Accept'     => 'application/json',
+                    'User-Agent' => 'GuzzleHttp/6.3.3 curl/7.52.1'
+                ],
+                'json' => $params,
             ]);
         } catch (GuzzleException $e) {
             throw $e;
         }
-
         return json_decode((string)$response->getBody(), true);
     }
 }

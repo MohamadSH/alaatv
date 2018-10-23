@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Traits\CharacterCommon;
 use Illuminate\Foundation\Http\FormRequest;
+use Auth;
 
 class ContactUsFormRequest extends FormRequest
 {
@@ -25,12 +26,28 @@ class ContactUsFormRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'email'=>'email',
-            'fullName' => 'required|max:255',
-            'phone' => 'numeric',
-            'message' => 'required',
-        ];
+        $rules =
+            [
+                'email'=>'sometimes|nullable|email',
+                'fullName' => 'required|max:255',
+                'phone' => 'sometimes|nullable|numeric',
+                'message' => 'required',
+                'g-recaptcha-response' => 'required|recaptcha',
+            ];
+
+//        if($this->request->has("securityQuestion"))
+//        {
+//            $securityQuestion = $this->request->get("securityQuestion");
+//            if($securityQuestion != "هفت")
+//            {
+//                $rules = array_add($rules , "g-recaptcha-response" , "required") ;
+//            }
+//        }
+//        else
+//        {
+//            $rules = array_add($rules , "g-recaptcha-response" , "required") ;
+//        }
+        return $rules;
     }
 
     public function prepareForValidation()

@@ -430,7 +430,7 @@ class AppServiceProvider extends ServiceProvider
                             $sections->push(
                                 [
                                     "name"=>$section,
-                                    "displayName" => "نظام قدیم",
+                                    "displayName" => "کنکور نظام قدیم",
                                     "descriptiveName" => "کنکور نظام قدیم" ,
                                     "lessons" => $lessons ,
                                     "tags" => [
@@ -751,7 +751,7 @@ class AppServiceProvider extends ServiceProvider
                             $sections->push(
                                 [
                                     "name"=>$section,
-                                    "displayName" => "نظام جدید",
+                                    "displayName" => "کنکور نظام جدید",
                                     "descriptiveName" => "کنکور نظام جدید" ,
                                     "lessons" => $lessons ,
                                     "tags" => [

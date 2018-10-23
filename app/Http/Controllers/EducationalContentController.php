@@ -613,19 +613,23 @@ class EducationalContentController extends Controller
 
             $sideBarMode = "closed";
 
-            if ($educationalContent->contentsets->isNotEmpty() && $educationalContent->contentsets->first()->id != 199)
+            $contentset = $educationalContent->contentsets->first();
+            if (!is_null($contentset) && $contentset->id != 199)
                 $adItems = Educationalcontent::whereHas("contentsets", function ($q) {
                     $q->where("id", 199);
                 })
                     ->where("enable", 1)
                     ->orderBy("order")
                     ->get();
-
+            if(Auth::check() && Auth::user()->hasRole("admin"))
+            {
+//                dd($educationalContent->pivot->order);
+            }
             $videosWithSameSetL = null;
             $videosWithSameSetR = null;
             if(isset($videosWithSameSet) && $videosWithSameSet instanceof Collection)
-                [$videosWithSameSetL , $videosWithSameSetR] = $videosWithSameSet->partition(function ($i) use($educationalContent) {
-                    return $i["content"]->id < $educationalContent->id;
+                [$videosWithSameSetL , $videosWithSameSetR] = $videosWithSameSet->partition(function ($i) use($contentset) {
+                    return $i["session"] < $contentset->pivot->order;
                 });
             return view("educationalContent.show", compact("productSeenCount","author","educationalContent", "rootContentType", "childContentType", "contentsWithSameType" , "soonContentsWithSameType" , "educationalContentSet" , "contentsWithSameSet","videosWithSameSet","pamphletsWithSameSet" , "contentSetName" , "videoSources" ,
                 "files" , "tags" , "sideBarMode" , "educationalContentDisplayName" , "sessionNumber" , "fileToShow" , "userCanSeeCounter" , "adItems","videosWithSameSetL","videosWithSameSetR"));

@@ -82,6 +82,13 @@
                                     </a>
                                 </li>
                             @endif
+                            @if(isset($wSetting->socialNetwork->instagram->main->link) && strlen($wSetting->socialNetwork->instagram->main->link) > 0)
+                                <li>
+                                    <a target="_blank" href="{{$wSetting->socialNetwork->instagram->main->link}}">
+                                        <i class="fa fa-instagram"></i>
+                                    </a>
+                                </li>
+                            @endif
                         </ul>
                     </div>
                     <div class="c-section" style="text-align: right">
@@ -114,7 +121,7 @@
                     {!! Form::open(['method' => 'POST','action' => ['HomeController@sendMail']]) !!}
                         <div class="form-group {{ $errors->has('fullName') ? ' has-error' : '' }}">
                             <span style="color:red;">*</span>
-                            <input type="text" name="fullName" placeholder="نام کامل" class="form-control input-md">
+                            <input type="text" name="fullName" value="{{old("fullName")}}" placeholder="نام کامل" class="form-control input-md">
                             @if ($errors->has('fullName'))
                                 <span class="help-block">
                                         <strong>{{ $errors->first('fullName') }}</strong>
@@ -122,7 +129,7 @@
                             @endif
                         </div>
                         <div class="form-group {{ $errors->has('email') ? ' has-error' : '' }}">
-                            <input type="text" name="email" placeholder="ایمیل" class="form-control input-md">
+                            <input type="text" name="email" value="{{old("email")}}" placeholder="ایمیل" class="form-control input-md">
                             @if ($errors->has('email'))
                                 <span class="help-block">
                                     <strong>{{ $errors->first('email') }}</strong>
@@ -130,7 +137,7 @@
                             @endif
                         </div>
                         <div class="form-group {{ $errors->has('phone') ? ' has-error' : '' }}">
-                            <input type="text" name="phone" placeholder="تلفن تماس" class="form-control input-md">
+                            <input type="text" name="phone" value="{{old("phone")}}" placeholder="تلفن تماس" class="form-control input-md">
                             @if ($errors->has('phone'))
                                 <span class="help-block">
                                             <strong>{{ $errors->first('phone') }}</strong>
@@ -140,11 +147,29 @@
 
                         <div class="form-group {{ $errors->has('message') ? ' has-error' : '' }}">
                             <span style="color:red;">*</span>
-                            <textarea rows="8" name="message" placeholder="متن پیام ..." class="form-control input-md"></textarea>
+                            <textarea rows="8" name="message" placeholder="متن پیام ..." class="form-control input-md">{{old("message")}}</textarea>
                             @if ($errors->has('message'))
                                 <span class="help-block">
                                         <strong>{{ $errors->first('message') }}</strong>
                                     </span>
+                            @endif
+                        </div>
+                        {{--<div class="form-group {{ $errors->has('g-recaptcha-response') ? ' has-error' : '' }}">--}}
+                            {{--<span style="color:red;">*</span>--}}
+                            {{--<label for="securityQuestion">سوال امنیتی</label>--}}
+                            {{--<input type="text" name="securityQuestion"  placeholder="حاصل 4+3 چند می شود؟ (جواب را به حروف بنویسید) " class="form-control input-md">--}}
+                            {{--@if ($errors->has('g-recaptcha-response'))--}}
+                                {{--<span class="help-block">--}}
+                                    {{--<strong>{{ $errors->first('g-recaptcha-response') }}</strong>--}}
+                                {{--</span>--}}
+                            {{--@endif--}}
+                        {{--</div>--}}
+                        <div class="form-group {{ $errors->has('g-recaptcha-response') ? ' has-error' : '' }}" >
+                            {!! Recaptcha::render() !!}
+                            @if ($errors->has('g-recaptcha-response'))
+                                <span class="help-block">
+                                <strong>{{ $errors->first('g-recaptcha-response') }}</strong>
+                                </span>
                             @endif
                         </div>
                         <button type="submit" class="btn grey">ارسال</button>

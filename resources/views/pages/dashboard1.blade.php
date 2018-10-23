@@ -317,6 +317,9 @@
             <!-- END Portlet PORTLET-->
         </div>
     </div>
+
+    @include("partials.certificates")
+
     {{--<div class="row">--}}
     {{--<div class="col-md-6" id="consultationColumn" >--}}
     {{--<div class="portlet light portlet-fit">--}}
