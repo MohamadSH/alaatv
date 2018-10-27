@@ -60,6 +60,7 @@ use App\{Assignmentstatus,
     Websitesetting};
 use Auth;
 use Carbon\Carbon;
+use DB;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\{App, Config, File, Input, Route, Storage};
@@ -130,19 +131,8 @@ class HomeController extends Controller
         return $title;
     }*/
 
-    public function debug(Request $request, $id)
+    public function debug(Request $request)
     {
-        /*        return json_encode([
-                    'username' => 'u',
-                    'password' => 'p'
-                ]);*/
-//        dd($ch);
-        dump($id);
-        dump($request->route('ab'));
-        dd("Done!");
-        dd( App::getLocale());
-        $pr = Product::find(181);
-        dd($pr->sample_photos);
         $categories = Category::active()->get()->toTree();
         return view('partials.tree',compact('categories'));
 
