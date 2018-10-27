@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Traits\Helper;
+use App\Traits\DateTrait;
 use App\Traits\ProductCommon;
 use Carbon\Carbon;
 use Iatstuti\Database\Support\CascadeSoftDeletes;
@@ -75,9 +76,14 @@ class Order extends Model
 {
     use SoftDeletes, CascadeSoftDeletes;
     use Helper;
+    use DateTrait;
     protected $cascadeDeletes = ['transactions', 'files'];
     /**      * The attributes that should be mutated to dates.        */
-    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
     use ProductCommon;
 
     /**
@@ -362,27 +368,6 @@ class Order extends Model
         else return $this->successfulTransactions->where('cost', '<', 0)->sum("cost");
     }
 
-    /**
-     * @return string
-     * Converting Created_at field to jalali
-     */
-    public function CreatedAt_Jalali()
-    {
-        $explodedDateTime = explode(" ", $this->created_at);
-//        $explodedTime = $explodedDateTime[1] ;
-        return $this->convertDate($this->created_at, "toJalali");
-    }
-
-    /**
-     * @return string
-     * Converting Updated_at field to jalali
-     */
-    public function UpdatedAt_Jalali()
-    {
-        $explodedDateTime = explode(" ", $this->updated_at);
-//        $explodedTime = $explodedDateTime[1] ;
-        return $this->convertDate($this->updated_at, "toJalali");
-    }
 
     public function CompletedAt_Jalali()
     {

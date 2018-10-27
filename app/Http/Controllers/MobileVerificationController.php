@@ -12,8 +12,8 @@ class MobileVerificationController extends Controller
     | Mobile Verification Controller
     |--------------------------------------------------------------------------
     |
-    | This controller is responsible for handling email verification for any
-    | user that recently registered with the application. Emails may also
+    | This controller is responsible for handling mobile verification for any
+    | user that recently registered with the application. Mobiles may also
     | be re-sent if the user didn't receive the original email message.
     |
     */
@@ -38,7 +38,7 @@ class MobileVerificationController extends Controller
     public function show(Request $request)
     {
         return $request->user()->hasVerifiedMobile()
-            ? redirect()->back()
+            ? back()
             : view('auth.verify');
     }
 
@@ -51,11 +51,12 @@ class MobileVerificationController extends Controller
      */
     public function verify(Request $request, $code)
     {
-        if ($code == $request->user()->getKey() &&
-            $request->user()->markMobileAsVerified()) {
-            event(new MobileVerified($request->user()));
+        $user = $request->user();
+        if ($code == $user->getMobileVerificationCode() &&
+            $user->markMobileAsVerified()) {
+            event(new MobileVerified($user));
         }
-        return redirect()->back()->with('verified', true);
+        return back()->with('verified', true);
     }
 
     /**
@@ -67,7 +68,7 @@ class MobileVerificationController extends Controller
     public function resend(Request $request)
     {
         if ($request->user()->hasVerifiedMobile()) {
-            return redirect()->back();
+            return back();
         }
         $request->user()->sendMobileVerificationNotification();
         return back()->with('resent', true);

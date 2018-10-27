@@ -2,11 +2,15 @@
 
 namespace App\Providers;
 
-use App\Events\MobileVerified;
-use App\Listeners\MobileVerifiedListener;
-use App\Listeners\SendMobileVerificationNotification;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+
+use App\Listeners\MobileVerifiedListener;
+use App\Listeners\FreeInternetAcceptListener;
+
+use Illuminate\Auth\Events\Registered;
+use App\Events\FreeInternetAccept;
+use App\Events\MobileVerified;
+
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -17,10 +21,13 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
         Registered::class => [
-            SendMobileVerificationNotification::class,
+//            SendMobileVerificationNotification::class,
         ],
         MobileVerified::class => [
             MobileVerifiedListener::class
+        ],
+        FreeInternetAccept::class => [
+            FreeInternetAcceptListener::class
         ]
     ];
 

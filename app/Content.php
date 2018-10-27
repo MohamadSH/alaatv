@@ -13,6 +13,7 @@ use App\Collection\ProductCollection;
 use App\Traits\APIRequestCommon;
 use App\Traits\FileCommon;
 use App\Traits\Helper;
+use App\Traits\DateTrait;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
@@ -105,7 +106,8 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface
     use APIRequestCommon;
     use SoftDeletes;
     use Helper;
-
+    use DateTrait;
+    
     /*
     |--------------------------------------------------------------------------
     | Properties
@@ -567,30 +569,6 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface
             'articleModifiedTime' => $this->updated_at,
             'articlePublishedTime' => $this->validSince,
         ];
-    }
-
-    /**
-     * Converts content's created_at to Jalali
-     *
-     * @return string
-     */
-    public function CreatedAt_Jalali(): string
-    {
-        $explodedDateTime = explode(" ", $this->created_at);
-//        $explodedTime = $explodedDateTime[1] ;
-        return $this->convertDate($this->created_at, "toJalali");
-    }
-
-    /**
-     * Converts content's updated_at to Jalali
-     *
-     * @return string
-     */
-    public function UpdatedAt_Jalali(): string
-    {
-        $explodedDateTime = explode(" ", $this->updated_at);
-//        $explodedTime = $explodedDateTime[1] ;
-        return $this->convertDate($this->updated_at, "toJalali");
     }
 
     /**

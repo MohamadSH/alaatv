@@ -23,7 +23,7 @@ class EnsureMobileIsVerified
             ($request->user() instanceof MustVerifyMobileNumber &&
                 !$request->user()->hasVerifiedMobile())) {
             return $request->expectsJson()
-                ? abort(Response::HTTP_FORBIDDEN, 'Your mobile number is not verified.')
+                ? abort(Response::HTTP_FORBIDDEN, \Lang::get('verification.Your mobile number is not verified.'))
                 : Redirect::route('verification.notice');
         }
         return $next($request);

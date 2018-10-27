@@ -4,7 +4,7 @@ namespace App;
 
 use App\Classes\{Advertisable, Pricing\Alaa\AlaaCashier, SEO\SeoInterface, SEO\SeoMetaTagsGenerator, Taggable};
 use App\Collection\ProductCollection;
-use App\Traits\{APIRequestCommon, CharacterCommon, Helper, ProductCommon};
+use App\Traits\{APIRequestCommon, CharacterCommon, Helper, ProductCommon, DateTrait};
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\{Eloquent\Builder, Eloquent\Model, Eloquent\SoftDeletes};
@@ -95,6 +95,7 @@ class Product extends Model implements Advertisable, Taggable , SeoInterface
     use CharacterCommon;
     use Helper;
     use APIRequestCommon;
+    use DateTrait;
 
     /*
     |--------------------------------------------------------------------------
@@ -480,29 +481,6 @@ class Product extends Model implements Advertisable, Taggable , SeoInterface
             return $bons;
         });
 
-    }
-
-    /**
-     * Converts content's created_at to Jalali
-     *
-     * @return string
-     */
-    public function CreatedAt_Jalali(): string
-    {
-        $explodedDateTime = explode(" ", $this->created_at);
-//        $explodedTime = $explodedDateTime[1] ;
-        return $this->convertDate($this->created_at, "toJalali");
-    }
-
-    /**
-     * Converts content's updated_at to Jalali
-     * @return string
-     */
-    public function UpdatedAt_Jalali(): string
-    {
-        $explodedDateTime = explode(" ", $this->updated_at);
-//        $explodedTime = $explodedDateTime[1] ;
-        return $this->convertDate($this->updated_at, "toJalali");
     }
 
     /**

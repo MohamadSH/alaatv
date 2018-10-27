@@ -9,6 +9,7 @@
 namespace App;
 
 use App\Traits\Helper;
+use App\Traits\DateTrait;
 use Laratrust\Models\LaratrustRole;
 
 /**
@@ -35,6 +36,7 @@ use Laratrust\Models\LaratrustRole;
 class Role extends LaratrustRole
 {
     use Helper;
+    use DateTrait;
     /**
      * @var array
      */
@@ -43,35 +45,17 @@ class Role extends LaratrustRole
         'display_name',
         'description',
     ];
-
+    protected $dates = [
+        'created_at',
+        'updated_at'
+    ];
+    
     /*
      * it needs for deleting the role
      */
     public function users()
     {
         return $this->belongsToMany('App\User');
-    }
-
-    /**
-     * @return string
-     * Converting Created_at field to jalali
-     */
-    public function CreatedAt_Jalali()
-    {
-        $explodedDateTime = explode(" ", $this->created_at);
-//        $explodedTime = $explodedDateTime[1] ;
-        return $this->convertDate($this->created_at, "toJalali");
-    }
-
-    /**
-     * @return string
-     * Converting Updated_at field to jalali
-     */
-    public function UpdatedAt_Jalali()
-    {
-        $explodedDateTime = explode(" ", $this->updated_at);
-//        $explodedTime = $explodedDateTime[1] ;
-        return $this->convertDate($this->updated_at, "toJalali");
     }
 
 }

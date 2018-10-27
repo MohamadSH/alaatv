@@ -9,6 +9,7 @@ use App\Collection\UserCollection;
 use App\Traits\APIRequestCommon;
 use App\Traits\HasWallet;
 use App\Traits\Helper;
+use App\Traits\DateTrait;
 use App\Traits\MustVerifyMobileNumberTrait;
 use Carbon\Carbon;
 use Iatstuti\Database\Support\CascadeSoftDeletes;
@@ -142,6 +143,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
 {
     use MustVerifyMobileNumberTrait;
     use Helper;
+    use DateTrait;
     use SoftDeletes, CascadeSoftDeletes;
     use LaratrustUserTrait;
     use HasWallet;
@@ -615,28 +617,6 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
             //            dd($message." ".$hmac." ".$timestamp);
             return $message . " " . $hmac . " " . $timestamp;
         }
-    }
-
-    /**
-     * @return string
-     * Converting Created_at field to jalali
-     */
-    public function CreatedAt_Jalali()
-    {
-        $explodedDateTime = explode(" ", $this->created_at);
-//        $explodedTime = $explodedDateTime[1] ;
-        return $this->convertDate($this->created_at, "toJalali");
-    }
-
-    /**
-     * @return string
-     * Converting Updated_at field to jalali
-     */
-    public function UpdatedAt_Jalali()
-    {
-        $explodedDateTime = explode(" ", $this->updated_at);
-//        $explodedTime = $explodedDateTime[1] ;
-        return $this->convertDate($this->updated_at, "toJalali");
     }
 
     /**

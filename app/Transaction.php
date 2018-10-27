@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Traits\Helper;
+use App\Traits\DateTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Config;
@@ -69,9 +70,14 @@ use Illuminate\Support\Facades\Config;
 class Transaction extends Model
 {
     use Helper;
+    use DateTrait;
     use SoftDeletes;
     /**      * The attributes that should be mutated to dates.        */
-    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
 
     /**
      * @var array
@@ -127,28 +133,6 @@ class Transaction extends Model
     public function wallet()
     {
         return $this->belongsTo("\App\Wallet");
-    }
-
-    /**
-     * @return string
-     * Converting Created_at field to jalali
-     */
-    public function CreatedAt_Jalali()
-    {
-        $explodedDateTime = explode(" ", $this->created_at);
-//        $explodedTime = $explodedDateTime[1] ;
-        return $this->convertDate($this->created_at, "toJalali");
-    }
-
-    /**
-     * @return string
-     * Converting Created_at field to jalali
-     */
-    public function CompletedAt_Jalali()
-    {
-        $explodedDateTime = explode(" ", $this->completed_at);
-//        $explodedTime = $explodedDateTime[1] ;
-        return $this->convertDate($this->completed_at, "toJalali");
     }
 
     /**

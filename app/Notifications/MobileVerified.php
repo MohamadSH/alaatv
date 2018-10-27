@@ -8,16 +8,16 @@ use App\User;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Queue\SerializesModels;
 
-class VerifyMobile extends Notification implements ShouldQueue
+class MobileVerified extends Notification implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    const MEDIANA_PATTERN_CODE_USER_SEND_VERIFICATION_CODE = 799;
+    const MEDIANA_PATTERN_CODE_USER_MOBILE_VERIFIED = 813;
     public $timeout = 120;
-
     /**
      * @var User
      */
@@ -34,8 +34,29 @@ class VerifyMobile extends Notification implements ShouldQueue
         $this->user = $notifiable;
         return [
             MedianaPatternChannel::class,
-
+            'mail'
         ];
+
+    }
+
+    /**
+     * Get the mail representation of the notification.
+     *
+     * @param  mixed $notifiable
+     * @return \Illuminate\Notifications\Messages\MailMessage
+     */
+    public function toMail($notifiable)
+    {
+        return (new MailMessage)
+            ->line($this->msg())
+            ->action('برو به سایت آلاء', url('/'));
+    }
+
+    private function msg(): string
+    {
+        $messageCore = "آلایی عزیز، شماره موبایل شما در آلاء تایید شد.";
+        $message = $messageCore;
+        return $message;
     }
 
     /**
@@ -47,25 +68,14 @@ class VerifyMobile extends Notification implements ShouldQueue
         return (new MedianaMessage())
             ->content($this->msg())
             ->setInputData($this->getInputData())
-            ->setPatternCode(self::MEDIANA_PATTERN_CODE_USER_SEND_VERIFICATION_CODE)
+            ->setPatternCode(self::MEDIANA_PATTERN_CODE_USER_MOBILE_VERIFIED)
             ->sendAt(Carbon::now());
-    }
-
-    private function msg(): string
-    {
-        $messageCore = "کد تایید شماره موبایل شما در آلاء:"
-            . "\n"
-            . $this->user->getMobileVerificationCode()
-            . "\n"
-            . "sanatisharif.ir";
-        $message = $messageCore;
-        return $message;
     }
 
     private function getInputData(): array
     {
         return [
-            'code' => $this->user->getMobileVerificationCode(),
+            'request' => 'شماره موبایل '
         ];
     }
 }
