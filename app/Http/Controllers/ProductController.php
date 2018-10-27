@@ -77,14 +77,14 @@ class ProductController extends Controller
 
     private function callMiddlewares(): void
     {
-        $this->middleware('permission:' . config('constants.LIST_PRODUCT_ACCESS'), ['only' => 'index']);
+//        $this->middleware('permission:' . config('constants.LIST_PRODUCT_ACCESS'), ['only' => 'index']);
         $this->middleware('permission:' . config('constants.INSERT_PRODUCT_ACCESS'), ['only' => 'create']);
         $this->middleware('permission:' . config('constants.REMOVE_PRODUCT_ACCESS'), ['only' => 'destroy']);
         $this->middleware('permission:' . config('constants.SHOW_PRODUCT_ACCESS'), ['only' => 'edit']);
         $this->middleware('permission:' . config('constants.EDIT_PRODUCT_ACCESS'), ['only' => 'update']);
         $this->middleware('permission:' . config('constants.EDIT_CONFIGURE_PRODUCT_ACCESS'), ['only' => ['childProductEnable', 'completeEachChildPivot']]);
         $this->middleware('permission:' . config('constants.INSERT_CONFIGURE_PRODUCT_ACCESS'), ['only' => 'makeConfiguration', 'createConfiguration']);
-        $this->middleware('auth', ['except' => ['show', 'refreshPrice', 'search', 'showPartial', 'landing1', 'landing2', 'landing3', 'landing4']]);
+        $this->middleware('auth', ['except' => ['index', 'show', 'refreshPrice', 'search', 'showPartial', 'landing1', 'landing2', 'landing3', 'landing4']]);
     }
 
     /**

@@ -9,19 +9,15 @@ use App\Classes\SEO\SeoInterface;
 use App\Classes\SEO\SeoMetaTagsGenerator;
 use App\Classes\Taggable;
 use App\Collection\ContentCollection;
-use App\Collection\ProductCollection;
 use App\Traits\APIRequestCommon;
-use App\Traits\FileCommon;
-use App\Traits\Helper;
 use App\Traits\DateTrait;
+use App\Traits\Helper;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\{
-    Artisan, Cache, Config
-};
+use Illuminate\Support\Facades\{Artisan, Cache, Config};
 use Stevebauman\Purify\Facades\Purify;
 
 /**
@@ -383,38 +379,13 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface
     }
 
     /**
-     * Get the content's contentset .
-     *
-     * @return Contentset
-     */
-    public function getContentsetAttribute() : ?Contentset
-    {
-        $content = $this;
-        $key = "content:contentSet:" . $this->cacheKey();
-        $contentset = Cache::tags(["content"])->remember($key, Config::get("constants.CACHE_60"), function () use ($content) {
-            return $content->contentsets->where("pivot.isDefault", 1)->first();
-        });
-        return $contentset;
-    }
-
-    /**
      * Get the content's session .
      *
      * @return int|null
      */
     public function getSessionAttribute()
     {
-        $content = $this;
-        $order = optional($this->pivot)->order;
-        if(isset($order))
-            return $order;
-
-        $key = "content:session:" . $this->cacheKey();
-        $session = Cache::tags(["content"])->remember($key, Config::get("constants.CACHE_60"), function () use ($content) {
-            $cs = $content->contentset;
-            return isset($cs) ? $cs->pivot->order : null;
-        });
-        return $session;
+        return $this->order;
     }
 
     /**
@@ -446,13 +417,13 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface
         $key = "content:setMates:" . $this->cacheKey();
 
         $setMates = Cache::tags(["content"])->remember($key, Config::get("constants.CACHE_60"), function () use ($content) {
-            $contentSet = $content->contentset;
+            $contentSet = $content->set;
             $contentSetName = optional($contentSet)->name;
             if (isset($contentSet)) {
                 $sameContents = $contentSet->contents()
                     ->active()
                     ->get()
-                    ->sortBy("pivot.order")
+                    ->sortBy("order")
                     ->load('contenttype');
             }else
                 $sameContents = new ContentCollection([]);
@@ -463,22 +434,6 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface
         });
         return $setMates;
 
-    }
-
-    /**
-     * Gets content's order in it's default content set
-     *
-     * @return int
-     */
-    public  function getOrder():?int
-    {
-        $key = "content:Order"
-            .$this->cacheKey();
-        $c = $this;
-        return Cache::tags("content")->remember($key,Config::get("constants.CACHE_60"),function () use($c) {
-            $order = optional(optional($c->contentset)->pivot)->order;
-            return  $order >= 0 ? $order : -1;
-        });
     }
 
     /**
@@ -495,7 +450,7 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface
             $c = $this;
             return Cache::remember($key,Config::get("constants.CACHE_60"),function () use($c) {
                 $displayName = "";
-                $sessionNumber = $c->getOrder();
+                $sessionNumber = $c->order;
                 if (isset($c->contenttype)) {
                     $displayName .=$c->contenttype->displayName." ";
                 }
@@ -520,10 +475,8 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface
 
         $adItems = Cache::tags(["content"])->remember($key, Config::get("constants.CACHE_60"), function () use ($content) {
             $adItems = collect();
-            if (optional($content->contentset)->id != 199) {
-                $adItems = Content::whereHas("contentsets", function ($q) {
-                    $q->where("id", 199);
-                })
+            if (optional($content->set)->id != 199) {
+                $adItems = Contentset::findOrFail(199)->contents()
                     ->where("enable", 1)
                     ->orderBy("order")
                     ->get();
@@ -675,6 +628,16 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface
     public function user()
     {
         return $this->belongsTo("\App\User" , "author_id" ,"id");
+    }
+
+    /**
+     * Get the content's contentset .
+     *
+     * @return Contentset|\Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function set()
+    {
+        return $this->belongsTo("\App\Contentset", "contentset_id", "id");
     }
 
     /*

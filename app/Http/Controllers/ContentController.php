@@ -3,25 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\Classes\Search\ContentSearch;
+use App\Content;
 use App\Contentset;
 use App\Contenttype;
-use App\Content;
+use App\Http\Requests\{ContentIndexRequest, EditContentRequest, InsertContentRequest, Request};
+use App\Traits\{APIRequestCommon,
+    CharacterCommon,
+    FileCommon,
+    Helper,
+    MetaCommon,
+    ProductCommon,
+    RequestCommon,
+    UserSeenTrait};
 use App\User;
-use App\Http\Requests\{
-    ContentIndexRequest, EditContentRequest, InsertContentRequest, Request
-};
-use App\Traits\{
-    APIRequestCommon, CharacterCommon, FileCommon, Helper, MetaCommon, ProductCommon, RequestCommon, UserSeenTrait
-};
 use App\Websitesetting;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\{
-    Cache, Config, View
-};
+use Illuminate\Support\Facades\{Cache, Config, View};
 use Illuminate\Support\Str;
 use Jenssegers\Agent\Agent;
 
@@ -195,7 +196,7 @@ class ContentController extends Controller
         $validSinceTime = optional($content->validSince)->format('H:i:s');
         $tags = optional($content->tags)->tags;
         $tags = implode(",", isset($tags) ? $tags : []);
-        $contentset = $content->contentset;
+        $contentset = $content->set;
         $rootContentTypes = $this->getRootsContentTypes();
 
         $result = compact("content" ,"rootContentTypes" ,"validSinceTime" ,"tags" ,"contentset" ,"rootContentTypes" );
@@ -423,37 +424,6 @@ class ContentController extends Controller
 
     /**
      * @param Content $content
-     * @param $contentset_id
-     * @param $order
-     * @param int $isDefault
-     */
-    private function attachContentSetToContent(Content &$content, $setId,$order, $isDefault = 1 ): void
-    {
-        $content->contentsets()->attach($setId, [
-            "order" =>isset($order) ? $order : 0,
-            "isDefault" => $isDefault
-        ]);
-    }
-
-    //TODO:// implement
-    public function attachContentToContentSet(Request $request, Content $content, Contentset $set){
-        abort(Response::HTTP_FORBIDDEN);
-        /*$order = $request->get('order', 0);
-        $this->attachContentSetToContent($content, $set, $order,0);*/
-    }
-    public function updateContentSetPivots(Request $request, Content $content, Contentset $set){
-        abort(Response::HTTP_FORBIDDEN);
-        /*$order = $request->get('order', 0);
-        $content->contentsets()
-            ->updateExistingPivot($set->id, [
-                'order' => $order
-            ], false);*/
-    }
-
-
-
-    /**
-     * @param Content $content
      *
      * @param array $files
      */
@@ -609,7 +579,7 @@ class ContentController extends Controller
                 }
 
                 $thumbnail = $item->files->where('pivot.label','thumbnail')->first();
-                $contenSets = $item->contentsets->where("pivot.isDefault" , 1)->first();
+                $contenSets = $item->set;
                 $sessionNumber = $contenSets->pivot->order;
                 $response->push(
                     [

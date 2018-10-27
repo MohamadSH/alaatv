@@ -133,14 +133,7 @@ class HomeController extends Controller
 
     public function debug(Request $request)
     {
-        event(new FreeInternetAccept(User::findOrFail(2)));
-        dd(".");
-        /*        return json_encode([
-                    'username' => 'u',
-                    'password' => 'p'
-                ]);*/
-//        dd($ch);
-        dump($id);
+
         dump($request->route('ab'));
         dd("Done!");
         dd( App::getLocale());
@@ -2089,7 +2082,7 @@ class HomeController extends Controller
                     $content = Content::find($contentId);
 
                     $mobile = substr(optional($user)->mobile , 0 , 4)."*******";
-                    $contentset = $content->contentsets->first();
+                    $contentset = $content->set;
                     if(isset($content->user))
                         $author = $content->user->firstName ." " . $content->user->lastName;
                     else

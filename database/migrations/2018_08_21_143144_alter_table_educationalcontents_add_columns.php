@@ -2,9 +2,9 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\{
-    Log, Schema
-};
+use Illuminate\Support\Facades\{Log, Schema};
+use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 class AlterTableEducationalContentsAddColumns extends Migration
 {
@@ -50,13 +50,19 @@ class AlterTableEducationalContentsAddColumns extends Migration
         });
 
         $contents = \App\Content::all();
+        $output = new ConsoleOutput();
+        $output->writeln('update contents files....');
+        $progress = new ProgressBar($output, $contents->count());
         foreach ($contents as $content) {
             try {
                 $content->fixFiles();
             } catch (Exception $e) {
                 Log::error("Content-" . $content->id . ":\n\r" . $e->getMessage());
             }
+            $progress->advance();
         }
+        $progress->finish();
+        $output->writeln('Done!');
     }
 
     /**

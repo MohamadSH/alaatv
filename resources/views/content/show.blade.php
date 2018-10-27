@@ -82,12 +82,18 @@
                                             </li>
                                             @foreach($videosWithSameSetL->take(-5) as $item)
 
-                                                <li class="page-item @if($item["content"]->id == $content->id) active @endif"><a class="page-link" href="{{action("ContentController@show" , $item["content"])}}">{{ $item["content"]->getOrder() }}</a></li>
+                                                <li class="page-item @if($item["content"]->id == $content->id) active @endif">
+                                                    <a class="page-link"
+                                                       href="{{action("ContentController@show" , $item["content"])}}">{{ $item["content"]->order }}</a>
+                                                </li>
 
                                             @endforeach
                                             @foreach($videosWithSameSetR->take(6) as $item)
 
-                                                <li class="page-item @if($item["content"]->id == $content->id) active @endif"><a class="page-link" href="{{action("ContentController@show" , $item["content"])}}">{{ $item["content"]->getOrder() }}</a></li>
+                                                <li class="page-item @if($item["content"]->id == $content->id) active @endif">
+                                                    <a class="page-link"
+                                                       href="{{action("ContentController@show" , $item["content"])}}">{{ $item["content"]->order }}</a>
+                                                </li>
 
                                             @endforeach
                                             <li class="page-item">
@@ -220,7 +226,7 @@
                                                 </div>
                                                 <div class="list-item-content">
                                                     <h3 class="uppercase bold">
-                                                        <a href="javascript:;">&nbsp;</a>
+                                                        <a href="javascript:">&nbsp;</a>
                                                     </h3>
                                                 </div>
                                         </li>
@@ -406,7 +412,7 @@
                                                 <div class="list-datetime bold uppercase font-yellow-casablanca"> {{($item["content"]->display_name)}} </div>
                                                 <div class="list-item-content">
                                                     <h3 class="uppercase bold">
-                                                        <a href="javascript:;">&nbsp;</a>
+                                                        <a href="javascript:">&nbsp;</a>
                                                     </h3>
                                                 </div>
                                             </li>
