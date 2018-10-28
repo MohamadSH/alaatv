@@ -28,6 +28,7 @@ use App\{Assignmentstatus,
     Major,
     Notifications\GeneralNotice,
     Notifications\GiftGiven,
+    Notifications\MobileVerified,
     Notifications\UserRegisterd,
     Order,
     Orderproduct,
@@ -133,6 +134,11 @@ class HomeController extends Controller
 
     public function debug(Request $request)
     {
+        $user = User::FindOrFail(1);
+        $user->sendMobileVerificationNotification();
+        $user->sendMobileVerifiedNotification();
+        dd("Done!");
+
         $categories = Category::active()->get()->toTree();
         return view('partials.tree',compact('categories'));
 

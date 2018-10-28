@@ -1,3 +1,18 @@
+function addSubmitButton() {
+    $(".hasRequestedVerificationCode").removeClass("hidden");
+}
+
+function removeCodeRequestButton()
+{
+    $("#hasntRequestedVerificationCode").addClass("hidden");
+}
+
+function showVerificationResponseMessage(selector , message)
+{
+    $("#verificationCode"+selector+" > span").html(message);
+    $("#verificationCode"+selector).removeClass("hidden");
+}
+
 $(document).on("click", "#sendVerificationCodeButton", function (e){
     e.preventDefault();
     var action = $(this).attr("href");
@@ -19,42 +34,40 @@ $(document).on("click", "#sendVerificationCodeButton", function (e){
         "showMethod": "fadeIn",
         "hideMethod": "fadeOut"
     };
+    var responseMessage = "";
     userAjax = $.ajax({
         type: "GET",
         url: action,
+        accepts: "application/json; charset=utf-8",
+        dataType : "json",
+        contentType: "application/json; charset=utf-8",
         statusCode: {
             200:function (response) {
-                $(".hasRequestedVerificationCode").removeClass("hidden");
-                $("#hasntRequestedVerificationCode").addClass("hidden");
-                $("#getVerificationCodeSuccess > span").html(response.message);
-                $("#getVerificationCodeSuccess").removeClass("hidden");
-            },
-            //The status for when the user is not authorized for making the request
-            401:function (ressponse) {
+                responseMessage = response.responseText ;
+                showVerificationResponseMessage("Success" , responseMessage);
+                addSubmitButton();
+                removeCodeRequestButton();
             },
             403: function (response) {
+                responseMessage = response.responseJSON.message ;
+                showVerificationResponseMessage("Error" , responseMessage);
             },
             404: function (response) {
+                toastr["error"]("Not Found", "پیام سیستم");
             },
             //The status for when form data is not valid
             422: function (response) {
-                toastr["error"]("خطای 422 . خطای ورودی ها", "پیام سیستم");
+                toastr["error"]("خطای ورودی ها", "پیام سیستم");
+            },
+            //Too many attempts
+            429: function (response) {
+                responseMessage = "شما به سقف تعداد درخواست رسیده اید لطفا چند لحظه صبر کنید" ;
+                showVerificationResponseMessage("Warning" , responseMessage);
             },
             //The status for when there is error php code
             500: function (response) {
-                console.log(response.responseText);
+                console.log(response);
                 toastr["error"]("خطای 500", "پیام سیستم");
-            },
-            //The status for when there is error php code
-            503: function (response) {
-                var text = $.parseJSON(response.responseText);
-                $("#verificationCodeError > span").html(text.message);
-                $("#verificationCodeError").removeClass("hidden");
-            },
-            406: function (response) {
-                var text = $.parseJSON(response.responseText);
-                $("#verificationCodeWarning > span").html(text.message);
-                $("#verificationCodeWarning").removeClass("hidden");
             }
         }
     });
@@ -82,6 +95,7 @@ $(document).on('submit', '#submitVerificationCodeForm', function(e){
         "hideMethod": "fadeOut"
     };
     $("#verificationCodeAjaxLoadingSpinner").show();
+    var responseMessage = "";
     $.ajax({
         type: 'POST',
         url: url,
@@ -90,41 +104,39 @@ $(document).on('submit', '#submitVerificationCodeForm', function(e){
             //The status for when action was successful
             200: function (response) {
                 // console.log(response);
-                // console.log(response.responseText);
-                $("#verificationCodeAjaxLoadingSpinner").hide();
                 location.reload();
+
+                // responseMessage = response.responseText ;
+                //
+                // $(".hasRequestedVerificationCode").removeClass("hidden");
+                // $("#hasntRequestedVerificationCode").addClass("hidden");
+                // $("#verificationCodeSuccess > span").html(responseMessage);
+                // $("#verificationCodeSuccess").removeClass("hidden");
             },
             //The status for when the user is not authorized for making the request
             403: function (response) {
-                window.location.replace("/403");
+                responseMessage = response.responseJSON.message ;
+                showVerificationResponseMessage("Error" , responseMessage);
             },
             404: function (response) {
-                window.location.replace("/404");
+                toastr["error"]("Not Found", "پیام سیستم");
             },
             //The status for when form data is not valid
             422: function (response) {
-                toastr["error"]("خطای 422 . خطای ورودی ها", "پیام سیستم");
+                toastr["error"]("خطای ورودی ها", "پیام سیستم");
+            },
+            //Too many attempts
+            429: function (response) {
+                responseMessage = "شما به سقف تعداد تایید کد رسیده اید لطفا چند لحظه صبر کنید" ;
+                showVerificationResponseMessage("Warning" , responseMessage);
             },
             //The status for when there is error php code
             500: function (response) {
                 toastr["error"]("خطای 500", "پیام سیستم");
-            },
-            //The status for when there is error php code
-            503: function (response) {
-                var text = $.parseJSON(response.responseText);
-                $("#verificationCodeError > span").html(text.message);
-                $("#verificationCodeError").removeClass("hidden");
-            },
-            406: function (response) {
-                var text = $.parseJSON(response.responseText);
-                $("#verificationCodeWarning > span").html(text.message);
-                $("#verificationCodeWarning").removeClass("hidden");
             }
-        },
-        cache: false,
-        // contentType: false,
-        processData: false
+        }
     });
+    $("#verificationCodeAjaxLoadingSpinner").hide();
 });
 
 $(document).on("click", ".close", function (e){

@@ -174,7 +174,7 @@
                                                                                 "withBirthdate"=>true ,
                                                                                 "withIntroducer"=>true ,
                                                                                 "submitCaption" => "ثبت درخواست" ,
-                                                                                "disableSubmit" =>(!$user->mobileNumberVerification || !isset($user->photo) || strcmp($user->photo, config('constants.PROFILE_DEFAULT_IMAGE')) == 0)?true:false ,
+                                                                                "disableSubmit" =>(!$user->hasVerifiedMobile() || !isset($user->photo) || strcmp($user->photo, config('constants.PROFILE_DEFAULT_IMAGE')) == 0)?true:false ,
                                                                                 "text1p1"=>"قسمت‌های ستاره دار ضروری است." ,
                                                                                 "text1p2"=>"پس از تکمیل فرم زیر، درخواست شما در صف بررسی اینترنت رایگان آسیاتک قرار خواهد گرفت." ,
                                                                                 "text2" =>" اطلاعات وارد شده پس از ثبت درخواست قابل تغییر نیستند.",
@@ -225,7 +225,7 @@
 
 @section("extraJS")
     <script type="text/javascript">
-        var mobileVerification = {{$user->mobileNumberVerification}};
+        var mobileVerification = {{$user->hasVerifiedMobile()}};
         /**
          * Set token for ajax request
          */

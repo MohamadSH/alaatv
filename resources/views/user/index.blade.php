@@ -51,7 +51,7 @@
         @endpermission
         <td>@if(isset($user->city) && strlen($user->city)>0) {{ $user->city }} @else <span class="label label-sm label-warning"> درج نشده </span>  @endif</td>
         <td>@if(isset($user->province) && strlen($user->province)>0) {{ $user->province }} @else <span class="label label-sm label-warning"> درج نشده </span> @endif</td>
-        <td>@if(isset($user->mobileNumberVerification) && $user->mobileNumberVerification == 1) <span class="label label-sm label-success">احراز هویت کرده</span> @else <span class="label label-sm label-danger"> نامعتبر </span> @endif</td>
+        <td>@if($user->hasVerifiedMobile()) <span class="label label-sm label-success">احراز هویت کرده</span> @else <span class="label label-sm label-danger"> نامعتبر </span> @endif</td>
         <td>@if(isset($user->postalCode) && strlen($user->postalCode)>0) {{ $user->postalCode }} @else <span class="label label-sm label-warning"> درج نشده </span> @endif</td>
         <td>@if(isset($user->address) && strlen($user->address)>0) {{ $user->address }} @else <span class="label label-sm label-warning"> درج نشده </span> @endif</td>
         {{--<td>@if(isset($user->major->id)) @if(strlen($user->major->name)>0) {{ $user->major->name }} @else {{ $user->major->id }} @endif @else <span class="label label-sm label-danger"> درج نشده </span> @endif</td>--}}

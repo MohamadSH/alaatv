@@ -84,7 +84,7 @@
         <div class="margin-top-20 profile-desc-link">
             <i class="fa fa-mobile"></i> شماره موبایل:
             <span>@if(isset($user->mobile)){{ $user->mobile }} @endif</span>
-            @if($user->mobileNumberVerification)
+            @if($user->hasVerifiedMobile())
                 <span class="label label-success">شماره موبایل تایید شده است. </span>
             @else
                 <span class="label label-danger"> توجه! شماره موبایل تایید نشده است. </span>
@@ -99,10 +99,10 @@
                 </div>
             @endif
         </div>
-        @if(!$user->mobileNumberVerification )
+        @if(!$user->hasVerifiedMobile() )
             <div class="margin-top-20 profile-desc-link">
                 <div class="form-group form-md-line-input">
-                    {!! Form::open(['method' => 'POST','action' => ['UserController@submitVerificationCode'] , 'id'=>'submitVerificationCodeForm']) !!}
+                    {!! Form::open(['method' => 'POST','action' => ['MobileVerificationController@verify'] , 'id'=>'submitVerificationCodeForm']) !!}
                         <fieldset class="hasRequestedVerificationCode {{(isset($hasRequestedVerificationCode) && $hasRequestedVerificationCode)?"":"hidden"}}">
                             <input type="text" name="code" class="form-control" id="form_control_1"  placeholder="کد تایید شماره خود را وارد نمایید">
                             <label for="form_control_1"><span class="font-red-thunderbird">تایید شماره موبایل(حساب کاربری)</span></label>
@@ -114,13 +114,13 @@
                             <button type="submit" class="btn green">تایید کد</button>
                         </fieldset>
                         <fieldset id="hasntRequestedVerificationCode" class="{{(isset($hasRequestedVerificationCode) && $hasRequestedVerificationCode)?"hidden":""}}">
-                            <a href="{{action("UserController@sendVerificationCode")}}" class="btn blue" id="sendVerificationCodeButton">درخواست ارسال کد</a>
+                            <a href="{{action("MobileVerificationController@resend")}}" class="btn blue" id="sendVerificationCodeButton">درخواست ارسال کد</a>
                         </fieldset>
                     <img src="/img/loading-spinner-default.gif" style="width: 15px; display: none" id="verificationCodeAjaxLoadingSpinner">
                     {!! Form::close() !!}
                 </div>
                 <div class="form-group form-md-line-input" style="text-align: justify;">
-                    <div class="alert alert-success alert-dismissable hidden" id="getVerificationCodeSuccess">
+                    <div class="alert alert-success alert-dismissable hidden" id="verificationCodeSuccess">
                         <button type="button" class="close"  aria-hidden="true"></button>
                         <span></span>
                     </div>
@@ -161,7 +161,7 @@
     <div class="portlet-title">
         <div class="caption" style="width: 100%; text-align: center">
             <span class="caption-subject font-dark bold uppercase">میزان تکمیل پروفایل</span>
-            @if(!$user->mobileNumberVerification)
+            @if(!$user->hasVerifiedMobile())
                 <span class="label label-warning">توجه! یکی از موارد ، تایید شماره موبایل می باشد </span>
             @endif
         </div>
