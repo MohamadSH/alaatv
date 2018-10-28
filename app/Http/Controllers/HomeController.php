@@ -44,7 +44,7 @@ use App\{Assignmentstatus,
     Role,
     Traits\APIRequestCommon,
     Traits\CharacterCommon,
-    Traits\DateCommon,
+    Traits\DateTrait,
     Traits\Helper,
     Traits\ProductCommon,
     Traits\UserCommon,
@@ -79,7 +79,7 @@ class HomeController extends Controller
     use Helper;
     use APIRequestCommon ;
     use ProductCommon;
-    use DateCommon;
+    use DateTrait;
     use CharacterCommon;
     use UserCommon;
     /**

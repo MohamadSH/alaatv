@@ -475,6 +475,21 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
         });
     }
 
+    /**
+     * @return UserCollection
+     */
+    public static function getEmployee(): UserCollection
+    {
+        $key = "getEmployee";
+        return Cache::tags(["employee"])->remember($key, config("constants.CACHE_600"), function () {
+            $employees = User::select()
+                ->role([config('constants.ROLE_EMPLOYEE')])
+                ->orderBy('lastName')
+                ->get();
+            return $employees;
+        });
+    }
+
     public static function orderStatusFilter($users, $orderStatusesId)
     {
         $key="user:orderStatusFilter:".implode($users->pluck('id')->toArray())."-".$orderStatusesId;

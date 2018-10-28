@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Employeeschedule;
 use App\Employeetimesheet;
 use App\Http\Requests\InsertEmployeeTimeSheet;
-use App\Traits\DateCommon;
+use App\Traits\DateTrait;
 use App\Traits\EmployeeWorkSheetCommon;
 use App\User;
 use App\Workdaytype;
@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\View;
 
 class EmployeetimesheetController extends Controller
 {
-    use DateCommon ;
+    use DateTrait;
     use EmployeeWorkSheetCommon ;
 
     function __construct()
