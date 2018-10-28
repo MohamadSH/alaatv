@@ -51,6 +51,7 @@
             // Sends the custom dimension to Google Analytics.
             gtag('event', 'hit', {'dimension2': dimensionValue});
         </script>
+        <script type="text/javascript" src="https://s1.mediaad.org/serve/549/retargeting.js"></script>
         <script>
             now = new Date();
             var head = document.getElementsByTagName('head')[0];
