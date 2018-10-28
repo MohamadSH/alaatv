@@ -756,6 +756,8 @@ class UserController extends Controller
             })->whereIn("orderstatus_id" , [Config::get("constants.ORDER_STATUS_CLOSED")])->get()->isNotEmpty();
             $userCompletion = (int)$user->completion();
 
+            $mobileVerificationCode = $user->getMobileVerificationCode();
+
             return view("user.profile.profile", compact("genders",
                                                                         "majors",
                                                                         "sideBarMode",
@@ -772,7 +774,8 @@ class UserController extends Controller
                                                                         "hasHamayeshTalaiArabi" ,
                                                                         "hasHamayeshHozouriArabi" ,
                                                                         "lotteryName",
-                                                                        "hasRequestedVerificationCode"
+                                                                        "hasRequestedVerificationCode",
+                                                                        "mobileVerificationCode"
                                                         ));
         } else {
             abort(403);

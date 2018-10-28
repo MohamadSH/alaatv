@@ -11,6 +11,7 @@ namespace App\Traits;
 
 use App\Notifications\MobileVerified;
 use App\Notifications\VerifyMobile;
+use Illuminate\Support\Facades\Cache;
 
 trait MustVerifyMobileNumberTrait
 {
@@ -44,7 +45,10 @@ trait MustVerifyMobileNumberTrait
     public function sendMobileVerificationNotification()
     {
         if ($this->setMobileVerificationCode())
+        {
             $this->notify(new VerifyMobile());
+            Cache::tags('User:'.$this->id)->flush();
+        }
     }
 
     /**
