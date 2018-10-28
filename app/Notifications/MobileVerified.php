@@ -16,7 +16,7 @@ class MobileVerified extends Notification implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    const MEDIANA_PATTERN_CODE_USER_MOBILE_VERIFIED = 813;
+    const MEDIANA_PATTERN_CODE_USER_MOBILE_VERIFIED = 817;
     public $timeout = 120;
     /**
      * @var User
