@@ -306,7 +306,10 @@ class UserController extends Controller
 
         $mobileNumberVerification = Input::get("mobileNumberVerification");
         if(isset($mobileNumberVerification) && strlen($mobileNumberVerification) > 0){
-            $users = $users->where("mobileNumberVerification" , $mobileNumberVerification);
+            if($mobileNumberVerification)
+                $users = $users->whereNotNull("mobile_verified_at");
+            else
+                $users = $users->whereNull("mobile_verified_at");
         }
 
         //filter by postalCode, province , city, address, school , email
@@ -453,9 +456,9 @@ class UserController extends Controller
             $users = collect();
             foreach ($uniqueUsers as $user)
             {
-                if($user->where("mobileNumberVerification" , 1)->isNotEmpty())
+                if($user->whereNotNull("mobile_verified_at")->isNotEmpty())
                 {
-                    $users->push($user->where("mobileNumberVerification" , 1)->first());
+                    $users->push($user->whereNotNUll("mobile_verified_at")->first());
                 }
                 else
                 {
@@ -564,9 +567,9 @@ class UserController extends Controller
                 $user->gender_id = null;
 
             if ( $request->has("mobileNumberVerification"))
-                $user->mobileNumberVerification = 1;
+                $user->mobile_verified_at = Carbon::now()->setTimezone("Asia/Tehran");
             else
-                $user->mobileNumberVerification = 0 ;
+                $user->mobile_verified_at = null ;
 
             $user->password = bcrypt($request->get("password"));
 
@@ -753,21 +756,7 @@ class UserController extends Controller
             })->whereIn("orderstatus_id" , [Config::get("constants.ORDER_STATUS_CLOSED")])->get()->isNotEmpty();
             $userCompletion = (int)$user->completion();
 
-            $verificationMessageStatusSent = config("constants.VERIFICATION_MESSAGE_STATUS_SENT");
-            $verificationMessage = $user->verificationmessages
-                ->where("verificationmessagestatus_id",$verificationMessageStatusSent)
-                ->sortByDesc("created_at")
-                ->first();
-            $hasRequestedVerificationCode = false;
-            if(isset($verificationMessage))
-            {
-                $hasRequestedVerificationCode = true;
-                $now = Carbon::now();
-                if($now->diffInMinutes($verificationMessage->created_at) > Config::get('constants.MOBILE_VERIFICATION_WAIT_TIME'))
-                {
-                    $hasRequestedVerificationCode = false;
-                }
-            }
+            $mobileVerificationCode = $user->getMobileVerificationCode();
 
             return view("user.profile.profile", compact("genders",
                                                                         "majors",
@@ -785,7 +774,8 @@ class UserController extends Controller
                                                                         "hasHamayeshTalaiArabi" ,
                                                                         "hasHamayeshHozouriArabi" ,
                                                                         "lotteryName",
-                                                                        "hasRequestedVerificationCode"
+                                                                        "hasRequestedVerificationCode",
+                                                                        "mobileVerificationCode"
                                                         ));
         } else {
             abort(403);
@@ -861,9 +851,9 @@ class UserController extends Controller
         }
 
         if ( $request->has("mobileNumberVerification"))
-            $user->mobileNumberVerification = 1;
+            $user->mobile_verified_at = Carbon::now()->setTimezone("Asia/Tehran");
         else
-            $user->mobileNumberVerification = 0 ;
+            $user->mobile_verified_at = null ;
 
         if ( $request->has("lockProfile"))
             $user->lockProfile = 1;
@@ -1157,107 +1147,6 @@ class UserController extends Controller
     }
 
     /**
-     * Send an account verification code to the user
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function sendVerificationCode()
-    {
-        $verificationMessageStatusSent = config("constants.VERIFICATION_MESSAGE_STATUS_SENT");
-        $verificationMessageStatusNotDel = config("constants.VERIFICATION_MESSAGE_STATUS_NOT_DELIVERED");
-        $verificationMessageStatusExpired = config("constants.VERIFICATION_MESSAGE_STATUS_EXPIRED");
-        $now = Carbon::now();
-
-        $user = Auth::user() ;
-        $verificationMessages = $user->verificationmessages
-                                    ->where("verificationmessagestatus_id",$verificationMessageStatusSent)
-                                    ->sortByDesc("created_at");
-
-        if($user->mobileNumberVerification)
-        {
-            $message = "حساب کاربری شما قبلا تایید شده است.";
-            return $this->response
-                        ->setStatusCode(406)
-                        ->setContent(["message" => $message]);
-        }
-
-//        for($i=1 ; $i<=10 ; $i++)
-//        {
-//            $generatedCode = rand(1000,99999);
-//            $similarCodes = Verificationmessage::all()->where("code" , $generatedCode)->where("verificationmessagestatus_id",$verificationMessageStatusSent);
-//            if($similarCodes->isEmpty()){
-//                $verificationCode = $generatedCode;
-//                break;
-//            }
-//            else{
-//                foreach ($similarCodes as $similarCode)
-//                {
-//                    if(!isset($similarCode->expired_at) ||  $now > $similarCode->expired_at)
-//                    {
-//                        $similarCode->verificationmessagestatus_id = $verificationMessageStatusExpired;
-//                        if(!isset($similarCode->expired_at)) $similarCode->expired_at = $now;
-//                        if($similarCode->update())  $verificationCode = $similarCode->code;
-//                    }
-//                }
-//            }
-//        }
-        $verificationCode = rand(1000,99999);
-        if(!isset($verificationCode)) {
-            $message = "در حال امکان تخصیص کد احراز هویت به شما وجود ندارد . لطفا چند لحظه دیگر اقدام نمایید";
-            return $this->response
-                ->setStatusCode(503)
-                ->setContent(["message" => $message]);
-        }
-
-        $smsInfo = [];
-        $smsInfo["to"] = array(ltrim($user->mobile, '0'));
-        $smsInfo["message"] = "کد تایید شماره موبایل شما در آلاء: ".$verificationCode;
-
-        if($verificationMessages->isEmpty())
-        {
-            $this->medianaSendSMS($smsInfo);
-            return $this->saveVerificationCode($user, $verificationCode, $verificationMessageStatusSent);
-        }else{
-                if($verificationMessages->count()>1)
-                {
-                    foreach($verificationMessages as $verificationMessage)
-                    {
-                        if($verificationMessage->id != $verificationMessages->first()->id)
-                        {
-                            $verificationMessage->verificationmessagestatus_id = $verificationMessageStatusExpired;
-                            $verificationMessage->expired_at = $now;
-                            $verificationMessage->update();
-                        }
-                    }
-                }
-                $verificationMessage = $verificationMessages->first();
-                if($now->diffInMinutes($verificationMessage->created_at) > Config::get('constants.MOBILE_VERIFICATION_WAIT_TIME'))
-                {
-                    $verificationMessage->verificationmessagestatus_id = $verificationMessageStatusNotDel;
-                    $verificationMessage->expired_at = $now ;
-                    if($verificationMessage->update())
-                    {
-                        $this->medianaSendSMS($smsInfo);
-                        return $this->saveVerificationCode($user, $verificationCode, $verificationMessageStatusSent);
-                    }else{
-                        $message = "خطای پایگاه داده در ارسال کد . لطفا چند لحظه دیگر اقدام نمایید";
-                        return $this->response
-                            ->setStatusCode(503)
-                            ->setContent(["message" => $message]);
-                    }
-                }else{
-                    if($now->diffInMinutes($verificationMessage->created_at) > 0 ) $timeInterval = $now->diffInMinutes($verificationMessage->created_at)." دقیقه ";
-                    else $timeInterval = $now->diffInSeconds($verificationMessage->created_at)." ثانیه ";
-
-                    $message = "شما پس از گذشت ۵ دقیقه از آخرین درخواست خود می توانید دوباره درخواست ارسال نمایید .از زمان ارسال آخرین پیامک تایید برای شما ".$timeInterval."می گذرد.";
-                    return $this->response
-                        ->setStatusCode(406)
-                        ->setContent(["message" => $message]);
-                }
-        }
-    }
-
-    /**
      * Send system generated password to the user that does not belong to anyone
      *
      * @param \App\Http\Requests\PasswordRecoveryRequest $request
@@ -1314,72 +1203,6 @@ class UserController extends Controller
         $user->update();
         session()->put("tab", "tab_1_3");
         return redirect()->back();
-    }
-
-    /**
-     * Verifying user account
-     *
-     * @param \App\Http\Requests\SubmitVerificationCode $request
-     * @return \Illuminate\Http\Response
-     */
-    public function submitVerificationCode(SubmitVerificationCode $request)
-    {
-        if(Auth::user()->mobileNumberVerification)
-        {
-            $message = "شماره موبایل شما قبلا تایید شده است";
-            return $this->response
-                ->setStatusCode(406)
-                ->setContent(["message" => $message]);
-        }
-        $code = $request->get("code");
-
-        $verificationMessageStatusSent = config("constants.VERIFICATION_MESSAGE_STATUS_SENT");
-        $verificationMessageStatusExpired = config("constants.VERIFICATION_MESSAGE_STATUS_EXPIRED");
-        $verificationMessageStatusSuccess = config("constants.VERIFICATION_MESSAGE_STATUS_SUCCESSFUL");
-        $verificationMessages= Auth::user()->verificationmessages->where("code",$code)->where("verificationmessagestatus_id",$verificationMessageStatusSent)->sortByDesc("created_at");
-        if($verificationMessages->isEmpty())
-        {
-            $message = "کد وارد شده اشتباه می باشد و یا باطل شده است";
-            return $this->response
-                ->setStatusCode(503)
-                ->setContent(["message" => $message]);
-        }else{
-            $verificationMessage = $verificationMessages->first();
-            $now = Carbon::now();
-            if(!isset($verificationMessage->expired_at) || $now < $verificationMessage->expired_at)
-            {
-                Auth::user()->mobileNumberVerification = 1;
-                if(Auth::user()->update()) {
-                    $verificationMessage->verificationmessagestatus_id = $verificationMessageStatusSuccess;
-                    $verificationMessage->expired_at = $now;
-                    if ($verificationMessage->update()) {
-                        $message = "شماره موبایل شما با موفقیت تایید شد";
-                        return $this->response
-                            ->setStatusCode(200)
-                            ->setContent(["message" => $message]);
-                    } else {
-                        $message = "خطای پایگاه داده در تایید حساب کاربری . لطفا کد احراز هویت را مجددا وارد نمایید";
-                        return $this->response
-                            ->setStatusCode(503)
-                            ->setContent(["message" => $message]);
-                    }
-                }
-            }else{
-                $verificationMessage->verificationmessagestatus_id = $verificationMessageStatusExpired;
-                if($verificationMessage->update())
-                {
-                    $message = "کد احراز هویت شما منقضی شده است . لطفا مجددا درخواست کد نمایید";
-                    return $this->response
-                        ->setStatusCode(503)
-                        ->setContent(["message" => $message]);
-                }else{
-                    $message = "خطای پایگاه داده در تایید حساب کاربری . لطفا کد احراز هویت را مجددا وارد نمایید";
-                    return $this->response
-                        ->setStatusCode(503)
-                        ->setContent(["message" => $message]);
-                }
-            }
-        }
     }
 
     /**
@@ -2369,7 +2192,7 @@ class UserController extends Controller
         $updateRequest->offsetSet("province" , $request->get("province"));
         $updateRequest->offsetSet("city" , $request->get("city"));
         $updateRequest->offsetSet("address" , $request->get("address"));
-        if($user->mobileNumberVerification )
+        if($user->hasVerifiedMobile() )
             $updateRequest->offsetSet("mobileNumberVerification" , 1);
         $birthdate = Carbon::parse($request->get("birthdate") )
                             ->setTimezone("Asia/Tehran")->format('Y-m-d');
@@ -2392,7 +2215,7 @@ class UserController extends Controller
                                 "school",
                                 "major_id",
                                 "introducedBy",
-                                "mobileNumberVerification",
+                                "mobile_verified_at",
                                 "photo"
                             ];
         if($response->getStatusCode() == 200)

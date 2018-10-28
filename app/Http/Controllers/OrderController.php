@@ -30,6 +30,7 @@ use App\Transaction;
 use App\Transactiongateway;
 use App\Transactionstatus;
 use App\User;
+use App\Websitesetting;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -54,7 +55,7 @@ class OrderController extends Controller
     protected $setting;
     use ProductCommon ;
     use RequestCommon;
-    function __construct()
+    function __construct( Websitesetting $setting )
     {
         $this->response = new Response();
 
@@ -63,7 +64,7 @@ class OrderController extends Controller
         $this->middleware('permission:'.Config::get('constants.REMOVE_ORDER_ACCESS'),['only'=>'destroy']);
         $this->middleware('permission:'.Config::get('constants.SHOW_ORDER_ACCESS'),['only'=>'edit']);
         $this->middleware('permission:'.Config::get('constants.INSERT_ORDER_ACCESS'),['only'=>'exitAdminInsertOrder']);
-        $this->setting = json_decode(app('setting')->setting);
+        $this->setting = $setting->setting;
     }
 
     private function renewOrderproducs($orderproducts)

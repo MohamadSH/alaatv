@@ -241,9 +241,11 @@ $(document).on("click", "#product-portlet .reload", function (){
         // }
         statusCode: {
             200:function (response) {
+                var layout = response.items[0].indexView;
                 var newDataTable =$("#product_table").DataTable();
                 newDataTable.destroy();
-                $('#product_table > tbody').html(response);
+
+                $('#product_table > tbody').html(layout);
                 makeDataTable("product_table");
                 $("#product-portlet-loading").addClass("hidden");
                 // console.log(response.statusCode);

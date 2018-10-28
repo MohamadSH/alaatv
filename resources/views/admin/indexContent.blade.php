@@ -11,6 +11,7 @@
     <link href="/assets/global/plugins/bootstrap-summernote/summernote.css" rel="stylesheet" type="text/css" />
     <link href="/assets/global/plugins/jquery-multi-select/css/multi-select-rtl.css" rel="stylesheet" type="text/css" />
     <link href="/assets/extra/jplayer/dist/skin/blue.monday/css/jplayer.blue.monday.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/extra/persian-datepicker/dist/css/persian-datepicker-1.1.3.css" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section("metadata")
@@ -50,7 +51,6 @@
 
                 @permission((Config::get('constants.LIST_EDUCATIONAL_CONTENT_ACCESS')))
                 <div class="portlet box red" id="content-portlet">
-                    <span class="hidden" id="content-portlet-action">{{action("ContentController@index")}}</span>
                     <div class="portlet-title">
                         <div class="caption">
                             <i class="fa fa-cogs"></i>مدیریت محتوای آموزشی </div>
@@ -64,7 +64,53 @@
                         <div class="tools"> </div>
                     </div>
                     <div class="portlet-body" style="display: block;">
+                        <div class="portlet box blue" style="background: #e7ecf1">
+                            {{--<div class="portlet-title">--}}
+                            {{--<div class="caption "><h3 class="bold">--}}
+                            {{--<i class="fa fa-filter"></i>فیلتر جدول</h3></div>--}}
+                            {{--</div>--}}
+                            <style>
+                                .form .form-row-seperated .form-group{
+                                    border-bottom-color: #bfbfbf !important;
+                                }
+                            </style>
+                            <div class="portlet-body form" style="border-top: #3598dc solid 1px" >
+                                {!! Form::open(['method' => 'GET','action' => ['ContentController@index'],'class'=>'form-horizontal form-row-seperated' , 'id' => 'filterContentForm']) !!}
+                                <div class="form-body" style="background: #e7ecf1">
+                                    <div class="form-group">
+                                        <label class="col-md-2 bold control-label">تاریخ درج : </label>
+                                        <div class="col-md-10">
+                                                {{--<label class="control-label" style="float: right;"><label class="mt-checkbox mt-checkbox-outline">--}}
+                                                        {{--<input type="checkbox" id="contentCreatedTimeEnable" value="1" name="createdTimeEnable" checked >--}}
+                                                        {{--<span class="bg-grey-cararra"></span>--}}
+                                                    {{--</label>--}}
+                                                {{--</label>--}}
+                                                <label class="control-label" style=" float: right;"   >از تاریخ
+                                                </label>
+                                                <div class="col-md-3 col-xs-12">
+                                                    <input id="contentCreatedSince" type="text" class="form-control">
+                                                    <input name="createdAtSince" id="contentCreatedSinceAlt" type="text" class="form-control hidden" >
+                                                </div>
+                                                <label class="control-label" style="float: right;">تا تاریخ
+                                                </label>
+                                                <div class="col-md-3 col-xs-12">
+                                                    <input id="contentCreatedTill" type="text" class="form-control">
+                                                    <input name="createdAtTill" id="contentCreatedTillAlt" type="text" class="form-control hidden" >
+                                                </div>
 
+{{--                                            @include('admin.filters.timeFilter.createdAt' , ["id" => "content" , "default" => true])--}}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <a href="javascript:;" class="btn btn-lg bg-font-dark reload" style="background: #489fff">فیلتر</a>
+                                            <img class="hidden" id="userBon-portlet-loading" src="{{Config::get('constants.FILTER_LOADING_GIF')}}"  width="5%">
+                                        </div>
+                                    </div>
+                                </div>
+                                {!! Form::close() !!}
+                            </div>
+                        </div>
                         <div class="table-toolbar">
                             <div class="row">
                                 <div class="col-md-6">
@@ -72,8 +118,8 @@
                                     <div class="btn-group">
                                         @permission((Config::get('constants.INSERT_EDUCATIONAL_CONTENT_ACCESS')))
 {{--                                        <a  class="btn btn-outline red" target="_blank" href="{{action("ContentController@create2")}}"><i class="fa fa-plus"></i> افزودن محتوا </a>--}}
-                                        <a  class="btn btn-outline red" target="_blank" href="{{action("ContentController@create3")}}"><i class="fa fa-plus"></i> افزودن محتوا </a>
-                                        <a  class="btn btn-outline red-flamingo" target="_blank" href="{{action("ContentController@create2")}}"><i class="fa fa-plus"></i> آپلود محتوا </a>
+                                        <a  class="btn btn-outline red" target="_blank" href="{{action("ContentController@create2")}}"><i class="fa fa-plus"></i> افزودن محتوا </a>
+                                        <a  class="btn btn-outline red-flamingo" target="_blank" href="{{action("ContentController@create")}}"><i class="fa fa-plus"></i> آپلود محتوا </a>
                                         @endpermission
                                     </div>
                                 </div>
@@ -84,10 +130,7 @@
                             <tr>
                                 <th></th>
                                 <th class="all"> نام </th>
-                                {{--<th class="min-tablet"> ترتیب </th>--}}
                                 <th class="desktop"> فعال/غیرفعال </th>
-                                <th class="desktop"> مقطع </th>
-                                <th class="desktop"> رشته </th>
                                 <th class="desktop "> نوع محتوا </th>
                                 <th class="none"> فایل ها  </th>
                                 <th class="desktop"> توضیح </th>
@@ -656,6 +699,7 @@
     <script src="/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
     <script src="/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js" type="text/javascript"></script>
     <script src="/assets/global/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>
+    <script src="/assets/extra/persian-datepicker/lib/persian-date-1.0.5.js" type="text/javascript" ></script>
 @endsection
 
 @section("footerPageLevelScript")
@@ -663,6 +707,7 @@
     <script src="/assets/pages/scripts/ui-toastr.min.js" type="text/javascript"></script>
     <script src="/assets/pages/scripts/components-editors.min.js" type="text/javascript"></script>
     <script src="/assets/pages/scripts/components-multi-select.min.js" type="text/javascript"></script>
+    <script src="/assets/extra/persian-datepicker/dist/js/persian-datepicker-1.1.3.min.js" type="text/javascript" ></script>
 @endsection
 
 @section("extraJS")

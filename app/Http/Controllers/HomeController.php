@@ -28,6 +28,7 @@ use App\{Assignmentstatus,
     Major,
     Notifications\GeneralNotice,
     Notifications\GiftGiven,
+    Notifications\MobileVerified,
     Notifications\UserRegisterd,
     Order,
     Orderproduct,
@@ -133,19 +134,11 @@ class HomeController extends Controller
 
     public function debug(Request $request)
     {
-        event(new FreeInternetAccept(User::findOrFail(2)));
-        dd(".");
-        /*        return json_encode([
-                    'username' => 'u',
-                    'password' => 'p'
-                ]);*/
-//        dd($ch);
-        dump($id);
-        dump($request->route('ab'));
+        $user = User::FindOrFail(1);
+        $user->sendMobileVerificationNotification();
+        $user->sendMobileVerifiedNotification();
         dd("Done!");
-        dd( App::getLocale());
-        $pr = Product::find(181);
-        dd($pr->sample_photos);
+
         $categories = Category::active()->get()->toTree();
         return view('partials.tree',compact('categories'));
 

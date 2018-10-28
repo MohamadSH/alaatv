@@ -54,9 +54,9 @@ abstract class Cashier
     /**
      * Returns price info array
      *
-     * @return array
+     * @return
      */
-    abstract public function getPrice() :string ;
+    abstract public function getPrice() ;
 
     /*
     |--------------------------------------------------------------------------

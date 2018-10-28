@@ -49,7 +49,8 @@ class Kernel extends ConsoleKernel
                 $employeeSchedule = Employeeschedule::where("user_id", $employee->id)->where("day" , $dayOfWeekJalali)->get()->first();
                 $employeeTimeSheet = Employeetimesheet::where("user_id" , $employee->id)->where("date" , $toDayDate)->get();
                 $done = false ;
-                if($employeeTimeSheet->isEmpty()){
+                if($employeeTimeSheet->isEmpty())
+                {// Check whether he has entered today's time or not
                     $newEmplployeeTimeSheet = new Employeetimesheet();
 
                     $newEmplployeeTimeSheet->date = $toDayDate;
@@ -75,7 +76,8 @@ class Kernel extends ConsoleKernel
                         $done = $newEmplployeeTimeSheet->id;
                     else
                         $done = false;
-                }elseif(!$employeeTimeSheet->first()->getOriginal("timeSheetLock")){
+                }elseif(!$employeeTimeSheet->first()->getOriginal("timeSheetLock"))
+                {// Check whether it is locked or not
                     $employeeTimeSheet = $employeeTimeSheet->first();
                     if(strcmp($employeeTimeSheet->clockIn , "00:00:00") == 0 )
                     {
@@ -124,9 +126,8 @@ class Kernel extends ConsoleKernel
                 {
                     $employeeTimeSheet = Employeetimesheet::all()->where("id" , $done)->first() ;
                     /**
-                     * Sending auto generated password through SMS
+                     * Sending SMS
                      */
-//                    if(isset($employeeTimeSheet->getEmployeeFullName()[0]))
                     if(isset($employeeTimeSheet->user->firstName))
                         $message = "سلام " .$employeeTimeSheet->user->firstName." عزیز";
                     else
@@ -173,6 +174,9 @@ class Kernel extends ConsoleKernel
                             $response = $this->medianaSendSMS($smsInfo);
                         }
                     }
+                    /**
+                     * End of sending SMS
+                     */
                 }
             }
 
