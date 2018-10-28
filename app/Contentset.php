@@ -4,6 +4,7 @@ namespace App;
 
 
 use App\Classes\Taggable;
+use App\Traits\favorableTraits;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
@@ -44,6 +45,8 @@ use Illuminate\Support\Facades\Config;
 class Contentset extends Model implements Taggable
 {
     use SoftDeletes;
+    use favorableTraits;
+
     /**      * The attributes that should be mutated to dates.        */
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 

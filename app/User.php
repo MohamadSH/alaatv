@@ -7,9 +7,9 @@ use App\Classes\Verification\MustVerifyMobileNumber;
 use App\Collection\ContentCollection;
 use App\Collection\UserCollection;
 use App\Traits\APIRequestCommon;
+use App\Traits\DateTrait;
 use App\Traits\HasWallet;
 use App\Traits\Helper;
-use App\Traits\DateTrait;
 use App\Traits\MustVerifyMobileNumberTrait;
 use Carbon\Carbon;
 use Iatstuti\Database\Support\CascadeSoftDeletes;
@@ -409,6 +409,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
 
     /**
      * Retrieve all product vouchers of this user
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function productvouchers()
     {
@@ -418,8 +419,23 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     public function ordermanagercomments()
     {
         return $this->hasMany('App\Ordermanagercomment');
-    }    
-    
+    }
+
+    public function favoredContent()
+    {
+        return $this->morphedByMany('App\Content', 'favorable')->withTimestamps();
+    }
+
+    public function favoredSet()
+    {
+        return $this->morphedByMany('App\Contentset', 'favorable')->withTimestamps();
+    }
+
+    public function favoredProduct()
+    {
+        return $this->morphedByMany('App\Product', 'favorable')->withTimestamps();
+    }
+
     /**
      * Create a new Eloquent Collection instance.
      *

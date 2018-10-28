@@ -2,9 +2,14 @@
 
 namespace App;
 
-use App\Classes\{Advertisable, Pricing\Alaa\AlaaCashier, SEO\SeoInterface, SEO\SeoMetaTagsGenerator, Taggable};
+use App\Classes\{Advertisable,
+    FavorableInterface,
+    Pricing\Alaa\AlaaCashier,
+    SEO\SeoInterface,
+    SEO\SeoMetaTagsGenerator,
+    Taggable};
 use App\Collection\ProductCollection;
-use App\Traits\{APIRequestCommon, CharacterCommon, Helper, ProductCommon, DateTrait};
+use App\Traits\{APIRequestCommon, CharacterCommon, DateTrait, favorableTraits, Helper, ProductCommon};
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\{Eloquent\Builder, Eloquent\Model, Eloquent\SoftDeletes};
@@ -81,7 +86,7 @@ use Illuminate\Support\{Collection, Facades\Cache, Facades\Config};
  * @method static \Illuminate\Database\Query\Builder|\App\Product withoutTrashed()
  * @mixin \Eloquent
  */
-class Product extends Model implements Advertisable, Taggable , SeoInterface
+class Product extends Model implements Advertisable, Taggable, SeoInterface, FavorableInterface
 {
     /*
     |--------------------------------------------------------------------------
@@ -96,7 +101,7 @@ class Product extends Model implements Advertisable, Taggable , SeoInterface
     use Helper;
     use APIRequestCommon;
     use DateTrait;
-
+    use favorableTraits;
     /*
     |--------------------------------------------------------------------------
     | Properties

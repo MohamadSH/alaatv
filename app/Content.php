@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Classes\Advertisable;
+use App\Classes\FavorableInterface;
 use App\Classes\LinkGenerator;
 use App\Classes\Search\Tag\ContentTagManagerViaApi;
 use App\Classes\SEO\SeoInterface;
@@ -11,6 +12,7 @@ use App\Classes\Taggable;
 use App\Collection\ContentCollection;
 use App\Traits\APIRequestCommon;
 use App\Traits\DateTrait;
+use App\Traits\favorableTraits;
 use App\Traits\Helper;
 use Carbon\Carbon;
 use Exception;
@@ -91,7 +93,7 @@ use Stevebauman\Purify\Facades\Purify;
  * @property-read mixed $meta_title
  * @property-read mixed $title
  */
-class Content extends Model implements Advertisable, Taggable, SeoInterface
+class Content extends Model implements Advertisable, Taggable, SeoInterface, FavorableInterface
 {
     /*
     |--------------------------------------------------------------------------
@@ -103,6 +105,7 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface
     use SoftDeletes;
     use Helper;
     use DateTrait;
+    use favorableTraits;
     
     /*
     |--------------------------------------------------------------------------
