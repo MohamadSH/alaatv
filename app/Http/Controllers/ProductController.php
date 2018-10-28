@@ -55,6 +55,7 @@ class ProductController extends Controller
     protected $response;
     protected $setting;
     const PARTIAL_SEARCH_TEMPLATE = 'partials.search.product';
+    const PARTIAL_INDEX_TEMPLATE = 'product.index';
 
     /*
     |--------------------------------------------------------------------------
@@ -216,9 +217,9 @@ class ProductController extends Controller
      * @param $query
      * @return string
      */
-    private function getPartialSearchFromIds($query)
+    private function getPartialSearchFromIds($query , $layout)
     {
-        $partialSearch = View::make(self::PARTIAL_SEARCH_TEMPLATE, ['items' => $query])->render();
+        $partialSearch = View::make($layout, ['items' => $query])->render();
         return $partialSearch;
     }
 
@@ -262,9 +263,17 @@ class ProductController extends Controller
         if ($isApp) {
             $items->push($productResult->getCollection());
         } else {
-            if ($productResult->total() > 0) $partialSearch = $this->getPartialSearchFromIds($productResult); else
+            if ($productResult->total() > 0) {
+//                $partialSearch = View::make('product.index', ['products' => $productResult])->render();
+                $partialSearch = $this->getPartialSearchFromIds($productResult, self::PARTIAL_SEARCH_TEMPLATE );
+                $partialIndex = $this->getPartialSearchFromIds($productResult, self::PARTIAL_INDEX_TEMPLATE);
+            }
+            else
+            {
                 $partialSearch = null;
-            $items->push(["totalitems" => $productResult->total(), "view" => $partialSearch,]);
+                $partialIndex = null ;
+            }
+            $items->push(["totalitems" => $productResult->total(), "view" => $partialSearch,"indexView" => $partialIndex]);
         }
 
         if ($isApp) {

@@ -27,7 +27,7 @@ class RouteServiceProvider extends ServiceProvider
     private function modelBinding(){
         Route::bind('user', function( $value){
             $key = "User:".$value;
-           return Cache::remember($key,Config::get("constants.CACHE_5"),function () use ($value){
+           return Cache::tags(['user',$key])->remember($key,Config::get("constants.CACHE_5"),function () use ($value){
                 return User::where('id', $value)->first() ?? abort(404);
             });
 

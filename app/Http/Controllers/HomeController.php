@@ -28,6 +28,7 @@ use App\{Assignmentstatus,
     Major,
     Notifications\GeneralNotice,
     Notifications\GiftGiven,
+    Notifications\MobileVerified,
     Notifications\UserRegisterd,
     Order,
     Orderproduct,
@@ -136,9 +137,7 @@ class HomeController extends Controller
 
         dump($request->route('ab'));
         dd("Done!");
-        dd( App::getLocale());
-        $pr = Product::find(181);
-        dd($pr->sample_photos);
+
         $categories = Category::active()->get()->toTree();
         return view('partials.tree',compact('categories'));
 

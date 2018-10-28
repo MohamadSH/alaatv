@@ -42,6 +42,14 @@ class ContentController extends Controller
     use CharacterCommon;
     use MetaCommon;
 
+    /*
+    |--------------------------------------------------------------------------
+    | Properties
+    |--------------------------------------------------------------------------
+    */
+
+    const PARTIAL_SEARCH_TEMPLATE_ROOT = 'partials.search';
+    const PARTIAL_INDEX_TEMPLATE = 'content.index';
 
 
     public function __construct(Agent $agent, Response $response ,Websitesetting $setting)
@@ -81,13 +89,20 @@ class ContentController extends Controller
             }
             else {
                 if (${$contentType . 'Result'}->total() > 0)
-                    $partialSearch = $this->getPartialSearchFromIds( ${$contentType . 'Result'}, $contentType);
+                {
+                    $partialSearch = $this->getPartialSearchFromIds( ${$contentType . 'Result'}, self::PARTIAL_SEARCH_TEMPLATE_ROOT.".".$contentType);
+                    $partialIndex = $this->getPartialSearchFromIds( ${$contentType . 'Result'}, self::PARTIAL_INDEX_TEMPLATE);
+                }
                 else
+                {
                     $partialSearch = null;
+                    $partialIndex = null ;
+                }
                 $items->push([
                     "type"=>$contentType,
                     "totalitems"=> ${$contentType . 'Result'}->total(),
                     "view"=>$partialSearch,
+                    "indexView" => $partialIndex,
                     "tagLabels" => $tags
                 ]);
             }
@@ -542,9 +557,9 @@ class ContentController extends Controller
     }
 
 
-    private function getPartialSearchFromIds($query , string $itemType ){
+    private function getPartialSearchFromIds($query , string $layout ){
         $partialSearch = View::make(
-            'partials.search.'.$itemType,
+            $layout ,
             [
                 'items' => $query
             ]

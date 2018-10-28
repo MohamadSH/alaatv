@@ -22,7 +22,9 @@ class ContentSearch extends SearchAbstract
     protected $validFilters = [
       'name',
       'tags',
-      'contentType'
+      'contentType',
+      'createdAtSince',
+      'createdAtTill'
     ];
 
     public function apply(array $filters ) :LengthAwarePaginator {
@@ -32,6 +34,7 @@ class ContentSearch extends SearchAbstract
         return Cache::tags(['content','search'])->remember($key,$this->cacheTime,function () use( $filters ) {
 //            dump("in cache");
             $query = $this->applyDecoratorsFromFiltersArray($filters, $this->model->newQuery());
+
             return $this->getResults($query);
         });
     }

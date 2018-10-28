@@ -910,26 +910,33 @@ $(document).on("click", ".eventResultUpdate", function (e){
  * Educational Content Admin Ajax
  */
 $(document).on("click", "#content-portlet .reload", function (){
+    console.log("triggered");
     $("#content-portlet-loading").removeClass("hidden");
     $('#content_table > tbody').html("");
-    var columns = ["name" ,  "enable",  "description" , "grade" , "major" , "contentType" , "file" , "created_at" , "updated_at" , "validSince" , "action"] ;
-    var url = $("#content-portlet-action").text();
+
+    var formData = $("#filterContentForm").serialize();
+    console.log(formData);
+    var url = $("#filterContentForm").attr('action');
     $.ajax({
         type: "GET",
         url: url,
-        data: {"columns":columns ,"controlPanel":true} ,
+        data: formData ,
         success: function (result) {
-            // console.log(result);
-            // console.log(result.responseText);
+            var resultItems = result.items ;
+            var layout = "" ;
+            $.each(resultItems, function(index, value) {
+                layout += value.indexView;
+            });
+            console.log(layout);
             var newDataTable =$("#content_table").DataTable();
             newDataTable.destroy();
-            $('#content_table > tbody').html(result);
+            $('#content_table > tbody').html(layout);
             makeDataTable("content_table");
             $("#content-portlet-loading").addClass("hidden");
         },
         error: function (result) {
-            // console.log(result);
-            // console.log(result.responseText);
+            console.log(result);
+            console.log(result.responseText);
         }
     });
 
@@ -988,3 +995,36 @@ function removeContent(url){
         },
     });
 }
+
+
+/*
+     completedSince
+*/
+$("#contentCreatedSince").persianDatepicker({
+    altField: '#contentCreatedSinceAlt',
+    altFormat: "YYYY MM DD",
+    observer: true,
+    format: 'YYYY/MM/DD',
+    altFieldFormatter: function(unixDate){
+        var d = new Date(unixDate).toISOString();
+        d = d.substring(0, d.indexOf('T'));
+        d += " 00:00:00";
+        console.log(d);
+        return d;
+    }
+});
+/*
+ completedTill
+ */
+$("#contentCreatedTill").persianDatepicker({
+    altField: '#contentCreatedTillAlt',
+    altFormat: "YYYY MM DD",
+    observer: true,
+    format: 'YYYY/MM/DD',
+    altFieldFormatter: function(unixDate){
+        var d = new Date(unixDate).toISOString();
+        d = d.substring(0, d.indexOf('T'));
+        d += " 23:59:59";
+        return d;
+    }
+});
