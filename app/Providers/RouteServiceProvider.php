@@ -31,7 +31,6 @@ use App\{Afterloginformcontrol,
     User,
     Userbon,
     Userupload,
-    Verificationmessage,
     Wallet,
     Websitesetting};
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
@@ -153,13 +152,6 @@ class RouteServiceProvider extends ServiceProvider
             $key = "Userupload:" . $value;
             return Cache::remember($key, Config::get("constants.CACHE_5"), function () use ($value) {
                 return Userupload::where('id', $value)->first() ?? abort(404);
-            });
-
-        });
-        Route::bind('verificationmessage', function ($value) {
-            $key = "Verificationmessage:" . $value;
-            return Cache::remember($key, Config::get("constants.CACHE_5"), function () use ($value) {
-                return Verificationmessage::where('id', $value)->first() ?? abort(404);
             });
 
         });

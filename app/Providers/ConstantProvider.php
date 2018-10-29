@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\{Contentset, Contenttype, Product, Productfiletype, Verificationmessagestatus, Wallettype};
+use App\{Contentset, Contenttype, Product, Productfiletype, Wallettype};
 use Illuminate\{Database\QueryException, Support\Facades\Config, Support\Facades\View, Support\ServiceProvider};
 
 class ConstantProvider extends ServiceProvider
@@ -168,17 +168,6 @@ class ConstantProvider extends ServiceProvider
             if ($wallettypes->where("name", "gift")->isNotEmpty())
                 Config::set("constants.WALLET_TYPE_GIFT", $wallettypes->where("name", "gift")->first()->id);
 
-//                =============================VERIFICATION MESSAGE STATUSES
-
-            $verificationmessagestatuses = Verificationmessagestatus::all();
-            if ($verificationmessagestatuses->where("name", "sent")->isNotEmpty())
-                Config::set("constants.VERIFICATION_MESSAGE_STATUS_SENT", $verificationmessagestatuses->where("name", "sent")->first()->id);
-            if ($verificationmessagestatuses->where("name", "successful")->isNotEmpty())
-                Config::set("constants.VERIFICATION_MESSAGE_STATUS_SUCCESSFUL", $verificationmessagestatuses->where("name", "successful")->first()->id);
-            if ($verificationmessagestatuses->where("name", "notDelivered")->isNotEmpty())
-                Config::set("constants.VERIFICATION_MESSAGE_STATUS_NOT_DELIVERED", $verificationmessagestatuses->where("name", "notDelivered")->first()->id);
-            if ($verificationmessagestatuses->where("name", "expired")->isNotEmpty())
-                Config::set("constants.VERIFICATION_MESSAGE_STATUS_EXPIRED", $verificationmessagestatuses->where("name", "expired")->first()->id);
 
             $donateProduct = Product::whereIn("id", config("constants.DONATE_PRODUCT"))
                 ->first();

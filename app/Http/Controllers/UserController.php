@@ -1975,28 +1975,13 @@ class UserController extends Controller
             }
         }
 
-        $verificationMessageStatusSent = config("constants.VERIFICATION_MESSAGE_STATUS_SENT");
-        $verificationMessage = $user->verificationmessages
-            ->where("verificationmessagestatus_id", $verificationMessageStatusSent)
-            ->sortByDesc("created_at")
-            ->first();
-        $hasRequestedVerificationCode = false;
-        if (isset($verificationMessage)) {
-            $hasRequestedVerificationCode = true;
-            $now = Carbon::now();
-            if ($now->diffInMinutes($verificationMessage->created_at) > Config::get('constants.MOBILE_VERIFICATION_WAIT_TIME')) {
-                $hasRequestedVerificationCode = false;
-            }
-        }
-
         return view("user.submitVoucherRequest", compact("user",
             "genders",
             "majors",
             "sideBarMode",
             "userHasRegistered",
             "rank",
-            "userVoucher",
-            "hasRequestedVerificationCode"
+            "userVoucher"
         ));
     }
 

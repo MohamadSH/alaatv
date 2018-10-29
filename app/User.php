@@ -160,7 +160,6 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
         'orders',
         'userbons',
         'useruploads',
-        'verificationmessages',
         'bankaccounts',
         'contacts',
         'mbtianswers'
@@ -343,11 +342,6 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     public function useruploads()
     {
         return $this->hasMany('\App\Userupload');
-    }
-
-    public function verificationmessages()
-    {
-        return $this->hasMany('\App\Verificationmessage');
     }
 
     //Site pages that user has seen
