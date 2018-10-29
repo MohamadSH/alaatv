@@ -2,10 +2,9 @@
 
 namespace App;
 
-use App\Traits\Helper;
 use App\Traits\DateTrait;
+use App\Traits\Helper;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
@@ -42,7 +41,7 @@ class Attributeset extends Model
     use SoftDeletes;
     use Helper;
     use DateTrait;
-    
+
     /**
      * The attributes that should be mutated to dates.
      *
@@ -65,30 +64,20 @@ class Attributeset extends Model
         'attributegroups'
     ];
 
-    public function cacheKey()
+    public function attributes()
     {
-        $key = $this->getKey();
-        $time= isset($this->update) ? $this->updated_at->timestamp : $this->created_at->timestamp;
-        return sprintf(
-            "%s-%s",
-            //$this->getTable(),
-            $key,
-            $time
-        );
-    }
-    public function attributes(){
-        $key = "Attributeset:".$this->cacheKey();
-        return Cache::remember($key,Config::get("constants.CACHE_60"),function () {
+        $key = "Attributeset:" . $this->cacheKey();
+        return Cache::remember($key, Config::get("constants.CACHE_60"), function () {
             $result = DB::table('attributesets')
-                ->join('attributegroups',function ($join){
-                    $join->on( 'attributesets.id', '=', 'attributegroups.attributeset_id')
+                ->join('attributegroups', function ($join) {
+                    $join->on('attributesets.id', '=', 'attributegroups.attributeset_id')
                         ->whereNull('attributegroups.deleted_at');
                 })
-                ->join('attribute_attributegroup', function ($join){
+                ->join('attribute_attributegroup', function ($join) {
                     $join->on('attribute_attributegroup.attributegroup_id', '=', 'attributegroups.id');
 
                 })
-                ->join('attributes', function ($join){
+                ->join('attributes', function ($join) {
                     $join->on('attributes.id', '=', 'attribute_attributegroup.attribute_id')
                         ->whereNull('attributes.deleted_at');
                 })
@@ -97,8 +86,8 @@ class Attributeset extends Model
                     'attribute_attributegroup.attributegroup_id as pivot_attributegroup_id',
                     'attribute_attributegroup.order as pivot_order',
                     'attribute_attributegroup.description as pivot_description',
-                    ])
-                ->where('attributesets.id','=',$this->id)
+                ])
+                ->where('attributesets.id', '=', $this->id)
                 ->whereNull('attributesets.deleted_at')
                 ->get();
 
@@ -111,7 +100,7 @@ class Attributeset extends Model
                     "order" => $item->pivot_order,
                     "description" => $item->pivot_description,
                 ];
-                $p = $item->newPivot($item,$p,'attribute_attributegroup',true);
+                $p = $item->newPivot($item, $p, 'attribute_attributegroup', true);
 
                 $item->relations = [
 
@@ -129,6 +118,18 @@ class Attributeset extends Model
 
         });
 
+    }
+
+    public function cacheKey()
+    {
+        $key = $this->getKey();
+        $time = isset($this->update) ? $this->updated_at->timestamp : $this->created_at->timestamp;
+        return sprintf(
+            "%s-%s",
+            //$this->getTable(),
+            $key,
+            $time
+        );
     }
 
     public function products()

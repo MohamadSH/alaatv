@@ -16,7 +16,7 @@ class CreatedAtTill extends FilterAbstract
 
     public function apply(Builder $builder, $value, FilterCallback $callback): Builder
     {
-        return $builder->where($this->attribute , "<=" , $value);
+        return $builder->where($this->attribute, "<=", $value);
     }
 
 

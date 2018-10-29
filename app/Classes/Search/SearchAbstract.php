@@ -21,7 +21,7 @@ abstract class SearchAbstract
 
     protected $cacheKey;
     protected $cacheTime;
-    protected $validFilters ;
+    protected $validFilters;
     protected $model;
     protected $dummyFilterCallBack;
     protected $pageName = 'page';
@@ -31,11 +31,11 @@ abstract class SearchAbstract
 
     public function __construct()
     {
-        if(!isset($this->model))
+        if (!isset($this->model))
             throw new LogicException(get_class($this) . ' must have a $model');
 
         $this->dummyFilterCallBack = new DummyFilterCallBack();
-        $this->cacheKey = get_class($this).':';
+        $this->cacheKey = get_class($this) . ':';
         $this->cacheTime = Config::get("constants.CACHE_60");
         $this->pageNum = self::DEFAULT_PAGE_NUMBER;
         $this->model = (new $this->model);
@@ -98,6 +98,7 @@ abstract class SearchAbstract
     }
 
     abstract protected function getResults(Builder $query);
+
     abstract protected function setupDecorator($decorator);
 
 
@@ -107,7 +108,7 @@ abstract class SearchAbstract
      */
     protected function makeCacheKey(array $array): string
     {
-        $key = $this->cacheKey . $this->pageName.'-' .$this->pageNum . ':'.md5(serialize($this->validFilters).serialize($array));
+        $key = $this->cacheKey . $this->pageName . '-' . $this->pageNum . ':' . md5(serialize($this->validFilters) . serialize($array));
         return $key;
     }
 

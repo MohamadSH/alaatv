@@ -1,17 +1,17 @@
 <?php namespace App\Traits;
 
+use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
-use \Illuminate\Http\Request;
-use \GuzzleHttp\Client;
+use Illuminate\Http\Request;
 
 trait APIRequestCommon
 {
-    public function sendRequest( $path , $method , $parameters=[]) {
+    public function sendRequest($path, $method, $parameters = [])
+    {
         $client = new Client();
         $request = new Request();
-        foreach ($parameters as $key => $parameter)
-        {
-            $request->offsetSet($key , $parameter);
+        foreach ($parameters as $key => $parameter) {
+            $request->offsetSet($key, $parameter);
         }
         try {
             $res = $client->request($method, $path, ['form_params' => $request->all()]);
@@ -19,8 +19,8 @@ trait APIRequestCommon
             dd($e);
         }
         return [
-            "statusCode"=>$res->getStatusCode(),
-            "result"=>$res->getBody()->getContents()
+            "statusCode" => $res->getStatusCode(),
+            "result" => $res->getBody()->getContents()
         ];
     }
 

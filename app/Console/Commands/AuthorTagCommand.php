@@ -44,17 +44,17 @@ class AuthorTagCommand extends Command
     public function handle()
     {
         $authorId = (int)$this->argument('author');
-        if($authorId > 0){
+        if ($authorId > 0) {
             try {
                 $user = User::findOrFail($authorId);
-            } catch (ModelNotFoundException $exception){
+            } catch (ModelNotFoundException $exception) {
                 $this->error($exception->getMessage());
                 return;
             }
-            if ($this->confirm('You have chosen '.$user->getfullName().'. Do you wish to continue?',true)) {
+            if ($this->confirm('You have chosen ' . $user->getfullName() . '. Do you wish to continue?', true)) {
                 $this->performTaggingTaskForAnAuthor($user);
             }
-        }else{
+        } else {
             $this->performTaggingTaskForAllAuthors();
         }
 
@@ -66,15 +66,14 @@ class AuthorTagCommand extends Command
      */
     private function performTaggingTaskForAnAuthor(User $user)
     {
-        $userContents = $user->contents ;
-        if(count($userContents) == 0){
-            $this->error("user ".$user->getfullName()." has no content.");
+        $userContents = $user->contents;
+        if (count($userContents) == 0) {
+            $this->error("user " . $user->getfullName() . " has no content.");
 
-        }else{
+        } else {
             $this->sendTagsOfTaggableToApi($user, $this->tagging);
         }
     }
-
 
 
     private function performTaggingTaskForAllAuthors(): void

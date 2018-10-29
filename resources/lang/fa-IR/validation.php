@@ -75,10 +75,10 @@ return [
     'string' => 'The :attribute must be a string.',
     'timezone' => 'The :attribute must be a valid zone.',
     'unique' => ':attribute قبلا ثبت شده است',
-    'uploaded'  => 'آپلود :attribute نا موفق بود.',
+    'uploaded' => 'آپلود :attribute نا موفق بود.',
     'url' => 'معتبر نمی باشد :attribute فرمت',
-    'validate' => 'مقدار :attribute معتبر نمی باشد.' ,
-    'array2d' => 'مقدار :attribute باید آرایه دو بعدی باشد.' ,
+    'validate' => 'مقدار :attribute معتبر نمی باشد.',
+    'array2d' => 'مقدار :attribute باید آرایه دو بعدی باشد.',
     "recaptcha" => 'مقدار :attribute معتبر نمی باشد.',
 
     /*
@@ -96,36 +96,36 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
-        'assignmentstatus_id' =>[
+        'assignmentstatus_id' => [
             'min' => 'وضعیت تمرین باید مشخص شود'
         ],
-        'consultationstatus_id' =>[
+        'consultationstatus_id' => [
             'min' => 'وضعیت مشاوره باید مشخص شود'
         ],
-        'major_id' =>[
+        'major_id' => [
             'min' => 'رشته باید مشخص شود',
             'exists' => 'رشته باید مشخص شود'
         ],
-        'grade_id' =>[
+        'grade_id' => [
             'exists' => 'مقطع باید مشخص شود'
         ],
-        'userstatus_id' =>[
+        'userstatus_id' => [
             'min' => 'وضعیت کاربر باید مشخص شود'
         ],
-        'nationalCode' =>[
+        'nationalCode' => [
             'validate' => 'کد ملی معتبر نمی باشد'
         ],
-        'orderstatus_id' =>[
+        'orderstatus_id' => [
             'exists' => 'وضعیت انتخاب شده معتبر نمی باشد'
         ],
-        'transactionID' =>[
+        'transactionID' => [
             'max' => 'این تراکنش شماره ندارد.',
             'required_if' => 'وارد کردن شماره تراکنش الزامی است.'
         ],
-        'usageLimit' =>[
+        'usageLimit' => [
             'required_if' => 'در حالت محدود ، تعیین تعداد مجاز برای استفاده از کپن الزامیست.'
         ],
-        'amount' =>[
+        'amount' => [
             'required_if' => 'در حالت محدود ، تعیین تعداد موجود برای کالا الزامیست.'
         ],
         'cost' => [
@@ -170,13 +170,13 @@ return [
         'photo' => 'عکس',
         'questionFile' => 'فایل سؤال',
         'solutionFile' => 'فایل پاسخ',
-        'major_id' => 'رشته' ,
+        'major_id' => 'رشته',
         'majors' => 'رشته',
-        'assignmentstatus_id' => 'وضعیت تمرین' ,
-        'consultationstatus_id' => 'وضعیت مشاوره' ,
-        'numberOfQuestions' => 'تعداد سؤالات' ,
+        'assignmentstatus_id' => 'وضعیت تمرین',
+        'consultationstatus_id' => 'وضعیت مشاوره',
+        'numberOfQuestions' => 'تعداد سؤالات',
         'userstatus_id' => 'وضعیت کاربر',
-        'postalCode'    => 'کد پستی',
+        'postalCode' => 'کد پستی',
         'g-recaptcha-response' => 'عبارت امنیتی',
         'cost' => 'مبلغ',
         'transactionID' => 'شماره تراکنش',
@@ -191,12 +191,12 @@ return [
         'attributeset_id' => 'دسته صفت',
         'title' => 'عنوان',
         'message' => 'پیام',
-        'mobileNumber'=>'شماره موبایل',
+        'mobileNumber' => 'شماره موبایل',
         'displayName' => 'نام قابل نمایش',
         'display_name' => 'نام قابل نمایش',
         'attributecontrol_id' => 'نوع کنترل صفت',
         'totalNumber' => 'تعداد بن',
-        'gender_id' => 'جنسیت' ,
+        'gender_id' => 'جنسیت',
         'genders' => 'جنسیت',
         'bonPlus' => 'تعداد بن',
         'bonDiscount' => 'تخفیف بن',
@@ -206,27 +206,27 @@ return [
         'paycheckNumber' => 'شماره چک',
         'consultingAudioQuestions' => 'فایل صوتی سوال مشاوره ای',
         'contacttype_id' => 'نوع مخاطب',
-        'relative_id'   => 'نسبت مخاطب',
+        'relative_id' => 'نسبت مخاطب',
         'order' => 'ترتیب',
         'brief' => 'خلاصه',
         'keyword' => 'کلمات کلیدی',
         'complimentaryproducts' => 'اشانتیون',
         'producttype_id' => 'نوع محصول',
-        'file'=>'فایل',
-        'files'=>'فایل',
-        'rank'=>'رتبه',
-        'participationCode'=>'کد داوطلبی',
-        'reportFile'=>'فایل کارنامه',
+        'file' => 'فایل',
+        'files' => 'فایل',
+        'rank' => 'رتبه',
+        'participationCode' => 'کد داوطلبی',
+        'reportFile' => 'فایل کارنامه',
         'phoneNumber' => 'شماره تلفن',
-        'grades'=>'مقطع',
-        'grade_id'=>'مقطع',
-        'contenttypes'=>'نوع محتوا',
+        'grades' => 'مقطع',
+        'grade_id' => 'مقطع',
+        'contenttypes' => 'نوع محتوا',
         'user_id' => 'کاربر',
         'date' => 'تاریخ',
         'score' => 'نمره',
         'province' => 'استان',
         'city' => 'شهر',
-        'school' => 'مدرسه' ,
+        'school' => 'مدرسه',
         'introducedBy' => 'معرف',
         'address' => 'آدرس'
     ],
@@ -236,5 +236,7 @@ return [
         'each field should be string' => 'مقادیر هر آیتم باید string باشد.',
         'each item in array should be instance of std class' => 'هر آیتم باید از نوع stdclass باشد.',
         'should be An array' => ':attribute باید آرایه باشد.'
-    ]
+    ],
+
+    'phone' => 'شماره :attribute به درستی وارد نشده است.'
 ];

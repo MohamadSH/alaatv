@@ -8,6 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 class RegisterForSanatiSharifHighSchoolRequest extends FormRequest
 {
     use CharacterCommon;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -25,26 +26,26 @@ class RegisterForSanatiSharifHighSchoolRequest extends FormRequest
      */
     public function rules()
     {
-        $rules  = [];
-        if($this->request->has("firstName"))
-            $rules["firstName"] = "required" ;
+        $rules = [];
+        if ($this->request->has("firstName"))
+            $rules["firstName"] = "required";
         else
-            $rules["firstName"] = "" ;
+            $rules["firstName"] = "";
 
-        if($this->request->has("lastName"))
-            $rules["lastName"] = "required" ;
+        if ($this->request->has("lastName"))
+            $rules["lastName"] = "required";
         else
-            $rules["lastName"] = "" ;
+            $rules["lastName"] = "";
 
-        if($this->request->has("mobile"))
-            $rules["mobile"] = "required|digits:11" ;
+        if ($this->request->has("mobile"))
+            $rules["mobile"] = "required|digits:11|phone:AUTO,IR,mobile";
         else
-            $rules["mobile"] = "" ;
+            $rules["mobile"] = "";
 
-        if($this->request->has("nationalCode"))
-            $rules["nationalCode"] = "required|digits_between:0,15" ;
+        if ($this->request->has("nationalCode"))
+            $rules["nationalCode"] = "required|digits_between:0,15";
         else
-            $rules["nationalCode"] = "" ;
+            $rules["nationalCode"] = "";
         return [
             "firstName" => $rules["firstName"],
             "lastName" => $rules["lastName"],
@@ -53,7 +54,7 @@ class RegisterForSanatiSharifHighSchoolRequest extends FormRequest
             "grade_id" => "required|exists:grades,id",
             "major_id" => "required|exists:majors,id",
 //            "score" => "required",
-            "score" => array('required' , 'regex:/[0-9]\.*/'),
+            "score" => array('required', 'regex:/[0-9]\.*/'),
         ];
     }
 
@@ -65,25 +66,22 @@ class RegisterForSanatiSharifHighSchoolRequest extends FormRequest
 
     protected function replaceNumbers()
     {
-        $input = $this->request->all() ;
-        if(isset($input["mobile"]))
-        {
-            $input["mobile"] = preg_replace('/\s+/', '', $input["mobile"] ) ;
-            $input["mobile"] = $this->convertToEnglish($input["mobile"]) ;
+        $input = $this->request->all();
+        if (isset($input["mobile"])) {
+            $input["mobile"] = preg_replace('/\s+/', '', $input["mobile"]);
+            $input["mobile"] = $this->convertToEnglish($input["mobile"]);
         }
 
-        if(isset($input["nationalCode"]))
-        {
-            $input["nationalCode"] = preg_replace('/\s+/', '', $input["nationalCode"] ) ;
-            $input["nationalCode"] = $this->convertToEnglish($input["nationalCode"]) ;
+        if (isset($input["nationalCode"])) {
+            $input["nationalCode"] = preg_replace('/\s+/', '', $input["nationalCode"]);
+            $input["nationalCode"] = $this->convertToEnglish($input["nationalCode"]);
         }
 
-        if(isset($input["score"]))
-        {
-            $input["score"] = preg_replace('/\s+/', '', $input["score"] ) ;
-            $input["score"] = $this->convertToEnglish($input["score"]) ;
+        if (isset($input["score"])) {
+            $input["score"] = preg_replace('/\s+/', '', $input["score"]);
+            $input["score"] = $this->convertToEnglish($input["score"]);
         }
 
-        $this->replace($input) ;
+        $this->replace($input);
     }
 }

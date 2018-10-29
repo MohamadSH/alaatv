@@ -23,21 +23,20 @@ class ModifyRequestInputMiddleware
     public function handle($request, Closure $next, $index)
     {
 
-        $this->replaceNumbers($request, explode("|",$index));
+        $this->replaceNumbers($request, explode("|", $index));
         return $next($request);
 
     }
 
-    protected function replaceNumbers(Request &$request , array $array)
+    protected function replaceNumbers(Request &$request, array $array)
     {
 
-        $input = $request->all() ;
-        foreach ($array as $item)
-        {
-            if(isset($input[$item]))
-                $input[$item] = $this->convertToEnglish($input[$item]) ;
+        $input = $request->all();
+        foreach ($array as $item) {
+            if (isset($input[$item]))
+                $input[$item] = $this->convertToEnglish($input[$item]);
         }
-        $request->replace($input) ;
+        $request->replace($input);
 
 
     }

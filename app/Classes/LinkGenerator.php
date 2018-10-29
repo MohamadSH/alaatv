@@ -12,9 +12,7 @@ namespace App\Classes;
 use App\Adapter\AlaaSftpAdapter;
 use App\File;
 use Illuminate\Support\Facades\Storage;
-use League\Flysystem\Adapter\Local;
 use League\Flysystem\FileNotFoundException;
-use League\Flysystem\Sftp\SftpAdapter;
 
 /**
  * Class LinkGenerator
@@ -22,12 +20,11 @@ use League\Flysystem\Sftp\SftpAdapter;
  */
 class LinkGenerator
 {
+    protected const DOWNLOAD_CONTROLLER_NAME = "HomeController@newDownload";
     protected $uuid;
     protected $disk;
     protected $url;
     protected $fileName;
-
-    protected const DOWNLOAD_CONTROLLER_NAME = "HomeController@newDownload";
 
     /**
      * LinkGenerator constructor.
@@ -39,33 +36,6 @@ class LinkGenerator
             ->setUuid($file->uuid)
             ->setUrl($file->url)
             ->setFileName($file->fileName);
-    }
-
-    /**
-     * LinkGenerator constructor.
-     * @param $uuid
-     * @param $disk
-     * @param $url
-     * @param $fileName
-     * @return LinkGenerator
-     */
-    public static function create($uuid, $disk, $url, $fileName)
-    {
-        $input = new \stdClass();
-//        dd("0");
-        $input->disk = null;
-//        dd("1");
-        if (isset($disk))
-            $input->disk = $disk;
-        else if (isset($uuid)) {
-            $input->disk = self::findDiskNameFromUUID($uuid);
-        }
-//        dd("2");
-        $input->uuid = $uuid;
-        $input->url = $url;
-        $input->fileName = $fileName;
-//        dd($input);
-        return new LinkGenerator($input);
     }
 
     /**
@@ -109,6 +79,33 @@ class LinkGenerator
     }
 
     /**
+     * LinkGenerator constructor.
+     * @param $uuid
+     * @param $disk
+     * @param $url
+     * @param $fileName
+     * @return LinkGenerator
+     */
+    public static function create($uuid, $disk, $url, $fileName)
+    {
+        $input = new \stdClass();
+//        dd("0");
+        $input->disk = null;
+//        dd("1");
+        if (isset($disk))
+            $input->disk = $disk;
+        else if (isset($uuid)) {
+            $input->disk = self::findDiskNameFromUUID($uuid);
+        }
+//        dd("2");
+        $input->uuid = $uuid;
+        $input->url = $url;
+        $input->fileName = $fileName;
+//        dd($input);
+        return new LinkGenerator($input);
+    }
+
+    /**
      * @param $uuid
      * @return null | string
      */
@@ -138,24 +135,27 @@ class LinkGenerator
 //            dd("here");
             $diskAdapter = Storage::disk($this->disk)->getAdapter();
 //            dd($diskAdapter);
-            $url = $this->fetchUrl($diskAdapter,$this->fileName);
-            if(isset($paid)){
+            $url = $this->fetchUrl($diskAdapter, $this->fileName);
+            if (isset($paid)) {
                 $data = encrypt([
                     "url" => $url,
                     "data" => $paid
                 ]);
-                return action(self::DOWNLOAD_CONTROLLER_NAME,$data);
+                return action(self::DOWNLOAD_CONTROLLER_NAME, $data);
 
-            }else{
+            } else {
                 return $url;
             }
         } else {
             throw new \Exception("DiskName and FileName should be set \n File uuid=" . $this->uuid);
         }
     }
-    private function fetchUrl(AlaaSftpAdapter $diskAdapter , $fileName){
+
+    private function fetchUrl(AlaaSftpAdapter $diskAdapter, $fileName)
+    {
         return $diskAdapter->getUrl($fileName);
     }
+
     /**
      * @return array
      */

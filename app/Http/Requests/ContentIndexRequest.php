@@ -28,7 +28,7 @@ class ContentIndexRequest extends FormRequest
     {
         return [
             'contentType' => 'array|min:1',
-            "contentType.*"  => "required|string|distinct|min:3",
+            "contentType.*" => "required|string|distinct|min:3",
             'tags' => 'array|min:1'
         ];
     }

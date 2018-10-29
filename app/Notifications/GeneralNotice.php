@@ -4,27 +4,26 @@ namespace App\Notifications;
 
 use App\Broadcasting\MedianaChannel;
 use App\Classes\sms\MedianaMessage;
-use App\Lottery;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Notification;
 use Illuminate\Queue\SerializesModels;
 
 class GeneralNotice extends Notification implements ShouldQueue
 {
-    use Queueable , SerializesModels;
+    use Queueable, SerializesModels;
 
+    public $timeout = 120;
     /**
      * @var string
      */
-    protected  $message;
+    protected $message;
     /**
      * @var User
      */
     protected $user;
-    public $timeout = 120;
 
     /**
      * Create a new notification instance.
@@ -39,7 +38,7 @@ class GeneralNotice extends Notification implements ShouldQueue
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param  mixed $notifiable
      * @return array
      */
     public function via($notifiable)
@@ -62,7 +61,8 @@ class GeneralNotice extends Notification implements ShouldQueue
             ->sendAt(Carbon::now());
     }
 
-    private function msg() : string {
+    private function msg(): string
+    {
 //        if(isset($this->user->gender_id))
 //        {
 //            if($this->user->gender->name=="خانم")
@@ -74,7 +74,7 @@ class GeneralNotice extends Notification implements ShouldQueue
 //        }else{
 //            $gender = "";
 //        }
-        
+
         $messageCore = $this->message;
 //        $message = "سلام ".$gender.$this->user->getfullName()."\n".$messageCore;
         $message = $messageCore;

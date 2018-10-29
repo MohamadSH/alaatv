@@ -23,7 +23,8 @@
                         {{$gift->name}}
                     </h4>
                     <div>
-                        <a class="col-md-1 removeProductGift" data-role="{{$gift->id}}" data-target="#removeProductGiftModal" data-toggle="modal" style="color: red">
+                        <a class="col-md-1 removeProductGift" data-role="{{$gift->id}}"
+                           data-target="#removeProductGiftModal" data-toggle="modal" style="color: red">
                             <i class="fa fa-remove"></i></a>
                     </div>
                 </div>

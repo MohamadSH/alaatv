@@ -920,11 +920,11 @@ $(document).on("click", "#content-portlet .reload", function (){
     $.ajax({
         type: "GET",
         url: url,
-        data: formData ,
+        data: formData,
         success: function (result) {
-            var resultItems = result.items ;
-            var layout = "" ;
-            $.each(resultItems, function(index, value) {
+            var resultItems = result.items;
+            var layout = "";
+            $.each(resultItems, function (index, value) {
                 layout += value.indexView;
             });
             console.log(layout);
@@ -1005,7 +1005,7 @@ $("#contentCreatedSince").persianDatepicker({
     altFormat: "YYYY MM DD",
     observer: true,
     format: 'YYYY/MM/DD',
-    altFieldFormatter: function(unixDate){
+    altFieldFormatter: function (unixDate) {
         var d = new Date(unixDate).toISOString();
         d = d.substring(0, d.indexOf('T'));
         d += " 00:00:00";
@@ -1021,7 +1021,7 @@ $("#contentCreatedTill").persianDatepicker({
     altFormat: "YYYY MM DD",
     observer: true,
     format: 'YYYY/MM/DD',
-    altFieldFormatter: function(unixDate){
+    altFieldFormatter: function (unixDate) {
         var d = new Date(unixDate).toISOString();
         d = d.substring(0, d.indexOf('T'));
         d += " 23:59:59";

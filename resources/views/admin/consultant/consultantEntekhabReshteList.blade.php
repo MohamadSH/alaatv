@@ -1,8 +1,8 @@
 @extends("app")
 
 @section("headPageLevelPlugin")
-    <link href="/assets/global/plugins/jquery-nestable/jquery.nestable.css" rel="stylesheet" type="text/css" />
-    <link href="/assets/global/plugins/bootstrap-toastr/toastr-rtl.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/global/plugins/jquery-nestable/jquery.nestable.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/global/plugins/bootstrap-toastr/toastr-rtl.min.css" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section("headPageLevelStyle")
@@ -50,18 +50,21 @@
 
                     <div class="table-scrollable">
                         <table class="table table-striped table-bordered table-advance table-hover">
-                            <thead >
-                            <tr >
+                            <thead>
+                            <tr>
                                 <th class="text-center">
-                                    <i class="icon-user"></i> نام دانش آموز </th>
+                                    <i class="icon-user"></i> نام دانش آموز
+                                </th>
                                 <th class="text-center">
-                                    <i class="fa fa-graduation-cap"></i> رشته </th>
+                                    <i class="fa fa-graduation-cap"></i> رشته
+                                </th>
                                 <th class="text-center">
-                                    <i class="fa "></i> عملیات </th>
+                                    <i class="fa "></i> عملیات
+                                </th>
                             </tr>
                             </thead>
                             <tbody class="text-center">
-                                @include("usersurveyanswers.index")
+                            @include("usersurveyanswers.index")
                             </tbody>
                         </table>
                     </div>
@@ -114,7 +117,7 @@
                     });
 
                     $('#nestable_list_3').nestable({
-                        maxDepth:1,
+                        maxDepth: 1,
                     });
 
                 }
@@ -123,95 +126,90 @@
 
         }();
 
-        jQuery(document).ready(function() {
+        jQuery(document).ready(function () {
             UINestable.init();
         });
 
         var dataId;
-        var previousDataId ;
-        var nextDataId ;
-        $('.dd3-handle').on('mousedown', function() {
+        var previousDataId;
+        var nextDataId;
+        $('.dd3-handle').on('mousedown', function () {
             dataId = parseInt($(this).parent().attr("data-id"));
-            var previousSiblings = $("#dd-item_"+dataId).closest(".dd-item").prev();
+            var previousSiblings = $("#dd-item_" + dataId).closest(".dd-item").prev();
             previousDataId = parseInt(previousSiblings.attr("data-id"));
-            if(isNaN(previousDataId)) {
+            if (isNaN(previousDataId)) {
                 previousDataId = 0;
             }
-            var nextSibling = $("#dd-item_"+dataId).closest(".dd-item").next();
+            var nextSibling = $("#dd-item_" + dataId).closest(".dd-item").next();
             nextDataId = parseInt(nextSibling.attr("data-id"));
-            if(isNaN(nextDataId)) {
+            if (isNaN(nextDataId)) {
                 nextDataId = 0;
             }
         });
-        $('.dd').on('change', function() {
-            var draggedItem = $("#dd-item_"+dataId);
-            var previousSiblings = $("#dd-item_"+dataId).closest(".dd-item").prev();
+        $('.dd').on('change', function () {
+            var draggedItem = $("#dd-item_" + dataId);
+            var previousSiblings = $("#dd-item_" + dataId).closest(".dd-item").prev();
             var caption = parseInt(previousSiblings.find(".dd-item-caption").html());
-            var nextSiblings = $("#dd-item_"+dataId).closest(".dd-item").next();
+            var nextSiblings = $("#dd-item_" + dataId).closest(".dd-item").next();
 
-            var newNextDataId ;
-            if(isNaN(parseInt(nextSiblings.attr("data-id")))) newNextDataId = 0;
+            var newNextDataId;
+            if (isNaN(parseInt(nextSiblings.attr("data-id")))) newNextDataId = 0;
             else newNextDataId = parseInt(nextSiblings.attr("data-id"));
 
-            var newPreviousDataId ;
-            if(isNaN(parseInt(previousSiblings.attr("data-id")))) newPreviousDataId = 0 ;
+            var newPreviousDataId;
+            if (isNaN(parseInt(previousSiblings.attr("data-id")))) newPreviousDataId = 0;
             else newPreviousDataId = parseInt(previousSiblings.attr("data-id"));
 
-            if(previousDataId === newPreviousDataId && nextDataId === newNextDataId) return true;
+            if (previousDataId === newPreviousDataId && nextDataId === newNextDataId) return true;
 
-            if(isNaN(caption))
-            {
+            if (isNaN(caption)) {
 
-                if(previousDataId === 0 && nextDataId === newNextDataId) return true ;
+                if (previousDataId === 0 && nextDataId === newNextDataId) return true;
                 var nextCaption = parseInt(nextSiblings.find(".dd-item-caption").html());
-                previousSiblings = $("#dd-item_"+(nextCaption-1));
+                previousSiblings = $("#dd-item_" + (nextCaption - 1));
                 caption = parseInt(previousSiblings.find(".dd-item-caption").html());
             }
 
-            if(caption > dataId)
-            {//moved down
-                draggedItem.attr("id" , "dd-item_");
+            if (caption > dataId) {//moved down
+                draggedItem.attr("id", "dd-item_");
                 var captionCounter = parseInt(draggedItem.find(".dd-item-caption").html());
-                var siblingCounter = $("#dd-item_"+(captionCounter+1));
-                while(captionCounter < caption)
-                {
+                var siblingCounter = $("#dd-item_" + (captionCounter + 1));
+                while (captionCounter < caption) {
 
                     siblingCounter.find(".dd-item-caption").html(captionCounter);
-                    siblingCounter.attr("id" , "dd-item_"+captionCounter);
-                    siblingCounter.attr("data-id" , captionCounter);
-                    siblingCounter.find(".majorCode").attr("id" , "majorCode_"+captionCounter);
-                    siblingCounter.find(".majorName").attr("id" , "majorName_"+captionCounter);
-                    captionCounter = captionCounter + 1 ;
-                    siblingCounter = $("#dd-item_"+(captionCounter+1));
+                    siblingCounter.attr("id", "dd-item_" + captionCounter);
+                    siblingCounter.attr("data-id", captionCounter);
+                    siblingCounter.find(".majorCode").attr("id", "majorCode_" + captionCounter);
+                    siblingCounter.find(".majorName").attr("id", "majorName_" + captionCounter);
+                    captionCounter = captionCounter + 1;
+                    siblingCounter = $("#dd-item_" + (captionCounter + 1));
                 }
                 draggedItem.find(".dd-item-caption").html(caption);
-                draggedItem.attr("id" , "dd-item_"+caption);
-                draggedItem.attr("data-id" , caption);
-                draggedItem.find(".majorCode").attr("id" , "majorCode_"+caption);
-                draggedItem.find(".majorName").attr("id" , "majorName_"+caption);
-            }else
-            {//moved up
+                draggedItem.attr("id", "dd-item_" + caption);
+                draggedItem.attr("data-id", caption);
+                draggedItem.find(".majorCode").attr("id", "majorCode_" + caption);
+                draggedItem.find(".majorName").attr("id", "majorName_" + caption);
+            } else {//moved up
                 caption = parseInt(nextSiblings.find(".dd-item-caption").html());
 
-                draggedItem.attr("id" , "dd-item_");
+                draggedItem.attr("id", "dd-item_");
                 var captionCounter = parseInt(draggedItem.find(".dd-item-caption").html());
-                var siblingCounter = $("#dd-item_"+(captionCounter-1));
-                while(captionCounter > caption)
-                {
+                var siblingCounter = $("#dd-item_" + (captionCounter - 1));
+                while (captionCounter > caption) {
 
                     siblingCounter.find(".dd-item-caption").html(captionCounter);
-                    siblingCounter.attr("id" , "dd-item_"+captionCounter);
-                    siblingCounter.attr("data-id" , captionCounter);
-                    siblingCounter.find(".majorCode").attr("id" , "majorCode_"+captionCounter);
-                    siblingCounter.find(".majorName").attr("id" , "majorName_"+captionCounter);
-                    captionCounter = captionCounter - 1 ;
-                    siblingCounter = $("#dd-item_"+(captionCounter-1));
+                    siblingCounter.attr("id", "dd-item_" + captionCounter);
+                    siblingCounter.attr("data-id", captionCounter);
+                    siblingCounter.find(".majorCode").attr("id", "majorCode_" + captionCounter);
+                    siblingCounter.find(".majorName").attr("id", "majorName_" + captionCounter);
+                    captionCounter = captionCounter - 1;
+                    siblingCounter = $("#dd-item_" + (captionCounter - 1));
                 }
                 draggedItem.find(".dd-item-caption").html(caption);
-                draggedItem.attr("id" , "dd-item_"+caption);
-                draggedItem.attr("data-id" , caption);
-                draggedItem.find(".majorCode").attr("id" , "majorCode_"+caption);
-                draggedItem.find(".majorName").attr("id" , "majorName_"+caption);
+                draggedItem.attr("id", "dd-item_" + caption);
+                draggedItem.attr("data-id", caption);
+                draggedItem.find(".majorCode").attr("id", "majorCode_" + caption);
+                draggedItem.find(".majorName").attr("id", "majorName_" + caption);
             }
 
         });
@@ -221,29 +219,29 @@
 @section("extraJS")
     <script>
         var insertedMajorCodes = [];
-        $(document).on("focusout", ".majorCode", function (){
+        $(document).on("focusout", ".majorCode", function () {
             var majorCode = $(this).val();
             var textId = $(this).attr("id").split("majorCode_")[1];
             var parentMajorId = $("input[name=parentMajor]").val();
             majorCode = $.trim(majorCode);
 
-            if(majorCode.length >0)
-                if($.inArray(parseInt(majorCode) , insertedMajorCodes) == -1)
+            if (majorCode.length > 0)
+                if ($.inArray(parseInt(majorCode), insertedMajorCodes) == -1)
                     $.ajax({
                         type: "GET",
-                        url: "{{action("MajorController@index")}}" ,
-                        data: {majorCode: [majorCode] , majorParent:parentMajorId },
+                        url: "{{action("MajorController@index")}}",
+                        data: {majorCode: [majorCode], majorParent: parentMajorId},
                         statusCode: {
                             //The status for when action was successful
                             200: function (response) {
                                 //                    console.log(response) ;
                                 //                    console.log(response.responseText) ;
-                                if(response.length!=0)  {
-                                    $("#majorName_"+textId).val(response[0].name);
+                                if (response.length != 0) {
+                                    $("#majorName_" + textId).val(response[0].name);
                                     insertedMajorCodes.push(parseInt(majorCode));
                                 }
                                 else {
-                                    $("#majorCode_"+textId).val("");
+                                    $("#majorCode_" + textId).val("");
                                     toastr.options = {
                                         "closeButton": true,
                                         "debug": false,
@@ -281,7 +279,7 @@
                             }
                         }
                     });
-                else{
+                else {
                     toastr.options = {
                         "closeButton": true,
                         "debug": false,

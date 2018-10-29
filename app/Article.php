@@ -3,11 +3,10 @@
 namespace App;
 
 
-use App\Traits\Helper;
 use App\Traits\DateTrait;
+use App\Traits\Helper;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Laravel\Scout\Searchable;
 
 /**
  * App\Article
@@ -50,6 +49,7 @@ class Article extends Model
     use SoftDeletes;
     use Helper;
     use DateTrait;
+
 //    use Searchable;
 
     /**

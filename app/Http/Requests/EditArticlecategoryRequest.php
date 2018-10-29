@@ -17,7 +17,7 @@ class EditArticlecategoryRequest extends FormRequest
      */
     public function authorize()
     {
-        if(Auth()->user()->can(Config::get('constants.EDIT_ARTICLECATEGORY_ACCESS'))) return true;
+        if (Auth()->user()->can(Config::get('constants.EDIT_ARTICLECATEGORY_ACCESS'))) return true;
         return false;
     }
 
@@ -42,12 +42,11 @@ class EditArticlecategoryRequest extends FormRequest
 
     protected function replaceNumbers()
     {
-        $input = $this->request->all() ;
-        if(isset($input["order"]))
-        {
-            $input["order"] = preg_replace('/\s+/', '', $input["order"] ) ;
-            $input["order"] = $this->convertToEnglish($input["order"]) ;
+        $input = $this->request->all();
+        if (isset($input["order"])) {
+            $input["order"] = preg_replace('/\s+/', '', $input["order"]);
+            $input["order"] = $this->convertToEnglish($input["order"]);
         }
-        $this->replace($input) ;
+        $this->replace($input);
     }
 }

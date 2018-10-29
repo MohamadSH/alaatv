@@ -15,11 +15,11 @@ class SlideShowController extends Controller
 {
     function __construct()
     {
-        $this->middleware('permission:'.Config::get('constants.LIST_SLIDESHOW_ACCESS'),['only'=>'index']);
-        $this->middleware('permission:'.Config::get('constants.INSERT_SLIDESHOW_ACCESS'),['only'=>'create' , 'store']);
-        $this->middleware('permission:'.Config::get('constants.EDIT_SLIDESHOW_ACCESS'),['only'=>'update' , 'edit']);
-        $this->middleware('permission:'.Config::get('constants.REMOVE_SLIDESHOW_ACCESS'),['only'=>'destroy']);
-        $this->middleware('permission:'.Config::get('constants.SHOW_SLIDESHOW_ACCESS'),['only'=>'show' ]);
+        $this->middleware('permission:' . Config::get('constants.LIST_SLIDESHOW_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:' . Config::get('constants.INSERT_SLIDESHOW_ACCESS'), ['only' => 'create', 'store']);
+        $this->middleware('permission:' . Config::get('constants.EDIT_SLIDESHOW_ACCESS'), ['only' => 'update', 'edit']);
+        $this->middleware('permission:' . Config::get('constants.REMOVE_SLIDESHOW_ACCESS'), ['only' => 'destroy']);
+        $this->middleware('permission:' . Config::get('constants.SHOW_SLIDESHOW_ACCESS'), ['only' => 'show']);
     }
 
     /**
@@ -29,7 +29,7 @@ class SlideShowController extends Controller
      */
     public function index()
     {
-        $slides  = Slideshow::all()->sortBy("order");
+        $slides = Slideshow::all()->sortBy("order");
         return $slides;
     }
 
@@ -46,7 +46,7 @@ class SlideShowController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -70,21 +70,20 @@ class SlideShowController extends Controller
         $slide = new Slideshow();
         $slide->fill($request->all());
 
-        if(strlen($slide->order)==0) $slide->order = 0;
+        if (strlen($slide->order) == 0) $slide->order = 0;
 
-        if(strlen($slide->link)==0)
+        if (strlen($slide->link) == 0)
             $slide->link = null;
-        elseif(isset($slide->link))
-        {
-            if(strcmp($slide->link[0], "#") !=0 )
-                if(!preg_match("/^http:\/\//",$slide->link) && !preg_match("/^https:\/\//", $slide->link) )
-                $slide->link = "https://".$slide->link;
+        elseif (isset($slide->link)) {
+            if (strcmp($slide->link[0], "#") != 0)
+                if (!preg_match("/^http:\/\//", $slide->link) && !preg_match("/^https:\/\//", $slide->link))
+                    $slide->link = "https://" . $slide->link;
         }
 
         if ($request->hasFile("photo")) {
             $file = $request->file('photo');
             $extension = $file->getClientOriginalExtension();
-            $fileName = basename($file->getClientOriginalName() , ".".$extension) . "_" . date("YmdHis") . '.' . $extension;
+            $fileName = basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
 
             if (Storage::disk(Config::get('constants.DISK9'))->put($fileName, File::get($file))) {
                 $slide->photo = $fileName;
@@ -93,11 +92,11 @@ class SlideShowController extends Controller
             }
         }
 
-        $isEnable= $request->get("isEnable");
-    if(isset($isEnable)) $slide->isEnable = 1;
-        else $slide->isEnable  = 0;
+        $isEnable = $request->get("isEnable");
+        if (isset($isEnable)) $slide->isEnable = 1;
+        else $slide->isEnable = 0;
 
-        if($slide->save()) session()->put('success', 'اسلاید با موفقیت افزوده شد!');
+        if ($slide->save()) session()->put('success', 'اسلاید با موفقیت افزوده شد!');
         else session()->put('error', 'خطای پایگاه داده!');
         return redirect()->back();
     }
@@ -105,7 +104,7 @@ class SlideShowController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -121,9 +120,8 @@ class SlideShowController extends Controller
      */
     public function edit($slide)
     {
-        $slideWebsitePage = $slide->websitepage->url ;
-        switch ($slideWebsitePage)
-        {
+        $slideWebsitePage = $slide->websitepage->url;
+        switch ($slideWebsitePage) {
             case "/home":
                 $slideDisk = 9;
                 $previousUrl = action("HomeController@adminSlideShow");
@@ -136,13 +134,13 @@ class SlideShowController extends Controller
                 break;
         }
         $slideWebsitepageId = $slide->websitepage->id;
-        return view("slideShow.edit", compact('slide' , 'slideDisk' , 'slideWebsitepageId' , 'previousUrl'));
+        return view("slideShow.edit", compact('slide', 'slideDisk', 'slideWebsitepageId', 'previousUrl'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @param  \App\Slideshow $slide
      * @return \Illuminate\Http\Response
      */
@@ -169,21 +167,20 @@ class SlideShowController extends Controller
 
         $slide->fill($request->all());
 
-        if(strlen($slide->order)==0) $slide->order = 0;
+        if (strlen($slide->order) == 0) $slide->order = 0;
 
-        if(strlen($slide->link)==0)
+        if (strlen($slide->link) == 0)
             $slide->link = null;
-        elseif(isset($slide->link))
-        {
-            if(strcmp($slide->link[0], "#")!=0)
-                if(!preg_match("/^http:\/\//",$slide->link) && !preg_match("/^https:\/\//", $slide->link))
-                    $slide->link = "https://".$slide->link;
+        elseif (isset($slide->link)) {
+            if (strcmp($slide->link[0], "#") != 0)
+                if (!preg_match("/^http:\/\//", $slide->link) && !preg_match("/^https:\/\//", $slide->link))
+                    $slide->link = "https://" . $slide->link;
         }
 
         if ($request->hasFile("photo")) {
             $file = $request->file('photo');
             $extension = $file->getClientOriginalExtension();
-            $fileName = basename($file->getClientOriginalName() , ".".$extension) . "_" . date("YmdHis") . '.' . $extension;
+            $fileName = basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
 
             if (Storage::disk(Config::get('constants.DISK9'))->put($fileName, File::get($file))) {
                 Storage::disk(Config::get('constants.DISK9'))->delete($oldPhoto);
@@ -193,13 +190,13 @@ class SlideShowController extends Controller
             }
         }
 
-        $isEnable= $request->get("isEnable");
-        if(isset($isEnable)) $slide->isEnable = 1;
-        else $slide->isEnable  = 0;
+        $isEnable = $request->get("isEnable");
+        if (isset($isEnable)) $slide->isEnable = 1;
+        else $slide->isEnable = 0;
 
-        if($slide->update()) session()->put('success', 'اسلاید با موفقیت اصلاح شد!');
+        if ($slide->update()) session()->put('success', 'اسلاید با موفقیت اصلاح شد!');
         else session()->put('error', 'خطای پایگاه داده!');
-        return redirect()->back() ;
+        return redirect()->back();
 
     }
 

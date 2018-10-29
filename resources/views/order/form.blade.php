@@ -3,15 +3,18 @@
     <div class="form-group">
         <label class="col-md-2 control-label " for="cost">مبلغ خام سفارش (تومان)</label>
         <div class="col-md-1">
-                <text class="form-control-static font-blue" >@if(isset($order->cost) || isset($order->costwithoutcoupon)) {{number_format($order->cost + $order->costwithoutcoupon)}} @else یافت نشد @endif</text>
+            <text class="form-control-static font-blue">@if(isset($order->cost) || isset($order->costwithoutcoupon)) {{number_format($order->cost + $order->costwithoutcoupon)}} @else
+                    یافت نشد @endif</text>
         </div>
         <label class="col-md-2 control-label " for="cost"> قابل پرداخت (تومان)</label>
         <div class="col-md-1">
-            <text class="form-control-static font-blue" >@if(isset($order->cost) || isset($order->costwithoutcoupon)) {{number_format($order->totalCost() )}} @else یافت نشد @endif</text>
+            <text class="form-control-static font-blue">@if(isset($order->cost) || isset($order->costwithoutcoupon)) {{number_format($order->totalCost() )}} @else
+                    یافت نشد @endif</text>
         </div>
         <label class="col-md-2 control-label " for="cost"> پرداخت شده (تومان)</label>
         <div class="col-md-1">
-            <text class="form-control-static font-blue" >@if(isset($order->cost) || isset($order->costwithoutcoupon)) {{number_format($order->totalPaidCost() + $order->totalRefund())}} @else یافت نشد @endif</text>
+            <text class="form-control-static font-blue">@if(isset($order->cost) || isset($order->costwithoutcoupon)) {{number_format($order->totalPaidCost() + $order->totalRefund())}} @else
+                    یافت نشد @endif</text>
         </div>
         <label class="col-md-2 control-label" for="discount">تخفیف کلی (تومان)</label>
         <div class="col-md-1 {{ $errors->has('discount') ? ' has-error' : '' }}">
@@ -33,7 +36,7 @@
                 </span>
             @endif
             <label class="mt-checkbox mt-checkbox-outline"> ارسال پیامک
-                <input type="checkbox" value="1" name="orderstatusSMS"  />
+                <input type="checkbox" value="1" name="orderstatusSMS"/>
                 <span></span>
             </label>
         </div>
@@ -51,7 +54,11 @@
     <div class="form-group ">
         <label class="col-md-3 control-label" for="coupon_id">کپن</label>
         <div class="col-md-2 {{ $errors->has('coupon_id') ? ' has-error' : '' }}">
-            {!! Form::select('coupon_id', $coupons ,null,['class' => 'form-control', 'id' => 'coupon_id']) !!}@if($order->hasCoupon())<label class="font-red">@if($order->determineCoupontype()["type"] == Config::get("constants.DISCOUNT_TYPE_PERCENTAGE")){{$order->determineCoupontype()["discount"]}}% تخفیف  @elseif($order->determineCoupontype()["type"] == Config::get("constants.DISCOUNT_TYPE_COST")) {{number_format($order->determineCoupontype()["discount"])}} تومان @endif</label>@endif
+            {!! Form::select('coupon_id', $coupons ,null,['class' => 'form-control', 'id' => 'coupon_id']) !!}@if($order->hasCoupon())
+                <label class="font-red">@if($order->determineCoupontype()["type"] == Config::get("constants.DISCOUNT_TYPE_PERCENTAGE")){{$order->determineCoupontype()["discount"]}}
+                    %
+                    تخفیف  @elseif($order->determineCoupontype()["type"] == Config::get("constants.DISCOUNT_TYPE_COST")) {{number_format($order->determineCoupontype()["discount"])}}
+                    تومان @endif</label>@endif
             @if( count($coupons) == 1 )
                 <span class="help-block font-red">
                     <strong>توجه!</strong> کپنی در سایت درج نشده است
@@ -72,7 +79,7 @@
                     </span>
             @endif
             <label class="mt-checkbox mt-checkbox-outline"> ارسال پیامک
-                <input type="checkbox" value="1" name="postingSMS"  />
+                <input type="checkbox" value="1" name="postingSMS"/>
                 <span></span>
             </label>
             <h6 class="bold">کدهای درج شده</h6>
@@ -117,31 +124,34 @@
             @endif
         </div>
     </div>
-        <div class="form-group {{ $errors->has('file') ? ' has-error' : '' }}">
-            <label class="col-md-2 control-label" for="questionFile">فایل سفارش</label>
-            <div class="col-md-10">
-                @if(!$order->files->isEmpty())
-                    <a target="_blank" class="btn blue" href="{{action("HomeController@download" , ["content"=>"فایل سفارش","fileName"=>$order->files->first()->file ])}}">دانلود فایل</a>
-                @else
-                    <div class="fileinput fileinput-new" data-provides="fileinput">
-                        <div class="input-group input-large ">
-                            <div class="form-control uneditable-input input-fixed input-medium" data-trigger="fileinput">
-                                <i class="fa fa-file fileinput-exists"></i>&nbsp;
-                                <span class="fileinput-filename"></span>
-                            </div>
-                            <span class="input-group-addon btn default btn-file">
+    <div class="form-group {{ $errors->has('file') ? ' has-error' : '' }}">
+        <label class="col-md-2 control-label" for="questionFile">فایل سفارش</label>
+        <div class="col-md-10">
+            @if(!$order->files->isEmpty())
+                <a target="_blank" class="btn blue"
+                   href="{{action("HomeController@download" , ["content"=>"فایل سفارش","fileName"=>$order->files->first()->file ])}}">دانلود
+                    فایل</a>
+            @else
+                <div class="fileinput fileinput-new" data-provides="fileinput">
+                    <div class="input-group input-large ">
+                        <div class="form-control uneditable-input input-fixed input-medium" data-trigger="fileinput">
+                            <i class="fa fa-file fileinput-exists"></i>&nbsp;
+                            <span class="fileinput-filename"></span>
+                        </div>
+                        <span class="input-group-addon btn default btn-file">
                                                                         <span class="fileinput-new"> انتخاب فایل </span>
                                                                         <span class="fileinput-exists"> تغییر </span>
-                                {!! Form::file('file' , ['id'=>'file']) !!} </span>
-                            <a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput"> حذف </a>
-                        </div>
+                            {!! Form::file('file' , ['id'=>'file']) !!} </span>
+                        <a href="javascript:" class="input-group-addon btn red fileinput-exists"
+                           data-dismiss="fileinput"> حذف </a>
                     </div>
-                    @if ($errors->has('file'))
-                        <span class="help-block">
+                </div>
+                @if ($errors->has('file'))
+                    <span class="help-block">
                             <strong>{{ $errors->first('file') }}</strong>
                         </span>
-                    @endif
                 @endif
-            </div>
+            @endif
         </div>
+    </div>
 </div>

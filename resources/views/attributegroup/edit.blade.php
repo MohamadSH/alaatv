@@ -2,7 +2,7 @@
 @extends("app",["pageName"=>"admin"])
 
 @section("headPageLevelPlugin")
-    <link href="/assets/global/plugins/jquery-multi-select/css/multi-select-rtl.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/global/plugins/jquery-multi-select/css/multi-select-rtl.css" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section("pageBar")
@@ -38,7 +38,8 @@
                     </div>
                     <div class="actions">
                         <div class="btn-group">
-                            <a class="btn btn-sm dark dropdown-toggle" href="{{action("AttributesetController@edit" , $attributeset)}}" > بازگشت
+                            <a class="btn btn-sm dark dropdown-toggle"
+                               href="{{action("AttributesetController@edit" , $attributeset)}}"> بازگشت
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         </div>
@@ -46,12 +47,12 @@
                 </div>
                 <div class="portlet-body form">
                     {!! Form::model($attributegroup,['method' => 'PUT','action' => ['AttributegroupController@update',$attributegroup], 'class'=>'form-horizontal']) !!}
-                      @include('attributegroup.form')
+                    @include('attributegroup.form')
                     {!! Form::close() !!}
 
                 </div>
             </div>
-        <!-- END SAMPLE FORM PORTLET-->
+            <!-- END SAMPLE FORM PORTLET-->
         </div>
     </div>
 @endsection
@@ -69,7 +70,7 @@
 
 @section("extraJS")
     <script>
-        jQuery(document).ready(function() {
+        jQuery(document).ready(function () {
             $('#group_attributes').multiSelect();
         });
     </script>

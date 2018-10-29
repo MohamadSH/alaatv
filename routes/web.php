@@ -227,12 +227,21 @@ Route::group(['prefix' => 'c'], function () {
     Route::get('search', 'ContentController@search');
     Route::get('create2', 'ContentController@create2');
 
+    Route::get('{c}/favored', 'FavorableController@getUsersThatFavoredThisFavorable');
+    Route::post('{c}/favored', 'FavorableController@markFavorableFavorite');
+
     Route::post('basicStore' , 'ContentController@basicStore') ;
     Route::group(['prefix' => '{c}/attach'], function () {
         Route::post('set/{set}' , 'ContentController@attachContentToContentSet');
         Route::put('set/{set}' , 'ContentController@updateContentSetPivots');
     });
 });
+
+Route::group(['prefix' => 'product'], function () {
+    Route::get('{product}/favored', 'FavorableController@getUsersThatFavoredThisFavorable');
+    Route::post('{product}/favored', 'FavorableController@markFavorableFavorite');
+});
+
 Route::get("ctag" , "ContentController@retrieveTags");
 Route::resource('set' , 'ContentsetController') ;
 Route::resource('product', 'ProductController');

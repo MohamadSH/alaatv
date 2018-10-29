@@ -49,7 +49,7 @@ class Event extends Model
      */
     protected $fillable = [
         'name',
-        'displayName' ,
+        'displayName',
         'description',
         'startTime',
         'endTime',

@@ -34,11 +34,13 @@ abstract class RedisTagManagerViaApi implements TaggingInterface
     public function __construct()
     {
         $this->apiUrl = config("constants.TAG_API_URL");
-        if(!isset($this->bucket))
+        if (!isset($this->bucket))
             throw new LogicException(get_class($this) . ' must have a $bucket');
     }
-    public function setTags($taggableId , array $tags, $score = 0){
-        $url = $this->apiUrl."id/".$this->bucket."/".$taggableId;
+
+    public function setTags($taggableId, array $tags, $score = 0)
+    {
+        $url = $this->apiUrl . "id/" . $this->bucket . "/" . $taggableId;
         $method = "PUT";
 
 
@@ -46,27 +48,29 @@ abstract class RedisTagManagerViaApi implements TaggingInterface
             "tags" => json_encode($tags, JSON_UNESCAPED_UNICODE),
 
         ];
-        if(isset($score))
+        if (isset($score))
             $params["score"] = $score;
-        $response = $this->sendRequest($url,$method,$params);
+        $response = $this->sendRequest($url, $method, $params);
         if ($response["statusCode"] == Response::HTTP_OK) {
             //TODO:// Redis Response
         }
     }
+
     /**
      * @param $taggableId
      * @return array
      */
-    public function getTags($taggableId):array {
-        $url = $this->apiUrl."id/".$this->bucket."/".$taggableId;
+    public function getTags($taggableId): array
+    {
+        $url = $this->apiUrl . "id/" . $this->bucket . "/" . $taggableId;
         $method = "GET";
-        $response = $this->sendRequest($url,$method);
+        $response = $this->sendRequest($url, $method);
 
-        if($response["statusCode"] == 200) {
+        if ($response["statusCode"] == 200) {
             $result = json_decode($response["result"]);
             $tags = $result->data->tags;
         } else {
-            $tags =[];
+            $tags = [];
         }
         return $tags;
     }
@@ -135,7 +139,7 @@ abstract class RedisTagManagerViaApi implements TaggingInterface
     {
         $options = "withscores=" . (int)$this->limit_WithScores;
         $options .= "&limit=" . (int)$this->limit_PerPage;
-        $options .= "&offset=" .  $this->getOffset();
+        $options .= "&offset=" . $this->getOffset();
 
         return $options;
     }

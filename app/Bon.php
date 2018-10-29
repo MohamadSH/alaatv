@@ -57,10 +57,11 @@ class Bon extends Model
         'order',
         'enable',
     ];
+
     public function cacheKey()
     {
         $key = $this->getKey();
-        $time= isset($this->updated_at) ? $this->updated_at->timestamp : $this->created_at->timestamp;
+        $time = isset($this->updated_at) ? $this->updated_at->timestamp : $this->created_at->timestamp;
         return sprintf(
             "%s-%s",
             //$this->getTable(),
@@ -99,9 +100,9 @@ class Bon extends Model
      * @param mixed $name
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeOfName($query , $name)
+    public function scopeOfName($query, $name)
     {
-        return $query->where("name" , $name) ;
+        return $query->where("name", $name);
     }
 
 }

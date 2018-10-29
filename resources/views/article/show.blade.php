@@ -1,9 +1,9 @@
 @extends("app")
 
 @section("headPageLevelPlugin")
-    <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
 
-    <link href="../assets/pages/css/blog-rtl.min.css" rel="stylesheet" type="text/css" />
+    <link href="../assets/pages/css/blog-rtl.min.css" rel="stylesheet" type="text/css"/>
 @endsection
 
 
@@ -35,11 +35,12 @@
                         <h1 class="blog-single-head-title">{{$article->title}}</h1>
                         <div class="blog-single-head-date">
                             <i class="icon-calendar font-blue"></i>
-                            <a href="javascript:;">{{$article->CreatedAt_Jalali()}}</a>
+                            <a href="javascript:">{{$article->CreatedAt_Jalali()}}</a>
                         </div>
                     </div>
                     <div class="blog-single-img">
-                        <img src="{{ route('image', ['category'=>'8','w'=>'608' , 'h'=>'608' ,  'filename' =>  $article->image ]) }}" alt="عکس مقاله@if(isset($article->title[0])) {{$article->title}} @endif" /> </div>
+                        <img src="{{ route('image', ['category'=>'8','w'=>'608' , 'h'=>'608' ,  'filename' =>  $article->image ]) }}"
+                             alt="عکس مقاله@if(isset($article->title[0])) {{$article->title}} @endif"/></div>
                     <div class="blog-single-desc">
                         <p> {!! $article->brief !!}</p>
                         <p> {!! $article->body !!}</p>

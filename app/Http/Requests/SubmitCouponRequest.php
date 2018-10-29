@@ -7,7 +7,8 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class SubmitCouponRequest extends FormRequest
 {
-    use CharacterCommon ;
+    use CharacterCommon;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -38,12 +39,11 @@ class SubmitCouponRequest extends FormRequest
 
     protected function replaceNumbers()
     {
-        $input = $this->request->all() ;
-        if(isset($input["coupon"]))
-        {
-            $input["coupon"] = preg_replace('/\s+/', '', $input["coupon"] ) ;
-            $input["coupon"] = $this->convertToEnglish($input["coupon"]) ;
+        $input = $this->request->all();
+        if (isset($input["coupon"])) {
+            $input["coupon"] = preg_replace('/\s+/', '', $input["coupon"]);
+            $input["coupon"] = $this->convertToEnglish($input["coupon"]);
         }
-        $this->replace($input) ;
+        $this->replace($input);
     }
 }

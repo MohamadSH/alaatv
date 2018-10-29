@@ -13,16 +13,17 @@ use App\Classes\Taggable;
 
 interface TaggingInterface
 {
-    public function setTags($taggableId , array $tags, $score = 0);
+    public function setTags($taggableId, array $tags, $score = 0);
+
     /**
      * @param $taggableId
      * @return array
      */
-    public function getTags($taggableId):array;
+    public function getTags($taggableId): array;
 
     /**
      * @param array $tags
      * @return Taggable
      */
-    public function getTaggable(array $tags) :array ;
+    public function getTaggable(array $tags): array;
 }

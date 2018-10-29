@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\Config;
 
 class AttacheUserBonRequest extends FormRequest
 {
-    use CharacterCommon ;
+    use CharacterCommon;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -16,7 +17,7 @@ class AttacheUserBonRequest extends FormRequest
      */
     public function authorize()
     {
-        if(Auth()->user()->can(Config::get('constants.ATTACHE_USER_BON_ACCESS'))) return true;
+        if (Auth()->user()->can(Config::get('constants.ATTACHE_USER_BON_ACCESS'))) return true;
         return false;
     }
 
@@ -41,12 +42,11 @@ class AttacheUserBonRequest extends FormRequest
 
     protected function replaceNumbers()
     {
-        $input = $this->request->all() ;
-        if(isset($input["totalNumber"]))
-        {
-            $input["totalNumber"] = preg_replace('/\s+/', '', $input["totalNumber"] ) ;
-            $input["totalNumber"] = $this->convertToEnglish($input["totalNumber"]) ;
+        $input = $this->request->all();
+        if (isset($input["totalNumber"])) {
+            $input["totalNumber"] = preg_replace('/\s+/', '', $input["totalNumber"]);
+            $input["totalNumber"] = $this->convertToEnglish($input["totalNumber"]);
         }
-        $this->replace($input) ;
+        $this->replace($input);
     }
 }

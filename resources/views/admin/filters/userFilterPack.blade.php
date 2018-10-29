@@ -1,5 +1,5 @@
 <div class="form-group">
-    <div class="row" >
+    <div class="row">
         <div class="col-lg-6 col-md-6">
             @include('admin.filters.productsFilter' , ["withCheckbox"   => 1  , "listType" => "configurables" ])
         </div>
@@ -34,7 +34,7 @@
     </div>
 </div>
 <div class="form-group">
-    <div class="row" >
+    <div class="row">
         <div class="col-lg-4 col-md-4">
             @include('admin.filters.postalCodeFilter')
         </div>

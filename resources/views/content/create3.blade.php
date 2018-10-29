@@ -34,14 +34,14 @@
                     <div class="row">
                         {!! Form::open(['method' => 'POST', 'action' => 'ContentController@basicStore']) !!}
                         <div class="col-md-6">
-                                {!! Form::text('contentset_id', null, ['class' => 'form-control', 'placeholder'=>'شماره درس', 'dir'=>'ltr']) !!}
-                                <span class="help-block" >
+                            {!! Form::text('contentset_id', null, ['class' => 'form-control', 'placeholder'=>'شماره درس', 'dir'=>'ltr']) !!}
+                            <span class="help-block">
                                     <strong></strong>
                                  </span>
                         </div>
                         <div class="col-md-6">
-                                {!! Form::select('contenttype_id', $contenttypes, null,['class' => 'form-control']) !!}
-                                <span class="help-block">
+                            {!! Form::select('contenttype_id', $contenttypes, null,['class' => 'form-control']) !!}
+                            <span class="help-block">
                                     <strong></strong>
                                 </span>
                         </div>
@@ -53,13 +53,13 @@
                                     </span>
                                 {!! Form::text('order', null, ['class' => 'form-control', 'placeholder'=>'ترتیب' , 'id'=>'order' , 'disabled', 'dir'=>'ltr']) !!}
                             </div>
-                            <span class="help-block" >
+                            <span class="help-block">
                                     <strong></strong>
                             </span>
                         </div>
                         <div class="col-md-6">
-                                {!! Form::text('name', null, ['class' => 'form-control', 'placeholder'=>'عنوان']) !!}
-                                <span class="help-block" >
+                            {!! Form::text('name', null, ['class' => 'form-control', 'placeholder'=>'عنوان']) !!}
+                            <span class="help-block">
                                     <strong></strong>
                                 </span>
                         </div>
@@ -67,12 +67,12 @@
                             <div class="col-md-12">
                                 <div class="mt-radio-list">
                                     <label class="mt-radio mt-radio-outline"> درج با اسم فایل
-                                        <input class="modeRadio" type="radio" value="filename" name="mode" checked />
+                                        <input class="modeRadio" type="radio" value="filename" name="mode" checked/>
                                         <span></span>
                                     </label>
                                 </div>
                                 {!! Form::text('fileName', null, ['class' => 'form-control', 'placeholder'=>'نام کامل فایل', 'dir'=>'ltr']) !!}
-                                <span class="help-block" >
+                                <span class="help-block">
                                     <strong></strong>
                                 </span>
                             </div>
@@ -81,30 +81,30 @@
                             <div class="col-md-12">
                                 <div class="mt-radio-list">
                                     <label class="mt-radio mt-radio-outline"> درج با لینک
-                                        <input class="modeRadio" type="radio" value="filelink" name="mode" />
+                                        <input class="modeRadio" type="radio" value="filelink" name="mode"/>
                                         <span></span>
                                     </label>
                                 </div>
                                 {!! Form::text('hd', null, ['class' => 'form-control', 'placeholder'=>'لینک کیفیت HD', 'dir'=>'ltr']) !!}
-                                <span class="help-block" >
+                                <span class="help-block">
                                     <strong></strong>
                                 </span>
                             </div>
                             <div class="col-md-12">
                                 {!! Form::text('hq', null, ['class' => 'form-control', 'placeholder'=>'لینک کیفیت hq', 'dir'=>'ltr']) !!}
-                                <span class="help-block" >
+                                <span class="help-block">
                                     <strong></strong>
                                 </span>
                             </div>
                             <div class="col-md-12">
                                 {!! Form::text('240p', null, ['class' => 'form-control', 'placeholder'=>'لینک کیفیت 240p', 'dir'=>'ltr']) !!}
-                                <span class="help-block" >
+                                <span class="help-block">
                                     <strong></strong>
                                 </span>
                             </div>
                             <div class="col-md-12">
                                 {!! Form::text('thumbnail', null, ['class' => 'form-control', 'placeholder'=>'لینک تامبنیل', 'dir'=>'ltr']) !!}
-                                <span class="help-block" >
+                                <span class="help-block">
                                     <strong></strong>
                                 </span>
                             </div>
@@ -133,30 +133,26 @@
 
         $(document).ready(function () {
             var height = $("#fileLinkSection").height();
-            $("#fileNameSection").css("min-height" , height + 20);
+            $("#fileNameSection").css("min-height", height + 20);
             $("#fileLinkSection :input").not("[name=mode]").attr("disabled", true);
         });
 
-        $(document).on("click", "#orderCheckbox", function (){
-            if($(this).prop("checked"))
-            {
-                $("#order").prop("disabled" , false);
+        $(document).on("click", "#orderCheckbox", function () {
+            if ($(this).prop("checked")) {
+                $("#order").prop("disabled", false);
             }
-            else
-            {
-                $("#order").prop("disabled" , true);
+            else {
+                $("#order").prop("disabled", true);
             }
         });
 
-        $(document).on("click", ".modeRadio", function (){
-            var value= $(this).val();
-            if(value == "filename")
-            {
+        $(document).on("click", ".modeRadio", function () {
+            var value = $(this).val();
+            if (value == "filename") {
                 $("#fileNameSection :input").not("[name=mode]").attr("disabled", false);
                 $("#fileLinkSection :input").not("[name=mode]").attr("disabled", true);
             }
-            else if(value == "filelink")
-            {
+            else if (value == "filelink") {
                 $("#fileNameSection :input").not("[name=mode]").attr("disabled", true);
                 $("#fileLinkSection :input").not("[name=mode]").attr("disabled", false);
             }

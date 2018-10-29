@@ -7,9 +7,9 @@ use App\Classes\Verification\MustVerifyMobileNumber;
 use App\Collection\ContentCollection;
 use App\Collection\UserCollection;
 use App\Traits\APIRequestCommon;
+use App\Traits\DateTrait;
 use App\Traits\HasWallet;
 use App\Traits\Helper;
-use App\Traits\DateTrait;
 use App\Traits\MustVerifyMobileNumberTrait;
 use Carbon\Carbon;
 use Iatstuti\Database\Support\CascadeSoftDeletes;
@@ -181,7 +181,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
         "gender_id",
         "major_id",
         "email"
-    ]; 
+    ];
     //columns being used for locking user's profile
     protected $completeInfo = [
         "photo",
@@ -225,7 +225,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
         'school',
         'major_id',
         'grade_id',
-        'birthdate' ,
+        'birthdate',
         'gender_id',
         'userstatus_id',
         'email',
@@ -254,19 +254,60 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     | scope methods
     |--------------------------------------------------------------------------
     */
-    
+
+    /**
+     * @return UserCollection
+     */
+    public static function getTeachers(): UserCollection
+    {
+        $key = "getTeachers";
+        return Cache::tags(["teachers"])->remember($key, config("constants.CACHE_600"), function () {
+            $authors = User::select()
+                ->role([config('constants.ROLE_TEACHER')])
+                ->orderBy('lastName')
+                ->get();
+            return $authors;
+        });
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | relations
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * @return UserCollection
+     */
+    public static function getEmployee(): UserCollection
+    {
+        $key = "getEmployee";
+        return Cache::tags(["employee"])->remember($key, config("constants.CACHE_600"), function () {
+            $employees = User::select()
+                ->role([config('constants.ROLE_EMPLOYEE')])
+                ->orderBy('lastName')
+                ->get();
+            return $employees;
+        });
+    }
+
+    public static function orderStatusFilter($users, $orderStatusesId)
+    {
+        $key = "user:orderStatusFilter:" . implode($users->pluck('id')->toArray()) . "-" . $orderStatusesId;
+
+        return Cache::remember($key, Config::get("constants.CACHE_3"), function () use ($users, $orderStatusesId) {
+
+            return $users->whereIn('id', Order::whereIn("orderstatus_id", $orderStatusesId)->pluck('user_id'));
+        });
+
+    }
+
     public function scopeRole($query, array $roles)
     {
         return $query->whereHas('roles', function ($q) use ($roles) {
             $q->whereIn("id", $roles);
         });
     }
- 
-    /*
-    |--------------------------------------------------------------------------
-    | relations
-    |--------------------------------------------------------------------------
-    */
 
     public function major()
     {
@@ -309,6 +350,8 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
         return $this->hasMany('\App\Verificationmessage');
     }
 
+    //Site pages that user has seen
+
     public function bankaccounts()
     {
         return $this->hasMany('\App\Bankaccount');
@@ -322,13 +365,6 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     public function mbtianswers()
     {
         return $this->hasMany('\App\Mbtianswer');
-    }
-
-    //Site pages that user has seen
-    public function seensitepages()
-    {
-        return $this->belongsToMany('\App\Websitepage', 'userseensitepages', 'user_id', 'websitepage_id')
-            ->withPivot("created_at", "numberOfVisit");
     }
 
     public function usersurveyanswers()
@@ -374,7 +410,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
 
     public function contents()
     {
-        return $this->hasMany("\App\Content" , "author_id" , "id");
+        return $this->hasMany("\App\Content", "author_id", "id");
     }
 
     public function orderproducts()
@@ -408,17 +444,33 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
 
     /**
      * Retrieve all product vouchers of this user
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function productvouchers()
     {
         return $this->hasMany("\App\Productvoucher");
     }
-    
+
     public function ordermanagercomments()
     {
         return $this->hasMany('App\Ordermanagercomment');
-    }    
-    
+    }
+
+    public function favoredContent()
+    {
+        return $this->morphedByMany('App\Content', 'favorable')->withTimestamps();
+    }
+
+    public function favoredSet()
+    {
+        return $this->morphedByMany('App\Contentset', 'favorable')->withTimestamps();
+    }
+
+    public function favoredProduct()
+    {
+        return $this->morphedByMany('App\Product', 'favorable')->withTimestamps();
+    }
+
     /**
      * Create a new Eloquent Collection instance.
      *
@@ -428,45 +480,6 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     public function newCollection(array $models = [])
     {
         return new UserCollection($models);
-    }
-
-
-    public function cacheKey()
-    {
-        $key = $this->getKey();
-        $time= isset($this->update) ? $this->updated_at->timestamp : $this->created_at->timestamp;
-        return sprintf(
-            "%s-%s",
-            //$this->getTable(),
-            $key,
-            $time
-        );
-    }
-
-    /**
-     * @return UserCollection
-     */
-    public static function getTeachers() :UserCollection
-    {
-        $key = "getTeachers";
-        return Cache::tags(["teachers"])->remember($key,config("constants.CACHE_600"),function (){
-            $authors = User::select()
-                ->role([config('constants.ROLE_TEACHER')])
-                ->orderBy('lastName')
-                ->get();
-            return $authors;
-        });
-    }
-
-    public static function orderStatusFilter($users, $orderStatusesId)
-    {
-        $key="user:orderStatusFilter:".implode($users->pluck('id')->toArray())."-".$orderStatusesId;
-
-        return Cache::remember($key,Config::get("constants.CACHE_3"),function () use($users, $orderStatusesId) {
-
-            return $users->whereIn('id', Order::whereIn("orderstatus_id", $orderStatusesId)->pluck('user_id'));
-        });
-
     }
 
     public function getRememberToken()
@@ -484,28 +497,28 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
         return 'remember_token';
     }
 
-    //TODO:// add cache
-    public function products(){
+    public function products()
+    {
         $result = DB::table('products')
-            ->join('orderproducts', function ($join){
+            ->join('orderproducts', function ($join) {
                 $join->on('products.id', '=', 'orderproducts.product_id')
                     ->whereNull('orderproducts.deleted_at');
             })
-            ->join('orders',function ($join){
-                $join->on( 'orders.id', '=', 'orderproducts.order_id')
-                    ->whereIn('orders.orderstatus_id',[
+            ->join('orders', function ($join) {
+                $join->on('orders.id', '=', 'orderproducts.order_id')
+                    ->whereIn('orders.orderstatus_id', [
                         Config::get("constants.ORDER_STATUS_CLOSED"),
                         Config::get("constants.ORDER_STATUS_POSTED"),
                         Config::get("constants.ORDER_STATUS_READY_TO_POST")
                     ])
                     ->whereNull('orders.deleted_at');
             })
-            ->join('users','users.id', '=', 'orders.user_id')
+            ->join('users', 'users.id', '=', 'orders.user_id')
             ->select([
 
                 "products.*"
             ])
-            ->where('users.id','=',$this->getKey())
+            ->where('users.id', '=', $this->getKey())
             ->whereNull('products.deleted_at')
             ->distinct()
             ->get();
@@ -514,16 +527,15 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
         return $result;
     }
 
-
     /**
      * @param string $bonName
      * @return int
      */
-    public function userHasBon($bonName) :int
+    public function userHasBon($bonName): int
     {
-        $key="user:userHasBon:".$this->cacheKey()."-".$bonName;
+        $key = "user:userHasBon:" . $this->cacheKey() . "-" . $bonName;
 
-        return Cache::tags('bon')->remember($key,Config::get("constants.CACHE_60"),function () use($bonName) {
+        return Cache::tags('bon')->remember($key, Config::get("constants.CACHE_60"), function () use ($bonName) {
 
             $bon = Bon::all()
                 ->where('name', $bonName)
@@ -543,6 +555,20 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
 
     }
 
+    //TODO:// add cache
+
+    public function cacheKey()
+    {
+        $key = $this->getKey();
+        $time = isset($this->update) ? $this->updated_at->timestamp : $this->created_at->timestamp;
+        return sprintf(
+            "%s-%s",
+            //$this->getTable(),
+            $key,
+            $time
+        );
+    }
+
     /**
      * returns user valid bons of the specified bons
      *
@@ -552,9 +578,9 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
      */
     public function userValidBons(Bon $bon)
     {
-        $key="user:userValidBons:".$this->cacheKey()."-".(isset($bon) ? $bon->cacheKey() : "");
+        $key = "user:userValidBons:" . $this->cacheKey() . "-" . (isset($bon) ? $bon->cacheKey() : "");
 
-        return Cache::tags('bon')->remember($key,Config::get("constants.CACHE_60"),function () use($bon) {
+        return Cache::tags('bon')->remember($key, Config::get("constants.CACHE_60"), function () use ($bon) {
             return Userbon::where("user_id", $this->id)
                 ->where("bon_id", $bon->id)
                 ->where("userbonstatus_id", Config::get("constants.USERBON_STATUS_ACTIVE"))
@@ -650,7 +676,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
         $tableColumns = Schema::getColumnListing("users");
         switch ($type) {
             case "full":
-                $importantColumns = array("firstName", "lastName", "mobile", "nationalCode", "province", "city", "address", "postalCode", "gender_id" , "mobile_verified_at");
+                $importantColumns = array("firstName", "lastName", "mobile", "nationalCode", "province", "city", "address", "postalCode", "gender_id", "mobile_verified_at");
                 break;
             case "fullAddress":
                 $importantColumns = array("firstName", "lastName", "mobile", "nationalCode", "province", "city", "address");
@@ -683,7 +709,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
                     }
                     if (!isset($this->$tableColumn) || strlen(preg_replace('/\s+/', '', $this->$tableColumn)) == 0) {
                         $unsetColumns++;
-                    } elseif (strcmp($tableColumn, "mobile_verified_at") == 0 && !is_null($this->$tableColumn) ) {
+                    } elseif (strcmp($tableColumn, "mobile_verified_at") == 0 && !is_null($this->$tableColumn)) {
                         $unsetColumns++;
                     }
                 }
@@ -694,7 +720,6 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
         } else return 100;
 
     }
-
 
     public function getfullName($mode = "firstNameFirst")
     {
@@ -735,25 +760,25 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
         return ltrim($this->mobile, '0');
     }
 
-
     /**  Determines whether user has this content or not
      * @param  $contentId
      * @return bool
      */
     public function hasContent($contentId)
     {
-        return true ;
+        return true;
     }
 
-    public function seen($path){
-        $path = "/".ltrim($path,"/");
+    public function seen($path)
+    {
+        $path = "/" . ltrim($path, "/");
 
         $SeenCount = 0;
-        $websitepage = Websitepage::firstOrNew(["url"=>$path ]);
-        if(!isset($websitepage->id)) {
+        $websitepage = Websitepage::firstOrNew(["url" => $path]);
+        if (!isset($websitepage->id)) {
             $websitepage->save();
         }
-        if(isset($websitepage->id)) {
+        if (isset($websitepage->id)) {
             if (!$this->seensitepages->contains($websitepage->id))
                 $this->seensitepages()->attach($websitepage->id);
             else {
@@ -765,6 +790,12 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
         }
 
         return $SeenCount;
+    }
+
+    public function seensitepages()
+    {
+        return $this->belongsToMany('\App\Websitepage', 'userseensitepages', 'user_id', 'websitepage_id')
+            ->withPivot("created_at", "numberOfVisit");
     }
 
     public function CanSeeCounter(): bool
@@ -794,8 +825,22 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
 
     public function getTaggableTags()
     {
-        $userContents = $this->contents ;
+        $userContents = $this->contents;
         return $this->mergeContentTags($userContents);
+    }
+
+    /**
+     * @param $userContents
+     * @return array
+     */
+    private function mergeContentTags(ContentCollection $userContents): array
+    {
+        $tags = [];
+        foreach ($userContents as $content) {
+            $tags = array_merge($tags, $content->tags->tags);
+        }
+        $tags = array_values(array_unique($tags));
+        return $tags;
     }
 
     public function getTaggableId()
@@ -810,23 +855,10 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
 
     public function isTaggableActive(): bool
     {
-        $userContents = $this->contents ;
-        if(count($userContents) == 0){
+        $userContents = $this->contents;
+        if (count($userContents) == 0) {
             return false;
         }
         return true;
-    }
-    /**
-     * @param $userContents
-     * @return array
-     */
-    private function mergeContentTags(ContentCollection $userContents): array
-    {
-        $tags = [];
-        foreach ($userContents as $content) {
-            $tags = array_merge($tags, $content->tags->tags);
-        }
-        $tags = array_values(array_unique($tags));
-        return $tags;
     }
 }

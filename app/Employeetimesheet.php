@@ -2,10 +2,9 @@
 
 namespace App;
 
-use App\Traits\DateCommon;
+use App\Traits\DateTrait;
 use App\Traits\Helper;
 use Carbon\Carbon;
-use function GuzzleHttp\Psr7\str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -77,7 +76,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Employeetimesheet extends Model
 {
     use SoftDeletes;
-    use DateCommon;
+    use DateTrait;
     use Helper;
     /**      * The attributes that should be mutated to dates.        */
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
@@ -499,9 +498,9 @@ class Employeetimesheet extends Model
                     $finishTime = Carbon::parse($this->obtainShiftTime());
                     $workAndShiftDiff = $finishTime->diffInSeconds($beginTime, false);
                     if ($workAndShiftDiff < 0) {
-                        return gmdate("H:i", abs($workAndShiftDiff))." منفی";
+                        return "-" . gmdate("H:i", abs($workAndShiftDiff));
                     } else {
-                        return gmdate("H:i", abs($workAndShiftDiff));
+                        return "+" . gmdate("H:i", abs($workAndShiftDiff));
                     }
                 } else {
                     return false;

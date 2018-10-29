@@ -6,16 +6,16 @@ trait CharacterCommon
      * @param $str
      * @return boolean
      */
-    public function strIsEmpty($str):bool
+    public function strIsEmpty($str): bool
     {
-        return strlen(preg_replace('/\s+/', '', $str)) == 0 ;
+        return strlen(preg_replace('/\s+/', '', $str)) == 0;
     }
 
     /** Converts Persian numbers in a string to English numbers
      * @param string $string
      * @return string
      */
-    public function convertToEnglish($string) : string
+    public function convertToEnglish($string): string
     {
         $newNumbers = range(0, 9);
         // 1. Persian HTML decimal
@@ -27,9 +27,9 @@ trait CharacterCommon
         // 4. Persian Numeric
         $persian = array('۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹');
 
-        $string =  str_replace($persianDecimal, $newNumbers, $string);
-        $string =  str_replace($arabicDecimal, $newNumbers, $string);
-        $string =  str_replace($arabic, $newNumbers, $string);
+        $string = str_replace($persianDecimal, $newNumbers, $string);
+        $string = str_replace($arabicDecimal, $newNumbers, $string);
+        $string = str_replace($arabic, $newNumbers, $string);
         return str_replace($persian, $newNumbers, $string);
     }
 
@@ -38,7 +38,7 @@ trait CharacterCommon
      * @param string $separator
      * @return string
      */
-    function make_slug($string, $separator = '-') : string
+    function make_slug($string, $separator = '-'): string
     {
         $string = trim($string);
         $string = mb_strtolower($string, 'UTF-8');
@@ -62,11 +62,11 @@ trait CharacterCommon
      * @param string $protocol
      * @return string
      */
-    function makeValidUrl($string , $protocol = "https") :string
+    function makeValidUrl($string, $protocol = "https"): string
     {
-        if(!preg_match("/^http:\/\//", $string) && !preg_match("/^https:\/\//", $string) )
-            $string = $protocol."://" . $string ;
+        if (!preg_match("/^http:\/\//", $string) && !preg_match("/^https:\/\//", $string))
+            $string = $protocol . "://" . $string;
 
-        return $string ;
+        return $string;
     }
 }

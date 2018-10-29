@@ -22,5 +22,7 @@ return [
     'Your mobile number has been verified.' => 'Your mobile number has been verified.',
     'Your mobile number is verified.' => 'Your mobile number is verified.',
     'Verification code is sent.' => 'Verification code is sent.',
-    'Your code is wrong.' => 'Your code is wrong.'
+    'Your code is wrong.' => 'Your code is wrong.',
+
+    'phone' => 'The :attribute field contains an invalid number.'
 ];

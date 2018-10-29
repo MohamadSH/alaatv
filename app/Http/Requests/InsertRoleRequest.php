@@ -13,7 +13,7 @@ class InsertRoleRequest extends FormRequest
      */
     public function authorize()
     {
-        if(Auth()->user()->hasRole('admin')) return true;
+        if (Auth()->user()->hasRole('admin')) return true;
         return false;
     }
 

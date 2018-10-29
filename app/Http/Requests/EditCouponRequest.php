@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Config;
 class EditCouponRequest extends FormRequest
 {
     use CharacterCommon;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -16,7 +17,7 @@ class EditCouponRequest extends FormRequest
      */
     public function authorize()
     {
-        if(Auth()->user()->can(Config::get('constants.EDIT_COUPON_ACCESS'))) return true;
+        if (Auth()->user()->can(Config::get('constants.EDIT_COUPON_ACCESS'))) return true;
         return false;
     }
 
@@ -46,31 +47,27 @@ class EditCouponRequest extends FormRequest
 
     protected function replaceNumbers()
     {
-        $input = $this->request->all() ;
-        if(isset($input["code"]))
-        {
-            $input["code"] = preg_replace('/\s+/', '', $input["code"] ) ;
-            $input["code"] = $this->convertToEnglish($input["code"]) ;
+        $input = $this->request->all();
+        if (isset($input["code"])) {
+            $input["code"] = preg_replace('/\s+/', '', $input["code"]);
+            $input["code"] = $this->convertToEnglish($input["code"]);
         }
 
-        if(isset($input["discount"]))
-        {
-            $input["discount"] = preg_replace('/\s+/', '', $input["discount"] ) ;
-            $input["discount"] = $this->convertToEnglish($input["discount"]) ;
+        if (isset($input["discount"])) {
+            $input["discount"] = preg_replace('/\s+/', '', $input["discount"]);
+            $input["discount"] = $this->convertToEnglish($input["discount"]);
         }
 
-        if(isset($input["usageNumber"]))
-        {
-            $input["usageNumber"] = preg_replace('/\s+/', '', $input["usageNumber"] ) ;
-            $input["usageNumber"] = $this->convertToEnglish($input["usageNumber"]) ;
+        if (isset($input["usageNumber"])) {
+            $input["usageNumber"] = preg_replace('/\s+/', '', $input["usageNumber"]);
+            $input["usageNumber"] = $this->convertToEnglish($input["usageNumber"]);
         }
 
-        if(isset($input["usageLimit"]))
-        {
-            $input["usageLimit"] = preg_replace('/\s+/', '', $input["usageLimit"] ) ;
-            $input["usageLimit"] = $this->convertToEnglish($input["usageLimit"]) ;
+        if (isset($input["usageLimit"])) {
+            $input["usageLimit"] = preg_replace('/\s+/', '', $input["usageLimit"]);
+            $input["usageLimit"] = $this->convertToEnglish($input["usageLimit"]);
         }
 
-        $this->replace($input) ;
+        $this->replace($input);
     }
 }

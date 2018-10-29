@@ -30,7 +30,7 @@ class VerificationmessageController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return boolean
      */
     public function store(Request $request)
@@ -40,10 +40,9 @@ class VerificationmessageController extends Controller
         $verificationMessage->code = $request->get("code");
         $verificationMessage->verificationmessagestatus_id = $request->get("verificationmessagestatus_id");
         $verificationMessage->expired_at = $request->get("expired_at");
-        if($verificationMessage->save())
-        {
+        if ($verificationMessage->save()) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -51,7 +50,7 @@ class VerificationmessageController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -62,7 +61,7 @@ class VerificationmessageController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -73,8 +72,8 @@ class VerificationmessageController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -85,7 +84,7 @@ class VerificationmessageController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

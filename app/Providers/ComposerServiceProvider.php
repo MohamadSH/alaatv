@@ -2,8 +2,9 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\ServiceProvider;
+
 class ComposerServiceProvider extends ServiceProvider
 {
     /**
@@ -16,7 +17,7 @@ class ComposerServiceProvider extends ServiceProvider
         // Using class based composers...
         View::composer('pages.search', 'App\Http\ViewComposers\ContentSearchComposer');
 
-        View::composer('content.show', function($view){
+        View::composer('content.show', function ($view) {
             $sideBarMode = "closed";
             $view->with(compact('sideBarMode'));
         });

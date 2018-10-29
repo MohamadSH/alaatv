@@ -78,14 +78,14 @@ class ProductController extends Controller
 
     private function callMiddlewares(): void
     {
-        $this->middleware('permission:' . config('constants.LIST_PRODUCT_ACCESS'), ['only' => 'index']);
+//        $this->middleware('permission:' . config('constants.LIST_PRODUCT_ACCESS'), ['only' => 'index']);
         $this->middleware('permission:' . config('constants.INSERT_PRODUCT_ACCESS'), ['only' => 'create']);
         $this->middleware('permission:' . config('constants.REMOVE_PRODUCT_ACCESS'), ['only' => 'destroy']);
         $this->middleware('permission:' . config('constants.SHOW_PRODUCT_ACCESS'), ['only' => 'edit']);
         $this->middleware('permission:' . config('constants.EDIT_PRODUCT_ACCESS'), ['only' => 'update']);
         $this->middleware('permission:' . config('constants.EDIT_CONFIGURE_PRODUCT_ACCESS'), ['only' => ['childProductEnable', 'completeEachChildPivot']]);
         $this->middleware('permission:' . config('constants.INSERT_CONFIGURE_PRODUCT_ACCESS'), ['only' => 'makeConfiguration', 'createConfiguration']);
-        $this->middleware('auth', ['except' => ['show', 'refreshPrice', 'search', 'showPartial', 'landing1', 'landing2', 'landing3', 'landing4']]);
+        $this->middleware('auth', ['except' => ['index', 'show', 'refreshPrice', 'search', 'showPartial', 'landing1', 'landing2', 'landing3', 'landing4']]);
     }
 
     /**
@@ -197,8 +197,8 @@ class ProductController extends Controller
     private function getCustomer(Request $request): ?User
     {
         if (session()->has("adminOrder_id"))
-           return User::find(session()->get("customer_id"));
-            return $request->user();
+            return User::find(session()->get("customer_id"));
+        return $request->user();
 
     }
 
@@ -217,7 +217,7 @@ class ProductController extends Controller
      * @param $query
      * @return string
      */
-    private function getPartialSearchFromIds($query , $layout)
+    private function getPartialSearchFromIds($query, $layout)
     {
         $partialSearch = View::make($layout, ['items' => $query])->render();
         return $partialSearch;
@@ -265,15 +265,13 @@ class ProductController extends Controller
         } else {
             if ($productResult->total() > 0) {
 //                $partialSearch = View::make('product.index', ['products' => $productResult])->render();
-                $partialSearch = $this->getPartialSearchFromIds($productResult, self::PARTIAL_SEARCH_TEMPLATE );
+                $partialSearch = $this->getPartialSearchFromIds($productResult, self::PARTIAL_SEARCH_TEMPLATE);
                 $partialIndex = $this->getPartialSearchFromIds($productResult, self::PARTIAL_INDEX_TEMPLATE);
-            }
-            else
-            {
+            } else {
                 $partialSearch = null;
-                $partialIndex = null ;
+                $partialIndex = null;
             }
-            $items->push(["totalitems" => $productResult->total(), "view" => $partialSearch,"indexView" => $partialIndex]);
+            $items->push(["totalitems" => $productResult->total(), "view" => $partialSearch, "indexView" => $partialIndex]);
         }
 
         if ($isApp) {
@@ -381,21 +379,21 @@ class ProductController extends Controller
 
 
         return view("product.show", compact("product",
-                                                        "productType",
-                                                            "productSeenCount",
-                                                            "otherProductChunks",
-                                                            "selectCollection",
-                                                            "simpleInfoAttributes",
-                                                            "checkboxInfoAttributes",
-                                                            "extraSelectCollection",
-                                                            "extraCheckboxCollection",
-                                                            'groupedCheckboxCollection',
-                                                            "descriptionIframe",
-                                                            "productAllFiles",
-                                                            "exclusiveOtherProducts",
-                                                            "productSamplePhotos",
-                                                            "giftCollection"
-                                                        ));
+            "productType",
+            "productSeenCount",
+            "otherProductChunks",
+            "selectCollection",
+            "simpleInfoAttributes",
+            "checkboxInfoAttributes",
+            "extraSelectCollection",
+            "extraCheckboxCollection",
+            'groupedCheckboxCollection',
+            "descriptionIframe",
+            "productAllFiles",
+            "exclusiveOtherProducts",
+            "productSamplePhotos",
+            "giftCollection"
+        ));
     }
 
     /**
@@ -537,36 +535,33 @@ class ProductController extends Controller
 
 
         $key = "product:refreshPrice:Product"
-                                        . "\\"
-                                        . $product->cacheKey()
-                                        . "-user"
-                                        .(isset($user) && !is_null($user) ? $user->cacheKey() : "")
-                                        ."\\mainAttributeValues:"
-                                        .(isset($mainAttributeValues) ? implode("", $mainAttributeValues) : "-")
-                                        ."\\subProducts:"
-                                        .(isset($selectedSubProductIds) ? implode("", $selectedSubProductIds) : "-")
-                                        ."\\extraAttributeValues:"
-                                        .(isset($extraAttributeValues) ? implode("", $extraAttributeValues) : "-");
+            . "\\"
+            . $product->cacheKey()
+            . "-user"
+            . (isset($user) && !is_null($user) ? $user->cacheKey() : "")
+            . "\\mainAttributeValues:"
+            . (isset($mainAttributeValues) ? implode("", $mainAttributeValues) : "-")
+            . "\\subProducts:"
+            . (isset($selectedSubProductIds) ? implode("", $selectedSubProductIds) : "-")
+            . "\\extraAttributeValues:"
+            . (isset($extraAttributeValues) ? implode("", $extraAttributeValues) : "-");
 
-        return Cache::tags('bon')->remember($key, config("constants.CACHE_60"), function () use ($product , $user , $mainAttributeValues , $selectedSubProductIds , $extraAttributeValues) {
+        return Cache::tags('bon')->remember($key, config("constants.CACHE_60"), function () use ($product, $user, $mainAttributeValues, $selectedSubProductIds, $extraAttributeValues) {
             $productType = optional($product->producttype)->id;
             $intendedProducts = collect();
-            switch ($productType)
-            {
+            switch ($productType) {
                 case config("constants.PRODUCT_TYPE_SIMPLE"):
                     $intendedProducts->push($product);
                     break;
                 case config("constants.PRODUCT_TYPE_CONFIGURABLE"):
                     $simpleProduct = $this->findProductChildViaAttributes($product, $mainAttributeValues);
-                    if (isset($simpleProduct))
-                    {
+                    if (isset($simpleProduct)) {
                         $intendedProducts->push($simpleProduct);
                     }
 
                     break;
                 case config("constants.PRODUCT_TYPE_SELECTABLE"):
-                    if(isset($selectedSubProductIds))
-                    {
+                    if (isset($selectedSubProductIds)) {
                         $selectedSubProducts = Product::whereIn('id', $selectedSubProductIds)->get();
                         $selectedSubProducts->load('parents');
                         $selectedSubProducts->keepOnlyParents();
@@ -580,10 +575,8 @@ class ProductController extends Controller
 
             $cost = 0;
             $costForCustomer = 0;
-            foreach ($intendedProducts as $product)
-            {
-                if($product->isInStock())
-                {
+            foreach ($intendedProducts as $product) {
+                if ($product->isInStock()) {
                     if (isset($user))
                         $costArray = $product->calculatePayablePrice($user);
                     else
@@ -604,10 +597,10 @@ class ProductController extends Controller
             $result = ["cost" => $cost, "costForCustomer" => $costForCustomer];
 
             $totalExtraCost = 0;
-            if(is_array($extraAttributeValues))
+            if (is_array($extraAttributeValues))
                 $totalExtraCost = $this->productExtraCostFromAttributes($product, $extraAttributeValues);
 
-            $result = array_add($result , 'totalExtraCost' , $totalExtraCost);
+            $result = array_add($result, 'totalExtraCost', $totalExtraCost);
 
             return json_encode($result, JSON_UNESCAPED_UNICODE);
         });

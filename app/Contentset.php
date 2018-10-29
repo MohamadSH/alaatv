@@ -4,6 +4,7 @@ namespace App;
 
 
 use App\Classes\Taggable;
+use App\Traits\favorableTraits;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
@@ -44,6 +45,8 @@ use Illuminate\Support\Facades\Config;
 class Contentset extends Model implements Taggable
 {
     use SoftDeletes;
+    use favorableTraits;
+
     /**      * The attributes that should be mutated to dates.        */
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
@@ -96,14 +99,26 @@ class Contentset extends Model implements Taggable
     |--------------------------------------------------------------------------
     */
 
-    public function getLastContent() :Content
+    public function getLastContent(): Content
     {
-        $key = "ContentSet:getLastContent".$this->cacheKey();
-        return Cache::tags('set')->remember($key,Config::get("constants.CACHE_60"),function () {
+        $key = "ContentSet:getLastContent" . $this->cacheKey();
+        return Cache::tags('set')->remember($key, Config::get("constants.CACHE_60"), function () {
             return $this->contents
                 ->sortByDesc("pivot.order")->first();
         });
 
+    }
+
+    public function cacheKey()
+    {
+        $key = $this->getKey();
+        $time = isset($this->update) ? $this->updated_at->timestamp : $this->created_at->timestamp;
+        return sprintf(
+            "%s-%s",
+            //$this->getTable(),
+            $key,
+            $time
+        );
     }
 
     public function getTagsAttribute($value)
@@ -131,24 +146,12 @@ class Contentset extends Model implements Taggable
         return $tags;
     }
 
-    public function cacheKey()
-    {
-        $key = $this->getKey();
-        $time= isset($this->update) ? $this->updated_at->timestamp : $this->created_at->timestamp;
-        return sprintf(
-            "%s-%s",
-            //$this->getTable(),
-            $key,
-            $time
-        );
-    }
-
     public function getTaggableTags()
     {
         return $this->tags->tags;
     }
 
-    public function getTaggableId() :int
+    public function getTaggableId(): int
     {
         return $this->id;
     }
@@ -172,6 +175,7 @@ class Contentset extends Model implements Taggable
     {
         return $this->isEnable();
     }
+
     public function isEnable(): bool
     {
         if ($this->enable)

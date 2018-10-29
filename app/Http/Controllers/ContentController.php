@@ -3,25 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\Classes\Search\ContentSearch;
+use App\Content;
 use App\Contentset;
 use App\Contenttype;
-use App\Content;
+use App\Http\Requests\{ContentIndexRequest, EditContentRequest, InsertContentRequest, Request};
+use App\Traits\{APIRequestCommon,
+    CharacterCommon,
+    FileCommon,
+    Helper,
+    MetaCommon,
+    ProductCommon,
+    RequestCommon,
+    UserSeenTrait};
 use App\User;
-use App\Http\Requests\{
-    ContentIndexRequest, EditContentRequest, InsertContentRequest, Request
-};
-use App\Traits\{
-    APIRequestCommon, CharacterCommon, FileCommon, Helper, MetaCommon, ProductCommon, RequestCommon, UserSeenTrait
-};
 use App\Websitesetting;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\{
-    Cache, Config, View
-};
+use Illuminate\Support\Facades\{Cache, Config, View};
 use Illuminate\Support\Str;
 use Jenssegers\Agent\Agent;
 
@@ -29,12 +30,12 @@ use Jenssegers\Agent\Agent;
 class ContentController extends Controller
 {
 
-    protected $response ;
-    protected $setting ;
+    protected $response;
+    protected $setting;
 
-    use ProductCommon ;
+    use ProductCommon;
     use Helper;
-    use FileCommon ;
+    use FileCommon;
     use UserSeenTrait;
     use RequestCommon;
     use APIRequestCommon;
@@ -51,7 +52,7 @@ class ContentController extends Controller
     const PARTIAL_INDEX_TEMPLATE = 'content.index';
 
 
-    public function __construct(Agent $agent, Response $response ,Websitesetting $setting)
+    public function __construct(Agent $agent, Response $response, Websitesetting $setting)
     {
         $this->response = $response;
         $this->setting = $setting->setting;
@@ -68,73 +69,67 @@ class ContentController extends Controller
     public function index(ContentIndexRequest $request)
     {
         $contentTypes = array_filter($request->get('contentType',
-            ["video" , "pamphlet" , "article"]
+            ["video", "pamphlet", "article"]
         ));
         $tags = $request->get('tags');
         $filters = $request->all();
         $isApp = $this->isRequestFromApp($request);
 
         $items = collect();
-        foreach ($contentTypes as $contentType)
-        {
+        foreach ($contentTypes as $contentType) {
             $filters['contentType'] = [$contentType];
-            ${$contentType.'Result'} = ( new ContentSearch )
-                                        ->setPageName($contentType.'Page')
-                                        ->apply($filters);
+            ${$contentType . 'Result'} = (new ContentSearch)
+                ->setPageName($contentType . 'Page')
+                ->apply($filters);
 
-            if($isApp)
-            {
-                    $items->push(${$contentType . 'Result'}->getCollection());
-            }
-            else {
-                if (${$contentType . 'Result'}->total() > 0)
-                {
-                    $partialSearch = $this->getPartialSearchFromIds( ${$contentType . 'Result'}, self::PARTIAL_SEARCH_TEMPLATE_ROOT.".".$contentType);
-                    $partialIndex = $this->getPartialSearchFromIds( ${$contentType . 'Result'}, self::PARTIAL_INDEX_TEMPLATE);
-                }
-                else
-                {
+            if ($isApp) {
+                $items->push(${$contentType . 'Result'}->getCollection());
+            } else {
+                if (${$contentType . 'Result'}->total() > 0) {
+                    $partialSearch = $this->getPartialSearchFromIds(${$contentType . 'Result'}, self::PARTIAL_SEARCH_TEMPLATE_ROOT . "." . $contentType);
+                    $partialIndex = $this->getPartialSearchFromIds(${$contentType . 'Result'}, self::PARTIAL_INDEX_TEMPLATE);
+                } else {
                     $partialSearch = null;
-                    $partialIndex = null ;
+                    $partialIndex = null;
                 }
                 $items->push([
-                    "type"=>$contentType,
-                    "totalitems"=> ${$contentType . 'Result'}->total(),
-                    "view"=>$partialSearch,
+                    "type" => $contentType,
+                    "totalitems" => ${$contentType . 'Result'}->total(),
+                    "view" => $partialSearch,
                     "indexView" => $partialIndex,
                     "tagLabels" => $tags
                 ]);
             }
         }
 
-        if($isApp){
+        if ($isApp) {
             $response = $this->makeJsonForAndroidApp($items);
-            return response()->json($response,200);
+            return response()->json($response, 200);
         }
-        if(request()->ajax())
-        {
+        if (request()->ajax()) {
             return $this->response
-                        ->setStatusCode(Response::HTTP_OK)
-                        ->setContent([
-                            "items"=>$items ,
-                            "itemTypes"=>$contentTypes ,
-                            "tagLabels" => $tags ,
-                        ]);
+                ->setStatusCode(Response::HTTP_OK)
+                ->setContent([
+                    "items" => $items,
+                    "itemTypes" => $contentTypes,
+                    "tagLabels" => $tags,
+                ]);
         }
-        return view("pages.search" , compact("items" ,"contentTypes"  , 'tags' ));
+        return view("pages.search", compact("items", "contentTypes", 'tags'));
     }
 
-    public function embed(Request $request , Content $content){
+    public function embed(Request $request, Content $content)
+    {
         $url = action('ContentController@show', $content);
         $this->generateSeoMetaTags($content);
-        if($content->contenttype_id != Content::CONTENT_TYPE_VIDEO)
+        if ($content->contenttype_id != Content::CONTENT_TYPE_VIDEO)
             return redirect($url, Response::HTTP_MOVED_PERMANENTLY);
         $video = $content;
         [
-            $contentsWithSameSet ,
+            $contentsWithSameSet,
             $contentSetName
-        ]  = $video->getSetMates();
-        return view("content.embed",compact('video','contentsWithSameSet','contentSetName'));
+        ] = $video->getSetMates();
+        return view("content.embed", compact('video', 'contentsWithSameSet', 'contentSetName'));
     }
 
     /**
@@ -145,10 +140,10 @@ class ContentController extends Controller
     public function create()
     {
         $rootContentTypes = Contenttype::getRootContentType();
-        $contentsets = Contentset::latest()->pluck("name" , "id");
+        $contentsets = Contentset::latest()->pluck("name", "id");
         $authors = User::getTeachers()->pluck("full_name", "id");
 
-        return view("content.create2" , compact("rootContentTypes" ,"contentsets" ,"authors")) ;
+        return view("content.create2", compact("rootContentTypes", "contentsets", "authors"));
     }
 
     /**
@@ -158,9 +153,9 @@ class ContentController extends Controller
      */
     public function create2()
     {
-        $contenttypes = Contenttype::getRootContentType()->pluck('displayName','id');
+        $contenttypes = Contenttype::getRootContentType()->pluck('displayName', 'id');
 
-        return view("content.create3" , compact("contenttypes")) ;
+        return view("content.create3", compact("contenttypes"));
     }
 
     /**
@@ -185,11 +180,10 @@ class ContentController extends Controller
             $seenCount = $this->getSeenCountFromRequest($request);
             $userCanSeeCounter = optional(auth()->user())->CanSeeCounter();
 
-            $result = compact( "seenCount","author", "content", "rootContentType", "childContentType", "contentSet", "contentsWithSameSet", "videosWithSameSet", "pamphletsWithSameSet", "contentSetName", "videoSources"
-              , "tags", "sideBarMode", "userCanSeeCounter", "adItems", "videosWithSameSetL", "videosWithSameSetR","contentId");
+            $result = compact("seenCount", "author", "content", "rootContentType", "childContentType", "contentSet", "contentsWithSameSet", "videosWithSameSet", "pamphletsWithSameSet", "contentSetName", "videoSources"
+                , "tags", "sideBarMode", "userCanSeeCounter", "adItems", "videosWithSameSetL", "videosWithSameSetR", "contentId");
 
-            if(request()->ajax())
-            {
+            if (request()->ajax()) {
                 return $this->response
                     ->setStatusCode(Response::HTTP_OK)
                     ->setContent($result);
@@ -202,7 +196,7 @@ class ContentController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Content   $content
+     * @param  \App\Content $content
      * @return \Illuminate\Http\Response
      */
     public function edit($content)
@@ -210,17 +204,17 @@ class ContentController extends Controller
         $validSinceTime = optional($content->validSince)->format('H:i:s');
         $tags = optional($content->tags)->tags;
         $tags = implode(",", isset($tags) ? $tags : []);
-        $contentset = $content->contentset;
+        $contentset = $content->set;
         $rootContentTypes = $this->getRootsContentTypes();
 
-        $result = compact("content" ,"rootContentTypes" ,"validSinceTime" ,"tags" ,"contentset" ,"rootContentTypes" );
-        return view("content.edit" , $result) ;
+        $result = compact("content", "rootContentTypes", "validSinceTime", "tags", "contentset", "rootContentTypes");
+        return view("content.edit", $result);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\InsertContentRequest  $request
+     * @param  \App\Http\Requests\InsertContentRequest $request
      * @return \Illuminate\Http\Response
      */
     public function store(InsertContentRequest $request)
@@ -249,17 +243,17 @@ class ContentController extends Controller
         $order = $request->get("order");
         $this->fillContentFromRequest($request, $content);
 
-        if($content->save()){
-            if(isset($contentset_id))
-                $this->attachContentSetToContent($content, $contentset_id,$order);
+        if ($content->save()) {
+            if (isset($contentset_id))
+                $this->attachContentSetToContent($content, $contentset_id, $order);
             return $this->response
-                ->setStatusCode(Response::HTTP_OK )
+                ->setStatusCode(Response::HTTP_OK)
                 ->setContent([
-                    "id"=>$content->id
+                    "id" => $content->id
                 ]);
         }
         return $this->response
-            ->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE) ;
+            ->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
     }
 
     /**
@@ -279,15 +273,14 @@ class ContentController extends Controller
         $contentset = Contentset::FindOrFail($contentset_id);
         $lastContent = $contentset->getLastContent();
 
-        if(isset($lastContent))
+        if (isset($lastContent))
             $newContent = $lastContent->replicate();
-        else
-        {
-            session()->put("error" , trans('content.No previous content found'));
+        else {
+            session()->put("error", trans('content.No previous content found'));
             return redirect()->back();
         }
-        if($newContent instanceof Content){
-            $newContent->contenttype_id = $contenttype_id ;
+        if ($newContent instanceof Content) {
+            $newContent->contenttype_id = $contenttype_id;
             $newContent->name = $name;
             $newContent->description = null;
             $newContent->metaTitle = null;
@@ -297,26 +290,27 @@ class ContentController extends Controller
             $newContent->created_at = $dateNow;
             $newContent->updated_at = $dateNow;
 
-            $files = $this->makeVideoFileArray($fileName , $contentset_id);
+            $files = $this->makeVideoFileArray($fileName, $contentset_id);
 
-            $thumbnailUrl          = $this->makeThumbnailUrlFromFileName($fileName, $contentset_id);
+            $thumbnailUrl = $this->makeThumbnailUrlFromFileName($fileName, $contentset_id);
             $newContent->thumbnail = $this->makeThumbanilFile($thumbnailUrl);
             $this->storeFilesOfContent($newContent, $files);
 
             $newContent->save();
-            if(!isset($order))
+            if (!isset($order))
                 $order = $lastContent->pivot->order + 1;
-            $this->attachContentSetToContent($newContent,$contentset->id,$order);
+            $this->attachContentSetToContent($newContent, $contentset->id, $order);
 
-            return redirect(action("ContentController@edit" , $newContent->id));
-        }else
-            throw new Exception("replicate Error!". $contentset_id);
+            return redirect(action("ContentController@edit", $newContent->id));
+        } else
+            throw new Exception("replicate Error!" . $contentset_id);
     }
+
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\EditContentRequest  $request
-     * @param  \App\Content   $content
+     * @param  \App\Http\Requests\EditContentRequest $request
+     * @param  \App\Content $content
      * @return \Illuminate\Http\Response
      */
     public function update(EditContentRequest $request, $content)
@@ -324,10 +318,9 @@ class ContentController extends Controller
         $this->fillContentFromRequest($request, $content);
 
         //TODO:// update default contentset
-        if($content->update()){
+        if ($content->update()) {
             session()->put('success', 'اصلاح محتوا با موفقیت انجام شد');
-        }
-        else{
+        } else {
             session()->put('error', 'خطای پایگاه داده');
         }
         return redirect()->back();
@@ -343,11 +336,10 @@ class ContentController extends Controller
     public function destroy($content)
     {
         //TODO:// remove Tags From Redis, ( Do it in ContentObserver)
-        if ($content->delete()){
-            return $this->response->setStatusCode(Response::HTTP_OK) ;
-        }
-        else {
-            return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE) ;
+        if ($content->delete()) {
+            return $this->response->setStatusCode(Response::HTTP_OK);
+        } else {
+            return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
 
@@ -359,7 +351,7 @@ class ContentController extends Controller
      */
     public function search()
     {
-        return redirect('/c',Response::HTTP_MOVED_PERMANENTLY);
+        return redirect('/c', Response::HTTP_MOVED_PERMANENTLY);
     }
 
     /**
@@ -398,9 +390,8 @@ class ContentController extends Controller
         $this->middleware('permission:' . Config::get('constants.INSERT_EDUCATIONAL_CONTENT_ACCESS'), ['only' => ['store', 'create', 'create2']]);
         $this->middleware('permission:' . Config::get("constants.EDIT_EDUCATIONAL_CONTENT"), ['only' => ['update', 'edit']]);
         $this->middleware('permission:' . Config::get("constants.REMOVE_EDUCATIONAL_CONTENT_ACCESS"), ['only' => 'destroy']);
-        $this->middleware('convert:order|title', ['only' => ['store' , 'update']]);
+        $this->middleware('convert:order|title', ['only' => ['store', 'update']]);
     }
-
 
 
     /**
@@ -438,41 +429,10 @@ class ContentController extends Controller
 
     /**
      * @param Content $content
-     * @param $contentset_id
-     * @param $order
-     * @param int $isDefault
-     */
-    private function attachContentSetToContent(Content &$content, $setId,$order, $isDefault = 1 ): void
-    {
-        $content->contentsets()->attach($setId, [
-            "order" =>isset($order) ? $order : 0,
-            "isDefault" => $isDefault
-        ]);
-    }
-
-    //TODO:// implement
-    public function attachContentToContentSet(Request $request, Content $content, Contentset $set){
-        abort(Response::HTTP_FORBIDDEN);
-        /*$order = $request->get('order', 0);
-        $this->attachContentSetToContent($content, $set, $order,0);*/
-    }
-    public function updateContentSetPivots(Request $request, Content $content, Contentset $set){
-        abort(Response::HTTP_FORBIDDEN);
-        /*$order = $request->get('order', 0);
-        $content->contentsets()
-            ->updateExistingPivot($set->id, [
-                'order' => $order
-            ], false);*/
-    }
-
-
-
-    /**
-     * @param Content $content
      *
      * @param array $files
      */
-    private function storeFilesOfContent(Content &$content, array $files):void
+    private function storeFilesOfContent(Content &$content, array $files): void
     {
         $disk = $content->isFree ? config("constants.DISK_FREE_CONTENT") : config("constants.DISK_PRODUCT_CONTENT");
 
@@ -506,7 +466,7 @@ class ContentController extends Controller
      * @param Content $content
      * @return void
      */
-    private function fillContentFromRequest(FormRequest $request, Content &$content):void
+    private function fillContentFromRequest(FormRequest $request, Content &$content): void
     {
         $inputData = $request->all();
         $time = $request->get("validSinceTime");
@@ -524,20 +484,22 @@ class ContentController extends Controller
             $this->storeFilesOfContent($content, $files);
     }
 
-    public function makeVideoFileArray($fileName,$contentset_id) :array {
+    public function makeVideoFileArray($fileName, $contentset_id): array
+    {
         $fileUrl = [
-            "720p" =>   "/media/".$contentset_id."/HD_720p/".$fileName,
-            "480p" => "/media/".$contentset_id."/hq/".$fileName,
-            "240p" =>"/media/".$contentset_id."/240p/".$fileName
+            "720p" => "/media/" . $contentset_id . "/HD_720p/" . $fileName,
+            "480p" => "/media/" . $contentset_id . "/hq/" . $fileName,
+            "240p" => "/media/" . $contentset_id . "/240p/" . $fileName
         ];
         $files = [];
-        $files[] = $this->makeVideoFileStdClass($fileUrl["240p"],"240p");
+        $files[] = $this->makeVideoFileStdClass($fileUrl["240p"], "240p");
 
-        $files[] = $this->makeVideoFileStdClass($fileUrl["480p"],"480p");
+        $files[] = $this->makeVideoFileStdClass($fileUrl["480p"], "480p");
 
-        $files[] = $this->makeVideoFileStdClass($fileUrl["720p"],"720p");
+        $files[] = $this->makeVideoFileStdClass($fileUrl["720p"], "720p");
         return $files;
     }
+
     /**
      * @param $filename
      * @param $res
@@ -587,28 +549,31 @@ class ContentController extends Controller
     }
 
 
-    private function getPartialSearchFromIds($query , string $layout ){
+    private function getPartialSearchFromIds($query, string $layout)
+    {
         $partialSearch = View::make(
-            $layout ,
+            $layout,
             [
                 'items' => $query
             ]
         )->render();
         return $partialSearch;
     }
-    private function makeJsonForAndroidApp(Collection $items){
+
+    private function makeJsonForAndroidApp(Collection $items)
+    {
 
 //        dd($items);
         $items = $items->pop();
         $key = md5($items->pluck("id")->implode(","));
-        $response = Cache::remember($key,Config::get("constants.CACHE_60"),function () use($items){
+        $response = Cache::remember($key, Config::get("constants.CACHE_60"), function () use ($items) {
             $response = collect();
             $items->load('files');
-            foreach ($items as $item){
+            foreach ($items as $item) {
                 $hq = "";
-                $h240 ="" ;
+                $h240 = "";
                 if (isset($item->files)) {
-                    $hq= $item->files->where('pivot.label','hq')->first();
+                    $hq = $item->files->where('pivot.label', 'hq')->first();
 
                     if (isset($hq)) {
                         $hq = $hq->name;
@@ -617,27 +582,27 @@ class ContentController extends Controller
                 }
 
                 if (isset($item->files)) {
-                    $temp = $item->files->where('pivot.label','240p')->first();
+                    $temp = $item->files->where('pivot.label', '240p')->first();
                     if (isset($temp)) {
                         $h240 = $temp->name;
                     }
                 }
 
-                $thumbnail = $item->files->where('pivot.label','thumbnail')->first();
-                $contenSets = $item->contentsets->where("pivot.isDefault" , 1)->first();
+                $thumbnail = $item->files->where('pivot.label', 'thumbnail')->first();
+                $contenSets = $item->set;
                 $sessionNumber = $contenSets->pivot->order;
                 $response->push(
                     [
                         "videoId" => $item->id,
                         "name" => $item->display_name,
                         "videoDescribe" => $item->description,
-                        "url" => action('ContentController@show',$item),
+                        "url" => action('ContentController@show', $item),
                         "videoLink480" => $hq,
                         "videoLink240" => $h240,
-                        "videoviewcounter" =>"0",
+                        "videoviewcounter" => "0",
                         "videoDuration" => 0,
-                        "session" => $sessionNumber."",
-                        "thumbnail" => (isset($thumbnail->name))?$thumbnail->name:""
+                        "session" => $sessionNumber . "",
+                        "thumbnail" => (isset($thumbnail->name)) ? $thumbnail->name : ""
                     ]
                 );
                 //dd($response);
@@ -652,14 +617,13 @@ class ContentController extends Controller
 
     private function getAuthExceptionArray(Agent $agent): array
     {
-        if ($agent->isRobot())
-        {
-            $authException = ["index" , "show" , "embed" ];
-        }else{
+        if ($agent->isRobot()) {
+            $authException = ["index", "show", "embed"];
+        } else {
             $authException = ["index"];
         }
         //TODO:// preview(Telegram)
-        $authException = ["index" , "show" , "search" ,"embed","attachContentToContentSet" ];
+        $authException = ["index", "show", "search", "embed", "attachContentToContentSet"];
         return $authException;
     }
 }

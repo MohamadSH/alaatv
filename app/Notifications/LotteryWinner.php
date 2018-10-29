@@ -14,47 +14,47 @@ use Illuminate\Queue\SerializesModels;
 
 class LotteryWinner extends Notification implements ShouldQueue
 {
-    use Queueable , SerializesModels;
+    use Queueable, SerializesModels;
 
+    public $timeout = 120;
     /**
      * @var int
      */
-    protected  $rank;
+    protected $rank;
     /**
      * @var string
      */
-    protected  $prize;
+    protected $prize;
     /**
      * @var string
      */
-    protected  $memorial;
+    protected $memorial;
     /**
      * @var Lottery
      */
-    protected  $lottery;
+    protected $lottery;
     /**
      * @var User
      */
     protected $user;
-    public $timeout = 120;
 
     /**
      * Create a new notification instance.
      *
      * @param int $giftCost
      */
-    public function __construct(Lottery $lottery , $rank , $prize , $memorial)
+    public function __construct(Lottery $lottery, $rank, $prize, $memorial)
     {
         $this->lottery = $lottery;
         $this->rank = $rank;
-        $this->prize = $prize ;
-        $this->memorial = $memorial ;
+        $this->prize = $prize;
+        $this->memorial = $memorial;
     }
 
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param  mixed $notifiable
      * @return array
      */
     public function via($notifiable)

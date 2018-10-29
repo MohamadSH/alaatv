@@ -19,17 +19,17 @@
                         </div>
                     </div>
                     <div class="col2">
-    {{--<div class="date">{{$content["validSince_Jalali"]}}</div>--}}
+                        {{--<div class="date">{{$content["validSince_Jalali"]}}</div>--}}
                     </div>
                 </a>
             </li>
             <!-- END TIMELINE ITEM -->
-    @endforeach
+        @endforeach
     </ul>
 @else
-<p class="text-center">
-    موردی یافت نشد
-</p>
+    <p class="text-center">
+        موردی یافت نشد
+    </p>
 @endif
 <div class="row text-center">
     {{ $items->links() }}

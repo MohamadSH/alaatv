@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\Config;
 
 class EditArticleRequest extends FormRequest
 {
-    use CharacterCommon ;
+    use CharacterCommon;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -16,7 +17,7 @@ class EditArticleRequest extends FormRequest
      */
     public function authorize()
     {
-        if(Auth()->user()->can(Config::get('constants.EDIT_ARTICLE_ACCESS'))) return true;
+        if (Auth()->user()->can(Config::get('constants.EDIT_ARTICLE_ACCESS'))) return true;
         return false;
     }
 
@@ -45,12 +46,11 @@ class EditArticleRequest extends FormRequest
 
     protected function replaceNumbers()
     {
-        $input = $this->request->all() ;
-        if(isset($input["order"]))
-        {
-            $input["order"] = preg_replace('/\s+/', '', $input["order"] ) ;
-            $input["order"] = $this->convertToEnglish($input["order"]) ;
+        $input = $this->request->all();
+        if (isset($input["order"])) {
+            $input["order"] = preg_replace('/\s+/', '', $input["order"]);
+            $input["order"] = $this->convertToEnglish($input["order"]);
         }
-        $this->replace($input) ;
+        $this->replace($input);
     }
 }

@@ -1,9 +1,9 @@
 @extends("app" , ["pageName" => "profile"])
 
 @section("headPageLevelPlugin")
-    <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css" />
-    <link href="/assets/global/plugins/bootstrap-sweetalert/sweetalert.css" rel="stylesheet" type="text/css" />
-    <link href="/assets/global/plugins/bootstrap-toastr/toastr-rtl.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/global/plugins/bootstrap-sweetalert/sweetalert.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/global/plugins/bootstrap-toastr/toastr-rtl.min.css" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section("headPageLevelStyle")
@@ -41,49 +41,69 @@
             @if(isset($hasHamayeshHozouriArabi) && $hasHamayeshHozouriArabi)
                 <div class="alert alert-block bg-blue bg-font-blue fade in">
                     <button type="button" class="close" data-dismiss="alert"></button>
-                    <h4 class="alert-heading text-center" style="line-height: normal;">نام شما در شرکت کنندگان همایش رایگان حضوری عربی آقای ناصح زاده روز 27 خرداد ثبت شده است</h4>
-                    <h4 class="alert-heading text-center" style="line-height: normal;">برای انصراف از شرکت در همایش بر روی دکمه زیر کلیک کنید</h4>
+                    <h4 class="alert-heading text-center" style="line-height: normal;">نام شما در شرکت کنندگان همایش
+                        رایگان حضوری عربی آقای ناصح زاده روز 27 خرداد ثبت شده است</h4>
+                    <h4 class="alert-heading text-center" style="line-height: normal;">برای انصراف از شرکت در همایش بر
+                        روی دکمه زیر کلیک کنید</h4>
                     <p style="text-align: center;">
                         {{--<button class="btn mt-sweetalert-hamayesh-arabi" data-title="آیا از شرکت خود مطمئنید؟" data-type="warning" data-allow-outside-click="true" data-show-confirm-button="true" data-show-cancel-button="true" data-cancel-button-class="btn-danger" data-cancel-button-text="خیر" data-confirm-button-text="بله شرکت می کنم" data-confirm-button-class="btn-info" style="background: #d6af18;">ثبت نام در همایش حضوری</button>--}}
-                        <button class="btn btn-lg" id="bt-cancel-hamayesh-arabi"  style="background: #d6af18;">انصراف می دهم</button>
+                        <button class="btn btn-lg" id="bt-cancel-hamayesh-arabi" style="background: #d6af18;">انصراف می
+                            دهم
+                        </button>
                     </p>
                 </div>
             @elseif(isset($hasHamayeshTalaiArabi) && $hasHamayeshTalaiArabi)
                 <div class="alert alert-block bg-purple bg-font-purple fade in">
                     <button type="button" class="close" data-dismiss="alert"></button>
-                    <h4 class="alert-heading text-center" style="line-height: normal;">شما به همایش حضوری رایگان 27 خرداد میلاد ناصح زاده دعوت شده اید . آیا شرکت می کنید؟</h4>
-                    <h4 class="alert-heading text-center" style="line-height: normal;">(محل برگزاری تهران) ثبت نام تا ساعت 12 جمعه 25 خرداد باز خواهد بود.</h4>
+                    <h4 class="alert-heading text-center" style="line-height: normal;">شما به همایش حضوری رایگان 27
+                        خرداد میلاد ناصح زاده دعوت شده اید . آیا شرکت می کنید؟</h4>
+                    <h4 class="alert-heading text-center" style="line-height: normal;">(محل برگزاری تهران) ثبت نام تا
+                        ساعت 12 جمعه 25 خرداد باز خواهد بود.</h4>
                     <p style="text-align: center;">
                         {{--<button class="btn mt-sweetalert-hamayesh-arabi" data-title="آیا از شرکت خود مطمئنید؟" data-type="warning" data-allow-outside-click="true" data-show-confirm-button="true" data-show-cancel-button="true" data-cancel-button-class="btn-danger" data-cancel-button-text="خیر" data-confirm-button-text="بله شرکت می کنم" data-confirm-button-class="btn-info" style="background: #d6af18;">ثبت نام در همایش حضوری</button>--}}
-                        <button class="btn btn-lg" id="bt-register-hamayesh-arabi"  style="background: #d6af18;">شرکت می کنم</button>
+                        <button class="btn btn-lg" id="bt-register-hamayesh-arabi" style="background: #d6af18;">شرکت می
+                            کنم
+                        </button>
                     </p>
                 </div>
             @endif
             @if(isset($userPoints) && $userPoints)
                 <div class="alert alert-block bg-dark bg-font-purple fade in">
                     <button type="button" class="close" data-dismiss="alert"></button>
-                    <h4 class="alert-heading text-center" style="line-height: normal;">برای انصرف از قرعه کشی {{$lotteryName}} ، روی دکمه زیر کلیک کنید</h4>
-                    <h4 class="alert-heading text-center" style="line-height: normal;">در صورت انصراف مبلغ {{(isset($exchangeAmount))?number_format($exchangeAmount):""}} تومان اعتبار هدیه به رسم یاد بود به شما اهدا خواهد شد.</h4>
+                    <h4 class="alert-heading text-center" style="line-height: normal;">برای انصرف از قرعه
+                        کشی {{$lotteryName}} ، روی دکمه زیر کلیک کنید</h4>
+                    <h4 class="alert-heading text-center" style="line-height: normal;">در صورت انصراف
+                        مبلغ {{(isset($exchangeAmount))?number_format($exchangeAmount):""}} تومان اعتبار هدیه به رسم یاد
+                        بود به شما اهدا خواهد شد.</h4>
                     <p style="text-align: center;">
-                        <button class="btn mt-sweetalert" data-title="آیا از انصراف خود مطمئنید؟" data-type="warning" data-allow-outside-click="true" data-show-confirm-button="true" data-show-cancel-button="true" data-cancel-button-class="btn-danger" data-cancel-button-text="خیر انصراف نمی دهم" data-confirm-button-text="بله انصراف می دهم" data-confirm-button-class="btn-info" style="background: #d6af18;">انصراف از قرعه کشی و دریافت مبلغ هدیه</button>
+                        <button class="btn mt-sweetalert" data-title="آیا از انصراف خود مطمئنید؟" data-type="warning"
+                                data-allow-outside-click="true" data-show-confirm-button="true"
+                                data-show-cancel-button="true" data-cancel-button-class="btn-danger"
+                                data-cancel-button-text="خیر انصراف نمی دهم"
+                                data-confirm-button-text="بله انصراف می دهم" data-confirm-button-class="btn-info"
+                                style="background: #d6af18;">انصراف از قرعه کشی و دریافت مبلغ هدیه
+                        </button>
                     </p>
                 </div>
             @elseif(isset($userLottery))
                 @if(isset($prizeCollection))
                     <div class="alert alert-block bg-blue bg-font-blue fade in">
                         <button type="button" class="close" data-dismiss="alert"></button>
-                        <h4 class="alert-heading text-center" style="line-height: normal;">{{$lotteryMessage}} {{($lotteryRank>0)?" جایزه شما:":""}}</h4>
+                        <h4 class="alert-heading text-center"
+                            style="line-height: normal;">{{$lotteryMessage}} {{($lotteryRank>0)?" جایزه شما:":""}}</h4>
                         @foreach($prizeCollection as $prize )
                             <h5 class="text-center bold" style="font-size: large">{{$prize["name"]}}</h5>
                         @endforeach
-                        <h4 class="alert-heading text-center" style="line-height: normal;"> از طرف آلاء به شما تقدیم شده است. به امید موفقیت شما</h4>
+                        <h4 class="alert-heading text-center" style="line-height: normal;"> از طرف آلاء به شما تقدیم شده
+                            است. به امید موفقیت شما</h4>
                     </div>
                 @else
                     <div class="alert alert-block bg-blue bg-font-blue fade in">
                         <button type="button" class="close" data-dismiss="alert"></button>
                         <h4 class="alert-heading text-center" style="line-height: normal;">{{$lotteryMessage}}</h4>
 
-                        <h4 class="alert-heading text-center" style="line-height: normal;">از شرکت شما در قرعه کشی سپاس گزاریم . با امید موفقیت شما.</h4>
+                        <h4 class="alert-heading text-center" style="line-height: normal;">از شرکت شما در قرعه کشی سپاس
+                            گزاریم . با امید موفقیت شما.</h4>
                     </div>
                 @endif
 
@@ -164,9 +184,9 @@
                                         </a>
                                     </li>
                                     {{--@if(($user->id == Auth::id()))--}}
-                                        {{--<li @if(strcmp(session('tabPane') , "tab_1_2") == 0) {{ "class=active" }} @endif>--}}
-                                            {{--<a href="#tab_1_2" data-toggle="tab">تغییر عکس</a>--}}
-                                        {{--</li>--}}
+                                    {{--<li @if(strcmp(session('tabPane') , "tab_1_2") == 0) {{ "class=active" }} @endif>--}}
+                                    {{--<a href="#tab_1_2" data-toggle="tab">تغییر عکس</a>--}}
+                                    {{--</li>--}}
                                     {{--@endif--}}
                                     @permission((Config::get('constants.EDIT_USER_ACCESS')))
                                     @if($user->id == Auth::id())
@@ -181,7 +201,8 @@
                             <div class="portlet-body">
                                 <div class="tab-content">
                                     <!-- PERSONAL INFO TAB -->
-                                    <div class="tab-pane @if(Empty(session('tabPane')) || strcmp(session('tabPane') , "tab_1_1") == 0) active @endif" id="tab_1_1">
+                                    <div class="tab-pane @if(Empty(session('tabPane')) || strcmp(session('tabPane') , "tab_1_1") == 0) active @endif"
+                                         id="tab_1_1">
                                         @if(
                                              (!$user->lockProfile and $user->id == Auth::id()))
 
@@ -195,45 +216,46 @@
                                     </div>
                                     <!-- END PERSONAL INFO TAB -->
                                     <!-- CHANGE AVATAR TAB -->
-                                    @if(($user->id == Auth::id()))
-                                        {{--<div class="tab-pane @if(strcmp(session('tabPane') , "tab_1_2") == 0) active @endif" id="tab_1_2">--}}
-                                            {{--<p> می توانید عکس پروفایل خود را با استفاده از فرم زیر تغییر دهید . </p>--}}
-                                            {{--<form method="post" role="form" action="{{ action("UserController@updatePhoto" ) }}" enctype="multipart/form-data">--}}
-                                                {{--{{ csrf_field() }}--}}
-                                                {{--<div class="form-group {{ $errors->has('photo') ? ' has-error' : '' }}">--}}
-                                                    {{--<div class="fileinput fileinput-new" data-provides="fileinput">--}}
-                                                        {{--<div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">--}}
-                                                            {{--<img  @if(isset($user->photo)) src="{{ route('image', ['category'=>'1','w'=>'140' , 'h'=>'140' ,  'filename' =>  $user->photo ]) }}" @endif  alt="عکس پروفایل" />--}}
-                                                        {{--</div>--}}
-                                                        {{--<div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"> </div>--}}
-                                                        {{--<div>--}}
-                                                                        {{--<span class="btn default btn-file">--}}
-                                                                            {{--<span class="fileinput-new"> انتخاب عکس </span>--}}
-                                                                            {{--<span class="fileinput-exists"> تغییر </span>--}}
-                                                                            {{--<input type="file" name="photo"> </span>--}}
-                                                            {{--<a href="javascript:;" class="btn default fileinput-exists" data-dismiss="fileinput"> حذف </a>--}}
-                                                        {{--</div>--}}
-                                                    {{--</div>--}}
-                                                    {{--<div class="clearfix margin-top-10">--}}
-                                                        {{--<span class="label label-danger">توجه! </span>--}}
-                                                        {{--<span> دقت نمایید که حجم عکس مورد نظر باید حداکثر 500 کیلوبایت و فرمت آن jpg و یا png باشد. </span>--}}
-                                                    {{--</div>--}}
-                                                {{--</div>--}}
-                                                {{--<div class="margin-top-10">--}}
-                                                    {{--<button type="submit"  class="btn green"> ذخیره </button>--}}
-                                                {{--</div>--}}
-                                                {{--@if($errors->has('photo'))--}}
-                                                    {{--@include("systemMessage.flash",array("error"=>$errors->first('photo')))--}}
-                                                {{--@else--}}
-                                                    {{--@if(Session::has('belongsTo') && strcmp(Session::get('belongsTo'),"photo")==0)--}}
-                                                        {{--@include("systemMessage.flash")--}}
-                                                    {{--@endif--}}
-                                                {{--@endif--}}
-                                            {{--</form>--}}
-                                        {{--</div>--}}
-                                        <!-- END CHANGE AVATAR TAB -->
+                                @if(($user->id == Auth::id()))
+                                    {{--<div class="tab-pane @if(strcmp(session('tabPane') , "tab_1_2") == 0) active @endif" id="tab_1_2">--}}
+                                    {{--<p> می توانید عکس پروفایل خود را با استفاده از فرم زیر تغییر دهید . </p>--}}
+                                    {{--<form method="post" role="form" action="{{ action("UserController@updatePhoto" ) }}" enctype="multipart/form-data">--}}
+                                    {{--{{ csrf_field() }}--}}
+                                    {{--<div class="form-group {{ $errors->has('photo') ? ' has-error' : '' }}">--}}
+                                    {{--<div class="fileinput fileinput-new" data-provides="fileinput">--}}
+                                    {{--<div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">--}}
+                                    {{--<img  @if(isset($user->photo)) src="{{ route('image', ['category'=>'1','w'=>'140' , 'h'=>'140' ,  'filename' =>  $user->photo ]) }}" @endif  alt="عکس پروفایل" />--}}
+                                    {{--</div>--}}
+                                    {{--<div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"> </div>--}}
+                                    {{--<div>--}}
+                                    {{--<span class="btn default btn-file">--}}
+                                    {{--<span class="fileinput-new"> انتخاب عکس </span>--}}
+                                    {{--<span class="fileinput-exists"> تغییر </span>--}}
+                                    {{--<input type="file" name="photo"> </span>--}}
+                                    {{--<a href="javascript:;" class="btn default fileinput-exists" data-dismiss="fileinput"> حذف </a>--}}
+                                    {{--</div>--}}
+                                    {{--</div>--}}
+                                    {{--<div class="clearfix margin-top-10">--}}
+                                    {{--<span class="label label-danger">توجه! </span>--}}
+                                    {{--<span> دقت نمایید که حجم عکس مورد نظر باید حداکثر 500 کیلوبایت و فرمت آن jpg و یا png باشد. </span>--}}
+                                    {{--</div>--}}
+                                    {{--</div>--}}
+                                    {{--<div class="margin-top-10">--}}
+                                    {{--<button type="submit"  class="btn green"> ذخیره </button>--}}
+                                    {{--</div>--}}
+                                    {{--@if($errors->has('photo'))--}}
+                                    {{--@include("systemMessage.flash",array("error"=>$errors->first('photo')))--}}
+                                    {{--@else--}}
+                                    {{--@if(Session::has('belongsTo') && strcmp(Session::get('belongsTo'),"photo")==0)--}}
+                                    {{--@include("systemMessage.flash")--}}
+                                    {{--@endif--}}
+                                    {{--@endif--}}
+                                    {{--</form>--}}
+                                    {{--</div>--}}
+                                    <!-- END CHANGE AVATAR TAB -->
                                         <!-- CHANGE PASSWORD TAB -->
-                                        <div class="tab-pane @if(strcmp(session('tabPane') , "tab_1_3") == 0) active @endif" id="tab_1_3">
+                                        <div class="tab-pane @if(strcmp(session('tabPane') , "tab_1_3") == 0) active @endif"
+                                             id="tab_1_3">
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <!-- BEGIN Portlet PORTLET-->
@@ -246,11 +268,15 @@
                                                         </div>
                                                         <div class="portlet-body">
                                                             <div class="row">
-                                                                <form  action="{{ action("UserController@sendGeneratedPassword") }}" method="post" >
+                                                                <form action="{{ action("UserController@sendGeneratedPassword") }}"
+                                                                      method="post">
                                                                     {{ csrf_field() }}
                                                                     <div class="form-actions">
-                                                                        برای ارسال پیامک رمز عبور جدید بر روی این دکمه کلیک کنید
-                                                                        <button type="submit" class="btn yellow">ارسال پیامک رمز عبور</button>
+                                                                        برای ارسال پیامک رمز عبور جدید بر روی این دکمه
+                                                                        کلیک کنید
+                                                                        <button type="submit" class="btn yellow">ارسال
+                                                                            پیامک رمز عبور
+                                                                        </button>
                                                                     </div>
                                                                 </form>
                                                             </div>
@@ -270,12 +296,14 @@
                                                             </div>
                                                         </div>
                                                         <div class="portlet-body">
-                                                            <form action="{{action("UserController@updatePassword" )}}" method="post">
+                                                            <form action="{{action("UserController@updatePassword" )}}"
+                                                                  method="post">
                                                                 <input type="hidden" name="_method" value="PUT">
                                                                 {{ csrf_field() }}
                                                                 <div class="form-group {{ $errors->has('oldPassword') ? ' has-error' : '' }}">
                                                                     <label class="control-label">رمز عبور فعلی</label>
-                                                                    <input type="password" class="form-control" name="oldPassword" />
+                                                                    <input type="password" class="form-control"
+                                                                           name="oldPassword"/>
                                                                     @if ($errors->has('oldPassword'))
                                                                         <span class="help-block">
                                                                 <strong>{{ $errors->first('oldPassword') }}</strong>
@@ -284,7 +312,8 @@
                                                                 </div>
                                                                 <div class="form-group {{ $errors->has('password') ? ' has-error' : '' }}">
                                                                     <label class="control-label">رمز عبور جدید</label>
-                                                                    <input type="password" class="form-control" name="password" />
+                                                                    <input type="password" class="form-control"
+                                                                           name="password"/>
                                                                     @if ($errors->has('password'))
                                                                         <span class="help-block">
                                                                 <strong>{{ $errors->first('password') }}</strong>
@@ -293,8 +322,10 @@
                                                                 </div>
 
                                                                 <div class="form-group {{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
-                                                                    <label class="control-label">تکرار رمز عبور جدید</label>
-                                                                    <input type="password" class="form-control" name="password_confirmation" />
+                                                                    <label class="control-label">تکرار رمز عبور
+                                                                        جدید</label>
+                                                                    <input type="password" class="form-control"
+                                                                           name="password_confirmation"/>
                                                                     @if ($errors->has('password_confirmation'))
                                                                         <span class="help-block">
                                                                  <strong>{{ $errors->first('password_confirmation') }}</strong>
@@ -303,7 +334,8 @@
                                                                 </div>
 
                                                                 <div class="margin-top-10">
-                                                                    <button type="submit" class="btn green"> تغییر </button>
+                                                                    <button type="submit" class="btn green"> تغییر
+                                                                    </button>
                                                                 </div>
                                                                 @if(Session::has('belongsTo') && strcmp(Session::get('belongsTo'),"password")==0)
                                                                     @include("systemMessage.flash")
@@ -369,7 +401,7 @@
         /**
          * Set token for ajax request
          */
-        $(function() {
+        $(function () {
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': window.Laravel.csrfToken,
@@ -383,7 +415,7 @@
             return {
                 //main function to initiate the module
                 init: function () {
-                    $('.mt-sweetalert').each(function(){
+                    $('.mt-sweetalert').each(function () {
                         var sa_title = $(this).data('title');
                         var sa_message = $(this).data('message');
                         var sa_type = $(this).data('type');
@@ -401,7 +433,7 @@
                         var sa_confirmButtonClass = $(this).data('confirm-button-class');
                         var sa_cancelButtonClass = $(this).data('cancel-button-class');
 
-                        $(this).click(function(){
+                        $(this).click(function () {
                             //console.log(sa_btnClass);
                             swal({
                                     title: sa_title,
@@ -417,8 +449,8 @@
                                     confirmButtonText: sa_confirmButtonText,
                                     cancelButtonText: sa_cancelButtonText,
                                 },
-                                function(isConfirm){
-                                    if (isConfirm){
+                                function (isConfirm) {
+                                    if (isConfirm) {
                                         toastr.options = {
                                             "closeButton": true,
                                             "debug": false,
@@ -434,7 +466,7 @@
                                             "hideMethod": "fadeOut"
                                         };
 
-                                        if(userAjax) {
+                                        if (userAjax) {
                                             userAjax.abort();
                                         }
                                         userAjax = $.ajax({
@@ -443,12 +475,12 @@
                                             contentType: "application/json",
                                             dataType: "json",
                                             statusCode: {
-                                                200:function (response) {
+                                                200: function (response) {
                                                     // console.log(response.responseText);
                                                     location.reload();
                                                 },
                                                 //The status for when the user is not authorized for making the request
-                                                401:function (ressponse) {
+                                                401: function (ressponse) {
                                                 },
                                                 403: function (response) {
                                                 },
@@ -481,114 +513,114 @@
 
         }();
 
-        jQuery(document).ready(function() {
+        jQuery(document).ready(function () {
             SweetAlert.init();
         });
 
         {{--$(document).on("click", "#bt-register-hamayesh-arabi", function (){--}}
-            {{--toastr.options = {--}}
-                {{--"closeButton": true,--}}
-                {{--"debug": false,--}}
-                {{--"positionClass": "toast-top-center",--}}
-                {{--"onclick": null,--}}
-                {{--"showDuration": "1000",--}}
-                {{--"hideDuration": "1000",--}}
-                {{--"timeOut": "5000",--}}
-                {{--"extendedTimeOut": "1000",--}}
-                {{--"showEasing": "swing",--}}
-                {{--"hideEasing": "linear",--}}
-                {{--"showMethod": "fadeIn",--}}
-                {{--"hideMethod": "fadeOut"--}}
-            {{--};--}}
+        {{--toastr.options = {--}}
+        {{--"closeButton": true,--}}
+        {{--"debug": false,--}}
+        {{--"positionClass": "toast-top-center",--}}
+        {{--"onclick": null,--}}
+        {{--"showDuration": "1000",--}}
+        {{--"hideDuration": "1000",--}}
+        {{--"timeOut": "5000",--}}
+        {{--"extendedTimeOut": "1000",--}}
+        {{--"showEasing": "swing",--}}
+        {{--"hideEasing": "linear",--}}
+        {{--"showMethod": "fadeIn",--}}
+        {{--"hideMethod": "fadeOut"--}}
+        {{--};--}}
 
-            {{--if(userAjax) {--}}
-                {{--userAjax.abort();--}}
-            {{--}--}}
-            {{--userAjax = $.ajax({--}}
-                {{--type: "POST",--}}
-                {{--url: "{{action("OrderController@addToArabiHozouri")}}",--}}
-                {{--contentType: "application/json",--}}
-                {{--dataType: "json",--}}
-                {{--statusCode: {--}}
-                    {{--200:function (response) {--}}
-                        {{--location.reload();--}}
-                    {{--},--}}
-                    {{--//The status for when the user is not authorized for making the request--}}
-                    {{--401:function (ressponse) {--}}
-                    {{--},--}}
-                    {{--403: function (response) {--}}
-                    {{--},--}}
-                    {{--404: function (response) {--}}
-                    {{--},--}}
-                    {{--//The status for when form data is not valid--}}
-                    {{--422: function (response) {--}}
-                        {{--//--}}
-                    {{--},--}}
-                    {{--//The status for when there is error php code--}}
-                    {{--500: function (response) {--}}
-                        {{--console.log(response);--}}
-                    {{--},--}}
-                    {{--//The status for when there is error php code--}}
-                    {{--503: function (response) {--}}
-                        {{--// console.log("503 Error");--}}
-                        {{--console.log(response);--}}
-                        {{--toastr["error"]("خطا", "پیام سیستم");--}}
-                    {{--}--}}
-                {{--}--}}
-            {{--});--}}
+        {{--if(userAjax) {--}}
+        {{--userAjax.abort();--}}
+        {{--}--}}
+        {{--userAjax = $.ajax({--}}
+        {{--type: "POST",--}}
+        {{--url: "{{action("OrderController@addToArabiHozouri")}}",--}}
+        {{--contentType: "application/json",--}}
+        {{--dataType: "json",--}}
+        {{--statusCode: {--}}
+        {{--200:function (response) {--}}
+        {{--location.reload();--}}
+        {{--},--}}
+        {{--//The status for when the user is not authorized for making the request--}}
+        {{--401:function (ressponse) {--}}
+        {{--},--}}
+        {{--403: function (response) {--}}
+        {{--},--}}
+        {{--404: function (response) {--}}
+        {{--},--}}
+        {{--//The status for when form data is not valid--}}
+        {{--422: function (response) {--}}
+        {{--//--}}
+        {{--},--}}
+        {{--//The status for when there is error php code--}}
+        {{--500: function (response) {--}}
+        {{--console.log(response);--}}
+        {{--},--}}
+        {{--//The status for when there is error php code--}}
+        {{--503: function (response) {--}}
+        {{--// console.log("503 Error");--}}
+        {{--console.log(response);--}}
+        {{--toastr["error"]("خطا", "پیام سیستم");--}}
+        {{--}--}}
+        {{--}--}}
+        {{--});--}}
         {{--});--}}
 
         {{--$(document).on("click", "#bt-cancel-hamayesh-arabi", function (){--}}
-            {{--toastr.options = {--}}
-                {{--"closeButton": true,--}}
-                {{--"debug": false,--}}
-                {{--"positionClass": "toast-top-center",--}}
-                {{--"onclick": null,--}}
-                {{--"showDuration": "1000",--}}
-                {{--"hideDuration": "1000",--}}
-                {{--"timeOut": "5000",--}}
-                {{--"extendedTimeOut": "1000",--}}
-                {{--"showEasing": "swing",--}}
-                {{--"hideEasing": "linear",--}}
-                {{--"showMethod": "fadeIn",--}}
-                {{--"hideMethod": "fadeOut"--}}
-            {{--};--}}
+        {{--toastr.options = {--}}
+        {{--"closeButton": true,--}}
+        {{--"debug": false,--}}
+        {{--"positionClass": "toast-top-center",--}}
+        {{--"onclick": null,--}}
+        {{--"showDuration": "1000",--}}
+        {{--"hideDuration": "1000",--}}
+        {{--"timeOut": "5000",--}}
+        {{--"extendedTimeOut": "1000",--}}
+        {{--"showEasing": "swing",--}}
+        {{--"hideEasing": "linear",--}}
+        {{--"showMethod": "fadeIn",--}}
+        {{--"hideMethod": "fadeOut"--}}
+        {{--};--}}
 
-            {{--if(userAjax) {--}}
-                {{--userAjax.abort();--}}
-            {{--}--}}
-            {{--userAjax = $.ajax({--}}
-                {{--type: "POST",--}}
-                {{--url: "{{action("OrderController@removeArabiHozouri")}}",--}}
-                {{--contentType: "application/json",--}}
-                {{--dataType: "json",--}}
-                {{--statusCode: {--}}
-                    {{--200:function (response) {--}}
-                        {{--location.reload();--}}
-                    {{--},--}}
-                    {{--//The status for when the user is not authorized for making the request--}}
-                    {{--401:function (ressponse) {--}}
-                    {{--},--}}
-                    {{--403: function (response) {--}}
-                    {{--},--}}
-                    {{--404: function (response) {--}}
-                    {{--},--}}
-                    {{--//The status for when form data is not valid--}}
-                    {{--422: function (response) {--}}
-                        {{--//--}}
-                    {{--},--}}
-                    {{--//The status for when there is error php code--}}
-                    {{--500: function (response) {--}}
-                        {{--console.log(response);--}}
-                    {{--},--}}
-                    {{--//The status for when there is error php code--}}
-                    {{--503: function (response) {--}}
-                        {{--// console.log("503 Error");--}}
-                        {{--console.log(response);--}}
-                        {{--toastr["error"]("خطا", "پیام سیستم");--}}
-                    {{--}--}}
-                {{--}--}}
-            {{--});--}}
+        {{--if(userAjax) {--}}
+        {{--userAjax.abort();--}}
+        {{--}--}}
+        {{--userAjax = $.ajax({--}}
+        {{--type: "POST",--}}
+        {{--url: "{{action("OrderController@removeArabiHozouri")}}",--}}
+        {{--contentType: "application/json",--}}
+        {{--dataType: "json",--}}
+        {{--statusCode: {--}}
+        {{--200:function (response) {--}}
+        {{--location.reload();--}}
+        {{--},--}}
+        {{--//The status for when the user is not authorized for making the request--}}
+        {{--401:function (ressponse) {--}}
+        {{--},--}}
+        {{--403: function (response) {--}}
+        {{--},--}}
+        {{--404: function (response) {--}}
+        {{--},--}}
+        {{--//The status for when form data is not valid--}}
+        {{--422: function (response) {--}}
+        {{--//--}}
+        {{--},--}}
+        {{--//The status for when there is error php code--}}
+        {{--500: function (response) {--}}
+        {{--console.log(response);--}}
+        {{--},--}}
+        {{--//The status for when there is error php code--}}
+        {{--503: function (response) {--}}
+        {{--// console.log("503 Error");--}}
+        {{--console.log(response);--}}
+        {{--toastr["error"]("خطا", "پیام سیستم");--}}
+        {{--}--}}
+        {{--}--}}
+        {{--});--}}
         {{--});--}}
     </script>
 @endsection

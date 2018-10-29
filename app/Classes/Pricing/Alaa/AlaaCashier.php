@@ -13,8 +13,9 @@ use App\Classes\Abstracts\Cashier;
 
 class AlaaCashier Extends Cashier
 {
-    public function getPrice() :string {
-        $priceInfo =  [
+    public function getPrice(): string
+    {
+        $priceInfo = [
             'price' => $this->calculatePrice(),
             'info' => [
                 'productCost' => $this->rawCost,

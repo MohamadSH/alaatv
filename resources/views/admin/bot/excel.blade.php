@@ -26,7 +26,7 @@
 
 @section("content")
     {{--Ajax modal loaded after inserting content--}}
-    <div id="ajax-modal" class="modal fade" tabindex="-1"> </div>
+    <div id="ajax-modal" class="modal fade" tabindex="-1"></div>
     {{--Ajax modal for panel startup --}}
     <div class="row">
         @include("systemMessage.flash")
@@ -35,8 +35,8 @@
             <div class="portlet light">
                 <div class="portlet-body">
                     {!! Form::open(['files'=>'true' , 'method'=>'POST' , 'action'=>'HomeController@excelBot' , 'target'=>'_blank' ]) !!}
-                        <input type="file" name="file">
-                        <input type="submit" value="انجام بده">
+                    <input type="file" name="file">
+                    <input type="submit" value="انجام بده">
                     {!! Form::close() !!}
                 </div>
             </div>

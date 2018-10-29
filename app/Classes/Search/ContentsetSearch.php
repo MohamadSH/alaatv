@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\{
 
 class ContentsetSearch extends SearchAbstract
 {
-    protected $model = "App\Contentset" ;
+    protected $model = "App\Contentset";
     protected $pageName = 'contentsetPage';
     protected $validFilters = [
         'name',
@@ -36,7 +36,7 @@ class ContentsetSearch extends SearchAbstract
     {
         $this->pageNum = $this->setPageNum($filters);
         $key = $this->makeCacheKey($filters);
-        return Cache::tags(['contentset','search'])->remember($key,$this->cacheTime,function () use( $filters ) {
+        return Cache::tags(['contentset', 'search'])->remember($key, $this->cacheTime, function () use ($filters) {
             $query = $this->applyDecoratorsFromFiltersArray($filters, $this->model->newQuery());
             return $this->getResults($query);
         });
@@ -49,7 +49,7 @@ class ContentsetSearch extends SearchAbstract
     protected function getResults(Builder $query)
     {
         $result = $query->active()
-            ->orderBy("created_at" , "desc")
+            ->orderBy("created_at", "desc")
             ->paginate($this->numberOfItemInEachPage,
                 ['*'],
                 $this->pageName,

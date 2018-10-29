@@ -78,7 +78,7 @@ return [
     |
     */
 
-    'locale' => env('APP_LANGUAGE','en'),
+    'locale' => env('APP_LANGUAGE', 'en'),
 
     /*
     |--------------------------------------------------------------------------
@@ -228,7 +228,7 @@ return [
         'Html' => Collective\Html\HtmlFacade::class,
         'Recaptcha' => Greggilbert\Recaptcha\Facades\Recaptcha::class,
         'Agent' => Jenssegers\Agent\Facades\Agent::class,
-        'Laratrust'   => Laratrust\LaratrustFacade::class,
+        'Laratrust' => Laratrust\LaratrustFacade::class,
         'Sitemap' => Watson\Sitemap\Facades\Sitemap::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,

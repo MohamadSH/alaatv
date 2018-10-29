@@ -47,7 +47,8 @@
                                                         <span class="fileinput-new"> انتخاب فایل </span>
                                                         <span class="fileinput-exists"> تغییر </span>
                     {!! Form::file('file' , ['id'=>'productFile']) !!} </span>
-                <a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput"> حذف </a>
+                <a href="javascript:" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput">
+                    حذف </a>
             </div>
         </div>
         @if ($errors->has('file'))
@@ -83,7 +84,8 @@
 <div class="form-group {{ $errors->has('validSinceDate') ? ' has-error' : '' }} col-md-12">
     <label class=" col-md-3 control-label" for="productFileValidSince">تاریخ نمایان شدن(برای کاربر)</label>
     <div class="col-md-9">
-        <input id="productFileValidSince" type="text" class="form-control" value="@if(isset($validDate)) {{$validDate}} @else {{old('validSinceDate')}} @endif"  dir="ltr">
+        <input id="productFileValidSince" type="text" class="form-control"
+               value="@if(isset($validDate)) {{$validDate}} @else {{old('validSinceDate')}} @endif" dir="ltr">
         <input name="validSinceDate" id="productFileValidSinceAlt" type="text" class="form-control hidden">
     </div>
 </div>
@@ -91,15 +93,17 @@
 <div class="form-group {{ $errors->has('time') ? ' has-error' : '' }} col-md-12">
     <label class="col-md-3 control-label" for="productFileValidSinceTime">ساعت</label>
     <div class="col-md-9">
-        <input class="form-control" name="time" id="productFileValidSinceTime" placeholder="00:00" value="@if(isset($validTime)){{$validTime}} @else {{old('time')}}@endif" dir="ltr">
+        <input class="form-control" name="time" id="productFileValidSinceTime" placeholder="00:00"
+               value="@if(isset($validTime)){{$validTime}} @else {{old('time')}}@endif" dir="ltr">
     </div>
 </div>
 <div class="form-group {{ $errors->has('enable') ? ' has-error' : '' }} col-md-12">
     <label class="col-md-3"></label>
     <div class="col-md-9">
         <div class="mt-checkbox-list">
-            <label class="mt-checkbox mt-checkbox-outline bold">  فعال بودن
-                <input type="checkbox" value="1" name="enable" @if(isset($productFile->enable) && $productFile->enable == 1) checked @endif/>
+            <label class="mt-checkbox mt-checkbox-outline bold"> فعال بودن
+                <input type="checkbox" value="1" name="enable"
+                       @if(isset($productFile->enable) && $productFile->enable == 1) checked @endif/>
                 <span></span>
             </label>
         </div>

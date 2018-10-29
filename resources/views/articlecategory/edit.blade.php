@@ -2,9 +2,9 @@
 @extends("app",["pageName"=>"admin"])
 
 @section("headPageLevelPlugin")
-    <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css" />
-    <link href="/assets/global/plugins/bootstrap-summernote/summernote.css" rel="stylesheet" type="text/css" />
-    <link href="/assets/global/plugins/jquery-multi-select/css/multi-select-rtl.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/global/plugins/bootstrap-summernote/summernote.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/global/plugins/jquery-multi-select/css/multi-select-rtl.css" rel="stylesheet" type="text/css"/>
 @endsection
 
 
@@ -31,8 +31,8 @@
     <div class="row">
         <div class="col-md-3"></div>
         <div class="col-md-6 ">
-            @include("systemMessage.flash")
-            <!-- BEGIN SAMPLE FORM PORTLET-->
+        @include("systemMessage.flash")
+        <!-- BEGIN SAMPLE FORM PORTLET-->
             <div class="portlet light ">
                 <div class="portlet-title">
                     <div class="caption">
@@ -41,7 +41,8 @@
                     </div>
                     <div class="actions">
                         <div class="btn-group">
-                            <a class="btn btn-sm dark dropdown-toggle" href="{{action("HomeController@adminContent")}}" > بازگشت
+                            <a class="btn btn-sm dark dropdown-toggle" href="{{action("HomeController@adminContent")}}">
+                                بازگشت
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         </div>

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Config;
 class EditProductRequest extends FormRequest
 {
     use CharacterCommon;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -16,7 +17,7 @@ class EditProductRequest extends FormRequest
      */
     public function authorize()
     {
-        if(Auth()->user()->can(Config::get('constants.EDIT_PRODUCT_ACCESS'))) return true;
+        if (Auth()->user()->can(Config::get('constants.EDIT_PRODUCT_ACCESS'))) return true;
         return false;
     }
 
@@ -30,7 +31,7 @@ class EditProductRequest extends FormRequest
         return [
             'name' => 'required',
             'basePrice' => 'required|numeric',
-            'order'=>'numeric',
+            'order' => 'numeric',
             'discount' => 'numeric',
             'amount' => 'required_if:amountLimit,1|numeric',
             'image' => 'image|mimes:jpeg,jpg,png',
@@ -49,24 +50,21 @@ class EditProductRequest extends FormRequest
 
     protected function replaceNumbers()
     {
-        $input = $this->request->all() ;
-        if(isset($input["order"]))
-        {
-            $input["order"] = preg_replace('/\s+/', '', $input["order"] ) ;
-            $input["order"] = $this->convertToEnglish($input["order"]) ;
+        $input = $this->request->all();
+        if (isset($input["order"])) {
+            $input["order"] = preg_replace('/\s+/', '', $input["order"]);
+            $input["order"] = $this->convertToEnglish($input["order"]);
         }
 
-        if(isset($input["discount"]))
-        {
-            $input["discount"] = preg_replace('/\s+/', '', $input["discount"] ) ;
-            $input["discount"] = $this->convertToEnglish($input["discount"]) ;
+        if (isset($input["discount"])) {
+            $input["discount"] = preg_replace('/\s+/', '', $input["discount"]);
+            $input["discount"] = $this->convertToEnglish($input["discount"]);
         }
 
-        if(isset($input["amount"]))
-        {
-            $input["amount"] = preg_replace('/\s+/', '', $input["amount"] ) ;
-            $input["amount"] = $this->convertToEnglish($input["amount"]) ;
+        if (isset($input["amount"])) {
+            $input["amount"] = preg_replace('/\s+/', '', $input["amount"]);
+            $input["amount"] = $this->convertToEnglish($input["amount"]);
         }
-        $this->replace($input) ;
+        $this->replace($input);
     }
 }

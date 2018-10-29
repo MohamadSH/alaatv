@@ -7,7 +7,7 @@ use App\Eventresult;
 use App\Eventresultstatus;
 use App\Http\Requests\InsertEventResultRequest;
 use Illuminate\Http\Request;
-use Auth ;
+use Auth;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
@@ -18,12 +18,13 @@ class EventresultController extends Controller
 {
 
     protected $response;
+
     function __construct()
     {
         /** setting permissions
          *
          */
-        $this->middleware('permission:'.Config::get('constants.LIST_EVENTRESULT_ACCESS')."|".Config::get('constants.LIST_SHARIF_REGISTER_ACCESS'),['only'=>'index']);
+        $this->middleware('permission:' . Config::get('constants.LIST_EVENTRESULT_ACCESS') . "|" . Config::get('constants.LIST_SHARIF_REGISTER_ACCESS'), ['only' => 'index']);
 
         $this->response = new Response();
 
@@ -39,23 +40,20 @@ class EventresultController extends Controller
         $eventresults = Eventresult::orderBy("rank");
 
         $eventIds = Input::get("event_id");
-        if(isset($eventIds))
-        {
-            $eventresults = $eventresults->whereIn("event_id" , $eventIds) ;
-        }
-        else
-        {
+        if (isset($eventIds)) {
+            $eventresults = $eventresults->whereIn("event_id", $eventIds);
+        } else {
             $eventIds = [];
         }
         $eventresults = $eventresults->get();
-        $sharifRegisterEvent = Event::where("name" , "sabtename_sharif_97")->get()->first();
-        if(isset($sharifRegisterEvent) && in_array($sharifRegisterEvent->id , $eventIds))
+        $sharifRegisterEvent = Event::where("name", "sabtename_sharif_97")->get()->first();
+        if (isset($sharifRegisterEvent) && in_array($sharifRegisterEvent->id, $eventIds))
             $isSharifRegisterEvent = true;
         else
             $isSharifRegisterEvent = false;
 
         $eventResultStatuses = Eventresultstatus::pluck('displayName', 'id');
-        return view("event.result.index" , compact("eventresults" , "eventIds" , "isSharifRegisterEvent" , "eventResultStatuses"));
+        return view("event.result.index", compact("eventresults", "eventIds", "isSharifRegisterEvent", "eventResultStatuses"));
     }
 
     /**
@@ -71,51 +69,44 @@ class EventresultController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\InsertEventResultRequest  $request
+     * @param  \App\Http\Requests\InsertEventResultRequest $request
      * @return \Illuminate\Http\Response
      */
     public function store(InsertEventResultRequest $request)
     {
 
-        $eventResult  = new Eventresult();
+        $eventResult = new Eventresult();
         $eventResult->fill($request->all());
 
-        if($request->has("participationCode"))
-        {
-            $eventResult->participationCode = encrypt($request->get("participationCode")) ;
+        if ($request->has("participationCode")) {
+            $eventResult->participationCode = encrypt($request->get("participationCode"));
         }
 
-        if($request->has("user_id"))
-        {
+        if ($request->has("user_id")) {
             $eventResult->user_id = $request->get("user_id");
-        }
-        elseif(Auth::check())
-        {
+        } elseif (Auth::check()) {
             $user = Auth::user();
-            $eventResult->user_id = $user->id ;
+            $eventResult->user_id = $user->id;
         }
 
-        if($request->has("enableReportPublish"))
-            $eventResult->enableReportPublish = 1 ;
+        if ($request->has("enableReportPublish"))
+            $eventResult->enableReportPublish = 1;
         else
             $eventResult->enableReportPublish = 0;
 
-        $userUpdate = false ;
-        if($request->has("major_id"))
-        {
-            $userUpdate = true ;
+        $userUpdate = false;
+        if ($request->has("major_id")) {
+            $userUpdate = true;
             $user->major_id = $request->get("major_id");
         }
 
-        if($request->has("firstName"))
-        {
-            $userUpdate = true ;
+        if ($request->has("firstName")) {
+            $userUpdate = true;
             $user->firstName = $request->get("firstName");
         }
 
-        if($request->has("lastName"))
-        {
-            $userUpdate = true ;
+        if ($request->has("lastName")) {
+            $userUpdate = true;
             $user->lastName = $request->get("lastName");
         }
 
@@ -143,30 +134,24 @@ class EventresultController extends Controller
         }
 
         if ($eventResult->save()) {
-            if($userUpdate ) $user->update();
-            if($request->has("fromAPI"))
-            {
+            if ($userUpdate) $user->update();
+            if ($request->has("fromAPI")) {
                 $participationCode = $eventResult->participationCode;
                 $message = "نتیجه با موفقیت درج شد";
                 $status = 200;
-            }
-            else
-            {
+            } else {
                 session()->put("success", "کارنامه با موفقیت درج شد");
             }
         } else {
-            if($request->has("fromAPI"))
-            {
+            if ($request->has("fromAPI")) {
                 $message = "خطا در درج نتیجه";
                 $status = 503;
-            }
-            else
-            {
+            } else {
                 session()->put("error", "خطای پایگاه داده");
             }
         }
-        if($request->has("fromAPI"))
-            return $this->response->setStatusCode($status)->setContent(["message"=>$message , "participationCode"=>(isset($participationCode)?$participationCode:null)]);
+        if ($request->has("fromAPI"))
+            return $this->response->setStatusCode($status)->setContent(["message" => $message, "participationCode" => (isset($participationCode) ? $participationCode : null)]);
         else
             return redirect()->back();
     }
@@ -174,7 +159,7 @@ class EventresultController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -185,7 +170,7 @@ class EventresultController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -196,23 +181,19 @@ class EventresultController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  Eventresult  $eventResult
+     * @param  \Illuminate\Http\Request $request
+     * @param  Eventresult $eventResult
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Eventresult $eventResult)
     {
         $eventResult->fill($request->all());
         $updateResult = $eventResult->update();
-        if($request->ajax())
-        {
-            return  $this->response->setStatusCode(200);
-        }
-        else
-        {
-            if($updateResult)
-            {
-                session()->put("success" , "تغییرات با موفقیت ثبت شد");
+        if ($request->ajax()) {
+            return $this->response->setStatusCode(200);
+        } else {
+            if ($updateResult) {
+                session()->put("success", "تغییرات با موفقیت ثبت شد");
             }
             return redirect()->back();
         }
@@ -222,7 +203,7 @@ class EventresultController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

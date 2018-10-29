@@ -79,13 +79,15 @@ class ProductObserver
      * This is because the models are never actually retrieved when issuing a mass update.
      * @param Product $product
      */
-    public function saving(Product $product){
+    public function saving(Product $product)
+    {
 
 
     }
 
-    public function saved(Product $product){
-        $this->sendTagsOfTaggableToApi($product , $this->tagging);
+    public function saved(Product $product)
+    {
+        $this->sendTagsOfTaggableToApi($product, $this->tagging);
         Artisan::call('cache:clear');
     }
 }

@@ -1,7 +1,8 @@
 @if(isset($coupon))
     {!! Form::hidden('id',$coupon->id, ['class' => 'btn red']) !!}
     <div class="form-body">
-        <div class="note note-warning"><h4 class="caption-subject font-dark bold uppercase"> وارد کردن اطلاعات زیر الزامیست: </h4></div>
+        <div class="note note-warning"><h4 class="caption-subject font-dark bold uppercase"> وارد کردن اطلاعات زیر
+                الزامیست: </h4></div>
         <div class="form-group {{ $errors->has('name') ? ' has-error' : '' }}">
             <label class="col-md-3 control-label" for="name">نام کپن</label>
             <div class="col-md-9">
@@ -27,16 +28,17 @@
         </div>
 
         <br>
-        <div class="note note-info"><h4 class="caption-subject font-dark bold uppercase"> وارد کردن اطلاعات زیر اختیاری می باشد: </h4></div>
+        <div class="note note-info"><h4 class="caption-subject font-dark bold uppercase"> وارد کردن اطلاعات زیر اختیاری
+                می باشد: </h4></div>
         <div class="form-group {{ $errors->has('discount') ? ' has-error' : '' }}">
             <div class="col-md-3"></div>
             <div class="col-md-9">
-            <label class="control-label" >
-                <label class="mt-checkbox mt-checkbox-outline">فعال/غیرفعال
-                    {!! Form::checkbox('enable', '1', null, ['class' => '', 'id' => 'enable'  ]) !!}
-                    <span class="bg-grey-cararra"></span>
+                <label class="control-label">
+                    <label class="mt-checkbox mt-checkbox-outline">فعال/غیرفعال
+                        {!! Form::checkbox('enable', '1', null, ['class' => '', 'id' => 'enable'  ]) !!}
+                        <span class="bg-grey-cararra"></span>
+                    </label>
                 </label>
-            </label>
             </div>
         </div>
         <div class="form-group {{ $errors->has('discount') ? ' has-error' : '' }}">
@@ -134,17 +136,22 @@
         </div>
 
         <div class="form-group {{ $errors->has('validSince') ? ' has-error' : '' }}">
-            <label class="control-label" >
+            <label class="control-label">
                 <label class="mt-checkbox mt-checkbox-outline">تاریخ شروع معتبر بودن کپن
-                    <input type="checkbox" name="validSinceEnable" class="" id="couponValidSinceEnable" @if(isset($validSinceDate)) checked @endif>
+                    <input type="checkbox" name="validSinceEnable" class="" id="couponValidSinceEnable"
+                           @if(isset($validSinceDate)) checked @endif>
                     <span class="bg-grey-cararra"></span>
                 </label>
             </label>
             <div class="col-md-9">
-                <input id="couponValidSince" type="text" class="form-control" value="@if(isset($validSinceDate)) {{$validSinceDate}} @endif"  dir="ltr" @if(!isset($validSinceDate)) disabled="disabled" @endif>
+                <input id="couponValidSince" type="text" class="form-control"
+                       value="@if(isset($validSinceDate)) {{$validSinceDate}} @endif" dir="ltr"
+                       @if(!isset($validSinceDate)) disabled="disabled" @endif>
                 <input name="validSince" id="couponValidSinceAlt" type="text" class="form-control hidden">
 
-                <input class="form-control" name="sinceTime" id="couponValidSinceTime" placeholder="00:00" value="@if(isset($validSinceTime)) {{$validSinceTime}} @endif" dir="ltr" @if(!isset($validSinceDate)) disabled="disabled" @endif>
+                <input class="form-control" name="sinceTime" id="couponValidSinceTime" placeholder="00:00"
+                       value="@if(isset($validSinceTime)) {{$validSinceTime}} @endif" dir="ltr"
+                       @if(!isset($validSinceDate)) disabled="disabled" @endif>
 
                 @if ($errors->has('validSince'))
                     <span class="help-block">
@@ -155,17 +162,22 @@
         </div>
 
         <div class="form-group {{ $errors->has('validUntil') ? ' has-error' : '' }}">
-            <label class="control-label" >
+            <label class="control-label">
                 <label class="mt-checkbox mt-checkbox-outline">تاریخ شروع معتبر بودن کپن
-                    <input type="checkbox" name="validUntilEnable" class="" id="couponValidUntilEnable" @if(isset($validUntilDate)) checked @endif>
+                    <input type="checkbox" name="validUntilEnable" class="" id="couponValidUntilEnable"
+                           @if(isset($validUntilDate)) checked @endif>
                     <span class="bg-grey-cararra"></span>
                 </label>
             </label>
             <div class="col-md-9">
-                <input id="couponValidUntil" type="text" class="form-control" value="@if(isset($validUntilDate)) {{$validUntilDate}} @endif" dir="ltr" @if(!isset($validUntilDate)) disabled="disabled" @endif>
+                <input id="couponValidUntil" type="text" class="form-control"
+                       value="@if(isset($validUntilDate)) {{$validUntilDate}} @endif" dir="ltr"
+                       @if(!isset($validUntilDate)) disabled="disabled" @endif>
                 <input name="validUntil" id="couponValidUntilAlt" type="text" class="form-control hidden">
 
-                <input class="form-control" name="untilTime" id="couponValidUntilTime" placeholder="00:00" value="@if(isset($validUntilTime)) {{$validUntilTime}} @endif" dir="ltr" @if(!isset($validUntilDate)) disabled="disabled" @endif>
+                <input class="form-control" name="untilTime" id="couponValidUntilTime" placeholder="00:00"
+                       value="@if(isset($validUntilTime)) {{$validUntilTime}} @endif" dir="ltr"
+                       @if(!isset($validUntilDate)) disabled="disabled" @endif>
 
                 @if ($errors->has('validUntil'))
                     <span class="help-block">
@@ -209,7 +221,7 @@
 
     <div class="col-md-8 col-md-offset-2">
         <p>
-            <label class="control-label" >
+            <label class="control-label">
                 <label class="mt-checkbox mt-checkbox-outline">فعال/غیرفعال
                     {!! Form::checkbox('enable', '1', null, ['class' => '', 'id' => 'enable' , 'checked' ]) !!}
                     <span class="bg-grey-cararra"></span>
@@ -235,18 +247,18 @@
             <span class="help-block" id="couponUsageLimitAlert">
                     <strong></strong>
             </span>
-            <div class="clearfix margin-top-10">
-                {!! Form::select('limitStatus',$limitStatus, null, ['class' => 'form-control', 'id' => 'limitStatus']) !!}
-            </div>
+        <div class="clearfix margin-top-10">
+            {!! Form::select('limitStatus',$limitStatus, null, ['class' => 'form-control', 'id' => 'limitStatus']) !!}
+        </div>
         </p>
         <br>
         <p>
-            <div class="clearfix margin-bottom-10" >
-                <span class="label label-success">توجه</span>
-                <strong id="">محصولاتی که مشمول کپن می شوند</strong>
-            </div>
-                {!! Form::select('coupontype_id',$coupontype, null, ['class' => 'form-control', 'id' => 'coupontypeId']) !!}
-            <span class="help-block" id="coupontypeIdAlert">
+        <div class="clearfix margin-bottom-10">
+            <span class="label label-success">توجه</span>
+            <strong id="">محصولاتی که مشمول کپن می شوند</strong>
+        </div>
+        {!! Form::select('coupontype_id',$coupontype, null, ['class' => 'form-control', 'id' => 'coupontypeId']) !!}
+        <span class="help-block" id="coupontypeIdAlert">
                     <strong></strong>
             </span>
         </p>
@@ -255,10 +267,10 @@
             <span class="help-block" id="couponProductAlert">
                     <strong></strong>
             </span>
-            <div class="clearfix margin-top-10">
-                <span class="label label-info">توجه</span>
-                <strong id="">ستون چپ محصولات شامل تخفیف می باشند</strong>
-            </div>
+        <div class="clearfix margin-top-10">
+            <span class="label label-info">توجه</span>
+            <strong id="">ستون چپ محصولات شامل تخفیف می باشند</strong>
+        </div>
         </p>
         <p>
             {!! Form::textarea('description', null, ['class' => 'form-control', 'id' => 'couponDescription'  , 'placeholder'=>'توضیح درباره کپن']) !!}
@@ -267,16 +279,17 @@
             </span>
         </p>
         <div class="col-md-6">
-            <label class="control-label" >
+            <label class="control-label">
                 <label class="mt-checkbox mt-checkbox-outline">تاریخ شروع معتبر بودن کپن
                     {!! Form::checkbox('validSinceEnable', '1', null, ['class' => '', 'id' => 'couponValidSinceEnable'  ]) !!}
                     <span class="bg-grey-cararra"></span>
                 </label>
             </label>
             <div class="col-md-12">
-                <input id="couponValidSince" type="text" class="form-control"  dir="ltr" disabled="disabled">
+                <input id="couponValidSince" type="text" class="form-control" dir="ltr" disabled="disabled">
                 <input name="validSince" id="couponValidSinceAlt" type="text" class="form-control hidden">
-                <input class="form-control" name="sinceTime" id="couponValidSinceTime" placeholder="00:00" dir="ltr" disabled="disabled">
+                <input class="form-control" name="sinceTime" id="couponValidSinceTime" placeholder="00:00" dir="ltr"
+                       disabled="disabled">
                 <span class="help-block" id="couponValidSinceAltAlert">
                         <strong></strong>
                 </span>
@@ -284,16 +297,17 @@
         </div>
 
         <div class="col-md-6">
-            <label class="control-label" >
+            <label class="control-label">
                 <label class="mt-checkbox mt-checkbox-outline">تاریخ پایان معتبر بودن کپن
                     {!! Form::checkbox('validUntilEnable', '1', null, ['class' => '', 'id' => 'couponValidUntilEnable'  ]) !!}
                     <span class="bg-grey-cararra"></span>
                 </label>
             </label>
             <div class="col-md-12">
-                <input id="couponValidUntil" type="text" class="form-control"  dir="ltr" disabled="disabled">
+                <input id="couponValidUntil" type="text" class="form-control" dir="ltr" disabled="disabled">
                 <input name="validUntil" id="couponValidUntilAlt" type="text" class="form-control hidden">
-                <input class="form-control" name="untilTime" id="couponValidUntilTime" placeholder="00:00" dir="ltr" disabled="disabled">
+                <input class="form-control" name="untilTime" id="couponValidUntilTime" placeholder="00:00" dir="ltr"
+                       disabled="disabled">
                 <span class="help-block" id="couponValidUntilAltAlert">
                         <strong></strong>
                 </span>

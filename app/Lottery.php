@@ -56,13 +56,11 @@ class Lottery extends Model
 
     public function prizes($rank)
     {
-        $prizeName = "" ;
+        $prizeName = "";
         $amount = 0;
         $memorial = "";
-        if($this->id == 4)
-        {
-            if($rank==1)
-            {//nafare aval
+        if ($this->id == 4) {
+            if ($rank == 1) {//nafare aval
                 $prizeName = "یک دستگاه پلی استیشن 4";
             }
 //            else
@@ -80,6 +78,6 @@ class Lottery extends Model
             $prizeName,
             $amount,
             $memorial
-            ];
+        ];
     }
 }

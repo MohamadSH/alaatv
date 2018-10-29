@@ -12,14 +12,14 @@ use Illuminate\Http\Response;
 
 class PhoneController extends Controller
 {
-    protected $response ;
+    protected $response;
 
     function __construct()
     {
         /** setting permissions
          *
          */
-        $this->middleware('permission:'.Config::get('constants.EDIT_CONTACT_ACCESS'),['only'=>'edit']);
+        $this->middleware('permission:' . Config::get('constants.EDIT_CONTACT_ACCESS'), ['only' => 'edit']);
 
         $this->response = new Response();
     }
@@ -47,18 +47,18 @@ class PhoneController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(InsertPhoneRequest $request)
     {
         $phone = new Phone();
         $phone->fill($request->all());
-        $phone->priority =  preg_replace('/\s+/', '', $phone->priority);
-        if(strlen($phone->priority == 0)) $phone->priority = 0;
-        if($phone->save()){
+        $phone->priority = preg_replace('/\s+/', '', $phone->priority);
+        if (strlen($phone->priority == 0)) $phone->priority = 0;
+        if ($phone->save()) {
             return $this->response->setStatusCode(200);
-        }else{
+        } else {
             return $this->response->setStatusCode(503);
         }
     }
@@ -66,7 +66,7 @@ class PhoneController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -77,7 +77,7 @@ class PhoneController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -88,8 +88,8 @@ class PhoneController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(EditPhoneRequest $request, $phone)
@@ -108,7 +108,7 @@ class PhoneController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

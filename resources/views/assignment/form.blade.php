@@ -35,7 +35,8 @@
                                                                 <span class="fileinput-new"> انتخاب فایل </span>
                                                                 <span class="fileinput-exists"> تغییر </span>
                             {!! Form::file('questionFile' , ['id'=>'questionFile']) !!} </span>
-                        <a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput"> حذف </a>
+                        <a href="javascript:" class="input-group-addon btn red fileinput-exists"
+                           data-dismiss="fileinput"> حذف </a>
                     </div>
                 </div>
                 @if ($errors->has('questionFile'))
@@ -58,7 +59,8 @@
                                                                 <span class="fileinput-new"> انتخاب فایل </span>
                                                                 <span class="fileinput-exists"> تغییر </span>
                             {!! Form::file('solutionFile' , ['id'=>'solutionFile']) !!} </span>
-                        <a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput"> حذف </a>
+                        <a href="javascript:" class="input-group-addon btn red fileinput-exists"
+                           data-dismiss="fileinput"> حذف </a>
                     </div>
                 </div>
                 @if ($errors->has('solutionFile'))
@@ -144,7 +146,8 @@
                                                                 <span class="fileinput-exists"> تغییر </span>
                     {!! Form::file('questionFile' , ['id'=>'questionFile']) !!}
                 </span>
-                <a href="javascript:;" class="input-group-addon btn red fileinput-exists" id="assignmentQuestionFile-remove" data-dismiss="fileinput"> حذف </a>
+                <a href="javascript:" class="input-group-addon btn red fileinput-exists"
+                   id="assignmentQuestionFile-remove" data-dismiss="fileinput"> حذف </a>
             </div>
             <div class="clearfix margin-top-10">
                 <span class="label label-danger">توجه</span>
@@ -163,10 +166,10 @@
             <span class="help-block" id="assignmentMajorAlert">
                     <strong></strong>
             </span>
-            <div class="clearfix margin-top-10">
-                <span class="label label-info">توجه</span>
-                <strong id="assignmentQuestionFileAlert">ستون چپ رشته های انتخاب شده می باشند</strong>
-            </div>
+        <div class="clearfix margin-top-10">
+            <span class="label label-info">توجه</span>
+            <strong id="assignmentQuestionFileAlert">ستون چپ رشته های انتخاب شده می باشند</strong>
+        </div>
         </p>
     </div>
     <div class="col-md-6">
@@ -185,7 +188,8 @@
                                                                 <span class="fileinput-new"> پاسخ </span>
                                                                 <span class="fileinput-exists"> تغییر </span>
                     {!! Form::file('solutionFile' , ['id'=>'solutionFile']) !!} </span>
-                <a href="javascript:;" class="input-group-addon btn red fileinput-exists" id="assignmentSolutionFile-remove" data-dismiss="fileinput"> حذف </a>
+                <a href="javascript:" class="input-group-addon btn red fileinput-exists"
+                   id="assignmentSolutionFile-remove" data-dismiss="fileinput"> حذف </a>
             </div>
             <div class="clearfix margin-top-10">
                 <span class="label label-danger">توجه</span>
@@ -202,7 +206,7 @@
 
     <div class="col-md-12">
         <p>{!! Form::textarea('description', null, ['class' => 'form-control', 'id' => 'assignmentSummerNote' , 'placeholder'=>'توضیحات']) !!}
-        {{--<p><div name="summernote" id="summernote_1"></div>--}}
+            {{--<p><div name="summernote" id="summernote_1"></div>--}}
             <span class="help-block" id="descriptionAlert">
                 <strong></strong>
             </span>

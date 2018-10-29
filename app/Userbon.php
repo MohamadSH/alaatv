@@ -2,8 +2,8 @@
 
 namespace App;
 
-use App\Traits\Helper;
 use App\Traits\DateTrait;
+use App\Traits\Helper;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -70,7 +70,7 @@ class Userbon extends Model
         'updated_at',
         'deleted_at'
     ];
-    
+
     public function userbonstatus()
     {
         return $this->belongsTo('App\Userbonstatus');

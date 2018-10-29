@@ -12,19 +12,19 @@ use Illuminate\Support\Facades\Config;
 
 class ArticlecategoryController extends Controller
 {
-    protected $response ;
+    protected $response;
 
     function __construct()
     {
         /** setting permissions
          *
          */
-        $this->middleware('permission:'.Config::get('constants.LIST_ARTICLECATEGORY_ACCESS'),['only'=>'index']);
-        $this->middleware('permission:'.Config::get('constants.INSERT_ARTICLECATEGORY_ACCESS'),['only'=>'create']);
-        $this->middleware('permission:'.Config::get('constants.INSERT_ARTICLECATEGORY_ACCESS'),['only'=>'store']);
-        $this->middleware('permission:'.Config::get('constants.REMOVE_ARTICLECATEGORY_ACCESS'),['only'=>'destroy']);
-        $this->middleware('permission:'.Config::get('constants.SHOW_ARTICLECATEGORY_ACCESS'),['only'=>'edit']);
-        $this->middleware('permission:'.Config::get('constants.EDIT_ARTICLECATEGORY_ACCESS'),['only'=>'update']);
+        $this->middleware('permission:' . Config::get('constants.LIST_ARTICLECATEGORY_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:' . Config::get('constants.INSERT_ARTICLECATEGORY_ACCESS'), ['only' => 'create']);
+        $this->middleware('permission:' . Config::get('constants.INSERT_ARTICLECATEGORY_ACCESS'), ['only' => 'store']);
+        $this->middleware('permission:' . Config::get('constants.REMOVE_ARTICLECATEGORY_ACCESS'), ['only' => 'destroy']);
+        $this->middleware('permission:' . Config::get('constants.SHOW_ARTICLECATEGORY_ACCESS'), ['only' => 'edit']);
+        $this->middleware('permission:' . Config::get('constants.EDIT_ARTICLECATEGORY_ACCESS'), ['only' => 'update']);
 
         $this->response = new Response();
     }
@@ -53,20 +53,19 @@ class ArticlecategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(InsertArticlecategoryRequest $request)
     {
         $articlecategory = new Articlecategory();
-        if(isset($request->enable)) $request->offsetSet("enable" , 1);
-        else    $request->offsetSet("enable" , 0);
+        if (isset($request->enable)) $request->offsetSet("enable", 1);
+        else    $request->offsetSet("enable", 0);
         $articlecategory->fill($request->all());
 
-        if($articlecategory->save()){
+        if ($articlecategory->save()) {
             return $this->response->setStatusCode(200);
-        }
-        else{
+        } else {
             return $this->response->setStatusCode(503);
         }
     }
@@ -74,7 +73,7 @@ class ArticlecategoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -85,7 +84,7 @@ class ArticlecategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($articlecategory)
@@ -96,20 +95,19 @@ class ArticlecategoryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(EditArticlecategoryRequest $request, $articlecategory)
     {
-        if(isset($request->enable)) $request->offsetSet("enable" , 1);
-        else    $request->offsetSet("enable" , 0);
+        if (isset($request->enable)) $request->offsetSet("enable", 1);
+        else    $request->offsetSet("enable", 0);
         $articlecategory->fill($request->all());
 
         if ($articlecategory->update()) {
             session()->put('success', 'اصلاح دسته با موفقیت انجام شد');
-        }
-        else{
+        } else {
             session()->put('error', 'خطای پایگاه داده');
         }
         return redirect()->back();
@@ -118,17 +116,17 @@ class ArticlecategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($articlecategory)
     {
         $categoryId = $articlecategory->id;
 
-        if ($articlecategory->delete()){
+        if ($articlecategory->delete()) {
 //            session()->put('success', 'دسته بندی با موفقیت حذف شد');
             $articles = Article::where('articlecategory_id', $categoryId)->get();
-            foreach ($articles as $article){
+            foreach ($articles as $article) {
                 $article->articlecategory_id = null;
                 $article->update();
             }

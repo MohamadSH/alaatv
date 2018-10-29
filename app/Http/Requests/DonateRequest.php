@@ -7,7 +7,8 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class DonateRequest extends FormRequest
 {
-    use CharacterCommon ;
+    use CharacterCommon;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -38,13 +39,12 @@ class DonateRequest extends FormRequest
 
     protected function replaceNumbers()
     {
-        $input = $this->request->all() ;
-        if(isset($input["amount"]))
-        {
-            $input["amount"] = preg_replace('/\s+/', '', $input["amount"] ) ;
-            $input["amount"] = $this->convertToEnglish($input["amount"]) ;
+        $input = $this->request->all();
+        if (isset($input["amount"])) {
+            $input["amount"] = preg_replace('/\s+/', '', $input["amount"]);
+            $input["amount"] = $this->convertToEnglish($input["amount"]);
         }
 
-        $this->replace($input) ;
+        $this->replace($input);
     }
 }

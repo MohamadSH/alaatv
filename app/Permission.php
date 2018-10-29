@@ -8,8 +8,8 @@
 
 namespace App;
 
-use App\Traits\Helper;
 use App\Traits\DateTrait;
+use App\Traits\Helper;
 use Laratrust\Models\LaratrustPermission;
 
 /**
@@ -34,7 +34,7 @@ class Permission extends LaratrustPermission
 {
     use Helper;
     use DateTrait;
-    
+
     /**
      * @var array
      */
@@ -43,7 +43,7 @@ class Permission extends LaratrustPermission
         'display_name',
         'description',
     ];
-    
+
     protected $dates = [
         'created_at',
         'updated_at'

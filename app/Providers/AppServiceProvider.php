@@ -3,12 +3,13 @@
 namespace App\Providers;
 
 
-use App\{
-    Adapter\AlaaSftpAdapter, Content, Observers\ContentObserver, Observers\ProductObserver, Product,  Traits\UserCommon
-};
-use Illuminate\Support\Facades\{
-    Auth, Schema, Storage, Validator
-};
+use App\{Adapter\AlaaSftpAdapter,
+    Content,
+    Observers\ContentObserver,
+    Observers\ProductObserver,
+    Product,
+    Traits\UserCommon};
+use Illuminate\Support\Facades\{Auth, Schema, Storage, Validator};
 use Illuminate\Support\ServiceProvider;
 use Laravel\Horizon\Horizon;
 use League\Flysystem\Filesystem;
@@ -16,6 +17,7 @@ use League\Flysystem\Filesystem;
 class AppServiceProvider extends ServiceProvider
 {
     use UserCommon;
+
     /**
      * Bootstrap any application services.
      *
@@ -27,10 +29,9 @@ class AppServiceProvider extends ServiceProvider
         Product::observe(ProductObserver::class);
 
         Horizon::auth(function ($request) {
-            if( Auth::check() && Auth::user()->hasRole("admin") ){
+            if (Auth::check() && Auth::user()->hasRole("admin")) {
                 return true;
-            }
-            else{
+            } else {
                 return false;
             }
         });
@@ -43,9 +44,8 @@ class AppServiceProvider extends ServiceProvider
         /**
          *  National code validation for registration form
          */
-        Validator::extend('validate', function($attribute, $value, $parameters, $validator) {
-            if(strcmp($parameters[0],"nationalCode")==0)
-            {
+        Validator::extend('validate', function ($attribute, $value, $parameters, $validator) {
+            if (strcmp($parameters[0], "nationalCode") == 0) {
                 $flag = $this->validateNationalCode($value);
                 return $flag;
             }
@@ -63,9 +63,9 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
 
-         if ($this->app->environment() !== 'production') {
-             $this->app->register(\Barryvdh\Debugbar\ServiceProvider::class);
-             $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
-         }
+        if ($this->app->environment() !== 'production') {
+            $this->app->register(\Barryvdh\Debugbar\ServiceProvider::class);
+            $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
+        }
     }
 }

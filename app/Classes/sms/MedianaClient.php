@@ -5,7 +5,9 @@
  * Date: 2018-04-23
  * Time: 21:24
  */
+
 namespace App\Classes\sms;
+
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Exception\GuzzleException;
 
@@ -42,7 +44,7 @@ class MedianaClient implements SmsSenderClient
      */
     protected $http;
 
-    public function __construct(HttpClient $http, $userName, $password, $number , $url)
+    public function __construct(HttpClient $http, $userName, $password, $number, $url)
     {
         $this->number = $number;
         $this->userName = $userName;
@@ -66,7 +68,7 @@ class MedianaClient implements SmsSenderClient
             'pass' => $this->password,
             'from' => $this->number,
         ];
-        if(isset($params['from']))
+        if (isset($params['from']))
             unset($base["from"]);
 
         $params = array_merge($base, $params);

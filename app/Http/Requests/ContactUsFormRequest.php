@@ -7,7 +7,8 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class ContactUsFormRequest extends FormRequest
 {
-    use CharacterCommon ;
+    use CharacterCommon;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -58,17 +59,15 @@ class ContactUsFormRequest extends FormRequest
 
     protected function replaceNumbers()
     {
-        $input = $this->request->all() ;
-        if(isset($input["phone"]))
-        {
-            $input["phone"] = preg_replace('/\s+/', '', $input["phone"] ) ;
-            $input["phone"] = $this->convertToEnglish($input["phone"]) ;
+        $input = $this->request->all();
+        if (isset($input["phone"])) {
+            $input["phone"] = preg_replace('/\s+/', '', $input["phone"]);
+            $input["phone"] = $this->convertToEnglish($input["phone"]);
         }
-        if(isset($input["email"]))
-        {
-            $input["email"] = preg_replace('/\s+/', '', $input["email"] ) ;
-            $input["email"] = $this->convertToEnglish($input["email"]) ;
+        if (isset($input["email"])) {
+            $input["email"] = preg_replace('/\s+/', '', $input["email"]);
+            $input["email"] = $this->convertToEnglish($input["email"]);
         }
-        $this->replace($input) ;
+        $this->replace($input);
     }
 }

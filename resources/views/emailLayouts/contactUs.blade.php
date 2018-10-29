@@ -6,7 +6,7 @@
 <body style="direction: rtl;">
 <h2>آلاء - تماس با ما</h2>
 
-<div >
+<div>
     <ul>
         <li>
             ایمیل فرستنده : {{ $email }}

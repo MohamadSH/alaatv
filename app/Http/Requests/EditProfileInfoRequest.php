@@ -4,13 +4,13 @@ namespace App\Http\Requests;
 
 use App\Afterloginformcontrol;
 use App\Traits\CharacterCommon;
-use Illuminate\Foundation\Http\FormRequest;
 use Auth;
-use Illuminate\Support\Facades\Input;
+use Illuminate\Foundation\Http\FormRequest;
 
 class EditProfileInfoRequest extends FormRequest
 {
-    use CharacterCommon ;
+    use CharacterCommon;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -18,7 +18,7 @@ class EditProfileInfoRequest extends FormRequest
      */
     public function authorize()
     {
-        if(Auth::user()->lockProfile) return false;
+        if (Auth::user()->lockProfile) return false;
         else return true;
     }
 
@@ -34,21 +34,19 @@ class EditProfileInfoRequest extends FormRequest
             'email' => 'email',
         ];
 
-        if(
-            ( strcmp(url()->previous() ,action("UserController@show",$this->user()).'/' ) != 0) &&
-            (strcmp(url()->previous() ,action("UserController@show",$this->user())) != 0) &&
-            ( strcmp(url()->previous().'/' ,action("UserController@show",$this->user()).'/' ) != 0) &&
-            (strcmp(url()->previous().'/' ,action("UserController@show",$this->user())) != 0)
-        )
-        {
-            $afterLoginFields = Afterloginformcontrol::getFormFields()->pluck('name' , 'id')->toArray() ;
+        if (
+            (strcmp(url()->previous(), action("UserController@show", $this->user()) . '/') != 0) &&
+            (strcmp(url()->previous(), action("UserController@show", $this->user())) != 0) &&
+            (strcmp(url()->previous() . '/', action("UserController@show", $this->user()) . '/') != 0) &&
+            (strcmp(url()->previous() . '/', action("UserController@show", $this->user())) != 0)
+        ) {
+            $afterLoginFields = Afterloginformcontrol::getFormFields()->pluck('name', 'id')->toArray();
 
-            foreach ($afterLoginFields as $afterLoginField)
-            {
-                if(strcmp($afterLoginField, "email") == 0) $rules[$afterLoginField] = "required|email";
-                elseif(strcmp($afterLoginField, "photo") == 0) $rules[$afterLoginField] = "required|image|mimes:jpeg,jpg,png|max:512";
-                elseif(strcmp($afterLoginField, "major_id") == 0) $rules[$afterLoginField] = "required|exists:majors,id";
-                elseif(strcmp($afterLoginField, "gender_id") == 0) $rules[$afterLoginField] = "required|exists:genders,id";
+            foreach ($afterLoginFields as $afterLoginField) {
+                if (strcmp($afterLoginField, "email") == 0) $rules[$afterLoginField] = "required|email";
+                elseif (strcmp($afterLoginField, "photo") == 0) $rules[$afterLoginField] = "required|image|mimes:jpeg,jpg,png|max:512";
+                elseif (strcmp($afterLoginField, "major_id") == 0) $rules[$afterLoginField] = "required|exists:majors,id";
+                elseif (strcmp($afterLoginField, "gender_id") == 0) $rules[$afterLoginField] = "required|exists:genders,id";
                 else $rules[$afterLoginField] = "required|max:255";
             }
         }
@@ -69,16 +67,16 @@ class EditProfileInfoRequest extends FormRequest
 
     protected function replaceNumbers()
     {
-        $input = $this->request->all() ;
-        if(isset($input["email"])) {
-            $input["email"] = preg_replace('/\s+/', '', $input["email"] ) ;
-            $input["email"] = $this->convertToEnglish($input["email"]) ;
+        $input = $this->request->all();
+        if (isset($input["email"])) {
+            $input["email"] = preg_replace('/\s+/', '', $input["email"]);
+            $input["email"] = $this->convertToEnglish($input["email"]);
         }
-        if(isset($input["postalCode"])) {
-            $input["postalCode"] = preg_replace('/\s+/', '', $input["postalCode"] ) ;
-            $input["postalCode"] = $this->convertToEnglish($input["postalCode"]) ;
+        if (isset($input["postalCode"])) {
+            $input["postalCode"] = preg_replace('/\s+/', '', $input["postalCode"]);
+            $input["postalCode"] = $this->convertToEnglish($input["postalCode"]);
         }
-        $this->replace($input) ;
+        $this->replace($input);
     }
 
 }

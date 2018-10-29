@@ -7,7 +7,7 @@
         </div>
         <div class="col-md-8">
             <a href="{{action("ContentController@show" , $item)}}">
-               {{ $item->name }}
+                {{ $item->name }}
             </a>
         </div>
     </div>

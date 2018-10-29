@@ -33,7 +33,7 @@ class GenerateFilterCommand extends Command
         $stub = $this->compileTemplate($filterName);
 
         $path = $this->makeFilterClass($filterName, $stub);
-        $this->info($path."  created.");
+        $this->info($path . "  created.");
     }
 
     /**
@@ -44,7 +44,7 @@ class GenerateFilterCommand extends Command
     {
         $stub = file_get_contents(app_path('Console/filter.stub'));
         $stub = str_replace("{{CLASS}}", $filterName, $stub);
-        $stub = str_replace("{{ATTRIBUTE_NAME}}",str_slug($filterName,"_"),$stub);
+        $stub = str_replace("{{ATTRIBUTE_NAME}}", str_slug($filterName, "_"), $stub);
         return $stub;
     }
 

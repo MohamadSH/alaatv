@@ -24,8 +24,8 @@ class PasswordRecoveryRequest extends FormRequest
      */
     public function rules()
     {
-		if (!Auth::check()) $rules = ["mobileNumber"=>"required"];
-		else $rules = [];
+        if (!Auth::check()) $rules = ["mobileNumber" => "required"];
+        else $rules = [];
         return $rules;
     }
 }

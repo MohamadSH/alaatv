@@ -2,8 +2,8 @@
 @extends("app",["pageName"=>"admin"])
 
 @section("headPageLevelPlugin")
-    <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css" />
-    <link href="/assets/global/plugins/jquery-multi-select/css/multi-select-rtl.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/global/plugins/jquery-multi-select/css/multi-select-rtl.css" rel="stylesheet" type="text/css"/>
 @endsection
 
 
@@ -34,16 +34,18 @@
         <div class="col-md-3"></div>
         <div class="col-md-6 ">
         @include("systemMessage.flash")
-            <!-- BEGIN SAMPLE FORM PORTLET-->
+        <!-- BEGIN SAMPLE FORM PORTLET-->
             <div class="portlet light ">
                 <div class="portlet-title">
                     <div class="caption">
                         <i class="icon-settings font-dark"></i>
-                        <span class="caption-subject font-dark sbold uppercase">اصلاح اطلاعات <a href="{{action("ProductController@show" , $slide)}}">{{$slide->name}}</a></span>
+                        <span class="caption-subject font-dark sbold uppercase">اصلاح اطلاعات <a
+                                    href="{{action("ProductController@show" , $slide)}}">{{$slide->name}}</a></span>
                     </div>
                     <div class="actions">
                         <div class="btn-group">
-                            <a class="btn btn-sm dark dropdown-toggle" href="@if(isset($previousUrl)) {{$previousUrl}}  @endif" > بازگشت
+                            <a class="btn btn-sm dark dropdown-toggle"
+                               href="@if(isset($previousUrl)) {{$previousUrl}}  @endif"> بازگشت
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         </div>
@@ -51,7 +53,7 @@
                 </div>
                 <div class="portlet-body form">
                     {!! Form::model($slide,['files'=>true,'method' => 'PUT','action' => ['SlideShowController@update' , $slide], 'class'=>'form-horizontal']) !!}
-                            @include('slideShow.form')
+                    @include('slideShow.form')
                     {!! Form::close() !!}
                 </div>
             </div>

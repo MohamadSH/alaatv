@@ -17,7 +17,8 @@
         <span class="required" aria-required="true"> * </span>
     @endif
     <div class="input-icon"><i class="fa fa-location-arrow" aria-hidden="true"></i>
-        <input id="province" class="form-control placeholder-no-fix" type="text" value="{{(!is_null(old("province"))?old("province"):$user->province)}}" name="province"/>
+        <input id="province" class="form-control placeholder-no-fix" type="text"
+               value="{{(!is_null(old("province"))?old("province"):$user->province)}}" name="province"/>
     </div>
     @if ($errors->has('province'))
         <span class="help-block">
@@ -31,7 +32,8 @@
         <span class="required" aria-required="true"> * </span>
     @endif
     <div class="input-icon"><i class="fa fa-location-arrow" aria-hidden="true"></i>
-        <input id="city" class="form-control placeholder-no-fix" type="text" value="{{(!is_null(old("city"))?old("city"):$user->city)}}" name="city"/>
+        <input id="city" class="form-control placeholder-no-fix" type="text"
+               value="{{(!is_null(old("city"))?old("city"):$user->city)}}" name="city"/>
     </div>
     @if ($errors->has('city'))
         <span class="help-block">
@@ -45,7 +47,8 @@
         <span class="required" aria-required="true"> * </span>
     @endif
     <div class="input-icon"><i class="fa fa-map-marker" aria-hidden="true"></i>
-        <input id="address" class="form-control placeholder-no-fix" type="text" value="{{(!is_null(old("address"))?old("address"):$user->address)}}" name="address"/>
+        <input id="address" class="form-control placeholder-no-fix" type="text"
+               value="{{(!is_null(old("address"))?old("address"):$user->address)}}" name="address"/>
     </div>
     @if ($errors->has('address'))
         <span class="help-block">
@@ -59,7 +62,8 @@
         <span class="required" aria-required="true"> * </span>
     @endif
     <div class="input-icon"><i class="fa fa-envelope-open" aria-hidden="true"></i>
-        <input id="postalCode" class="form-control placeholder-no-fix" type="text" value="{{(!is_null(old("postalCode"))?old("postalCode"):$user->postalCode)}}"
+        <input id="postalCode" class="form-control placeholder-no-fix" type="text"
+               value="{{(!is_null(old("postalCode"))?old("postalCode"):$user->postalCode)}}"
                name="postalCode"/>
     </div>
     @if ($errors->has('postalCode'))
@@ -89,8 +93,9 @@
             <span class="required" aria-required="true"> * </span>
         @endif
         <div class="input-icon"><i class="fa fa-calendar-times-o" aria-hidden="true"></i>
-            <input id="birthdate" type="text" class="form-control placeholder-no-fix" value="{{(!is_null(old("birthdate"))?old("birthdate"):$user->birthdate)}}">
-            <input name="birthdate" id="birthdateAlt" type="text" class="form-control hidden" >
+            <input id="birthdate" type="text" class="form-control placeholder-no-fix"
+                   value="{{(!is_null(old("birthdate"))?old("birthdate"):$user->birthdate)}}">
+            <input name="birthdate" id="birthdateAlt" type="text" class="form-control hidden">
         </div>
         @if ($errors->has('birthdate'))
             <span class="help-block">
@@ -105,7 +110,8 @@
         <span class="required" aria-required="true"> * </span>
     @endif
     <div class="input-icon"><i class="fa fa-graduation-cap" aria-hidden="true"></i>
-        <input id="school" class="form-control placeholder-no-fix" type="text" value="{{(!is_null(old("school"))?old("school"):$user->school)}}"  name="school" /> </div>
+        <input id="school" class="form-control placeholder-no-fix" type="text"
+               value="{{(!is_null(old("school"))?old("school"):$user->school)}}" name="school"/></div>
     @if ($errors->has('school'))
         <span class="help-block">
             <strong>{{ $errors->first('school') }}</strong>
@@ -133,7 +139,9 @@
             <span class="required" aria-required="true"> * </span>
         @endif
         <div class="input-icon"><i class="fa fa-pencil" aria-hidden="true"></i>
-            <input id="introducedBy" class="form-control placeholder-no-fix" type="text" value="{{(!is_null(old("introducedBy"))?old("introducedBy"):$user->introducedBy)}}"  name="introducedBy" /> </div>
+            <input id="introducedBy" class="form-control placeholder-no-fix" type="text"
+                   value="{{(!is_null(old("introducedBy"))?old("introducedBy"):$user->introducedBy)}}"
+                   name="introducedBy"/></div>
         @if ($errors->has('introducedBy'))
             <span class="help-block">
             <strong>{{ $errors->first('introducedBy') }}</strong>
@@ -144,7 +152,8 @@
 <div class="form-group {{ $errors->has('email') ? ' has-error' : '' }}">
     <label for="email" class="control-label">ایمیل(اختیاری)</label>
     <div class="input-icon"><i class="fa fa-envelope-o" aria-hidden="true"></i>
-        <input id="email" class="form-control placeholder-no-fix" type="text" value="{{(!is_null(old("email"))?old("email"):$user->email)}}" name="email"/>
+        <input id="email" class="form-control placeholder-no-fix" type="text"
+               value="{{(!is_null(old("email"))?old("email"):$user->email)}}" name="email"/>
     </div>
     @if ($errors->has('email'))
         <span class="help-block">
@@ -166,10 +175,12 @@
 
 @if(isset($text3))
     @if(!$user->hasVerifiedMobile() || !isset($user->photo) || strcmp($user->photo, config('constants.PROFILE_DEFAULT_IMAGE')) == 0)
-        <div class="alert alert-danger alert-dismissable margin-top-10" id="profileEditViewText3" style="text-align: justify">
+        <div class="alert alert-danger alert-dismissable margin-top-10" id="profileEditViewText3"
+             style="text-align: justify">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
             @if(!$user->hasVerifiedMobile())لطفا شماره موبایل خود را تایید نمایید<br>@endif
-            @if(!isset($user->photo) || strcmp($user->photo, config('constants.PROFILE_DEFAULT_IMAGE')) == 0)<span id="profileEditViewText3-span2">لطفا عکس خود را آپلود نمایید</span>@endif
+            @if(!isset($user->photo) || strcmp($user->photo, config('constants.PROFILE_DEFAULT_IMAGE')) == 0)<span
+                    id="profileEditViewText3-span2">لطفا عکس خود را آپلود نمایید</span>@endif
         </div>
     @endif
 @endif
@@ -181,6 +192,8 @@
     </div>
 @endif
 <div class="margiv-top-10 ">
-    <button type="submit" class="btn btn-lg green" id="updateProfileInfoFormButton" {{(isset($disableSubmit) && $disableSubmit)?"disabled":""}}> @if(isset($submitCaption)){{$submitCaption}} @else ثبت درخواست @endif</button>
+    <button type="submit" class="btn btn-lg green"
+            id="updateProfileInfoFormButton" {{(isset($disableSubmit) && $disableSubmit)?"disabled":""}}> @if(isset($submitCaption)){{$submitCaption}} @else
+            ثبت درخواست @endif</button>
 </div>
 {!! Form::close() !!}

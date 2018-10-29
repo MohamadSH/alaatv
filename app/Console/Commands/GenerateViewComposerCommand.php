@@ -32,7 +32,7 @@ class GenerateViewComposerCommand extends Command
         $stub = $this->compileTemplate($composerName);
 
         $path = $this->makeFilterClass($composerName, $stub);
-        $this->info($path."  created.");
+        $this->info($path . "  created.");
     }
 
     /**

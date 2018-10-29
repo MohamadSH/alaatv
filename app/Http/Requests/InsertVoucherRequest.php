@@ -8,6 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 class InsertVoucherRequest extends FormRequest
 {
     use CharacterCommon;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -28,7 +29,7 @@ class InsertVoucherRequest extends FormRequest
         $rules = [
             'postalCode' => 'required|numeric',
             'email' => 'sometimes|nullable|email',
-            "gender_id"=>"required|exists:genders,id",
+            "gender_id" => "required|exists:genders,id",
             "province" => "required",
             "city" => "required",
             "address" => "required",
@@ -49,27 +50,27 @@ class InsertVoucherRequest extends FormRequest
 
     protected function replaceNumbers()
     {
-        $input = $this->request->all() ;
-        if(isset($input["email"])) {
-            $input["email"] = preg_replace('/\s+/', '', $input["email"] ) ;
-            $input["email"] = $this->convertToEnglish($input["email"]) ;
+        $input = $this->request->all();
+        if (isset($input["email"])) {
+            $input["email"] = preg_replace('/\s+/', '', $input["email"]);
+            $input["email"] = $this->convertToEnglish($input["email"]);
         }
-        if(isset($input["postalCode"])) {
-            $input["postalCode"] = preg_replace('/\s+/', '', $input["postalCode"] ) ;
-            $input["postalCode"] = $this->convertToEnglish($input["postalCode"]) ;
-        }
-
-        if(isset($input["address"])) {
-            $input["address"] = $this->convertToEnglish($input["address"]) ;
+        if (isset($input["postalCode"])) {
+            $input["postalCode"] = preg_replace('/\s+/', '', $input["postalCode"]);
+            $input["postalCode"] = $this->convertToEnglish($input["postalCode"]);
         }
 
-        if(isset($input["school"])) {
-            $input["school"] = $this->convertToEnglish($input["school"]) ;
+        if (isset($input["address"])) {
+            $input["address"] = $this->convertToEnglish($input["address"]);
         }
 
-        if(isset($input["introducedBy"])) {
-            $input["introducedBy"] = $this->convertToEnglish($input["introducedBy"]) ;
+        if (isset($input["school"])) {
+            $input["school"] = $this->convertToEnglish($input["school"]);
         }
-        $this->replace($input) ;
+
+        if (isset($input["introducedBy"])) {
+            $input["introducedBy"] = $this->convertToEnglish($input["introducedBy"]);
+        }
+        $this->replace($input);
     }
 }

@@ -2,14 +2,14 @@
 
 namespace App;
 
-use App\Traits\Helper;
 use App\Traits\DateTrait;
+use App\Traits\Helper;
 use App\Traits\ProductCommon;
+use Auth;
 use Carbon\Carbon;
 use Iatstuti\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Auth;
 use Illuminate\Support\Facades\Config;
 
 /**
@@ -153,11 +153,11 @@ class Order extends Model
         return $this->hasMany('App\Transaction')->where('paymentmethod_id', 1);
     }
 
-        public function successfulTransactions()
+    public function successfulTransactions()
     {
-        return $this->hasMany('App\Transaction')->where(function ($q){
+        return $this->hasMany('App\Transaction')->where(function ($q) {
             $q->where("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL"))
-              ->orWhere("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_SUSPENDED")) ;
+                ->orWhere("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_SUSPENDED"));
         });
     }
 
@@ -174,7 +174,7 @@ class Order extends Model
     public function suspendedTransactions()
     {
         return $this->hasMany('App\Transaction')
-                    ->where("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_SUSPENDED"));
+            ->where("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_SUSPENDED"));
     }
 
     public function archivedSuccessfulTransactions()
@@ -428,8 +428,8 @@ class Order extends Model
         }
 
         [
-          $couponValidationMessage,
-          $couponValidationCode
+            $couponValidationMessage,
+            $couponValidationCode
         ] = $this->coupon->validateCoupon();
         if (strlen($couponValidationMessage) > 0 && $couponValidationCode != 4) {
             $collapseCoupon = true;
@@ -449,7 +449,7 @@ class Order extends Model
 
         if (!$couponRemoved) {
             $orderproducts = $this->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
-                                    ->get();
+                ->get();
 
             $orderHasExtraAttribute = false;
             foreach ($orderproducts as $orderproduct) {
@@ -472,74 +472,6 @@ class Order extends Model
         return ["warning" => $warningMessage, "info" => $infoMessage, "error" => $errorMessage, "couponRemoved" => $couponRemoved];
     }
 
-    /**
-     * Detaches coupon from this order
-     *
-     * @return array
-     */
-    public function detachCoupon()
-    {
-        $done = false;
-        if(isset($this->coupon->id))
-        {
-            $coupon = $this->coupon ;
-            $coupon->usageNumber = $coupon->usageNumber - 1;
-            if($coupon->update());
-            {
-                $this->coupon_id = null;
-                $this->couponDiscount = 0 ;
-                $this->couponDiscountAmount = 0 ;
-                $done = true;
-            }
-        }
-        return ["result"=>$done];
-    }
-
-    /**
-     * Determines whether order has used coupon or not
-     *
-     * @return bool
-     */
-    public function hasUsedCoupon()
-    {
-        $flag = false;
-        if(isset($this->coupon->id ))
-        {
-            if($this->coupon->coupontype->id == 2)
-            {
-                foreach ($this->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->get() as $orderproduct)
-                {
-                    $hasCoupon = true;
-                    if(!in_array($this->coupon->id, $orderproduct->product->coupons->pluck('id')->toArray()))
-                    {
-                        $hasCoupon = false;
-                        $parentsArray = $this->makeParentArray($orderproduct->product);
-                        foreach ($parentsArray as $parent)
-                        {
-                            if(in_array($this->coupon->id, $parent->coupons->pluck('id')->toArray()))
-                            {
-                                $hasCoupon = true;
-                                break ;
-                            }
-                        }
-                    }
-
-                    if($hasCoupon)
-                    {
-                        $flag = true;
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                $flag = true;
-            }
-        }
-
-        return  $flag;
-    }
-
     public function totalCost()
     {
         return $this->obtainOrderCost()["totalCost"];
@@ -558,6 +490,64 @@ class Order extends Model
             }
         else
             return $this->hasMany('App\Orderproduct');
+    }
+
+    /**
+     * Detaches coupon from this order
+     *
+     * @return array
+     */
+    public function detachCoupon()
+    {
+        $done = false;
+        if (isset($this->coupon->id)) {
+            $coupon = $this->coupon;
+            $coupon->usageNumber = $coupon->usageNumber - 1;
+            if ($coupon->update()) ;
+            {
+                $this->coupon_id = null;
+                $this->couponDiscount = 0;
+                $this->couponDiscountAmount = 0;
+                $done = true;
+            }
+        }
+        return ["result" => $done];
+    }
+
+    /**
+     * Determines whether order has used coupon or not
+     *
+     * @return bool
+     */
+    public function hasUsedCoupon()
+    {
+        $flag = false;
+        if (isset($this->coupon->id)) {
+            if ($this->coupon->coupontype->id == 2) {
+                foreach ($this->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->get() as $orderproduct) {
+                    $hasCoupon = true;
+                    if (!in_array($this->coupon->id, $orderproduct->product->coupons->pluck('id')->toArray())) {
+                        $hasCoupon = false;
+                        $parentsArray = $this->makeParentArray($orderproduct->product);
+                        foreach ($parentsArray as $parent) {
+                            if (in_array($this->coupon->id, $parent->coupons->pluck('id')->toArray())) {
+                                $hasCoupon = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if ($hasCoupon) {
+                        $flag = true;
+                        break;
+                    }
+                }
+            } else {
+                $flag = true;
+            }
+        }
+
+        return $flag;
     }
 
     public function cancelOpenOnlineTransactions()
@@ -596,31 +586,26 @@ class Order extends Model
         $user = $this->user;
 
         $orderproducts = $this->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->get();
-        foreach ($orderproducts as $orderproduct)
-        {
-            if(!isset($user))
+        foreach ($orderproducts as $orderproduct) {
+            if (!isset($user))
                 break;
-            if($user->userbons->where("orderproduct_id" , $orderproduct->id )->isNotEmpty())
-                continue ;
-            $simpleProduct = $orderproduct->product ;
-            $bons = $simpleProduct->bons->where("name" , $bonName);
-            if($bons->isEmpty())
-            {
+            if ($user->userbons->where("orderproduct_id", $orderproduct->id)->isNotEmpty())
+                continue;
+            $simpleProduct = $orderproduct->product;
+            $bons = $simpleProduct->bons->where("name", $bonName);
+            if ($bons->isEmpty()) {
                 $grandParent = $simpleProduct->getGrandParent();
-                if($grandParent !== false)
-                {
-                    $simpleProduct = $grandParent ;
-                    $bons = $grandParent->bons->where("name" , $bonName)->where("isEnable" , 1);
+                if ($grandParent !== false) {
+                    $simpleProduct = $grandParent;
+                    $bons = $grandParent->bons->where("name", $bonName)->where("isEnable", 1);
                 }
             }
-            if(in_array($simpleProduct->id , $checkedProducts))
+            if (in_array($simpleProduct->id, $checkedProducts))
                 continue;
-            if($bons->isNotEmpty())
-            {
+            if ($bons->isNotEmpty()) {
                 $bon = $bons->first();
                 $bonPlus = $bon->pivot->bonPlus;
-                if($bonPlus)
-                {
+                if ($bonPlus) {
                     $userbon = new Userbon();
                     $userbon->user_id = $user->id;
                     $userbon->bon_id = $bon->id;
@@ -636,7 +621,7 @@ class Order extends Model
         }
 
         return [
-            $totalSuccessfulBons ,
+            $totalSuccessfulBons,
             $totalFailedBons
         ];
     }
@@ -647,15 +632,15 @@ class Order extends Model
      * @param string $paymentStatus
      * @return array
      */
-    public function close( $paymentStatus , $orderStatus=null)
+    public function close($paymentStatus, $orderStatus = null)
     {
-        if(!isset($orderStatus))
+        if (!isset($orderStatus))
             $orderStatus = Config::get("constants.ORDER_STATUS_CLOSED");
 
         $this->orderstatus_id = $orderStatus;
         $this->paymentstatus_id = $paymentStatus;
         $this->completed_at = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
-                                    ->timezone('Asia/Tehran');
+            ->timezone('Asia/Tehran');
 
     }
 
@@ -668,17 +653,16 @@ class Order extends Model
     public function hasProducts($products)
     {
         return $this->orderproducts
-                    ->whereIn("product_id" ,$products)
-                    ->isNotEmpty();
+            ->whereIn("product_id", $products)
+            ->isNotEmpty();
     }
 
     public function closeWalletPendingTransactions()
     {
         $walletTransactions = $this->suspendedTransactions
-                                   ->where("paymentmethod_id" , config("constants.PAYMENT_METHOD_WALLET"));
-        foreach($walletTransactions as $transaction)
-        {
-            $transaction->transactionstatus_id = config("constants.TRANSACTION_STATUS_SUCCESSFUL") ;
+            ->where("paymentmethod_id", config("constants.PAYMENT_METHOD_WALLET"));
+        foreach ($walletTransactions as $transaction) {
+            $transaction->transactionstatus_id = config("constants.TRANSACTION_STATUS_SUCCESSFUL");
             $transaction->update();
         }
     }

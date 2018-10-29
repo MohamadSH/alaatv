@@ -29,20 +29,20 @@ class OrderCheck
          * Initiating an order for the user
          * at the moment he opens the website
          */
-        if (Auth::guard($guard)->check()){
+        if (Auth::guard($guard)->check()) {
             /**
              * Making an open order for the user or retrieving the existing one
              */
             $openOrder = $request->user()->openOrders()->get();
-            if($openOrder->isEmpty()){
+            if ($openOrder->isEmpty()) {
                 $request = new Request();
-                $request->offsetSet("paymentstatus_id" , Config::get("constants.PAYMENT_STATUS_UNPAID"));
-                $request->offsetSet("orderstatus_id" , Config::get("constants.ORDER_STATUS_OPEN"));
-                $request->offsetSet("user_id" , Auth::user()->id);
+                $request->offsetSet("paymentstatus_id", Config::get("constants.PAYMENT_STATUS_UNPAID"));
+                $request->offsetSet("orderstatus_id", Config::get("constants.ORDER_STATUS_OPEN"));
+                $request->offsetSet("user_id", Auth::user()->id);
                 $controller = new OrderController();
                 $order = $controller->store($request);
 
-            }else{
+            } else {
                 $order = $openOrder->first();
             }
             /**
@@ -52,9 +52,8 @@ class OrderCheck
             /**
              *  Putting found order id in session
              */
-            if(isset($order))
-            {
-                session()->put("order_id" , $order->id);
+            if (isset($order)) {
+                session()->put("order_id", $order->id);
 //                session()->save();
             }
             /**
@@ -64,66 +63,59 @@ class OrderCheck
             /**
              *  Pulling orderProducts that user has added to the cart before login
              */
-            if(session()->has("orderproducts"))
-            {
-				$products = session()->pull("orderproducts");
-                if(session()->has("orderproductAttributes"))
+            if (session()->has("orderproducts")) {
+                $products = session()->pull("orderproducts");
+                if (session()->has("orderproductAttributes"))
                     $attributes = session()->pull("orderproductAttributes");
-                foreach ($products as $key=>$value)
-                {
-                    $product = Product::where("id",$key)->get()->first();
-                    if(isset($product) && strlen($product->validateProduct()) == 0)
-                    {
+                foreach ($products as $key => $value) {
+                    $product = Product::where("id", $key)->get()->first();
+                    if (isset($product) && strlen($product->validateProduct()) == 0) {
                         $orderproduct = new Orderproduct();
                         $orderproduct->product_id = $product->id;
                         $orderproduct->order_id = $order->id;
 
-                        if($orderproduct->save()){
+                        if ($orderproduct->save()) {
 
-                            if(isset($product->amount)) {
+                            if (isset($product->amount)) {
                                 $product->amount = $product->amount - 1;
                                 $product->update();
                             }
-                            if(isset($attributes) && isset($attributes[$product->id]))
-                            {
+                            if (isset($attributes) && isset($attributes[$product->id])) {
                                 $orderproductAttributes = $attributes[$product->id];
-                                foreach ($orderproductAttributes as $orderproductAttribute => $extraCost)
-                                {
+                                foreach ($orderproductAttributes as $orderproductAttribute => $extraCost) {
                                     $myParent = $this->makeParentArray($product);
                                     $myParent = end($myParent);
-                                    $attributevalues = $myParent->attributevalues->where("id" , $orderproductAttribute);
-                                    if($attributevalues->isNotEmpty())
-                                    {
-                                        $orderproduct->attributevalues()->attach($attributevalues->first()->id,["extraCost"=>$attributevalues->first()->pivot->extraCost]);
-                                    }else{
+                                    $attributevalues = $myParent->attributevalues->where("id", $orderproductAttribute);
+                                    if ($attributevalues->isNotEmpty()) {
+                                        $orderproduct->attributevalues()->attach($attributevalues->first()->id, ["extraCost" => $attributevalues->first()->pivot->extraCost]);
+                                    } else {
 
                                     }
                                 }
                             }
 
                             $costArray = $orderproduct->obtainOrderproductCost();
-                            if(isset($costArray["cost"]))
+                            if (isset($costArray["cost"]))
                                 $orderproduct->cost = $costArray["CustomerCost"];
                             else
-                                $orderproduct->cost = null ;
+                                $orderproduct->cost = null;
                             $orderproduct->update();
 
                             /**
                              * Attaching simple product gifts to the order
                              */
                             $attachedGifts = array();
-                            foreach ($value["gifts"] as $gift)
-                            {
-                                if(in_array( $gift->id , $attachedGifts ))
+                            foreach ($value["gifts"] as $gift) {
+                                if (in_array($gift->id, $attachedGifts))
                                     continue;
                                 else
                                     array_push($attachedGifts, $gift->id);
-                                if($order->orderproducts(Config::get("constants.ORDER_PRODUCT_GIFT"))->whereHas("product" , function($q) use($gift){
-                                    $q->where("id" , $gift->id);
+                                if ($order->orderproducts(Config::get("constants.ORDER_PRODUCT_GIFT"))->whereHas("product", function ($q) use ($gift) {
+                                    $q->where("id", $gift->id);
                                 })->get()->isNotEmpty())
                                     continue;
 
-                                $orderproduct->attachGift($gift) ;
+                                $orderproduct->attachGift($gift);
                             }
                             /**
                              *    end

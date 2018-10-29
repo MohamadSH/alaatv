@@ -1,27 +1,27 @@
 <?php
 
 return [
-    'meta'      => [
+    'meta' => [
         /*
          * The default configurations to be used by the meta generator.
          */
-        'defaults'       => [
-            'title'        => null, // set false to total remove
-            'description'  => null, // set false to total remove
-            'separator'    => ' - ',
-            'keywords'     => [],
-            'canonical'    => false, // Set null for using Url::current(), set false to total remove
+        'defaults' => [
+            'title' => null, // set false to total remove
+            'description' => null, // set false to total remove
+            'separator' => ' - ',
+            'keywords' => [],
+            'canonical' => false, // Set null for using Url::current(), set false to total remove
         ],
 
         /*
          * Webmaster tags are always added.
          */
         'webmaster_tags' => [
-            'google'    => "B1qvdXnVrJoIof7j3dUJH8ln-G5Ek2nwBCh49tEpDDw",
-            'bing'      => null,
-            'alexa'     => null,
+            'google' => "B1qvdXnVrJoIof7j3dUJH8ln-G5Ek2nwBCh49tEpDDw",
+            'bing' => null,
+            'alexa' => null,
             'pinterest' => null,
-            'yandex'    => null,
+            'yandex' => null,
         ],
     ],
     'opengraph' => [
@@ -29,12 +29,12 @@ return [
          * The default configurations to be used by the opengraph generator.
          */
         'defaults' => [
-            'title'       => null, // set false to total remove
+            'title' => null, // set false to total remove
             'description' => null, // set false to total remove
-            'url'         => false, // Set null for using Url::current(), set false to total remove
-            'type'        => false,
-            'site_name'   => false,
-            'images'      => [],
+            'url' => false, // Set null for using Url::current(), set false to total remove
+            'type' => false,
+            'site_name' => false,
+            'images' => [],
         ],
     ],
     'twitter' => [
@@ -42,8 +42,8 @@ return [
          * The default values to be used by the twitter cards generator.
          */
         'defaults' => [
-          //'card'        => 'summary',
-          //'site'        => '@LuizVinicius73',
+            //'card'        => 'summary',
+            //'site'        => '@LuizVinicius73',
         ],
     ],
 ];

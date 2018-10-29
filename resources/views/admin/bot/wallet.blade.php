@@ -26,7 +26,7 @@
 
 @section("content")
     {{--Ajax modal loaded after inserting content--}}
-    <div id="ajax-modal" class="modal fade" tabindex="-1"> </div>
+    <div id="ajax-modal" class="modal fade" tabindex="-1"></div>
     {{--Ajax modal for panel startup --}}
     <div class="row">
         @include("systemMessage.flash")
@@ -49,10 +49,10 @@
                         <option value="7">همایش طلایی را خریده اند</option>
                     </select>
                     <label for="userGroup" class="control-label">
-                        <input type="checkbox" name="giveGift" value="1" >
+                        <input type="checkbox" name="giveGift" value="1">
                         اعتبار اهداء کن
                     </label>
-                    <input type="text" name="giftCost" value=""  placeholder="مبلغ اهدایی">
+                    <input type="text" name="giftCost" value="" placeholder="مبلغ اهدایی">
                     <input type="submit" value="انجام بده">
                     {!! Form::close() !!}
                 </div>

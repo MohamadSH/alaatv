@@ -25,20 +25,21 @@
         <div class="row bs-reset">
             <div class="col-md-6 login-container bs-reset">
                 {{--<div class="col-md-12">--}}
-                    {{--<div class="m-heading-1 border-blue m-bordered margin-top-40">--}}
-                        {{--<h3>به سایت آلاء خوش آمدید</h3>--}}
-                        {{--<p>--}}
-                    {{--ثبت نام در سایت آلاء به معنی ثبت نام در اردو نیستا!--}}
-                        {{--</p>--}}
-                        {{--<p>--}}
-                        {{--برای دیدن انواع اردو ها و خدمات سایت ما مثل مشاوره ی فردی که به سفارش آلاء راه انداختیم باید اول تو سایتمون عضو شید.--}}
-                        {{--</p>--}}
-                    {{--</div>--}}
+                {{--<div class="m-heading-1 border-blue m-bordered margin-top-40">--}}
+                {{--<h3>به سایت آلاء خوش آمدید</h3>--}}
+                {{--<p>--}}
+                {{--ثبت نام در سایت آلاء به معنی ثبت نام در اردو نیستا!--}}
+                {{--</p>--}}
+                {{--<p>--}}
+                {{--برای دیدن انواع اردو ها و خدمات سایت ما مثل مشاوره ی فردی که به سفارش آلاء راه انداختیم باید اول تو سایتمون عضو شید.--}}
+                {{--</p>--}}
+                {{--</div>--}}
                 {{--</div>--}}
                 <div class="col-md-12 margin-top-40">
-                    <div class="note note-info bg-font-dark bg-green-sharp" >
+                    <div class="note note-info bg-font-dark bg-green-sharp">
                         <h4 class="block bold">به سایت آلاء خوش آمدید</h4>
-                        <h5 class="bold" style="line-height: normal;">نیازی به ثبت نام نیست .برای ورود تنها کافی است شماره موبایل و کد ملی خود را وارد کنید</h5>
+                        <h5 class="bold" style="line-height: normal;">نیازی به ثبت نام نیست .برای ورود تنها کافی است
+                            شماره موبایل و کد ملی خود را وارد کنید</h5>
                     </div>
                 </div>
                 {{--<img class="login-logo login-6" src="../assets/pages/img/login/login-invert.png" />--}}
@@ -68,7 +69,7 @@
                 </div>
             </div>
             <div class="col-md-6 bs-reset">
-                <div class="login-bg"> </div>
+                <div class="login-bg"></div>
             </div>
         </div>
     </div>

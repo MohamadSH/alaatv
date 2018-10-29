@@ -20,14 +20,14 @@
     <!-- BEGIN LOGO -->
     <div class="logo">
         <a href="{{action("HomeController@index")}}">
-            <img src="/assets/pages/img/logo-big.png" alt="ثبت نام" /> </a>
+            <img src="/assets/pages/img/logo-big.png" alt="ثبت نام"/> </a>
     </div>
     <!-- END LOGO -->
     <div class="content">
-       @include("user.form"  , ["formID" => 1])
+        @include("user.form"  , ["formID" => 1])
     </div>
     <!-- BEGIN COPYRIGHT -->
-    <div class="copyright" style="direction: ltr;"> 2017 &copy; Alaa </div>
+    <div class="copyright" style="direction: ltr;"> 2017 &copy; Alaa</div>
     <!-- END COPYRIGHT -->
 @endsection
 

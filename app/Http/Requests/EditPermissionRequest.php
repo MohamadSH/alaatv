@@ -14,7 +14,7 @@ class EditPermissionRequest extends FormRequest
      */
     public function authorize()
     {
-        if(Auth()->user()->can(Config::get('constants.EDIT_PERMISSION_ACCESS'))) return true;
+        if (Auth()->user()->can(Config::get('constants.EDIT_PERMISSION_ACCESS'))) return true;
         return false;
     }
 
@@ -27,7 +27,7 @@ class EditPermissionRequest extends FormRequest
     {
         $permission = $this->route('permission');
         return [
-            'name' => 'required|unique:permissions,name,'.$permission->id.',id',
+            'name' => 'required|unique:permissions,name,' . $permission->id . ',id',
             'display_name' => 'required'
         ];
     }

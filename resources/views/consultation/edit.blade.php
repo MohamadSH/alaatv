@@ -1,9 +1,9 @@
 @permission((Config::get('constants.SHOW_CONSULTATION_ACCESS')))
 @extends("app",["pageName"=>"admin"])
 @section("headPageLevelPlugin")
-    <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css" />
-    <link href="/assets/global/plugins/bootstrap-summernote/summernote.css" rel="stylesheet" type="text/css" />
-    <link href="/assets/global/plugins/jquery-multi-select/css/multi-select-rtl.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/global/plugins/bootstrap-summernote/summernote.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/global/plugins/jquery-multi-select/css/multi-select-rtl.css" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section("pageBar")
@@ -26,34 +26,35 @@
 @endsection
 @section("content")
     <div class="row">
-                <div class="col-md-3"></div>
-                <div class="col-md-6 ">
-                    @include("systemMessage.flash")
-                    <!-- BEGIN SAMPLE FORM PORTLET-->
-                    <div class="portlet light ">
-                        <div class="portlet-title">
-                            <div class="caption">
-                                <i class="icon-settings font-dark"></i>
-                                <span class="caption-subject font-dark sbold uppercase">اصلاح مشاوره {{$consultation->name}}</span>
-                            </div>
-                            <div class="actions">
-                                <div class="btn-group">
-                                    <a class="btn btn-sm dark dropdown-toggle" href="{{action("HomeController@adminContent")}}" > بازگشت
-                                        <i class="fa fa-angle-left"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="portlet-body form">
-                            {!! Form::model($consultation,['files'=>true,'method' => 'PUT','action' => ['ConsultationController@update',$consultation], 'class'=>'form-horizontal']) !!}
-                              @include('consultation.form',[$consultationStatuses , $majors ])
-                            {!! Form::close() !!}
+        <div class="col-md-3"></div>
+        <div class="col-md-6 ">
+        @include("systemMessage.flash")
+        <!-- BEGIN SAMPLE FORM PORTLET-->
+            <div class="portlet light ">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-settings font-dark"></i>
+                        <span class="caption-subject font-dark sbold uppercase">اصلاح مشاوره {{$consultation->name}}</span>
+                    </div>
+                    <div class="actions">
+                        <div class="btn-group">
+                            <a class="btn btn-sm dark dropdown-toggle" href="{{action("HomeController@adminContent")}}">
+                                بازگشت
+                                <i class="fa fa-angle-left"></i>
+                            </a>
                         </div>
                     </div>
-                    <!-- END SAMPLE FORM PORTLET-->
-
+                </div>
+                <div class="portlet-body form">
+                    {!! Form::model($consultation,['files'=>true,'method' => 'PUT','action' => ['ConsultationController@update',$consultation], 'class'=>'form-horizontal']) !!}
+                    @include('consultation.form',[$consultationStatuses , $majors ])
+                    {!! Form::close() !!}
                 </div>
             </div>
+            <!-- END SAMPLE FORM PORTLET-->
+
+        </div>
+    </div>
 @endsection
 
 @section("footerPageLevelPlugin")
@@ -70,7 +71,7 @@
 @endsection
 @section("extraJS")
     <script>
-        jQuery(document).ready(function() {
+        jQuery(document).ready(function () {
             $('#consultation_major').multiSelect();
         });
     </script>

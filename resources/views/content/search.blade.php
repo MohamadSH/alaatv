@@ -3,7 +3,7 @@
 @section("css")
     <link rel="stylesheet" href="{{ mix('/css/all.css') }}">
     <style>
-        .mt-element-list{
+        .mt-element-list {
             background-color: white;
         }
 
@@ -33,14 +33,15 @@
                 {{--<div class="tools"> </div>--}}
 
                 {{--</div>--}}
-                <div class="portlet-body" >
+                <div class="portlet-body">
                     {!! Form::open(['action'=> 'ContentController@index'  ,'class'=>'form-horizontal form-row-seperated' , 'id' => 'contentFilterForm'  ]) !!}
                     <div class="form-body">
                         <div class="form-group form-md-line-input has-info form-md-floating-label">
                             <div class="col-md-12">
                                 <div class="input-group input-group-sm">
                                     <div class="input-group-control">
-                                        <input name="searchText" type="text" class="form-control input-sm" id="searchText">
+                                        <input name="searchText" type="text" class="form-control input-sm"
+                                               id="searchText">
                                         <label for="searchText">متن جستجو</label>
                                     </div>
                                     <span class="input-group-btn btn-right">
@@ -76,7 +77,8 @@
                     </div>
                     {!! Form::close() !!}
                     <div class="row text-center">
-                        <img class="hidden" id="content-table-loading" src="/assets/extra/load2.GIF" alt="loading"  style="width: 20px;">
+                        <img class="hidden" id="content-table-loading" src="/assets/extra/load2.GIF" alt="loading"
+                             style="width: 20px;">
                     </div>
                 </div>
             </div>
@@ -103,22 +105,22 @@
                     </div>
 
                 </div>
-                <div class="portlet-body" >
-                        <table class="table table-striped table-bordered table-hover dt-responsive"  id="content_table">
-                            <thead>
-                            <tr>
-                                <th></th>
-                                <th class="all text-center"> نام </th>
-                                <th class="min-tablet text-center"> مقطع </th>
-                                <th class="min-tablet text-center"> رشته </th>
-                                <th class="min-tablet text-center"> نوع محتوا </th>
-                                <th class="all">  </th>
-                            </tr>
-                            </thead>
-                            <tbody  class="text-center">
-                                {{--Loading By Ajax--}}
-                            </tbody>
-                        </table>
+                <div class="portlet-body">
+                    <table class="table table-striped table-bordered table-hover dt-responsive" id="content_table">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th class="all text-center"> نام</th>
+                            <th class="min-tablet text-center"> مقطع</th>
+                            <th class="min-tablet text-center"> رشته</th>
+                            <th class="min-tablet text-center"> نوع محتوا</th>
+                            <th class="all"></th>
+                        </tr>
+                        </thead>
+                        <tbody class="text-center">
+                        {{--Loading By Ajax--}}
+                        </tbody>
+                    </table>
                 </div>
             </div>
             <!-- END EXAMPLE TABLE PORTLET-->
@@ -127,7 +129,9 @@
                     <div class="col-md-4">
                         <div class="col-item">
                             <div class="photo">
-                                <img  src="{{ route('image', ['category'=>'4' , 'w'=>'254' , 'h'=>'254', 'filename' =>  $product->image ]) }}"  class="img-responsive" alt="عکس محصول@if(isset($product[0])) {{$product->name}} @endif" />
+                                <img src="{{ route('image', ['category'=>'4' , 'w'=>'254' , 'h'=>'254', 'filename' =>  $product->image ]) }}"
+                                     class="img-responsive"
+                                     alt="عکس محصول@if(isset($product[0])) {{$product->name}} @endif"/>
                             </div>
                             <div class="info">
                                 <div class="row">
@@ -136,14 +140,21 @@
                                             @if(strlen($product->name)>0 ) {{$product->name}} @endif</h5>
                                         <h5 class="price-text-color bold">
                                             @if($product->isFree)
-                                                <div class="cbp-l-grid-projects-desc text-center bold font-red product-potfolio-free" >رایگان </div>
+                                                <div class="cbp-l-grid-projects-desc text-center bold font-red product-potfolio-free">
+                                                    رایگان
+                                                </div>
                                             @elseif($costCollection[$product->id]["cost"] == 0)
-                                                <div class="cbp-l-grid-projects-desc text-center bold font-blue product-potfolio-no-cost">قیمت: پس از انتخاب محصول</div>
+                                                <div class="cbp-l-grid-projects-desc text-center bold font-blue product-potfolio-no-cost">
+                                                    قیمت: پس از انتخاب محصول
+                                                </div>
                                             @elseif($costCollection[$product->id]["productDiscount"]+$costCollection[$product->id]["bonDiscount"]>0)
-                                                <div class="cbp-l-grid-projects-desc text-center bold font-red product-potfolio-real-cost">@if(isset($costCollection[$product->id]["cost"])){{number_format($costCollection[$product->id]["cost"])}} تومان@endif</div>
-                                                <div class="cbp-l-grid-projects-desc text-center bold font-green product-potfolio-discount-cost"> @if(Auth::check()) {{number_format((1 - ($costCollection[$product->id]["bonDiscount"] / 100)) * ((1 - ($costCollection[$product->id]["productDiscount"] / 100)) * $costCollection[$product->id]["cost"]))}} @else @if(isset($costCollection[$product->id]["cost"])){{number_format(((1-($costCollection[$product->id]["productDiscount"]/100))*$costCollection[$product->id]["cost"]))}} تومان@endif @endif</div>
+                                                <div class="cbp-l-grid-projects-desc text-center bold font-red product-potfolio-real-cost">@if(isset($costCollection[$product->id]["cost"])){{number_format($costCollection[$product->id]["cost"])}}
+                                                    تومان@endif</div>
+                                                <div class="cbp-l-grid-projects-desc text-center bold font-green product-potfolio-discount-cost"> @if(Auth::check()) {{number_format((1 - ($costCollection[$product->id]["bonDiscount"] / 100)) * ((1 - ($costCollection[$product->id]["productDiscount"] / 100)) * $costCollection[$product->id]["cost"]))}} @else @if(isset($costCollection[$product->id]["cost"])){{number_format(((1-($costCollection[$product->id]["productDiscount"]/100))*$costCollection[$product->id]["cost"]))}}
+                                                    تومان@endif @endif</div>
                                             @else
-                                                <div class="cbp-l-grid-projects-desc text-center bold font-green product-potfolio-no-discount">@if(isset($costCollection[$product->id]["cost"])){{number_format($costCollection[$product->id]["cost"])}} تومان@endif </div>
+                                                <div class="cbp-l-grid-projects-desc text-center bold font-green product-potfolio-no-discount">@if(isset($costCollection[$product->id]["cost"])){{number_format($costCollection[$product->id]["cost"])}}
+                                                    تومان@endif </div>
                                             @endif
                                         </h5>
                                     </div>
@@ -155,7 +166,9 @@
                                 </div>
                                 <div class="separator clear-left">
                                     <p class="">
-                                        <a  href="{{action("ProductController@show" , $product)}}" class="btn btn-lg green hidden-sm"><i class="fa fa-cart-plus"></i>سفارش</a></p>
+                                        <a href="{{action("ProductController@show" , $product)}}"
+                                           class="btn btn-lg green hidden-sm"><i class="fa fa-cart-plus"></i>سفارش</a>
+                                    </p>
                                 </div>
                                 <div class="clearfix">
                                 </div>
@@ -174,7 +187,8 @@
     <script src="{{ mix('/js/footer_Page_Level_Plugin.js') }}" type="text/javascript"></script>
     <script src="/assets/global/scripts/datatable.js" type="text/javascript"></script>
     <script src="/assets/global/plugins/datatables/datatables.min.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
+    <script src="/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js"
+            type="text/javascript"></script>
 @endsection
 
 @section("footerPageLevelScript")
@@ -189,11 +203,11 @@
 
         makeDataTableWithoutButton("content_table");
 
-        $(document).on("change", ".contentFilter", function (){
+        $(document).on("change", ".contentFilter", function () {
             contentLoad();
         });
 
-        $(document).on("click", "#goButton", function (){
+        $(document).on("click", "#goButton", function () {
             contentLoad();
         });
 
@@ -203,17 +217,17 @@
 
         function contentLoad() {
             var formData = $("#contentFilterForm").serialize();
-            var columns= [ "columns[]=name" , "columns[]=show" , "columns[]=grade" , "columns[]=major" , "columns[]=contentType" ] ;
-            formData = formData + "&" + columns.join('&') ;
+            var columns = ["columns[]=name", "columns[]=show", "columns[]=grade", "columns[]=major", "columns[]=contentType"];
+            formData = formData + "&" + columns.join('&');
             $("#content-table-loading").removeClass("hidden");
             $.ajax({
                 type: "GET",
                 url: "{{action("ContentController@index")}}",
-                data:formData,
+                data: formData,
                 success: function (result) {
                     // console.log(result);
                     // console.log(result.responseText);
-                    var newDataTable =$("#content_table").DataTable();
+                    var newDataTable = $("#content_table").DataTable();
                     newDataTable.destroy();
                     $('#content_table > tbody').html(result);
                     makeDataTableWithoutButton("content_table");
@@ -229,23 +243,22 @@
 
         function initialContentTypeSelect() {
             var selected = $("#rootContentTypes option:selected").text();
-            if(selected == "آزمون")
-            {
-                $("#childContentTypes").prop("disabled" , false);
-            }else{
+            if (selected == "آزمون") {
+                $("#childContentTypes").prop("disabled", false);
+            } else {
                 $("#childContentTypes").val("0");
-                $("#childContentTypes").prop("disabled" , true);
+                $("#childContentTypes").prop("disabled", true);
             }
         }
 
         initialContentTypeSelect();
 
-        $('#rootContentTypes').on('change', function() {
+        $('#rootContentTypes').on('change', function () {
             initialContentTypeSelect();
         });
     </script>
     <script type="text/javascript">
-        (function($, window, document, undefined) {
+        (function ($, window, document, undefined) {
             'use strict';
 
             // init cubeportfolio
@@ -290,7 +303,7 @@
                 singlePageDeeplinking: true,
                 singlePageStickyNavigation: true,
                 singlePageCounter: '<div class="cbp-popup-singlePage-counter" style="direction:ltr">@{{current}} of @{{total}}</div>',
-                singlePageCallback: function(url, element) {
+                singlePageCallback: function (url, element) {
                     // to update singlePage content use the following method: this.updateSinglePage(yourContent)
                     var t = this;
 
@@ -300,10 +313,10 @@
                         dataType: 'html',
                         timeout: 10000
                     })
-                        .done(function(result) {
+                        .done(function (result) {
                             t.updateSinglePage(result);
                         })
-                        .fail(function() {
+                        .fail(function () {
                             t.updateSinglePage('AJAX Error! Please refresh the page!');
                         });
                 },

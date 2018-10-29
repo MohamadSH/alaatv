@@ -36,10 +36,11 @@ class ContentCollection extends Collection
         throw new \LogicException('define Content::CONTENT_TYPE_FLASHCARD');
     }
 
-    public function onlyItemTypes(array $itemTypes){
+    public function onlyItemTypes(array $itemTypes)
+    {
         $result = new ContentCollection();
-        foreach ($itemTypes as $itemType){
-            $filter = $itemType."s";
+        foreach ($itemTypes as $itemType) {
+            $filter = $itemType . "s";
             $result = $result->merge($this->$filter());
         }
         return $result;

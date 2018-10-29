@@ -2,8 +2,8 @@
 
 namespace App;
 
-use App\Traits\Helper;
 use App\Traits\DateTrait;
+use App\Traits\Helper;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -60,7 +60,7 @@ class Coupon extends Model
     use SoftDeletes;
     use Helper;
     use DateTrait;
-    
+
     /**      * The attributes that should be mutated to dates.        */
     protected $dates = [
         'created_at',
@@ -118,34 +118,27 @@ class Coupon extends Model
      */
     public function validateCoupon()
     {
-        $message = "" ;
+        $message = "";
         $validationCode = 0;
-        if (!$this->enable)
-        {
-            $message =  "کپن وارد شده غیر فعال می باشد";
+        if (!$this->enable) {
+            $message = "کپن وارد شده غیر فعال می باشد";
             $validationCode = 1;
-        }
-        elseif (isset($this->validSince) && Carbon::now() < $this->validSince)
-        {
-            $message =  "تاریخ استفاده از کپن آغاز نشده است";
+        } elseif (isset($this->validSince) && Carbon::now() < $this->validSince) {
+            $message = "تاریخ استفاده از کپن آغاز نشده است";
             $validationCode = 2;
-        }
-        elseif (isset($this->validUntil) && Carbon::now() > $this->validUntil)
-        {
-            $message =  "تاریخ استفاده از کپن به پایان رسیده است";
+        } elseif (isset($this->validUntil) && Carbon::now() > $this->validUntil) {
+            $message = "تاریخ استفاده از کپن به پایان رسیده است";
             $validationCode = 3;
-        }
-        elseif (isset($this->usageLimit) && $this->usageNumber >= $this->usageLimit)
-        {
-            $message =  "تعداد مجاز استفاده از کپن به پایان رسیده است";
+        } elseif (isset($this->usageLimit) && $this->usageNumber >= $this->usageLimit) {
+            $message = "تعداد مجاز استفاده از کپن به پایان رسیده است";
             $validationCode = 4;
         }
 
 
         return [
-            $message ,
+            $message,
             $validationCode
-            ];
+        ];
     }
 
     /**

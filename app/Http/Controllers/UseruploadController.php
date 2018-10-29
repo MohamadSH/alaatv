@@ -4,27 +4,27 @@ namespace App\Http\Controllers;
 
 use App\Consultationstatus;
 use App\Http\Requests\InsertUserUploadRequest;
-use App\Http\Requests\SendSMSRequest;
+use App\Notifications\CounselingStatusChanged;
 use App\Userupload;
 use App\Useruploadstatus;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\Response;
 
 class UseruploadController extends Controller
 {
-    protected $response ;
+    protected $response;
 
     function __construct()
     {
         /** setting permissions
          *
          */
-        $this->middleware('permission:'.Config::get('constants.LIST_QUESTION_ACCESS'),['only'=>'index']);
-        $this->middleware('permission:'.Config::get('constants.SHOW_QUESTION_ACCESS'),['only'=>'show']);
+        $this->middleware('permission:' . Config::get('constants.LIST_QUESTION_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:' . Config::get('constants.SHOW_QUESTION_ACCESS'), ['only' => 'show']);
 
         $this->response = new Response();
     }
@@ -37,10 +37,10 @@ class UseruploadController extends Controller
     public function index()
     {
         $questions = Userupload::all()->sortByDesc("created_at");
-        $questionStatuses  = Useruploadstatus::pluck('displayName', 'id');
+        $questionStatuses = Useruploadstatus::pluck('displayName', 'id');
 
         $counter = 1;
-        return view("userUpload.index" , compact("questions" , "counter" , "questionStatuses"));
+        return view("userUpload.index", compact("questions", "counter", "questionStatuses"));
     }
 
     /**
@@ -56,8 +56,9 @@ class UseruploadController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \app\Http\Requests\InsertUserUploadRequest  $request
+     * @param  \app\Http\Requests\InsertUserUploadRequest $request
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     public function store(InsertUserUploadRequest $request)
     {
@@ -65,7 +66,7 @@ class UseruploadController extends Controller
         $userUpload->fill($request->all());
 
         $userUpload->user_id = Auth::user()->id;
-        $userUpload_pending = Useruploadstatus::all()->where("name" , "pending")->first();
+        $userUpload_pending = Useruploadstatus::all()->where("name", "pending")->first();
         $userUpload->useruploadstatus_id = $userUpload_pending->id;
         if ($request->hasFile("consultingAudioQuestions")) {
             $file = $request->file('consultingAudioQuestions');
@@ -76,11 +77,10 @@ class UseruploadController extends Controller
             }
             if ($userUpload->save()) {
                 session()->flash('success', 'درج سوال مشاوره ای با موفقیت انجام شد');
-            }
-            else{
+            } else {
                 session()->flash('error', 'خطای پایگاه داده');
             }
-        }else  session()->flash('error', 'فایلی فرستاده نشده است');
+        } else  session()->flash('error', 'فایلی فرستاده نشده است');
 
 
         return response([
@@ -99,13 +99,13 @@ class UseruploadController extends Controller
         $user = $userUpload->user;
         $counter = 0;
         $consultationStatuses = Consultationstatus::pluck('name', 'id');
-        return view("userUpload.show" , compact("user" , "counter" , "consultationStatuses"));
+        return view("userUpload.show", compact("user", "counter", "consultationStatuses"));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -116,7 +116,7 @@ class UseruploadController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @param  \app\Userupload $userupload
      * @return \Illuminate\Http\Response
      */
@@ -125,24 +125,13 @@ class UseruploadController extends Controller
         $oldUserUploadStatus = $userupload->useruploadstatus_id;
         $userupload->fill($request->all());
         if ($userupload->update()) {
-            if($oldUserUploadStatus != $userupload->useruploadstatus_id)
-            {
-                $controller = new HomeController();
-                $smsRequest = new SendSMSRequest();
-                $fullName = "";
-                if(strlen($userupload->user->firstName)>0) $fullName .= $userupload->user->firstName;
-                if(strlen($userupload->user->lastName)>0) $fullName .= " ".$userupload->user->lastName;
-                $userUploadStatusName = Useruploadstatus::where('id', $userupload->useruploadstatus_id)->pluck('displayName')->toArray();
-                if(strlen($fullName)>0) $smsRequest["message"] = $fullName." عزیز وضعیت سوال مشاوره ای شما به حالت ".$userUploadStatusName[0]." تغییر کرد-آلاء";
-                else $smsRequest["message"] = " کاربر گرامی وضعیت سوال مشاوره ای شما به حالت ".$userUploadStatusName[0]." تغییر کرد-آلاء";
-                $smsRequest["users"] = $userupload->user_id;
-                $smsstatus =  $controller->sendSMS($smsRequest);
-                return $this->response->setStatusCode(200)->setContent($smsstatus->getStatusCode());
+            if ($oldUserUploadStatus != $userupload->useruploadstatus_id) {
+                $userUploadStatusName = Useruploadstatus::where('id', $userupload->useruploadstatus_id)
+                    ->pluck('displayName')->toArray();
+                $userupload->user->notify(new CounselingStatusChanged($userUploadStatusName[0]));
             }
-            else
-                return $this->response->setStatusCode(200);
-        }
-        else{
+            return $this->response->setStatusCode(200);
+        } else {
             return $this->response->setStatusCode(503);
         }
     }
@@ -150,7 +139,7 @@ class UseruploadController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

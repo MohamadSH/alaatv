@@ -10,9 +10,10 @@ use App\Helpers\ENPayment;
 use App\Http\Requests\DonateRequest;
 use App\Http\Requests\EditOrderRequest;
 use App\Http\Requests\InsertTransactionRequest;
-use App\Http\Requests\SendSMSRequest;
 use App\Http\Requests\SubmitCouponRequest;
 use App\Notifications\InvoicePaid;
+use App\Notifications\OrderStatusChanged;
+use App\Notifications\PostCodeNotification;
 use App\Order;
 use App\Ordermanagercomment;
 use App\Orderpostinginfo;
@@ -49,107 +50,93 @@ use Zarinpal\Zarinpal;
 
 class OrderController extends Controller
 {
-    use APIRequestCommon ;
+    use APIRequestCommon;
     use Helper;
-    protected $response ;
+    protected $response;
     protected $setting;
-    use ProductCommon ;
+    use ProductCommon;
     use RequestCommon;
-    function __construct( Websitesetting $setting )
+
+    function __construct(Websitesetting $setting)
     {
         $this->response = new Response();
 
-        $this->middleware('permission:'.Config::get('constants.LIST_ORDER_ACCESS'),['only'=>'index']);
-        $this->middleware('permission:'.Config::get('constants.INSERT_ORDER_ACCESS'),['only'=>'create']);
-        $this->middleware('permission:'.Config::get('constants.REMOVE_ORDER_ACCESS'),['only'=>'destroy']);
-        $this->middleware('permission:'.Config::get('constants.SHOW_ORDER_ACCESS'),['only'=>'edit']);
-        $this->middleware('permission:'.Config::get('constants.INSERT_ORDER_ACCESS'),['only'=>'exitAdminInsertOrder']);
+        $this->middleware('permission:' . Config::get('constants.LIST_ORDER_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:' . Config::get('constants.INSERT_ORDER_ACCESS'), ['only' => 'create']);
+        $this->middleware('permission:' . Config::get('constants.REMOVE_ORDER_ACCESS'), ['only' => 'destroy']);
+        $this->middleware('permission:' . Config::get('constants.SHOW_ORDER_ACCESS'), ['only' => 'edit']);
+        $this->middleware('permission:' . Config::get('constants.INSERT_ORDER_ACCESS'), ['only' => 'exitAdminInsertOrder']);
         $this->setting = $setting->setting;
     }
 
     private function renewOrderproducs($orderproducts)
     {
         $renewedOrderproducts = collect();
-        $orderproductsRawCost =  0;
+        $orderproductsRawCost = 0;
         /**
          * Updating each orderproduct
          */
-        foreach ($orderproducts as $orderproduct)
-        {
+        foreach ($orderproducts as $orderproduct) {
             //ToDo : Make it better
-            if(!$orderproduct->product->isEnableToPurchase() && !$orderproduct->isGiftType() && !session()->has("adminOrder_id")) {
-                $orderproductController =  new OrderproductController();
-                $orderproductController->destroy($orderproduct) ;
-            }
-            else {
+            if (!$orderproduct->product->isEnableToPurchase() && !$orderproduct->isGiftType() && !session()->has("adminOrder_id")) {
+                $orderproductController = new OrderproductController();
+                $orderproductController->destroy($orderproduct);
+            } else {
                 $extraAttributes = $orderproduct->attributevalues;
-                foreach($extraAttributes as $extraAttribute)
-                {
+                foreach ($extraAttributes as $extraAttribute) {
                     $myParent = $this->makeParentArray($orderproduct->product);
                     $myParent = end($myParent);
-                    $productAttributevalue = $myParent->attributevalues->where("id" ,  $extraAttribute->id)->first();
+                    $productAttributevalue = $myParent->attributevalues->where("id", $extraAttribute->id)->first();
 
-                    if(!isset($productAttributevalue))
-                    {
+                    if (!isset($productAttributevalue)) {
                         $orderproduct->attributevalues()->detach($productAttributevalue);
-                    }
-                    else
-                    {
+                    } else {
                         $newExtraCost = $productAttributevalue->pivot->extraCost;
-                        $orderproduct->attributevalues()->updateExistingPivot($extraAttribute->id,["extraCost"=>$newExtraCost]);
+                        $orderproduct->attributevalues()->updateExistingPivot($extraAttribute->id, ["extraCost" => $newExtraCost]);
                     }
                 }
                 $userbons = $orderproduct->userbons;
-                if(!$userbons->isEmpty())
-                {
+                if (!$userbons->isEmpty()) {
                     $bonName = Config::get("constants.BON1");
-                    $bons = $orderproduct->product->bons->where("name" , $bonName)->where("pivot.discount",">","0")->where("isEnable" , 1);
-                    if($bons->isEmpty())
-                    {
+                    $bons = $orderproduct->product->bons->where("name", $bonName)->where("pivot.discount", ">", "0")->where("isEnable", 1);
+                    if ($bons->isEmpty()) {
                         $parentsArray = $this->makeParentArray($orderproduct->product);
-                        if(!empty($parentsArray))
-                        {
-                            foreach ($parentsArray as $parent)
-                            {
-                                $bons= $parent->bons->where("name", $bonName)->where("isEnable" , 1);
-                                if(!$bons->isEmpty()) break ;
+                        if (!empty($parentsArray)) {
+                            foreach ($parentsArray as $parent) {
+                                $bons = $parent->bons->where("name", $bonName)->where("isEnable", 1);
+                                if (!$bons->isEmpty()) break;
                             }
                         }
                     }
 
-                    if($bons->isEmpty())
-                    {
-                        foreach ($userbons as $userBon)
-                        {
+                    if ($bons->isEmpty()) {
+                        foreach ($userbons as $userBon) {
                             $orderproduct->userbons()->detach($userBon);
                             $userBon->usedNumber = 0;
                             $userBon->userbonstatus_id = Config::get("constants.USERBON_STATUS_ACTIVE");
                             $userBon->update();
                         }
 
-                    }
-                    else
-                    {
+                    } else {
                         $bon = $bons->first();
-                        foreach ($userbons as $userbon)
-                        {
+                        foreach ($userbons as $userbon) {
                             $newDiscount = $bon->pivot->discount;
-                            $orderproduct->userbons()->updateExistingPivot($userbon->id , ["discount"=>$newDiscount]);
+                            $orderproduct->userbons()->updateExistingPivot($userbon->id, ["discount" => $newDiscount]);
                         }
                     }
                 }
 
-                $newOrderproduct = Orderproduct::where("id" , $orderproduct->id)->get()->first();
+                $newOrderproduct = Orderproduct::where("id", $orderproduct->id)->get()->first();
 
-                if(!isset($newOrderproduct)) continue;
+                if (!isset($newOrderproduct)) continue;
 
                 $renewedOrderproducts->push($newOrderproduct);
                 $orderproductCost = $newOrderproduct->obtainOrderproductCost();
 
                 $newOrderproduct->fillCostValues($orderproductCost);
 
-                if(isset($orderproductCost["cost"]))
-                    $orderproductsRawCost +=  $newOrderproduct->cost + $orderproductCost["extraCost"] ;
+                if (isset($orderproductCost["cost"]))
+                    $orderproductsRawCost += $newOrderproduct->cost + $orderproductCost["extraCost"];
 
                 $newOrderproduct->update();
 
@@ -160,7 +147,7 @@ class OrderController extends Controller
          *  end
          */
 
-        return array("rawCost" => $orderproductsRawCost , 'orderproducts'=>$renewedOrderproducts);
+        return array("rawCost" => $orderproductsRawCost, 'orderproducts' => $renewedOrderproducts);
     }
 
     /**
@@ -171,90 +158,79 @@ class OrderController extends Controller
     public function index()
     {
         $user = Auth::user();
-        if($user->can(Config::get('constants.SHOW_OPENBYADMIN_ORDER')))
-            $orders = Order::where("orderstatus_id","<>", Config::get("constants.ORDER_STATUS_OPEN"));
+        if ($user->can(Config::get('constants.SHOW_OPENBYADMIN_ORDER')))
+            $orders = Order::where("orderstatus_id", "<>", Config::get("constants.ORDER_STATUS_OPEN"));
         else
-            $orders = Order::where("orderstatus_id","<>",Config::get("constants.ORDER_STATUS_OPEN"))->where("orderstatus_id","<>",Config::get("constants.ORDER_STATUS_OPEN_BY_ADMIN"));
+            $orders = Order::where("orderstatus_id", "<>", Config::get("constants.ORDER_STATUS_OPEN"))->where("orderstatus_id", "<>", Config::get("constants.ORDER_STATUS_OPEN_BY_ADMIN"));
 
 
         $createdSinceDate = Input::get('createdSinceDate');
         $createdTillDate = Input::get('createdTillDate');
         $createdTimeEnable = Input::get('createdTimeEnable');
-        if(strlen($createdSinceDate)>0 && strlen($createdTillDate)>0 && isset($createdTimeEnable))
-        {
+        if (strlen($createdSinceDate) > 0 && strlen($createdTillDate) > 0 && isset($createdTimeEnable)) {
             $orders = $this->timeFilterQuery($orders, $createdSinceDate, $createdTillDate, 'created_at');
         }
 
         $updatedSinceDate = Input::get('updatedSinceDate');
         $updatedTillDate = Input::get('updatedTillDate');
         $updatedTimeEnable = Input::get('updatedTimeEnable');
-        if(strlen($updatedSinceDate)>0 && strlen($updatedTillDate)>0 && isset($updatedTimeEnable))
-        {
+        if (strlen($updatedSinceDate) > 0 && strlen($updatedTillDate) > 0 && isset($updatedTimeEnable)) {
             $orders = $this->timeFilterQuery($orders, $updatedSinceDate, $updatedTillDate, 'updated_at');
         }
 
         $completedSinceDate = Input::get('completedSinceDate');
         $completedTillDate = Input::get('completedTillDate');
         $completedTimeEnable = Input::get('completedTimeEnable');
-        if(strlen($completedSinceDate)>0 && strlen($completedTillDate)>0 && isset($completedTimeEnable))
-        {
-            $orders = $this->timeFilterQuery($orders, $completedSinceDate, $completedTillDate, 'completed_at', $sinceTime = "00:00:00" , $tillTime = "23:59:59" , false);
+        if (strlen($completedSinceDate) > 0 && strlen($completedTillDate) > 0 && isset($completedTimeEnable)) {
+            $orders = $this->timeFilterQuery($orders, $completedSinceDate, $completedTillDate, 'completed_at', $sinceTime = "00:00:00", $tillTime = "23:59:59", false);
         }
 
         $firstName = trim(Input::get('firstName'));
-        if(isset($firstName) && strlen($firstName)>0)
-        {
-            $orders = $orders->whereHas('user', function($q) use ($firstName) {
+        if (isset($firstName) && strlen($firstName) > 0) {
+            $orders = $orders->whereHas('user', function ($q) use ($firstName) {
                 $q->where('firstName', 'like', '%' . $firstName . '%');
             });
         }
 
         $lastName = trim(Input::get('lastName'));
-        if(isset($lastName) && strlen($lastName)>0)
-        {
-            $orders = $orders->whereHas('user', function($q) use ($lastName) {
+        if (isset($lastName) && strlen($lastName) > 0) {
+            $orders = $orders->whereHas('user', function ($q) use ($lastName) {
                 $q->where('lastName', 'like', '%' . $lastName . '%');
             });
         }
 
         $nationalCode = trim(Input::get('nationalCode'));
-        if(isset($nationalCode) && strlen($nationalCode)>0)
-        {
-            $orders = $orders->whereHas('user', function($q) use ($nationalCode) {
+        if (isset($nationalCode) && strlen($nationalCode) > 0) {
+            $orders = $orders->whereHas('user', function ($q) use ($nationalCode) {
                 $q->where('nationalCode', 'like', '%' . $nationalCode . '%');
             });
         }
 
         $mobile = trim(Input::get('mobile'));
-        if(isset($mobile) && strlen($mobile)>0)
-        {
-            $orders = $orders->whereHas('user', function($q) use ($mobile) {
+        if (isset($mobile) && strlen($mobile) > 0) {
+            $orders = $orders->whereHas('user', function ($q) use ($mobile) {
                 $q->where('mobile', 'like', '%' . $mobile . '%');
             });
         }
 
         $orderStatusesId = Input::get('orderStatuses');
 //        if(isset($orderStatusesId) && !in_array(0, $orderStatusesId))
-        if(isset($orderStatusesId))
-        {
+        if (isset($orderStatusesId)) {
             $orders = Order::orderStatusFilter($orders, $orderStatusesId);
         }
 
         $paymentStatusesId = Input::get('paymentStatuses');
 //        if(isset($paymentStatusesId) && !in_array(0, $paymentStatusesId))
-        if(isset($paymentStatusesId))
-        {
+        if (isset($paymentStatusesId)) {
             $orders = Order::paymentStatusFilter($orders, $paymentStatusesId);
         }
 
         $productsId = Input::get('products');
-        if(isset($productsId) && !in_array(0, $productsId))
-        {
+        if (isset($productsId) && !in_array(0, $productsId)) {
             $products = Product::whereIn('id', $productsId)->get();
             foreach ($products as $product) {
-                if($product->producttype_id == Config::get("constants.PRODUCT_TYPE_CONFIGURABLE"))
-                    if ($product->hasChildren())
-                    {
+                if ($product->producttype_id == Config::get("constants.PRODUCT_TYPE_CONFIGURABLE"))
+                    if ($product->hasChildren()) {
                         $productsId = array_merge($productsId, Product::whereHas('parents', function ($q) use ($productsId) {
                             $q->whereIn("parent_id", $productsId);
                         })->pluck("id")->toArray());
@@ -262,22 +238,20 @@ class OrderController extends Controller
             }
 
             $orders = $orders->whereHas("orderproducts", function ($q) use ($productsId) {
-                    $q->whereIn("product_id", $productsId);
-                });
+                $q->whereIn("product_id", $productsId);
+            });
         }
 
-        $extraAttributevaluesId= Input::get('extraAttributes');
-        if(isset($extraAttributevaluesId))
-        {
-            if(isset($productsId) && !in_array(0, $productsId))
-            {
-                $orders = $orders->whereHas("orderproducts" , function ($q) use ($extraAttributevaluesId,$productsId){
+        $extraAttributevaluesId = Input::get('extraAttributes');
+        if (isset($extraAttributevaluesId)) {
+            if (isset($productsId) && !in_array(0, $productsId)) {
+                $orders = $orders->whereHas("orderproducts", function ($q) use ($extraAttributevaluesId, $productsId) {
                     $q->whereHas("attributevalues", function ($q) use ($extraAttributevaluesId) {
                         $q->whereIn("value_id", $extraAttributevaluesId);
-                    })->whereIn("product_id",$productsId);
+                    })->whereIn("product_id", $productsId);
                 });
-            }else{
-                $orders = $orders->whereHas("orderproducts" , function ($q) use ($extraAttributevaluesId){
+            } else {
+                $orders = $orders->whereHas("orderproducts", function ($q) use ($extraAttributevaluesId) {
                     $q->whereHas("attributevalues", function ($q) use ($extraAttributevaluesId) {
                         $q->whereIn("value_id", $extraAttributevaluesId);
                     });
@@ -288,19 +262,17 @@ class OrderController extends Controller
 
         $majorEnable = Input::get('majorEnable');
         $majorsId = Input::get('majors');
-        if(isset($majorEnable) && isset($majorsId))
-        {
+        if (isset($majorEnable) && isset($majorsId)) {
             $orders = Order::UserMajorFilter($orders, $majorsId);
         }
 
 
         $couponEnable = Input::get('couponEnable');
         $couponsId = Input::get('coupons');
-        if(isset($couponEnable) && isset($couponsId))
-        {
+        if (isset($couponEnable) && isset($couponsId)) {
             if (in_array(0, $couponsId))
                 $orders = $orders->whereDoesntHave("coupon");
-            elseif(in_array(-1, $couponsId))
+            elseif (in_array(-1, $couponsId))
                 $orders = $orders->whereHas("coupon");
             else
                 $orders = $orders->whereIn("coupon_id", $couponsId);
@@ -308,8 +280,7 @@ class OrderController extends Controller
 
         $transactionStatusEnable = Input::get('transactionStatusEnable');
         $transactionStatusesId = Input::get('transactionStatuses');
-        if(isset($transactionStatusEnable) && isset($transactionStatusesId))
-        {
+        if (isset($transactionStatusEnable) && isset($transactionStatusesId)) {
             $orders = $orders->whereHas("transactions", function ($q) use ($transactionStatusesId) {
                 $q->whereIn("transactionstatus_id", $transactionStatusesId);
             });
@@ -317,79 +288,72 @@ class OrderController extends Controller
 
         $checkoutStatusEnable = Input::get('checkoutStatusEnable');
         $checkoutStatusesId = Input::get('checkoutStatuses');
-        if(isset($checkoutStatusEnable) && isset($checkoutStatusesId))
-        {
-            if(isset($productsId) && !in_array(0, $productsId))
-            {
-                $orders = $orders->whereHas("orderproducts", function ($q) use ($checkoutStatusesId , $productsId) {
-                    $q->whereIn("product_id" , $productsId)->where(function ($q2) use ($checkoutStatusesId){
-                        if(in_array("0" , $checkoutStatusesId))
-                        {
+        if (isset($checkoutStatusEnable) && isset($checkoutStatusesId)) {
+            if (isset($productsId) && !in_array(0, $productsId)) {
+                $orders = $orders->whereHas("orderproducts", function ($q) use ($checkoutStatusesId, $productsId) {
+                    $q->whereIn("product_id", $productsId)->where(function ($q2) use ($checkoutStatusesId) {
+                        if (in_array("0", $checkoutStatusesId)) {
                             $q2->whereIn("checkoutstatus_id", $checkoutStatusesId)->orWhereNull("checkoutstatus_id");
-                        }else{
+                        } else {
                             $q2->whereIn("checkoutstatus_id", $checkoutStatusesId);
                         }
                     });
                 });
-            }else{
-                    $orders = $orders->whereHas("orderproducts", function ($q) use ($checkoutStatusesId) {
-                        if(in_array("0" , $checkoutStatusesId))
-                        {
-                            $q->whereIn("checkoutstatus_id", $checkoutStatusesId)->orWhereNull("checkoutstatus_id");
-                        }else{
-                            $q->whereIn("checkoutstatus_id", $checkoutStatusesId);
-                        }
-                    });
+            } else {
+                $orders = $orders->whereHas("orderproducts", function ($q) use ($checkoutStatusesId) {
+                    if (in_array("0", $checkoutStatusesId)) {
+                        $q->whereIn("checkoutstatus_id", $checkoutStatusesId)->orWhereNull("checkoutstatus_id");
+                    } else {
+                        $q->whereIn("checkoutstatus_id", $checkoutStatusesId);
+                    }
+                });
             }
 
         }
 
         $withoutPostalCode = Input::get("withoutPostalCode");
-        if(isset($withoutPostalCode)) {
-            $orders = $orders->whereHas("user" , function ($q){
-                $q->where(function ($q){
-                    $q->whereNull("postalCode")->orWhere("postalCode" , "");
+        if (isset($withoutPostalCode)) {
+            $orders = $orders->whereHas("user", function ($q) {
+                $q->where(function ($q) {
+                    $q->whereNull("postalCode")->orWhere("postalCode", "");
                 });
             });
-        }
-        else{
+        } else {
             $postalCode = Input::get("postalCode");
-            if(isset($postalCode) && strlen($postalCode) > 0) {
-                $orders = $orders->whereHas("user" , function ($q) use ($postalCode){
+            if (isset($postalCode) && strlen($postalCode) > 0) {
+                $orders = $orders->whereHas("user", function ($q) use ($postalCode) {
                     $q->where('postalCode', 'like', '%' . $postalCode . '%');
                 });
             }
         }
 
         $withoutProvince = Input::get("withoutProvince");
-        if(isset($withoutProvince)) {
-            $orders = $orders->whereHas("user" , function ($q){
-                $q->where(function ($q){
-                    $q->whereNull("province")->orWhere("province" , "");
+        if (isset($withoutProvince)) {
+            $orders = $orders->whereHas("user", function ($q) {
+                $q->where(function ($q) {
+                    $q->whereNull("province")->orWhere("province", "");
                 });
             });
-        }
-        else{
+        } else {
             $province = Input::get("province");
-            if(isset($province) && strlen($province) > 0) {
-                $orders = $orders->whereHas("user" , function ($q) use ($province){
+            if (isset($province) && strlen($province) > 0) {
+                $orders = $orders->whereHas("user", function ($q) use ($province) {
                     $q->where('province', 'like', '%' . $province . '%');
                 });
             }
         }
 
         $withoutCity = Input::get("withoutCity");
-        if(isset($withoutCity)) {
-            $orders = $orders->whereHas("user" , function ($q){
-                $q->where(function ($q){
-                    $q->whereNull("city")->orWhere("city" , "");
+        if (isset($withoutCity)) {
+            $orders = $orders->whereHas("user", function ($q) {
+                $q->where(function ($q) {
+                    $q->whereNull("city")->orWhere("city", "");
                 });
             });
-        }
-        else{
+        } else {
             $city = Input::get("city");
-            if(isset($city) && strlen($city) > 0) {
-                $orders = $orders->whereHas("user" , function ($q) use ($city){
+            if (isset($city) && strlen($city) > 0) {
+                $orders = $orders->whereHas("user", function ($q) use ($city) {
                     $q->where('city', 'like', '%' . $city . '%');
                 });
             }
@@ -413,27 +377,27 @@ class OrderController extends Controller
 //        }
 
         $addressSpecialFilter = Input::get("addressSpecialFilter");
-        if(isset($addressSpecialFilter)) {
-            switch ($addressSpecialFilter){
+        if (isset($addressSpecialFilter)) {
+            switch ($addressSpecialFilter) {
                 case "0":
                     $address = Input::get("address");
-                    if(isset($address) && strlen($address) > 0) {
-                        $orders = $orders->whereHas("user" , function ($q) use ($address){
+                    if (isset($address) && strlen($address) > 0) {
+                        $orders = $orders->whereHas("user", function ($q) use ($address) {
                             $q->where('address', 'like', '%' . $address . '%');
                         });
                     }
                     break;
                 case "1":
-                    $orders = $orders->whereHas("user" , function ($q){
-                        $q->where(function ($q){
-                            $q->whereNull("address")->orWhere("address" , "");
+                    $orders = $orders->whereHas("user", function ($q) {
+                        $q->where(function ($q) {
+                            $q->whereNull("address")->orWhere("address", "");
                         });
                     });
                     break;
                 case  "2":
-                    $orders = $orders->whereHas("user" , function ($q){
-                        $q->where(function ($q){
-                            $q->whereNotNull("address")->Where("address" ,"<>", "");
+                    $orders = $orders->whereHas("user", function ($q) {
+                        $q->where(function ($q) {
+                            $q->whereNotNull("address")->Where("address", "<>", "");
                         });
                     });
                     break;
@@ -441,28 +405,26 @@ class OrderController extends Controller
                     break;
             }
 
-        }
-        else{
+        } else {
             $address = Input::get("address");
-            if(isset($address) && strlen($address) > 0) {
-                $orders = $orders->whereHas("user" , function ($q) use ($address){
+            if (isset($address) && strlen($address) > 0) {
+                $orders = $orders->whereHas("user", function ($q) use ($address) {
                     $q->where('address', 'like', '%' . $address . '%');
                 });
             }
         }
 
         $withoutSchool = Input::get("withoutSchool");
-        if(isset($withoutSchool)) {
-            $orders = $orders->whereHas("user" , function ($q){
-                $q->where(function ($q){
-                    $q->whereNull("school")->orWhere("school" , "");
+        if (isset($withoutSchool)) {
+            $orders = $orders->whereHas("user", function ($q) {
+                $q->where(function ($q) {
+                    $q->whereNull("school")->orWhere("school", "");
                 });
             });
-        }
-        else{
+        } else {
             $school = Input::get("school");
-            if(isset($school) && strlen($school) > 0) {
-                $orders = $orders->whereHas("user" , function ($q) use ($school){
+            if (isset($school) && strlen($school) > 0) {
+                $orders = $orders->whereHas("user", function ($q) use ($school) {
                     $q->where('school', 'like', '%' . $school . '%');
                 });
 
@@ -471,28 +433,26 @@ class OrderController extends Controller
 
         //customer description , manager comment
         $withoutCustomerDescription = Input::get("withoutOrderCustomerDescription");
-        if(isset($withoutCustomerDescription)){
-            $orders = $orders->where(function ($q){
-                $q->whereNull("customerDescription")->orWhere("customerDescription" , "");
+        if (isset($withoutCustomerDescription)) {
+            $orders = $orders->where(function ($q) {
+                $q->whereNull("customerDescription")->orWhere("customerDescription", "");
             });
-        }
-        else{
+        } else {
             $customerDescription = Input::get("orderCustomerDescription");
-            if(isset($customerDescription) && strlen($customerDescription) > 0){
-                $orders = $orders->where("customerDescription" , "like" , "%" . $customerDescription . "%");
+            if (isset($customerDescription) && strlen($customerDescription) > 0) {
+                $orders = $orders->where("customerDescription", "like", "%" . $customerDescription . "%");
             }
         }
 
         $withoutManagerComments = Input::get("withoutOrderManagerComments");
-        if(isset($withoutManagerComments)){
+        if (isset($withoutManagerComments)) {
             $orders = $orders->whereDoesntHave("ordermanagercomments")
-                ->orWhereHas("ordermanagercomments" , function ($q){
-                    $q->whereNull("comment")->orWhere("comment" , "");
-            });
-        }
-        else{
+                ->orWhereHas("ordermanagercomments", function ($q) {
+                    $q->whereNull("comment")->orWhere("comment", "");
+                });
+        } else {
             $managerComments = Input::get("orderManagerComments");
-            if(isset($managerComments) && strlen($managerComments) > 0) {
+            if (isset($managerComments) && strlen($managerComments) > 0) {
                 $orders = $orders->whereHas("ordermanagercomments", function ($q) use ($managerComments) {
                     $q->where("comment", "like", "%" . $managerComments . "%");
                 });
@@ -529,15 +489,14 @@ class OrderController extends Controller
 
         $sortBy = Input::get("sortBy");
         $sortType = Input::get("sortType");
-        if(strlen($sortBy) > 0 && strlen($sortType) > 0){
-            if(strcmp($sortBy, "userLastName") == 0){
+        if (strlen($sortBy) > 0 && strlen($sortType) > 0) {
+            if (strcmp($sortBy, "userLastName") == 0) {
                 $orders = $orders->join('users', 'orders.user_id', '=', 'users.id')
-                    ->orderBy('users.lastName' , $sortType)
+                    ->orderBy('users.lastName', $sortType)
                     ->select('orders.*');
-            }
-            elseif(strcmp($sortBy, "userFirstName") == 0){
+            } elseif (strcmp($sortBy, "userFirstName") == 0) {
                 $orders = $orders->join('users', 'orders.user_id', '=', 'users.id')
-                    ->orderBy('users.firstName' , $sortType)
+                    ->orderBy('users.firstName', $sortType)
                     ->select('orders.*');
             }
 //            elseif(strcmp($sortBy, "productName") == 0){
@@ -547,8 +506,7 @@ class OrderController extends Controller
             else {
                 $orders = $orders->orderBy($sortBy, $sortType);
             }
-        }else
-        {
+        } else {
             $orders = $orders->orderBy("updated_at", "desc");
         }
 
@@ -559,25 +517,23 @@ class OrderController extends Controller
          *  obtaining orderproducts for checkout
          */
         $myOrderproducts = array();
-        if(isset($productsId))
-            foreach ($orders as $order)
-            {
-                    $checkoutOrderproducts = $order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
-                                                    ->where(function ($q) {
-                                                        $q->where("checkoutstatus_id" , 1)
-                                                            ->orWhereNull("checkoutstatus_id") ;
-                                                    });
-                    if(!in_array(0, $productsId))
-                    {
-                        $checkoutOrderproducts->whereIn("product_id", $productsId)
-                                                        ->get();
-                    }
+        if (isset($productsId))
+            foreach ($orders as $order) {
+                $checkoutOrderproducts = $order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
+                    ->where(function ($q) {
+                        $q->where("checkoutstatus_id", 1)
+                            ->orWhereNull("checkoutstatus_id");
+                    });
+                if (!in_array(0, $productsId)) {
+                    $checkoutOrderproducts->whereIn("product_id", $productsId)
+                        ->get();
+                }
 
-                    $myOrderproducts = array_merge($myOrderproducts , $checkoutOrderproducts->pluck("id")->toArray());
+                $myOrderproducts = array_merge($myOrderproducts, $checkoutOrderproducts->pluck("id")->toArray());
             }
-        $result =  array(
-            'index' => View::make("order.index", compact('orders' , 'orderstatuses'))->render()
-        , 'myOrderproducts'=>$myOrderproducts,
+        $result = array(
+            'index' => View::make("order.index", compact('orders', 'orderstatuses'))->render()
+        , 'myOrderproducts' => $myOrderproducts,
         );
 
         return response(json_encode($result, JSON_UNESCAPED_UNICODE), 200)->header('Content-Type', 'application/json');
@@ -590,32 +546,30 @@ class OrderController extends Controller
      */
     public function create()
     {
-            $customer_id = Input::get("customer_id");
-            $customer = User::FindOrFail($customer_id);
-            $openOrders = $customer->orders->where("orderstatus_id" , Config::get("constants.ORDER_STATUS_OPEN_BY_ADMIN"));
-            if($openOrders->isEmpty()) {
-                $request = new Request();
-                $request->offsetSet("paymentstatus_id", Config::get("constants.PAYMENT_STATUS_UNPAID"));
-                $request->offsetSet("orderstatus_id", Config::get("constants.ORDER_STATUS_OPEN_BY_ADMIN"));
-                $request->offsetSet("user_id", $customer->id);
-                $controller = new OrderController();
-                $order = $controller->store($request);
-            }
-            else
-            {
-                $order = $openOrders->first();
-            }
+        $customer_id = Input::get("customer_id");
+        $customer = User::FindOrFail($customer_id);
+        $openOrders = $customer->orders->where("orderstatus_id", Config::get("constants.ORDER_STATUS_OPEN_BY_ADMIN"));
+        if ($openOrders->isEmpty()) {
+            $request = new Request();
+            $request->offsetSet("paymentstatus_id", Config::get("constants.PAYMENT_STATUS_UNPAID"));
+            $request->offsetSet("orderstatus_id", Config::get("constants.ORDER_STATUS_OPEN_BY_ADMIN"));
+            $request->offsetSet("user_id", $customer->id);
+            $controller = new OrderController();
+            $order = $controller->store($request);
+        } else {
+            $order = $openOrders->first();
+        }
 
-            if($order){
-                session()->put("customer_id" , $customer_id);
-                if(strlen($customer->firstName) > 0 ) session()->put("customer_firstName" , $customer->firstName);
-                if(strlen($customer->lastName) > 0 )  session()->put("customer_lastName" , $customer->lastName);
+        if ($order) {
+            session()->put("customer_id", $customer_id);
+            if (strlen($customer->firstName) > 0) session()->put("customer_firstName", $customer->firstName);
+            if (strlen($customer->lastName) > 0) session()->put("customer_lastName", $customer->lastName);
 
-                session()->put("adminOrder_id" , $order->id);
-                session()->save();
-            }else{
-                return redirect(action("HomeController@error500"));
-            }
+            session()->put("adminOrder_id", $order->id);
+            session()->save();
+        } else {
+            return redirect(action("HomeController@error500"));
+        }
 
         return redirect(action("ProductController@search"));
     }
@@ -623,23 +577,23 @@ class OrderController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \App\Order
      */
     public function store(Request $request)
     {
         $order = new Order();
         $order->fill($request->all());
-        if($order->save())
+        if ($order->save())
             return $order;
         else
-            return false ;
+            return false;
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -650,7 +604,7 @@ class OrderController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($order)
@@ -658,93 +612,89 @@ class OrderController extends Controller
         $orderstatuses = Orderstatus::pluck('displayName', 'id')->toArray();
         $paymentstatuses = Paymentstatus::pluck('displayName', 'id')->toArray();
 
-        if(!isset($order->coupon->id)){ $order->coupon_id = 0; }
+        if (!isset($order->coupon->id)) {
+            $order->coupon_id = 0;
+        }
 
         $coupons = Coupon::pluck('name', 'id')->toArray();
-        $coupons = array_add($coupons , 0 , "بدون کپن");
+        $coupons = array_add($coupons, 0, "بدون کپن");
         $coupons = array_sort_recursive($coupons);
 
 
-        $orderTransactions = $order->successfulTransactions->merge(  $order->pendingTransactions)->merge($order->unpaidTransactions);
+        $orderTransactions = $order->successfulTransactions->merge($order->pendingTransactions)->merge($order->unpaidTransactions);
         $orderArchivedTransactions = $order->archivedSuccessfulTransactions;
         $transactionPaymentmethods = Paymentmethod::pluck('displayName', 'name')->toArray();
-        $offlineTransactionPaymentMethods = Paymentmethod::where("id" ,"<>",Config::get("constants.PAYMENT_METHOD_ONLINE" ))->pluck('displayName', 'id')->toArray();
-        $transactionStatuses = Transactionstatus::where("name" ,"<>","transferredToPay")->orderBy("order")->pluck('displayName', 'id')->toArray();
+        $offlineTransactionPaymentMethods = Paymentmethod::where("id", "<>", Config::get("constants.PAYMENT_METHOD_ONLINE"))->pluck('displayName', 'id')->toArray();
+        $transactionStatuses = Transactionstatus::where("name", "<>", "transferredToPay")->orderBy("order")->pluck('displayName', 'id')->toArray();
 
         $products = $this->makeProductCollection();
 
-        return view('order.edit', compact('order', 'orderstatuses','paymentstatuses' , 'coupons', 'orderTransactions', 'transactionstatuses', 'productBon' , 'transactionPaymentmethods' , 'transactionStatuses' , 'products' , 'orderArchivedTransactions' , 'products' , 'offlineTransactionPaymentMethods'));
+        return view('order.edit', compact('order', 'orderstatuses', 'paymentstatuses', 'coupons', 'orderTransactions', 'transactionstatuses', 'productBon', 'transactionPaymentmethods', 'transactionStatuses', 'products', 'orderArchivedTransactions', 'products', 'offlineTransactionPaymentMethods'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \app\Http\Requests\EditOrderRequest  $request
+     * @param  \app\Http\Requests\EditOrderRequest $request
      * @param  \App\Order $order
      * @return \Illuminate\Http\Response
      */
     public function update(EditOrderRequest $request, Order $order)
     {
         $oldOrderStatus = $order->orderstatus_id;
-        $user = Auth::user();
+        $user = $request->user();
 
-        if(isset($order->coupon->id)) {
+        if (isset($order->coupon->id)) {
             $oldCoupon = $order->coupon;
         }
 
         $order->fill($request->all());
 
-        if($request->has("coupon_id"))
-        {
-            if(isset($oldCoupon)) {
+        if ($request->has("coupon_id")) {
+            if (isset($oldCoupon)) {
                 $oldCoupon->usageNumber = $oldCoupon->usageNumber - 1;
                 $oldCoupon->update();//ToDo put if
             }
             if ($order->coupon_id == 0) {
                 $order->coupon_id = NULL;
-                $order->couponDiscount = 0 ;
-                $order->couponDiscountAmount = 0 ;
-            }
-            else {
+                $order->couponDiscount = 0;
+                $order->couponDiscountAmount = 0;
+            } else {
                 /** Muhammad Shahrokhi
                  * Attention : I don't check coupon validation intentionally because it is admin
                  * update and I beleive it should be able to update submit any coupon for the order
                  * with out any limitations
                  */
                 $coupon = Coupon::all()->where("id", $order->coupon_id)->first();
-                $order->couponDiscount = $coupon->discount ;
+                $order->couponDiscount = $coupon->discount;
                 $coupon->usageNumber = $coupon->usageNumber + 1;
                 $coupon->update();
 
-                if(!isset($oldCoupon) )
-                {
-                    if(!isset($order->cost) || $order->cost == 0)
-                    {
-                        $order->cost = $order->costwithoutcoupon ;
-                        $order->costwithoutcoupon = 0 ;
+                if (!isset($oldCoupon)) {
+                    if (!isset($order->cost) || $order->cost == 0) {
+                        $order->cost = $order->costwithoutcoupon;
+                        $order->costwithoutcoupon = 0;
                     }
                 }
             }
         }
 
 
-        if($request->has('managerDescription')) {
+        if ($request->has('managerDescription')) {
             if ($order->ordermanagercomments->isEmpty()) {
                 $managerComment = new Ordermanagercomment();
-                if($request->has('managerDescription'))
+                if ($request->has('managerDescription'))
                     $managerComment->comment = $request->get('managerDescription');
                 $managerComment->order_id = $order->id;
                 $managerComment->user_id = $user->id;
                 $managerComment->save();
-            }
-            else{
+            } else {
                 $order->ordermanagercomments->first()->comment = $request->get('managerDescription');
                 $order->ordermanagercomments->first()->user_id = $user->id;
                 $order->ordermanagercomments->first()->update();
             }
-        }else{
-            if (!$order->ordermanagercomments->isEmpty())
-            {
+        } else {
+            if (!$order->ordermanagercomments->isEmpty()) {
                 $order->ordermanagercomments->first()->comment = null;
                 $order->ordermanagercomments->first()->user_id = $user->id;
                 $order->ordermanagercomments->first()->update();
@@ -752,147 +702,85 @@ class OrderController extends Controller
         }
 
         if ($order->update()) {
-            if($request->has("orderstatusSMS"))
-            {
-                $controller = new HomeController();
-                $smsRequest = new SendSMSRequest();
-                $fullName = "";
-                if(strlen($order->user->firstName)>0)
-                    $fullName .= $order->user->firstName;
-                if(strlen($order->user->lastName)>0)
-                    $fullName .= " ".$order->user->lastName;
-                if(strlen($fullName)>0)
-                    $smsRequest["message"] = $fullName;
-                else
-                    $smsRequest["message"] = "کاربر گرامی";
-                $smsRequest["message"]  .= " سلام، وضعیت سفارش شما در آلاء به ".$order->orderstatus->displayName." تغییر کرد";
-                $smsRequest["users"] = $order->user_id;
-                $controller->sendSMS($smsRequest);
+
+            if ($request->has("orderstatusSMS")) {
+                $order->user->notify(New OrderStatusChanged($order->orderstatus->displayName));
             }
 
-            if($request->has('postCode'))
-            {
+            if ($request->has('postCode')) {
                 $postCode = $request->get('postCode');
-                if(strlen(preg_replace('/\s+/', '', $postCode ))>0 )
-                {
+                if (strlen(preg_replace('/\s+/', '', $postCode)) > 0) {
                     $insertPostingInfo = false;
-//                    if ($order->orderpostinginfos->isEmpty()) {
-                        $postingInfo = new Orderpostinginfo();
-                        $postingInfo->postCode = $request->get('postCode');
-                        $postingInfo->order_id = $order->id;
-                        $postingInfo->user_id = $user->id;
-                        if($postingInfo->save())
-                            $insertPostingInfo=true;
-//                    }
-//                    else{
-//                        $order->orderpostinginfos->first()->postCode = $request->get('postCode');
-//                        if($order->orderpostinginfos->first()->update()) $insertPostingInfo=true;
-//                    }
-                    if($insertPostingInfo && $request->has('postingSMS')){
-                        $myParents  = Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT")->get()->first()->product->parents;
-                        if (!empty($myParents)){
-                            $rootParent = end($myParents);
-                            $productName =$rootParent->name  ;
-                        }else{
-                             $productName =$order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->get()->first()->product->first()->name ;
-                        }
+                    $postingInfo = new Orderpostinginfo();
+                    $postingInfo->postCode = $request->get('postCode');
+                    $postingInfo->order_id = $order->id;
+                    $postingInfo->user_id = $user->id;
+                    if ($postingInfo->save())
+                        $insertPostingInfo = true;
 
-
-                        $controller = new HomeController();
-                        $smsRequest = new SendSMSRequest();
-                        $fullName = "";
-                        if(strlen($order->user->firstName)>0)
-                            $fullName .= $order->user->firstName;
-                        if(strlen($order->user->lastName)>0)
-                            $fullName .= " ".$order->user->lastName;
-                        if(strlen($fullName)>0)
-                            $smsRequest["message"] = $fullName;
-                        else
-                            $smsRequest["message"] = "کاربر گرامی";
-                        $smsRequest["message"]  .= " شماره مرسوله پستی ".$productName." ".$request->get('postCode')." می باشد - آلاء";
-//                        $smsRequest["message"]  .= " برنامه و دفترچه عید نوروز برای شما پست شد"."\n"."کد رهگیری مرسوله: ".$request->get('postCode')."\n"."آلاء - K96.IR";
-                        $smsRequest["users"] = $order->user_id;
-                        $response = $controller->sendSMS($smsRequest);
-                        if($response->getStatusCode() == 200)
-                            $smsMessageSuccess = "پیامک کد رهگیری برای کاربر ارسال شد.";
-                        else
-                            $smsMessageError = "خطا در ارسال پیامک کد رهگیری.";
-
+                    if ($insertPostingInfo && $request->has('postingSMS')) {
+                        $postCode = $request->get('postCode');
+                        $order->user->notify(New PostCodeNotification($postCode));
                     }
-                }else{}
+                }
             }
-            $file = $this->requestHasFile($request , "file");
+
+            $file = $this->requestHasFile($request, "file");
             if ($file !== false) {
                 $extension = $file->getClientOriginalExtension();
-                $fileName = basename($file->getClientOriginalName() , ".".$extension) . "_" . date("YmdHis") . '.' . $extension;
+                $fileName = basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
                 if (Storage::disk(Config::get('constants.DISK10'))->put($fileName, File::get($file))) {
                     $orderFileRequest = new Request();
-                    $orderFileRequest->offsetSet("order_id" ,  $order->id);
-                    $orderFileRequest->offsetSet("user_id" , $user->id);
-                    $orderFileRequest->offsetSet("file" , $fileName );
+                    $orderFileRequest->offsetSet("order_id", $order->id);
+                    $orderFileRequest->offsetSet("user_id", $user->id);
+                    $orderFileRequest->offsetSet("file", $fileName);
                     $orderFileController = new OrderFileController();
                     $responseStatus = $orderFileController->store($orderFileRequest);
-                    if($responseStatus->getStatusCode() != 200)
+                    if ($responseStatus->getStatusCode() != 200)
                         session()->put('error', 'خطا در ذخیره اطلاعات فایل');
                 } else {
                     session()->put('error', 'بارگذاری فایل سفارش با مشکل مواجه شد!');
                 }
             }
-            if(isset($smsMessageSuccess))
-                session()->put("success", "اطلاعات سفارش با موفقیت اصلاح شد.".$smsMessageSuccess);
-            else
-                session()->put("success", "اطلاعات سفارش با موفقیت اصلاح شد.");
 
-            if(isset($smsMessageError))
-                session()->put("error", $smsMessageError);
+            session()->put("success", "اطلاعات سفارش با موفقیت اصلاح شد.");
 
             $asiatechProduct = config("constants.ASIATECH_FREE_ADSL");
-            if( $order->hasProducts([ $asiatechProduct ]) &&
-                $order->orderstatus_id == config("constants.ORDER_STATUS_CLOSED"))
-            {
+            if ($order->hasProducts([$asiatechProduct]) &&
+                $order->orderstatus_id == config("constants.ORDER_STATUS_CLOSED")) {
                 $orderUser = $order->user;
                 $nowDateTime = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
-                                        ->timezone('Asia/Tehran');
+                    ->timezone('Asia/Tehran');
                 $userVoucher = $orderUser->productvouchers()
-                                        ->where("enable" , 1)
-                                        ->where("expirationdatetime" , ">" , $nowDateTime)
-                                        ->where("product_id" , $asiatechProduct)
-                                        ->get();
+                    ->where("enable", 1)
+                    ->where("expirationdatetime", ">", $nowDateTime)
+                    ->where("product_id", $asiatechProduct)
+                    ->get();
 
-                if($userVoucher->isEmpty())
-                {
+                if ($userVoucher->isEmpty()) {
                     $unusedVoucher = Productvoucher::whereNull("user_id")
-                                                    ->where("enable" , 1)
-                                                    ->where("expirationdatetime" , ">" , $nowDateTime)
-                                                    ->where("product_id" , $asiatechProduct)
-                                                    ->get()
-                                                    ->first();
-                    if(isset($unusedVoucher))
-                    {
+                        ->where("enable", 1)
+                        ->where("expirationdatetime", ">", $nowDateTime)
+                        ->where("product_id", $asiatechProduct)
+                        ->get()
+                        ->first();
+                    if (isset($unusedVoucher)) {
                         $unusedVoucher->user_id = $orderUser->id;
-                        if($unusedVoucher->update())
-                        {
-                            session()->put("success",session()->pull("success") . " کد تخفیف آسیاتک با موفقیت این کاربر داده شد.");
+                        if ($unusedVoucher->update()) {
+                            session()->put("success", session()->pull("success") . " کد تخفیف آسیاتک با موفقیت این کاربر داده شد.");
+                        } else {
+                            session()->put("error", "خطا در تخصیص کد تخفیف آسیاتک");
                         }
-                        else
-                        {
-                            session()->put("error","خطا در تخصیص کد تخفیف آسیاتک");
-                        }
+                    } else {
+                        session()->put("error", "کد تخفیف آسیاتک برای این کاربر یافت نشد");
                     }
-                    else
-                    {
-                        session()->put("error","کد تخفیف آسیاتک برای این کاربر یافت نشد");
-                    }
-                }
-                else
-                {
-                    session()->put("error","این کاربر قبلا کد تخفیف اینترنت رایگان آسیاتک گرفته است.");
+                } else {
+                    session()->put("error", "این کاربر قبلا کد تخفیف اینترنت رایگان آسیاتک گرفته است.");
                 }
             }
+        } else {
+            session()->put("error", "خطای پایگاه داده");
         }
-        else {
-        session()->put("error", "خطای پایگاه داده");
-    }
 
         return redirect()->back();
     }
@@ -900,7 +788,7 @@ class OrderController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($order)
@@ -908,7 +796,7 @@ class OrderController extends Controller
 //        if ($order->delete()) session()->flash('success', 'سفارش با موفقیت اصلاح شد');
 //        else session()->flash('error', 'خطای پایگاه داده');
         $order->delete();
-        return redirect()->back() ;
+        return redirect()->back();
     }
 
     /**
@@ -919,7 +807,7 @@ class OrderController extends Controller
      */
     public function checkoutAuth()
     {
-        if(Auth::check())
+        if (Auth::check())
             return redirect(action("OrderController@checkoutReview"));
         return view("order.checkout.auth");
     }
@@ -932,48 +820,48 @@ class OrderController extends Controller
      */
     public function checkoutCompleteInfo()
     {
-        if(!Auth::check())
+        if (!Auth::check())
             return redirect(action("OrderController@checkoutAuth"));
         $user = Auth::user();
-        if($user->completion("afterLoginForm") == 100) {
+        if ($user->completion("afterLoginForm") == 100) {
             session()->pull("success");
             session()->pull("tab");
             session()->pull("belongsTo");
             return redirect(action("OrderController@checkoutReview"));
         }
-        $formFields =Afterloginformcontrol::getFormFields();
+        $formFields = Afterloginformcontrol::getFormFields();
         $tables = [];
-        foreach ($formFields as $formField){
-            if(strpos($formField->name, "_id")) {
+        foreach ($formFields as $formField) {
+            if (strpos($formField->name, "_id")) {
                 $tableName = $formField->name;
-                $tableName = str_replace("_id" ,"s" , $tableName);
+                $tableName = str_replace("_id", "s", $tableName);
                 $tables[$formField->name] = DB::table($tableName)->pluck('name', 'id');
             }
         }
         $note = "لطفا برای ادامه مراحل اطلاعات زیر را تکمیل نمایید";
 
-        return view("order.checkout.completeInfo" , compact("formFields" , "note" , "tables"));
+        return view("order.checkout.completeInfo", compact("formFields", "note", "tables"));
     }
 
-    private function getUserOrder(){
+    private function getUserOrder()
+    {
         $user = Auth::user();
-        if(session()->has("adminOrder_id"))
-        {
-            if(!$user->can(Config::get('constants.INSERT_ORDER_ACCESS')))
+        if (session()->has("adminOrder_id")) {
+            if (!$user->can(Config::get('constants.INSERT_ORDER_ACCESS')))
                 return redirect(action("HomeController@error403"));
             $user_id = session()->get("customer_id");
             $user = User::FindOrFail($user_id);
             $orderstatus_id = Config::get("constants.ORDER_STATUS_OPEN_BY_ADMIN");
-        }else
-        {
+        } else {
             $orderstatus_id = Config::get("constants.ORDER_STATUS_OPEN");
         }
 
-        $order = $user->orders->where("orderstatus_id" , $orderstatus_id)->first();
+        $order = $user->orders->where("orderstatus_id", $orderstatus_id)->first();
 
         $orderproducts = $order->orderproducts->sortByDesc("created_at");
-        return [$user, $order , $orderproducts ] ;
+        return [$user, $order, $orderproducts];
     }
+
     /**
      * Showing authentication step in the checkout process
      *
@@ -982,7 +870,7 @@ class OrderController extends Controller
      */
     public function checkoutReview(Request $request)
     {
-        if(!Auth::check())
+        if (!Auth::check())
             return redirect(action("OrderController@checkoutAuth"));
 
         $url = $request->url();
@@ -992,46 +880,44 @@ class OrderController extends Controller
         SEO::setCanonical($url);
         SEO::twitter()->setSite("آلاء");
         SEO::setDescription($this->setting->site->seo->homepage->metaDescription);
-        SEO::opengraph()->addImage(route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]), ['height' => 100, 'width' => 100]);
+        SEO::opengraph()->addImage(route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]), ['height' => 100, 'width' => 100]);
 
-        [$user, $order , $orderproducts ] = $this->getUserOrder();
+        [$user, $order, $orderproducts] = $this->getUserOrder();
 
-            $renewedOrderproducts = $this->renewOrderproducs($orderproducts);
-            $orderproductsRawCost = (int)$renewedOrderproducts["rawCost"];
-            $orderproducts = $renewedOrderproducts["orderproducts"];
-            $costCollection = collect();
-            $orderproductLinks = collect();
-            foreach ($orderproducts as $orderproduct)
-            {
-                $costArray  = $orderproduct->obtainOrderproductCost(false);
-                $costCollection->put( $orderproduct->id , ["cost"=>$costArray["cost"] , 'extraCost'=>$costArray["extraCost"] , 'bonDiscount'=>$costArray['bonDiscount'] , "productDiscount"=>$costArray['productDiscount'] , "productDiscountAmount"=>$costArray['productDiscountAmount']]);
-                $orderproductLink = $orderproduct->product->makeProductLink();
-                if(strlen($orderproductLink) > 0)
-                    $orderproductLinks->put($orderproduct->id , $orderproductLink);
-            }
-            $renewedOrder = Order::where("id" , $order->id)->get()->first() ;
-            $orderCostArray = $renewedOrder->obtainOrderCost(true);
-            $orderCost = $orderCostArray["rawCostWithDiscount"] + $orderCostArray["rawCostWithoutDiscount"];
+        $renewedOrderproducts = $this->renewOrderproducs($orderproducts);
+        $orderproductsRawCost = (int)$renewedOrderproducts["rawCost"];
+        $orderproducts = $renewedOrderproducts["orderproducts"];
+        $costCollection = collect();
+        $orderproductLinks = collect();
+        foreach ($orderproducts as $orderproduct) {
+            $costArray = $orderproduct->obtainOrderproductCost(false);
+            $costCollection->put($orderproduct->id, ["cost" => $costArray["cost"], 'extraCost' => $costArray["extraCost"], 'bonDiscount' => $costArray['bonDiscount'], "productDiscount" => $costArray['productDiscount'], "productDiscountAmount" => $costArray['productDiscountAmount']]);
+            $orderproductLink = $orderproduct->product->makeProductLink();
+            if (strlen($orderproductLink) > 0)
+                $orderproductLinks->put($orderproduct->id, $orderproductLink);
+        }
+        $renewedOrder = Order::where("id", $order->id)->get()->first();
+        $orderCostArray = $renewedOrder->obtainOrderCost(true);
+        $orderCost = $orderCostArray["rawCostWithDiscount"] + $orderCostArray["rawCostWithoutDiscount"];
         $orderHasOrdrooGheireHozoori = $order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
-            ->whereIn("product_id" , Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_NOT_DEFAULT"))
+            ->whereIn("product_id", Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_NOT_DEFAULT"))
             ->get()
             ->isNotEmpty();
 
-        $orderHasDonate = $order->hasProducts(Config::get("constants.DONATE_PRODUCT")) ;
+        $orderHasDonate = $order->hasProducts(Config::get("constants.DONATE_PRODUCT"));
 
-        $donateCost = 0 ;
-        if($orderHasDonate)
-        {
-            $donateCost = config("constants.DONATE_PRODUCT_COST")  ;
+        $donateCost = 0;
+        if ($orderHasDonate) {
+            $donateCost = config("constants.DONATE_PRODUCT_COST");
         }
 
         $credit = $user->getTotalWalletBalance();
-        $costWithWallet = $orderCost - $donateCost ;
-        $walletUse = min($costWithWallet , $credit) ;
-        $payableCost = max($orderCost - $walletUse , 0);
+        $costWithWallet = $orderCost - $donateCost;
+        $walletUse = min($costWithWallet, $credit);
+        $payableCost = max($orderCost - $walletUse, 0);
 
-        return view("order.checkout.review" , compact("user","orderproducts" , "orderCost" , "orderproductsRawCost" ,
-            'costCollection' ,'orderproductLinks' , 'orderHasOrdrooGheireHozoori' , 'credit' , 'walletUse' , 'payableCost'));
+        return view("order.checkout.review", compact("user", "orderproducts", "orderCost", "orderproductsRawCost",
+            'costCollection', 'orderproductLinks', 'orderHasOrdrooGheireHozoori', 'credit', 'walletUse', 'payableCost'));
     }
 
     /**
@@ -1042,23 +928,22 @@ class OrderController extends Controller
      */
     public function checkoutInvoice()
     {
-        if(!Auth::check())
+        if (!Auth::check())
             return redirect(action("OrderController@checkoutAuth"));
 
-        [$user, $order , $orderproducts ] = $this->getUserOrder();
+        [$user, $order, $orderproducts] = $this->getUserOrder();
         $costCollection = collect();
-        foreach ($orderproducts as $orderproduct)
-        {
-            $costArray  = $orderproduct->obtainOrderproductCost(false);
-            $costCollection->put( $orderproduct->id , ["cost"=>$costArray["cost"] , 'extraCost'=>$costArray["extraCost"] , 'bonDiscount'=>$costArray['bonDiscount']]);
+        foreach ($orderproducts as $orderproduct) {
+            $costArray = $orderproduct->obtainOrderproductCost(false);
+            $costCollection->put($orderproduct->id, ["cost" => $costArray["cost"], 'extraCost' => $costArray["extraCost"], 'bonDiscount' => $costArray['bonDiscount']]);
 
         }
         $orderCostArray = $order->obtainOrderCost(true);
         $orderCost = $orderCostArray["rawCostWithDiscount"] + $orderCostArray["rawCostWithoutDiscount"];
-        $user = $order->user ;
+        $user = $order->user;
 
-        $todayDate = $this->convertDate(Carbon::now()->toDateTimeString() , "toJalali" );
-        return view("order.checkout.invoice" , compact("orderproducts" , "orderCost"  , 'costCollection' , 'user' , 'todayDate'));
+        $todayDate = $this->convertDate(Carbon::now()->toDateTimeString(), "toJalali");
+        return view("order.checkout.invoice", compact("orderproducts", "orderCost", 'costCollection', 'user', 'todayDate'));
 
 
     }
@@ -1071,7 +956,7 @@ class OrderController extends Controller
      */
     public function checkoutPayment(Request $request)
     {
-        if(!Auth::check())
+        if (!Auth::check())
             return redirect(action("OrderController@checkoutAuth"));
 
 
@@ -1082,40 +967,37 @@ class OrderController extends Controller
         SEO::setCanonical($url);
         SEO::twitter()->setSite("آلاء");
         SEO::setDescription($this->setting->site->seo->homepage->metaDescription);
-        SEO::opengraph()->addImage(route('image', ['category'=>'11','w'=>'100' , 'h'=>'100' ,  'filename' =>  $this->setting->site->siteLogo ]), ['height' => 100, 'width' => 100]);
+        SEO::opengraph()->addImage(route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]), ['height' => 100, 'width' => 100]);
 
-        if(session()->has("couponMessageSuccess"))
+        if (session()->has("couponMessageSuccess"))
             session()->flash('success', session()->pull("couponMessageSuccess"));
-        elseif(session()->has("couponMessageError"))
+        elseif (session()->has("couponMessageError"))
             session()->flash('error', session()->pull("couponMessageError"));
-        elseif(session()->has("couponMessageInfo"))
+        elseif (session()->has("couponMessageInfo"))
             session()->flash('info', session()->pull("couponMessageInfo"));
 
         $previousPath = url()->previous();
-        if(strcmp($previousPath , action("OrderController@checkoutReview"))==0
-            || strcmp($previousPath , action("OrderController@checkoutPayment"))==0)
-        {
-            [$user, $order , $orderproducts ] = $this->getUserOrder();
+        if (strcmp($previousPath, action("OrderController@checkoutReview")) == 0
+            || strcmp($previousPath, action("OrderController@checkoutPayment")) == 0) {
+            [$user, $order, $orderproducts] = $this->getUserOrder();
 
-            if($orderproducts->isNotEmpty())
-            {
-                $gateways = Transactiongateway::all()->where("enable",1)->sortBy("order")->pluck("displayName" , "name");
+            if ($orderproducts->isNotEmpty()) {
+                $gateways = Transactiongateway::all()->where("enable", 1)->sortBy("order")->pluck("displayName", "name");
 
                 $this->renewOrderproducs($orderproducts);
 
-                $renewedOrder = Order::where("id" , $order->id)->get()->first();
+                $renewedOrder = Order::where("id", $order->id)->get()->first();
                 $orderCost = $renewedOrder->refreshCost()["newCost"];
                 $cost = $renewedOrder->totalCost();
                 $totalRawCost = $orderCost["rawCostWithDiscount"] + $orderCost["rawCostWithoutDiscount"];
 
-                if($renewedOrder->hasCoupon()) {
+                if ($renewedOrder->hasCoupon()) {
                     $validateCouponProduct = $renewedOrder->reviewCoupon();
-                    if(strlen($validateCouponProduct["warning"]) >0)  session()->flash('warning', $validateCouponProduct["warning"]);
-                    if(strlen($validateCouponProduct["info"]) >0)  session()->flash('info', $validateCouponProduct["info"]);
-                    if(strlen($validateCouponProduct["error"]) >0)  session()->flash('error', $validateCouponProduct["error"]);
-                    if($validateCouponProduct["couponRemoved"])
-                    {
-                        $renewedOrder = Order::where("id" , $order->id)->get()->first();
+                    if (strlen($validateCouponProduct["warning"]) > 0) session()->flash('warning', $validateCouponProduct["warning"]);
+                    if (strlen($validateCouponProduct["info"]) > 0) session()->flash('info', $validateCouponProduct["info"]);
+                    if (strlen($validateCouponProduct["error"]) > 0) session()->flash('error', $validateCouponProduct["error"]);
+                    if ($validateCouponProduct["couponRemoved"]) {
+                        $renewedOrder = Order::where("id", $order->id)->get()->first();
                         $orderCost = $renewedOrder->refreshCost()["newCost"];
                         $cost = $renewedOrder->totalCost();
                         $totalRawCost = $orderCost["rawCostWithDiscount"] + $orderCost["rawCostWithoutDiscount"];
@@ -1123,33 +1005,30 @@ class OrderController extends Controller
                 }
                 $coupon = $renewedOrder->coupon;
 
-                if($cost == 0) {
+                if ($cost == 0) {
                     $paymentMethods = array("offlinePayment" => "کارت به کارت");
-                }
-                else{
+                } else {
 //                    $paymentMethods = array("onlinePayment" => "آنلاین" , "offlinePayment" => "کارت به کارت");
-                    $paymentMethods = array("onlinePayment" => "آنلاین" );
+                    $paymentMethods = array("onlinePayment" => "آنلاین");
                 }
 
-                $orderHasDonate = $order->hasProducts(Config::get("constants.DONATE_PRODUCT")) ;
-                $donateCost = 0 ;
-                if($orderHasDonate)
-                {
-                    $donateCost = config("constants.DONATE_PRODUCT_COST")  ;
+                $orderHasDonate = $order->hasProducts(Config::get("constants.DONATE_PRODUCT"));
+                $donateCost = 0;
+                if ($orderHasDonate) {
+                    $donateCost = config("constants.DONATE_PRODUCT_COST");
                 }
 
                 $credit = $user->getTotalWalletBalance();
-                $costWithWallet = $cost - $donateCost ;
-                $walletUse = min($costWithWallet , $credit) ;
-                $payableCost = max($cost - $walletUse , 0);
+                $costWithWallet = $cost - $donateCost;
+                $walletUse = min($costWithWallet, $credit);
+                $payableCost = max($cost - $walletUse, 0);
 
-                return view("order.checkout.payment" , compact("gateways" , "cost" , "coupon" , "paymentMethods" , "orderHasDonate" ,
-                    "totalRawCost" , "credit" , "walletPaymentAmount" , "walletUse"  , "payableCost"));
-            }else
-            {
+                return view("order.checkout.payment", compact("gateways", "cost", "coupon", "paymentMethods", "orderHasDonate",
+                    "totalRawCost", "credit", "walletPaymentAmount", "walletUse", "payableCost"));
+            } else {
                 return redirect(action("OrderController@checkoutReview"));
             }
-        }else {
+        } else {
             return redirect(action("OrderController@checkoutReview"));
         }
 
@@ -1158,287 +1037,252 @@ class OrderController extends Controller
     /**
      * Verify customer online payment after comming back from payment gateway
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function verifyPayment(Request $request)
     {
         $sendSMS = false;
         $user = Auth::user();
-        if($request->has('Authority') && $request->has('Status') )
-        {    // Come back from ZarinPal
+        if ($request->has('Authority') && $request->has('Status')) {    // Come back from ZarinPal
             $result["isAdminOrder"] = false;
             $authority = $request->get('Authority');
             $status = $request->get('Status');
 
-            $transaction = Transaction::where('authority' ,$authority)->firstOrFail() ;
+            $transaction = Transaction::where('authority', $authority)->firstOrFail();
             $order = Order::FindorFail($transaction->order_id);
 
             $usedCoupon = $order->hasUsedCoupon();
-            if(!$usedCoupon)
-            {
+            if (!$usedCoupon) {
                 /** if order has not used coupon reverse it    */
 
-                $order->detachCoupon() ;
+                $order->detachCoupon();
             }
 
-            $zarinPal = new Zarinpal($transaction->transactiongateway->merchantNumber,new SoapDriver());
+            $zarinPal = new Zarinpal($transaction->transactiongateway->merchantNumber, new SoapDriver());
 
-            $result = $zarinPal->verify($status,$transaction->cost,$authority);
+            $result = $zarinPal->verify($status, $transaction->cost, $authority);
             //return $result["status"] = success / canceled
             if (Auth::user()->hasRole("admin")) {
                 $result["Status"] = "success";
                 $result["RefID"] = "mohamad" . rand(0, 1000);
             }
-            if(!isset($result))
-                    abort(404) ;
-            if(strcmp(array_get($result,"Status"),'success')==0)
-            {
+            if (!isset($result))
+                abort(404);
+            if (strcmp(array_get($result, "Status"), 'success') == 0) {
                 $user = $order->user;
-                $transaction->transactionID = $result["RefID"] ;
-                $transaction->transactionstatus_id = Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL") ;
+                $transaction->transactionID = $result["RefID"];
+                $transaction->transactionstatus_id = Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL");
                 $transaction->completed_at = Carbon::now();
                 $transaction->update();
 
                 /** Wallet transactions */
                 $order->closeWalletPendingTransactions();
                 /** End */
-                $order->close(Config::get("constants.PAYMENT_STATUS_PAID")) ;
-                if($transaction->cost < (int)$order->totalCost() )
-                {
-                    if((int)$order->totalPaidCost() < (int)$order->totalCost())
+                $order->close(Config::get("constants.PAYMENT_STATUS_PAID"));
+                if ($transaction->cost < (int)$order->totalCost()) {
+                    if ((int)$order->totalPaidCost() < (int)$order->totalCost())
                         $order->paymentstatus_id = Config::get("constants.PAYMENT_STATUS_INDEBTED");
                 }
 
                 $order->timestamps = false;
-                if($order->update())
-                    $result = array_add($result , "saveOrder" , 1);
+                if ($order->update())
+                    $result = array_add($result, "saveOrder", 1);
                 else
-                    $result = array_add($result , "saveOrder" , 0);
+                    $result = array_add($result, "saveOrder", 0);
                 $order->timestamps = true;
 
                 /** Attaching user bons for this order */
                 $bonName = Config::get("constants.BON1");
-                $bon = Bon::where("name" , $bonName)->first();
-                if(isset($bon))
-                {
+                $bon = Bon::where("name", $bonName)->first();
+                if (isset($bon)) {
                     [
-                        $givenBonNumber ,
-                        $failedBonNumber ] = $order->giveUserBons($bonName);
+                        $givenBonNumber,
+                        $failedBonNumber] = $order->giveUserBons($bonName);
 
-                    if($givenBonNumber == 0 )
-                        if($failedBonNumber > 0)
-                            $result = array_add($result , "saveBon" , -1);
+                    if ($givenBonNumber == 0)
+                        if ($failedBonNumber > 0)
+                            $result = array_add($result, "saveBon", -1);
                         else
-                            $result = array_add($result , "saveBon" , 0);
+                            $result = array_add($result, "saveBon", 0);
                     else
-                        $result = array_add($result , "saveBon" , $givenBonNumber);
+                        $result = array_add($result, "saveBon", $givenBonNumber);
 
-                    $bonDisplayName = $bon->displayName ;
-                    $result = array_add($result , "bonName" , $bonDisplayName);
+                    $bonDisplayName = $bon->displayName;
+                    $result = array_add($result, "bonName", $bonDisplayName);
                 }
 
                 $sendSMS = true;
-            }
-            elseif(strcmp(array_get($result,"Status"),'canceled')==0 ||
-                (strcmp(array_get($result,"Status"),'error')==0 && strcmp(array_get($result,"error"),'-22')==0) )
-            {
-                $result["Status"] = 'canceled' ;
-                $user = $order->user ;
-                if($order->orderstatus_id == Config::get("constants.ORDER_STATUS_OPEN"))
-                {
+            } elseif (strcmp(array_get($result, "Status"), 'canceled') == 0 ||
+                (strcmp(array_get($result, "Status"), 'error') == 0 && strcmp(array_get($result, "error"), '-22') == 0)) {
+                $result["Status"] = 'canceled';
+                $user = $order->user;
+                if ($order->orderstatus_id == Config::get("constants.ORDER_STATUS_OPEN")) {
                     $result["tryAgain"] = true;
 
-                    $order->close( Config::get("constants.PAYMENT_STATUS_UNPAID"),Config::get("constants.ORDER_STATUS_CANCELED")) ;
+                    $order->close(Config::get("constants.PAYMENT_STATUS_UNPAID"), Config::get("constants.ORDER_STATUS_CANCELED"));
                     $order->timestamps = false;
-                    if ($order->update())
-                    {
+                    if ($order->update()) {
                         $request = new Request();
                         $request->offsetSet("paymentstatus_id", Config::get("constants.PAYMENT_STATUS_UNPAID"));
                         $request->offsetSet("orderstatus_id", Config::get("constants.ORDER_STATUS_OPEN"));
-                        $response = $this->copy($order , $request);
-                    }else
-                    {
+                        $response = $this->copy($order, $request);
+                    } else {
                         //last order is not closed and no action is necessary
                     }
                     $order->timestamps = true;
-                }elseif($order->orderstatus_id == Config::get("constants.ORDER_STATUS_OPEN_DONATE"))
-                {
+                } elseif ($order->orderstatus_id == Config::get("constants.ORDER_STATUS_OPEN_DONATE")) {
 //                    $order->close( Config::get("constants.PAYMENT_STATUS_UNPAID"),Config::get("constants.ORDER_STATUS_CANCELED")) ;
 //                    $order->timestamps = false;
 //                    $order->update();
 //                    $order->timestamps = true;
                     $result["tryAgain"] = false;
-                }
-                else
-                {
+                } else {
                     $result["tryAgain"] = false;
                     $walletTransactions = $order->suspendedTransactions
-                                                ->where("paymentmethod_id" , config("constants.PAYMENT_METHOD_WALLET"));
-                    $totalWalletRefund = 0 ;
+                        ->where("paymentmethod_id", config("constants.PAYMENT_METHOD_WALLET"));
+                    $totalWalletRefund = 0;
                     $closeOrderFlag = false;
-                    foreach ($walletTransactions as $transaction)
-                    {
-                        $wallet = $transaction->wallet ;
+                    foreach ($walletTransactions as $transaction) {
+                        $wallet = $transaction->wallet;
                         $amount = $transaction->cost;
-                        if(isset($wallet))
-                        {
-                            $response =  $wallet->deposit($amount);
-                            if($response["result"])
-                            {
+                        if (isset($wallet)) {
+                            $response = $wallet->deposit($amount);
+                            if ($response["result"]) {
                                 $transaction->delete();
                                 $totalWalletRefund += $amount;
+                            } else {
+
                             }
-                            else
-                            {
+                        } else {
+                            $response = $user->deposit($amount, config("constants.WALLET_TYPE_GIFT"));
+                            if ($response["result"]) {
+                                $transaction->delete();
+                                $totalWalletRefund += $amount;
+                            } else {
 
                             }
                         }
-                        else
-                        {
-                            $response = $user->deposit($amount , config("constants.WALLET_TYPE_GIFT")) ;
-                            if($response["result"])
-                            {
-                                $transaction->delete();
-                                $totalWalletRefund += $amount;
-                            }
-                            else
-                            {
-
-                            }
-                        }
-                        $closeOrderFlag = true ;
+                        $closeOrderFlag = true;
 
                     }
-                    if($totalWalletRefund > 0)
-                    {
+                    if ($totalWalletRefund > 0) {
                         $result["walletAmount"] = $totalWalletRefund;
                         $result["walletRefund"] = true;
                     }
 
-                    if($closeOrderFlag)
-                    {
-                        $order->close( Config::get("constants.PAYMENT_STATUS_UNPAID"),Config::get("constants.ORDER_STATUS_CANCELED")) ;
+                    if ($closeOrderFlag) {
+                        $order->close(Config::get("constants.PAYMENT_STATUS_UNPAID"), Config::get("constants.ORDER_STATUS_CANCELED"));
                         $order->timestamps = false;
-                        $order->update() ;
+                        $order->update();
                         $order->timestamps = true;
                     }
                 }
             }
-        }
-        elseif( $request->has("State") && $request->has("token"))
-        {// ENBank gateway
+        } elseif ($request->has("State") && $request->has("token")) {// ENBank gateway
             $result = array();
-            $homeController = new HomeController() ;
+            $homeController = new HomeController();
             $result["isAdminOrder"] = false;
             $state = $request->get("State");
-            $token = $request->get("token") ;
+            $token = $request->get("token");
             $refNumber = $request->get("RefNum");
-            $result["RefID"] = $refNumber ;
-            $transaction = Transaction::all()->where('authority' ,$token)->first() ;
-            if(!isset($transaction) || $transaction->transactionstatus->id != Config::get("constants.TRANSACTION_STATUS_TRANSFERRED_TO_PAY") ) return redirect(action(("HomeController@error403")));
+            $result["RefID"] = $refNumber;
+            $transaction = Transaction::all()->where('authority', $token)->first();
+            if (!isset($transaction) || $transaction->transactionstatus->id != Config::get("constants.TRANSACTION_STATUS_TRANSFERRED_TO_PAY")) return redirect(action(("HomeController@error403")));
             $order = Order::FindorFail($transaction->order_id);
 
             $usedCoupon = $order->hasUsedCoupon();
-            if(!$usedCoupon)
-            {
+            if (!$usedCoupon) {
                 /** if order has not used coupon reverse it    */
 
-                $order->detachCoupon() ;
+                $order->detachCoupon();
             }
 
-            if(strcasecmp($state , "ok") == 0) {
-                $result["Status"] = "success" ;
-                $enBankGate = Transactiongateway::all()->where('name' ,'enbank')->first() ;
-                $amount = $transaction->cost*10 ; // tabdile mablaghe transaction be rial
+            if (strcasecmp($state, "ok") == 0) {
+                $result["Status"] = "success";
+                $enBankGate = Transactiongateway::all()->where('name', 'enbank')->first();
+                $amount = $transaction->cost * 10; // tabdile mablaghe transaction be rial
 
                 $ENBank = new ENPayment();
 
-                $login = $ENBank->login($enBankGate->merchantNumber,$enBankGate->merchantPassword);
-                if(isset($login['return']))
-                {
+                $login = $ENBank->login($enBankGate->merchantNumber, $enBankGate->merchantPassword);
+                if (isset($login['return'])) {
                     $login = $login['return'];
 
-                }else{
-                    $message = "خطای لاگین در اتصال به بانک" ;
+                } else {
+                    $message = "خطای لاگین در اتصال به بانک";
                     return $homeController->errorPage($message);
                 }
 
 
                 $params['login'] = $login;
                 $params['amount'] = $amount;
-                $params['token']= $token;
-                $params['RefNum']= $refNumber;
+                $params['token'] = $token;
+                $params['RefNum'] = $refNumber;
                 $verifyTrans = $ENBank->tokenPurchaseVerifyTransaction($params);
                 $logout = $ENBank->logout($login);
-                if(isset($verifyTrans['faultcode']))
-                {
+                if (isset($verifyTrans['faultcode'])) {
                     $result["Status"] = "error";
-                    $faultDetail = key($verifyTrans["detail"]) ;
-                    switch ($faultDetail)
-                    {
+                    $faultDetail = key($verifyTrans["detail"]);
+                    switch ($faultDetail) {
                         case "WsTransactionNotFoundException":
-                            $result["error"] = "-21" ;
+                            $result["error"] = "-21";
                             break;
                         default :
                             break;
                     }
 
 
-                }elseif(isset($verifyTrans['return'])){
+                } elseif (isset($verifyTrans['return'])) {
                     $verifyTrans = $verifyTrans['return'];
                     $verifiedTotalAmount = $verifyTrans['resultTotalAmount'];
 
-                    if((int)$verifiedTotalAmount != $amount)
-                    {
-                        $transaction->cost = $verifiedTotalAmount/10 ;
+                    if ((int)$verifiedTotalAmount != $amount) {
+                        $transaction->cost = $verifiedTotalAmount / 10;
                     }
-                    if($order->orderstatus_id == Config::get("constants.ORDER_STATUS_OPEN"))
-                    {
+                    if ($order->orderstatus_id == Config::get("constants.ORDER_STATUS_OPEN")) {
                         session()->forget("order_id");
                     }
                     $user = $order->user;
-                    $transaction->referenceNumber = $refNumber ;
-                    $transaction->transactionstatus_id = Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL") ;
+                    $transaction->referenceNumber = $refNumber;
+                    $transaction->transactionstatus_id = Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL");
                     $transaction->completed_at = Carbon::now();
                     $transaction->update();
                     $order->paymentstatus_id = Config::get("constants.PAYMENT_STATUS_PAID");
 
                     $order->orderstatus_id = Config::get("constants.ORDER_STATUS_CLOSED");
-                    if($transaction->cost < (int)$order->totalCost() )
-                    {
-                        if((int)$order->totalPaidCost() < (int)$order->totalCost()) $order->paymentstatus_id = Config::get("constants.PAYMENT_STATUS_INDEBTED");
+                    if ($transaction->cost < (int)$order->totalCost()) {
+                        if ((int)$order->totalPaidCost() < (int)$order->totalCost()) $order->paymentstatus_id = Config::get("constants.PAYMENT_STATUS_INDEBTED");
                     }
                     $order->timestamps = false;
                     $order->completed_at = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran');
-                    if($order->update())
-                        $result = array_add($result , "saveOrder" , 1);
+                    if ($order->update())
+                        $result = array_add($result, "saveOrder", 1);
                     else
-                        $result = array_add($result , "saveOrder" , 0);
+                        $result = array_add($result, "saveOrder", 0);
                     $order->timestamps = true;
 
                     /** Attaching user bons for this order */
                     $bonName = Config::get("constants.BON1");
                     [
-                        $givenBonNumber ,
-                        $failedBonNumber ] = $order->giveUserBons($bonName);
+                        $givenBonNumber,
+                        $failedBonNumber] = $order->giveUserBons($bonName);
 
-                    if($givenBonNumber == 0 )
-                        if($failedBonNumber > 0)
-                            $result = array_add($result , "saveBon" , -1);
+                    if ($givenBonNumber == 0)
+                        if ($failedBonNumber > 0)
+                            $result = array_add($result, "saveBon", -1);
                         else
-                            $result = array_add($result , "saveBon" , 0);
+                            $result = array_add($result, "saveBon", 0);
                     else
-                        $result = array_add($result , "saveBon" , $givenBonNumber);
-                    $result = array_add($result , "bonName" , $bonName);
+                        $result = array_add($result, "saveBon", $givenBonNumber);
+                    $result = array_add($result, "bonName", $bonName);
                 }
 
-            }
-            elseif(strcasecmp($state , "Canceled By User") == 0){
-                $result["Status"] = "canceled" ;
-                $transaction->transactionstatus_id = Config::get("constants.TRANSACTION_STATUS_UNSUCCESSFUL") ;
+            } elseif (strcasecmp($state, "Canceled By User") == 0) {
+                $result["Status"] = "canceled";
+                $transaction->transactionstatus_id = Config::get("constants.TRANSACTION_STATUS_UNSUCCESSFUL");
                 $transaction->update();
-                if($order->orderstatus_id == Config::get("constants.ORDER_STATUS_OPEN")) {
+                if ($order->orderstatus_id == Config::get("constants.ORDER_STATUS_OPEN")) {
                     $result["tryAgain"] = true;
                     $order->orderstatus_id = Config::get("constants.ORDER_STATUS_CANCELED");
                     $order->paymentstatus_id = Config::get("constants.PAYMENT_STATUS_UNPAID");
@@ -1448,25 +1292,22 @@ class OrderController extends Controller
                         $request = new Request();
                         $request->offsetSet("paymentstatus_id", Config::get("constants.PAYMENT_STATUS_UNPAID"));
                         $request->offsetSet("orderstatus_id", Config::get("constants.ORDER_STATUS_OPEN"));
-                        $response = $this->copy($order , $request);
+                        $response = $this->copy($order, $request);
                     } else {
                         //last order is not closed and no action is necessary
                     }
                     $order->timestamps = true;
-                }else{
+                } else {
                     $result["tryAgain"] = false;
                 }
 
             }
-        }
-        else
-        {
+        } else {
             $result = array();
-            if(session()->has("adminOrder_id"))
-            {
+            if (session()->has("adminOrder_id")) {
                 $result["isAdminOrder"] = true;
 
-                if(!$user->can(Config::get('constants.INSERT_ORDER_ACCESS')))
+                if (!$user->can(Config::get('constants.INSERT_ORDER_ACCESS')))
                     return redirect(action("HomeController@error403"));
 
                 $order_id = session()->get("adminOrder_id");
@@ -1478,65 +1319,54 @@ class OrderController extends Controller
                 session()->forget("customer_id");
                 session()->forget("customer_firstName");
                 session()->forget("customer_lastName");
-            }
-            elseif(session()->has("closedOrder_id"))
-            {
+            } elseif (session()->has("closedOrder_id")) {
                 $result["isAdminOrder"] = false;
 
                 $order_id = session()->get("closedOrder_id");
                 session()->forget("closedOrder_id");
                 $order = Order::FindorFail($order_id);
 
-                if($order->user->id != $user->id)
+                if ($order->user->id != $user->id)
                     abort(403);
-            }
-            elseif(session()->has("order_id"))
-            {
+            } elseif (session()->has("order_id")) {
                 $result["isAdminOrder"] = false;
 
                 $order_id = session()->get("order_id");
                 session()->forget("order_id");
                 $order = Order::FindorFail($order_id);
 
-                if($order->orderstatus_id != Config::get("constants.ORDER_STATUS_OPEN"))
+                if ($order->orderstatus_id != Config::get("constants.ORDER_STATUS_OPEN"))
                     abort(403);
-                if($order->user->id != $user->id)
+                if ($order->user->id != $user->id)
                     abort(403);
-            }
-            else
-            {
+            } else {
                 abort(404);
             }
 
-            if($order->orderproducts->isEmpty())
+            if ($order->orderproducts->isEmpty())
                 return redirect(action("OrderController@checkoutReview"));
 
-            if($request->has("customerDescription"))
-            {
+            if ($request->has("customerDescription")) {
                 $customerDescription = $request->get("customerDescription");
                 $order->customerDescription = $customerDescription;
             }
-            if($request->has('paymentmethod'))
-            {
+            if ($request->has('paymentmethod')) {
                 $paymentMethod = $request->get('paymentmethod');
 
                 $usedCoupon = $order->hasUsedCoupon();
-                if(!$usedCoupon)
-                {
+                if (!$usedCoupon) {
                     /** if order has not used coupon reverse it    */
-                    $order->detachCoupon() ;
+                    $order->detachCoupon();
                 }
 
-                $debitCard = Bankaccount::all()->where("user_id" , 2)->first();
-                if(isset($debitCard))
-                {
+                $debitCard = Bankaccount::all()->where("user_id", 2)->first();
+                if (isset($debitCard)) {
                     $result["debitCardNumber"] = $debitCard->cardNumber;
-                    $result["debitCardBank"] = $debitCard->bank->name ;
-                    $result["debitCardOwner"] = $debitCard->user->firstName ." ".$debitCard->user->lastName;
+                    $result["debitCardBank"] = $debitCard->bank->name;
+                    $result["debitCardOwner"] = $debitCard->user->firstName . " " . $debitCard->user->lastName;
                 }
 
-                switch ($paymentMethod)
-                {
+                switch ($paymentMethod) {
                     case "inPersonPayment" :
                         $result["Status"] = "inPersonPayment";
                         break;
@@ -1545,56 +1375,52 @@ class OrderController extends Controller
                         $result["Status"] = "offlinePayment";
                         break;
                     default :
-                        return redirect(action(("HomeController@error404"))) ;
+                        return redirect(action(("HomeController@error404")));
                         break;
                 }
 
-                $order->close(Config::get("constants.PAYMENT_STATUS_UNPAID")) ;
+                $order->close(Config::get("constants.PAYMENT_STATUS_UNPAID"));
                 $order->timestamps = false;
-                if($order->update())
-                    $result = array_add($result , "saveOrder" , 1);
+                if ($order->update())
+                    $result = array_add($result, "saveOrder", 1);
                 else
-                    $result = array_add($result , "saveOrder" , 0);
+                    $result = array_add($result, "saveOrder", 0);
                 $order->timestamps = true;
                 $sendSMS = true;
 
-            }
-            else
-            {
+            } else {
                 /** Wallet transactions */
                 $order->closeWalletPendingTransactions();
                 /** End */
                 $cost = $order->totalCost() - $order->totalPaidCost();
 
-                if($cost == 0 &&
-                    (isset($order->cost) || isset($order->costwithoutcoupon)) )
-                {
-                    $order->close(Config::get("constants.PAYMENT_STATUS_PAID")) ;
+                if ($cost == 0 &&
+                    (isset($order->cost) || isset($order->costwithoutcoupon))) {
+                    $order->close(Config::get("constants.PAYMENT_STATUS_PAID"));
                     $order->timestamps = false;
-                    if($order->update())
-                        $result = array_add($result , "saveOrder" , 1);
+                    if ($order->update())
+                        $result = array_add($result, "saveOrder", 1);
                     else
-                        $result = array_add($result , "saveOrder" , 0);
+                        $result = array_add($result, "saveOrder", 0);
                     $order->timestamps = true;
                     /** Attaching user bons for this order */
                     $bonName = Config::get("constants.BON1");
-                    $bon = Bon::where("name" , $bonName)->first();
-                    if(isset($bon))
-                    {
+                    $bon = Bon::where("name", $bonName)->first();
+                    if (isset($bon)) {
                         [
-                            $givenBonNumber ,
-                            $failedBonNumber ] = $order->giveUserBons($bonName);
+                            $givenBonNumber,
+                            $failedBonNumber] = $order->giveUserBons($bonName);
 
-                        if($givenBonNumber == 0 )
-                            if($failedBonNumber > 0)
-                                $result = array_add($result , "saveBon" , -1);
+                        if ($givenBonNumber == 0)
+                            if ($failedBonNumber > 0)
+                                $result = array_add($result, "saveBon", -1);
                             else
-                                $result = array_add($result , "saveBon" , 0);
+                                $result = array_add($result, "saveBon", 0);
                         else
-                            $result = array_add($result , "saveBon" , $givenBonNumber);
+                            $result = array_add($result, "saveBon", $givenBonNumber);
 
-                        $bonDisplayName = $bon->displayName ;
-                        $result = array_add($result , "bonName" , $bonDisplayName);
+                        $bonDisplayName = $bon->displayName;
+                        $result = array_add($result, "bonName", $bonDisplayName);
                     }
                     $result["Status"] = "freeProduct";
                     $sendSMS = true;
@@ -1605,37 +1431,32 @@ class OrderController extends Controller
         /**
          * Sending SMS to Ordoo 97 customers
          */
-        if($sendSMS && isset($order))
-        {
+        if ($sendSMS && isset($order)) {
             $user = $order->user;
-            $order =  $order->fresh();
+            $order = $order->fresh();
             $user->notify(new InvoicePaid($order));
             Cache::tags('bon')->flush();
         }
 
 
-        if(isset($result["Status"]))
-        {
-            if(isset($result["RefID"]) || strcmp($result["Status"],'freeProduct')==0)
-            {
-                session()->put("verifyPayment" , 1) ;
-                return redirect(action("OrderController@successfulPayment" , [
+        if (isset($result["Status"])) {
+            if (isset($result["RefID"]) || strcmp($result["Status"], 'freeProduct') == 0) {
+                session()->put("verifyPayment", 1);
+                return redirect(action("OrderController@successfulPayment", [
                     "result" => $result
                 ]));
-            }elseif(strcmp($result["Status"],'canceled')==0 ||
-                (strcmp($result["Status"],'error')==0 && isset($result["error"]) && strcmp($result["error"],'-22')==0))
-            {
-                if(isset($result["tryAgain"]) && $result["tryAgain"])
-                {
-                    session()->put("verifyPayment" , 1) ;
-                    return redirect(action("OrderController@failedPayment" , [
+            } elseif (strcmp($result["Status"], 'canceled') == 0 ||
+                (strcmp($result["Status"], 'error') == 0 && isset($result["error"]) && strcmp($result["error"], '-22') == 0)) {
+                if (isset($result["tryAgain"]) && $result["tryAgain"]) {
+                    session()->put("verifyPayment", 1);
+                    return redirect(action("OrderController@failedPayment", [
                         "result" => $result
                     ]));
                 }
             }
         }
 
-        return redirect(action("OrderController@otherPayment" , [
+        return redirect(action("OrderController@otherPayment", [
             "result" => $result
         ]));
 
@@ -1646,61 +1467,49 @@ class OrderController extends Controller
     /**
      * Successful payments
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-     function successfulPayment(Request $request)
-     {
-         if(session()->has("verifyPayment"))
-         {
-             $flag = true;
-             session()->forget("verifyPayment") ;
-         }
-         else
-         {
-             $flag = false;
-         }
+    function successfulPayment(Request $request)
+    {
+        if (session()->has("verifyPayment")) {
+            $flag = true;
+            session()->forget("verifyPayment");
+        } else {
+            $flag = false;
+        }
 
-         if(!$flag)
-             return redirect(action("HomeController@error403"));
-         if($request->has("result"))
-         {
-             $result = $request->get("result");
-             return view('order.checkout.verification',compact('result')) ;
-         }
-         else
-         {
-             return redirect(action("HomeController@error403"));
-         }
-     }
+        if (!$flag)
+            return redirect(action("HomeController@error403"));
+        if ($request->has("result")) {
+            $result = $request->get("result");
+            return view('order.checkout.verification', compact('result'));
+        } else {
+            return redirect(action("HomeController@error403"));
+        }
+    }
 
     /**
      *  repeat an old payment
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     function failedPayment(Request $request)
     {
-        if(session()->has("verifyPayment"))
-        {
+        if (session()->has("verifyPayment")) {
             $flag = true;
-            session()->forget("verifyPayment") ;
-        }
-        else
-        {
+            session()->forget("verifyPayment");
+        } else {
             $flag = false;
         }
 
-        if(!$flag)
+        if (!$flag)
             return redirect(action("HomeController@error403"));
-        if($request->has("result"))
-        {
+        if ($request->has("result")) {
             $result = $request->get("result");
-            return view('order.checkout.verification',compact('result')) ;
-        }
-        else
-        {
+            return view('order.checkout.verification', compact('result'));
+        } else {
             return redirect(action("HomeController@error403"));
         }
     }
@@ -1708,18 +1517,15 @@ class OrderController extends Controller
     /**
      *  Payments other than successful and failed
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     function otherPayment(Request $request)
     {
-        if($request->has("result"))
-        {
+        if ($request->has("result")) {
             $result = $request->get("result");
-            return view('order.checkout.verification',compact('result')) ;
-        }
-        else
-        {
+            return view('order.checkout.verification', compact('result'));
+        } else {
             abort(404);
         }
     }
@@ -1731,51 +1537,46 @@ class OrderController extends Controller
      * @param \App\Http\Requests\SubmitCouponRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function submitCoupon(SubmitCouponRequest $request){
+    public function submitCoupon(SubmitCouponRequest $request)
+    {
         $couponCode = $request->coupon;
-        $coupon = Coupon::all()->where("code" , $couponCode)->first();
+        $coupon = Coupon::all()->where("code", $couponCode)->first();
         $user = Auth::user();
-        if(isset($coupon)){
-            if(session()->has("adminOrder_id"))
-            {
-                if(!$user->can(Config::get('constants.INSERT_ORDER_ACCESS')))
+        if (isset($coupon)) {
+            if (session()->has("adminOrder_id")) {
+                if (!$user->can(Config::get('constants.INSERT_ORDER_ACCESS')))
                     return redirect(action("HomeController@error403"));
                 $order_id = session()->get("adminOrder_id");
                 $order = Order::FindorFail($order_id);
-            }else
-            {
+            } else {
                 $order_id = session()->get("order_id");
-                $order = Order::where("id" , $order_id)->get()->first() ;
-                if($order->user->id != $user->id )
+                $order = Order::where("id", $order_id)->get()->first();
+                if ($order->user->id != $user->id)
                     return redirect(action("HomeController@error403"));
             }
 
             [
-                $validateCoupon ,
+                $validateCoupon,
                 $validateCouponCode
             ] = $coupon->validateCoupon();
 
-            if(strlen($validateCoupon)==0)
-            {
+            if (strlen($validateCoupon) == 0) {
                 $order->refreshCost();
                 $cost = $order->totalCost();
-                if(!isset($coupon->maxCost) || $cost <= $coupon->maxCost)
-                {
-                    if(isset($order->coupon->id)) {
+                if (!isset($coupon->maxCost) || $cost <= $coupon->maxCost) {
+                    if (isset($order->coupon->id)) {
                         $oldCoupon = $order->coupon;
                         $flag = ($oldCoupon->usageNumber > 0);
-                        if ($oldCoupon->id != $coupon->id)
-                        {
+                        if ($oldCoupon->id != $coupon->id) {
                             if ($flag) $oldCoupon->usageNumber = $oldCoupon->usageNumber - 1;
                             if ($oldCoupon->update()) {
                                 $coupon->usageNumber = $coupon->usageNumber + 1;
                                 if ($coupon->update()) {
                                     $order->coupon_id = $coupon->id;
-                                    if($coupon->discounttype_id == Config::get("constants.DISCOUNT_TYPE_COST")) {
+                                    if ($coupon->discounttype_id == Config::get("constants.DISCOUNT_TYPE_COST")) {
                                         $order->couponDiscount = 0;
                                         $order->couponDiscountAmount = (int)$coupon->discount;
-                                    }
-                                    else {
+                                    } else {
                                         $order->couponDiscount = $coupon->discount;
                                         $order->couponDiscountAmount = 0;
                                     }
@@ -1799,44 +1600,38 @@ class OrderController extends Controller
                                 session()->put('couponMessageError', "خطای پایگاه داده در ثبت کپن!");
                             }
                         }
-                    }else
-                    {
-                        $coupon->usageNumber = $coupon->usageNumber + 1 ;
-                        if($coupon->update())
-                        {
+                    } else {
+                        $coupon->usageNumber = $coupon->usageNumber + 1;
+                        if ($coupon->update()) {
                             $order->coupon_id = $coupon->id;
-                            if($coupon->discounttype_id == Config::get("constants.DISCOUNT_TYPE_COST")) {
+                            if ($coupon->discounttype_id == Config::get("constants.DISCOUNT_TYPE_COST")) {
                                 $order->couponDiscount = 0;
                                 $order->couponDiscountAmount = (int)$coupon->discount;
-                            }
-                            else {
+                            } else {
                                 $order->couponDiscount = $coupon->discount;
                                 $order->couponDiscountAmount = 0;
                             }
                             $order->timestamps = false;
-                            if($order->update()) {
+                            if ($order->update()) {
                                 session()->put('couponMessageSuccess', 'کپن شما با موفقیت ثبت شد!');
-                            }
-                            else{
-                                $coupon->usageNumber = $coupon->usageNumber - 1 ;
+                            } else {
+                                $coupon->usageNumber = $coupon->usageNumber - 1;
                                 $coupon->update();
                                 session()->put('couponMessageError', "خطای پایگاه داده در ثبت کپن!");
                             }
                             $order->timestamps = true;
-                        }else
-                        {
+                        } else {
                             session()->put('couponMessageError', "خطای پایگاه داده در ثبت کپن!");
                         }
                     }
+                } else {
+                    session()->put('couponMessageError', "حداکثر مبلغ سبد خرید برای استفاده از این کپن " . number_format($coupon->maxCost) . " تومان  می باشد.");
                 }
-                else{
-                    session()->put('couponMessageError', "حداکثر مبلغ سبد خرید برای استفاده از این کپن ".number_format($coupon->maxCost)." تومان  می باشد.");
-                }
-            }else{
+            } else {
                 session()->put('couponMessageError', $validateCoupon);
             }
 
-        }else{
+        } else {
             session()->put('couponMessageError', "کد وارد شده اشتباه می باشد");
         }
         return redirect()->back();
@@ -1847,131 +1642,118 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function removeCoupon(){
+    public function removeCoupon()
+    {
         $user = Auth::user();
-        if(session()->has("adminOrder_id"))
-        {
-            if(!$user->can(Config::get('constants.INSERT_ORDER_ACCESS')))
+        if (session()->has("adminOrder_id")) {
+            if (!$user->can(Config::get('constants.INSERT_ORDER_ACCESS')))
                 return redirect(action("HomeController@error403"));
             $order_id = session()->get("adminOrder_id");
             $order = Order::FindorFail($order_id);
-        }else
-        {
+        } else {
             $order_id = session()->get("order_id");
             $order = Order::FindorFail($order_id);
-            if($order->user->id != $user->id)
+            if ($order->user->id != $user->id)
                 return redirect(action("HomeController@error403"));
         }
 
         $result = $order->detachCoupon();
-        if($result)
-        {
-            if($order->update())
+        if ($result) {
+            if ($order->update())
                 session()->put('couponMessageSuccess', "کپن سفارش شما با موفیت حذف شد");
             else
                 session()->put('couponMessageError', "خطای پایگاه داده");
-        }
-        else
-        {
+        } else {
             session()->put('couponMessageError', "خطای پایگاه داده");
         }
 
         return redirect()->back();
     }
 
-    public function exitAdminInsertOrder(){
-        Session::forget("customer_id") ;
-        Session::forget("customer_firstName") ;
-        Session::forget("customer_lastName") ;
-        Session::forget("adminOrder_id") ;
+    public function exitAdminInsertOrder()
+    {
+        Session::forget("customer_id");
+        Session::forget("customer_firstName");
+        Session::forget("customer_lastName");
+        Session::forget("adminOrder_id");
         return redirect(action("ProductController@search"));
     }
 
-    public function addOrderproduct(Request $request , Product $product)
+    public function addOrderproduct(Request $request, Product $product)
     {
-        try
-        {
-            if($request->has("userId_bhrk"))
-            {
-                $userId =  $request->get("userId_bhrk");
+        try {
+            if ($request->has("userId_bhrk")) {
+                $userId = $request->get("userId_bhrk");
                 $forceUser = true;
-            }
-            else
-            {
+            } else {
                 $user = Auth::user();
             }
-            if($request->has("cost"))
+            if ($request->has("cost"))
                 $cost = $request->get("cost");
 
             $orderMode = "";
-            if($request->has("mode"))
+            if ($request->has("mode"))
                 $orderMode = $request->get("mode");
 
             $forceStore = false;
-            switch ($orderMode)
-            {
+            switch ($orderMode) {
                 case "normal":
                     $openOrder = $user->openOrders()
                         ->get()
                         ->first();
                     break;
                 case "donate":
-                    $openOrder = Order::where("user_id" , $user->id)
-                                        ->where("orderstatus_id" , config()->get("constants.ORDER_STATUS_OPEN_DONATE"))
-                                        ->first();
+                    $openOrder = Order::where("user_id", $user->id)
+                        ->where("orderstatus_id", config()->get("constants.ORDER_STATUS_OPEN_DONATE"))
+                        ->first();
                     // chon order taze sakhte shode in code order ro peida nemikonad va user->fresh ham kar nemikone
 //                    $openOrder = $user->orders
 //                        ->where("orderstatus_id" , config()->get("constants.ORDER_STATUS_OPEN_DONATE"))
 //                        ->first();
                     break;
                 default:
-                    if($request->has("orderId_bhrk"))
-                    {
+                    if ($request->has("orderId_bhrk")) {
                         $orderId = $request->get("orderId_bhrk");
-                        $openOrder = Order::where("id" , $orderId)
-                                    ->first();
+                        $openOrder = Order::where("id", $orderId)
+                            ->first();
                         $forceStore = true;
                     }
                     break;
             }
 
-            if(isset($openOrder))
-            {
-                $restorableProducts = Config::get("constants.DONATE_PRODUCT") ;
+            if (isset($openOrder)) {
+                $restorableProducts = Config::get("constants.DONATE_PRODUCT");
                 $createFlag = true;
-                if(in_array($product->id , $restorableProducts))
-                {
+                if (in_array($product->id, $restorableProducts)) {
                     $oldOrderproduct = $openOrder->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
-                        ->whereIn("product_id" , $restorableProducts )
+                        ->whereIn("product_id", $restorableProducts)
                         ->onlyTrashed()
-                        ->get() ;
-                    if( $oldOrderproduct->isNotEmpty())
-                    {
-                        $deletedOrderproduct = $oldOrderproduct->first() ;
+                        ->get();
+                    if ($oldOrderproduct->isNotEmpty()) {
+                        $deletedOrderproduct = $oldOrderproduct->first();
                         $deletedOrderproduct->restore();
                         $createFlag = false;
                     }
                 }
 
-                if($createFlag)
-                {
+                if ($createFlag) {
                     $request = new Request();
-                    $request->offsetSet("product_id" ,  $product->id);
-                    $request->offsetSet("order_id" ,  $openOrder->id);
-                    if($forceStore)
-                        $request->offsetSet("forceStore_bhrk" ,  true);
-                    if(isset($cost))
-                        $request->offsetSet("cost_bhrk" ,  $cost);
+                    $request->offsetSet("product_id", $product->id);
+                    $request->offsetSet("order_id", $openOrder->id);
+                    if ($forceStore)
+                        $request->offsetSet("forceStore_bhrk", true);
+                    if (isset($cost))
+                        $request->offsetSet("cost_bhrk", $cost);
 
-                    if(isset($forceUser))
-                        $request->offsetSet("userId_bhrk" ,  $userId);
-                    $request->offsetSet("withoutBon" ,  true);
+                    if (isset($forceUser))
+                        $request->offsetSet("userId_bhrk", $userId);
+                    $request->offsetSet("withoutBon", true);
                     $orderproductController = new OrderproductController();
-                    $orderproductController->store($request) ;
+                    $orderproductController->store($request);
                 }
 
                 $openOrder->fresh();
-                $orderCost = $openOrder->obtainOrderCost(true , false) ;
+                $orderCost = $openOrder->obtainOrderCost(true, false);
                 $openOrder->cost = $orderCost["rawCostWithDiscount"];
                 $openOrder->costwithoutcoupon = $orderCost["rawCostWithoutDiscount"];
                 $openOrder->timestamps = false;
@@ -1979,49 +1761,47 @@ class OrderController extends Controller
                 $openOrder->timestamps = true;
                 $cost = $openOrder->totalCost();
 
-                if($updateFlag)
+                if ($updateFlag)
                     return $this->response
                         ->setStatusCode(200)
-                        ->setContent(["cost"=>$cost]);
+                        ->setContent(["cost" => $cost]);
                 else
                     return $this->response
                         ->setStatusCode(503)
-                        ->setContent(["errorMessage"=>"could not update order"]);
+                        ->setContent(["errorMessage" => "could not update order"]);
             }
             return $this->response
                 ->setStatusCode(503)
-                ->setContent(["errorMessage"=>"cound not find order"]);
-        }catch (\Exception    $e)
-        {
+                ->setContent(["errorMessage" => "cound not find order"]);
+        } catch (\Exception    $e) {
             $message = "unexpected error";
             return $this->response
                 ->setStatusCode(500)
                 ->setContent([
-                    "errorMessage"=>$message ,
-                    "error"=>$e->getMessage() ,
-                    "line"=>$e->getLine() ,
-                    "file"=>$e->getFile()
+                    "errorMessage" => $message,
+                    "error" => $e->getMessage(),
+                    "line" => $e->getLine(),
+                    "file" => $e->getFile()
                 ]);
         }
     }
 
-    public function removeOrderproduct(Product $product , Request $request , OrderproductController $orderproductController)
+    public function removeOrderproduct(Product $product, Request $request, OrderproductController $orderproductController)
     {
         $user = Auth::user();
 
         $openOrder = $user->openOrders()->get()->first();
         //ToDo : if($openOrders->count()>1)
 
-        if(isset($openOrder))
-        {
-            $orderproduct = $openOrder->orderproducts->where("product_id" , $product->id)->first();
-            if(!isset($orderproduct))
-                return $this->response->setStatusCode(503)->setContent(["message"=>"محصول مورد نظر در سبد وجود ندارد"]);
-            $orderproductController->destroy($orderproduct) ;
+        if (isset($openOrder)) {
+            $orderproduct = $openOrder->orderproducts->where("product_id", $product->id)->first();
+            if (!isset($orderproduct))
+                return $this->response->setStatusCode(503)->setContent(["message" => "محصول مورد نظر در سبد وجود ندارد"]);
+            $orderproductController->destroy($orderproduct);
 
-            $newOpenOrder = $user->orders->where("id" , $openOrder->id)->first();
+            $newOpenOrder = $user->orders->where("id", $openOrder->id)->first();
 
-            $orderCost = $newOpenOrder->obtainOrderCost(true , false) ;
+            $orderCost = $newOpenOrder->obtainOrderCost(true, false);
             $newOpenOrder->cost = $orderCost["rawCostWithDiscount"];
             $newOpenOrder->costwithoutcoupon = $orderCost["rawCostWithoutDiscount"];
             $newOpenOrder->timestamps = false;
@@ -2029,17 +1809,14 @@ class OrderController extends Controller
             $newOpenOrder->timestamps = true;
             $cost = $newOpenOrder->totalCost();
 
-            if($updateFlag)
-            {
-                return $this->response->setStatusCode(200)->setContent(["cost"=>$cost]);
-            }
-            else
-            {
-                return $this->response->setStatusCode(503)->setContent(["message"=>"خطای پایگاه داده"]);
+            if ($updateFlag) {
+                return $this->response->setStatusCode(200)->setContent(["cost" => $cost]);
+            } else {
+                return $this->response->setStatusCode(503)->setContent(["message" => "خطای پایگاه داده"]);
             }
         }
 
-        return $this->response->setStatusCode(503)->setContent(["message"=>"خطای غیر منتظره"]);
+        return $this->response->setStatusCode(503)->setContent(["message" => "خطای غیر منتظره"]);
 
     }
 
@@ -2052,150 +1829,138 @@ class OrderController extends Controller
     public function detachOrderproduct(Request $request)
     {
         $orderproductsId = $request->get("orderproducts");
-        $orderId = $request->get("order") ;
+        $orderId = $request->get("order");
 
-        $orderproducts = Orderproduct::whereIn("id" , $orderproductsId)->get();
-        $flagOrder = $orderproducts->first()->order->id ;
-        foreach ($orderproducts as $orderproduct)
-        {
-            if($flagOrder == $orderproduct->order->id) {
+        $orderproducts = Orderproduct::whereIn("id", $orderproductsId)->get();
+        $flagOrder = $orderproducts->first()->order->id;
+        foreach ($orderproducts as $orderproduct) {
+            if ($flagOrder == $orderproduct->order->id) {
                 if ($orderproduct->order->id != $orderId)
-                    return $this->response->setStatusCode(503)->setContent(["message"=>"درخواست غیر مجاز"]);
-            }else{
-                return $this->response->setStatusCode(503)->setContent(["message"=>"درخواست غیر مجاز"]);
+                    return $this->response->setStatusCode(503)->setContent(["message" => "درخواست غیر مجاز"]);
+            } else {
+                return $this->response->setStatusCode(503)->setContent(["message" => "درخواست غیر مجاز"]);
             }
-                $flagOrder = $orderproduct->order->id ;
+            $flagOrder = $orderproduct->order->id;
         }
 
-        $oldOrder = Order::FindOrFail($orderId) ;
+        $oldOrder = Order::FindOrFail($orderId);
 
-        if($orderproducts->count() >= $oldOrder->orderproducts ->where("orderproducttype_id" , "<>" , Config::get("constants.ORDER_PRODUCT_GIFT"))->count()) return $this->response->setStatusCode(503)->setContent(["message"=>"شما نمی توانید سفارش را خالی کنید"]);
+        if ($orderproducts->count() >= $oldOrder->orderproducts->where("orderproducttype_id", "<>", Config::get("constants.ORDER_PRODUCT_GIFT"))->count()) return $this->response->setStatusCode(503)->setContent(["message" => "شما نمی توانید سفارش را خالی کنید"]);
 
-        $oldOrderBackup = $oldOrder->replicate() ;
-        $newOrder = $oldOrder->replicate() ;
-        if(!$newOrder->save())
-        {
-            return $this->response->setStatusCode(503)->setContent(["message"=>"خطا درایجاد سفارش جدید"]);
+        $oldOrderBackup = $oldOrder->replicate();
+        $newOrder = $oldOrder->replicate();
+        if (!$newOrder->save()) {
+            return $this->response->setStatusCode(503)->setContent(["message" => "خطا درایجاد سفارش جدید"]);
         }
 
-        foreach ($orderproducts as $orderproduct)
-        {
+        foreach ($orderproducts as $orderproduct) {
             $gifts = $orderproduct->children;
-            foreach ($gifts as $gift)
-            {
-                $gift->order_id = $newOrder->id ;
+            foreach ($gifts as $gift) {
+                $gift->order_id = $newOrder->id;
                 $gift->update();
             }
-            $orderproduct->order_id = $newOrder->id ;
-            $orderproduct->update() ;
+            $orderproduct->order_id = $newOrder->id;
+            $orderproduct->update();
         }
 
         /**
          * Reobtaining old order cost
          */
-        $oldOrder = Order::where("id" , $oldOrder->id)->get()->first();
-        $orderCost = $oldOrder->obtainOrderCost(true , false , "REOBTAIN") ;
+        $oldOrder = Order::where("id", $oldOrder->id)->get()->first();
+        $orderCost = $oldOrder->obtainOrderCost(true, false, "REOBTAIN");
         $oldOrder->cost = $orderCost["rawCostWithDiscount"];
         $oldOrder->costwithoutcoupon = $orderCost["rawCostWithoutDiscount"];
         $oldOrder->timestamps = false;
         $oldOrderDone = $oldOrder->update();
         $oldOrder->timestamps = true;
-        if($oldOrderDone)
-        {
+        if ($oldOrderDone) {
 
             /**
              * obtaining new order cost
              */
-                $newOrder = Order::where("id" , $newOrder->id)->get()->first();
-                $newOrder->created_at =  Carbon::now();
-                $newOrder->updated_at =  Carbon::now();
-                $newOrder->completed_at =  Carbon::now();
-                $newOrder->discount = 0 ;
-                $orderCost = $newOrder->obtainOrderCost(true , false , "REOBTAIN") ;
-                $newOrder->cost = $orderCost["rawCostWithDiscount"];
-                $newOrder->costwithoutcoupon = $orderCost["rawCostWithoutDiscount"];
-                $newOrderDone = $newOrder->update();
-                if($newOrderDone)
-                {
-                    /**
-                     * Transactions
-                     */
-                    $newCost = $newOrder->totalCost() ; //$newOrder->totalCost() ;
+            $newOrder = Order::where("id", $newOrder->id)->get()->first();
+            $newOrder->created_at = Carbon::now();
+            $newOrder->updated_at = Carbon::now();
+            $newOrder->completed_at = Carbon::now();
+            $newOrder->discount = 0;
+            $orderCost = $newOrder->obtainOrderCost(true, false, "REOBTAIN");
+            $newOrder->cost = $orderCost["rawCostWithDiscount"];
+            $newOrder->costwithoutcoupon = $orderCost["rawCostWithoutDiscount"];
+            $newOrderDone = $newOrder->update();
+            if ($newOrderDone) {
+                /**
+                 * Transactions
+                 */
+                $newCost = $newOrder->totalCost(); //$newOrder->totalCost() ;
 //                  if(($newOrder->totalCost() + $oldOrder->totalCost()) != $oldOrder->successfulTransactions->sum("cost") ) abort("403") ;
-                    $transactions = $oldOrder->successfulTransactions->where("cost",">" , 0 )->sortBy("cost");
-                    foreach ($transactions as $transaction)
-                    {
-                        if($newCost <= 0 ) break ;
-                        if($transaction->cost > $newCost)
-                        {
-                            $newTransaction = new Transaction() ;
-                            $newTransaction->destinationBankAccount_id = $transaction->destinationBankAccount_id;;
-                            $newTransaction->paymentmethod_id = $transaction->paymentmethod_id ;
-                            $newTransaction->transactiongateway_id = $transaction->transactiongateway_id;
-                            $newTransaction->transactionstatus_id = Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL") ;
-                            $newTransaction->cost = $newCost ;
-                            $newTransaction->order_id = $newOrder->id;
-                            $newTransaction->save();
+                $transactions = $oldOrder->successfulTransactions->where("cost", ">", 0)->sortBy("cost");
+                foreach ($transactions as $transaction) {
+                    if ($newCost <= 0) break;
+                    if ($transaction->cost > $newCost) {
+                        $newTransaction = new Transaction();
+                        $newTransaction->destinationBankAccount_id = $transaction->destinationBankAccount_id;;
+                        $newTransaction->paymentmethod_id = $transaction->paymentmethod_id;
+                        $newTransaction->transactiongateway_id = $transaction->transactiongateway_id;
+                        $newTransaction->transactionstatus_id = Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL");
+                        $newTransaction->cost = $newCost;
+                        $newTransaction->order_id = $newOrder->id;
+                        $newTransaction->save();
 
-                            $newTransaction2 = new \App\Transaction() ;
-                            $newTransaction2->cost = $transaction->cost - $newCost ;
-                            $newTransaction2->destinationBankAccount_id = $transaction->destinationBankAccount_id;
-                            $newTransaction2->paymentmethod_id = $transaction->paymentmethod_id ;
-                            $newTransaction2->transactiongateway_id = $transaction->transactiongateway_id;
-                            $newTransaction2->transactionstatus_id = Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL") ;
-                            $newTransaction2->order_id = $oldOrder->id;
-                            $newTransaction2->save();
+                        $newTransaction2 = new \App\Transaction();
+                        $newTransaction2->cost = $transaction->cost - $newCost;
+                        $newTransaction2->destinationBankAccount_id = $transaction->destinationBankAccount_id;
+                        $newTransaction2->paymentmethod_id = $transaction->paymentmethod_id;
+                        $newTransaction2->transactiongateway_id = $transaction->transactiongateway_id;
+                        $newTransaction2->transactionstatus_id = Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL");
+                        $newTransaction2->order_id = $oldOrder->id;
+                        $newTransaction2->save();
 
-                            if($transaction->getGrandParent() !== false)
-                            {
-                                $grandTransaction = $transaction->getGrandParent() ;
-                                $newTransaction->parents()->attach($grandTransaction->id,["relationtype_id"=>Config::get("constants.TRANSACTION_INTERRELATION_PARENT_CHILD")]) ;
-                                $newTransaction2->parents()->attach($grandTransaction->id,["relationtype_id"=>Config::get("constants.TRANSACTION_INTERRELATION_PARENT_CHILD")]) ;
-                                $grandTransaction->children()->detach($transaction->id) ;
-                                $transaction->delete() ;
-                            }else{
-                                $newTransaction->parents()->attach($transaction->id,["relationtype_id"=>Config::get("constants.TRANSACTION_INTERRELATION_PARENT_CHILD")]) ;
-                                $newTransaction2->parents()->attach($transaction->id,["relationtype_id"=>Config::get("constants.TRANSACTION_INTERRELATION_PARENT_CHILD")]) ;
-                                $transaction->transactionstatus_id = Config::get("constants.TRANSACTION_STATUS_ARCHIVED_SUCCESSFUL") ;
-                                $transaction->update();
-                            }
-
-                            $newCost = 0 ;
-
-                        }else
-                        {
-                            $transaction->order_id = $newOrder->id;
+                        if ($transaction->getGrandParent() !== false) {
+                            $grandTransaction = $transaction->getGrandParent();
+                            $newTransaction->parents()->attach($grandTransaction->id, ["relationtype_id" => Config::get("constants.TRANSACTION_INTERRELATION_PARENT_CHILD")]);
+                            $newTransaction2->parents()->attach($grandTransaction->id, ["relationtype_id" => Config::get("constants.TRANSACTION_INTERRELATION_PARENT_CHILD")]);
+                            $grandTransaction->children()->detach($transaction->id);
+                            $transaction->delete();
+                        } else {
+                            $newTransaction->parents()->attach($transaction->id, ["relationtype_id" => Config::get("constants.TRANSACTION_INTERRELATION_PARENT_CHILD")]);
+                            $newTransaction2->parents()->attach($transaction->id, ["relationtype_id" => Config::get("constants.TRANSACTION_INTERRELATION_PARENT_CHILD")]);
+                            $transaction->transactionstatus_id = Config::get("constants.TRANSACTION_STATUS_ARCHIVED_SUCCESSFUL");
                             $transaction->update();
-                            $newCost = $newCost - $transaction->cost ;
                         }
-                    }
-                    /**
-                     * End
-                     */
 
-                    if($newOrder->totalPaidCost() >= (int)$newOrder->totalCost())
-                    {
-                        $newOrder->paymentstatus_id = Config::get("constants.PAYMENT_STATUS_PAID");
-                        $newOrder->update();
-                    }
+                        $newCost = 0;
 
-                session()->put("success" , "سفارش با موفقیت تفکیک شد . رفتن به سفارش جدید : "."<a target='_blank' href='".action('OrderController@edit' , $newOrder)."'>".$newOrder->id."</a>");
-                return $this->response->setStatusCode(200)->setContent(["orderId"=>$newOrder->id]);
-            }   else{
-                $oldOrder->fill($oldOrderBackup->toArray());
-                foreach ($orderproducts as $orderproduct)
-                {
-                    $orderproduct->order_id = $oldOrder->id ;
-                    $orderproduct->update() ;
+                    } else {
+                        $transaction->order_id = $newOrder->id;
+                        $transaction->update();
+                        $newCost = $newCost - $transaction->cost;
+                    }
                 }
-                if($oldOrder->update()){
-                    return $this->response->setStatusCode(503)->setContent(["message"=>"خطا در آپدیت سفارش جدید ایجاد شده . سفارش قدیم بدون تغییر ماند."]);
-                }else{
-                    return $this->response->setStatusCode(503)->setContent(["message"=>"خطا در آپدیت سفارش جدید ایجاد شده . سفارش قدیم دچار تغییرات شد."]);
+                /**
+                 * End
+                 */
+
+                if ($newOrder->totalPaidCost() >= (int)$newOrder->totalCost()) {
+                    $newOrder->paymentstatus_id = Config::get("constants.PAYMENT_STATUS_PAID");
+                    $newOrder->update();
+                }
+
+                session()->put("success", "سفارش با موفقیت تفکیک شد . رفتن به سفارش جدید : " . "<a target='_blank' href='" . action('OrderController@edit', $newOrder) . "'>" . $newOrder->id . "</a>");
+                return $this->response->setStatusCode(200)->setContent(["orderId" => $newOrder->id]);
+            } else {
+                $oldOrder->fill($oldOrderBackup->toArray());
+                foreach ($orderproducts as $orderproduct) {
+                    $orderproduct->order_id = $oldOrder->id;
+                    $orderproduct->update();
+                }
+                if ($oldOrder->update()) {
+                    return $this->response->setStatusCode(503)->setContent(["message" => "خطا در آپدیت سفارش جدید ایجاد شده . سفارش قدیم بدون تغییر ماند."]);
+                } else {
+                    return $this->response->setStatusCode(503)->setContent(["message" => "خطا در آپدیت سفارش جدید ایجاد شده . سفارش قدیم دچار تغییرات شد."]);
                 }
             }
-        }else{
-            return $this->response->setStatusCode(503)->setContent(["message"=>"خطا در آپدیت اطلاعات سفارش قدیم"]);
+        } else {
+            return $this->response->setStatusCode(503)->setContent(["message" => "خطا در آپدیت اطلاعات سفارش قدیم"]);
         }
 
 
@@ -2209,22 +1974,21 @@ class OrderController extends Controller
      * @param TransactionController $transactionController
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function exchangeOrderproduct(Order $order , Request $request , TransactionController $transactionController)
+    public function exchangeOrderproduct(Order $order, Request $request, TransactionController $transactionController)
     {
         $done = false;
         $exchangeArray1 = $request->get("exchange-a");
-        foreach ($exchangeArray1 as $key => $item)
-        {
-            $newProduct = Product::where("id" , $item["orderproductExchangeNewProduct"])->get()->first();
-            if(isset($newProduct)) {
+        foreach ($exchangeArray1 as $key => $item) {
+            $newProduct = Product::where("id", $item["orderproductExchangeNewProduct"])->get()->first();
+            if (isset($newProduct)) {
                 $done = true;
                 $orderproduct = Orderproduct::where("id", $key)->get()->first();
                 if ($orderproduct->order_id != $order->id) continue;
                 if (isset($orderproduct)) {
                     $orderproduct->product_id = $newProduct->id;
-                    if(strlen( preg_replace('/\s+/', '',$item["orderproductExchangeNewCost"])) > 0)
+                    if (strlen(preg_replace('/\s+/', '', $item["orderproductExchangeNewCost"])) > 0)
                         $orderproduct->cost = $item["orderproductExchangeNewCost"];
-                    if(strlen( preg_replace('/\s+/', '',$item["orderproductExchangeNewDiscountAmount"])) > 0)
+                    if (strlen(preg_replace('/\s+/', '', $item["orderproductExchangeNewDiscountAmount"])) > 0)
                         $orderproduct->discountAmount = $item["orderproductExchangeNewDiscountAmount"];
                     $orderproduct->discountPercentage = 0;
                     $orderproduct->includedInCoupon = 0;
@@ -2235,58 +1999,55 @@ class OrderController extends Controller
         }
 
         $exchangeArray2 = $request->get("exchange-b");
-            foreach ($exchangeArray2 as $item)
-            {
-                $newProduct = Product::where("id" , $item["newOrderproductProduct"])->get()->first();
-                if(isset($newProduct)) {
-                    $done = true;
-                    $orderproduct = new Orderproduct();
-                    $orderproduct->product_id = $newProduct->id;
-                    $orderproduct->order_id = $order->id;
-                    if(strlen( preg_replace('/\s+/', '',$item["neworderproductCost"])) > 0)
-                        $orderproduct->cost = $item["neworderproductCost"];
-                    $orderproduct->save();
-                }
+        foreach ($exchangeArray2 as $item) {
+            $newProduct = Product::where("id", $item["newOrderproductProduct"])->get()->first();
+            if (isset($newProduct)) {
+                $done = true;
+                $orderproduct = new Orderproduct();
+                $orderproduct->product_id = $newProduct->id;
+                $orderproduct->order_id = $order->id;
+                if (strlen(preg_replace('/\s+/', '', $item["neworderproductCost"])) > 0)
+                    $orderproduct->cost = $item["neworderproductCost"];
+                $orderproduct->save();
             }
-        if($request->has("orderproductExchangeTransacctionCheckbox"))
-        {
+        }
+        if ($request->has("orderproductExchangeTransacctionCheckbox")) {
             $done = true;
-            $request->offsetSet("order_id" , $order->id);
-            $transactionRequest =  new InsertTransactionRequest();
-            $transactionRequest->offsetSet("order_id" , $order->id);
+            $request->offsetSet("order_id", $order->id);
+            $transactionRequest = new InsertTransactionRequest();
+            $transactionRequest->offsetSet("order_id", $order->id);
             $cost = $request->get("cost");
-            if($request->has("cost")) $transactionRequest->offsetSet("cost" , -$cost);
-            if(strlen( preg_replace('/\s+/', '',$request->get("traceNumber"))) != 0  )
-                $transactionRequest->offsetSet("traceNumber" , $request->get("traceNumber"));
-            if(strlen(preg_replace('/\s+/', '',$request->get("referenceNumber"))) != 0  )
-                $transactionRequest->offsetSet("referenceNumber" , $request->get("referenceNumber"));
-            if(strlen(preg_replace('/\s+/', '',$request->get("paycheckNumber"))) != 0 )
-                $transactionRequest->offsetSet("paycheckNumber" , $request->get("paycheckNumber"));
-            if(strlen( preg_replace('/\s+/', '',$request->get("managerComment"))) != 0  )
-                $transactionRequest->offsetSet("managerComment" , $request->get("managerComment"));
-            $transactionRequest->offsetSet("destinationBankAccount_id" , 1);
-            if($request->has("paymentmethod_id"))
-                $transactionRequest->offsetSet("paymentmethod_id" , $request->get("paymentmethod_id"));
-            if($request->has("transactionstatus_id"))
-                $transactionRequest->offsetSet("transactionstatus_id" , $request->get("transactionstatus_id"));
+            if ($request->has("cost")) $transactionRequest->offsetSet("cost", -$cost);
+            if (strlen(preg_replace('/\s+/', '', $request->get("traceNumber"))) != 0)
+                $transactionRequest->offsetSet("traceNumber", $request->get("traceNumber"));
+            if (strlen(preg_replace('/\s+/', '', $request->get("referenceNumber"))) != 0)
+                $transactionRequest->offsetSet("referenceNumber", $request->get("referenceNumber"));
+            if (strlen(preg_replace('/\s+/', '', $request->get("paycheckNumber"))) != 0)
+                $transactionRequest->offsetSet("paycheckNumber", $request->get("paycheckNumber"));
+            if (strlen(preg_replace('/\s+/', '', $request->get("managerComment"))) != 0)
+                $transactionRequest->offsetSet("managerComment", $request->get("managerComment"));
+            $transactionRequest->offsetSet("destinationBankAccount_id", 1);
+            if ($request->has("paymentmethod_id"))
+                $transactionRequest->offsetSet("paymentmethod_id", $request->get("paymentmethod_id"));
+            if ($request->has("transactionstatus_id"))
+                $transactionRequest->offsetSet("transactionstatus_id", $request->get("transactionstatus_id"));
 
             $transactionController->store($transactionRequest);
             session()->forget("success");
             session()->forget("error");
         }
 
-        if($done)
-        {
-            $newOrder = Order::where("id" , $order->id)->get()->first();
-            $orderCost = $newOrder->obtainOrderCost(true , false , "REOBTAIN") ;
+        if ($done) {
+            $newOrder = Order::where("id", $order->id)->get()->first();
+            $orderCost = $newOrder->obtainOrderCost(true, false, "REOBTAIN");
             $newOrder->cost = $orderCost["rawCostWithDiscount"];
             $newOrder->costwithoutcoupon = $orderCost["rawCostWithoutDiscount"];
             $newOrderDone = $newOrder->update();
-            if($newOrderDone) session()->put("success" , "عملیات تعویض آیتم های سفارش یا موفقیت انجام شد");
-            else session()->put("error" , "خطا در بروز رسانی قیمت سفارش");
+            if ($newOrderDone) session()->put("success", "عملیات تعویض آیتم های سفارش یا موفقیت انجام شد");
+            else session()->put("error", "خطا در بروز رسانی قیمت سفارش");
             return redirect()->back();
-        }else{
-            session()->put("warning" , "عملیاتی انجام نشد");
+        } else {
+            session()->put("warning", "عملیاتی انجام نشد");
             return redirect()->back();
         }
 
@@ -2299,46 +2060,40 @@ class OrderController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @param \App\Http\Controllers\OrderController $orderController
      */
-    public  function copy(Order $order ,Request $request)
+    public function copy(Order $order, Request $request)
     {
         $failed = true;
         $copyOrderRequest = new Request();
-        if($request->has("paymenrstatus_id"))
+        if ($request->has("paymenrstatus_id"))
             $copyOrderRequest->offsetSet("paymentstatus_id", $request->get("paymenrstatus_id"));
-        if($request->has("orderstatus_id"))
+        if ($request->has("orderstatus_id"))
             $copyOrderRequest->offsetSet("orderstatus_id", $request->get("orderstatus_id"));
         $copyOrderRequest->offsetSet("user_id", $order->user_id);
         $copyOrderRequest->offsetSet("coupon_id", $order->coupon_id);
         $copyOrderRequest->offsetSet("couponDiscount", $order->couponDiscount);
         $copyOrderRequest->offsetSet("couponDiscountAmount", $order->couponDiscountAmount);
         $copyOrderRequest->offsetSet("checkOutDateTime", $order->checkOutDateTime);
-        $orderController = new  OrderController() ;
+        $orderController = new  OrderController();
         $newOrder = $orderController->store($copyOrderRequest);
         if ($newOrder) {
             $orderproducts = $order->orderproducts;
-            foreach ($orderproducts as $orderproduct)
-            {
+            foreach ($orderproducts as $orderproduct) {
                 $newOrderproduct = new Orderproduct();
                 $newOrderproduct->product_id = $orderproduct->product_id;
                 $newOrderproduct->order_id = $newOrder->id;
                 $newOrderproduct->quantity = $orderproduct->quantity;
-                if ($newOrderproduct->save())
-                {
+                if ($newOrderproduct->save()) {
                     $userbons = $orderproduct->userbons;
-                    foreach ($userbons as $userbon)
-                    {
+                    foreach ($userbons as $userbon) {
                         $newOrderproduct->userbons()
-                            ->attach($userbon->id, ["usageNumber" => $userbon->pivot->usageNumber , "discount"=>$userbon->pivot->discount]);
+                            ->attach($userbon->id, ["usageNumber" => $userbon->pivot->usageNumber, "discount" => $userbon->pivot->discount]);
                     }
-                    foreach ($orderproduct->attributevalues as $value)
-                    {
+                    foreach ($orderproduct->attributevalues as $value) {
                         if ($orderproduct->product->hasParents()) {
                             $myParent = $this->makeParentArray($orderproduct->product);
                             $myParent = end($myParent);
                             $attributevalue = $myParent->attributevalues->where("id", $value->id);
-                        }
-                        else
-                        {
+                        } else {
                             $attributevalue = $orderproduct->product->attributevalues->where("id", $value->id);
                         }
                         if (!$attributevalue->isEmpty()) {
@@ -2348,27 +2103,23 @@ class OrderController extends Controller
                         }
                     }
                     $failed = false;
-                } else
-                {
+                } else {
                     // he just lost one of last orders items in his new order
                 }
             }
 
-        } else
-        {
+        } else {
             // the new order was not created and no action is necessary.in fact he just lost his last order to add to.
         }
 
-        if($request->has("fromAPI"))
-        {
-            if(!$failed)
+        if ($request->has("fromAPI")) {
+            if (!$failed)
                 return $this->response
-                            ->setStatusCode(200);
+                    ->setStatusCode(200);
             else
                 return $this->response
                     ->setStatusCode(503);
-        }
-        else{
+        } else {
 
         }
     }
@@ -2381,47 +2132,39 @@ class OrderController extends Controller
      */
     public function donateOrder(DonateRequest $request)
     {
-        $amount = $request->get("amount") ;
+        $amount = $request->get("amount");
         $user = Auth::user();
-        $donateOrders = $user->orders->where("orderstatus_id", config("constants.ORDER_STATUS_OPEN_DONATE")) ;
-        if($donateOrders->isNotEmpty())
-        {
+        $donateOrders = $user->orders->where("orderstatus_id", config("constants.ORDER_STATUS_OPEN_DONATE"));
+        if ($donateOrders->isNotEmpty()) {
             $donateOrder = $donateOrders->first();
-        }
-        else
-        {
+        } else {
             $donateOrder = new Order();
-            $donateOrder->orderstatus_id = config("constants.ORDER_STATUS_OPEN_DONATE") ;
-            $donateOrder->paymentstatus_id = config("constants.PAYMENT_STATUS_PAID") ;
-            $donateOrder->user_id = $user->id ;
-            if($donateOrder->save())
-            {
+            $donateOrder->orderstatus_id = config("constants.ORDER_STATUS_OPEN_DONATE");
+            $donateOrder->paymentstatus_id = config("constants.PAYMENT_STATUS_PAID");
+            $donateOrder->user_id = $user->id;
+            if ($donateOrder->save()) {
                 $user->fresh();
             }
         }
-        $request->offsetSet("mode" , "donate");
-        $request->offsetSet("cost" , $amount);
-        $product = Product::FindOrFail(config("constants.CUSTOM_DONATE_PRODUCT")) ;
-        $response = $this->addOrderproduct($request , $product) ;
+        $request->offsetSet("mode", "donate");
+        $request->offsetSet("cost", $amount);
+        $product = Product::FindOrFail(config("constants.CUSTOM_DONATE_PRODUCT"));
+        $response = $this->addOrderproduct($request, $product);
         $responseStatus = $response->getStatusCode();
         $result = json_decode($response->getContent());
-        if($responseStatus == 200)
-        {
-            if(isset($result->cost))
+        if ($responseStatus == 200) {
+            if (isset($result->cost))
                 $cost = $result->cost;
-            if(isset($cost))
-            {
+            if (isset($cost)) {
                 $request = new Request();
-                $request->offsetSet("gateway" , "zarinpal");
-                $request->offsetSet("order_id" , $donateOrder->id);
-                $request->offsetSet("forcePay_bhrk" , true);
+                $request->offsetSet("gateway", "zarinpal");
+                $request->offsetSet("order_id", $donateOrder->id);
+                $request->offsetSet("forcePay_bhrk", true);
                 $transactionController = new TransactionController();
-                $result =  $transactionController->paymentRedirect($request);
+                $result = $transactionController->paymentRedirect($request);
 //                dd($result);
             }
-        }
-        else
-        {
+        } else {
 //            dd($result);
         }
         return redirect()->back();
@@ -2430,173 +2173,139 @@ class OrderController extends Controller
 
     public function addToArabiHozouri(Request $request)
     { //Adding user to Hamayesh Houzori Arabi 27 Khordad
-        try
-        {
+        try {
             $user = Auth::user();
-            $done =false;
+            $done = false;
             $hamayeshHozouriProductId = 223;
-            $hamayeshTalaiProductId = [ 210 , 211 ,212 ,213 , 214,215,216,217,218,219,220,221, 222 ];
+            $hamayeshTalaiProductId = [210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222];
             $hamayeshTalai = $user->orders()
-                                ->whereHas("orderproducts" , function ($q) use ($hamayeshTalaiProductId){
-                                    $q->whereIn("product_id" , $hamayeshTalaiProductId);
-                                })
-                                ->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
-                                ->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_PAID"))
-                                ->first();
+                ->whereHas("orderproducts", function ($q) use ($hamayeshTalaiProductId) {
+                    $q->whereIn("product_id", $hamayeshTalaiProductId);
+                })
+                ->where("orderstatus_id", config("constants.ORDER_STATUS_CLOSED"))
+                ->where("paymentstatus_id", config("constants.PAYMENT_STATUS_PAID"))
+                ->first();
 
-            if(!isset($hamayeshTalai))
+            if (!isset($hamayeshTalai))
                 return $this->response
                     ->setStatusCode(503)
                     ->setContent([
-                        "message"=>"شما همایش طلایی عربی ندارد"
+                        "message" => "شما همایش طلایی عربی ندارد"
                     ]);
 
             $hozouriOrders = $user->orders()
-                                    ->whereHas("orderproducts" , function ($q) use ($hamayeshHozouriProductId){
-                                        $q->where("product_id" , $hamayeshHozouriProductId);
-                                    })
-                                    ->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
-                                    ->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_PAID"))
-                                    ;
-            if($hozouriOrders->get()->isNotEmpty())
-            {
+                ->whereHas("orderproducts", function ($q) use ($hamayeshHozouriProductId) {
+                    $q->where("product_id", $hamayeshHozouriProductId);
+                })
+                ->where("orderstatus_id", config("constants.ORDER_STATUS_CLOSED"))
+                ->where("paymentstatus_id", config("constants.PAYMENT_STATUS_PAID"));
+            if ($hozouriOrders->get()->isNotEmpty()) {
                 return $this->response
                     ->setStatusCode(503)
-                    ->setContent(["message"=>"شما قبلا در همایش حضوری ثبت نام کرده اید"]);
-            }
-            else
-            {
+                    ->setContent(["message" => "شما قبلا در همایش حضوری ثبت نام کرده اید"]);
+            } else {
                 $withTrashedOrders = $hozouriOrders->withTrashed()->get();
-                if($withTrashedOrders->isNotEmpty())
-                {
+                if ($withTrashedOrders->isNotEmpty()) {
                     $deletedOrder = $withTrashedOrders->first();
-                    $restoreResult =  $deletedOrder->restore();
-                    if($restoreResult)
-                    {
+                    $restoreResult = $deletedOrder->restore();
+                    if ($restoreResult) {
                         $done = true;
+                    } else {
+                        $done = false;
                     }
-                    else
-                    {
-                        $done =false;
-                    }
-                }
-                else
-                {
+                } else {
                     $hozouriOrder = new Order();
-                    $hozouriOrder->orderstatus_id = config("constants.ORDER_STATUS_CLOSED") ;
-                    $hozouriOrder->paymentstatus_id = config("constants.PAYMENT_STATUS_PAID") ;
-                    $hozouriOrder->cost = 0 ;
+                    $hozouriOrder->orderstatus_id = config("constants.ORDER_STATUS_CLOSED");
+                    $hozouriOrder->paymentstatus_id = config("constants.PAYMENT_STATUS_PAID");
+                    $hozouriOrder->cost = 0;
                     $hozouriOrder->costwithoutcoupon = 0;
-                    $hozouriOrder->user_id = $user->id ;
+                    $hozouriOrder->user_id = $user->id;
                     $hozouriOrder->completed_at = Carbon::now()->setTimezone("Asia/Tehran");
-                    if($hozouriOrder->save())
-                    {
-                        $request->offsetSet("cost" , 0);
-                        $request->offsetSet("orderId_bhrk" , $hozouriOrder->id);
-                        $product =  Product::where("id" , $hamayeshHozouriProductId)->first();
-                        if(isset($product))
-                        {
-                            $response = $this->addOrderproduct($request , $product) ;
+                    if ($hozouriOrder->save()) {
+                        $request->offsetSet("cost", 0);
+                        $request->offsetSet("orderId_bhrk", $hozouriOrder->id);
+                        $product = Product::where("id", $hamayeshHozouriProductId)->first();
+                        if (isset($product)) {
+                            $response = $this->addOrderproduct($request, $product);
                             $responseStatus = $response->getStatusCode();
                             $result = json_decode($response->getContent());
-                            if($responseStatus == 200)
-                            {
+                            if ($responseStatus == 200) {
                                 $done = true;
-                            }
-                            else
-                            {
+                            } else {
                                 $done = false;
                             }
-                        }
-                        else
-                        {
+                        } else {
                             $done = false;
                         }
-                    }
-                    else
-                    {
-                        $done =false;
+                    } else {
+                        $done = false;
                     }
                 }
             }
 
-            if($done)
-            {
+            if ($done) {
                 return $this->response->setStatusCode(200);
-            }
-            else
-            {
+            } else {
                 return $this->response->setStatusCode(503);
             }
-        }
-        catch (\Exception    $e) {
+        } catch (\Exception    $e) {
             $message = "unexpected error";
             return $this->response
                 ->setStatusCode(503)
                 ->setContent([
-                    "message"=>$message ,
-                    "error"=>$e->getMessage() ,
-                    "line"=>$e->getLine() ,
-                    "file"=>$e->getFile()
+                    "message" => $message,
+                    "error" => $e->getMessage(),
+                    "line" => $e->getLine(),
+                    "file" => $e->getFile()
                 ]);
         }
     }
 
     public function removeArabiHozouri(Request $request)
     { //Adding user to Hamayesh Houzori Arabi 27 Khordad
-        try
-        {
+        try {
             $user = Auth::user();
-            $done =false;
+            $done = false;
             $hamayeshHozouriProductId = 223;
 
             $hozouriOrders = $user->orders()
-                                ->whereHas("orderproducts" , function ($q) use ($hamayeshHozouriProductId){
-                                    $q->where("product_id" , $hamayeshHozouriProductId);
-                                })
-                                ->where("orderstatus_id" , config("constants.ORDER_STATUS_CLOSED"))
-                                ->where("paymentstatus_id" , config("constants.PAYMENT_STATUS_PAID"))
-                                ->get();
-            if($hozouriOrders->isNotEmpty())
-            {
+                ->whereHas("orderproducts", function ($q) use ($hamayeshHozouriProductId) {
+                    $q->where("product_id", $hamayeshHozouriProductId);
+                })
+                ->where("orderstatus_id", config("constants.ORDER_STATUS_CLOSED"))
+                ->where("paymentstatus_id", config("constants.PAYMENT_STATUS_PAID"))
+                ->get();
+            if ($hozouriOrders->isNotEmpty()) {
                 $done = true;
-                foreach ($hozouriOrders as $hozouriOrder)
-                {
+                foreach ($hozouriOrders as $hozouriOrder) {
                     $removeResult = $hozouriOrder->delete();
-                    if(!$removeResult)
-                    {
+                    if (!$removeResult) {
                         $done = false;
                         break;
                     }
                 }
 
-            }
-            else
-            {
+            } else {
                 return $this->response
                     ->setStatusCode(503)
-                    ->setContent(["message"=>"شما در همایش ثبت نام نکرده اید"]);
+                    ->setContent(["message" => "شما در همایش ثبت نام نکرده اید"]);
             }
 
 
-            if($done)
-            {
+            if ($done) {
                 return $this->response->setStatusCode(200);
-            }
-            else
-            {
+            } else {
                 return $this->response->setStatusCode(503);
             }
-        }
-        catch (\Exception    $e) {
+        } catch (\Exception    $e) {
             $message = "unexpected error";
             return $this->response
                 ->setStatusCode(503)
                 ->setContent([
-                    "message"=>$message ,
-                    "error"=>$e->getMessage() ,
-                    "line"=>$e->getLine() ,
-                    "file"=>$e->getFile()
+                    "message" => $message,
+                    "error" => $e->getMessage(),
+                    "line" => $e->getLine(),
+                    "file" => $e->getFile()
                 ]);
         }
     }

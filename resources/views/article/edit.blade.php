@@ -2,8 +2,8 @@
 @extends("app",["pageName"=>"admin"])
 
 @section("headPageLevelPlugin")
-    <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css" />
-    <link href="/assets/global/plugins/bootstrap-summernote/summernote.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/global/plugins/bootstrap-summernote/summernote.css" rel="stylesheet" type="text/css"/>
 @endsection
 
 
@@ -55,8 +55,9 @@
     </script>
 
     <script>
-        countChar(document.getElementById('title'),50,60,100,'#progressbar_title');
-        countChar(document.getElementById('brief'),150,160,200,'#progressbar_brief');
+        countChar(document.getElementById('title'), 50, 60, 100, '#progressbar_title');
+        countChar(document.getElementById('brief'), 150, 160, 200, '#progressbar_brief');
+
         /**
          *
          * @param val
@@ -64,22 +65,22 @@
          * @param bNumberOfChar
          * @param progress
          */
-        function countChar(val,aNumberOfChar,bNumberOfChar,maxChar,progress) {
+        function countChar(val, aNumberOfChar, bNumberOfChar, maxChar, progress) {
             var len = val.value.length;
             var $progressbar = $(progress);
 
-            var w = Math.round(100 * len / maxChar) ;
+            var w = Math.round(100 * len / maxChar);
 //            console.log(w);
-            if(w <  Math.round(100 * aNumberOfChar / maxChar)){
+            if (w < Math.round(100 * aNumberOfChar / maxChar)) {
                 $progressbar.css("width", w + "%");
                 $progressbar.css("background-color", '#ff5329');
             }
-            else if(w <= Math.round(100 * bNumberOfChar / maxChar)){
+            else if (w <= Math.round(100 * bNumberOfChar / maxChar)) {
                 $progressbar.css("width", w + "%");
                 $progressbar.css("background-color", '#00aa11');
             }
             else {
-                $progressbar.css("width", w  + "%");
+                $progressbar.css("width", w + "%");
                 $progressbar.css("background-color", '#ff0000');
             }
         }

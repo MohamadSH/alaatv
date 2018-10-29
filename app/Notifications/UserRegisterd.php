@@ -12,7 +12,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 use Illuminate\Queue\SerializesModels;
 
-class UserRegisterd extends Notification  implements ShouldQueue
+class UserRegisterd extends Notification implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -26,7 +26,7 @@ class UserRegisterd extends Notification  implements ShouldQueue
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param  mixed $notifiable
      * @return array
      */
     public function via($notifiable)
@@ -44,7 +44,7 @@ class UserRegisterd extends Notification  implements ShouldQueue
      */
     public function toMediana($notifiable)
     {
-        if(!isset($this->user))
+        if (!isset($this->user))
             $this->user = $notifiable;
 
         return (new MedianaMessage())
