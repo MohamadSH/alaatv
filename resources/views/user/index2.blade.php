@@ -41,7 +41,8 @@
                 @endforeach
             @endif
         </td>
-        <td>@if($user->hasVerifiedMobile()) <span class="label label-sm label-success">احراز هویت کرده</span> @else <span class="label label-sm label-danger"> نامعتبر </span> @endif</td>
+            <td>@if($user->hasVerifiedMobile()) <span class="label label-sm label-success">احراز هویت کرده</span> @else
+                    <span class="label label-sm label-danger"> نامعتبر </span> @endif</td>
         <td>@if(isset($user->nationalCode) && strlen($user->nationalCode)>0) {{ $user->nationalCode }} @else <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
         <td>@if(isset($user->city) && strlen($user->city)>0) {{ $user->city }} @else <span class="label label-sm label-warning"> درج نشده </span> @endif</td>
     </tr>

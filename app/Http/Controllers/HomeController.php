@@ -23,12 +23,10 @@ use App\{Assignmentstatus,
     Http\Requests\ContactUsFormRequest,
     Http\Requests\InsertUserRequest,
     Http\Requests\Request,
-    Http\Requests\SendSMSRequest,
     Lottery,
     Major,
     Notifications\GeneralNotice,
     Notifications\GiftGiven,
-    Notifications\MobileVerified,
     Notifications\UserRegisterd,
     Order,
     Orderproduct,
@@ -64,7 +62,7 @@ use Auth;
 use Carbon\Carbon;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\{App, Config, File, Input, Route, Storage};
+use Illuminate\Support\Facades\{Config, File, Input, Route, Storage};
 use Illuminate\Support\Str;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Sftp\SftpAdapter;
@@ -928,124 +926,6 @@ class HomeController extends Controller
             $orders->load("orderproducts");
         }
         return view("admin.indexTeleMarketing" , compact("orders" , "marketingProducts"));
-    }
-
-    /**
-     * Send a custom SMS to the user
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function sendSMS(SendSMSRequest $request)
-    {
-        $from = $request->get("smsProviderNumber");
-        $message = $request->get("message");
-        $usersId = $request->get("users");
-        $usersId = explode(',', $usersId);
-        $relatives = $request->get("relatives");
-        $relatives = explode(',', $relatives);
-
-        $smsNumber = config('constants.SMS_PROVIDER_DEFAULT_NUMBER');
-        $users = User::whereIn("id", $usersId)->get();
-        if ($users->isEmpty())
-            return $this->response->setStatusCode(451);
-
-        if (!isset($from) || strlen($from) == 0)
-            $from = $smsNumber;
-
-        /**
-         *  for customized message to every user
-
-        foreach ($users as $user) {
-        $customizedMessage = "";
-        $mobiles = [];
-        if (in_array(0, $relatives))
-        array_push($mobiles, ltrim($user->mobile, '0'));
-        if (in_array(1, $relatives)) {
-        if (!$user->contacts->isEmpty()) {
-        $fatherMobiles = $user->contacts->where("relative_id", 1)->first()->phones->where("phonetype_id", 1)->sortBy("priority");
-        if (!$fatherMobiles->isEmpty())
-        foreach ($fatherMobiles as $fatherMobile) {
-        array_push($mobiles, ltrim($fatherMobile->phoneNumber, '0'));
-        }
-
-        }
-        }
-        if (in_array(2, $relatives)) {
-        if (!$user->contacts->isEmpty()) {
-        $motherMobiles = $user->contacts->where("relative_id", 2)->first()->phones->where("phonetype_id", 1)->sortBy("priority");
-        if (!$motherMobiles->isEmpty())
-        foreach ($motherMobiles as $motherMobile) {
-        array_push($mobiles, ltrim($motherMobile->phoneNumber, '0'));
-        }
-        }
-        }
-        $smsInfo = array();
-        $gender = "";
-        if(isset($user->gender_id))
-        {
-        if($user->gender->name=="خانم")
-        $gender = "خانم ";
-        elseif($user->gender->name=="آقا")
-        $gender = "آقای ";
-        else
-        $gender = "";
-        }else{
-        $gender = "";
-        }
-        $customizedMessage = "سلام ".$gender.$user->getfullName()."\n".$message;
-        $smsInfo["message"] = $customizedMessage;
-        $smsInfo["to"] = $mobiles;
-        $smsInfo["from"] = "+985000145";
-        $response = $this->medianaSendSMS($smsInfo);
-        if (!$response["error"]) {
-
-        } else {
-        dump("SMS was not sent to user: ".$user->id) ;
-        }
-        }
-        dd("done");
-
-
-        /**
-         *
-         */
-
-        $mobiles = [];
-        foreach ($users as $user) {
-            if (in_array(0, $relatives))
-                array_push($mobiles, ltrim($user->mobile, '0'));
-            if (in_array(1, $relatives)) {
-                if (!$user->contacts->isEmpty()) {
-                    $fatherMobiles = $user->contacts->where("relative_id", 1)->first()->phones->where("phonetype_id", 1)->sortBy("priority");
-                    if (!$fatherMobiles->isEmpty())
-                        foreach ($fatherMobiles as $fatherMobile) {
-                            array_push($mobiles, ltrim($fatherMobile->phoneNumber, '0'));
-                        }
-
-                }
-            }
-            if (in_array(2, $relatives)) {
-                if (!$user->contacts->isEmpty()) {
-                    $motherMobiles = $user->contacts->where("relative_id", 2)->first()->phones->where("phonetype_id", 1)->sortBy("priority");
-                    if (!$motherMobiles->isEmpty())
-                        foreach ($motherMobiles as $motherMobile) {
-                            array_push($mobiles, ltrim($motherMobile->phoneNumber, '0'));
-                        }
-                }
-            }
-        }
-        $smsInfo = array();
-        $smsInfo["message"] = $message;
-        $smsInfo["to"] = $mobiles;
-        $smsInfo["from"] = $from;
-        $response = $this->medianaSendSMS($smsInfo);
-        if (!$response["error"]) {
-            $smsCredit = $this->medianaGetCredit();
-            return $this->response->setContent($smsCredit)->setStatusCode(200);
-        } else {
-            return $this->response->setStatusCode(503);
-        }
     }
 
     /**
@@ -2026,25 +1906,6 @@ class HomeController extends Controller
     public function smsBot()
     {
         abort("403");
-        /**
-        $lottery = Lottery::where("name", Config::get("constants.LOTTERY_NAME"))->get()->first();
-        $userlotteries = $lottery->users->where("pivot.rank", ">", 0)->sortBy("pivot.rank");
-
-        $counter = 0;
-        foreach ($userlotteries as $userlottery) {
-        $counter++;
-        $smsInfo = array();
-        $smsInfo["to"] = array(ltrim($userlottery->mobile, '0'));
-        $smsInfo["from"] = config("constants.SMS_PROVIDER_DEFAULT_NUMBER");
-        //
-        //            $prize = json_decode($userlottery->pivot->prizes)->items[0]->name ;
-        $smsInfo["message"] = "سلام ، کاربر گرامی نتیجه قرعه کشی در پروفایل شما قرار داده شد - آلاء";
-        $response = $this->medianaSendSMS($smsInfo);
-        dump($response);
-
-        }
-        dd($counter);
-         */
     }
 //    public function certificates()
 //    {

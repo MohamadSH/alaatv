@@ -681,7 +681,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
         $tableColumns = Schema::getColumnListing("users");
         switch ($type) {
             case "full":
-                $importantColumns = array("firstName", "lastName", "mobile", "nationalCode", "province", "city", "address", "postalCode", "gender_id" , "mobile_verified_at");
+                $importantColumns = array("firstName", "lastName", "mobile", "nationalCode", "province", "city", "address", "postalCode", "gender_id", "mobile_verified_at");
                 break;
             case "fullAddress":
                 $importantColumns = array("firstName", "lastName", "mobile", "nationalCode", "province", "city", "address");
@@ -714,7 +714,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
                     }
                     if (!isset($this->$tableColumn) || strlen(preg_replace('/\s+/', '', $this->$tableColumn)) == 0) {
                         $unsetColumns++;
-                    } elseif (strcmp($tableColumn, "mobile_verified_at") == 0 && !is_null($this->$tableColumn) ) {
+                    } elseif (strcmp($tableColumn, "mobile_verified_at") == 0 && !is_null($this->$tableColumn)) {
                         $unsetColumns++;
                     }
                 }

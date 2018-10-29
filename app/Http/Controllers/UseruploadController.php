@@ -4,15 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Consultationstatus;
 use App\Http\Requests\InsertUserUploadRequest;
-use App\Http\Requests\SendSMSRequest;
+use App\Notifications\CounselingStatusChanged;
 use App\Userupload;
 use App\Useruploadstatus;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\Response;
 
 class UseruploadController extends Controller
 {
@@ -56,8 +56,9 @@ class UseruploadController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \app\Http\Requests\InsertUserUploadRequest  $request
+     * @param  \app\Http\Requests\InsertUserUploadRequest $request
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     public function store(InsertUserUploadRequest $request)
     {
@@ -127,20 +128,11 @@ class UseruploadController extends Controller
         if ($userupload->update()) {
             if($oldUserUploadStatus != $userupload->useruploadstatus_id)
             {
-                $controller = new HomeController();
-                $smsRequest = new SendSMSRequest();
-                $fullName = "";
-                if(strlen($userupload->user->firstName)>0) $fullName .= $userupload->user->firstName;
-                if(strlen($userupload->user->lastName)>0) $fullName .= " ".$userupload->user->lastName;
-                $userUploadStatusName = Useruploadstatus::where('id', $userupload->useruploadstatus_id)->pluck('displayName')->toArray();
-                if(strlen($fullName)>0) $smsRequest["message"] = $fullName." عزیز وضعیت سوال مشاوره ای شما به حالت ".$userUploadStatusName[0]." تغییر کرد-آلاء";
-                else $smsRequest["message"] = " کاربر گرامی وضعیت سوال مشاوره ای شما به حالت ".$userUploadStatusName[0]." تغییر کرد-آلاء";
-                $smsRequest["users"] = $userupload->user_id;
-                $smsstatus =  $controller->sendSMS($smsRequest);
-                return $this->response->setStatusCode(200)->setContent($smsstatus->getStatusCode());
+                $userUploadStatusName = Useruploadstatus::where('id', $userupload->useruploadstatus_id)
+                    ->pluck('displayName')->toArray();
+                $userupload->user->notify(new CounselingStatusChanged($userUploadStatusName[0]));
             }
-            else
-                return $this->response->setStatusCode(200);
+            return $this->response->setStatusCode(200);
         }
         else{
             return $this->response->setStatusCode(503);

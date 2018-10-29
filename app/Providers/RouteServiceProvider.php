@@ -2,13 +2,40 @@
 
 namespace App\Providers;
 
-use App\{
-    Afterloginformcontrol, Article, Articlecategory, Assignment, Attribute, Attributegroup, Attributeset, Attributevalue, City, Consultation, Contact, Contentset, Coupon, Content, Employeetimesheet, Eventresult, File, Mbtianswer, Order, Orderproduct, Permission, Phone, Product, Productfile, Productphoto, Role, Slideshow, User, Userbon, Userupload, Verificationmessage, Wallet, Websitesetting
-};
-use Illuminate\Support\Facades\{
-    Cache, Config, Route
-};
+use App\{Afterloginformcontrol,
+    Article,
+    Articlecategory,
+    Assignment,
+    Attribute,
+    Attributegroup,
+    Attributeset,
+    Attributevalue,
+    City,
+    Consultation,
+    Contact,
+    Content,
+    Contentset,
+    Coupon,
+    Employeetimesheet,
+    Eventresult,
+    Mbtianswer,
+    Order,
+    Orderproduct,
+    Permission,
+    Phone,
+    Product,
+    Productfile,
+    Productphoto,
+    Role,
+    Slideshow,
+    User,
+    Userbon,
+    Userupload,
+    Verificationmessage,
+    Wallet,
+    Websitesetting};
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\{Cache, Config, Route};
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -27,7 +54,7 @@ class RouteServiceProvider extends ServiceProvider
     private function modelBinding(){
         Route::bind('user', function( $value){
             $key = "User:".$value;
-           return Cache::tags(['user',$key])->remember($key,Config::get("constants.CACHE_5"),function () use ($value){
+            return Cache::tags(['user', $key])->remember($key, Config::get("constants.CACHE_5"), function () use ($value) {
                 return User::where('id', $value)->first() ?? abort(404);
             });
 

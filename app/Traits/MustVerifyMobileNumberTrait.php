@@ -44,10 +44,9 @@ trait MustVerifyMobileNumberTrait
      */
     public function sendMobileVerificationNotification()
     {
-        if ($this->setMobileVerificationCode())
-        {
+        if ($this->setMobileVerificationCode()) {
             $this->notify(new VerifyMobile());
-            Cache::tags('User:'.$this->id)->flush();
+            Cache::tags('User:' . $this->id)->flush();
         }
     }
 

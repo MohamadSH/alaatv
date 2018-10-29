@@ -1,23 +1,31 @@
 @permission((Config::get('constants.LIST_PRODUCT_ACCESS')))
-    @foreach($items as $item)
+@foreach($items as $item)
         <tr >
             <th></th>
-            <td>@if(isset($item->name) && strlen($item->name)>0) <a target="_blank" href="{{action("ProductController@show" , $item)}}"> {{ $item->name }} </a> @else <span class="label label-sm label-danger"> درج نشده </span> @endif </td>
-            <td>@if(isset($item->basePrice) && strlen($item->basePrice)>0) {{ $item->basePrice }} @else <span class="label label-sm label-danger"> درج نشده </span> @endif </td>
-            <td>@if(isset($item->discount) ) {{$item->discount}} @else <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
+            <td>@if(isset($item->name) && strlen($item->name)>0) <a target="_blank"
+                                                                    href="{{action("ProductController@show" , $item)}}"> {{ $item->name }} </a> @else
+                    <span class="label label-sm label-danger"> درج نشده </span> @endif </td>
+            <td>@if(isset($item->basePrice) && strlen($item->basePrice)>0) {{ $item->basePrice }} @else <span
+                        class="label label-sm label-danger"> درج نشده </span> @endif </td>
+            <td>@if(isset($item->discount) ) {{$item->discount}} @else <span class="label label-sm label-danger"> درج نشده </span> @endif
+            </td>
             <td>
                 <div class="mt-element-overlay">
                     <div class="mt-overlay-1">
-                        <img  alt="عکس محصول @if(isset($item->name[0])) {{$item->name}} @endif"  class="timeline-badge-userpic" style="width: 60px ;height: 60px" src="{{ route('image', ['category'=>'4','w'=>'60' , 'h'=>'60' ,  'filename' =>  $item->image ]) }}"  />
+                        <img alt="عکس محصول @if(isset($item->name[0])) {{$item->name}} @endif"
+                             class="timeline-badge-userpic" style="width: 60px ;height: 60px"
+                             src="{{ route('image', ['category'=>'4','w'=>'60' , 'h'=>'60' ,  'filename' =>  $item->image ]) }}"/>
                             <div class="mt-overlay">
                                 <ul class="mt-info">
                                     <li>
-                                        <a class="btn default btn-outline" data-toggle="modal" href="#profileimage-{{$item->id}}">
+                                        <a class="btn default btn-outline" data-toggle="modal"
+                                           href="#profileimage-{{$item->id}}">
                                             <i class="icon-magnifier"></i>
                                         </a>
                                     </li>
                                     <li>
-                                        <a target="_blank" class="btn default btn-outline" href="{{action("HomeController@download" , ["content"=>"عکس محصول","fileName"=>$item->image ])}}">
+                                        <a target="_blank" class="btn default btn-outline"
+                                           href="{{action("HomeController@download" , ["content"=>"عکس محصول","fileName"=>$item->image ])}}">
                                             <i class="icon-link"></i>
                                         </a>
                                     </li>
@@ -33,7 +41,8 @@
                     </div>
                     <div class="modal-body">
                         <div class="row" style="text-align: center;">
-                            <img  alt="عکس محصول @if(isset($item->name[0])) {{$item->name}} @endif"  style="width: 80%" src="{{ route('image', ['category'=>'4','w'=>'608' , 'h'=>'608' ,  'filename' =>  $item->image ]) }}" />
+                            <img alt="عکس محصول @if(isset($item->name[0])) {{$item->name}} @endif" style="width: 80%"
+                                 src="{{ route('image', ['category'=>'4','w'=>'608' , 'h'=>'608' ,  'filename' =>  $item->image ]) }}"/>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -41,8 +50,12 @@
                     </div>
                 </div>
             </td>
-            <td style="text-align: center">@if(isset($item->shortDescription) && strlen($item->shortDescription)>0) <button class="btn blue" data-target="#static-shortDescription-{{$item->id}}" data-toggle="modal">نمایش </button> @else <span class="label label-sm label-danger"> درج نشده </span> @endif
-                <div id="static-shortDescription-{{$item->id}}" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+            <td style="text-align: center">@if(isset($item->shortDescription) && strlen($item->shortDescription)>0)
+                    <button class="btn blue" data-target="#static-shortDescription-{{$item->id}}" data-toggle="modal">
+                        نمایش
+                    </button> @else <span class="label label-sm label-danger"> درج نشده </span> @endif
+                <div id="static-shortDescription-{{$item->id}}" class="modal fade" tabindex="-1" data-backdrop="static"
+                     data-keyboard="false">
                     <div class="modal-body" style="text-align: right">
                         {!! $item->shortDescription !!}
                     </div>
@@ -51,30 +64,49 @@
                     </div>
                 </div>
             </td>
-            <td style="text-align: center">@if(isset($item->longDescription) && strlen($item->longDescription)>0) <button class="btn blue" data-target="#static-longDescription-{{$item->id}}" data-toggle="modal">نمایش </button> @else <span class="label label-sm label-danger"> درج نشده </span> @endif
-                <div id="static-longDescription-{{$item->id}}" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+            <td style="text-align: center">@if(isset($item->longDescription) && strlen($item->longDescription)>0)
+                    <button class="btn blue" data-target="#static-longDescription-{{$item->id}}" data-toggle="modal">
+                        نمایش
+                    </button> @else <span class="label label-sm label-danger"> درج نشده </span> @endif
+                <div id="static-longDescription-{{$item->id}}" class="modal fade" tabindex="-1" data-backdrop="static"
+                     data-keyboard="false">
                     <div class="modal-body" style="text-align: right">
-                            {!! $item->longDescription !!}
+                        {!! $item->longDescription !!}
                     </div>
                     <div class="modal-footer">
                         <button type="button" data-dismiss="modal" class="btn btn-outline dark">بستن</button>
                     </div>
                 </div>
             </td>
-            <td>@if(isset($item->producttype->id)) @if(strlen($item->producttype->name)>0) {{ $item->producttype->displayName }} @else {{ $item->producttype->id }} @endif @else <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
-            <td>@if(isset($item->enable) && $item->enable) <span class="label label-sm label-success">  فعال </span> @else <span class="label label-sm label-danger"> غیر فعال </span> @endif</td>
+            <td>@if(isset($item->producttype->id)) @if(strlen($item->producttype->name)>0) {{ $item->producttype->displayName }} @else {{ $item->producttype->id }} @endif @else
+                    <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
+            <td>@if(isset($item->enable) && $item->enable) <span
+                        class="label label-sm label-success">  فعال </span> @else <span
+                        class="label label-sm label-danger"> غیر فعال </span> @endif</td>
             <td>@if(isset($item->amount) ) {{$item->amount}} @else  بدون محدودیت  @endif</td>
             <td>@if(isset($item->file) && strlen($item->file)>0)
-                <a target="_blank" href="{{action("HomeController@download" , ["content"=>"کاتالوگ محصول","fileName"=>$item->file ])}}" class="btn btn-icon-only blue"><i class="fa fa-download"></i></a>@else <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
-            <td>@if(isset($item->slogan) && strlen($item->slogan)>0) {!!   $item->slogan !!} @else <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
-            <td>@if(isset($item->order) && strlen($item->order)>0) {!!   $item->order !!} @else <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
-            <td>@if(isset($item->attributeset->id)) @if(strlen($item->attributeset->name)>0) {{ $item->attributeset->name }} @else {{ $item->producttype->id }} @endif @else <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
-            <td class="center">@if(isset($item->validSince) && strlen($item->validSince)>0) {{ $item->validSince_Jalali() }} @else <span class="label label-sm label-danger"> درج نشده </span> @endif </td>
-            <td class="center">@if(isset($item->validUntil) && strlen($item->validUntil)>0) {{ $item->validUntil_Jalali() }} @else <span class="label label-sm label-danger"> درج نشده </span> @endif </td>
-            <td class="center">@if(isset($item->created_at) && strlen($item->created_at)>0) {{ $item->CreatedAt_Jalali() }}  @else <span class="label label-sm label-danger"> درج نشده </span> @endif </td>
-            <td class="center">@if(isset($item->updated_at) && strlen($item->updated_at)>0) {{ $item->UpdatedAt_Jalali() }}  @else <span class="label label-sm label-danger"> درج نشده </span> @endif </td>
-            <td class="center">@if(!$item->bons->isEmpty()) {{$item->bons->first()->pivot->bonPlus}} @else <span class="label label-sm label-warning"> بدون بن </span> @endif </td>
-            <td class="center">@if(!$item->bons->isEmpty()) {{$item->bons->first()->pivot->discount}} @else <span class="label label-sm label-warning"> بدون بن </span> @endif </td>
+                    <a target="_blank"
+                       href="{{action("HomeController@download" , ["content"=>"کاتالوگ محصول","fileName"=>$item->file ])}}"
+                       class="btn btn-icon-only blue"><i class="fa fa-download"></i></a>@else <span
+                            class="label label-sm label-danger"> درج نشده </span> @endif</td>
+            <td>@if(isset($item->slogan) && strlen($item->slogan)>0) {!!   $item->slogan !!} @else <span
+                        class="label label-sm label-danger"> درج نشده </span> @endif</td>
+            <td>@if(isset($item->order) && strlen($item->order)>0) {!!   $item->order !!} @else <span
+                        class="label label-sm label-danger"> درج نشده </span> @endif</td>
+            <td>@if(isset($item->attributeset->id)) @if(strlen($item->attributeset->name)>0) {{ $item->attributeset->name }} @else {{ $item->producttype->id }} @endif @else
+                    <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
+            <td class="center">@if(isset($item->validSince) && strlen($item->validSince)>0) {{ $item->validSince_Jalali() }} @else
+                    <span class="label label-sm label-danger"> درج نشده </span> @endif </td>
+            <td class="center">@if(isset($item->validUntil) && strlen($item->validUntil)>0) {{ $item->validUntil_Jalali() }} @else
+                    <span class="label label-sm label-danger"> درج نشده </span> @endif </td>
+            <td class="center">@if(isset($item->created_at) && strlen($item->created_at)>0) {{ $item->CreatedAt_Jalali() }}  @else
+                    <span class="label label-sm label-danger"> درج نشده </span> @endif </td>
+            <td class="center">@if(isset($item->updated_at) && strlen($item->updated_at)>0) {{ $item->UpdatedAt_Jalali() }}  @else
+                    <span class="label label-sm label-danger"> درج نشده </span> @endif </td>
+            <td class="center">@if(!$item->bons->isEmpty()) {{$item->bons->first()->pivot->bonPlus}} @else <span
+                        class="label label-sm label-warning"> بدون بن </span> @endif </td>
+            <td class="center">@if(!$item->bons->isEmpty()) {{$item->bons->first()->pivot->discount}} @else <span
+                        class="label label-sm label-warning"> بدون بن </span> @endif </td>
             <td>
                 <div class="btn-group">
                     <button class="btn btn-xs black dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> عملیات
@@ -95,7 +127,8 @@
                         @endpermission
                         @permission((Config::get('constants.COPY_PRODUCT_ACCESS')))
                         <li>
-                            <a class="copyProduct" data-action="{{action("ProductController@copy" , $item)}}" data-target="#copyProductModal" data-toggle="modal">
+                            <a class="copyProduct" data-action="{{action("ProductController@copy" , $item)}}"
+                               data-target="#copyProductModal" data-toggle="modal">
                                 <i class="fa fa-files-o"></i> کپی از محصول </a>
                         </li>
                         @endpermission
@@ -104,13 +137,16 @@
                     <div id="ajax-modal" class="modal fade" tabindex="-1"> </div>
                     <!-- static -->
                     @permission((Config::get('constants.REMOVE_PRODUCT_ACCESS')))
-                    <div id="static-{{$item->id}}" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+                    <div id="static-{{$item->id}}" class="modal fade" tabindex="-1" data-backdrop="static"
+                         data-keyboard="false">
                         <div class="modal-header">
                             <h4 class="modal-title">آیا مطمئن هستید؟</h4>
                         </div>
                         <div class="modal-footer">
                             <button type="button" data-dismiss="modal" class="btn btn-outline dark">خیر</button>
-                            <button type="button" data-dismiss="modal"  class="btn green" onclick="removeProduct('{{action("ProductController@destroy" , $item)}}');" >بله</button>
+                            <button type="button" data-dismiss="modal" class="btn green"
+                                    onclick="removeProduct('{{action("ProductController@destroy" , $item)}}');">بله
+                            </button>
                         </div>
                     </div>
                     @endpermission

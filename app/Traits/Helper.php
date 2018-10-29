@@ -3,104 +3,12 @@ namespace App\Traits;
 
 
 use App\User;
-use App\Websitepage;
 use Carbon\Carbon;
-use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 
 trait Helper
 {
     protected $response;
-
-
-
-    /**
-     * Sending SMS request to Mediana SMS Panel
-     *
-     * @param array $params
-     * @return array|string
-     */
-    public function medianaSendSMS(array $params)
-    {
-        $url = config("services.medianaSMS.normal.url");
-
-//        $rcpt_nm = array('9121111111','9122222222');
-        if(isset($params["to"]))
-            $rcpt_nm =  $params["to"];
-        if(isset($params["from"]))
-            $from = $params["from"];
-        else
-            $from =config("constants.SMS_PROVIDER_DEFAULT_NUMBER") ;
-
-        $param = [
-            'uname'=>config("services.medianaSMS.normal.userName"),
-            'pass'=>config("services.medianaSMS.normal.password"),
-            'from'=>$from,
-            'message'=>$params["message"],
-            'to' => json_encode($rcpt_nm, JSON_UNESCAPED_UNICODE),
-            'op'=>'send'
-        ];
-
-        $handler = curl_init($url);
-        curl_setopt($handler, CURLOPT_CUSTOMREQUEST, "POST");
-        curl_setopt($handler, CURLOPT_POSTFIELDS, $param);
-        curl_setopt($handler, CURLOPT_RETURNTRANSFER, true);
-
-        $response = curl_exec($handler);
-        $response =  json_decode($response);
-        $res_code = $response[0];
-        $res_data = $response[1];
-
-        switch ($res_code) {
-            case 0 :
-                return [
-                    "error"=>false ,
-                    "message"=>"ارسال موفقیت آمیز بود"
-                ];
-                break;
-            default:
-                return [
-                    "error"=>true ,
-                    "message"=>$res_data
-                ];
-                break;
-        }
-    }
-
-    /**
-     * Sending SMS request to Mediana SMS Panel
-     *
-     * @param array $params
-     * @return string
-     */
-    public function medianaSendPatternSMS(array $params)
-    {
-        $this->response = new Response();
-        $client = new \SoapClient(
-            config("services.medianaSMS.pattern.url")
-        );
-        $user = config("services.medianaSMS.normal.userName");
-        $pass = config("services.medianaSMS.normal.password");
-
-        if(isset($params["from"]))
-            $from = $params["from"];
-        else
-            $from = config("constants.SMS_PROVIDER_DEFAULT_NUMBER") ;
-
-        if(isset($params["to"]))
-            $rcpt_nm =  $params["to"];
-        if(isset($params["patternCode"]))
-            $pattern_code = $params["patternCode"];
-        if(isset($params["inputData"]))
-            $input_data = $params["inputData"];
-
-        $response = $client->sendPatternSms($from , $rcpt_nm , $user , $pass , $pattern_code  , $input_data);
-
-        if($response)
-            return $this->response->setStatusCode(200);
-        else
-            return $this->response->setStatusCode(503);
-    }
 
     public function medianaGetCredit()
     {

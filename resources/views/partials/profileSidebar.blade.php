@@ -14,7 +14,8 @@
                                                                     {!! Form::file('photo' , ['id'=>'profilePhotoFile' , 'data-action'=>action("UserController@updatePhoto")]) !!}
                                                                 </span>
                         <span class="fileinput-filename"> </span> &nbsp;
-                        <a href="javascript:;" class="close fileinput-exists" data-dismiss="fileinput" id="profilePhotoAjaxFileInputClose"> </a>
+                        <a href="javascript:" class="close fileinput-exists" data-dismiss="fileinput"
+                           id="profilePhotoAjaxFileInputClose"> </a>
                     </div>
                     <img src="/img/loading-spinner-default.gif" style="width: 15px; display: none" id="profilePhotoAjaxLoadingSpinner">
                 {!! Form::close() !!}
@@ -103,18 +104,20 @@
             <div class="margin-top-20 profile-desc-link">
                 <div class="form-group form-md-line-input">
                     {!! Form::open(['method' => 'POST','action' => ['MobileVerificationController@verify'] , 'id'=>'submitVerificationCodeForm']) !!}
-                        <fieldset class="hasRequestedVerificationCode {{(is_null($mobileVerificationCode))?"hidden":""}}">
+                    <fieldset class="hasRequestedVerificationCode {{(is_null($mobileVerificationCode))?"hidden":""}}">
                             <input type="text" name="code" class="form-control" id="form_control_1"  placeholder="کد تایید شماره خود را وارد نمایید">
                             <label for="form_control_1"><span class="font-red-thunderbird">تایید شماره موبایل(حساب کاربری)</span></label>
                             <span class="help-block">برای دریافت کد روی دکمه درخواست کلیک کنید</span>
                         </fieldset>
                 </div>
                 <div class="form-actions noborder" style="text-align: center;">
-                        <fieldset class="hasRequestedVerificationCode {{(is_null($mobileVerificationCode))?"hidden":""}}" >
+                    <fieldset class="hasRequestedVerificationCode {{(is_null($mobileVerificationCode))?"hidden":""}}">
                             <button type="submit" class="btn green">تایید کد</button>
                         </fieldset>
-                        <fieldset id="hasntRequestedVerificationCode" class="">
-                            <a href="{{action("MobileVerificationController@resend")}}" class="btn blue" id="sendVerificationCodeButton">@if(isset($mobileVerificationCode)) درخواست مجدد کد @elseدرخواست ارسال کد@endif</a>
+                    <fieldset id="hasntRequestedVerificationCode" class="">
+                        <a href="{{action("MobileVerificationController@resend")}}" class="btn blue"
+                           id="sendVerificationCodeButton">@if(isset($mobileVerificationCode)) درخواست مجدد کد @else
+                                درخواست ارسال کد@endif</a>
                         </fieldset>
                     <img src="/img/loading-spinner-default.gif" style="width: 15px; display: none" id="verificationCodeAjaxLoadingSpinner">
                     {!! Form::close() !!}

@@ -8,7 +8,6 @@
 
 namespace App\Classes\Search\Filters;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 
 class createdAtSince extends FilterAbstract
@@ -17,7 +16,7 @@ class createdAtSince extends FilterAbstract
 
     public function apply(Builder $builder, $value, FilterCallback $callback): Builder
     {
-        return $builder->where($this->attribute , ">=" , $value);
+        return $builder->where($this->attribute, ">=", $value);
     }
 
 }

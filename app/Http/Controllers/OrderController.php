@@ -10,9 +10,10 @@ use App\Helpers\ENPayment;
 use App\Http\Requests\DonateRequest;
 use App\Http\Requests\EditOrderRequest;
 use App\Http\Requests\InsertTransactionRequest;
-use App\Http\Requests\SendSMSRequest;
 use App\Http\Requests\SubmitCouponRequest;
 use App\Notifications\InvoicePaid;
+use App\Notifications\OrderStatusChanged;
+use App\Notifications\PostCodeNotification;
 use App\Order;
 use App\Ordermanagercomment;
 use App\Orderpostinginfo;
@@ -55,7 +56,8 @@ class OrderController extends Controller
     protected $setting;
     use ProductCommon ;
     use RequestCommon;
-    function __construct( Websitesetting $setting )
+
+    function __construct(Websitesetting $setting)
     {
         $this->response = new Response();
 
@@ -686,7 +688,7 @@ class OrderController extends Controller
     public function update(EditOrderRequest $request, Order $order)
     {
         $oldOrderStatus = $order->orderstatus_id;
-        $user = Auth::user();
+        $user = $request->user();
 
         if(isset($order->coupon->id)) {
             $oldCoupon = $order->coupon;
@@ -752,22 +754,10 @@ class OrderController extends Controller
         }
 
         if ($order->update()) {
+
             if($request->has("orderstatusSMS"))
             {
-                $controller = new HomeController();
-                $smsRequest = new SendSMSRequest();
-                $fullName = "";
-                if(strlen($order->user->firstName)>0)
-                    $fullName .= $order->user->firstName;
-                if(strlen($order->user->lastName)>0)
-                    $fullName .= " ".$order->user->lastName;
-                if(strlen($fullName)>0)
-                    $smsRequest["message"] = $fullName;
-                else
-                    $smsRequest["message"] = "کاربر گرامی";
-                $smsRequest["message"]  .= " سلام، وضعیت سفارش شما در آلاء به ".$order->orderstatus->displayName." تغییر کرد";
-                $smsRequest["users"] = $order->user_id;
-                $controller->sendSMS($smsRequest);
+                $order->user->notify(New OrderStatusChanged($order->orderstatus->displayName));
             }
 
             if($request->has('postCode'))
@@ -776,51 +766,20 @@ class OrderController extends Controller
                 if(strlen(preg_replace('/\s+/', '', $postCode ))>0 )
                 {
                     $insertPostingInfo = false;
-//                    if ($order->orderpostinginfos->isEmpty()) {
-                        $postingInfo = new Orderpostinginfo();
-                        $postingInfo->postCode = $request->get('postCode');
-                        $postingInfo->order_id = $order->id;
-                        $postingInfo->user_id = $user->id;
-                        if($postingInfo->save())
-                            $insertPostingInfo=true;
-//                    }
-//                    else{
-//                        $order->orderpostinginfos->first()->postCode = $request->get('postCode');
-//                        if($order->orderpostinginfos->first()->update()) $insertPostingInfo=true;
-//                    }
+                    $postingInfo = new Orderpostinginfo();
+                    $postingInfo->postCode = $request->get('postCode');
+                    $postingInfo->order_id = $order->id;
+                    $postingInfo->user_id = $user->id;
+                    if ($postingInfo->save())
+                        $insertPostingInfo = true;
+
                     if($insertPostingInfo && $request->has('postingSMS')){
-                        $myParents  = Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT")->get()->first()->product->parents;
-                        if (!empty($myParents)){
-                            $rootParent = end($myParents);
-                            $productName =$rootParent->name  ;
-                        }else{
-                             $productName =$order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->get()->first()->product->first()->name ;
-                        }
-
-
-                        $controller = new HomeController();
-                        $smsRequest = new SendSMSRequest();
-                        $fullName = "";
-                        if(strlen($order->user->firstName)>0)
-                            $fullName .= $order->user->firstName;
-                        if(strlen($order->user->lastName)>0)
-                            $fullName .= " ".$order->user->lastName;
-                        if(strlen($fullName)>0)
-                            $smsRequest["message"] = $fullName;
-                        else
-                            $smsRequest["message"] = "کاربر گرامی";
-                        $smsRequest["message"]  .= " شماره مرسوله پستی ".$productName." ".$request->get('postCode')." می باشد - آلاء";
-//                        $smsRequest["message"]  .= " برنامه و دفترچه عید نوروز برای شما پست شد"."\n"."کد رهگیری مرسوله: ".$request->get('postCode')."\n"."آلاء - K96.IR";
-                        $smsRequest["users"] = $order->user_id;
-                        $response = $controller->sendSMS($smsRequest);
-                        if($response->getStatusCode() == 200)
-                            $smsMessageSuccess = "پیامک کد رهگیری برای کاربر ارسال شد.";
-                        else
-                            $smsMessageError = "خطا در ارسال پیامک کد رهگیری.";
-
+                        $postCode = $request->get('postCode');
+                        $order->user->notify(New PostCodeNotification($postCode));
                     }
-                }else{}
+                }
             }
+
             $file = $this->requestHasFile($request , "file");
             if ($file !== false) {
                 $extension = $file->getClientOriginalExtension();
@@ -838,13 +797,8 @@ class OrderController extends Controller
                     session()->put('error', 'بارگذاری فایل سفارش با مشکل مواجه شد!');
                 }
             }
-            if(isset($smsMessageSuccess))
-                session()->put("success", "اطلاعات سفارش با موفقیت اصلاح شد.".$smsMessageSuccess);
-            else
-                session()->put("success", "اطلاعات سفارش با موفقیت اصلاح شد.");
 
-            if(isset($smsMessageError))
-                session()->put("error", $smsMessageError);
+            session()->put("success", "اطلاعات سفارش با موفقیت اصلاح شد.");
 
             $asiatechProduct = config("constants.ASIATECH_FREE_ADSL");
             if( $order->hasProducts([ $asiatechProduct ]) &&

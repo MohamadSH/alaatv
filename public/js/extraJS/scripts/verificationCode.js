@@ -2,15 +2,13 @@ function addSubmitButton() {
     $(".hasRequestedVerificationCode").removeClass("hidden");
 }
 
-function removeCodeRequestButton()
-{
+function removeCodeRequestButton() {
     $("#hasntRequestedVerificationCode").addClass("hidden");
 }
 
-function showVerificationResponseMessage(selector , message)
-{
-    $("#verificationCode"+selector+" > span").html(message);
-    $("#verificationCode"+selector).removeClass("hidden");
+function showVerificationResponseMessage(selector, message) {
+    $("#verificationCode" + selector + " > span").html(message);
+    $("#verificationCode" + selector).removeClass("hidden");
 }
 
 $(document).on("click", "#sendVerificationCodeButton", function (e){
@@ -39,18 +37,18 @@ $(document).on("click", "#sendVerificationCodeButton", function (e){
         type: "GET",
         url: action,
         accepts: "application/json; charset=utf-8",
-        dataType : "json",
+        dataType: "json",
         contentType: "application/json; charset=utf-8",
         statusCode: {
             200:function (response) {
-                responseMessage = response.responseText ;
-                showVerificationResponseMessage("Success" , responseMessage);
+                responseMessage = response.responseText;
+                showVerificationResponseMessage("Success", responseMessage);
                 addSubmitButton();
                 removeCodeRequestButton();
             },
             403: function (response) {
-                responseMessage = response.responseJSON.message ;
-                showVerificationResponseMessage("Error" , responseMessage);
+                responseMessage = response.responseJSON.message;
+                showVerificationResponseMessage("Error", responseMessage);
             },
             404: function (response) {
                 toastr["error"]("Not Found", "پیام سیستم");
@@ -61,8 +59,8 @@ $(document).on("click", "#sendVerificationCodeButton", function (e){
             },
             //Too many attempts
             429: function (response) {
-                responseMessage = "شما به سقف تعداد درخواست رسیده اید لطفا چند لحظه صبر کنید" ;
-                showVerificationResponseMessage("Warning" , responseMessage);
+                responseMessage = "شما به سقف تعداد درخواست رسیده اید لطفا چند لحظه صبر کنید";
+                showVerificationResponseMessage("Warning", responseMessage);
             },
             //The status for when there is error php code
             500: function (response) {
@@ -115,8 +113,8 @@ $(document).on('submit', '#submitVerificationCodeForm', function(e){
             },
             //The status for when the user is not authorized for making the request
             403: function (response) {
-                responseMessage = response.responseJSON.message ;
-                showVerificationResponseMessage("Error" , responseMessage);
+                responseMessage = response.responseJSON.message;
+                showVerificationResponseMessage("Error", responseMessage);
             },
             404: function (response) {
                 toastr["error"]("Not Found", "پیام سیستم");
@@ -127,8 +125,8 @@ $(document).on('submit', '#submitVerificationCodeForm', function(e){
             },
             //Too many attempts
             429: function (response) {
-                responseMessage = "شما به سقف تعداد تایید کد رسیده اید لطفا چند لحظه صبر کنید" ;
-                showVerificationResponseMessage("Warning" , responseMessage);
+                responseMessage = "شما به سقف تعداد تایید کد رسیده اید لطفا چند لحظه صبر کنید";
+                showVerificationResponseMessage("Warning", responseMessage);
             },
             //The status for when there is error php code
             500: function (response) {

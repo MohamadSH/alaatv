@@ -88,15 +88,12 @@ class ContentController extends Controller
                     $items->push(${$contentType . 'Result'}->getCollection());
             }
             else {
-                if (${$contentType . 'Result'}->total() > 0)
-                {
-                    $partialSearch = $this->getPartialSearchFromIds( ${$contentType . 'Result'}, self::PARTIAL_SEARCH_TEMPLATE_ROOT.".".$contentType);
-                    $partialIndex = $this->getPartialSearchFromIds( ${$contentType . 'Result'}, self::PARTIAL_INDEX_TEMPLATE);
-                }
-                else
-                {
+                if (${$contentType . 'Result'}->total() > 0) {
+                    $partialSearch = $this->getPartialSearchFromIds(${$contentType . 'Result'}, self::PARTIAL_SEARCH_TEMPLATE_ROOT . "." . $contentType);
+                    $partialIndex = $this->getPartialSearchFromIds(${$contentType . 'Result'}, self::PARTIAL_INDEX_TEMPLATE);
+                } else {
                     $partialSearch = null;
-                    $partialIndex = null ;
+                    $partialIndex = null;
                 }
                 $items->push([
                     "type"=>$contentType,
@@ -557,9 +554,10 @@ class ContentController extends Controller
     }
 
 
-    private function getPartialSearchFromIds($query , string $layout ){
+    private function getPartialSearchFromIds($query, string $layout)
+    {
         $partialSearch = View::make(
-            $layout ,
+            $layout,
             [
                 'items' => $query
             ]

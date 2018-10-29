@@ -21,7 +21,6 @@ use App\Http\Requests\InsertUserRequest;
 use App\Http\Requests\InsertVoucherRequest;
 use App\Http\Requests\PasswordRecoveryRequest;
 use App\Http\Requests\RegisterForSanatiSharifHighSchoolRequest;
-use App\Http\Requests\SubmitVerificationCode;
 use App\Lottery;
 use App\Major;
 use App\Order;
@@ -54,6 +53,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
+use PHPUnit\Framework\Exception;
 use SEO;
 use stdClass;
 
@@ -306,7 +306,7 @@ class UserController extends Controller
 
         $mobileNumberVerification = Input::get("mobileNumberVerification");
         if(isset($mobileNumberVerification) && strlen($mobileNumberVerification) > 0){
-            if($mobileNumberVerification)
+            if ($mobileNumberVerification)
                 $users = $users->whereNotNull("mobile_verified_at");
             else
                 $users = $users->whereNull("mobile_verified_at");
@@ -456,7 +456,7 @@ class UserController extends Controller
             $users = collect();
             foreach ($uniqueUsers as $user)
             {
-                if($user->whereNotNull("mobile_verified_at")->isNotEmpty())
+                if ($user->whereNotNull("mobile_verified_at")->isNotEmpty())
                 {
                     $users->push($user->whereNotNUll("mobile_verified_at")->first());
                 }
@@ -569,7 +569,7 @@ class UserController extends Controller
             if ( $request->has("mobileNumberVerification"))
                 $user->mobile_verified_at = Carbon::now()->setTimezone("Asia/Tehran");
             else
-                $user->mobile_verified_at = null ;
+                $user->mobile_verified_at = null;
 
             $user->password = bcrypt($request->get("password"));
 
@@ -774,8 +774,8 @@ class UserController extends Controller
                                                                         "hasHamayeshTalaiArabi" ,
                                                                         "hasHamayeshHozouriArabi" ,
                                                                         "lotteryName",
-                                                                        "hasRequestedVerificationCode",
-                                                                        "mobileVerificationCode"
+                "hasRequestedVerificationCode",
+                "mobileVerificationCode"
                                                         ));
         } else {
             abort(403);
@@ -853,7 +853,7 @@ class UserController extends Controller
         if ( $request->has("mobileNumberVerification"))
             $user->mobile_verified_at = Carbon::now()->setTimezone("Asia/Tehran");
         else
-            $user->mobile_verified_at = null ;
+            $user->mobile_verified_at = null;
 
         if ( $request->has("lockProfile"))
             $user->lockProfile = 1;
@@ -1186,10 +1186,7 @@ class UserController extends Controller
         /**
          * Sending auto generated password through SMS
          */
-        $smsInfo = [];
-        $smsInfo["to"] = array(ltrim($user->mobile, '0'));
-        $smsInfo["message"] = "کاربر گرامی رمز عبور شما تغییر کرد.\n رمزعبور جدید ".$password["rawPassword"]."\n آلاء";
-        $response = $this->medianaSendSMS($smsInfo);
+        throw new Exception("sendGeneratedPassword: implement sms Send!");
 //          $response = array("error"=>false , "message"=>"ارسال موفقیت آمیز بود");
         if(!$response["error"]){
             $user->passwordRegenerated_at = Carbon::now();
@@ -1974,12 +1971,11 @@ class UserController extends Controller
      * Register student for sanati sharif highschool
      *
      * @param  \App\Http\Requests\RegisterForSanatiSharifHighSchoolRequest $request
+     * @param EventresultController $eventResultController
      * @return \Illuminate\Http\Response
      */
     public function registerForSanatiSharifHighSchool(RegisterForSanatiSharifHighSchoolRequest $request ,
-                                                      RegisterController $registerController ,
-                                                    EventresultController $eventResultController ,
-                                                    HomeController $homeController)
+                                                      EventresultController $eventResultController)
     {
         $event = Event::where("name" , "sabtename_sharif_97")->get();
         if($event->isEmpty())
@@ -2065,11 +2061,6 @@ class UserController extends Controller
         $message = "پیش ثبت نام شما در دبیرستان دانشگاه صنعتی شریف با موفقیت انجام شد ." ;
         if(isset($participationCode))
             $message .= "کد داوطلبی شما: ".$participationCode;
-//        $sendSMSRequest = new \App\Http\Requests\SendSMSRequest();
-//        $sendSMSRequest->offsetSet("message" , $message);
-//        $sendSMSRequest->offsetSet("users" , [$user->id]);
-//        $sendSMSRequest->offsetSet("relatives" , [0]);
-//        $response = $homeController->sendSMS($sendSMSRequest);
         session()->put("success", $message);
         return redirect()->back();
     }
@@ -2192,7 +2183,7 @@ class UserController extends Controller
         $updateRequest->offsetSet("province" , $request->get("province"));
         $updateRequest->offsetSet("city" , $request->get("city"));
         $updateRequest->offsetSet("address" , $request->get("address"));
-        if($user->hasVerifiedMobile() )
+        if ($user->hasVerifiedMobile())
             $updateRequest->offsetSet("mobileNumberVerification" , 1);
         $birthdate = Carbon::parse($request->get("birthdate") )
                             ->setTimezone("Asia/Tehran")->format('Y-m-d');
@@ -2215,7 +2206,7 @@ class UserController extends Controller
                                 "school",
                                 "major_id",
                                 "introducedBy",
-                                "mobile_verified_at",
+            "mobile_verified_at",
                                 "photo"
                             ];
         if($response->getStatusCode() == 200)

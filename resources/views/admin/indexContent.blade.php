@@ -11,7 +11,8 @@
     <link href="/assets/global/plugins/bootstrap-summernote/summernote.css" rel="stylesheet" type="text/css" />
     <link href="/assets/global/plugins/jquery-multi-select/css/multi-select-rtl.css" rel="stylesheet" type="text/css" />
     <link href="/assets/extra/jplayer/dist/skin/blue.monday/css/jplayer.blue.monday.min.css" rel="stylesheet" type="text/css" />
-    <link href="/assets/extra/persian-datepicker/dist/css/persian-datepicker-1.1.3.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/extra/persian-datepicker/dist/css/persian-datepicker-1.1.3.css" rel="stylesheet"
+          type="text/css"/>
 @endsection
 
 @section("metadata")
@@ -56,10 +57,10 @@
                             <i class="fa fa-cogs"></i>مدیریت محتوای آموزشی </div>
                         <div class="tools">
                             <img class="hidden" id="content-portlet-loading" src="{{Config::get('constants.ADMIN_LOADING_BAR_GIF')}}" alt="loading"  style="width: 50px;">
-                            <a href="javascript:;" class="collapse" id="content-expand"> </a>
+                            <a href="javascript:" class="collapse" id="content-expand"> </a>
                             {{--<a href="#portlet-config" data-toggle="modal" class="config"> </a>--}}
-                            <a href="javascript:;" class="reload"> </a>
-                            <a href="javascript:;" class="remove"> </a>
+                            <a href="javascript:" class="reload"> </a>
+                            <a href="javascript:" class="remove"> </a>
                         </div>
                         <div class="tools"> </div>
                     </div>
@@ -70,41 +71,45 @@
                             {{--<i class="fa fa-filter"></i>فیلتر جدول</h3></div>--}}
                             {{--</div>--}}
                             <style>
-                                .form .form-row-seperated .form-group{
+                                .form .form-row-seperated .form-group {
                                     border-bottom-color: #bfbfbf !important;
                                 }
                             </style>
-                            <div class="portlet-body form" style="border-top: #3598dc solid 1px" >
+                            <div class="portlet-body form" style="border-top: #3598dc solid 1px">
                                 {!! Form::open(['method' => 'GET','action' => ['ContentController@index'],'class'=>'form-horizontal form-row-seperated' , 'id' => 'filterContentForm']) !!}
                                 <div class="form-body" style="background: #e7ecf1">
                                     <div class="form-group">
                                         <label class="col-md-2 bold control-label">تاریخ درج : </label>
                                         <div class="col-md-10">
-                                                {{--<label class="control-label" style="float: right;"><label class="mt-checkbox mt-checkbox-outline">--}}
-                                                        {{--<input type="checkbox" id="contentCreatedTimeEnable" value="1" name="createdTimeEnable" checked >--}}
-                                                        {{--<span class="bg-grey-cararra"></span>--}}
-                                                    {{--</label>--}}
-                                                {{--</label>--}}
-                                                <label class="control-label" style=" float: right;"   >از تاریخ
-                                                </label>
-                                                <div class="col-md-3 col-xs-12">
-                                                    <input id="contentCreatedSince" type="text" class="form-control">
-                                                    <input name="createdAtSince" id="contentCreatedSinceAlt" type="text" class="form-control hidden" >
-                                                </div>
-                                                <label class="control-label" style="float: right;">تا تاریخ
-                                                </label>
-                                                <div class="col-md-3 col-xs-12">
-                                                    <input id="contentCreatedTill" type="text" class="form-control">
-                                                    <input name="createdAtTill" id="contentCreatedTillAlt" type="text" class="form-control hidden" >
-                                                </div>
+                                            {{--<label class="control-label" style="float: right;"><label class="mt-checkbox mt-checkbox-outline">--}}
+                                            {{--<input type="checkbox" id="contentCreatedTimeEnable" value="1" name="createdTimeEnable" checked >--}}
+                                            {{--<span class="bg-grey-cararra"></span>--}}
+                                            {{--</label>--}}
+                                            {{--</label>--}}
+                                            <label class="control-label" style=" float: right;">از تاریخ
+                                            </label>
+                                            <div class="col-md-3 col-xs-12">
+                                                <input id="contentCreatedSince" type="text" class="form-control">
+                                                <input name="createdAtSince" id="contentCreatedSinceAlt" type="text"
+                                                       class="form-control hidden">
+                                            </div>
+                                            <label class="control-label" style="float: right;">تا تاریخ
+                                            </label>
+                                            <div class="col-md-3 col-xs-12">
+                                                <input id="contentCreatedTill" type="text" class="form-control">
+                                                <input name="createdAtTill" id="contentCreatedTillAlt" type="text"
+                                                       class="form-control hidden">
+                                            </div>
 
-{{--                                            @include('admin.filters.timeFilter.createdAt' , ["id" => "content" , "default" => true])--}}
+                                            {{--                                            @include('admin.filters.timeFilter.createdAt' , ["id" => "content" , "default" => true])--}}
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <div class="col-md-12">
-                                            <a href="javascript:;" class="btn btn-lg bg-font-dark reload" style="background: #489fff">فیلتر</a>
-                                            <img class="hidden" id="userBon-portlet-loading" src="{{Config::get('constants.FILTER_LOADING_GIF')}}"  width="5%">
+                                            <a href="javascript:" class="btn btn-lg bg-font-dark reload"
+                                               style="background: #489fff">فیلتر</a>
+                                            <img class="hidden" id="userBon-portlet-loading"
+                                                 src="{{Config::get('constants.FILTER_LOADING_GIF')}}" width="5%">
                                         </div>
                                     </div>
                                 </div>
@@ -118,8 +123,12 @@
                                     <div class="btn-group">
                                         @permission((Config::get('constants.INSERT_EDUCATIONAL_CONTENT_ACCESS')))
 {{--                                        <a  class="btn btn-outline red" target="_blank" href="{{action("ContentController@create2")}}"><i class="fa fa-plus"></i> افزودن محتوا </a>--}}
-                                        <a  class="btn btn-outline red" target="_blank" href="{{action("ContentController@create2")}}"><i class="fa fa-plus"></i> افزودن محتوا </a>
-                                        <a  class="btn btn-outline red-flamingo" target="_blank" href="{{action("ContentController@create")}}"><i class="fa fa-plus"></i> آپلود محتوا </a>
+                                        <a class="btn btn-outline red" target="_blank"
+                                           href="{{action("ContentController@create2")}}"><i class="fa fa-plus"></i>
+                                            افزودن محتوا </a>
+                                        <a class="btn btn-outline red-flamingo" target="_blank"
+                                           href="{{action("ContentController@create")}}"><i class="fa fa-plus"></i>
+                                            آپلود محتوا </a>
                                         @endpermission
                                     </div>
                                 </div>
@@ -156,10 +165,10 @@
                                 <i class="fa fa-cogs"></i>مدیریت تمرین ها </div>
                             <div class="tools">
                                 <img class="hidden" id="assignment-portlet-loading" src="{{Config::get('constants.ADMIN_LOADING_BAR_GIF')}}" alt="loading"  style="width: 50px;">
-                                <a href="javascript:;" class="collapse" id="assignment-expand"> </a>
+                                <a href="javascript:" class="collapse" id="assignment-expand"> </a>
                                 {{--<a href="#portlet-config" data-toggle="modal" class="config"> </a>--}}
-                                <a href="javascript:;" class="reload"> </a>
-                                <a href="javascript:;" class="remove"> </a>
+                                <a href="javascript:" class="reload"> </a>
+                                <a href="javascript:" class="remove"> </a>
                             </div>
                             <div class="tools"> </div>
                         </div>
@@ -229,10 +238,10 @@
                                 <i class="fa fa-cogs"></i>مدیریت مشاوره ها </div>
                             <div class="tools">
                                 <img class="hidden" id="consultation-portlet-loading" src="{{Config::get('constants.ADMIN_LOADING_BAR_GIF')}}" alt="loading"  style="width: 50px;">
-                                <a href="javascript:;" class="collapse" id="consultation-expand"> </a>
+                                <a href="javascript:" class="collapse" id="consultation-expand"> </a>
                                 {{--<a href="#portlet-config" data-toggle="modal" class="config"> </a>--}}
-                                <a href="javascript:;" class="reload"> </a>
-                                <a href="javascript:;" class="remove"> </a>
+                                <a href="javascript:" class="reload"> </a>
+                                <a href="javascript:" class="remove"> </a>
                             </div>
                             <div class="tools"> </div>
                         </div>
@@ -302,10 +311,12 @@
                                 <i class="fa fa-cogs"></i>مدیریت سؤالات مشاوره ای </div>
                             <div class="tools">
                                 <img class="hidden" id="question-portlet-loading" src="{{Config::get('constants.ADMIN_LOADING_BAR_GIF')}}"  style="width: 50px;">
-                                <a href="javascript:;" class="collapse" id="question-expand"> </a>
+                                <a href="javascript:" class="collapse" id="question-expand"> </a>
                                 {{--<a href="#portlet-config" data-toggle="modal" class="config"> </a>--}}
-                                @permission((Config::get('constants.LIST_QUESTION_ACCESS')))<a href="javascript:;" class="reload"> </a> @endpermission
-                                <a href="javascript:;" class="remove"> </a>
+                                @permission((Config::get('constants.LIST_QUESTION_ACCESS')))<a href="javascript:"
+                                                                                               class="reload"> </a>
+                                @endpermission
+                                <a href="javascript:" class="remove"> </a>
                             </div>
                             <div class="tools"> </div>
                         </div>
@@ -347,10 +358,12 @@
                             <i class="fa fa-cogs bg-font-dark"></i>لیست پاسخنامه های MBTI </div>
                         <div class="tools">
                             <img class="hidden" id="mbtiAnswer-portlet-loading" src="{{Config::get('constants.ADMIN_LOADING_BAR_GIF')}}"  style="width: 50px;">
-                            <a href="javascript:;" class="collapse" id="mbtiAnswer-expand"> </a>
+                            <a href="javascript:" class="collapse" id="mbtiAnswer-expand"> </a>
                             {{--<a href="#portlet-config" data-toggle="modal" class="config"> </a>--}}
-                            @permission((Config::get('constants.LIST_MBTIANSWER_ACCESS')))<a href="javascript:;" class="reload"> </a> @endpermission
-                            <a href="javascript:;" class="remove"> </a>
+                            @permission((Config::get('constants.LIST_MBTIANSWER_ACCESS')))<a href="javascript:"
+                                                                                             class="reload"> </a>
+                            @endpermission
+                            <a href="javascript:" class="remove"> </a>
                         </div>
                         <div class="tools"> </div>
                     </div>
@@ -393,12 +406,12 @@
                             <i class="fa fa-cogs bg-font-dark"></i>لیست نتایج کنکور 96 </div>
                         <div class="tools">
                             <img class="hidden" id="konkurResult96-portlet-loading" src="{{Config::get('constants.ADMIN_LOADING_BAR_GIF')}}"  style="width: 50px;">
-                            <a href="javascript:;" class="collapse" id="konkurResult96-expand"> </a>
+                            <a href="javascript:" class="collapse" id="konkurResult96-expand"> </a>
                             {{--<a href="#portlet-config" data-toggle="modal" class="config"> </a>--}}
                             @permission((Config::get('constants.LIST_EVENTRESULT_ACCESS')))
-                                <a href="javascript:;" class="reload" data-role="konkurResult96"> </a>
+                            <a href="javascript:" class="reload" data-role="konkurResult96"> </a>
                             @endpermission
-                            <a href="javascript:;" class="remove"> </a>
+                            <a href="javascript:" class="remove"> </a>
                         </div>
                         <div class="tools"> </div>
                     </div>
@@ -451,12 +464,12 @@
                             <i class="fa fa-cogs bg-font-dark"></i>لیست نتایج کنکور 97 </div>
                         <div class="tools">
                             <img class="hidden" id="konkurResult97-portlet-loading" src="{{Config::get('constants.ADMIN_LOADING_BAR_GIF')}}"  style="width: 50px;">
-                            <a href="javascript:;" class="collapse" id="konkurResult97-expand"> </a>
+                            <a href="javascript:" class="collapse" id="konkurResult97-expand"> </a>
                             {{--<a href="#portlet-config" data-toggle="modal" class="config"> </a>--}}
                             @permission((Config::get('constants.LIST_EVENTRESULT_ACCESS')))
-                            <a href="javascript:;" class="reload" data-role="konkurResult97"> </a>
+                            <a href="javascript:" class="reload" data-role="konkurResult97"> </a>
                             @endpermission
-                            <a href="javascript:;" class="remove"> </a>
+                            <a href="javascript:" class="remove"> </a>
                         </div>
                         <div class="tools"> </div>
                     </div>
@@ -512,11 +525,11 @@
                             <i class="fa fa-cogs bg-font-dark"></i>لیست پیش ثبت نام شریف </div>
                         <div class="tools">
                             <img class="hidden" id="sharifRegisterResult-loading" src="{{Config::get('constants.ADMIN_LOADING_BAR_GIF')}}"  style="width: 50px;">
-                            <a href="javascript:;" class="collapse" id="sharifRegisterResult-expand"> </a>
+                            <a href="javascript:" class="collapse" id="sharifRegisterResult-expand"> </a>
                             @permission((Config::get('constants.LIST_SHARIF_REGISTER_ACCESS')))
-                                <a href="javascript:;" class="reload" data-role="sharifRegisterResult"> </a>
+                            <a href="javascript:" class="reload" data-role="sharifRegisterResult"> </a>
                             @endpermission
-                            <a href="javascript:;" class="remove"> </a>
+                            <a href="javascript:" class="remove"> </a>
                         </div>
                         <div class="tools"> </div>
                     </div>
@@ -699,7 +712,7 @@
     <script src="/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
     <script src="/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js" type="text/javascript"></script>
     <script src="/assets/global/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>
-    <script src="/assets/extra/persian-datepicker/lib/persian-date-1.0.5.js" type="text/javascript" ></script>
+    <script src="/assets/extra/persian-datepicker/lib/persian-date-1.0.5.js" type="text/javascript"></script>
 @endsection
 
 @section("footerPageLevelScript")
@@ -707,7 +720,8 @@
     <script src="/assets/pages/scripts/ui-toastr.min.js" type="text/javascript"></script>
     <script src="/assets/pages/scripts/components-editors.min.js" type="text/javascript"></script>
     <script src="/assets/pages/scripts/components-multi-select.min.js" type="text/javascript"></script>
-    <script src="/assets/extra/persian-datepicker/dist/js/persian-datepicker-1.1.3.min.js" type="text/javascript" ></script>
+    <script src="/assets/extra/persian-datepicker/dist/js/persian-datepicker-1.1.3.min.js"
+            type="text/javascript"></script>
 @endsection
 
 @section("extraJS")
@@ -719,50 +733,50 @@
          * Start up jquery
          */
         jQuery(document).ready(function() {
-            @permission((Config::get('constants.LIST_ASSIGNMENT_ACCESS')))
+        @permission((Config::get('constants.LIST_ASSIGNMENT_ACCESS')));
                 $("#assignment-portlet .reload").trigger("click");
                 $('#assignment_major').multiSelect();
                 $("#assignment-expand").trigger("click");
                 $('#assignmentSummerNote').summernote({height: 300});
-            @endpermission
-            @permission((Config::get('constants.LIST_CONSULTATION_ACCESS')))
+            @endpermission;
+            @permission((Config::get('constants.LIST_CONSULTATION_ACCESS')));
                 $("#consultation-portlet .reload").trigger("click");
                 $('#consultation_major').multiSelect();
                 $("#consultation-expand").trigger("click");
                 $('#consultationSummerNote').summernote({height: 300});
-            @endpermission
-            @permission((Config::get('constants.LIST_QUESTION_ACCESS')))
+            @endpermission;
+            @permission((Config::get('constants.LIST_QUESTION_ACCESS')));
                 $("#question-portlet .reload").trigger("click");
                 $("#question-expand").trigger("click");
-            @endpermission
-            @permission((Config::get('constants.LIST_MBTIANSWER_ACCESS')))
+            @endpermission;
+            @permission((Config::get('constants.LIST_MBTIANSWER_ACCESS')));
                 $("#mbtiAnswer-portlet .reload").trigger("click");
                 $("#mbtiAnswer-expand").trigger("click");
-            @endpermission
+            @endpermission;
 
-            @permission((Config::get('constants.LIST_ARTICLE_ACCESS')))
+            @permission((Config::get('constants.LIST_ARTICLE_ACCESS')));
                 $("#article-portlet .reload").trigger("click");
                 $("#article-expand").trigger("click");
-            @endpermission
+            @endpermission;
 
-            @permission((Config::get('constants.LIST_ARTICLECATEGORY_ACCESS')))
+            @permission((Config::get('constants.LIST_ARTICLECATEGORY_ACCESS')));
                 $("#articlecategory-portlet .reload").trigger("click");
                 $("#articlecategory-expand").trigger("click");
-            @endpermission
+            @endpermission;
 
-            @permission((Config::get('constants.LIST_EVENTRESULT_ACCESS')))
+            @permission((Config::get('constants.LIST_EVENTRESULT_ACCESS')));
             // $("#konkur96-portlet .reload").trigger("click");
             $("#konkurResult96-expand").trigger("click");
             $("#konkur97-portlet .reload").trigger("click");
             $("#konkurResult97-expand").trigger("click");
-            @endpermission
+            @endpermission;
 
-            @permission((Config::get('constants.LIST_SHARIF_REGISTER_ACCESS')))
+            @permission((Config::get('constants.LIST_SHARIF_REGISTER_ACCESS')));
             $("#schoolRegister-portlet .reload").trigger("click");
             $("#sharifRegisterResult-expand").trigger("click");
-            @endpermission
+            @endpermission;
 
-            @permission((Config::get('constants.LIST_EDUCATIONAL_CONTENT_ACCESS')))
+            @permission((Config::get('constants.LIST_EDUCATIONAL_CONTENT_ACCESS')));
             // $("#content-portlet .reload").trigger("click");
             $("#content-expand").trigger("click");
             @endpermission

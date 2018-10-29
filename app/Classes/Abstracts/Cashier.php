@@ -56,7 +56,7 @@ abstract class Cashier
      *
      * @return
      */
-    abstract public function getPrice() ;
+    abstract public function getPrice();
 
     /*
     |--------------------------------------------------------------------------
