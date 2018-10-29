@@ -83,6 +83,24 @@ class UserController extends Controller
         $this->setting = $setting->setting;
     }
 
+    /**
+     * Checks whether user can see profile
+     *
+     * @param $user
+     * @return bool
+     */
+    private function canSeeProfile($user): bool
+    {
+        if(Auth::check())
+            return (
+                ($user->id === Auth::id()) ||
+                (Auth::user()->hasRole(config('constants.ROLE_ADMIN'))) ||
+                ($user->hasRole(config('constants.ROLE_TECH')))
+            );
+        else
+            return false;
+    }
+
     public function findTech(Request $request){
         $user = User::where('techCode',$request->techCode)->first();
         if(isset($user))
@@ -638,12 +656,8 @@ class UserController extends Controller
      */
     public function show($user)
     {
-        if(
-            ( $user->id === Auth::id() ) ||
-            ( Auth::user()->hasRole(Config::get('constants.ROLE_ADMIN') ) ) ||
-            ( $user->hasRole(Config::get('constants.ROLE_TECH') ) )
-          ){
-
+        if($this->canSeeProfile($user))
+        {
             if (session()->has("tab")) session()->flash("tabPane", session()->pull("tab"));
             if (session()->has("belongsTo")) session()->flash("belongsTo", session()->pull("belongsTo"));
             if (session()->has("success")) session()->flash("success", session()->pull("success"));

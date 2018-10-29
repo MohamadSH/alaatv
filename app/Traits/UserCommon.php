@@ -1,7 +1,15 @@
 <?php namespace App\Traits;
 
+
 trait UserCommon
 {
+    /**
+     * Exchange user lottery points
+     *
+     * @param $user
+     * @param $points
+     * @return array
+     */
     public function exchangeLottery($user , $points)
     {
         /**   giving coupon */
@@ -51,6 +59,12 @@ trait UserCommon
         ];
     }
 
+    /**
+     * Validates national code
+     *
+     * @param $value
+     * @return bool
+     */
     public function validateNationalCode($value)
     {
         $flag = false;
@@ -71,6 +85,4 @@ trait UserCommon
 
         return $flag;
     }
-
-
 }
