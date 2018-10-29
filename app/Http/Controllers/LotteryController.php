@@ -17,6 +17,7 @@ class LotteryController extends Controller
 {
 
     private $response;
+
     public function __construct()
     {
 
@@ -47,7 +48,7 @@ class LotteryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -58,7 +59,7 @@ class LotteryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -69,7 +70,7 @@ class LotteryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -80,8 +81,8 @@ class LotteryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -92,7 +93,7 @@ class LotteryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -150,46 +151,40 @@ class LotteryController extends Controller
                 }
             }
             dump($luckyBox);
-          dd("stop");
+            dd("stop");
             // Draw
             $counter = 0;
             $successCounter = 0;
             $failedCounter = 0;
             $warningCounter = 0;
             $winners = array();
-            while (!$luckyBox->isEmpty())
-            {
+            while (!$luckyBox->isEmpty()) {
                 $card = $luckyBox->draw();
                 $cardId = $card->getId();
 
-                if(in_array($cardId , $winners))
-                    continue ;
+                if (in_array($cardId, $winners))
+                    continue;
 
                 $user = \App\User::where("id", $cardId)->first();
-                if (isset($user))
-                {
+                if (isset($user)) {
                     $userbon = $user->userbons->where("bon_id", $bon->id)
                         ->where("userbonstatus_id", 1)
                         ->first();
 
-                    if (isset($userbon))
-                    {
+                    if (isset($userbon)) {
                         $userbon->userbonstatus_id = 3;
                         $userbon->usedNumber = $userbon->totalNumber;
                         $userbon->update();
-                    }
-                    else
-                    {
+                    } else {
                         dump("Warning! Userbon not found for user: " . $user->id);
                         $warningCounter++;
                     }
 
                     $userlotteries = $user->lotteries->where("lottery_id", $lottery->id);
-                    if ($userlotteries->isEmpty())
-                    {
+                    if ($userlotteries->isEmpty()) {
                         $counter++;
                         $user->lotteries()->attach($lottery->id, ["rank" => $counter]);
-                        echo "<span style='color:red;font-weight: bolder'>". "#$counter: " ."</span>". $user->getfullName() . " - $user->mobile" . " - $user->nationalCode"." Points: ".$userbon->totalNumber;
+                        echo "<span style='color:red;font-weight: bolder'>" . "#$counter: " . "</span>" . $user->getfullName() . " - $user->mobile" . " - $user->nationalCode" . " Points: " . $userbon->totalNumber;
                         echo "<br>";
                         $successCounter++;
 
@@ -202,10 +197,8 @@ class LotteryController extends Controller
 //                      echo "<span style='color:green;font-weight: bolder'>User notified</span>";
 //                      echo "<br>";
 
-                        array_push($winners , $cardId) ;
-                    }
-                    else
-                    {
+                        array_push($winners, $cardId);
+                    } else {
                         if ($userlotteries->first()->pivot->rank == 0) {
                             dump("Warning! User " . $user->id . " had been removed from lottery");
                             $warningCounter++;
@@ -224,14 +217,12 @@ class LotteryController extends Controller
             dump("number of failed users: " . $failedCounter);
             dump("number of warnings: " . $warningCounter);
             dd("finish");
-        }
-        catch(\Exception $e)
-        {
+        } catch (\Exception $e) {
             $message = "unexpected error";
-            dump($successCounter." users successfully done");
-            dump($failedCounter." users failed");
-            dump($warningCounter." warnings");
-            return $this->response->setStatusCode(503)->setContent(["message" => $message,"number of successfully processed items"=>$counter, "error" => $e->getMessage(), "line" => $e->getLine()]);
+            dump($successCounter . " users successfully done");
+            dump($failedCounter . " users failed");
+            dump($warningCounter . " warnings");
+            return $this->response->setStatusCode(503)->setContent(["message" => $message, "number of successfully processed items" => $counter, "error" => $e->getMessage(), "line" => $e->getLine()]);
         }
     }
 
@@ -242,98 +233,84 @@ class LotteryController extends Controller
     public function givePrizes(Request $request)
     {
         abort("404");
-        try
-        {
-            $lotteryName = "" ;
-            if($request->has("lottery"))
-            {
-                $lotteryName = $request->get("lottery") ;
+        try {
+            $lotteryName = "";
+            if ($request->has("lottery")) {
+                $lotteryName = $request->get("lottery");
             }
 
-            $lottery = Lottery::where("name" ,  $lotteryName)->first();
-            if(!isset($lottery))
-                dd("Lottery not found!") ;
+            $lottery = Lottery::where("name", $lotteryName)->first();
+            if (!isset($lottery))
+                dd("Lottery not found!");
 
             $userlotteries = $lottery->users->sortBy("pivot.rank");
 
-            $successCounter = 0 ;
-            $failedCounter = 0 ;
-            dump("Number of participants: ".$userlotteries->count());
-            foreach ($userlotteries as $userlottery)
-            {
-                $rank = $userlottery->pivot->rank ;
+            $successCounter = 0;
+            $failedCounter = 0;
+            dump("Number of participants: " . $userlotteries->count());
+            foreach ($userlotteries as $userlottery) {
+                $rank = $userlottery->pivot->rank;
                 [
-                    $prizeName ,
+                    $prizeName,
                     $amount,
                     $memorial
-                ]= $lottery->prizes($rank);
+                ] = $lottery->prizes($rank);
 
                 $done = true;
-                $prizeInfo = "" ;
-                if($amount > 0)
-                {
-                    $depositResult =  $userlottery->deposit($amount , config("constants.WALLET_TYPE_GIFT"));
+                $prizeInfo = "";
+                if ($amount > 0) {
+                    $depositResult = $userlottery->deposit($amount, config("constants.WALLET_TYPE_GIFT"));
                     $done = $depositResult["result"];
                     $responseText = $depositResult["responseText"];
 
-                    if($done)
-                    {
-                    $userlottery->notify(new GiftGiven($amount));
-                        echo "<span style='color:green' >"."Notification sent to user :".$userlottery->lastName."</span>";
+                    if ($done) {
+                        $userlottery->notify(new GiftGiven($amount));
+                        echo "<span style='color:green' >" . "Notification sent to user :" . $userlottery->lastName . "</span>";
                         echo "<br>";
 
-                        $objectId = $depositResult["wallet"] ;
+                        $objectId = $depositResult["wallet"];
                         $prizeInfo = '
                           "objectType": "App\\\\Wallet",
-                          "objectId": "'.$objectId.'"
+                          "objectId": "' . $objectId . '"
                           ';
                     }
-                }elseif(strlen($memorial) > 0)
-                {
-                    $objectId = 543 ;
+                } elseif (strlen($memorial) > 0) {
+                    $objectId = 543;
                     $prizeInfo = '
                           "objectType": "App\\\\Coupon",
-                          "objectId": "'.$objectId.'"
+                          "objectId": "' . $objectId . '"
                           ';
                 }
 
-                if($done)
-                {
-                    if(strlen($prizeName) == 0)
-                    {
-                        $userlottery->notify(new LotteryWinner($lottery , $rank , $prizeName , $memorial));
-                        echo "<span style='color:green;font-weight: bolder'>User ".$userlottery->mobile." with rank ".$rank." notified</span>";
+                if ($done) {
+                    if (strlen($prizeName) == 0) {
+                        $userlottery->notify(new LotteryWinner($lottery, $rank, $prizeName, $memorial));
+                        echo "<span style='color:green;font-weight: bolder'>User " . $userlottery->mobile . " with rank " . $rank . " notified</span>";
                         echo "<br>";
                     }
 
                     $itemName = "";
-                    if(strlen($prizeName) > 0 )
-                    {
+                    if (strlen($prizeName) > 0) {
                         $itemName = $prizeName;
-                    }
-                    elseif(strlen($memorial)>0)
-                    {
+                    } elseif (strlen($memorial) > 0) {
                         $itemName = $memorial;
                     }
 
                     $prizes = "";
-                    if(strlen($prizeInfo) > 0)
-                    {
+                    if (strlen($prizeInfo) > 0) {
                         $prizes = '{
                       "items": [
                         {
-                          "name": "'.$itemName.'",'
-                            .$prizeInfo.
+                          "name": "' . $itemName . '",'
+                            . $prizeInfo .
                             '}
                       ]
                     }';
-                    }
-                    elseif(strlen($itemName) > 0)
-                    {
+                    } elseif (strlen($itemName) > 0) {
                         $prizes = '{
                       "items": [
                         {
-                          "name": "'.$itemName.'"
+                          "name": "' . $itemName . '"
                         }
                           ]
                     }';
@@ -341,54 +318,43 @@ class LotteryController extends Controller
                     }
 
                     $pivotArray = array();
-                    if(strlen($prizes) > 0)
-                    {
-                        $pivotArray["prizes"] =  $prizes;
+                    if (strlen($prizes) > 0) {
+                        $pivotArray["prizes"] = $prizes;
                     }
 
-                    if(!empty($pivotArray))
-                    {
+                    if (!empty($pivotArray)) {
                         $givePrizeResult = $userlottery->lotteries()
-                            ->where("lottery_id" , $lottery->id)
-                            ->where("pivot.rank" , $rank)
-                            ->updateExistingPivot($lottery->id , $pivotArray );
+                            ->where("lottery_id", $lottery->id)
+                            ->where("pivot.rank", $rank)
+                            ->updateExistingPivot($lottery->id, $pivotArray);
 
-                        if(!$givePrizeResult)
-                        {
-                            dump("Failed on updating prize for user: ".$userlottery->id) ;
-                            $failedCounter++ ;
+                        if (!$givePrizeResult) {
+                            dump("Failed on updating prize for user: " . $userlottery->id);
+                            $failedCounter++;
+                        } else {
+                            $successCounter++;
                         }
-                        else
-                        {
-                            $successCounter++ ;
-                        }
+                    } else {
+                        $successCounter++;
                     }
-                    else
-                    {
-                        $successCounter++ ;
-                    }
-                }
-                else
-                {
-                    dump("Failed on updating wallet for user ".$userlottery->id." ".$responseText);
+                } else {
+                    dump("Failed on updating wallet for user " . $userlottery->id . " " . $responseText);
                     $failedCounter++;
                 }
             }
-            dump("Successfully processed users ".$successCounter);
-            dump("ّFiled users: ".$failedCounter);
-            dd("done") ;
-        }
-        catch(\Exception $e)
-        {
+            dump("Successfully processed users " . $successCounter);
+            dump("ّFiled users: " . $failedCounter);
+            dd("done");
+        } catch (\Exception $e) {
             $message = "unexpected error";
             return $this->response
-                        ->setStatusCode(503)
-                        ->setContent([
-                            "message" => $message,
-                            "error" => $e->getMessage(),
-                            "line" => $e->getLine()
-                        ]);
-                    }
+                ->setStatusCode(503)
+                ->setContent([
+                    "message" => $message,
+                    "error" => $e->getMessage(),
+                    "line" => $e->getLine()
+                ]);
+        }
 
     }
 }

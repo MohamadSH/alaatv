@@ -21,7 +21,7 @@ class MedianaServiceProvider extends ServiceProvider
     {
         $this->app->when(MedianaChannel::class)
             ->needs(SmsSenderClient::class)
-            ->give(function (){
+            ->give(function () {
                 $config = $this->app['config']['services.medianaSMS.normal'];
 
                 return new MedianaClient(

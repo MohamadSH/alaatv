@@ -1,10 +1,10 @@
 <?php
+
 namespace App\Traits;
 
 use App\Http\Controllers\WalletController;
 use App\Http\Requests\Request;
 use App\Wallet;
-use Carbon\Carbon;
 
 trait HasWallet
 {
@@ -17,31 +17,19 @@ trait HasWallet
     }
 
     /**
-     * Retrieve the balance of this user's wallet
-     */
-    public function getWalletBalance($type = 1)
-    {
-        $wallet = $this->wallets->where("wallettype_id" , $type)->first();
-        $balance = 0 ;
-        if(isset($wallet))
-            $balance = $this->wallets->where("wallettype_id" , $type)->first()->balance;
-
-        return $balance ;
-    }
-    /**
      * Retrieve the balance of all of this user's wallet
      */
     public function getTotalWalletBalance()
     {
         $wallets = $this->wallets;
         $totalBalance = 0;
-        foreach ($wallets as $wallet)
-        {
-            $totalBalance += $wallet->balance ;
+        foreach ($wallets as $wallet) {
+            $totalBalance += $wallet->balance;
         }
 
-        return $totalBalance ;
+        return $totalBalance;
     }
+
     /**
      * Determine if the user can withdraw the given amount
      * @param  integer $amount
@@ -51,150 +39,150 @@ trait HasWallet
     {
         return $this->getWalletBalance() >= $amount;
     }
+
+    /**
+     * Retrieve the balance of this user's wallet
+     */
+    public function getWalletBalance($type = 1)
+    {
+        $wallet = $this->wallets->where("wallettype_id", $type)->first();
+        $balance = 0;
+        if (isset($wallet))
+            $balance = $this->wallets->where("wallettype_id", $type)->first()->balance;
+
+        return $balance;
+    }
+
     /**
      * Move credits to this account
      * @param  integer $amount
-     * @param  string  $type
-     * @param  array   $meta
+     * @param  string $type
+     * @param  array $meta
      * @return array
      */
-    public function deposit($amount=0, $walletType=null )
+    public function deposit($amount = 0, $walletType = null)
     {
         $failed = true;
         $responseText = "";
 
-        if(!isset($walletType))
+        if (!isset($walletType))
             $walletType = config("constants.WALLET_TYPE_MAIN");
-        $wallet = $this->wallets->where("wallettype_id" , $walletType)->first();
-        if(isset($wallet))
-        {
+        $wallet = $this->wallets->where("wallettype_id", $walletType)->first();
+        if (isset($wallet)) {
             $result = $wallet->deposit($amount);
-            if($result["result"])
-            {
+            if ($result["result"]) {
                 $failed = false;
-            }
-            else
-            {
+            } else {
                 $failed = true;
                 $responseText = $result["responseText"];
             }
-        }
-        else
-        {
+        } else {
             $walletController = new WalletController();
             $request = new Request();
 
-            $request->offsetSet("user_id" , $this->id);
-            $request->offsetSet("wallettype_id" , $walletType);
-            $request->offsetSet("fromAPI" , 1);
-            $response =  $walletController->store($request);
-            if($response->getStatusCode() == 200)
-            {
-                $result =  json_decode($response->getContent());
-                $wallet = Wallet::where("id" , $result->wallet->id)->first() ;
+            $request->offsetSet("user_id", $this->id);
+            $request->offsetSet("wallettype_id", $walletType);
+            $request->offsetSet("fromAPI", 1);
+            $response = $walletController->store($request);
+            if ($response->getStatusCode() == 200) {
+                $result = json_decode($response->getContent());
+                $wallet = Wallet::where("id", $result->wallet->id)->first();
                 $wallet->deposit($amount);
                 $failed = false;
-            }
-            else
-            {
+            } else {
                 $failed = true;
                 $responseText = "CAN_NOT_CREATE_WALLET";
             }
         }
 
-        if(!$failed)
+        if (!$failed)
             $responseText = "SUCCESSFUL";
         return [
-            "result" => !$failed ,
+            "result" => !$failed,
             "responseText" => $responseText,
-            "wallet" => (isset($wallet))?$wallet->id:0
-        ] ;
+            "wallet" => (isset($wallet)) ? $wallet->id : 0
+        ];
     }
+
     /**
      * Fail to move credits to this account
      * @param  integer $amount
-     * @param  string  $type
-     * @param  array   $meta
+     * @param  string $type
+     * @param  array $meta
      */
     public function failDeposit($amount, $type = 'deposit', $meta = [])
     {
         $this->deposit($amount, $type, $meta, false);
     }
+
     /**
      * Attempt to move credits from this account
      * @param  integer $amount
-     * @param  string  $type
-     * @param  array   $meta
+     * @param  string $type
+     * @param  array $meta
      * @param  boolean $shouldAccept
      * @return array
      */
-    public function withdraw( $amount , $walletType=null, $shouldAccept = true)
+    public function withdraw($amount, $walletType = null, $shouldAccept = true)
     {
         $failed = true;
         $responseText = "";
 
-        if(!isset($walletType))
+        if (!isset($walletType))
             $walletType = config("constants.WALLET_TYPE_MAIN");
 
-        $wallet = $this->wallets->where("wallettype_id" , $walletType)->first();
-        if(isset($wallet))
-        {
+        $wallet = $this->wallets->where("wallettype_id", $walletType)->first();
+        if (isset($wallet)) {
             $result = $wallet->withdraw($amount);
-            if($result["result"])
-            {
+            if ($result["result"]) {
                 $failed = false;
-            }
-            else
-            {
+            } else {
                 $failed = true;
                 $responseText = $result["responseText"];
             }
-        }
-        else
-        {
+        } else {
             $walletController = new WalletController();
             $request = new Request();
 
-            $request->offsetSet("user_id" , $this->id);
-            $request->offsetSet("wallettype_id" , $walletType);
-            $request->offsetSet("fromAPI" , 1);
-            $response =  $walletController->store($request);
-            if($response->getStatusCode() == 200)
-            {
-                $result =  json_decode($response->getContent());
-                $wallet = Wallet::where("id" , $result->wallet->id)->first() ;
+            $request->offsetSet("user_id", $this->id);
+            $request->offsetSet("wallettype_id", $walletType);
+            $request->offsetSet("fromAPI", 1);
+            $response = $walletController->store($request);
+            if ($response->getStatusCode() == 200) {
+                $result = json_decode($response->getContent());
+                $wallet = Wallet::where("id", $result->wallet->id)->first();
                 $wallet->deposit(0);
                 $failed = false;
-            }
-            else
-            {
+            } else {
                 $failed = true;
                 $responseText = "CAN_NOT_CREATE_WALLET";
             }
         }
 
-        if(!$failed)
+        if (!$failed)
             $responseText = "SUCCESSFUL";
         return [
-            "result" => !$failed ,
+            "result" => !$failed,
             "responseText" => $responseText,
-            "wallet" => (isset($wallet))?$wallet->id:0
-        ] ;
+            "wallet" => (isset($wallet)) ? $wallet->id : 0
+        ];
     }
+
     /**
      * Move credits from this account
      * @param  integer $amount
-     * @param  string  $type
-     * @param  array   $meta
+     * @param  string $type
+     * @param  array $meta
      * @param  boolean $shouldAccept
      */
-    public function forceWithdraw($amount, $walletType )
+    public function forceWithdraw($amount, $walletType)
     {
-        if(!isset($walletType))
+        if (!isset($walletType))
             $walletType = config("constants.WALLET_TYPE_MAIN");
 
-        return $this->withdraw($amount,$walletType, false);
+        return $this->withdraw($amount, $walletType, false);
     }
+
     /**
      * Returns the actual balance for this wallet.
      * Might be different from the balance property if the database is manipulated

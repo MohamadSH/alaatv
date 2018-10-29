@@ -1,6 +1,7 @@
 @if(isset($role))
     <div class="form-body">
-        <div class="note note-warning"><h4 class="caption-subject font-dark bold uppercase"> وارد کردن اطلاعات زیر الزامیست: </h4></div>
+        <div class="note note-warning"><h4 class="caption-subject font-dark bold uppercase"> وارد کردن اطلاعات زیر
+                الزامیست: </h4></div>
         <div class="form-group {{ $errors->has('name') ? ' has-error' : '' }}">
             <label class="col-md-3 control-label" for="name">نام</label>
             <div class="col-md-9">
@@ -24,7 +25,8 @@
             </div>
         </div>
         <br>
-        <div class="note note-info"><h4 class="caption-subject font-dark bold uppercase"> وارد کردن اطلاعات زیر اختیاری می باشد: </h4></div>
+        <div class="note note-info"><h4 class="caption-subject font-dark bold uppercase"> وارد کردن اطلاعات زیر اختیاری
+                می باشد: </h4></div>
         <div class="form-group {{ $errors->has('description') ? ' has-error' : '' }}">
             <label class="col-md-3 control-label" for="description">توضیح نقش</label>
             <div class="col-md-9">

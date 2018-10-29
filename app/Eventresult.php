@@ -2,8 +2,8 @@
 
 namespace App;
 
-use App\Traits\Helper;
 use App\Traits\DateTrait;
+use App\Traits\Helper;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -51,7 +51,7 @@ class Eventresult extends Model
     use SoftDeletes;
     use Helper;
     use DateTrait;
-    
+
     /**      * The attributes that should be mutated to dates.        */
     protected $dates = [
         'created_at',
@@ -65,7 +65,7 @@ class Eventresult extends Model
     protected $fillable = [
         'user_id',
         'event_id',
-        'eventresultstatus_id' ,
+        'eventresultstatus_id',
         'rank',
         'participationCode',
         'participationCodeHash',

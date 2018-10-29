@@ -17,7 +17,7 @@ class CheckForMaintenanceMode
     /**
      * Create a new middleware instance.
      *
-     * @param  \Illuminate\Contracts\Foundation\Application  $app
+     * @param  \Illuminate\Contracts\Foundation\Application $app
      * @return void
      */
     public function __construct(Application $app)
@@ -28,15 +28,14 @@ class CheckForMaintenanceMode
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Closure $next
      * @return mixed
      */
     public function handle($request, Closure $next)
     {
         if ($this->app->isDownForMaintenance() &&
-            !in_array($request->ip(), ['79.127.123.242' , '79.127.123.243' , '79.127.123.244' , '79.127.123.246' , '185.49.84.106']))
-        {
+            !in_array($request->ip(), ['79.127.123.242', '79.127.123.243', '79.127.123.244', '79.127.123.246', '185.49.84.106'])) {
             return abort(503);
         }
 

@@ -1,15 +1,16 @@
 @if(!Auth::check())
     @if($formID == 1)
         <!-- BEGIN REGISTRATION FORM 1 -->
-        <form  action="{{ action("Auth\RegisterController@register") }}" enctype="multipart/form-data" method="post" >
+        <form action="{{ action("Auth\RegisterController@register") }}" enctype="multipart/form-data" method="post">
             {{ csrf_field() }}
             <h3>ثبت نام</h3>
             <p class="caption-subject font-red-thunderbird bold uppercase">وارد کردن تمام موارد الزامی می باشد: </p>
-            <div class="form-group {{ $errors->has('firstName') ? ' has-error' : '' }}" >
+            <div class="form-group {{ $errors->has('firstName') ? ' has-error' : '' }}">
                 <label for="firstName" class="control-label visible-ie8 visible-ie9">نام</label>
                 <div class="input-icon">
                     <i class="fa fa-font"></i>
-                    <input id="firstName" class="form-control placeholder-no-fix" type="text" value="{{ old('firstName') }}" placeholder="نام" name="firstName" />
+                    <input id="firstName" class="form-control placeholder-no-fix" type="text"
+                           value="{{ old('firstName') }}" placeholder="نام" name="firstName"/>
 
                     @if ($errors->has('firstName'))
                         <span class="help-block">
@@ -18,11 +19,12 @@
                     @endif
                 </div>
             </div>
-            <div class="form-group {{ $errors->has('lastName') ? ' has-error' : '' }}" >
+            <div class="form-group {{ $errors->has('lastName') ? ' has-error' : '' }}">
                 <label class="control-label visible-ie8 visible-ie9">نام خانوادگی</label>
                 <div class="input-icon">
                     <i class="fa fa-font"></i>
-                    <input class="form-control placeholder-no-fix" type="text" value="{{ old('lastName') }}" placeholder="نام خانوادگی" name="lastName" /> </div>
+                    <input class="form-control placeholder-no-fix" type="text" value="{{ old('lastName') }}"
+                           placeholder="نام خانوادگی" name="lastName"/></div>
                 @if ($errors->has('lastName'))
                     <span class="help-block">
                                     <strong>{{ $errors->first('lastName') }}</strong>
@@ -30,12 +32,13 @@
                 @endif
             </div>
             <span class="help-block small bg-font-dark">کد ملی ده رقمی بدون خط فاصله</span>
-            <div class="form-group {{ $errors->has('nationalCode') ? ' has-error' : '' }}" >
+            <div class="form-group {{ $errors->has('nationalCode') ? ' has-error' : '' }}">
                 <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
                 <label class="control-label visible-ie8 visible-ie9">کد ملی</label>
                 <div class="input-icon">
                     <i class="fa fa-user"></i>
-                    <input class="form-control placeholder-no-fix" type="text" value="{{ old('nationalCode') }}" placeholder="کد ملی(با اعداد انگلیسی)" name="nationalCode"  maxlength="10"/> </div>
+                    <input class="form-control placeholder-no-fix" type="text" value="{{ old('nationalCode') }}"
+                           placeholder="کد ملی(با اعداد انگلیسی)" name="nationalCode" maxlength="10"/></div>
                 @if ($errors->has('nationalCode'))
                     <span class="help-block">
                                         <strong>{{ $errors->first('nationalCode') }}</strong>
@@ -43,12 +46,13 @@
                 @endif
             </div>
             <span class="help-block small bg-font-dark">مثال: 09191234567</span>
-            <div class="form-group {{ $errors->has('mobile') ? ' has-error' : '' }}" >
+            <div class="form-group {{ $errors->has('mobile') ? ' has-error' : '' }}">
                 <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
                 <label class="control-label visible-ie8 visible-ie9">شماره موبایل</label>
                 <div class="input-icon">
                     <i class="fa fa-mobile"></i>
-                    <input class="form-control placeholder-no-fix" type="text" value="{{ old('mobile') }}" placeholder="موبایل(با اعداد انگلیسی)" name="mobile" maxlength="11"/> </div>
+                    <input class="form-control placeholder-no-fix" type="text" value="{{ old('mobile') }}"
+                           placeholder="موبایل(با اعداد انگلیسی)" name="mobile" maxlength="11"/></div>
                 @if ($errors->has('mobile'))
                     <span class="help-block">
                                             <strong>{{ $errors->first('mobile') }}</strong>
@@ -60,75 +64,76 @@
                 </div>
             </div>
             {{--<div class="form-group col-md-12 {{ $errors->has('major_id') ? ' has-error' : '' }}">--}}
-                {{--<label class="control-label visible-ie8 visible-ie9">رشته</label>--}}
-                {{--<div class="input-icon">--}}
-                    {{--<i class="fa fa-graduation-cap"></i>--}}
-                    {{--{!! Form::select('major_id',$majors,old('major_id'),['class' => 'select2 form-control', 'id' => 'major_id']) !!}--}}
-                    {{--@if ($errors->has('major_id'))--}}
-                        {{--<span class="help-block">--}}
-                                            {{--<strong>{{ $errors->first('major_id') }}</strong>--}}
-                                        {{--</span>--}}
-                    {{--@endif--}}
-                {{--</div>--}}
+            {{--<label class="control-label visible-ie8 visible-ie9">رشته</label>--}}
+            {{--<div class="input-icon">--}}
+            {{--<i class="fa fa-graduation-cap"></i>--}}
+            {{--{!! Form::select('major_id',$majors,old('major_id'),['class' => 'select2 form-control', 'id' => 'major_id']) !!}--}}
+            {{--@if ($errors->has('major_id'))--}}
+            {{--<span class="help-block">--}}
+            {{--<strong>{{ $errors->first('major_id') }}</strong>--}}
+            {{--</span>--}}
+            {{--@endif--}}
+            {{--</div>--}}
             {{--</div>--}}
             {{--<div class="form-group {{ $errors->has('password') ? ' has-error' : '' }}" >--}}
-                {{--<label class="control-label visible-ie8 visible-ie9">رمز عبور</label>--}}
-                {{--<div class="input-icon">--}}
-                    {{--<i class="fa fa-lock"></i>--}}
-                    {{--<input class="form-control placeholder-no-fix" type="password" autocomplete="off" id="register_password" placeholder="رمز عبور" name="password" />--}}
-                {{--</div>--}}
-                {{--@if ($errors->has('password'))--}}
-                    {{--<span class="help-block">--}}
-                                                {{--<strong>{{ $errors->first('password') }}</strong>--}}
-                                            {{--</span>--}}
-                {{--@endif--}}
+            {{--<label class="control-label visible-ie8 visible-ie9">رمز عبور</label>--}}
+            {{--<div class="input-icon">--}}
+            {{--<i class="fa fa-lock"></i>--}}
+            {{--<input class="form-control placeholder-no-fix" type="password" autocomplete="off" id="register_password" placeholder="رمز عبور" name="password" />--}}
+            {{--</div>--}}
+            {{--@if ($errors->has('password'))--}}
+            {{--<span class="help-block">--}}
+            {{--<strong>{{ $errors->first('password') }}</strong>--}}
+            {{--</span>--}}
+            {{--@endif--}}
             {{--</div>--}}
             {{--<div class="form-group {{ $errors->has('password_confirmation') ? ' has-error' : '' }}" >--}}
-                {{--<label class="control-label visible-ie8 visible-ie9">تکرار رمز عبور</label>--}}
-                {{--<div class="controls">--}}
-                    {{--<div class="input-icon">--}}
-                        {{--<i class="fa fa-check"></i>--}}
-                        {{--<input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="تکرار رمز عبور   " name="password_confirmation" /> </div>--}}
-                    {{--@if ($errors->has('password_confirmation'))--}}
-                        {{--<span class="help-block">--}}
-                            {{--<strong>{{ $errors->first('password_confirmation') }}</strong>--}}
-                        {{--</span>--}}
-                    {{--@endif--}}
-                {{--</div>--}}
+            {{--<label class="control-label visible-ie8 visible-ie9">تکرار رمز عبور</label>--}}
+            {{--<div class="controls">--}}
+            {{--<div class="input-icon">--}}
+            {{--<i class="fa fa-check"></i>--}}
+            {{--<input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="تکرار رمز عبور   " name="password_confirmation" /> </div>--}}
+            {{--@if ($errors->has('password_confirmation'))--}}
+            {{--<span class="help-block">--}}
+            {{--<strong>{{ $errors->first('password_confirmation') }}</strong>--}}
+            {{--</span>--}}
+            {{--@endif--}}
+            {{--</div>--}}
             {{--</div>--}}
             {{--<span class="help-block @if ($errors->has('photo')) font-red bold @else small @endif bg-font-dark">فرمتهای مجاز: jpg,png - حداکثر حجم مجاز: ۲۰۰ کیلوبایت</span>--}}
             {{--<div class="form-group {{ $errors->has('photo') ? ' has-error' : '' }}">--}}
-                {{--<label class="control-label visible-ie8 visible-ie9">عکس</label>--}}
-                {{--<div class="fileinput fileinput-new" data-provides="fileinput">--}}
-                                                            {{--<span class="btn green btn-file">--}}
-                                                                {{--<i class="fa fa-picture-o"></i>--}}
-                                                                {{--<span class="fileinput-new"> عکس  </span>--}}
-                                                                {{--<span class="fileinput-exists"> تغییر </span>--}}
-                                                                {{--<input class="form-control placeholder-no-fix" type="file" name="photo"> </span>--}}
-                    {{--<span class="fileinput-filename bg-font-dark"> </span> &nbsp;--}}
-                    {{--<a href="javascript:;" class="close fileinput-exists" data-dismiss="fileinput"> </a>--}}
-                {{--</div>--}}
+            {{--<label class="control-label visible-ie8 visible-ie9">عکس</label>--}}
+            {{--<div class="fileinput fileinput-new" data-provides="fileinput">--}}
+            {{--<span class="btn green btn-file">--}}
+            {{--<i class="fa fa-picture-o"></i>--}}
+            {{--<span class="fileinput-new"> عکس  </span>--}}
+            {{--<span class="fileinput-exists"> تغییر </span>--}}
+            {{--<input class="form-control placeholder-no-fix" type="file" name="photo"> </span>--}}
+            {{--<span class="fileinput-filename bg-font-dark"> </span> &nbsp;--}}
+            {{--<a href="javascript:;" class="close fileinput-exists" data-dismiss="fileinput"> </a>--}}
+            {{--</div>--}}
             {{--</div>--}}
             {{--<div class="form-group {{ $errors->has('g-recaptcha-response') ? ' has-error' : '' }}" >--}}
-                {{--<div class="controls">--}}
-                    {{--{!! Recaptcha::render() !!}--}}
-                {{--</div>--}}
-                {{--@if ($errors->has('g-recaptcha-response'))--}}
-                    {{--<span class="help-block">--}}
-                                {{--<strong>{{ $errors->first('g-recaptcha-response') }}</strong>--}}
-                    {{--</span>--}}
-                {{--@endif--}}
+            {{--<div class="controls">--}}
+            {{--{!! Recaptcha::render() !!}--}}
+            {{--</div>--}}
+            {{--@if ($errors->has('g-recaptcha-response'))--}}
+            {{--<span class="help-block">--}}
+            {{--<strong>{{ $errors->first('g-recaptcha-response') }}</strong>--}}
+            {{--</span>--}}
+            {{--@endif--}}
             {{--</div>--}}
 
-            <div class="form-group" >
+            <div class="form-group">
                 <label class="mt-checkbox mt-checkbox-outline">
-                    <div class="md-checkbox @if($errors->has('rules')) has-error @else has-success @endif" >
-                        <input type="checkbox" id="rules_checkbox" name="rules" value="1" class="md-check" onclick="if ($(this).parents('.has-error').length != 0) $(this).parent().removeClass('has-error').addClass('has-success' ) ;">
+                    <div class="md-checkbox @if($errors->has('rules')) has-error @else has-success @endif">
+                        <input type="checkbox" id="rules_checkbox" name="rules" value="1" class="md-check"
+                               onclick="if ($(this).parents('.has-error').length != 0) $(this).parent().removeClass('has-error').addClass('has-success' ) ;">
                         <label for="rules_checkbox">
                             <span></span>
                             <span class="check"></span>
                             <span class="box"></span>
-                            <input type="checkbox" name="tnc" /> من با
+                            <input type="checkbox" name="tnc"/> من با
                             <a class="font-grey-salt" data-toggle="modal" href="#rules">قوانین استفاده از سایت </a>
                             موافقم
                             <span></span>
@@ -156,22 +161,27 @@
                 <!-- /.modal-dialog -->
             </div>
             <div class="form-actions">
-                <button id="register-back-btn" type="button" class="btn red btn-outline" onclick="location.href = '/'"> خانه </button>
-                <button type="submit" id="register-submit-btn" class="btn green pull-right"> ثبت نام </button>
+                <button id="register-back-btn" type="button" class="btn red btn-outline" onclick="location.href = '/'">
+                    خانه
+                </button>
+                <button type="submit" id="register-submit-btn" class="btn green pull-right"> ثبت نام</button>
             </div>
         </form>
         <!-- END REGISTRATION FORM 1 -->
     @elseif($formID == 2)
         <!-- BEGIN REGISTRATION FORM 2 -->
-        <form  action="{{ action("Auth\RegisterController@register") }}" enctype="multipart/form-data" method="post" >
+        <form action="{{ action("Auth\RegisterController@register") }}" enctype="multipart/form-data" method="post">
             {{ csrf_field() }}
             <h2>عضویت در سایت آلاء</h2>
-            <p class="caption-subject bold uppercase">بعد از ثبت نام می توانید خدمات مختلف را ببینید و هر کدام را که خواستید سفارش بدید.</p>
-            <div class="form-group col-md-6 {{ $errors->has('firstName') ? ' has-error' : '' }}" style="border-bottom: none !important;">
+            <p class="caption-subject bold uppercase">بعد از ثبت نام می توانید خدمات مختلف را ببینید و هر کدام را که
+                خواستید سفارش بدید.</p>
+            <div class="form-group col-md-6 {{ $errors->has('firstName') ? ' has-error' : '' }}"
+                 style="border-bottom: none !important;">
                 <label for="firstName" class="control-label visible-ie8 visible-ie9">نام</label>
                 <div class="input-icon">
                     <i class="fa fa-font"></i>
-                    <input id="firstName" class="form-control placeholder-no-fix" type="text" value="{{ old('firstName') }}" placeholder="نام(فارسی)" name="firstName" />
+                    <input id="firstName" class="form-control placeholder-no-fix" type="text"
+                           value="{{ old('firstName') }}" placeholder="نام(فارسی)" name="firstName"/>
 
                     {{--@if ($errors->has('firstName'))--}}
                     {{--<span class="help-block">--}}
@@ -181,11 +191,13 @@
                 </div>
             </div>
 
-            <div class="form-group col-md-6 {{ $errors->has('lastName') ? ' has-error' : '' }}" style="border-bottom: none !important;">
+            <div class="form-group col-md-6 {{ $errors->has('lastName') ? ' has-error' : '' }}"
+                 style="border-bottom: none !important;">
                 <label class="control-label visible-ie8 visible-ie9">نام خانوادگی</label>
                 <div class="input-icon">
                     <i class="fa fa-font"></i>
-                    <input class="form-control placeholder-no-fix" type="text" value="{{ old('lastName') }}" placeholder="نام خانوادگی(فارسی)" name="lastName" /> </div>
+                    <input class="form-control placeholder-no-fix" type="text" value="{{ old('lastName') }}"
+                           placeholder="نام خانوادگی(فارسی)" name="lastName"/></div>
                 {{--@if ($errors->has('lastName'))--}}
                 {{--<span class="help-block">--}}
                 {{--<strong>{{ $errors->first('lastName') }}</strong>--}}
@@ -194,12 +206,14 @@
             </div>
             <div class="col-md-6">
                 <span class="help-block small">کد ملی ده رقمی بدون خط فاصله</span>
-                <div class="form-group {{ $errors->has('nationalCode') ? ' has-error' : '' }}" style="border-bottom: none !important;">
+                <div class="form-group {{ $errors->has('nationalCode') ? ' has-error' : '' }}"
+                     style="border-bottom: none !important;">
                     <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
                     <label class="control-label visible-ie8 visible-ie9">کد ملی</label>
                     <div class="input-icon">
                         <i class="fa fa-user"></i>
-                        <input class="form-control placeholder-no-fix" type="text" value="{{ old('nationalCode') }}" placeholder="کد ملی(با اعداد انگلیسی)" name="nationalCode"  maxlength="10"/> </div>
+                        <input class="form-control placeholder-no-fix" type="text" value="{{ old('nationalCode') }}"
+                               placeholder="کد ملی(با اعداد انگلیسی)" name="nationalCode" maxlength="10"/></div>
                     @if ($errors->has('nationalCode'))
                         <span class="help-block">
                                         <strong>{{ $errors->first('nationalCode') }}</strong>
@@ -209,12 +223,14 @@
             </div>
             <div class="col-md-6">
                 <span class="help-block small">مثال: 09191234567</span>
-                <div class="form-group {{ $errors->has('mobile') ? ' has-error' : '' }}" style="border-bottom: none !important;">
+                <div class="form-group {{ $errors->has('mobile') ? ' has-error' : '' }}"
+                     style="border-bottom: none !important;">
                     <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
                     <label class="control-label visible-ie8 visible-ie9">شماره موبایل</label>
                     <div class="input-icon">
                         <i class="fa fa-mobile"></i>
-                        <input class="form-control placeholder-no-fix" type="text" value="{{ old('mobile') }}" placeholder="موبایل(با اعداد انگلیسی)" name="mobile" maxlength="11"/> </div>
+                        <input class="form-control placeholder-no-fix" type="text" value="{{ old('mobile') }}"
+                               placeholder="موبایل(با اعداد انگلیسی)" name="mobile" maxlength="11"/></div>
                     {{--@if ($errors->has('mobile'))--}}
                     {{--<span class="help-block">--}}
                     {{--<strong>{{ $errors->first('mobile') }}</strong>--}}
@@ -246,29 +262,29 @@
             {{--</div>--}}
             {{--</div>--}}
             {{--<div class="form-group col-md-6 {{ $errors->has('password') ? ' has-error' : '' }}" style="border-bottom: none !important;">--}}
-                {{--<label class="control-label visible-ie8 visible-ie9">رمز عبور</label>--}}
-                {{--<div class="input-icon">--}}
-                    {{--<i class="fa fa-lock"></i>--}}
-                    {{--<input class="form-control placeholder-no-fix" type="password" autocomplete="off" id="register_password" placeholder="رمز عبور" name="password" />--}}
-                {{--</div>--}}
-                {{--@if ($errors->has('password'))--}}
-                    {{--<span class="help-block">--}}
-                                                {{--<strong>{{ $errors->first('password') }}</strong>--}}
-                                            {{--</span>--}}
-                {{--@endif--}}
+            {{--<label class="control-label visible-ie8 visible-ie9">رمز عبور</label>--}}
+            {{--<div class="input-icon">--}}
+            {{--<i class="fa fa-lock"></i>--}}
+            {{--<input class="form-control placeholder-no-fix" type="password" autocomplete="off" id="register_password" placeholder="رمز عبور" name="password" />--}}
+            {{--</div>--}}
+            {{--@if ($errors->has('password'))--}}
+            {{--<span class="help-block">--}}
+            {{--<strong>{{ $errors->first('password') }}</strong>--}}
+            {{--</span>--}}
+            {{--@endif--}}
             {{--</div>--}}
             {{--<div class="form-group col-md-6 {{ $errors->has('password_confirmation') ? ' has-error' : '' }}" style="border-bottom: none !important;">--}}
-                {{--<label class="control-label visible-ie8 visible-ie9">تکرار رمز عبور</label>--}}
-                {{--<div class="controls">--}}
-                    {{--<div class="input-icon">--}}
-                        {{--<i class="fa fa-check"></i>--}}
-                        {{--<input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="تکرار رمز عبور   " name="password_confirmation" /> </div>--}}
-                    {{--@if ($errors->has('password_confirmation'))--}}
-                        {{--<span class="help-block">--}}
-                            {{--<strong>{{ $errors->first('password_confirmation') }}</strong>--}}
-                        {{--</span>--}}
-                    {{--@endif--}}
-                {{--</div>--}}
+            {{--<label class="control-label visible-ie8 visible-ie9">تکرار رمز عبور</label>--}}
+            {{--<div class="controls">--}}
+            {{--<div class="input-icon">--}}
+            {{--<i class="fa fa-check"></i>--}}
+            {{--<input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="تکرار رمز عبور   " name="password_confirmation" /> </div>--}}
+            {{--@if ($errors->has('password_confirmation'))--}}
+            {{--<span class="help-block">--}}
+            {{--<strong>{{ $errors->first('password_confirmation') }}</strong>--}}
+            {{--</span>--}}
+            {{--@endif--}}
+            {{--</div>--}}
             {{--</div>--}}
             {{--<span class="help-block @if ($errors->has('photo')) font-red bold @else small @endif bg-font-dark">فرمتهای مجاز: jpg,png - حداکثر حجم مجاز: ۲۰۰ کیلوبایت</span>--}}
             {{--<div class="form-group {{ $errors->has('photo') ? ' has-error' : '' }}">--}}
@@ -284,25 +300,26 @@
             {{--</div>--}}
             {{--</div>--}}
             {{--<div class="form-group col-md-12{{ $errors->has('g-recaptcha-response') ? ' has-error' : '' }}" style="border-bottom: none !important; @if ($errors->has('g-recaptcha-response')) border-right: solid  #e73d4a; @endif">--}}
-                {{--<div class="controls">--}}
-                    {{--{!! Recaptcha::render() !!}--}}
-                {{--</div>--}}
-                {{--@if ($errors->has('g-recaptcha-response'))--}}
-                {{--<span class="help-block small">--}}
-                {{--<strong>{{ $errors->first('g-recaptcha-response') }}</strong>--}}
-                {{--</span>--}}
-                {{--@endif--}}
+            {{--<div class="controls">--}}
+            {{--{!! Recaptcha::render() !!}--}}
+            {{--</div>--}}
+            {{--@if ($errors->has('g-recaptcha-response'))--}}
+            {{--<span class="help-block small">--}}
+            {{--<strong>{{ $errors->first('g-recaptcha-response') }}</strong>--}}
+            {{--</span>--}}
+            {{--@endif--}}
             {{--</div>--}}
             @if(isset($pageName) && strcmp($pageName , "checkoutAuth") ==0)
                 <div class="form-group col-md-8" style="border-bottom: none !important;">
                     <label class="mt-checkbox mt-checkbox-outline">
-                        <div class="md-checkbox @if($errors->has('rules')) has-error @else has-success @endif" >
-                            <input type="checkbox" id="rules_checkbox" name="rules" value="1" class="md-check" onclick="if ($(this).parents('.has-error').length != 0) $(this).parent().removeClass('has-error').addClass('has-success' ) ;" >
+                        <div class="md-checkbox @if($errors->has('rules')) has-error @else has-success @endif">
+                            <input type="checkbox" id="rules_checkbox" name="rules" value="1" class="md-check"
+                                   onclick="if ($(this).parents('.has-error').length != 0) $(this).parent().removeClass('has-error').addClass('has-success' ) ;">
                             <label for="rules_checkbox">
                                 <span></span>
                                 <span class="check"></span>
                                 <span class="box"></span>
-                                <input type="checkbox" name="tnc" /> من با قوانین استفاده از سایت موافقم
+                                <input type="checkbox" name="tnc"/> من با قوانین استفاده از سایت موافقم
                                 <span></span>
                             </label>
                         </div>
@@ -310,7 +327,7 @@
                 </div>
                 <div class="form-actions col-md-4">
                     {{--<button id="register-back-btn" type="button" class="btn red btn-outline" onclick="location.href = '/'"> خانه </button>--}}
-                    <button type="submit" id="register-submit-btn" class="btn green pull-right"> ثبت نام </button>
+                    <button type="submit" id="register-submit-btn" class="btn green pull-right"> ثبت نام</button>
                 </div>
                 <div class="form-group col-md-12">
                     <div class="panel-group accordion" id="accordion1">
@@ -318,11 +335,13 @@
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
-                                    <a class="accordion-toggle accordion-toggle-styled collapsed" data-toggle="collapse" data-parent="#accordion3" href="#collapse_3_1"> برای خواندن قوانین کلیک کنید </a>
+                                    <a class="accordion-toggle accordion-toggle-styled collapsed" data-toggle="collapse"
+                                       data-parent="#accordion3" href="#collapse_3_1"> برای خواندن قوانین کلیک کنید </a>
                                 </h4>
                             </div>
                             <div id="collapse_3_1" class="panel-collapse collapse">
-                                <div class="panel-body" @if(isset($wSetting) && strlen($wSetting)>300)style="height:200px; overflow-y:auto;"@endif>
+                                <div class="panel-body"
+                                     @if(isset($wSetting) && strlen($wSetting)>300)style="height:200px; overflow-y:auto;"@endif>
                                     <p> تابعیت از قوانین جمهوری اسلامی ایران برای استفاده از سایت الزامی می باشد</p>
                                 </div>
                             </div>
@@ -334,30 +353,31 @@
             @else
                 <div class="form-group col-md-8" style="border-bottom: none !important;">
                     <label class="mt-checkbox mt-checkbox-outline">
-                        <div class="md-checkbox @if($errors->has('rules')) has-error @else has-success @endif" >
-                            <input type="checkbox" id="rules_checkbox" name="rules" value="1" class="md-check" onclick="if ($(this).parents('.has-error').length != 0) $(this).parent().removeClass('has-error').addClass('has-success' ) ;" >
+                        <div class="md-checkbox @if($errors->has('rules')) has-error @else has-success @endif">
+                            <input type="checkbox" id="rules_checkbox" name="rules" value="1" class="md-check"
+                                   onclick="if ($(this).parents('.has-error').length != 0) $(this).parent().removeClass('has-error').addClass('has-success' ) ;">
                             <label for="rules_checkbox">
                                 <span></span>
                                 <span class="check"></span>
                                 <span class="box"></span>
-                                <input type="checkbox" name="tnc" /> من با
+                                <input type="checkbox" name="tnc"/> من با
                                 <a class="font-grey-salt" data-toggle="modal" href="#rules">قوانین استفاده از سایت </a>
                                 موافقم
                                 <span></span>
                             </label>
                             {{--<div class="panel-group accordion" id="accordion1">--}}
-                                {{--<div class="panel panel-default">--}}
-                                    {{--<div class="panel-heading">--}}
-                                        {{--<h4 class="panel-title">--}}
-                                            {{--<a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion1" href="#collapse_1" aria-expanded="false"> قوانین استفاده از سایت </a>--}}
-                                        {{--</h4>--}}
-                                    {{--</div>--}}
-                                    {{--<div id="collapse_1" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">--}}
-                                        {{--<div class="panel-body">--}}
-                                            {{--<p> تابعیت از قوانین جمهوری اسلامی ایران برای استفاده از سایت الزامی می باشد</p>--}}
-                                        {{--</div>--}}
-                                    {{--</div>--}}
-                                {{--</div>--}}
+                            {{--<div class="panel panel-default">--}}
+                            {{--<div class="panel-heading">--}}
+                            {{--<h4 class="panel-title">--}}
+                            {{--<a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion1" href="#collapse_1" aria-expanded="false"> قوانین استفاده از سایت </a>--}}
+                            {{--</h4>--}}
+                            {{--</div>--}}
+                            {{--<div id="collapse_1" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">--}}
+                            {{--<div class="panel-body">--}}
+                            {{--<p> تابعیت از قوانین جمهوری اسلامی ایران برای استفاده از سایت الزامی می باشد</p>--}}
+                            {{--</div>--}}
+                            {{--</div>--}}
+                            {{--</div>--}}
                             {{--</div>--}}
                             {{--@endif--}}
                         </div>
@@ -383,7 +403,7 @@
                 </div>
                 <div class="form-actions col-md-4">
                     {{--<button id="register-back-btn" type="button" class="btn red btn-outline" onclick="location.href = '/'"> خانه </button>--}}
-                    <button type="submit" id="register-submit-btn" class="btn green pull-right"> ثبت نام </button>
+                    <button type="submit" id="register-submit-btn" class="btn green pull-right"> ثبت نام</button>
                 </div>
             @endif
         </form>
@@ -392,7 +412,8 @@
 @elseif(isset($user))
     {!! Form::hidden('id',$user->id, ['class' => 'btn red']) !!}
     <div class="form-body">
-        <div class="note note-warning"><h4 class="caption-subject font-dark bold uppercase"> وارد کردن اطلاعات زیر الزامیست: </h4></div>
+        <div class="note note-warning"><h4 class="caption-subject font-dark bold uppercase"> وارد کردن اطلاعات زیر
+                الزامیست: </h4></div>
         <div class="form-group {{ $errors->has('firstName') ? ' has-error' : '' }}">
             <label class="col-md-3 control-label" for="firstName">نام</label>
             <div class="col-md-9">
@@ -448,18 +469,19 @@
                 @endif
             </div>
         </div>
-        <div class="note note-info"><h4 class="caption-subject font-dark bold uppercase"> وارد کردن اطلاعات زیر اختیاری می باشد: </h4></div>
+        <div class="note note-info"><h4 class="caption-subject font-dark bold uppercase"> وارد کردن اطلاعات زیر اختیاری
+                می باشد: </h4></div>
         <div class="form-group {{ $errors->has('lockProfile') ? ' has-error' : '' }}">
             <div class="col-md-3"></div>
             <div class="col-md-9">
                 <label class="mt-checkbox mt-checkbox-outline">
-                    <div class="md-checkbox" >
+                    <div class="md-checkbox">
                         {!! Form::checkbox('lockProfile', '1', null,  ['value' => '1' , 'id' => 'checkbox_lockProfile' , 'class'=>'md-check']) !!}
                         <label for="checkbox_lockProfile">
                             <span></span>
                             <span class="check"></span>
                             <span class="box"></span>
-                           قفل کردن ویرایش اطلاعات شخصی
+                            قفل کردن ویرایش اطلاعات شخصی
                             <span></span>
                         </label>
                     </div>
@@ -470,7 +492,7 @@
             <div class="col-md-3"></div>
             <div class="col-md-9">
                 <label class="mt-checkbox mt-checkbox-outline">
-                    <div class="md-checkbox" >
+                    <div class="md-checkbox">
                         {!! Form::checkbox('mobileNumberVerification', '1', null,  ['value' => '1' , 'id' => 'checkbox_mobileNumberVerification' , 'class'=>'md-check']) !!}
                         <label for="checkbox_mobileNumberVerification">
                             <span></span>
@@ -489,19 +511,22 @@
                 <div class="fileinput fileinput-new" data-provides="fileinput">
                     <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;"><img
                                 src="{{ route('image', ['category'=>'1','w'=>'140' , 'h'=>'140' , 'filename' =>  $user->photo ]) }}"
-                                alt="عکس پروفایل" /> </div>
-                    <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"> </div>
+                                alt="عکس پروفایل"/></div>
+                    <div class="fileinput-preview fileinput-exists thumbnail"
+                         style="max-width: 200px; max-height: 150px;"></div>
                     <div>
                                                             <span class="btn default btn-file">
                                                                 <span class="fileinput-new"> تغییر عکس </span>
                                                                 <span class="fileinput-exists"> تغییر </span>
                                                                 <input type="file" name="photo"> </span>
-                        <a href="javascript:;" class="btn red fileinput-exists" id="userPhoto-remove" data-dismiss="fileinput"> حذف </a>
+                        <a href="javascript:" class="btn red fileinput-exists" id="userPhoto-remove"
+                           data-dismiss="fileinput"> حذف </a>
                     </div>
                 </div>
                 <div class="clearfix margin-top-10">
-                    <span class="label label-danger">توجه</span> فرمت های مجاز: jpg , png - حداکثر حجم مجاز: 500KB </div>
-                 </div>
+                    <span class="label label-danger">توجه</span> فرمت های مجاز: jpg , png - حداکثر حجم مجاز: 500KB
+                </div>
+            </div>
         </div>
         <div class="form-group {{ $errors->has('major_id') ? ' has-error' : '' }}">
             <label class="col-md-3 control-label" for="major_id">رشته</label>
@@ -615,16 +640,16 @@
         </div>
 
         {{--<div class="form-group {{ $errors->has('techCode') ? ' has-error' : '' }}">--}}
-            {{--<label for="techCode" class=" control-label">کد تکنسین</label>--}}
-            {{--<div class="input-icon"><i class="fa fa-id-card" aria-hidden="true"></i>--}}
-                {{--<input id="techCode" class="form-control placeholder-no-fix" maxlength="5" type="text" value="{{ $user->techCode }}"--}}
-                       {{--name="techCode"  />--}}
-            {{--</div>--}}
-            {{--@if ($errors->has('techCode'))--}}
-                {{--<span class="help-block">--}}
-            {{--<strong>{{ $errors->first('techCode') }}</strong>--}}
+        {{--<label for="techCode" class=" control-label">کد تکنسین</label>--}}
+        {{--<div class="input-icon"><i class="fa fa-id-card" aria-hidden="true"></i>--}}
+        {{--<input id="techCode" class="form-control placeholder-no-fix" maxlength="5" type="text" value="{{ $user->techCode }}"--}}
+        {{--name="techCode"  />--}}
+        {{--</div>--}}
+        {{--@if ($errors->has('techCode'))--}}
+        {{--<span class="help-block">--}}
+        {{--<strong>{{ $errors->first('techCode') }}</strong>--}}
         {{--</span>--}}
-            {{--@endif--}}
+        {{--@endif--}}
         {{--</div>--}}
 
         <div class="row static-info margin-top-20">
@@ -641,7 +666,7 @@
                 <label class="control-label" for="password">رمز عبور جدید</label>
             </div>
             <div class="col-md-9">
-                <input type="password" class="form-control" name="password" />
+                <input type="password" class="form-control" name="password"/>
                 @if ($errors->has('password'))
                     <span class="help-block">
                         <strong>{{ $errors->first('password') }}</strong>
@@ -654,7 +679,7 @@
                 <label class="control-label" for="password_confirmation">تکرار رمز عبور جدید</label>
             </div>
             <div class="col-md-9">
-                <input type="password" class="form-control" name="password_confirmation" />
+                <input type="password" class="form-control" name="password_confirmation"/>
                 @if ($errors->has('password_confirmation'))
                     <span class="help-block">
                          <strong>{{ $errors->first('password_confirmation') }}</strong>
@@ -691,7 +716,7 @@
     @if(isset($formID) && $formID == 1)
         @include("systemMessage.flash")
         @if(Auth::user()->lockProfile)
-            <div  class="custom-alerts alert alert-warning fade in margin-top-10">
+            <div class="custom-alerts alert alert-warning fade in margin-top-10">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
                 <i class="fa fa-times-circle"></i>
                 پروفایل شما قفل می باشد، لطفا با مسئولین سایت تماس بگیرید
@@ -699,10 +724,12 @@
         @endif
         {!! Form::open(['files' => 'true', 'method' => 'PUT', 'action' => 'UserController@updateProfile']) !!}
         <fieldset @if(Auth::user()->lockProfile) disabled @endif>
-        <p class="caption-subject @if(isset($noteFontColor)) {{$noteFontColor}} @endif bold uppercase" style="text-align:justify">@if(isset($note)) {{$note}} @endif </p>
+            <p class="caption-subject @if(isset($noteFontColor)) {{$noteFontColor}} @endif bold uppercase"
+               style="text-align:justify">@if(isset($note)) {{$note}} @endif </p>
             @foreach($formFields as $formField)
-                <div class="form-group {{ $errors->has($formField->name) ? ' has-error' : '' }}" >
-                    <label for="{{$formField->name}}" class="control-label visible-ie8 visible-ie9">{{$formField->displayName}}</label>
+                <div class="form-group {{ $errors->has($formField->name) ? ' has-error' : '' }}">
+                    <label for="{{$formField->name}}"
+                           class="control-label visible-ie8 visible-ie9">{{$formField->displayName}}</label>
                     <div class="input-icon">
                         <i class="fa fa-pencil"></i>
                         @if(strpos($formField->name, "_id"))
@@ -710,7 +737,8 @@
                         @elseif(strcmp($formField->name , "photo") == 0)
                             <div class="fileinput fileinput-new" id="photo-div" data-provides="fileinput">
                                 <div class="input-group input-large">
-                                    <div class="form-control uneditable-input input-fixed input-medium" data-trigger="fileinput">
+                                    <div class="form-control uneditable-input input-fixed input-medium"
+                                         data-trigger="fileinput">
                                         <i class="fa fa-file fileinput-exists"></i>&nbsp;
                                         <span class="fileinput-filename"> </span>
                                     </div>
@@ -718,14 +746,18 @@
                                                                 <span class="fileinput-new"> عکس </span>
                                                                 <span class="fileinput-exists"> تغییر </span>
                                         {!! Form::file('photo' , ['id'=>'photo']) !!} </span>
-                                    <a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput"> حذف </a>
+                                    <a href="javascript:" class="input-group-addon btn red fileinput-exists"
+                                       data-dismiss="fileinput"> حذف </a>
                                 </div>
                                 <div class="clearfix margin-top-10">
-                                    <span class="label label-danger">توجه</span><strong id="photoAlert">فرمت های مجاز: jpg , png - حداکثر حجم مجاز: 500KB</strong>
+                                    <span class="label label-danger">توجه</span><strong id="photoAlert">فرمت های مجاز:
+                                        jpg , png - حداکثر حجم مجاز: 500KB</strong>
                                 </div>
                             </div>
                         @else
-                            <input class="form-control placeholder-no-fix" type="text" value="@if(isset(Auth::user()[$formField->name]) && strlen(preg_replace('/\s+/', '', Auth::user()[$formField->name]))>0) {{old($formField->name, Auth::user()[$formField->name])}} @else{{old($formField->name)}}@endif" placeholder="{{$formField->displayName}}" name="{{$formField->name}}" />
+                            <input class="form-control placeholder-no-fix" type="text"
+                                   value="@if(isset(Auth::user()[$formField->name]) && strlen(preg_replace('/\s+/', '', Auth::user()[$formField->name]))>0) {{old($formField->name, Auth::user()[$formField->name])}} @else{{old($formField->name)}}@endif"
+                                   placeholder="{{$formField->displayName}}" name="{{$formField->name}}"/>
                         @endif
                         @if ($errors->has($formField->name))
                             <span class="help-block">
@@ -736,162 +768,167 @@
                 </div>
             @endforeach
         </fieldset>
-            <div class="form-actions" style="text-align: center">
-                @if(isset($formByPass) && !$formByPass)
-                    <button  type="button" class="btn blue" onclick="location.href = '@if(session()->has("redirectTo"))  {{session()->get("redirectTo")}}@else {{action("HomeController@index")}} @endif' "> بعدا پر می کنم </button>
-                @elseif(isset($hasHomeButton)) <a href="{{action("HomeController@index")}}"  class="btn red"> خانه </a>
-                @endif
-                @if(!Auth::user()->lockProfile)
-                    <button type="submit" class="btn green"> ادامه </button>
-                @endif
-            </div>
+        <div class="form-actions" style="text-align: center">
+            @if(isset($formByPass) && !$formByPass)
+                <button type="button" class="btn blue"
+                        onclick="location.href = '@if(session()->has("redirectTo"))  {{session()->get("redirectTo")}}@else {{action("HomeController@index")}} @endif' ">
+                    بعدا پر می کنم
+                </button>
+            @elseif(isset($hasHomeButton)) <a href="{{action("HomeController@index")}}" class="btn red"> خانه </a>
+            @endif
+            @if(!Auth::user()->lockProfile)
+                <button type="submit" class="btn green"> ادامه</button>
+            @endif
+        </div>
 
         {!! Form::close() !!}
     @else
-            <div class="col-md-12">
-                <p class="caption-subject font-dark bold uppercase"> وارد کردن اطلاعات زیر الزامی می باشد: </p>
-            </div>
-            <div class="col-md-6">
-                <p>{!! Form::text('firstName', null, ['class' => 'form-control', 'id' => 'firstName' , 'placeholder'=>'نام']) !!}
-                    <span class="help-block" id="firstNameAlert">
+        <div class="col-md-12">
+            <p class="caption-subject font-dark bold uppercase"> وارد کردن اطلاعات زیر الزامی می باشد: </p>
+        </div>
+        <div class="col-md-6">
+            <p>{!! Form::text('firstName', null, ['class' => 'form-control', 'id' => 'firstName' , 'placeholder'=>'نام']) !!}
+                <span class="help-block" id="firstNameAlert">
                 <strong></strong>
             </span>
-                </p>
-                <p>{!! Form::text('nationalCode', null, ['class' => 'form-control', 'id' => 'nationalCode'  , 'maxlength'=>'10' , 'placeholder'=>'کد ملی']) !!}
-                    <span class="help-block" id="nationalCodeAlert">
+            </p>
+            <p>{!! Form::text('nationalCode', null, ['class' => 'form-control', 'id' => 'nationalCode'  , 'maxlength'=>'10' , 'placeholder'=>'کد ملی']) !!}
+                <span class="help-block" id="nationalCodeAlert">
                 <strong></strong>
             </span>
-                </p>
-                <p>{!! Form::password('password', ['class' => 'form-control', 'id' => 'password' , 'placeholder'=>'رمز عبور']) !!}
-                    <span class="help-block" id="passwordAlert">
+            </p>
+            <p>{!! Form::password('password', ['class' => 'form-control', 'id' => 'password' , 'placeholder'=>'رمز عبور']) !!}
+                <span class="help-block" id="passwordAlert">
                 <strong></strong>
             </span>
-                </p>
+            </p>
 
-            </div>
-            <div class="col-md-6">
-                <p>{!! Form::text('lastName', null, ['class' => 'form-control', 'id' => 'lastName' , 'placeholder'=>'نام خانوادگی']) !!}
-                    <span class="help-block" id="lastNameAlert">
+        </div>
+        <div class="col-md-6">
+            <p>{!! Form::text('lastName', null, ['class' => 'form-control', 'id' => 'lastName' , 'placeholder'=>'نام خانوادگی']) !!}
+                <span class="help-block" id="lastNameAlert">
                      <strong></strong>
                     </span>
-                </p>
-                <p>{!! Form::text('mobile', null, ['class' => 'form-control', 'id' => 'mobile' , 'maxlength'=>'11' , 'placeholder'=>'موبایل']) !!}
-                    <span class="help-block" id="mobileAlert">
+            </p>
+            <p>{!! Form::text('mobile', null, ['class' => 'form-control', 'id' => 'mobile' , 'maxlength'=>'11' , 'placeholder'=>'موبایل']) !!}
+                <span class="help-block" id="mobileAlert">
                         <strong></strong>
                      </span>
-                </p>
-                <p>{!! Form::select('userstatus_id',$userStatuses,null,['class' => 'form-control', 'id' => 'userstatus_id']) !!}
-                    <span class="help-block" id="userstatusAlert">
+            </p>
+            <p>{!! Form::select('userstatus_id',$userStatuses,null,['class' => 'form-control', 'id' => 'userstatus_id']) !!}
+                <span class="help-block" id="userstatusAlert">
                      <strong></strong>
                     </span>
-                </p>
-            </div>
-            <div class="col-md-12">
-                <p class="caption-subject font-dark bold uppercase"> وارد کردن اطلاعات زیر اختیاری می باشد: </p>
-            </div>
-            <div class="col-md-12">
-                <label class="mt-checkbox mt-checkbox-outline">
-                    <div class="md-checkbox" >
-                        {!! Form::checkbox('mobileNumberVerification', '1', null,  [ 'id'=>'checkbox_insertUserMobileNumberVerification'  , 'class'=>'md-check']) !!}
-                        <label for="checkbox_insertUserMobileNumberVerification">
-                            <span></span>
-                            <span class="check"></span>
-                            <span class="box"></span>
-                            تایید شماره موبایل
-                            <span></span>
-                        </label>
-                    </div>
-                </label>
-            </div>
-            <div class="col-md-6">
-                <p>{!! Form::text('province', null, ['class' => 'form-control', 'id' => 'province' , 'placeholder'=>'استان']) !!}
-                    <span class="help-block" id="provinceAlert">
+            </p>
+        </div>
+        <div class="col-md-12">
+            <p class="caption-subject font-dark bold uppercase"> وارد کردن اطلاعات زیر اختیاری می باشد: </p>
+        </div>
+        <div class="col-md-12">
+            <label class="mt-checkbox mt-checkbox-outline">
+                <div class="md-checkbox">
+                    {!! Form::checkbox('mobileNumberVerification', '1', null,  [ 'id'=>'checkbox_insertUserMobileNumberVerification'  , 'class'=>'md-check']) !!}
+                    <label for="checkbox_insertUserMobileNumberVerification">
+                        <span></span>
+                        <span class="check"></span>
+                        <span class="box"></span>
+                        تایید شماره موبایل
+                        <span></span>
+                    </label>
+                </div>
+            </label>
+        </div>
+        <div class="col-md-6">
+            <p>{!! Form::text('province', null, ['class' => 'form-control', 'id' => 'province' , 'placeholder'=>'استان']) !!}
+                <span class="help-block" id="provinceAlert">
                 <strong></strong>
             </span>
-                </p>
-            </div>
-            <div class="col-md-6">
-                <p>{!! Form::text('city', null, ['class' => 'form-control', 'id' => 'city' , 'placeholder'=>'شهر']) !!}
-                    <span class="help-block" id="cityAlert">
+            </p>
+        </div>
+        <div class="col-md-6">
+            <p>{!! Form::text('city', null, ['class' => 'form-control', 'id' => 'city' , 'placeholder'=>'شهر']) !!}
+                <span class="help-block" id="cityAlert">
                 <strong></strong>
             </span>
-                </p>
-            </div>
-            <div class="col-md-12">
-                <p>{!! Form::text('address', null, ['class' => 'form-control', 'id' => 'address' , 'placeholder'=>'آدرس']) !!}
-                    <span class="help-block" id="addressAlert">
+            </p>
+        </div>
+        <div class="col-md-12">
+            <p>{!! Form::text('address', null, ['class' => 'form-control', 'id' => 'address' , 'placeholder'=>'آدرس']) !!}
+                <span class="help-block" id="addressAlert">
                 <strong></strong>
             </span>
-                </p>
-            </div>
-            <div class="col-md-6">
-                <p>{!! Form::text('postalCode', null, ['class' => 'form-control', 'id' => 'postalCode' , 'placeholder'=>'کد پستی']) !!}
-                    <span class="help-block" id="postalCodeAlert">
+            </p>
+        </div>
+        <div class="col-md-6">
+            <p>{!! Form::text('postalCode', null, ['class' => 'form-control', 'id' => 'postalCode' , 'placeholder'=>'کد پستی']) !!}
+                <span class="help-block" id="postalCodeAlert">
                 <strong></strong>
             </span>
-                </p>
+            </p>
 
-            </div>
-            <div class="col-md-6">
-                <p>{!! Form::text('school', null, ['class' => 'form-control', 'id' => 'school' , 'placeholder'=>'مدرسه']) !!}
-                    <span class="help-block" id="schoolAlert">
+        </div>
+        <div class="col-md-6">
+            <p>{!! Form::text('school', null, ['class' => 'form-control', 'id' => 'school' , 'placeholder'=>'مدرسه']) !!}
+                <span class="help-block" id="schoolAlert">
                 <strong></strong>
             </span>
-                </p>
-            </div>
-            <div class="col-md-6">
-                <p>{!! Form::select('major_id', $majors, null,['class' => 'form-control', 'id' => 'userMajor', 'placeholder' => 'رشته نامشخص']) !!}
-                    <span class="help-block" id="userMajorAlert">
+            </p>
+        </div>
+        <div class="col-md-6">
+            <p>{!! Form::select('major_id', $majors, null,['class' => 'form-control', 'id' => 'userMajor', 'placeholder' => 'رشته نامشخص']) !!}
+                <span class="help-block" id="userMajorAlert">
                 <strong></strong>
             </span>
-                </p>
-            </div>
-            <div class="col-md-6">
-                <p>{!! Form::select('gender_id', $genders, null,['class' => 'form-control', 'id' => 'userGender', 'placeholder' => 'جنسیت نامشخص']) !!}
-                    <span class="help-block" id="userGenderAlert">
+            </p>
+        </div>
+        <div class="col-md-6">
+            <p>{!! Form::select('gender_id', $genders, null,['class' => 'form-control', 'id' => 'userGender', 'placeholder' => 'جنسیت نامشخص']) !!}
+                <span class="help-block" id="userGenderAlert">
                 <strong></strong>
             </span>
-                </p>
-            </div>
-            <div class="col-md-6">
-                <p>{!! Form::text('email', null, ['class' => 'form-control', 'id' => 'email' , 'placeholder'=>'ایمیل']) !!}
-                    <span class="help-block" id="emailAlert">
+            </p>
+        </div>
+        <div class="col-md-6">
+            <p>{!! Form::text('email', null, ['class' => 'form-control', 'id' => 'email' , 'placeholder'=>'ایمیل']) !!}
+                <span class="help-block" id="emailAlert">
 					<strong></strong>
 				</span>
-                </p>
-            </div>
-            <div class="col-md-6">
-                <div class="fileinput fileinput-new" id="photo-div" data-provides="fileinput">
-                    <div class="input-group input-large">
-                        <div class="form-control uneditable-input input-fixed input-medium" data-trigger="fileinput">
-                            <i class="fa fa-file fileinput-exists"></i>&nbsp;
-                            <span class="fileinput-filename"> </span>
-                        </div>
-                        <span class="input-group-addon btn default btn-file">
+            </p>
+        </div>
+        <div class="col-md-6">
+            <div class="fileinput fileinput-new" id="photo-div" data-provides="fileinput">
+                <div class="input-group input-large">
+                    <div class="form-control uneditable-input input-fixed input-medium" data-trigger="fileinput">
+                        <i class="fa fa-file fileinput-exists"></i>&nbsp;
+                        <span class="fileinput-filename"> </span>
+                    </div>
+                    <span class="input-group-addon btn default btn-file">
                                                                 <span class="fileinput-new"> عکس </span>
                                                                 <span class="fileinput-exists"> تغییر </span>
-                            {!! Form::file('photo' , ['id'=>'photo']) !!} </span>
-                        <a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput"> حذف </a>
-                    </div>
-                    <div class="clearfix margin-top-10">
-                        <span class="label label-danger">توجه</span><strong id="photoAlert">فرمت های مجاز: jpg , png - حداکثر حجم مجاز: 500KB</strong>
-                    </div>
+                        {!! Form::file('photo' , ['id'=>'photo']) !!} </span>
+                    <a href="javascript:" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput">
+                        حذف </a>
+                </div>
+                <div class="clearfix margin-top-10">
+                    <span class="label label-danger">توجه</span><strong id="photoAlert">فرمت های مجاز: jpg , png -
+                        حداکثر حجم مجاز: 500KB</strong>
                 </div>
             </div>
-            @permission((Config::get('constants.INSET_USER_ROLE')))
-            <div class="col-md-12">
-                <p>
-                    <label class="control-label">نقش ها</label>
-                    {!! Form::select('roles[]', $roles ,null,['multiple' => 'multiple','class' => 'multi-select', 'id' => 'user_role']) !!}
-                    <span class="help-block" id="roleAlert">
+        </div>
+        @permission((Config::get('constants.INSET_USER_ROLE')))
+        <div class="col-md-12">
+            <p>
+                <label class="control-label">نقش ها</label>
+                {!! Form::select('roles[]', $roles ,null,['multiple' => 'multiple','class' => 'multi-select', 'id' => 'user_role']) !!}
+                <span class="help-block" id="roleAlert">
                         <strong></strong>
                 </span>
-                <div class="clearfix margin-top-10">
-                    <span class="label label-info">توجه</span>
-                    <strong id="">ستون چپ نقش های انتخاب شده می باشند</strong>
-                </div>
-                </p>
+            <div class="clearfix margin-top-10">
+                <span class="label label-info">توجه</span>
+                <strong id="">ستون چپ نقش های انتخاب شده می باشند</strong>
             </div>
-            @endpermission
-        @endif
+            </p>
+        </div>
+        @endpermission
+    @endif
 @endif

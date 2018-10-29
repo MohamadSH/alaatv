@@ -1,24 +1,19 @@
 <?php namespace App\Traits;
 
-use Illuminate\Support\Facades\Config;
-
 trait QueryCommon
 {
-    protected function textSearch($text , $columns , & $query)
+    protected function textSearch($text, $columns, & $query)
     {
-        if(strlen(preg_replace('/\s+/', '', $text)) >0)
-        {
-            $words = explode(" " , $text);
-                $query = $query->where(function ($q) use ($words , $columns) {
-                    foreach ($columns as $column)
-                    {
-                        foreach ($words as $word)
-                        {
-                            $q->orWhere($column, 'like', '%' . $word . '%');
-                        }
+        if (strlen(preg_replace('/\s+/', '', $text)) > 0) {
+            $words = explode(" ", $text);
+            $query = $query->where(function ($q) use ($words, $columns) {
+                foreach ($columns as $column) {
+                    foreach ($words as $word) {
+                        $q->orWhere($column, 'like', '%' . $word . '%');
                     }
+                }
 
-                });
+            });
         }
         return $query;
     }

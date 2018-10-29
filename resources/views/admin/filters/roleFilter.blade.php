@@ -10,9 +10,9 @@
                         "data-label" => "left" , "data-width" => "100%" , "data-filter" => "true" , "data-height" => "200" ,
                         "title" => "نقش ها" , "disabled"]) !!}
     {{--<select class="mt-multiselect btn btn-default" multiple="multiple" data-label="left" data-width="100%" data-filter="true" data-height="200"--}}
-            {{--id="roles" name="roles[]" title="نقش ها" disabled>--}}
-        {{--@foreach($roles as $key=>$value)--}}
-            {{--<option value="{{$key}}">{{$value}}</option>--}}
-        {{--@endforeach--}}
+    {{--id="roles" name="roles[]" title="نقش ها" disabled>--}}
+    {{--@foreach($roles as $key=>$value)--}}
+    {{--<option value="{{$key}}">{{$value}}</option>--}}
+    {{--@endforeach--}}
     {{--</select>--}}
 </div>

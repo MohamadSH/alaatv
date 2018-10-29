@@ -43,18 +43,20 @@
             <div class="recent-donators">
                 <h3>آخرین کمک های هفته</h3>
                 @if($latestDonors->isEmpty())
-                    <div class="hero" style="margin-bottom: 200px"> <h2>کمکی نشده</h2></div>
+                    <div class="hero" style="margin-bottom: 200px"><h2>کمکی نشده</h2></div>
                 @else
                     <ul class="list">
                         @foreach($latestDonors as $latestDonor )
                             <li>
                                 <div class="donator">
-                                    <img src="{{ route('image', ['category'=>'1','w'=>'141' , 'h'=>'141' ,  'filename' =>  $latestDonor["avatar"] ]) }}" alt="donator">
+                                    <img src="{{ route('image', ['category'=>'1','w'=>'141' , 'h'=>'141' ,  'filename' =>  $latestDonor["avatar"] ]) }}"
+                                         alt="donator">
 
                                     <span class="name">
                                     {{(strlen($latestDonor["firstName"])>0)?$latestDonor["firstName"]:""}} {{(strlen($latestDonor["lastName"])>0)?$latestDonor["lastName"]:""}}
                                 </span>
-                                    <span class="price">{{number_format($latestDonor["donateAmount"])}} <span class="currency">تومان</span></span>
+                                    <span class="price">{{number_format($latestDonor["donateAmount"])}} <span
+                                                class="currency">تومان</span></span>
                                 </div><!-- .donator -->
                             </li>
                         @endforeach
@@ -66,18 +68,20 @@
             <div class="best-donators">
                 <h3>بیشترین کمک های {{$currentJalaliMonthString}}</h3>
                 @if($maxDonors->isEmpty())
-                    <div class="hero" style="margin-bottom: 200px"> <h2>کمکی نشده</h2></div>
+                    <div class="hero" style="margin-bottom: 200px"><h2>کمکی نشده</h2></div>
                 @else
                     <ul class="list">
                         @foreach($maxDonors as $maxDonor )
                             <li>
                                 <div class="donator">
-                                    <img src="{{ route('image', ['category'=>'1','w'=>'141' , 'h'=>'141' ,  'filename' =>  $maxDonor["avatar"] ]) }}" alt="donator">
+                                    <img src="{{ route('image', ['category'=>'1','w'=>'141' , 'h'=>'141' ,  'filename' =>  $maxDonor["avatar"] ]) }}"
+                                         alt="donator">
 
                                     <span class="name">
                                         {{(strlen($maxDonor["firstName"])>0)?$maxDonor["firstName"]:""}} {{(strlen($maxDonor["lastName"])>0)?$maxDonor["lastName"]:""}}
                                     </span>
-                                    <span class="price">{{number_format($maxDonor["donateAmount"])}} <span class="currency">تومان</span></span>
+                                    <span class="price">{{number_format($maxDonor["donateAmount"])}} <span
+                                                class="currency">تومان</span></span>
                                 </div><!-- .donator -->
                             </li>
                         @endforeach
@@ -96,7 +100,8 @@
                 <div class="donator">
                     <h3>به هر میزان که می توانید در تامین هزینه های آلاء مشارکت نمایید.</h3>
                     <p style="  text-align: justify">مشارکت
-                        اختیاری بوده و از نظر شرعی آلاء متعهد می شود که این مشارکت ها را برای حفظ، نگهداری، توسعه و بهبود خدمات خود استفاده کند.
+                        اختیاری بوده و از نظر شرعی آلاء متعهد می شود که این مشارکت ها را برای حفظ، نگهداری، توسعه و
+                        بهبود خدمات خود استفاده کند.
                     </p>
                 </div>
             </div>
@@ -120,7 +125,7 @@
                     <span class="amount">{{number_format($totalSpend)}}<span class="currency">تومان</span></span>
                     <span class="title">از 1 مهر تا {{$currentJalaliDateString}}</span>
                 </div><!-- .title -->
-                
+
             </div><!-- .totals -->
 
             <div class="chart-by-month">
@@ -257,7 +262,7 @@
                 borderColor: '#49aaed',
                 data: [
                     @foreach($chartData as $chartDatum)
-                        {{$chartDatum["totalIncome"]}},
+                    {{$chartDatum["totalIncome"]}},
                     @endforeach
                 ],
                 fill: false,
@@ -268,8 +273,8 @@
                 borderColor: '#ff597c',
                 data: [
                     @foreach($chartData as $chartDatum)
-                        {{$chartDatum["totalSpend"]}},
-                        // 25000000,
+                    {{$chartDatum["totalSpend"]}},
+                    // 25000000,
                     @endforeach
                 ],
             }]
@@ -289,7 +294,7 @@
                 mode: 'index',
                 intersect: false,
                 callbacks: {
-                    label: function(tooltipItem, data) {
+                    label: function (tooltipItem, data) {
                         return tooltipItem.yLabel.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                     },
                 },
@@ -313,24 +318,23 @@
                         labelString: ''
                     },
                     ticks: {
-                        callback: function(label, index, labels) {
+                        callback: function (label, index, labels) {
                             var amount = label / 1000000;
-                            if(amount < 1)
-                            {
+                            if (amount < 1) {
                                 amount = amount * 1000;
                                 return amount + " هزار تومان";
                             }
-                            return amount + " میلیون تومان" ;
+                            return amount + " میلیون تومان";
 
-                            },
-                        beginAtZero:true,
-                        max: 1000000 ,
+                        },
+                        beginAtZero: true,
+                        max: 1000000,
                     },
 
                 }]
             }
         }
-    }
+    };
 
 
     var config2 = {
@@ -366,11 +370,11 @@
         },
         options: {
             responsive: true,
-            legend: { display: false }
+            legend: {display: false}
         }
-    }
+    };
 
-    window.onload = function() {
+    window.onload = function () {
         var ctx = document.getElementById('monthlychart').getContext('2d');
         window.myLine = new Chart(ctx, config);
 

@@ -38,7 +38,8 @@ class Websitesetting extends Model
         'version'
     ];
 
-    public function getSettingAttribute($value){
+    public function getSettingAttribute($value)
+    {
         return json_decode($value);
     }
 }

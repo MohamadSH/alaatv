@@ -9,16 +9,15 @@
 namespace App\Classes\SEO;
 
 
-
 use SEO;
 
 class SeoMetaTagsGenerator
 {
-    public const SEO_MOD_VIDEO_TAGS  = 1;
-    public const SEO_MOD_PDF_TAGS  = 2;
-    public const SEO_MOD_ARTICLE_TAGS  = 3;
-    public const SEO_MOD_PRODUCT_TAGS  = 4;
-    public const SEO_MOD_GENERAL_TAGS  = 5;
+    public const SEO_MOD_VIDEO_TAGS = 1;
+    public const SEO_MOD_PDF_TAGS = 2;
+    public const SEO_MOD_ARTICLE_TAGS = 3;
+    public const SEO_MOD_PRODUCT_TAGS = 4;
+    public const SEO_MOD_GENERAL_TAGS = 5;
 
     private const SEO_TYPE_VIDEO = "video";
     private const SEO_TYPE_WEBSITE = "website";
@@ -58,13 +57,15 @@ class SeoMetaTagsGenerator
      */
     public function __construct(SeoInterface $seo)
     {
-        foreach($seo->getMetaTags() as $key => $value){
+        foreach ($seo->getMetaTags() as $key => $value) {
 
             $this->$key = $value;
         }
         $this->build();
     }
-    protected function generateCommonTags(){
+
+    protected function generateCommonTags()
+    {
         SEO::setTitle($this->title);
         SEO::setDescription($this->description);
         SEO::opengraph()->setUrl($this->url);
@@ -72,7 +73,9 @@ class SeoMetaTagsGenerator
         SEO::twitter()->setSite($this->site);
         SEO::opengraph()->addImage($this->imageUrl, ['height' => $this->imageHeight, 'width' => $this->imageWidth]);
     }
-    protected function generateVideoTags(){
+
+    protected function generateVideoTags()
+    {
         SEO::twitter()->addValue('player', $this->playerUrl);
         SEO::twitter()->addValue('player:width', $this->playerWidth);
         SEO::twitter()->addValue('player:height', $this->playerHeight);
@@ -94,10 +97,14 @@ class SeoMetaTagsGenerator
             'height' => $this->videoHeight
         ]);
     }
-    protected function generatePdfTags(){
+
+    protected function generatePdfTags()
+    {
         SEO::opengraph()->setType(self::SEO_TYPE_WEBSITE);
     }
-    protected function generateArticleTags(){
+
+    protected function generateArticleTags()
+    {
         SEO::opengraph()->setType(self::SEO_TYPE_ARTICLE)
             ->setArticle([
                 'published_time' => $this->articlePublishedTime,
@@ -106,7 +113,9 @@ class SeoMetaTagsGenerator
                 'tag' => $this->tags
             ]);
     }
-    protected function generateProductTags(){
+
+    protected function generateProductTags()
+    {
         SEO::opengraph()->setType(self::SEO_TYPE_WEBSITE);
     }
 

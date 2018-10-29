@@ -4,31 +4,35 @@ namespace App\Traits;
 
 trait DateTrait
 {
-    protected function jalali_to_gregorian($j_y, $j_m, $j_d, $mod = '')
+    /**
+     * @return string
+     * Converting Created_at field to jalali
+     */
+    public function CreatedAt_Jalali()
     {
-        $d_4 = ($j_y + 1) % 4;
-        $doy_j = ($j_m < 7) ? (($j_m - 1) * 31) + $j_d : (($j_m - 7) * 30) + $j_d + 186;
-        $d_33 = (int)((($j_y - 55) % 132) * .0305);
-        $a = ($d_33 != 3 and $d_4 <= $d_33) ? 287 : 286;
-        $b = (($d_33 == 1 or $d_33 == 2) and ($d_33 == $d_4 or $d_4 == 1)) ? 78 : (($d_33 == 3 and $d_4 == 0) ? 80 : 79);
-        if ((int)(($j_y - 19) / 63) == 20) {
-            $a--;
-            $b++;
-        }
-        if ($doy_j <= $a) {
-            $gy = $j_y + 621;
-            $gd = $doy_j + $b;
-        } else {
-            $gy = $j_y + 622;
-            $gd = $doy_j - $a;
-        }
-        foreach (array(0, 31, ($gy % 4 == 0) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31) as $gm => $v) {
-            if ($gd <= $v) break;
-            $gd -= $v;
-        }
-        return ($mod == '') ? array($gy, $gm, $gd) : $gy . $mod . $gm . $mod . $gd;
+        $explodedDateTime = explode(" ", $this->created_at);
+        return $this->convertDate($this->created_at, "toJalali");
     }
-  
+
+    public function convertDate($date, $convertType)
+    {
+        if (strcmp($convertType, 'toJalali') == 0 && strlen($date) > 0) {
+            $explodedDate = explode(" ", $date);
+            $explodedDate = $explodedDate[0];
+            $explodedDate = explode("-", $explodedDate);
+            $year = $explodedDate[0];
+            $month = $explodedDate[1];
+            $day = $explodedDate[2];
+            return $this->gregorian_to_jalali($year, $month, $day, "/");
+        } elseif (strcmp($convertType, 'toMiladi') == 0 && strlen($date) > 0) {
+            $explodedDate = explode("/", $date);
+            $year = $explodedDate[0];
+            $month = $explodedDate[1];
+            $day = $explodedDate[2];
+            return $this->jalali_to_gregorian($year, $month, $day, "-");
+        }
+    }
+
     protected function gregorian_to_jalali($g_y, $g_m, $g_d, $mod = '')
     {
         $d_4 = $g_y % 4;
@@ -59,33 +63,32 @@ trait DateTrait
         }
         return ($mod == '') ? array($jy, $jm, $jd) : $jy . $mod . $jm . $mod . $jd;
     }
-    public  function convertDate($date , $convertType){
-        if(strcmp($convertType , 'toJalali') == 0 && strlen($date)>0) {
-            $explodedDate = explode(" " ,$date);
-            $explodedDate= $explodedDate[0];
-            $explodedDate = explode("-" , $explodedDate);
-            $year = $explodedDate[0];
-            $month = $explodedDate[1];
-            $day = $explodedDate[2] ;
-            return $this->gregorian_to_jalali($year , $month , $day , "/") ;
-        }elseif(strcmp($convertType , 'toMiladi') == 0 && strlen($date)>0){
-            $explodedDate = explode("/" ,$date);
-            $year = $explodedDate[0];
-            $month = $explodedDate[1];
-            $day = $explodedDate[2] ;
-            return $this->jalali_to_gregorian($year , $month , $day , "-") ;
-        }
-    }
-  
-      /**
-     * @return string
-     * Converting Created_at field to jalali
-     */
-    public function CreatedAt_Jalali()
+
+    protected function jalali_to_gregorian($j_y, $j_m, $j_d, $mod = '')
     {
-        $explodedDateTime = explode(" ", $this->created_at);
-        return $this->convertDate($this->created_at, "toJalali");
+        $d_4 = ($j_y + 1) % 4;
+        $doy_j = ($j_m < 7) ? (($j_m - 1) * 31) + $j_d : (($j_m - 7) * 30) + $j_d + 186;
+        $d_33 = (int)((($j_y - 55) % 132) * .0305);
+        $a = ($d_33 != 3 and $d_4 <= $d_33) ? 287 : 286;
+        $b = (($d_33 == 1 or $d_33 == 2) and ($d_33 == $d_4 or $d_4 == 1)) ? 78 : (($d_33 == 3 and $d_4 == 0) ? 80 : 79);
+        if ((int)(($j_y - 19) / 63) == 20) {
+            $a--;
+            $b++;
+        }
+        if ($doy_j <= $a) {
+            $gy = $j_y + 621;
+            $gd = $doy_j + $b;
+        } else {
+            $gy = $j_y + 622;
+            $gd = $doy_j - $a;
+        }
+        foreach (array(0, 31, ($gy % 4 == 0) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31) as $gm => $v) {
+            if ($gd <= $v) break;
+            $gd -= $v;
+        }
+        return ($mod == '') ? array($gy, $gm, $gd) : $gy . $mod . $gm . $mod . $gd;
     }
+
     /**
      * @return string
      * Converting Updated_at field to jalali

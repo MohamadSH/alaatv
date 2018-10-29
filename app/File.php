@@ -68,8 +68,7 @@ class File extends Model
     {
         $fileRemotePath = "";
         $disk = $this->disks->first();
-        if(isset($disk))
-        {
+        if (isset($disk)) {
             $diskAdapter = Storage::disk($disk->name)->getAdapter();
             $diskType = class_basename($diskAdapter);
             $sftpRoot = config("constants.SFTP_ROOT");
@@ -80,14 +79,12 @@ class File extends Model
                 case "SftpAdapter" :
 //                $fileHost = $diskAdapter->getHost();
                     $fileRoot = $diskAdapter->getRoot();
-                    $fileRemotePath = str_replace($sftpRoot , $dProtocol.$dName ,$fileRoot );
+                    $fileRemotePath = str_replace($sftpRoot, $dProtocol . $dName, $fileRoot);
                     $fileRemotePath .= $this->name;
                     break;
             }
             return $fileRemotePath;
-        }
-        else
-        {
+        } else {
             return action("HomeController@error404");
         }
 

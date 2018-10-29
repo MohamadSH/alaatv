@@ -11,6 +11,7 @@ class EditOrderRequest extends FormRequest
 {
     use CharacterCommon;
     protected $id;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -18,7 +19,7 @@ class EditOrderRequest extends FormRequest
      */
     public function authorize()
     {
-        if(Auth()->user()->can(Config::get('constants.EDIT_ORDER_ACCESS'))) return true;
+        if (Auth()->user()->can(Config::get('constants.EDIT_ORDER_ACCESS'))) return true;
         return false;
     }
 
@@ -35,7 +36,9 @@ class EditOrderRequest extends FormRequest
             'orderstatus_id' => 'exists:orderstatuses,id',
             'paymentstatus_id' => 'exists:paymentstatuses,id',
         ];
-        if(Input::get(['transactionstatus_id']) != Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL")){$rules['transactionID'] = 'max:0';}
+        if (Input::get(['transactionstatus_id']) != Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL")) {
+            $rules['transactionID'] = 'max:0';
+        }
 
         return $rules;
     }
@@ -48,12 +51,11 @@ class EditOrderRequest extends FormRequest
 
     protected function replaceNumbers()
     {
-        $input = $this->request->all() ;
-        if(isset($input["discount"]))
-        {
-            $input["discount"] = preg_replace('/\s+/', '', $input["discount"] ) ;
-            $input["discount"] = $this->convertToEnglish($input["discount"]) ;
+        $input = $this->request->all();
+        if (isset($input["discount"])) {
+            $input["discount"] = preg_replace('/\s+/', '', $input["discount"]);
+            $input["discount"] = $this->convertToEnglish($input["discount"]);
         }
-        $this->replace($input) ;
+        $this->replace($input);
     }
 }

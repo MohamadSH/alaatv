@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Input;
 
 class ContactController extends Controller
 {
-    protected $response ;
+    protected $response;
 
 
     function __construct()
@@ -25,9 +25,9 @@ class ContactController extends Controller
         /** setting permissions
          *
          */
-        $this->middleware('permission:'.Config::get('constants.LIST_CONTACT_ACCESS'),['only'=>'index']);
-        $this->middleware('permission:'.Config::get('constants.REMOVE_CONTACT_ACCESS'),['only'=>'destroy']);
-        $this->middleware('permission:'.Config::get('constants.EDIT_CONTACT_ACCESS'),['only'=>'edit']);
+        $this->middleware('permission:' . Config::get('constants.LIST_CONTACT_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:' . Config::get('constants.REMOVE_CONTACT_ACCESS'), ['only' => 'destroy']);
+        $this->middleware('permission:' . Config::get('constants.EDIT_CONTACT_ACCESS'), ['only' => 'edit']);
 
         $this->response = new Response();
 
@@ -41,16 +41,14 @@ class ContactController extends Controller
     public function index()
     {
         $userId = Input::get('user');
-        if(isset($userId))
-        {
-            $contacts = Contact::where('user_id', $userId)->orderBy("created_at" , "desc")->get();
+        if (isset($userId)) {
+            $contacts = Contact::where('user_id', $userId)->orderBy("created_at", "desc")->get();
             $relatives = Relative::pluck('displayName', 'id');
             $contacttypes = Contacttype::pluck('displayName', 'id');
-        }else
-        {
+        } else {
             $contacts = Contact::all()->sortByDesc("created_at");
         }
-        return view('contact.index' , compact('contacts' , 'userId' , 'relatives' , 'contacttypes'));
+        return view('contact.index', compact('contacts', 'userId', 'relatives', 'contacttypes'));
     }
 
     /**
@@ -66,31 +64,31 @@ class ContactController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\InsertContactRequest  $request
+     * @param  \App\Http\Requests\InsertContactRequest $request
      * @return \Illuminate\Http\Response
      */
     public function store(InsertContactRequest $request)
     {
         $contact = new Contact();
         $contact->fill($request->all());
-        if($contact->save()){
-            if($request->has("isServiceRequest"))
-                return $this->response->setStatusCode(200)->setContent(["contact"=>$contact]);
+        if ($contact->save()) {
+            if ($request->has("isServiceRequest"))
+                return $this->response->setStatusCode(200)->setContent(["contact" => $contact]);
             else
                 session()->put("success", "مخاطب با موفقیت درج شد");
-        }else{
-            if($request->has("isServiceRequest"))
+        } else {
+            if ($request->has("isServiceRequest"))
                 return $this->response->setStatusCode(503);
             else
                 session()->put("error", "خطای پایگاه داده.");
         }
-        return redirect(action("ContactController@edit" , $contact));
+        return redirect(action("ContactController@edit", $contact));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -109,14 +107,14 @@ class ContactController extends Controller
         $relatives = Relative::pluck('displayName', 'id');
         $contacttypes = Contacttype::pluck('displayName', 'id');
         $phonetypes = Phonetype::pluck('displayName', 'id');
-        return view('contact.edit' , compact('contact' , 'relatives' , 'contacttypes' , 'phonetypes'));
+        return view('contact.edit', compact('contact', 'relatives', 'contacttypes', 'phonetypes'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\EditContactRequest  $request
-     * @param  \App\Contact  $contact
+     * @param  \App\Http\Requests\EditContactRequest $request
+     * @param  \App\Contact $contact
      * @return \Illuminate\Http\Response
      */
     public function update(EditContactRequest $request, $contact)
@@ -130,12 +128,12 @@ class ContactController extends Controller
                 $phoneRequest["phoneNumber"] = $request->get("phoneNumber")[$key];
                 $phoneRequest["phonetype_id"] = $request->get("phonetype_id")[$key];
                 $phoneRequest["priority"] = $request->get("priority")[$key];
-                if(!$phoneUpdate->update($phoneRequest, $phone)){
+                if (!$phoneUpdate->update($phoneRequest, $phone)) {
                     $flag = false;
                     break;
                 }
             }
-            if($flag)
+            if ($flag)
                 session()->put("success", "اطلاعات مخاطب با موفقیت اصلاح شد");
             else
                 session()->put("error", "خطای پایگاه داده.");
@@ -153,16 +151,13 @@ class ContactController extends Controller
      */
     public function destroy(Contact $contact)
     {
-        if($contact->delete())
-        {
-            if(!$contact->phones->isEmpty())
-                foreach ($contact->phones as $phone)
-                {
+        if ($contact->delete()) {
+            if (!$contact->phones->isEmpty())
+                foreach ($contact->phones as $phone) {
                     $phone->delete();
                 }
             session()->put("success", "مخاطب با موفقیت حذف شد");
-        }
-        else
+        } else
             session()->put("error", "خطای پایگاه داده.");
 
         return redirect()->back();

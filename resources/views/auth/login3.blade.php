@@ -12,41 +12,47 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
 Renew Support: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes
 License: You must have a valid license purchased only from themeforest(the above link) in order to legally use the theme for your project.
 -->
-<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
-<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if IE 8]>
+<html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]>
+<html lang="en" class="ie9 no-js"> <![endif]-->
 <!--[if !IE]><!-->
 <html lang="en" dir="rtl">
 <!--<![endif]-->
 <!-- BEGIN HEAD -->
 
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8"/>
     <title>ورود</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta content="width=device-width, initial-scale=1" name="viewport" />
-    <meta content="login page" name="description" />
-    <meta content="Alaa" name="author" />
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <meta content="login page" name="description"/>
+    <meta content="Alaa" name="author"/>
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
     <link rel="stylesheet" href="{{ mix('/css/mandatory_all.css') }}">
     <!-- END GLOBAL MANDATORY STYLES -->
     <!-- BEGIN PAGE LEVEL PLUGINS -->
-    <link href="/assets/global/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
-    <link href="/assets/global/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/global/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/global/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css"/>
     <!-- END PAGE LEVEL PLUGINS -->
     <!-- BEGIN THEME GLOBAL STYLES -->
-    <link href="/assets/global/css/components-md-rtl.min.css" rel="stylesheet" id="style_components" type="text/css" />
-    <link href="/assets/global/css/plugins-md-rtl.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/global/css/components-md-rtl.min.css" rel="stylesheet" id="style_components" type="text/css"/>
+    <link href="/assets/global/css/plugins-md-rtl.min.css" rel="stylesheet" type="text/css"/>
     <!-- END THEME GLOBAL STYLES -->
     <!-- BEGIN PAGE LEVEL STYLES -->
-    <link href="/assets/pages/css/login-rtl.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/pages/css/login-rtl.min.css" rel="stylesheet" type="text/css"/>
     <!-- END PAGE LEVEL STYLES -->
     <!-- BEGIN THEME LAYOUT STYLES -->
     <!-- END THEME LAYOUT STYLES -->
-    <link rel="shortcut icon" href="favicon.ico" />
+    <link rel="shortcut icon" href="favicon.ico"/>
     <script async src="https://www.googletagmanager.com/gtag/js?id={{Config('constants.google.analytics')}}"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
         var dimensionValue = '{{ request()->ip() }}';
 
         gtag('js', new Date());
@@ -55,7 +61,7 @@ License: You must have a valid license purchased only from themeforest(the above
             'custom_map': {'dimension2': 'dimension2'}
         });
         @if(Auth::check())
-            gtag('set', {'user_id': '{{ Auth::user() ->id }}'}); // Set the user ID using signed-in user_id.
+        gtag('set', {'user_id': '{{ Auth::user() ->id }}'}); // Set the user ID using signed-in user_id.
         @endif
         // Sends the custom dimension to Google Analytics.
         gtag('event', 'hit', {'dimension2': dimensionValue});
@@ -70,8 +76,9 @@ License: You must have a valid license purchased only from themeforest(the above
 <!-- BEGIN LOGO -->
 <div class="logo bg-font-dark">
     <a href="{{action("HomeController@index")}}">
-        <img @if(isset($wSetting->site->siteLogo))src="{{route('image', ['category'=>'11','w'=>'135' , 'h'=>'67' ,  'filename' =>  $wSetting->site->siteLogo ])}}" @endif alt="" /> </a>
-    <h3 >آلاء - خدمات نوین آموزش</h3>
+        <img @if(isset($wSetting->site->siteLogo))src="{{route('image', ['category'=>'11','w'=>'135' , 'h'=>'67' ,  'filename' =>  $wSetting->site->siteLogo ])}}"
+             @endif alt=""/> </a>
+    <h3>آلاء - خدمات نوین آموزش</h3>
     <h4>مجری توسعه عدالت آموزشی</h4>
 </div>
 <!-- END LOGO -->
@@ -79,9 +86,9 @@ License: You must have a valid license purchased only from themeforest(the above
 <div class="content">
     <!-- BEGIN LOGIN FORM -->
 @include("partials.loginForm" ,["withHeader"=>false])
-    <!-- END LOGIN FORM -->
+<!-- END LOGIN FORM -->
 </div>
-<div class="copyright"> Copyright © Alaa 2017 </div>
+<div class="copyright"> Copyright © Alaa 2017</div>
 <!--[if lt IE 9]>
 <script src="/assets/global/plugins/respond.min.js"></script>
 <script src="/assets/global/plugins/excanvas.min.js"></script>

@@ -33,10 +33,10 @@
         <div class="col-md-6">
             <div class="fileinput fileinput-new" data-provides="fileinput">
                 @if(isset($slide->photo))
-                <div class="fileinput-new thumbnail" ><img
-                            src="{{ route('image', [ 'category'=>$slideDisk,'w'=>'140' , 'h'=>'140' , 'filename' =>  $slide->photo ]) }}"
-                            {{--alt="عکس خدمت" onerror="this.src='http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image';"/> </div>--}}
-                             alt="عکس محصول @if(isset($slide->title[0])) {{$slide->title}} @endif" /> </div>
+                    <div class="fileinput-new thumbnail"><img
+                                src="{{ route('image', [ 'category'=>$slideDisk,'w'=>'140' , 'h'=>'140' , 'filename' =>  $slide->photo ]) }}"
+                                {{--alt="عکس خدمت" onerror="this.src='http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image';"/> </div>--}}
+                                alt="عکس محصول @if(isset($slide->title[0])) {{$slide->title}} @endif"/></div>
                 @endif
                 <div class="input-group input-large ">
                     <div class="form-control uneditable-input input-fixed input-medium" data-trigger="fileinput">
@@ -47,7 +47,8 @@
                                                         <span class="fileinput-new"> انتخاب فایل </span>
                                                         <span class="fileinput-exists"> تغییر </span>
                         {!! Form::file('photo' ) !!} </span>
-                    <a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput"> حذف </a>
+                    <a href="javascript:" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput">
+                        حذف </a>
                 </div>
             </div>
             @if ($errors->has('photo'))
@@ -66,7 +67,7 @@
         <div class="col-md-3"></div>
         <div class="col-md-9">
             <label class="mt-checkbox mt-checkbox-outline">
-                <div class="md-checkbox" >
+                <div class="md-checkbox">
                     @if(!isset($slide))
                         {!! Form::checkbox('isEnable', '1', null,  ['value' => '1' , 'id' => 'checkbox_isEnable' , 'class'=>'md-check' , 'checked']) !!}
                     @else
@@ -76,7 +77,7 @@
                         <span></span>
                         <span class="check"></span>
                         <span class="box"></span>
-                     فعال/غیرفعال
+                        فعال/غیرفعال
                         <span></span>
                     </label>
                 </div>
@@ -84,8 +85,8 @@
         </div>
     </div>
     @permission((Config::get('constants.EDIT_SLIDESHOW_ACCESS')))
-        @if(isset($slide))
-            <button type="submit" class="btn green">اصلاح</button>
-        @endif
+    @if(isset($slide))
+        <button type="submit" class="btn green">اصلاح</button>
+    @endif
     @endpermission
 </div>

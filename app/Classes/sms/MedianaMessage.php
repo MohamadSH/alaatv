@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Classes\sms;
 
 class MedianaMessage
@@ -22,6 +23,7 @@ class MedianaMessage
     public $pattern_code;
 
     public $input_data = [];
+
     /**
      * Create a new message instance.
      *
@@ -32,6 +34,7 @@ class MedianaMessage
         $this->content = $content;
 
     }
+
     /**
      * Create a new message instance.
      *
@@ -41,6 +44,7 @@ class MedianaMessage
     {
         new static($content);
     }
+
     /**
      * Set the message content.
      *
@@ -54,21 +58,25 @@ class MedianaMessage
         return $this;
     }
 
-    public function setInputData(array $input_data){
+    public function setInputData(array $input_data)
+    {
         $this->input_data = $input_data;
         return $this;
     }
 
-    public function setFrom($from){
+    public function setFrom($from)
+    {
         $this->from = $from;
         return $this;
     }
 
-    public function setOp($op){
+    public function setOp($op)
+    {
         $this->op = $op;
         return $this;
 
     }
+
     /**
      * Set the message send at.
      *
@@ -82,7 +90,8 @@ class MedianaMessage
         return $this;
     }
 
-    public function setPatternCode($pattern_code){
+    public function setPatternCode($pattern_code)
+    {
         $this->pattern_code = $pattern_code;
         return $this;
     }

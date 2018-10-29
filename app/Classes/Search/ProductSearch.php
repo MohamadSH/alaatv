@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\{
 
 class ProductSearch extends SearchAbstract
 {
-    protected $model = "App\Product" ;
+    protected $model = "App\Product";
     protected $pageName = 'productPage';
     protected $validFilters = [
         'name',
@@ -36,7 +36,7 @@ class ProductSearch extends SearchAbstract
     {
         $this->pageNum = $this->setPageNum($filters);
         $key = $this->makeCacheKey($filters);
-        return Cache::tags(['product','search'])->remember($key,$this->cacheTime,function () use( $filters ) {
+        return Cache::tags(['product', 'search'])->remember($key, $this->cacheTime, function () use ($filters) {
             $query = $this->applyDecoratorsFromFiltersArray($filters, $this->model->newQuery());
             return $this->getResults($query);
         });
@@ -49,14 +49,14 @@ class ProductSearch extends SearchAbstract
     protected function getResults(Builder $query)
     {
         $result = $query->active()
-                        ->doesntHave('parents')
-                        ->whereNull('deleted_at')
-                        ->orderBy("created_at" , "desc")
-                        ->paginate($this->numberOfItemInEachPage,
-                            ['*'],
-                            $this->pageName,
-                            $this->pageNum
-                        );
+            ->doesntHave('parents')
+            ->whereNull('deleted_at')
+            ->orderBy("created_at", "desc")
+            ->paginate($this->numberOfItemInEachPage,
+                ['*'],
+                $this->pageName,
+                $this->pageNum
+            );
         return $result;
     }
 

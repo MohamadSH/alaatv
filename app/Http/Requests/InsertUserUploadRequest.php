@@ -4,7 +4,6 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Input;
 
 class InsertUserUploadRequest extends FormRequest
 {
@@ -15,7 +14,7 @@ class InsertUserUploadRequest extends FormRequest
      */
     public function authorize()
     {
-        if(Auth::user()->completion() == 100) return true;
+        if (Auth::user()->completion() == 100) return true;
         else return false;
     }
 

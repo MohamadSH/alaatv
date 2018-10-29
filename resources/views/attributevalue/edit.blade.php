@@ -30,11 +30,12 @@
                 <div class="portlet-title">
                     <div class="caption">
                         <i class="icon-settings font-dark"></i>
-                        <span class="caption-subject font-dark sbold uppercase">اصلاح مقدار صفت  {{$attributevalue->name}}</span>
+                        <span class="caption-subject font-dark sbold uppercase">اصلاح مقدار صفت {{$attributevalue->name}}</span>
                     </div>
                     <div class="actions">
                         <div class="btn-group">
-                            <a class="btn btn-sm dark dropdown-toggle" href="{{action("AttributeController@edit",$attribute)}}" > بازگشت
+                            <a class="btn btn-sm dark dropdown-toggle"
+                               href="{{action("AttributeController@edit",$attribute)}}"> بازگشت
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         </div>
@@ -42,7 +43,7 @@
                 </div>
                 <div class="portlet-body form">
                     {!! Form::model($attributevalue,['method' => 'PUT','action' => ['AttributevalueController@update',$attributevalue], 'class'=>'form-horizontal']) !!}
-                        @include('attributevalue.form')
+                    @include('attributevalue.form')
                     {!! Form::close() !!}
                 </div>
             </div>

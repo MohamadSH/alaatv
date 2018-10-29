@@ -2,8 +2,8 @@
 @extends("app",["pageName"=>"admin"])
 
 @section("headPageLevelPlugin")
-    <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css" />
-    <link href="/assets/global/plugins/jquery-multi-select/css/multi-select-rtl.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/global/plugins/jquery-multi-select/css/multi-select-rtl.css" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section("pageBar")
@@ -36,11 +36,13 @@
                 <div class="portlet-title">
                     <div class="caption">
                         <i class="icon-settings font-dark"></i>
-                        <span class="caption-subject font-dark sbold uppercase">اصلاح اطلاعات    @if(!isset($user->firstName) && !isset($user->lastName)) کاربر ناشناس @else @if(isset($user->firstName)) {{$user->firstName}} @endif @if(isset($user->lastName)){{$user->lastName}} @endif @endif</span>
+                        <span class="caption-subject font-dark sbold uppercase">اصلاح اطلاعات @if(!isset($user->firstName) && !isset($user->lastName))
+                                کاربر
+                                ناشناس @else @if(isset($user->firstName)) {{$user->firstName}} @endif @if(isset($user->lastName)){{$user->lastName}} @endif @endif</span>
                     </div>
                     <div class="actions">
                         <div class="btn-group">
-                            <a class="btn btn-sm dark dropdown-toggle" href="{{action("HomeController@admin")}}" > بازگشت
+                            <a class="btn btn-sm dark dropdown-toggle" href="{{action("HomeController@admin")}}"> بازگشت
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         </div>
@@ -71,7 +73,7 @@
 
 @section("extraJS")
     <script>
-        jQuery(document).ready(function() {
+        jQuery(document).ready(function () {
             $('#user_role').multiSelect();
         });
     </script>

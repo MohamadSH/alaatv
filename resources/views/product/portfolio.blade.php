@@ -6,12 +6,12 @@
 
 @section("pageBar")
     {{--<h3 class="page-title"> محصولات--}}
-        {{--<small>اردوی طلایی </small>--}}
+    {{--<small>اردوی طلایی </small>--}}
     {{--</h3>--}}
     {{--<div class="row">--}}
-        {{--<div class="col-md-12">--}}
-        {{--<img src="/img/extra/landing/hamayesh-ad.jpg">--}}
-        {{--</div>--}}
+    {{--<div class="col-md-12">--}}
+    {{--<img src="/img/extra/landing/hamayesh-ad.jpg">--}}
+    {{--</div>--}}
     {{--</div>--}}
     <div class="page-bar">
         <ul class="page-breadcrumb">
@@ -34,15 +34,16 @@
 
 @section("content")
     {{--<a href="{{action("ProductController@showLive" , 183)}}"><img src="/img/extra/arabi-live-ad.jpg" width="100%"></a>--}}
-    <div class="portfolio-content portfolio-1" >
+    <div class="portfolio-content portfolio-1">
         @if($products->isEmpty())
             <div class="note " style="background-color: #00d4db;">
-                <h4 class="block bold" style="text-align: center">کاربر گرامی در حال حاضر موردی برای ثبت نام وجود ندارد. همایشها و اردوهای بعدی به زودی اعلام خواهند شد.</h4>
+                <h4 class="block bold" style="text-align: center">کاربر گرامی در حال حاضر موردی برای ثبت نام وجود ندارد.
+                    همایشها و اردوهای بعدی به زودی اعلام خواهند شد.</h4>
             </div>
         @else
             @include("partials.portfolioGrid" , ["withFilterButton" => true , "withAd"=>true])
         @endif
-        <div  class="cbp-l-loadMore-button margin-top-40" id="pagination-div">
+        <div class="cbp-l-loadMore-button margin-top-40" id="pagination-div">
             <div class="search-page">
                 <div class="search-pagination">
                     <ul class="pagination">
@@ -55,45 +56,45 @@
         </div>
     </div>
     {{--<div class="modal fade" id="basic" tabindex="-1" role="basic" aria-hidden="true">--}}
-        {{--<div class="modal-dialog">--}}
-            {{--<div class="modal-content">--}}
-                {{--<div class="modal-header">--}}
-                    {{--<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>--}}
-                    {{--<h4 class="modal-title font-green">به آلاء خوش آمدید</h4>--}}
-                {{--</div>--}}
-                {{--<div class="modal-body bold">--}}
-                    {{--@if(Session::has('welcomePasswordMessage'))--}}
-                        {{--<div class="row" id="passwordMessageRow">--}}
-                            {{--<div class="col-md-12">--}}
-                                {{--<h3 class="font-red">رمز عبور شما</h3>--}}
-                                {{--<p style="text-align: justify;">--}}
-                                {{--</p>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                    {{--@endif--}}
-                    {{--@if(Session::has('welcomeVerifyCodeMessage'))--}}
-                        {{--<div class="row" id="verifyCodeMessageRow">--}}
-                            {{--<div class="col-md-12">--}}
-                                {{--<h3 class="font-red">تایید شماره موبایل(تایید حساب کاربری)</h3>--}}
-                                {{--<p style="text-align: justify;">--}}
-                                {{--</p>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                    {{--@endif--}}
-                    {{--<div class="row" >--}}
-                        {{--<div class="col-md-12">--}}
-                            {{--<a href="{{action("UserController@show",Auth::user())}}" class="btn btn-lg blue">--}}
-                                    {{--<i class="icon-user"></i> رفتن به پروفایل </a>--}}
-                        {{--</div>--}}
-                    {{--</div>--}}
-                {{--</div>--}}
-                {{--<div class="modal-footer">--}}
-                    {{--<button type="button" class="btn dark btn-outline" data-dismiss="modal">بستن پنجره</button>--}}
-                {{--</div>--}}
-            {{--</div>--}}
-            {{--<!-- /.modal-content -->--}}
-        {{--</div>--}}
-        {{--<!-- /.modal-dialog -->--}}
+    {{--<div class="modal-dialog">--}}
+    {{--<div class="modal-content">--}}
+    {{--<div class="modal-header">--}}
+    {{--<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>--}}
+    {{--<h4 class="modal-title font-green">به آلاء خوش آمدید</h4>--}}
+    {{--</div>--}}
+    {{--<div class="modal-body bold">--}}
+    {{--@if(Session::has('welcomePasswordMessage'))--}}
+    {{--<div class="row" id="passwordMessageRow">--}}
+    {{--<div class="col-md-12">--}}
+    {{--<h3 class="font-red">رمز عبور شما</h3>--}}
+    {{--<p style="text-align: justify;">--}}
+    {{--</p>--}}
+    {{--</div>--}}
+    {{--</div>--}}
+    {{--@endif--}}
+    {{--@if(Session::has('welcomeVerifyCodeMessage'))--}}
+    {{--<div class="row" id="verifyCodeMessageRow">--}}
+    {{--<div class="col-md-12">--}}
+    {{--<h3 class="font-red">تایید شماره موبایل(تایید حساب کاربری)</h3>--}}
+    {{--<p style="text-align: justify;">--}}
+    {{--</p>--}}
+    {{--</div>--}}
+    {{--</div>--}}
+    {{--@endif--}}
+    {{--<div class="row" >--}}
+    {{--<div class="col-md-12">--}}
+    {{--<a href="{{action("UserController@show",Auth::user())}}" class="btn btn-lg blue">--}}
+    {{--<i class="icon-user"></i> رفتن به پروفایل </a>--}}
+    {{--</div>--}}
+    {{--</div>--}}
+    {{--</div>--}}
+    {{--<div class="modal-footer">--}}
+    {{--<button type="button" class="btn dark btn-outline" data-dismiss="modal">بستن پنجره</button>--}}
+    {{--</div>--}}
+    {{--</div>--}}
+    {{--<!-- /.modal-content -->--}}
+    {{--</div>--}}
+    {{--<!-- /.modal-dialog -->--}}
     {{--</div>--}}
 @endsection
 
@@ -110,13 +111,13 @@
 @section("extraJS")
     <script type="text/javascript">
         {{--$(window).bind("load", function() {--}}
-            {{--@if (Session::has('welcomePasswordMessage') || Session::has('welcomeVerifyCodeMessage') )--}}
-                            {{--$("#passwordMessageRow > div > p").html("{{Session::pull('welcomePasswordMessage')}}");--}}
-                            {{--$("#verifyCodeMessageRow > div > p").html("{{Session::pull('welcomeVerifyCodeMessage')}}");--}}
-                            {{--$("#welcomeMessage").trigger("click");--}}
-            {{--@endif--}}
-        {{--});--}}
-        (function($, window, document, undefined) {
+                {{--@if (Session::has('welcomePasswordMessage') || Session::has('welcomeVerifyCodeMessage') )--}}
+                {{--$("#passwordMessageRow > div > p").html("{{Session::pull('welcomePasswordMessage')}}");--}}
+                {{--$("#verifyCodeMessageRow > div > p").html("{{Session::pull('welcomeVerifyCodeMessage')}}");--}}
+                {{--$("#welcomeMessage").trigger("click");--}}
+                {{--@endif--}}
+                {{--});--}}
+        (function ($, window, document, undefined) {
             'use strict';
 
             // init cubeportfolio
@@ -161,7 +162,7 @@
                 singlePageDeeplinking: true,
                 singlePageStickyNavigation: true,
                 singlePageCounter: '<div class="cbp-popup-singlePage-counter" style="direction:ltr">@{{current}} of @{{total}}</div>',
-                singlePageCallback: function(url, element) {
+                singlePageCallback: function (url, element) {
                     // to update singlePage content use the following method: this.updateSinglePage(yourContent)
                     var t = this;
 
@@ -171,10 +172,10 @@
                         dataType: 'html',
                         timeout: 10000
                     })
-                        .done(function(result) {
+                        .done(function (result) {
                             t.updateSinglePage(result);
                         })
-                        .fail(function() {
+                        .fail(function () {
                             t.updateSinglePage('AJAX Error! Please refresh the page!');
                         });
                 },

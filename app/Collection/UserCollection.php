@@ -11,9 +11,9 @@ namespace App\Collection;
 
 use Illuminate\Database\Eloquent\Collection;
 
-class UserCollection  extends Collection
+class UserCollection extends Collection
 {
-    public function roleFilter( array $rolesId) :UserCollection
+    public function roleFilter(array $rolesId): UserCollection
     {
         $users = $this->whereHas('roles', function ($q) use ($rolesId) {
             $q->whereIn("id", $rolesId);
@@ -21,7 +21,7 @@ class UserCollection  extends Collection
         return $users;
     }
 
-    public function majorFilter($majorsId) :UserCollection
+    public function majorFilter($majorsId): UserCollection
     {
         if (in_array(0, $majorsId))
             $users = $this->whereDoesntHave("major");

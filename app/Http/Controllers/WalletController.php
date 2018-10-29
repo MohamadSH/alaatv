@@ -38,7 +38,7 @@ class WalletController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -47,31 +47,22 @@ class WalletController extends Controller
         $wallet->fill($request->all());
 
         $done = false;
-        if($wallet->save())
+        if ($wallet->save())
             $done = true;
 
-        if($done)
-        {
-            if($request->has("fromAPI"))
-            {
+        if ($done) {
+            if ($request->has("fromAPI")) {
                 return $this->response
-                            ->setStatusCode(200)
-                            ->setContent(["wallet"=>$wallet]) ;
-            }
-            else
-            {
+                    ->setStatusCode(200)
+                    ->setContent(["wallet" => $wallet]);
+            } else {
 
             }
-        }
-        else
-        {
-            if($request->has("fromAPI"))
-            {
+        } else {
+            if ($request->has("fromAPI")) {
                 return $this->response
-                            ->setStatusCode(503);
-            }
-            else
-            {
+                    ->setStatusCode(503);
+            } else {
 
             }
         }
@@ -82,7 +73,7 @@ class WalletController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -93,7 +84,7 @@ class WalletController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Wallet  $wallet
+     * @param  \App\Wallet $wallet
      * @return \Illuminate\Http\Response
      */
     public function edit(Wallet $wallet)
@@ -104,38 +95,29 @@ class WalletController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Wallet  $wallet
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Wallet $wallet
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Wallet $wallet)
     {
         $wallet->fill($request->all());
         $done = false;
-        if($wallet->update())
-            $done = true ;
+        if ($wallet->update())
+            $done = true;
 
-        if($done)
-        {
-            if($request->has("fromAPI"))
-            {
+        if ($done) {
+            if ($request->has("fromAPI")) {
                 return $this->response
                     ->setStatusCode(200);
-            }
-            else
-            {
+            } else {
 
             }
-        }
-        else
-        {
-            if($request->has("fromAPI"))
-            {
+        } else {
+            if ($request->has("fromAPI")) {
                 return $this->response
                     ->setStatusCode(503);
-            }
-            else
-            {
+            } else {
 
             }
         }
@@ -144,7 +126,7 @@ class WalletController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Wallet  $wallet
+     * @param  \App\Wallet $wallet
      * @return \Illuminate\Http\Response
      */
     public function destroy(Wallet $wallet)

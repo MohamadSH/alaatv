@@ -27,15 +27,18 @@ class ContentTagManagerViaApi extends RedisTagManagerViaApi
         $this->limit_PageNum = 1;
     }
 
-    public function getVideos(array $tags){
-        return $this->getTaggable(array_merge($tags,['فیلم']));
+    public function getVideos(array $tags)
+    {
+        return $this->getTaggable(array_merge($tags, ['فیلم']));
     }
 
-    public function getPamphlets(array $tags){
-        return $this->getTaggable(array_merge($tags,['جزوه']));
+    public function getPamphlets(array $tags)
+    {
+        return $this->getTaggable(array_merge($tags, ['جزوه']));
     }
 
-    public function getArticles(array $tags){
-        return $this->getTaggable(array_merge($tags,['مقاله']));
+    public function getArticles(array $tags)
+    {
+        return $this->getTaggable(array_merge($tags, ['مقاله']));
     }
 }

@@ -14,36 +14,39 @@ use Carbon\Carbon;
 
 class CouponController extends Controller
 {
-    protected $response ;
+    protected $response;
 
     function __construct()
     {
         $this->response = new Response();
 
-        $this->middleware('permission:'.Config::get('constants.LIST_COUPON_ACCESS'),['only'=>'index']);
-        $this->middleware('permission:'.Config::get('constants.INSERT_COUPON_ACCESS'),['only'=>'create']);
-        $this->middleware('permission:'.Config::get('constants.REMOVE_COUPON_ACCESS'),['only'=>'destroy']);
-        $this->middleware('permission:'.Config::get('constants.SHOW_COUPON_ACCESS'),['only'=>'edit']);
+        $this->middleware('permission:' . Config::get('constants.LIST_COUPON_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:' . Config::get('constants.INSERT_COUPON_ACCESS'), ['only' => 'create']);
+        $this->middleware('permission:' . Config::get('constants.REMOVE_COUPON_ACCESS'), ['only' => 'destroy']);
+        $this->middleware('permission:' . Config::get('constants.SHOW_COUPON_ACCESS'), ['only' => 'edit']);
     }
 
     public function index()
     {
         $coupons = Coupon::all()->sortByDesc("created_at");
-        return view("coupon.index", compact('coupons' ));
+        return view("coupon.index", compact('coupons'));
     }
 
-    public function show(){
-
-    }
-
-    public function create(){
+    public function show()
+    {
 
     }
 
-    public function store(InsertCouponRequest $request){
+    public function create()
+    {
+
+    }
+
+    public function store(InsertCouponRequest $request)
+    {
         $coupon = new Coupon();
         $coupon->fill($request->all());
-        if($request->has("validSinceEnable")) {
+        if ($request->has("validSinceEnable")) {
             if ($request->has("validSince") && strlen($request->get("validSince")) > 0) {
                 $validSince = Carbon::parse($request->get("validSince"))->format('Y-m-d');
                 $sinceTime = $request->get("sinceTime");
@@ -55,14 +58,13 @@ class CouponController extends Controller
             } else {
                 $coupon->validSince = null;
             }
-        }
-        else{
-                $coupon->validSince = null;
+        } else {
+            $coupon->validSince = null;
         }
 
 
-        if($request->has("validUntilEnable")) {
-                if($request->has("validUntil")  && strlen($request->get("validUntil")) > 0) {
+        if ($request->has("validUntilEnable")) {
+            if ($request->has("validUntil") && strlen($request->get("validUntil")) > 0) {
                 $validUntil = Carbon::parse($request->get("validUntil"))->format('Y-m-d');
                 $untilTime = $request->get("untilTime");
                 if (strlen($untilTime) > 0) $untilTime = Carbon::parse($untilTime)->format('H:i:s');
@@ -70,32 +72,29 @@ class CouponController extends Controller
 
                 $validUntil = $validUntil . " " . $untilTime;
                 $coupon->validUntil = $validUntil;
-                }
-                else{
-                    $coupon->validUntil = null;
-                }
-        }
-        else{
+            } else {
+                $coupon->validUntil = null;
+            }
+        } else {
             $coupon->validUntil = null;
         }
 
-        if ($request->get('limitStatus') == 0){
+        if ($request->get('limitStatus') == 0) {
             $coupon->usageLimit = null;
         }
-        $coupon->discount =  preg_replace('/\s+/', '', $coupon->discount);
-        if(strlen($coupon->discount) == 0) $coupon->discount = 0;
+        $coupon->discount = preg_replace('/\s+/', '', $coupon->discount);
+        if (strlen($coupon->discount) == 0) $coupon->discount = 0;
 
-        if($request->has("enable")) $coupon->enable = 1;
+        if ($request->has("enable")) $coupon->enable = 1;
         else $coupon->enable = 0;
 
-        $coupon->maxCost =  preg_replace('/\s+/', '', $coupon->maxCost);
-        if(strlen($coupon->maxCost) == 0) $coupon->maxCost = null;
+        $coupon->maxCost = preg_replace('/\s+/', '', $coupon->maxCost);
+        if (strlen($coupon->maxCost) == 0) $coupon->maxCost = null;
 
         if ($coupon->save()) {
             $coupon->products()->sync($request->get('products', []));
-            return $this->response->setStatusCode(200)->setContent(["id"=>$coupon->id]);
-        }
-        else{
+            return $this->response->setStatusCode(200)->setContent(["id" => $coupon->id]);
+        } else {
             return $this->response->setStatusCode(503);
         }
     }
@@ -120,20 +119,19 @@ class CouponController extends Controller
             $validSinceDate = Carbon::parse($coupon->validSince)->format('Y-m-d');
             $validSinceTime = Carbon::parse($coupon->validSince)->format('H:i');
         }
-        if (isset($coupon->validUntil))
-        {
+        if (isset($coupon->validUntil)) {
             $validUntilDate = Carbon::parse($coupon->validUntil)->format('Y-m-d');
             $validUntilTime = Carbon::parse($coupon->validUntil)->format('H:i');
         }
 
-        return view('coupon.edit', compact('coupon', 'limitStatus', 'defaultLimitStatus', 'coupontype', 'products' , 'couponProducts' , 'validSinceDate' , 'validSinceTime' , 'validUntilDate' , 'validUntilTime'));
+        return view('coupon.edit', compact('coupon', 'limitStatus', 'defaultLimitStatus', 'coupontype', 'products', 'couponProducts', 'validSinceDate', 'validSinceTime', 'validUntilDate', 'validUntilTime'));
     }
 
     public function update(EditCouponRequest $request, $coupon)
     {
         $coupon->fill($request->all());
 
-        if($request->has("validSinceEnable")) {
+        if ($request->has("validSinceEnable")) {
             if ($request->has("validSince") && strlen($request->get("validSince")) > 0) {
                 $validSince = Carbon::parse($request->get("validSince"))->format('Y-m-d');
                 $sinceTime = $request->get("sinceTime");
@@ -145,11 +143,11 @@ class CouponController extends Controller
             } else {
                 $coupon->validSince = null;
             }
-        }else{
+        } else {
             $coupon->validSince = null;
         }
 
-        if($request->has("validUntilEnable")) {
+        if ($request->has("validUntilEnable")) {
             if ($request->has("validUntil") && strlen($request->get("validUntil")) > 0) {
                 $validUntil = Carbon::parse($request->get("validUntil"))->format('Y-m-d');
                 $untilTime = $request->get("untilTime");
@@ -161,22 +159,22 @@ class CouponController extends Controller
             } else {
                 $coupon->validUntil = null;
             }
-        }else{
+        } else {
             $coupon->validUntil = null;
         }
 
-        if ($request->get('limitStatus') == 0){
+        if ($request->get('limitStatus') == 0) {
             $coupon->usageLimit = null;
         }
 
-        $coupon->discount =  preg_replace('/\s+/', '', $coupon->discount);
-        if(strlen($coupon->discount) == 0) $coupon->discount = 0;
+        $coupon->discount = preg_replace('/\s+/', '', $coupon->discount);
+        if (strlen($coupon->discount) == 0) $coupon->discount = 0;
 
-        if($request->has("enable")) $coupon->enable = 1;
+        if ($request->has("enable")) $coupon->enable = 1;
         else $coupon->enable = 0;
 
-        $coupon->maxCost =  preg_replace('/\s+/', '', $coupon->maxCost);
-        if(strlen($coupon->maxCost) == 0) $coupon->maxCost = null;
+        $coupon->maxCost = preg_replace('/\s+/', '', $coupon->maxCost);
+        if (strlen($coupon->maxCost) == 0) $coupon->maxCost = null;
 
         if ($coupon->update()) {
             $coupon->products()->sync($request->get('products', []));
@@ -187,8 +185,9 @@ class CouponController extends Controller
         return redirect()->back();
     }
 
-    public function destroy($coupon){
+    public function destroy($coupon)
+    {
         $coupon->delete();
-        return redirect()->back() ;
+        return redirect()->back();
     }
 }

@@ -52,6 +52,13 @@ class Contenttype extends Model
         'enable',
     ];
 
+    public static function getRootContentType()
+    {
+        return Cache::tags('contentType')->remember('ContentType:getRootContentType', config('constants.CACHE_600'), function () {
+            return Contenttype::whereDoesntHave("parents")->get();
+        });
+    }
+
     public function contents()
     {
         return $this->belongsToMany('App\Content', 'educationalcontent_contenttype', 'contenttype_id', 'content_id');
@@ -72,11 +79,5 @@ class Contenttype extends Model
             ->withPivot('relationtype_id')
             ->join('contenttypeinterraltions', 'relationtype_id', 'contenttypeinterraltions.id')
             ->where("relationtype_id", 1);
-    }
-
-    public static function getRootContentType(){
-        return Cache::tags('contentType')->remember('ContentType:getRootContentType', config('constants.CACHE_600'),function (){
-            return Contenttype::whereDoesntHave("parents")->get();
-        });
     }
 }

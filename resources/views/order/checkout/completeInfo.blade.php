@@ -25,10 +25,10 @@
                     <div class="row">
                         <div class="col-md-4"></div>
                         <div class="col-md-4">
-                            <div class="portlet solid grey" >
+                            <div class="portlet solid grey">
                                 <div class="portlet-title">
                                     {{--<div class="caption">--}}
-                                        {{--<i class="fa fa-pencil"></i>--}}
+                                    {{--<i class="fa fa-pencil"></i>--}}
                                     {{--Portlet </div>--}}
                                 </div>
                                 <div class="portlet-body">
@@ -58,11 +58,11 @@
 @section("extraJS")
     @if(!empty($errors->getBags()))
         <script>
-            jQuery(document).ready(function() {
+            jQuery(document).ready(function () {
                 @if(!$errors->login->isEmpty())
-                    $("#signin-button").trigger("click");
+                $("#signin-button").trigger("click");
                 @else
-                    $("#signup-button").trigger("click");
+                $("#signup-button").trigger("click");
                 @endif
             });
         </script>

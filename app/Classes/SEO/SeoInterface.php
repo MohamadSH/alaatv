@@ -12,5 +12,5 @@ namespace App\Classes\SEO;
 interface SeoInterface
 {
 
-    public function getMetaTags() :array ;
+    public function getMetaTags(): array;
 }

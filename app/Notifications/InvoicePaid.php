@@ -15,21 +15,21 @@ use Illuminate\Queue\SerializesModels;
 
 class InvoicePaid extends Notification implements ShouldQueue
 {
-    use Queueable , SerializesModels;
+    use Queueable, SerializesModels;
 
     protected const MEDIANA_PATTERN_CODE_INVOICE_PAID = 800;
+    public $timeout = 120;
     /**
      * @var Order
      */
-    protected  $invoice;
-    public $timeout = 120;
+    protected $invoice;
 
     /**
      * Create a new notification instance.
      *
      * @param Order $invoice
      */
-    public function __construct(Order $invoice )
+    public function __construct(Order $invoice)
     {
         $this->invoice = $invoice;
     }
@@ -37,7 +37,7 @@ class InvoicePaid extends Notification implements ShouldQueue
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param  mixed $notifiable
      * @return array
      */
     public function via($notifiable)
@@ -59,11 +59,6 @@ class InvoicePaid extends Notification implements ShouldQueue
             ->setInputData($this->getInputData())
             ->setPatternCode(self::MEDIANA_PATTERN_CODE_INVOICE_PAID)
             ->sendAt(Carbon::now());
-    }
-
-    private function getInvoiceUser() : User {
-        $user = $this->invoice->user;
-        return $user;
     }
 
     private function msg(): string
@@ -91,6 +86,12 @@ class InvoicePaid extends Notification implements ShouldQueue
         $message = "سلام " . $gender . $user->getfullName() . "\n" . $messageCore;
 
         return $message;
+    }
+
+    private function getInvoiceUser(): User
+    {
+        $user = $this->invoice->user;
+        return $user;
     }
 
     private function getInputData(): array

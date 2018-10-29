@@ -1,7 +1,7 @@
 @extends("app")
 
 @section("headPageLevelStyle")
-    <link href="/assets/pages/css/error-rtl.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/pages/css/error-rtl.min.css" rel="stylesheet" type="text/css"/>
 @endsection
 @section("headThemeLayoutStyle")
 
@@ -29,10 +29,10 @@
 @section("content")
     <div class="row">
         <div class="col-md-12 page-404">
-            <div class="number font-red"> 403 </div>
+            <div class="number font-red"> 403</div>
             <div class="details">
                 <h3>دسترسی غیر مجاز</h3>
-                <p>  دسترسی شما به این بخش ممکن نمی باشد
+                <p> دسترسی شما به این بخش ممکن نمی باشد
                     <br/>
                     <a href="{{action("HomeController@index")}}"> خانه </a>
                 {{--or try the search bar below. </p>--}}

@@ -5,11 +5,11 @@ namespace App\Http\Requests;
 use App\Traits\CharacterCommon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Config;
-use Auth;
 
 class EditPhoneRequest extends FormRequest
 {
     use CharacterCommon;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -17,7 +17,7 @@ class EditPhoneRequest extends FormRequest
      */
     public function authorize()
     {
-        if(Auth()->user()->can(Config::get('constants.EDIT_CONTACT_ACCESS'))) return true;
+        if (Auth()->user()->can(Config::get('constants.EDIT_CONTACT_ACCESS'))) return true;
         return false;
     }
 
@@ -44,18 +44,16 @@ class EditPhoneRequest extends FormRequest
 
     protected function replaceNumbers()
     {
-        $input = $this->request->all() ;
-        if(isset($input["phoneNumber"]))
-        {
-            $input["phoneNumber"] = preg_replace('/\s+/', '', $input["phoneNumber"] ) ;
-            $input["phoneNumber"] = $this->convertToEnglish($input["phoneNumber"]) ;
+        $input = $this->request->all();
+        if (isset($input["phoneNumber"])) {
+            $input["phoneNumber"] = preg_replace('/\s+/', '', $input["phoneNumber"]);
+            $input["phoneNumber"] = $this->convertToEnglish($input["phoneNumber"]);
         }
 
-        if(isset($input["priority"]))
-        {
-            $input["priority"] = preg_replace('/\s+/', '', $input["priority"] ) ;
-            $input["priority"] = $this->convertToEnglish($input["priority"]) ;
+        if (isset($input["priority"])) {
+            $input["priority"] = preg_replace('/\s+/', '', $input["priority"]);
+            $input["priority"] = $this->convertToEnglish($input["priority"]);
         }
-        $this->replace($input) ;
+        $this->replace($input);
     }
 }

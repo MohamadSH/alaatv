@@ -31,7 +31,6 @@
             color: black;
         }
 
-
         .slick-slide {
             transition: all ease-in-out .3s;
             opacity: .2;
@@ -45,7 +44,7 @@
             opacity: 1;
         }
 
-        .contentset-thumbnail{
+        .contentset-thumbnail {
             width: 100%;
         }
     </style>
@@ -101,104 +100,108 @@
                 </div>
                 @if(isset($extraTags))
                     @foreach($extraTags as $key => $extraTag)
-                        <span class="tag label label-info tag_{{$key}}" style="display: inline-block; margin: 2px; padding: 10px;">
+                        <span class="tag label label-info tag_{{$key}}"
+                              style="display: inline-block; margin: 2px; padding: 10px;">
                             <a class="removeTagLabel" data-role="{{$key}}" style="padding-left: 10px">
                                 <i class="fa fa-remove"></i>
                             </a>
                         <span>
-                                <a href="{{action("ContentController@index")}}?tags[]={{$extraTag}}"  class="font-white">{{$extraTag}}</a>
+                                <a href="{{action("ContentController@index")}}?tags[]={{$extraTag}}"
+                                   class="font-white">{{$extraTag}}</a>
                         </span>
-                            <input id="tagInput_{{$key}}" class="extraTag" name="tags[]" type="hidden" value="{{$extraTag}}">
+                            <input id="tagInput_{{$key}}" class="extraTag" name="tags[]" type="hidden"
+                                   value="{{$extraTag}}">
                         </span>
                     @endforeach
                 @endif
                 {!! Form::close() !!}
                 <div class="row text-center">
-                    <img id="content-search-loading" src="/assets/extra/load2.GIF" alt="loading"  style="display: none ; width: 20px;">
+                    <img id="content-search-loading" src="/assets/extra/load2.GIF" alt="loading"
+                         style="display: none ; width: 20px;">
                 </div>
             </div>
         </div>
     </div>
-    <div class="row" >
+    <div class="row">
 
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
             <!-- BEGIN PORTLET-->
-                <div class="portlet light " id="productPortlet">
-                    <div class="portlet-title tabbable-line">
-                        <div class="caption">
-                            <i class="icon-globe font-dark hide"></i>
-                            <span class="caption-subject font-dark bold uppercase">محصولات آلاء</span>
-                        </div>
-                    </div>
-                    <div class="portlet-body" id="productDiv">
-                        <div class="row">
-                            <section class="productSlider slider" style="width: 95%;margin-top: 0px ; margin-bottom: 15px;">
-                            </section>
-                        </div>
+            <div class="portlet light " id="productPortlet">
+                <div class="portlet-title tabbable-line">
+                    <div class="caption">
+                        <i class="icon-globe font-dark hide"></i>
+                        <span class="caption-subject font-dark bold uppercase">محصولات آلاء</span>
                     </div>
                 </div>
-                <!-- END PORTLET-->
+                <div class="portlet-body" id="productDiv">
+                    <div class="row">
+                        <section class="productSlider slider" style="width: 95%;margin-top: 0px ; margin-bottom: 15px;">
+                        </section>
+                    </div>
+                </div>
             </div>
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
-                    <div class="portlet light contentPortlet">
-                        <div class="portlet-title tabbable-line">
-                            <div class="caption">
-                                <i class="icon-globe font-dark hide"></i>
-                                <span class="caption-subject font-dark bold uppercase">دوره های آموزشی آلاء</span>
-                                {{--{!! $tagLabels !!}--}}
-                            </div>
-                        </div>
-                        <div class="portlet-body " id="tab_contentset" >
-                        </div>
-                    </div>
-                </div>
-    </div>
-        @foreach($ads1 as $image => $link)
-            @include('partials.bannerAds', ['img'=>$image , 'link'=>$link])
-        @endforeach
-            <!-- BEGIN PORTLET-->
-    <div class="row" >
+            <!-- END PORTLET-->
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
             <div class="portlet light contentPortlet">
                 <div class="portlet-title tabbable-line">
                     <div class="caption">
                         <i class="icon-globe font-dark hide"></i>
-                        <span class="caption-subject font-dark bold uppercase">فیلم ها و جزوات آموزشی آلاء</span>
+                        <span class="caption-subject font-dark bold uppercase">دوره های آموزشی آلاء</span>
                         {{--{!! $tagLabels !!}--}}
                     </div>
-                    <ul class="nav nav-tabs">
-                        @if($items->where("type" , "article")->first()["totalitems"] > 0)
-                            <li>
-                                <a href="#tab_content_article" data-toggle="tab"> Article </a>
-                            </li>
-                        @endif
-                        <li>
-                            <a href="#tab_content_pamphlet" data-toggle="tab"> PDF </a>
-                        </li>
-                        <li class="active">
-                            <a href="#tab_content_video"  data-toggle="tab">Video</a>
-                        </li>
-                    </ul>
                 </div>
-                <div class="portlet-body " >
-                    <div class="tab-content">
-                        <div class="tab-pane active" id="tab_content_video">
-                            {!!  $items->where("type" , "video")->first()["view"] !!}
-                        </div>
-                        <div class="tab-pane text-center" id="tab_content_pamphlet">
-                            {!! $items->where("type" , "pamphlet")->first()["view"]  !!}
-                        </div>
-                        <div class="tab-pane text-center" id="tab_content_article">
-                            {!! $items->where("type" , "article")->first()["view"]  !!}
-                        </div>
-                    </div>
-
+                <div class="portlet-body " id="tab_contentset">
                 </div>
             </div>
-            <!-- END PORTLET-->
-            @foreach($ads2 as $image => $link)
-                @include('partials.bannerAds', ['img'=>$image , 'link'=>$link])
-            @endforeach
         </div>
+    </div>
+    @foreach($ads1 as $image => $link)
+        @include('partials.bannerAds', ['img'=>$image , 'link'=>$link])
+    @endforeach
+    <!-- BEGIN PORTLET-->
+    <div class="row">
+        <div class="portlet light contentPortlet">
+            <div class="portlet-title tabbable-line">
+                <div class="caption">
+                    <i class="icon-globe font-dark hide"></i>
+                    <span class="caption-subject font-dark bold uppercase">فیلم ها و جزوات آموزشی آلاء</span>
+                    {{--{!! $tagLabels !!}--}}
+                </div>
+                <ul class="nav nav-tabs">
+                    @if($items->where("type" , "article")->first()["totalitems"] > 0)
+                        <li>
+                            <a href="#tab_content_article" data-toggle="tab"> Article </a>
+                        </li>
+                    @endif
+                    <li>
+                        <a href="#tab_content_pamphlet" data-toggle="tab"> PDF </a>
+                    </li>
+                    <li class="active">
+                        <a href="#tab_content_video" data-toggle="tab">Video</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="portlet-body ">
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab_content_video">
+                        {!!  $items->where("type" , "video")->first()["view"] !!}
+                    </div>
+                    <div class="tab-pane text-center" id="tab_content_pamphlet">
+                        {!! $items->where("type" , "pamphlet")->first()["view"]  !!}
+                    </div>
+                    <div class="tab-pane text-center" id="tab_content_article">
+                        {!! $items->where("type" , "article")->first()["view"]  !!}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- END PORTLET-->
+        @foreach($ads2 as $image => $link)
+            @include('partials.bannerAds', ['img'=>$image , 'link'=>$link])
+        @endforeach
+    </div>
     </div>
 @endsection
 
@@ -226,8 +229,7 @@
         actionUrl["product"] = "{{action('ProductController@index')}}";
         actionUrl["contentset"] = "{{action('ContentsetController@index')}}";
 
-        $(document).ready(function()
-        {
+        $(document).ready(function () {
 
             initialSlick($(".productSlider"));
             initialPortfolio("#js-grid-juicy-contentset");
@@ -236,8 +238,8 @@
             // makeLessonSelect( $("#gradeSelect").val());
             // makeTeacherSelect();
 
-            contentLoad( "product" , ["product"],null , actionUrl["product"] , false);
-            contentLoad("contentset" , ["contentset"] , null , actionUrl["contentset"] , false);
+            contentLoad("product", ["product"], null, actionUrl["product"], false);
+            contentLoad("contentset", ["contentset"], null, actionUrl["contentset"], false);
             $(".contentPortlet .portlet-title .caption").append(makeTagLabels(tags));
             // $("#itemFilterFormBody").append(makeTagLabels(extraTags ,true ) );
         });
@@ -249,10 +251,9 @@
 
             var grades = [];  // ToDo : comes from ajax
             $("#gradeSelect").empty();
-            $.each(grades , function (index , value)
-            {
-                var caption = "" ;
-                if(value != null && value != undefined)
+            $.each(grades, function (index, value) {
+                var caption = "";
+                if (value != null && value != undefined)
                     caption = value;
 
                 $("#gradeSelect").append($("<option></option>")
@@ -267,10 +268,9 @@
 
             var lessons = [];  // ToDo : comes from ajax
             $("#lessonSelect").empty();
-            $.each(lessons , function (index , value)
-            {
-                var caption = "" ;
-                if(value != null && value != undefined)
+            $.each(lessons, function (index, value) {
+                var caption = "";
+                if (value != null && value != undefined)
                     caption = value;
 
                 $("#lessonSelect").append($("<option></option>")
@@ -282,26 +282,24 @@
             //ToDo
         }
 
-        function makeTagLabels(tags , withInput) {
+        function makeTagLabels(tags, withInput) {
             var labels = "";
-            if(withInput == null || withInput == undefined)
+            if (withInput == null || withInput == undefined)
                 withInput = false;
-            $.each(tags , function (key , value)
-            {
-                var label = '<span class="tag label label-info tag_'+key+'" style="display: inline-block; margin: 2px; padding: 10px;">\n'  ;
-                label += '<a class="removeTagLabel" data-role="'+key+'" style="padding-left: 10px"><i class="fa fa-remove"></i></a>\n' ;
-                label += '<span >\n' ;
-                label += '<a href="{{action("ContentController@index")}}?tags[]='+value+'"  class="font-white">'+value+'</a>\n' ;
-                label += '</span>\n' ;
-                if(withInput)
-                {
-                    label += '<input id="tagInput_'+key+'" class="extraTag" name="tags[]" type="hidden" value="'+value+'">\n' ;
+            $.each(tags, function (key, value) {
+                var label = '<span class="tag label label-info tag_' + key + '" style="display: inline-block; margin: 2px; padding: 10px;">\n';
+                label += '<a class="removeTagLabel" data-role="' + key + '" style="padding-left: 10px"><i class="fa fa-remove"></i></a>\n';
+                label += '<span >\n';
+                label += '<a href="{{action("ContentController@index")}}?tags[]=' + value + '"  class="font-white">' + value + '</a>\n';
+                label += '</span>\n';
+                if (withInput) {
+                    label += '<input id="tagInput_' + key + '" class="extraTag" name="tags[]" type="hidden" value="' + value + '">\n';
                 }
                 label += '</span>';
 
                 labels += label
             });
-            return labels ;
+            return labels;
         }
 
         function destroySlick(element) {
@@ -310,7 +308,7 @@
 
         function initialSlick(element) {
             element.slick({
-                auto:true,
+                auto: true,
                 dots: true,
                 infinite: false,
                 speed: 300,
@@ -345,13 +343,13 @@
                     // settings: "unslick"
                     // instead of a settings object
                 ],
-                rtl:true
+                rtl: true
             });
         }
 
         function initialPortfolio(className) {
             (
-                function ($, window, document, className , undefined) {
+                function ($, window, document, className, undefined) {
                     'use strict';
 
                     // init cubeportfolio
@@ -416,25 +414,25 @@
                     });
 
                 }
-            )(jQuery, window, document,className);
+            )(jQuery, window, document, className);
         }
 
-        function contentLoadAjaxRequest(url , formData,type ) {
+        function contentLoadAjaxRequest(url, formData, type) {
             $.ajax({
                 type: "GET",
                 cache: true,
-                url: url ,
-                data:formData,
+                url: url,
+                data: formData,
                 statusCode:
                     {
-                        200:function (response) {
+                        200: function (response) {
                             var items = response.items;
                             // tags = response.tagLabels;
 
                             // location.hash = page;
-                            $.each(items , function (key , item) {
+                            $.each(items, function (key, item) {
                                 var totalItems = item.totalitems;
-                                switch(type) {
+                                switch (type) {
                                     case "contentset":
                                         // $("#tab_contentset").html(item.view);
                                         $("#js-grid-juicy-contentset").cubeportfolio('destroy');
@@ -442,42 +440,35 @@
                                         initialPortfolio("#js-grid-juicy-contentset");
                                         break;
                                     case "content":
-                                        if(item.type === "video")
-                                        {
+                                        if (item.type === "video") {
                                             $("#js-grid-juicy-projects").cubeportfolio('destroy');
                                             $("#tab_content_video").html(item.view);
                                             initialPortfolio("#js-grid-juicy-projects");
                                         }
-                                        else if(item.type === "pamphlet")
-                                        {
+                                        else if (item.type === "pamphlet") {
                                             $("#tab_content_pamphlet").html(item.view);
                                         }
-                                        else if(item.type === "article")
-                                        {
-                                            if(totalItems > 0)
-                                            {
+                                        else if (item.type === "article") {
+                                            if (totalItems > 0) {
                                                 $("#tab_content_article").html(item.view);
                                                 $("#tab_content_article").show();
                                                 $('a[href^="#tab_content_article]').show();
                                             }
-                                            else
-                                            {
+                                            else {
                                                 $("#tab_content_article").hide();
                                                 $('a[href^="#tab_content_article]').hide();
                                             }
                                         }
                                         break;
                                     case "product":
-                                        if(totalItems > 0)
-                                        {
+                                        if (totalItems > 0) {
                                             $("#productPortlet").show();
                                             var element = $(".productSlider");
-                                            destroySlick(element) ;
+                                            destroySlick(element);
                                             $("#productDiv .row .productSlider").html(item.view);
                                             initialSlick(element);
                                         }
-                                        else
-                                        {
+                                        else {
                                             $("#productPortlet").hide();
                                         }
 
@@ -489,87 +480,78 @@
                             $("#content-search-loading").hide();
 
                         },
-                        422:function (response) {
+                        422: function (response) {
                             console.log(response);
                         },
-                        503:function (response) {
+                        503: function (response) {
                             console.log(response);
                         }
                     }
             });
         }
 
-        function contentLoad(itemType ,pageName, pageNumber , url , setTagLabel)
-        {
+        function contentLoad(itemType, pageName, pageNumber, url, setTagLabel) {
             var formData = "";
 
-            var extraTags = [] ;
+            var extraTags = [];
             var tags = [];
-            $("#itemFilterForm").find(':not(input[name=_token])').filter(':input').each(function ()
-            {
+            $("#itemFilterForm").find(':not(input[name=_token])').filter(':input').each(function () {
                 var elementId = $(this).attr("id");
-                var element = $("#"+elementId);
+                var element = $("#" + elementId);
 
-                if(element.hasClass("extraTag"))
-                {
+                if (element.hasClass("extraTag")) {
                     var extraTagText = element.val();
-                    formData += "tags[]="+ extraTagText+"&";
+                    formData += "tags[]=" + extraTagText + "&";
                     extraTags.push(extraTagText);
                     tags.push(extraTagText);
                 }
-                else if($("#"+elementId+" option:selected").val() != '')
-                {
-                    var selectedText = $("#"+elementId+" option:selected").text();
+                else if ($("#" + elementId + " option:selected").val() != '') {
+                    var selectedText = $("#" + elementId + " option:selected").text();
                     var tagText = string_to_slug(selectedText);
-                    formData += "tags[]="+ tagText +"&";
+                    formData += "tags[]=" + tagText + "&";
                     tags.push(tagText);
                 }
             });
 
-            formData = formData.slice(0,-1);
-            if(setTagLabel)
-            {
+            formData = formData.slice(0, -1);
+            if (setTagLabel) {
                 $(".tag").remove();
                 $(".contentPortlet .portlet-title .caption").append(makeTagLabels(tags));
-                $("#itemFilterFormBody").append(makeTagLabels(extraTags , true));
+                $("#itemFilterFormBody").append(makeTagLabels(extraTags, true));
             }
             var addressBarAppend = formData;
-            $.each( pageName, function( key, value )
-            {
-                if( pageNumber != undefined && pageNumber > 0 )
-                {
-                    var numberQuery  ;
-                    numberQuery = [ pageName+"Page="+pageNumber ] ;
-                    formData = formData + "&" + numberQuery.join('&') ;
-                }else
-                {
+            $.each(pageName, function (key, value) {
+                if (pageNumber != undefined && pageNumber > 0) {
+                    var numberQuery;
+                    numberQuery = [pageName + "Page=" + pageNumber];
+                    formData = formData + "&" + numberQuery.join('&');
+                } else {
                     $("#content-search-loading").show();
                 }
 
-                if( value != undefined &&  value.length > 0 )
-                {
-                    var typesQuery = [ "contentType[]="+value ] ;
-                    formData = formData + "&" + typesQuery.join('&') ;
+                if (value != undefined && value.length > 0) {
+                    var typesQuery = ["contentType[]=" + value];
+                    formData = formData + "&" + typesQuery.join('&');
                 }
             });
 
-            formData =  decodeURIComponent(formData);
+            formData = decodeURIComponent(formData);
             changeUrl(addressBarAppend);
 
-            if(itemType === "video" || itemType === "pamphlet" || itemType === "article")
-                        itemType = "content";
+            if (itemType === "video" || itemType === "pamphlet" || itemType === "article")
+                itemType = "content";
             // console.log(formData);
-            contentLoadAjaxRequest(url,formData,itemType,setTagLabel);
+            contentLoadAjaxRequest(url, formData, itemType, setTagLabel);
             return false;
         }
 
-        function changeUrl(appendUrl)
-        {
-            var newUrl = "{{action("ContentController@index")}}"+"?"+appendUrl;
-            window.history.pushState({formData: appendUrl},"Title",newUrl);
-            document.title=newUrl;
+        function changeUrl(appendUrl) {
+            var newUrl = "{{action("ContentController@index")}}" + "?" + appendUrl;
+            window.history.pushState({formData: appendUrl}, "Title", newUrl);
+            document.title = newUrl;
         }
-        $(window).on("popstate", function(e) {
+
+        $(window).on("popstate", function (e) {
             window.location.reload();
         });
 
@@ -578,10 +560,10 @@
             var parameters = query.split('=');
             var pageName = parameters[0];
             var pageNumber = parameters[1];
-            parameters= pageName.split('Page');
+            parameters = pageName.split('Page');
             var itemType = parameters[0];
 
-            contentLoad(itemType   , [itemType],pageNumber , actionUrl[itemType],false );
+            contentLoad(itemType, [itemType], pageNumber, actionUrl[itemType], false);
             e.preventDefault();
         });
 
@@ -603,41 +585,37 @@
         //     tags.push($("#teacherSelect option:selected").val());
         // });
 
-        $(document).on("change", ".itemFilter", function (){
-            contentLoad( "content" , ["video","pamphlet","article"],null  , actionUrl["content"] , true);
-            contentLoad( "product" , ["product"],null , actionUrl["product"], true);
-            contentLoad("contentset" , ["contentset"] , null , actionUrl["contentset"], true);
+        $(document).on("change", ".itemFilter", function () {
+            contentLoad("content", ["video", "pamphlet", "article"], null, actionUrl["content"], true);
+            contentLoad("product", ["product"], null, actionUrl["product"], true);
+            contentLoad("contentset", ["contentset"], null, actionUrl["contentset"], true);
         });
 
-        $(document).on("click", ".removeTagLabel", function ()
-        {
+        $(document).on("click", ".removeTagLabel", function () {
             var id = $(this).data("role");
-            $(".tag_"+id).remove();
+            $(".tag_" + id).remove();
             tags.splice(id, 1);
             var elements = [
-                    "gradeSelect" ,
-                    "majorSelect" ,
-                    "lessonSelect",
-                    "teacherSelect"
+                "gradeSelect",
+                "majorSelect",
+                "lessonSelect",
+                "teacherSelect"
             ];
 
 
-            $.each(elements , function (key , value)
-            {
-                $("#"+value).each(function ()
-                {
-                    var selectedText = $("#"+value+" option:selected").text();
+            $.each(elements, function (key, value) {
+                $("#" + value).each(function () {
+                    var selectedText = $("#" + value + " option:selected").text();
                     var slugifiedSelectedText = string_to_slug(selectedText);
-                    if ($.inArray(slugifiedSelectedText , tags) == -1)
-                    {
-                        $("#"+value).val($("#"+value+" option:first").val());
+                    if ($.inArray(slugifiedSelectedText, tags) == -1) {
+                        $("#" + value).val($("#" + value + " option:first").val());
                     }
                 });
             });
 
-            contentLoad( "content" , ["video","pamphlet","article"],null  , actionUrl["content"] , true);
-            contentLoad( "product" , ["product"],null , actionUrl["product"], true);
-            contentLoad("contentset" , ["contentset"] , null , actionUrl["contentset"], true);
+            contentLoad("content", ["video", "pamphlet", "article"], null, actionUrl["content"], true);
+            contentLoad("product", ["product"], null, actionUrl["product"], true);
+            contentLoad("contentset", ["contentset"], null, actionUrl["contentset"], true);
         });
 
     </script>

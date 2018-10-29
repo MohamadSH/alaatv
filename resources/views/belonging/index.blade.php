@@ -3,11 +3,13 @@
 
 @section("headPageLevelPlugin")
     {{--<link href="/assets/extra/persian-datepicker/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>--}}
-    <link href="/assets/global/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css" />
-    <link href="/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap-rtl.css" rel="stylesheet" type="text/css" />
-    <link href="/assets/global/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css" rel="stylesheet" type="text/css" />
-    <link href="/assets/global/plugins/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" type="text/css" />
-    <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/global/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap-rtl.css" rel="stylesheet"
+          type="text/css"/>
+    <link href="/assets/global/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css" rel="stylesheet"
+          type="text/css"/>
+    <link href="/assets/global/plugins/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section("metadata")
@@ -39,16 +41,17 @@
 @section("content")
     <div class="row">
         {{--Ajax modal loaded after inserting content--}}
-        <div id="ajax-modal" class="modal fade" tabindex="-1"> </div>
+        <div id="ajax-modal" class="modal fade" tabindex="-1"></div>
     {{--Ajax modal for panel startup --}}
 
     <!-- /.modal -->
         <div class="col-md-12">
-        <!-- BEGIN USER BELONGINGS TABLE PORTLET-->
-            <div class="portlet box purple-intense" >
+            <!-- BEGIN USER BELONGINGS TABLE PORTLET-->
+            <div class="portlet box purple-intense">
                 <div class="portlet-title">
                     <div class="caption">
-                        <i class="fa fa-th-list" aria-hidden="true"></i>لیست اسناد فنی@if(isset($user)) {{$user->firstName}} {{$user->lastName}}@endif</div>
+                        <i class="fa fa-th-list" aria-hidden="true"></i>لیست اسناد
+                        فنی@if(isset($user)) {{$user->firstName}} {{$user->lastName}}@endif</div>
                 </div>
                 <div class="portlet-body" style="display: block;">
                     @include("systemMessage.flash")
@@ -57,9 +60,11 @@
                             <div class="col-md-6">
                                 <div class="btn-group">
                                     @permission((Config::get('constants.INSERT_BELONGING_ACCESS')))
-                                        @if(isset($user))
-                                        <a class="addBelonging btn btn-outline purple-intense-stripe"  data-target="#addBelongingModal"  data-toggle="modal">
-                                            <i class="fa fa-plus" aria-hidden="true"></i> ثبت اسناد فنی برای {{$user->firstName}} {{$user->lastName}} </a>
+                                    @if(isset($user))
+                                        <a class="addBelonging btn btn-outline purple-intense-stripe"
+                                           data-target="#addBelongingModal" data-toggle="modal">
+                                            <i class="fa fa-plus" aria-hidden="true"></i> ثبت اسناد فنی
+                                            برای {{$user->firstName}} {{$user->lastName}} </a>
 
                                         <!-- responsive modal -->
                                         <div id="addBelongingModal" class="modal fade" tabindex="-1">
@@ -72,11 +77,13 @@
                                                 </span>
                                                 {{--{!! Form::text('description', null,['class' => 'form-control' , 'id' => 'userBelongingDescription', 'placeholder' => 'توضیحات اسناد فنی']) !!}--}}
                                                 {{--<span class="help-block" id="userBelongingDescriptionAlert">--}}
-                                                        {{--<strong></strong>--}}
+                                                {{--<strong></strong>--}}
                                                 {{--</span>--}}
-                                                <div class="fileinput fileinput-new" id="thumbnail-div" data-provides="fileinput">
+                                                <div class="fileinput fileinput-new" id="thumbnail-div"
+                                                     data-provides="fileinput">
                                                     <div class="input-group input-large">
-                                                        <div class="form-control uneditable-input input-fixed input-medium" data-trigger="fileinput">
+                                                        <div class="form-control uneditable-input input-fixed input-medium"
+                                                             data-trigger="fileinput">
                                                             <i class="fa fa-file fileinput-exists"></i>&nbsp;
                                                             <span class="fileinput-filename"> </span>
                                                         </div>
@@ -84,25 +91,31 @@
                                                                         <span class="fileinput-new">فایل سند فنی </span>
                                                                         <span class="fileinput-exists"> تغییر </span>
                                                             {!! Form::file('file') !!} </span>
-                                                        <a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput"> حذف </a>
+                                                        <a href="javascript:"
+                                                           class="input-group-addon btn red fileinput-exists"
+                                                           data-dismiss="fileinput"> حذف </a>
                                                     </div>
                                                 </div>
                                                 {!! Form::hidden('userId', $user->id,['id'=>'belongingUserIdInput']) !!}
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" data-dismiss="modal" class="btn btn-outline dark" >بستن</button>
-                                                <button type="submit" class="btn green" >ثبت</button>
+                                                <button type="button" data-dismiss="modal" class="btn btn-outline dark">
+                                                    بستن
+                                                </button>
+                                                <button type="submit" class="btn green">ثبت</button>
                                             </div>
                                             {!! Form::close() !!}
                                         </div>
-                                        @endif
+                                    @endif
                                     @endpermission
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="belonging_table">
-                        <div id="deleteBelongingConfirmationModal" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+                    <table class="table table-striped table-bordered table-hover dt-responsive" width="100%"
+                           id="belonging_table">
+                        <div id="deleteBelongingConfirmationModal" class="modal fade" tabindex="-1"
+                             data-backdrop="static" data-keyboard="false">
                             <div class="modal-header">حذف اسناد فنی <span id="deleteBelongingFullName"></span></div>
                             <div class="modal-body">
                                 <p> آیا مطمئن هستید؟ </p>
@@ -110,19 +123,22 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" data-dismiss="modal" class="btn btn-outline dark">خیر</button>
-                                <button type="button" data-dismiss="modal"  class="btn green" onclick="removeBelonging()">بله</button>
+                                <button type="button" data-dismiss="modal" class="btn green"
+                                        onclick="removeBelonging()">بله
+                                </button>
                             </div>
                         </div>
-                        <thead >
-                            <tr >
-                                <th ></th>
-                                @if(!isset($user))<th class="all">مشتری</th> @endif
-                                <th class="min-tablet"> عنوان </th>
-                                {{--<th class="all text-center">توضیح </th>--}}
-                                <th class="all"> سند فنی </th>
-                                <th class="none"> زمان ثبت نام </th>
-                                <th class="all"> عملیات </th>
-                            </tr>
+                        <thead>
+                        <tr>
+                            <th></th>
+                            @if(!isset($user))
+                                <th class="all">مشتری</th> @endif
+                            <th class="min-tablet"> عنوان</th>
+                            {{--<th class="all text-center">توضیح </th>--}}
+                            <th class="all"> سند فنی</th>
+                            <th class="none"> زمان ثبت نام</th>
+                            <th class="all"> عملیات</th>
+                        </tr>
                         </thead>
                         <tbody>
                         @if(isset($belongings) && !$belongings->isEmpty())
@@ -130,20 +146,32 @@
                                 <tr id="{{$belonging->id}}">
                                     <th></th>
                                     {{--<th class="text-center">{{$counter++}}</th>--}}
-                                    @if(!isset($user))<td>@if(!$belonging->users->isEmpty()) @if(isset($belonging->users->first()->firstName) || $belonging->users->first()->lastName){{$belonging->users->first()->firstName}} {{$belonging->users->first()->lastName}} @else <span class="label label-sm label-warning">کاربر ناشناس</span> @endif @else <span class="label label-sm label-danger">بدون مالک</span> @endif</td> @endif
-                                    <td id="belongingFullName_{{$belonging->id}}">@if(isset($belonging->name) && strlen($belonging->name)>0 ) {{ $belonging->name}} @else <span class="label label-sm label-danger">بدون توضیح</span> @endif</td>
-{{--                                    <td >@if(isset($belonging->description) && strlen($belonging->description)>0 ) {{ $belonging->description}} @else <span class="label label-sm label-warning">بدون توضیح</span> @endif</td>--}}
-                                    <td  >@if(isset($belonging->file) && strlen($belonging->file)>0 ) <a href="{{action("HomeController@download" , ["content"=>"سند فنی دارایی","fileName"=>$belonging->file ])}}"  class="btn btn-xs red">دانلود فایل</a> @else <span class="label label-sm label-danger">درج نشده</span> @endif</td>
-                                    <td >@if(isset($belonging->created_at) ) {{ $belonging->CreatedAt_Jalali()}} @else <span class="label label-sm label-danger">درج نشده</span> @endif</td>
+                                    @if(!isset($user))
+                                        <td>@if(!$belonging->users->isEmpty()) @if(isset($belonging->users->first()->firstName) || $belonging->users->first()->lastName){{$belonging->users->first()->firstName}} {{$belonging->users->first()->lastName}} @else
+                                                <span class="label label-sm label-warning">کاربر ناشناس</span> @endif @else
+                                                <span class="label label-sm label-danger">بدون مالک</span> @endif
+                                        </td> @endif
+                                    <td id="belongingFullName_{{$belonging->id}}">@if(isset($belonging->name) && strlen($belonging->name)>0 ) {{ $belonging->name}} @else
+                                            <span class="label label-sm label-danger">بدون توضیح</span> @endif</td>
+                                    {{--                                    <td >@if(isset($belonging->description) && strlen($belonging->description)>0 ) {{ $belonging->description}} @else <span class="label label-sm label-warning">بدون توضیح</span> @endif</td>--}}
+                                    <td>@if(isset($belonging->file) && strlen($belonging->file)>0 ) <a
+                                                href="{{action("HomeController@download" , ["content"=>"سند فنی دارایی","fileName"=>$belonging->file ])}}"
+                                                class="btn btn-xs red">دانلود فایل</a> @else <span
+                                                class="label label-sm label-danger">درج نشده</span> @endif</td>
+                                    <td>@if(isset($belonging->created_at) ) {{ $belonging->CreatedAt_Jalali()}} @else
+                                            <span class="label label-sm label-danger">درج نشده</span> @endif</td>
                                     <td>@permission((Config::get('constants.REMOVE_BELONGING_ACCESS')))
-                                            <a class="deleteBelonging" data-target="#deleteBelongingConfirmationModal" data-toggle="modal">
-                                                <i class="fa fa-remove" aria-hidden="true"></i> حذف </a>
-                                        @endpermission</td>
+                                        <a class="deleteBelonging" data-target="#deleteBelongingConfirmationModal"
+                                           data-toggle="modal">
+                                            <i class="fa fa-remove" aria-hidden="true"></i> حذف </a>
+                                        @endpermission
+                                    </td>
                                 </tr>
                             @endforeach
                         @else
                             <tr>
-                                <td colspan="7"><h4 class="text-center bold">اسناد فنی برای این کاربر ثبت نشده است</h4></td>
+                                <td colspan="7"><h4 class="text-center bold">اسناد فنی برای این کاربر ثبت نشده است</h4>
+                                </td>
                             </tr>
                         @endif
                         </tbody>
@@ -159,7 +187,8 @@
     <script src="/assets/global/scripts/datatable.js" type="text/javascript"></script>
     <script src="/assets/global/plugins/datatables/datatables.min.js" type="text/javascript"></script>
     {{--<script src="/assets/extra/persian-datepicker/lib/bootstrap/js/bootstrap.min.js" type="text/javascript" ></script>--}}
-    <script src="/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
+    <script src="/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js"
+            type="text/javascript"></script>
     <script src="/assets/global/plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type="text/javascript"></script>
     <script src="/assets/global/plugins/bootstrap-modal/js/bootstrap-modal.js" type="text/javascript"></script>
     <script src="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
@@ -173,13 +202,13 @@
     <script src="/js/extraJS/scripts/admin-makeDataTable.js" type="text/javascript"></script>
     <script type="application/javascript">
 
-        jQuery(document).ready(function() {
-            var newDataTable =$("#belonging_table").DataTable();
+        jQuery(document).ready(function () {
+            var newDataTable = $("#belonging_table").DataTable();
             newDataTable.destroy();
             makeDataTable("belonging_table");
         });
 
-        $(function() {
+        $(function () {
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': window.Laravel.csrfToken,
@@ -187,17 +216,18 @@
             });
         });
 
-        $(document).on("click", ".deleteBelonging", function (){
+        $(document).on("click", ".deleteBelonging", function () {
             var belonging_id = $(this).closest('tr').attr('id');
             $("input[name=belonging_id]").val(belonging_id);
-            $("#deleteBelongingFullName").text($("#belongingFullName_"+belonging_id).text());
+            $("#deleteBelongingFullName").text($("#belongingFullName_" + belonging_id).text());
         });
-        function removeBelonging(){
+
+        function removeBelonging() {
             var belonging_id = $("input[name=belonging_id]").val();
             $.ajax({
                 type: 'POST',
-                url: 'belonging/'+belonging_id,
-                data:{_method: 'delete'},
+                url: 'belonging/' + belonging_id,
+                data: {_method: 'delete'},
                 success: function (result) {
                     // console.log(result);
                     // console.log(result.responseText);

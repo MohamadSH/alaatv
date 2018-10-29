@@ -106,25 +106,22 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
     use Helper;
     use DateTrait;
     use favorableTraits;
-    
+
     /*
     |--------------------------------------------------------------------------
     | Properties
     |--------------------------------------------------------------------------
     */
 
-    protected static $purifyNullConfig = ['HTML.Allowed' => ''];
-
     public const CONTENT_TYPE_PAMPHLET = 1;
     public const CONTENT_TYPE_EXAM = 2;
     public const CONTENT_TYPE_BOOK = 7;
     public const CONTENT_TYPE_VIDEO = 8;
     public const CONTENT_TYPE_ARTICLE = 9;
-
     public const CONTENT_TEMPLATE_VIDEO = 1;
     public const CONTENT_TEMPLATE_PAMPHLET = 2;
     public const CONTENT_TEMPLATE_EXAM = 2;
-
+    protected static $purifyNullConfig = ['HTML.Allowed' => ''];
     /**      * The attributes that should be mutated to dates.        */
     protected $dates = [
         'created_at',
@@ -153,16 +150,16 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
         'enable'
     ];
 
-
     /**
-     * Create a new Eloquent Collection instance.
-     *
-     * @param  array $models
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return array
      */
-    public function newCollection(array $models = [])
+    public static function videoFileCaptionTable(): array
     {
-        return new ContentCollection($models);
+        return [
+            "240p" => "کیفیت متوسط",
+            "480p" => "کیفیت بالا",
+            "720p" => "کیفیت عالی"
+        ];
     }
 
 
@@ -179,16 +176,15 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
     |--------------------------------------------------------------------------
     */
 
-    public function cacheKey()
+    /**
+     * Create a new Eloquent Collection instance.
+     *
+     * @param  array $models
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function newCollection(array $models = [])
     {
-        $key = $this->getKey();
-        $time= isset($this->update) ? $this->updated_at->timestamp : $this->created_at->timestamp;
-        return sprintf(
-            "%s-%s",
-            //$this->getTable(),
-            $key,
-            $time
-        );
+        return new ContentCollection($models);
     }
 
     /*
@@ -226,9 +222,10 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeActive($query){
+    public function scopeActive($query)
+    {
         return $query->where('enable', 1)
-            ->where(function ($q){
+            ->where(function ($q) {
                 $q->where('validSince', '<', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'))
                     ->orWhereNull('validSince');
             }
@@ -258,9 +255,9 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
      * @param $value
      * @return string
      */
-    public function getTitleAttribute($value) :string
+    public function getTitleAttribute($value): string
     {
-        return Purify::clean($value,self::$purifyNullConfig);
+        return Purify::clean($value, self::$purifyNullConfig);
     }
 
     /**
@@ -269,7 +266,7 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
      * @param $value
      * @return string
      */
-    public function getDescriptionAttribute($value) : string
+    public function getDescriptionAttribute($value): string
     {
         return Purify::clean($value);
     }
@@ -280,9 +277,9 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
      * @param $value
      * @return string
      */
-    public function getNameAttribute($value):string
+    public function getNameAttribute($value): string
     {
-        return Purify::clean($value,self::$purifyNullConfig);
+        return Purify::clean($value, self::$purifyNullConfig);
     }
 
     /**
@@ -291,12 +288,12 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
      * @param $value
      * @return string
      */
-    public function getMetaTitleAttribute($value) :string
+    public function getMetaTitleAttribute($value): string
     {
-        if(isset($value[0]))
-            return Purify::clean($value,self::$purifyNullConfig);
-        else{
-            return Purify::clean(mb_substr($this->display_name,0,config("constants.META_TITLE_LIMIT"), "utf-8"),self::$purifyNullConfig);
+        if (isset($value[0]))
+            return Purify::clean($value, self::$purifyNullConfig);
+        else {
+            return Purify::clean(mb_substr($this->display_name, 0, config("constants.META_TITLE_LIMIT"), "utf-8"), self::$purifyNullConfig);
         }
     }
 
@@ -306,12 +303,12 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
      * @param $value
      * @return string
      */
-    public function getMetaDescriptionAttribute($value) : string
+    public function getMetaDescriptionAttribute($value): string
     {
-        if(isset($value[0]))
-            return Purify::clean($value,self::$purifyNullConfig);
-        else{
-            return Purify::clean(mb_substr($this->description,0,config("constants.META_DESCRIPTION_LIMIT"), "utf-8"),self::$purifyNullConfig);
+        if (isset($value[0]))
+            return Purify::clean($value, self::$purifyNullConfig);
+        else {
+            return Purify::clean(mb_substr($this->description, 0, config("constants.META_DESCRIPTION_LIMIT"), "utf-8"), self::$purifyNullConfig);
         }
     }
 
@@ -321,10 +318,10 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
      * @param $value
      * @return Collection
      */
-    public function getFileAttribute($value) : Collection
+    public function getFileAttribute($value): Collection
     {
-        $key = "Content:File".$this->cacheKey();
-        return Cache::tags('content')->remember($key,Config::get("constants.CACHE_60"),function () use($value) {
+        $key = "Content:File" . $this->cacheKey();
+        return Cache::tags('content')->remember($key, Config::get("constants.CACHE_60"), function () use ($value) {
             $fileCollection = collect(json_decode($value));
             $fileCollection->transform(function ($item, $key) {
                 $l = new LinkGenerator($item);
@@ -336,6 +333,18 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
 
             return $fileCollection->groupBy('type');
         });
+    }
+
+    public function cacheKey()
+    {
+        $key = $this->getKey();
+        $time = isset($this->update) ? $this->updated_at->timestamp : $this->created_at->timestamp;
+        return sprintf(
+            "%s-%s",
+            //$this->getTable(),
+            $key,
+            $time
+        );
     }
 
     /**
@@ -350,7 +359,7 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
     {
         $t = json_decode($value);
         $link = null;
-        if(isset($t))
+        if (isset($t))
             $link = new LinkGenerator($t);
         return optional($link)->getLinks();
     }
@@ -360,7 +369,7 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
      *
      * @return string
      */
-    public function getAuthorAttribute() : string
+    public function getAuthorAttribute(): string
     {
         $content = $this;
         $key = "content:author" . $content->cacheKey();
@@ -395,7 +404,8 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
      * Gets content's pamphlets
      * @return Collection
      */
-    public function getPamphlets() :Collection {
+    public function getPamphlets(): Collection
+    {
         $pamphlet = optional($this->file)->get('pamphlet');
         return isset($pamphlet) ? $pamphlet : collect();
     }
@@ -404,7 +414,8 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
      * Gets content's videos
      * @return Collection
      */
-    public function getVideos() :Collection {
+    public function getVideos(): Collection
+    {
         $video = optional($this->file)->get('video');
         return isset($video) ? $video : collect();
     }
@@ -428,7 +439,7 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
                     ->get()
                     ->sortBy("order")
                     ->load('contenttype');
-            }else
+            } else
                 $sameContents = new ContentCollection([]);
             return [
                 $sameContents,
@@ -445,19 +456,19 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
      * @return string
      * @throws Exception
      */
-    public function getDisplayNameAttribute() :string
+    public function getDisplayNameAttribute(): string
     {
         try {
             $key = "content:getDisplayName"
-                .$this->cacheKey();
+                . $this->cacheKey();
             $c = $this;
-            return Cache::remember($key,Config::get("constants.CACHE_60"),function () use($c) {
+            return Cache::remember($key, Config::get("constants.CACHE_60"), function () use ($c) {
                 $displayName = "";
                 $sessionNumber = $c->order;
                 if (isset($c->contenttype)) {
-                    $displayName .=$c->contenttype->displayName." ";
+                    $displayName .= $c->contenttype->displayName . " ";
                 }
-                $displayName .= ( isset($sessionNumber) && $sessionNumber > -1 ? "جلسه ".$sessionNumber." - ":"" )." ".(isset($c->name) ? $c->name : $c->user->name);
+                $displayName .= (isset($sessionNumber) && $sessionNumber > -1 ? "جلسه " . $sessionNumber . " - " : "") . " " . (isset($c->name) ? $c->name : $c->user->name);
                 return $displayName;
             });
 
@@ -500,17 +511,17 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
         return [
             'title' => $this->metaTitle,
             'description' => $this->metaDescription,
-            'url' => action('ContentController@show',$this),
-            'canonical' => action('ContentController@show',$this),
+            'url' => action('ContentController@show', $this),
+            'canonical' => action('ContentController@show', $this),
             'site' => 'آلاء',
             'imageUrl' => $this->thumbnail,
             'imageWidth' => '1280',
             'imageHeight' => '720',
             'seoMod' => SeoMetaTagsGenerator::SEO_MOD_VIDEO_TAGS,
-            'playerUrl' => action('ContentController@embed',$this),
+            'playerUrl' => action('ContentController@embed', $this),
             'playerWidth' => '854',
             'playerHeight' => '480',
-            'videoDirectUrl' => optional(optional(optional($this->file->first())->where('res','480p'))->first())->link,
+            'videoDirectUrl' => optional(optional(optional($this->file->first())->where('res', '480p'))->first())->link,
             'videoActorName' => $this->author,
             'videoActorRole' => 'دبیر',
             'videoDirector' => 'آلاء',
@@ -527,18 +538,6 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
         ];
     }
 
-    /**
-     *  Converts content's validSince to Jalali
-     *
-     * @return string
-     */
-    public function validSince_Jalali() : string
-    {
-        $explodedDateTime = explode(" ", $this->validSince);
-        $explodedTime = $explodedDateTime[1];
-        return $this->convertDate($this->validSince, "toJalali") . " " . $explodedTime;
-    }
-
     /*
     |--------------------------------------------------------------------------
     | Mutator
@@ -546,13 +545,26 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
     */
 
     /**
+     *  Converts content's validSince to Jalali
+     *
+     * @return string
+     */
+    public function validSince_Jalali(): string
+    {
+        $explodedDateTime = explode(" ", $this->validSince);
+        $explodedTime = $explodedDateTime[1];
+        return $this->convertDate($this->validSince, "toJalali") . " " . $explodedTime;
+    }
+
+    /**
      * Set the content's thumbnail.
      *
      * @param $input
      * @return void
      */
-    public function setThumbnailAttribute($input){
-        $this->attributes['thumbnail'] = json_encode($input,JSON_UNESCAPED_UNICODE);
+    public function setThumbnailAttribute($input)
+    {
+        $this->attributes['thumbnail'] = json_encode($input, JSON_UNESCAPED_UNICODE);
     }
 
     /**
@@ -566,15 +578,23 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
         $this->attributes['file'] = $input->toJson(JSON_UNESCAPED_UNICODE);
     }
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relations
+    |--------------------------------------------------------------------------
+    */
+
     /**
      * Set the content's tag.
      *
      * @param array $value
      * @return void
      */
-    public function setTagsAttribute(array $value){
+    public function setTagsAttribute(array $value)
+    {
         $tags = null;
-        if(!empty($value))
+        if (!empty($value))
             $tags = json_encode([
                 "bucket" => "content",
                 "tags" => $value
@@ -582,13 +602,6 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
 
         $this->attributes['tags'] = $tags;
     }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Relations
-    |--------------------------------------------------------------------------
-    */
 
     public function grades()
     {
@@ -600,6 +613,11 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
         return $this->belongsToMany('App\Major');
     }
 
+    public function thumbnails()
+    {
+        return $this->files()->where('label', '=', 'thumbnail');
+    }
+
     public function files()
     {
         return $this->belongsToMany(
@@ -607,10 +625,6 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
             'educationalcontent_file',
             'content_id',
             'file_id')->withPivot("caption", "label");
-    }
-
-    public function thumbnails(){
-        return $this->files()->where('label','=','thumbnail');
     }
 
     public function contentsets()
@@ -630,8 +644,14 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
 
     public function user()
     {
-        return $this->belongsTo("\App\User" , "author_id" ,"id");
+        return $this->belongsTo("\App\User", "author_id", "id");
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    |  Checkers (boolean)
+    |--------------------------------------------------------------------------
+    */
 
     /**
      * Get the content's contentset .
@@ -643,78 +663,11 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
         return $this->belongsTo("\App\Contentset", "contentset_id", "id");
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    |  Checkers (boolean)
-    |--------------------------------------------------------------------------
-    */
-
-    /**
-     * Checks whether the content is active or not .
-     *
-     * @return bool
-     */
-    public function isActive(): bool
-    {
-        return ($this->isEnable() && $this->isValid() ? true : false);
-    }
-
-    /**
-     * Checks whether the content is valid or not .
-     *
-     * @return bool
-     */
-    public function isValid(): bool
-    {
-        if ($this->validSince < Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran')
-            || is_null($this->validSince))
-            return true;
-        return false;
-    }
-
-    /**
-     * Checks whether the content is enable or not .
-     *
-     * @return bool
-     */
-    public function isEnable(): bool
-    {
-        if ($this->enable)
-            return true;
-        return false;
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Static methods
-    |--------------------------------------------------------------------------
-    */
-
-    /**
-     * @return array
-     */
-    public static function videoFileCaptionTable(): array
-    {
-        return [
-            "240p" => "کیفیت متوسط",
-            "480p" => "کیفیت بالا",
-            "720p" => "کیفیت عالی"
-        ];
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Other
-    |--------------------------------------------------------------------------
-    */
-
-
-
     /**
      * Fixes contents files (used in /database/migrations/2018_08_21_143144_alter_table_educationalcontents_add_columns.php)
      * @retuen void
      */
-    public function fixFiles():void
+    public function fixFiles(): void
     {
         $content = $this;
         $files = collect();
@@ -734,12 +687,12 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
                         "uuid" => $file->uuid,
                         "disk" => "alaaCdnSFTP",
                         "url" => $url,
-                        "fileName" =>parse_url($url)['path'],
+                        "fileName" => parse_url($url)['path'],
                         "size" => $size,
                         "caption" => $caption,
                         "res" => $res,
                         "type" => $type,
-                        "ext"  => pathinfo(parse_url($url)['path'],PATHINFO_EXTENSION)
+                        "ext" => pathinfo(parse_url($url)['path'], PATHINFO_EXTENSION)
                     ]);
                 }
 
@@ -755,12 +708,12 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
                         "uuid" => $file->uuid,
                         "disk" => "alaaCdnSFTP",
                         "url" => $url,
-                        "fileName" =>parse_url($url)['path'],
+                        "fileName" => parse_url($url)['path'],
                         "size" => $size,
                         "caption" => $caption,
                         "res" => $res,
                         "type" => $type,
-                        "ext"  => pathinfo(parse_url($url)['path'],PATHINFO_EXTENSION)
+                        "ext" => pathinfo(parse_url($url)['path'], PATHINFO_EXTENSION)
                     ]);
                 }
 
@@ -777,12 +730,12 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
                         "uuid" => $file->uuid,
                         "disk" => "alaaCdnSFTP",
                         "url" => $url,
-                        "fileName" =>parse_url($url)['path'],
+                        "fileName" => parse_url($url)['path'],
                         "size" => $size,
                         "caption" => $caption,
                         "res" => $res,
                         "type" => $type,
-                        "ext"  => pathinfo(parse_url($url)['path'],PATHINFO_EXTENSION)
+                        "ext" => pathinfo(parse_url($url)['path'], PATHINFO_EXTENSION)
                     ]);
                 }
 
@@ -790,8 +743,7 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
                 $file = optional($content->files->where("pivot.label", "thumbnail")->first());
 
                 $url = $file->name;
-                if(isset($url))
-                {
+                if (isset($url)) {
                     $size = null;
                     $type = "thumbnail";
 
@@ -799,12 +751,12 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
                         "uuid" => $file->uuid,
                         "disk" => "alaaCdnSFTP",
                         "url" => $url,
-                        "fileName" =>parse_url($url)['path'],
+                        "fileName" => parse_url($url)['path'],
                         "size" => $size,
                         "caption" => null,
                         "res" => null,
                         "type" => $type,
-                        "ext"  => pathinfo(parse_url($url)['path'],PATHINFO_EXTENSION)
+                        "ext" => pathinfo(parse_url($url)['path'], PATHINFO_EXTENSION)
                     ];
                 }
                 break;
@@ -814,7 +766,7 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
                 foreach ($pFiles as $file) {
                     $type = "pamphlet";
                     $res = null;
-                    $caption = "فایل" .' '. $file->pivot->caption;
+                    $caption = "فایل" . ' ' . $file->pivot->caption;
 
                     if ($file->disks->isNotEmpty()) {
                         $disk = $file->disks->first();
@@ -828,9 +780,9 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
                         "fileName" => $file->name,
                         "size" => null,
                         "caption" => $caption,
-                        "res"  => $res,
+                        "res" => $res,
                         "type" => $type,
-                        "ext"     => pathinfo($file->name,PATHINFO_EXTENSION)
+                        "ext" => pathinfo($file->name, PATHINFO_EXTENSION)
                     ]);
 
                 }
@@ -856,17 +808,29 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
      *
      * @return array
      */
-    public function retrievingTags() : array
+    public function retrievingTags(): array
     {
         return (new ContentTagManagerViaApi())->getTags($this->id);
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Static methods
+    |--------------------------------------------------------------------------
+    */
 
     public function getTaggableTags()
     {
         return $this->tags->tags;
     }
 
-    public function getTaggableId() :int
+    /*
+    |--------------------------------------------------------------------------
+    | Other
+    |--------------------------------------------------------------------------
+    */
+
+    public function getTaggableId(): int
     {
         return $this->id;
     }
@@ -876,13 +840,48 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
         return optional($this->created_at)->timestamp;
     }
 
-    public function isTaggableActive() :bool
+    public function isTaggableActive(): bool
     {
         if ($this->isActive() &&
             isset($this->tags) &&
             !empty($this->tags->tags)) {
             return true;
         }
+        return false;
+    }
+
+    /**
+     * Checks whether the content is active or not .
+     *
+     * @return bool
+     */
+    public function isActive(): bool
+    {
+        return ($this->isEnable() && $this->isValid() ? true : false);
+    }
+
+    /**
+     * Checks whether the content is enable or not .
+     *
+     * @return bool
+     */
+    public function isEnable(): bool
+    {
+        if ($this->enable)
+            return true;
+        return false;
+    }
+
+    /**
+     * Checks whether the content is valid or not .
+     *
+     * @return bool
+     */
+    public function isValid(): bool
+    {
+        if ($this->validSince < Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran')
+            || is_null($this->validSince))
+            return true;
         return false;
     }
 }

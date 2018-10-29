@@ -4,7 +4,6 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Config;
-use Auth;
 
 class EditContactRequest extends FormRequest
 {
@@ -15,7 +14,7 @@ class EditContactRequest extends FormRequest
      */
     public function authorize()
     {
-        if(Auth()->user()->can(Config::get('constants.EDIT_CONTACT_ACCESS'))) return true;
+        if (Auth()->user()->can(Config::get('constants.EDIT_CONTACT_ACCESS'))) return true;
         return false;
     }
 
@@ -30,7 +29,7 @@ class EditContactRequest extends FormRequest
         return [
             'name' => 'required',
             'contacttype_id' => 'exists:contacttypes,id',
-            'relative_id' => 'unique:contacts,relative_id'.$contactId.'id,deleted_at,NULL|exists:relatives,id',
+            'relative_id' => 'unique:contacts,relative_id' . $contactId . 'id,deleted_at,NULL|exists:relatives,id',
 
             'phoneNumber.*' => 'required|numeric',
             'priority.*' => 'numeric',

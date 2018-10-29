@@ -2,9 +2,10 @@
 @extends("app",["pageName"=>"admin"])
 
 @section("headPageLevelPlugin")
-    <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css" />
-    <link href="/assets/global/plugins/jquery-multi-select/css/multi-select-rtl.css" rel="stylesheet" type="text/css" />
-    <link href="/assets/extra/persian-datepicker/dist/css/persian-datepicker-0.4.5.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/global/plugins/jquery-multi-select/css/multi-select-rtl.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/extra/persian-datepicker/dist/css/persian-datepicker-0.4.5.css" rel="stylesheet"
+          type="text/css"/>
 @endsection
 @section("pageBar")
     <div class="page-bar">
@@ -35,11 +36,12 @@
                 <div class="portlet-title">
                     <div class="caption">
                         <i class="icon-settings font-dark"></i>
-                        <span class="caption-subject font-dark sbold uppercase">اصلاح اطلاعات کپن  {{$coupon->name}}</span>
+                        <span class="caption-subject font-dark sbold uppercase">اصلاح اطلاعات کپن {{$coupon->name}}</span>
                     </div>
                     <div class="actions">
                         <div class="btn-group">
-                            <a class="btn btn-sm dark dropdown-toggle" href="{{action("HomeController@adminProduct")}}" > بازگشت
+                            <a class="btn btn-sm dark dropdown-toggle" href="{{action("HomeController@adminProduct")}}">
+                                بازگشت
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         </div>
@@ -63,13 +65,14 @@
     <script src="/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
     <script src="/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js" type="text/javascript"></script>
     <script src="/assets/global/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>
-    <script src="/assets/extra/persian-datepicker/lib/persian-date.js" type="text/javascript" ></script>
+    <script src="/assets/extra/persian-datepicker/lib/persian-date.js" type="text/javascript"></script>
 
 @endsection
 
 @section("footerPageLevelScript")
     <script src="/assets/pages/scripts/components-multi-select.min.js" type="text/javascript"></script>
-    <script src="/assets/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js" type="text/javascript" ></script>
+    <script src="/assets/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js"
+            type="text/javascript"></script>
 @endsection
 @section("extraJS")
     <script src="/js/extraJS/admin-coupon.js" type="text/javascript"></script>
@@ -78,7 +81,7 @@
         /**
          * Start up jquery
          */
-        jQuery(document).ready(function() {
+        jQuery(document).ready(function () {
             /*
              validdSince
              */
@@ -87,7 +90,7 @@
                 altFormat: "YYYY MM DD",
                 observer: true,
                 format: 'YYYY/MM/DD',
-                altFieldFormatter: function(unixDate){
+                altFieldFormatter: function (unixDate) {
                     var d = new Date(unixDate).toISOString();
                     return d;
                 }
@@ -101,7 +104,7 @@
                 altFormat: "YYYY MM DD",
                 observer: true,
                 format: 'YYYY/MM/DD',
-                altFieldFormatter: function(unixDate){
+                altFieldFormatter: function (unixDate) {
                     var d = new Date(unixDate).toISOString();
                     return d;
                 }
@@ -109,24 +112,24 @@
         });
 
         $('#couponValidSinceEnable').change(function () {
-            if($(this).prop('checked') === true) {
-                $('#couponValidSince').attr('disabled' ,false);
-                $('#couponValidSinceTime').attr('disabled' ,false);
+            if ($(this).prop('checked') === true) {
+                $('#couponValidSince').attr('disabled', false);
+                $('#couponValidSinceTime').attr('disabled', false);
             }
             else {
-                $('#couponValidSince').attr('disabled' ,true);
-                $('#couponValidSinceTime').attr('disabled' ,true);
+                $('#couponValidSince').attr('disabled', true);
+                $('#couponValidSinceTime').attr('disabled', true);
             }
         });
 
         $('#couponValidUntilEnable').change(function () {
-            if($(this).prop('checked') === true) {
-                $('#couponValidUntil').attr('disabled' ,false);
-                $('#couponValidUntilTime').attr('disabled' ,false);
+            if ($(this).prop('checked') === true) {
+                $('#couponValidUntil').attr('disabled', false);
+                $('#couponValidUntilTime').attr('disabled', false);
             }
             else {
-                $('#couponValidUntil').attr('disabled' ,true);
-                $('#couponValidUntilTime').attr('disabled' ,true);
+                $('#couponValidUntil').attr('disabled', true);
+                $('#couponValidUntilTime').attr('disabled', true);
             }
         });
 

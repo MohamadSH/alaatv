@@ -1,7 +1,6 @@
-
 <div class="row">
 
-    <div class="col-md-4" >
+    <div class="col-md-4">
 
         <div class="portlet light certificate-box">
             <div class="card-icon">

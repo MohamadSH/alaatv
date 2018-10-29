@@ -9,7 +9,7 @@ use Illuminate\Http\Response;
 
 class FileController extends Controller
 {
-    protected $response ;
+    protected $response;
 
     function __construct()
     {
@@ -39,24 +39,23 @@ class FileController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\InsertFileRequest  $request
+     * @param  \App\Http\Requests\InsertFileRequest $request
      * @return \Illuminate\Http\Response
      */
     public function store(InsertFileRequest $request)
     {
         $file = new File();
-        $file->fill($request->all()) ;
-        if($file->save()) {
-            if($request->has("disk_id")) $file->disks()->attach($request->get("disk_id"));
-            return $file->id ;
-        }
-        else return false;
+        $file->fill($request->all());
+        if ($file->save()) {
+            if ($request->has("disk_id")) $file->disks()->attach($request->get("disk_id"));
+            return $file->id;
+        } else return false;
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -67,7 +66,7 @@ class FileController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -78,8 +77,8 @@ class FileController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -90,18 +89,17 @@ class FileController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\File  $file
+     * @param  \App\File $file
      * @return \Illuminate\Http\Response
      */
     public function destroy($file)
     {
         if ($file->delete()) {
             session()->put('success', 'فایل با موفقیت اصلاح شد');
-            return $this->response->setStatusCode(200) ;
-        }
-        else {
+            return $this->response->setStatusCode(200);
+        } else {
 //            session()->put('error', 'خطای پایگاه داده');
-            return $this->response->setStatusCode(503) ;
+            return $this->response->setStatusCode(503);
         }
     }
 }

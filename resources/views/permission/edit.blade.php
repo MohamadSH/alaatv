@@ -2,7 +2,7 @@
 @extends("app",["pageName"=>"admin"])
 
 @section("headPageLevelPlugin")
-    <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section("pageBar")
@@ -35,11 +35,11 @@
                 <div class="portlet-title">
                     <div class="caption">
                         <i class="icon-settings font-dark"></i>
-                        <span class="caption-subject font-dark sbold uppercase">اصلاح اطلاعات دسترسی  {{$permission->display_name}}</span>
+                        <span class="caption-subject font-dark sbold uppercase">اصلاح اطلاعات دسترسی {{$permission->display_name}}</span>
                     </div>
                     <div class="actions">
                         <div class="btn-group">
-                            <a class="btn btn-sm dark dropdown-toggle" href="{{action("HomeController@admin")}}" > بازگشت
+                            <a class="btn btn-sm dark dropdown-toggle" href="{{action("HomeController@admin")}}"> بازگشت
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         </div>

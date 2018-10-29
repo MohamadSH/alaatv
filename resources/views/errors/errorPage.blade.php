@@ -1,7 +1,7 @@
 @extends("app")
 
 @section("headPageLevelStyle")
-    <link href="/assets/pages/css/error-rtl.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/pages/css/error-rtl.min.css" rel="stylesheet" type="text/css"/>
 @endsection
 @section("headThemeLayoutStyle")
 
@@ -29,7 +29,7 @@
 @section("content")
     <div class="row">
         <div class="col-md-12 page-404">
-            <div class="number"><img src="/assets/extra/stop.png" style="" ></div>
+            <div class="number"><img src="/assets/extra/stop.png" style=""></div>
             {{--<div class="number font-red"> 404 </div>--}}
             <div class="details">
                 {{--<h1 class="font-red">خطا!</h1>--}}

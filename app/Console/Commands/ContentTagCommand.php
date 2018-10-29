@@ -47,23 +47,26 @@ class ContentTagCommand extends Command
     public function handle()
     {
         $contentId = (int)$this->argument('content');
-        if($contentId > 0){
+        if ($contentId > 0) {
             try {
                 $content = Content::findOrFail($contentId);
-            } catch (ModelNotFoundException $exception){
+            } catch (ModelNotFoundException $exception) {
                 $this->error($exception->getMessage());
                 return;
             }
-            if ($this->confirm('You have chosen\n\r '.$content->display_name.'. \n\rDo you wish to continue?',true)) {
+            if ($this->confirm('You have chosen\n\r ' . $content->display_name . '. \n\rDo you wish to continue?', true)) {
                 $this->performTaggingTaskForAContent($content);
             }
-        }else{
+        } else {
             $this->performTaggingTaskForAllContents();
         }
     }
-    private function  performTaggingTaskForAContent(Content $content){
+
+    private function performTaggingTaskForAContent(Content $content)
+    {
         $this->sendTagsOfTaggableToApi($content, $this->tagging);
     }
+
     private function performTaggingTaskForAllContents(): void
     {
         $contents = Content::all();

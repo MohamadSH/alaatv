@@ -35,7 +35,8 @@
                 <div class="col-md-9">
                     <div class="fileinput fileinput-new" data-provides="fileinput">
                         <div class="input-group input-large ">
-                            <div class="form-control uneditable-input input-fixed input-medium" data-trigger="fileinput">
+                            <div class="form-control uneditable-input input-fixed input-medium"
+                                 data-trigger="fileinput">
                                 <i class="fa fa-file fileinput-exists"></i>&nbsp;
                                 <span class="fileinput-filename"> @if(isset($product->file) && strlen($product->file)>0) {{$product->file}} @endif</span>
                             </div>
@@ -43,7 +44,8 @@
                                                                     <span class="fileinput-new"> انتخاب فایل </span>
                                                                     <span class="fileinput-exists"> تغییر </span>
                                 {!! Form::file('file' , ['id'=>'file']) !!} </span>
-                            <a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput"> حذف </a>
+                            <a href="javascript:" class="input-group-addon btn red fileinput-exists"
+                               data-dismiss="fileinput"> حذف </a>
                         </div>
                     </div>
                     @if ($errors->has('file'))
@@ -60,14 +62,17 @@
                         <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;"><img
                                     src="{{ route('image', [ 'category'=>'4','w'=>'140' , 'h'=>'140' , 'filename' =>  $product->image ]) }}"
                                     {{--alt="عکس خدمت" onerror="this.src='http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image';"/> </div>--}}
-                                    @if(strlen($product->name)>0) alt="{{$product->name}}" @else alt="عکس محصول" @endif/> </div>
-                        <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"> </div>
+                                    @if(strlen($product->name)>0) alt="{{$product->name}}"
+                                    @else alt="عکس محصول" @endif/></div>
+                        <div class="fileinput-preview fileinput-exists thumbnail"
+                             style="max-width: 200px; max-height: 150px;"></div>
                         <div>
                                                                 <span class="btn default btn-file">
                                                                     <span class="fileinput-new"> تغییر عکس </span>
                                                                     <span class="fileinput-exists"> تغییر </span>
                                                                     <input type="file" name="image"> </span>
-                            <a href="javascript:;" class="btn red fileinput-exists" id="userPhoto-remove" data-dismiss="fileinput"> حذف </a>
+                            <a href="javascript:" class="btn red fileinput-exists" id="userPhoto-remove"
+                               data-dismiss="fileinput"> حذف </a>
                         </div>
                     </div>
                     @if ($errors->has('image'))
@@ -76,7 +81,7 @@
                     </span>
                     @endif
                     {{--<div class="clearfix margin-top-10">--}}
-                        {{--<span class="label label-danger">توجه</span> فرمت های مجاز: jpg , png - حداکثر حجم مجاز: ۲۰۰KB </div>--}}
+                    {{--<span class="label label-danger">توجه</span> فرمت های مجاز: jpg , png - حداکثر حجم مجاز: ۲۰۰KB </div>--}}
                 </div>
             </div>
             <div class="form-group {{ $errors->has('introVideo') ? ' has-error' : '' }}">
@@ -106,11 +111,11 @@
                 <div class="col-md-12">
                     <div class="mt-checkbox-list">
                         <label class="mt-checkbox mt-checkbox-outline font-red bold">یکسان سازی قیمت فرزندان
-                            <input type="checkbox" value="1" name="changeChildrenPrice"   />
+                            <input type="checkbox" value="1" name="changeChildrenPrice"/>
                             <span></span>
                         </label>
                         <label class="mt-checkbox mt-checkbox-outline">رایگان باشد
-                            <input type="checkbox" value="1" name="isFree"  @if($product->isFree) checked @endif />
+                            <input type="checkbox" value="1" name="isFree" @if($product->isFree) checked @endif />
                             <span></span>
                         </label>
                     </div>
@@ -177,37 +182,37 @@
                 </div>
             </div>
             @if(isset($bons))
-            {!! Form::hidden('bon_id', $bons->id) !!}
-            <div class="form-group {{ $errors->has('bonPlus') ? ' has-error' : '' }}">
-                <label class="col-md-3 control-label" for="bonPlus">تعداد بن افزوده محصول</label>
-                <div class="col-md-9">
-                    @if(isset($bons->pivot->bonPlus))
-                        {!! Form::text('bonPlus', $bons->pivot->bonPlus, ['class' => 'form-control', 'id' => 'productBonPlus' ]) !!}
-                    @else
-                        {!! Form::text('bonPlus', null, ['class' => 'form-control', 'id' => 'productBonPlus' ]) !!}
-                    @endif
-                    @if ($errors->has('productBonPlus'))
-                        <span class="help-block">
+                {!! Form::hidden('bon_id', $bons->id) !!}
+                <div class="form-group {{ $errors->has('bonPlus') ? ' has-error' : '' }}">
+                    <label class="col-md-3 control-label" for="bonPlus">تعداد بن افزوده محصول</label>
+                    <div class="col-md-9">
+                        @if(isset($bons->pivot->bonPlus))
+                            {!! Form::text('bonPlus', $bons->pivot->bonPlus, ['class' => 'form-control', 'id' => 'productBonPlus' ]) !!}
+                        @else
+                            {!! Form::text('bonPlus', null, ['class' => 'form-control', 'id' => 'productBonPlus' ]) !!}
+                        @endif
+                        @if ($errors->has('productBonPlus'))
+                            <span class="help-block">
                         <strong>{{ $errors->first('productBonPlus') }}</strong>
                     </span>
-                    @endif
+                        @endif
+                    </div>
                 </div>
-            </div>
-            <div class="form-group {{ $errors->has('bonDiscount') ? ' has-error' : '' }}">
-                <label class="col-md-3 control-label" for="bonDiscount">میزان تخفیف برای هر بن (%)</label>
-                <div class="col-md-9">
-                    @if(isset($bons->pivot->discount))
-                        {!! Form::text('bonDiscount', $bons->pivot->discount, ['class' => 'form-control', 'id' => 'productBonDiscount' ]) !!}
-                    @else
-                        {!! Form::text('bonDiscount', null, ['class' => 'form-control', 'id' => 'productBonDiscount' ]) !!}
-                    @endif
-                    @if ($errors->has('bonDiscount'))
-                        <span class="help-block">
+                <div class="form-group {{ $errors->has('bonDiscount') ? ' has-error' : '' }}">
+                    <label class="col-md-3 control-label" for="bonDiscount">میزان تخفیف برای هر بن (%)</label>
+                    <div class="col-md-9">
+                        @if(isset($bons->pivot->discount))
+                            {!! Form::text('bonDiscount', $bons->pivot->discount, ['class' => 'form-control', 'id' => 'productBonDiscount' ]) !!}
+                        @else
+                            {!! Form::text('bonDiscount', null, ['class' => 'form-control', 'id' => 'productBonDiscount' ]) !!}
+                        @endif
+                        @if ($errors->has('bonDiscount'))
+                            <span class="help-block">
                         <strong>{{ $errors->first('bonDiscount') }}</strong>
                     </span>
-                    @endif
+                        @endif
+                    </div>
                 </div>
-            </div>
             @endif
             <br>
             <div class="form-group {{ $errors->has('shortDescription') ? ' has-error' : '' }}">
@@ -285,14 +290,17 @@
                     <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;"><img
                                 src="{{ route('image', [ 'category'=>'4','w'=>'140' , 'h'=>'140' , 'filename' =>  $product->image ]) }}"
                                 {{--alt="عکس خدمت" onerror="this.src='http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image';"/> </div>--}}
-                                @if(strlen($product->name)>0) alt="{{$product->name}}" @else  alt="عکس محصول"  @endif/> </div>
-                    <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"> </div>
+                                @if(strlen($product->name)>0) alt="{{$product->name}}" @else  alt="عکس محصول" @endif/>
+                    </div>
+                    <div class="fileinput-preview fileinput-exists thumbnail"
+                         style="max-width: 200px; max-height: 150px;"></div>
                     <div>
                                                                 <span class="btn default btn-file">
                                                                     <span class="fileinput-new"> تغییر عکس </span>
                                                                     <span class="fileinput-exists"> تغییر </span>
                                                                     <input type="file" name="image"> </span>
-                        <a href="javascript:;" class="btn red fileinput-exists" id="userPhoto-remove" data-dismiss="fileinput"> حذف </a>
+                        <a href="javascript:" class="btn red fileinput-exists" id="userPhoto-remove"
+                           data-dismiss="fileinput"> حذف </a>
                     </div>
                 </div>
                 @if ($errors->has('image'))
@@ -471,7 +479,8 @@
                                                                 <span class="fileinput-new"> انتخاب کاتالوگ </span>
                                                                 <span class="fileinput-exists"> تغییر </span>
                     {!! Form::file('file' , ['id'=>'productFile']) !!} </span>
-                <a href="javascript:;" class="input-group-addon btn red fileinput-exists" id="productFile-remove" data-dismiss="fileinput"> حذف </a>
+                <a href="javascript:" class="input-group-addon btn red fileinput-exists" id="productFile-remove"
+                   data-dismiss="fileinput"> حذف </a>
             </div>
         </div>
         <span class="help-block" id="productFileAlert">
@@ -490,11 +499,13 @@
                                                                     <span class="fileinput-new"> انتخاب عکس </span>
                                                                     <span class="fileinput-exists"> تغییر </span>
                                                                     {!! Form::file('image' , ['id'=>'productImage']) !!} </span>
-                                                                </span>
-                    <a href="javascript:;" class="btn red fileinput-exists" id="productImage-remove" data-dismiss="fileinput"> حذف </a>
+                    </span>
+                    <a href="javascript:" class="btn red fileinput-exists" id="productImage-remove"
+                       data-dismiss="fileinput"> حذف </a>
                 </div>
                 <div class="clearfix margin-top-10">
-                    <span class="label label-danger">توجه</span><strong id="productImageAlert">فرمت های مجاز: jpg , png - حداکثر حجم مجاز: ۲۰۰KB</strong>
+                    <span class="label label-danger">توجه</span><strong id="productImageAlert">فرمت های مجاز: jpg , png
+                        - حداکثر حجم مجاز: ۲۰۰KB</strong>
                 </div>
             </div>
         </div>

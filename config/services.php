@@ -35,18 +35,18 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
-    'medianaSMS' =>[
-        'normal' =>[
-                'url' => env('MEDIANA_API_URL','http://37.130.202.188/api/select'),
-                'userName' => env('MEDIANA_USERNAME','demo'),
-                'password' => env('MEDIANA_PASSWORD','demo'),
-                'from' => env('SMS_PROVIDER_DEFAULT_NUMBER',''),
-            ],
+    'medianaSMS' => [
+        'normal' => [
+            'url' => env('MEDIANA_API_URL', 'http://37.130.202.188/api/select'),
+            'userName' => env('MEDIANA_USERNAME', 'demo'),
+            'password' => env('MEDIANA_PASSWORD', 'demo'),
+            'from' => env('SMS_PROVIDER_DEFAULT_NUMBER', ''),
+        ],
         'pattern' => [
-            'url' => env('MEDIANA_PATTERN_API_URL',''),
-            'userName' => env('MEDIANA_USERNAME','demo'),
-            'password' => env('MEDIANA_PASSWORD','demo'),
-            'from' => env('SMS_PROVIDER_DEFAULT_NUMBER',''),
+            'url' => env('MEDIANA_PATTERN_API_URL', ''),
+            'userName' => env('MEDIANA_USERNAME', 'demo'),
+            'password' => env('MEDIANA_PASSWORD', 'demo'),
+            'from' => env('SMS_PROVIDER_DEFAULT_NUMBER', ''),
         ]
 
     ]

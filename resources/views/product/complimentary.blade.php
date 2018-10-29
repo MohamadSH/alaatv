@@ -17,27 +17,32 @@
         {!! Form::close() !!}
 
         @if($product->complimentaryproducts->isNotEmpty())
-                @foreach($product->complimentaryproducts as $complimentary)
+            @foreach($product->complimentaryproducts as $complimentary)
                 <hr>
                 <div class="row">
                     <h4 class="bold col-md-11">
                         {{$complimentary->name}}
                     </h4>
                     <div>
-                        <a class="col-md-1"  data-target="#static-{{$complimentary->id}}" data-toggle="modal" style="color: red">
+                        <a class="col-md-1" data-target="#static-{{$complimentary->id}}" data-toggle="modal"
+                           style="color: red">
                             <i class="fa fa-remove"></i></a>
                     </div>
                 </div>
-                <div id="static-{{$complimentary->id}}" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+                <div id="static-{{$complimentary->id}}" class="modal fade" tabindex="-1" data-backdrop="static"
+                     data-keyboard="false">
                     <div class="modal-body">
                         <p> آیا مطمئن هستید؟ </p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" data-dismiss="modal" class="btn btn-outline dark">خیر</button>
-                        <button type="button" data-dismiss="modal"  class="btn green" onclick="removeComplimentary('{{action("ProductController@removeComplimentary" , $complimentary , ["product" => $product])}}');" >بله</button>
+                        <button type="button" data-dismiss="modal" class="btn green"
+                                onclick="removeComplimentary('{{action("ProductController@removeComplimentary" , $complimentary , ["product" => $product])}}');">
+                            بله
+                        </button>
                     </div>
                 </div>
-                @endforeach
+            @endforeach
         @else
             <hr>
             <div>

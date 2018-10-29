@@ -1,7 +1,7 @@
 @extends("app")
 
 @section("headPageLevelStyle")
-    <link href="/assets/pages/css/error-rtl.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/pages/css/error-rtl.min.css" rel="stylesheet" type="text/css"/>
 @endsection
 @section("headThemeLayoutStyle")
 
@@ -29,23 +29,23 @@
 @section("content")
     <div class="row">
         <div class="col-md-12 page-404">
-            <div class="number font-red"> 404 </div>
+            <div class="number font-red"> 404</div>
             <div class="details">
                 <h3>ظاهرا شما گم شده اید!</h3>
                 <p> صفحه ی مورد نظر شما یافت نشد
                     <br/>
                     <a href="{{action("HomeController@index")}}"> خانه </a>
-                    {{--or try the search bar below. </p>--}}
+                {{--or try the search bar below. </p>--}}
                 {{--<form action="#">--}}
-                    {{--<div class="input-group input-medium">--}}
-                        {{--<input type="text" class="form-control" placeholder="keyword...">--}}
-                        {{--<span class="input-group-btn">--}}
-                                {{--<button type="submit" class="btn red">--}}
-                                    {{--<i class="fa fa-search"></i>--}}
-                                {{--</button>--}}
-                            {{--</span>--}}
-                    {{--</div>--}}
-                    {{--<!-- /input-group -->--}}
+                {{--<div class="input-group input-medium">--}}
+                {{--<input type="text" class="form-control" placeholder="keyword...">--}}
+                {{--<span class="input-group-btn">--}}
+                {{--<button type="submit" class="btn red">--}}
+                {{--<i class="fa fa-search"></i>--}}
+                {{--</button>--}}
+                {{--</span>--}}
+                {{--</div>--}}
+                {{--<!-- /input-group -->--}}
                 {{--</form>--}}
             </div>
         </div>

@@ -148,7 +148,8 @@ class Sanatisharifmerge extends Model
         'content_id',
     ];
 
-    public function  content(){
+    public function content()
+    {
         return $this->belongsTo('App\Content');
     }
 }

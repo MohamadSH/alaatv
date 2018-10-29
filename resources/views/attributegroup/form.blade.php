@@ -1,6 +1,7 @@
 @if(isset($attributegroup))
     <div class="form-body">
-        <div class="note note-warning"><h4 class="caption-subject font-dark bold uppercase"> وارد کردن اطلاعات زیر الزامیست: </h4></div>
+        <div class="note note-warning"><h4 class="caption-subject font-dark bold uppercase"> وارد کردن اطلاعات زیر
+                الزامیست: </h4></div>
         <div class="form-group {{ $errors->has('name') ? ' has-error' : '' }}">
             <label class="col-md-3 control-label" for="name"> نام گروه صفت</label>
             <div class="col-md-9">
@@ -13,7 +14,8 @@
             </div>
         </div>
         <br>
-        <div class="note note-info"><h4 class="caption-subject font-dark bold uppercase"> وارد کردن اطلاعات زیر اختیاری می باشد: </h4></div>
+        <div class="note note-info"><h4 class="caption-subject font-dark bold uppercase"> وارد کردن اطلاعات زیر اختیاری
+                می باشد: </h4></div>
         <div class="form-group {{ $errors->has('description') ? ' has-error' : '' }}">
             <label class="col-md-3 control-label" for="description"> توضیح گروه صفت</label>
             <div class="col-md-9">
@@ -78,10 +80,10 @@
             <span class="help-block" id="attributesAlert">
                     <strong></strong>
             </span>
-            <div class="clearfix margin-top-10">
-                <span class="label label-info">توجه</span>
-                <strong id="">ستون چپ دسترسی های انتخاب شده می باشند</strong>
-            </div>
+        <div class="clearfix margin-top-10">
+            <span class="label label-info">توجه</span>
+            <strong id="">ستون چپ دسترسی های انتخاب شده می باشند</strong>
+        </div>
         </p>
     </div>
     {!! Form::hidden('attributeset_id',$attributeset->id) !!}

@@ -35,11 +35,11 @@ class ContentsetController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    protected $response ;
-    protected $setting ;
+    protected $response;
+    protected $setting;
     const PARTIAL_SEARCH_TEMPLATE = "partials.search.contentset";
 
-    public function __construct(Response $response , Websitesetting $setting )
+    public function __construct(Response $response, Websitesetting $setting)
     {
         $this->response = $response;
         $this->setting = $setting->setting;
@@ -58,14 +58,14 @@ class ContentsetController extends Controller
      * @param Contentset $contentset
      * @return void
      */
-    private function fillContentFromRequest(FormRequest $request, Contentset &$contentset):void
+    private function fillContentFromRequest(FormRequest $request, Contentset &$contentset): void
     {
         $inputData = $request->all();
         $enabled = $request->has("enable");
         $display = $request->has("display");
 
         $contentset->fill($inputData);
-        if($request->has("id"))
+        if ($request->has("id"))
             $contentset->id = $request->id;
 
         $contentset->enable = $enabled ? 1 : 0;
@@ -76,7 +76,8 @@ class ContentsetController extends Controller
      * @param $query
      * @return string
      */
-    private function getPartialSearchFromIds($query ){
+    private function getPartialSearchFromIds($query)
+    {
         $partialSearch = View::make(
             self::PARTIAL_SEARCH_TEMPLATE,
             [
@@ -90,10 +91,11 @@ class ContentsetController extends Controller
      * @param Collection $items
      * @return \Illuminate\Http\Response
      */
-    private function makeJsonForAndroidApp(Collection $items){
+    private function makeJsonForAndroidApp(Collection $items)
+    {
         $items = $items->pop();
         $key = md5($items->pluck("id")->implode(","));
-        $response = Cache::remember($key,config("constants.CACHE_60"),function () use($items){
+        $response = Cache::remember($key, config("constants.CACHE_60"), function () use ($items) {
             $response = collect();
 
         });
@@ -105,7 +107,7 @@ class ContentsetController extends Controller
      */
     private function getAuthExceptionArray(): array
     {
-        $authException = ["index" , "show" ];
+        $authException = ["index", "show"];
         return $authException;
     }
 
@@ -135,44 +137,41 @@ class ContentsetController extends Controller
         $filters = $request->all();
         $isApp = $this->isRequestFromApp($request);
         $items = collect();
-        $pageName = 'contentsetPage' ;
-        $contentsetResult = ( new ContentsetSearch() )
+        $pageName = 'contentsetPage';
+        $contentsetResult = (new ContentsetSearch())
             ->setPageName($pageName)
             ->apply($filters);
 
-        if($isApp)
-        {
+        if ($isApp) {
             $items->push($contentsetResult->getCollection());
-        }
-        else {
+        } else {
             if ($contentsetResult->total() > 0)
-                $partialSearch = $this->getPartialSearchFromIds( $contentsetResult);
+                $partialSearch = $this->getPartialSearchFromIds($contentsetResult);
             else
                 $partialSearch = null;
             $items->push([
-                "totalitems"=> $contentsetResult->total(),
-                "view"=>$partialSearch,
+                "totalitems" => $contentsetResult->total(),
+                "view" => $partialSearch,
             ]);
         }
 
-        if($isApp){
+        if ($isApp) {
             $response = $this->makeJsonForAndroidApp($items);
-            return response()->json($response,Response::HTTP_OK);
+            return response()->json($response, Response::HTTP_OK);
         }
-        if(request()->ajax())
-        {
+        if (request()->ajax()) {
             return $this->response
                 ->setStatusCode(Response::HTTP_OK)
                 ->setContent([
-                    "items"=>$items ,
-                    "tagLabels" => $tags ,
+                    "items" => $items,
+                    "tagLabels" => $tags,
                 ]);
         }
 
 //        return back()->withInput();
         return redirect()->action(
-                "ContentController@index"
-        ,$filters);
+            "ContentController@index"
+            , $filters);
     }
 
     /**
@@ -188,7 +187,7 @@ class ContentsetController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(InsertContentsetRequest $request)
@@ -196,7 +195,7 @@ class ContentsetController extends Controller
         $contentSet = new Contentset();
         $this->fillContentFromRequest($request, $content);
 
-        if($contentSet->save())
+        if ($contentSet->save())
             return $this->response->setStatusCode(Response::HTTP_OK);
         else
             return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
@@ -205,7 +204,7 @@ class ContentsetController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -216,7 +215,7 @@ class ContentsetController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -227,8 +226,8 @@ class ContentsetController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -239,7 +238,7 @@ class ContentsetController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

@@ -41,7 +41,7 @@ class Category extends Model
 
     protected $fillable = [
         'name',
-        'tags'  ,
+        'tags',
         'enable',
         'description'
     ];
@@ -51,15 +51,17 @@ class Category extends Model
         'updated_at',
     ];
 
-    public function scopeActive($query){
+    public function scopeActive($query)
+    {
         return $query->where('enable', 1);
     }
 
-    public function getWithDepth(){
-        return Cache::tags('tree')->remember('tree',config('constants.CACHE_600'),function (){
+    public function getWithDepth()
+    {
+        return Cache::tags('tree')->remember('tree', config('constants.CACHE_600'), function () {
             return Category::withDepth()
-                    ->active()
-                    ->get();
+                ->active()
+                ->get();
         });
     }
 }

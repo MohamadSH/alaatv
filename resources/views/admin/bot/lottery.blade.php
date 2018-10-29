@@ -26,7 +26,7 @@
 
 @section("content")
     {{--Ajax modal loaded after inserting content--}}
-    <div id="ajax-modal" class="modal fade" tabindex="-1"> </div>
+    <div id="ajax-modal" class="modal fade" tabindex="-1"></div>
     {{--Ajax modal for panel startup --}}
     <div class="row">
         @include("systemMessage.flash")
@@ -34,7 +34,11 @@
             <!-- BEGIN Portlet PORTLET-->
             <div class="portlet light">
                 <div class="portlet-body">
-                    {{(isset($params["pointGiven"]) && $params["pointGiven"])?"✅":""}}<span class="bold" style="font-size: larger">1.</span>&nbsp;&nbsp;<a class="btn btn-default" href="{{action("HomeController@pointBot")}}" {{(isset($params["pointGiven"]) && $params["pointGiven"])?"disabled":""}} target="_blank">اهدای امتیاز به کاربران</a>
+                    {{(isset($params["pointGiven"]) && $params["pointGiven"])?"✅":""}}<span class="bold"
+                                                                                            style="font-size: larger">1.</span>&nbsp;&nbsp;<a
+                            class="btn btn-default" href="{{action("HomeController@pointBot")}}"
+                            {{(isset($params["pointGiven"]) && $params["pointGiven"])?"disabled":""}} target="_blank">اهدای
+                        امتیاز به کاربران</a>
                     <hr>
                 </div>
             </div>

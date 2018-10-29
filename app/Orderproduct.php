@@ -79,18 +79,6 @@ class Orderproduct extends Model
         'attributevalues'
     ];
 
-    public function cacheKey()
-    {
-        $key = $this->getKey();
-        $time= isset($this->update) ? $this->updated_at->timestamp : $this->created_at->timestamp;
-        return sprintf(
-            "%s-%s",
-            //$this->getTable(),
-            $key,
-            $time
-        );
-    }
-
     public function order()
     {
         return $this->belongsTo('\App\Order');
@@ -136,9 +124,9 @@ class Orderproduct extends Model
 
     public function getExtraCost($extraAttributevaluesId = null)
     {
-        $key="Orderproduct:getExtraCost:".$this->cacheKey()."\\".(isset($extraAttributevaluesId) ? implode(".",$extraAttributevaluesId) : "-");
+        $key = "Orderproduct:getExtraCost:" . $this->cacheKey() . "\\" . (isset($extraAttributevaluesId) ? implode(".", $extraAttributevaluesId) : "-");
 
-        return Cache::remember($key,Config::get("constants.CACHE_60"),function () use($extraAttributevaluesId) {
+        return Cache::remember($key, Config::get("constants.CACHE_60"), function () use ($extraAttributevaluesId) {
             $extraCost = 0;
             if (isset($extraAttributevaluesId))
                 $extraAttributevalues = $this->attributevalues->whereIn("id", $extraAttributevaluesId);
@@ -151,6 +139,18 @@ class Orderproduct extends Model
             return $extraCost;
         });
 
+    }
+
+    public function cacheKey()
+    {
+        $key = $this->getKey();
+        $time = isset($this->update) ? $this->updated_at->timestamp : $this->created_at->timestamp;
+        return sprintf(
+            "%s-%s",
+            //$this->getTable(),
+            $key,
+            $time
+        );
     }
 
     public function calculatePayableCost($withOrderCoupon = false)
@@ -238,7 +238,7 @@ class Orderproduct extends Model
             "productDiscount" => $productDiscount,
             'bonDiscount' => $bonDiscount,
             "productDiscountAmount" => (int)$productDiscountAmount,
-            'CustomerCost' =>(int)(((int)$cost * (1 - ($productDiscount / 100))) * (1 - ($bonDiscount / 100)) - $productDiscountAmount)
+            'CustomerCost' => (int)(((int)$cost * (1 - ($productDiscount / 100))) * (1 - ($bonDiscount / 100)) - $productDiscountAmount)
         ];
     }
 

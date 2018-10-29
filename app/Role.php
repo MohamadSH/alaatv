@@ -8,8 +8,8 @@
 
 namespace App;
 
-use App\Traits\Helper;
 use App\Traits\DateTrait;
+use App\Traits\Helper;
 use Laratrust\Models\LaratrustRole;
 
 /**
@@ -49,7 +49,7 @@ class Role extends LaratrustRole
         'created_at',
         'updated_at'
     ];
-    
+
     /*
      * it needs for deleting the role
      */

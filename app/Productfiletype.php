@@ -47,6 +47,17 @@ class Productfiletype extends Model
         'displayName',
     ];
 
+    /**
+     * @return array
+     */
+    public static function makeSelectArray(): array
+    {
+        $productFileTypes = Productfiletype::pluck('displayName', 'id')->toArray();
+        $productFileTypes = array_add($productFileTypes, 0, "انتخاب کنید");
+        $productFileTypes = array_sort_recursive($productFileTypes);
+        return $productFileTypes;
+    }
+
     public function productfiles()
     {
         return $this->hasMany('\App\Productfile');
@@ -61,16 +72,5 @@ class Productfiletype extends Model
         $explodedDateTime = explode(" ", $this->validSince);
         $explodedTime = $explodedDateTime[1];
         return $this->convertDate($this->validSince, "toJalali") . " " . $explodedTime;
-    }
-
-    /**
-     * @return array
-     */
-    public static function makeSelectArray(): array
-    {
-        $productFileTypes = Productfiletype::pluck('displayName', 'id')->toArray();
-        $productFileTypes = array_add($productFileTypes, 0, "انتخاب کنید");
-        $productFileTypes = array_sort_recursive($productFileTypes);
-        return $productFileTypes;
     }
 }

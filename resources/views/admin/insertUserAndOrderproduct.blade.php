@@ -26,7 +26,7 @@
 
 @section("content")
     {{--Ajax modal loaded after inserting content--}}
-    <div id="ajax-modal" class="modal fade" tabindex="-1"> </div>
+    <div id="ajax-modal" class="modal fade" tabindex="-1"></div>
     {{--Ajax modal for panel startup --}}
     <div class="row">
         @include("systemMessage.flash")
@@ -38,7 +38,7 @@
                         {!! Form::open(['method' => 'POST', 'action' => 'HomeController@registerUserAndGiveOrderproduct']) !!}
                         <div class="col-md-6">
                             <p>{!! Form::text('firstName', null, ['class' => 'form-control', 'id' => 'firstName' , 'placeholder'=>'نام']) !!}
-                                <span class="help-block" >
+                                <span class="help-block">
                                     <strong></strong>
                                  </span>
                             </p>
@@ -50,12 +50,12 @@
                         </div>
                         <div class="col-md-6">
                             <p>{!! Form::text('lastName', null, ['class' => 'form-control', 'id' => 'lastName' , 'placeholder'=>'نام خانوادگی']) !!}
-                                <span class="help-block" >
+                                <span class="help-block">
                          <strong></strong>
                         </span>
                             </p>
                             <p>{!! Form::text('mobile', null, ['class' => 'form-control', 'id' => 'mobile' , 'maxlength'=>'11' , 'placeholder'=>'موبایل']) !!}
-                                <span class="help-block" >
+                                <span class="help-block">
                             <strong></strong>
                          </span>
                             </p>

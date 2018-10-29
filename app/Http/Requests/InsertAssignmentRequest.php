@@ -4,12 +4,12 @@ namespace App\Http\Requests;
 
 use App\Traits\CharacterCommon;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 
 class InsertAssignmentRequest extends FormRequest
 {
-    use CharacterCommon ;
+    use CharacterCommon;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -17,7 +17,7 @@ class InsertAssignmentRequest extends FormRequest
      */
     public function authorize()
     {
-        if(Auth()->user()->can(Config::get('constants.INSERT_ASSIGNMENT_ACCESS'))) return true;
+        if (Auth()->user()->can(Config::get('constants.INSERT_ASSIGNMENT_ACCESS'))) return true;
         return false;
     }
 
@@ -45,18 +45,16 @@ class InsertAssignmentRequest extends FormRequest
 
     protected function replaceNumbers()
     {
-        $input = $this->request->all() ;
-        if(isset($input["numberOfQuestions"]))
-        {
-            $input["numberOfQuestions"] = preg_replace('/\s+/', '', $input["numberOfQuestions"] ) ;
-            $input["numberOfQuestions"] = $this->convertToEnglish($input["numberOfQuestions"]) ;
+        $input = $this->request->all();
+        if (isset($input["numberOfQuestions"])) {
+            $input["numberOfQuestions"] = preg_replace('/\s+/', '', $input["numberOfQuestions"]);
+            $input["numberOfQuestions"] = $this->convertToEnglish($input["numberOfQuestions"]);
         }
 
-        if(isset($input["order"]))
-        {
-            $input["order"] = preg_replace('/\s+/', '', $input["order"] ) ;
-            $input["order"] = $this->convertToEnglish($input["order"]) ;
+        if (isset($input["order"])) {
+            $input["order"] = preg_replace('/\s+/', '', $input["order"]);
+            $input["order"] = $this->convertToEnglish($input["order"]);
         }
-        $this->replace($input) ;
+        $this->replace($input);
     }
 }

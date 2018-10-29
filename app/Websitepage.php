@@ -51,7 +51,8 @@ class Websitepage extends Model
         return $this->belongsToMany('\App\User', 'userseensitepages', 'websitepage_id', 'user_id');
     }
 
-    public function slides(){
+    public function slides()
+    {
         return $this->hasMany('\App\Slideshow');
     }
 

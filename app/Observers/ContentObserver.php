@@ -21,7 +21,7 @@ class ContentObserver
     /**
      * Handle the content "created" event.
      *
-     * @param  \App\Content  $content
+     * @param  \App\Content $content
      * @return void
      */
     public function created(Content $content)
@@ -32,7 +32,7 @@ class ContentObserver
     /**
      * Handle the content "updated" event.
      *
-     * @param  \App\Content  $content
+     * @param  \App\Content $content
      * @return void
      */
     public function updated(Content $content)
@@ -42,7 +42,7 @@ class ContentObserver
     /**
      * Handle the content "deleted" event.
      *
-     * @param  \App\Content  $content
+     * @param  \App\Content $content
      * @return void
      */
     public function deleted(Content $content)
@@ -53,7 +53,7 @@ class ContentObserver
     /**
      * Handle the content "restored" event.
      *
-     * @param  \App\Content  $content
+     * @param  \App\Content $content
      * @return void
      */
     public function restored(Content $content)
@@ -64,7 +64,7 @@ class ContentObserver
     /**
      * Handle the content "force deleted" event.
      *
-     * @param  \App\Content  $content
+     * @param  \App\Content $content
      * @return void
      */
     public function forceDeleted(Content $content)
@@ -79,17 +79,12 @@ class ContentObserver
      * This is because the models are never actually retrieved when issuing a mass update.
      * @param Content $content
      */
-    public function saving(Content $content){
+    public function saving(Content $content)
+    {
 
         $content->template_id = $this->findTemplateIdOfaContent($content);
 
     }
-
-    public function saved(Content $content){
-        $this->sendTagsOfTaggableToApi($content , $this->tagging);
-        Artisan::call('cache:clear');
-    }
-
 
     /**
      * @param $content
@@ -110,5 +105,11 @@ class ContentObserver
             default:
                 return null;
         }
+    }
+
+    public function saved(Content $content)
+    {
+        $this->sendTagsOfTaggableToApi($content, $this->tagging);
+        Artisan::call('cache:clear');
     }
 }

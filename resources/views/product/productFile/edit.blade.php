@@ -2,8 +2,9 @@
 @extends("app",["pageName"=>"admin"])
 
 @section("headPageLevelPlugin")
-    <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css" />
-    <link href="/assets/extra/persian-datepicker/dist/css/persian-datepicker-0.4.5.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/extra/persian-datepicker/dist/css/persian-datepicker-0.4.5.css" rel="stylesheet"
+          type="text/css"/>
 @endsection
 
 
@@ -20,7 +21,8 @@
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
-                <a href="{{action("ProductController@edit" , $productFile->product_id)}}">اصلاح محصول {{$productFile->product->name}}</a>
+                <a href="{{action("ProductController@edit" , $productFile->product_id)}}">اصلاح
+                    محصول {{$productFile->product->name}}</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
@@ -44,7 +46,8 @@
                     </div>
                     <div class="actions">
                         <div class="btn-group">
-                            <a class="btn btn-sm dark dropdown-toggle" href="{{action("ProductController@edit" , $productFile->product_id)}}"> بازگشت
+                            <a class="btn btn-sm dark dropdown-toggle"
+                               href="{{action("ProductController@edit" , $productFile->product_id)}}"> بازگشت
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         </div>
@@ -72,11 +75,12 @@
 
 @section("footerPageLevelPlugin")
     <script src="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
-    <script src="/assets/extra/persian-datepicker/lib/persian-date.js" type="text/javascript" ></script>
+    <script src="/assets/extra/persian-datepicker/lib/persian-date.js" type="text/javascript"></script>
 @endsection
 
 @section("footerPageLevelScript")
-    <script src="/assets/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js" type="text/javascript" ></script>
+    <script src="/assets/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js"
+            type="text/javascript"></script>
 @endsection
 
 @section("extraJS")
@@ -84,7 +88,7 @@
         /**
          * Start up jquery
          */
-        jQuery(document).ready(function() {
+        jQuery(document).ready(function () {
             /*
              validdSince
              */
@@ -93,7 +97,7 @@
                 altFormat: "YYYY MM DD",
                 observer: true,
                 format: 'YYYY/MM/DD',
-                altFieldFormatter: function(unixDate){
+                altFieldFormatter: function (unixDate) {
                     var d = new Date(unixDate).toISOString();
                     return d;
                 }

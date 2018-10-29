@@ -10,13 +10,13 @@
 @endsection
 
 @section("gtagJs")
-        {{--<!-- Event snippet for Make-A-Payment conversion page -->--}}
-        {{--<script>--}}
-            {{--gtag('event', 'conversion', {--}}
-                {{--'send_to': 'AW-927952751/0L57COfS9YEBEO_evboD',--}}
-                {{--'transaction_id': ''--}}
-            {{--});--}}
-        {{--</script>--}}
+    {{--<!-- Event snippet for Make-A-Payment conversion page -->--}}
+    {{--<script>--}}
+    {{--gtag('event', 'conversion', {--}}
+    {{--'send_to': 'AW-927952751/0L57COfS9YEBEO_evboD',--}}
+    {{--'transaction_id': ''--}}
+    {{--});--}}
+    {{--</script>--}}
 @endsection
 
 @section("css")
@@ -24,9 +24,10 @@
     <link rel="stylesheet" type="text/css" href="/assets/extra/slick/slick/slick.css">
     <link rel="stylesheet" type="text/css" href="/assets/extra/slick/slick/slick-theme.css">
     <style type="text/css">
-        .search-content-3 .tile-container>.tile-thumbnail{
+        .search-content-3 .tile-container > .tile-thumbnail {
             height: 100px !important;
         }
+
         /**
          product slider styles
          */
@@ -53,7 +54,6 @@
             color: black;
         }
 
-
         .slick-slide {
             transition: all ease-in-out .3s;
             opacity: .2;
@@ -72,86 +72,88 @@
 
 @section("content")
     <style>
-        p.ribbon-content{
+        p.ribbon-content {
             font-weight: bold;
             text-decoration: none !important;
         }
+
         .mt-element-ribbon {
             margin-bottom: 8px;
 
         }
-        a.mt-element-ribbon{
+
+        a.mt-element-ribbon {
             text-decoration: none;
         }
     </style>
     {{--<div class="row">--}}
-        {{--<div class="col-lg-12 col-md-12 col-xs-12">--}}
-            {{--<div class="portlet light portlet-fit ">--}}
-                {{--<div class="portlet-body "  >--}}
-                    {{--<div class="row">--}}
-                        {{--<div class="col-md-3">--}}
-                            {{--<a  href="/landing/4">--}}
-                                {{--<div class="mt-element-ribbon  bg-red-flamingo">--}}
-                                    {{--<div class="ribbon ribbon-left ribbon-vertical-left ribbon-shadow ribbon-border-dash-vert ribbon-color-primary uppercase">--}}
-                                        {{--<div class="ribbon-sub ribbon-bookmark"></div>--}}
-                                        {{--<i class="fa fa-star"></i>--}}
-                                    {{--</div>--}}
-                                    {{--<p class="ribbon-content font-white">--}}
-                                         {{--آلاء - همایش طلایی کنکور(80%)--}}
-                                    {{--</p>--}}
-                                {{--</div>--}}
-                            {{--</a>--}}
+    {{--<div class="col-lg-12 col-md-12 col-xs-12">--}}
+    {{--<div class="portlet light portlet-fit ">--}}
+    {{--<div class="portlet-body "  >--}}
+    {{--<div class="row">--}}
+    {{--<div class="col-md-3">--}}
+    {{--<a  href="/landing/4">--}}
+    {{--<div class="mt-element-ribbon  bg-red-flamingo">--}}
+    {{--<div class="ribbon ribbon-left ribbon-vertical-left ribbon-shadow ribbon-border-dash-vert ribbon-color-primary uppercase">--}}
+    {{--<div class="ribbon-sub ribbon-bookmark"></div>--}}
+    {{--<i class="fa fa-star"></i>--}}
+    {{--</div>--}}
+    {{--<p class="ribbon-content font-white">--}}
+    {{--آلاء - همایش طلایی کنکور(80%)--}}
+    {{--</p>--}}
+    {{--</div>--}}
+    {{--</a>--}}
 
-                        {{--</div>--}}
-                        {{--<div class="col-md-3">--}}
-                            {{--<div class="mt-element-ribbon bg-blue" >--}}
-                                {{--<a  href="javascript:void(0)"--}}
-                                    {{--onclick="$('html, body').animate({scrollTop: $('.konkoor').offset().top - 80}, 2000);">--}}
-                                    {{--<div class="ribbon ribbon-left ribbon-vertical-left ribbon-shadow ribbon-border-dash-vert ribbon-color-primary uppercase">--}}
-                                        {{--<div class="ribbon-sub ribbon-bookmark"></div>--}}
-                                        {{--<i class="fa fa-star"></i>--}}
-                                    {{--</div>--}}
-                                    {{--<p class="ribbon-content font-white">--}}
-                                        {{--آلاء - تدریس کنکور، رایگان و کامل--}}
-                                    {{--</p>--}}
-                                {{--</a>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                        {{--<div class="col-md-3">--}}
-                            {{--<div class="mt-element-ribbon bg-green-jungle" >--}}
-                                {{--<a  href="javascript:void(0)"--}}
-                                    {{--onclick="$('html, body').animate({scrollTop: $('.dahom').offset().top  - 80}, 2000);">--}}
-                                    {{--<div class="ribbon ribbon-left ribbon-vertical-left ribbon-shadow ribbon-border-dash-vert ribbon-color-primary uppercase">--}}
-                                        {{--<div class="ribbon-sub ribbon-bookmark"></div>--}}
-                                        {{--<i class="fa fa-star"></i>--}}
-                                    {{--</div>--}}
-                                    {{--<p class="ribbon-content font-white">--}}
-                                        {{--آلاء - تدریس دهم، رایگان--}}
-                                    {{--</p>--}}
-                                {{--</a>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
+    {{--</div>--}}
+    {{--<div class="col-md-3">--}}
+    {{--<div class="mt-element-ribbon bg-blue" >--}}
+    {{--<a  href="javascript:void(0)"--}}
+    {{--onclick="$('html, body').animate({scrollTop: $('.konkoor').offset().top - 80}, 2000);">--}}
+    {{--<div class="ribbon ribbon-left ribbon-vertical-left ribbon-shadow ribbon-border-dash-vert ribbon-color-primary uppercase">--}}
+    {{--<div class="ribbon-sub ribbon-bookmark"></div>--}}
+    {{--<i class="fa fa-star"></i>--}}
+    {{--</div>--}}
+    {{--<p class="ribbon-content font-white">--}}
+    {{--آلاء - تدریس کنکور، رایگان و کامل--}}
+    {{--</p>--}}
+    {{--</a>--}}
+    {{--</div>--}}
+    {{--</div>--}}
+    {{--<div class="col-md-3">--}}
+    {{--<div class="mt-element-ribbon bg-green-jungle" >--}}
+    {{--<a  href="javascript:void(0)"--}}
+    {{--onclick="$('html, body').animate({scrollTop: $('.dahom').offset().top  - 80}, 2000);">--}}
+    {{--<div class="ribbon ribbon-left ribbon-vertical-left ribbon-shadow ribbon-border-dash-vert ribbon-color-primary uppercase">--}}
+    {{--<div class="ribbon-sub ribbon-bookmark"></div>--}}
+    {{--<i class="fa fa-star"></i>--}}
+    {{--</div>--}}
+    {{--<p class="ribbon-content font-white">--}}
+    {{--آلاء - تدریس دهم، رایگان--}}
+    {{--</p>--}}
+    {{--</a>--}}
+    {{--</div>--}}
+    {{--</div>--}}
 
-                        {{--<div class="col-md-3">--}}
+    {{--<div class="col-md-3">--}}
 
-                            {{--<div class="mt-element-ribbon bg-yellow-lemon" >--}}
-                                {{--<a  href="javascript:void(0)"--}}
-                                    {{--onclick="$('html, body').animate({scrollTop: $('.yazdahom').offset().top  - 80}, 2000);">--}}
-                                    {{--<div class="ribbon ribbon-left ribbon-vertical-left ribbon-shadow ribbon-border-dash-vert ribbon-color-primary uppercase">--}}
-                                        {{--<div class="ribbon-sub ribbon-bookmark"></div>--}}
-                                        {{--<i class="fa fa-star"></i>--}}
-                                    {{--</div>--}}
-                                    {{--<p class="ribbon-content font-white">--}}
-                                        {{--آلاء - تدریس یازدهم، رایگان--}}
-                                    {{--</p>--}}
-                                {{--</a>--}}
-                            {{--</div>--}}
+    {{--<div class="mt-element-ribbon bg-yellow-lemon" >--}}
+    {{--<a  href="javascript:void(0)"--}}
+    {{--onclick="$('html, body').animate({scrollTop: $('.yazdahom').offset().top  - 80}, 2000);">--}}
+    {{--<div class="ribbon ribbon-left ribbon-vertical-left ribbon-shadow ribbon-border-dash-vert ribbon-color-primary uppercase">--}}
+    {{--<div class="ribbon-sub ribbon-bookmark"></div>--}}
+    {{--<i class="fa fa-star"></i>--}}
+    {{--</div>--}}
+    {{--<p class="ribbon-content font-white">--}}
+    {{--آلاء - تدریس یازدهم، رایگان--}}
+    {{--</p>--}}
+    {{--</a>--}}
+    {{--</div>--}}
 
-                        {{--</div>--}}
-                    {{--</div>--}}
-                {{--</div>--}}
-            {{--</div>--}}
-        {{--</div>--}}
+    {{--</div>--}}
+    {{--</div>--}}
+    {{--</div>--}}
+    {{--</div>--}}
+    {{--</div>--}}
     {{--</div>--}}
     {{--<div class="clearfix"></div>--}}
     @include("partials.slideShow1" ,["marginBottom"=>"25"])
@@ -226,24 +228,26 @@
     {{--Product Portfolio--}}
 
     {{--<div class="row">--}}
-        {{--<div class="col-md-12">--}}
-            {{--<div class="portfolio-content portfolio-1" >--}}
-                {{--@if($products->isEmpty())--}}
-                    {{--<div class="note " style="background-color: #00d4db;">--}}
-                        {{--<h4 class="block bold" style="text-align: center">کاربر گرامی در حال حاضر موردی برای ثبت نام وجود ندارد. همایشها و اردوهای بعدی به زودی اعلام خواهند شد.</h4>--}}
-                    {{--</div>--}}
-                {{--@else--}}
-                    {{--@include("partials.portfolioGrid" , ["withFilterButton" => false , "withAd"=>true])--}}
-                {{--@endif--}}
-            {{--</div>--}}
-        {{--</div>--}}
+    {{--<div class="col-md-12">--}}
+    {{--<div class="portfolio-content portfolio-1" >--}}
+    {{--@if($products->isEmpty())--}}
+    {{--<div class="note " style="background-color: #00d4db;">--}}
+    {{--<h4 class="block bold" style="text-align: center">کاربر گرامی در حال حاضر موردی برای ثبت نام وجود ندارد. همایشها و اردوهای بعدی به زودی اعلام خواهند شد.</h4>--}}
+    {{--</div>--}}
+    {{--@else--}}
+    {{--@include("partials.portfolioGrid" , ["withFilterButton" => false , "withAd"=>true])--}}
+    {{--@endif--}}
+    {{--</div>--}}
+    {{--</div>--}}
     {{--</div>--}}
     {{--End of Product Portfolio--}}
     @foreach($sections as $section)
         <div class="row">
             <div class="col-md-12 {{$section["class"]}}">
                 <h4 style="font-weight: bold">{{$section["descriptiveName"]}}
-                    <a style="float: left; padding: 10px; width: 15%" href="{{urldecode(action("ContentController@index" , ["tags" => $section["tags"]]))}}" class="btn btn-success">بیشتر</a>
+                    <a style="float: left; padding: 10px; width: 15%"
+                       href="{{urldecode(action("ContentController@index" , ["tags" => $section["tags"]]))}}"
+                       class="btn btn-success">بیشتر</a>
                 </h4>
 
                 <hr style="border-color: #17233a">
@@ -256,10 +260,10 @@
                                         <a href="{{(isset($lesson["content_id"]) && $lesson["content_id"]>0)?action("ContentController@show", $lesson["content_id"]):""}}">
                                             <img src="
                                             @if(isset($lesson["pic"]) && strlen($lesson["pic"])>0)
-                                                    {{$lesson["pic"]."?w=253&h=142"}}
+                                            {{$lesson["pic"]."?w=253&h=142"}}
                                             @else
                                                     http://via.placeholder.com/195x195
-                                            @endif " alt="{{$lesson["displayName"]}}"/> 
+                                            @endif " alt="{{$lesson["displayName"]}}"/>
                                         </a>
                                     </div>
                                     <div class="tile-title" style="height: 145px;">
@@ -267,10 +271,10 @@
                                             <a href="{{(isset($lesson["content_id"]) && $lesson["content_id"]>0)?action("ContentController@show", $lesson["content_id"]):""}}">{{$lesson["displayName"]}}</a>
                                         </h5>
                                         {{--<a href="javascript:;">--}}
-                                            {{--<i class="icon-question font-blue"></i>--}}
+                                        {{--<i class="icon-question font-blue"></i>--}}
                                         {{--</a>--}}
                                         {{--<a href="javascript:;">--}}
-                                            {{--<i class="icon-plus font-green-meadow"></i>--}}
+                                        {{--<i class="icon-plus font-green-meadow"></i>--}}
                                         {{--</a>--}}
                                         <div class="tile-desc">
                                             <p>مدرس:
@@ -298,16 +302,19 @@
                 <div class="portlet-body">
                     <div class="row">
                         <div class="col-lg-3 col-md-2 col-sd-2 col-xs-12 text-center">
-                            <img src="/assets/extra/Alaa-logo.gif" style="width: 50%;" alt="فیلم کنکور آلاء" />
+                            <img src="/assets/extra/Alaa-logo.gif" style="width: 50%;" alt="فیلم کنکور آلاء"/>
                         </div>
                         <div class="col-lg-9 col-md-10 col-sd-10 col-xs-12">
                             <h4></h4>
                             <p class="text-justify" style="line-height:normal">
-                                آلاء پنجره ای است رو به دور نمای آموزش کشور که می کوشد با اساتید کار بلد و مخاطبان پر تعداد و متعهد خود آموزش همگانی را
+                                آلاء پنجره ای است رو به دور نمای آموزش کشور که می کوشد با اساتید کار بلد و مخاطبان پر
+                                تعداد و متعهد خود آموزش همگانی را
                                 در چهار گوشه ی این سرزمین در دسترس فرزندان ایران قرار دهد.
                             </p>
                             <p class="text-justify" style="line-height:normal">
-                                خدمات اصلی آموزش در آلاء کاملا رایگان بوده و درآمد خدمات جانبی آن صرف برپا نگه داشتن و دوام این مجموعه عام المنفعه می شود. محصولات ما پیش تر با نام های آلاء و تخته خاک در اختیار مخاطبان قرار می گرفت که
+                                خدمات اصلی آموزش در آلاء کاملا رایگان بوده و درآمد خدمات جانبی آن صرف برپا نگه داشتن و
+                                دوام این مجموعه عام المنفعه می شود. محصولات ما پیش تر با نام های آلاء و تخته خاک در
+                                اختیار مخاطبان قرار می گرفت که
                                 برای سهولت در مدیریت و دسترسی کاربران اکنون انحصارا با نام آلاء منتشر می شود.
                             </p>
                         </div>
@@ -521,33 +528,34 @@
                     //main function to initiate the module
                     init: function () {
                         var finish = new Date({{Config::get("constants.SPECIAL_OFFER_DEADLINE")}});
-                        $('#defaultCountdown').countdown({until:finish  ,format: 'DHMS',
-                            layout:  '<span class="countdown_row countdown_show4" >'+
-                            '{d<}'+
-                            '<span class="countdown_section bg-green" style="width: 24%"  >'+
-                            '<label class="countdown_amount" >{dn}</label>'+
-                            '<br>{dl}'+
-                            '</span>'+
-                            '{d>}'+
-                            '{h<}'+
-                            '<span class="countdown_section bg-green" style="width: 24%">'+
-                            '<label class="countdown_amount">{hn}</label>'+
-                            '<br>{hl}'+
-                            '</span>'+
-                            '{h>}'+
-                            '{m<}'+
-                            '<span class="countdown_section bg-green" style="width: 24%">'+
-                            '<label class="countdown_amount">{mn}</label>'+
-                            '<br>{ml}'+
-                            '</span>'+
-                            '{m>}'+
-                            '{s<}'+
-                            '<span class="countdown_section bg-green" style="width: 24%">'+
-                            '<label class="countdown_amount">{sn}</label>'+
-                            '<br>{sl}'+
-                            '</span>'+
-                            '{s>}'+
-                            '</span>',
+                        $('#defaultCountdown').countdown({
+                            until: finish, format: 'DHMS',
+                            layout: '<span class="countdown_row countdown_show4" >' +
+                                '{d<}' +
+                                '<span class="countdown_section bg-green" style="width: 24%"  >' +
+                                '<label class="countdown_amount" >{dn}</label>' +
+                                '<br>{dl}' +
+                                '</span>' +
+                                '{d>}' +
+                                '{h<}' +
+                                '<span class="countdown_section bg-green" style="width: 24%">' +
+                                '<label class="countdown_amount">{hn}</label>' +
+                                '<br>{hl}' +
+                                '</span>' +
+                                '{h>}' +
+                                '{m<}' +
+                                '<span class="countdown_section bg-green" style="width: 24%">' +
+                                '<label class="countdown_amount">{mn}</label>' +
+                                '<br>{ml}' +
+                                '</span>' +
+                                '{m>}' +
+                                '{s<}' +
+                                '<span class="countdown_section bg-green" style="width: 24%">' +
+                                '<label class="countdown_amount">{sn}</label>' +
+                                '<br>{sl}' +
+                                '</span>' +
+                                '{s>}' +
+                                '</span>',
                             description: 'تا پایان'
                         });
                     }
@@ -556,7 +564,7 @@
 
             }();
 
-        jQuery(document).ready(function() {
+        jQuery(document).ready(function () {
             ComingSoon.init();
         });
         @endif
@@ -566,14 +574,13 @@
 @section("extraJS")
     <script src="/assets/extra/slick/slick/slick.min.js" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript">
-        $(document).ready(function(){
+        $(document).ready(function () {
             initialSlick($(".lessonSlider1"));
         });
 
-        function initialSlick(element)
-        {
+        function initialSlick(element) {
             element.slick({
-                auto:true,
+                auto: true,
                 dots: true,
                 infinite: false,
                 speed: 300,
@@ -608,11 +615,11 @@
                     // settings: "unslick"
                     // instead of a settings object
                 ],
-                rtl:true
+                rtl: true
             });
         }
 
-        (function($, window, document, undefined) {
+        (function ($, window, document, undefined) {
             'use strict';
 
             // init cubeportfolio
@@ -657,7 +664,7 @@
                 singlePageDeeplinking: true,
                 singlePageStickyNavigation: true,
                 singlePageCounter: '<div class="cbp-popup-singlePage-counter" style="direction:ltr">@{{current}} of @{{total}}</div>',
-                singlePageCallback: function(url, element) {
+                singlePageCallback: function (url, element) {
                     // to update singlePage content use the following method: this.updateSinglePage(yourContent)
                     var t = this;
 
@@ -667,10 +674,10 @@
                         dataType: 'html',
                         timeout: 10000
                     })
-                        .done(function(result) {
+                        .done(function (result) {
                             t.updateSinglePage(result);
                         })
-                        .fail(function() {
+                        .fail(function () {
                             t.updateSinglePage('AJAX Error! Please refresh the page!');
                         });
                 },

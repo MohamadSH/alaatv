@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Config;
 class InsertUserBonRequest extends FormRequest
 {
     use CharacterCommon;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -16,7 +17,7 @@ class InsertUserBonRequest extends FormRequest
      */
     public function authorize()
     {
-        if(Auth()->user()->can(Config::get('constants.INSERT_USER_BON_ACCESS'))) return true;
+        if (Auth()->user()->can(Config::get('constants.INSERT_USER_BON_ACCESS'))) return true;
         return false;
     }
 
@@ -40,19 +41,17 @@ class InsertUserBonRequest extends FormRequest
 
     protected function replaceNumbers()
     {
-        $input = $this->request->all() ;
-        if(isset($input["totalNumber"]))
-        {
-            $input["totalNumber"] = preg_replace('/\s+/', '', $input["totalNumber"] ) ;
-            $input["totalNumber"] = $this->convertToEnglish($input["totalNumber"]) ;
+        $input = $this->request->all();
+        if (isset($input["totalNumber"])) {
+            $input["totalNumber"] = preg_replace('/\s+/', '', $input["totalNumber"]);
+            $input["totalNumber"] = $this->convertToEnglish($input["totalNumber"]);
         }
 
-        if(isset($input["usedNumber"]))
-        {
-            $input["usedNumber"] = preg_replace('/\s+/', '', $input["usedNumber"] ) ;
-            $input["usedNumber"] = $this->convertToEnglish($input["usedNumber"]) ;
+        if (isset($input["usedNumber"])) {
+            $input["usedNumber"] = preg_replace('/\s+/', '', $input["usedNumber"]);
+            $input["usedNumber"] = $this->convertToEnglish($input["usedNumber"]);
         }
 
-        $this->replace($input) ;
+        $this->replace($input);
     }
 }

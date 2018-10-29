@@ -1,12 +1,13 @@
 @extends("app",["pageName"=>$pageName])
 
 @section("headPageLevelPlugin")
-    <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css" />
-    <link href="/assets/extra/jplayer/dist/skin/blue.monday/css/jplayer.blue.monday.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/extra/jplayer/dist/skin/blue.monday/css/jplayer.blue.monday.min.css" rel="stylesheet"
+          type="text/css"/>
 @endsection
 
 @section("headPageLevelStyle")
-    <link href="/assets/pages/css/profile-rtl.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/pages/css/profile-rtl.min.css" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section("title")
@@ -37,15 +38,20 @@
                 <div class="portlet light profile-sidebar-portlet ">
                     <!-- SIDEBAR USERPIC -->
                     <div class="profile-userpic">
-                        <img @if(isset(Auth::user()->photo))  src="{{ route('image', ['category'=>'1','w'=>'150' , 'h'=>'150' ,  'filename' => Auth::user()->photo ]) }}" @endif class="img-responsive" alt="عکس پروفایل"> </div>
+                        <img @if(isset(Auth::user()->photo))  src="{{ route('image', ['category'=>'1','w'=>'150' , 'h'=>'150' ,  'filename' => Auth::user()->photo ]) }}"
+                             @endif class="img-responsive" alt="عکس پروفایل"></div>
                     <!-- END SIDEBAR USERPIC -->
                     <!-- SIDEBAR USER TITLE -->
                     <div class="profile-usertitle">
-                        <div class="profile-usertitle-name">@if(!isset(Auth::user()->firstName) && !isset(Auth::user()->lastName)) کاربر ناشناس @else @if(isset(Auth::user()->firstName)) {{Auth::user()->firstName}} @endif @if(isset(Auth::user()->lastName)){{Auth::user()->lastName}} @endif @endif</div>
+                        <div class="profile-usertitle-name">@if(!isset(Auth::user()->firstName) && !isset(Auth::user()->lastName))
+                                کاربر
+                                ناشناس @else @if(isset(Auth::user()->firstName)) {{Auth::user()->firstName}} @endif @if(isset(Auth::user()->lastName)){{Auth::user()->lastName}} @endif @endif</div>
                         <div class="profile-usertitle-name font-red">مشاور</div>
                     </div>
-                    <div class="profile-userbuttons" >
-                                <button type="button" class="btn btn-circle green btn-sm" style="margin-bottom: 10%">شما به {{$answeredQuestionsCount}} سؤال پاسخ داده اید</button>
+                    <div class="profile-userbuttons">
+                        <button type="button" class="btn btn-circle green btn-sm" style="margin-bottom: 10%">شما
+                            به {{$answeredQuestionsCount}} سؤال پاسخ داده اید
+                        </button>
                     </div>
                     <!-- END SIDEBAR USER TITLE -->
                     <!-- SIDEBAR BUTTONS -->
@@ -75,20 +81,22 @@
                                 </div>
 
                                 {{--<div class="inputs">--}}
-                                    {{--<div class="portlet-input input-inline input-small ">--}}
-                                        {{--<div class="input-icon right">--}}
-                                            {{--<i class="icon-magnifier"></i>--}}
-                                            {{--<input type="text" class="form-control form-control-solid" placeholder="search..."> </div>--}}
-                                    {{--</div>--}}
+                                {{--<div class="portlet-input input-inline input-small ">--}}
+                                {{--<div class="input-icon right">--}}
+                                {{--<i class="icon-magnifier"></i>--}}
+                                {{--<input type="text" class="form-control form-control-solid" placeholder="search..."> </div>--}}
+                                {{--</div>--}}
                                 {{--</div>--}}
                                 <div class="actions">
                                     <div class="btn-group btn-group-devided" data-toggle="buttons">
                                         <label class="btn btn-transparent grey-salsa btn-circle btn-sm active">
                                             <input type="radio" name="options" class="toggle" id="option1">امروز</label>
                                         <label class="btn btn-transparent grey-salsa btn-circle btn-sm">
-                                            <input type="radio" name="options" class="toggle" id="option2">این هفته</label>
+                                            <input type="radio" name="options" class="toggle" id="option2">این
+                                            هفته</label>
                                         <label class="btn btn-transparent grey-salsa btn-circle btn-sm">
-                                            <input type="radio" name="options" class="toggle" id="option2">این ماه</label>
+                                            <input type="radio" name="options" class="toggle" id="option2">این
+                                            ماه</label>
                                     </div>
                                 </div>
                             </div>
@@ -119,7 +127,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="scroller" style="height: 300px;" data-always-visible="1" data-rail-visible1="0" data-handle-color="#D7DCE2">
+                                <div class="scroller" style="height: 300px;" data-always-visible="1"
+                                     data-rail-visible1="0" data-handle-color="#D7DCE2">
                                     <div class="general-item-list">
                                         @include("userUpload.index" )
                                     </div>
@@ -146,7 +155,7 @@
 
 @section("extraJS")
     <script type="text/javascript">
-        $("#sparkline_total").sparkline([0, 0, 0, 0, 0, 0, 0.5,0.5, 0.5,0.5,0.5, 0.6, 1], {
+        $("#sparkline_total").sparkline([0, 0, 0, 0, 0, 0, 0.5, 0.5, 0.5, 0.5, 0.5, 0.6, 1], {
             type: 'bar',
             width: '100',
             barWidth: 6,
@@ -155,7 +164,7 @@
             negBarColor: '#e02222'
         });
 
-        $("#sparkline_new").sparkline([0, 0, 0, 0, 0, 0, 0.5,0.5, 0.5,0.5,0.5, 0.6, 1], {
+        $("#sparkline_new").sparkline([0, 0, 0, 0, 0, 0, 0.5, 0.5, 0.5, 0.5, 0.5, 0.6, 1], {
             type: 'bar',
             width: '100',
             barWidth: 6,

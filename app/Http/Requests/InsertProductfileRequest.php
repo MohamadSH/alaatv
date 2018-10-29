@@ -7,7 +7,8 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class InsertProductfileRequest extends FormRequest
 {
-    use CharacterCommon ;
+    use CharacterCommon;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -40,19 +41,17 @@ class InsertProductfileRequest extends FormRequest
 
     protected function replaceNumbers()
     {
-        $input = $this->request->all() ;
-        if(isset($input["cloudFile"]))
-        {
-            $input["cloudFile"] = preg_replace('/\s+/', '', $input["cloudFile"] ) ;
-            $input["cloudFile"] = $this->convertToEnglish($input["cloudFile"]) ;
+        $input = $this->request->all();
+        if (isset($input["cloudFile"])) {
+            $input["cloudFile"] = preg_replace('/\s+/', '', $input["cloudFile"]);
+            $input["cloudFile"] = $this->convertToEnglish($input["cloudFile"]);
         }
 
-        if(isset($input["order"]))
-        {
-            $input["order"] = preg_replace('/\s+/', '', $input["order"] ) ;
-            $input["order"] = $this->convertToEnglish($input["order"]) ;
+        if (isset($input["order"])) {
+            $input["order"] = preg_replace('/\s+/', '', $input["order"]);
+            $input["order"] = $this->convertToEnglish($input["order"]);
         }
 
-        $this->replace($input) ;
+        $this->replace($input);
     }
 }

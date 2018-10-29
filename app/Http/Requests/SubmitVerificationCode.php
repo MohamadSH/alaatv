@@ -7,7 +7,8 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class SubmitVerificationCode extends FormRequest
 {
-    use CharacterCommon ;
+    use CharacterCommon;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -38,11 +39,11 @@ class SubmitVerificationCode extends FormRequest
 
     protected function replaceNumbers()
     {
-        $input = $this->request->all() ;
-        if(isset($input["code"])) {
-            $input["code"] = preg_replace('/\s+/', '', $input["code"] ) ;
-            $input["code"] = $this->convertToEnglish($input["code"]) ;
+        $input = $this->request->all();
+        if (isset($input["code"])) {
+            $input["code"] = preg_replace('/\s+/', '', $input["code"]);
+            $input["code"] = $this->convertToEnglish($input["code"]);
         }
-        $this->replace($input) ;
+        $this->replace($input);
     }
 }

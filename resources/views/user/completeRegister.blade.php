@@ -1,7 +1,7 @@
 @extends("app")
 
 @section("headPageLevelStyle")
-    <link href="/assets/pages/css/login-4-rtl.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/pages/css/login-4-rtl.min.css" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section("headThemeLayoutStyle")
@@ -24,7 +24,7 @@
     <!-- BEGIN LOGO -->
     <div class="logo">
         {{--<a href="{{action("HomeController@index")}}">--}}
-            {{--<img src="/assets/pages/img/logo-big.png" alt="" /> </a>--}}
+        {{--<img src="/assets/pages/img/logo-big.png" alt="" /> </a>--}}
         <h3 class="bg-font-dark bold">تکمیل ثبت نام</h3>
     </div>
 

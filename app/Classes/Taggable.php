@@ -12,8 +12,12 @@ namespace App\Classes;
 interface Taggable
 {
     public function retrievingTags();
+
     public function getTaggableTags();
+
     public function getTaggableId();
+
     public function getTaggableScore();
-    public function isTaggableActive()  :bool ;
+
+    public function isTaggableActive(): bool;
 }

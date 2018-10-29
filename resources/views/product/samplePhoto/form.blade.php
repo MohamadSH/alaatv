@@ -33,7 +33,8 @@
                                                         <span class="fileinput-new"> انتخاب فایل </span>
                                                         <span class="fileinput-exists"> تغییر </span>
                     {!! Form::file('file' , ['id'=>'productPhoto']) !!} </span>
-                <a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput"> حذف </a>
+                <a href="javascript:" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput">
+                    حذف </a>
             </div>
         </div>
         @if ($errors->has('file'))
@@ -58,8 +59,9 @@
     <label class="col-md-3"></label>
     <div class="col-md-9">
         <div class="mt-checkbox-list">
-            <label class="mt-checkbox mt-checkbox-outline bold">  فعال بودن
-                <input type="checkbox" value="1" name="enable" @if(isset($productPhoto->enable) && $productPhoto->enable == 1) checked @endif/>
+            <label class="mt-checkbox mt-checkbox-outline bold"> فعال بودن
+                <input type="checkbox" value="1" name="enable"
+                       @if(isset($productPhoto->enable) && $productPhoto->enable == 1) checked @endif/>
                 <span></span>
             </label>
         </div>

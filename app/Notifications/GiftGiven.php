@@ -13,37 +13,37 @@ use Illuminate\Queue\SerializesModels;
 
 class GiftGiven extends Notification implements ShouldQueue
 {
-    use Queueable , SerializesModels;
+    use Queueable, SerializesModels;
 
+    public $timeout = 120;
     /**
      * @var int
      */
-    protected  $giftCost;
+    protected $giftCost;
     /**
      * @var string
      */
-    protected  $partialMessage;
+    protected $partialMessage;
     /**
      * @var User
      */
     protected $user;
-    public $timeout = 120;
 
     /**
      * Create a new notification instance.
      *
      * @param int $giftCost
      */
-    public function __construct( $giftCost , $partialMessage = null)
+    public function __construct($giftCost, $partialMessage = null)
     {
-        $this->partialMessage = $partialMessage ;
+        $this->partialMessage = $partialMessage;
         $this->giftCost = $giftCost;
     }
 
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param  mixed $notifiable
      * @return array
      */
     public function via($notifiable)
