@@ -42,7 +42,6 @@ use App\{Afterloginformcontrol,
 
 use Auth;
 use Carbon\Carbon;
-use Hash;
 
 use Illuminate\{Foundation\Http\FormRequest,
     Http\Request,
@@ -761,11 +760,13 @@ class UserController extends Controller
 //        return redirect(action("HomeController@error404"));
         $event = Event::FindOrFail(1);
         $surveys = $event->surveys;
-        foreach ($surveys as $survey) {
+        foreach ($surveys as $survey)
+        {
             $questions = $survey->questions->sortBy("pivot.order");
             $questionsData = collect();
             $answersData = collect();
-            foreach ($questions as $question) {
+            foreach ($questions as $question)
+            {
                 $requestBaseUrl = $question->dataSourceUrl;
                 /**
                  * Getting raw answer
@@ -779,7 +780,8 @@ class UserController extends Controller
                 $answersCollection = json_decode($response->content());
                 \Illuminate\Support\Facades\Request::replace($originalInput);
                 $questionAnswerArray = [];
-                foreach ($answersCollection as $answerCollection) {
+                foreach ($answersCollection as $answerCollection)
+                {
                     /** Making answers */
                     $answerArray = $answerCollection->userAnswer->answer;
                     $requestUrl = url("/") . $requestBaseUrl . "?ids=$answerArray";
@@ -789,7 +791,8 @@ class UserController extends Controller
                     $response = Route::dispatch($request);
                     $dataJson = json_decode($response->content());
                     \Illuminate\Support\Facades\Request::replace($originalInput);
-                    foreach ($dataJson as $data) {
+                    foreach ($dataJson as $data)
+                    {
                         $questionAnswerArray = array_add($questionAnswerArray, $data->id, $data->name);
                     }
                 }
@@ -797,19 +800,23 @@ class UserController extends Controller
                 /**
                  *  Making questions
                  */
-                if (strpos($question->dataSourceUrl, "major") !== false) {
+                if (strpos($question->dataSourceUrl, "major") !== false)
+                {
                     $userMajor = Auth()->user()->major;
                     $userMajors = collect();
                     $userMajors->push($userMajor);
-                    foreach ($userMajors as $major) {
+                    foreach ($userMajors as $major)
+                    {
                         $accessibleMajors = $major->accessibles;
-                        foreach ($accessibleMajors as $accessibleMajor) {
+                        foreach ($accessibleMajors as $accessibleMajor)
+                        {
                             $userMajors->push($accessibleMajor);
                         }
                     }
                     $userMajors = $userMajors->pluck('id')->toArray();
                     $requestUrl = url("/") . $requestBaseUrl . "?";
-                    foreach ($userMajors as $major) {
+                    foreach ($userMajors as $major)
+                    {
                         $requestUrl .= "&parents[]=$major";
                     }
                     $originalInput = \Illuminate\Support\Facades\Request::input();
@@ -820,15 +827,18 @@ class UserController extends Controller
                     \Illuminate\Support\Facades\Request::replace($originalInput);
                     $rootMajorArray = [];
                     $majorsArray = array();
-                    foreach ($dataJson as $item) {
+                    foreach ($dataJson as $item)
+                    {
                         $majorsArray = array_add($majorsArray, $item->id, $item->name);
                     }
                     $rootMajorArray = array_add($rootMajorArray, $userMajor->name, $majorsArray);
                     $questionsData->put($question->id, $rootMajorArray);
-                } elseif (strpos($question->dataSourceUrl, "city") !== false) {
+                } elseif (strpos($question->dataSourceUrl, "city") !== false)
+                {
                     $provinces = Province::orderBy("name")->get();
                     $provinceCityArray = [];
-                    foreach ($provinces as $province) {
+                    foreach ($provinces as $province)
+                    {
                         $requestUrl = url("/") . $requestBaseUrl . "?provinces[]=$province->id";
                         $originalInput = \Illuminate\Support\Facades\Request::input();
                         $request = \Illuminate\Support\Facades\Request::create($requestUrl, 'GET');
@@ -837,7 +847,8 @@ class UserController extends Controller
                         $dataJson = json_decode($response->content());
                         \Illuminate\Support\Facades\Request::replace($originalInput);
                         $citiesArray = array();
-                        foreach ($dataJson as $item) {
+                        foreach ($dataJson as $item)
+                        {
                             $citiesArray = array_add($citiesArray, $item->id, $item->name);
                         }
                         $provinceCityArray = array_add($provinceCityArray, $province->name, $citiesArray);
@@ -896,7 +907,8 @@ class UserController extends Controller
             {
                 session()->put("success", $message);
             }
-        } else {
+        } else
+        {
             $message = "خطای پایگاه داده";
             if ($request->has("fromAPI"))
             {
@@ -926,17 +938,20 @@ class UserController extends Controller
         $user = $request->user();
         $user->fill($request->all());
 
-        if ($request->hasFile("photo")) {
-            $photoRequest = new EditProfilePhotoRequest();
-            $photoRequest['photo'] = $request->photo;
-            $this->updatePhoto($photoRequest);
+        $file = $this->requestHasFile($request , "photo");
+        if ($file !== false)
+        {
+            $this->storePhotoOfUser($user, $file);
         }
 
-        if ($user->completion("lockProfile") == 100) $user->lockProfile = 1;
+        if ($user->completion("lockProfile") == 100)
+            $user->lockProfile();
 
-        if ($user->update()) {
+        if ($user->update())
+        {
             session()->put("success", "اطلاعات شما با موفقیت اصلاح شد.");
-        } else {
+        } else
+        {
             session()->put("error", "خطای پایگاه داده.");
         }
         return redirect()->back()->withInput();
@@ -952,26 +967,31 @@ class UserController extends Controller
     public function updatePhoto(EditProfilePhotoRequest $request)
     {
         $user = $request->user();
-        $file = $request->photo;
-        $extension = $file->getClientOriginalExtension();
-        $fileName = basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
 
-        if (Storage::disk(config('constants.DISK1'))->put($fileName, File::get($file))) {
-            if (strcmp($user->photo, config('constants.PROFILE_DEFAULT_IMAGE')) != 0) //Deleting the old photo
-                Storage::disk(config('constants.DISK1'))->delete($user->photo);
-            $user->photo = $fileName;
+        $file = $this->requestHasFile($request , "photo");
+        if ($file !== false)
+        {
+            $this->storePhotoOfUser($user, $file);
         }
-        if ($user->update()) {
-            if ($request->ajax()) {
-                $newPhotoSrc = route('image', ['category' => '1', 'w' => '150', 'h' => '150', 'filename' => $fileName]);
-                return $this->response->setStatusCode(200)->setContent(["newPhoto" => $newPhotoSrc]);
-            } else {
+
+        if ($user->update())
+        {
+            if ($request->ajax())
+            {
+                $newPhotoSrc = route('image', ['category' => '1', 'w' => '150', 'h' => '150', 'filename' => $user->photo]);
+                return $this->response->setStatusCode(Response::HTTP_OK)
+                                      ->setContent(["newPhoto" => $newPhotoSrc]);
+            } else
+                {
                 session()->put("success", "تغییر عکس با موفقیت انجام شد.");
             }
-        } else {
-            if ($request->ajax()) {
-                return $this->response->setStatusCode(503);
-            } else {
+        } else
+        {
+            if ($request->ajax())
+            {
+                return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
+            } else
+            {
                 session()->put("error", "خطای پایگاه داده.");
             }
         }
@@ -989,21 +1009,29 @@ class UserController extends Controller
     public function updatePassword(EditProfilePasswordRequest $request)
     {
         $user = $request->user();
+        $oldPassword = $request->oldPassword ;
+        $newPassword = $request->password ;
+        $passwordStatus =  $user->checkPassword($oldPassword , $newPassword);
 
-        if (Hash::check($request->oldPassword, $user->password)) {
-            if (Hash::check($request->password, $user->password)) {
-                session()->put("error", "رمز عبور جدید و قدیم یکسان می باشند!");
-            } else {
-                if ($user->fill(['password' => bcrypt($request->password)])->update()) {
-                    session()->put("success", "رمز عبور با موفقیت تغییر یافت.");
-                } else {
-                    session()->put("error", "خطا در تغییر رمز عبور ، لطفا دوباره اقدام نمایید.");
-                }
+        if($passwordStatus == 2)
+        {
+            $user->changePassword($newPassword);
+            if ($user->update())
+            {
+                session()->put("success", "رمز عبور با موفقیت تغییر یافت.");
+            }else
+            {
+                session()->put("error", "خطا در تغییر رمز عبور ، لطفا دوباره اقدام نمایید.");
             }
-
-        } else {
+        }
+        elseif($passwordStatus == 1)
+        {
+            session()->put("error", "رمز عبور جدید و قدیم یکسان می باشند!");
+        }elseif($passwordStatus == 3)
+        {
             session()->put("error", "رمز عبور قدیم وارد شده اشتباه می باشد.");
         }
+
         return redirect()->back();
     }
 
@@ -1138,7 +1166,7 @@ class UserController extends Controller
         $completionPercentage = (int)(($completedFieldsCount / $completionFieldsCount) * 100);
         if ($completionPercentage == 100) {
             if ($user->completion("lockProfile") == 100) {
-                $user->lockProfile = 1;
+                $user->lockProfile();
                 $user->timestamps = false;
                 $user->update();
                 $user->timestamps = true;
@@ -1807,7 +1835,7 @@ class UserController extends Controller
                         $responseStatus = $response->getStatusCode();
                         $result = json_decode($response->getContent());
                         if ($responseStatus == 200) {
-                            $user->lockProfile = 1;
+                            $user->lockProfile();
 
                             $user->update();
                         } else {

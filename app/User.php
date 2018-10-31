@@ -20,7 +20,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\{Auth, Cache, Config, DB};
 use Laratrust\Traits\LaratrustUserTrait;
 use Schema;
-
+use Hash;
 
 /**
  * App\User
@@ -936,5 +936,49 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
             return $users->whereIn('id', Order::whereIn("orderstatus_id", $orderStatusesId)->pluck('user_id'));
         });
 
+    }
+
+    /**
+     * Locks user's profile
+     */
+    protected function lockProfile(): void
+    {
+        $this->lockProfile = 1;
+    }
+
+    /**
+     * Compares user's password with a new password
+     *
+     * @param string $oldPassword
+     * @param $newPassword
+     * @return int
+     *  1 => old password and new password are the same
+     *  2 => old password is the same as current password but new password is not
+     *  3 => old password is not the same as current password
+     */
+    public function checkPassword($oldPassword , $newPassword) :int
+    {
+        if (Hash::check($oldPassword, $this->password))
+        {
+            if (Hash::check( $newPassword , $this->password))
+            {
+                $status = 1;
+            }else
+            {
+                $status = 2;
+            }
+
+        }else
+        {
+            $status = 0;
+        }
+    }
+
+    /**
+     * @param $newPassword
+     */
+    public function changePassword($newPassword):void
+    {
+        $this->fill(['password' => bcrypt($newPassword)]);
     }
 }
