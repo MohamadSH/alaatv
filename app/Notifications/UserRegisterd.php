@@ -79,7 +79,7 @@ class UserRegisterd extends Notification implements ShouldQueue
             . "پشتیبانی:"
             . "\n"
             . "https://goo.gl/jme5VU";
-        $message = "سلام " . $gender . $this->user->getfullName() . "\n" . $messageCore;
+        $message = "سلام " . $gender . $this->user->full_name . "\n" . $messageCore;
 
         return $message;
     }

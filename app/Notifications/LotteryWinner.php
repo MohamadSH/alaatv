@@ -106,7 +106,7 @@ class LotteryWinner extends Notification implements ShouldQueue
             . "آلاء"
             . "\n"
             . "sanatisharif.ir";
-        $message = "سلام " . $gender . $this->user->getfullName() . "\n" . $messageCore;
+        $message = "سلام " . $gender . $this->user->full_name . "\n" . $messageCore;
 
         return $message;
     }

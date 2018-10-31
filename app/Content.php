@@ -374,7 +374,7 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
         $content = $this;
         $key = "content:author" . $content->cacheKey();
         $author = Cache::tags(["user"])->remember($key, Config::get("constants.CACHE_60"), function () use ($content) {
-            return optional($this->user)->getfullName();
+            return optional($this->user)->full_name;
         });
         return isset($author) ? $author : "";
     }

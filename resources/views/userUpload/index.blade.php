@@ -31,9 +31,9 @@
     @foreach($questions as $question)
         <tr id="{{$question->id}}">
             <th></th>
-            <td>@if(isset($question->user->id)) @if(strlen($question->user->getFullName("lastNameFirst")) > 0) <a
+            <td>@if(isset($question->user->id)) @if(strlen($question->user->reverse_full_name) > 0) <a
                         target="_blank"
-                        href="{{action("UserController@edit" , $question->user)}}">{{$question->user->getFullName("lastNameFirst")}}</a> @else
+                        href="{{action("UserController@edit" , $question->user)}}">{{$question->user->reverse_full_name}}</a> @else
                     <span class="label label-sm label-danger"> درج نشده </span> @endif @endif</td>
             <td>@if(strlen($question->title) > 0)  {{$question->title}} @else <span class="label label-sm label-danger">بدون عنوان </span> @endif
             </td>

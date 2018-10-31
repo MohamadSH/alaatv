@@ -392,32 +392,13 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
         return $this->convertDate($explodedDate, "toJalali");
     }
 
+
     /**
-     * @param string $mode
-     * @return string
+     *
      */
-    public function getfullName($mode = "firstNameFirst")
+    public function getReverseFullNameAttribute()
     {
-        $fullName = "";
-        switch ($mode) {
-            case "firstNameFirst":
-                if (isset($this->firstName[0]) || isset($this->lastName[0])) {
-                    if (isset($this->firstName[0])) $fullName .= $this->firstName . " ";
-                    if (isset($this->lastName[0])) $fullName .= $this->lastName;
-
-                }
-                break;
-            case "lastNameFirst":
-                if (isset($this->firstName[0]) || isset($this->lastName[0])) {
-                    if (isset($this->firstName[0])) $fullName .= $this->lastName . " ";
-                    if (isset($this->lastName[0])) $fullName .= $this->firstName;
-                }
-                break;
-            default:
-                break;
-        }
-
-        return $fullName;
+        return ucfirst($this->lastName) . ' ' . ucfirst($this->firstName);
     }
 
     /**

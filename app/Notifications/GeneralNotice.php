@@ -76,7 +76,7 @@ class GeneralNotice extends Notification implements ShouldQueue
 //        }
 
         $messageCore = $this->message;
-//        $message = "سلام ".$gender.$this->user->getfullName()."\n".$messageCore;
+//        $message = "سلام ".$gender.$this->user->full_name."\n".$messageCore;
         $message = $messageCore;
 
         return $message;

@@ -3763,7 +3763,7 @@ class HomeController extends Controller
                 } else {
                     $gender = "";
                 }
-                $message = $gender . $user->getfullName() . "\n";
+                $message = $gender . $user->full_name . "\n";
                 $message .= "همایش طلایی عربی و همایش حل مسائل شیمی به فایل های شما افزوده شد . دانلود در:";
                 $message .= "\n";
                 $message .= "sanatisharif.ir/asset/";

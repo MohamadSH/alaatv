@@ -115,7 +115,7 @@
                                 <td></td>
                                 <td>{{$userlottery->pivot->rank}}</td>
                                 <td><a href="{{action("UserController@edit", $userlottery)}}"
-                                       target="_blank">{{$userlottery->getfullName()}}</a></td>
+                                       target="_blank">{{$userlottery->full_name}}</a></td>
                                 <td>{{$userlottery->mobile}}</td>
                                 <td>
                                     @if(isset($userlottery->pivot->prizes))

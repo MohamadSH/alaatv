@@ -53,7 +53,7 @@ class SendEmployeeTimeSheetCommand extends Command
                 $this->error($exception->getMessage());
                 return;
             }
-            if ($this->confirm('You have chosen ' . $user->getfullName() . '. Do you wish to continue?', true)) {
+            if ($this->confirm('You have chosen ' . $user->full_name . '. Do you wish to continue?', true)) {
                 $this->performTimeSheetTaskForAnEmployee($user);
             }
         } else {
@@ -63,7 +63,7 @@ class SendEmployeeTimeSheetCommand extends Command
 
     private function performTimeSheetTaskForAnEmployee(User $user)
     {
-        $this->info("send TimeSheet to" . $user->getfullName());
+        $this->info("send TimeSheet to" . $user->full_name);
         $dayOfWeekJalali = $this->convertToJalaliDay(Carbon::today('Asia/Tehran')->format('l'));
         $toDayDate = Carbon::today('Asia/Tehran')->format("Y-m-d");
         $this->calculate($user, $dayOfWeekJalali, $toDayDate);
