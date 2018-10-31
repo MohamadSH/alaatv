@@ -69,13 +69,6 @@ class ProductController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    function __construct(Response $response, Websitesetting $setting)
-    {
-        $this->response = $response;
-        $this->setting = $setting->setting;
-        $this->callMiddlewares();
-    }
-
     private function callMiddlewares(): void
     {
 //        $this->middleware('permission:' . config('constants.LIST_PRODUCT_ACCESS'), ['only' => 'index']);
@@ -243,6 +236,13 @@ class ProductController extends Controller
     | Public methods
     |--------------------------------------------------------------------------
     */
+
+    public function __construct(Response $response, Websitesetting $setting)
+    {
+        $this->response = $response;
+        $this->setting = $setting->setting;
+        $this->callMiddlewares();
+    }
 
     /**
      * Display a listing of the resource.
