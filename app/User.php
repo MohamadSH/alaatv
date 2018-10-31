@@ -7,6 +7,7 @@ use App\Classes\Verification\MustVerifyMobileNumber;
 use App\Collection\ContentCollection;
 use App\Collection\UserCollection;
 use App\Traits\APIRequestCommon;
+use App\Traits\CharacterCommon;
 use App\Traits\DateTrait;
 use App\Traits\HasWallet;
 use App\Traits\Helper;
@@ -141,6 +142,12 @@ use Schema;
  */
 class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
 {
+    /*
+    |--------------------------------------------------------------------------
+    | Traits
+    |--------------------------------------------------------------------------
+    */
+
     use MustVerifyMobileNumberTrait;
     use Helper;
     use DateTrait;
@@ -149,6 +156,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     use HasWallet;
     use Notifiable;
     use APIRequestCommon;
+    use CharacterCommon;
 
     /*
     |--------------------------------------------------------------------------
@@ -156,102 +164,29 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     |--------------------------------------------------------------------------
     */
 
-    protected $cascadeDeletes = [
-        'orders',
-        'userbons',
-        'useruploads',
-        'verificationmessages',
-        'bankaccounts',
-        'contacts',
-        'mbtianswers'
-    ];
+    protected $cascadeDeletes = ['orders', 'userbons', 'useruploads', 'verificationmessages', 'bankaccounts', 'contacts', 'mbtianswers'];
     /**      * The attributes that should be mutated to dates.        */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-        'birthdate'
-    ];
-    protected $lockProfile = [
-        "province",
-        "city",
-        "address",
-        "postalCode",
-        "school",
-        "gender_id",
-        "major_id",
-        "email"
-    ];
+    protected $dates = ['created_at', 'updated_at', 'deleted_at', 'birthdate'];
+    protected $lockProfile = ["province", "city", "address", "postalCode", "school", "gender_id", "major_id", "email"];
     //columns being used for locking user's profile
-    protected $completeInfo = [
-        "photo",
-        "province",
-        "city",
-        "address",
-        "postalCode",
-        "school",
-        "gender_id",
-        "major_id",
-        "grade_id",
-        "phone",
-        "bloodtype_id",
-        "allergy",
-        "medicalCondition",
-        "diet"
-    ];
-    protected $medicalInfo = [
-        "bloodtype_id",
-        "allergy",
-        "medicalCondition",
-        "diet"
-    ];
+    protected $completeInfo = ["photo", "province", "city", "address", "postalCode", "school", "gender_id", "major_id", "grade_id", "phone", "bloodtype_id", "allergy", "medicalCondition", "diet"];
+    protected $medicalInfo = ["bloodtype_id", "allergy", "medicalCondition", "diet"];
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'firstName',
-        'lastName',
-        'nameSlug',
-        'mobile',
-        'password',
-        'nationalCode',
-        'photo',
-        'province',
-        'city',
-        'address',
-        'postalCode',
-        'school',
-        'major_id',
-        'grade_id',
-        'birthdate',
-        'gender_id',
-        'userstatus_id',
-        'email',
-        'bio',
-        'introducedBy',
-        'phone',
-        'whatsapp',
-        'skype',
-        'bloodtype_id',
-        'allergy',
-        'medicalCondition',
-        'diet',
-    ];
+    protected $fillable = ['firstName', 'lastName', 'nameSlug', 'mobile', 'password', 'nationalCode', 'photo', 'province', 'city', 'address', 'postalCode', 'school', 'major_id', 'grade_id', 'birthdate', 'gender_id', 'userstatus_id', 'email', 'bio', 'introducedBy', 'phone', 'whatsapp', 'skype', 'bloodtype_id', 'allergy', 'medicalCondition', 'diet', 'techCode',];
     /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
      */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    protected $hidden = ['password', 'remember_token',];
 
     /*
     |--------------------------------------------------------------------------
-    | scope methods
+    | Private methods
     |--------------------------------------------------------------------------
     */
 
@@ -262,17 +197,14 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     {
         $key = "getTeachers";
         return Cache::tags(["teachers"])->remember($key, config("constants.CACHE_600"), function () {
-            $authors = User::select()
-                ->role([config('constants.ROLE_TEACHER')])
-                ->orderBy('lastName')
-                ->get();
+            $authors = User::select()->role([config('constants.ROLE_TEACHER')])->orderBy('lastName')->get();
             return $authors;
         });
     }
 
     /*
     |--------------------------------------------------------------------------
-    | relations
+    | scope methods
     |--------------------------------------------------------------------------
     */
 
@@ -283,13 +215,16 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     {
         $key = "getEmployee";
         return Cache::tags(["employee"])->remember($key, config("constants.CACHE_600"), function () {
-            $employees = User::select()
-                ->role([config('constants.ROLE_EMPLOYEE')])
-                ->orderBy('lastName')
-                ->get();
+            $employees = User::select()->role([config('constants.ROLE_EMPLOYEE')])->orderBy('lastName')->get();
             return $employees;
         });
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Mutator
+    |--------------------------------------------------------------------------
+    */
 
     public static function orderStatusFilter($users, $orderStatusesId)
     {
@@ -307,6 +242,152 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
         return $query->whereHas('roles', function ($q) use ($roles) {
             $q->whereIn("id", $roles);
         });
+    }
+
+    /** Setter mutator for major_id
+     * @param $value
+     */
+    public function setMajorIdAttribute($value): void
+    {
+        if ($value == 0) {
+            $this->attributes["major_id"] = null;
+        }
+    }
+
+    /** Setter mutator for grade_id
+     * @param $value
+     */
+    public function setGenderIdAttribute($value): void
+    {
+        if ($value == 0) {
+            $this->attributes["gender_id"] = null;
+        }
+    }
+
+    /** Setter mutator for grade_id
+     * @param $value
+     */
+    public function setBloodTypeIdAttribute($value): void
+    {
+        if ($value == 0) {
+            $this->attributes["bloodType_id"] = null;
+        }
+    }
+
+    /** Setter mutator for grade_id
+     * @param $value
+     */
+    public function setGradeIdAttribute($value): void
+    {
+        if ($value == 0) {
+            $this->attributes["grade_id"] = null;
+        }
+    }
+
+    /** Setter mutator for email
+     * @param $value
+     */
+    public function setEmailAttribute($value): void
+    {
+        if ($this->strIsEmpty($value)) {
+            $this->attributes["email"] = null;
+        }
+    }
+
+    /** Setter mutator for phone
+     * @param $value
+     */
+    public function setPhoneAttribute($value): void
+    {
+        if ($this->strIsEmpty($value)) {
+            $this->attributes["phone"] = null;
+        }
+    }
+
+    /** Setter mutator for city
+     * @param $value
+     */
+    public function setCityAttribute($value): void
+    {
+        if ($this->strIsEmpty($value)) {
+            $this->attributes["city"] = null;
+        }
+    }
+
+    /** Setter mutator for province
+     * @param $value
+     */
+    public function setProvinceAttribute($value): void
+    {
+        if ($this->strIsEmpty($value)) {
+            $this->attributes["province"] = null;
+        }
+    }
+
+    /** Setter mutator for address
+     * @param $value
+     */
+    public function setAddressAttribute($value): void
+    {
+        if ($this->strIsEmpty($value)) {
+            $this->attributes["address"] = null;
+        }
+    }
+
+    /** Setter mutator for postalCode
+     * @param $value
+     */
+    public function setPostalCodeAttribute($value): void
+    {
+        if ($this->strIsEmpty($value)) {
+            $this->attributes["postalCode"] = null;
+        }
+    }
+
+    /** Setter mutator for school
+     * @param $value
+     */
+    public function setSchoolAttribute($value): void
+    {
+        if ($this->strIsEmpty($value)) {
+            $this->attributes["school"] = null;
+        }
+    }
+
+    /** Setter mutator for allergy
+     * @param $value
+     */
+    public function setAllergyAttribute($value): void
+    {
+        if ($this->strIsEmpty($value)) {
+            $this->attributes["allergy"] = null;
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | relations
+    |--------------------------------------------------------------------------
+    */
+
+    /** Setter mutator for medicalCondition
+     * @param $value
+     */
+    public function setMedicalConditionAttribute($value): void
+    {
+        if ($this->strIsEmpty($value)) {
+            $this->attributes["medicalCondition"] = null;
+        }
+    }
+
+    /** Setter mutator for discount
+     * @param $value
+     */
+    public function setDietAttribute($value): void
+    {
+        if ($this->strIsEmpty($value)) {
+            $this->attributes["diet"] = null;
+        }
     }
 
     public function major()
@@ -331,8 +412,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
 
     public function openOrders()
     {
-        return $this->hasMany('App\Order')
-            ->where("orderstatus_id", Config::get("constants.ORDER_STATUS_OPEN"));
+        return $this->hasMany('App\Order')->where("orderstatus_id", Config::get("constants.ORDER_STATUS_OPEN"));
     }
 
     public function userbons()
@@ -350,12 +430,12 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
         return $this->hasMany('\App\Verificationmessage');
     }
 
-    //Site pages that user has seen
-
     public function bankaccounts()
     {
         return $this->hasMany('\App\Bankaccount');
     }
+
+    //Site pages that user has seen
 
     public function contacts()
     {
@@ -390,12 +470,6 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     public function employeetimesheets()
     {
         return $this->hasMany("\App\Employeetimesheet");
-    }
-
-    public function lotteries()
-    {
-        return $this->belongsToMany("\App\Lottery")
-            ->withPivot("rank", "prizes");
     }
 
     public function bloodtype()
@@ -471,6 +545,12 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
         return $this->morphedByMany('App\Product', 'favorable')->withTimestamps();
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | other
+    |--------------------------------------------------------------------------
+    */
+
     /**
      * Create a new Eloquent Collection instance.
      *
@@ -499,74 +579,16 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
 
     public function products()
     {
-        $result = DB::table('products')
-            ->join('orderproducts', function ($join) {
-                $join->on('products.id', '=', 'orderproducts.product_id')
-                    ->whereNull('orderproducts.deleted_at');
-            })
-            ->join('orders', function ($join) {
-                $join->on('orders.id', '=', 'orderproducts.order_id')
-                    ->whereIn('orders.orderstatus_id', [
-                        Config::get("constants.ORDER_STATUS_CLOSED"),
-                        Config::get("constants.ORDER_STATUS_POSTED"),
-                        Config::get("constants.ORDER_STATUS_READY_TO_POST")
-                    ])
-                    ->whereNull('orders.deleted_at');
-            })
-            ->join('users', 'users.id', '=', 'orders.user_id')
-            ->select([
+        $result = DB::table('products')->join('orderproducts', function ($join) {
+            $join->on('products.id', '=', 'orderproducts.product_id')->whereNull('orderproducts.deleted_at');
+        })->join('orders', function ($join) {
+            $join->on('orders.id', '=', 'orderproducts.order_id')->whereIn('orders.orderstatus_id', [Config::get("constants.ORDER_STATUS_CLOSED"), Config::get("constants.ORDER_STATUS_POSTED"), Config::get("constants.ORDER_STATUS_READY_TO_POST")])->whereNull('orders.deleted_at');
+        })->join('users', 'users.id', '=', 'orders.user_id')->select([
 
-                "products.*"
-            ])
-            ->where('users.id', '=', $this->getKey())
-            ->whereNull('products.deleted_at')
-            ->distinct()
-            ->get();
+            "products.*"])->where('users.id', '=', $this->getKey())->whereNull('products.deleted_at')->distinct()->get();
         $result = Product::hydrate($result->toArray());
 
         return $result;
-    }
-
-    /**
-     * @param string $bonName
-     * @return int
-     */
-    public function userHasBon($bonName): int
-    {
-        $key = "user:userHasBon:" . $this->cacheKey() . "-" . $bonName;
-
-        return Cache::tags('bon')->remember($key, Config::get("constants.CACHE_60"), function () use ($bonName) {
-
-            $bon = Bon::all()
-                ->where('name', $bonName)
-                ->where('isEnable', '=', 1);
-            if ($bon->isEmpty())
-                return false;
-            $userbons = $this->userbons
-                ->where("bon_id", $bon->first()->id)
-                ->where("userbonstatus_id", Config::get("constants.USERBON_STATUS_ACTIVE"));
-            $totalBonNumber = 0;
-            foreach ($userbons as $userbon) {
-                $totalBonNumber = $totalBonNumber + $userbon->validateBon();
-            }
-            return $totalBonNumber;
-
-        });
-
-    }
-
-    //TODO:// add cache
-
-    public function cacheKey()
-    {
-        $key = $this->getKey();
-        $time = isset($this->update) ? $this->updated_at->timestamp : $this->created_at->timestamp;
-        return sprintf(
-            "%s-%s",
-            //$this->getTable(),
-            $key,
-            $time
-        );
     }
 
     /**
@@ -581,18 +603,21 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
         $key = "user:userValidBons:" . $this->cacheKey() . "-" . (isset($bon) ? $bon->cacheKey() : "");
 
         return Cache::tags('bon')->remember($key, Config::get("constants.CACHE_60"), function () use ($bon) {
-            return Userbon::where("user_id", $this->id)
-                ->where("bon_id", $bon->id)
-                ->where("userbonstatus_id", Config::get("constants.USERBON_STATUS_ACTIVE"))
-                ->whereColumn('totalNumber', '>', 'usedNumber')
-                ->where(function ($query) {
-                    $query->whereNull("validSince")->orwhere("validSince", "<", Carbon::now());
-                })
-                ->where(function ($query) {
-                    $query->whereNull("validUntil")->orwhere("validUntil", ">", Carbon::now());
-                })->get();
+            return Userbon::where("user_id", $this->id)->where("bon_id", $bon->id)->where("userbonstatus_id", Config::get("constants.USERBON_STATUS_ACTIVE"))->whereColumn('totalNumber', '>', 'usedNumber')->where(function ($query) {
+                $query->whereNull("validSince")->orwhere("validSince", "<", Carbon::now());
+            })->where(function ($query) {
+                $query->whereNull("validUntil")->orwhere("validUntil", ">", Carbon::now());
+            })->get();
         });
 
+    }
+
+    public function cacheKey()
+    {
+        $key = $this->getKey();
+        $time = isset($this->update) ? $this->updated_at->timestamp : $this->created_at->timestamp;
+        return sprintf("%s-%s", //$this->getTable(),
+            $key, $time);
     }
 
     /**
@@ -604,18 +629,9 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     {
         if (isset($this->firstName) && isset($this->lastName) && isset($this->mobile)) {
             if (isset($this->photo) && strlen($this->photo) > 0) {
-                $data = array(
-                    "id" => $this->mobile,
-                    "username" => $this->firstName . " " . $this->lastName,
-                    "email" => $this->mobile . "@takhtekhak.com",
-                    "avatar" => route('image', ['category' => '1', 'w' => '39', 'h' => '39', 'filename' => $this->photo])
-                );
+                $data = array("id" => $this->mobile, "username" => $this->firstName . " " . $this->lastName, "email" => $this->mobile . "@takhtekhak.com", "avatar" => route('image', ['category' => '1', 'w' => '39', 'h' => '39', 'filename' => $this->photo]));
             } else {
-                $data = array(
-                    "id" => $this->mobile,
-                    "username" => $this->firstName . " " . $this->lastName,
-                    "email" => $this->mobile . "@takhtekhak.com",
-                );
+                $data = array("id" => $this->mobile, "username" => $this->firstName . " " . $this->lastName, "email" => $this->mobile . "@takhtekhak.com",);
             }
             $message = base64_encode(json_encode($data, JSON_UNESCAPED_UNICODE));
             $timestamp = time();
@@ -624,25 +640,18 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
 
             $blocksize = 64;
             $hashfunc = 'sha1';
-            if (strlen($key) > $blocksize)
-                $key = pack('H*', $hashfunc($key));
+            if (strlen($key) > $blocksize) $key = pack('H*', $hashfunc($key));
             $key = str_pad($key, $blocksize, chr(0x00));
             $ipad = str_repeat(chr(0x36), $blocksize);
             $opad = str_repeat(chr(0x5c), $blocksize);
-            $hmac = pack(
-                'H*', $hashfunc(
-                    ($key ^ $opad) . pack(
-                        'H*', $hashfunc(
-                            ($key ^ $ipad) . $data
-                        )
-                    )
-                )
-            );
+            $hmac = pack('H*', $hashfunc(($key ^ $opad) . pack('H*', $hashfunc(($key ^ $ipad) . $data))));
             $hmac = bin2hex($hmac);
             //            dd($message." ".$hmac." ".$timestamp);
             return $message . " " . $hmac . " " . $timestamp;
         }
     }
+
+    //TODO:// add cache
 
     /**
      * @return string
@@ -779,12 +788,8 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
             $websitepage->save();
         }
         if (isset($websitepage->id)) {
-            if (!$this->seensitepages->contains($websitepage->id))
-                $this->seensitepages()->attach($websitepage->id);
-            else {
-                $this->seensitepages()->updateExistingPivot($websitepage->id, [
-                    "numberOfVisit" => $this->seensitepages()->where("id", $websitepage->id)->first()->pivot->numberOfVisit + 1, "updated_at" => Carbon::now()
-                ]);
+            if (!$this->seensitepages->contains($websitepage->id)) $this->seensitepages()->attach($websitepage->id); else {
+                $this->seensitepages()->updateExistingPivot($websitepage->id, ["numberOfVisit" => $this->seensitepages()->where("id", $websitepage->id)->first()->pivot->numberOfVisit + 1, "updated_at" => Carbon::now()]);
             }
             $SeenCount = $websitepage->userschecked()->count();
         }
@@ -794,8 +799,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
 
     public function seensitepages()
     {
-        return $this->belongsToMany('\App\Websitepage', 'userseensitepages', 'user_id', 'websitepage_id')
-            ->withPivot("created_at", "numberOfVisit");
+        return $this->belongsToMany('\App\Websitepage', 'userseensitepages', 'user_id', 'websitepage_id')->withPivot("created_at", "numberOfVisit");
     }
 
     public function CanSeeCounter(): bool
@@ -808,10 +812,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
         /**
          *      Retrieving Tags
          */
-        $response = $this->sendRequest(
-            config("constants.TAG_API_URL") . "id/author/" . $this->id,
-            "GET"
-        );
+        $response = $this->sendRequest(config("constants.TAG_API_URL") . "id/author/" . $this->id, "GET");
 
         if ($response["statusCode"] == 200) {
             $result = json_decode($response["result"]);
@@ -860,5 +861,94 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
             return false;
         }
         return true;
+    }
+
+    public function getLottery()
+    {
+        $exchangeAmount = 0;
+        $userPoints = 0;
+        $userLottery = null;
+        $prizeCollection = collect();
+        $lotteryRank = null;
+        $lottery = null;
+        $lotteryMessage = "";
+        $lotteryName = "";
+
+        $now = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now());
+        $startTime2 = Carbon::create(2018, 06, 15, 07, 00, 00, 'Asia/Tehran');
+        $endTime2 = Carbon::create(2018, 06, 15, 23, 59, 30, 'Asia/Tehran');
+        $flag2 = ($now->between($startTime2, $endTime2));
+        if ($flag2) {
+            $bon = Bon::where("name", Config::get("constants.BON2"))->first();
+            $userPoints = 0;
+            if (isset($bon)) {
+                $userPoints = $this->userHasBon($bon->name);
+                $exchangeAmount = $userPoints * config("constants.HAMAYESH_LOTTERY_EXCHANGE_AMOUNT");
+            }
+            if ($userPoints <= 0) {
+                $lottery = Lottery::where("name", Config::get("constants.LOTTERY_NAME"))->get()->first();
+                if (isset($lottery)) {
+                    $userLottery = $this->lotteries()->where("lottery_id", $lottery->id)->get()->first();
+                    if (isset($userLottery)) {
+                        $lotteryName = $lottery->displayName;
+                        $lotteryMessage = "شما در قرعه کشی " . $lotteryName . " شرکت داده شدید و متاسفانه برنده نشدید.";
+                        if (isset($userLottery->pivot->prizes)) {
+                            $lotteryRank = $userLottery->pivot->rank;
+                            if ($lotteryRank == 0) {
+                                $lotteryMessage = "شما از قرعه کشی " . $lotteryName . " انصراف دادید.";
+                            } else {
+                                $lotteryMessage = "شما در قرعه کشی " . $lotteryName . " برنده " . $lotteryRank . " شدید.";
+                            }
+
+                            $prizes = json_decode($userLottery->pivot->prizes)->items;
+                            $prizeCollection = collect();
+                            foreach ($prizes as $prize) {
+                                if (isset($prize->objectId)) {
+                                    $id = $prize->objectId;
+                                    $model_name = $prize->objectType;
+                                    $model = new $model_name;
+                                    $modelObject = $model->find($id);
+
+                                    $prizeCollection->push(["name" => $prize->name]);
+                                } else {
+                                    $prizeCollection->push(["name" => $prize->name]);
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+
+        return [$exchangeAmount, $userPoints, $userLottery, $prizeCollection, $lotteryRank, $lottery, $lotteryMessage, $lotteryName];
+    }
+
+    /**
+     * @param string $bonName
+     * @return int
+     */
+    public function userHasBon($bonName): int
+    {
+        $key = "user:userHasBon:" . $this->cacheKey() . "-" . $bonName;
+
+        return Cache::tags('bon')->remember($key, Config::get("constants.CACHE_60"), function () use ($bonName) {
+
+            $bon = Bon::all()->where('name', $bonName)->where('isEnable', '=', 1);
+            if ($bon->isEmpty()) return false;
+            $userbons = $this->userbons->where("bon_id", $bon->first()->id)->where("userbonstatus_id", Config::get("constants.USERBON_STATUS_ACTIVE"));
+            $totalBonNumber = 0;
+            foreach ($userbons as $userbon) {
+                $totalBonNumber = $totalBonNumber + $userbon->validateBon();
+            }
+            return $totalBonNumber;
+
+        });
+
+    }
+
+    public function lotteries()
+    {
+        return $this->belongsToMany("\App\Lottery")->withPivot("rank", "prizes");
     }
 }

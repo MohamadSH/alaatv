@@ -28,7 +28,6 @@ class EditProfilePasswordRequest extends FormRequest
      */
     public function rules()
     {
-        session()->put("tab", "tab_1_3");
         return [
             'password' => 'required|confirmed|min:6',
             'oldPassword' => 'required',
