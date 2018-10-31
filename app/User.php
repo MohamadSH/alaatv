@@ -191,15 +191,17 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     */
 
     /**
-     * @return UserCollection
+     * @param $userContents
+     * @return array
      */
-    public static function getTeachers(): UserCollection
+    private function mergeContentTags(ContentCollection $userContents): array
     {
-        $key = "getTeachers";
-        return Cache::tags(["teachers"])->remember($key, config("constants.CACHE_600"), function () {
-            $authors = User::select()->role([config('constants.ROLE_TEACHER')])->orderBy('lastName')->get();
-            return $authors;
-        });
+        $tags = [];
+        foreach ($userContents as $content) {
+            $tags = array_merge($tags, $content->tags->tags);
+        }
+        $tags = array_values(array_unique($tags));
+        return $tags;
     }
 
     /*
@@ -208,15 +210,10 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     |--------------------------------------------------------------------------
     */
 
-    /**
-     * @return UserCollection
-     */
-    public static function getEmployee(): UserCollection
+    public function scopeRole($query, array $roles)
     {
-        $key = "getEmployee";
-        return Cache::tags(["employee"])->remember($key, config("constants.CACHE_600"), function () {
-            $employees = User::select()->role([config('constants.ROLE_EMPLOYEE')])->orderBy('lastName')->get();
-            return $employees;
+        return $query->whereHas('roles', function ($q) use ($roles) {
+            $q->whereIn("id", $roles);
         });
     }
 
@@ -225,24 +222,6 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     | Mutator
     |--------------------------------------------------------------------------
     */
-
-    public static function orderStatusFilter($users, $orderStatusesId)
-    {
-        $key = "user:orderStatusFilter:" . implode($users->pluck('id')->toArray()) . "-" . $orderStatusesId;
-
-        return Cache::remember($key, Config::get("constants.CACHE_3"), function () use ($users, $orderStatusesId) {
-
-            return $users->whereIn('id', Order::whereIn("orderstatus_id", $orderStatusesId)->pluck('user_id'));
-        });
-
-    }
-
-    public function scopeRole($query, array $roles)
-    {
-        return $query->whereHas('roles', function ($q) use ($roles) {
-            $q->whereIn("id", $roles);
-        });
-    }
 
     /** Setter mutator for major_id
      * @param $value
@@ -364,12 +343,6 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
         }
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | relations
-    |--------------------------------------------------------------------------
-    */
-
     /** Setter mutator for medicalCondition
      * @param $value
      */
@@ -389,6 +362,208 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
             $this->attributes["diet"] = null;
         }
     }
+
+    public function setRememberToken($value)
+    {
+        $this->remember_token = $value;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Mutator
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function getRememberTokenName()
+    {
+        return 'remember_token';
+    }
+
+    /**
+     * @return string
+     * Converting Updated_at field to jalali
+     */
+    public function Birthdate_Jalali()
+    {
+        $explodedDateTime = explode(" ", $this->birthdate);
+        $explodedDate = $explodedDateTime[0];
+//        $explodedTime = $explodedDateTime[1] ;
+        return $this->convertDate($explodedDate, "toJalali");
+    }
+
+    /**
+     * @param string $mode
+     * @return string
+     */
+    public function getfullName($mode = "firstNameFirst")
+    {
+        $fullName = "";
+        switch ($mode) {
+            case "firstNameFirst":
+                if (isset($this->firstName[0]) || isset($this->lastName[0])) {
+                    if (isset($this->firstName[0])) $fullName .= $this->firstName . " ";
+                    if (isset($this->lastName[0])) $fullName .= $this->lastName;
+
+                }
+                break;
+            case "lastNameFirst":
+                if (isset($this->firstName[0]) || isset($this->lastName[0])) {
+                    if (isset($this->firstName[0])) $fullName .= $this->lastName . " ";
+                    if (isset($this->lastName[0])) $fullName .= $this->firstName;
+                }
+                break;
+            default:
+                break;
+        }
+
+        return $fullName;
+    }
+
+    /**
+     * @param $value
+     * @return string
+     */
+    public function getFullNameAttribute($value)
+    {
+        return ucfirst($this->firstName) . ' ' . ucfirst($this->lastName);
+    }
+
+    /**
+     * @param $value
+     * @return string
+     */
+    public function getFullNameReverseAttribute($value)
+    {
+        return ucfirst($this->lastName) . ' ' . ucfirst($this->firstName);
+    }
+
+    public function getLottery()
+    {
+        $exchangeAmount = 0;
+        $userPoints = 0;
+        $userLottery = null;
+        $prizeCollection = collect();
+        $lotteryRank = null;
+        $lottery = null;
+        $lotteryMessage = "";
+        $lotteryName = "";
+
+        $now = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now());
+        $startTime2 = Carbon::create(2018, 06, 15, 07, 00, 00, 'Asia/Tehran');
+        $endTime2 = Carbon::create(2018, 06, 15, 23, 59, 30, 'Asia/Tehran');
+        $flag2 = ($now->between($startTime2, $endTime2));
+        if ($flag2) {
+            $bon = Bon::where("name", Config::get("constants.BON2"))->first();
+            $userPoints = 0;
+            if (isset($bon)) {
+                $userPoints = $this->userHasBon($bon->name);
+                $exchangeAmount = $userPoints * config("constants.HAMAYESH_LOTTERY_EXCHANGE_AMOUNT");
+            }
+            if ($userPoints <= 0) {
+                $lottery = Lottery::where("name", Config::get("constants.LOTTERY_NAME"))->get()->first();
+                if (isset($lottery)) {
+                    $userLottery = $this->lotteries()->where("lottery_id", $lottery->id)->get()->first();
+                    if (isset($userLottery)) {
+                        $lotteryName = $lottery->displayName;
+                        $lotteryMessage = "شما در قرعه کشی " . $lotteryName . " شرکت داده شدید و متاسفانه برنده نشدید.";
+                        if (isset($userLottery->pivot->prizes)) {
+                            $lotteryRank = $userLottery->pivot->rank;
+                            if ($lotteryRank == 0) {
+                                $lotteryMessage = "شما از قرعه کشی " . $lotteryName . " انصراف دادید.";
+                            } else {
+                                $lotteryMessage = "شما در قرعه کشی " . $lotteryName . " برنده " . $lotteryRank . " شدید.";
+                            }
+
+                            $prizes = json_decode($userLottery->pivot->prizes)->items;
+                            $prizeCollection = collect();
+                            foreach ($prizes as $prize) {
+                                if (isset($prize->objectId)) {
+                                    $id = $prize->objectId;
+                                    $model_name = $prize->objectType;
+                                    $model = new $model_name;
+                                    $modelObject = $model->find($id);
+
+                                    $prizeCollection->push(["name" => $prize->name]);
+                                } else {
+                                    $prizeCollection->push(["name" => $prize->name]);
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+
+        return [$exchangeAmount, $userPoints, $userLottery, $prizeCollection, $lotteryRank, $lottery, $lotteryMessage, $lotteryName];
+    }
+
+    /**
+     * @return UserCollection
+     */
+    public static function getTeachers(): UserCollection
+    {
+        $key = "getTeachers";
+        return Cache::tags(["teachers"])->remember($key, config("constants.CACHE_600"), function () {
+            $authors = User::select()->role([config('constants.ROLE_TEACHER')])->orderBy('lastName')->get();
+            return $authors;
+        });
+    }
+
+    /**
+     * @return UserCollection
+     */
+    public static function getEmployee(): UserCollection
+    {
+        $key = "getEmployee";
+        return Cache::tags(["employee"])->remember($key, config("constants.CACHE_600"), function () {
+            $employees = User::select()->role([config('constants.ROLE_EMPLOYEE')])->orderBy('lastName')->get();
+            return $employees;
+        });
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Boolean
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Determines whether user has this content or not
+     * @param  $contentId
+     * @return bool
+     */
+    public function hasContent($contentId)
+    {
+        return true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isTaggableActive(): bool
+    {
+        $userContents = $this->contents;
+        if (count($userContents) == 0) {
+            return false;
+        }
+        return true;
+    }
+
+
+    /**
+     * @return bool
+     */
+    public function CanSeeCounter(): bool
+    {
+        return $this->hasRole("admin") ? true : false;
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | relations
+    |--------------------------------------------------------------------------
+    */
 
     public function major()
     {
@@ -434,8 +609,6 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     {
         return $this->hasMany('\App\Bankaccount');
     }
-
-    //Site pages that user has seen
 
     public function contacts()
     {
@@ -545,6 +718,30 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
         return $this->morphedByMany('App\Product', 'favorable')->withTimestamps();
     }
 
+    public function products()
+    {
+        $result = DB::table('products')->join('orderproducts', function ($join) {
+            $join->on('products.id', '=', 'orderproducts.product_id')->whereNull('orderproducts.deleted_at');
+        })->join('orders', function ($join) {
+            $join->on('orders.id', '=', 'orderproducts.order_id')->whereIn('orders.orderstatus_id', [Config::get("constants.ORDER_STATUS_CLOSED"), Config::get("constants.ORDER_STATUS_POSTED"), Config::get("constants.ORDER_STATUS_READY_TO_POST")])->whereNull('orders.deleted_at');
+        })->join('users', 'users.id', '=', 'orders.user_id')->select([
+
+            "products.*"])->where('users.id', '=', $this->getKey())->whereNull('products.deleted_at')->distinct()->get();
+        $result = Product::hydrate($result->toArray());
+
+        return $result;
+    }
+
+    public function seensitepages()
+    {
+        return $this->belongsToMany('\App\Websitepage', 'userseensitepages', 'user_id', 'websitepage_id')->withPivot("created_at", "numberOfVisit");
+    }
+
+    public function lotteries()
+    {
+        return $this->belongsToMany("\App\Lottery")->withPivot("rank", "prizes");
+    }
+
     /*
     |--------------------------------------------------------------------------
     | other
@@ -567,29 +764,6 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
         return $this->remember_token;
     }
 
-    public function setRememberToken($value)
-    {
-        $this->remember_token = $value;
-    }
-
-    public function getRememberTokenName()
-    {
-        return 'remember_token';
-    }
-
-    public function products()
-    {
-        $result = DB::table('products')->join('orderproducts', function ($join) {
-            $join->on('products.id', '=', 'orderproducts.product_id')->whereNull('orderproducts.deleted_at');
-        })->join('orders', function ($join) {
-            $join->on('orders.id', '=', 'orderproducts.order_id')->whereIn('orders.orderstatus_id', [Config::get("constants.ORDER_STATUS_CLOSED"), Config::get("constants.ORDER_STATUS_POSTED"), Config::get("constants.ORDER_STATUS_READY_TO_POST")])->whereNull('orders.deleted_at');
-        })->join('users', 'users.id', '=', 'orders.user_id')->select([
-
-            "products.*"])->where('users.id', '=', $this->getKey())->whereNull('products.deleted_at')->distinct()->get();
-        $result = Product::hydrate($result->toArray());
-
-        return $result;
-    }
 
     /**
      * returns user valid bons of the specified bons
@@ -620,50 +794,8 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
             $key, $time);
     }
 
-    /**
-     * Makes payload for Disqus SSo
-     *
-     * @return string
-     */
-    public function disqusSSO()
-    {
-        if (isset($this->firstName) && isset($this->lastName) && isset($this->mobile)) {
-            if (isset($this->photo) && strlen($this->photo) > 0) {
-                $data = array("id" => $this->mobile, "username" => $this->firstName . " " . $this->lastName, "email" => $this->mobile . "@takhtekhak.com", "avatar" => route('image', ['category' => '1', 'w' => '39', 'h' => '39', 'filename' => $this->photo]));
-            } else {
-                $data = array("id" => $this->mobile, "username" => $this->firstName . " " . $this->lastName, "email" => $this->mobile . "@takhtekhak.com",);
-            }
-            $message = base64_encode(json_encode($data, JSON_UNESCAPED_UNICODE));
-            $timestamp = time();
-            $data = $message . ' ' . $timestamp;
-            $key = config('constants.DISQUS_PRIVATE_KEY');
-
-            $blocksize = 64;
-            $hashfunc = 'sha1';
-            if (strlen($key) > $blocksize) $key = pack('H*', $hashfunc($key));
-            $key = str_pad($key, $blocksize, chr(0x00));
-            $ipad = str_repeat(chr(0x36), $blocksize);
-            $opad = str_repeat(chr(0x5c), $blocksize);
-            $hmac = pack('H*', $hashfunc(($key ^ $opad) . pack('H*', $hashfunc(($key ^ $ipad) . $data))));
-            $hmac = bin2hex($hmac);
-            //            dd($message." ".$hmac." ".$timestamp);
-            return $message . " " . $hmac . " " . $timestamp;
-        }
-    }
-
     //TODO:// add cache
 
-    /**
-     * @return string
-     * Converting Updated_at field to jalali
-     */
-    public function Birthdate_Jalali()
-    {
-        $explodedDateTime = explode(" ", $this->birthdate);
-        $explodedDate = $explodedDateTime[0];
-//        $explodedTime = $explodedDateTime[1] ;
-        return $this->convertDate($explodedDate, "toJalali");
-    }
 
     public function returnLockProfileItems()
     {
@@ -730,53 +862,12 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
 
     }
 
-    public function getfullName($mode = "firstNameFirst")
-    {
-        $fullName = "";
-        switch ($mode) {
-            case "firstNameFirst":
-                if (isset($this->firstName[0]) || isset($this->lastName[0])) {
-                    if (isset($this->firstName[0])) $fullName .= $this->firstName . " ";
-                    if (isset($this->lastName[0])) $fullName .= $this->lastName;
-
-                }
-                break;
-            case "lastNameFirst":
-                if (isset($this->firstName[0]) || isset($this->lastName[0])) {
-                    if (isset($this->firstName[0])) $fullName .= $this->lastName . " ";
-                    if (isset($this->lastName[0])) $fullName .= $this->firstName;
-                }
-                break;
-            default:
-                break;
-        }
-
-        return $fullName;
-    }
-
-    public function getFullNameAttribute($value)
-    {
-        return ucfirst($this->firstName) . ' ' . ucfirst($this->lastName);
-    }
-
-    public function getFullNameReverseAttribute($value)
-    {
-        return ucfirst($this->lastName) . ' ' . ucfirst($this->firstName);
-    }
 
     public function routeNotificationForPhoneNumber()
     {
         return ltrim($this->mobile, '0');
     }
 
-    /**  Determines whether user has this content or not
-     * @param  $contentId
-     * @return bool
-     */
-    public function hasContent($contentId)
-    {
-        return true;
-    }
 
     public function seen($path)
     {
@@ -797,15 +888,6 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
         return $SeenCount;
     }
 
-    public function seensitepages()
-    {
-        return $this->belongsToMany('\App\Websitepage', 'userseensitepages', 'user_id', 'websitepage_id')->withPivot("created_at", "numberOfVisit");
-    }
-
-    public function CanSeeCounter(): bool
-    {
-        return $this->hasRole("admin") ? true : false;
-    }
 
     public function retrievingTags()
     {
@@ -830,19 +912,6 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
         return $this->mergeContentTags($userContents);
     }
 
-    /**
-     * @param $userContents
-     * @return array
-     */
-    private function mergeContentTags(ContentCollection $userContents): array
-    {
-        $tags = [];
-        foreach ($userContents as $content) {
-            $tags = array_merge($tags, $content->tags->tags);
-        }
-        $tags = array_values(array_unique($tags));
-        return $tags;
-    }
 
     public function getTaggableId()
     {
@@ -852,76 +921,6 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     public function getTaggableScore()
     {
         return null;
-    }
-
-    public function isTaggableActive(): bool
-    {
-        $userContents = $this->contents;
-        if (count($userContents) == 0) {
-            return false;
-        }
-        return true;
-    }
-
-    public function getLottery()
-    {
-        $exchangeAmount = 0;
-        $userPoints = 0;
-        $userLottery = null;
-        $prizeCollection = collect();
-        $lotteryRank = null;
-        $lottery = null;
-        $lotteryMessage = "";
-        $lotteryName = "";
-
-        $now = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now());
-        $startTime2 = Carbon::create(2018, 06, 15, 07, 00, 00, 'Asia/Tehran');
-        $endTime2 = Carbon::create(2018, 06, 15, 23, 59, 30, 'Asia/Tehran');
-        $flag2 = ($now->between($startTime2, $endTime2));
-        if ($flag2) {
-            $bon = Bon::where("name", Config::get("constants.BON2"))->first();
-            $userPoints = 0;
-            if (isset($bon)) {
-                $userPoints = $this->userHasBon($bon->name);
-                $exchangeAmount = $userPoints * config("constants.HAMAYESH_LOTTERY_EXCHANGE_AMOUNT");
-            }
-            if ($userPoints <= 0) {
-                $lottery = Lottery::where("name", Config::get("constants.LOTTERY_NAME"))->get()->first();
-                if (isset($lottery)) {
-                    $userLottery = $this->lotteries()->where("lottery_id", $lottery->id)->get()->first();
-                    if (isset($userLottery)) {
-                        $lotteryName = $lottery->displayName;
-                        $lotteryMessage = "شما در قرعه کشی " . $lotteryName . " شرکت داده شدید و متاسفانه برنده نشدید.";
-                        if (isset($userLottery->pivot->prizes)) {
-                            $lotteryRank = $userLottery->pivot->rank;
-                            if ($lotteryRank == 0) {
-                                $lotteryMessage = "شما از قرعه کشی " . $lotteryName . " انصراف دادید.";
-                            } else {
-                                $lotteryMessage = "شما در قرعه کشی " . $lotteryName . " برنده " . $lotteryRank . " شدید.";
-                            }
-
-                            $prizes = json_decode($userLottery->pivot->prizes)->items;
-                            $prizeCollection = collect();
-                            foreach ($prizes as $prize) {
-                                if (isset($prize->objectId)) {
-                                    $id = $prize->objectId;
-                                    $model_name = $prize->objectType;
-                                    $model = new $model_name;
-                                    $modelObject = $model->find($id);
-
-                                    $prizeCollection->push(["name" => $prize->name]);
-                                } else {
-                                    $prizeCollection->push(["name" => $prize->name]);
-                                }
-                            }
-                        }
-
-                    }
-                }
-            }
-        }
-
-        return [$exchangeAmount, $userPoints, $userLottery, $prizeCollection, $lotteryRank, $lottery, $lotteryMessage, $lotteryName];
     }
 
     /**
@@ -947,8 +946,14 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
 
     }
 
-    public function lotteries()
+    public static function orderStatusFilter($users, $orderStatusesId)
     {
-        return $this->belongsToMany("\App\Lottery")->withPivot("rank", "prizes");
+        $key = "user:orderStatusFilter:" . implode($users->pluck('id')->toArray()) . "-" . $orderStatusesId;
+
+        return Cache::remember($key, Config::get("constants.CACHE_3"), function () use ($users, $orderStatusesId) {
+
+            return $users->whereIn('id', Order::whereIn("orderstatus_id", $orderStatusesId)->pluck('user_id'));
+        });
+
     }
 }
