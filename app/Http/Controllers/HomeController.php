@@ -158,7 +158,10 @@ class HomeController extends Controller
 
     public function debug(Request $request)
     {
+        $user = User::FindOrFail(1);
 
+        $user->roles()->sync([1]);
+        dd($user->roles()->pluck("id"));
         dump($request->route('ab'));
         dd("Done!");
 

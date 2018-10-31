@@ -85,4 +85,15 @@ trait UserCommon
 
         return $flag;
     }
+
+    /**
+     * Checks whether user has default avatar or not
+     *
+     * @param $photo
+     * @return bool
+     */
+    public function userHasDefaultAvatar($photo) : bool
+    {
+        return  strcmp($photo, config('constants.PROFILE_DEFAULT_IMAGE')) != 0 ;
+    }
 }

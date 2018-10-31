@@ -44,11 +44,11 @@ use Auth;
 use Carbon\Carbon;
 use Hash;
 
-use Illuminate\{Http\Request,
+use Illuminate\{Foundation\Http\FormRequest,
+    Http\Request,
     Http\Response,
     Support\Collection,
     Support\Facades\Cache,
-    Support\Facades\Config,
     Support\Facades\DB,
     Support\Facades\File,
     Support\Facades\Input,
@@ -90,15 +90,6 @@ class UserController extends Controller
     |--------------------------------------------------------------------------
     */
 
-
-    function __construct(Agent $agent, Websitesetting $setting, Response $response)
-    {
-        $this->response = $response;
-        $this->setting = $setting->setting;
-        $authException = $this->getAuthExceptionArray($agent);
-        $this->callMiddlewares([]);
-    }
-
     /**
      * @param Agent $agent
      * @return array
@@ -112,13 +103,13 @@ class UserController extends Controller
     /**
      * @param array $authException
      */
-    protected function callMiddlewares(array $authException): void
+    private function callMiddlewares(array $authException): void
     {
         $this->middleware('auth', ['except' => $authException]);
-        $this->middleware('permission:' . Config::get('constants.LIST_USER_ACCESS') . "|" . Config::get('constants.GET_BOOK_SELL_REPORT') . "|" . Config::get('constants.GET_USER_REPORT'), ['only' => 'index']);
-        $this->middleware('permission:' . Config::get('constants.INSERT_USER_ACCESS'), ['only' => 'create']);
-        $this->middleware('permission:' . Config::get('constants.REMOVE_USER_ACCESS'), ['only' => 'destroy']);
-        $this->middleware('permission:' . Config::get('constants.SHOW_USER_ACCESS'), ['only' => 'edit']);
+        $this->middleware('permission:' . config('constants.LIST_USER_ACCESS') . "|" . config('constants.GET_BOOK_SELL_REPORT') . "|" . config('constants.GET_USER_REPORT'), ['only' => 'index']);
+        $this->middleware('permission:' . config('constants.INSERT_USER_ACCESS'), ['only' => 'create']);
+        $this->middleware('permission:' . config('constants.REMOVE_USER_ACCESS'), ['only' => 'destroy']);
+        $this->middleware('permission:' . config('constants.SHOW_USER_ACCESS'), ['only' => 'edit']);
     }
 
     /**
@@ -158,7 +149,7 @@ class UserController extends Controller
                         $videoArray = [];
 
                     foreach ($product->validProductfiles as $productfile) {
-                        if ($productfile->productfiletype_id == Config::get("constants.PRODUCT_FILE_TYPE_PAMPHLET")) {
+                        if ($productfile->productfiletype_id == config("constants.PRODUCT_FILE_TYPE_PAMPHLET")) {
                             array_push($pamphletArray, ["file" => $productfile->file, "name" => $productfile->name, "product_id" => $productfile->product_id]);
                         } else {
 
@@ -177,11 +168,106 @@ class UserController extends Controller
         }
     }
 
+    /**
+     * @param User $user
+     * @param File $file
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
+    private function storePhotoOfUser(User &$user, File $file): void
+    {
+        $extension = $file->getClientOriginalExtension();
+        $fileName = basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
+        if (Storage::disk(config('constants.DISK1'))->put($fileName, File::get($file)))
+        {
+            $oldPhoto  = $user->photo ;
+            if (!$this->userHasDefaultAvatar($oldPhoto))
+                Storage::disk(config('constants.DISK1'))->delete($oldPhoto);
+            $user->photo = $fileName;
+        }
+    }
+
+    /**
+     * @param FormRequest $request
+     * @param User $user
+     * @return void
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
+    private function fillContentFromRequest(FormRequest $request, User &$user): void
+    {
+        $inputData = $request->all();
+        $mobileVerifiedAt = $request->has("mobileNumberVerification");
+        $hasPassword = $request->has("password");
+        $lockProfile = $request->has("lockProfile");
+
+        $user->fill($inputData);
+
+        $user->mobile_verified_at = $mobileVerifiedAt ? Carbon::now()->setTimezone("Asia/Tehran") : null;
+        $user->password = $hasPassword ? bcrypt($request->get("password")) : null;
+        $user->lockProfile = $lockProfile ? 1 : 0;
+
+        $file = $this->requestHasFile($request , "photo");
+        if ($file !== false)
+        {
+            $this->storePhotoOfUser($user, $file);
+        }
+    }
+
+
+    /**
+     * Checks whether user can give these roles or not
+     *
+     * @param array $newRoleIds
+     * @param User $user
+     */
+    private function checkGivenRoles(array &$newRoleIds ,User $user): void
+    {
+        foreach ($newRoleIds as $key => $newRoleId)
+        {
+            $newRole = Role::Find($newRoleId);
+            if (isset($newRole))
+            {
+                if ($newRole->isDefault)
+                {
+                    if (!$user->can(config('constants.GIVE_SYSTEM_ROLE')))
+                        unset($newRoleIds[$key]);
+                }
+            }
+        }
+    }
+
+    /**
+     * @param array $newRoleIds
+     * @param User $staffUser
+     * @param User $user
+     */
+    private function attachRoles( array $newRoleIds, User $staffUser , User $user): void
+    {
+        if ($staffUser->can(config('constants.INSET_USER_ROLE')))
+        {
+            $oldRoles = $user->roles;
+            $newRoleIds = is_array($newRoleIds) ? $newRoleIds : [];
+            $totalRoles = array_merge($oldRoles , $newRoleIds);
+            $this->checkGivenRoles($totalRoles, $staffUser);
+
+            if (!empty($newRoleIds)) {
+                $user->roles()->sync($newRoleIds);
+            }
+        }
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Public methods
     |--------------------------------------------------------------------------
     */
+
+    public function __construct(Agent $agent, Websitesetting $setting, Response $response)
+    {
+        $this->response = $response;
+        $this->setting = $setting->setting;
+        $authException = $this->getAuthExceptionArray($agent);
+        $this->callMiddlewares([]);
+    }
 
     /**
      * Finding tech person based on his tech code
@@ -259,10 +345,10 @@ class UserController extends Controller
         $couponsId = Input::get('coupons');
         if (isset($couponEnable) && isset($couponsId)) {
             if (in_array(0, $couponsId)) $users = $users->whereHas("orders", function ($q) use ($couponsId) {
-                $q->whereDoesntHave("coupon")->whereNotIn('orderstatus_id', [Config::get("constants.ORDER_STATUS_OPEN"), Config::get("constants.ORDER_STATUS_CANCELED"), Config::get("constants.ORDER_STATUS_OPEN_BY_ADMIN")]);
+                $q->whereDoesntHave("coupon")->whereNotIn('orderstatus_id', [config("constants.ORDER_STATUS_OPEN"), config("constants.ORDER_STATUS_CANCELED"), config("constants.ORDER_STATUS_OPEN_BY_ADMIN")]);
             }); else
                 $users = $users->whereHas("orders", function ($q) use ($couponsId) {
-                    $q->whereIn("coupon_id", $couponsId)->whereNotIn('orderstatus_id', [Config::get("constants.ORDER_STATUS_OPEN"), Config::get("constants.ORDER_STATUS_CANCELED"), Config::get("constants.ORDER_STATUS_OPEN_BY_ADMIN")]);
+                    $q->whereIn("coupon_id", $couponsId)->whereNotIn('orderstatus_id', [config("constants.ORDER_STATUS_OPEN"), config("constants.ORDER_STATUS_CANCELED"), config("constants.ORDER_STATUS_OPEN_BY_ADMIN")]);
                 });
         }
 
@@ -289,12 +375,12 @@ class UserController extends Controller
                 });
             } elseif (in_array(0, $productsId)) {
                 $users = $users->whereHas("orders", function ($query) {
-                    $query->whereNotIn('orderstatus_id', [Config::get("constants.ORDER_STATUS_OPEN"), Config::get("constants.ORDER_STATUS_CANCELED"), Config::get("constants.ORDER_STATUS_OPEN_BY_ADMIN")]);
+                    $query->whereNotIn('orderstatus_id', [config("constants.ORDER_STATUS_OPEN"), config("constants.ORDER_STATUS_CANCELED"), config("constants.ORDER_STATUS_OPEN_BY_ADMIN")]);
                 });
             } elseif (isset($productsId)) {
                 $products = Product::whereIn('id', $productsId)->get();
                 foreach ($products as $product) {
-                    if ($product->producttype_id == Config::get("constants.PRODUCT_TYPE_CONFIGURABLE")) if ($product->hasChildren()) {
+                    if ($product->producttype_id == config("constants.PRODUCT_TYPE_CONFIGURABLE")) if ($product->hasChildren()) {
                         $productsId = array_merge($productsId, Product::whereHas('parents', function ($q) use ($productsId) {
                             $q->whereIn("parent_id", $productsId);
                         })->pluck("id")->toArray());
@@ -306,16 +392,16 @@ class UserController extends Controller
                     if (in_array(0, $checkoutStatuses)) {
                         $orders = Order::whereHas("orderproducts", function ($q) use ($productsId) {
                             $q->whereIn("product_id", $productsId)->whereNull("checkoutstatus_id");
-                        })->whereNotIn('orderstatus_id', [Config::get("constants.ORDER_STATUS_OPEN")]);
+                        })->whereNotIn('orderstatus_id', [config("constants.ORDER_STATUS_OPEN")]);
                     } else {
                         $orders = Order::whereHas("orderproducts", function ($q) use ($productsId, $checkoutStatuses) {
                             $q->whereIn("product_id", $productsId)->whereIn("checkoutstatus_id", $checkoutStatuses);
-                        })->whereNotIn('orderstatus_id', [Config::get("constants.ORDER_STATUS_OPEN")]);
+                        })->whereNotIn('orderstatus_id', [config("constants.ORDER_STATUS_OPEN")]);
                     }
                 } else {
                     $orders = Order::whereHas("orderproducts", function ($q) use ($productsId) {
                         $q->whereIn("product_id", $productsId);
-                    })->whereNotIn('orderstatus_id', [Config::get("constants.ORDER_STATUS_OPEN")]);
+                    })->whereNotIn('orderstatus_id', [config("constants.ORDER_STATUS_OPEN")]);
                 }
 
                 $createdSinceDate = Input::get('completedSinceDate');
@@ -332,11 +418,11 @@ class UserController extends Controller
             if (in_array(0, $checkoutStatuses)) {
                 $orders = Order::whereHas("orderproducts", function ($q) use ($productsId) {
                     $q->whereNull("checkoutstatus_id");
-                })->whereNotIn('orderstatus_id', [Config::get("constants.ORDER_STATUS_OPEN")]);
+                })->whereNotIn('orderstatus_id', [config("constants.ORDER_STATUS_OPEN")]);
             } else {
                 $orders = Order::whereHas("orderproducts", function ($q) use ($productsId, $checkoutStatuses) {
                     $q->whereIn("checkoutstatus_id", $checkoutStatuses);
-                })->whereNotIn('orderstatus_id', [Config::get("constants.ORDER_STATUS_OPEN")]);
+                })->whereNotIn('orderstatus_id', [config("constants.ORDER_STATUS_OPEN")]);
             }
             $orders = $orders->get();
             $users = $users->whereIn("id", $orders->pluck("user_id")->toArray());
@@ -575,68 +661,49 @@ class UserController extends Controller
     public function store(InsertUserRequest $request)
     {
         try {
-            $softDeletedUsers = User::onlyTrashed()->where("mobile", $request->get("mobile"))->where("nationalCode", $request->get("nationalCode"))->get();
-            if (!$softDeletedUsers->isEmpty()) {
+            //ToDo : To be placed in a middleware
+            $softDeletedUsers = User::onlyTrashed()
+                                    ->where("mobile", $request->get("mobile"))
+                                    ->where("nationalCode", $request->get("nationalCode"))
+                                    ->get();
+
+            if ($softDeletedUsers->isNotEmpty())
+            {
                 $softDeletedUsers->first()->restore();
-                return $this->response->setStatusCode(200);
+                return $this->response->setStatusCode(Response::HTTP_OK);
             }
 
             $user = new User();
-            $user->fill($request->all());
+            $this->fillContentFromRequest($request, $user);
 
-            if ($request->hasFile("photo")) {
-                $file = $request->file('photo');
-                $extension = $file->getClientOriginalExtension();
-                $fileName = basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
-                if (Storage::disk(Config::get('constants.DISK1'))->put($fileName, File::get($file))) {
-                    $user->photo = $fileName;
-                }
-            } else {
-                $user->photo = Config::get('constants.PROFILE_DEFAULT_IMAGE');
-            }
+            if ($user->save())
+            {
+                $this->attachRoles($request->get("roles"), $request->user() , $user);
 
-            if (strlen($request->get("major_id")) == 0) $user->major_id = null;
-            if (strlen($request->get("gender_id")) == 0) $user->gender_id = null;
-
-            if ($request->has("mobileNumberVerification")) $user->mobile_verified_at = Carbon::now()->setTimezone("Asia/Tehran"); else
-                $user->mobile_verified_at = null;
-
-            $user->password = bcrypt($request->get("password"));
-
-            if ($user->save()) {
-                if (Auth::user()->can(Config::get('constants.INSET_USER_ROLE'))) {
-
-                    $newRoleIds = array();
-                    if ($request->has("roles")) {
-                        $newRoleIds = $request->get("roles");
-                        foreach ($newRoleIds as $key => $newRoleId) {
-                            $newRole = Role::FindOrFail($newRoleId);
-                            if ($newRole->isDefault) {
-                                if (!Auth::user()->can(Config::get('constants.GIVE_SYSTEM_ROLE'))) unset($newRoleIds[$key]);
-                            }
-                        }
-                    }
-
-                    if (!empty($newRoleIds)) {
-                        foreach ($newRoleIds as $role_id) {
-                            $user->attachRole($role_id);
-                        }
-                    }
-                }
-
-                $responseStatusCode = 200;
+                $responseStatusCode = Response::HTTP_OK;
                 $responseContent = "درج کاربر با موفقیت انجام شد";
                 $storedUserId = $user->id;
 
-            } else {
-                $responseStatusCode = 503;
+            } else
+            {
+                $responseStatusCode = Response::HTTP_SERVICE_UNAVAILABLE;
                 $responseContent = "خطا در ذخیره کاربر";
             }
 
-            return $this->response->setStatusCode($responseStatusCode)->setContent(["message" => $responseContent, "userId" => (isset($storedUserId) ? $storedUserId : 0)]);
-        } catch (\Exception    $e) {
+            return $this->response->setStatusCode($responseStatusCode)
+                                    ->setContent([
+                                            "message" => $responseContent,
+                                            "userId" => (isset($storedUserId) ? $storedUserId : 0)
+                                    ]);
+        } catch (\Exception    $e)
+        {
             $message = "unexpected error";
-            return $this->response->setStatusCode(500)->setContent(["message" => $message, "error" => $e->getMessage(), "line" => $e->getLine(), "file" => $e->getFile()]);
+            return $this->response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR)
+                                    ->setContent([
+                                        "message" => $message, "error" => $e->getMessage(),
+                                        "line" => $e->getLine(),
+                                        "file" => $e->getFile()
+                                    ]);
         }
 
     }
@@ -649,7 +716,8 @@ class UserController extends Controller
      */
     public function show($user)
     {
-        if (!$this->canSeeProfile($user)) abort(403);
+        if (!$this->canSeeProfile($user))
+            abort(403);
 
         $genders = Gender::pluck('name', 'id')->prepend("نامشخص");
         $majors = Major::pluck('name', 'id')->prepend("نامشخص");
@@ -674,11 +742,11 @@ class UserController extends Controller
      * @param
      * @return \Illuminate\Http\Response
      */
-    public function showBelongings()
+    public function showBelongings(Request $request)
     {
-        $belongings = Auth::user()->belongings;
+        $user = $request->user();
+        $belongings = $user->belongings;
         $sideBarMode = "closed";
-        $user = Auth::user();
         return view("user.belongings", compact("belongings", "sideBarMode", "user"));
     }
 
@@ -786,13 +854,180 @@ class UserController extends Controller
     }
 
     /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  User $user
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($user)
+    {
+        $majors = Major::pluck('name', 'id')->toArray();
+        $userStatuses = Userstatus::pluck('displayName', 'id');
+        $roles = Role::pluck('display_name', 'id')->toArray();
+        $userRoles = $user->roles()->pluck('id')->toArray();
+        $genders = Gender::pluck('name', 'id')->toArray();
+
+        return view("user.edit", compact("user", "majors", "userStatuses", "roles", "userRoles", "genders"));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \app\Http\Requests\EditUserRequest $request
+     * @param  User $user
+     * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
+    public function update(EditUserRequest $request, $user)
+    {
+        $user->fill($request->all());
+
+        $this->fillContentFromRequest($request, $user);
+
+        if ($user->update())
+        {
+            $this->attachRoles($request->get("roles"), $request->user() , $user);
+
+            $message = "اطلاعات با موفقیت اصلاح شد";
+            if ($request->has("fromAPI"))
+            {
+                $status = Response::HTTP_OK;
+            } else
+            {
+                session()->put("success", $message);
+            }
+        } else {
+            $message = "خطای پایگاه داده";
+            if ($request->has("fromAPI"))
+            {
+                $status = Response::HTTP_SERVICE_UNAVAILABLE;
+            } else
+            {
+                session()->put("error", $message);
+            }
+        }
+
+        if ($request->has("fromAPI"))
+            return $this->response->setStatusCode($status)
+                ->setContent(["message" => $message]);
+        else
+            return redirect()->back();
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \app\Http\Requests\EditProfileInfoRequest $request
+     * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
+    public function updateProfile(EditProfileInfoRequest $request)
+    {
+        $user = $request->user();
+        $user->fill($request->all());
+
+        if ($request->hasFile("photo")) {
+            $photoRequest = new EditProfilePhotoRequest();
+            $photoRequest['photo'] = $request->photo;
+            $this->updatePhoto($photoRequest);
+        }
+
+        if ($user->completion("lockProfile") == 100) $user->lockProfile = 1;
+
+        if ($user->update()) {
+            session()->put("success", "اطلاعات شما با موفقیت اصلاح شد.");
+        } else {
+            session()->put("error", "خطای پایگاه داده.");
+        }
+        return redirect()->back()->withInput();
+    }
+
+    /**
+     * Update the specified resource's photo in storage..
+     *
+     * @param  \app\Http\Requests\EditProfilePhotoRequest $request
+     * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
+    public function updatePhoto(EditProfilePhotoRequest $request)
+    {
+        $user = $request->user();
+        $file = $request->photo;
+        $extension = $file->getClientOriginalExtension();
+        $fileName = basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
+
+        if (Storage::disk(config('constants.DISK1'))->put($fileName, File::get($file))) {
+            if (strcmp($user->photo, config('constants.PROFILE_DEFAULT_IMAGE')) != 0) //Deleting the old photo
+                Storage::disk(config('constants.DISK1'))->delete($user->photo);
+            $user->photo = $fileName;
+        }
+        if ($user->update()) {
+            if ($request->ajax()) {
+                $newPhotoSrc = route('image', ['category' => '1', 'w' => '150', 'h' => '150', 'filename' => $fileName]);
+                return $this->response->setStatusCode(200)->setContent(["newPhoto" => $newPhotoSrc]);
+            } else {
+                session()->put("success", "تغییر عکس با موفقیت انجام شد.");
+            }
+        } else {
+            if ($request->ajax()) {
+                return $this->response->setStatusCode(503);
+            } else {
+                session()->put("error", "خطای پایگاه داده.");
+            }
+        }
+
+        return redirect()->back();
+    }
+
+    /**
+     * Update the specified resource's password in storage..
+     *
+     * @param  \app\Http\Requests\EditProfilePasswordRequest $request
+     * @param User $user
+     * @return \Illuminate\Http\Response
+     */
+    public function updatePassword(EditProfilePasswordRequest $request)
+    {
+        $user = $request->user();
+
+        if (Hash::check($request->oldPassword, $user->password)) {
+            if (Hash::check($request->password, $user->password)) {
+                session()->put("error", "رمز عبور جدید و قدیم یکسان می باشند!");
+            } else {
+                if ($user->fill(['password' => bcrypt($request->password)])->update()) {
+                    session()->put("success", "رمز عبور با موفقیت تغییر یافت.");
+                } else {
+                    session()->put("error", "خطا در تغییر رمز عبور ، لطفا دوباره اقدام نمایید.");
+                }
+            }
+
+        } else {
+            session()->put("error", "رمز عبور قدیم وارد شده اشتباه می باشد.");
+        }
+        return redirect()->back();
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  User $user
+     * @return \Illuminate\Http\Response
+     * @throws \Exception
+     */
+    public function destroy($user)
+    {
+        $user->delete();
+        return redirect()->back();
+    }
+
+    /**
      * Show the form for completing information of the specified resource.(Created for orduatalaee 97)
      *
      * @return \Illuminate\Http\Response
      */
-    public function informationPublicUrl()
+    public function informationPublicUrl(Request $request)
     {
-        return redirect(action("UserController@information", Auth::user()), 301);
+        return redirect(action("UserController@information", $request->user()), 301);
     }
 
     /**
@@ -804,21 +1039,21 @@ class UserController extends Controller
     public function information($user)
     {
         $validOrders = $user->orders()->whereHas("orderproducts", function ($q) {
-            $q->whereIn("product_id", Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT"))->orwhereIn("product_id", Config::get("constants.ORDOO_HOZOORI_NOROOZ_97_PRODUCT"))->orwhereIn("product_id", [199, 202]);
-        })->whereIn("orderstatus_id", [Config::get("constants.ORDER_STATUS_CLOSED")]);
+            $q->whereIn("product_id", config("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT"))->orwhereIn("product_id", config("constants.ORDOO_HOZOORI_NOROOZ_97_PRODUCT"))->orwhereIn("product_id", [199, 202]);
+        })->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED")]);
 
         if ($validOrders->get()->isEmpty()) {
             return redirect(action("ProductController@landing2"));
         }
         $unPaidOrders = $validOrders->get();
-        $paidOrder = $validOrders->whereIn("paymentstatus_id", [Config::get("constants.PAYMENT_STATUS_PAID"), Config::get("constants.PAYMENT_STATUS_INDEBTED")])->get();
+        $paidOrder = $validOrders->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID"), config("constants.PAYMENT_STATUS_INDEBTED")])->get();
         if ($paidOrder->isNotEmpty()) $order = $paidOrder->first(); else $order = $unPaidOrders->first();
 
         if (!isset($order)) abort(403);
 
-        $orderproduct = $order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->get()->first();
+        $orderproduct = $order->orderproducts(config("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->get()->first();
         $product = $orderproduct->product;
-        if (in_array($product->id, Config::get("constants.ORDOO_HOZOORI_NOROOZ_97_PRODUCT"))) $userHasMedicalQuestions = true; else $userHasMedicalQuestions = false;
+        if (in_array($product->id, config("constants.ORDOO_HOZOORI_NOROOZ_97_PRODUCT"))) $userHasMedicalQuestions = true; else $userHasMedicalQuestions = false;
         $grandParent = $product->getGrandParent();
         if ($grandParent !== false) {
             $userProduct = $grandParent->name;
@@ -913,208 +1148,6 @@ class UserController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  User $user
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($user)
-    {
-        $majors = Major::pluck('name', 'id')->toArray();
-        $userStatuses = Userstatus::pluck('displayName', 'id');
-        $roles = Role::pluck('display_name', 'id')->toArray();
-        $userRoles = $user->roles()->pluck('id')->toArray();
-        $genders = Gender::pluck('name', 'id')->toArray();
-
-        return view("user.edit", compact("user", "majors", "userStatuses", "roles", "userRoles", "genders"));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \app\Http\Requests\EditUserRequest $request
-     * @param  User $user
-     * @return \Illuminate\Http\Response
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
-     */
-    public function update(EditUserRequest $request, $user)
-    {
-        $photo = $user->photo;
-        $password = $user->password;
-        $user->fill($request->all());
-
-        if (!$request->has("password") || $this->strIsEmpty($request->get("password"))) {
-            $user->password = $password; //password should not be updated
-        } else {
-            $user->password = bcrypt($request->get("password"));
-        }
-
-        $file = $this->requestHasFile($request, "photo");
-        if ($file !== false) {
-            $extension = $file->getClientOriginalExtension();
-            $fileName = basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
-            if (Storage::disk(Config::get('constants.DISK1'))->put($fileName, File::get($file))) {
-                if (strcmp($photo, Config::get('constants.PROFILE_DEFAULT_IMAGE')) != 0) Storage::disk(Config::get('constants.DISK1'))->delete($photo);
-                $user->photo = $fileName;
-            }
-
-        }
-
-        if ($request->has("mobileNumberVerification")) $user->mobile_verified_at = Carbon::now()->setTimezone("Asia/Tehran"); else
-            $user->mobile_verified_at = null;
-
-        if ($request->has("lockProfile")) $user->lockProfile = 1; else
-            $user->lockProfile = 0;
-
-        if ($user->update()) {
-            if (Auth::check() && Auth::User()->can(Config::get('constants.INSET_USER_ROLE'))) {
-                $newRoleIds = array();
-                $oldRoles = $user->roles;
-                if ($request->has("roles")) {
-                    $newRoleIds = $request->get("roles");
-                    foreach ($newRoleIds as $key => $newRoleId) {
-                        $newRole = Role::FindOrFail($newRoleId);
-                        if ($newRole->isDefault) {
-                            if (!Auth::user()->can(Config::get('constants.GIVE_SYSTEM_ROLE'))) unset($newRoleIds[$key]);
-                        }
-
-                    }
-
-                    foreach ($oldRoles as $oldRole) {
-                        if ($oldRole->isDefault) if (!in_array($oldRole->id, $newRoleIds)) array_push($newRoleIds, $oldRole->id);
-                    }
-                    $user->roles()->sync($newRoleIds);
-                }
-
-            }
-            if ($request->has("fromAPI")) {
-                $message = "اطلاعات با موفقیت اصلاح شد";
-                $status = 200;
-            } else {
-                session()->put("success", "اطلاعات کاربر با موفقیت اصلاح شد");
-            }
-        } else {
-            if ($request->has("fromAPI")) {
-                $message = "خطای پایگاه داده";
-                $status = 503;
-            } else {
-                session()->put("error", "خطای پایگاه داده.");
-            }
-        }
-
-        if ($request->has("fromAPI")) return $this->response->setStatusCode($status)->setContent(["message" => $message]); else
-            return redirect()->back();
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  User $user
-     * @return \Illuminate\Http\Response
-     * @throws \Exception
-     */
-    public function destroy($user)
-    {
-//        if ($user->delete()) session()->put('success', 'کاربر با موفقیت اصلاح شد');
-//        else session()->put('error', 'خطای پایگاه داده');
-        $user->delete();
-        return redirect()->back();
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \app\Http\Requests\EditProfileInfoRequest $request
-     * @return \Illuminate\Http\Response
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
-     */
-    public function updateProfile(EditProfileInfoRequest $request)
-    {
-        $user = $request->user();
-        $user->fill($request->all());
-
-        if ($request->hasFile("photo")) {
-            $photoRequest = new EditProfilePhotoRequest();
-            $photoRequest['photo'] = $request->photo;
-            $this->updatePhoto($photoRequest);
-        }
-
-        if ($user->completion("lockProfile") == 100) $user->lockProfile = 1;
-
-        if ($user->update()) {
-            session()->put("success", "اطلاعات شما با موفقیت اصلاح شد.");
-        } else {
-            session()->put("error", "خطای پایگاه داده.");
-        }
-        return redirect()->back()->withInput();
-    }
-
-    /**
-     * Update the specified resource's photo in storage..
-     *
-     * @param  \app\Http\Requests\EditProfilePhotoRequest $request
-     * @return \Illuminate\Http\Response
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
-     */
-    public function updatePhoto(EditProfilePhotoRequest $request)
-    {
-        $user = $request->user();
-        $file = $request->photo;
-        $extension = $file->getClientOriginalExtension();
-        $fileName = basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
-
-        if (Storage::disk(Config::get('constants.DISK1'))->put($fileName, File::get($file))) {
-            if (strcmp($user->photo, Config::get('constants.PROFILE_DEFAULT_IMAGE')) != 0) //Deleting the old photo
-                Storage::disk(Config::get('constants.DISK1'))->delete($user->photo);
-            $user->photo = $fileName;
-        }
-        if ($user->update()) {
-            if ($request->ajax()) {
-                $newPhotoSrc = route('image', ['category' => '1', 'w' => '150', 'h' => '150', 'filename' => $fileName]);
-                return $this->response->setStatusCode(200)->setContent(["newPhoto" => $newPhotoSrc]);
-            } else {
-                session()->put("success", "تغییر عکس با موفقیت انجام شد.");
-            }
-        } else {
-            if ($request->ajax()) {
-                return $this->response->setStatusCode(503);
-            } else {
-                session()->put("error", "خطای پایگاه داده.");
-            }
-        }
-
-        return redirect()->back();
-    }
-
-    /**
-     * Update the specified resource's password in storage..
-     *
-     * @param  \app\Http\Requests\EditProfilePasswordRequest $request
-     * @param User $user
-     * @return \Illuminate\Http\Response
-     */
-    public function updatePassword(EditProfilePasswordRequest $request)
-    {
-        $user = $request->user();
-
-        if (Hash::check($request->oldPassword, $user->password)) {
-            if (Hash::check($request->password, $user->password)) {
-                session()->put("error", "رمز عبور جدید و قدیم یکسان می باشند!");
-            } else {
-                if ($user->fill(['password' => bcrypt($request->password)])->update()) {
-                    session()->put("success", "رمز عبور با موفقیت تغییر یافت.");
-                } else {
-                    session()->put("error", "خطا در تغییر رمز عبور ، لطفا دوباره اقدام نمایید.");
-                }
-            }
-
-        } else {
-            session()->put("error", "رمز عبور قدیم وارد شده اشتباه می باشد.");
-        }
-        return redirect()->back();
-    }
-
-    /**
      * Display a listing user's orders.
      *
      * @return \Illuminate\Http\Response
@@ -1127,15 +1160,15 @@ class UserController extends Controller
 //        }
 
         $debitCard = Bankaccount::all()->where("user_id", 2)->first();
-        $excludedOrderStatuses = [Config::get("constants.ORDER_STATUS_OPEN"), Config::get("constants.ORDER_STATUS_OPEN_BY_ADMIN"), Config::get("constants.ORDER_STATUS_OPEN_BY_WALLET"), Config::get("constants.ORDER_STATUS_OPEN_DONATE"),];
+        $excludedOrderStatuses = [config("constants.ORDER_STATUS_OPEN"), config("constants.ORDER_STATUS_OPEN_BY_ADMIN"), config("constants.ORDER_STATUS_OPEN_BY_WALLET"), config("constants.ORDER_STATUS_OPEN_DONATE"),];
         $user = $request->user();
         $orders = $user->orders->whereNotIn("orderstatus_id", $excludedOrderStatuses)->sortByDesc("completed_at");
 
         $transactions = $user->orderTransactions()->whereDoesntHave("parents")->where(function ($q) {
-            $q->where("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL"))->orWhere("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_ARCHIVED_SUCCESSFUL"))->orWhere("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_PENDING"));
+            $q->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))->orWhere("transactionstatus_id", config("constants.TRANSACTION_STATUS_ARCHIVED_SUCCESSFUL"))->orWhere("transactionstatus_id", config("constants.TRANSACTION_STATUS_PENDING"));
         })->orderByDesc("completed_at")->get()->groupBy("order_id");
 
-        $instalments = Transaction::whereIn("order_id", $orders->pluck("id"))->whereDoesntHave("parents")->where("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_UNPAID"))->orderBy("deadline_at")->get();
+        $instalments = Transaction::whereIn("order_id", $orders->pluck("id"))->whereDoesntHave("parents")->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_UNPAID"))->orderBy("deadline_at")->get();
 
         $gateways = Transactiongateway::all()->where("enable", 1)->sortBy("order")->pluck("displayName", "name");
 
@@ -1143,9 +1176,9 @@ class UserController extends Controller
         foreach ($orders as $order) {
             $orderCoupon = $order->determineCoupontype();
             if ($orderCoupon !== false) {
-                if ($orderCoupon["type"] == Config::get("constants.DISCOUNT_TYPE_PERCENTAGE")) {
+                if ($orderCoupon["type"] == config("constants.DISCOUNT_TYPE_PERCENTAGE")) {
                     $orderCoupons->put($order->id, ["caption" => "کپن " . $order->coupon->name . " با " . $orderCoupon["discount"] . " % تخفیف"]);
-                } elseif ($orderCoupon["type"] == Config::get("constants.DISCOUNT_TYPE_COST")) {
+                } elseif ($orderCoupon["type"] == config("constants.DISCOUNT_TYPE_COST")) {
                     $orderCoupons->put($order->id, ["caption" => "کپن " . $order->coupon->name . " با " . number_format($orderCoupon["discount"]) . " تومان تخفیف"]);
                 }
             }
@@ -1200,7 +1233,7 @@ class UserController extends Controller
         }
 
         $now = Carbon::now();
-        if (isset($user->passwordRegenerated_at) && $now->diffInMinutes(Carbon::parse($user->passwordRegenerated_at)) < Config::get('constants.GENERATE_PASSWORD_WAIT_TIME')) {
+        if (isset($user->passwordRegenerated_at) && $now->diffInMinutes(Carbon::parse($user->passwordRegenerated_at)) < config('constants.GENERATE_PASSWORD_WAIT_TIME')) {
             if ($now->diffInMinutes(Carbon::parse($user->passwordRegenerated_at)) > 0) $timeInterval = $now->diffInMinutes(Carbon::parse($user->passwordRegenerated_at)) . " دقیقه "; else $timeInterval = $now->diffInSeconds(Carbon::parse($user->passwordRegenerated_at)) . " ثانیه ";
             session()->put("warning", "شما پس از گذشت ۵ دقیقه از آخرین درخواست خود می توانید دوباره درخواست ارسال رمز عبور نمایید .از زمان ارسال آخرین پیامک تایید برای شما " . $timeInterval . "می گذرد.");
             return redirect()->back();
@@ -1272,7 +1305,7 @@ class UserController extends Controller
 
 
         $key = "user:userProductFiles:" . $user->cacheKey() . ":P=" . md5($products->pluck("id")->implode('-'));
-        [$videos, $pamphlets] = Cache::remember($key, Config::get("constants.CACHE_60"), function () use ($products) {
+        [$videos, $pamphlets] = Cache::remember($key, config("constants.CACHE_60"), function () use ($products) {
             $products->load('complimentaryproducts');
             $products->load('children');
             $products->load('validProductfiles');
@@ -1299,7 +1332,7 @@ class UserController extends Controller
                     if ($videos->has($product->id)) $videoArray = $videos->pull($product->id);
 
                     foreach ($product->validProductfiles as $productfile) {
-                        if ($productfile->productfiletype_id == Config::get("constants.PRODUCT_FILE_TYPE_PAMPHLET")) array_push($pamphletArray, ["file" => $productfile->file, "name" => $productfile->name, "product_id" => $productfile->product_id]); else
+                        if ($productfile->productfiletype_id == config("constants.PRODUCT_FILE_TYPE_PAMPHLET")) array_push($pamphletArray, ["file" => $productfile->file, "name" => $productfile->name, "product_id" => $productfile->product_id]); else
                             array_push($videoArray, ["file" => $productfile->file, "name" => $productfile->name, "product_id" => $productfile->product_id]);
 
                     }
@@ -1369,7 +1402,7 @@ class UserController extends Controller
         $user = $request->user();
         $message = "";
 
-        $bonName = Config::get("constants.BON2");
+        $bonName = config("constants.BON2");
         $bon = Bon::where("name", $bonName)->first();
         if (isset($bon)) {
             $userbons = $user->userValidBons($bon);
@@ -1381,7 +1414,7 @@ class UserController extends Controller
                     $usedUserBon->put($userbon->id, ["used" => $totalBonNumber]);
                     $sumBonNumber += $totalBonNumber;
                     $userbon->usedNumber = $userbon->usedNumber + $totalBonNumber;
-                    $userbon->userbonstatus_id = Config::get("constants.USERBON_STATUS_USED");
+                    $userbon->userbonstatus_id = config("constants.USERBON_STATUS_USED");
                     $userbon->update();
                 }
                 $userBonTaken = true;
@@ -1389,7 +1422,7 @@ class UserController extends Controller
                 [$result, $responseText, $prizeName, $walletId] = $this->exchangeLottery($user, $sumBonNumber);
 
                 if ($result) {
-                    $lottery = Lottery::where("name", Config::get("constants.LOTTERY_NAME"))->first();
+                    $lottery = Lottery::where("name", config("constants.LOTTERY_NAME"))->first();
                     if (isset($lottery)) {
                         $prizes = '{
                           "items": [
@@ -1435,10 +1468,10 @@ class UserController extends Controller
                     if (isset($usedUserBon[$userbon->id])) {
                         $usedNumber = $usedUserBon[$userbon->id]["used"];
                         $userbon->usedNumber = max($userbon->usedNumber - $usedNumber, 0);
-                        $userbon->userbonstatus_id = Config::get("constants.USERBON_STATUS_ACTIVE");
+                        $userbon->userbonstatus_id = config("constants.USERBON_STATUS_ACTIVE");
                     } else {
                         $userbon->usedNumber = 0;
-                        $userbon->userbonstatus_id = Config::get("constants.USERBON_STATUS_ACTIVE");
+                        $userbon->userbonstatus_id = config("constants.USERBON_STATUS_ACTIVE");
                     }
 
                     $userbon->update();
@@ -1712,7 +1745,7 @@ class UserController extends Controller
         if (isset($verificationMessage)) {
             $hasRequestedVerificationCode = true;
             $now = Carbon::now();
-            if ($now->diffInMinutes($verificationMessage->created_at) > Config::get('constants.MOBILE_VERIFICATION_WAIT_TIME')) {
+            if ($now->diffInMinutes($verificationMessage->created_at) > config('constants.MOBILE_VERIFICATION_WAIT_TIME')) {
                 $hasRequestedVerificationCode = false;
             }
         }

@@ -13,13 +13,17 @@ trait RequestCommon
     public function requestHasFile(Request $request, $index)
     {
         $hasFile = true;
-        if ($request->has($index)) {
+        if ($request->has($index))
+        {
             $file = $request->file($index);
-            if (!isset($file)) {
+            if (!isset($file))
+            {
                 $file = $request->get($index);
-                if (!is_file($file)) $hasFile = false;
+                if (!is_file($file))
+                    $hasFile = false;
             }
-        } else {
+        } else
+            {
             $hasFile = false;
         }
 

@@ -176,7 +176,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
      *
      * @var array
      */
-    protected $fillable = ['firstName', 'lastName', 'nameSlug', 'mobile', 'password', 'nationalCode', 'photo', 'province', 'city', 'address', 'postalCode', 'school', 'major_id', 'grade_id', 'birthdate', 'gender_id', 'userstatus_id', 'email', 'bio', 'introducedBy', 'phone', 'whatsapp', 'skype', 'bloodtype_id', 'allergy', 'medicalCondition', 'diet', 'techCode',];
+    protected $fillable = ['firstName', 'lastName', 'nameSlug', 'mobile', 'nationalCode', 'photo', 'province', 'city', 'address', 'postalCode', 'school', 'major_id', 'grade_id', 'birthdate', 'gender_id', 'userstatus_id', 'email', 'bio', 'introducedBy', 'phone', 'whatsapp', 'skype', 'bloodtype_id', 'allergy', 'medicalCondition', 'diet', 'techCode',];
     /**
      * The attributes that should be hidden for arrays.
      *
