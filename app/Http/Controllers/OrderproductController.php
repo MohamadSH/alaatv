@@ -331,7 +331,7 @@ class OrderproductController extends Controller
 
                 }
                 //ToDo : replace with appropriate error page
-//                    else exit("خطای پایگاه داده");
+//                    else exit(\Lang::get("responseText.Database error."));
             }
 
         } else {

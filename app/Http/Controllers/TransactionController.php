@@ -870,7 +870,7 @@ class TransactionController extends Controller
             if ($request->ajax() || $request->has("apirequest")) {
                 return $this->response->setStatusCode(503);
             } else {
-                session()->put("success", "خطای پایگاه داده");
+                session()->put("success", \Lang::get("responseText.Database error."));
                 return redirect()->back();
             }
         }

@@ -50,7 +50,7 @@ class AfterLoginFormController extends Controller
         $afterLoginFormField->fill($request->all());
 
         if ($afterLoginFormField->save()) session()->put("success", "فیلد با موفقیت اضافه شد");
-        else session()->flash("error", "خطای پایگاه داده");
+        else session()->flash("error", \Lang::get("responseText.Database error."));
 
         return redirect()->back();
     }
@@ -98,7 +98,7 @@ class AfterLoginFormController extends Controller
     public function destroy(Afterloginformcontrol $field)
     {
         if ($field->delete()) session()->put("success", "فیلد با موفقیت حذف شد");
-        else session()->put("error", "خطای پایگاه داده");
+        else session()->put("error", \Lang::get("responseText.Database error."));
         return response([
             'sessionData' => session()->all()
         ]);

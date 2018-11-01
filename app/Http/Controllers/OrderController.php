@@ -725,7 +725,7 @@ class OrderController extends Controller
                 }
             }
 
-            $file = $this->requestHasFile($request, "file");
+            $file = $this->getRequestFile($request, "file");
             if ($file !== false) {
                 $extension = $file->getClientOriginalExtension();
                 $fileName = basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
@@ -779,7 +779,7 @@ class OrderController extends Controller
                 }
             }
         } else {
-            session()->put("error", "خطای پایگاه داده");
+            session()->put("error", \Lang::get("responseText.Database error."));
         }
 
         return redirect()->back();
@@ -1662,9 +1662,9 @@ class OrderController extends Controller
             if ($order->update())
                 session()->put('couponMessageSuccess', "کپن سفارش شما با موفیت حذف شد");
             else
-                session()->put('couponMessageError', "خطای پایگاه داده");
+                session()->put('couponMessageError', \Lang::get("responseText.Database error."));
         } else {
-            session()->put('couponMessageError', "خطای پایگاه داده");
+            session()->put('couponMessageError', \Lang::get("responseText.Database error."));
         }
 
         return redirect()->back();
@@ -1812,7 +1812,7 @@ class OrderController extends Controller
             if ($updateFlag) {
                 return $this->response->setStatusCode(200)->setContent(["cost" => $cost]);
             } else {
-                return $this->response->setStatusCode(503)->setContent(["message" => "خطای پایگاه داده"]);
+                return $this->response->setStatusCode(503)->setContent(["message" => \Lang::get("responseText.Database error.")]);
             }
         }
 

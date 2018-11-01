@@ -400,7 +400,7 @@
                     //The status for when there is error php code
                     503: function (response) {
                         submitButton.html("<i class=\"fa fa-check\"></i> ذخیره اطلاعات");
-                        form.closest(".portlet").find(".custom-alerts >  strong").html("خطای پایگاه داده");
+                        form.closest(".portlet").find(".custom-alerts >  strong").html(\Lang::get("responseText.Database error."));
                         form.closest(".portlet").find(".custom-alerts").removeClass("hidden")
                     }
                 },
