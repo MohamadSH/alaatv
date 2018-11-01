@@ -133,7 +133,6 @@ Route::group(['middleware' => 'auth'], function()
         Route::get('{user}/info', 'UserController@information');
         Route::post('{user}/completeInfo', 'UserController@completeInformation');
         Route::put('updateProfile', 'UserController@updateProfile');
-        Route::post('updatePhoto' , 'UserController@updatePhoto');
         Route::put('updatePassword' , 'UserController@updatePassword');
         Route::get('orders' , 'UserController@userOrders');
         Route::get('question' , 'UserController@uploads');

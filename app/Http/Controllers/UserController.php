@@ -33,7 +33,6 @@ use App\{Afterloginformcontrol,
     Http\Controllers\Auth\RegisterController,
     Http\Requests\EditProfileInfoRequest,
     Http\Requests\EditProfilePasswordRequest,
-    Http\Requests\EditProfilePhotoRequest,
     Http\Requests\EditUserRequest,
     Http\Requests\InsertUserRequest,
     Http\Requests\InsertVoucherRequest,
@@ -203,12 +202,17 @@ class UserController extends Controller
         $user->mobile_verified_at = $mobileVerifiedAt ? Carbon::now()->setTimezone("Asia/Tehran") : null;
         $user->password = $hasPassword ? bcrypt($request->get("password")) : null;
         $user->lockProfile = $lockProfile ? 1 : 0;
+        $user->firstName = $request->get("firstName");
+        $user->lastName = $request->get("lastName");
+        $user->nameSlug = $request->get("nameSlug");
+        $user->mobile = $request->get("mobile");
+        $user->nationalCode = $request->get("nationalCode");
+        $user->userstatus_id = $request->get("userstatus_id");
+        $user->techCode = $request->get("techCode");
 
-        $file = $this->requestHasFile($request , "photo");
+        $file = $this->getRequestFile($request , "photo");
         if ($file !== false)
-        {
             $this->storePhotoOfUser($user, $file);
-        }
     }
 
 
@@ -909,7 +913,7 @@ class UserController extends Controller
             }
         } else
         {
-            $message = "خطای پایگاه داده";
+            $message = \Lang::get("responseText.Database error.");
             if ($request->has("fromAPI"))
             {
                 $status = Response::HTTP_SERVICE_UNAVAILABLE;
@@ -938,65 +942,48 @@ class UserController extends Controller
         $user = $request->user();
         $user->fill($request->all());
 
-        $file = $this->requestHasFile($request , "photo");
+        $file = $this->getRequestFile($request , "photo");
         if ($file !== false)
-        {
             $this->storePhotoOfUser($user, $file);
-        }
 
         if ($user->completion("lockProfile") == 100)
             $user->lockProfile();
 
-        if ($user->update())
-        {
-            session()->put("success", "اطلاعات شما با موفقیت اصلاح شد.");
-        } else
-        {
-            session()->put("error", "خطای پایگاه داده.");
-        }
-        return redirect()->back()->withInput();
-    }
-
-    /**
-     * Update the specified resource's photo in storage..
-     *
-     * @param  \app\Http\Requests\EditProfilePhotoRequest $request
-     * @return \Illuminate\Http\Response
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
-     */
-    public function updatePhoto(EditProfilePhotoRequest $request)
-    {
-        $user = $request->user();
-
-        $file = $this->requestHasFile($request , "photo");
-        if ($file !== false)
-        {
-            $this->storePhotoOfUser($user, $file);
-        }
-
+        $isAjax = false;
         if ($user->update())
         {
             if ($request->ajax())
             {
+                $isAjax = true;
                 $newPhotoSrc = route('image', ['category' => '1', 'w' => '150', 'h' => '150', 'filename' => $user->photo]);
-                return $this->response->setStatusCode(Response::HTTP_OK)
-                                      ->setContent(["newPhoto" => $newPhotoSrc]);
-            } else
-                {
-                session()->put("success", "تغییر عکس با موفقیت انجام شد.");
+                $response =  $this->response->setStatusCode(Response::HTTP_OK)
+                                            ->setContent(["newPhoto" => $newPhotoSrc]);
+            }
+            else
+            {
+                session()->put("success", "اطلاعات شما با موفقیت اصلاح شد");
             }
         } else
         {
             if ($request->ajax())
             {
-                return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
-            } else
+                $isAjax = true;
+                $response = $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
+            }
+            else
             {
-                session()->put("error", "خطای پایگاه داده.");
+                session()->put("error", \Lang::get("responseText.Database error."));
             }
         }
 
-        return redirect()->back();
+        if($isAjax)
+        {
+            return $response;
+        }
+        else
+        {
+            return redirect()->back();
+        }
     }
 
     /**
@@ -1411,7 +1398,7 @@ class UserController extends Controller
             return $homeController->errorPage($message);
         }
         if ($done) session()->flash("success", "ساعت کاری با موفقیت ذخیره شد"); else
-            session()->flash("error", "خطای پایگاه داده");
+            session()->flash("error", \Lang::get("responseText.Database error."));
 
         return redirect()->back();
     }

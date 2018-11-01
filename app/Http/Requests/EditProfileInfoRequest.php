@@ -18,8 +18,10 @@ class EditProfileInfoRequest extends FormRequest
      */
     public function authorize()
     {
-        if (Auth::user()->lockProfile) return false;
-        else return true;
+        if (Auth::user()->lockProfile)
+            return false;
+        else
+            return true;
     }
 
     /**
@@ -32,6 +34,7 @@ class EditProfileInfoRequest extends FormRequest
         $rules = [
             'postalCode' => 'numeric',
             'email' => 'email',
+            'photo' => 'image|mimes:jpeg,jpg,png|max:800', //ToDo: it needs to be required but will conflict with profile update
         ];
 
         if (

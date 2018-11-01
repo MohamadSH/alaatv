@@ -176,7 +176,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
      *
      * @var array
      */
-    protected $fillable = ['firstName', 'lastName', 'nameSlug', 'mobile', 'nationalCode', 'photo', 'province', 'city', 'address', 'postalCode', 'school', 'major_id', 'grade_id', 'birthdate', 'gender_id', 'userstatus_id', 'email', 'bio', 'introducedBy', 'phone', 'whatsapp', 'skype', 'bloodtype_id', 'allergy', 'medicalCondition', 'diet', 'techCode',];
+    protected $fillable = ['province', 'city', 'address', 'postalCode', 'school', 'major_id', 'grade_id', 'birthdate', 'gender_id', 'email', 'bio', 'introducedBy', 'phone', 'whatsapp', 'skype', 'bloodtype_id', 'allergy', 'medicalCondition', 'diet'];
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -233,6 +233,26 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
         }
     }
 
+    /** Setter mutator for userstatus_id
+     * @param $value
+     */
+    public function setUserstatusIdAttribute($value): void
+    {
+        if ($value == 0) {
+            $this->attributes["userstatus_id"] = null;
+        }
+    }
+
+    /** Setter mutator for bloodtype_id
+     * @param $value
+     */
+    public function setBloodtypeIdAttribute($value): void
+    {
+        if ($value == 0) {
+            $this->attributes["bloodtype_id"] = null;
+        }
+    }
+
     /** Setter mutator for grade_id
      * @param $value
      */
@@ -240,16 +260,6 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     {
         if ($value == 0) {
             $this->attributes["gender_id"] = null;
-        }
-    }
-
-    /** Setter mutator for grade_id
-     * @param $value
-     */
-    public function setBloodTypeIdAttribute($value): void
-    {
-        if ($value == 0) {
-            $this->attributes["bloodType_id"] = null;
         }
     }
 

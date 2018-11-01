@@ -10,7 +10,7 @@ trait RequestCommon
      * @param $index
      * @return array|bool|\Illuminate\Http\UploadedFile|mixed|null
      */
-    public function requestHasFile(Request $request, $index)
+    public function getRequestFile(Request $request, $index)
     {
         $hasFile = true;
         if ($request->has($index))
