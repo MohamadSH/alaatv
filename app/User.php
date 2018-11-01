@@ -949,29 +949,21 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     /**
      * Compares user's password with a new password
      *
-     * @param string $oldPassword
-     * @param $newPassword
-     * @return int
-     *  1 => old password and new password are the same
-     *  2 => old password is the same as current password but new password is not
-     *  3 => old password is not the same as current password
+     * @param $password
+     * @return bool
+     *  True : equal / False : not equal
      */
-    public function checkPassword($oldPassword , $newPassword) :int
+    public function compareWithCurrentPassword($password) : bool
     {
-        if (Hash::check($oldPassword, $this->password))
+        if (Hash::check($password, $this->password))
         {
-            if (Hash::check( $newPassword , $this->password))
-            {
-                $status = 1;
-            }else
-            {
-                $status = 2;
-            }
-
+            $result = true;
         }else
         {
-            $status = 0;
+            $result = false;
         }
+
+        return $result ;
     }
 
     /**

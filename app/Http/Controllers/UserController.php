@@ -1003,7 +1003,6 @@ class UserController extends Controller
      * Update the specified resource's password in storage..
      *
      * @param  \app\Http\Requests\EditProfilePasswordRequest $request
-     * @param User $user
      * @return \Illuminate\Http\Response
      */
     public function updatePassword(EditProfilePasswordRequest $request)
@@ -1011,9 +1010,10 @@ class UserController extends Controller
         $user = $request->user();
         $oldPassword = $request->oldPassword ;
         $newPassword = $request->password ;
-        $passwordStatus =  $user->checkPassword($oldPassword , $newPassword);
 
-        if($passwordStatus == 2)
+        $confirmation = $this->userPasswordConfirmation($user ,  $oldPassword , $newPassword);
+
+        if( $confirmation["confirmed"])
         {
             $user->changePassword($newPassword);
             if ($user->update())
@@ -1024,12 +1024,9 @@ class UserController extends Controller
                 session()->put("error", "خطا در تغییر رمز عبور ، لطفا دوباره اقدام نمایید.");
             }
         }
-        elseif($passwordStatus == 1)
+        else
         {
-            session()->put("error", "رمز عبور جدید و قدیم یکسان می باشند!");
-        }elseif($passwordStatus == 3)
-        {
-            session()->put("error", "رمز عبور قدیم وارد شده اشتباه می باشد.");
+            session()->put("error", $confirmation["message"]);
         }
 
         return redirect()->back();

@@ -96,4 +96,37 @@ trait UserCommon
     {
         return  strcmp($photo, config('constants.PROFILE_DEFAULT_IMAGE')) != 0 ;
     }
+
+    /**
+     * Determines oldPassword and newPassword confirmation of the user
+     * @param $user
+     * @param $oldPassword
+     * @param $newPassword
+     * @return array
+     */
+    public function userPasswordConfirmation($user , $claimdedOldPassword , $newPassword) : array
+    {
+        $confirmed = false;
+        if ($user->compareWithCurrentPassword($claimdedOldPassword))
+        {
+            if (!$user->compareWithCurrentPassword($newPassword))
+            {
+                $confirmed = true;
+                $message = \Lang::get('confirmation.Confirmed.');
+            }
+            else
+            {
+                $message = \Lang::get('confirmation.Current password and new password are the same.');
+            }
+        }
+        else
+        {
+            $message = \Lang::get('confirmation.Claimed old password is not correct');
+        }
+
+        return [
+            "confirmed" => $confirmed ,
+            "message" => $message
+        ] ;
+    }
 }
