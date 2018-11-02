@@ -48,12 +48,15 @@ class UserbonController extends Controller
         $productsId = Input::get("products");
         if (isset($productsId)) {
             if (!in_array(0, $productsId)) {
-                $products = Product::whereIn('id', $productsId)->get();
+                $products = Product::whereIn('id', $productsId)
+                                   ->get();
                 foreach ($products as $product) {
                     if ($product->hasChildren()) {
                         $productsId = array_merge($productsId, Product::whereHas('parents', function ($q) use ($productsId) {
                             $q->whereIn("parent_id", $productsId);
-                        })->pluck("id")->toArray());
+                        })
+                                                                      ->pluck("id")
+                                                                      ->toArray());
                     }
                 }
                 $userbons = $userbons->whereHas("orderproduct", function ($q) use ($productsId) {
@@ -115,6 +118,7 @@ class UserbonController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \app\Http\Requests\InsertUserBonRequest $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(InsertUserBonRequest $request)
@@ -132,6 +136,7 @@ class UserbonController extends Controller
      * Display the specified resource.
      *
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -143,6 +148,7 @@ class UserbonController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -154,7 +160,8 @@ class UserbonController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param  int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -166,6 +173,7 @@ class UserbonController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($userbon)

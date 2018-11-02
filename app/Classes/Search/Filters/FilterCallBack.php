@@ -11,12 +11,14 @@ namespace App\Classes\Search\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
 
-interface FilterCallback {
+interface FilterCallback
+{
     /**
      * @param array $err [ "status" => integer, "message" => string , "data" => mix]
+     *
      * @return void
      */
-    public function err(array $err) :void;
+    public function err(array $err): void;
 
-    public function success(Builder &$builder , &$data);
+    public function success(Builder &$builder, &$data);
 }

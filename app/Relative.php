@@ -10,13 +10,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\Relative
  *
- * @property int $id
- * @property string|null $name نام رکورد
- * @property string|null $displayName نام قابل نمایش رکورد
- * @property string|null $description توضیح رکورد
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property \Carbon\Carbon|null $deleted_at
+ * @property int                                                          $id
+ * @property string|null                                                  $name        نام رکورد
+ * @property string|null                                                  $displayName نام قابل نمایش رکورد
+ * @property string|null                                                  $description توضیح رکورد
+ * @property \Carbon\Carbon|null                                          $created_at
+ * @property \Carbon\Carbon|null                                          $updated_at
+ * @property \Carbon\Carbon|null                                          $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Contact[] $contact
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Relative onlyTrashed()
@@ -41,7 +41,7 @@ class Relative extends Model
     protected $dates = [
         'created_at',
         'updated_at',
-        'deleted_at'
+        'deleted_at',
     ];
 
     /**

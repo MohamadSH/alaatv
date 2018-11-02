@@ -44,6 +44,7 @@ class GiftGiven extends Notification implements ShouldQueue
      * Get the notification's delivery channels.
      *
      * @param  mixed $notifiable
+     *
      * @return array
      */
     public function via($notifiable)
@@ -56,6 +57,7 @@ class GiftGiven extends Notification implements ShouldQueue
 
     /**
      * @param $notifiable
+     *
      * @return MedianaMessage
      */
     public function toMediana($notifiable)
@@ -74,7 +76,7 @@ class GiftGiven extends Notification implements ShouldQueue
         if (isset($this->user->gender_id)) {
             if ($this->user->gender->name == "خانم")
                 $gender = "خانم ";
-            elseif ($this->user->gender->name == "آقا")
+            else if ($this->user->gender->name == "آقا")
                 $gender = "آقای ";
             else
                 $gender = "";

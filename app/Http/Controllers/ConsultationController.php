@@ -4,16 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Assignmentstatus;
 use App\Consultation;
-use App\Major;
 use App\Http\Requests\ConsultationRequest;
 use App\Http\Requests\EditConsultationRequest;
 use App\Http\Requests\InsertConsultationRequest;
-use Illuminate\Http\Request;
+use App\Major;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\File;
-use App\Http\Requests;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class ConsultationController extends Controller
 {
@@ -39,7 +37,8 @@ class ConsultationController extends Controller
      */
     public function index()
     {
-        $consultations = Consultation::all()->sortByDesc('created_at');
+        $consultations = Consultation::all()
+                                     ->sortByDesc('created_at');
         $pageName = "admin";
         return view("consultation.index", compact("consultations", "pageName"));
     }
@@ -58,6 +57,7 @@ class ConsultationController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \app\Http\Requests\InsertConsultationRequest $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(InsertConsultationRequest $request)
@@ -77,7 +77,8 @@ class ConsultationController extends Controller
             $file = $request->file('thumbnail');
             $extension = $file->getClientOriginalExtension();
             $fileName = basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
-            if (Storage::disk(Config::get('constants.DISK7'))->put($fileName, File::get($file))) {
+            if (Storage::disk(Config::get('constants.DISK7'))
+                       ->put($fileName, File::get($file))) {
                 $consultation->thumbnail = $fileName;
             }
         } else {
@@ -85,7 +86,8 @@ class ConsultationController extends Controller
         }
 
         if ($consultation->save()) {
-            $consultation->majors()->sync($request->get('majors', []));
+            $consultation->majors()
+                         ->sync($request->get('majors', []));
             return $this->response->setStatusCode(200);
         } else {
             return $this->response->setStatusCode(503);
@@ -96,6 +98,7 @@ class ConsultationController extends Controller
      * Display the specified resource.
      *
      * @param  Consultation $consultation
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($consultation)
@@ -107,12 +110,15 @@ class ConsultationController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  Consultation $consultation
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($consultation)
     {
-        $majors = Major::pluck('name', 'id')->toArray();
-        $consultationMajors = $consultation->majors->pluck('id')->toArray();
+        $majors = Major::pluck('name', 'id')
+                       ->toArray();
+        $consultationMajors = $consultation->majors->pluck('id')
+                                                   ->toArray();
         $consultationStatuses = Assignmentstatus::pluck('name', 'id');
         return view("consultation.edit", compact("consultation", "majors", "consultationStatuses", "consultationMajors"));
     }
@@ -121,7 +127,8 @@ class ConsultationController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \app\Http\Requests\ConsultationRequest $request
-     * @param  Consultation $consultation
+     * @param  Consultation                           $consultation
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(EditConsultationRequest $request, $consultation)
@@ -133,8 +140,10 @@ class ConsultationController extends Controller
             $file = $request->file('thumbnail');
             $extension = $file->getClientOriginalExtension();
             $fileName = basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
-            if (Storage::disk(Config::get('constants.DISK7'))->put($fileName, File::get($file))) {
-                Storage::disk(Config::get('constants.DISK7'))->delete($thumbnail);
+            if (Storage::disk(Config::get('constants.DISK7'))
+                       ->put($fileName, File::get($file))) {
+                Storage::disk(Config::get('constants.DISK7'))
+                       ->delete($thumbnail);
                 $consultation->thumbnail = $fileName;
             }
         }
@@ -159,11 +168,13 @@ class ConsultationController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  Consultation $consultation
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($consultation)
     {
-        if ($consultation->delete()) session()->put('success', 'مشاوره با موفقیت اصلاح شد');
+        if ($consultation->delete())
+            session()->put('success', 'مشاوره با موفقیت اصلاح شد');
         else session()->put('error', 'خطای پایگاه داده');
         return redirect()->back();
     }

@@ -6,8 +6,8 @@ use App\Event;
 use App\Eventresult;
 use App\Eventresultstatus;
 use App\Http\Requests\InsertEventResultRequest;
-use Illuminate\Http\Request;
 use Auth;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
@@ -46,7 +46,9 @@ class EventresultController extends Controller
             $eventIds = [];
         }
         $eventresults = $eventresults->get();
-        $sharifRegisterEvent = Event::where("name", "sabtename_sharif_97")->get()->first();
+        $sharifRegisterEvent = Event::where("name", "sabtename_sharif_97")
+                                    ->get()
+                                    ->first();
         if (isset($sharifRegisterEvent) && in_array($sharifRegisterEvent->id, $eventIds))
             $isSharifRegisterEvent = true;
         else
@@ -70,6 +72,7 @@ class EventresultController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \App\Http\Requests\InsertEventResultRequest $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(InsertEventResultRequest $request)
@@ -84,7 +87,7 @@ class EventresultController extends Controller
 
         if ($request->has("user_id")) {
             $eventResult->user_id = $request->get("user_id");
-        } elseif (Auth::check()) {
+        } else if (Auth::check()) {
             $user = Auth::user();
             $eventResult->user_id = $user->id;
         }
@@ -110,31 +113,33 @@ class EventresultController extends Controller
             $user->lastName = $request->get("lastName");
         }
 
-//        if($request->has("participationCode"))
-//        {
-//            if(strlen(preg_replace('/\s+/', '', $request->get("participationCode"))) == 0)
-//                $eventResult->participationCodeHash = null;
-//            else
-//                $eventResult->participationCodeHash = bcrypt($request->get("participationCode")) ;
-//        }else{
-//            $eventResult->participationCodeHash = null;
-//        }
+        //        if($request->has("participationCode"))
+        //        {
+        //            if(strlen(preg_replace('/\s+/', '', $request->get("participationCode"))) == 0)
+        //                $eventResult->participationCodeHash = null;
+        //            else
+        //                $eventResult->participationCodeHash = bcrypt($request->get("participationCode")) ;
+        //        }else{
+        //            $eventResult->participationCodeHash = null;
+        //        }
 
         if ($request->hasFile("reportFile")) {
             $file = $request->reportFile;
             $extension = $file->getClientOriginalExtension();
             $fileName = basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
 
-//            $oldReportFile = $eventResult->reportFile;
+            //            $oldReportFile = $eventResult->reportFile;
 
-            if (Storage::disk(Config::get('constants.DISK14'))->put($fileName, File::get($file))) {
-//                if (isset($oldReportFile)) Storage::disk(Config::get('constants.DISK14'))->delete($oldReportFile);
+            if (Storage::disk(Config::get('constants.DISK14'))
+                       ->put($fileName, File::get($file))) {
+                //                if (isset($oldReportFile)) Storage::disk(Config::get('constants.DISK14'))->delete($oldReportFile);
                 $eventResult->reportFile = $fileName;
             }
         }
 
         if ($eventResult->save()) {
-            if ($userUpdate) $user->update();
+            if ($userUpdate)
+                $user->update();
             if ($request->has("fromAPI")) {
                 $participationCode = $eventResult->participationCode;
                 $message = "نتیجه با موفقیت درج شد";
@@ -151,7 +156,10 @@ class EventresultController extends Controller
             }
         }
         if ($request->has("fromAPI"))
-            return $this->response->setStatusCode($status)->setContent(["message" => $message, "participationCode" => (isset($participationCode) ? $participationCode : null)]);
+            return $this->response->setStatusCode($status)
+                                  ->setContent(["message"           => $message,
+                                                "participationCode" => (isset($participationCode) ? $participationCode : null),
+                                               ]);
         else
             return redirect()->back();
     }
@@ -160,6 +168,7 @@ class EventresultController extends Controller
      * Display the specified resource.
      *
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -171,6 +180,7 @@ class EventresultController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -182,7 +192,8 @@ class EventresultController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  Eventresult $eventResult
+     * @param  Eventresult              $eventResult
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Eventresult $eventResult)
@@ -204,6 +215,7 @@ class EventresultController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

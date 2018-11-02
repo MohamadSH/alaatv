@@ -9,15 +9,17 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\Wallet
  *
- * @property int $id
- * @property int|null $user_id آیدی مشخص کننده کاربر صاحب کیف پول
- * @property int|null $wallettype_id آیدی مشخص کننده نوع کیف پول
- * @property int $balance اعتبار کیف پول
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property \Carbon\Carbon|null $deleted_at
+ * @property int                                                              $id
+ * @property int|null                                                         $user_id       آیدی مشخص کننده کاربر صاحب
+ *           کیف پول
+ * @property int|null                                                         $wallettype_id آیدی مشخص کننده نوع کیف
+ *           پول
+ * @property int                                                              $balance       اعتبار کیف پول
+ * @property \Carbon\Carbon|null                                              $created_at
+ * @property \Carbon\Carbon|null                                              $updated_at
+ * @property \Carbon\Carbon|null                                              $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[] $transactions
- * @property-read \App\User|null $user
+ * @property-read \App\User|null                                              $user
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Wallet onlyTrashed()
  * @method static bool|null restore()
@@ -36,7 +38,11 @@ class Wallet extends Model
 {
     use SoftDeletes;
     /**      * The attributes that should be mutated to dates.        */
-    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
 
     /**
      * @var array
@@ -57,6 +63,7 @@ class Wallet extends Model
 
     /**
      * Force to move credits from this account
+     *
      * @param  integer $amount
      * @param  boolean $shouldAccept
      */
@@ -67,10 +74,12 @@ class Wallet extends Model
 
     /**
      * Attempt to add credits to this wallet
+     *
      * @param  integer $amount
-     * @param  string $type
-     * @param  array $meta
+     * @param  string  $type
+     * @param  array   $meta
      * @param  boolean $shouldAccept
+     *
      * @return array
      */
     public function withdraw($amount, $orderId = null, $shouldAccept = true)
@@ -93,14 +102,14 @@ class Wallet extends Model
                         $transactionStatus = config("constants.TRANSACTION_STATUS_SUCCESSFUL");
                     $paymentMethod = config("constants.PAYMENT_METHOD_WALLET");
                     $this->transactions()
-                        ->create([
-                            'order_id' => $orderId,
-                            'wallet_id' => $this->id,
-                            'cost' => $amount,
-                            'transactionstatus_id' => $transactionStatus,
-                            'paymentmethod_id' => $paymentMethod,
-                            'completed_at' => $completed_at,
-                        ]);
+                         ->create([
+                                      'order_id'             => $orderId,
+                                      'wallet_id'            => $this->id,
+                                      'cost'                 => $amount,
+                                      'transactionstatus_id' => $transactionStatus,
+                                      'paymentmethod_id'     => $paymentMethod,
+                                      'completed_at'         => $completed_at,
+                                  ]);
                 }
                 $responseText = "SUCCESSFUL";
                 $failed = false;
@@ -114,14 +123,16 @@ class Wallet extends Model
         }
 
         return [
-            "result" => !$failed,
+            "result"       => !$failed,
             "responseText" => $responseText,
         ];
     }
 
     /**
      * Determine if the user can withdraw from this wallet
+     *
      * @param  integer $amount
+     *
      * @return boolean
      */
     public function canWithdraw($amount)
@@ -139,10 +150,12 @@ class Wallet extends Model
 
     /**
      * Attempt to move credits from this wallet
+     *
      * @param  integer $amount
-     * @param  string $type
-     * @param  array $meta
+     * @param  string  $type
+     * @param  array   $meta
      * @param  boolean $shouldAccept
+     *
      * @return array
      */
     public function deposit($amount)
@@ -158,12 +171,12 @@ class Wallet extends Model
                 $completed_at = Carbon::now();
                 $transactionStatus = config("constants.TRANSACTION_STATUS_SUCCESSFUL");
                 $this->transactions()
-                    ->create([
-                        'wallet_id' => $this->id,
-                        'cost' => -$amount,
-                        'transactionstatus_id' => $transactionStatus,
-                        'completed_at' => $completed_at,
-                    ]);
+                     ->create([
+                                  'wallet_id'            => $this->id,
+                                  'cost'                 => -$amount,
+                                  'transactionstatus_id' => $transactionStatus,
+                                  'completed_at'         => $completed_at,
+                              ]);
             }
             $responseText = "SUCCESSFUL";
             $failed = false;
@@ -173,7 +186,7 @@ class Wallet extends Model
         }
 
         return [
-            "result" => !$failed,
+            "result"       => !$failed,
             "responseText" => $responseText,
         ];
     }

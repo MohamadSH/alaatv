@@ -33,8 +33,9 @@ trait MustVerifyMobileNumberTrait
     public function markMobileAsVerified()
     {
         return $this->forceFill([
-            'mobile_verified_at' => $this->freshTimestamp(),
-        ])->save();
+                                    'mobile_verified_at' => $this->freshTimestamp(),
+                                ])
+                    ->save();
     }
 
     /**
@@ -46,7 +47,8 @@ trait MustVerifyMobileNumberTrait
     {
         if ($this->setMobileVerificationCode()) {
             $this->notify(new VerifyMobile());
-            Cache::tags('User:' . $this->id)->flush();
+            Cache::tags('User:' . $this->id)
+                 ->flush();
         }
     }
 
@@ -59,8 +61,9 @@ trait MustVerifyMobileNumberTrait
     {
         $verificationCode = rand(1000, 99999);
         return $this->forceFill([
-            'mobile_verified_code' => $verificationCode,
-        ])->save();
+                                    'mobile_verified_code' => $verificationCode,
+                                ])
+                    ->save();
     }
 
     /**

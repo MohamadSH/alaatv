@@ -22,15 +22,16 @@ class EmployeeTimeSheetNotification extends Notification implements ShouldQueue
      * @var User
      */
     protected $user;
-    private $date;
-    private $in;
-    private $out;
-    private $mh;
-    private $eh;
+    private   $date;
+    private   $in;
+    private   $out;
+    private   $mh;
+    private   $eh;
 
 
     /**
      * EmployeeTimeSheetNotification constructor.
+     *
      * @param $date
      * @param $in
      * @param $out
@@ -51,6 +52,7 @@ class EmployeeTimeSheetNotification extends Notification implements ShouldQueue
      * Get the notification's delivery channels.
      *
      * @param  mixed $notifiable
+     *
      * @return array
      */
     public function via($notifiable)
@@ -64,6 +66,7 @@ class EmployeeTimeSheetNotification extends Notification implements ShouldQueue
 
     /**
      * @param $notifiable
+     *
      * @return MedianaMessage
      */
     public function toMediana($notifiable)
@@ -95,10 +98,10 @@ class EmployeeTimeSheetNotification extends Notification implements ShouldQueue
     {
         return [
             'user' => $this->user->firstName,
-            'in' => $this->in,
-            'out' => $this->out,
-            'mh' => $this->mh,
-            'eh' => $this->eh,
+            'in'   => $this->in,
+            'out'  => $this->out,
+            'mh'   => $this->mh,
+            'eh'   => $this->eh,
             'date' => $this->date,
         ];
     }

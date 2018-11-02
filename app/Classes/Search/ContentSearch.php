@@ -15,14 +15,14 @@ use Illuminate\Support\Facades\Cache;
 
 class ContentSearch extends SearchAbstract
 {
-    protected $model = "App\Content";
-    protected $pageName = 'contentPage';
+    protected $model        = "App\Content";
+    protected $pageName     = 'contentPage';
     protected $validFilters = [
         'name',
         'tags',
         'contentType',
         'createdAtSince',
-        'createdAtTill'
+        'createdAtTill',
     ];
 
     public function apply(array $filters): LengthAwarePaginator
@@ -30,29 +30,34 @@ class ContentSearch extends SearchAbstract
         $this->pageNum = $this->setPageNum($filters);
         $key = $this->makeCacheKey($filters);
 
-        return Cache::tags(['content', 'search'])->remember($key, $this->cacheTime, function () use ($filters) {
-//            dump("in cache");
-            $query = $this->applyDecoratorsFromFiltersArray($filters, $this->model->newQuery());
+        return Cache::tags([
+                               'content',
+                               'search',
+                           ])
+                    ->remember($key, $this->cacheTime, function () use ($filters) {
+                        //            dump("in cache");
+                        $query = $this->applyDecoratorsFromFiltersArray($filters, $this->model->newQuery());
 
-            return $this->getResults($query);
-        });
+                        return $this->getResults($query);
+                    });
     }
 
     protected function getResults(Builder $query)
     {
         $result = $query->active()
-            ->orderBy("created_at", "desc")
-            ->paginate($this->numberOfItemInEachPage,
-                ['*'],
-                $this->pageName,
-                $this->pageNum
-            );
+                        ->orderBy("created_at", "desc")
+                        ->paginate($this->numberOfItemInEachPage,
+                                   ['*'],
+                                   $this->pageName,
+                                   $this->pageNum
+                        );
         return $result;
     }
 
 
     /**
      * @param $decorator
+     *
      * @return mixed
      */
     protected function setupDecorator($decorator)

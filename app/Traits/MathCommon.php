@@ -17,6 +17,7 @@ trait MathCommon
      *
      * @param  $matrix
      * @param  $vertex
+     *
      * @return $result
      */
     function cartesianProduct($matrix, $vertex)
@@ -24,7 +25,7 @@ trait MathCommon
         if (sizeof($matrix) == 0) {
             $result[0][0] = $vertex;
             return $result;
-        } elseif (sizeof($matrix) == 1) {
+        } else if (sizeof($matrix) == 1) {
             $result = [];
             $index = 0;
             foreach (current($matrix) as $firstItem) {
@@ -34,7 +35,7 @@ trait MathCommon
                 }
             }
             return $result;
-        } elseif (sizeof($matrix) >= 2) {
+        } else if (sizeof($matrix) >= 2) {
             $vertex2 = array_pop($matrix);
             return $this->cartesianProduct($this->cartesianProduct($matrix, $vertex2), $vertex);
         }

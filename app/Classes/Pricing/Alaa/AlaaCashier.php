@@ -17,30 +17,30 @@ class AlaaCashier Extends Cashier
     {
         $priceInfo = [
             'price' => $this->calculatePrice(),
-            'info' => [
+            'info'  => [
                 'productCost' => $this->rawCost,
-                'discount' => [
+                'discount'    => [
                     'totalAmount' => $this->calculateTotalDiscountAmount(),
-                    'info' => [
-                        'bon' => [
+                    'info'        => [
+                        'bon'     => [
                             'totalAmount' => $this->getBonDiscount(),
-                            'info' => [
+                            'info'        => [
                                 $this->bonName => [
-                                    'number' => $this->totalBonNumber,
+                                    'number'            => $this->totalBonNumber,
                                     'perUnitPercentage' => $this->bonDiscountPercentage,
-                                    'totalPercentage' => $this->getBonTotalPercentage(),
-                                ]
-                            ]
+                                    'totalPercentage'   => $this->getBonTotalPercentage(),
+                                ],
+                            ],
                         ],
                         'product' => [
                             'totalAmount' => $this->getProductDiscount(),
-                            'info' => [
-                                'amount' => $this->discountCashAmount,
-                                'percentage' => $this->discountPercentage
-                            ]
+                            'info'        => [
+                                'amount'     => $this->discountCashAmount,
+                                'percentage' => $this->discountPercentage,
+                            ],
                         ],
-                    ]
-                ]
+                    ],
+                ],
             ],
         ];
 

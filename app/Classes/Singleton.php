@@ -19,7 +19,7 @@ abstract class Singleton implements ISingleton
     final public static function getInstance(): ISingleton
     {
 
-//        $className = get_called_class();
+        //        $className = get_called_class();
         $className = static::class;
         self::$_instances[$className] = self::$_instances[$className] ?? new static();
         return self::$_instances[$className];

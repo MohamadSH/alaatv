@@ -11,20 +11,20 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\Article
  *
- * @property int $id
- * @property int|null $user_id آی دی مشخص کننده فرد ایجاد کننده مقاله
- * @property int|null $articlecategory_id آی دی مشخص کننده دسته بندی مقاله
- * @property int $order ترتیب مقاله
- * @property string|null $title عنوان مقاله
- * @property string|null $keyword کلمات کلیدی مقاله
- * @property string|null $brief خلاصه مقاله
- * @property string|null $body متن مقاله
- * @property string|null $image تصویر مقاله
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property \Carbon\Carbon|null $deleted_at
+ * @property int                            $id
+ * @property int|null                       $user_id            آی دی مشخص کننده فرد ایجاد کننده مقاله
+ * @property int|null                       $articlecategory_id آی دی مشخص کننده دسته بندی مقاله
+ * @property int                            $order              ترتیب مقاله
+ * @property string|null                    $title              عنوان مقاله
+ * @property string|null                    $keyword            کلمات کلیدی مقاله
+ * @property string|null                    $brief              خلاصه مقاله
+ * @property string|null                    $body               متن مقاله
+ * @property string|null                    $image              تصویر مقاله
+ * @property \Carbon\Carbon|null            $created_at
+ * @property \Carbon\Carbon|null            $updated_at
+ * @property \Carbon\Carbon|null            $deleted_at
  * @property-read \App\Articlecategory|null $articlecategory
- * @property-read \App\User|null $user
+ * @property-read \App\User|null            $user
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Article onlyTrashed()
  * @method static bool|null restore()
@@ -50,7 +50,7 @@ class Article extends Model
     use Helper;
     use DateTrait;
 
-//    use Searchable;
+    //    use Searchable;
 
     /**
      * The attributes that should be mutated to dates.
@@ -60,7 +60,7 @@ class Article extends Model
     protected $dates = [
         'created_at',
         'updated_at',
-        'deleted_at'
+        'deleted_at',
     ];
 
     protected $fillable = [
@@ -71,12 +71,13 @@ class Article extends Model
         'keyword',
         'brief',
         'body',
-        'image'
+        'image',
     ];
 
     public static function recentArticles($number)
     {
-        return Article::take($number)->orderBy('created_at', 'desc');
+        return Article::take($number)
+                      ->orderBy('created_at', 'desc');
     }
 
     public function user()
@@ -91,7 +92,10 @@ class Article extends Model
 
     public function sameCategoryArticles($number)
     {
-        return Article::where('articlecategory_id', $this->articlecategory_id)->where('id', "<>", $this->id)->orderBy('created_at', 'desc')->take($number);
+        return Article::where('articlecategory_id', $this->articlecategory_id)
+                      ->where('id', "<>", $this->id)
+                      ->orderBy('created_at', 'desc')
+                      ->take($number);
     }
 
     /**

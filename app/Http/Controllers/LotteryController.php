@@ -8,10 +8,8 @@ use App\Notifications\GiftGiven;
 use App\Notifications\LotteryWinner;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Config;
-use LuckyBox\LuckyBox;
 use LuckyBox\Card\IdCard;
-use Auth;
+use LuckyBox\LuckyBox;
 
 class LotteryController extends Controller
 {
@@ -49,6 +47,7 @@ class LotteryController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -60,6 +59,7 @@ class LotteryController extends Controller
      * Display the specified resource.
      *
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -71,6 +71,7 @@ class LotteryController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -82,7 +83,8 @@ class LotteryController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param  int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -94,6 +96,7 @@ class LotteryController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -116,12 +119,13 @@ class LotteryController extends Controller
             }
 
             $lottery = Lottery::where("name", $lotteryName)
-                ->first();
+                              ->first();
             if (!isset($lottery))
                 dd("Lottery not found!");
 
             $bonName = config("constants.BON2");
-            $bon = Bon::where("name", $bonName)->first();
+            $bon = Bon::where("name", $bonName)
+                      ->first();
             if (!isset($bon))
                 dd("Unexpected error! bon not found.");
 
@@ -129,13 +133,13 @@ class LotteryController extends Controller
             $luckyBox->setConsumable(true);
 
             $participants = \App\Userbon::where("bon_id", $bon->id)
-                ->where("userbonstatus_id", 1)
-                ->get();
+                                        ->where("userbonstatus_id", 1)
+                                        ->get();
 
             dump("Number of participants: " . $participants->count());
             dump("Sum of total points: " . $participants->sum("totalNumber"));
 
-            $participantArray = array();
+            $participantArray = [];
             foreach ($participants as $participant) {
                 if (in_array($participant->user->id, $participantArray))
                     continue;
@@ -146,7 +150,7 @@ class LotteryController extends Controller
                 for ($i = $points; $i > 0; $i--) {
                     $card = new IdCard();
                     $card->setId($participant->user->id)
-                        ->setRate(100);
+                         ->setRate(100);
                     $luckyBox->add($card);
                 }
             }
@@ -157,7 +161,7 @@ class LotteryController extends Controller
             $successCounter = 0;
             $failedCounter = 0;
             $warningCounter = 0;
-            $winners = array();
+            $winners = [];
             while (!$luckyBox->isEmpty()) {
                 $card = $luckyBox->draw();
                 $cardId = $card->getId();
@@ -165,11 +169,12 @@ class LotteryController extends Controller
                 if (in_array($cardId, $winners))
                     continue;
 
-                $user = \App\User::where("id", $cardId)->first();
+                $user = \App\User::where("id", $cardId)
+                                 ->first();
                 if (isset($user)) {
                     $userbon = $user->userbons->where("bon_id", $bon->id)
-                        ->where("userbonstatus_id", 1)
-                        ->first();
+                                              ->where("userbonstatus_id", 1)
+                                              ->first();
 
                     if (isset($userbon)) {
                         $userbon->userbonstatus_id = 3;
@@ -183,19 +188,20 @@ class LotteryController extends Controller
                     $userlotteries = $user->lotteries->where("lottery_id", $lottery->id);
                     if ($userlotteries->isEmpty()) {
                         $counter++;
-                        $user->lotteries()->attach($lottery->id, ["rank" => $counter]);
+                        $user->lotteries()
+                             ->attach($lottery->id, ["rank" => $counter]);
                         echo "<span style='color:red;font-weight: bolder'>" . "#$counter: " . "</span>" . $user->getfullName() . " - $user->mobile" . " - $user->nationalCode" . " Points: " . $userbon->totalNumber;
                         echo "<br>";
                         $successCounter++;
 
-//                        [
-//                            $prizeName ,
-//                            $amount
-//                        ]= $lottery->prizes($counter);
+                        //                        [
+                        //                            $prizeName ,
+                        //                            $amount
+                        //                        ]= $lottery->prizes($counter);
 
-//                      $user->notify(new LotteryWinner($lottery , $counter , $prizeName));
-//                      echo "<span style='color:green;font-weight: bolder'>User notified</span>";
-//                      echo "<br>";
+                        //                      $user->notify(new LotteryWinner($lottery , $counter , $prizeName));
+                        //                      echo "<span style='color:green;font-weight: bolder'>User notified</span>";
+                        //                      echo "<br>";
 
                         array_push($winners, $cardId);
                     } else {
@@ -217,12 +223,18 @@ class LotteryController extends Controller
             dump("number of failed users: " . $failedCounter);
             dump("number of warnings: " . $warningCounter);
             dd("finish");
-        } catch (\Exception $e) {
+        }
+        catch (\Exception $e) {
             $message = "unexpected error";
             dump($successCounter . " users successfully done");
             dump($failedCounter . " users failed");
             dump($warningCounter . " warnings");
-            return $this->response->setStatusCode(503)->setContent(["message" => $message, "number of successfully processed items" => $counter, "error" => $e->getMessage(), "line" => $e->getLine()]);
+            return $this->response->setStatusCode(503)
+                                  ->setContent(["message"                                => $message,
+                                                "number of successfully processed items" => $counter,
+                                                "error"                                  => $e->getMessage(),
+                                                "line"                                   => $e->getLine(),
+                                               ]);
         }
     }
 
@@ -239,7 +251,8 @@ class LotteryController extends Controller
                 $lotteryName = $request->get("lottery");
             }
 
-            $lottery = Lottery::where("name", $lotteryName)->first();
+            $lottery = Lottery::where("name", $lotteryName)
+                              ->first();
             if (!isset($lottery))
                 dd("Lottery not found!");
 
@@ -253,7 +266,7 @@ class LotteryController extends Controller
                 [
                     $prizeName,
                     $amount,
-                    $memorial
+                    $memorial,
                 ] = $lottery->prizes($rank);
 
                 $done = true;
@@ -274,7 +287,7 @@ class LotteryController extends Controller
                           "objectId": "' . $objectId . '"
                           ';
                     }
-                } elseif (strlen($memorial) > 0) {
+                } else if (strlen($memorial) > 0) {
                     $objectId = 543;
                     $prizeInfo = '
                           "objectType": "App\\\\Coupon",
@@ -292,7 +305,7 @@ class LotteryController extends Controller
                     $itemName = "";
                     if (strlen($prizeName) > 0) {
                         $itemName = $prizeName;
-                    } elseif (strlen($memorial) > 0) {
+                    } else if (strlen($memorial) > 0) {
                         $itemName = $memorial;
                     }
 
@@ -306,7 +319,7 @@ class LotteryController extends Controller
                             '}
                       ]
                     }';
-                    } elseif (strlen($itemName) > 0) {
+                    } else if (strlen($itemName) > 0) {
                         $prizes = '{
                       "items": [
                         {
@@ -317,16 +330,16 @@ class LotteryController extends Controller
 
                     }
 
-                    $pivotArray = array();
+                    $pivotArray = [];
                     if (strlen($prizes) > 0) {
                         $pivotArray["prizes"] = $prizes;
                     }
 
                     if (!empty($pivotArray)) {
                         $givePrizeResult = $userlottery->lotteries()
-                            ->where("lottery_id", $lottery->id)
-                            ->where("pivot.rank", $rank)
-                            ->updateExistingPivot($lottery->id, $pivotArray);
+                                                       ->where("lottery_id", $lottery->id)
+                                                       ->where("pivot.rank", $rank)
+                                                       ->updateExistingPivot($lottery->id, $pivotArray);
 
                         if (!$givePrizeResult) {
                             dump("Failed on updating prize for user: " . $userlottery->id);
@@ -345,15 +358,16 @@ class LotteryController extends Controller
             dump("Successfully processed users " . $successCounter);
             dump("ّFiled users: " . $failedCounter);
             dd("done");
-        } catch (\Exception $e) {
+        }
+        catch (\Exception $e) {
             $message = "unexpected error";
             return $this->response
                 ->setStatusCode(503)
                 ->setContent([
-                    "message" => $message,
-                    "error" => $e->getMessage(),
-                    "line" => $e->getLine()
-                ]);
+                                 "message" => $message,
+                                 "error"   => $e->getMessage(),
+                                 "line"    => $e->getLine(),
+                             ]);
         }
 
     }

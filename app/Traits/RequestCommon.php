@@ -7,7 +7,8 @@ trait RequestCommon
 {
     /**
      * @param Request $request
-     * @param $index
+     * @param         $index
+     *
      * @return array|bool|\Illuminate\Http\UploadedFile|mixed|null
      */
     public function requestHasFile(Request $request, $index)
@@ -17,7 +18,8 @@ trait RequestCommon
             $file = $request->file($index);
             if (!isset($file)) {
                 $file = $request->get($index);
-                if (!is_file($file)) $hasFile = false;
+                if (!is_file($file))
+                    $hasFile = false;
             }
         } else {
             $hasFile = false;
@@ -31,6 +33,7 @@ trait RequestCommon
 
     /**
      * @param FormRequest $request
+     *
      * @return bool
      */
     public function isRequestFromApp(FormRequest $request): bool

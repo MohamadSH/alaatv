@@ -3,14 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Attribute;
-use App\Attributecontrol;
-use App\Attributegroup;
 use App\Attributeset;
 use App\Http\Requests\EditAttributesetRequest;
 use App\Http\Requests\InsertAttributesetRequest;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Config;
 
 
 class AttributesetController extends Controller
@@ -34,7 +31,8 @@ class AttributesetController extends Controller
      */
     public function index()
     {
-        $attributesets = Attributeset::all()->sortByDesc('created_at');
+        $attributesets = Attributeset::all()
+                                     ->sortByDesc('created_at');
         return view('attributeset.index', compact('attributesets'));
 
     }
@@ -53,6 +51,7 @@ class AttributesetController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(InsertAttributesetRequest $request)
@@ -71,6 +70,7 @@ class AttributesetController extends Controller
      * Display the specified resource.
      *
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -82,12 +82,14 @@ class AttributesetController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit(Attributeset $attributeset)
     {
-//        $attributegroups = $attributeset->attributegroups;
-        $attributes = Attribute::pluck('displayName', 'id')->toArray();
+        //        $attributegroups = $attributeset->attributegroups;
+        $attributes = Attribute::pluck('displayName', 'id')
+                               ->toArray();
         return view('attributeset.edit', compact('attributeset', 'attributes'));
     }
 
@@ -95,7 +97,8 @@ class AttributesetController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param  int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(EditAttributesetRequest $request, Attributeset $attributeset)
@@ -114,11 +117,13 @@ class AttributesetController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy(Attributeset $attributeset)
     {
-        if ($attributeset->delete()) session()->put('success', ' دسته صفت با موفقیت اصلاح شد');
+        if ($attributeset->delete())
+            session()->put('success', ' دسته صفت با موفقیت اصلاح شد');
         else session()->put('error', 'خطای پایگاه داده');
         return redirect()->back();
     }

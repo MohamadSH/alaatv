@@ -21,6 +21,6 @@ class Locate extends Model
         'rgt',
         'lvl',
         'parent_id',
-        'published'
+        'published',
     ];
 }

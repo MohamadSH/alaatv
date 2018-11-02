@@ -36,7 +36,8 @@ class UseruploadController extends Controller
      */
     public function index()
     {
-        $questions = Userupload::all()->sortByDesc("created_at");
+        $questions = Userupload::all()
+                               ->sortByDesc("created_at");
         $questionStatuses = Useruploadstatus::pluck('displayName', 'id');
 
         $counter = 1;
@@ -57,6 +58,7 @@ class UseruploadController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \app\Http\Requests\InsertUserUploadRequest $request
+     *
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
@@ -66,13 +68,16 @@ class UseruploadController extends Controller
         $userUpload->fill($request->all());
 
         $userUpload->user_id = Auth::user()->id;
-        $userUpload_pending = Useruploadstatus::all()->where("name", "pending")->first();
+        $userUpload_pending = Useruploadstatus::all()
+                                              ->where("name", "pending")
+                                              ->first();
         $userUpload->useruploadstatus_id = $userUpload_pending->id;
         if ($request->hasFile("consultingAudioQuestions")) {
             $file = $request->file('consultingAudioQuestions');
             $extension = $file->getClientOriginalExtension();
             $fileName = date("YmdHis") . '.' . $extension;
-            if (Storage::disk(Config::get('constants.DISK6'))->put($fileName, File::get($file))) {
+            if (Storage::disk(Config::get('constants.DISK6'))
+                       ->put($fileName, File::get($file))) {
                 $userUpload->file = $fileName;
             }
             if ($userUpload->save()) {
@@ -84,14 +89,15 @@ class UseruploadController extends Controller
 
 
         return response([
-            'sessionData' => session()->all()
-        ]);
+                            'sessionData' => session()->all(),
+                        ]);
     }
 
     /**
      * Display the specified resource.
      *
      * @param  \app\Userupload $userUpload
+     *
      * @return \Illuminate\Http\Response
      */
     public function show(Userupload $userUpload)
@@ -106,6 +112,7 @@ class UseruploadController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -117,7 +124,8 @@ class UseruploadController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  \app\Userupload $userupload
+     * @param  \app\Userupload          $userupload
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Userupload $userupload)
@@ -127,7 +135,8 @@ class UseruploadController extends Controller
         if ($userupload->update()) {
             if ($oldUserUploadStatus != $userupload->useruploadstatus_id) {
                 $userUploadStatusName = Useruploadstatus::where('id', $userupload->useruploadstatus_id)
-                    ->pluck('displayName')->toArray();
+                                                        ->pluck('displayName')
+                                                        ->toArray();
                 $userupload->user->notify(new CounselingStatusChanged($userUploadStatusName[0]));
             }
             return $this->response->setStatusCode(200);
@@ -140,6 +149,7 @@ class UseruploadController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

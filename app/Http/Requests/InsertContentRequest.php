@@ -26,13 +26,13 @@ class InsertContentRequest extends FormRequest
      */
     public function rules()
     {
-//        dd($this->request->get('files'));
+        //        dd($this->request->get('files'));
         //TODO:// contenttypes,id exists on contentType
         return [
-            'order' => 'numeric',
-            'name' => 'required',
+            'order'          => 'numeric',
+            'name'           => 'required',
             'contenttype_id' => 'required',
-            'files' => [new FilesArray]
+            'files'          => [new FilesArray],
         ];
 
     }

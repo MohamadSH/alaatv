@@ -8,14 +8,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\Contacttype
  *
- * @property int $id
- * @property string|null $displayName نام قابل نمایش نوع
- * @property string|null $name نام این نوع در سیستم
- * @property string|null $description توضیحات این نوع
- * @property int $isEnable نوع دفترچه تلفن فعال است یا خیر
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property \Carbon\Carbon|null $deleted_at
+ * @property int                                                          $id
+ * @property string|null                                                  $displayName نام قابل نمایش نوع
+ * @property string|null                                                  $name        نام این نوع در سیستم
+ * @property string|null                                                  $description توضیحات این نوع
+ * @property int                                                          $isEnable    نوع دفترچه تلفن فعال است یا خیر
+ * @property \Carbon\Carbon|null                                          $created_at
+ * @property \Carbon\Carbon|null                                          $updated_at
+ * @property \Carbon\Carbon|null                                          $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Contact[] $contacts
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Contacttype onlyTrashed()
@@ -36,7 +36,11 @@ class Contacttype extends Model
 {
     use SoftDeletes;
     /**      * The attributes that should be mutated to dates.        */
-    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
 
     /**
      * @var array
@@ -45,7 +49,7 @@ class Contacttype extends Model
         'name',
         'displayName',
         'description',
-        'isEnable'
+        'isEnable',
     ];
 
     public function contacts()

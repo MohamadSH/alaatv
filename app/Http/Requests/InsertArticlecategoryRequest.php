@@ -17,7 +17,10 @@ class InsertArticlecategoryRequest extends FormRequest
      */
     public function authorize()
     {
-        if (Auth()->user()->can(Config::get('constants.INSERT_ARTICLECATEGORY_ACCESS'))) return true;
+        if (Auth()
+            ->user()
+            ->can(Config::get('constants.INSERT_ARTICLECATEGORY_ACCESS')))
+            return true;
         return false;
     }
 
@@ -29,8 +32,8 @@ class InsertArticlecategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'order' => 'integer|min:0'
+            'name'  => 'required',
+            'order' => 'integer|min:0',
         ];
     }
 

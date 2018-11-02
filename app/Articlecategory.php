@@ -11,14 +11,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\Articlecategory
  *
- * @property int $id
- * @property string|null $name نام دسته بندی
- * @property string|null $description توضیح دسته بندی مقالات
- * @property int $enable فعال بودن یا نبودن دسته
- * @property int $order ترتیب دسته
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property \Carbon\Carbon|null $deleted_at
+ * @property int                                                          $id
+ * @property string|null                                                  $name        نام دسته بندی
+ * @property string|null                                                  $description توضیح دسته بندی مقالات
+ * @property int                                                          $enable      فعال بودن یا نبودن دسته
+ * @property int                                                          $order       ترتیب دسته
+ * @property \Carbon\Carbon|null                                          $created_at
+ * @property \Carbon\Carbon|null                                          $updated_at
+ * @property \Carbon\Carbon|null                                          $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Article[] $articles
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Articlecategory onlyTrashed()
@@ -48,14 +48,14 @@ class Articlecategory extends Model
     protected $dates = [
         'created_at',
         'updated_at',
-        'deleted_at'
+        'deleted_at',
     ];
 
     protected $fillable = [
         'name',
         'description',
         'enable',
-        'order'
+        'order',
     ];
 
     public function articles()

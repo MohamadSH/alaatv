@@ -29,7 +29,8 @@ class AppServiceProvider extends ServiceProvider
         Product::observe(ProductObserver::class);
 
         Horizon::auth(function ($request) {
-            if (Auth::check() && Auth::user()->hasRole("admin")) {
+            if (Auth::check() && Auth::user()
+                                     ->hasRole("admin")) {
                 return true;
             } else {
                 return false;

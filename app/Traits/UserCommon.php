@@ -8,6 +8,7 @@ trait UserCommon
      *
      * @param $user
      * @param $points
+     *
      * @return array
      */
     public function exchangeLottery($user, $points)
@@ -55,7 +56,7 @@ trait UserCommon
             $done,
             $responseText,
             $prizeName,
-            $objectId
+            $objectId,
         ];
     }
 
@@ -63,6 +64,7 @@ trait UserCommon
      * Validates national code
      *
      * @param $value
+     *
      * @return bool
      */
     public function validateNationalCode($value)

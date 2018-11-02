@@ -17,7 +17,9 @@ class WebsiteSettingProvider extends ServiceProvider
     {
         $key = "AppServiceProvider:websitesettings";
         $setting = Cache::remember($key, Config::get("constants.CACHE_600"), function () {
-            return Websitesetting::where("version", 1)->get()->first();
+            return Websitesetting::where("version", 1)
+                                 ->get()
+                                 ->first();
         });
 
         view()->share('wSetting', $setting->setting);

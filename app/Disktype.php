@@ -8,11 +8,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\Disktype
  *
- * @property int $id
- * @property string $name نام نوع دیسک
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property \Carbon\Carbon|null $deleted_at
+ * @property int                                                       $id
+ * @property string                                                    $name نام نوع دیسک
+ * @property \Carbon\Carbon|null                                       $created_at
+ * @property \Carbon\Carbon|null                                       $updated_at
+ * @property \Carbon\Carbon|null                                       $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Disk[] $disks
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Disktype onlyTrashed()
@@ -31,7 +31,11 @@ class Disktype extends Model
     use SoftDeletes;
 
     /**      * The attributes that should be mutated to dates.        */
-    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
 
     protected $fillable = [
         'name',

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Middleware\CompleteInfo;
 use App\Traits\CharacterCommon;
 use App\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -53,91 +52,98 @@ class LoginController extends Controller
      * Handle a login request to the application.
      *
      * @param  LoginRequest $request
+     *
      * @return Response
      */
     public function login(Request $request)
     {
-        $request->offsetSet("mobile" ,  $this->convertToEnglish($request->get("mobile")));
-        $request->offsetSet("password" , $this->convertToEnglish($request->get("password")));
+        $request->offsetSet("mobile", $this->convertToEnglish($request->get("mobile")));
+        $request->offsetSet("password", $this->convertToEnglish($request->get("password")));
 
         $validator = Validator::make($request->all(), [
-            'mobile' => 'required', 'password' => 'required',
+            'mobile'   => 'required',
+            'password' => 'required',
         ]);
 
         if ($validator->fails()) {
-             return redirect()->back()
-                 ->withInput($request->only('mobile', 'remember'))
-                 ->withErrors([
-                     'validation' => 'خطای ورودی ها'
-                 ],"login");
+            return redirect()
+                ->back()
+                ->withInput($request->only('mobile', 'remember'))
+                ->withErrors([
+                                 'validation' => 'خطای ورودی ها',
+                             ], "login");
         }
 
-//             $credentials = $this->getCredentials($request);
+        //             $credentials = $this->getCredentials($request);
 
         $remember = true;
-//        if($request->has("remember"))
-//            $remember = true;
-//        else
-//            $remember = false;
+        //        if($request->has("remember"))
+        //            $remember = true;
+        //        else
+        //            $remember = false;
 
-        $intendedUsers = User::where("mobile" , $request->get("mobile"))->get();
+        $intendedUsers = User::where("mobile", $request->get("mobile"))
+                             ->get();
 
-        foreach ($intendedUsers as $user)
-        {
-            if (Auth::attempt(['id'=>$user->id,'mobile' => $user->mobile, 'password' => $request->get("password")] , $remember)) {
+        foreach ($intendedUsers as $user) {
+            if (Auth::attempt(['id'       => $user->id,
+                               'mobile'   => $user->mobile,
+                               'password' => $request->get("password"),
+                              ], $remember)) {
                 if (strcmp(Auth::user()->userstatus->name, "inactive") == 0) {
                     Auth::logout();
                     Session::flush();
-                    return redirect()->back()
+                    return redirect()
+                        ->back()
                         ->withInput($request->only('mobile', 'remember'))
                         ->withErrors([
-                            'inActive' => 'حساب کاربری شما غیر فعال شده است!'
-                        ], "login");
+                                         'inActive' => 'حساب کاربری شما غیر فعال شده است!',
+                                     ], "login");
                 }
                 break;
             }
         }
-        if(!Auth::check())
-        {
-            if(User::where("mobile" , $request->get("mobile"))->where("nationalCode" , $request->get("password"))->get()->isEmpty())
-            {
+        if (!Auth::check()) {
+            if (User::where("mobile", $request->get("mobile"))
+                    ->where("nationalCode", $request->get("password"))
+                    ->get()
+                    ->isEmpty()) {
                 $registerRequest = new Request();
-                $registerRequest->offsetSet("mobile" ,  $request->get("mobile"));
-                $registerRequest->offsetSet("nationalCode" , $request->get("password"));
-                $registerRequest->offsetSet("firstName" ,  null);
-                $registerRequest->offsetSet("lastName" , null);
+                $registerRequest->offsetSet("mobile", $request->get("mobile"));
+                $registerRequest->offsetSet("nationalCode", $request->get("password"));
+                $registerRequest->offsetSet("firstName", null);
+                $registerRequest->offsetSet("lastName", null);
                 $registerController = new RegisterController();
                 $registerController->register($registerRequest);
-            }else
-            {
-                return redirect()->back()
+            } else {
+                return redirect()
+                    ->back()
                     ->withInput($request->only('mobile', 'remember'))
                     ->withErrors([
-                        'credential' => 'اطلاعات وارد شده معتبر نمی باشند '
-                    ],"login");
+                                     'credential' => 'اطلاعات وارد شده معتبر نمی باشند ',
+                                 ], "login");
             }
         }
 
         $baseUrl = url("/");
-        $targetUrl = redirect()->intended()->getTargetUrl();
-        if(strcmp($targetUrl , $baseUrl) == 0)
-        {
-            if(strcmp(URL::previous() , route('login')) != 0) $this->redirectTo = URL::previous() ;
-        }else
-        {
-            $this->redirectTo = $targetUrl ;
+        $targetUrl = redirect()
+            ->intended()
+            ->getTargetUrl();
+        if (strcmp($targetUrl, $baseUrl) == 0) {
+            if (strcmp(URL::previous(), route('login')) != 0)
+                $this->redirectTo = URL::previous();
+        } else {
+            $this->redirectTo = $targetUrl;
         }
 
         //ToDo: config , it has to be replaced with setting
-        if(true)
-        {//config variable for showing the form or not
-            if(Auth::user()->completion("afterLoginForm") != 100)
-            {
-                if(strcmp(URL::previous() , action("OrderController@checkoutAuth")) == 0)
-                {
+        if (true) {//config variable for showing the form or not
+            if (Auth::user()
+                    ->completion("afterLoginForm") != 100) {
+                if (strcmp(URL::previous(), action("OrderController@checkoutAuth")) == 0) {
                     return redirect(action("OrderController@checkoutCompleteInfo"));
-                }else{
-                    session()->put("redirectTo" , $this->redirectTo );
+                } else {
+                    session()->put("redirectTo", $this->redirectTo);
                     return redirect(action("UserController@completeRegister"));
                 }
 
@@ -154,6 +160,6 @@ class LoginController extends Controller
      */
     public function showLoginForm()
     {
-        return view('auth.login3' );
+        return view('auth.login3');
     }
 }

@@ -19,7 +19,10 @@ class EditOrderRequest extends FormRequest
      */
     public function authorize()
     {
-        if (Auth()->user()->can(Config::get('constants.EDIT_ORDER_ACCESS'))) return true;
+        if (Auth()
+            ->user()
+            ->can(Config::get('constants.EDIT_ORDER_ACCESS')))
+            return true;
         return false;
     }
 
@@ -32,8 +35,8 @@ class EditOrderRequest extends FormRequest
     {
         $this->id = $_REQUEST["id"];
         $rules = [
-            'discount' => 'numeric',
-            'orderstatus_id' => 'exists:orderstatuses,id',
+            'discount'         => 'numeric',
+            'orderstatus_id'   => 'exists:orderstatuses,id',
             'paymentstatus_id' => 'exists:paymentstatuses,id',
         ];
         if (Input::get(['transactionstatus_id']) != Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL")) {

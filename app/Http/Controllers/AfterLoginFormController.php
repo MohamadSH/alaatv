@@ -15,14 +15,22 @@ class AfterLoginFormController extends Controller
      */
     public function index()
     {
-        $afterLoginFormFields = Afterloginformcontrol::all()->sortBy("order");
+        $afterLoginFormFields = Afterloginformcontrol::all()
+                                                     ->sortBy("order");
         $availableFields = Schema::getColumnListing("users");
         foreach ($availableFields as $key => $availableField) {
             unset($availableFields[$key]);
-            if (strcmp(Schema::getColumnType("users", $availableField), "string") == 0) $availableFields[$availableField] = $availableField;
-            elseif (strpos($availableField, "_id")) $availableFields[$availableField] = $availableField;
+            if (strcmp(Schema::getColumnType("users", $availableField), "string") == 0)
+                $availableFields[$availableField] = $availableField;
+            else if (strpos($availableField, "_id"))
+                $availableFields[$availableField] = $availableField;
         }
-        $availableFields = array_diff($availableFields, ["remember_token", "password", "mobile", "nationalCode"]);
+        $availableFields = array_diff($availableFields, [
+            "remember_token",
+            "password",
+            "mobile",
+            "nationalCode",
+        ]);
         $sideBarMode = "closed";
         $section = "afterLoginForm";
         return view("admin.siteConfiguration.afterLoginForm", compact("afterLoginFormFields", "availableFields", "sideBarMode", "section"));
@@ -42,6 +50,7 @@ class AfterLoginFormController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -49,7 +58,8 @@ class AfterLoginFormController extends Controller
         $afterLoginFormField = new Afterloginformcontrol();
         $afterLoginFormField->fill($request->all());
 
-        if ($afterLoginFormField->save()) session()->put("success", "فیلد با موفقیت اضافه شد");
+        if ($afterLoginFormField->save())
+            session()->put("success", "فیلد با موفقیت اضافه شد");
         else session()->flash("error", "خطای پایگاه داده");
 
         return redirect()->back();
@@ -59,6 +69,7 @@ class AfterLoginFormController extends Controller
      * Display the specified resource.
      *
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -70,6 +81,7 @@ class AfterLoginFormController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -81,7 +93,8 @@ class AfterLoginFormController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param  int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -93,14 +106,16 @@ class AfterLoginFormController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Afterloginformcontrol $field
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy(Afterloginformcontrol $field)
     {
-        if ($field->delete()) session()->put("success", "فیلد با موفقیت حذف شد");
+        if ($field->delete())
+            session()->put("success", "فیلد با موفقیت حذف شد");
         else session()->put("error", "خطای پایگاه داده");
         return response([
-            'sessionData' => session()->all()
-        ]);
+                            'sessionData' => session()->all(),
+                        ]);
     }
 }

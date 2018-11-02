@@ -23,28 +23,28 @@ class TagManagerProvider extends ServiceProvider
     {
 
         $this->app->when(ContentObserver::class)
-            ->needs(TaggingInterface::class)
-            ->give(function () {
-                return (new ContentTagManagerViaApi());
-            });
+                  ->needs(TaggingInterface::class)
+                  ->give(function () {
+                      return (new ContentTagManagerViaApi());
+                  });
 
         $this->app->when(ProductObserver::class)
-            ->needs(TaggingInterface::class)
-            ->give(function () {
-                return (new ProductTagManagerViaApi());
-            });
+                  ->needs(TaggingInterface::class)
+                  ->give(function () {
+                      return (new ProductTagManagerViaApi());
+                  });
         //
 
         $this->app->when(ContentTagCommand::class)
-            ->needs(TaggingInterface::class)
-            ->give(function () {
-                return (new ContentTagManagerViaApi());
-            });
+                  ->needs(TaggingInterface::class)
+                  ->give(function () {
+                      return (new ContentTagManagerViaApi());
+                  });
         $this->app->when(AuthorTagCommand::class)
-            ->needs(TaggingInterface::class)
-            ->give(function () {
-                return (new AuthorTagManagerViaApi());
-            });
+                  ->needs(TaggingInterface::class)
+                  ->give(function () {
+                      return (new AuthorTagManagerViaApi());
+                  });
 
     }
 

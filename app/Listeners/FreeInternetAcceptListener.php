@@ -10,6 +10,7 @@ class FreeInternetAcceptListener
      * Handle the event.
      *
      * @param FreeInternetAccept $event
+     *
      * @return void
      */
     public function handle(FreeInternetAccept $event)

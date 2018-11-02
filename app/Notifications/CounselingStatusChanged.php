@@ -22,7 +22,7 @@ class CounselingStatusChanged extends Notification implements ShouldQueue
      * @var User
      */
     protected $user;
-    private $orderStatus;
+    private   $orderStatus;
 
     public function __construct($orderStatus)
     {
@@ -33,6 +33,7 @@ class CounselingStatusChanged extends Notification implements ShouldQueue
      * Get the notification's delivery channels.
      *
      * @param  mixed $notifiable
+     *
      * @return array
      */
     public function via($notifiable)
@@ -46,6 +47,7 @@ class CounselingStatusChanged extends Notification implements ShouldQueue
 
     /**
      * @param $notifiable
+     *
      * @return MedianaMessage
      */
     public function toMediana($notifiable)

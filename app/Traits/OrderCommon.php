@@ -24,7 +24,7 @@ trait OrderCommon
 
         return [
             "result" => $walletPaidFlag,
-            "cost" => $cost
+            "cost"   => $cost,
         ];
     }
 }

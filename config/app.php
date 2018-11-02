@@ -176,6 +176,7 @@ return [
         App\Providers\MedianaServiceProvider::class,
         App\Providers\ComposerServiceProvider::class,
         App\Providers\TagManagerProvider::class,
+        App\Providers\InterfaceBindingProvider::class,
 
     ],
     /*

@@ -16,8 +16,9 @@ class ModifyRequestInputMiddleware
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  \Closure $next
-     * @param $index
+     * @param  \Closure                 $next
+     * @param                           $index
+     *
      * @return mixed
      */
     public function handle($request, Closure $next, $index)

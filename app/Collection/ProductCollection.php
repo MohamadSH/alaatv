@@ -16,7 +16,8 @@ class ProductCollection extends Collection
     /**
      * If the collection contains parent of products , it keeps the parent and removes it's children
      * Used in ProductController@refreshPrice : In case of calculating the price for a selectable product
-     * we need to keep only the parent product and remove all of it's children from the collection(which aren't necessary)
+     * we need to keep only the parent product and remove all of it's children from the collection(which aren't
+     * necessary)
      *
      */
     public function keepOnlyParents(): void
@@ -40,9 +41,10 @@ class ProductCollection extends Collection
     public function removeProductDescendants(Product $product): void
     {
         $children = $product->children;
-        $toArray = $this->pluck("id")->toArray();
+        $toArray = $this->pluck("id")
+                        ->toArray();
         foreach ($children as $child) {
-//          $ck = $this->search($child); // didn't work!!
+            //          $ck = $this->search($child); // didn't work!!
             $key = array_search($child->id, $toArray);
             if ($key) {
                 $this->forget($key);

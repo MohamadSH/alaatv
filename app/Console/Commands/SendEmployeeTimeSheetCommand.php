@@ -49,7 +49,8 @@ class SendEmployeeTimeSheetCommand extends Command
         if ($employeeId > 0) {
             try {
                 $user = User::findOrFail($employeeId);
-            } catch (ModelNotFoundException $exception) {
+            }
+            catch (ModelNotFoundException $exception) {
                 $this->error($exception->getMessage());
                 return;
             }
@@ -64,15 +65,22 @@ class SendEmployeeTimeSheetCommand extends Command
     private function performTimeSheetTaskForAnEmployee(User $user)
     {
         $this->info("send TimeSheet to" . $user->getfullName());
-        $dayOfWeekJalali = $this->convertToJalaliDay(Carbon::today('Asia/Tehran')->format('l'));
-        $toDayDate = Carbon::today('Asia/Tehran')->format("Y-m-d");
+        $dayOfWeekJalali = $this->convertToJalaliDay(Carbon::today('Asia/Tehran')
+                                                           ->format('l'));
+        $toDayDate = Carbon::today('Asia/Tehran')
+                           ->format("Y-m-d");
         $this->calculate($user, $dayOfWeekJalali, $toDayDate);
     }
 
     private function calculate(User $employee, $dayOfWeekJalali, $toDayDate)
     {
-        $employeeSchedule = Employeeschedule::where("user_id", $employee->id)->where("day", $dayOfWeekJalali)->get()->first();
-        $employeeTimeSheet = Employeetimesheet::where("user_id", $employee->id)->where("date", $toDayDate)->get();
+        $employeeSchedule = Employeeschedule::where("user_id", $employee->id)
+                                            ->where("day", $dayOfWeekJalali)
+                                            ->get()
+                                            ->first();
+        $employeeTimeSheet = Employeetimesheet::where("user_id", $employee->id)
+                                              ->where("date", $toDayDate)
+                                              ->get();
         $done = false;
         if ($employeeTimeSheet->isEmpty()) {
             $newEmplployeeTimeSheet = new Employeetimesheet();
@@ -99,22 +107,23 @@ class SendEmployeeTimeSheetCommand extends Command
                 $done = $newEmplployeeTimeSheet->id;
             else
                 $done = false;
-        } elseif (!$employeeTimeSheet->first()->getOriginal("timeSheetLock")) {
+        } else if (!$employeeTimeSheet->first()
+                                      ->getOriginal("timeSheetLock")) {
             $employeeTimeSheet = $employeeTimeSheet->first();
             if (strcmp($employeeTimeSheet->clockIn, "00:00:00") == 0) {
                 if (strcmp($employeeTimeSheet->beginLunchBreak, "00:00:00") != 0)
                     $employeeTimeSheet->clockIn = $employeeTimeSheet->beginLunchBreak;
-                elseif (strcmp($employeeTimeSheet->finishLunchBreak, "00:00:00") != 0)
+                else if (strcmp($employeeTimeSheet->finishLunchBreak, "00:00:00") != 0)
                     $employeeTimeSheet->clockIn = $employeeTimeSheet->finishLunchBreak;
-                elseif (strcmp($employeeTimeSheet->clockOut, "00:00:00") != 0)
+                else if (strcmp($employeeTimeSheet->clockOut, "00:00:00") != 0)
                     $employeeTimeSheet->clockIn = $employeeTimeSheet->clockOut;
             }
             if (strcmp($employeeTimeSheet->clockOut, "00:00:00") == 0) {
                 if (strcmp($employeeTimeSheet->finishLunchBreak, "00:00:00") != 0)
                     $employeeTimeSheet->clockOut = $employeeTimeSheet->finishLunchBreak;
-                elseif (strcmp($employeeTimeSheet->beginLunchBreak, "00:00:00") != 0)
+                else if (strcmp($employeeTimeSheet->beginLunchBreak, "00:00:00") != 0)
                     $employeeTimeSheet->clockOut = $employeeTimeSheet->beginLunchBreak;
-                elseif (strcmp($employeeTimeSheet->clockIn, "00:00:00") != 0)
+                else if (strcmp($employeeTimeSheet->clockIn, "00:00:00") != 0)
                     $employeeTimeSheet->clockOut = $employeeTimeSheet->clockIn;
             }
 
@@ -141,7 +150,9 @@ class SendEmployeeTimeSheetCommand extends Command
         }
 
         if ($done) {
-            $employeeTimeSheet = Employeetimesheet::all()->where("id", $done)->first();
+            $employeeTimeSheet = Employeetimesheet::all()
+                                                  ->where("id", $done)
+                                                  ->first();
             /**
              * Sending auto generated password through SMS
              */

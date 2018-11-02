@@ -51,7 +51,9 @@ class FavorableController extends Controller
     {
         $key = md5($request->url());
         return Cache::remember($key, config('constants.CACHE_1'), function () use ($favorable) {
-            return $favorable->favoriteBy()->get()->count();
+            return $favorable->favoriteBy()
+                             ->get()
+                             ->count();
         });
 
     }

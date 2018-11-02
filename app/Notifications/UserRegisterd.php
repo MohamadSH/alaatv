@@ -27,6 +27,7 @@ class UserRegisterd extends Notification implements ShouldQueue
      * Get the notification's delivery channels.
      *
      * @param  mixed $notifiable
+     *
      * @return array
      */
     public function via($notifiable)
@@ -40,6 +41,7 @@ class UserRegisterd extends Notification implements ShouldQueue
 
     /**
      * @param $notifiable
+     *
      * @return MedianaMessage
      */
     public function toMediana($notifiable)
@@ -59,7 +61,7 @@ class UserRegisterd extends Notification implements ShouldQueue
         if (isset($this->user->gender_id)) {
             if ($this->user->gender->name == "خانم")
                 $gender = "خانم ";
-            elseif ($this->user->gender->name == "آقا")
+            else if ($this->user->gender->name == "آقا")
                 $gender = "آقای ";
             else
                 $gender = "";
@@ -88,8 +90,8 @@ class UserRegisterd extends Notification implements ShouldQueue
     {
 
         return [
-            'username' => $this->user->mobile,
-            'password' => $this->user->nationalCode,
+            'username'              => $this->user->mobile,
+            'password'              => $this->user->nationalCode,
             "https://goo.gl/jme5VU" => "https://goo.gl/jme5VU",
         ];
     }

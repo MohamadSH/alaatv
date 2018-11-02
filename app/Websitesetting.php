@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\Websitesetting
  *
- * @property int $id
- * @property string $setting ستون شامل تنظیمات سایت
- * @property int|null $version ستون مشخص ککنده ورژن تنظیمات
+ * @property int                 $id
+ * @property string              $setting ستون شامل تنظیمات سایت
+ * @property int|null            $version ستون مشخص ککنده ورژن تنظیمات
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property \Carbon\Carbon|null $deleted_at
@@ -31,11 +31,15 @@ class Websitesetting extends Model
 {
     use SoftDeletes;
     /**      * The attributes that should be mutated to dates.        */
-    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
 
     protected $fillable = [
         'setting',
-        'version'
+        'version',
     ];
 
     public function getSettingAttribute($value)

@@ -20,7 +20,10 @@ class EditUserRequest extends FormRequest
      */
     public function authorize()
     {
-        if (Auth()->user()->can(Config::get('constants.EDIT_USER_ACCESS'))) return true;
+        if (Auth()
+            ->user()
+            ->can(Config::get('constants.EDIT_USER_ACCESS')))
+            return true;
         return false;
     }
 
@@ -34,35 +37,40 @@ class EditUserRequest extends FormRequest
         $this->userId = $this->request->get("id");
 
         $rules = [
-            'firstName' => 'required|max:255',
-            'lastName' => 'required|max:255',
-            'mobile' => [
+            'firstName'     => 'required|max:255',
+            'lastName'      => 'required|max:255',
+            'mobile'        => [
                 'required',
                 'digits:11',
                 'phone:AUTO,IR,mobile',
-                Rule::unique('users')->where(function ($query) {
-                    $query->where('nationalCode', $_REQUEST["nationalCode"])->where('deleted_at', null);
-                })
+                Rule::unique('users')
+                    ->where(function ($query) {
+                        $query->where('nationalCode', $_REQUEST["nationalCode"])
+                              ->where('deleted_at', null);
+                    }),
             ],
-            'nationalCode' => [
+            'nationalCode'  => [
                 'required',
                 'digits:10',
                 'validate:nationalCode',
-                Rule::unique('users')->where(function ($query) {
-                    $query->where('mobile', $_REQUEST["mobile"])->where('deleted_at', null);
-                })
+                Rule::unique('users')
+                    ->where(function ($query) {
+                        $query->where('mobile', $_REQUEST["mobile"])
+                              ->where('deleted_at', null);
+                    }),
             ],
             'userstatus_id' => 'required|exists:userstatuses,id',
-            'photo' => 'sometimes|nullable|image|mimes:jpeg,jpg,png|max:512',
-            'postalCode' => 'sometimes|nullable|numeric',
-            'email' => 'sometimes|nullable|email',
-            'password' => 'sometimes|nullable|confirmed|min:6',
-            'major_id' => 'sometimes|nullable|exists:majors,id',
-            'gender_id' => 'sometimes|nullable|exists:genders,id',
-            'techCode' => 'sometimes|nullable|alpha_num|max:5|min:5|unique:users,techCode,' . $this->userId . ',id',
+            'photo'         => 'sometimes|nullable|image|mimes:jpeg,jpg,png|max:512',
+            'postalCode'    => 'sometimes|nullable|numeric',
+            'email'         => 'sometimes|nullable|email',
+            'password'      => 'sometimes|nullable|confirmed|min:6',
+            'major_id'      => 'sometimes|nullable|exists:majors,id',
+            'gender_id'     => 'sometimes|nullable|exists:genders,id',
+            'techCode'      => 'sometimes|nullable|alpha_num|max:5|min:5|unique:users,techCode,' . $this->userId . ',id',
         ];
 
-        if ($this->request->has("major_id") && strcmp($this->request->get("major_id"), "0") != 0) $rules["major_id"] = "exists:majors,id";
+        if ($this->request->has("major_id") && strcmp($this->request->get("major_id"), "0") != 0)
+            $rules["major_id"] = "exists:majors,id";
         return $rules;
     }
 

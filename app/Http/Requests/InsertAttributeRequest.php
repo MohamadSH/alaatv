@@ -14,7 +14,10 @@ class InsertAttributeRequest extends FormRequest
      */
     public function authorize()
     {
-        if (Auth()->user()->can(Config::get('constants.INSERT_ATTRIBUTE_ACCESS'))) return true;
+        if (Auth()
+            ->user()
+            ->can(Config::get('constants.INSERT_ATTRIBUTE_ACCESS')))
+            return true;
         return false;
 
     }
@@ -27,8 +30,8 @@ class InsertAttributeRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'displayName' => 'required',
+            'name'                => 'required',
+            'displayName'         => 'required',
             'attributecontrol_id' => 'required|exists:attributecontrols,id',
         ];
     }

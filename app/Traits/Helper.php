@@ -14,12 +14,11 @@ trait Helper
     public function medianaGetCredit()
     {
         $url = config("services.medianaSMS.normal.url");
-        $param = array
-        (
+        $param = [
             'uname' => config("services.medianaSMS.normal.userName"),
-            'pass' => config("services.medianaSMS.normal.password"),
-            'op' => 'credit',
-        );
+            'pass'  => config("services.medianaSMS.normal.password"),
+            'op'    => 'credit',
+        ];
         $handler = curl_init($url);
         curl_setopt($handler, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($handler, CURLOPT_POSTFIELDS, $param);
@@ -43,19 +42,25 @@ trait Helper
      * Generates a random password that does not belong to anyone
      *
      * @param int $length
+     *
      * @return string
      */
     public function generateRandomPassword($length)
     {
         $generatedPassword = rand(1000, 9999);
         $generatedPasswordHash = bcrypt($generatedPassword);
-        return ["rawPassword" => $generatedPassword, "hashPassword" => $generatedPasswordHash];
+        return [
+            "rawPassword" => $generatedPassword,
+            "hashPassword" => $generatedPasswordHash,
+        ];
     }
 
     public function timeFilterQuery($list, $sinceDate, $tillDate, $by = 'created_at', $sinceTime = "00:00:00", $tillTime = "23:59:59", $timeZoneConvert = true)
     {
-        $sinceDate = Carbon::parse($sinceDate)->format('Y-m-d') . " " . $sinceTime;
-        $tillDate = Carbon::parse($tillDate)->format('Y-m-d') . " " . $tillTime;
+        $sinceDate = Carbon::parse($sinceDate)
+                           ->format('Y-m-d') . " " . $sinceTime;
+        $tillDate = Carbon::parse($tillDate)
+                          ->format('Y-m-d') . " " . $tillTime;
 
         if ($timeZoneConvert) {
             $sinceDate = Carbon::parse($sinceDate, "Asia/Tehran");
@@ -63,7 +68,10 @@ trait Helper
             $tillDate = Carbon::parse($tillDate, "Asia/Tehran");
             $tillDate->setTimezone('UTC');
         }
-        $list = $list->whereBetween($by, [$sinceDate, $tillDate]);
+        $list = $list->whereBetween($by, [
+            $sinceDate,
+            $tillDate,
+        ]);
         return $list;
     }
 
@@ -85,18 +93,27 @@ trait Helper
 
         if (isset($websitepage->id)) {
             if (!$user->seensitepages->contains($websitepage->id))
-                $user->seensitepages()->attach($websitepage->id);
+                $user->seensitepages()
+                     ->attach($websitepage->id);
             else {
-                $user->seensitepages()->updateExistingPivot($websitepage->id, ["numberOfVisit" => $user->seensitepages()->where("id", $websitepage->id)->first()->pivot->numberOfVisit + 1, "updated_at" => Carbon::now()]);
+                $user->seensitepages()
+                     ->updateExistingPivot($websitepage->id, [
+                         "numberOfVisit" => $user->seensitepages()
+                                                 ->where("id", $websitepage->id)
+                                                 ->first()->pivot->numberOfVisit + 1,
+                         "updated_at"    => Carbon::now(),
+                     ]);
             }
-            $productSeenCount = $websitepage->userschecked()->count();
+            $productSeenCount = $websitepage->userschecked()
+                                            ->count();
         }
         return $productSeenCount;
     }
 
     public function mergeCollections($firstCollection, $secondCollection): Collection
     {
-        $merge = $firstCollection->toBase()->merge($secondCollection);
+        $merge = $firstCollection->toBase()
+                                 ->merge($secondCollection);
 
         return $merge;
     }

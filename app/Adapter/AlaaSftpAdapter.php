@@ -13,6 +13,7 @@ use League\Flysystem\Sftp\SftpAdapter;
 
 /**
  * Class AlaaSftpAdapter
+ *
  * @package App\Adapter
  */
 class AlaaSftpAdapter extends SftpAdapter
@@ -31,7 +32,11 @@ class AlaaSftpAdapter extends SftpAdapter
     /**
      * @var array
      */
-    protected $newConfigurableArray = ['prefix', 'dProtocol', 'dHost'];
+    protected $newConfigurableArray = [
+        'prefix',
+        'dProtocol',
+        'dHost',
+    ];
 
     /**
      * Constructor.
@@ -72,6 +77,7 @@ class AlaaSftpAdapter extends SftpAdapter
 
     /**
      * @param $fileName
+     *
      * @return string
      */
     public function getUrl($fileName)
@@ -119,6 +125,7 @@ class AlaaSftpAdapter extends SftpAdapter
 
     /**
      * @param mixed $dProtocol
+     *
      * @return AlaaSftpAdapter
      */
     protected function setDProtocol($dProtocol)
@@ -137,6 +144,7 @@ class AlaaSftpAdapter extends SftpAdapter
 
     /**
      * @param mixed $dHost
+     *
      * @return AlaaSftpAdapter
      */
     protected function setDHost($dHost)

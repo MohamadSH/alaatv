@@ -21,46 +21,14 @@ class Tags extends FilterAbstract
     {
         $this->isSetTagManager();
 
-        if(!$this->validateTags($value, $callback))
+        if (!$this->validateTags($value, $callback))
             return $builder;
 
         $resultArray = $this->retriveTagable($value);
 
-        $callback->success($builder,$resultArray);
+        $callback->success($builder, $resultArray);
 
-        return $builder->whereIn('id',$resultArray);
-    }
-
-    /**
-     * @param TaggingInterface $tagManager
-     * @return Tags
-     */
-    public function setTagManager(TaggingInterface $tagManager)
-    {
-        $this->tagManager = $tagManager;
-        return $this;
-    }
-
-    /**
-     * @param $value
-     * @param FilterCallback $callback
-     * @return bool
-     */
-    private function validateTags($value, FilterCallback $callback): bool
-    {
-        if (!isset($value)) {
-            $callback->err([
-                "message" => $this->getValueShouldBeSetMessage()
-            ]);
-            return false;
-        }
-        if (!is_array($value)) {
-            $callback->err([
-                "message" => $this->getValueShouldBeArrayMessage()
-            ]);
-            return false;
-        }
-        return true;
+        return $builder->whereIn('id', $resultArray);
     }
 
     private function isSetTagManager(): void
@@ -72,7 +40,31 @@ class Tags extends FilterAbstract
     }
 
     /**
+     * @param                $value
+     * @param FilterCallback $callback
+     *
+     * @return bool
+     */
+    private function validateTags($value, FilterCallback $callback): bool
+    {
+        if (!isset($value)) {
+            $callback->err([
+                               "message" => $this->getValueShouldBeSetMessage(),
+                           ]);
+            return false;
+        }
+        if (!is_array($value)) {
+            $callback->err([
+                               "message" => $this->getValueShouldBeArrayMessage(),
+                           ]);
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * @param $value
+     *
      * @return mixed
      */
     private function retriveTagable($value)
@@ -80,9 +72,20 @@ class Tags extends FilterAbstract
         $tags = array_filter($value);
         [
             $numberOfResult,
-            $resultArray
+            $resultArray,
         ] = $this->tagManager->getTaggable($tags);
         return $resultArray;
+    }
+
+    /**
+     * @param TaggingInterface $tagManager
+     *
+     * @return Tags
+     */
+    public function setTagManager(TaggingInterface $tagManager)
+    {
+        $this->tagManager = $tagManager;
+        return $this;
     }
 
 

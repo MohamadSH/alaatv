@@ -24,7 +24,7 @@ trait DateTrait
             $month = $explodedDate[1];
             $day = $explodedDate[2];
             return $this->gregorian_to_jalali($year, $month, $day, "/");
-        } elseif (strcmp($convertType, 'toMiladi') == 0 && strlen($date) > 0) {
+        } else if (strcmp($convertType, 'toMiladi') == 0 && strlen($date) > 0) {
             $explodedDate = explode("/", $date);
             $year = $explodedDate[0];
             $month = $explodedDate[1];
@@ -36,9 +36,24 @@ trait DateTrait
     protected function gregorian_to_jalali($g_y, $g_m, $g_d, $mod = '')
     {
         $d_4 = $g_y % 4;
-        $g_a = array(0, 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334);
+        $g_a = [
+            0,
+            0,
+            31,
+            59,
+            90,
+            120,
+            151,
+            181,
+            212,
+            243,
+            273,
+            304,
+            334,
+        ];
         $doy_g = $g_a[(int)$g_m] + $g_d;
-        if ($d_4 == 0 and $g_m > 2) $doy_g++;
+        if ($d_4 == 0 and $g_m > 2)
+            $doy_g++;
         $d_33 = (int)((($g_y - 16) % 132) * .0305);
         $a = ($d_33 == 3 or $d_33 < ($d_4 - 1) or $d_4 == 0) ? 286 : 287;
         $b = (($d_33 == 1 or $d_33 == 2) and ($d_33 == $d_4 or $d_4 == 1)) ? 78 : (($d_33 == 3 and $d_4 == 0) ? 80 : 79);
@@ -61,7 +76,11 @@ trait DateTrait
             $jd = $doy_j - 186 - ($jm * 30);
             $jm += 7;
         }
-        return ($mod == '') ? array($jy, $jm, $jd) : $jy . $mod . $jm . $mod . $jd;
+        return ($mod == '') ? [
+            $jy,
+            $jm,
+            $jd,
+        ] : $jy . $mod . $jm . $mod . $jd;
     }
 
     protected function jalali_to_gregorian($j_y, $j_m, $j_d, $mod = '')
@@ -82,11 +101,30 @@ trait DateTrait
             $gy = $j_y + 622;
             $gd = $doy_j - $a;
         }
-        foreach (array(0, 31, ($gy % 4 == 0) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31) as $gm => $v) {
-            if ($gd <= $v) break;
+        foreach ([
+                     0,
+                     31,
+                     ($gy % 4 == 0) ? 29 : 28,
+                     31,
+                     30,
+                     31,
+                     30,
+                     31,
+                     31,
+                     30,
+                     31,
+                     30,
+                     31,
+                 ] as $gm => $v) {
+            if ($gd <= $v)
+                break;
             $gd -= $v;
         }
-        return ($mod == '') ? array($gy, $gm, $gd) : $gy . $mod . $gm . $mod . $gd;
+        return ($mod == '') ? [
+            $gy,
+            $gm,
+            $gd,
+        ] : $gy . $mod . $gm . $mod . $gd;
     }
 
     /**
@@ -181,7 +219,7 @@ trait DateTrait
                 default:
                     break;
             }
-        } elseif ($mode == "STRING_TO_NUMBER") {
+        } else if ($mode == "STRING_TO_NUMBER") {
             $result = 0;
             switch ($month) {
                 case "فروردین":

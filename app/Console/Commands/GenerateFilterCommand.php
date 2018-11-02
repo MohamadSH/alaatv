@@ -38,6 +38,7 @@ class GenerateFilterCommand extends Command
 
     /**
      * @param $filterName
+     *
      * @return bool|mixed|string
      */
     protected function compileTemplate($filterName)
@@ -51,6 +52,7 @@ class GenerateFilterCommand extends Command
     /**
      * @param $filterName
      * @param $stub
+     *
      * @return string
      */
     protected function makeFilterClass($filterName, $stub): string

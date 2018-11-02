@@ -23,7 +23,8 @@ class RoleController extends Controller
 
     public function index()
     {
-        $roles = Role::all()->sortByDesc('created_at');;
+        $roles = Role::all()
+                     ->sortByDesc('created_at');;
         return view("role.index", compact('roles'));
     }
 
@@ -57,8 +58,10 @@ class RoleController extends Controller
             $message = "این نقش قابل اصلاح نمی باشد";
             return $homeController->errorPage($message);
         }
-        $permissions = Permission::pluck('display_name', 'id')->toArray();
-        $rolePermissions = $role->permissions->pluck('id')->toArray();
+        $permissions = Permission::pluck('display_name', 'id')
+                                 ->toArray();
+        $rolePermissions = $role->permissions->pluck('id')
+                                             ->toArray();
         return view('role.edit', compact('role', 'permissions', 'rolePermissions'));
     }
 
@@ -73,7 +76,8 @@ class RoleController extends Controller
             $role->fill($request->all());
 
         if ($role->update()) {
-            $role->permissions()->sync($request->get('permissions', []));
+            $role->permissions()
+                 ->sync($request->get('permissions', []));
             session()->put("success", "اطلاعات نقش با موفقیت اصلاح شد");
         } else {
             session()->put("error", "خطای پایگاه داده.");
@@ -88,7 +92,8 @@ class RoleController extends Controller
             $message = "این نقش قابل حذف نمی باشد";
             return $homeController->errorPage($message);
         }
-        if ($role->delete()) session()->put('success', 'نقش با موفقیت حذف شد');
+        if ($role->delete())
+            session()->put('success', 'نقش با موفقیت حذف شد');
         else session()->put('error', 'خطای پایگاه داده');
         return redirect()->back();
     }

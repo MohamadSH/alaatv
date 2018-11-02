@@ -11,26 +11,30 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\Coupon
  *
- * @property int $id
- * @property int|null $coupontype_id آی دی مشخص کننده نوع کپن
- * @property int|null $discounttype_id نوع تخفیف
- * @property string|null $name نام کپن
- * @property int $enable فعال یا غیرفعال بودن کپن برای استفاده جدید
- * @property string|null $description توضیحات کپن
- * @property string|null $code کد کپن
- * @property float $discount میزان تخفیف کپن به درصد
- * @property int|null $maxCost بیشسینه قیمت مورد نیاز برای استفاده از این کپن
- * @property int|null $usageLimit حداکثر تعداد مجاز تعداد استفاده از کپن - اگر نال باشد یعنی نامحدود
- * @property int $usageNumber تعداد استفاده ها از کپن تا این لحظه
- * @property string|null $validSince تاریخ شروع معتبر بودن کپن
- * @property string|null $validUntil تاریخ پایان معتبر بودن کپن
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property \Carbon\Carbon|null $deleted_at
- * @property-read \App\Coupontype|null $coupontype
- * @property-read \App\Discounttype|null $discounttype
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\User[] $marketers
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Order[] $orders
+ * @property int                                                          $id
+ * @property int|null                                                     $coupontype_id   آی دی مشخص کننده نوع کپن
+ * @property int|null                                                     $discounttype_id نوع تخفیف
+ * @property string|null                                                  $name            نام کپن
+ * @property int                                                          $enable          فعال یا غیرفعال بودن کپن
+ *           برای استفاده جدید
+ * @property string|null                                                  $description     توضیحات کپن
+ * @property string|null                                                  $code            کد کپن
+ * @property float                                                        $discount        میزان تخفیف کپن به درصد
+ * @property int|null                                                     $maxCost         بیشسینه قیمت مورد نیاز برای
+ *           استفاده از این کپن
+ * @property int|null                                                     $usageLimit      حداکثر تعداد مجاز تعداد
+ *           استفاده از کپن - اگر نال باشد یعنی نامحدود
+ * @property int                                                          $usageNumber     تعداد استفاده ها از کپن تا
+ *           این لحظه
+ * @property string|null                                                  $validSince      تاریخ شروع معتبر بودن کپن
+ * @property string|null                                                  $validUntil      تاریخ پایان معتبر بودن کپن
+ * @property \Carbon\Carbon|null                                          $created_at
+ * @property \Carbon\Carbon|null                                          $updated_at
+ * @property \Carbon\Carbon|null                                          $deleted_at
+ * @property-read \App\Coupontype|null                                    $coupontype
+ * @property-read \App\Discounttype|null                                  $discounttype
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\User[]    $marketers
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Order[]   $orders
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Product[] $products
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Coupon onlyTrashed()
@@ -65,7 +69,7 @@ class Coupon extends Model
     protected $dates = [
         'created_at',
         'updated_at',
-        'deleted_at'
+        'deleted_at',
     ];
 
     /**
@@ -83,7 +87,7 @@ class Coupon extends Model
         'validSince',
         'validUntil',
         'coupontype_id',
-        'discounttype_id'
+        'discounttype_id',
     ];
 
     public function marketers()
@@ -123,13 +127,13 @@ class Coupon extends Model
         if (!$this->enable) {
             $message = "کپن وارد شده غیر فعال می باشد";
             $validationCode = 1;
-        } elseif (isset($this->validSince) && Carbon::now() < $this->validSince) {
+        } else if (isset($this->validSince) && Carbon::now() < $this->validSince) {
             $message = "تاریخ استفاده از کپن آغاز نشده است";
             $validationCode = 2;
-        } elseif (isset($this->validUntil) && Carbon::now() > $this->validUntil) {
+        } else if (isset($this->validUntil) && Carbon::now() > $this->validUntil) {
             $message = "تاریخ استفاده از کپن به پایان رسیده است";
             $validationCode = 3;
-        } elseif (isset($this->usageLimit) && $this->usageNumber >= $this->usageLimit) {
+        } else if (isset($this->usageLimit) && $this->usageNumber >= $this->usageLimit) {
             $message = "تعداد مجاز استفاده از کپن به پایان رسیده است";
             $validationCode = 4;
         }
@@ -137,7 +141,7 @@ class Coupon extends Model
 
         return [
             $message,
-            $validationCode
+            $validationCode,
         ];
     }
 

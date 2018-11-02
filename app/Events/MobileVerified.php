@@ -20,6 +20,7 @@ class MobileVerified
      * Create a new event instance.
      *
      * @param  MustVerifyMobileNumber $user
+     *
      * @return void
      */
     public function __construct(MustVerifyMobileNumber $user)

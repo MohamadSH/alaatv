@@ -9,10 +9,6 @@
 namespace App\Classes\Search;
 
 
-use App\Classes\Search\Filters\Filter;
-use App\Classes\Search\Filters\Tags;
-use App\Classes\Search\Tag\ContentTagManagerViaApi;
-use App\Classes\Taggable;
 use App\Traits\APIRequestCommon;
 use Illuminate\Http\Response;
 use LogicException;
@@ -58,6 +54,7 @@ abstract class RedisTagManagerViaApi implements TaggingInterface
 
     /**
      * @param $taggableId
+     *
      * @return array
      */
     public function getTags($taggableId): array
@@ -77,6 +74,7 @@ abstract class RedisTagManagerViaApi implements TaggingInterface
 
     /**
      * @param mixed $limit_PerPage
+     *
      * @return RedisTagManagerViaApi
      */
     public function setLimitPerPage($limit_PerPage)
@@ -87,6 +85,7 @@ abstract class RedisTagManagerViaApi implements TaggingInterface
 
     /**
      * @param mixed $limit_PageNum
+     *
      * @return RedisTagManagerViaApi
      */
     public function setLimitPageNum($limit_PageNum)
@@ -97,6 +96,7 @@ abstract class RedisTagManagerViaApi implements TaggingInterface
 
     /**
      * @param mixed $limit_WithScores
+     *
      * @return RedisTagManagerViaApi
      */
     public function setLimitWithScores($limit_WithScores)
@@ -107,6 +107,7 @@ abstract class RedisTagManagerViaApi implements TaggingInterface
 
     /**
      * @param array $tags
+     *
      * @return array
      */
     public function getTaggable(array $tags): array
@@ -126,13 +127,20 @@ abstract class RedisTagManagerViaApi implements TaggingInterface
             }
             return [
                 $total_items_db,
-                $arrayOfId
+                $arrayOfId,
             ];
         }
         return [
             -1,
-            []
+            [],
         ];
+    }
+
+    protected function getStrTags(array $tags)
+    {
+        $strTags = implode("\",\"", $tags);
+        $strTags = "[\"$strTags\"]";
+        return $strTags;
     }
 
     protected function getOptions()
@@ -142,13 +150,6 @@ abstract class RedisTagManagerViaApi implements TaggingInterface
         $options .= "&offset=" . $this->getOffset();
 
         return $options;
-    }
-
-    protected function getStrTags(array $tags)
-    {
-        $strTags = implode("\",\"", $tags);
-        $strTags = "[\"$strTags\"]";
-        return $strTags;
     }
 
     /**

@@ -29,7 +29,8 @@ abstract class Cashier
 
     /**
      * CostCentre constructor.
-     * @param User $user
+     *
+     * @param User    $user
      * @param Product $product
      */
     public function __construct(Product $product, User $user = null)
@@ -65,6 +66,67 @@ abstract class Cashier
     */
 
     /**
+     * @param int $rawCost
+     *
+     * @return Cashier
+     */
+    public function setRawCost($rawCost): Cashier
+    {
+        $this->rawCost = $rawCost;
+        return $this;
+    }
+
+    /**
+     * @param int $discountPercentage
+     *
+     * @return Cashier
+     */
+    public function setDiscountPercentage($discountPercentage): Cashier
+    {
+        $this->discountPercentage = $discountPercentage;
+        return $this;
+    }
+
+    /**
+     * @param int $bonDiscountPercentage
+     *
+     * @return Cashier
+     */
+    public function setBonDiscountPercentage($bonDiscountPercentage): Cashier
+    {
+        $this->bonDiscountPercentage = $bonDiscountPercentage;
+        return $this;
+    }
+
+    /**
+     * @param int $totalBonNumber
+     *
+     * @return Cashier
+     */
+    public function setTotalBonNumber(int $totalBonNumber): Cashier
+    {
+        $this->totalBonNumber = $totalBonNumber;
+        return $this;
+    }
+
+    /**
+     * @param int $discountCashAmount
+     *
+     * @return Cashier
+     */
+    public function setDiscountCashAmount($discountCashAmount): Cashier
+    {
+        $this->discountCashAmount = $discountCashAmount;
+        return $this;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Public Methods
+    |--------------------------------------------------------------------------
+    */
+
+    /**
      * Calculates the price
      *
      * @return mixed
@@ -95,16 +157,6 @@ abstract class Cashier
     }
 
     /**
-     * Obtains total discount product percentage based on product discount
-     *
-     * @return int
-     */
-    protected function getProductDiscount(): int
-    {
-        return max($this->discountPercentage * $this->rawCost, $this->discountCashAmount);
-    }
-
-    /**
      * Obtains total bon percentage
      *
      * @return float|int
@@ -114,59 +166,14 @@ abstract class Cashier
         return $this->bonDiscountPercentage * $this->totalBonNumber;
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Public Methods
-    |--------------------------------------------------------------------------
-    */
     /**
-     * @param int $rawCost
-     * @return Cashier
+     * Obtains total discount product percentage based on product discount
+     *
+     * @return int
      */
-    public function setRawCost($rawCost): Cashier
+    protected function getProductDiscount(): int
     {
-        $this->rawCost = $rawCost;
-        return $this;
-    }
-
-    /**
-     * @param int $discountPercentage
-     * @return Cashier
-     */
-    public function setDiscountPercentage($discountPercentage): Cashier
-    {
-        $this->discountPercentage = $discountPercentage;
-        return $this;
-    }
-
-    /**
-     * @param int $bonDiscountPercentage
-     * @return Cashier
-     */
-    public function setBonDiscountPercentage($bonDiscountPercentage): Cashier
-    {
-        $this->bonDiscountPercentage = $bonDiscountPercentage;
-        return $this;
-    }
-
-    /**
-     * @param int $totalBonNumber
-     * @return Cashier
-     */
-    public function setTotalBonNumber(int $totalBonNumber): Cashier
-    {
-        $this->totalBonNumber = $totalBonNumber;
-        return $this;
-    }
-
-    /**
-     * @param int $discountCashAmount
-     * @return Cashier
-     */
-    public function setDiscountCashAmount($discountCashAmount): Cashier
-    {
-        $this->discountCashAmount = $discountCashAmount;
-        return $this;
+        return max($this->discountPercentage * $this->rawCost, $this->discountCashAmount);
     }
 
 }

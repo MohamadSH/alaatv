@@ -4,12 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Attribute;
 use App\Attributecontrol;
-use App\Attributevalue;
 use App\Http\Requests\EditAttributeRequest;
 use App\Http\Requests\InsertAttributeRequest;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Config;
 
 class AttributeController extends Controller
 {
@@ -32,7 +30,8 @@ class AttributeController extends Controller
      */
     public function index()
     {
-        $attributes = Attribute::all()->sortByDesc('created_at');
+        $attributes = Attribute::all()
+                               ->sortByDesc('created_at');
         return view('attribute.index', compact('attributes'));
     }
 
@@ -50,13 +49,15 @@ class AttributeController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(InsertAttributeRequest $request)
     {
         $attribute = new Attribute();
         $attribute->fill($request->all());
-        if (strlen($attribute->attributecontrol_id) == 0) $attribute->attributecontrol_id = null;
+        if (strlen($attribute->attributecontrol_id) == 0)
+            $attribute->attributecontrol_id = null;
 
         if ($attribute->save()) {
             return $this->response->setStatusCode(200);
@@ -69,6 +70,7 @@ class AttributeController extends Controller
      * Display the specified resource.
      *
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -80,13 +82,15 @@ class AttributeController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param Attribute $attribute
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit(Attribute $attribute)
     {
-        $attributecontrols = Attributecontrol::pluck('name', 'id')->toArray();
+        $attributecontrols = Attributecontrol::pluck('name', 'id')
+                                             ->toArray();
 
-//        $attributevalues = Attributevalue::where('attribute_id' , $attribute->id)->get();
+        //        $attributevalues = Attributevalue::where('attribute_id' , $attribute->id)->get();
         $attributevalues = $attribute->attributevalues;
 
         return view('attribute.edit', compact('attribute', 'attributecontrols', 'attributevalues'));
@@ -96,13 +100,15 @@ class AttributeController extends Controller
      * Update the specified resource in storage.
      *
      * @param EditAttributeRequest $request
-     * @param Attribute $attribute
+     * @param Attribute            $attribute
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(EditAttributeRequest $request, Attribute $attribute)
     {
         $attribute->fill($request->all());
-        if (strlen($attribute->attributecontrol_id) == 0) $attribute->attributecontrol_id = null;
+        if (strlen($attribute->attributecontrol_id) == 0)
+            $attribute->attributecontrol_id = null;
 
         if ($attribute->update()) {
             session()->put("success", "اطلاعات صفت با موفقیت اصلاح شد");
@@ -116,12 +122,14 @@ class AttributeController extends Controller
      * Remove the specified resource from storage.
      *
      * @param Attribute $attribute
+     *
      * @return \Illuminate\Http\Response
      * @throws \Exception
      */
     public function destroy(Attribute $attribute)
     {
-        if ($attribute->delete()) session()->put('success', 'صفت با موفقیت حذف شد');
+        if ($attribute->delete())
+            session()->put('success', 'صفت با موفقیت حذف شد');
         else session()->put('error', 'خطای پایگاه داده');
         return redirect()->back();
     }

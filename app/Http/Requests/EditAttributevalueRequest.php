@@ -14,7 +14,10 @@ class EditAttributevalueRequest extends FormRequest
      */
     public function authorize()
     {
-        if (Auth()->user()->can(Config::get('constants.EDIT_ATTRIBUTEVALUE_ACCESS'))) return true;
+        if (Auth()
+            ->user()
+            ->can(Config::get('constants.EDIT_ATTRIBUTEVALUE_ACCESS')))
+            return true;
         return false;
     }
 
@@ -26,7 +29,7 @@ class EditAttributevalueRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required'
+            'name' => 'required',
         ];
     }
 }

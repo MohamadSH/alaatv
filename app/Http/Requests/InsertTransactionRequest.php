@@ -27,7 +27,7 @@ class InsertTransactionRequest extends FormRequest
      */
     public function rules()
     {
-        $customeRules = array();
+        $customeRules = [];
         $customeRules["referenceNumber"] = "";
         $customeRules["traceNumber"] = "";
         $customeRules["authority"] = "";
@@ -59,21 +59,21 @@ class InsertTransactionRequest extends FormRequest
                 case "paycheck":
                     $customeRules["paycheckNumber"] = "required|";
                     break;
-//            case "cash":
-//                break;
+                //            case "cash":
+                //                break;
                 default:
                     break;
             }
         }
         $rules = [
-            'order_id' => 'required',
-            'cost' => 'required|integer',
+            'order_id'             => 'required',
+            'cost'                 => 'required|integer',
             'transactionstatus_id' => 'required|exists:transactionstatuses,id',
-            'paymentmethod_id' => $customeRules["paymentmethod_id"] . 'exists:paymentmethods,id',
-            'referenceNumber' => $customeRules["referenceNumber"] . 'unique:transactions,referenceNumber,NULL,id,deleted_at,NULL|numeric|nullable',
-            'traceNumber' => $customeRules["traceNumber"] . 'unique:transactions,traceNumber,NULL,id,deleted_at,NULL|numeric|nullable',
-            'authority' => $customeRules["authority"] . 'numeric|nullable',
-            'paycheckNumber' => $customeRules["paycheckNumber"] . 'unique:transactions,paycheckNumber,NULL,id,deleted_at,NULL|nullable',
+            'paymentmethod_id'     => $customeRules["paymentmethod_id"] . 'exists:paymentmethods,id',
+            'referenceNumber'      => $customeRules["referenceNumber"] . 'unique:transactions,referenceNumber,NULL,id,deleted_at,NULL|numeric|nullable',
+            'traceNumber'          => $customeRules["traceNumber"] . 'unique:transactions,traceNumber,NULL,id,deleted_at,NULL|numeric|nullable',
+            'authority'            => $customeRules["authority"] . 'numeric|nullable',
+            'paycheckNumber'       => $customeRules["paycheckNumber"] . 'unique:transactions,paycheckNumber,NULL,id,deleted_at,NULL|nullable',
         ];
         return $rules;
     }
@@ -82,12 +82,14 @@ class InsertTransactionRequest extends FormRequest
      * Configure the validator instance.
      *
      * @param  \Illuminate\Validation\Validator $validator
+     *
      * @return void
      */
     public function withValidator($validator)
     {
         if ($validator->fails()) {
-            $this->session()->put("validationFailed", "insertTransaction");
+            $this->session()
+                 ->put("validationFailed", "insertTransaction");
         }
     }
 
@@ -106,25 +108,30 @@ class InsertTransactionRequest extends FormRequest
             switch ($paymentMethod) {
                 case "online":
                     $input["paymentmethod_id"] = 1;
-                    if (!isset($input["transactionstatus_id"])) $input["transactionstatus_id"] = Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL");
-                    if (!isset($input["transactiongateway_id"])) $input["transactiongateway_id"] = 1;
+                    if (!isset($input["transactionstatus_id"]))
+                        $input["transactionstatus_id"] = Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL");
+                    if (!isset($input["transactiongateway_id"]))
+                        $input["transactiongateway_id"] = 1;
                     break;
                 case "ATM":
                     $input["paymentmethod_id"] = 2;
-                    if (!isset($input["transactionstatus_id"])) $input["transactionstatus_id"] = Config::get("constants.TRANSACTION_STATUS_PENDING");
+                    if (!isset($input["transactionstatus_id"]))
+                        $input["transactionstatus_id"] = Config::get("constants.TRANSACTION_STATUS_PENDING");
                     break;
                 case "POS":
                     $input["paymentmethod_id"] = 3;
-                    if (!isset($input["transactionstatus_id"])) $input["transactionstatus_id"] = Config::get("constants.TRANSACTION_STATUS_PENDING");
+                    if (!isset($input["transactionstatus_id"]))
+                        $input["transactionstatus_id"] = Config::get("constants.TRANSACTION_STATUS_PENDING");
                     break;
                 case "paycheck":
                     $input["paymentmethod_id"] = 4;
-                    if (!isset($input["transactionstatus_id"])) $input["transactionstatus_id"] = Config::get("constants.TRANSACTION_STATUS_PENDING");
+                    if (!isset($input["transactionstatus_id"]))
+                        $input["transactionstatus_id"] = Config::get("constants.TRANSACTION_STATUS_PENDING");
                     break;
-//            case "cash":
-//                $this->request->set("paymentmethod_id" , 5);
-////                $this->request->set("transactionstatus_id" , Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL"));
-//                break;
+                //            case "cash":
+                //                $this->request->set("paymentmethod_id" , 5);
+                ////                $this->request->set("transactionstatus_id" , Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL"));
+                //                break;
                 default:
                     break;
             }
@@ -161,7 +168,8 @@ class InsertTransactionRequest extends FormRequest
             $input["paycheckNumber"] = $this->convertToEnglish($input["paycheckNumber"]);
         }
         if (isset($input["managerComment"])) {
-            if (strlen($input["managerComment"]) > 0) $input["managerComment"] = $this->convertToEnglish($input["managerComment"]);
+            if (strlen($input["managerComment"]) > 0)
+                $input["managerComment"] = $this->convertToEnglish($input["managerComment"]);
         }
         $this->replace($input);
     }

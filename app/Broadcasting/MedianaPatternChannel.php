@@ -32,7 +32,7 @@ class MedianaPatternChannel
     /**
      * Send the given notification.
      *
-     * @param mixed $notifiable
+     * @param mixed        $notifiable
      * @param Notification $notification
      *
      * @return array
@@ -68,18 +68,18 @@ class MedianaPatternChannel
      * Build up params.
      *
      * @param MedianaMessage $message
-     * @param string $to
+     * @param string         $to
      *
      * @return array
      */
     protected function buildParams(MedianaMessage $message, $to)
     {
         $param = [
-//            'to' => json_encode([$to], JSON_UNESCAPED_UNICODE),
-            'toNum' => $to,
+            //            'to' => json_encode([$to], JSON_UNESCAPED_UNICODE),
+            'toNum'       => $to,
             'patternCode' => trim(data_get($message, 'pattern_code')),
-            'inputData' => data_get($message, 'input_data'),
-            'op' => 'patternV2',
+            'inputData'   => data_get($message, 'input_data'),
+            'op'          => 'patternV2',
         ];
         if (isset($message->from))
             $param['from'] = $message->from;

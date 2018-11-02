@@ -55,11 +55,11 @@ class ContentCollection extends Collection
 
             $myContentType = optional($content->contenttype)->name;
             $result->push([
-                "content" => $content,
-                "type" => $myContentType,
-                "thumbnail" => $content->thumbnail,
-                "session" => $content->session
-            ]);
+                              "content"   => $content,
+                              "type"      => $myContentType,
+                              "thumbnail" => $content->thumbnail,
+                              "session"   => $content->session,
+                          ]);
         }
         return $result;
     }

@@ -17,7 +17,10 @@ class EditArticleRequest extends FormRequest
      */
     public function authorize()
     {
-        if (Auth()->user()->can(Config::get('constants.EDIT_ARTICLE_ACCESS'))) return true;
+        if (Auth()
+            ->user()
+            ->can(Config::get('constants.EDIT_ARTICLE_ACCESS')))
+            return true;
         return false;
     }
 
@@ -29,12 +32,12 @@ class EditArticleRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|max:100',
-            'keyword' => 'max:200',
-            'brief' => 'required|max:200',
-            'body' => 'required',
-            'image' => 'image|mimes:jpeg,jpg,png',
-            'articlecategory_id' => 'exists:articlecategories,id'
+            'title'              => 'required|max:100',
+            'keyword'            => 'max:200',
+            'brief'              => 'required|max:200',
+            'body'               => 'required',
+            'image'              => 'image|mimes:jpeg,jpg,png',
+            'articlecategory_id' => 'exists:articlecategories,id',
         ];
     }
 

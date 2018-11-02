@@ -17,7 +17,10 @@ class InsertConsultationRequest extends FormRequest
      */
     public function authorize()
     {
-        if (Auth()->user()->can(Config::get('constants.INSERT_CONSULTATION_ACCESS'))) return true;
+        if (Auth()
+            ->user()
+            ->can(Config::get('constants.INSERT_CONSULTATION_ACCESS')))
+            return true;
         return false;
     }
 
@@ -29,7 +32,7 @@ class InsertConsultationRequest extends FormRequest
     public function rules()
     {
         return [
-            'majors' => 'required|exists:majors,id',
+            'majors'                => 'required|exists:majors,id',
             'consultationstatus_id' => 'required|exists:consultationstatuses,id',
         ];
     }

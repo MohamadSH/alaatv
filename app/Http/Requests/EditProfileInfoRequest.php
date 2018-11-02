@@ -18,7 +18,8 @@ class EditProfileInfoRequest extends FormRequest
      */
     public function authorize()
     {
-        if (Auth::user()->lockProfile) return false;
+        if (Auth::user()->lockProfile)
+            return false;
         else return true;
     }
 
@@ -31,7 +32,7 @@ class EditProfileInfoRequest extends FormRequest
     {
         $rules = [
             'postalCode' => 'numeric',
-            'email' => 'email',
+            'email'      => 'email',
         ];
 
         if (
@@ -40,22 +41,28 @@ class EditProfileInfoRequest extends FormRequest
             (strcmp(url()->previous() . '/', action("UserController@show", $this->user()) . '/') != 0) &&
             (strcmp(url()->previous() . '/', action("UserController@show", $this->user())) != 0)
         ) {
-            $afterLoginFields = Afterloginformcontrol::getFormFields()->pluck('name', 'id')->toArray();
+            $afterLoginFields = Afterloginformcontrol::getFormFields()
+                                                     ->pluck('name', 'id')
+                                                     ->toArray();
 
             foreach ($afterLoginFields as $afterLoginField) {
-                if (strcmp($afterLoginField, "email") == 0) $rules[$afterLoginField] = "required|email";
-                elseif (strcmp($afterLoginField, "photo") == 0) $rules[$afterLoginField] = "required|image|mimes:jpeg,jpg,png|max:512";
-                elseif (strcmp($afterLoginField, "major_id") == 0) $rules[$afterLoginField] = "required|exists:majors,id";
-                elseif (strcmp($afterLoginField, "gender_id") == 0) $rules[$afterLoginField] = "required|exists:genders,id";
+                if (strcmp($afterLoginField, "email") == 0)
+                    $rules[$afterLoginField] = "required|email";
+                else if (strcmp($afterLoginField, "photo") == 0)
+                    $rules[$afterLoginField] = "required|image|mimes:jpeg,jpg,png|max:512";
+                else if (strcmp($afterLoginField, "major_id") == 0)
+                    $rules[$afterLoginField] = "required|exists:majors,id";
+                else if (strcmp($afterLoginField, "gender_id") == 0)
+                    $rules[$afterLoginField] = "required|exists:genders,id";
                 else $rules[$afterLoginField] = "required|max:255";
             }
         }
 
-//        if(isset($_REQUEST["gender_id"]) && strcmp($_REQUEST["gender_id"],"0")!=0) $rules["gender_id"] = "exists:genders,id";
+        //        if(isset($_REQUEST["gender_id"]) && strcmp($_REQUEST["gender_id"],"0")!=0) $rules["gender_id"] = "exists:genders,id";
 
-//        $rules =[
-//
-//        ];
+        //        $rules =[
+        //
+        //        ];
         return $rules;
     }
 

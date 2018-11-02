@@ -27,6 +27,7 @@ class VerifyMobile extends Notification implements ShouldQueue
      * Get the notification's delivery channels.
      *
      * @param  mixed $notifiable
+     *
      * @return array
      */
     public function via($notifiable)
@@ -40,6 +41,7 @@ class VerifyMobile extends Notification implements ShouldQueue
 
     /**
      * @param $notifiable
+     *
      * @return MedianaMessage
      */
     public function toMediana($notifiable)

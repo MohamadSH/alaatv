@@ -7,10 +7,9 @@ use App\Coupontype;
 use App\Http\Requests\EditCouponRequest;
 use App\Http\Requests\InsertCouponRequest;
 use App\Product;
-use Illuminate\Http\Request;
+use Carbon\Carbon;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
-use Carbon\Carbon;
 
 class CouponController extends Controller
 {
@@ -28,7 +27,8 @@ class CouponController extends Controller
 
     public function index()
     {
-        $coupons = Coupon::all()->sortByDesc("created_at");
+        $coupons = Coupon::all()
+                         ->sortByDesc("created_at");
         return view("coupon.index", compact('coupons'));
     }
 
@@ -48,9 +48,12 @@ class CouponController extends Controller
         $coupon->fill($request->all());
         if ($request->has("validSinceEnable")) {
             if ($request->has("validSince") && strlen($request->get("validSince")) > 0) {
-                $validSince = Carbon::parse($request->get("validSince"))->format('Y-m-d');
+                $validSince = Carbon::parse($request->get("validSince"))
+                                    ->format('Y-m-d');
                 $sinceTime = $request->get("sinceTime");
-                if (strlen($sinceTime) > 0) $sinceTime = Carbon::parse($sinceTime)->format('H:i:s');
+                if (strlen($sinceTime) > 0)
+                    $sinceTime = Carbon::parse($sinceTime)
+                                       ->format('H:i:s');
                 else $sinceTime = "00:00:00";
 
                 $validSince = $validSince . " " . $sinceTime;
@@ -65,9 +68,12 @@ class CouponController extends Controller
 
         if ($request->has("validUntilEnable")) {
             if ($request->has("validUntil") && strlen($request->get("validUntil")) > 0) {
-                $validUntil = Carbon::parse($request->get("validUntil"))->format('Y-m-d');
+                $validUntil = Carbon::parse($request->get("validUntil"))
+                                    ->format('Y-m-d');
                 $untilTime = $request->get("untilTime");
-                if (strlen($untilTime) > 0) $untilTime = Carbon::parse($untilTime)->format('H:i:s');
+                if (strlen($untilTime) > 0)
+                    $untilTime = Carbon::parse($untilTime)
+                                       ->format('H:i:s');
                 else $untilTime = "00:00:00";
 
                 $validUntil = $validUntil . " " . $untilTime;
@@ -83,17 +89,22 @@ class CouponController extends Controller
             $coupon->usageLimit = null;
         }
         $coupon->discount = preg_replace('/\s+/', '', $coupon->discount);
-        if (strlen($coupon->discount) == 0) $coupon->discount = 0;
+        if (strlen($coupon->discount) == 0)
+            $coupon->discount = 0;
 
-        if ($request->has("enable")) $coupon->enable = 1;
+        if ($request->has("enable"))
+            $coupon->enable = 1;
         else $coupon->enable = 0;
 
         $coupon->maxCost = preg_replace('/\s+/', '', $coupon->maxCost);
-        if (strlen($coupon->maxCost) == 0) $coupon->maxCost = null;
+        if (strlen($coupon->maxCost) == 0)
+            $coupon->maxCost = null;
 
         if ($coupon->save()) {
-            $coupon->products()->sync($request->get('products', []));
-            return $this->response->setStatusCode(200)->setContent(["id" => $coupon->id]);
+            $coupon->products()
+                   ->sync($request->get('products', []));
+            return $this->response->setStatusCode(200)
+                                  ->setContent(["id" => $coupon->id]);
         } else {
             return $this->response->setStatusCode(503);
         }
@@ -103,7 +114,7 @@ class CouponController extends Controller
     {
         $limitStatus = [
             0 => 'نامحدود',
-            1 => 'محدود'
+            1 => 'محدود',
         ];
         if (isset($coupon->usageLimit)) {
             $defaultLimitStatus = 1;
@@ -111,17 +122,23 @@ class CouponController extends Controller
             $defaultLimitStatus = 0;
         }
 
-        $products = Product::pluck('name', 'id')->toArray();
-        $couponProducts = $coupon->products->pluck('id')->toArray();
+        $products = Product::pluck('name', 'id')
+                           ->toArray();
+        $couponProducts = $coupon->products->pluck('id')
+                                           ->toArray();
         $coupontype = Coupontype::pluck('displayName', 'id');
 
         if (isset($coupon->validSince)) {
-            $validSinceDate = Carbon::parse($coupon->validSince)->format('Y-m-d');
-            $validSinceTime = Carbon::parse($coupon->validSince)->format('H:i');
+            $validSinceDate = Carbon::parse($coupon->validSince)
+                                    ->format('Y-m-d');
+            $validSinceTime = Carbon::parse($coupon->validSince)
+                                    ->format('H:i');
         }
         if (isset($coupon->validUntil)) {
-            $validUntilDate = Carbon::parse($coupon->validUntil)->format('Y-m-d');
-            $validUntilTime = Carbon::parse($coupon->validUntil)->format('H:i');
+            $validUntilDate = Carbon::parse($coupon->validUntil)
+                                    ->format('Y-m-d');
+            $validUntilTime = Carbon::parse($coupon->validUntil)
+                                    ->format('H:i');
         }
 
         return view('coupon.edit', compact('coupon', 'limitStatus', 'defaultLimitStatus', 'coupontype', 'products', 'couponProducts', 'validSinceDate', 'validSinceTime', 'validUntilDate', 'validUntilTime'));
@@ -133,9 +150,12 @@ class CouponController extends Controller
 
         if ($request->has("validSinceEnable")) {
             if ($request->has("validSince") && strlen($request->get("validSince")) > 0) {
-                $validSince = Carbon::parse($request->get("validSince"))->format('Y-m-d');
+                $validSince = Carbon::parse($request->get("validSince"))
+                                    ->format('Y-m-d');
                 $sinceTime = $request->get("sinceTime");
-                if (strlen($sinceTime) > 0) $sinceTime = Carbon::parse($sinceTime)->format('H:i:s');
+                if (strlen($sinceTime) > 0)
+                    $sinceTime = Carbon::parse($sinceTime)
+                                       ->format('H:i:s');
                 else $sinceTime = "00:00:00";
 
                 $validSince = $validSince . " " . $sinceTime;
@@ -149,9 +169,12 @@ class CouponController extends Controller
 
         if ($request->has("validUntilEnable")) {
             if ($request->has("validUntil") && strlen($request->get("validUntil")) > 0) {
-                $validUntil = Carbon::parse($request->get("validUntil"))->format('Y-m-d');
+                $validUntil = Carbon::parse($request->get("validUntil"))
+                                    ->format('Y-m-d');
                 $untilTime = $request->get("untilTime");
-                if (strlen($untilTime) > 0) $untilTime = Carbon::parse($untilTime)->format('H:i:s');
+                if (strlen($untilTime) > 0)
+                    $untilTime = Carbon::parse($untilTime)
+                                       ->format('H:i:s');
                 else $untilTime = "00:00:00";
 
                 $validUntil = $validUntil . " " . $untilTime;
@@ -168,16 +191,20 @@ class CouponController extends Controller
         }
 
         $coupon->discount = preg_replace('/\s+/', '', $coupon->discount);
-        if (strlen($coupon->discount) == 0) $coupon->discount = 0;
+        if (strlen($coupon->discount) == 0)
+            $coupon->discount = 0;
 
-        if ($request->has("enable")) $coupon->enable = 1;
+        if ($request->has("enable"))
+            $coupon->enable = 1;
         else $coupon->enable = 0;
 
         $coupon->maxCost = preg_replace('/\s+/', '', $coupon->maxCost);
-        if (strlen($coupon->maxCost) == 0) $coupon->maxCost = null;
+        if (strlen($coupon->maxCost) == 0)
+            $coupon->maxCost = null;
 
         if ($coupon->update()) {
-            $coupon->products()->sync($request->get('products', []));
+            $coupon->products()
+                   ->sync($request->get('products', []));
             session()->put("success", "اطلاعات کپن با موفقیت اصلاح شد");
         } else {
             session()->put("error", "خطای پایگاه داده.");

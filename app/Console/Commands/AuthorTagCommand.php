@@ -2,9 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Classes\Search\Tag\AuthorTagManagerViaApi;
 use App\Classes\Search\TaggingInterface;
-use App\Collection\ContentCollection;
 use App\Traits\TaggableTrait;
 use App\User;
 use Illuminate\Console\Command;
@@ -12,29 +10,26 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class AuthorTagCommand extends Command
 {
-    private $tagging;
-    use TaggableTrait;
-
-    public function __construct(TaggingInterface $tagging)
-    {
-        parent::__construct();
-        $this->tagging = $tagging;
-    }
-
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
     protected $signature = 'alaaTv:seed:tag:author {author : The ID of the teacher}';
-
+    use TaggableTrait;
     /**
      * The console command description.
      *
      * @var string
      */
     protected $description = 'add Tags for an Author';
+    private $tagging;
 
+    public function __construct(TaggingInterface $tagging)
+    {
+        parent::__construct();
+        $this->tagging = $tagging;
+    }
 
     /**
      * Execute the console command.
@@ -47,7 +42,8 @@ class AuthorTagCommand extends Command
         if ($authorId > 0) {
             try {
                 $user = User::findOrFail($authorId);
-            } catch (ModelNotFoundException $exception) {
+            }
+            catch (ModelNotFoundException $exception) {
                 $this->error($exception->getMessage());
                 return;
             }

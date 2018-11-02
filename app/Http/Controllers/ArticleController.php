@@ -12,11 +12,10 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\File;
 use Intervention\Image\Facades\Image;
-use SEO;
 
 class ArticleController extends Controller
 {
@@ -34,7 +33,12 @@ class ArticleController extends Controller
         $this->middleware('permission:' . Config::get('constants.REMOVE_ARTICLE_ACCESS'), ['only' => 'destroy']);
         $this->middleware('permission:' . Config::get('constants.SHOW_ARTICLE_ACCESS'), ['only' => 'edit']);
         $this->middleware('permission:' . Config::get('constants.EDIT_ARTICLE_ACCESS'), ['only' => 'update']);
-        $this->middleware('auth', ['except' => ['show', 'showList']]);
+        $this->middleware('auth', [
+            'except' => [
+                'show',
+                'showList',
+            ],
+        ]);
 
         $this->response = new Response();
     }
@@ -46,7 +50,8 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        $articles = Article::all()->sortByDesc("created_at");
+        $articles = Article::all()
+                           ->sortByDesc("created_at");
         return view('article.index', compact('articles'));
     }
 
@@ -57,7 +62,8 @@ class ArticleController extends Controller
      */
     public function create()
     {
-        $articlecategories = Articlecategory::where('enable', 1)->pluck('name', 'id');
+        $articlecategories = Articlecategory::where('enable', 1)
+                                            ->pluck('name', 'id');
         return view("article.create", compact("articlecategories"));
     }
 
@@ -65,34 +71,49 @@ class ArticleController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \App\Http\Requests\InsertArticleRequest $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(InsertArticleRequest $request)
     {
         $article = new Article();
         $article->fill($request->all());
-        if (strlen($article->articlecategory_id) == 0 || !isset($article->articlecategory_id)) $article->articlecategory_id = null;
+        if (strlen($article->articlecategory_id) == 0 || !isset($article->articlecategory_id))
+            $article->articlecategory_id = null;
         $article->user_id = Auth::user()->id;
 
         if ($request->hasFile("image")) {
             $file = $request->file('image');
             $extension = $file->getClientOriginalExtension();
             $fileName = basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
-            if (Storage::disk(Config::get('constants.DISK8'))->put($fileName, File::get($file))) {
+            if (Storage::disk(Config::get('constants.DISK8'))
+                       ->put($fileName, File::get($file))) {
                 $article->image = $fileName;
-                $img = Image::make(route('image', ['category' => '8', 'w' => '338', 'h' => '338', 'filename' => $fileName]));
+                $img = Image::make(route('image', [
+                    'category' => '8',
+                    'w'        => '338',
+                    'h'        => '338',
+                    'filename' => $fileName,
+                ]));
                 $img->resize(766, 249);
-                $img->save(Storage::disk(Config::get('constants.DISK8'))->getAdapter()->getPathPrefix() . $fileName);
+                $img->save(Storage::disk(Config::get('constants.DISK8'))
+                                  ->getAdapter()
+                                  ->getPathPrefix() . $fileName);
             }
         } else {
             $article->image = Config::get('constants.ARTICLE_DEFAULT_IMAGE');
         }
 
         if ($request->has("order")) {
-            if (strlen(preg_replace('/\s+/', '', $request->get("order"))) == 0) $article->order = 0;
-            $articlesWithSameOrder = Article::where("articlecategory_id", $article->articlecategory_id)->where("order", $article->order)->get();
+            if (strlen(preg_replace('/\s+/', '', $request->get("order"))) == 0)
+                $article->order = 0;
+            $articlesWithSameOrder = Article::where("articlecategory_id", $article->articlecategory_id)
+                                            ->where("order", $article->order)
+                                            ->get();
             if (!$articlesWithSameOrder->isEmpty()) {
-                $articlesWithGreaterOrder = Article::where("articlecategory_id", $article->articlecategory_id)->where("order", ">=", $article->order)->get();
+                $articlesWithGreaterOrder = Article::where("articlecategory_id", $article->articlecategory_id)
+                                                   ->where("order", ">=", $article->order)
+                                                   ->get();
                 foreach ($articlesWithGreaterOrder as $graterArticle) {
                     $graterArticle->order = $graterArticle->order + 1;
                     $graterArticle->update();
@@ -112,16 +133,20 @@ class ArticleController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Article $article
+     *
      * @return \Illuminate\Http\Response
      */
     public function show(Request $request, $article)
     {
-        $articlecategories = Articlecategory::where('enable', 1)->get();
+        $articlecategories = Articlecategory::where('enable', 1)
+                                            ->get();
 
         $otherArticlesType = "same";
-        $otherArticles = $article->sameCategoryArticles(4)->get();
+        $otherArticles = $article->sameCategoryArticles(4)
+                                 ->get();
         if ($otherArticles->isEmpty()) {
-            $otherArticles = Article::recentArticles(4)->get();
+            $otherArticles = Article::recentArticles(4)
+                                    ->get();
             $otherArticlesType = "recent";
         }
 
@@ -136,11 +161,13 @@ class ArticleController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  \App\Article $article
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($article)
     {
-        $articlecategories = Articlecategory::where('enable', 1)->pluck('name', 'id');
+        $articlecategories = Articlecategory::where('enable', 1)
+                                            ->pluck('name', 'id');
         return view('article.edit', compact('article', 'articlecategories'));
     }
 
@@ -148,33 +175,50 @@ class ArticleController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  \App\Article $article
+     * @param  \App\Article             $article
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(EditArticleRequest $request, $article)
     {
         $oldImage = $article->image;
         $article->fill($request->all());
-        if (strlen($article->articlecategory_id) == 0 || !isset($article->articlecategory_id)) $article->articlecategory_id = null;
+        if (strlen($article->articlecategory_id) == 0 || !isset($article->articlecategory_id))
+            $article->articlecategory_id = null;
 
         if ($request->hasFile("image")) {
             $file = $request->file('image');
             $extension = $file->getClientOriginalExtension();
             $fileName = basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
-            if (Storage::disk(Config::get('constants.DISK8'))->put($fileName, File::get($file))) {
-                Storage::disk(Config::get('constants.DISK8'))->delete($oldImage);
+            if (Storage::disk(Config::get('constants.DISK8'))
+                       ->put($fileName, File::get($file))) {
+                Storage::disk(Config::get('constants.DISK8'))
+                       ->delete($oldImage);
                 $article->image = $fileName;
-                $img = Image::make(route('image', ['category' => '8', 'w' => '338', 'h' => '338', 'filename' => $fileName]));
+                $img = Image::make(route('image', [
+                    'category' => '8',
+                    'w'        => '338',
+                    'h'        => '338',
+                    'filename' => $fileName,
+                ]));
                 $img->resize(766, 249);
-                $img->save(Storage::disk(Config::get('constants.DISK8'))->getAdapter()->getPathPrefix() . $fileName);
+                $img->save(Storage::disk(Config::get('constants.DISK8'))
+                                  ->getAdapter()
+                                  ->getPathPrefix() . $fileName);
             }
         }
 
         if ($request->has("order")) {
-            if (strlen(preg_replace('/\s+/', '', $request->get("order"))) == 0) $article->order = 0;
-            $articlesWithSameOrder = Article::where("articlecategory_id", $article->articlecategory_id)->where("id", "<>", $article->id)->where("order", $article->order)->get();
+            if (strlen(preg_replace('/\s+/', '', $request->get("order"))) == 0)
+                $article->order = 0;
+            $articlesWithSameOrder = Article::where("articlecategory_id", $article->articlecategory_id)
+                                            ->where("id", "<>", $article->id)
+                                            ->where("order", $article->order)
+                                            ->get();
             if (!$articlesWithSameOrder->isEmpty()) {
-                $articlesWithGreaterOrder = Article::where("articlecategory_id", $article->articlecategory_id)->where("order", ">=", $article->order)->get();
+                $articlesWithGreaterOrder = Article::where("articlecategory_id", $article->articlecategory_id)
+                                                   ->where("order", ">=", $article->order)
+                                                   ->get();
                 foreach ($articlesWithGreaterOrder as $graterArticle) {
                     $graterArticle->order = $graterArticle->order + 1;
                     $graterArticle->update();
@@ -194,11 +238,13 @@ class ArticleController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Article $article
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($article)
     {
-        if ($article->delete()) session()->put('success', 'مقاله با موفقیت حذف شد');
+        if ($article->delete())
+            session()->put('success', 'مقاله با موفقیت حذف شد');
         else session()->put('error', 'خطای پایگاه داده');
         return redirect()->back();
     }
@@ -211,35 +257,49 @@ class ArticleController extends Controller
     public function showList()
     {
         $categoryId = Input::get('categoryId');
-        $articlecategories = Articlecategory::where('enable', 1)->orderBy('order')->get();
+        $articlecategories = Articlecategory::where('enable', 1)
+                                            ->orderBy('order')
+                                            ->get();
         if (strcmp($categoryId, 'else') == 0) {
             $categoryId = null;
         }
-//        elseif(!isset($categoryId))
-//        {
-//            foreach ($articlecategories as $articlecategory)
-//            {
-//                if(!$articlecategory->articles->isEmpty())
-//                {
-//                    $categoryId = $articlecategory->id;
-//                    $articleCategoryName = $articlecategory->name;
-//                    break;
-//                }
-//            }
+        //        elseif(!isset($categoryId))
+        //        {
+        //            foreach ($articlecategories as $articlecategory)
+        //            {
+        //                if(!$articlecategory->articles->isEmpty())
+        //                {
+        //                    $categoryId = $articlecategory->id;
+        //                    $articleCategoryName = $articlecategory->name;
+        //                    break;
+        //                }
+        //            }
 
-//        }
-        $countWithoutCategory = Article::where('articlecategory_id', null)->count();
+        //        }
+        $countWithoutCategory = Article::where('articlecategory_id', null)
+                                       ->count();
         if (!Input::has('categoryId')) {
             $itemsPerPage = 5;
-            $articles = Article::orderBy('created_at', 'desc')->paginate($itemsPerPage);
-        } else $articles = Article::where('articlecategory_id', $categoryId)->orderBy('order')->get();
-        if (!isset($articleCategoryName) && isset($categoryId)) $articleCategoryName = $articlecategories->where('id', $categoryId)->first()->name;
+            $articles = Article::orderBy('created_at', 'desc')
+                               ->paginate($itemsPerPage);
+        } else $articles = Article::where('articlecategory_id', $categoryId)
+                                  ->orderBy('order')
+                                  ->get();
+        if (!isset($articleCategoryName) && isset($categoryId))
+            $articleCategoryName = $articlecategories->where('id', $categoryId)
+                                                     ->first()->name;
 
 
-        $recentArticles = Article::recentArticles(4)->get();
+        $recentArticles = Article::recentArticles(4)
+                                 ->get();
 
-        $websitePageId = Websitepage::all()->where('url', "/لیست-مقالات")->first()->id;
-        $slides = Slideshow::all()->where("isEnable", 1)->where("websitepage_id", $websitePageId)->sortBy("order");
+        $websitePageId = Websitepage::all()
+                                    ->where('url', "/لیست-مقالات")
+                                    ->first()->id;
+        $slides = Slideshow::all()
+                           ->where("isEnable", 1)
+                           ->where("websitepage_id", $websitePageId)
+                           ->sortBy("order");
         $slideCounter = 1;
         $slideDisk = 15;
 

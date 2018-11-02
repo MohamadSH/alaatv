@@ -3,15 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\Block;
+use App\Classes\Format\BlockCollectionFormatter;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 
 class BlockController extends Controller
 {
     /**
+     * @var BlockCollectionFormatter
+     */
+    private $formatter;
+
+    public function __construct(BlockCollectionFormatter $formatter)
+    {
+        $this->formatter = $formatter;
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @param Request $request
+     *
      * @return Block[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Http\Response
      */
     public function index(Request $request)
@@ -35,6 +46,7 @@ class BlockController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -45,8 +57,9 @@ class BlockController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param Request $request
+     * @param Request     $request
      * @param  \App\Block $block
+     *
      * @return Block|\Illuminate\Http\JsonResponse
      */
     public function show(Request $request, Block $block)
@@ -58,6 +71,7 @@ class BlockController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  \App\Block $block
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit(Block $block)
@@ -69,7 +83,8 @@ class BlockController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  \App\Block $block
+     * @param  \App\Block               $block
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Block $block)
@@ -81,6 +96,7 @@ class BlockController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Block $block
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy(Block $block)

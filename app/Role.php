@@ -15,15 +15,16 @@ use Laratrust\Models\LaratrustRole;
 /**
  * App\Role
  *
- * @property int $id
- * @property int $isDefault آیا نقش سیستمی است(نقش پیش فرض سیستمی)
- * @property string $name
- * @property string|null $display_name
- * @property string|null $description
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
+ * @property int                                                             $id
+ * @property int                                                             $isDefault آیا نقش سیستمی است(نقش پیش فرض
+ *           سیستمی)
+ * @property string                                                          $name
+ * @property string|null                                                     $display_name
+ * @property string|null                                                     $description
+ * @property \Carbon\Carbon|null                                             $created_at
+ * @property \Carbon\Carbon|null                                             $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Permission[] $permissions
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\User[] $users
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\User[]       $users
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Role whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Role whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Role whereDisplayName($value)
@@ -45,9 +46,9 @@ class Role extends LaratrustRole
         'display_name',
         'description',
     ];
-    protected $dates = [
+    protected $dates    = [
         'created_at',
-        'updated_at'
+        'updated_at',
     ];
 
     /*

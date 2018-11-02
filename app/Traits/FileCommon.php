@@ -5,7 +5,9 @@ trait FileCommon
 {
 
     /** Obtains file size based on it's url
+     *
      * @param string $url
+     *
      * @return string
      */
     public function curlGetFileSize($url): string
@@ -38,35 +40,37 @@ trait FileCommon
     }
 
     /** Converts file size to Persian string
+     *
      * @param $bytes
+     *
      * @return string
      */
     function FileSizeConvert($bytes): string
     {
         $result = "";
         $bytes = floatval($bytes);
-        $arBytes = array(
-            0 => array(
-                "UNIT" => "ترابایت",
-                "VALUE" => pow(1024, 4)
-            ),
-            1 => array(
-                "UNIT" => "گیگابایت",
-                "VALUE" => pow(1024, 3)
-            ),
-            2 => array(
-                "UNIT" => "مگابایت",
-                "VALUE" => pow(1024, 2)
-            ),
-            3 => array(
-                "UNIT" => "کیلوبایت",
-                "VALUE" => 1024
-            ),
-            4 => array(
-                "UNIT" => "بایت",
-                "VALUE" => 1
-            ),
-        );
+        $arBytes = [
+            0 => [
+                "UNIT"  => "ترابایت",
+                "VALUE" => pow(1024, 4),
+            ],
+            1 => [
+                "UNIT"  => "گیگابایت",
+                "VALUE" => pow(1024, 3),
+            ],
+            2 => [
+                "UNIT"  => "مگابایت",
+                "VALUE" => pow(1024, 2),
+            ],
+            3 => [
+                "UNIT"  => "کیلوبایت",
+                "VALUE" => 1024,
+            ],
+            4 => [
+                "UNIT"  => "بایت",
+                "VALUE" => 1,
+            ],
+        ];
 
         foreach ($arBytes as $arItem) {
             if ($bytes >= $arItem["VALUE"]) {

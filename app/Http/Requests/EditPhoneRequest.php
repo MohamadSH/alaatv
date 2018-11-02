@@ -17,7 +17,10 @@ class EditPhoneRequest extends FormRequest
      */
     public function authorize()
     {
-        if (Auth()->user()->can(Config::get('constants.EDIT_CONTACT_ACCESS'))) return true;
+        if (Auth()
+            ->user()
+            ->can(Config::get('constants.EDIT_CONTACT_ACCESS')))
+            return true;
         return false;
     }
 
@@ -29,10 +32,10 @@ class EditPhoneRequest extends FormRequest
     public function rules()
     {
         return [
-            'phoneNumber' => 'required|numeric',
-            'priority' => 'numeric',
-            'contact_id' => 'exists:contacts,id',
-            'phonetype_id' => 'exists:phonetypes,id'
+            'phoneNumber'  => 'required|numeric',
+            'priority'     => 'numeric',
+            'contact_id'   => 'exists:contacts,id',
+            'phonetype_id' => 'exists:phonetypes,id',
         ];
     }
 

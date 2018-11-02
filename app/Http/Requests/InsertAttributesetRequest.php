@@ -14,7 +14,10 @@ class InsertAttributesetRequest extends FormRequest
      */
     public function authorize()
     {
-        if (Auth()->user()->can(Config::get('constants.INSERT_ATTRIBUTESET_ACCESS'))) return true;
+        if (Auth()
+            ->user()
+            ->can(Config::get('constants.INSERT_ATTRIBUTESET_ACCESS')))
+            return true;
         return false;
 
     }

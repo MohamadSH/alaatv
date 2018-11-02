@@ -14,14 +14,14 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
         'Illuminate\Auth\Events\Registered' => [
-//            SendMobileVerificationNotification::class,
+            //            SendMobileVerificationNotification::class,
         ],
-        'App\Events\MobileVerified' => [
-            'App\Listeners\MobileVerifiedListener'
+        'App\Events\MobileVerified'         => [
+            'App\Listeners\MobileVerifiedListener',
         ],
-        'App\Events\FreeInternetAccept' => [
-            'App\Listeners\FreeInternetAcceptListener'
-        ]
+        'App\Events\FreeInternetAccept'     => [
+            'App\Listeners\FreeInternetAcceptListener',
+        ],
     ];
 
     /**

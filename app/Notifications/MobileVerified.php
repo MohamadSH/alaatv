@@ -27,6 +27,7 @@ class MobileVerified extends Notification implements ShouldQueue
      * Get the notification's delivery channels.
      *
      * @param  mixed $notifiable
+     *
      * @return array
      */
     public function via($notifiable)
@@ -34,7 +35,7 @@ class MobileVerified extends Notification implements ShouldQueue
         $this->user = $notifiable;
         return [
             MedianaPatternChannel::class,
-            'mail'
+            'mail',
         ];
 
     }
@@ -43,6 +44,7 @@ class MobileVerified extends Notification implements ShouldQueue
      * Get the mail representation of the notification.
      *
      * @param  mixed $notifiable
+     *
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
     public function toMail($notifiable)
@@ -61,6 +63,7 @@ class MobileVerified extends Notification implements ShouldQueue
 
     /**
      * @param $notifiable
+     *
      * @return MedianaMessage
      */
     public function toMediana($notifiable)
@@ -75,7 +78,7 @@ class MobileVerified extends Notification implements ShouldQueue
     private function getInputData(): array
     {
         return [
-            'request' => 'شماره موبایل '
+            'request' => 'شماره موبایل ',
         ];
     }
 }

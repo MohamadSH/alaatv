@@ -17,12 +17,14 @@ interface TaggingInterface
 
     /**
      * @param $taggableId
+     *
      * @return array
      */
     public function getTags($taggableId): array;
 
     /**
      * @param array $tags
+     *
      * @return Taggable
      */
     public function getTaggable(array $tags): array;

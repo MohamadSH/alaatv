@@ -27,9 +27,9 @@ class ContentIndexRequest extends FormRequest
     public function rules()
     {
         return [
-            'contentType' => 'array|min:1',
+            'contentType'   => 'array|min:1',
             "contentType.*" => "required|string|distinct|min:3",
-            'tags' => 'array|min:1'
+            'tags'          => 'array|min:1',
         ];
     }
 

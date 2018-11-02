@@ -67,8 +67,8 @@ class MedianaPatternClient implements SmsSenderClient
     {
         $url = $this->url;
         $base = [
-            'user' => $this->userName,
-            'pass' => $this->password,
+            'user'    => $this->userName,
+            'pass'    => $this->password,
             'fromNum' => $this->number,
         ];
         if (isset($params['from']))
@@ -78,12 +78,13 @@ class MedianaPatternClient implements SmsSenderClient
         try {
             $response = $this->http->post($url, [
                 'headers' => [
-                    'Accept' => 'application/json',
-                    'User-Agent' => 'GuzzleHttp/6.3.3 curl/7.52.1'
+                    'Accept'     => 'application/json',
+                    'User-Agent' => 'GuzzleHttp/6.3.3 curl/7.52.1',
                 ],
-                'json' => $params,
+                'json'    => $params,
             ]);
-        } catch (GuzzleException $e) {
+        }
+        catch (GuzzleException $e) {
             throw $e;
         }
         return json_decode((string)$response->getBody(), true);

@@ -27,7 +27,8 @@ class FilesArray implements Rule
      * Determine if the validation rule passes.
      *
      * @param  string $attribute
-     * @param  mixed $value
+     * @param  mixed  $value
+     *
      * @return bool
      */
     public function passes($attribute, $value)
@@ -87,10 +88,10 @@ class FilesArray implements Rule
     protected function messageLookupTable(): array
     {
         return [
-            'nameIsSet' => trans('validation.FileArray.name should be set', ['attribute' => $this->getAttributeName()]),
-            'fieldsAreString' => trans('validation.FileArray.each field should be string', ['attribute' => $this->getAttributeName()]),
+            'nameIsSet'          => trans('validation.FileArray.name should be set', ['attribute' => $this->getAttributeName()]),
+            'fieldsAreString'    => trans('validation.FileArray.each field should be string', ['attribute' => $this->getAttributeName()]),
             'eachItemIsStdClass' => trans('validation.FileArray.each item in array should be instance of std class', ['attribute' => $this->getAttributeName()]),
-            'isArray' => trans('validation.FileArray.should be An array', ['attribute' => $this->getAttributeName()])
+            'isArray'            => trans('validation.FileArray.should be An array', ['attribute' => $this->getAttributeName()]),
         ];
     }
 

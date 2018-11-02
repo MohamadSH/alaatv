@@ -24,7 +24,7 @@ class InsertContentFileCaption extends FormRequest
     public function rules()
     {
         return [
-            'caption' => 'required'
+            'caption' => 'required',
         ];
     }
 }

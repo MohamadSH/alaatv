@@ -22,11 +22,12 @@ class PostCodeNotification extends Notification implements ShouldQueue
      * @var User
      */
     protected $user;
-    private $code;
+    private   $code;
 
 
     /**
      * PostCodeNotification constructor.
+     *
      * @param $code
      */
     public function __construct($code)
@@ -39,6 +40,7 @@ class PostCodeNotification extends Notification implements ShouldQueue
      * Get the notification's delivery channels.
      *
      * @param  mixed $notifiable
+     *
      * @return array
      */
     public function via($notifiable)
@@ -52,6 +54,7 @@ class PostCodeNotification extends Notification implements ShouldQueue
 
     /**
      * @param $notifiable
+     *
      * @return MedianaMessage
      */
     public function toMediana($notifiable)

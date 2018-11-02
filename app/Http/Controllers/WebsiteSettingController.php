@@ -13,9 +13,19 @@ class WebsiteSettingController extends Controller
     function __construct()
     {
         $this->middleware('permission:' . Config::get('constants.LIST_SITE_CONFIG_ACCESS'), ['only' => 'index']);
-        $this->middleware('permission:' . Config::get('constants.INSERT_SITE_CONFIG_ACCESS'), ['only' => ['create', 'store']]);
+        $this->middleware('permission:' . Config::get('constants.INSERT_SITE_CONFIG_ACCESS'), [
+            'only' => [
+                'create',
+                'store',
+            ],
+        ]);
         $this->middleware('permission:' . Config::get('constants.REMOVE_SITE_CONFIG_ACCESS'), ['only' => 'destroy']);
-        $this->middleware('permission:' . Config::get('constants.EDIT_SITE_CONFIG_ACCESS'), ['only' => ['edit', 'update']]);
+        $this->middleware('permission:' . Config::get('constants.EDIT_SITE_CONFIG_ACCESS'), [
+            'only' => [
+                'edit',
+                'update',
+            ],
+        ]);
         $this->middleware('permission:' . Config::get('constants.SHOW_SITE_CONFIG_ACCESS'), ['only' => 'show']);
     }
 
@@ -43,6 +53,7 @@ class WebsiteSettingController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -54,6 +65,7 @@ class WebsiteSettingController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Websitesetting $setting
+     *
      * @return \Illuminate\Http\Response
      */
     public function show(Websitesetting $setting)
@@ -66,6 +78,7 @@ class WebsiteSettingController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -77,7 +90,8 @@ class WebsiteSettingController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param  int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $setting)
@@ -107,14 +121,14 @@ class WebsiteSettingController extends Controller
         $wSetting->branches->main->emergencyContacts[0]->description = $request->get("branchesEmergencyContactsDescription")[0];
         $wSetting->branches->main->emails[0]->address = $request->get("branchesEmails");
 
-//        $wSetting->socialNetwork->telegram[0]->name = $request->get("telegramName");
+        //        $wSetting->socialNetwork->telegram[0]->name = $request->get("telegramName");
         $wSetting->socialNetwork->telegram->channel->link = $request->get("telegramLink");
         $wSetting->socialNetwork->telegram->channel->admin = $request->get("telegramAdmin");
-//        $wSetting->socialNetwork->instagram[0]->link = $request->get("instagramLink");
-//        $wSetting->socialNetwork->facebook[0]->link = $request->get("facebookLink");
-//        $wSetting->socialNetwork->twitter[0]->link = $request->get("twitterLink");
-//        $wSetting->socialNetwork->googleplus[0]->link = $request->get("googleplusLink");
-//        $wSetting->socialNetwork->telegram[0]->enable = 1;
+        //        $wSetting->socialNetwork->instagram[0]->link = $request->get("instagramLink");
+        //        $wSetting->socialNetwork->facebook[0]->link = $request->get("facebookLink");
+        //        $wSetting->socialNetwork->twitter[0]->link = $request->get("twitterLink");
+        //        $wSetting->socialNetwork->googleplus[0]->link = $request->get("googleplusLink");
+        //        $wSetting->socialNetwork->telegram[0]->enable = 1;
 
 
         if ($request->hasFile("favicon")) {
@@ -122,8 +136,10 @@ class WebsiteSettingController extends Controller
             $file = $request->file('favicon');
             $extension = $file->getClientOriginalExtension();
             $fileName = basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
-            if (Storage::disk(Config::get('constants.DISK11'))->put($fileName, File::get($file))) {
-                Storage::disk(Config::get('constants.DISK11'))->delete($oldLogo);
+            if (Storage::disk(Config::get('constants.DISK11'))
+                       ->put($fileName, File::get($file))) {
+                Storage::disk(Config::get('constants.DISK11'))
+                       ->delete($oldLogo);
                 $wSetting->site->favicon = $fileName;
             }
         }
@@ -132,8 +148,10 @@ class WebsiteSettingController extends Controller
             $file = $request->file('siteLogo');
             $extension = $file->getClientOriginalExtension();
             $fileName = basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
-            if (Storage::disk(Config::get('constants.DISK11'))->put($fileName, File::get($file))) {
-                Storage::disk(Config::get('constants.DISK11'))->delete($oldLogo);
+            if (Storage::disk(Config::get('constants.DISK11'))
+                       ->put($fileName, File::get($file))) {
+                Storage::disk(Config::get('constants.DISK11'))
+                       ->delete($oldLogo);
                 $wSetting->site->siteLogo = $fileName;
             }
         }
@@ -150,6 +168,7 @@ class WebsiteSettingController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

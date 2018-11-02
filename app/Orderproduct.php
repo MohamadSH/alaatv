@@ -12,28 +12,34 @@ use Illuminate\Support\Facades\Config;
 /**
  * App\Orderproduct
  *
- * @property int $id
- * @property int|null $orderproducttype_id آیدی مشخص کننده نوع آیتم سبد
- * @property int $order_id
- * @property int $product_id
- * @property int|null $checkoutstatus_id آی دی مشحص کننده وضعیت تسویه حساب این آیتم
- * @property int|null $cost مبلغ این آیتم سبد
- * @property float $discountPercentage تخفیف این آیتم سبد(به درصد)
- * @property int $discountAmount تخفیف این آیتم سبد(مبلغ)
- * @property int $includedInCoupon مشخص کننده اینکه آیا این آیتم مشمول کپن بوده یا نه(در صورت کپن داشتن سفارش)
- * @property int $quantity تعداد سفارش داده شده
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property \Carbon\Carbon|null $deleted_at
+ * @property int                                                                 $id
+ * @property int|null                                                            $orderproducttype_id آیدی مشخص کننده
+ *           نوع آیتم سبد
+ * @property int                                                                 $order_id
+ * @property int                                                                 $product_id
+ * @property int|null                                                            $checkoutstatus_id   آی دی مشحص کننده
+ *           وضعیت تسویه حساب این آیتم
+ * @property int|null                                                            $cost                مبلغ این آیتم سبد
+ * @property float                                                               $discountPercentage  تخفیف این آیتم
+ *           سبد(به درصد)
+ * @property int                                                                 $discountAmount      تخفیف این آیتم
+ *           سبد(مبلغ)
+ * @property int                                                                 $includedInCoupon    مشخص کننده اینکه
+ *           آیا این آیتم مشمول کپن بوده یا نه(در صورت کپن داشتن سفارش)
+ * @property int                                                                 $quantity            تعداد سفارش داده
+ *           شده
+ * @property \Carbon\Carbon|null                                                 $created_at
+ * @property \Carbon\Carbon|null                                                 $updated_at
+ * @property \Carbon\Carbon|null                                                 $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Attributevalue[] $attributevalues
- * @property-read \App\Checkoutstatus|null $checkoutstatus
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Orderproduct[] $children
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Userbon[] $insertedUserbons
- * @property-read \App\Order $order
- * @property-read \App\Orderproducttype|null $orderproducttype
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Orderproduct[] $parents
- * @property-read \App\Product $product
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Userbon[] $userbons
+ * @property-read \App\Checkoutstatus|null                                       $checkoutstatus
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Orderproduct[]   $children
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Userbon[]        $insertedUserbons
+ * @property-read \App\Order                                                     $order
+ * @property-read \App\Orderproducttype|null                                     $orderproducttype
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Orderproduct[]   $parents
+ * @property-read \App\Product                                                   $product
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Userbon[]        $userbons
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Orderproduct onlyTrashed()
  * @method static bool|null restore()
@@ -58,7 +64,11 @@ class Orderproduct extends Model
 {
     use SoftDeletes;
     /**      * The attributes that should be mutated to dates.        */
-    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
     use ProductCommon;
 
     /**
@@ -73,10 +83,10 @@ class Orderproduct extends Model
         'discountPercentage',
         'discountAmount',
         'includedInCoupon',
-        'checkoutstatus_id'
+        'checkoutstatus_id',
     ];
-    protected $touches = [
-        'attributevalues'
+    protected $touches  = [
+        'attributevalues',
     ];
 
     public function order()
@@ -91,12 +101,14 @@ class Orderproduct extends Model
 
     public function attributevalues()
     {
-        return $this->belongsToMany('\App\Attributevalue', 'attributevalue_orderproduct', 'orderproduct_id', 'value_id')->withPivot("extraCost");
+        return $this->belongsToMany('\App\Attributevalue', 'attributevalue_orderproduct', 'orderproduct_id', 'value_id')
+                    ->withPivot("extraCost");
     }
 
     public function userbons()
     {
-        return $this->belongsToMany('\App\Userbon')->withPivot("usageNumber", "discount");
+        return $this->belongsToMany('\App\Userbon')
+                    ->withPivot("usageNumber", "discount");
     }
 
     public function insertedUserbons()
@@ -112,9 +124,9 @@ class Orderproduct extends Model
     public function children()
     {
         return $this->belongsToMany('App\Orderproduct', 'orderproduct_orderproduct', 'op1_id', 'op2_id')
-            ->withPivot('relationtype_id')
-            ->join('orderproductinterrelations', 'relationtype_id', 'orderproductinterrelations.id')
-            ->where("relationtype_id", Config::get("constants.ORDER_PRODUCT_INTERRELATION_PARENT_CHILD"));
+                    ->withPivot('relationtype_id')
+                    ->join('orderproductinterrelations', 'relationtype_id', 'orderproductinterrelations.id')
+                    ->where("relationtype_id", Config::get("constants.ORDER_PRODUCT_INTERRELATION_PARENT_CHILD"));
     }
 
     public function orderproducttype()
@@ -157,18 +169,18 @@ class Orderproduct extends Model
     {
         $costArray = $this->obtainOrderproductCost(false);
         if ($withOrderCoupon) {
-//            $couponType = $this->order->determineCoupontype();
-//            if($couponType !== false  && $this->includedInCoupon)
-//            {
-//                if($couponType["type"] == Config::get("constants.DISCOUNT_TYPE_PERCENTAGE"))
-//                    return (int)( ((1-($costArray["bonDiscount"]/100)) * ( ( (1-($costArray["productDiscount"]/100))*$costArray["cost"]) - $costArray["productDiscountAmount"]))*(1-($couponType["discount"]/100)));
-//                elseif($couponType["type"] == Config::get("constants.DISCOUNT_TYPE_COST"))
-//                    return (int)( ((1-($costArray["bonDiscount"]/100)) * ( ( (1-($costArray["productDiscount"]/100))*$costArray["cost"]) - $costArray["productDiscountAmount"])) - $couponType["discount"] );
-//
-//            }else
-//            {
+            //            $couponType = $this->order->determineCoupontype();
+            //            if($couponType !== false  && $this->includedInCoupon)
+            //            {
+            //                if($couponType["type"] == Config::get("constants.DISCOUNT_TYPE_PERCENTAGE"))
+            //                    return (int)( ((1-($costArray["bonDiscount"]/100)) * ( ( (1-($costArray["productDiscount"]/100))*$costArray["cost"]) - $costArray["productDiscountAmount"]))*(1-($couponType["discount"]/100)));
+            //                elseif($couponType["type"] == Config::get("constants.DISCOUNT_TYPE_COST"))
+            //                    return (int)( ((1-($costArray["bonDiscount"]/100)) * ( ( (1-($costArray["productDiscount"]/100))*$costArray["cost"]) - $costArray["productDiscountAmount"])) - $couponType["discount"] );
+            //
+            //            }else
+            //            {
             return (int)((1 - ($costArray["bonDiscount"] / 100)) * (((1 - ($costArray["productDiscount"] / 100)) * $costArray["cost"]) - $costArray["productDiscountAmount"]));
-//            }
+            //            }
         } else {
             return (int)((1 - ($costArray["bonDiscount"] / 100)) * (((1 - ($costArray["productDiscount"] / 100)) * $costArray["cost"]) - $costArray["productDiscountAmount"]));
         }
@@ -178,18 +190,20 @@ class Orderproduct extends Model
      * Obtain order total cost
      *
      * @param boolean $calculateCost
+     *
      * @return array
      */
     public function obtainOrderproductCost($calculateCost = true)
     {
-        $costArray = array();
+        $costArray = [];
         $bonDiscount = 0;
         $productDiscount = 0;
         $productDiscountAmount = 0;
         $orderProductExtraCost = 0;
         if ($calculateCost) {
             $product = $this->product;
-            if ($product->isFree) $costArray["cost"] = null;
+            if ($product->isFree)
+                $costArray["cost"] = null;
             else {
                 $costArray = $product->calculatePayablePrice();
 
@@ -199,13 +213,16 @@ class Orderproduct extends Model
 
                 $userbons = $this->userbons;
                 foreach ($userbons as $userbon) {
-                    $bons = $product->bons->where("id", $userbon->bon_id)->where("isEnable", 1);
+                    $bons = $product->bons->where("id", $userbon->bon_id)
+                                          ->where("isEnable", 1);
                     if ($bons->isEmpty()) {
                         $parentsArray = $this->makeParentArray($product);
                         if (!empty($parentsArray)) {
                             foreach ($parentsArray as $parent) {
-                                $bons = $parent->bons->where("id", $userbon->bon_id)->where("isEnable", 1);
-                                if (!$bons->isEmpty()) break;
+                                $bons = $parent->bons->where("id", $userbon->bon_id)
+                                                     ->where("isEnable", 1);
+                                if (!$bons->isEmpty())
+                                    break;
                             }
                         }
                     }
@@ -233,12 +250,12 @@ class Orderproduct extends Model
 
         $cost = (int)$costArray["cost"];
         return [
-            "cost" => $cost,
-            "extraCost" => $orderProductExtraCost,
-            "productDiscount" => $productDiscount,
-            'bonDiscount' => $bonDiscount,
+            "cost"                  => $cost,
+            "extraCost"             => $orderProductExtraCost,
+            "productDiscount"       => $productDiscount,
+            'bonDiscount'           => $bonDiscount,
             "productDiscountAmount" => (int)$productDiscountAmount,
-            'CustomerCost' => (int)(((int)$cost * (1 - ($productDiscount / 100))) * (1 - ($bonDiscount / 100)) - $productDiscountAmount)
+            'CustomerCost'          => (int)(((int)$cost * (1 - ($productDiscount / 100))) * (1 - ($bonDiscount / 100)) - $productDiscountAmount),
         ];
     }
 
@@ -253,14 +270,16 @@ class Orderproduct extends Model
 
     public function isNormalType()
     {
-        if ($this->orderproducttype_id == Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT") || !isset($this->orderproductstatus_id)) return true;
+        if ($this->orderproducttype_id == Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT") || !isset($this->orderproductstatus_id))
+            return true;
         else
             return false;
     }
 
     public function fillCostValues($costArray)
     {
-        if (isset($costArray["cost"])) $this->cost = $costArray["cost"];
+        if (isset($costArray["cost"]))
+            $this->cost = $costArray["cost"];
         else $this->cost = null;
 
         if ($this->isGiftType()) {
@@ -283,7 +302,9 @@ class Orderproduct extends Model
     }
 
     /** Attaches a gift to the order of this orderproduct which is related to this orderproduct
+     *
      * @param Product $gift
+     *
      * @return Orderproduct
      */
     public function attachGift(Product $gift)
@@ -296,16 +317,17 @@ class Orderproduct extends Model
         $giftOrderproduct->discountPercentage = 100;
         $giftOrderproduct->save();
 
-        $giftOrderproduct->parents()->attach($this, ["relationtype_id" => Config::get("constants.ORDER_PRODUCT_INTERRELATION_PARENT_CHILD")]);
+        $giftOrderproduct->parents()
+                         ->attach($this, ["relationtype_id" => Config::get("constants.ORDER_PRODUCT_INTERRELATION_PARENT_CHILD")]);
         return $giftOrderproduct;
     }
 
     public function parents()
     {
         return $this->belongsToMany('App\Orderproduct', 'orderproduct_orderproduct', 'op2_id', 'op1_id')
-            ->withPivot('relationtype_id')
-            ->join('orderproductinterrelations', 'relationtype_id', 'orderproductinterrelations.id')
-            ->where("relationtype_id", Config::get("constants.ORDER_PRODUCT_INTERRELATION_PARENT_CHILD"));
+                    ->withPivot('relationtype_id')
+                    ->join('orderproductinterrelations', 'relationtype_id', 'orderproductinterrelations.id')
+                    ->where("relationtype_id", Config::get("constants.ORDER_PRODUCT_INTERRELATION_PARENT_CHILD"));
     }
 
 }

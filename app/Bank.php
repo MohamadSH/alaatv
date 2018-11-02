@@ -8,12 +8,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\Bank
  *
- * @property int $id
- * @property string|null $name نام بانک
- * @property string|null $description توضیح درباره بانک
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property \Carbon\Carbon|null $deleted_at
+ * @property int                                                              $id
+ * @property string|null                                                      $name        نام بانک
+ * @property string|null                                                      $description توضیح درباره بانک
+ * @property \Carbon\Carbon|null                                              $created_at
+ * @property \Carbon\Carbon|null                                              $updated_at
+ * @property \Carbon\Carbon|null                                              $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Bankaccount[] $backaccounts
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Bank onlyTrashed()
@@ -39,7 +39,7 @@ class Bank extends Model
     protected $dates = [
         'created_at',
         'updated_at',
-        'deleted_at'
+        'deleted_at',
     ];
 
     /**

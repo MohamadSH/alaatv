@@ -8,17 +8,17 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\Slideshow
  *
- * @property int $id
- * @property int|null $websitepage_id آی دی مشخص کننده صفحه محل نمایش اسلاید
- * @property string|null $title
- * @property string|null $shortDescription
- * @property string|null $photo
- * @property string|null $link
- * @property int $order
- * @property int $isEnable
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property \Carbon\Carbon|null $deleted_at
+ * @property int                        $id
+ * @property int|null                   $websitepage_id آی دی مشخص کننده صفحه محل نمایش اسلاید
+ * @property string|null                $title
+ * @property string|null                $shortDescription
+ * @property string|null                $photo
+ * @property string|null                $link
+ * @property int                        $order
+ * @property int                        $isEnable
+ * @property \Carbon\Carbon|null        $created_at
+ * @property \Carbon\Carbon|null        $updated_at
+ * @property \Carbon\Carbon|null        $deleted_at
  * @property-read \App\Websitepage|null $websitepage
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Slideshow onlyTrashed()
@@ -42,7 +42,11 @@ class Slideshow extends Model
 {
     use SoftDeletes;
     /**      * The attributes that should be mutated to dates.        */
-    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
 
     /**
      * @var array
@@ -54,7 +58,7 @@ class Slideshow extends Model
         'photo',
         'link',
         'order',
-        'isEnable'
+        'isEnable',
     ];
 
     public function websitepage()

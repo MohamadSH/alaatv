@@ -27,7 +27,7 @@ class ProductIndexRequest extends FormRequest
     public function rules()
     {
         return [
-            'tags' => 'array|min:1'
+            'tags' => 'array|min:1',
         ];
     }
 

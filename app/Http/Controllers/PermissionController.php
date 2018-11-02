@@ -5,11 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\EditPermissionRequest;
 use App\Http\Requests\InsertPermissionRequest;
 use App\Permission;
-use App\Traits\Helper;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Config;
 
 class PermissionController extends Controller
 {
@@ -27,7 +24,8 @@ class PermissionController extends Controller
 
     public function index()
     {
-        $permissions = Permission::all()->sortByDesc('created_at');
+        $permissions = Permission::all()
+                                 ->sortByDesc('created_at');
         return view("permission.index", compact('permissions'));
     }
 
@@ -73,7 +71,8 @@ class PermissionController extends Controller
 
     public function destroy($permission)
     {
-        if ($permission->delete()) session()->put('success', 'دسترسی با موفقیت حذف شد');
+        if ($permission->delete())
+            session()->put('success', 'دسترسی با موفقیت حذف شد');
         else session()->put('error', 'خطای پایگاه داده');
         return redirect()->back();
     }

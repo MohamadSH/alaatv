@@ -17,7 +17,10 @@ class EditCouponRequest extends FormRequest
      */
     public function authorize()
     {
-        if (Auth()->user()->can(Config::get('constants.EDIT_COUPON_ACCESS'))) return true;
+        if (Auth()
+            ->user()
+            ->can(Config::get('constants.EDIT_COUPON_ACCESS')))
+            return true;
         return false;
     }
 
@@ -29,13 +32,13 @@ class EditCouponRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'code' => 'required',
-            'discount' => 'numeric',
-            'usageNumber' => 'numeric',
-            'usageLimit' => 'required_if:limitStatus,1|numeric',
+            'name'          => 'required',
+            'code'          => 'required',
+            'discount'      => 'numeric',
+            'usageNumber'   => 'numeric',
+            'usageLimit'    => 'required_if:limitStatus,1|numeric',
             'coupontype_id' => 'required|exists:coupontypes,id',
-            'products' => 'required_if:coupontype_id,2'
+            'products'      => 'required_if:coupontype_id,2',
         ];
     }
 

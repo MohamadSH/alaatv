@@ -8,14 +8,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\Ordermanagercomment
  *
- * @property int $id
- * @property int|null $user_id آیدی مشخص کننده کاربر مسئول
- * @property int $order_id آیدی مشخص کننده سفارش
- * @property string|null $comment توضیح مسئول
+ * @property int                 $id
+ * @property int|null            $user_id  آیدی مشخص کننده کاربر مسئول
+ * @property int                 $order_id آیدی مشخص کننده سفارش
+ * @property string|null         $comment  توضیح مسئول
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property \Carbon\Carbon|null $deleted_at
- * @property-read \App\Order $order
+ * @property-read \App\Order     $order
  * @property-read \App\User|null $user
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Ordermanagercomment onlyTrashed()
@@ -35,7 +35,11 @@ class Ordermanagercomment extends Model
 {
     use SoftDeletes;
     /**      * The attributes that should be mutated to dates.        */
-    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
 
     /**
      * @var array
@@ -43,7 +47,7 @@ class Ordermanagercomment extends Model
     protected $fillable = [
         'user_id',
         'order_id',
-        'comment'
+        'comment',
     ];
 
     public function order()

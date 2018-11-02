@@ -8,14 +8,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\Survey
  *
- * @property int $id
- * @property string|null $name نام مصاحبه
- * @property string|null $description توضیح درباره مصاحبه
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property \Carbon\Carbon|null $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Event[] $events
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Question[] $questions
+ * @property int                                                                   $id
+ * @property string|null                                                           $name        نام مصاحبه
+ * @property string|null                                                           $description توضیح درباره مصاحبه
+ * @property \Carbon\Carbon|null                                                   $created_at
+ * @property \Carbon\Carbon|null                                                   $updated_at
+ * @property \Carbon\Carbon|null                                                   $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Event[]            $events
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Question[]         $questions
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Usersurveyanswer[] $usersurveyanswer
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Survey onlyTrashed()
@@ -34,7 +34,11 @@ class Survey extends Model
 {
     use SoftDeletes;
     /**      * The attributes that should be mutated to dates.        */
-    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
 
     /**
      * @var array
@@ -46,12 +50,14 @@ class Survey extends Model
 
     public function questions()
     {
-        return $this->belongsToMany('\App\Question')->withPivot("order", "enable", "description");;
+        return $this->belongsToMany('\App\Question')
+                    ->withPivot("order", "enable", "description");;
     }
 
     public function events()
     {
-        return $this->belongsToMany('\App\Event')->withPivot("order", "enable", "description");;
+        return $this->belongsToMany('\App\Event')
+                    ->withPivot("order", "enable", "description");;
     }
 
     public function usersurveyanswer()

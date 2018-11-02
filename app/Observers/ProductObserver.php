@@ -22,6 +22,7 @@ class ProductObserver
      * Handle the product "created" event.
      *
      * @param Product $product
+     *
      * @return void
      */
     public function created(Product $product)
@@ -33,6 +34,7 @@ class ProductObserver
      * Handle the product "updated" event.
      *
      * @param Product $product
+     *
      * @return void
      */
     public function updated(Product $product)
@@ -43,6 +45,7 @@ class ProductObserver
      * Handle the product "deleted" event.
      *
      * @param Product $product
+     *
      * @return void
      */
     public function deleted(Product $product)
@@ -54,6 +57,7 @@ class ProductObserver
      * Handle the product "restored" event.
      *
      * @param Product $product
+     *
      * @return void
      */
     public function restored(Product $product)
@@ -65,6 +69,7 @@ class ProductObserver
      * Handle the product "force deleted" event.
      *
      * @param Product $product
+     *
      * @return void
      */
     public function forceDeleted(Product $product)
@@ -77,6 +82,7 @@ class ProductObserver
      * When issuing a mass update via Eloquent,
      * the saved and updated model events will not be fired for the updated models.
      * This is because the models are never actually retrieved when issuing a mass update.
+     *
      * @param Product $product
      */
     public function saving(Product $product)

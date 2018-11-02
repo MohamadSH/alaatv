@@ -10,8 +10,6 @@ namespace App\Classes\Search;
 
 
 use App\Classes\Search\Filters\Filter;
-use App\Classes\Search\Filters\Tags;
-use App\Classes\Search\Tag\ContentTagManagerViaApi;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Config;
 use LogicException;
@@ -19,6 +17,7 @@ use LogicException;
 abstract class SearchAbstract
 {
 
+    protected const DEFAULT_PAGE_NUMBER = 1;
     protected $cacheKey;
     protected $cacheTime;
     protected $validFilters;
@@ -26,7 +25,6 @@ abstract class SearchAbstract
     protected $dummyFilterCallBack;
     protected $pageName = 'page';
     protected $pageNum;
-    protected const DEFAULT_PAGE_NUMBER = 1;
     protected $numberOfItemInEachPage = 25;
 
     public function __construct()
@@ -45,6 +43,7 @@ abstract class SearchAbstract
 
     /**
      * @param int $numberOfItemInEachPage
+     *
      * @return SearchAbstract
      */
     public function setNumberOfItemInEachPage(int $numberOfItemInEachPage): SearchAbstract
@@ -55,6 +54,7 @@ abstract class SearchAbstract
 
     /**
      * @param string $pageName
+     *
      * @return SearchAbstract
      */
     public function setPageName(string $pageName): SearchAbstract
@@ -92,6 +92,8 @@ abstract class SearchAbstract
         return class_exists($decorator);
     }
 
+    abstract protected function setupDecorator($decorator);
+
     protected function isFilterDecorator($decorator)
     {
         return ($decorator instanceof Filter);
@@ -99,11 +101,9 @@ abstract class SearchAbstract
 
     abstract protected function getResults(Builder $query);
 
-    abstract protected function setupDecorator($decorator);
-
-
     /**
      * @param array $array
+     *
      * @return string
      */
     protected function makeCacheKey(array $array): string
@@ -114,6 +114,7 @@ abstract class SearchAbstract
 
     /**
      * @param array $filters
+     *
      * @return int|mixed
      */
     protected function setPageNum(array $filters)

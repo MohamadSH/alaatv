@@ -82,27 +82,10 @@ class UserController extends Controller
         $this->setting = $setting->setting;
     }
 
-    /**
-     * Checks whether user can see profile
-     *
-     * @param $user
-     * @return bool
-     */
-    private function canSeeProfile($user): bool
-    {
-        if (Auth::check())
-            return (
-                ($user->id === Auth::id()) ||
-                (Auth::user()->hasRole(config('constants.ROLE_ADMIN'))) ||
-                ($user->hasRole(config('constants.ROLE_TECH')))
-            );
-        else
-            return false;
-    }
-
     public function findTech(Request $request)
     {
-        $user = User::where('techCode', $request->techCode)->first();
+        $user = User::where('techCode', $request->techCode)
+                    ->first();
         if (isset($user))
             return action('UserController@show', $user);
         return 0;
@@ -119,9 +102,15 @@ class UserController extends Controller
         $createdSinceDate = Input::get('createdSinceDate');
         $createdTillDate = Input::get('createdTillDate');
         if (strlen($createdSinceDate) > 0 && strlen($createdTillDate) > 0 && isset($createdTimeEnable)) {
-            $createdSinceDate = Carbon::parse($createdSinceDate)->format('Y-m-d') . " 00:00:00";
-            $createdTillDate = Carbon::parse($createdTillDate)->format('Y-m-d') . " 23:59:59";
-            $users = User::whereBetween('created_at', [$createdSinceDate, $createdTillDate])->orderBy('created_at', 'Desc');
+            $createdSinceDate = Carbon::parse($createdSinceDate)
+                                      ->format('Y-m-d') . " 00:00:00";
+            $createdTillDate = Carbon::parse($createdTillDate)
+                                     ->format('Y-m-d') . " 23:59:59";
+            $users = User::whereBetween('created_at', [
+                $createdSinceDate,
+                $createdTillDate,
+            ])
+                         ->orderBy('created_at', 'Desc');
         } else {
             $users = User::orderBy('created_at', 'Desc');
         }
@@ -172,11 +161,21 @@ class UserController extends Controller
         if (isset($couponEnable) && isset($couponsId)) {
             if (in_array(0, $couponsId))
                 $users = $users->whereHas("orders", function ($q) use ($couponsId) {
-                    $q->whereDoesntHave("coupon")->whereNotIn('orderstatus_id', [Config::get("constants.ORDER_STATUS_OPEN"), Config::get("constants.ORDER_STATUS_CANCELED"), Config::get("constants.ORDER_STATUS_OPEN_BY_ADMIN")]);
+                    $q->whereDoesntHave("coupon")
+                      ->whereNotIn('orderstatus_id', [
+                          Config::get("constants.ORDER_STATUS_OPEN"),
+                          Config::get("constants.ORDER_STATUS_CANCELED"),
+                          Config::get("constants.ORDER_STATUS_OPEN_BY_ADMIN"),
+                      ]);
                 });
             else
                 $users = $users->whereHas("orders", function ($q) use ($couponsId) {
-                    $q->whereIn("coupon_id", $couponsId)->whereNotIn('orderstatus_id', [Config::get("constants.ORDER_STATUS_OPEN"), Config::get("constants.ORDER_STATUS_CANCELED"), Config::get("constants.ORDER_STATUS_OPEN_BY_ADMIN")]);
+                    $q->whereIn("coupon_id", $couponsId)
+                      ->whereNotIn('orderstatus_id', [
+                          Config::get("constants.ORDER_STATUS_OPEN"),
+                          Config::get("constants.ORDER_STATUS_CANCELED"),
+                          Config::get("constants.ORDER_STATUS_OPEN_BY_ADMIN"),
+                      ]);
                 });
         }
 
@@ -199,20 +198,29 @@ class UserController extends Controller
         if (isset($orderProductEnable) || isset($productsId)) {
             if (in_array(-1, $productsId)) {
                 $users = $users->whereDoesntHave("orders", function ($q) {
-                    $q->where("orderstatus_id", "<>", 1)->where("orderstatus_id", "<>", 3)->where("orderstatus_id", "<>", 4);
+                    $q->where("orderstatus_id", "<>", 1)
+                      ->where("orderstatus_id", "<>", 3)
+                      ->where("orderstatus_id", "<>", 4);
                 });
-            } elseif (in_array(0, $productsId)) {
+            } else if (in_array(0, $productsId)) {
                 $users = $users->whereHas("orders", function ($query) {
-                    $query->whereNotIn('orderstatus_id', [Config::get("constants.ORDER_STATUS_OPEN"), Config::get("constants.ORDER_STATUS_CANCELED"), Config::get("constants.ORDER_STATUS_OPEN_BY_ADMIN")]);
+                    $query->whereNotIn('orderstatus_id', [
+                        Config::get("constants.ORDER_STATUS_OPEN"),
+                        Config::get("constants.ORDER_STATUS_CANCELED"),
+                        Config::get("constants.ORDER_STATUS_OPEN_BY_ADMIN"),
+                    ]);
                 });
-            } elseif (isset($productsId)) {
-                $products = Product::whereIn('id', $productsId)->get();
+            } else if (isset($productsId)) {
+                $products = Product::whereIn('id', $productsId)
+                                   ->get();
                 foreach ($products as $product) {
                     if ($product->producttype_id == Config::get("constants.PRODUCT_TYPE_CONFIGURABLE"))
                         if ($product->hasChildren()) {
                             $productsId = array_merge($productsId, Product::whereHas('parents', function ($q) use ($productsId) {
                                 $q->whereIn("parent_id", $productsId);
-                            })->pluck("id")->toArray());
+                            })
+                                                                          ->pluck("id")
+                                                                          ->toArray());
                         }
                 }
 
@@ -220,17 +228,22 @@ class UserController extends Controller
                     $checkoutStatuses = Input::get("checkoutStatuses");
                     if (in_array(0, $checkoutStatuses)) {
                         $orders = Order::whereHas("orderproducts", function ($q) use ($productsId) {
-                            $q->whereIn("product_id", $productsId)->whereNull("checkoutstatus_id");
-                        })->whereNotIn('orderstatus_id', [Config::get("constants.ORDER_STATUS_OPEN")]);
+                            $q->whereIn("product_id", $productsId)
+                              ->whereNull("checkoutstatus_id");
+                        })
+                                       ->whereNotIn('orderstatus_id', [Config::get("constants.ORDER_STATUS_OPEN")]);
                     } else {
                         $orders = Order::whereHas("orderproducts", function ($q) use ($productsId, $checkoutStatuses) {
-                            $q->whereIn("product_id", $productsId)->whereIn("checkoutstatus_id", $checkoutStatuses);
-                        })->whereNotIn('orderstatus_id', [Config::get("constants.ORDER_STATUS_OPEN")]);
+                            $q->whereIn("product_id", $productsId)
+                              ->whereIn("checkoutstatus_id", $checkoutStatuses);
+                        })
+                                       ->whereNotIn('orderstatus_id', [Config::get("constants.ORDER_STATUS_OPEN")]);
                     }
                 } else {
                     $orders = Order::whereHas("orderproducts", function ($q) use ($productsId) {
                         $q->whereIn("product_id", $productsId);
-                    })->whereNotIn('orderstatus_id', [Config::get("constants.ORDER_STATUS_OPEN")]);
+                    })
+                                   ->whereNotIn('orderstatus_id', [Config::get("constants.ORDER_STATUS_OPEN")]);
                 }
 
                 $createdSinceDate = Input::get('completedSinceDate');
@@ -240,43 +253,51 @@ class UserController extends Controller
                     $orders = $this->timeFilterQuery($orders, $createdSinceDate, $createdTillDate, 'created_at');
                 }
                 $orders = $orders->get();
-                $users = $users->whereIn("id", $orders->pluck("user_id")->toArray());
+                $users = $users->whereIn("id", $orders->pluck("user_id")
+                                                      ->toArray());
             }
-        } elseif (Input::has("checkoutStatusEnable")) {
+        } else if (Input::has("checkoutStatusEnable")) {
             $checkoutStatuses = Input::get("checkoutStatuses");
             if (in_array(0, $checkoutStatuses)) {
                 $orders = Order::whereHas("orderproducts", function ($q) use ($productsId) {
                     $q->whereNull("checkoutstatus_id");
-                })->whereNotIn('orderstatus_id', [Config::get("constants.ORDER_STATUS_OPEN")]);
+                })
+                               ->whereNotIn('orderstatus_id', [Config::get("constants.ORDER_STATUS_OPEN")]);
             } else {
                 $orders = Order::whereHas("orderproducts", function ($q) use ($productsId, $checkoutStatuses) {
                     $q->whereIn("checkoutstatus_id", $checkoutStatuses);
-                })->whereNotIn('orderstatus_id', [Config::get("constants.ORDER_STATUS_OPEN")]);
+                })
+                               ->whereNotIn('orderstatus_id', [Config::get("constants.ORDER_STATUS_OPEN")]);
             }
             $orders = $orders->get();
-            $users = $users->whereIn("id", $orders->pluck("user_id")->toArray());
+            $users = $users->whereIn("id", $orders->pluck("user_id")
+                                                  ->toArray());
         }
 
         $paymentStatusesId = Input::get('paymentStatuses');
         if (isset($paymentStatusesId)) {
             //Muhammad Shahrokhi : kar nemikone!
-//            $users = $users->whereHas("orders" , function ($q) use ($paymentStatusesId) {
-//                $q->whereIn("paymentstatus_id", $paymentStatusesId)->whereNotIn('orderstatus_id', [1]);
-//            }
-            if (!isset($orders)) $orders = Order::all();
+            //            $users = $users->whereHas("orders" , function ($q) use ($paymentStatusesId) {
+            //                $q->whereIn("paymentstatus_id", $paymentStatusesId)->whereNotIn('orderstatus_id', [1]);
+            //            }
+            if (!isset($orders))
+                $orders = Order::all();
             else $orders = Order::paymentStatusFilter($orders, $paymentStatusesId);
-            $users = $users->whereIn("id", $orders->pluck("user_id")->toArray());
+            $users = $users->whereIn("id", $orders->pluck("user_id")
+                                                  ->toArray());
         }
 
         $orderStatusesId = Input::get('orderStatuses');
         if (isset($orderStatusesId)) {
             //Muhammad Shahrokhi : kar nemikone!
-//            $users = $users->whereHas("orders" , function ($q) use ($orderStatusesId) {
-//                $q->whereIn("orderstatus_id", $orderStatusesId)->whereNotIn('orderstatus_id', [1]);
-//            });
-            if (!isset($orders)) $orders = Order::all();
+            //            $users = $users->whereHas("orders" , function ($q) use ($orderStatusesId) {
+            //                $q->whereIn("orderstatus_id", $orderStatusesId)->whereNotIn('orderstatus_id', [1]);
+            //            });
+            if (!isset($orders))
+                $orders = Order::all();
             else $orders = Order::orderStatusFilter($orders, $orderStatusesId);
-            $users = $users->whereIn("id", $orders->pluck("user_id")->toArray());
+            $users = $users->whereIn("id", $orders->pluck("user_id")
+                                                  ->toArray());
         }
         //filter by gender ,lockProfile , mobileVerification
         $genderId = Input::get("gender_id");
@@ -309,7 +330,8 @@ class UserController extends Controller
         $withoutPostalCode = Input::get("withoutPostalCode");
         if (isset($withoutPostalCode)) {
             $users = $users->where(function ($q) {
-                $q->whereNull("postalCode")->orWhere("postalCode", "");
+                $q->whereNull("postalCode")
+                  ->orWhere("postalCode", "");
             });
         } else {
             $postalCode = Input::get("postalCode");
@@ -320,7 +342,8 @@ class UserController extends Controller
         $withoutProvince = Input::get("withoutProvince");
         if (isset($withoutProvince)) {
             $users = $users->where(function ($q) {
-                $q->whereNull("province")->orWhere("province", "");
+                $q->whereNull("province")
+                  ->orWhere("province", "");
             });
         } else {
             $province = Input::get("province");
@@ -331,7 +354,8 @@ class UserController extends Controller
         $withoutCity = Input::get("withoutCity");
         if (isset($withoutCity)) {
             $users = $users->where(function ($q) {
-                $q->whereNull("city")->orWhere("city", "");
+                $q->whereNull("city")
+                  ->orWhere("city", "");
             });
         } else {
             $city = Input::get("city");
@@ -339,17 +363,17 @@ class UserController extends Controller
                 $users = $users->where('city', 'like', '%' . $city . '%');
         }
 
-//        $withoutAddress = Input::get("withoutAddress");
-//        if(isset($withoutAddress)) {
-//            $users = $users->where(function ($q){
-//                $q->whereNull("address")->orWhere("address" , "");
-//            });
-//        }
-//        else{
-//            $address = Input::get("address");
-//            if (isset($address) && strlen($address) > 0)
-//                $users = $users->where('address', 'like', '%' . $address . '%');
-//        }
+        //        $withoutAddress = Input::get("withoutAddress");
+        //        if(isset($withoutAddress)) {
+        //            $users = $users->where(function ($q){
+        //                $q->whereNull("address")->orWhere("address" , "");
+        //            });
+        //        }
+        //        else{
+        //            $address = Input::get("address");
+        //            if (isset($address) && strlen($address) > 0)
+        //                $users = $users->where('address', 'like', '%' . $address . '%');
+        //        }
 
         $addressSpecialFilter = Input::get("addressSpecialFilter");
         if (isset($addressSpecialFilter)) {
@@ -361,12 +385,14 @@ class UserController extends Controller
                     break;
                 case "1":
                     $users = $users->where(function ($q) {
-                        $q->whereNull("address")->orWhere("address", "");
+                        $q->whereNull("address")
+                          ->orWhere("address", "");
                     });
                     break;
                 case  "2":
                     $users = $users->where(function ($q) {
-                        $q->whereNotNull("address")->Where("address", "<>", "");
+                        $q->whereNotNull("address")
+                          ->Where("address", "<>", "");
                     });
                     break;
                 default:
@@ -382,7 +408,8 @@ class UserController extends Controller
         $withoutSchool = Input::get("withoutSchool");
         if (isset($withoutSchool)) {
             $users = $users->where(function ($q) {
-                $q->whereNull("school")->orWhere("school", "");
+                $q->whereNull("school")
+                  ->orWhere("school", "");
             });
         } else {
             $school = Input::get("school");
@@ -393,7 +420,8 @@ class UserController extends Controller
         $withoutEmail = Input::get("withoutEmail");
         if (isset($withoutEmail)) {
             $users = $users->where(function ($q) {
-                $q->whereNull("email")->orWhere("email", "");
+                $q->whereNull("email")
+                  ->orWhere("email", "");
             });
         } else {
             $email = Input::get("email");
@@ -411,11 +439,17 @@ class UserController extends Controller
         $hasPishtaz = [];
         if (isset($orders))
             foreach ($users as $user) {
-                if ($user->orders()->whereIn("id", $orders->pluck("id")->toArray())->whereHas("orderproducts", function ($q) {
-                    $q->whereHas("attributevalues", function ($q2) {
-                        $q2->where("id", 48);
-                    });
-                })->get()->isNotEmpty()) array_push($hasPishtaz, $user->id);
+                if ($user->orders()
+                         ->whereIn("id", $orders->pluck("id")
+                                                ->toArray())
+                         ->whereHas("orderproducts", function ($q) {
+                             $q->whereHas("attributevalues", function ($q2) {
+                                 $q2->where("id", 48);
+                             });
+                         })
+                         ->get()
+                         ->isNotEmpty())
+                    array_push($hasPishtaz, $user->id);
             }
 
         /**
@@ -425,7 +459,8 @@ class UserController extends Controller
         $sortBy = Input::get("sortBy");
         $sortType = Input::get("sortType");
         if (strlen($sortBy) > 0 && strlen($sortType) > 0) {
-            if (strcmp($sortType, "desc") == 0) $users = $users->sortByDesc($sortBy);
+            if (strcmp($sortType, "desc") == 0)
+                $users = $users->sortByDesc($sortBy);
             else $users = $users->sortBy($sortBy);
         }
 
@@ -441,8 +476,10 @@ class UserController extends Controller
             $uniqueUsers = $users->groupBy("nationalCode");
             $users = collect();
             foreach ($uniqueUsers as $user) {
-                if ($user->whereNotNull("mobile_verified_at")->isNotEmpty()) {
-                    $users->push($user->whereNotNUll("mobile_verified_at")->first());
+                if ($user->whereNotNull("mobile_verified_at")
+                         ->isNotEmpty()) {
+                    $users->push($user->whereNotNUll("mobile_verified_at")
+                                      ->first());
                 } else {
                     $users->push($user->first());
                 }
@@ -451,18 +488,28 @@ class UserController extends Controller
             $index = "user.index2";
             $usersId = $users->pluck("id");
             $usersIdCount = $usersId->count();
-            $numberOfFatherPhones = Phone::whereIn('contact_id', Contact::whereIn('user_id', $usersId)->where('relative_id', 1)->pluck('id'))->where("phonetype_id", 1)->count();
-            $numberOfMotherPhones = Phone::whereIn('contact_id', Contact::whereIn('user_id', $usersId)->where('relative_id', 2)->pluck('id'))->where("phonetype_id", 1)->count();
-        } elseif (strcmp($previousPath, action("HomeController@admin")) == 0) {
+            $numberOfFatherPhones = Phone::whereIn('contact_id', Contact::whereIn('user_id', $usersId)
+                                                                        ->where('relative_id', 1)
+                                                                        ->pluck('id'))
+                                         ->where("phonetype_id", 1)
+                                         ->count();
+            $numberOfMotherPhones = Phone::whereIn('contact_id', Contact::whereIn('user_id', $usersId)
+                                                                        ->where('relative_id', 2)
+                                                                        ->pluck('id'))
+                                         ->where("phonetype_id", 1)
+                                         ->count();
+        } else if (strcmp($previousPath, action("HomeController@admin")) == 0) {
             $index = "user.index";
-        } elseif (strcmp($previousPath, action("HomeController@adminReport")) == 0) {
+        } else if (strcmp($previousPath, action("HomeController@adminReport")) == 0) {
             $minCost = Input::get("minCost");
             if (isset($minCost[0])) {
                 foreach ($users as $key => $user) {
                     $userOrders = $user->orders;
                     $transactionSum = 0;
                     foreach ($userOrders as $order) {
-                        $successfullTransactions = $order->successfulTransactions()->where("created_at", ">", "2017-09-22")->get();
+                        $successfullTransactions = $order->successfulTransactions()
+                                                         ->where("created_at", ">", "2017-09-22")
+                                                         ->get();
                         foreach ($successfullTransactions as $transaction) {
                             $transactionSum += $transaction->cost;
                         }
@@ -475,7 +522,8 @@ class UserController extends Controller
 
             if (Input::has("lotteries")) {
                 $lotteryId = Input::get("lotteries");
-                $lotteries = Lottery::where("id", $lotteryId)->get();
+                $lotteries = Lottery::where("id", $lotteryId)
+                                    ->get();
             }
 
             if (Input::has("reportType"))
@@ -484,13 +532,17 @@ class UserController extends Controller
             if (Input::has("seePaidCost"))
                 $seePaidCost = true;
         }
-        $result = array(
-            'index' => View::make($index, compact('users', 'products', 'paymentStatusesId', 'reportType', 'hasPishtaz', 'orders', 'seePaidCost', 'lotteries'))->render()
-        , 'products' => (isset($products)) ? $products : [],
-            'lotteries' => (isset($lotteries)) ? $lotteries : [],
-            "allUsers" => $usersId, "allUsersNumber" => $usersIdCount,
-            "numberOfFatherPhones" => $numberOfFatherPhones, "numberOfMotherPhones" => $numberOfMotherPhones
-        );
+        $result = [
+            'index'                => View::make($index, compact('users', 'products', 'paymentStatusesId', 'reportType', 'hasPishtaz', 'orders', 'seePaidCost', 'lotteries'))
+                                          ->render()
+            ,
+            'products'             => (isset($products)) ? $products : [],
+            'lotteries'            => (isset($lotteries)) ? $lotteries : [],
+            "allUsers"             => $usersId,
+            "allUsersNumber"       => $usersIdCount,
+            "numberOfFatherPhones" => $numberOfFatherPhones,
+            "numberOfMotherPhones" => $numberOfMotherPhones,
+        ];
 
         return response(json_encode($result, JSON_UNESCAPED_UNICODE), 200)->header('Content-Type', 'application/json');
     }
@@ -509,14 +561,19 @@ class UserController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \app\Http\Requests\InsertUserRequest $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(InsertUserRequest $request)
     {
         try {
-            $softDeletedUsers = User::onlyTrashed()->where("mobile", $request->get("mobile"))->where("nationalCode", $request->get("nationalCode"))->get();
+            $softDeletedUsers = User::onlyTrashed()
+                                    ->where("mobile", $request->get("mobile"))
+                                    ->where("nationalCode", $request->get("nationalCode"))
+                                    ->get();
             if (!$softDeletedUsers->isEmpty()) {
-                $softDeletedUsers->first()->restore();
+                $softDeletedUsers->first()
+                                 ->restore();
                 return $this->response->setStatusCode(200);
             }
 
@@ -527,7 +584,8 @@ class UserController extends Controller
                 $file = $request->file('photo');
                 $extension = $file->getClientOriginalExtension();
                 $fileName = basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
-                if (Storage::disk(Config::get('constants.DISK1'))->put($fileName, File::get($file))) {
+                if (Storage::disk(Config::get('constants.DISK1'))
+                           ->put($fileName, File::get($file))) {
                     $user->photo = $fileName;
                 }
             } else {
@@ -540,22 +598,25 @@ class UserController extends Controller
                 $user->gender_id = null;
 
             if ($request->has("mobileNumberVerification"))
-                $user->mobile_verified_at = Carbon::now()->setTimezone("Asia/Tehran");
+                $user->mobile_verified_at = Carbon::now()
+                                                  ->setTimezone("Asia/Tehran");
             else
                 $user->mobile_verified_at = null;
 
             $user->password = bcrypt($request->get("password"));
 
             if ($user->save()) {
-                if (Auth::user()->can(Config::get('constants.INSET_USER_ROLE'))) {
+                if (Auth::user()
+                        ->can(Config::get('constants.INSET_USER_ROLE'))) {
 
-                    $newRoleIds = array();
+                    $newRoleIds = [];
                     if ($request->has("roles")) {
                         $newRoleIds = $request->get("roles");
                         foreach ($newRoleIds as $key => $newRoleId) {
                             $newRole = Role::FindOrFail($newRoleId);
                             if ($newRole->isDefault) {
-                                if (!Auth::user()->can(Config::get('constants.GIVE_SYSTEM_ROLE')))
+                                if (!Auth::user()
+                                         ->can(Config::get('constants.GIVE_SYSTEM_ROLE')))
                                     unset($newRoleIds[$key]);
                             }
                         }
@@ -580,19 +641,20 @@ class UserController extends Controller
             return $this->response
                 ->setStatusCode($responseStatusCode)
                 ->setContent([
-                    "message" => $responseContent,
-                    "userId" => (isset($storedUserId) ? $storedUserId : 0)
-                ]);
-        } catch (\Exception    $e) {
+                                 "message" => $responseContent,
+                                 "userId"  => (isset($storedUserId) ? $storedUserId : 0),
+                             ]);
+        }
+        catch (\Exception    $e) {
             $message = "unexpected error";
             return $this->response
                 ->setStatusCode(500)
                 ->setContent([
-                    "message" => $message,
-                    "error" => $e->getMessage(),
-                    "line" => $e->getLine(),
-                    "file" => $e->getFile()
-                ]);
+                                 "message" => $message,
+                                 "error"   => $e->getMessage(),
+                                 "line"    => $e->getLine(),
+                                 "file"    => $e->getFile(),
+                             ]);
         }
 
     }
@@ -601,47 +663,68 @@ class UserController extends Controller
      * Display the specified resource.
      *
      * @param  User $user
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($user)
     {
         if ($this->canSeeProfile($user)) {
-            if (session()->has("tab")) session()->flash("tabPane", session()->pull("tab"));
-            if (session()->has("belongsTo")) session()->flash("belongsTo", session()->pull("belongsTo"));
-            if (session()->has("success")) session()->flash("success", session()->pull("success"));
-            if (session()->has("error")) session()->flash("error", session()->pull("error"));
-            $genders = Gender::pluck('name', 'id')->prepend("نامشخص");
-            $majors = Major::pluck('name', 'id')->prepend("نامشخص");
+            if (session()->has("tab"))
+                session()->flash("tabPane", session()->pull("tab"));
+            if (session()->has("belongsTo"))
+                session()->flash("belongsTo", session()->pull("belongsTo"));
+            if (session()->has("success"))
+                session()->flash("success", session()->pull("success"));
+            if (session()->has("error"))
+                session()->flash("error", session()->pull("error"));
+            $genders = Gender::pluck('name', 'id')
+                             ->prepend("نامشخص");
+            $majors = Major::pluck('name', 'id')
+                           ->prepend("نامشخص");
             $sideBarMode = "closed";
 
             /** LOTTERY POINTS*/
             $now = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
-                ->timezone('Asia/Tehran');
+                         ->timezone('Asia/Tehran');
             $startTime = Carbon::create(2018, 06, 11, 07, 00, 00, 'Asia/Tehran');
             $endTime = Carbon::create(2018, 06, 15, 12, 00, 00, 'Asia/Tehran');
             $flag = ($now->between($startTime, $endTime));
-//	        $flag = true;
+            //	        $flag = true;
             $hamayeshHozouriProductId = 223;
             $hasHamayeshHozouriArabi = $user->orders()
-                ->whereHas("orderproducts", function ($q) use ($hamayeshHozouriProductId) {
-                    $q->where("product_id", $hamayeshHozouriProductId);
-                })
-                ->where("orderstatus_id", config("constants.ORDER_STATUS_CLOSED"))
-                ->where("paymentstatus_id", config("constants.PAYMENT_STATUS_PAID"))
-                ->get()
-                ->isNotEmpty();
+                                            ->whereHas("orderproducts", function ($q) use ($hamayeshHozouriProductId) {
+                                                $q->where("product_id", $hamayeshHozouriProductId);
+                                            })
+                                            ->where("orderstatus_id", config("constants.ORDER_STATUS_CLOSED"))
+                                            ->where("paymentstatus_id", config("constants.PAYMENT_STATUS_PAID"))
+                                            ->get()
+                                            ->isNotEmpty();
             if ($flag) {
 
                 if (!$hasHamayeshHozouriArabi) {
-                    $hamayeshTalaiProductId = [210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222];
+                    $hamayeshTalaiProductId = [
+                        210,
+                        211,
+                        212,
+                        213,
+                        214,
+                        215,
+                        216,
+                        217,
+                        218,
+                        219,
+                        220,
+                        221,
+                        222,
+                    ];
                     $hasHamayeshTalaiArabi = $user->orders()
-                        ->whereHas("orderproducts", function ($q) use ($hamayeshTalaiProductId) {
-                            $q->whereIn("product_id", $hamayeshTalaiProductId);
-                        })
-                        ->where("orderstatus_id", config("constants.ORDER_STATUS_CLOSED"))
-                        ->where("paymentstatus_id", config("constants.PAYMENT_STATUS_PAID"))
-                        ->get()
-                        ->isNotEmpty();
+                                                  ->whereHas("orderproducts", function ($q) use ($hamayeshTalaiProductId) {
+                                                      $q->whereIn("product_id", $hamayeshTalaiProductId);
+                                                  })
+                                                  ->where("orderstatus_id", config("constants.ORDER_STATUS_CLOSED"))
+                                                  ->where("paymentstatus_id", config("constants.PAYMENT_STATUS_PAID"))
+                                                  ->get()
+                                                  ->isNotEmpty();
                 }
             }
 
@@ -649,7 +732,8 @@ class UserController extends Controller
             $endTime2 = Carbon::create(2018, 06, 15, 23, 59, 30, 'Asia/Tehran');
             $flag2 = ($now->between($startTime2, $endTime2));
             if ($flag2) {
-                $bon = Bon::where("name", Config::get("constants.BON2"))->first();
+                $bon = Bon::where("name", Config::get("constants.BON2"))
+                          ->first();
                 $userPoints = 0;
                 if (isset($bon)) {
                     $userPoints = $user->userHasBon($bon->name);
@@ -657,13 +741,13 @@ class UserController extends Controller
                 }
                 if ($userPoints <= 0) {
                     $lottery = Lottery::where("name", Config::get("constants.LOTTERY_NAME"))
-                        ->get()
-                        ->first();
+                                      ->get()
+                                      ->first();
                     if (isset($lottery)) {
                         $userLottery = $user->lotteries()
-                            ->where("lottery_id", $lottery->id)
-                            ->get()
-                            ->first();
+                                            ->where("lottery_id", $lottery->id)
+                                            ->get()
+                                            ->first();
                         if (isset($userLottery)) {
                             $lotteryName = $lottery->displayName;
                             $lotteryMessage = "شما در قرعه کشی " . $lotteryName . " شرکت داده شدید و متاسفانه برنده نشدید.";
@@ -676,8 +760,8 @@ class UserController extends Controller
                                 }
 
                                 $prizes = json_decode($userLottery
-                                    ->pivot
-                                    ->prizes
+                                                          ->pivot
+                                                          ->prizes
                                 )->items;
                                 $prizeCollection = collect();
                                 foreach ($prizes as $prize) {
@@ -699,31 +783,36 @@ class UserController extends Controller
                 }
             }
 
-            $hasCompleteProfile = $user->orders()->whereHas("orderproducts", function ($q) {
-                $q->whereIn("product_id", Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT"))->orwhereIn("product_id", Config::get("constants.ORDOO_HOZOORI_NOROOZ_97_PRODUCT"));
-            })->whereIn("orderstatus_id", [Config::get("constants.ORDER_STATUS_CLOSED")])->get()->isNotEmpty();
+            $hasCompleteProfile = $user->orders()
+                                       ->whereHas("orderproducts", function ($q) {
+                                           $q->whereIn("product_id", Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT"))
+                                             ->orwhereIn("product_id", Config::get("constants.ORDOO_HOZOORI_NOROOZ_97_PRODUCT"));
+                                       })
+                                       ->whereIn("orderstatus_id", [Config::get("constants.ORDER_STATUS_CLOSED")])
+                                       ->get()
+                                       ->isNotEmpty();
             $userCompletion = (int)$user->completion();
 
             $mobileVerificationCode = $user->getMobileVerificationCode();
 
             return view("user.profile.profile", compact("genders",
-                "majors",
-                "sideBarMode",
-                "user",
-                "userPoints",
-                "exchangeAmount",
-                "userLottery",
-                "prizeCollection",
-                "hasCompleteProfile",
-                "userCompletion",
-                "lotteryRank",
-                "lottery",
-                "lotteryMessage",
-                "hasHamayeshTalaiArabi",
-                "hasHamayeshHozouriArabi",
-                "lotteryName",
-                "hasRequestedVerificationCode",
-                "mobileVerificationCode"
+                                                        "majors",
+                                                        "sideBarMode",
+                                                        "user",
+                                                        "userPoints",
+                                                        "exchangeAmount",
+                                                        "userLottery",
+                                                        "prizeCollection",
+                                                        "hasCompleteProfile",
+                                                        "userCompletion",
+                                                        "lotteryRank",
+                                                        "lottery",
+                                                        "lotteryMessage",
+                                                        "hasHamayeshTalaiArabi",
+                                                        "hasHamayeshHozouriArabi",
+                                                        "lotteryName",
+                                                        "hasRequestedVerificationCode",
+                                                        "mobileVerificationCode"
             ));
         } else {
             abort(403);
@@ -731,135 +820,60 @@ class UserController extends Controller
     }
 
     /**
+     * Checks whether user can see profile
+     *
+     * @param $user
+     *
+     * @return bool
+     */
+    private function canSeeProfile($user): bool
+    {
+        if (Auth::check())
+            return (
+                ($user->id === Auth::id()) ||
+                (Auth::user()
+                     ->hasRole(config('constants.ROLE_ADMIN'))) ||
+                ($user->hasRole(config('constants.ROLE_TECH')))
+            );
+        else
+            return false;
+    }
+
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  User $user
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($user)
     {
-        $majors = Major::pluck('name', 'id')->toArray();
+        $majors = Major::pluck('name', 'id')
+                       ->toArray();
         $userStatuses = Userstatus::pluck('displayName', 'id');
-        $roles = Role::pluck('display_name', 'id')->toArray();
-        $userRoles = $user->roles()->pluck('id')->toArray();
-        $genders = Gender::pluck('name', 'id')->toArray();
+        $roles = Role::pluck('display_name', 'id')
+                     ->toArray();
+        $userRoles = $user->roles()
+                          ->pluck('id')
+                          ->toArray();
+        $genders = Gender::pluck('name', 'id')
+                         ->toArray();
 
         return view("user.edit", compact("user", "majors", "userStatuses", "roles", "userRoles", "genders"));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \app\Http\Requests\EditUserRequest $request
-     * @param  User $user
-     * @return \Illuminate\Http\Response
-     */
-    public function update(EditUserRequest $request, $user)
-    {
-        $photo = $user->photo;
-        $password = $user->password;
-        $user->fill($request->all());
-
-        if ($request->has('techCode'))
-            $user->techCode = $request->get('techCode');
-
-        if (strlen($user->major_id) == 0) $user->major_id = null;
-        if (strlen($user->gender_id) == 0) $user->gender_id = null;
-        if (strlen($user->grade_id) == 0) $user->grade_id = null;
-        if (strlen($user->bloodtype_id) == 0) $user->bloodtype_id = null;
-        if (strlen(preg_replace('/\s+/', '', $user->email)) == 0) $user->email = null;
-        if (strlen(preg_replace('/\s+/', '', $user->phone)) == 0) $user->phone = null;
-        if (strlen(preg_replace('/\s+/', '', $user->city)) == 0) $user->city = null;
-        if (strlen(preg_replace('/\s+/', '', $user->province)) == 0) $user->province = null;
-        if (strlen(preg_replace('/\s+/', '', $user->address)) == 0) $user->address = null;
-        if (strlen(preg_replace('/\s+/', '', $user->postalCode)) == 0) $user->postalCode = null;
-        if (strlen(preg_replace('/\s+/', '', $user->school)) == 0) $user->school = null;
-        if (strlen(preg_replace('/\s+/', '', $user->allergy)) == 0) $user->allergy = null;
-        if (strlen(preg_replace('/\s+/', '', $user->medicalCondition)) == 0) $user->medicalCondition = null;
-        if (strlen(preg_replace('/\s+/', '', $user->diet)) == 0) $user->diet = null;
-
-        if (!$request->has("password") || strlen($request->get('password')) == 0) {
-            $user->password = $password; //Pasword should not be updated
-        } else {
-            $user->password = bcrypt($request->get("password"));
-        }
-
-        $file = $this->requestHasFile($request, "photo");
-        if ($file !== false) {
-            $extension = $file->getClientOriginalExtension();
-            $fileName = basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
-            if (Storage::disk(Config::get('constants.DISK1'))->put($fileName, File::get($file))) {
-                if (strcmp($photo, Config::get('constants.PROFILE_DEFAULT_IMAGE')) != 0) Storage::disk(Config::get('constants.DISK1'))->delete($photo);
-                $user->photo = $fileName;
-            }
-
-        }
-
-        if ($request->has("mobileNumberVerification"))
-            $user->mobile_verified_at = Carbon::now()->setTimezone("Asia/Tehran");
-        else
-            $user->mobile_verified_at = null;
-
-        if ($request->has("lockProfile"))
-            $user->lockProfile = 1;
-        else
-            $user->lockProfile = 0;
-
-        if ($user->update()) {
-            if (Auth::check() && Auth::User()->can(Config::get('constants.INSET_USER_ROLE'))) {
-                $newRoleIds = array();
-                $oldRoles = $user->roles;
-                if ($request->has("roles")) {
-                    $newRoleIds = $request->get("roles");
-                    foreach ($newRoleIds as $key => $newRoleId) {
-                        $newRole = Role::FindOrFail($newRoleId);
-                        if ($newRole->isDefault) {
-                            if (!Auth::user()->can(Config::get('constants.GIVE_SYSTEM_ROLE')))
-                                unset($newRoleIds[$key]);
-                        }
-
-                    }
-
-                    foreach ($oldRoles as $oldRole) {
-                        if ($oldRole->isDefault)
-                            if (!in_array($oldRole->id, $newRoleIds)) array_push($newRoleIds, $oldRole->id);
-                    }
-                    $user->roles()->sync($newRoleIds);
-                }
-
-            }
-            if ($request->has("fromAPI")) {
-                $message = "اطلاعات با موفقیت اصلاح شد";
-                $status = 200;
-            } else {
-                session()->put("success", "اطلاعات کاربر با موفقیت اصلاح شد");
-            }
-        } else {
-            if ($request->has("fromAPI")) {
-                $message = "خطای پایگاه داده";
-                $status = 503;
-            } else {
-                session()->put("error", "خطای پایگاه داده.");
-            }
-        }
-
-        if ($request->has("fromAPI"))
-            return $this->response->setStatusCode($status)->setContent(["message" => $message]);
-        else
-            return redirect()->back();
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  User $user
+     *
      * @return \Illuminate\Http\Response
      * @throws \Exception
      */
     public function destroy($user)
     {
-//        if ($user->delete()) session()->put('success', 'کاربر با موفقیت اصلاح شد');
-//        else session()->put('error', 'خطای پایگاه داده');
+        //        if ($user->delete()) session()->put('success', 'کاربر با موفقیت اصلاح شد');
+        //        else session()->put('error', 'خطای پایگاه داده');
         $user->delete();
         return redirect()->back();
     }
@@ -868,7 +882,8 @@ class UserController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \app\Http\Requests\EditProfileInfoRequest $request
-     * @param  User $user
+     * @param  User                                      $user
+     *
      * @return \Illuminate\Http\Response
      */
     public function updateProfile(EditProfileInfoRequest $request)
@@ -882,10 +897,13 @@ class UserController extends Controller
             $this->updatePhoto($photoRequest);
         }
 
-        if (strcmp($user->gender_id, "0") == 0 || strlen($user->gender_id) == 0) $user->gender_id = null;
-        if (strcmp($user->major_id, "0") == 0 || strlen($user->major_id) == 0) $user->major_id = null;
+        if (strcmp($user->gender_id, "0") == 0 || strlen($user->gender_id) == 0)
+            $user->gender_id = null;
+        if (strcmp($user->major_id, "0") == 0 || strlen($user->major_id) == 0)
+            $user->major_id = null;
 
-        if ($user->completion("lockProfile") == 100) $user->lockProfile = 1;
+        if ($user->completion("lockProfile") == 100)
+            $user->lockProfile = 1;
         if ($user->update()) {
             session()->put("belongsTo", "moreInfo");
             session()->put("success", "اطلاعات شما با موفقیت اصلاح شد.");
@@ -894,13 +912,16 @@ class UserController extends Controller
             session()->put("error", "خطای پایگاه داده.");
         }
         session()->put("tab", "tab_1_1");
-        return redirect()->back()->withInput();
+        return redirect()
+            ->back()
+            ->withInput();
     }
 
     /**
      * Update the specified resource's photo in storage..
      *
      * @param  \app\Http\Requests\EditProfilePhotoRequest $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function updatePhoto(EditProfilePhotoRequest $request)
@@ -910,15 +931,23 @@ class UserController extends Controller
         $extension = $file->getClientOriginalExtension();
         $fileName = basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
 
-        if (Storage::disk(Config::get('constants.DISK1'))->put($fileName, File::get($file))) {
-            if (strcmp($user->photo, Config::get('constants.PROFILE_DEFAULT_IMAGE')) != 0) Storage::disk(Config::get('constants.DISK1'))->delete($user->photo);
+        if (Storage::disk(Config::get('constants.DISK1'))
+                   ->put($fileName, File::get($file))) {
+            if (strcmp($user->photo, Config::get('constants.PROFILE_DEFAULT_IMAGE')) != 0)
+                Storage::disk(Config::get('constants.DISK1'))
+                       ->delete($user->photo);
             $user->photo = $fileName;
         }
         if ($user->update()) {
             if ($request->ajax()) {
-                $newPhotoSrc = route('image', ['category' => '1', 'w' => '150', 'h' => '150', 'filename' => $fileName]);
+                $newPhotoSrc = route('image', [
+                    'category' => '1',
+                    'w'        => '150',
+                    'h'        => '150',
+                    'filename' => $fileName,
+                ]);
                 return $this->response->setStatusCode(200)
-                    ->setContent(["newPhoto" => $newPhotoSrc]);
+                                      ->setContent(["newPhoto" => $newPhotoSrc]);
             } else {
                 session()->put("belongsTo", "photo");
                 session()->put("success", "تغییر عکس با موفقیت انجام شد.");
@@ -939,7 +968,8 @@ class UserController extends Controller
      * Update the specified resource's password in storage..
      *
      * @param  \app\Http\Requests\EditProfilePasswordRequest $request
-     * @param User $user
+     * @param User                                           $user
+     *
      * @return \Illuminate\Http\Response
      */
     public function updatePassword(EditProfilePasswordRequest $request)
@@ -952,8 +982,9 @@ class UserController extends Controller
                 session()->put("error", "رمز عبور جدید و قدیم یکسان می باشند!");
             } else {
                 if ($user->fill([
-                    'password' => bcrypt($request->password)
-                ])->update()) {
+                                    'password' => bcrypt($request->password),
+                                ])
+                         ->update()) {
                     session()->put("belongsTo", "password");
                     session()->put("success", "رمز عبور با موفقیت تغییر یافت.");
                 } else {
@@ -974,6 +1005,7 @@ class UserController extends Controller
      * Show authenticated user belongings
      *
      * @param
+     *
      * @return \Illuminate\Http\Response
      */
     public function showBelongings()
@@ -991,12 +1023,14 @@ class UserController extends Controller
      */
     public function userOrders()
     {
-//        if(Auth::user()->completion("fullAddress")!= 100) {
-//            session()->put("userOrders",true);
-//            return redirect(action("UserController@showProfile"));
-//        }
+        //        if(Auth::user()->completion("fullAddress")!= 100) {
+        //            session()->put("userOrders",true);
+        //            return redirect(action("UserController@showProfile"));
+        //        }
 
-        $debitCard = Bankaccount::all()->where("user_id", 2)->first();
+        $debitCard = Bankaccount::all()
+                                ->where("user_id", 2)
+                                ->first();
         $excludedOrderStatuses = [
             Config::get("constants.ORDER_STATUS_OPEN"),
             Config::get("constants.ORDER_STATUS_OPEN_BY_ADMIN"),
@@ -1009,26 +1043,26 @@ class UserController extends Controller
             ->sortByDesc("completed_at");
 
         $transactions = $user->orderTransactions()
-            ->whereDoesntHave("parents")
-            ->where(function ($q) {
-                $q->where("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL"))
-                    ->orWhere("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_ARCHIVED_SUCCESSFUL"))
-                    ->orWhere("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_PENDING"));
-            })
-            ->orderByDesc("completed_at")
-            ->get()
-            ->groupBy("order_id");
+                             ->whereDoesntHave("parents")
+                             ->where(function ($q) {
+                                 $q->where("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL"))
+                                   ->orWhere("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_ARCHIVED_SUCCESSFUL"))
+                                   ->orWhere("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_PENDING"));
+                             })
+                             ->orderByDesc("completed_at")
+                             ->get()
+                             ->groupBy("order_id");
 
         $instalments = Transaction::whereIn("order_id", $orders->pluck("id"))
-            ->whereDoesntHave("parents")
-            ->where("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_UNPAID"))
-            ->orderBy("deadline_at")
-            ->get();
+                                  ->whereDoesntHave("parents")
+                                  ->where("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_UNPAID"))
+                                  ->orderBy("deadline_at")
+                                  ->get();
 
         $gateways = Transactiongateway::all()
-            ->where("enable", 1)
-            ->sortBy("order")
-            ->pluck("displayName", "name");
+                                      ->where("enable", 1)
+                                      ->sortBy("order")
+                                      ->pluck("displayName", "name");
 
         $orderCoupons = collect();
         foreach ($orders as $order) {
@@ -1036,7 +1070,7 @@ class UserController extends Controller
             if ($orderCoupon !== false) {
                 if ($orderCoupon["type"] == Config::get("constants.DISCOUNT_TYPE_PERCENTAGE")) {
                     $orderCoupons->put($order->id, ["caption" => "کپن " . $order->coupon->name . " با " . $orderCoupon["discount"] . " % تخفیف"]);
-                } elseif ($orderCoupon["type"] == Config::get("constants.DISCOUNT_TYPE_COST")) {
+                } else if ($orderCoupon["type"] == Config::get("constants.DISCOUNT_TYPE_COST")) {
                     $orderCoupons->put($order->id, ["caption" => "کپن " . $order->coupon->name . " با " . number_format($orderCoupon["discount"]) . " تومان تخفیف"]);
                 }
             }
@@ -1072,6 +1106,7 @@ class UserController extends Controller
      * Send system generated password to the user that does not belong to anyone
      *
      * @param \App\Http\Requests\PasswordRecoveryRequest $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function sendGeneratedPassword(PasswordRecoveryRequest $request)
@@ -1079,7 +1114,8 @@ class UserController extends Controller
         //uncomment and put permission to extend the code
         $mobile = $request->get("mobileNumber");
         if (isset($mobile)) {
-            $users = User::all()->where("mobile", $mobile);
+            $users = User::all()
+                         ->where("mobile", $mobile);
             if ($users->isEmpty()) {
                 session()->put("error", "شماره موبایل وارد شده اشتباه می باشد!");
                 return redirect()->back();
@@ -1087,31 +1123,36 @@ class UserController extends Controller
         }
 
         if (!isset($user)) {
-            if (Auth::check()) $user = Auth::user();
+            if (Auth::check())
+                $user = Auth::user();
             else return redirect(action("HomeController@error403"));
         }
-//        $user = Auth::user();
+        //        $user = Auth::user();
         $now = Carbon::now();
         if (isset($user->passwordRegenerated_at) && $now->diffInMinutes(Carbon::parse($user->passwordRegenerated_at)) < Config::get('constants.GENERATE_PASSWORD_WAIT_TIME')) {
-            if ($now->diffInMinutes(Carbon::parse($user->passwordRegenerated_at)) > 0) $timeInterval = $now->diffInMinutes(Carbon::parse($user->passwordRegenerated_at)) . " دقیقه ";
+            if ($now->diffInMinutes(Carbon::parse($user->passwordRegenerated_at)) > 0)
+                $timeInterval = $now->diffInMinutes(Carbon::parse($user->passwordRegenerated_at)) . " دقیقه ";
             else $timeInterval = $now->diffInSeconds(Carbon::parse($user->passwordRegenerated_at)) . " ثانیه ";
             session()->put("warning", "شما پس از گذشت ۵ دقیقه از آخرین درخواست خود می توانید دوباره درخواست ارسال رمز عبور نمایید .از زمان ارسال آخرین پیامک تایید برای شما " . $timeInterval . "می گذرد.");
             session()->put("belongsTo", "password");
             session()->put("tab", "tab_1_3");
             return redirect()->back();
         }
-//        $password = $this->generateRandomPassword(4);
-        $password = ["rawPassword" => $user->nationalCode, "hashPassword" => bcrypt($user->nationalCode)];
+        //        $password = $this->generateRandomPassword(4);
+        $password = [
+            "rawPassword"  => $user->nationalCode,
+            "hashPassword" => bcrypt($user->nationalCode),
+        ];
         $user->password = $password["hashPassword"];
 
         /**
          * Sending auto generated password through SMS
          */
         $smsInfo = [];
-        $smsInfo["to"] = array(ltrim($user->mobile, '0'));
+        $smsInfo["to"] = [ltrim($user->mobile, '0')];
         $smsInfo["message"] = "کاربر گرامی رمز عبور شما تغییر کرد.\n رمزعبور جدید " . $password["rawPassword"] . "\n آلاء";
         $response = $this->medianaSendSMS($smsInfo);
-//          $response = array("error"=>false , "message"=>"ارسال موفقیت آمیز بود");
+        //          $response = array("error"=>false , "message"=>"ارسال موفقیت آمیز بود");
         if (!$response["error"]) {
             $user->passwordRegenerated_at = Carbon::now();
             session()->put("belongsTo", "password");
@@ -1133,16 +1174,18 @@ class UserController extends Controller
      */
     public function completeRegister()
     {
-        if (Auth::user()->completion("afterLoginForm") == 100) {
+        if (Auth::user()
+                ->completion("afterLoginForm") == 100) {
             session()->pull("success");
             session()->pull("tab");
             session()->pull("belongsTo");
-            if (session()->has("redirectTo")) return redirect(session()->pull("redirectTo"));
+            if (session()->has("redirectTo"))
+                return redirect(session()->pull("redirectTo"));
             else return redirect(action("HomeController@index"));
         }
         $previousPath = url()->previous();
         if (strcmp($previousPath, route('login')) == 0) {
-//            ToDo: config , obligating this form to the use or not
+            //            ToDo: config , obligating this form to the use or not
             if (true)
                 $formByPass = false;
             else
@@ -1156,68 +1199,11 @@ class UserController extends Controller
             if (strpos($formField->name, "_id")) {
                 $tableName = $formField->name;
                 $tableName = str_replace("_id", "s", $tableName);
-                $tables[$formField->name] = DB::table($tableName)->pluck('name', 'id');
+                $tables[$formField->name] = DB::table($tableName)
+                                              ->pluck('name', 'id');
             }
         }
         return view("user.completeRegister", compact("formFields", "note", "formByPass", "tables"));
-    }
-
-    private function addVideoPamphlet($productArray, &$productsWithPamphlet, &$productsWithVideo, Collection &$pamphlets, Collection &$videos)
-    {
-
-
-        if (!empty($productArray)) {
-            $videoArray = [];
-            $pamphletArray = [];
-            foreach ($productArray as $product) {
-
-                if (!in_array($product->id, $pamphletArray) && !in_array($product->id, $videoArray)) {
-                    array_push($productsWithPamphlet, $product->id);
-                    array_push($productsWithVideo, $product->id);
-
-                    if (isset($pamphlets[$product->id]))
-                        $pamphletArray = $pamphlets[$product->id];
-                    else
-                        $pamphletArray = [];
-                    if (isset($videos[$product->id]))
-                        $videoArray = $videos[$product->id];
-                    else
-                        $videoArray = [];
-
-                    foreach ($product->validProductfiles as $productfile) {
-                        if ($productfile->productfiletype_id == Config::get("constants.PRODUCT_FILE_TYPE_PAMPHLET")) {
-                            array_push($pamphletArray, [
-                                "file" => $productfile->file,
-                                "name" => $productfile->name,
-                                "product_id" => $productfile->product_id
-                            ]);
-                        } else {
-
-                            array_push($videoArray, [
-                                "file" => $productfile->file,
-                                "name" => $productfile->name,
-                                "product_id" => $productfile->product_id
-                            ]);
-                        }
-
-                    }
-
-                    if (!empty($pamphletArray))
-                        $pamphlets->put($product->id, [
-                            "productName" => $product->name,
-                            "pamphlets" => $pamphletArray
-                        ]);
-
-                    if (!empty($videoArray))
-                        $videos->put($product->id, [
-                            "productName" => $product->name,
-                            "videos" => $videoArray
-                        ]);
-                }
-
-                $this->addVideoPamphlet($product->complimentaryproducts, $productsWithPamphlet, $productsWithVideo, $pamphlets, $videos);
-            }
-        }
     }
 
     /**
@@ -1233,8 +1219,12 @@ class UserController extends Controller
         $products = $user->products();
 
 
-        $key = "user:userProductFiles:" . $user->cacheKey() . ":P=" . md5($products->pluck("id")->implode('-'));
-        [$videos, $pamphlets] = Cache::remember($key, Config::get("constants.CACHE_60"), function () use ($products) {
+        $key = "user:userProductFiles:" . $user->cacheKey() . ":P=" . md5($products->pluck("id")
+                                                                                   ->implode('-'));
+        [
+            $videos,
+            $pamphlets,
+        ] = Cache::remember($key, Config::get("constants.CACHE_60"), function () use ($products) {
             $products->load('complimentaryproducts');
             $products->load('children');
             $products->load('validProductfiles');
@@ -1265,50 +1255,111 @@ class UserController extends Controller
                     foreach ($product->validProductfiles as $productfile) {
                         if ($productfile->productfiletype_id == Config::get("constants.PRODUCT_FILE_TYPE_PAMPHLET"))
                             array_push($pamphletArray, [
-                                "file" => $productfile->file,
-                                "name" => $productfile->name,
-                                "product_id" => $productfile->product_id
+                                "file"       => $productfile->file,
+                                "name"       => $productfile->name,
+                                "product_id" => $productfile->product_id,
                             ]);
                         else
                             array_push($videoArray, [
-                                "file" => $productfile->file,
-                                "name" => $productfile->name,
-                                "product_id" => $productfile->product_id
+                                "file"       => $productfile->file,
+                                "name"       => $productfile->name,
+                                "product_id" => $productfile->product_id,
                             ]);
 
                     }
                     if (!empty($pamphletArray))
                         $pamphlets->put($product->id,
-                            [
-                                "productName" => $product->name,
-                                "pamphlets" => $pamphletArray
-                            ]);
+                                        [
+                                            "productName" => $product->name,
+                                            "pamphlets"   => $pamphletArray,
+                                        ]);
 
                     if (!empty($videoArray))
                         $videos->put($product->id, [
                             "productName" => $product->name,
-                            "videos" => $videoArray
+                            "videos"      => $videoArray,
                         ]);
                     $c = $product->complimentaryproducts;
                     $this->addVideoPamphlet($c, $productsWithPamphlet, $productsWithVideo, $pamphlets, $videos);
                 }
             }
-            return [$videos, $pamphlets];
+            return [
+                $videos,
+                $pamphlets,
+            ];
         });
 
         $isEmptyProducts = $products->isEmpty();
         $userCompletion = (int)$user->completion();
 
         return view("user.assetsList",
-            compact('section',
-                'sideBarMode',
-                'isEmptyProducts',
-                'pamphlets',
-                'videos',
-                'user',
-                'userCompletion'
-            )
+                    compact('section',
+                            'sideBarMode',
+                            'isEmptyProducts',
+                            'pamphlets',
+                            'videos',
+                            'user',
+                            'userCompletion'
+                    )
         );
+    }
+
+    private function addVideoPamphlet($productArray, &$productsWithPamphlet, &$productsWithVideo, Collection &$pamphlets, Collection &$videos)
+    {
+
+
+        if (!empty($productArray)) {
+            $videoArray = [];
+            $pamphletArray = [];
+            foreach ($productArray as $product) {
+
+                if (!in_array($product->id, $pamphletArray) && !in_array($product->id, $videoArray)) {
+                    array_push($productsWithPamphlet, $product->id);
+                    array_push($productsWithVideo, $product->id);
+
+                    if (isset($pamphlets[$product->id]))
+                        $pamphletArray = $pamphlets[$product->id];
+                    else
+                        $pamphletArray = [];
+                    if (isset($videos[$product->id]))
+                        $videoArray = $videos[$product->id];
+                    else
+                        $videoArray = [];
+
+                    foreach ($product->validProductfiles as $productfile) {
+                        if ($productfile->productfiletype_id == Config::get("constants.PRODUCT_FILE_TYPE_PAMPHLET")) {
+                            array_push($pamphletArray, [
+                                "file"       => $productfile->file,
+                                "name"       => $productfile->name,
+                                "product_id" => $productfile->product_id,
+                            ]);
+                        } else {
+
+                            array_push($videoArray, [
+                                "file"       => $productfile->file,
+                                "name"       => $productfile->name,
+                                "product_id" => $productfile->product_id,
+                            ]);
+                        }
+
+                    }
+
+                    if (!empty($pamphletArray))
+                        $pamphlets->put($product->id, [
+                            "productName" => $product->name,
+                            "pamphlets"   => $pamphletArray,
+                        ]);
+
+                    if (!empty($videoArray))
+                        $videos->put($product->id, [
+                            "productName" => $product->name,
+                            "videos"      => $videoArray,
+                        ]);
+                }
+
+                $this->addVideoPamphlet($product->complimentaryproducts, $productsWithPamphlet, $productsWithVideo, $pamphlets, $videos);
+            }
+        }
     }
 
     /**
@@ -1318,7 +1369,7 @@ class UserController extends Controller
      */
     public function showSurvey()
     {
-//        return redirect(action("HomeController@error404"));
+        //        return redirect(action("HomeController@error404"));
         $event = Event::FindOrFail(1);
         $surveys = $event->surveys;
         foreach ($surveys as $survey) {
@@ -1367,7 +1418,8 @@ class UserController extends Controller
                             $userMajors->push($accessibleMajor);
                         }
                     }
-                    $userMajors = $userMajors->pluck('id')->toArray();
+                    $userMajors = $userMajors->pluck('id')
+                                             ->toArray();
                     $requestUrl = url("/") . $requestBaseUrl . "?";
                     foreach ($userMajors as $major) {
                         $requestUrl .= "&parents[]=$major";
@@ -1379,14 +1431,15 @@ class UserController extends Controller
                     $dataJson = json_decode($response->content());
                     \Illuminate\Support\Facades\Request::replace($originalInput);
                     $rootMajorArray = [];
-                    $majorsArray = array();
+                    $majorsArray = [];
                     foreach ($dataJson as $item) {
                         $majorsArray = array_add($majorsArray, $item->id, $item->name);
                     }
                     $rootMajorArray = array_add($rootMajorArray, $userMajor->name, $majorsArray);
                     $questionsData->put($question->id, $rootMajorArray);
-                } elseif (strpos($question->dataSourceUrl, "city") !== false) {
-                    $provinces = Province::orderBy("name")->get();
+                } else if (strpos($question->dataSourceUrl, "city") !== false) {
+                    $provinces = Province::orderBy("name")
+                                         ->get();
                     $provinceCityArray = [];
                     foreach ($provinces as $province) {
                         $requestUrl = url("/") . $requestBaseUrl . "?provinces[]=$province->id";
@@ -1396,7 +1449,7 @@ class UserController extends Controller
                         $response = Route::dispatch($request);
                         $dataJson = json_decode($response->content());
                         \Illuminate\Support\Facades\Request::replace($originalInput);
-                        $citiesArray = array();
+                        $citiesArray = [];
                         foreach ($dataJson as $item) {
                             $citiesArray = array_add($citiesArray, $item->id, $item->name);
                         }
@@ -1417,17 +1470,23 @@ class UserController extends Controller
      * Storing user's work time (for employees)
      *
      * @param \App\Http\Controllers\EmployeetimesheetController $employeetimesheetController
-     * @param \App\Http\Controllers\HomeController $homeController
+     * @param \App\Http\Controllers\HomeController              $homeController
+     *
      * @return \Illuminate\Http\Response
      */
     public function submitWorkTime(Request $request, EmployeetimesheetController $employeetimesheetController, HomeController $homeController)
     {
         $userId = Auth::user()->id;
         $request->offsetSet("user_id", $userId);
-        $request->offsetSet("date", Carbon::today('Asia/Tehran')->format("Y-m-d"));
+        $request->offsetSet("date", Carbon::today('Asia/Tehran')
+                                          ->format("Y-m-d"));
 
-        $toDayJalali = $this->convertToJalaliDay(Carbon::today('Asia/Tehran')->format('l'));
-        $employeeSchedule = Employeeschedule::where("user_id", $userId)->where("day", $toDayJalali)->get()->first();
+        $toDayJalali = $this->convertToJalaliDay(Carbon::today('Asia/Tehran')
+                                                       ->format('l'));
+        $employeeSchedule = Employeeschedule::where("user_id", $userId)
+                                            ->where("day", $toDayJalali)
+                                            ->get()
+                                            ->first();
         if (isset($employeeSchedule)) {
             $request->offsetSet("userBeginTime", $employeeSchedule->getOriginal("beginTime"));
             $request->offsetSet("userFinishTime", $employeeSchedule->getOriginal("finishTime"));
@@ -1437,10 +1496,12 @@ class UserController extends Controller
         $request->offsetSet("modifier_id", Auth::user()->id);
         $request->offsetSet("serverSide", true);
         $insertRequest = new \App\Http\Requests\InsertEmployeeTimeSheet($request->all());
-        $userTimeSheets = Employeetimesheet::where("date", Carbon::today('Asia/Tehran'))->where("user_id", Auth::user()->id)->get();
+        $userTimeSheets = Employeetimesheet::where("date", Carbon::today('Asia/Tehran'))
+                                           ->where("user_id", Auth::user()->id)
+                                           ->get();
         if ($userTimeSheets->count() == 0) {
             $done = $employeetimesheetController->store($insertRequest);
-        } elseif ($userTimeSheets->count() == 1) {
+        } else if ($userTimeSheets->count() == 1) {
             $done = $employeetimesheetController->update($insertRequest, $userTimeSheets->first());
         } else {
             $message = "شما بیش از یک ساعت کاری برای امروز ثبت نموده اید!";
@@ -1458,6 +1519,7 @@ class UserController extends Controller
      * Removes user from lottery
      *
      * @param \App\Http\Controllers\CouponController $couponController
+     *
      * @return \Illuminate\Http\Response
      */
     public function removeFromLottery()
@@ -1466,7 +1528,8 @@ class UserController extends Controller
         $message = "";
 
         $bonName = Config::get("constants.BON2");
-        $bon = Bon::where("name", $bonName)->first();
+        $bon = Bon::where("name", $bonName)
+                  ->first();
         if (isset($bon)) {
             $userbons = $user->userValidBons($bon);
             if ($userbons->isNotEmpty()) {
@@ -1486,12 +1549,12 @@ class UserController extends Controller
                     $result,
                     $responseText,
                     $prizeName,
-                    $walletId
+                    $walletId,
                 ] = $this->exchangeLottery($user, $sumBonNumber);
 
                 if ($result) {
                     $lottery = Lottery::where("name", Config::get("constants.LOTTERY_NAME"))
-                        ->first();
+                                      ->first();
                     if (isset($lottery)) {
                         $prizes = '{
                           "items": [
@@ -1503,18 +1566,19 @@ class UserController extends Controller
                           ]
                         }';
                         if ($user->lotteries()
-                            ->where("lottery_id", $lottery->id)
-                            ->get()
-                            ->isEmpty()) {
+                                 ->where("lottery_id", $lottery->id)
+                                 ->get()
+                                 ->isEmpty()) {
                             $attachResult = $user->lotteries()
-                                ->attach($lottery->id, [
-                                        "rank" => 0,
-                                        "prizes" => $prizes
-                                    ]
-                                );
+                                                 ->attach($lottery->id, [
+                                                                          "rank"   => 0,
+                                                                          "prizes" => $prizes,
+                                                                      ]
+                                                 );
 
                             /**  clearing cache */
-                            Cache::tags('bon')->flush();
+                            Cache::tags('bon')
+                                 ->flush();
                             $done = true;
                         } else {
                             $done = false;
@@ -1555,10 +1619,12 @@ class UserController extends Controller
                         $userbon->update();
                     }
                 }
-                return $this->response->setStatusCode(503)->setContent(["message" => $message]);
+                return $this->response->setStatusCode(503)
+                                      ->setContent(["message" => $message]);
             }
         else
-            return $this->response->setStatusCode(503)->setContent(["message" => "عملیاتی انجام نشد"]);
+            return $this->response->setStatusCode(503)
+                                  ->setContent(["message" => "عملیاتی انجام نشد"]);
     }
 
     /**
@@ -1573,25 +1639,40 @@ class UserController extends Controller
 
     public function information($user)
     {
-        $validOrders = $user->orders()->whereHas("orderproducts", function ($q) {
-            $q->whereIn("product_id", Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT"))
-                ->orwhereIn("product_id", Config::get("constants.ORDOO_HOZOORI_NOROOZ_97_PRODUCT"))
-                ->orwhereIn("product_id", [199, 202]);
-        })->whereIn("orderstatus_id", [Config::get("constants.ORDER_STATUS_CLOSED")]);
+        $validOrders = $user->orders()
+                            ->whereHas("orderproducts", function ($q) {
+                                $q->whereIn("product_id", Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT"))
+                                  ->orwhereIn("product_id", Config::get("constants.ORDOO_HOZOORI_NOROOZ_97_PRODUCT"))
+                                  ->orwhereIn("product_id", [
+                                      199,
+                                      202,
+                                  ]);
+                            })
+                            ->whereIn("orderstatus_id", [Config::get("constants.ORDER_STATUS_CLOSED")]);
 
-        if ($validOrders->get()->isEmpty()) {
+        if ($validOrders->get()
+                        ->isEmpty()) {
             return redirect(action("ProductController@landing2"));
         }
         $unPaidOrders = $validOrders->get();
-        $paidOrder = $validOrders->whereIn("paymentstatus_id", [Config::get("constants.PAYMENT_STATUS_PAID"), Config::get("constants.PAYMENT_STATUS_INDEBTED")])->get();
-        if ($paidOrder->isNotEmpty()) $order = $paidOrder->first();
+        $paidOrder = $validOrders->whereIn("paymentstatus_id", [
+            Config::get("constants.PAYMENT_STATUS_PAID"),
+            Config::get("constants.PAYMENT_STATUS_INDEBTED"),
+        ])
+                                 ->get();
+        if ($paidOrder->isNotEmpty())
+            $order = $paidOrder->first();
         else $order = $unPaidOrders->first();
 
-        if (!isset($order)) abort(403);
+        if (!isset($order))
+            abort(403);
 
-        $orderproduct = $order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->get()->first();
+        $orderproduct = $order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
+                              ->get()
+                              ->first();
         $product = $orderproduct->product;
-        if (in_array($product->id, Config::get("constants.ORDOO_HOZOORI_NOROOZ_97_PRODUCT"))) $userHasMedicalQuestions = true;
+        if (in_array($product->id, Config::get("constants.ORDOO_HOZOORI_NOROOZ_97_PRODUCT")))
+            $userHasMedicalQuestions = true;
         else $userHasMedicalQuestions = false;
         $grandParent = $product->getGrandParent();
         if ($grandParent !== false) {
@@ -1601,34 +1682,48 @@ class UserController extends Controller
         }
 
 
-        $simpleContact = \App\Contacttype::where("name", "simple")->get()->first();
-        $mobilePhoneType = \App\Phonetype::where("name", "mobile")->get()->first();
-        $parents = \App\Relative::whereIn("name", ["father", "mother"])->get();
+        $simpleContact = \App\Contacttype::where("name", "simple")
+                                         ->get()
+                                         ->first();
+        $mobilePhoneType = \App\Phonetype::where("name", "mobile")
+                                         ->get()
+                                         ->first();
+        $parents = \App\Relative::whereIn("name", [
+            "father",
+            "mother",
+        ])
+                                ->get();
         $parentsNumber = collect();
         foreach ($parents as $parent) {
-            $parentContacts = $user->contacts->where("relative_id", $parent->id)->where("contacttype_id", $simpleContact->id);
+            $parentContacts = $user->contacts->where("relative_id", $parent->id)
+                                             ->where("contacttype_id", $simpleContact->id);
             if ($parentContacts->isNotEmpty()) {
                 $parentContact = $parentContacts->first();
-                $parentMobiles = $parentContact->phones->where("phonetype_id", $mobilePhoneType->id)->sortBy("priority");
+                $parentMobiles = $parentContact->phones->where("phonetype_id", $mobilePhoneType->id)
+                                                       ->sortBy("priority");
                 if ($parentMobiles->isNotEmpty()) {
                     $parentMobile = $parentMobiles->first()->phoneNumber;
                     $parentsNumber->put($parent->name, $parentMobile);
                 }
             }
         }
-        $majors = Major::pluck('name', 'id')->toArray();
+        $majors = Major::pluck('name', 'id')
+                       ->toArray();
         $majors[0] = "نامشخص";
         $majors = array_sort_recursive($majors);
         /////////////////////////////////////////
-        $genders = Gender::pluck('name', 'id')->toArray();
+        $genders = Gender::pluck('name', 'id')
+                         ->toArray();
         $genders[0] = "نامشخص";
         $genders = array_sort_recursive($genders);
         ///////////////////////
-        $bloodTypes = Bloodtype::pluck('name', 'id')->toArray();
+        $bloodTypes = Bloodtype::pluck('name', 'id')
+                               ->toArray();
         $bloodTypes[0] = "نامشخص";
         $bloodTypes = array_sort_recursive($bloodTypes);
         //////////////////////////
-        $grades = Grade::pluck('displayName', 'id')->toArray();
+        $grades = Grade::pluck('displayName', 'id')
+                       ->toArray();
         $grades[0] = "نامشخص";
         $grades = array_sort_recursive($grades);
         $orderFiles = $order->files;
@@ -1690,30 +1785,42 @@ class UserController extends Controller
      * Store the complentary information of specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  User $user
+     * @param  User                     $user
+     *
      * @return \Illuminate\Http\Response
      */
     public function completeInformation(User $user, Request $request, UserController $userController, PhoneController $phoneController
         , ContactController $contactController, OrderController $orderController)
     {
-        if (strlen($request->get("phone")) > 0) $this->convertToEnglish(preg_replace('/\s+/', '', $request->get("phone")));
-        if (strlen($request->get("postalCode")) > 0) $this->convertToEnglish(preg_replace('/\s+/', '', $request->get("postalCode")));
-        if (strlen($request->get("parentMobiles")["father"]) > 0) $this->convertToEnglish(preg_replace('/\s+/', '', $request->get("parentMobiles")["father"]));
-        if (strlen($request->get("parentMobiles")["mother"]) > 0) $this->convertToEnglish(preg_replace('/\s+/', '', $request->get("parentMobiles")["mother"]));
-        if (strlen($request->get("school")) > 0) $this->convertToEnglish($request->get("school"));
-        if (strlen($request->get("allergy")) > 0) $this->convertToEnglish($request->get("allergy"));
-        if (strlen($request->get("medicalCondition")) > 0) $this->convertToEnglish($request->get("medicalCondition"));
-        if (strlen($request->get("diet")) > 0) $this->convertToEnglish($request->get("diet"));
-        if (strlen($request->get("introducer")) > 0) $this->convertToEnglish($request->get("introducer"));
+        if (strlen($request->get("phone")) > 0)
+            $this->convertToEnglish(preg_replace('/\s+/', '', $request->get("phone")));
+        if (strlen($request->get("postalCode")) > 0)
+            $this->convertToEnglish(preg_replace('/\s+/', '', $request->get("postalCode")));
+        if (strlen($request->get("parentMobiles")["father"]) > 0)
+            $this->convertToEnglish(preg_replace('/\s+/', '', $request->get("parentMobiles")["father"]));
+        if (strlen($request->get("parentMobiles")["mother"]) > 0)
+            $this->convertToEnglish(preg_replace('/\s+/', '', $request->get("parentMobiles")["mother"]));
+        if (strlen($request->get("school")) > 0)
+            $this->convertToEnglish($request->get("school"));
+        if (strlen($request->get("allergy")) > 0)
+            $this->convertToEnglish($request->get("allergy"));
+        if (strlen($request->get("medicalCondition")) > 0)
+            $this->convertToEnglish($request->get("medicalCondition"));
+        if (strlen($request->get("diet")) > 0)
+            $this->convertToEnglish($request->get("diet"));
+        if (strlen($request->get("introducer")) > 0)
+            $this->convertToEnglish($request->get("introducer"));
         $this->validate($request, [
             'photo' => 'image|mimes:jpeg,jpg,png|max:200',
-            'file' => 'mimes:jpeg,jpg,png,zip,pdf,rar',
+            'file'  => 'mimes:jpeg,jpg,png,zip,pdf,rar',
         ]);
-        if (Auth::user()->id != $user->id) abort(403);
+        if (Auth::user()->id != $user->id)
+            abort(403);
         if ($request->has("order")) {
             $orderId = $request->get("order");
             $order = Order::FindOrFail($orderId);
-            if ($order->user_id != Auth::user()->id) abort(403);
+            if ($order->user_id != Auth::user()->id)
+                abort(403);
         } else {
             return $this->response->setStatusCode(422);
         }
@@ -1721,16 +1828,21 @@ class UserController extends Controller
          * User's basic info
          **/
         $editUserRequest = new EditUserRequest();
-        if ($request->hasFile("photo")) $editUserRequest->offsetSet("photo", $request->file("photo"));
+        if ($request->hasFile("photo"))
+            $editUserRequest->offsetSet("photo", $request->file("photo"));
         $editUserRequest->offsetSet("province", $request->get("province"));
         $editUserRequest->offsetSet("address", $request->get("address"));
         $editUserRequest->offsetSet("postalCode", $request->get("postalCode"));
         $editUserRequest->offsetSet("city", $request->get("city"));
         $editUserRequest->offsetSet("school", $request->get("school"));
-        if ($request->get("major_id") != 0) $editUserRequest->offsetSet("major_id", $request->get("major_id"));
-        if ($request->get("grade_id") != 0) $editUserRequest->offsetSet("grade_id", $request->get("grade_id"));
-        if ($request->get("gender_id") != 0) $editUserRequest->offsetSet("gender_id", $request->get("gender_id"));
-        if ($request->get("bloodtype_id") != 0) $editUserRequest->offsetSet("bloodtype_id", $request->get("bloodtype_id"));
+        if ($request->get("major_id") != 0)
+            $editUserRequest->offsetSet("major_id", $request->get("major_id"));
+        if ($request->get("grade_id") != 0)
+            $editUserRequest->offsetSet("grade_id", $request->get("grade_id"));
+        if ($request->get("gender_id") != 0)
+            $editUserRequest->offsetSet("gender_id", $request->get("gender_id"));
+        if ($request->get("bloodtype_id") != 0)
+            $editUserRequest->offsetSet("bloodtype_id", $request->get("bloodtype_id"));
         $editUserRequest->offsetSet("phone", $request->get("phone"));
         $editUserRequest->offsetSet("allergy", $request->get("allergy"));
         $editUserRequest->offsetSet("medicalCondition", $request->get("medicalCondition"));
@@ -1743,14 +1855,22 @@ class UserController extends Controller
         /**
          * Parent's basic info
          **/
-        $simpleContact = \App\Contacttype::where("name", "simple")->get()->first();
-        $mobilePhoneType = \App\Phonetype::where("name", "mobile")->get()->first();
+        $simpleContact = \App\Contacttype::where("name", "simple")
+                                         ->get()
+                                         ->first();
+        $mobilePhoneType = \App\Phonetype::where("name", "mobile")
+                                         ->get()
+                                         ->first();
         $parentsNumber = $request->get("parentMobiles");
 
         foreach ($parentsNumber as $relative => $mobile) {
-            if (strlen(preg_replace('/\s+/', '', $mobile)) == 0) continue;
-            $parent = \App\Relative::where("name", $relative)->get()->first();
-            $parentContacts = $user->contacts->where("relative_id", $parent->id)->where("contacttype_id", $simpleContact->id);
+            if (strlen(preg_replace('/\s+/', '', $mobile)) == 0)
+                continue;
+            $parent = \App\Relative::where("name", $relative)
+                                   ->get()
+                                   ->first();
+            $parentContacts = $user->contacts->where("relative_id", $parent->id)
+                                             ->where("contacttype_id", $simpleContact->id);
             if ($parentContacts->isEmpty()) {
                 $storeContactRequest = new \App\Http\Requests\InsertContactRequest();
                 $storeContactRequest->offsetSet("name", $relative);
@@ -1762,15 +1882,18 @@ class UserController extends Controller
                 if ($response->getStatusCode() == 200) {
                     $responseContent = json_decode($response->getContent("contact"));
                     $parentContact = $responseContent->contact;
-                } elseif ($response->getStatusCode() == 503) {
+                } else if ($response->getStatusCode() == 503) {
 
                 }
             } else {
                 $parentContact = $parentContacts->first();
             }
             if (isset($parentContact)) {
-                $parentContact = Contact::where("id", $parentContact->id)->get()->first();
-                $parentMobiles = $parentContact->phones->where("phonetype_id", $mobilePhoneType->id)->sortBy("priority");
+                $parentContact = Contact::where("id", $parentContact->id)
+                                        ->get()
+                                        ->first();
+                $parentMobiles = $parentContact->phones->where("phonetype_id", $mobilePhoneType->id)
+                                                       ->sortBy("priority");
                 if ($parentMobiles->isEmpty()) {
                     $storePhoneRequest = new \App\Http\Requests\InsertPhoneRequest();
                     $storePhoneRequest->offsetSet("phoneNumber", $mobile);
@@ -1779,7 +1902,7 @@ class UserController extends Controller
                     $response = $phoneController->store($storePhoneRequest);
                     if ($response->getStatusCode() == 200) {
 
-                    } elseif ($response->getStatusCode() == 503) {
+                    } else if ($response->getStatusCode() == 503) {
 
                     }
 
@@ -1800,7 +1923,8 @@ class UserController extends Controller
 
 
         $updateOrderRequest = new \App\Http\Requests\EditOrderRequest();
-        if ($request->hasFile("file")) $updateOrderRequest->offsetSet("file", $request->file("file"));
+        if ($request->hasFile("file"))
+            $updateOrderRequest->offsetSet("file", $request->file("file"));
         /**
          * customerExtraInfo
          */
@@ -1810,7 +1934,8 @@ class UserController extends Controller
         foreach ($extraInfoQuestions as $key => $question) {
             $obj = new stdClass();
             $obj->title = $question;
-            if (strlen(preg_replace('/\s+/', '', $customerExtraInfoAnswers[$key])) > 0) $obj->info = $customerExtraInfoAnswers[$key];
+            if (strlen(preg_replace('/\s+/', '', $customerExtraInfoAnswers[$key])) > 0)
+                $obj->info = $customerExtraInfoAnswers[$key];
             else $obj->info = null;
             if (strlen($jsonConcats) > 0)
                 $jsonConcats = $jsonConcats . ',' . json_encode($obj, JSON_UNESCAPED_UNICODE);
@@ -1826,11 +1951,137 @@ class UserController extends Controller
 
     }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \app\Http\Requests\EditUserRequest $request
+     * @param  User                               $user
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function update(EditUserRequest $request, $user)
+    {
+        $photo = $user->photo;
+        $password = $user->password;
+        $user->fill($request->all());
+
+        if ($request->has('techCode'))
+            $user->techCode = $request->get('techCode');
+
+        if (strlen($user->major_id) == 0)
+            $user->major_id = null;
+        if (strlen($user->gender_id) == 0)
+            $user->gender_id = null;
+        if (strlen($user->grade_id) == 0)
+            $user->grade_id = null;
+        if (strlen($user->bloodtype_id) == 0)
+            $user->bloodtype_id = null;
+        if (strlen(preg_replace('/\s+/', '', $user->email)) == 0)
+            $user->email = null;
+        if (strlen(preg_replace('/\s+/', '', $user->phone)) == 0)
+            $user->phone = null;
+        if (strlen(preg_replace('/\s+/', '', $user->city)) == 0)
+            $user->city = null;
+        if (strlen(preg_replace('/\s+/', '', $user->province)) == 0)
+            $user->province = null;
+        if (strlen(preg_replace('/\s+/', '', $user->address)) == 0)
+            $user->address = null;
+        if (strlen(preg_replace('/\s+/', '', $user->postalCode)) == 0)
+            $user->postalCode = null;
+        if (strlen(preg_replace('/\s+/', '', $user->school)) == 0)
+            $user->school = null;
+        if (strlen(preg_replace('/\s+/', '', $user->allergy)) == 0)
+            $user->allergy = null;
+        if (strlen(preg_replace('/\s+/', '', $user->medicalCondition)) == 0)
+            $user->medicalCondition = null;
+        if (strlen(preg_replace('/\s+/', '', $user->diet)) == 0)
+            $user->diet = null;
+
+        if (!$request->has("password") || strlen($request->get('password')) == 0) {
+            $user->password = $password; //Pasword should not be updated
+        } else {
+            $user->password = bcrypt($request->get("password"));
+        }
+
+        $file = $this->requestHasFile($request, "photo");
+        if ($file !== false) {
+            $extension = $file->getClientOriginalExtension();
+            $fileName = basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
+            if (Storage::disk(Config::get('constants.DISK1'))
+                       ->put($fileName, File::get($file))) {
+                if (strcmp($photo, Config::get('constants.PROFILE_DEFAULT_IMAGE')) != 0)
+                    Storage::disk(Config::get('constants.DISK1'))
+                           ->delete($photo);
+                $user->photo = $fileName;
+            }
+
+        }
+
+        if ($request->has("mobileNumberVerification"))
+            $user->mobile_verified_at = Carbon::now()
+                                              ->setTimezone("Asia/Tehran");
+        else
+            $user->mobile_verified_at = null;
+
+        if ($request->has("lockProfile"))
+            $user->lockProfile = 1;
+        else
+            $user->lockProfile = 0;
+
+        if ($user->update()) {
+            if (Auth::check() && Auth::User()
+                                     ->can(Config::get('constants.INSET_USER_ROLE'))) {
+                $newRoleIds = [];
+                $oldRoles = $user->roles;
+                if ($request->has("roles")) {
+                    $newRoleIds = $request->get("roles");
+                    foreach ($newRoleIds as $key => $newRoleId) {
+                        $newRole = Role::FindOrFail($newRoleId);
+                        if ($newRole->isDefault) {
+                            if (!Auth::user()
+                                     ->can(Config::get('constants.GIVE_SYSTEM_ROLE')))
+                                unset($newRoleIds[$key]);
+                        }
+
+                    }
+
+                    foreach ($oldRoles as $oldRole) {
+                        if ($oldRole->isDefault)
+                            if (!in_array($oldRole->id, $newRoleIds))
+                                array_push($newRoleIds, $oldRole->id);
+                    }
+                    $user->roles()
+                         ->sync($newRoleIds);
+                }
+
+            }
+            if ($request->has("fromAPI")) {
+                $message = "اطلاعات با موفقیت اصلاح شد";
+                $status = 200;
+            } else {
+                session()->put("success", "اطلاعات کاربر با موفقیت اصلاح شد");
+            }
+        } else {
+            if ($request->has("fromAPI")) {
+                $message = "خطای پایگاه داده";
+                $status = 503;
+            } else {
+                session()->put("error", "خطای پایگاه داده.");
+            }
+        }
+
+        if ($request->has("fromAPI"))
+            return $this->response->setStatusCode($status)
+                                  ->setContent(["message" => $message]);
+        else
+            return redirect()->back();
+    }
 
     /**
      * Register student for sanati sharif highschool
      *
      * @param  \App\Http\Requests\RegisterForSanatiSharifHighSchoolRequest $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function registerForSanatiSharifHighSchool(RegisterForSanatiSharifHighSchoolRequest $request,
@@ -1838,7 +2089,8 @@ class UserController extends Controller
                                                       EventresultController $eventResultController,
                                                       HomeController $homeController)
     {
-        $event = Event::where("name", "sabtename_sharif_97")->get();
+        $event = Event::where("name", "sabtename_sharif_97")
+                      ->get();
         if ($event->isEmpty()) {
             session()->put("error", "رخداد یافت نشد");
             return redirect()->back();
@@ -1849,7 +2101,9 @@ class UserController extends Controller
         if (Auth::check())
             $user = Auth::user();
         else
-            $registeredUser = User::where("mobile", $request->get("mobile"))->where("nationalCode", $request->get("nationalCode"))->get();
+            $registeredUser = User::where("mobile", $request->get("mobile"))
+                                  ->where("nationalCode", $request->get("nationalCode"))
+                                  ->get();
 
         if (!isset($user) && $registeredUser->isEmpty()) {
             $registerRequest = new Request();
@@ -1859,7 +2113,7 @@ class UserController extends Controller
             $registerRequest->offsetSet("nationalCode", $request->get("nationalCode"));
             $registerRequest->offsetSet("major_id", $request->get("major_id"));
             $registerRequest->offsetSet("grade_id", $request->get("grade_id"));
-//            $registerRequest->offsetSet("gender_id", 1);
+            //            $registerRequest->offsetSet("gender_id", 1);
             $registerController = new RegisterController();
             $response = $registerController->register($registerRequest);
             if ($response->getStatusCode() != 302) {
@@ -1885,7 +2139,8 @@ class UserController extends Controller
             }
         }
 
-        $eventRegistered = $user->eventresults->where("user_id", $user->id)->where("event_id", $event->id);
+        $eventRegistered = $user->eventresults->where("user_id", $user->id)
+                                              ->where("event_id", $event->id);
         if ($eventRegistered->isNotEmpty()) {
             session()->put("error", "شما قبلا ثبت نام کرده اید");
             return redirect()->back();
@@ -1900,20 +2155,20 @@ class UserController extends Controller
                 session()->put("error", "خطایی در ثبت نام شما رخ داد. لطفا مجددا اقدام نمایید");
                 return redirect()->back();
             } else {
-//                $result = json_decode($response->getContent());
-//                if(isset($result->participationCode))
-//                    $participationCode = $result->participationCode;
+                //                $result = json_decode($response->getContent());
+                //                if(isset($result->participationCode))
+                //                    $participationCode = $result->participationCode;
             }
         }
 
         $message = "پیش ثبت نام شما در دبیرستان دانشگاه صنعتی شریف با موفقیت انجام شد .";
         if (isset($participationCode))
             $message .= "کد داوطلبی شما: " . $participationCode;
-//        $sendSMSRequest = new \App\Http\Requests\SendSMSRequest();
-//        $sendSMSRequest->offsetSet("message" , $message);
-//        $sendSMSRequest->offsetSet("users" , [$user->id]);
-//        $sendSMSRequest->offsetSet("relatives" , [0]);
-//        $response = $homeController->sendSMS($sendSMSRequest);
+        //        $sendSMSRequest = new \App\Http\Requests\SendSMSRequest();
+        //        $sendSMSRequest->offsetSet("message" , $message);
+        //        $sendSMSRequest->offsetSet("users" , [$user->id]);
+        //        $sendSMSRequest->offsetSet("relatives" , [0]);
+        //        $response = $homeController->sendSMS($sendSMSRequest);
         session()->put("success", $message);
         return redirect()->back();
     }
@@ -1922,6 +2177,7 @@ class UserController extends Controller
      * Submit user request for voucher request
      *
      * @param  Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function voucherRequest(Request $request)
@@ -1929,42 +2185,57 @@ class UserController extends Controller
         $url = $request->url();
         $title = "آلاء| درخواست اینترنت آسیاتک";
         SEO::setTitle($title);
-        SEO::opengraph()->setUrl($url);
+        SEO::opengraph()
+           ->setUrl($url);
         SEO::setCanonical($url);
-        SEO::twitter()->setSite("آلاء");
+        SEO::twitter()
+           ->setSite("آلاء");
         SEO::setDescription($this->setting->site->seo->homepage->metaDescription);
-        SEO::opengraph()->addImage(route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]), ['height' => 100, 'width' => 100]);
+        SEO::opengraph()
+           ->addImage(route('image', [
+               'category' => '11',
+               'w'        => '100',
+               'h'        => '100',
+               'filename' => $this->setting->site->siteLogo,
+           ]), [
+                          'height' => 100,
+                          'width'  => 100,
+                      ]);
 
         $user = Auth::user();
-        $genders = Gender::pluck('name', 'id')->prepend("انتخاب کنید");
-        $majors = Major::pluck('name', 'id')->prepend("انتخاب کنید");
+        $genders = Gender::pluck('name', 'id')
+                         ->prepend("انتخاب کنید");
+        $majors = Major::pluck('name', 'id')
+                       ->prepend("انتخاب کنید");
         $sideBarMode = "closed";
 
         $asiatechProduct = config("constants.ASIATECH_FREE_ADSL");
-        $nowDateTime = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran');
+        $nowDateTime = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
+                             ->timezone('Asia/Tehran');
         $userHasRegistered = false;
 
         $asitechPendingOrders = Order::whereHas("orderproducts", function ($q) use ($asiatechProduct) {
             $q->where("product_id", $asiatechProduct);
         })
-            ->where("orderstatus_id", config("constants.ORDER_STATUS_PENDING"))
-            ->where("paymentstatus_id", config("constants.PAYMENT_STATUS_PAID"))
-            ->orderBy("completed_at")
-            ->get();
+                                     ->where("orderstatus_id", config("constants.ORDER_STATUS_PENDING"))
+                                     ->where("paymentstatus_id", config("constants.PAYMENT_STATUS_PAID"))
+                                     ->orderBy("completed_at")
+                                     ->get();
         $userAsitechPendingOrders = $asitechPendingOrders->where("user_id", $user->id);
         if ($userAsitechPendingOrders->isNotEmpty()) {
-            $rank = $userAsitechPendingOrders->keys()->first() + 1;
+            $rank = $userAsitechPendingOrders->keys()
+                                             ->first() + 1;
 
             $userHasRegistered = true;
         } else {
             $asitechApprovedOrders = $user->orders()
-                ->whereHas("orderproducts", function ($q) use ($asiatechProduct) {
-                    $q->where("product_id", $asiatechProduct);
-                })
-                ->where("orderstatus_id", config("constants.ORDER_STATUS_CLOSED"))
-                ->where("paymentstatus_id", config("constants.PAYMENT_STATUS_PAID"))
-                ->orderBy("completed_at")
-                ->get();
+                                          ->whereHas("orderproducts", function ($q) use ($asiatechProduct) {
+                                              $q->where("product_id", $asiatechProduct);
+                                          })
+                                          ->where("orderstatus_id", config("constants.ORDER_STATUS_CLOSED"))
+                                          ->where("paymentstatus_id", config("constants.PAYMENT_STATUS_PAID"))
+                                          ->orderBy("completed_at")
+                                          ->get();
             if ($asitechApprovedOrders->isNotEmpty()) {
                 $userVoucher = $user->productvouchers
                     ->where("expirationdatetime", ">", $nowDateTime)
@@ -1976,12 +2247,12 @@ class UserController extends Controller
         }
 
         return view("user.submitVoucherRequest", compact("user",
-            "genders",
-            "majors",
-            "sideBarMode",
-            "userHasRegistered",
-            "rank",
-            "userVoucher"
+                                                         "genders",
+                                                         "majors",
+                                                         "sideBarMode",
+                                                         "userHasRegistered",
+                                                         "rank",
+                                                         "userVoucher"
         ));
     }
 
@@ -1989,13 +2260,15 @@ class UserController extends Controller
      * Submit user request for voucher request
      *
      * @param  \App\Http\Requests\InsertVoucherRequest InsertVoucherRequest
+     *
      * @return \Illuminate\Http\Response
      */
     public function submitVoucherRequest(InsertVoucherRequest $request)
     {
         $asiatechProduct = config("constants.ASIATECH_FREE_ADSL");
         $user = Auth::user();
-        $nowDateTime = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran');
+        $nowDateTime = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
+                             ->timezone('Asia/Tehran');
         $vouchers = $user->productvouchers
             ->where("expirationdatetime", ">", $nowDateTime)
             ->where("product_id", $asiatechProduct);
@@ -2015,7 +2288,8 @@ class UserController extends Controller
         if ($user->hasVerifiedMobile())
             $updateRequest->offsetSet("mobileNumberVerification", 1);
         $birthdate = Carbon::parse($request->get("birthdate"))
-            ->setTimezone("Asia/Tehran")->format('Y-m-d');
+                           ->setTimezone("Asia/Tehran")
+                           ->format('Y-m-d');
         $updateRequest->offsetSet("birthdate", $birthdate);
         $updateRequest->offsetSet("school", $request->get("school"));
         $updateRequest->offsetSet("major_id", $request->get("major_id"));
@@ -2036,7 +2310,7 @@ class UserController extends Controller
             "major_id",
             "introducedBy",
             "mobile_verified_at",
-            "photo"
+            "photo",
         ];
         if ($response->getStatusCode() == 200) {
             if ($user->completion("custom", $completionColumns) < 100) {
@@ -2048,11 +2322,13 @@ class UserController extends Controller
                 $asiatechOrder->cost = 0;
                 $asiatechOrder->costwithoutcoupon = 0;
                 $asiatechOrder->user_id = $user->id;
-                $asiatechOrder->completed_at = Carbon::now()->setTimezone("Asia/Tehran");
+                $asiatechOrder->completed_at = Carbon::now()
+                                                     ->setTimezone("Asia/Tehran");
                 if ($asiatechOrder->save()) {
                     $request->offsetSet("cost", 0);
                     $request->offsetSet("orderId_bhrk", $asiatechOrder->id);
-                    $product = Product::where("id", $asiatechProduct)->first();
+                    $product = Product::where("id", $asiatechProduct)
+                                      ->first();
                     if (isset($product)) {
                         $orderController = new OrderController();
                         $response = $orderController->addOrderproduct($request, $product);

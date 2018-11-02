@@ -22,6 +22,7 @@ class ContentObserver
      * Handle the content "created" event.
      *
      * @param  \App\Content $content
+     *
      * @return void
      */
     public function created(Content $content)
@@ -33,6 +34,7 @@ class ContentObserver
      * Handle the content "updated" event.
      *
      * @param  \App\Content $content
+     *
      * @return void
      */
     public function updated(Content $content)
@@ -43,6 +45,7 @@ class ContentObserver
      * Handle the content "deleted" event.
      *
      * @param  \App\Content $content
+     *
      * @return void
      */
     public function deleted(Content $content)
@@ -54,6 +57,7 @@ class ContentObserver
      * Handle the content "restored" event.
      *
      * @param  \App\Content $content
+     *
      * @return void
      */
     public function restored(Content $content)
@@ -65,6 +69,7 @@ class ContentObserver
      * Handle the content "force deleted" event.
      *
      * @param  \App\Content $content
+     *
      * @return void
      */
     public function forceDeleted(Content $content)
@@ -77,6 +82,7 @@ class ContentObserver
      * When issuing a mass update via Eloquent,
      * the saved and updated model events will not be fired for the updated models.
      * This is because the models are never actually retrieved when issuing a mass update.
+     *
      * @param Content $content
      */
     public function saving(Content $content)
@@ -88,6 +94,7 @@ class ContentObserver
 
     /**
      * @param $content
+     *
      * @return int|null
      */
     private function findTemplateIdOfaContent($content)

@@ -23,7 +23,7 @@ class ContentSearchComposer
      * Create a new ContentSearch composer.
      *
      * @param Category $category
-     * @param Request $request
+     * @param Request  $request
      */
     public function __construct(Category $category, Request $request)
     {
@@ -35,6 +35,7 @@ class ContentSearchComposer
      * Bind data to the view.
      *
      * @param  View $view
+     *
      * @return void
      */
     public function compose(View $view)
@@ -45,10 +46,19 @@ class ContentSearchComposer
         $extraTags = $tags;
 
         $tree = $this->category->getWithDepth();
-        $majors = $tree->where('depth', 2)->sortBy("name", SORT_LOCALE_STRING)->pluck('name', 'id')->unique();
-        $grades = $tree->where('depth', 3)->pluck('name', 'id')->unique();
-        $lessons = $tree->where('depth', 4)->sortBy("name", SORT_LOCALE_STRING)->pluck('name', 'id')->unique();
-        $teachers = User::getTeachers()->pluck("full_name_reverse", "id");
+        $majors = $tree->where('depth', 2)
+                       ->sortBy("name", SORT_LOCALE_STRING)
+                       ->pluck('name', 'id')
+                       ->unique();
+        $grades = $tree->where('depth', 3)
+                       ->pluck('name', 'id')
+                       ->unique();
+        $lessons = $tree->where('depth', 4)
+                        ->sortBy("name", SORT_LOCALE_STRING)
+                        ->pluck('name', 'id')
+                        ->unique();
+        $teachers = User::getTeachers()
+                        ->pluck("full_name_reverse", "id");
 
         $defaultMajor = $this->findDefault($tags, $majors->toArray());
         if ($defaultMajor && ($key = array_search($this->make_slug($majors[$defaultMajor], "_"), $extraTags)) !== false) {
@@ -68,15 +78,15 @@ class ContentSearchComposer
         }
 
         $sideBarMode = "closed";
-//            $ads1 = [
-//                //DINI SEBTI
-//                'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-1.jpg' => 'https://sanatisharif.ir/landing/4',
-//            ];
-//            $ads2 = [
-//                //DINI SEBTI
-//                'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-2.jpg' => 'https://sanatisharif.ir/landing/4',
-//                'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-3.jpg' => 'https://sanatisharif.ir/landing/4',
-//            ];
+        //            $ads1 = [
+        //                //DINI SEBTI
+        //                'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-1.jpg' => 'https://sanatisharif.ir/landing/4',
+        //            ];
+        //            $ads2 = [
+        //                //DINI SEBTI
+        //                'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-2.jpg' => 'https://sanatisharif.ir/landing/4',
+        //                'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-3.jpg' => 'https://sanatisharif.ir/landing/4',
+        //            ];
         $ads1 = [];
         $ads2 = [];
         $view->with(compact('grades', 'majors', 'lessons', 'teachers', 'defaultLesson', 'defaultTeacher', 'defaultGrade', 'defaultMajor', 'sideBarMode', 'ads1', 'ads2', 'tags', 'extraTags'));
@@ -86,6 +96,7 @@ class ContentSearchComposer
     /**
      * @param $tags
      * @param $inputs
+     *
      * @return string
      */
     private function findDefault(array $tags, array $inputs)

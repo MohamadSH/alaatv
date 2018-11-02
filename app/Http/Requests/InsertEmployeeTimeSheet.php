@@ -25,7 +25,7 @@ class InsertEmployeeTimeSheet extends FormRequest
     {
         return [
             'user_id' => 'required|exists:users,id',
-            'date' => 'required|date'
+            'date'    => 'required|date',
         ];
     }
 }

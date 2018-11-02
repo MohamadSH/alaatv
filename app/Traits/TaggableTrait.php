@@ -8,15 +8,15 @@ use App\Classes\Taggable;
 trait TaggableTrait
 {
     /**
-     * @param Taggable $taggable
+     * @param Taggable         $taggable
      * @param TaggingInterface $tagging
      */
     public function sendTagsOfTaggableToApi(Taggable $taggable, TaggingInterface $tagging): void
     {
         if ($taggable->isTaggableActive()) {
             $tagging->setTags($taggable->getTaggableId(),
-                $taggable->getTaggableTags(),
-                $taggable->getTaggableScore()
+                              $taggable->getTaggableTags(),
+                              $taggable->getTaggableScore()
             );
         }
     }

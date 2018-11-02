@@ -39,16 +39,16 @@ class SeoDummyTags implements SeoInterface
     public function getMetaTags(): array
     {
         return [
-            'title' => $this->title,
+            'title'       => $this->title,
             'description' => $this->shortDescription,
-            'url' => $this->url,
-            'canonical' => $this->canonical,
-            'site' => 'آلاء',
-            'imageUrl' => $this->image,
-            'imageWidth' => $this->imageWidth,
+            'url'         => $this->url,
+            'canonical'   => $this->canonical,
+            'site'        => 'آلاء',
+            'imageUrl'    => $this->image,
+            'imageWidth'  => $this->imageWidth,
             'imageHeight' => $this->imageHeight,
-            'tags' => $this->tags,
-            'seoMod' => SeoMetaTagsGenerator::SEO_MOD_GENERAL_TAGS,
+            'tags'        => $this->tags,
+            'seoMod'      => SeoMetaTagsGenerator::SEO_MOD_GENERAL_TAGS,
         ];
     }
 }

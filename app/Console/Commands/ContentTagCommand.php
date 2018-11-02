@@ -10,11 +10,24 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ContentTagCommand extends Command
 {
-    private $tagging;
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'alaaTv:seed:tag:content {content : The ID of the content}';
     use TaggableTrait;
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'add Tags for a Content';
+    private $tagging;
 
     /**
      * ContentTagCommand constructor.
+     *
      * @param TaggingInterface $tagging
      */
     public function __construct(TaggingInterface $tagging)
@@ -22,22 +35,6 @@ class ContentTagCommand extends Command
         parent::__construct();
         $this->tagging = $tagging;
     }
-
-
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'alaaTv:seed:tag:content {content : The ID of the content}';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'add Tags for a Content';
-
 
     /**
      * Execute the console command.
@@ -50,7 +47,8 @@ class ContentTagCommand extends Command
         if ($contentId > 0) {
             try {
                 $content = Content::findOrFail($contentId);
-            } catch (ModelNotFoundException $exception) {
+            }
+            catch (ModelNotFoundException $exception) {
                 $this->error($exception->getMessage());
                 return;
             }

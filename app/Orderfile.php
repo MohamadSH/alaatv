@@ -8,15 +8,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\Orderfile
  *
- * @property int $id
- * @property int $order_id آی دی مشخص کننده سفارشی که این فایل به آن تعلق دارد
- * @property int|null $user_id آی دی مشخص کننده کاربر آپلود کننده فایل
- * @property string $file فایل آپلود شده
- * @property string|null $description توضیح درباره فایل
+ * @property int                 $id
+ * @property int                 $order_id    آی دی مشخص کننده سفارشی که این فایل به آن تعلق دارد
+ * @property int|null            $user_id     آی دی مشخص کننده کاربر آپلود کننده فایل
+ * @property string              $file        فایل آپلود شده
+ * @property string|null         $description توضیح درباره فایل
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property \Carbon\Carbon|null $deleted_at
- * @property-read \App\Order $order
+ * @property-read \App\Order     $order
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Orderfile onlyTrashed()
  * @method static bool|null restore()
@@ -36,7 +36,11 @@ class Orderfile extends Model
 {
     use SoftDeletes;
     /**      * The attributes that should be mutated to dates.        */
-    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
 
     /**
      * @var array

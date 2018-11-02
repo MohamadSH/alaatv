@@ -16,6 +16,7 @@ use League\Flysystem\FileNotFoundException;
 
 /**
  * Class LinkGenerator
+ *
  * @package App\Classes
  */
 class LinkGenerator
@@ -28,18 +29,20 @@ class LinkGenerator
 
     /**
      * LinkGenerator constructor.
+     *
      * @param $file
      */
     public function __construct(\stdClass $file)
     {
         $this->setDisk($file->disk)
-            ->setUuid($file->uuid)
-            ->setUrl($file->url)
-            ->setFileName($file->fileName);
+             ->setUuid($file->uuid)
+             ->setUrl($file->url)
+             ->setFileName($file->fileName);
     }
 
     /**
      * @param mixed $fileName
+     *
      * @return LinkGenerator
      */
     public function setFileName($fileName)
@@ -50,6 +53,7 @@ class LinkGenerator
 
     /**
      * @param mixed $url
+     *
      * @return LinkGenerator
      */
     public function setUrl($url)
@@ -60,6 +64,7 @@ class LinkGenerator
 
     /**
      * @param mixed $uuid
+     *
      * @return LinkGenerator
      */
     public function setUuid($uuid)
@@ -70,6 +75,7 @@ class LinkGenerator
 
     /**
      * @param mixed $disk
+     *
      * @return LinkGenerator
      */
     public function setDisk($disk)
@@ -80,38 +86,42 @@ class LinkGenerator
 
     /**
      * LinkGenerator constructor.
+     *
      * @param $uuid
      * @param $disk
      * @param $url
      * @param $fileName
+     *
      * @return LinkGenerator
      */
     public static function create($uuid, $disk, $url, $fileName)
     {
         $input = new \stdClass();
-//        dd("0");
+        //        dd("0");
         $input->disk = null;
-//        dd("1");
+        //        dd("1");
         if (isset($disk))
             $input->disk = $disk;
         else if (isset($uuid)) {
             $input->disk = self::findDiskNameFromUUID($uuid);
         }
-//        dd("2");
+        //        dd("2");
         $input->uuid = $uuid;
         $input->url = $url;
         $input->fileName = $fileName;
-//        dd($input);
+        //        dd($input);
         return new LinkGenerator($input);
     }
 
     /**
      * @param $uuid
+     *
      * @return null | string
      */
     private static function findDiskNameFromUUID($uuid)
     {
-        $file = File::where("uuid", $uuid)->get();
+        $file = File::where("uuid", $uuid)
+                    ->get();
         if ($file->isNotEmpty() && $file->count() == 1) {
             $file = $file->first();
             if ($file->disks->isNotEmpty()) {
@@ -123,6 +133,7 @@ class LinkGenerator
 
     /**
      * @param array|null $paid
+     *
      * @return array|null|string
      * @throws \Exception
      */
@@ -132,15 +143,16 @@ class LinkGenerator
             return $this->url;
         if (isset($this->disk) && isset($this->fileName)) {
 
-//            dd("here");
-            $diskAdapter = Storage::disk($this->disk)->getAdapter();
-//            dd($diskAdapter);
+            //            dd("here");
+            $diskAdapter = Storage::disk($this->disk)
+                                  ->getAdapter();
+            //            dd($diskAdapter);
             $url = $this->fetchUrl($diskAdapter, $this->fileName);
             if (isset($paid)) {
                 $data = encrypt([
-                    "url" => $url,
-                    "data" => $paid
-                ]);
+                                    "url"  => $url,
+                                    "data" => $paid,
+                                ]);
                 return action(self::DOWNLOAD_CONTROLLER_NAME, $data);
 
             } else {
@@ -162,16 +174,18 @@ class LinkGenerator
     private function stream()
     {
         $f = $this;
-        $fs = Storage::disk($f->disk)->getDriver();
+        $fs = Storage::disk($f->disk)
+                     ->getDriver();
         try {
             $stream = $fs->readStream($f->fileName);
             $result = [
                 "read-stream" => $stream,
             ];
-        } catch (FileNotFoundException $e) {
+        }
+        catch (FileNotFoundException $e) {
             $result = [
                 "read-stream" => null,
-                "exception" => $e
+                "exception"   => $e,
             ];
         }
 

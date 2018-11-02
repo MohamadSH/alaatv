@@ -8,17 +8,17 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\Productphoto
  *
- * @property int $id
- * @property int $product_id آیدی مشخص کننده محصول عکس
- * @property string|null $file فایل عکس
- * @property string|null $title تایتل عکس
- * @property string $description توضیح کوتاه یا تیتر دوم عکس
- * @property int $order ترتیب عکس
- * @property int $enable فعال/غیر فعال بودن عکس
+ * @property int                 $id
+ * @property int                 $product_id  آیدی مشخص کننده محصول عکس
+ * @property string|null         $file        فایل عکس
+ * @property string|null         $title       تایتل عکس
+ * @property string              $description توضیح کوتاه یا تیتر دوم عکس
+ * @property int                 $order       ترتیب عکس
+ * @property int                 $enable      فعال/غیر فعال بودن عکس
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property \Carbon\Carbon|null $deleted_at
- * @property-read \App\Product $product
+ * @property-read \App\Product   $product
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Productphoto onlyTrashed()
  * @method static bool|null restore()
@@ -41,7 +41,11 @@ class Productphoto extends Model
 {
     use SoftDeletes;
     /**      * The attributes that should be mutated to dates.        */
-    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
 
     /**
      * @var array
@@ -50,7 +54,7 @@ class Productphoto extends Model
         'title',
         'description',
         'file',
-        'product_id'
+        'product_id',
     ];
 
     public function product()
@@ -62,6 +66,7 @@ class Productphoto extends Model
      * Scope a query to only include enable(or disable) Products.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeEnable($query)

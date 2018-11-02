@@ -22,6 +22,7 @@ class FreeInternetAccept extends Notification implements ShouldQueue
      * Get the notification's delivery channels.
      *
      * @param  mixed $notifiable
+     *
      * @return array
      */
     public function via($notifiable)
@@ -29,7 +30,7 @@ class FreeInternetAccept extends Notification implements ShouldQueue
         $this->user = $notifiable;
         return [
             MedianaPatternChannel::class,
-            'mail'
+            'mail',
         ];
 
     }
@@ -38,6 +39,7 @@ class FreeInternetAccept extends Notification implements ShouldQueue
      * Get the mail representation of the notification.
      *
      * @param  mixed $notifiable
+     *
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
     public function toMail($notifiable)
@@ -59,6 +61,7 @@ class FreeInternetAccept extends Notification implements ShouldQueue
 
     /**
      * @param $notifiable
+     *
      * @return MedianaMessage
      */
     public function toMediana($notifiable)
@@ -73,7 +76,7 @@ class FreeInternetAccept extends Notification implements ShouldQueue
     private function getInputData(): array
     {
         return [
-            'https://sanatisharif.ir/v/asiatech' => 'https://sanatisharif.ir/v/asiatech'
+            'https://sanatisharif.ir/v/asiatech' => 'https://sanatisharif.ir/v/asiatech',
         ];
     }
 }

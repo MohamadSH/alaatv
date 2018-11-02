@@ -10,18 +10,21 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\Contact
  *
- * @property int $id
- * @property int|null $user_id آی دی مشخص کننده کاربر صاحب این رکورد دفترچه تلفن
- * @property int|null $contacttype_id آی دی مشخص کننده نوع این رکورد دفترچه تلفن
- * @property int|null $relative_id آی دی مشخص کننده نسبت صاحب اطالاعات تماس با کاربر
- * @property string|null $name نام صاحب اطالاعات تماس
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property \Carbon\Carbon|null $deleted_at
- * @property-read \App\Contacttype|null $contacttype
+ * @property int                                                        $id
+ * @property int|null                                                   $user_id        آی دی مشخص کننده کاربر صاحب این
+ *           رکورد دفترچه تلفن
+ * @property int|null                                                   $contacttype_id آی دی مشخص کننده نوع این رکورد
+ *           دفترچه تلفن
+ * @property int|null                                                   $relative_id    آی دی مشخص کننده نسبت صاحب
+ *           اطالاعات تماس با کاربر
+ * @property string|null                                                $name           نام صاحب اطالاعات تماس
+ * @property \Carbon\Carbon|null                                        $created_at
+ * @property \Carbon\Carbon|null                                        $updated_at
+ * @property \Carbon\Carbon|null                                        $deleted_at
+ * @property-read \App\Contacttype|null                                 $contacttype
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Phone[] $phones
- * @property-read \App\Relative|null $relative
- * @property-read \App\User|null $user
+ * @property-read \App\Relative|null                                    $relative
+ * @property-read \App\User|null                                        $user
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Contact onlyTrashed()
  * @method static bool|null restore()
@@ -46,7 +49,7 @@ class Contact extends Model
     protected $dates = [
         'created_at',
         'updated_at',
-        'deleted_at'
+        'deleted_at',
     ];
 
     /**
@@ -56,7 +59,7 @@ class Contact extends Model
         'name',
         'user_id',
         'contacttype_id',
-        'relative_id'
+        'relative_id',
     ];
 
     public function user()

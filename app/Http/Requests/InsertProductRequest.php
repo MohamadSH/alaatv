@@ -17,7 +17,10 @@ class InsertProductRequest extends FormRequest
      */
     public function authorize()
     {
-        if (Auth()->user()->can(Config::get('constants.INSERT_PRODUCT_ACCESS'))) return true;
+        if (Auth()
+            ->user()
+            ->can(Config::get('constants.INSERT_PRODUCT_ACCESS')))
+            return true;
         return false;
     }
 
@@ -29,17 +32,17 @@ class InsertProductRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'basePrice' => 'required|numeric',
-            'discount' => 'numeric',
-            'order' => 'numeric',
-            'amount' => 'required_if:amountLimit,1|numeric',
-            'image' => 'image|mimes:jpeg,jpg,png',
-            'file' => 'file',
+            'name'            => 'required',
+            'basePrice'       => 'required|numeric',
+            'discount'        => 'numeric',
+            'order'           => 'numeric',
+            'amount'          => 'required_if:amountLimit,1|numeric',
+            'image'           => 'image|mimes:jpeg,jpg,png',
+            'file'            => 'file',
             'attributeset_id' => 'required|exists:attributesets,id',
-            'bonPlus' => 'numeric',
-            'bonDiscount' => 'numeric',
-            'producttype_id' => 'required|exists:producttypes,id'
+            'bonPlus'         => 'numeric',
+            'bonDiscount'     => 'numeric',
+            'producttype_id'  => 'required|exists:producttypes,id',
         ];
     }
 

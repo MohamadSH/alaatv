@@ -8,20 +8,20 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\Bon
  *
- * @property int $id
- * @property string|null $name نام بن
- * @property string|null $displayName نام قابل نمایش بن
- * @property int|null $bontype_id آی دی مشحص کننده نوع بن
- * @property string|null $description توضیح درباره بن
- * @property int $isEnable فعال/غیرفعال
- * @property int $order ترتیب بن
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property \Carbon\Carbon|null $deleted_at
- * @property-read \App\Bontype|null $bontype
+ * @property int                                                          $id
+ * @property string|null                                                  $name        نام بن
+ * @property string|null                                                  $displayName نام قابل نمایش بن
+ * @property int|null                                                     $bontype_id  آی دی مشحص کننده نوع بن
+ * @property string|null                                                  $description توضیح درباره بن
+ * @property int                                                          $isEnable    فعال/غیرفعال
+ * @property int                                                          $order       ترتیب بن
+ * @property \Carbon\Carbon|null                                          $created_at
+ * @property \Carbon\Carbon|null                                          $updated_at
+ * @property \Carbon\Carbon|null                                          $deleted_at
+ * @property-read \App\Bontype|null                                       $bontype
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Product[] $products
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Userbon[] $userbons
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\User[] $users
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\User[]    $users
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Bon enable()
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Bon onlyTrashed()
@@ -45,7 +45,11 @@ class Bon extends Model
 {
     use SoftDeletes;
     /**      * The attributes that should be mutated to dates.        */
-    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
 
     /**
      * @var array
@@ -72,12 +76,14 @@ class Bon extends Model
 
     public function products()
     {
-        return $this->belongsToMany('\App\Product')->withPivot('discount', 'bonPlus');
+        return $this->belongsToMany('\App\Product')
+                    ->withPivot('discount', 'bonPlus');
     }
 
     public function users()
     {
-        return $this->belongsToMany('\App\User')->withPivot('number');
+        return $this->belongsToMany('\App\User')
+                    ->withPivot('number');
     }
 
     public function userbons()
@@ -97,7 +103,8 @@ class Bon extends Model
 
     /**
      * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param mixed $name
+     * @param mixed                                 $name
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeOfName($query, $name)

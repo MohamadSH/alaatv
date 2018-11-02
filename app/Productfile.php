@@ -10,20 +10,20 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\Productfile
  *
- * @property int $id
- * @property int $product_id آی دی مشخص کننده محصول این فایل
- * @property int|null $productfiletype_id توضیج درباره نوع رشته
- * @property string|null $file اسم فایل
- * @property string|null $cloudFile فایل آپلود شده در سرور خارجی
- * @property string|null $name عنوان فایل
- * @property string|null $description توضیح درباره فایل
- * @property int $order ترتیب فایل
- * @property int $enable فعال بودن یا غیرفعال بودن فایل
- * @property string|null $validSince تاریخ شروع استفاده از فایل
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property \Carbon\Carbon|null $deleted_at
- * @property-read \App\Product $product
+ * @property int                            $id
+ * @property int                            $product_id         آی دی مشخص کننده محصول این فایل
+ * @property int|null                       $productfiletype_id توضیج درباره نوع رشته
+ * @property string|null                    $file               اسم فایل
+ * @property string|null                    $cloudFile          فایل آپلود شده در سرور خارجی
+ * @property string|null                    $name               عنوان فایل
+ * @property string|null                    $description        توضیح درباره فایل
+ * @property int                            $order              ترتیب فایل
+ * @property int                            $enable             فعال بودن یا غیرفعال بودن فایل
+ * @property string|null                    $validSince         تاریخ شروع استفاده از فایل
+ * @property \Carbon\Carbon|null            $created_at
+ * @property \Carbon\Carbon|null            $updated_at
+ * @property \Carbon\Carbon|null            $deleted_at
+ * @property-read \App\Product              $product
  * @property-read \App\Productfiletype|null $productfiletype
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Productfile onlyTrashed()
@@ -52,7 +52,11 @@ class Productfile extends Model
     use SoftDeletes;
     use Helper;
     /**      * The attributes that should be mutated to dates.        */
-    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
 
     /**
      * @var array
@@ -66,7 +70,7 @@ class Productfile extends Model
         'order',
         'enable',
         'validSince',
-        'cloudFile'
+        'cloudFile',
     ];
 
     public function product()
@@ -94,6 +98,7 @@ class Productfile extends Model
      * Scope a query to only include enable(or disable) Products.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeEnable($query)
@@ -105,8 +110,8 @@ class Productfile extends Model
     {
         return $query->where(function ($q) {
             $q->where('validSince', '<', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
-                ->timezone('Asia/Tehran'))
-                ->orwhereNull('validSince');
+                                               ->timezone('Asia/Tehran'))
+              ->orwhereNull('validSince');
         });
     }
 }

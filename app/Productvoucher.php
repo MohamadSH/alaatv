@@ -8,17 +8,17 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\Productvoucher
  *
- * @property int $id
- * @property int|null $product_id آی دی محصول صاحب وچر
- * @property int|null $user_id آی دی مشخص کننده کاربر که کد به اون تخصیص داده شده است
- * @property string|null $code پین کد وچر
- * @property string|null $expirationdatetime زمان انقضای این پین کد
- * @property int $enable فعال یا غیرفعال بودن پین
- * @property string|null $description توضیح این پین کد
+ * @property int                 $id
+ * @property int|null            $product_id         آی دی محصول صاحب وچر
+ * @property int|null            $user_id            آی دی مشخص کننده کاربر که کد به اون تخصیص داده شده است
+ * @property string|null         $code               پین کد وچر
+ * @property string|null         $expirationdatetime زمان انقضای این پین کد
+ * @property int                 $enable             فعال یا غیرفعال بودن پین
+ * @property string|null         $description        توضیح این پین کد
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property \Carbon\Carbon|null $deleted_at
- * @property-read \App\Product $products
+ * @property-read \App\Product   $products
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Productvoucher onlyTrashed()
  * @method static bool|null restore()
@@ -40,7 +40,11 @@ class Productvoucher extends Model
 {
     use SoftDeletes;
     /**      * The attributes that should be mutated to dates.        */
-    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
 
     /**
      * @var array

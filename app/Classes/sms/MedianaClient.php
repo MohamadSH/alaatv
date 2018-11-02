@@ -65,20 +65,21 @@ class MedianaClient implements SmsSenderClient
         $url = $this->url;
         $base = [
             'uname' => $this->userName,
-            'pass' => $this->password,
-            'from' => $this->number,
+            'pass'  => $this->password,
+            'from'  => $this->number,
         ];
         if (isset($params['from']))
             unset($base["from"]);
 
         $params = array_merge($base, $params);
-//        dd($params);
+        //        dd($params);
 
         try {
             $response = $this->http->request('POST', $url, [
-                'form_params' => $params
+                'form_params' => $params,
             ]);
-        } catch (GuzzleException $e) {
+        }
+        catch (GuzzleException $e) {
             throw $e;
         }
 

@@ -21,6 +21,7 @@ class BlocksTableSeeder extends Seeder
                 'order' => 1,
                 'enable' => 1,
                 'created_at' => \Carbon\Carbon::now(),
+                'class' => 'konkoor'
             ],
             [
                 'id' => 2,
@@ -29,6 +30,7 @@ class BlocksTableSeeder extends Seeder
                 'order' => 2,
                 'enable' => 1,
                 'created_at' => \Carbon\Carbon::now(),
+                'class' => 'konkoor'
             ],
             [
                 'id' => 3,
@@ -37,6 +39,7 @@ class BlocksTableSeeder extends Seeder
                 'order' => 3,
                 'enable' => 1,
                 'created_at' => \Carbon\Carbon::now(),
+                'class' => 'yazdahom'
             ],
             [
                 'id' => 4,
@@ -45,6 +48,7 @@ class BlocksTableSeeder extends Seeder
                 'order' => 4,
                 'enable' => 1,
                 'created_at' => \Carbon\Carbon::now(),
+                'class' => 'dahom'
             ],
             [
                 'id' => 5,
@@ -53,6 +57,7 @@ class BlocksTableSeeder extends Seeder
                 'order' => 5,
                 'enable' => 1,
                 'created_at' => \Carbon\Carbon::now(),
+                'class' => 'hamayesh'
             ],
         ];
         DB::table('blocks')->insert($data); // Query Builder

@@ -14,19 +14,20 @@ trait MetaCommon
      * that can be found in the LICENSE file.
      *
      * https://github.com/peterkahl/multibyte-keyword-generator
-     * @param $text
+     * @param        $text
      * @param string $article_kw
      * @param string $global_kw
-     * @param int $min_word_length
-     * @param int $min_word_occur
-     * @param int $min_2words_length
-     * @param int $min_2words_phrase_length
-     * @param int $min_2words_phrase_occur
-     * @param int $min_3words_length
-     * @param int $min_3words_phrase_length
-     * @param int $min_3words_phrase_occur
+     * @param int    $min_word_length
+     * @param int    $min_word_occur
+     * @param int    $min_2words_length
+     * @param int    $min_2words_phrase_length
+     * @param int    $min_2words_phrase_occur
+     * @param int    $min_3words_length
+     * @param int    $min_3words_phrase_length
+     * @param int    $min_3words_phrase_occur
      * @param string $encoding
      * @param string $lang
+     *
      * @return string
      */
 
@@ -69,7 +70,7 @@ trait MetaCommon
         // What it does: If the class encounters this language(s), it will
         // return empty string ''
         // ignore languages
-//	$params['ignore'] = array('zh_CN', 'zh_TW', 'ja_JP'); // must be an array case sensitive !!!
+        //	$params['ignore'] = array('zh_CN', 'zh_TW', 'ja_JP'); // must be an array case sensitive !!!
         $params['min_word_length'] = $min_word_length;
         $params['min_word_occur'] = $min_word_occur;
         $params['min_2words_length'] = $min_2words_length;
@@ -97,7 +98,8 @@ trait MetaCommon
     {
         try {
             $seo = new SeoMetaTagsGenerator($item);
-        } catch (\Exception $e) {
+        }
+        catch (\Exception $e) {
         }
     }
 }

@@ -10,18 +10,20 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\Attribute
  *
- * @property int $id
- * @property int|null $attributecontrol_id آی دی مشخص کننده کنترل قابل استفاده برای صفت
- * @property string|null $name نام صفت
- * @property string|null $displayName نام قابل نمایش
- * @property string|null $description توضیح درباره صفت
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property \Carbon\Carbon|null $deleted_at
- * @property int|null $attributetype_id آی دی مشخص کننده نوع صفت مورد نظر
- * @property-read \App\Attributecontrol|null $attributecontrol
+ * @property int                                                                 $id
+ * @property int|null                                                            $attributecontrol_id آی دی مشخص کننده
+ *           کنترل قابل استفاده برای صفت
+ * @property string|null                                                         $name                نام صفت
+ * @property string|null                                                         $displayName         نام قابل نمایش
+ * @property string|null                                                         $description         توضیح درباره صفت
+ * @property \Carbon\Carbon|null                                                 $created_at
+ * @property \Carbon\Carbon|null                                                 $updated_at
+ * @property \Carbon\Carbon|null                                                 $deleted_at
+ * @property int|null                                                            $attributetype_id    آی دی مشخص کننده
+ *           نوع صفت مورد نظر
+ * @property-read \App\Attributecontrol|null                                     $attributecontrol
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Attributegroup[] $attributegroups
- * @property-read \App\Attributetype|null $attributetype
+ * @property-read \App\Attributetype|null                                        $attributetype
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Attributevalue[] $attributevalues
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Attribute onlyTrashed()
@@ -52,7 +54,7 @@ class Attribute extends Model
     protected $dates = [
         'created_at',
         'updated_at',
-        'deleted_at'
+        'deleted_at',
     ];
     /**
      * @var array
@@ -67,7 +69,8 @@ class Attribute extends Model
 
     public function attributegroups()
     {
-        return $this->belongsToMany('App\Attributegroup')->withTimestamps();
+        return $this->belongsToMany('App\Attributegroup')
+                    ->withTimestamps();
     }
 
     public function attributecontrol()

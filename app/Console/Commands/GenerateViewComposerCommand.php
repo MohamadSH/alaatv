@@ -37,6 +37,7 @@ class GenerateViewComposerCommand extends Command
 
     /**
      * @param $composerName
+     *
      * @return bool|mixed|string
      */
     protected function compileTemplate($composerName)
@@ -49,6 +50,7 @@ class GenerateViewComposerCommand extends Command
     /**
      * @param $composerName
      * @param $stub
+     *
      * @return string
      */
     protected function makeFilterClass($composerName, $stub): string

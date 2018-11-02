@@ -8,11 +8,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\Afterloginformcontrol
  *
- * @property int $id
- * @property string|null $name
- * @property string|null $displayName
- * @property int $enable
- * @property int $order
+ * @property int                 $id
+ * @property string|null         $name
+ * @property string|null         $displayName
+ * @property int                 $enable
+ * @property int                 $order
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property \Carbon\Carbon|null $deleted_at
@@ -42,7 +42,7 @@ class Afterloginformcontrol extends Model
     protected $dates = [
         'created_at',
         'updated_at',
-        'deleted_at'
+        'deleted_at',
     ];
 
     /**
@@ -51,11 +51,13 @@ class Afterloginformcontrol extends Model
     protected $fillable = [
         'name',
         'displayName',
-        'order'
+        'order',
     ];
 
     public static function getFormFields()
     {
-        return Afterloginformcontrol::all()->where("enable", 1)->sortBy("order");
+        return Afterloginformcontrol::all()
+                                    ->where("enable", 1)
+                                    ->sortBy("order");
     }
 }

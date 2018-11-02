@@ -8,13 +8,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\Paymentmethod
  *
- * @property int $id
- * @property string|null $name نام این روش
- * @property string|null $displayName نام قابل نمایش روش
- * @property string|null $description توضیح این روش
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property \Carbon\Carbon|null $deleted_at
+ * @property int                                                              $id
+ * @property string|null                                                      $name        نام این روش
+ * @property string|null                                                      $displayName نام قابل نمایش روش
+ * @property string|null                                                      $description توضیح این روش
+ * @property \Carbon\Carbon|null                                              $created_at
+ * @property \Carbon\Carbon|null                                              $updated_at
+ * @property \Carbon\Carbon|null                                              $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[] $transactions
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Paymentmethod onlyTrashed()
@@ -34,7 +34,11 @@ class Paymentmethod extends Model
 {
     use SoftDeletes;
     /**      * The attributes that should be mutated to dates.        */
-    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
 
     /**
      * @var array

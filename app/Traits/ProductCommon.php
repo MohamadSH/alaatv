@@ -10,6 +10,7 @@ trait ProductCommon
 {
     /**
      * @param Product $product
+     *
      * @return Collection
      */
     function makeAllFileCollection(Product $product): Collection
@@ -32,10 +33,10 @@ trait ProductCommon
                         $fileCollection->put($product->name, $filesArray);
                 }
                 $allFilesCollection->push([
-                    "typeName" => $productfiletype->name,
-                    "typeDisplayName" => $productfiletype->displayName,
-                    "files" => $fileCollection
-                ]);
+                                              "typeName"        => $productfiletype->name,
+                                              "typeDisplayName" => $productfiletype->displayName,
+                                              "files"           => $fileCollection,
+                                          ]);
             }
             return $allFilesCollection;
         });
@@ -43,7 +44,8 @@ trait ProductCommon
 
     /**
      * @param Product $product
-     * @param $chunk
+     * @param         $chunk
+     *
      * @return Collection
      */
     public function makeOtherProducts(Product $product, $chunk)
@@ -61,7 +63,8 @@ trait ProductCommon
 
     /**
      * @param Product $product
-     * @param $extraAttributeValues
+     * @param         $extraAttributeValues
+     *
      * @return int|float
      */
     public function productExtraCostFromAttributes(Product $product, $extraAttributeValues)
@@ -71,19 +74,21 @@ trait ProductCommon
             . $product->cacheKey()
             . "\\extraAttributeValues:"
             . (isset($extraAttributeValues) ? implode("", $extraAttributeValues) : "-");
-        return Cache::tags('bon')->remember($key, config("constants.CACHE_60"), function () use ($product, $extraAttributeValues) {
-            $totalExtraCost = 0;
-            foreach ($extraAttributeValues as $attributevalueId) {
-                $extraCost = 0;
-                $attributevalue = $product->attributevalues->where("id", $attributevalueId)->first();
+        return Cache::tags('bon')
+                    ->remember($key, config("constants.CACHE_60"), function () use ($product, $extraAttributeValues) {
+                        $totalExtraCost = 0;
+                        foreach ($extraAttributeValues as $attributevalueId) {
+                            $extraCost = 0;
+                            $attributevalue = $product->attributevalues->where("id", $attributevalueId)
+                                                                       ->first();
 
-                if (isset($attributevalue) && isset($attributevalue->pivot->extraCost))
-                    $extraCost = $attributevalue->pivot->extraCost;
+                            if (isset($attributevalue) && isset($attributevalue->pivot->extraCost))
+                                $extraCost = $attributevalue->pivot->extraCost;
 
-                $totalExtraCost += $extraCost;
-            }
-            return $totalExtraCost;
-        });
+                            $totalExtraCost += $extraCost;
+                        }
+                        return $totalExtraCost;
+                    });
 
     }
 
@@ -91,7 +96,8 @@ trait ProductCommon
      * Finds product intended child based on specified attribute values
      *
      * @param Product $product
-     * @param array $mainAttributeValues
+     * @param array   $mainAttributeValues
+     *
      * @return Product
      */
     public function findProductChildViaAttributes(Product $product, array $mainAttributeValues): ?Product
@@ -99,12 +105,13 @@ trait ProductCommon
         foreach ($product->children as $child) {
             $childAttributevalues = $child->attributevalues;
             $flag = true;
-            if (isset($mainAttributeValues)) foreach ($mainAttributeValues as $attributevalue) {
-                if (!$childAttributevalues->contains($attributevalue)) {
-                    $flag = false;
-                    break;
+            if (isset($mainAttributeValues))
+                foreach ($mainAttributeValues as $attributevalue) {
+                    if (!$childAttributevalues->contains($attributevalue)) {
+                        $flag = false;
+                        break;
+                    }
                 }
-            }
 
             if ($flag && $childAttributevalues->count() == count($mainAttributeValues)) {
                 $simpleProduct = $child;
@@ -127,12 +134,16 @@ trait ProductCommon
                 if ($product->producttype_id == 2) {
                     $enableChildren = $product->children->where("enable", 1);
                     if ($enableChildren->count() == 1) {
-                        $costArray = $enableChildren->first()->calculatePayablePrice();
+                        $costArray = $enableChildren->first()
+                                                    ->calculatePayablePrice();
                     } else $costArray = $product->calculatePayablePrice();
 
                 } else $costArray = $product->calculatePayablePrice();
 
-                $costCollection->put($product->id, ["cost" => $costArray["cost"], 'productDiscount' => $costArray["productDiscount"], 'bonDiscount' => $costArray['bonDiscount']]);
+                $costCollection->put($product->id, ["cost"            => $costArray["cost"],
+                                                    'productDiscount' => $costArray["productDiscount"],
+                                                    'bonDiscount'     => $costArray['bonDiscount'],
+                ]);
             }
             return $costCollection;
 
@@ -150,9 +161,14 @@ trait ProductCommon
         $key = "product:makeProductCollection:" . $key;
         return Cache::remember($key, Config::get("constants.CACHE_60"), function () use ($productsId) {
             if (isset($productsId))
-                $allProducts = Product::getProducts()->whereIn("id", $productsId)->orderBy("created_at", "Desc")->get();
+                $allProducts = Product::getProducts()
+                                      ->whereIn("id", $productsId)
+                                      ->orderBy("created_at", "Desc")
+                                      ->get();
             else
-                $allProducts = Product::getProducts()->orderBy("created_at", "Desc")->get();
+                $allProducts = Product::getProducts()
+                                      ->orderBy("created_at", "Desc")
+                                      ->get();
             $products = collect();
             foreach ($allProducts as $product) {
                 $products->push($product);
@@ -192,7 +208,7 @@ trait ProductCommon
         $key = "product:makeParentArray:" . $myProduct->cacheKey();
         return Cache::remember($key, Config::get("constants.CACHE_60"), function () use ($myProduct) {
             $counter = 1;
-            $parentsArray = array();
+            $parentsArray = [];
             while ($myProduct->hasParents()) {
                 $parentsArray = array_add($parentsArray, $counter++, $myProduct->parents->first());
                 $myProduct = $myProduct->parents->first();

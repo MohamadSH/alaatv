@@ -15,39 +15,52 @@ use Illuminate\Support\Facades\Config;
 /**
  * App\Order
  *
- * @property int $id
- * @property int|null $user_id آیدی مشخص کننده کاربر سفارش دهنده
- * @property int|null $orderstatus_id آیدی مشخص کننده وضعیت سفارش
- * @property int|null $paymentstatus_id آیدی مشخص کننده وضعیت پرداخت سفارش
- * @property int|null $coupon_id آیدی مشخص کننده کپن استفاده شده برای سفارش
- * @property float $couponDiscount میزان تخفیف کپن برای سفارش به درصد
- * @property int $couponDiscountAmount میزان تخفیف کپن(به تومان)
- * @property int|null $cost مبلغ قابل پرداخت توسط کاربر
- * @property int|null $costwithoutcoupon بخشی از قیمت که مشمول کپن تخفیف نمی شود
- * @property int $discount تخفیف خاص برای این سفارش به تومان
- * @property string|null $customerDescription توضیحات مشتری درباره سفارش
- * @property string|null $customerExtraInfo اطلاعات تکمیلی مشتری برای این سفارش
- * @property string|null $checkOutDateTime تاریخ تسویه حساب کامل
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property string|null $completed_at مشخص کننده زمان تکمیل سفارش کاربر
- * @property \Carbon\Carbon|null $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[] $archivedSuccessfulTransactions
- * @property-read \App\Coupon|null $coupon
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Orderfile[] $files
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Orderproduct[] $normalOrderproducts
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[] $onlinetransactions
+ * @property int                                                                      $id
+ * @property int|null                                                                 $user_id              آیدی مشخص
+ *           کننده کاربر سفارش دهنده
+ * @property int|null                                                                 $orderstatus_id       آیدی مشخص
+ *           کننده وضعیت سفارش
+ * @property int|null                                                                 $paymentstatus_id     آیدی مشخص
+ *           کننده وضعیت پرداخت سفارش
+ * @property int|null                                                                 $coupon_id            آیدی مشخص
+ *           کننده کپن استفاده شده برای سفارش
+ * @property float                                                                    $couponDiscount       میزان تخفیف
+ *           کپن برای سفارش به درصد
+ * @property int                                                                      $couponDiscountAmount میزان تخفیف
+ *           کپن(به تومان)
+ * @property int|null                                                                 $cost                 مبلغ قابل
+ *           پرداخت توسط کاربر
+ * @property int|null                                                                 $costwithoutcoupon    بخشی از
+ *           قیمت که مشمول کپن تخفیف نمی شود
+ * @property int                                                                      $discount             تخفیف خاص
+ *           برای این سفارش به تومان
+ * @property string|null                                                              $customerDescription  توضیحات
+ *           مشتری درباره سفارش
+ * @property string|null                                                              $customerExtraInfo    اطلاعات
+ *           تکمیلی مشتری برای این سفارش
+ * @property string|null                                                              $checkOutDateTime     تاریخ تسویه
+ *           حساب کامل
+ * @property \Carbon\Carbon|null                                                      $created_at
+ * @property \Carbon\Carbon|null                                                      $updated_at
+ * @property string|null                                                              $completed_at         مشخص کننده
+ *           زمان تکمیل سفارش کاربر
+ * @property \Carbon\Carbon|null                                                      $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[]         $archivedSuccessfulTransactions
+ * @property-read \App\Coupon|null                                                    $coupon
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Orderfile[]           $files
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Orderproduct[]        $normalOrderproducts
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[]         $onlinetransactions
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Ordermanagercomment[] $ordermanagercomments
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Orderpostinginfo[] $orderpostinginfos
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Orderproduct[] $orderproducts
- * @property-read \App\Orderstatus|null $orderstatus
- * @property-read \App\Paymentstatus|null $paymentstatus
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[] $pendingTransactions
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[] $successfulTransactions
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[] $suspendedTransactions
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[] $transactions
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[] $unpaidTransactions
- * @property-read \App\User|null $user
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Orderpostinginfo[]    $orderpostinginfos
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Orderproduct[]        $orderproducts
+ * @property-read \App\Orderstatus|null                                               $orderstatus
+ * @property-read \App\Paymentstatus|null                                             $paymentstatus
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[]         $pendingTransactions
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[]         $successfulTransactions
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[]         $suspendedTransactions
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[]         $transactions
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[]         $unpaidTransactions
+ * @property-read \App\User|null                                                      $user
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Order onlyTrashed()
  * @method static bool|null restore()
@@ -77,12 +90,15 @@ class Order extends Model
     use SoftDeletes, CascadeSoftDeletes;
     use Helper;
     use DateTrait;
-    protected $cascadeDeletes = ['transactions', 'files'];
+    protected $cascadeDeletes = [
+        'transactions',
+        'files',
+    ];
     /**      * The attributes that should be mutated to dates.        */
     protected $dates = [
         'created_at',
         'updated_at',
-        'deleted_at'
+        'deleted_at',
     ];
     use ProductCommon;
 
@@ -102,7 +118,7 @@ class Order extends Model
         'customerDescription',
         'customerExtraInfo',
         'checkOutDateTime',
-        'completed_at'
+        'completed_at',
     ];
 
     public static function orderStatusFilter($orders, $orderStatusesId)
@@ -150,36 +166,41 @@ class Order extends Model
 
     public function onlinetransactions()
     {
-        return $this->hasMany('App\Transaction')->where('paymentmethod_id', 1);
+        return $this->hasMany('App\Transaction')
+                    ->where('paymentmethod_id', 1);
     }
 
     public function successfulTransactions()
     {
-        return $this->hasMany('App\Transaction')->where(function ($q) {
-            $q->where("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL"))
-                ->orWhere("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_SUSPENDED"));
-        });
+        return $this->hasMany('App\Transaction')
+                    ->where(function ($q) {
+                        $q->where("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL"))
+                          ->orWhere("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_SUSPENDED"));
+                    });
     }
 
     public function pendingTransactions()
     {
-        return $this->hasMany('App\Transaction')->where("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_PENDING"));
+        return $this->hasMany('App\Transaction')
+                    ->where("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_PENDING"));
     }
 
     public function unpaidTransactions()
     {
-        return $this->hasMany('App\Transaction')->where("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_UNPAID"));
+        return $this->hasMany('App\Transaction')
+                    ->where("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_UNPAID"));
     }
 
     public function suspendedTransactions()
     {
         return $this->hasMany('App\Transaction')
-            ->where("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_SUSPENDED"));
+                    ->where("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_SUSPENDED"));
     }
 
     public function archivedSuccessfulTransactions()
     {
-        return $this->hasMany('App\Transaction')->where("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_ARCHIVED_SUCCESSFUL"));
+        return $this->hasMany('App\Transaction')
+                    ->where("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_ARCHIVED_SUCCESSFUL"));
     }
 
     public function transactions()
@@ -199,16 +220,19 @@ class Order extends Model
 
     public function normalOrderproducts()
     {
-        return $this->hasMany('App\Orderproduct')->where(function ($q) {
-            $q->whereNull("orderproducttype_id")->orWhere("orderproducttype_id", Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"));
-        });
+        return $this->hasMany('App\Orderproduct')
+                    ->where(function ($q) {
+                        $q->whereNull("orderproducttype_id")
+                          ->orWhere("orderproducttype_id", Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"));
+                    });
 
     }
 
     public function debt()
     {
         $cost = $this->obtainOrderCost()["totalCost"];
-        if (strcmp($this->orderstatus->name, 'refunded') == 0) return -($this->totalPaidCost() + $this->totalRefund());
+        if (strcmp($this->orderstatus->name, 'refunded') == 0)
+            return -($this->totalPaidCost() + $this->totalRefund());
         else return $cost - ($this->totalPaidCost() + $this->totalRefund());
     }
 
@@ -217,6 +241,7 @@ class Order extends Model
      *
      * @param boolean $calculateOrderCost
      * @param boolean $calculateOrderproductCost
+     *
      * @return array
      */
     public function obtainOrderCost($calculateOrderCost = false, $calculateOrderproductCost = true, $mode = "DEFAULT")
@@ -227,13 +252,13 @@ class Order extends Model
          * In the other words , if he has submitted a coupon for this order before, at the time we
          * have validated coupon before accepting it.so at this time I believe we can jsut let him use it.
          */
-//
+        //
         if ($calculateOrderCost) {
             $orderproducts = $this->normalOrderproducts->sortByDesc("created_at");
             $totalCostWithoutDiscount = null;
             $totalCostWithDiscount = null;
             foreach ($orderproducts as $orderproduct) {
-                $costArray = array();
+                $costArray = [];
                 if ($calculateOrderproductCost) {
                     $costArray = $orderproduct->obtainOrderproductCost();
                     /**
@@ -258,11 +283,13 @@ class Order extends Model
                                     $orderproduct->includedInCoupon = 1;
                                 } else {
                                     $flag = true;
-                                    if (!in_array($this->coupon->id, $orderproduct->product->coupons->pluck('id')->toArray())) {
+                                    if (!in_array($this->coupon->id, $orderproduct->product->coupons->pluck('id')
+                                                                                                    ->toArray())) {
                                         $flag = false;
                                         $parentsArray = $this->makeParentArray($orderproduct->product);
                                         foreach ($parentsArray as $parent) {
-                                            if (in_array($this->coupon->id, $parent->coupons->pluck('id')->toArray())) {
+                                            if (in_array($this->coupon->id, $parent->coupons->pluck('id')
+                                                                                            ->toArray())) {
                                                 $flag = true;
                                                 break;
                                             }
@@ -310,35 +337,45 @@ class Order extends Model
             $totalCostWithDiscount = $this->cost;
         }
 
-        if (isset($totalCostWithDiscount)) $rawCostWithDiscount = (int)($totalCostWithDiscount);
+        if (isset($totalCostWithDiscount))
+            $rawCostWithDiscount = (int)($totalCostWithDiscount);
         else $rawCostWithDiscount = null;
 
-        if (isset($totalCostWithoutDiscount)) $rawCostWithoutDiscount = (int)$totalCostWithoutDiscount;
+        if (isset($totalCostWithoutDiscount))
+            $rawCostWithoutDiscount = (int)$totalCostWithoutDiscount;
         else $rawCostWithoutDiscount = null;
 
-        if (isset($totalCostWithDiscount) || isset($totalCostWithoutDiscount)) $totalCost = ($totalCostWithoutDiscount + intval(round($this->obtainCouponDiscount($totalCostWithDiscount)), 0)) - $this->discount;
+        if (isset($totalCostWithDiscount) || isset($totalCostWithoutDiscount))
+            $totalCost = ($totalCostWithoutDiscount + intval(round($this->obtainCouponDiscount($totalCostWithDiscount)), 0)) - $this->discount;
         else $totalCost = null;
 
-        if ($totalCost < 0) $totalCost = 0;
+        if ($totalCost < 0)
+            $totalCost = 0;
 
-        return array("rawCostWithDiscount" => $rawCostWithDiscount, 'rawCostWithoutDiscount' => $rawCostWithoutDiscount, "totalCost" => $totalCost);
+        return [
+            "rawCostWithDiscount"    => $rawCostWithDiscount,
+            'rawCostWithoutDiscount' => $rawCostWithoutDiscount,
+            "totalCost"              => $totalCost,
+        ];
 
     }
 
     public function hasCoupon()
     {
-        if (isset($this->coupon->id)) return true;
+        if (isset($this->coupon->id))
+            return true;
         else return false;
     }
 
     public function obtainCouponDiscount($totalCost)
     {
-        if (!isset($totalCost) || $totalCost == 0) return $totalCost;
+        if (!isset($totalCost) || $totalCost == 0)
+            return $totalCost;
         $couponType = $this->determineCoupontype();
         if ($couponType !== false) {
             if ($couponType["type"] == Config::get("constants.DISCOUNT_TYPE_PERCENTAGE"))
                 $totalCost = ((1 - ($couponType["discount"] / 100)) * $totalCost);
-            elseif ($couponType["type"] == Config::get("constants.DISCOUNT_TYPE_COST"))
+            else if ($couponType["type"] == Config::get("constants.DISCOUNT_TYPE_COST"))
                 $totalCost = $totalCost - $couponType["discount"];
         }
         return $totalCost;
@@ -348,9 +385,15 @@ class Order extends Model
     {
         if ($this->hasCoupon()) {
             if ($this->couponDiscount > 0) {
-                return ["type" => Config::get("constants.DISCOUNT_TYPE_PERCENTAGE"), "discount" => $this->couponDiscount];
+                return [
+                    "type"     => Config::get("constants.DISCOUNT_TYPE_PERCENTAGE"),
+                    "discount" => $this->couponDiscount,
+                ];
             } else {
-                return ["type" => Config::get("constants.DISCOUNT_TYPE_COST"), "discount" => $this->couponDiscountAmount];
+                return [
+                    "type"     => Config::get("constants.DISCOUNT_TYPE_COST"),
+                    "discount" => $this->couponDiscountAmount,
+                ];
             }
         }
         return false;
@@ -358,21 +401,25 @@ class Order extends Model
 
     public function totalPaidCost()
     {
-        if ($this->transactions->isEmpty()) return 0;
-        else return $this->successfulTransactions->where('cost', '>', 0)->sum("cost");
+        if ($this->transactions->isEmpty())
+            return 0;
+        else return $this->successfulTransactions->where('cost', '>', 0)
+                                                 ->sum("cost");
     }
 
     public function totalRefund()
     {
-        if ($this->transactions->isEmpty()) return 0;
-        else return $this->successfulTransactions->where('cost', '<', 0)->sum("cost");
+        if ($this->transactions->isEmpty())
+            return 0;
+        else return $this->successfulTransactions->where('cost', '<', 0)
+                                                 ->sum("cost");
     }
 
 
     public function CompletedAt_Jalali()
     {
         $explodedDateTime = explode(" ", $this->completed_at);
-//        $explodedTime = $explodedDateTime[1] ;
+        //        $explodedTime = $explodedDateTime[1] ;
         return $this->convertDate($this->completed_at, "toJalali");
     }
 
@@ -396,14 +443,16 @@ class Order extends Model
         $bonSum = 0;
         if (isset($intendedUser)) {
             $user = $intendedUser;
-        } elseif (Auth::check()) {
+        } else if (Auth::check()) {
             $user = Auth::user();
         }
 
         if (isset($user)) {
             foreach ($this->orderproducts as $orderproduct) {
-                if (!$user->userbons->where("orderproduct_id", $orderproduct->id)->isEmpty())
-                    $bonSum += $user->userbons->where("orderproduct_id", $orderproduct->id)->sum("totalNumber");
+                if (!$user->userbons->where("orderproduct_id", $orderproduct->id)
+                                    ->isEmpty())
+                    $bonSum += $user->userbons->where("orderproduct_id", $orderproduct->id)
+                                              ->sum("totalNumber");
             }
         }
         return $bonSum;
@@ -413,6 +462,7 @@ class Order extends Model
      * Checks which order products this coupon does not submit to
      *
      * @param \App\Order $order
+     *
      * @return array
      */
     public function reviewCoupon()
@@ -429,7 +479,7 @@ class Order extends Model
 
         [
             $couponValidationMessage,
-            $couponValidationCode
+            $couponValidationCode,
         ] = $this->coupon->validateCoupon();
         if (strlen($couponValidationMessage) > 0 && $couponValidationCode != 4) {
             $collapseCoupon = true;
@@ -442,14 +492,14 @@ class Order extends Model
             if (session()->has("couponMessageSuccess")) {
                 $couponRemoved = true;
                 session()->forget("couponMessageSuccess");
-            } elseif (session()->has("couponMessageError")) {
+            } else if (session()->has("couponMessageError")) {
                 session()->forget("couponMessageError");
             }
         }
 
         if (!$couponRemoved) {
             $orderproducts = $this->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
-                ->get();
+                                  ->get();
 
             $orderHasExtraAttribute = false;
             foreach ($orderproducts as $orderproduct) {
@@ -458,18 +508,26 @@ class Order extends Model
                     break;
                 }
             }
-            if ($orderHasExtraAttribute) $infoMessage .= "کد تخفیف شامل قیمت ویژگی های افزوده (مانند پست) نمی باشد.";
+            if ($orderHasExtraAttribute)
+                $infoMessage .= "کد تخفیف شامل قیمت ویژگی های افزوده (مانند پست) نمی باشد.";
 
             if ($this->coupon->coupontype->id == 2) {
 
-                $couponProducts = $this->coupon->products->pluck('id')->toArray();
+                $couponProducts = $this->coupon->products->pluck('id')
+                                                         ->toArray();
                 foreach ($orderproducts as $orderproduct) {
-                    if (!in_array($orderproduct->product->id, $couponProducts)) $warningMessage .= "این کپن برای `" . $orderproduct->product->name . "` تخفیف ندارد. ";
+                    if (!in_array($orderproduct->product->id, $couponProducts))
+                        $warningMessage .= "این کپن برای `" . $orderproduct->product->name . "` تخفیف ندارد. ";
                 }
             }
         }
 
-        return ["warning" => $warningMessage, "info" => $infoMessage, "error" => $errorMessage, "couponRemoved" => $couponRemoved];
+        return [
+            "warning"       => $warningMessage,
+            "info"          => $infoMessage,
+            "error"         => $errorMessage,
+            "couponRemoved" => $couponRemoved,
+        ];
     }
 
     public function totalCost()
@@ -481,12 +539,14 @@ class Order extends Model
     {
         if (isset($type))
             if ($type == Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT")) {
-                return $this->hasMany('App\Orderproduct')->where(function ($q) use ($type) {
-                    $q->where("orderproducttype_id", $type)
-                        ->orWhereNull("orderproducttype_id");
-                });
+                return $this->hasMany('App\Orderproduct')
+                            ->where(function ($q) use ($type) {
+                                $q->where("orderproducttype_id", $type)
+                                  ->orWhereNull("orderproducttype_id");
+                            });
             } else {
-                return $this->hasMany('App\Orderproduct')->where("orderproducttype_id", $type);
+                return $this->hasMany('App\Orderproduct')
+                            ->where("orderproducttype_id", $type);
             }
         else
             return $this->hasMany('App\Orderproduct');
@@ -503,7 +563,8 @@ class Order extends Model
         if (isset($this->coupon->id)) {
             $coupon = $this->coupon;
             $coupon->usageNumber = $coupon->usageNumber - 1;
-            if ($coupon->update()) ;
+            if ($coupon->update())
+                ;
             {
                 $this->coupon_id = null;
                 $this->couponDiscount = 0;
@@ -524,13 +585,16 @@ class Order extends Model
         $flag = false;
         if (isset($this->coupon->id)) {
             if ($this->coupon->coupontype->id == 2) {
-                foreach ($this->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->get() as $orderproduct) {
+                foreach ($this->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
+                              ->get() as $orderproduct) {
                     $hasCoupon = true;
-                    if (!in_array($this->coupon->id, $orderproduct->product->coupons->pluck('id')->toArray())) {
+                    if (!in_array($this->coupon->id, $orderproduct->product->coupons->pluck('id')
+                                                                                    ->toArray())) {
                         $hasCoupon = false;
                         $parentsArray = $this->makeParentArray($orderproduct->product);
                         foreach ($parentsArray as $parent) {
-                            if (in_array($this->coupon->id, $parent->coupons->pluck('id')->toArray())) {
+                            if (in_array($this->coupon->id, $parent->coupons->pluck('id')
+                                                                            ->toArray())) {
                                 $hasCoupon = true;
                                 break;
                             }
@@ -576,20 +640,23 @@ class Order extends Model
      * Gives order bons to user
      *
      * @param string $bonName
+     *
      * @return array
      */
     public function giveUserBons($bonName)
     {
         $totalSuccessfulBons = 0;
         $totalFailedBons = 0;
-        $checkedProducts = array();
+        $checkedProducts = [];
         $user = $this->user;
 
-        $orderproducts = $this->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->get();
+        $orderproducts = $this->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
+                              ->get();
         foreach ($orderproducts as $orderproduct) {
             if (!isset($user))
                 break;
-            if ($user->userbons->where("orderproduct_id", $orderproduct->id)->isNotEmpty())
+            if ($user->userbons->where("orderproduct_id", $orderproduct->id)
+                               ->isNotEmpty())
                 continue;
             $simpleProduct = $orderproduct->product;
             $bons = $simpleProduct->bons->where("name", $bonName);
@@ -597,7 +664,8 @@ class Order extends Model
                 $grandParent = $simpleProduct->getGrandParent();
                 if ($grandParent !== false) {
                     $simpleProduct = $grandParent;
-                    $bons = $grandParent->bons->where("name", $bonName)->where("isEnable", 1);
+                    $bons = $grandParent->bons->where("name", $bonName)
+                                              ->where("isEnable", 1);
                 }
             }
             if (in_array($simpleProduct->id, $checkedProducts))
@@ -622,7 +690,7 @@ class Order extends Model
 
         return [
             $totalSuccessfulBons,
-            $totalFailedBons
+            $totalFailedBons,
         ];
     }
 
@@ -630,6 +698,7 @@ class Order extends Model
      * Closes this order
      *
      * @param string $paymentStatus
+     *
      * @return array
      */
     public function close($paymentStatus, $orderStatus = null)
@@ -640,7 +709,7 @@ class Order extends Model
         $this->orderstatus_id = $orderStatus;
         $this->paymentstatus_id = $paymentStatus;
         $this->completed_at = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
-            ->timezone('Asia/Tehran');
+                                    ->timezone('Asia/Tehran');
 
     }
 
@@ -648,6 +717,7 @@ class Order extends Model
      * Determines if this order has given products
      *
      * @param array $product
+     *
      * @return array
      */
     public function hasProducts($products)

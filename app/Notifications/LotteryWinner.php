@@ -55,6 +55,7 @@ class LotteryWinner extends Notification implements ShouldQueue
      * Get the notification's delivery channels.
      *
      * @param  mixed $notifiable
+     *
      * @return array
      */
     public function via($notifiable)
@@ -67,6 +68,7 @@ class LotteryWinner extends Notification implements ShouldQueue
 
     /**
      * @param $notifiable
+     *
      * @return MedianaMessage
      */
     public function toMediana($notifiable)
@@ -86,7 +88,7 @@ class LotteryWinner extends Notification implements ShouldQueue
         if (isset($this->user->gender_id)) {
             if ($this->user->gender->name == "خانم")
                 $gender = "خانم ";
-            elseif ($this->user->gender->name == "آقا")
+            else if ($this->user->gender->name == "آقا")
                 $gender = "آقای ";
             else
                 $gender = "";
@@ -96,7 +98,7 @@ class LotteryWinner extends Notification implements ShouldQueue
 
         if (strlen($prize) > 0)
             $messageCore = "شما برنده " . $rank . " در قرعه کشی " . $lotteryName . " شده اید. جایزه شما " . $prize . " می باشد و در سریع ترین زمان به شما تقدیم خواهد شد.";
-        elseif (strlen($memorial) > 0)
+        else if (strlen($memorial) > 0)
             $messageCore = "شما در قرعه کشی " . $lotteryName . " شرکت داده شدید و متاسفانه چیزی برنده نشدید. به رسم یادبود " . $memorial . " تقدیمتان شده است.";
         else
             $messageCore = "شما در قرعه کشی " . $lotteryName . " شرکت داده شدید و متاسفانه برنده نشدید.";

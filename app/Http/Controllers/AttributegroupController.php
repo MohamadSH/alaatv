@@ -6,9 +6,8 @@ use App\Attribute;
 use App\Attributegroup;
 use App\Http\Requests\EditAttributegroupRequest;
 use App\Http\Requests\InsertAttributegroupRequest;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Input;
 
 class AttributegroupController extends Controller
@@ -33,7 +32,8 @@ class AttributegroupController extends Controller
     public function index()
     {
         $attributesetId = Input::get('attributeset_id');
-        $attributegroups = Attributegroup::where('attributeset_id', $attributesetId)->get();
+        $attributegroups = Attributegroup::where('attributeset_id', $attributesetId)
+                                         ->get();
         return view('attributegroup.index', compact('attributegroups'));
     }
 
@@ -51,6 +51,7 @@ class AttributegroupController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(InsertAttributegroupRequest $request)
@@ -59,7 +60,8 @@ class AttributegroupController extends Controller
         $attributegroup->fill($request->all());
 
         if ($attributegroup->save()) {
-            $attributegroup->attributes()->sync($request->get('attributes', []));
+            $attributegroup->attributes()
+                           ->sync($request->get('attributes', []));
             return $this->response->setStatusCode(200);
         } else {
             return $this->response->setStatusCode(503);
@@ -72,6 +74,7 @@ class AttributegroupController extends Controller
      * Display the specified resource.
      *
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show(Attributegroup $attributegroup)
@@ -83,13 +86,17 @@ class AttributegroupController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit(Attributegroup $attributegroup)
     {
         $attributeset = $attributegroup->attributeset_id;
-        $attributes = Attribute::pluck('displayName', 'id')->toArray();
-        $groupAttributes = $attributegroup->attributes()->pluck('id')->toArray();
+        $attributes = Attribute::pluck('displayName', 'id')
+                               ->toArray();
+        $groupAttributes = $attributegroup->attributes()
+                                          ->pluck('id')
+                                          ->toArray();
         return view('attributegroup.edit', compact('attributegroup', 'attributeset', 'groupAttributes', 'attributes'));
     }
 
@@ -97,14 +104,16 @@ class AttributegroupController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param  int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(EditAttributegroupRequest $request, Attributegroup $attributegroup)
     {
         $attributeset = $attributegroup->attributeset_id;
         $attributegroup->fill($request->all());
-        $attributegroup->attributes()->sync($request->get('attributes', []));
+        $attributegroup->attributes()
+                       ->sync($request->get('attributes', []));
 
         if ($attributegroup->update()) {
             session()->put("success", "اطلاعات گروه صفت با موفقیت اصلاح شد");
@@ -118,11 +127,13 @@ class AttributegroupController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy(Attributegroup $attributegroup)
     {
-        if ($attributegroup->delete()) session()->put('success', 'گروه صفت با موفقیت حذف شد');
+        if ($attributegroup->delete())
+            session()->put('success', 'گروه صفت با موفقیت حذف شد');
         else session()->put('error', 'خطای پایگاه داده');
         return redirect()->back();
     }

@@ -38,6 +38,7 @@ class InvoicePaid extends Notification implements ShouldQueue
      * Get the notification's delivery channels.
      *
      * @param  mixed $notifiable
+     *
      * @return array
      */
     public function via($notifiable)
@@ -49,6 +50,7 @@ class InvoicePaid extends Notification implements ShouldQueue
 
     /**
      * @param $notifiable
+     *
      * @return MedianaMessage
      */
     public function toMediana($notifiable)
@@ -67,7 +69,7 @@ class InvoicePaid extends Notification implements ShouldQueue
         if (isset($user->gender_id)) {
             if ($user->gender->name == "خانم")
                 $gender = "خانم ";
-            elseif ($user->gender->name == "آقا")
+            else if ($user->gender->name == "آقا")
                 $gender = "آقای ";
             else
                 $gender = "";
@@ -97,7 +99,7 @@ class InvoicePaid extends Notification implements ShouldQueue
     private function getInputData(): array
     {
         return [
-            'code' => $this->invoice->id,
+            'code'                   => $this->invoice->id,
             "https://goo.gl/jme5VU " => "https://goo.gl/jme5VU",
         ];
     }

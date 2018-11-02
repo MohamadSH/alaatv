@@ -17,7 +17,10 @@ class AttacheUserBonRequest extends FormRequest
      */
     public function authorize()
     {
-        if (Auth()->user()->can(Config::get('constants.ATTACHE_USER_BON_ACCESS'))) return true;
+        if (Auth()
+            ->user()
+            ->can(Config::get('constants.ATTACHE_USER_BON_ACCESS')))
+            return true;
         return false;
     }
 
@@ -29,7 +32,7 @@ class AttacheUserBonRequest extends FormRequest
     public function rules()
     {
         return [
-            'totalNumber' => 'required|numeric'
+            'totalNumber' => 'required|numeric',
         ];
     }
 

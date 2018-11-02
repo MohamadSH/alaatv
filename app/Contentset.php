@@ -4,6 +4,7 @@ namespace App;
 
 
 use App\Classes\Taggable;
+use App\Collection\SetCollection;
 use App\Traits\favorableTraits;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -13,17 +14,17 @@ use Illuminate\Support\Facades\Config;
 /**
  * App\Contentset
  *
- * @property int $id
- * @property string|null $name نام
- * @property string|null $description توضیح
- * @property string|null $photo عکس پوستر
- * @property string|null $tags تگ ها
- * @property int $enable فعال/غیرفعال
- * @property int $display نمایش/عدم نمایش
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property \Carbon\Carbon|null $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Content[] $contents
+ * @property int                                                   $id
+ * @property string|null                                           $name        نام
+ * @property string|null                                           $description توضیح
+ * @property string|null                                           $photo       عکس پوستر
+ * @property string|null                                           $tags        تگ ها
+ * @property int                                                   $enable      فعال/غیرفعال
+ * @property int                                                   $display     نمایش/عدم نمایش
+ * @property \Carbon\Carbon|null                                   $created_at
+ * @property \Carbon\Carbon|null                                   $updated_at
+ * @property \Carbon\Carbon|null                                   $deleted_at
+ * @property-read \App\Collection\ContentCollection|\App\Content[] $contents
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Contentset onlyTrashed()
  * @method static bool|null restore()
@@ -41,7 +42,7 @@ use Illuminate\Support\Facades\Config;
  * @method static \Illuminate\Database\Query\Builder|\App\Contentset withoutTrashed()
  * @mixin \Eloquent
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset active()
- * @property-read \App\Collection\UserCollection|\App\User[] $favoriteBy
+ * @property-read \App\Collection\UserCollection|\App\User[]       $favoriteBy
  */
 class Contentset extends Model implements Taggable
 {
@@ -49,7 +50,11 @@ class Contentset extends Model implements Taggable
     use favorableTraits;
 
     /**      * The attributes that should be mutated to dates.        */
-    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
 
     /**
      * @var array
@@ -58,8 +63,20 @@ class Contentset extends Model implements Taggable
         'name',
         'description',
         'tags',
-        'photo'
+        'photo',
     ];
+
+    /**
+     * Create a new Eloquent Collection instance.
+     *
+     * @param  array $models
+     *
+     * @return SetCollection
+     */
+    public function newCollection(array $models = [])
+    {
+        return new SetCollection($models);
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -71,6 +88,7 @@ class Contentset extends Model implements Taggable
      * Scope a query to only include active Contentsets.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeActive($query)
@@ -84,14 +102,17 @@ class Contentset extends Model implements Taggable
     |--------------------------------------------------------------------------
     */
 
-    public function contents()
+    public function getLastContent(): Content
     {
-        return $this->belongsToMany(
-            "\App\Content",
-            "contentset_educationalcontent",
-            "contentset_id",
-            "edc_id")
-            ->withPivot("order", "isDefault");
+        $key = "ContentSet:getLastContent" . $this->cacheKey();
+        return Cache::tags('set')
+                    ->remember($key, Config::get("constants.CACHE_60"), function () {
+                        return $this->contents()
+                                    ->active()
+                                    ->get()
+                                    ->sortByDesc("order")
+                                    ->first();
+                    });
     }
 
     /*
@@ -99,16 +120,6 @@ class Contentset extends Model implements Taggable
     |
     |--------------------------------------------------------------------------
     */
-
-    public function getLastContent(): Content
-    {
-        $key = "ContentSet:getLastContent" . $this->cacheKey();
-        return Cache::tags('set')->remember($key, Config::get("constants.CACHE_60"), function () {
-            return $this->contents
-                ->sortByDesc("pivot.order")->first();
-        });
-
-    }
 
     public function cacheKey()
     {
@@ -120,6 +131,16 @@ class Contentset extends Model implements Taggable
             $key,
             $time
         );
+    }
+
+    public function contents()
+    {
+        return $this->belongsToMany(
+            "\App\Content",
+            "contentset_educationalcontent",
+            "contentset_id",
+            "edc_id")
+                    ->withPivot("order", "isDefault");
     }
 
     public function getTagsAttribute($value)

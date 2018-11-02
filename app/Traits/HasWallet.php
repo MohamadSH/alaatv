@@ -32,7 +32,9 @@ trait HasWallet
 
     /**
      * Determine if the user can withdraw the given amount
+     *
      * @param  integer $amount
+     *
      * @return boolean
      */
     public function canWithdraw($amount)
@@ -45,19 +47,23 @@ trait HasWallet
      */
     public function getWalletBalance($type = 1)
     {
-        $wallet = $this->wallets->where("wallettype_id", $type)->first();
+        $wallet = $this->wallets->where("wallettype_id", $type)
+                                ->first();
         $balance = 0;
         if (isset($wallet))
-            $balance = $this->wallets->where("wallettype_id", $type)->first()->balance;
+            $balance = $this->wallets->where("wallettype_id", $type)
+                                     ->first()->balance;
 
         return $balance;
     }
 
     /**
      * Move credits to this account
+     *
      * @param  integer $amount
-     * @param  string $type
-     * @param  array $meta
+     * @param  string  $type
+     * @param  array   $meta
+     *
      * @return array
      */
     public function deposit($amount = 0, $walletType = null)
@@ -67,7 +73,8 @@ trait HasWallet
 
         if (!isset($walletType))
             $walletType = config("constants.WALLET_TYPE_MAIN");
-        $wallet = $this->wallets->where("wallettype_id", $walletType)->first();
+        $wallet = $this->wallets->where("wallettype_id", $walletType)
+                                ->first();
         if (isset($wallet)) {
             $result = $wallet->deposit($amount);
             if ($result["result"]) {
@@ -86,7 +93,8 @@ trait HasWallet
             $response = $walletController->store($request);
             if ($response->getStatusCode() == 200) {
                 $result = json_decode($response->getContent());
-                $wallet = Wallet::where("id", $result->wallet->id)->first();
+                $wallet = Wallet::where("id", $result->wallet->id)
+                                ->first();
                 $wallet->deposit($amount);
                 $failed = false;
             } else {
@@ -98,17 +106,18 @@ trait HasWallet
         if (!$failed)
             $responseText = "SUCCESSFUL";
         return [
-            "result" => !$failed,
+            "result"       => !$failed,
             "responseText" => $responseText,
-            "wallet" => (isset($wallet)) ? $wallet->id : 0
+            "wallet"       => (isset($wallet)) ? $wallet->id : 0,
         ];
     }
 
     /**
      * Fail to move credits to this account
+     *
      * @param  integer $amount
-     * @param  string $type
-     * @param  array $meta
+     * @param  string  $type
+     * @param  array   $meta
      */
     public function failDeposit($amount, $type = 'deposit', $meta = [])
     {
@@ -117,10 +126,12 @@ trait HasWallet
 
     /**
      * Attempt to move credits from this account
+     *
      * @param  integer $amount
-     * @param  string $type
-     * @param  array $meta
+     * @param  string  $type
+     * @param  array   $meta
      * @param  boolean $shouldAccept
+     *
      * @return array
      */
     public function withdraw($amount, $walletType = null, $shouldAccept = true)
@@ -131,7 +142,8 @@ trait HasWallet
         if (!isset($walletType))
             $walletType = config("constants.WALLET_TYPE_MAIN");
 
-        $wallet = $this->wallets->where("wallettype_id", $walletType)->first();
+        $wallet = $this->wallets->where("wallettype_id", $walletType)
+                                ->first();
         if (isset($wallet)) {
             $result = $wallet->withdraw($amount);
             if ($result["result"]) {
@@ -150,7 +162,8 @@ trait HasWallet
             $response = $walletController->store($request);
             if ($response->getStatusCode() == 200) {
                 $result = json_decode($response->getContent());
-                $wallet = Wallet::where("id", $result->wallet->id)->first();
+                $wallet = Wallet::where("id", $result->wallet->id)
+                                ->first();
                 $wallet->deposit(0);
                 $failed = false;
             } else {
@@ -162,17 +175,18 @@ trait HasWallet
         if (!$failed)
             $responseText = "SUCCESSFUL";
         return [
-            "result" => !$failed,
+            "result"       => !$failed,
             "responseText" => $responseText,
-            "wallet" => (isset($wallet)) ? $wallet->id : 0
+            "wallet"       => (isset($wallet)) ? $wallet->id : 0,
         ];
     }
 
     /**
      * Move credits from this account
+     *
      * @param  integer $amount
-     * @param  string $type
-     * @param  array $meta
+     * @param  string  $type
+     * @param  array   $meta
      * @param  boolean $shouldAccept
      */
     public function forceWithdraw($amount, $walletType)
@@ -186,16 +200,17 @@ trait HasWallet
     /**
      * Returns the actual balance for this wallet.
      * Might be different from the balance property if the database is manipulated
+     *
      * @return float balance
      */
     public function actualBalance()
     {
-//        $credits = $this->wallet->transactions()
-//            ->whereIn('type', ['deposit', 'refund'])
-//            ->sum('amount');
-//        $debits = $this->wallet->transactions()
-//            ->whereIn('type', ['withdraw', 'payout'])
-//            ->sum('amount');
-//        return $credits - $debits;
+        //        $credits = $this->wallet->transactions()
+        //            ->whereIn('type', ['deposit', 'refund'])
+        //            ->sum('amount');
+        //        $debits = $this->wallet->transactions()
+        //            ->whereIn('type', ['withdraw', 'payout'])
+        //            ->sum('amount');
+        //        return $credits - $debits;
     }
 }

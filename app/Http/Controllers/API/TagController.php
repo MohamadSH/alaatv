@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\API;
 
 use App\Classes\RedisTagging;
-use App\Http\Requests\Request;
-
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Request;
 
 //https://github.com/smrchy/rest-tagging
 
@@ -16,21 +15,6 @@ class TagController extends Controller
     public function __construct()
     {
         $this->redis = RedisTagging::getInstance();
-    }
-
-    private function callBack($err, $result, & $response){
-        if(isset($err)){
-            $response = response()->json([
-                'error' => "msg",
-            ], 410);
-        }
-        $header = array (
-            'Content-Type' => 'application/json; charset=UTF-8',
-            'charset' => 'utf-8'
-        );
-        $response = response()->json([
-            'data' => $result,
-        ], 200,$header,JSON_UNESCAPED_UNICODE);
     }
 
     /**
@@ -48,57 +32,79 @@ class TagController extends Controller
      * Returns:
      *
      * true
+     *
      * @param \App\Http\Requests\Request|Request $request
-     * @param $bucket
-     * @param $id
+     * @param                                    $bucket
+     * @param                                    $id
+     *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function add (Request $request , $bucket , $id){
+    public function add(Request $request, $bucket, $id)
+    {
 
         $tags = json_decode($request->tags);
         $score = $request->score;
 
-        if(is_null($score))
-            $score = 0 ;
+        if (is_null($score))
+            $score = 0;
 
-        if(is_null($tags)) {
+        if (is_null($tags)) {
             return response()->json([
-                'error' => "tag is not set!"
-            ], 410);
+                                        'error' => "tag is not set!",
+                                    ], 410);
         }
 
         $response = null;
-        $this->redis->set($bucket, $id, $tags, $score, function($err, $result) use(& $response) {
-            $this->callBack($err, $result , $response);
+        $this->redis->set($bucket, $id, $tags, $score, function ($err, $result) use (& $response) {
+            $this->callBack($err, $result, $response);
         });
 
         return $response;
     }
 
+    private function callBack($err, $result, & $response)
+    {
+        if (isset($err)) {
+            $response = response()->json([
+                                             'error' => "msg",
+                                         ], 410);
+        }
+        $header = [
+            'Content-Type' => 'application/json; charset=UTF-8',
+            'charset'      => 'utf-8',
+        ];
+        $response = response()->json([
+                                         'data' => $result,
+                                     ], 200, $header, JSON_UNESCAPED_UNICODE);
+    }
+
     /**
      * GET /rt/id/:bucket/:id
      * Get all tags for an ID
+     *
      * @param Request $request
-     * @param $bucket
-     * @param $id
+     * @param         $bucket
+     * @param         $id
+     *
      * @return null
      */
 
-    public function get(Request $request , $bucket , $id){
+    public function get(Request $request, $bucket, $id)
+    {
         $response = null;
-        $this->redis->get($bucket, $id, function($err, $result) use(& $response) {
-            if(isset($err)){
+        $this->redis->get($bucket, $id, function ($err, $result) use (& $response) {
+            if (isset($err)) {
                 $response = response()->json([
-                    'error' => "msg",
-                ], 410);
+                                                 'error' => "msg",
+                                             ], 410);
             }
-            $header = array (
+            $header = [
                 'Content-Type' => 'application/json; charset=UTF-8',
-                'charset' => 'utf-8'
-            );
+                'charset'      => 'utf-8',
+            ];
             $response = response()->json([
-                'data' => $result,
-            ], 200,$header,JSON_UNESCAPED_UNICODE);
+                                             'data' => $result,
+                                         ], 200, $header, JSON_UNESCAPED_UNICODE);
         });
 
         return $response;
@@ -113,15 +119,18 @@ class TagController extends Controller
      * Returns:
      *
      * true
+     *
      * @param Request $request
-     * @param $bucket
-     * @param $id
+     * @param         $bucket
+     * @param         $id
+     *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function remove (Request $request , $bucket , $id){
+    public function remove(Request $request, $bucket, $id)
+    {
         $response = null;
-        $this->redis->remove($bucket, $id, function($err, $result) use(& $response) {
-            $this->callBack($err, $result , $response);
+        $this->redis->remove($bucket, $id, function ($err, $result) use (& $response) {
+            $this->callBack($err, $result, $response);
         });
 
         return $response;
@@ -129,8 +138,8 @@ class TagController extends Controller
 
     /**
      * GET /rt/tags/:bucket?queryparams
-     * The main method. Return the IDs for one or more tags. When more than one tag is supplied the query can be an intersection (default) or a union.
-     * type=inter (default) only those IDs will be returned where all tags match.
+     * The main method. Return the IDs for one or more tags. When more than one tag is supplied the query can be an
+     * intersection (default) or a union. type=inter (default) only those IDs will be returned where all tags match.
      * type=union all IDs where any tag matches will be returned.
      *
      * Parameters:
@@ -154,13 +163,15 @@ class TagController extends Controller
      * "offset":4
      * }
      * @param Request $request
-     * @param $bucket
+     * @param         $bucket
+     *
      * @return null
      */
-    public function index(Request $request , $bucket ){
+    public function index(Request $request, $bucket)
+    {
         $tags = $request->tags;
-        $tags = str_replace("\"","",$tags);
-        $tags =explode(",",substr($tags,1,-1));
+        $tags = str_replace("\"", "", $tags);
+        $tags = explode(",", substr($tags, 1, -1));
 
         $type = !is_null($request->type) ? $request->type : "inter";
         $limit = !is_null($request->limit) ? $request->limit : 100;
@@ -169,31 +180,32 @@ class TagController extends Controller
         $order = !is_null($request->order) ? $request->order : "desc";
 
         $response = null;
-        $this->redis->tags($bucket, $tags, $limit, $offset, $withscores, $order, $type, function($err, $result) use(& $response) {
-            if(isset($err)){
+        $this->redis->tags($bucket, $tags, $limit, $offset, $withscores, $order, $type, function ($err, $result) use (& $response) {
+            if (isset($err)) {
                 $response = response()->json([
-                    'error' => "msg",
-                ], 410);
+                                                 'error' => "msg",
+                                             ], 410);
             }
-          
+
             $header = [
                 'Content-Type' => 'application/json; charset=UTF-8',
-                'charset' => 'utf-8'
+                'charset'      => 'utf-8',
             ];
 
             $response = response()->json([
-                'data' => $result,
-            ], 200,$header,JSON_UNESCAPED_UNICODE);
+                                             'data' => $result,
+                                         ], 200, $header, JSON_UNESCAPED_UNICODE);
         });
 
         //dd($response);
         return $response;
     }
 
-    public function flush(Request $request){
+    public function flush(Request $request)
+    {
         abort(404);
-        $this->redis->flushDB(function($err , $result){
-           return $result;
+        $this->redis->flushDB(function ($err, $result) {
+            return $result;
         });
     }
 }

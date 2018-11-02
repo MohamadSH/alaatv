@@ -24,7 +24,7 @@ class AddComplimentaryProductRequest extends FormRequest
     public function rules()
     {
         return [
-            "complimentaryproducts" => "required|exists:products,id"
+            "complimentaryproducts" => "required|exists:products,id",
         ];
     }
 }

@@ -2,21 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Agent;
 use App\Classes\Search\ContentsetSearch;
 use App\Contentset;
 use App\Http\Requests\ContentsetIndexRequest;
 use App\Http\Requests\InsertContentsetRequest;
-use App\Http\Requests\ProductIndexRequest;
 use App\Traits\RequestCommon;
 use App\Websitesetting;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\{
-    Request, Response
-};
-use Illuminate\Support\{
-    Collection, Facades\Cache, Facades\View
-};
+use Illuminate\Http\{Request, Response};
+use Illuminate\Support\{Collection, Facades\Cache, Facades\View};
 
 class ContentsetController extends Controller
 {
@@ -35,9 +29,9 @@ class ContentsetController extends Controller
     |--------------------------------------------------------------------------
     */
 
+    const PARTIAL_SEARCH_TEMPLATE = "partials.search.contentset";
     protected $response;
     protected $setting;
-    const PARTIAL_SEARCH_TEMPLATE = "partials.search.contentset";
 
     public function __construct(Response $response, Websitesetting $setting)
     {
@@ -54,60 +48,14 @@ class ContentsetController extends Controller
     */
 
     /**
-     * @param FormRequest $request
-     * @param Contentset $contentset
-     * @return void
-     */
-    private function fillContentFromRequest(FormRequest $request, Contentset &$contentset): void
-    {
-        $inputData = $request->all();
-        $enabled = $request->has("enable");
-        $display = $request->has("display");
-
-        $contentset->fill($inputData);
-        if ($request->has("id"))
-            $contentset->id = $request->id;
-
-        $contentset->enable = $enabled ? 1 : 0;
-        $contentset->display = $display ? 1 : 0;
-    }
-
-    /**
-     * @param $query
-     * @return string
-     */
-    private function getPartialSearchFromIds($query)
-    {
-        $partialSearch = View::make(
-            self::PARTIAL_SEARCH_TEMPLATE,
-            [
-                'items' => $query
-            ]
-        )->render();
-        return $partialSearch;
-    }
-
-    /**
-     * @param Collection $items
-     * @return \Illuminate\Http\Response
-     */
-    private function makeJsonForAndroidApp(Collection $items)
-    {
-        $items = $items->pop();
-        $key = md5($items->pluck("id")->implode(","));
-        $response = Cache::remember($key, config("constants.CACHE_60"), function () use ($items) {
-            $response = collect();
-
-        });
-        return $response;
-    }
-
-    /**
      * @return array
      */
     private function getAuthExceptionArray(): array
     {
-        $authException = ["index", "show"];
+        $authException = [
+            "index",
+            "show",
+        ];
         return $authException;
     }
 
@@ -119,16 +67,11 @@ class ContentsetController extends Controller
         $this->middleware('auth', ['except' => $authException]);
     }
 
-    /*
-   |--------------------------------------------------------------------------
-   | Public methods
-   |--------------------------------------------------------------------------
-   */
-
     /**
      * Display a listing of the resource.
      *
      * @param ContentsetIndexRequest $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function index(ContentsetIndexRequest $request)
@@ -150,9 +93,9 @@ class ContentsetController extends Controller
             else
                 $partialSearch = null;
             $items->push([
-                "totalitems" => $contentsetResult->total(),
-                "view" => $partialSearch,
-            ]);
+                             "totalitems" => $contentsetResult->total(),
+                             "view"       => $partialSearch,
+                         ]);
         }
 
         if ($isApp) {
@@ -163,16 +106,56 @@ class ContentsetController extends Controller
             return $this->response
                 ->setStatusCode(Response::HTTP_OK)
                 ->setContent([
-                    "items" => $items,
-                    "tagLabels" => $tags,
-                ]);
+                                 "items" => $items,
+                                 "tagLabels" => $tags,
+                             ]);
         }
 
-//        return back()->withInput();
+        //        return back()->withInput();
         return redirect()->action(
             "ContentController@index"
             , $filters);
     }
+
+    /**
+     * @param $query
+     *
+     * @return string
+     */
+    private function getPartialSearchFromIds($query)
+    {
+        $partialSearch = View::make(
+            self::PARTIAL_SEARCH_TEMPLATE,
+            [
+                'items' => $query,
+            ]
+        )
+                             ->render();
+        return $partialSearch;
+    }
+
+    /**
+     * @param Collection $items
+     *
+     * @return \Illuminate\Http\Response
+     */
+    private function makeJsonForAndroidApp(Collection $items)
+    {
+        $items = $items->pop();
+        $key = md5($items->pluck("id")
+                         ->implode(","));
+        $response = Cache::remember($key, config("constants.CACHE_60"), function () use ($items) {
+            $response = collect();
+
+        });
+        return $response;
+    }
+
+    /*
+   |--------------------------------------------------------------------------
+   | Public methods
+   |--------------------------------------------------------------------------
+   */
 
     /**
      * Show the form for creating a new resource.
@@ -188,6 +171,7 @@ class ContentsetController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(InsertContentsetRequest $request)
@@ -202,9 +186,30 @@ class ContentsetController extends Controller
     }
 
     /**
+     * @param FormRequest $request
+     * @param Contentset  $contentset
+     *
+     * @return void
+     */
+    private function fillContentFromRequest(FormRequest $request, Contentset &$contentset): void
+    {
+        $inputData = $request->all();
+        $enabled = $request->has("enable");
+        $display = $request->has("display");
+
+        $contentset->fill($inputData);
+        if ($request->has("id"))
+            $contentset->id = $request->id;
+
+        $contentset->enable = $enabled ? 1 : 0;
+        $contentset->display = $display ? 1 : 0;
+    }
+
+    /**
      * Display the specified resource.
      *
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -216,6 +221,7 @@ class ContentsetController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -227,7 +233,8 @@ class ContentsetController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param  int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -239,6 +246,7 @@ class ContentsetController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

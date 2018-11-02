@@ -7,12 +7,10 @@ use App\Contacttype;
 use App\Http\Requests\EditContactRequest;
 use App\Http\Requests\EditPhoneRequest;
 use App\Http\Requests\InsertContactRequest;
-use App\Http\Requests\InsertPhoneRequest;
 use App\Phonetype;
 use App\Relative;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Input;
 
 class ContactController extends Controller
@@ -42,11 +40,14 @@ class ContactController extends Controller
     {
         $userId = Input::get('user');
         if (isset($userId)) {
-            $contacts = Contact::where('user_id', $userId)->orderBy("created_at", "desc")->get();
+            $contacts = Contact::where('user_id', $userId)
+                               ->orderBy("created_at", "desc")
+                               ->get();
             $relatives = Relative::pluck('displayName', 'id');
             $contacttypes = Contacttype::pluck('displayName', 'id');
         } else {
-            $contacts = Contact::all()->sortByDesc("created_at");
+            $contacts = Contact::all()
+                               ->sortByDesc("created_at");
         }
         return view('contact.index', compact('contacts', 'userId', 'relatives', 'contacttypes'));
     }
@@ -65,6 +66,7 @@ class ContactController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \App\Http\Requests\InsertContactRequest $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(InsertContactRequest $request)
@@ -73,7 +75,8 @@ class ContactController extends Controller
         $contact->fill($request->all());
         if ($contact->save()) {
             if ($request->has("isServiceRequest"))
-                return $this->response->setStatusCode(200)->setContent(["contact" => $contact]);
+                return $this->response->setStatusCode(200)
+                                      ->setContent(["contact" => $contact]);
             else
                 session()->put("success", "مخاطب با موفقیت درج شد");
         } else {
@@ -89,6 +92,7 @@ class ContactController extends Controller
      * Display the specified resource.
      *
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -100,6 +104,7 @@ class ContactController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  \App\Contact $contact
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit(Contact $contact)
@@ -114,7 +119,8 @@ class ContactController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \App\Http\Requests\EditContactRequest $request
-     * @param  \App\Contact $contact
+     * @param  \App\Contact                          $contact
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(EditContactRequest $request, $contact)
@@ -147,6 +153,7 @@ class ContactController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Contact $contact
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy(Contact $contact)

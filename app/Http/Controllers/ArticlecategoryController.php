@@ -6,7 +6,6 @@ use App\Article;
 use App\Articlecategory;
 use App\Http\Requests\EditArticlecategoryRequest;
 use App\Http\Requests\InsertArticlecategoryRequest;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
 
@@ -54,12 +53,14 @@ class ArticlecategoryController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(InsertArticlecategoryRequest $request)
     {
         $articlecategory = new Articlecategory();
-        if (isset($request->enable)) $request->offsetSet("enable", 1);
+        if (isset($request->enable))
+            $request->offsetSet("enable", 1);
         else    $request->offsetSet("enable", 0);
         $articlecategory->fill($request->all());
 
@@ -74,6 +75,7 @@ class ArticlecategoryController extends Controller
      * Display the specified resource.
      *
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -85,6 +87,7 @@ class ArticlecategoryController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($articlecategory)
@@ -96,12 +99,14 @@ class ArticlecategoryController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param  int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(EditArticlecategoryRequest $request, $articlecategory)
     {
-        if (isset($request->enable)) $request->offsetSet("enable", 1);
+        if (isset($request->enable))
+            $request->offsetSet("enable", 1);
         else    $request->offsetSet("enable", 0);
         $articlecategory->fill($request->all());
 
@@ -117,6 +122,7 @@ class ArticlecategoryController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($articlecategory)
@@ -124,14 +130,15 @@ class ArticlecategoryController extends Controller
         $categoryId = $articlecategory->id;
 
         if ($articlecategory->delete()) {
-//            session()->put('success', 'دسته بندی با موفقیت حذف شد');
-            $articles = Article::where('articlecategory_id', $categoryId)->get();
+            //            session()->put('success', 'دسته بندی با موفقیت حذف شد');
+            $articles = Article::where('articlecategory_id', $categoryId)
+                               ->get();
             foreach ($articles as $article) {
                 $article->articlecategory_id = null;
                 $article->update();
             }
             return redirect()->back();
         }
-//        else session()->put('error', 'خطای پایگاه داده');
+        //        else session()->put('error', 'خطای پایگاه داده');
     }
 }

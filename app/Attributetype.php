@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\Attributetype
  *
- * @property int $id
- * @property string|null $name نام این نوع
- * @property string|null $description توضیح درباره این نوع
+ * @property int                 $id
+ * @property string|null         $name        نام این نوع
+ * @property string|null         $description توضیح درباره این نوع
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property \Carbon\Carbon|null $deleted_at
@@ -38,7 +38,7 @@ class Attributetype extends Model
     protected $dates = [
         'created_at',
         'updated_at',
-        'deleted_at'
+        'deleted_at',
     ];
 
     /**

@@ -19,8 +19,9 @@ class OrderCheck
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  \Closure $next
-     * @param null $guard
+     * @param  \Closure                 $next
+     * @param null                      $guard
+     *
      * @return mixed
      */
     public function handle($request, Closure $next, $guard = null)
@@ -29,11 +30,14 @@ class OrderCheck
          * Initiating an order for the user
          * at the moment he opens the website
          */
-        if (Auth::guard($guard)->check()) {
+        if (Auth::guard($guard)
+                ->check()) {
             /**
              * Making an open order for the user or retrieving the existing one
              */
-            $openOrder = $request->user()->openOrders()->get();
+            $openOrder = $request->user()
+                                 ->openOrders()
+                                 ->get();
             if ($openOrder->isEmpty()) {
                 $request = new Request();
                 $request->offsetSet("paymentstatus_id", Config::get("constants.PAYMENT_STATUS_UNPAID"));
@@ -54,7 +58,7 @@ class OrderCheck
              */
             if (isset($order)) {
                 session()->put("order_id", $order->id);
-//                session()->save();
+                //                session()->save();
             }
             /**
              *  end
@@ -68,7 +72,9 @@ class OrderCheck
                 if (session()->has("orderproductAttributes"))
                     $attributes = session()->pull("orderproductAttributes");
                 foreach ($products as $key => $value) {
-                    $product = Product::where("id", $key)->get()->first();
+                    $product = Product::where("id", $key)
+                                      ->get()
+                                      ->first();
                     if (isset($product) && strlen($product->validateProduct()) == 0) {
                         $orderproduct = new Orderproduct();
                         $orderproduct->product_id = $product->id;
@@ -87,7 +93,8 @@ class OrderCheck
                                     $myParent = end($myParent);
                                     $attributevalues = $myParent->attributevalues->where("id", $orderproductAttribute);
                                     if ($attributevalues->isNotEmpty()) {
-                                        $orderproduct->attributevalues()->attach($attributevalues->first()->id, ["extraCost" => $attributevalues->first()->pivot->extraCost]);
+                                        $orderproduct->attributevalues()
+                                                     ->attach($attributevalues->first()->id, ["extraCost" => $attributevalues->first()->pivot->extraCost]);
                                     } else {
 
                                     }
@@ -104,15 +111,18 @@ class OrderCheck
                             /**
                              * Attaching simple product gifts to the order
                              */
-                            $attachedGifts = array();
+                            $attachedGifts = [];
                             foreach ($value["gifts"] as $gift) {
                                 if (in_array($gift->id, $attachedGifts))
                                     continue;
                                 else
                                     array_push($attachedGifts, $gift->id);
-                                if ($order->orderproducts(Config::get("constants.ORDER_PRODUCT_GIFT"))->whereHas("product", function ($q) use ($gift) {
-                                    $q->where("id", $gift->id);
-                                })->get()->isNotEmpty())
+                                if ($order->orderproducts(Config::get("constants.ORDER_PRODUCT_GIFT"))
+                                          ->whereHas("product", function ($q) use ($gift) {
+                                              $q->where("id", $gift->id);
+                                          })
+                                          ->get()
+                                          ->isNotEmpty())
                                     continue;
 
                                 $orderproduct->attachGift($gift);

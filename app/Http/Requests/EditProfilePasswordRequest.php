@@ -17,7 +17,10 @@ class EditProfilePasswordRequest extends FormRequest
      */
     public function authorize()
     {
-        if (Auth()->user()->can(Config::get('constants.EDIT_USER_ACCESS'))) return true;
+        if (Auth()
+            ->user()
+            ->can(Config::get('constants.EDIT_USER_ACCESS')))
+            return true;
         return false;
     }
 
@@ -30,7 +33,7 @@ class EditProfilePasswordRequest extends FormRequest
     {
         session()->put("tab", "tab_1_3");
         return [
-            'password' => 'required|confirmed|min:6',
+            'password'    => 'required|confirmed|min:6',
             'oldPassword' => 'required',
         ];
     }

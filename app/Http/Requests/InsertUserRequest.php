@@ -18,7 +18,10 @@ class InsertUserRequest extends FormRequest
      */
     public function authorize()
     {
-        if (Auth()->user()->can(Config::get('constants.INSERT_USER_ACCESS'))) return true;
+        if (Auth()
+            ->user()
+            ->can(Config::get('constants.INSERT_USER_ACCESS')))
+            return true;
         return false;
     }
 
@@ -30,31 +33,35 @@ class InsertUserRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'firstName' => 'required|max:255',
-            'lastName' => 'required|max:255',
-            'mobile' => [
+            'firstName'     => 'required|max:255',
+            'lastName'      => 'required|max:255',
+            'mobile'        => [
                 'required',
                 'digits:11',
                 'phone:AUTO,IR,mobile',
-                Rule::unique('users')->where(function ($query) {
-                    $query->where('nationalCode', $_REQUEST["nationalCode"])->where('deleted_at', null);
-                })
+                Rule::unique('users')
+                    ->where(function ($query) {
+                        $query->where('nationalCode', $_REQUEST["nationalCode"])
+                              ->where('deleted_at', null);
+                    }),
             ],
-            'password' => 'required|min:6',
-            'nationalCode' => [
+            'password'      => 'required|min:6',
+            'nationalCode'  => [
                 'required',
                 'digits:10',
                 'validate:nationalCode',
-                Rule::unique('users')->where(function ($query) {
-                    $query->where('mobile', $_REQUEST["mobile"])->where('deleted_at', null);
-                })
+                Rule::unique('users')
+                    ->where(function ($query) {
+                        $query->where('mobile', $_REQUEST["mobile"])
+                              ->where('deleted_at', null);
+                    }),
             ],
             'userstatus_id' => 'required|exists:userstatuses,id',
-            'photo' => 'image|mimes:jpeg,jpg,png|max:512',
-            'postalCode' => 'sometimes|nullable|numeric',
-            'major_id' => 'sometimes|nullable|exists:majors,id',
-            'gender_id' => 'sometimes|nullable|exists:genders,id',
-            'email' => 'sometimes|nullable|email'
+            'photo'         => 'image|mimes:jpeg,jpg,png|max:512',
+            'postalCode'    => 'sometimes|nullable|numeric',
+            'major_id'      => 'sometimes|nullable|exists:majors,id',
+            'gender_id'     => 'sometimes|nullable|exists:genders,id',
+            'email'         => 'sometimes|nullable|email',
         ];
 
         return $rules;

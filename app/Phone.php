@@ -10,15 +10,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\Phone
  *
- * @property int $id
- * @property int|null $contact_id آی دی مشخص کننده رکورد دفترچه تلفن صاحب شماره
- * @property int|null $phonetype_id آی دی مشخص کننده نوع شماره
- * @property string|null $phoneNumber شماره تلفن
- * @property int $priority اولویت شماره ها در میان نوع خود مثلا یک شماره موبایل در بین موبایلهای صاحب شماره ، 0 به معنی بالاترین اولویت
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property \Carbon\Carbon|null $deleted_at
- * @property-read \App\Contact|null $contact
+ * @property int                      $id
+ * @property int|null                 $contact_id   آی دی مشخص کننده رکورد دفترچه تلفن صاحب شماره
+ * @property int|null                 $phonetype_id آی دی مشخص کننده نوع شماره
+ * @property string|null              $phoneNumber  شماره تلفن
+ * @property int                      $priority     اولویت شماره ها در میان نوع خود مثلا یک شماره موبایل در بین
+ *           موبایلهای صاحب شماره ، 0 به معنی بالاترین اولویت
+ * @property \Carbon\Carbon|null      $created_at
+ * @property \Carbon\Carbon|null      $updated_at
+ * @property \Carbon\Carbon|null      $deleted_at
+ * @property-read \App\Contact|null   $contact
  * @property-read \App\Phonetype|null $phonetype
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Phone onlyTrashed()
@@ -44,7 +45,7 @@ class Phone extends Model
     protected $dates = [
         'created_at',
         'updated_at',
-        'deleted_at'
+        'deleted_at',
     ];
 
     /**
@@ -54,7 +55,7 @@ class Phone extends Model
         'phoneNumber',
         'priority',
         'contact_id',
-        'phonetype_id'
+        'phonetype_id',
     ];
 
     public function contact()

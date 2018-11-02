@@ -8,13 +8,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\Disk
  *
- * @property int $id
- * @property int|null $disktype_id آی دی مشخص کننده نوع دیسک
- * @property string $name نام دیسک
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property \Carbon\Carbon|null $deleted_at
- * @property-read \App\Disktype|null $disktype
+ * @property int                                                       $id
+ * @property int|null                                                  $disktype_id آی دی مشخص کننده نوع دیسک
+ * @property string                                                    $name        نام دیسک
+ * @property \Carbon\Carbon|null                                       $created_at
+ * @property \Carbon\Carbon|null                                       $updated_at
+ * @property \Carbon\Carbon|null                                       $deleted_at
+ * @property-read \App\Disktype|null                                   $disktype
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\File[] $files
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Disk onlyTrashed()
@@ -34,11 +34,15 @@ class Disk extends Model
     use SoftDeletes;
 
     /**      * The attributes that should be mutated to dates.        */
-    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
 
     protected $fillable = [
         'name',
-        'disktype_id'
+        'disktype_id',
     ];
 
     public function disktype()
@@ -48,6 +52,7 @@ class Disk extends Model
 
     public function files()
     {
-        return $this->belongsToMany("\App\File")->withPivot("priority");
+        return $this->belongsToMany("\App\File")
+                    ->withPivot("priority");
     }
 }

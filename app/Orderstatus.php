@@ -8,13 +8,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\Orderstatus
  *
- * @property int $id
- * @property string|null $name نام این وضعیت
- * @property string|null $displayName نام قابل نمایش این وضعیت
- * @property string|null $description توضیحات این وضعیت
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property \Carbon\Carbon|null $deleted_at
+ * @property int                                                        $id
+ * @property string|null                                                $name        نام این وضعیت
+ * @property string|null                                                $displayName نام قابل نمایش این وضعیت
+ * @property string|null                                                $description توضیحات این وضعیت
+ * @property \Carbon\Carbon|null                                        $created_at
+ * @property \Carbon\Carbon|null                                        $updated_at
+ * @property \Carbon\Carbon|null                                        $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Order[] $orders
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Orderstatus onlyTrashed()
@@ -34,7 +34,11 @@ class Orderstatus extends Model
 {
     use SoftDeletes;
     /**      * The attributes that should be mutated to dates.        */
-    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
 
     /**
      * @var array
