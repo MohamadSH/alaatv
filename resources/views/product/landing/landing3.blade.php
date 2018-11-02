@@ -52,7 +52,7 @@
     <![endif]-->
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id={{Config('constants.google.analytics')}}"></script>
-    <script type="text/javascript" src="https://s1.mediaad.org/serve/549/retargeting.js"></script>
+    <script type="text/javascript" src="https://s1.mediaad.org/serve/549/retargeting.js" defer></script>
     <script>
         window.dataLayer = window.dataLayer || [];
 

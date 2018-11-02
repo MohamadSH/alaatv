@@ -13,14 +13,14 @@ class BonSeeder extends Seeder
     public function run()
     {
         DB::table('bons')->delete();
-        $data = array(
-            array(
+        $data = [
+            [
                 'id' => '1',
                 'name' => 'alaa',
-                'displayName'   => 'فرات بن' ,
+                'displayName' => 'فرات بن',
                 'description' => 'بن تخفیف فرات',
-            ),
-        );
+            ],
+        ];
 
         DB::table('bons')->insert($data); // Query Builder
     }

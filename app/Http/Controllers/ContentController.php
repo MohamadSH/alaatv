@@ -50,14 +50,26 @@ class ContentController extends Controller
 
     const PARTIAL_SEARCH_TEMPLATE_ROOT = 'partials.search';
     const PARTIAL_INDEX_TEMPLATE = 'content.index';
+    /**
+     * @var ContentSearch
+     */
+    private $contentSearch;
 
 
-    public function __construct(Agent $agent, Response $response, Websitesetting $setting)
+    /**
+     * ContentController constructor.
+     * @param Agent $agent
+     * @param Response $response
+     * @param Websitesetting $setting
+     * @param ContentSearch $contentSearch
+     */
+    public function __construct(Agent $agent, Response $response, Websitesetting $setting , ContentSearch $contentSearch)
     {
         $this->response = $response;
         $this->setting = $setting->setting;
         $authException = $this->getAuthExceptionArray($agent);
         $this->callMiddlewares($authException);
+        $this->contentSearch = $contentSearch;
     }
 
     /**
@@ -78,33 +90,32 @@ class ContentController extends Controller
         $items = collect();
         foreach ($contentTypes as $contentType) {
             $filters['contentType'] = [$contentType];
-            ${$contentType . 'Result'} = (new ContentSearch)
+            ${$contentType . 'Result'} = $this->contentSearch
                 ->setPageName($contentType . 'Page')
                 ->apply($filters);
 
             if ($isApp) {
-                $items->push(${$contentType . 'Result'}->getCollection());
+                $data = ${$contentType . 'Result'}->getCollection();
             } else {
+                $partialSearch = $partialIndex = null;
                 if (${$contentType . 'Result'}->total() > 0) {
                     $partialSearch = $this->getPartialSearchFromIds(${$contentType . 'Result'}, self::PARTIAL_SEARCH_TEMPLATE_ROOT . "." . $contentType);
                     $partialIndex = $this->getPartialSearchFromIds(${$contentType . 'Result'}, self::PARTIAL_INDEX_TEMPLATE);
-                } else {
-                    $partialSearch = null;
-                    $partialIndex = null;
                 }
-                $items->push([
+                $data = [
                     "type" => $contentType,
                     "totalitems" => ${$contentType . 'Result'}->total(),
                     "view" => $partialSearch,
                     "indexView" => $partialIndex,
                     "tagLabels" => $tags
-                ]);
+                ];
             }
+            $items->push($data);
         }
 
         if ($isApp) {
             $response = $this->makeJsonForAndroidApp($items);
-            return response()->json($response, 200);
+            return response()->json($response, Response::HTTP_OK);
         }
         if (request()->ajax()) {
             return $this->response
@@ -239,13 +250,9 @@ class ContentController extends Controller
         }
         */
         $content = new Content();
-        $contentset_id = $request->get("contentset_id");
-        $order = $request->get("order");
         $this->fillContentFromRequest($request, $content);
 
         if ($content->save()) {
-            if (isset($contentset_id))
-                $this->attachContentSetToContent($content, $contentset_id, $order);
             return $this->response
                 ->setStatusCode(Response::HTTP_OK)
                 ->setContent([

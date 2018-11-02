@@ -35,9 +35,11 @@ class AlterTableUsersAddColumn extends Migration
         $progress = new ProgressBar($output, $users->count());
         foreach ($users as $user) {
             $user->timestamps = false;
-            $successfullVerification = $user->verificationmessages
+            $successfullVerification = DB::table('verificationmessages')
+                ->where("user_id", $user->id)
                 ->where("verificationmessagestatus_id", 2)
                 ->first();
+
             if (isset($successfullVerification)) {
                 $user->mobile_verified_at = $successfullVerification->created_at;
                 $user->update();

@@ -6,6 +6,7 @@ use App\{Assignmentstatus,
     Attribute,
     Attributecontrol,
     Attributeset,
+    Block,
     Bon,
     Category,
     Checkoutstatus,
@@ -158,7 +159,7 @@ class HomeController extends Controller
 
     public function debug(Request $request)
     {
-
+        return Block::getBlocks();
         dump($request->route('ab'));
         dd("Done!");
 

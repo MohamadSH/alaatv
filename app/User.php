@@ -162,7 +162,8 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
         'useruploads',
         'bankaccounts',
         'contacts',
-        'mbtianswers'
+        'mbtianswers',
+        'favorables'
     ];
     /**      * The attributes that should be mutated to dates.        */
     protected $dates = [

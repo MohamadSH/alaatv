@@ -249,6 +249,7 @@ Route::resource('orderproduct', 'OrderproductController');
 Route::resource('c', 'ContentController');
 Route::resource( "sanatisharifmerge" , "SanatisharifmergeController");
 Route::resource('article', 'ArticleController');
+Route::resource('block', 'BlockController');
 Auth::routes();
 
 Route::group(['prefix' => 'mobile'], function () {

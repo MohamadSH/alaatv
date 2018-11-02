@@ -146,6 +146,7 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
         'tags',
         'author_id',
         'contenttype_id',
+        'contentset_id',
         'isFree',
         'enable'
     ];
