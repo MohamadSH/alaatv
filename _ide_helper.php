@@ -3,7 +3,7 @@
 
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.6.38 on 2018-10-10 15:24:26.
+ * Generated for Laravel 5.6.39 on 2018-11-02 13:31:38.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -1473,132 +1473,6 @@ namespace Illuminate\Support\Facades {
         {
             //Method inherited from \Illuminate\Foundation\Console\Kernel            
             \App\Console\Kernel::setArtisan($artisan);
-        }
-        
-        /**
-         * 
-         *
-         * @static 
-         */ 
-        public static function convertDate($date, $convertType)
-        {
-            return \App\Console\Kernel::convertDate($date, $convertType);
-        }
-        
-        /**
-         * Sending SMS request to Mediana SMS Panel
-         *
-         * @param array $params
-         * @return array|string 
-         * @static 
-         */ 
-        public static function medianaSendSMS($params)
-        {
-            return \App\Console\Kernel::medianaSendSMS($params);
-        }
-        
-        /**
-         * Sending SMS request to Mediana SMS Panel
-         *
-         * @param array $params
-         * @return string 
-         * @static 
-         */ 
-        public static function medianaSendPatternSMS($params)
-        {
-            return \App\Console\Kernel::medianaSendPatternSMS($params);
-        }
-        
-        /**
-         * 
-         *
-         * @static 
-         */ 
-        public static function medianaGetCredit()
-        {
-            return \App\Console\Kernel::medianaGetCredit();
-        }
-        
-        /**
-         * Generates a random password that does not belong to anyone
-         *
-         * @param int $length
-         * @return string 
-         * @static 
-         */ 
-        public static function generateRandomPassword($length)
-        {
-            return \App\Console\Kernel::generateRandomPassword($length);
-        }
-        
-        /**
-         * 
-         *
-         * @static 
-         */ 
-        public static function timeFilterQuery($list, $sinceDate, $tillDate, $by = 'created_at', $sinceTime = '00:00:00', $tillTime = '23:59:59', $timeZoneConvert = true)
-        {
-            return \App\Console\Kernel::timeFilterQuery($list, $sinceDate, $tillDate, $by, $sinceTime, $tillTime, $timeZoneConvert);
-        }
-        
-        /**
-         * 
-         *
-         * @static 
-         */ 
-        public static function generateSecurePathHash($expires, $client_IP, $secret, $url)
-        {
-            return \App\Console\Kernel::generateSecurePathHash($expires, $client_IP, $secret, $url);
-        }
-        
-        /**
-         * 
-         *
-         * @static 
-         */ 
-        public static function userSeen($path, $user)
-        {
-            return \App\Console\Kernel::userSeen($path, $user);
-        }
-        
-        /**
-         * 
-         *
-         * @static 
-         */ 
-        public static function convertToJalaliDay($day)
-        {
-            return \App\Console\Kernel::convertToJalaliDay($day);
-        }
-        
-        /**
-         * 
-         *
-         * @static 
-         */ 
-        public static function convertToJalaliMonth($month, $mode = 'NUMBER_TO_STRING')
-        {
-            return \App\Console\Kernel::convertToJalaliMonth($month, $mode);
-        }
-        
-        /**
-         * 
-         *
-         * @static 
-         */ 
-        public static function getJalaliMonthDays($month)
-        {
-            return \App\Console\Kernel::getJalaliMonthDays($month);
-        }
-        
-        /**
-         * 
-         *
-         * @static 
-         */ 
-        public static function getFinancialYear($currentYear, $currentMonth, $pointedMonth)
-        {
-            return \App\Console\Kernel::getFinancialYear($currentYear, $currentMonth, $pointedMonth);
         }
          
     }
@@ -9093,7 +8967,7 @@ namespace Illuminate\Support\Facades {
          *  * _format request attribute
          *  * $default
          *
-         * @param string $default The default format
+         * @param string|null $default The default format
          * @return string The request format
          * @static 
          */ 

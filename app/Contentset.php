@@ -41,6 +41,7 @@ use Illuminate\Support\Facades\Config;
  * @method static \Illuminate\Database\Query\Builder|\App\Contentset withoutTrashed()
  * @mixin \Eloquent
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset active()
+ * @property-read \App\Collection\UserCollection|\App\User[] $favoriteBy
  */
 class Contentset extends Model implements Taggable
 {

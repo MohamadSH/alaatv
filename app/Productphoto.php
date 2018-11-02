@@ -35,6 +35,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Productphoto withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Productphoto withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Productphoto enable()
  */
 class Productphoto extends Model
 {

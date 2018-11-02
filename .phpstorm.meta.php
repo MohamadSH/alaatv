@@ -5,13 +5,14 @@ namespace PHPSTORM_META {
 
    /**
     * PhpStorm Meta file, to provide autocomplete information for PhpStorm
-    * Generated on 2018-09-11 12:02:28.
+    * Generated on 2018-11-02 13:31:14.
     *
     * @author Barry vd. Heuvel <barryvdh@gmail.com>
     * @see https://github.com/barryvdh/laravel-ide-helper
     */
     override(new \Illuminate\Contracts\Container\Container, map([
         '' => '@',
+        'App\Websitesetting' => \App\Websitesetting::class,
         'Artesaos\SEOTools\Contracts\MetaTags' => \Artesaos\SEOTools\SEOMeta::class,
         'Artesaos\SEOTools\Contracts\OpenGraph' => \Artesaos\SEOTools\OpenGraph::class,
         'Artesaos\SEOTools\Contracts\SEOTools' => \Artesaos\SEOTools\SEOTools::class,
@@ -47,10 +48,6 @@ namespace PHPSTORM_META {
         'Laravel\Horizon\Lock' => \Laravel\Horizon\Lock::class,
         'Laravel\Horizon\Stopwatch' => \Laravel\Horizon\Stopwatch::class,
         'Laravel\Scout\EngineManager' => \Laravel\Scout\EngineManager::class,
-        'Maatwebsite\ExcelLight\Excel' => \Maatwebsite\ExcelLight\Excel::class,
-        'Maatwebsite\ExcelLight\ExcelManager' => \Maatwebsite\ExcelLight\ExcelManager::class,
-        'Maatwebsite\ExcelLight\Reader' => \Maatwebsite\ExcelLight\Spout\Reader::class,
-        'Maatwebsite\ExcelLight\Writer' => \Maatwebsite\ExcelLight\Spout\Writer::class,
         'NunoMaduro\Collision\Contracts\Adapters\Phpunit\Listener' => \NunoMaduro\Collision\Adapters\Phpunit\Listener::class,
         'NunoMaduro\Collision\Contracts\Provider' => \NunoMaduro\Collision\Provider::class,
         'Yab\MySQLScout\Engines\Modes\ModeContainer' => \Yab\MySQLScout\Engines\Modes\ModeContainer::class,
@@ -162,6 +159,7 @@ namespace PHPSTORM_META {
         'html' => \Collective\Html\HtmlBuilder::class,
         'image' => \Intervention\Image\ImageManager::class,
         'laratrust' => \Laratrust\Laratrust::class,
+        'libphonenumber' => \libphonenumber\PhoneNumberUtil::class,
         'log' => \Illuminate\Log\LogManager::class,
         'mailer' => \Illuminate\Mail\Mailer::class,
         'memcached.connector' => \Illuminate\Cache\MemcachedConnector::class,
@@ -186,7 +184,6 @@ namespace PHPSTORM_META {
         'seotools.twitter' => \Artesaos\SEOTools\TwitterCards::class,
         'session' => \Illuminate\Session\SessionManager::class,
         'session.store' => \Illuminate\Session\Store::class,
-        'setting' => \App\Websitesetting::class,
         'sitemap' => \Watson\Sitemap\Sitemap::class,
         'swift.mailer' => \Swift_Mailer::class,
         'swift.transport' => \Illuminate\Mail\TransportManager::class,
@@ -200,6 +197,7 @@ namespace PHPSTORM_META {
     ]));
     override(\Illuminate\Contracts\Container\Container::make(0), map([
         '' => '@',
+        'App\Websitesetting' => \App\Websitesetting::class,
         'Artesaos\SEOTools\Contracts\MetaTags' => \Artesaos\SEOTools\SEOMeta::class,
         'Artesaos\SEOTools\Contracts\OpenGraph' => \Artesaos\SEOTools\OpenGraph::class,
         'Artesaos\SEOTools\Contracts\SEOTools' => \Artesaos\SEOTools\SEOTools::class,
@@ -235,10 +233,6 @@ namespace PHPSTORM_META {
         'Laravel\Horizon\Lock' => \Laravel\Horizon\Lock::class,
         'Laravel\Horizon\Stopwatch' => \Laravel\Horizon\Stopwatch::class,
         'Laravel\Scout\EngineManager' => \Laravel\Scout\EngineManager::class,
-        'Maatwebsite\ExcelLight\Excel' => \Maatwebsite\ExcelLight\Excel::class,
-        'Maatwebsite\ExcelLight\ExcelManager' => \Maatwebsite\ExcelLight\ExcelManager::class,
-        'Maatwebsite\ExcelLight\Reader' => \Maatwebsite\ExcelLight\Spout\Reader::class,
-        'Maatwebsite\ExcelLight\Writer' => \Maatwebsite\ExcelLight\Spout\Writer::class,
         'NunoMaduro\Collision\Contracts\Adapters\Phpunit\Listener' => \NunoMaduro\Collision\Adapters\Phpunit\Listener::class,
         'NunoMaduro\Collision\Contracts\Provider' => \NunoMaduro\Collision\Provider::class,
         'Yab\MySQLScout\Engines\Modes\ModeContainer' => \Yab\MySQLScout\Engines\Modes\ModeContainer::class,
@@ -350,6 +344,7 @@ namespace PHPSTORM_META {
         'html' => \Collective\Html\HtmlBuilder::class,
         'image' => \Intervention\Image\ImageManager::class,
         'laratrust' => \Laratrust\Laratrust::class,
+        'libphonenumber' => \libphonenumber\PhoneNumberUtil::class,
         'log' => \Illuminate\Log\LogManager::class,
         'mailer' => \Illuminate\Mail\Mailer::class,
         'memcached.connector' => \Illuminate\Cache\MemcachedConnector::class,
@@ -374,7 +369,6 @@ namespace PHPSTORM_META {
         'seotools.twitter' => \Artesaos\SEOTools\TwitterCards::class,
         'session' => \Illuminate\Session\SessionManager::class,
         'session.store' => \Illuminate\Session\Store::class,
-        'setting' => \App\Websitesetting::class,
         'sitemap' => \Watson\Sitemap\Sitemap::class,
         'swift.mailer' => \Swift_Mailer::class,
         'swift.transport' => \Illuminate\Mail\TransportManager::class,
@@ -388,6 +382,7 @@ namespace PHPSTORM_META {
     ]));
     override(\Illuminate\Contracts\Container\Container::makeWith(0), map([
         '' => '@',
+        'App\Websitesetting' => \App\Websitesetting::class,
         'Artesaos\SEOTools\Contracts\MetaTags' => \Artesaos\SEOTools\SEOMeta::class,
         'Artesaos\SEOTools\Contracts\OpenGraph' => \Artesaos\SEOTools\OpenGraph::class,
         'Artesaos\SEOTools\Contracts\SEOTools' => \Artesaos\SEOTools\SEOTools::class,
@@ -423,10 +418,6 @@ namespace PHPSTORM_META {
         'Laravel\Horizon\Lock' => \Laravel\Horizon\Lock::class,
         'Laravel\Horizon\Stopwatch' => \Laravel\Horizon\Stopwatch::class,
         'Laravel\Scout\EngineManager' => \Laravel\Scout\EngineManager::class,
-        'Maatwebsite\ExcelLight\Excel' => \Maatwebsite\ExcelLight\Excel::class,
-        'Maatwebsite\ExcelLight\ExcelManager' => \Maatwebsite\ExcelLight\ExcelManager::class,
-        'Maatwebsite\ExcelLight\Reader' => \Maatwebsite\ExcelLight\Spout\Reader::class,
-        'Maatwebsite\ExcelLight\Writer' => \Maatwebsite\ExcelLight\Spout\Writer::class,
         'NunoMaduro\Collision\Contracts\Adapters\Phpunit\Listener' => \NunoMaduro\Collision\Adapters\Phpunit\Listener::class,
         'NunoMaduro\Collision\Contracts\Provider' => \NunoMaduro\Collision\Provider::class,
         'Yab\MySQLScout\Engines\Modes\ModeContainer' => \Yab\MySQLScout\Engines\Modes\ModeContainer::class,
@@ -538,6 +529,7 @@ namespace PHPSTORM_META {
         'html' => \Collective\Html\HtmlBuilder::class,
         'image' => \Intervention\Image\ImageManager::class,
         'laratrust' => \Laratrust\Laratrust::class,
+        'libphonenumber' => \libphonenumber\PhoneNumberUtil::class,
         'log' => \Illuminate\Log\LogManager::class,
         'mailer' => \Illuminate\Mail\Mailer::class,
         'memcached.connector' => \Illuminate\Cache\MemcachedConnector::class,
@@ -562,7 +554,6 @@ namespace PHPSTORM_META {
         'seotools.twitter' => \Artesaos\SEOTools\TwitterCards::class,
         'session' => \Illuminate\Session\SessionManager::class,
         'session.store' => \Illuminate\Session\Store::class,
-        'setting' => \App\Websitesetting::class,
         'sitemap' => \Watson\Sitemap\Sitemap::class,
         'swift.mailer' => \Swift_Mailer::class,
         'swift.transport' => \Illuminate\Mail\TransportManager::class,
@@ -576,6 +567,7 @@ namespace PHPSTORM_META {
     ]));
     override(\App::make(0), map([
         '' => '@',
+        'App\Websitesetting' => \App\Websitesetting::class,
         'Artesaos\SEOTools\Contracts\MetaTags' => \Artesaos\SEOTools\SEOMeta::class,
         'Artesaos\SEOTools\Contracts\OpenGraph' => \Artesaos\SEOTools\OpenGraph::class,
         'Artesaos\SEOTools\Contracts\SEOTools' => \Artesaos\SEOTools\SEOTools::class,
@@ -611,10 +603,6 @@ namespace PHPSTORM_META {
         'Laravel\Horizon\Lock' => \Laravel\Horizon\Lock::class,
         'Laravel\Horizon\Stopwatch' => \Laravel\Horizon\Stopwatch::class,
         'Laravel\Scout\EngineManager' => \Laravel\Scout\EngineManager::class,
-        'Maatwebsite\ExcelLight\Excel' => \Maatwebsite\ExcelLight\Excel::class,
-        'Maatwebsite\ExcelLight\ExcelManager' => \Maatwebsite\ExcelLight\ExcelManager::class,
-        'Maatwebsite\ExcelLight\Reader' => \Maatwebsite\ExcelLight\Spout\Reader::class,
-        'Maatwebsite\ExcelLight\Writer' => \Maatwebsite\ExcelLight\Spout\Writer::class,
         'NunoMaduro\Collision\Contracts\Adapters\Phpunit\Listener' => \NunoMaduro\Collision\Adapters\Phpunit\Listener::class,
         'NunoMaduro\Collision\Contracts\Provider' => \NunoMaduro\Collision\Provider::class,
         'Yab\MySQLScout\Engines\Modes\ModeContainer' => \Yab\MySQLScout\Engines\Modes\ModeContainer::class,
@@ -726,6 +714,7 @@ namespace PHPSTORM_META {
         'html' => \Collective\Html\HtmlBuilder::class,
         'image' => \Intervention\Image\ImageManager::class,
         'laratrust' => \Laratrust\Laratrust::class,
+        'libphonenumber' => \libphonenumber\PhoneNumberUtil::class,
         'log' => \Illuminate\Log\LogManager::class,
         'mailer' => \Illuminate\Mail\Mailer::class,
         'memcached.connector' => \Illuminate\Cache\MemcachedConnector::class,
@@ -750,7 +739,6 @@ namespace PHPSTORM_META {
         'seotools.twitter' => \Artesaos\SEOTools\TwitterCards::class,
         'session' => \Illuminate\Session\SessionManager::class,
         'session.store' => \Illuminate\Session\Store::class,
-        'setting' => \App\Websitesetting::class,
         'sitemap' => \Watson\Sitemap\Sitemap::class,
         'swift.mailer' => \Swift_Mailer::class,
         'swift.transport' => \Illuminate\Mail\TransportManager::class,
@@ -764,6 +752,7 @@ namespace PHPSTORM_META {
     ]));
     override(\App::makeWith(0), map([
         '' => '@',
+        'App\Websitesetting' => \App\Websitesetting::class,
         'Artesaos\SEOTools\Contracts\MetaTags' => \Artesaos\SEOTools\SEOMeta::class,
         'Artesaos\SEOTools\Contracts\OpenGraph' => \Artesaos\SEOTools\OpenGraph::class,
         'Artesaos\SEOTools\Contracts\SEOTools' => \Artesaos\SEOTools\SEOTools::class,
@@ -799,10 +788,6 @@ namespace PHPSTORM_META {
         'Laravel\Horizon\Lock' => \Laravel\Horizon\Lock::class,
         'Laravel\Horizon\Stopwatch' => \Laravel\Horizon\Stopwatch::class,
         'Laravel\Scout\EngineManager' => \Laravel\Scout\EngineManager::class,
-        'Maatwebsite\ExcelLight\Excel' => \Maatwebsite\ExcelLight\Excel::class,
-        'Maatwebsite\ExcelLight\ExcelManager' => \Maatwebsite\ExcelLight\ExcelManager::class,
-        'Maatwebsite\ExcelLight\Reader' => \Maatwebsite\ExcelLight\Spout\Reader::class,
-        'Maatwebsite\ExcelLight\Writer' => \Maatwebsite\ExcelLight\Spout\Writer::class,
         'NunoMaduro\Collision\Contracts\Adapters\Phpunit\Listener' => \NunoMaduro\Collision\Adapters\Phpunit\Listener::class,
         'NunoMaduro\Collision\Contracts\Provider' => \NunoMaduro\Collision\Provider::class,
         'Yab\MySQLScout\Engines\Modes\ModeContainer' => \Yab\MySQLScout\Engines\Modes\ModeContainer::class,
@@ -914,6 +899,7 @@ namespace PHPSTORM_META {
         'html' => \Collective\Html\HtmlBuilder::class,
         'image' => \Intervention\Image\ImageManager::class,
         'laratrust' => \Laratrust\Laratrust::class,
+        'libphonenumber' => \libphonenumber\PhoneNumberUtil::class,
         'log' => \Illuminate\Log\LogManager::class,
         'mailer' => \Illuminate\Mail\Mailer::class,
         'memcached.connector' => \Illuminate\Cache\MemcachedConnector::class,
@@ -938,7 +924,6 @@ namespace PHPSTORM_META {
         'seotools.twitter' => \Artesaos\SEOTools\TwitterCards::class,
         'session' => \Illuminate\Session\SessionManager::class,
         'session.store' => \Illuminate\Session\Store::class,
-        'setting' => \App\Websitesetting::class,
         'sitemap' => \Watson\Sitemap\Sitemap::class,
         'swift.mailer' => \Swift_Mailer::class,
         'swift.transport' => \Illuminate\Mail\TransportManager::class,
@@ -952,6 +937,7 @@ namespace PHPSTORM_META {
     ]));
     override(\app(0), map([
         '' => '@',
+        'App\Websitesetting' => \App\Websitesetting::class,
         'Artesaos\SEOTools\Contracts\MetaTags' => \Artesaos\SEOTools\SEOMeta::class,
         'Artesaos\SEOTools\Contracts\OpenGraph' => \Artesaos\SEOTools\OpenGraph::class,
         'Artesaos\SEOTools\Contracts\SEOTools' => \Artesaos\SEOTools\SEOTools::class,
@@ -987,10 +973,6 @@ namespace PHPSTORM_META {
         'Laravel\Horizon\Lock' => \Laravel\Horizon\Lock::class,
         'Laravel\Horizon\Stopwatch' => \Laravel\Horizon\Stopwatch::class,
         'Laravel\Scout\EngineManager' => \Laravel\Scout\EngineManager::class,
-        'Maatwebsite\ExcelLight\Excel' => \Maatwebsite\ExcelLight\Excel::class,
-        'Maatwebsite\ExcelLight\ExcelManager' => \Maatwebsite\ExcelLight\ExcelManager::class,
-        'Maatwebsite\ExcelLight\Reader' => \Maatwebsite\ExcelLight\Spout\Reader::class,
-        'Maatwebsite\ExcelLight\Writer' => \Maatwebsite\ExcelLight\Spout\Writer::class,
         'NunoMaduro\Collision\Contracts\Adapters\Phpunit\Listener' => \NunoMaduro\Collision\Adapters\Phpunit\Listener::class,
         'NunoMaduro\Collision\Contracts\Provider' => \NunoMaduro\Collision\Provider::class,
         'Yab\MySQLScout\Engines\Modes\ModeContainer' => \Yab\MySQLScout\Engines\Modes\ModeContainer::class,
@@ -1102,6 +1084,7 @@ namespace PHPSTORM_META {
         'html' => \Collective\Html\HtmlBuilder::class,
         'image' => \Intervention\Image\ImageManager::class,
         'laratrust' => \Laratrust\Laratrust::class,
+        'libphonenumber' => \libphonenumber\PhoneNumberUtil::class,
         'log' => \Illuminate\Log\LogManager::class,
         'mailer' => \Illuminate\Mail\Mailer::class,
         'memcached.connector' => \Illuminate\Cache\MemcachedConnector::class,
@@ -1126,7 +1109,6 @@ namespace PHPSTORM_META {
         'seotools.twitter' => \Artesaos\SEOTools\TwitterCards::class,
         'session' => \Illuminate\Session\SessionManager::class,
         'session.store' => \Illuminate\Session\Store::class,
-        'setting' => \App\Websitesetting::class,
         'sitemap' => \Watson\Sitemap\Sitemap::class,
         'swift.mailer' => \Swift_Mailer::class,
         'swift.transport' => \Illuminate\Mail\TransportManager::class,
@@ -1140,6 +1122,7 @@ namespace PHPSTORM_META {
     ]));
     override(\resolve(0), map([
         '' => '@',
+        'App\Websitesetting' => \App\Websitesetting::class,
         'Artesaos\SEOTools\Contracts\MetaTags' => \Artesaos\SEOTools\SEOMeta::class,
         'Artesaos\SEOTools\Contracts\OpenGraph' => \Artesaos\SEOTools\OpenGraph::class,
         'Artesaos\SEOTools\Contracts\SEOTools' => \Artesaos\SEOTools\SEOTools::class,
@@ -1175,10 +1158,6 @@ namespace PHPSTORM_META {
         'Laravel\Horizon\Lock' => \Laravel\Horizon\Lock::class,
         'Laravel\Horizon\Stopwatch' => \Laravel\Horizon\Stopwatch::class,
         'Laravel\Scout\EngineManager' => \Laravel\Scout\EngineManager::class,
-        'Maatwebsite\ExcelLight\Excel' => \Maatwebsite\ExcelLight\Excel::class,
-        'Maatwebsite\ExcelLight\ExcelManager' => \Maatwebsite\ExcelLight\ExcelManager::class,
-        'Maatwebsite\ExcelLight\Reader' => \Maatwebsite\ExcelLight\Spout\Reader::class,
-        'Maatwebsite\ExcelLight\Writer' => \Maatwebsite\ExcelLight\Spout\Writer::class,
         'NunoMaduro\Collision\Contracts\Adapters\Phpunit\Listener' => \NunoMaduro\Collision\Adapters\Phpunit\Listener::class,
         'NunoMaduro\Collision\Contracts\Provider' => \NunoMaduro\Collision\Provider::class,
         'Yab\MySQLScout\Engines\Modes\ModeContainer' => \Yab\MySQLScout\Engines\Modes\ModeContainer::class,
@@ -1290,6 +1269,7 @@ namespace PHPSTORM_META {
         'html' => \Collective\Html\HtmlBuilder::class,
         'image' => \Intervention\Image\ImageManager::class,
         'laratrust' => \Laratrust\Laratrust::class,
+        'libphonenumber' => \libphonenumber\PhoneNumberUtil::class,
         'log' => \Illuminate\Log\LogManager::class,
         'mailer' => \Illuminate\Mail\Mailer::class,
         'memcached.connector' => \Illuminate\Cache\MemcachedConnector::class,
@@ -1314,7 +1294,6 @@ namespace PHPSTORM_META {
         'seotools.twitter' => \Artesaos\SEOTools\TwitterCards::class,
         'session' => \Illuminate\Session\SessionManager::class,
         'session.store' => \Illuminate\Session\Store::class,
-        'setting' => \App\Websitesetting::class,
         'sitemap' => \Watson\Sitemap\Sitemap::class,
         'swift.mailer' => \Swift_Mailer::class,
         'swift.transport' => \Illuminate\Mail\TransportManager::class,

@@ -92,6 +92,12 @@ use Stevebauman\Purify\Facades\Purify;
  * @property-read mixed $meta_description
  * @property-read mixed $meta_title
  * @property-read mixed $title
+ * @property int|null $contentset_id
+ * @property string|null $slug slug
+ * @property-read \App\Collection\UserCollection|\App\User[] $favoriteBy
+ * @property-read \App\Contentset|null $set
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereContentsetId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereSlug($value)
  */
 class Content extends Model implements Advertisable, Taggable, SeoInterface, FavorableInterface
 {

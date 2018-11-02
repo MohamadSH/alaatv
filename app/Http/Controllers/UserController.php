@@ -29,7 +29,7 @@ use App\Product;
 use App\Province;
 use App\Role;
 use App\Traits\CharacterCommon;
-use App\Traits\DateCommon;
+use App\Traits\DateTrait;
 use App\Traits\Helper;
 use App\Traits\ProductCommon;
 use App\Traits\RequestCommon;
@@ -62,11 +62,11 @@ class UserController extends Controller
     protected $setting;
 
     use ProductCommon;
-    use DateCommon;
     use RequestCommon;
     use CharacterCommon;
     use Helper;
     use UserCommon;
+    use DateTrait;
 
     function __construct(Websitesetting $setting)
     {

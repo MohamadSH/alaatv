@@ -138,6 +138,13 @@ use Schema;
  * @property string|null $nameSlug اسلاگ شده نام
  * @property-read mixed $full_name_reverse
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereNameSlug($value)
+ * @property string|null $mobile_verified_code کد تایید شماره موبایل
+ * @property string|null $mobile_verified_at تاریخ تایید شماره موبایل
+ * @property-read \App\Collection\ContentCollection|\App\Content[] $favoredContent
+ * @property-read \App\Collection\ProductCollection|\App\Product[] $favoredProduct
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Contentset[] $favoredSet
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereMobileVerifiedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereMobileVerifiedCode($value)
  */
 class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
 {
