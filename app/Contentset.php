@@ -143,6 +143,9 @@ class Contentset extends Model implements Taggable
                     ->withPivot("order", "isDefault");
     }
 
+    public function getShortNameAttribute($value){
+        return $this->small_name;
+    }
     public function getTagsAttribute($value)
     {
         return json_decode($value);
