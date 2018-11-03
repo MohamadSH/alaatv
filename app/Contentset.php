@@ -43,6 +43,9 @@ use Illuminate\Support\Facades\Config;
  * @mixin \Eloquent
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset active()
  * @property-read \App\Collection\UserCollection|\App\User[]       $favoriteBy
+ * @property string|null $small_name
+ * @property-read mixed $short_name
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset whereSmallName($value)
  */
 class Contentset extends Model implements Taggable
 {
