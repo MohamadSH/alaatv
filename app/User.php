@@ -4,21 +4,18 @@ namespace App;
 
 use App\Classes\Taggable;
 use App\Classes\Verification\MustVerifyMobileNumber;
-use App\Collection\ContentCollection;
-use App\Collection\UserCollection;
-use App\Traits\APIRequestCommon;
-use App\Traits\CharacterCommon;
-use App\Traits\DateTrait;
-use App\Traits\HasWallet;
-use App\Traits\Helper;
-use App\Traits\MustVerifyMobileNumberTrait;
+use App\Collection\{ContentCollection, UserCollection};
+use App\Traits\{APIRequestCommon, CharacterCommon, DateTrait, HasWallet, Helper, MustVerifyMobileNumberTrait};
+use Illuminate\{Database\Eloquent\SoftDeletes,
+    Foundation\Auth\User as Authenticatable,
+    Notifications\Notifiable,
+    Support\Facades\Auth,
+    Support\Facades\Cache,
+    Support\Facades\Config,
+    Support\Facades\DB};
+use Laratrust\Traits\LaratrustUserTrait;
 use Carbon\Carbon;
 use Iatstuti\Database\Support\CascadeSoftDeletes;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\{Auth, Cache, Config, DB};
-use Laratrust\Traits\LaratrustUserTrait;
 use Schema;
 use Hash;
 
@@ -89,7 +86,6 @@ use Hash;
  * @property-read \App\Userstatus $userstatus
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Usersurveyanswer[] $usersurveyanswers
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Userupload[] $useruploads
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Verificationmessage[] $verificationmessages
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[] $walletTransactions
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Wallet[] $wallets
  * @method static bool|null forceDelete()

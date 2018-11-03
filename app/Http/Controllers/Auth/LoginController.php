@@ -2,17 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Http\Controllers\UserController;
-use App\Http\Middleware\CompleteInfo;
+use App\Http\Controllers\{Controller, UserController};
 use App\Traits\CharacterCommon;
-use App\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\{Facades\Auth, Facades\Session, Facades\URL, Facades\Validator};
+use App\User;
 
 class LoginController extends Controller
 {
@@ -136,7 +131,7 @@ class LoginController extends Controller
         $targetUrl = redirect()->intended()->getTargetUrl();
         if(strcmp($targetUrl , $baseUrl) == 0)
         {// Indicates a strange situation when target url is the home page despite
-        // the fact that there is a probability that user must be redirected to another page except home page
+         // the fact that there is a probability that user must be redirected to another page except home page
 
             if(strcmp(URL::previous() , route('login')) != 0)
                 // User first had opened a page and then went to login
@@ -154,8 +149,7 @@ class LoginController extends Controller
                 return redirect(action("OrderController@checkoutCompleteInfo"));
             }else
             {
-                session()->put("redirectTo" , $this->redirectTo );
-                return redirect(action("UserController@completeRegister"));
+                return redirect(action("UserController@completeRegister" , ["redirect" => $this->redirectTo]));
             }
 
         }

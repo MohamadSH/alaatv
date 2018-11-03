@@ -1294,23 +1294,24 @@ class UserController extends Controller
      */
     public function completeRegister(Request $request)
     {
+        if($request->has("redirectTo"))
+            $targetUrl = $request->get("redirectTo");
+        else
+            $targetUrl = action("HomeController@index") ;
+
         if ($request->user()->completion("afterLoginForm") == 100)
         {
-            if (session()->has("redirectTo"))
-                return redirect(session()->pull("redirectTo"));
-            else
-                return redirect(action("HomeController@index"));
+            redirect($targetUrl);
         }
 
         $previousPath = url()->previous();
         if (strcmp($previousPath, route('login')) == 0)
         {
-//            ToDo: config , obligating this form to the use or not
-            if (true) $formByPass = false; else
-                $formByPass = true;
+            $formByPass = false;
             $note = "برای ورود به سایت لطفا اطلاعات زیر را تکمیل نمایید";
-        } else
+        }else
         {
+            $formByPass = true;
             $note = "برای استفاده از این خدمت سایت لطفا اطلاعات زیر را تکمیل نمایید";
         }
 
