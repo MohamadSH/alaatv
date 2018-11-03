@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * App\Slideshow
@@ -60,6 +61,23 @@ class Slideshow extends Model
         'order',
         'isEnable',
     ];
+
+    public static function getMainBanner()
+    {
+        return Cache::tags([
+                               'banner',
+                               'page',
+                           ])
+                    ->remember('getMainBanner', config('constants.CACHE_600'), function () {
+                        return Websitepage::where('url', "/home")
+                                          ->first()
+                                          ->slides()
+                                          ->where("isEnable", 1)
+                                          ->orderBy("order")
+                                          ->get();
+                    });
+
+    }
 
     public function websitepage()
     {

@@ -318,17 +318,8 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
      */
     public function scopeActive($query)
     {
-        return $query->where('enable', 1)
-                     ->where(function ($q) {
-                         $q->where('validSince', '<', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
-                                                            ->timezone('Asia/Tehran'))
-                           ->orWhereNull('validSince');
-                     })
-                     ->where(function ($q) {
-                         $q->where('validUntil', '>', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
-                                                            ->timezone('Asia/Tehran'))
-                           ->orWhereNull('validUntil');
-                     });
+        return $query->enable()
+                     ->valid();
     }
 
     /**
@@ -382,11 +373,17 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
      */
     public function scopeValid($query)
     {
-        return $query->where(function ($q) {
-            $q->where('validSince', '<', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
-                                               ->timezone('Asia/Tehran'))
-              ->orwhereNull('validSince');
-        });
+        return $query
+            ->where(function ($q) {
+                $q->where('validSince', '<', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
+                                                   ->timezone('Asia/Tehran'))
+                  ->orWhereNull('validSince');
+            })
+            ->where(function ($q) {
+                $q->where('validUntil', '>', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
+                                                   ->timezone('Asia/Tehran'))
+                  ->orWhereNull('validUntil');
+            });
     }
 
     /**

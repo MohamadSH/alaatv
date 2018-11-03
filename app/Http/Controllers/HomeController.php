@@ -43,6 +43,7 @@ use App\{Assignmentstatus,
     Question,
     Relative,
     Role,
+    Slideshow,
     Traits\APIRequestCommon,
     Traits\CharacterCommon,
     Traits\DateTrait,
@@ -360,12 +361,7 @@ class HomeController extends Controller
         //                ]);
         //        }
 
-        $slides = Websitepage::where('url', "/home")
-                             ->first()
-                             ->slides()
-                             ->where("isEnable", 1)
-                             ->orderBy("order")
-                             ->get();
+        $slides = Slideshow::getMainBanner();
         $slideCounter = 1;
         $slideDisk = 9;
 
