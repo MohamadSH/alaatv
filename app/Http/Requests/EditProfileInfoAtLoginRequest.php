@@ -2,15 +2,11 @@
 
 namespace App\Http\Requests;
 
-use App\Traits\CharacterCommon;
-use App\Traits\UserCommon;
+use App\Afterloginformcontrol;
 use Illuminate\Foundation\Http\FormRequest;
 
-class EditProfileInfoRequest extends FormRequest
+class EditProfileInfoAtLoginRequest extends FormRequest
 {
-    use UserCommon ;
-    use CharacterCommon;
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -31,11 +27,24 @@ class EditProfileInfoRequest extends FormRequest
      */
     public function rules()
     {
-        $rules = [
-            'postalCode' => 'numeric',
-            'email' => 'email',
-            'photo' => 'image|mimes:jpeg,jpg,png|max:800', //ToDo: it needs to be required but will conflict with profile update
-        ];
+        $afterLoginFields = Afterloginformcontrol::getFormFields()
+                ->pluck('name', 'id')
+                ->toArray();
+
+        $rules = [];
+        foreach ($afterLoginFields as $afterLoginField)
+        {
+            if (strcmp($afterLoginField, "email") == 0)
+                $rules[$afterLoginField] = "required|email";
+            elseif (strcmp($afterLoginField, "photo") == 0)
+                $rules[$afterLoginField] = "required|image|mimes:jpeg,jpg,png|max:512";
+            elseif (strcmp($afterLoginField, "major_id") == 0)
+                $rules[$afterLoginField] = "required|exists:majors,id";
+            elseif (strcmp($afterLoginField, "gender_id") == 0)
+                $rules[$afterLoginField] = "required|exists:genders,id";
+            else
+                $rules[$afterLoginField] = "required|max:255";
+        }
 
         return $rules;
     }

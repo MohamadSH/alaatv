@@ -100,7 +100,7 @@ trait UserCommon
     /**
      * Determines oldPassword and newPassword confirmation of the user
      * @param $user
-     * @param $oldPassword
+     * @param $claimdedOldPassword
      * @param $newPassword
      * @return array
      */
@@ -128,5 +128,15 @@ trait UserCommon
             "confirmed" => $confirmed ,
             "message" => $message
         ] ;
+    }
+
+    /**
+     *  Determines whether user's profile is locked or not
+     * @param $user
+     * @return bool
+     */
+    public function isUserProfileLocked($user): bool
+    {
+        return $user->lockProfile == 1 ;
     }
 }

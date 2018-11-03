@@ -722,7 +722,7 @@
                 پروفایل شما قفل می باشد، لطفا با مسئولین سایت تماس بگیرید
             </div>
         @endif
-        {!! Form::open(['files' => 'true', 'method' => 'PUT', 'action' => 'UserController@updateProfile']) !!}
+        {!! Form::open(['files' => 'true', 'method' => 'POST', 'action' => 'UserController@updateProfileAtLogin']) !!}
         <fieldset @if(Auth::user()->lockProfile) disabled @endif>
             <p class="caption-subject @if(isset($noteFontColor)) {{$noteFontColor}} @endif bold uppercase"
                style="text-align:justify">@if(isset($note)) {{$note}} @endif </p>

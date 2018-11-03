@@ -542,7 +542,6 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
         return true;
     }
 
-
     /**
      * @return bool
      */
@@ -550,6 +549,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     {
         return $this->hasRole("admin") ? true : false;
     }
+
     /*
     |--------------------------------------------------------------------------
     | relations
@@ -755,7 +755,6 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
         return $this->remember_token;
     }
 
-
     /**
      * returns user valid bons of the specified bons
      *
@@ -853,12 +852,10 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
 
     }
 
-
     public function routeNotificationForPhoneNumber()
     {
         return ltrim($this->mobile, '0');
     }
-
 
     public function seen($path)
     {
@@ -878,7 +875,6 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
 
         return $SeenCount;
     }
-
 
     public function retrievingTags()
     {
@@ -902,7 +898,6 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
         $userContents = $this->contents;
         return $this->mergeContentTags($userContents);
     }
-
 
     public function getTaggableId()
     {
@@ -951,7 +946,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     /**
      * Locks user's profile
      */
-    protected function lockProfile(): void
+    public function lockProfile(): void
     {
         $this->lockProfile = 1;
     }

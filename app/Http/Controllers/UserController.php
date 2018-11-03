@@ -12,6 +12,7 @@ use App\{Afterloginformcontrol,
     Event,
     Gender,
     Grade,
+    Http\Requests\EditProfileInfoAtLoginRequest,
     Lottery,
     Major,
     Order,
@@ -931,7 +932,7 @@ class UserController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the user's profile information ( some limited information )
      *
      * @param  \app\Http\Requests\EditProfileInfoRequest $request
      * @return \Illuminate\Http\Response
@@ -984,6 +985,20 @@ class UserController extends Controller
         {
             return redirect()->back();
         }
+    }
+
+    /**
+     * Update the user's profile information with dynamic form at login
+     *
+     * @param EditProfileInfoAtLoginRequest $request
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
+    public function updateProfileAtLogin(EditProfileInfoAtLoginRequest $request)
+    {
+        $updateProfileRequest = new EditProfileInfoRequest();
+        $updateProfileRequest->merge($request->all());
+        $this->updateProfile($updateProfileRequest);
+
     }
 
     /**
