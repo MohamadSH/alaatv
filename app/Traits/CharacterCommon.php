@@ -88,7 +88,7 @@ trait CharacterCommon
      *
      * @return string
      */
-    function make_slug($string, $separator = '-'): string
+    public function make_slug($string, $separator = '-'): string
     {
         $string = trim($string);
         $string = mb_strtolower($string, 'UTF-8');
@@ -113,7 +113,7 @@ trait CharacterCommon
      *
      * @return string
      */
-    function makeValidUrl($string, $protocol = "https"): string
+    public function makeValidUrl($string, $protocol = "https"): string
     {
         if (!preg_match("/^http:\/\//", $string) && !preg_match("/^https:\/\//", $string))
             $string = $protocol . "://" . $string;

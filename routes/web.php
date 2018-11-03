@@ -75,8 +75,9 @@ Route::group(['prefix' => 'orderproduct'], function () {
 Route::group(['prefix' => 'landing'], function () {
     Route::get('1', 'ProductController@landing1');
     Route::get('2', 'ProductController@landing2');
-    Route::get('3', ['as'   => 'landing.3',
-                     'uses' => 'ProductController@landing3',
+    Route::get('3', [
+        'as'   => 'landing.3',
+        'uses' => 'ProductController@landing3',
     ]);
     Route::get('4', 'ProductController@landing4');
 });
@@ -134,6 +135,19 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('{user}/completeInfo', 'UserController@completeInformation');
         Route::put('updateProfile', 'UserController@updateProfile');
         Route::post('updatePhoto', 'UserController@updatePhoto');
+        Route::put('updatePassword', 'UserController@updatePassword');
+        Route::get('orders', 'UserController@userOrders');
+        Route::get('question', 'UserController@uploads');
+        Route::get('getVerificationCode', 'UserController@sendVerificationCode');
+        Route::post('verifyAccount', 'UserController@submitVerificationCode');
+        Route::post('sendSMS', 'UserController@sendSMS');
+        Route::post('submitWorkTime', 'UserController@submitWorkTime');
+        Route::post('removeFromLottery', 'UserController@removeFromLottery');
+        Route::post('addToArabiHozouri', 'OrderController@addToArabiHozouri');
+        Route::post('removeArabiHozouri', 'OrderController@removeArabiHozouri');
+        Route::get('uploadQuestion', 'UserController@uploadConsultingQuestion')
+             ->middleware('completeInfo');
+        Route::put('updateProfileAtLogin', 'UserController@updateProfileAtLogin');
         Route::put('updatePassword', 'UserController@updatePassword');
         Route::get('orders', 'UserController@userOrders');
         Route::get('question', 'UserController@uploads');

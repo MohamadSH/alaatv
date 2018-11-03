@@ -2,9 +2,9 @@
 @foreach($userbons as $userbon)
     <tr id="{{$userbon->id}}">
         <th></th>
-        <td id="userBonFullName_{{$userbon->id}}">@if(strlen($userbon->user->getFullName("lastNameFirst")) > 0) <a
+        <td id="userBonFullName_{{$userbon->id}}">@if(strlen($userbon->user->reverse_full_name) > 0) <a
                     target="_blank"
-                    href="{{action("UserController@edit" , $userbon->user)}}">{{$userbon->user->getFullName("lastNameFirst")}}</a> @else
+                    href="{{action("UserController@edit" , $userbon->user)}}">{{$userbon->user->reverse_full_name}}</a> @else
                 <span class="label label-sm label-danger"> درج نشده </span> @endif </td>
         <td>@if(isset($userbon->totalNumber) && strlen($userbon->totalNumber)>0 ) {{ $userbon->totalNumber }}  @else
                 <span class="label label-sm label-danger"> درج نشده </span> @endif</td>

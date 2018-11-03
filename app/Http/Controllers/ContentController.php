@@ -29,9 +29,11 @@ use Jenssegers\Agent\Agent;
 
 class ContentController extends Controller
 {
-
-    const PARTIAL_SEARCH_TEMPLATE_ROOT = 'partials.search';
-    const PARTIAL_INDEX_TEMPLATE       = 'content.index';
+    /*
+    |--------------------------------------------------------------------------
+    | Traits
+    |--------------------------------------------------------------------------
+    */
 
     use ProductCommon;
     use Helper;
@@ -54,24 +56,20 @@ class ContentController extends Controller
      */
     private $contentSearch;
 
+    const PARTIAL_SEARCH_TEMPLATE_ROOT = 'partials.search';
+    const PARTIAL_INDEX_TEMPLATE       = 'content.index';
+
+    /*
+    |--------------------------------------------------------------------------
+    | Private methods
+    |--------------------------------------------------------------------------
+    */
 
     /**
-     * ContentController constructor.
+     * @param Agent $agent
      *
-     * @param Agent          $agent
-     * @param Response       $response
-     * @param Websitesetting $setting
-     * @param ContentSearch  $contentSearch
+     * @return array
      */
-    public function __construct(Agent $agent, Response $response, Websitesetting $setting, ContentSearch $contentSearch)
-    {
-        $this->response = $response;
-        $this->setting = $setting->setting;
-        $authException = $this->getAuthExceptionArray($agent);
-        $this->callMiddlewares($authException);
-        $this->contentSearch = $contentSearch;
-    }
-
     private function getAuthExceptionArray(Agent $agent): array
     {
         if ($agent->isRobot()) {
@@ -120,6 +118,286 @@ class ContentController extends Controller
                 'update',
             ],
         ]);
+    }
+
+    /**
+     * @param $filename
+     * @param $res
+     *
+     * @return \stdClass
+     */
+    private function makeVideoFileStdClass($filename, $res): \stdClass
+    {
+        $file = new \stdClass();
+        $file->name = $filename;
+        $file->res = $res;
+        $file->caption = Content::videoFileCaptionTable()[$res];
+        $file->type = "video";
+        return $file;
+    }
+
+    /**
+     * @param $thumbnailUrl
+     *
+     * @return array
+     */
+    private function makeThumbanilFile($thumbnailUrl): array
+    {
+        return [
+            "uuid"     => Str::uuid()
+                             ->toString(),
+            "disk"     => "alaaCdnSFTP",
+            "url"      => $thumbnailUrl,
+            "fileName" => parse_url($thumbnailUrl)['path'],
+            "size"     => null,
+            "caption"  => null,
+            "res"      => null,
+            "type"     => "thumbnail",
+            "ext"      => pathinfo(parse_url($thumbnailUrl)['path'], PATHINFO_EXTENSION),
+        ];
+    }
+
+    /**
+     * @param $fileName
+     * @param $contentset_id
+     *
+     * @return string
+     */
+    private function makeThumbnailUrlFromFileName($fileName, $contentset_id): string
+    {
+        $baseUrl = "https://cdn.sanatisharif.ir/media/";
+        //thumbnail
+        $thumbnailFileName = pathinfo($fileName, PATHINFO_FILENAME) . ".jpg";
+        $thumbnailUrl = $baseUrl . "thumbnails/" . $contentset_id . "/" . $thumbnailFileName;
+        return $thumbnailUrl;
+    }
+
+
+    /**
+     * @param        $query
+     * @param string $layout
+     *
+     * @return string
+     */
+    private function getPartialSearchFromIds($query, string $layout)
+    {
+        $partialSearch = View::make(
+            $layout,
+            [
+                'items' => $query,
+            ]
+        )
+                             ->render();
+        return $partialSearch;
+    }
+
+    /**
+     * @param Collection $items
+     *
+     * @return mixed
+     */
+    private function makeJsonForAndroidApp(Collection $items)
+    {
+
+        //        dd($items);
+        $items = $items->pop();
+        $key = md5($items->pluck("id")
+                         ->implode(","));
+        $response = Cache::remember($key, Config::get("constants.CACHE_60"), function () use ($items) {
+            $response = collect();
+            $items->load('files');
+            foreach ($items as $item) {
+                $hq = "";
+                $h240 = "";
+                if (isset($item->files)) {
+                    $hq = $item->files->where('pivot.label', 'hq')
+                                      ->first();
+
+                    if (isset($hq)) {
+                        $hq = $hq->name;
+                        $h240 = $hq;
+                    }
+                }
+
+                if (isset($item->files)) {
+                    $temp = $item->files->where('pivot.label', '240p')
+                                        ->first();
+                    if (isset($temp)) {
+                        $h240 = $temp->name;
+                    }
+                }
+
+                $thumbnail = $item->files->where('pivot.label', 'thumbnail')
+                                         ->first();
+                $contenSets = $item->set;
+                $sessionNumber = $contenSets->pivot->order;
+                $response->push(
+                    [
+                        "videoId"          => $item->id,
+                        "name"             => $item->display_name,
+                        "videoDescribe"    => $item->description,
+                        "url"              => action('ContentController@show', $item),
+                        "videoLink480"     => $hq,
+                        "videoLink240"     => $h240,
+                        "videoviewcounter" => "0",
+                        "videoDuration"    => 0,
+                        "session"          => $sessionNumber . "",
+                        "thumbnail"        => (isset($thumbnail->name)) ? $thumbnail->name : "",
+                    ]
+                );
+                //dd($response);
+                //return response()->make("ok");
+            }
+            $response->push(json_decode("{}"));
+            return $response;
+        });
+        return $response;
+    }
+
+    /**
+     * @param Content $content
+     *
+     * @return array
+     */
+    private function getContentInformation(Content $content): array
+    {
+        $author = $content->author;
+
+        [
+            $contentsWithSameSet,
+            $contentSetName,
+        ] = $content->getSetMates();
+        $contentsWithSameSet = $contentsWithSameSet->normalMates();
+        $videosWithSameSet = optional($contentsWithSameSet)->whereIn("type", "video");
+        $pamphletsWithSameSet = optional($contentsWithSameSet)->whereIn("type", "pamphlet");
+        [
+            $videosWithSameSetL,
+            $videosWithSameSetR,
+        ] = optional($videosWithSameSet)->partition(function ($i) use ($content) {
+            return $i["content"]->id < $content->id;
+        });
+
+        return [
+            $author,
+            $content,
+            $contentsWithSameSet,
+            $videosWithSameSet,
+            $videosWithSameSetL,
+            $videosWithSameSetR,
+            $pamphletsWithSameSet,
+            $contentSetName,
+        ];
+    }
+
+    /**
+     * @param $time
+     * @param $validSince
+     *
+     * @return null|string
+     */
+    private function getValidSinceDateTime($time, $validSince): string
+    {
+        if (isset($time)) {
+            if (strlen($time) > 0)
+                $time = Carbon::parse($time)
+                              ->format('H:i:s');
+            else
+                $time = "00:00:00";
+        }
+        if (isset($validSince)) {
+            $validSince = Carbon::parse($validSince)
+                                ->format('Y-m-d'); //Muhammad : added a day because it returns one day behind and IDK why!!
+            if (isset($time))
+                $validSince = $validSince . " " . $time;
+            return $validSince;
+        }
+        return null;
+    }
+
+    /**
+     * @param $tagString
+     *
+     * @return array
+     */
+    private function getTagsArrayFromTagString($tagString): array
+    {
+        $tags = explode(",", $tagString);
+        $tags = array_filter($tags);
+        return $tags;
+    }
+
+    /**
+     * @param Content $content
+     *
+     * @param array   $files
+     */
+    private function storeFilesOfContent(Content &$content, array $files): void
+    {
+        $disk = $content->isFree ? config("constants.DISK_FREE_CONTENT") : config("constants.DISK_PRODUCT_CONTENT");
+
+        $fileCollection = collect();
+
+        foreach ($files as $key => $file) {
+            $fileName = isset($file->name) ? $file->name : null;
+            $caption = isset($file->caption) ? $file->caption : null;
+            $res = isset($file->res) ? $file->res : null;
+            $type = isset($file->type) ? $file->type : null;
+            if ($this->strIsEmpty($fileName))
+                continue;
+            $fileCollection->push([
+                                      "uuid"     => Str::uuid()
+                                                       ->toString(),
+                                      "disk"     => $disk,
+                                      "url"      => null,
+                                      "fileName" => $fileName,
+                                      "size"     => null,
+                                      "caption"  => $caption,
+                                      "res"      => $res,
+                                      "type"     => $type,
+                                      "ext"      => pathinfo($fileName, PATHINFO_EXTENSION),
+                                  ]);
+        }
+        /** @var TYPE_NAME $content */
+        $content->file = $fileCollection;
+    }
+
+    /**
+     * @param FormRequest $request
+     * @param Content     $content
+     *
+     * @return void
+     */
+    private function fillContentFromRequest(FormRequest $request, Content &$content): void
+    {
+        $inputData = $request->all();
+        $time = $request->get("validSinceTime");
+        $validSince = $request->get("validSinceDate");
+        $enabled = $request->has("enable");
+        $tagString = $request->get("tags");
+        $files = json_decode($request->get("files"));
+
+        $content->fill($inputData);
+        $content->validSince = $this->getValidSinceDateTime($time, $validSince);
+        $content->enable = $enabled ? 1 : 0;
+        $content->tags = $this->getTagsArrayFromTagString($tagString);
+
+        if (isset($files))
+            $this->storeFilesOfContent($content, $files);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Public methods
+    |--------------------------------------------------------------------------
+    */
+
+    public function __construct(Agent $agent, Response $response, Websitesetting $setting, ContentSearch $contentSearch)
+    {
+        $this->response = $response;
+        $this->setting = $setting->setting;
+        $authException = $this->getAuthExceptionArray($agent);
+        $this->callMiddlewares($authException);
+        $this->contentSearch = $contentSearch;
     }
 
     /**
@@ -182,76 +460,6 @@ class ContentController extends Controller
                              ]);
         }
         return view("pages.search", compact("items", "contentTypes", 'tags'));
-    }
-
-    private function getPartialSearchFromIds($query, string $layout)
-    {
-        $partialSearch = View::make(
-            $layout,
-            [
-                'items' => $query,
-            ]
-        )
-                             ->render();
-        return $partialSearch;
-    }
-
-    private function makeJsonForAndroidApp(Collection $items)
-    {
-
-        //        dd($items);
-        $items = $items->pop();
-        $key = md5($items->pluck("id")
-                         ->implode(","));
-        $response = Cache::remember($key, Config::get("constants.CACHE_60"), function () use ($items) {
-            $response = collect();
-            $items->load('files');
-            foreach ($items as $item) {
-                $hq = "";
-                $h240 = "";
-                if (isset($item->files)) {
-                    $hq = $item->files->where('pivot.label', 'hq')
-                                      ->first();
-
-                    if (isset($hq)) {
-                        $hq = $hq->name;
-                        $h240 = $hq;
-                    }
-                }
-
-                if (isset($item->files)) {
-                    $temp = $item->files->where('pivot.label', '240p')
-                                        ->first();
-                    if (isset($temp)) {
-                        $h240 = $temp->name;
-                    }
-                }
-
-                $thumbnail = $item->files->where('pivot.label', 'thumbnail')
-                                         ->first();
-                $contenSets = $item->set;
-                $sessionNumber = $contenSets->pivot->order;
-                $response->push(
-                    [
-                        "videoId"          => $item->id,
-                        "name"             => $item->display_name,
-                        "videoDescribe"    => $item->description,
-                        "url"              => action('ContentController@show', $item),
-                        "videoLink480"     => $hq,
-                        "videoLink240"     => $h240,
-                        "videoviewcounter" => "0",
-                        "videoDuration"    => 0,
-                        "session"          => $sessionNumber . "",
-                        "thumbnail"        => (isset($thumbnail->name)) ? $thumbnail->name : "",
-                    ]
-                );
-                //dd($response);
-                //return response()->make("ok");
-            }
-            $response->push(json_decode("{}"));
-            return $response;
-        });
-        return $response;
     }
 
     public function embed(Request $request, Content $content)
@@ -341,41 +549,6 @@ class ContentController extends Controller
     }
 
     /**
-     * @param Content $content
-     *
-     * @return array
-     */
-    private function getContentInformation(Content $content): array
-    {
-        $author = $content->author;
-
-        [
-            $contentsWithSameSet,
-            $contentSetName,
-        ] = $content->getSetMates();
-        $contentsWithSameSet = $contentsWithSameSet->normalMates();
-        $videosWithSameSet = optional($contentsWithSameSet)->whereIn("type", "video");
-        $pamphletsWithSameSet = optional($contentsWithSameSet)->whereIn("type", "pamphlet");
-        [
-            $videosWithSameSetL,
-            $videosWithSameSetR,
-        ] = optional($videosWithSameSet)->partition(function ($i) use ($content) {
-            return $i["content"]->id < $content->id;
-        });
-
-        return [
-            $author,
-            $content,
-            $contentsWithSameSet,
-            $videosWithSameSet,
-            $videosWithSameSetL,
-            $videosWithSameSetR,
-            $pamphletsWithSameSet,
-            $contentSetName,
-        ];
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Content $content
@@ -437,102 +610,6 @@ class ContentController extends Controller
     }
 
     /**
-     * @param FormRequest $request
-     * @param Content     $content
-     *
-     * @return void
-     */
-    private function fillContentFromRequest(FormRequest $request, Content &$content): void
-    {
-        $inputData = $request->all();
-        $time = $request->get("validSinceTime");
-        $validSince = $request->get("validSinceDate");
-        $enabled = $request->has("enable");
-        $tagString = $request->get("tags");
-        $files = json_decode($request->get("files"));
-
-        $content->fill($inputData);
-        $content->validSince = $this->getValidSinceDateTime($time, $validSince);
-        $content->enable = $enabled ? 1 : 0;
-        $content->tags = $this->getTagsArrayFromTagString($tagString);
-
-        if (isset($files))
-            $this->storeFilesOfContent($content, $files);
-    }
-
-    /**
-     * @param $time
-     * @param $validSince
-     *
-     * @return null|string
-     */
-    private function getValidSinceDateTime($time, $validSince): string
-    {
-        if (isset($time)) {
-            if (strlen($time) > 0)
-                $time = Carbon::parse($time)
-                              ->format('H:i:s');
-            else
-                $time = "00:00:00";
-        }
-        if (isset($validSince)) {
-            $validSince = Carbon::parse($validSince)
-                                ->format('Y-m-d'); //Muhammad : added a day because it returns one day behind and IDK why!!
-            if (isset($time))
-                $validSince = $validSince . " " . $time;
-            return $validSince;
-        }
-        return null;
-    }
-
-    /**
-     * @param $tagString
-     *
-     * @return array
-     */
-    private function getTagsArrayFromTagString($tagString): array
-    {
-        $tags = explode(",", $tagString);
-        $tags = array_filter($tags);
-        return $tags;
-    }
-
-    /**
-     * @param Content $content
-     *
-     * @param array   $files
-     */
-    private function storeFilesOfContent(Content &$content, array $files): void
-    {
-        $disk = $content->isFree ? config("constants.DISK_FREE_CONTENT") : config("constants.DISK_PRODUCT_CONTENT");
-
-        $fileCollection = collect();
-
-        foreach ($files as $key => $file) {
-            $fileName = isset($file->name) ? $file->name : null;
-            $caption = isset($file->caption) ? $file->caption : null;
-            $res = isset($file->res) ? $file->res : null;
-            $type = isset($file->type) ? $file->type : null;
-            if ($this->strIsEmpty($fileName))
-                continue;
-            $fileCollection->push([
-                                      "uuid"     => Str::uuid()
-                                                       ->toString(),
-                                      "disk"     => $disk,
-                                      "url"      => null,
-                                      "fileName" => $fileName,
-                                      "size"     => null,
-                                      "caption"  => $caption,
-                                      "res"      => $res,
-                                      "type"     => $type,
-                                      "ext"      => pathinfo($fileName, PATHINFO_EXTENSION),
-                                  ]);
-        }
-        /** @var TYPE_NAME $content */
-        $content->file = $fileCollection;
-    }
-
-    /**
      * @param Request $request
      *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
@@ -581,74 +658,6 @@ class ContentController extends Controller
             return redirect(action("ContentController@edit", $newContent->id));
         } else
             throw new Exception("replicate Error!" . $contentset_id);
-    }
-
-    public function makeVideoFileArray($fileName, $contentset_id): array
-    {
-        $fileUrl = [
-            "720p" => "/media/" . $contentset_id . "/HD_720p/" . $fileName,
-            "480p" => "/media/" . $contentset_id . "/hq/" . $fileName,
-            "240p" => "/media/" . $contentset_id . "/240p/" . $fileName,
-        ];
-        $files = [];
-        $files[] = $this->makeVideoFileStdClass($fileUrl["240p"], "240p");
-
-        $files[] = $this->makeVideoFileStdClass($fileUrl["480p"], "480p");
-
-        $files[] = $this->makeVideoFileStdClass($fileUrl["720p"], "720p");
-        return $files;
-    }
-
-    /**
-     * @param $filename
-     * @param $res
-     *
-     * @return \stdClass
-     */
-    private function makeVideoFileStdClass($filename, $res): \stdClass
-    {
-        $file = new \stdClass();
-        $file->name = $filename;
-        $file->res = $res;
-        $file->caption = Content::videoFileCaptionTable()[$res];
-        $file->type = "video";
-        return $file;
-    }
-
-    /**
-     * @param $fileName
-     * @param $contentset_id
-     *
-     * @return string
-     */
-    private function makeThumbnailUrlFromFileName($fileName, $contentset_id): string
-    {
-        $baseUrl = "https://cdn.sanatisharif.ir/media/";
-        //thumbnail
-        $thumbnailFileName = pathinfo($fileName, PATHINFO_FILENAME) . ".jpg";
-        $thumbnailUrl = $baseUrl . "thumbnails/" . $contentset_id . "/" . $thumbnailFileName;
-        return $thumbnailUrl;
-    }
-
-    /**
-     * @param $thumbnailUrl
-     *
-     * @return array
-     */
-    private function makeThumbanilFile($thumbnailUrl): array
-    {
-        return [
-            "uuid"     => Str::uuid()
-                             ->toString(),
-            "disk"     => "alaaCdnSFTP",
-            "url"      => $thumbnailUrl,
-            "fileName" => parse_url($thumbnailUrl)['path'],
-            "size"     => null,
-            "caption"  => null,
-            "res"      => null,
-            "type"     => "thumbnail",
-            "ext"      => pathinfo(parse_url($thumbnailUrl)['path'], PATHINFO_EXTENSION),
-        ];
     }
 
     /**
@@ -700,5 +709,21 @@ class ContentController extends Controller
     public function search()
     {
         return redirect('/c', Response::HTTP_MOVED_PERMANENTLY);
+    }
+
+    public function makeVideoFileArray($fileName, $contentset_id): array
+    {
+        $fileUrl = [
+            "720p" => "/media/" . $contentset_id . "/HD_720p/" . $fileName,
+            "480p" => "/media/" . $contentset_id . "/hq/" . $fileName,
+            "240p" => "/media/" . $contentset_id . "/240p/" . $fileName,
+        ];
+        $files = [];
+        $files[] = $this->makeVideoFileStdClass($fileUrl["240p"], "240p");
+
+        $files[] = $this->makeVideoFileStdClass($fileUrl["480p"], "480p");
+
+        $files[] = $this->makeVideoFileStdClass($fileUrl["720p"], "720p");
+        return $files;
     }
 }

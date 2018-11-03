@@ -3,14 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Traits\CharacterCommon;
-use App\Traits\Helper;
+use App\Http\Controllers\UserController;
+use App\Http\Requests\InsertUserRequest;
+use App\Traits\{CharacterCommon, Helper};
 use App\User;
-use App\Userstatus;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Validation\Rule;
 use Validator;
 
@@ -38,16 +37,71 @@ class RegisterController extends Controller
      * @var string
      */
     protected $redirectTo;
+    protected $userController;
 
     /**
      * Create a new controller instance.
      *
-     * @return void
+     * @param UserController $userController
      */
-    public function __construct()
+    public function __construct(UserController $userController)
     {
         $this->middleware('guest');
         $this->redirectTo = action("ProductController@search");
+        $this->userController = $userController;
+    }
+
+    /**
+     * Get a validator for an incoming registration request.
+     *
+     * @param  array $data
+     *
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    protected function validator(array $data)
+    {
+        return Validator::make($data, [
+            //ToDo : Should be included from a common file with UserController@store
+            'mobile'       => [
+                'required',
+                'digits:11',
+                'phone:AUTO,IR,mobile',
+                Rule::unique('users')
+                    ->where(function ($query) use ($data) {
+                        $query->where('nationalCode', $data["nationalCode"])
+                              ->where('deleted_at', null);
+                    }),
+            ],
+            'nationalCode' => [
+                'required',
+                'digits:10',
+                'validate:nationalCode',
+                Rule::unique('users')
+                    ->where(function ($query) use ($data) {
+                        $query->where('mobile', $data["mobile"])
+                              ->where('deleted_at', null);
+                    }),
+            ],
+        ]);
+    }
+
+    /**
+     * Create a new user instance after a valid registration.
+     *
+     * @param  array $data
+     *
+     * @return User
+     */
+    protected function create(array $data)
+    {
+        $storeUserRequest = new InsertUserRequest();
+        $storeUserRequest->merge($data);
+        $storeUserRequest->headers->add(["X-Requested-With" => "XMLHttpRequest"]); //ToDo : to be tested
+        $response = $this->userController->store($storeUserRequest);
+        $responseContent = json_decode($response->getContent());
+        $user = $responseContent->user;
+
+        return $user;
     }
 
     /**
@@ -83,127 +137,6 @@ class RegisterController extends Controller
 
         return $this->registered($request, $user)
             ?: redirect($this->redirectPath());
-    }
-
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array $data
-     *
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'firstName'    => 'max:255',
-            'lastName'     => 'max:255',
-            'mobile'       => [
-                'required',
-                'digits:11',
-                'phone:AUTO,IR,mobile',
-                Rule::unique('users')
-                    ->where(function ($query) use ($data) {
-                        $query->where('nationalCode', $data["nationalCode"])
-                              ->where('deleted_at', null);
-                    }),
-            ],
-            //            'password' => 'required|confirmed|min:6',
-            'nationalCode' => [
-                'required',
-                'digits:10',
-                'validate:nationalCode',
-                Rule::unique('users')
-                    ->where(function ($query) use ($data) {
-                        $query->where('mobile', $data["mobile"])
-                              ->where('deleted_at', null);
-                    }),
-            ],
-            'postalCode'   => 'numeric',
-            'major_id'     => 'exists:majors,id',
-            'gender_id'    => 'exists:genders,id',
-            //            'photo' => 'required|image|mimes:jpeg,jpg,png|max:200',
-            //            'rules' => 'required',
-            //            'g-recaptcha-response' => 'required|recaptcha',
-            'email'        => 'email',
-        ]);
-    }
-
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array $data
-     *
-     * @return User
-     */
-    protected function create(array $data)
-    {
-        $softDeletedUsers = User::onlyTrashed()
-                                ->where("mobile", $data["mobile"])
-                                ->where("nationalCode", $data["nationalCode"])
-                                ->get();
-        if (!$softDeletedUsers->isEmpty()) {
-            $user = $softDeletedUsers->first();
-            $user->restore();
-            return $user;
-        }
-
-        /**
-         * Uploading photo
-         */
-        //Setting default values
-        $data["photo"] = Config::get('constants.PROFILE_DEFAULT_IMAGE');
-        $data["userstatus_id"] = Userstatus::all()
-                                           ->where("name", "active")
-                                           ->first()->id;
-
-        //          $password = $this->generateRandomPassword(4);
-        if (!isset($data['firstName']) || strlen(preg_replace('/\s+/', '', $data['firstName'])) == 0)
-            $data['firstName'] = null;
-        if (!isset($data['lastName']) || strlen(preg_replace('/\s+/', '', $data['lastName'])) == 0)
-            $data['lastName'] = null;
-        if (!isset($data['major_id']) || strlen(preg_replace('/\s+/', '', $data['major_id'])) == 0)
-            $data['major_id'] = null;
-        if (!isset($data['grade_id']) || strlen(preg_replace('/\s+/', '', $data['grade_id'])) == 0)
-            $data['grade_id'] = null;
-        if (!isset($data['gender_id']) || strlen(preg_replace('/\s+/', '', $data['gender_id'])) == 0)
-            $data['gender_id'] = null;
-        if (!isset($data['province']) || strlen(preg_replace('/\s+/', '', $data['province'])) == 0)
-            $data['province'] = null;
-        if (!isset($data['city']) || strlen(preg_replace('/\s+/', '', $data['city'])) == 0)
-            $data['city'] = null;
-        if (!isset($data['address']) || strlen(preg_replace('/\s+/', '', $data['address'])) == 0)
-            $data['address'] = null;
-        if (!isset($data['postalCode']) || strlen(preg_replace('/\s+/', '', $data['postalCode'])) == 0)
-            $data['postalCode'] = null;
-        if (!isset($data['school']) || strlen(preg_replace('/\s+/', '', $data['school'])) == 0)
-            $data['school'] = null;
-        if (!isset($data['email']) || strlen(preg_replace('/\s+/', '', $data['email'])) == 0)
-            $data['email'] = null;
-        /**
-         * making the order for this new user will be done in \App\Http\Middleware\OrderCheck
-         */
-
-        $user = User::create([
-                                 'firstName'     => $data['firstName'],
-                                 'lastName'      => $data['lastName'],
-                                 'nationalCode'  => $data['nationalCode'],
-                                 'mobile'        => $data['mobile'],
-                                 'major_id'      => $data['major_id'],
-                                 'grade_id'      => $data['grade_id'],
-                                 'gender_id'     => $data['gender_id'],
-                                 'photo'         => $data['photo'],
-                                 //            'password' => $password['hashPassword'],
-                                 'password'      => bcrypt($data['nationalCode']),
-                                 'province'      => $data['province'],
-                                 'city'          => $data['city'],
-                                 'address'       => $data['address'],
-                                 'postalCode'    => $data['postalCode'],
-                                 'school'        => $data['school'],
-                                 'userstatus_id' => $data["userstatus_id"],
-                                 'email'         => $data['email'],
-                             ]);
-        //        $user->notify(new UserRegisterd());
-        return $user;
     }
 
 }

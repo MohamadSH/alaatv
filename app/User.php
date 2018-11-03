@@ -688,60 +688,6 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     }
 
     /**
-     * Makes payload for Disqus SSo
-     *
-     * @return string
-     */
-    public function disqusSSO()
-    {
-        if (isset($this->firstName) && isset($this->lastName) && isset($this->mobile)) {
-            if (isset($this->photo) && strlen($this->photo) > 0) {
-                $data = [
-                    "id"       => $this->mobile,
-                    "username" => $this->firstName . " " . $this->lastName,
-                    "email"    => $this->mobile . "@takhtekhak.com",
-                    "avatar"   => route('image', [
-                        'category' => '1',
-                        'w'        => '39',
-                        'h'        => '39',
-                        'filename' => $this->photo,
-                    ]),
-                ];
-            } else {
-                $data = [
-                    "id"       => $this->mobile,
-                    "username" => $this->firstName . " " . $this->lastName,
-                    "email"    => $this->mobile . "@takhtekhak.com",
-                ];
-            }
-            $message = base64_encode(json_encode($data, JSON_UNESCAPED_UNICODE));
-            $timestamp = time();
-            $data = $message . ' ' . $timestamp;
-            $key = config('constants.DISQUS_PRIVATE_KEY');
-
-            $blocksize = 64;
-            $hashfunc = 'sha1';
-            if (strlen($key) > $blocksize)
-                $key = pack('H*', $hashfunc($key));
-            $key = str_pad($key, $blocksize, chr(0x00));
-            $ipad = str_repeat(chr(0x36), $blocksize);
-            $opad = str_repeat(chr(0x5c), $blocksize);
-            $hmac = pack(
-                'H*', $hashfunc(
-                        ($key ^ $opad) . pack(
-                            'H*', $hashfunc(
-                                    ($key ^ $ipad) . $data
-                                )
-                        )
-                    )
-            );
-            $hmac = bin2hex($hmac);
-            //            dd($message." ".$hmac." ".$timestamp);
-            return $message . " " . $hmac . " " . $timestamp;
-        }
-    }
-
-    /**
      * @return string
      * Converting Updated_at field to jalali
      */

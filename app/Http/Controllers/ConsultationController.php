@@ -159,7 +159,7 @@ class ConsultationController extends Controller
         if ($consultation->update()) {
             session()->put("success", "اطلاعات مشاوره با موفقیت اصلاح شد");
         } else {
-            session()->put("error", "خطای پایگاه داده");
+            session()->put("error", \Lang::get("responseText.Database error."));
         }
         return redirect()->back();
     }

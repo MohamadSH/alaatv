@@ -192,7 +192,7 @@ class EmployeetimesheetController extends Controller
             if ($request->has("serverSide")) {
                 return false;
             } else {
-                session()->flash("error", "خطای پایگاه داده");
+                session()->flash("error", \Lang::get("responseText.Database error."));
                 return redirect()->back();
             }
 
@@ -276,7 +276,7 @@ class EmployeetimesheetController extends Controller
             if ($request->has("serverSide")) {
                 return false;
             } else {
-                session()->flash("error", "خطای پایگاه داده");
+                session()->flash("error", \Lang::get("responseText.Database error."));
                 return redirect()->back();
             }
     }

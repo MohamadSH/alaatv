@@ -56,8 +56,8 @@
         <tr>
             <th></th>
             <td>@if(isset($eventresult->user->id))
-                    @if(strlen($eventresult->user->getFullName("lastNameFirst")) > 0) <a target="_blank"
-                                                                                         href="{{action("UserController@edit" , $eventresult->user)}}">{{$eventresult->user->getFullName()}}</a> @else
+                    @if(strlen($eventresult->user->reverse_full_name) > 0) <a target="_blank"
+                                                                                         href="{{action("UserController@edit" , $eventresult->user)}}">{{$eventresult->user->full_name}}</a> @else
                         <span class="label label-sm label-danger"> کاربر ناشناس </span>@endif
                 @endif
             </td>

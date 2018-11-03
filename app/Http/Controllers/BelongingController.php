@@ -86,7 +86,7 @@ class BelongingController extends Controller
                 $this->attachUserBelonging($request, $belonging);
             session()->put("success", "اسناد فنی با موفقیت درج شد!");
         } else {
-            session()->put("success", "خطای پایگاه داده");
+            session()->put("success", \Lang::get("responseText.Database error."));
         }
         return redirect()->back();
     }

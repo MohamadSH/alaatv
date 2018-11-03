@@ -152,7 +152,7 @@ class EventresultController extends Controller
                 $message = "خطا در درج نتیجه";
                 $status = 503;
             } else {
-                session()->put("error", "خطای پایگاه داده");
+                session()->put("error", \Lang::get("responseText.Database error."));
             }
         }
         if ($request->has("fromAPI"))

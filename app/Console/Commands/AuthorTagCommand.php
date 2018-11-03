@@ -47,7 +47,7 @@ class AuthorTagCommand extends Command
                 $this->error($exception->getMessage());
                 return;
             }
-            if ($this->confirm('You have chosen ' . $user->getfullName() . '. Do you wish to continue?', true)) {
+            if ($this->confirm('You have chosen ' . $user->full_name . '. Do you wish to continue?', true)) {
                 $this->performTaggingTaskForAnAuthor($user);
             }
         } else {
@@ -64,7 +64,7 @@ class AuthorTagCommand extends Command
     {
         $userContents = $user->contents;
         if (count($userContents) == 0) {
-            $this->error("user " . $user->getfullName() . " has no content.");
+            $this->error("user " . $user->full_name . " has no content.");
 
         } else {
             $this->sendTagsOfTaggableToApi($user, $this->tagging);

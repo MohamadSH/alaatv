@@ -2,9 +2,9 @@
 @foreach($transactions as $transaction)
     <tr id="{{$transaction->id}}">
         <th></th>
-        <td>@if(isset($transaction->order->user->id)) @if(strlen($transaction->order->user->getFullName("lastNameFirst")) > 0)
+        <td>@if(isset($transaction->order->user->id)) @if(strlen($transaction->order->user->reverse_full_name) > 0)
                 <a target="_blank"
-                   href="{{action("UserController@edit" , $transaction->order->user)}}">{{$transaction->order->user->getFullName("lastNameFirst")}}</a> @else
+                   href="{{action("UserController@edit" , $transaction->order->user)}}">{{$transaction->order->user->reverse_full_name}}</a> @else
                 <span class="label label-sm label-danger"> درج نشده </span> @endif @endif</td>
         <td>@if($transaction->hasParents())<a target="_blank"
                                               href="{{action('TransactionController@edit' , $transaction->getGrandParent())}}">رفتن

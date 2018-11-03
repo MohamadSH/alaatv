@@ -876,7 +876,7 @@ class OrderController extends Controller
 
         $donateCost = 0;
         if ($orderHasDonate) {
-            $donateCost =Product::getDonateProductCost();
+            $donateCost = Product::getDonateProductCost();
         }
 
         $credit = $user->getTotalWalletBalance();
@@ -1139,7 +1139,7 @@ class OrderController extends Controller
                 $orderHasDonate = $order->hasProducts(Product::DONATE_PRODUCT);
                 $donateCost = 0;
                 if ($orderHasDonate) {
-                    $donateCost =Product::getDonateProductCost();
+                    $donateCost = Product::getDonateProductCost();
                 }
 
                 $credit = $user->getTotalWalletBalance();
