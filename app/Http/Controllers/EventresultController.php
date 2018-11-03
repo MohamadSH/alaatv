@@ -157,8 +157,9 @@ class EventresultController extends Controller
         }
         if ($request->has("fromAPI"))
             return $this->response->setStatusCode($status)
-                                  ->setContent(["message"           => $message,
-                                                "participationCode" => (isset($participationCode) ? $participationCode : null),
+                                  ->setContent([
+                                                   "message"           => $message,
+                                                   "participationCode" => (isset($participationCode) ? $participationCode : null),
                                                ]);
         else
             return redirect()->back();

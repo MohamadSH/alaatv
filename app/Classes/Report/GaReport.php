@@ -74,41 +74,13 @@ abstract class GaReport implements ReportInterface
         $this->analytics = $analytics;
     }
 
+    public abstract function getReport($path, $from = '2013-01-01', $to = 'today');
+
     protected function get()
     {
         $this->body->setReportRequests([$this->request]);
         return $this->analytics->reports->batchGet($this->body);
     }
-
-    public abstract function getReport($path, $from = '2013-01-01', $to = 'today');
-
-    /**
-     * @param $from
-     * @param $to
-     */
-    protected function setDataRange($from, $to): void
-    {
-        // Init the DateRange object
-        $this->dateRange->setStartDate($from);
-        $this->dateRange->setEndDate($to);
-    }
-
-    protected function setRequest(): void
-    {
-        $this->request->setDateRanges($this->dateRange);
-        $this->request->setMetrics($this->metrics);
-        $this->request->setDimensions($this->dimension);
-        $this->request->setOrderBys($this->orderBy);
-        $this->request->setDimensionFilterClauses($this->filter);
-    }
-
-    protected abstract function setMetrics(): void;
-
-    protected abstract function setDimension(): void;
-
-    protected abstract function setOrderBy(): void;
-
-    protected abstract function setDimensionFilter($value): void;
 
     /**
      * @param $path
@@ -123,5 +95,33 @@ abstract class GaReport implements ReportInterface
         $this->setOrderBy();
         $this->setDimensionFilter($path);
         $this->setRequest();
+    }
+
+    /**
+     * @param $from
+     * @param $to
+     */
+    protected function setDataRange($from, $to): void
+    {
+        // Init the DateRange object
+        $this->dateRange->setStartDate($from);
+        $this->dateRange->setEndDate($to);
+    }
+
+    protected abstract function setMetrics(): void;
+
+    protected abstract function setDimension(): void;
+
+    protected abstract function setOrderBy(): void;
+
+    protected abstract function setDimensionFilter($value): void;
+
+    protected function setRequest(): void
+    {
+        $this->request->setDateRanges($this->dateRange);
+        $this->request->setMetrics($this->metrics);
+        $this->request->setDimensions($this->dimension);
+        $this->request->setOrderBys($this->orderBy);
+        $this->request->setDimensionFilterClauses($this->filter);
     }
 }

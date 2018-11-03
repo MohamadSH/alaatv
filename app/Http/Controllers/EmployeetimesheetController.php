@@ -79,8 +79,8 @@ class EmployeetimesheetController extends Controller
         $employeeWorkSheetSum = $this->sumWorkAndShiftDiff($employeeTimeSheets);
         $employeeSumRealWorkTime = $this->sumRealWorkTime($employeeTimeSheets);
         $result = [
-            'index' => View::make("employeeTimeSheet.index", compact('employeeTimeSheets', 'employeeWorkSheetSum'))
-                           ->render(),
+            'index'                => View::make("employeeTimeSheet.index", compact('employeeTimeSheets', 'employeeWorkSheetSum'))
+                                          ->render(),
             "employeeWorkSheetSum" => $employeeWorkSheetSum,
             "employeeRealWorkTime" => $employeeSumRealWorkTime,
         ];

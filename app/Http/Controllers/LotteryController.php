@@ -230,10 +230,11 @@ class LotteryController extends Controller
             dump($failedCounter . " users failed");
             dump($warningCounter . " warnings");
             return $this->response->setStatusCode(503)
-                                  ->setContent(["message"                                => $message,
-                                                "number of successfully processed items" => $counter,
-                                                "error"                                  => $e->getMessage(),
-                                                "line"                                   => $e->getLine(),
+                                  ->setContent([
+                                                   "message"                                => $message,
+                                                   "number of successfully processed items" => $counter,
+                                                   "error"                                  => $e->getMessage(),
+                                                   "line"                                   => $e->getLine(),
                                                ]);
         }
     }

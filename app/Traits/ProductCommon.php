@@ -140,9 +140,10 @@ trait ProductCommon
 
                 } else $costArray = $product->calculatePayablePrice();
 
-                $costCollection->put($product->id, ["cost"            => $costArray["cost"],
-                                                    'productDiscount' => $costArray["productDiscount"],
-                                                    'bonDiscount'     => $costArray['bonDiscount'],
+                $costCollection->put($product->id, [
+                    "cost"            => $costArray["cost"],
+                    'productDiscount' => $costArray["productDiscount"],
+                    'bonDiscount'     => $costArray['bonDiscount'],
                 ]);
             }
             return $costCollection;

@@ -8,7 +8,7 @@ return [
     | Password Confirmation Language Lines
     |--------------------------------------------------------------------------
     */
-    'Confirmed' => '',
+    'Confirmed'                                       => '',
     'Current password and new password are the same.' => '',
-    'Claimed old password is not correct' => '',
+    'Claimed old password is not correct'             => '',
 ];

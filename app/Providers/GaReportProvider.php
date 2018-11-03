@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use App\Classes\Report\GaReport;
 use Illuminate\Support\ServiceProvider;
 
 class GaReportProvider extends ServiceProvider

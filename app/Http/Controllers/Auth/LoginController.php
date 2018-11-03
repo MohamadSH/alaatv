@@ -88,9 +88,10 @@ class LoginController extends Controller
         $intendedUsers = User::where("mobile", $request->get("mobile"))
                              ->get();
         foreach ($intendedUsers as $user) {
-            if (Auth::attempt(['id'       => $user->id,
-                               'mobile'   => $user->mobile,
-                               'password' => $request->get("password"),
+            if (Auth::attempt([
+                                  'id'       => $user->id,
+                                  'mobile'   => $user->mobile,
+                                  'password' => $request->get("password"),
                               ], $remember)) {
                 if (strcmp(Auth::user()->userstatus->name, "inactive") == 0) {
                     Auth::logout();

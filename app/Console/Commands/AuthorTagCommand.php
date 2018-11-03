@@ -23,7 +23,7 @@ class AuthorTagCommand extends Command
      * @var string
      */
     protected $description = 'add Tags for an Author';
-    private $tagging;
+    private   $tagging;
 
     public function __construct(TaggingInterface $tagging)
     {

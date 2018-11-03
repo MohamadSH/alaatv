@@ -43,8 +43,8 @@ use Illuminate\Support\Facades\Config;
  * @mixin \Eloquent
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset active()
  * @property-read \App\Collection\UserCollection|\App\User[]       $favoriteBy
- * @property string|null $small_name
- * @property-read mixed $short_name
+ * @property string|null                                           $small_name
+ * @property-read mixed                                            $short_name
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset whereSmallName($value)
  */
 class Contentset extends Model implements Taggable
@@ -146,9 +146,11 @@ class Contentset extends Model implements Taggable
                     ->withPivot("order", "isDefault");
     }
 
-    public function getShortNameAttribute($value){
+    public function getShortNameAttribute($value)
+    {
         return $this->small_name;
     }
+
     public function getTagsAttribute($value)
     {
         return json_decode($value);

@@ -17,25 +17,21 @@ class OrderCollections extends Collection
     /**
      * @return BaseCollection
      */
-    public function getCoupons():BaseCollection
+    public function getCoupons(): BaseCollection
     {
         $items = $this;
         $result = collect();
 
-        foreach ($items as $order)
-        {
+        foreach ($items as $order) {
             $orderCoupon = $order->determineCoupontype();
-            if ($orderCoupon !== false)
-            {
-                if ($orderCoupon["type"] == config("constants.DISCOUNT_TYPE_PERCENTAGE"))
-                {
+            if ($orderCoupon !== false) {
+                if ($orderCoupon["type"] == config("constants.DISCOUNT_TYPE_PERCENTAGE")) {
                     $result->put($order->id, [
-                        "caption" => "کپن " . $order->coupon->name . " با " . $orderCoupon["discount"] . " % تخفیف"
+                        "caption" => "کپن " . $order->coupon->name . " با " . $orderCoupon["discount"] . " % تخفیف",
                     ]);
-                } elseif ($orderCoupon["type"] == config("constants.DISCOUNT_TYPE_COST"))
-                {
+                } else if ($orderCoupon["type"] == config("constants.DISCOUNT_TYPE_COST")) {
                     $result->put($order->id, [
-                        "caption" => "کپن " . $order->coupon->name . " با " . number_format($orderCoupon["discount"]) . " تومان تخفیف"
+                        "caption" => "کپن " . $order->coupon->name . " با " . number_format($orderCoupon["discount"]) . " تومان تخفیف",
                     ]);
                 }
             }

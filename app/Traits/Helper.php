@@ -50,7 +50,7 @@ trait Helper
         $generatedPassword = rand(1000, 9999);
         $generatedPasswordHash = bcrypt($generatedPassword);
         return [
-            "rawPassword" => $generatedPassword,
+            "rawPassword"  => $generatedPassword,
             "hashPassword" => $generatedPasswordHash,
         ];
     }

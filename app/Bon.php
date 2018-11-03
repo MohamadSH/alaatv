@@ -64,18 +64,6 @@ class Bon extends Model
         'enable',
     ];
 
-    public function cacheKey()
-    {
-        $key = $this->getKey();
-        $time = isset($this->updated_at) ? $this->updated_at->timestamp : $this->created_at->timestamp;
-        return sprintf(
-            "%s-%s",
-            //$this->getTable(),
-            $key,
-            $time
-        );
-    }
-
     public static function getAlaaBonDisplayName()
     {
         return Cache::tags('bon')
@@ -89,6 +77,19 @@ class Bon extends Model
                         return $bonName;
                     });
     }
+
+    public function cacheKey()
+    {
+        $key = $this->getKey();
+        $time = isset($this->updated_at) ? $this->updated_at->timestamp : $this->created_at->timestamp;
+        return sprintf(
+            "%s-%s",
+            //$this->getTable(),
+            $key,
+            $time
+        );
+    }
+
     public function products()
     {
         return $this->belongsToMany('\App\Product')

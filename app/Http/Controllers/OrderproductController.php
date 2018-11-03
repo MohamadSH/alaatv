@@ -482,7 +482,7 @@ class OrderproductController extends Controller
                             else
                                 $extraCost = null;
                             $groupedCheckbox->put($attributevalue->id, [
-                                "index" => $attributevalueIndex,
+                                "index"     => $attributevalueIndex,
                                 "extraCost" => $extraCost,
                             ]);
                         }

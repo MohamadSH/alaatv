@@ -106,7 +106,7 @@ class ContentsetController extends Controller
             return $this->response
                 ->setStatusCode(Response::HTTP_OK)
                 ->setContent([
-                                 "items" => $items,
+                                 "items"     => $items,
                                  "tagLabels" => $tags,
                              ]);
         }

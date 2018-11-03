@@ -13,7 +13,6 @@ class GaReportGetPathPageViews extends GaReport
 {
 
 
-
     public function getReport($path, $from = '2013-01-01', $to = 'today')
     {
         $this->init($path, $from, $to);

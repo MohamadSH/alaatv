@@ -91,7 +91,8 @@ class Transactiongateway extends Model
      * Scope a query to only include enable(or disable) Gateways.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param int $enable
+     * @param int                                   $enable
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeEnable($query, $enable = 1)

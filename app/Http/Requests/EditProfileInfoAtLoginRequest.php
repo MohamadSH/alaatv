@@ -14,7 +14,8 @@ class EditProfileInfoAtLoginRequest extends FormRequest
      */
     public function authorize()
     {
-        if ($this->user()->isUserProfileLocked())
+        if ($this->user()
+                 ->isUserProfileLocked())
             return false;
         else
             return true;
@@ -28,19 +29,18 @@ class EditProfileInfoAtLoginRequest extends FormRequest
     public function rules()
     {
         $afterLoginFields = Afterloginformcontrol::getFormFields()
-                ->pluck('name', 'id')
-                ->toArray();
+                                                 ->pluck('name', 'id')
+                                                 ->toArray();
 
         $rules = [];
-        foreach ($afterLoginFields as $afterLoginField)
-        {
+        foreach ($afterLoginFields as $afterLoginField) {
             if (strcmp($afterLoginField, "email") == 0)
                 $rules[$afterLoginField] = "required|email";
-            elseif (strcmp($afterLoginField, "photo") == 0)
+            else if (strcmp($afterLoginField, "photo") == 0)
                 $rules[$afterLoginField] = "required|image|mimes:jpeg,jpg,png|max:512";
-            elseif (strcmp($afterLoginField, "major_id") == 0)
+            else if (strcmp($afterLoginField, "major_id") == 0)
                 $rules[$afterLoginField] = "required|exists:majors,id";
-            elseif (strcmp($afterLoginField, "gender_id") == 0)
+            else if (strcmp($afterLoginField, "gender_id") == 0)
                 $rules[$afterLoginField] = "required|exists:genders,id";
             else
                 $rules[$afterLoginField] = "required|max:255";

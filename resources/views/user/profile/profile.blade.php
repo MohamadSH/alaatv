@@ -1,9 +1,9 @@
 @extends("app" , ["pageName" => "profile"])
 
 @section("headPageLevelPlugin")
-    <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css" />
-    <link href="/assets/global/plugins/bootstrap-sweetalert/sweetalert.css" rel="stylesheet" type="text/css" />
-    <link href="/assets/global/plugins/bootstrap-toastr/toastr-rtl.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/global/plugins/bootstrap-sweetalert/sweetalert.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/global/plugins/bootstrap-toastr/toastr-rtl.min.css" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section("headPageLevelStyle")
@@ -81,7 +81,7 @@
                                     </span>
                                 </div>
                                 <ul class="nav nav-tabs">
-                                    <li class="active" >
+                                    <li class="active">
                                         <a href="#tab_1_1" data-toggle="tab">
                                             اطلاعات شخصی
                                         </a>
@@ -119,11 +119,15 @@
                                                     </div>
                                                     <div class="portlet-body">
                                                         <div class="row">
-                                                            <form  action="{{ action("UserController@sendGeneratedPassword") }}" method="post" >
+                                                            <form action="{{ action("UserController@sendGeneratedPassword") }}"
+                                                                  method="post">
                                                                 {{ csrf_field() }}
                                                                 <div class="form-actions">
-                                                                    برای ارسال پیامک رمز عبور جدید بر روی این دکمه کلیک کنید
-                                                                    <button type="submit" class="btn yellow">ارسال پیامک رمز عبور</button>
+                                                                    برای ارسال پیامک رمز عبور جدید بر روی این دکمه کلیک
+                                                                    کنید
+                                                                    <button type="submit" class="btn yellow">ارسال پیامک
+                                                                        رمز عبور
+                                                                    </button>
                                                                 </div>
                                                             </form>
                                                         </div>
@@ -143,12 +147,14 @@
                                                         </div>
                                                     </div>
                                                     <div class="portlet-body">
-                                                        <form action="{{action("UserController@updatePassword" )}}" method="post">
+                                                        <form action="{{action("UserController@updatePassword" )}}"
+                                                              method="post">
                                                             <input type="hidden" name="_method" value="PUT">
                                                             {{ csrf_field() }}
                                                             <div class="form-group {{ $errors->has('oldPassword') ? ' has-error' : '' }}">
                                                                 <label class="control-label">رمز عبور فعلی</label>
-                                                                <input type="password" class="form-control" name="oldPassword" />
+                                                                <input type="password" class="form-control"
+                                                                       name="oldPassword"/>
                                                                 @if ($errors->has('oldPassword'))
                                                                     <span class="help-block">
                                                                 <strong>{{ $errors->first('oldPassword') }}</strong>
@@ -157,7 +163,8 @@
                                                             </div>
                                                             <div class="form-group {{ $errors->has('password') ? ' has-error' : '' }}">
                                                                 <label class="control-label">رمز عبور جدید</label>
-                                                                <input type="password" class="form-control" name="password" />
+                                                                <input type="password" class="form-control"
+                                                                       name="password"/>
                                                                 @if ($errors->has('password'))
                                                                     <span class="help-block">
                                                                 <strong>{{ $errors->first('password') }}</strong>
@@ -167,7 +174,8 @@
 
                                                             <div class="form-group {{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
                                                                 <label class="control-label">تکرار رمز عبور جدید</label>
-                                                                <input type="password" class="form-control" name="password_confirmation" />
+                                                                <input type="password" class="form-control"
+                                                                       name="password_confirmation"/>
                                                                 @if ($errors->has('password_confirmation'))
                                                                     <span class="help-block">
                                                                  <strong>{{ $errors->first('password_confirmation') }}</strong>
@@ -176,7 +184,7 @@
                                                             </div>
 
                                                             <div class="margin-top-10">
-                                                                <button type="submit" class="btn green"> تغییر </button>
+                                                                <button type="submit" class="btn green"> تغییر</button>
                                                             </div>
                                                         </form>
                                                     </div>
@@ -239,7 +247,7 @@
         /**
          * Set token for ajax request
          */
-        $(function() {
+        $(function () {
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': window.Laravel.csrfToken,
@@ -253,7 +261,7 @@
             return {
                 //main function to initiate the module
                 init: function () {
-                    $('.mt-sweetalert').each(function(){
+                    $('.mt-sweetalert').each(function () {
                         var sa_title = $(this).data('title');
                         var sa_message = $(this).data('message');
                         var sa_type = $(this).data('type');
@@ -271,7 +279,7 @@
                         var sa_confirmButtonClass = $(this).data('confirm-button-class');
                         var sa_cancelButtonClass = $(this).data('cancel-button-class');
 
-                        $(this).click(function(){
+                        $(this).click(function () {
                             //console.log(sa_btnClass);
                             swal({
                                     title: sa_title,
@@ -287,8 +295,8 @@
                                     confirmButtonText: sa_confirmButtonText,
                                     cancelButtonText: sa_cancelButtonText,
                                 },
-                                function(isConfirm){
-                                    if (isConfirm){
+                                function (isConfirm) {
+                                    if (isConfirm) {
                                         toastr.options = {
                                             "closeButton": true,
                                             "debug": false,
@@ -304,7 +312,7 @@
                                             "hideMethod": "fadeOut"
                                         };
 
-                                        if(userAjax) {
+                                        if (userAjax) {
                                             userAjax.abort();
                                         }
                                         userAjax = $.ajax({
@@ -313,12 +321,12 @@
                                             contentType: "application/json",
                                             dataType: "json",
                                             statusCode: {
-                                                200:function (response) {
+                                                200: function (response) {
                                                     // console.log(response.responseText);
                                                     location.reload();
                                                 },
                                                 //The status for when the user is not authorized for making the request
-                                                401:function (ressponse) {
+                                                401: function (ressponse) {
                                                 },
                                                 403: function (response) {
                                                 },
@@ -351,7 +359,7 @@
 
         }();
 
-        jQuery(document).ready(function() {
+        jQuery(document).ready(function () {
             SweetAlert.init();
         });
 

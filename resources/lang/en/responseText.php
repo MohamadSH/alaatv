@@ -8,5 +8,5 @@ return [
     | Response Text Language Lines
     |--------------------------------------------------------------------------
     */
-    "Database error." => "Database error"
+    "Database error." => "Database error",
 ];

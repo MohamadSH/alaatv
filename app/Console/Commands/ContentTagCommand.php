@@ -23,7 +23,7 @@ class ContentTagCommand extends Command
      * @var string
      */
     protected $description = 'add Tags for a Content';
-    private $tagging;
+    private   $tagging;
 
     /**
      * ContentTagCommand constructor.

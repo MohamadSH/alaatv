@@ -425,7 +425,7 @@ class TransactionController extends Controller
                     $walletCost = $cost;
                     $subtractedAmount = 0;
                     if ($order->hasProducts(Product::DONATE_PRODUCT)) {
-                        $subtractedAmount =Product::getDonateProductCost();
+                        $subtractedAmount = Product::getDonateProductCost();
                         $walletCost = $walletCost - $subtractedAmount;
 
                     }

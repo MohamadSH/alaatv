@@ -92,64 +92,64 @@ trait UserCommon
      * Checks whether user has default avatar or not
      *
      * @param $photo
+     *
      * @return bool
      */
-    public function userHasDefaultAvatar($photo) : bool
+    public function userHasDefaultAvatar($photo): bool
     {
-        return  strcmp($photo, config('constants.PROFILE_DEFAULT_IMAGE')) != 0 ;
+        return strcmp($photo, config('constants.PROFILE_DEFAULT_IMAGE')) != 0;
     }
 
     /**
      * Determines oldPassword and newPassword confirmation of the user
+     *
      * @param \App\User $user
-     * @param string $claimedOldPassword
-     * @param string $newPassword
+     * @param string    $claimedOldPassword
+     * @param string    $newPassword
+     *
      * @return array
      */
-    public function userPasswordConfirmation(\App\User $user , $claimedOldPassword , $newPassword) : array
+    public function userPasswordConfirmation(\App\User $user, $claimedOldPassword, $newPassword): array
     {
         $confirmed = false;
-        if ($user->compareWithCurrentPassword($claimedOldPassword))
-        {
-            if (!$user->compareWithCurrentPassword($newPassword))
-            {
+        if ($user->compareWithCurrentPassword($claimedOldPassword)) {
+            if (!$user->compareWithCurrentPassword($newPassword)) {
                 $confirmed = true;
                 $message = \Lang::get('confirmation.Confirmed.');
-            }
-            else
-            {
+            } else {
                 $message = \Lang::get('confirmation.Current password and new password are the same.');
             }
-        }
-        else
-        {
+        } else {
             $message = \Lang::get('confirmation.Claimed old password is not correct');
         }
 
         return [
-            "confirmed" => $confirmed ,
-            "message" => $message
-        ] ;
+            "confirmed" => $confirmed,
+            "message"   => $message,
+        ];
     }
 
     /**
      *  Determines whether user's profile is locked or not
+     *
      * @param \App\User $user
+     *
      * @return bool
      */
     public function isUserProfileLocked(\App\User $user): bool
     {
-        return $user->lockProfile == 1 ;
+        return $user->lockProfile == 1;
     }
 
     /**
      * @param $orders
+     *
      * @return \App\Transaction|\Illuminate\Database\Eloquent\Builder
      */
-    public function getInstalments($orders) : \Illuminate\Database\Eloquent\Builder
+    public function getInstalments($orders): \Illuminate\Database\Eloquent\Builder
     {
-         return \App\Transaction::whereIn("order_id", $orders->pluck("id"))
-                                ->whereDoesntHave("parents")
-                                ->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_UNPAID"));
+        return \App\Transaction::whereIn("order_id", $orders->pluck("id"))
+                               ->whereDoesntHave("parents")
+                               ->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_UNPAID"));
     }
 }

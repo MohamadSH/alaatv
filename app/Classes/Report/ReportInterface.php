@@ -11,6 +11,6 @@ namespace App\Classes\Report;
 interface ReportInterface
 {
     public function getReport($path, $from, $to);
-/*    public function getMostViewedContent($from, $to);
-    public function getMostViewedProduct($from, $to);*/
+    /*    public function getMostViewedContent($from, $to);
+        public function getMostViewedProduct($from, $to);*/
 }

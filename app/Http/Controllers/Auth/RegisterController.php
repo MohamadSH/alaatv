@@ -52,6 +52,41 @@ class RegisterController extends Controller
     }
 
     /**
+     * overriding method
+     * Show the application registration form.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showRegistrationForm()
+    {
+        return redirect(action("HomeController@index"));
+    }
+
+    /**
+     * Handle a registration request for the application.
+     *
+     * @param  \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function register(Request $request)
+    {
+        $request->offsetSet("mobile", $this->convertToEnglish($request->get("mobile")));
+        $request->offsetSet("nationalCode", $this->convertToEnglish($request->get("nationalCode")));
+
+        $this->validator($request->all())
+             ->validate();
+
+        event(new Registered($user = $this->create($request->all())));
+
+        $this->guard()
+             ->login($user);
+
+        return $this->registered($request, $user)
+            ?: redirect($this->redirectPath());
+    }
+
+    /**
      * Get a validator for an incoming registration request.
      *
      * @param  array $data
@@ -102,41 +137,6 @@ class RegisterController extends Controller
         $user = $responseContent->user;
 
         return $user;
-    }
-
-    /**
-     * overriding method
-     * Show the application registration form.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function showRegistrationForm()
-    {
-        return redirect(action("HomeController@index"));
-    }
-
-    /**
-     * Handle a registration request for the application.
-     *
-     * @param  \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function register(Request $request)
-    {
-        $request->offsetSet("mobile", $this->convertToEnglish($request->get("mobile")));
-        $request->offsetSet("nationalCode", $this->convertToEnglish($request->get("nationalCode")));
-
-        $this->validator($request->all())
-             ->validate();
-
-        event(new Registered($user = $this->create($request->all())));
-
-        $this->guard()
-             ->login($user);
-
-        return $this->registered($request, $user)
-            ?: redirect($this->redirectPath());
     }
 
 }

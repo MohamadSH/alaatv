@@ -23,7 +23,7 @@ abstract class SearchAbstract
     protected $validFilters;
     protected $model;
     protected $dummyFilterCallBack;
-    protected $pageName = 'page';
+    protected $pageName               = 'page';
     protected $pageNum;
     protected $numberOfItemInEachPage = 25;
 
