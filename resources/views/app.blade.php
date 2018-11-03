@@ -59,17 +59,7 @@
         gtag('event', 'hit', {'dimension2': dimensionValue});
     </script>
     <script type="text/javascript" src="/js/retargeting/mediaad.js"></script>
-    <script>
-        now = new Date();
-        var head = document.getElementsByTagName('head')[0];
-        var script = document.createElement('script');
-        script.type = 'text/javascript';
-        var script_address = 'https://cdn.yektanet.com/rg_woebegone/scripts/1603/rg.complete.js';
-        script.src = script_address + '?v=' + now.getFullYear().toString() + '0'
-            + now.getMonth() + '0' + now.getDate() + '0' + now.getHours();
-        script.async = true;
-        head.appendChild(script);
-    </script>
+
     {{--<script type="text/javascript">--}}
     {{--now = new Date();--}}
     {{--var head = document.getElementsByTagName('head')[0];--}}
@@ -252,6 +242,18 @@
 <script src="/assets/global/plugins/respond.min.js"></script>
 <script src="/assets/global/plugins/excanvas.min.js"></script>
 <![endif]-->
+
+<script>
+    now = new Date();
+    var head = document.getElementsByTagName('head')[0];
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    var script_address = 'https://cdn.yektanet.com/rg_woebegone/scripts/1603/rg.complete.js';
+    script.src = script_address + '?v=' + now.getFullYear().toString() + '0'
+        + now.getMonth() + '0' + now.getDate() + '0' + now.getHours();
+    script.async = true;
+    head.appendChild(script);
+</script>
 
 @section("js")
     <!-- BEGIN CORE PLUGINS -->
