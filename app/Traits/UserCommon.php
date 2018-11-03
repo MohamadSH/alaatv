@@ -99,15 +99,15 @@ trait UserCommon
 
     /**
      * Determines oldPassword and newPassword confirmation of the user
-     * @param $user
-     * @param $claimdedOldPassword
-     * @param $newPassword
+     * @param \App\User $user
+     * @param string $claimedOldPassword
+     * @param string $newPassword
      * @return array
      */
-    public function userPasswordConfirmation($user , $claimdedOldPassword , $newPassword) : array
+    public function userPasswordConfirmation(\App\User $user , $claimedOldPassword , $newPassword) : array
     {
         $confirmed = false;
-        if ($user->compareWithCurrentPassword($claimdedOldPassword))
+        if ($user->compareWithCurrentPassword($claimedOldPassword))
         {
             if (!$user->compareWithCurrentPassword($newPassword))
             {
@@ -132,11 +132,22 @@ trait UserCommon
 
     /**
      *  Determines whether user's profile is locked or not
-     * @param $user
+     * @param \App\User $user
      * @return bool
      */
-    public function isUserProfileLocked($user): bool
+    public function isUserProfileLocked(\App\User $user): bool
     {
         return $user->lockProfile == 1 ;
+    }
+
+    /**
+     * @param $orders
+     * @return \App\Transaction|\Illuminate\Database\Eloquent\Builder
+     */
+    public function getInstalments($orders) : \Illuminate\Database\Eloquent\Builder
+    {
+         return \App\Transaction::whereIn("order_id", $orders->pluck("id"))
+                                ->whereDoesntHave("parents")
+                                ->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_UNPAID"));
     }
 }

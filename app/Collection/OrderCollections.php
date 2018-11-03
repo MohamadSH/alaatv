@@ -1,0 +1,46 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: mohamamad
+ * Date: 11/3/2018
+ * Time: 4:34 PM
+ */
+
+namespace App\Collection;
+
+
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection as BaseCollection;
+
+class OrderCollections extends Collection
+{
+    /**
+     * @return BaseCollection
+     */
+    public function getCoupons():BaseCollection
+    {
+        $items = $this;
+        $result = collect();
+
+        foreach ($items as $order)
+        {
+            $orderCoupon = $order->determineCoupontype();
+            if ($orderCoupon !== false)
+            {
+                if ($orderCoupon["type"] == config("constants.DISCOUNT_TYPE_PERCENTAGE"))
+                {
+                    $result->put($order->id, [
+                        "caption" => "کپن " . $order->coupon->name . " با " . $orderCoupon["discount"] . " % تخفیف"
+                    ]);
+                } elseif ($orderCoupon["type"] == config("constants.DISCOUNT_TYPE_COST"))
+                {
+                    $result->put($order->id, [
+                        "caption" => "کپن " . $order->coupon->name . " با " . number_format($orderCoupon["discount"]) . " تومان تخفیف"
+                    ]);
+                }
+            }
+        }
+
+        return $result;
+    }
+}

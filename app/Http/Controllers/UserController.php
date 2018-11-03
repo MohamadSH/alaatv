@@ -26,7 +26,6 @@ use App\{Afterloginformcontrol,
     Traits\ProductCommon,
     Traits\RequestCommon,
     Traits\UserCommon,
-    Transaction,
     Transactiongateway,
     User,
     Userstatus,
@@ -742,6 +741,110 @@ class UserController extends Controller
     }
 
     /**
+     * Display a listing user's orders.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function userOrders(Request $request)
+    {
+        $debitCard = Bankaccount::all()->where("user_id", 2)->first();
+
+        $user = $request->user();
+
+        $key = "user:orders:" . $user->cacheKey() . ":Orders=" . md5($orders->pluck("id")->implode('-'));
+        $orders = Cache::remember($key, config("constants.CACHE_60"), function () use ($user)
+        {
+            return  $user->getShowableOrders()->get()->sortByDesc("completed_at");
+        });
+
+        $key = "user:transactions:" . $user->cacheKey() . ":Orders=" . md5($orders->pluck("id")->implode('-'));
+        $transactions = Cache::remember($key, config("constants.CACHE_60"), function () use ($user)
+        {
+             return $user->getShowableTransactions()->get()->sortByDesc("completed_at")->groupBy("order_id");
+        });
+
+        $key = "user:instalments:" . $user->cacheKey() . ":Orders=" . md5($orders->pluck("id")->implode('-'));
+        $instalments = Cache::remember($key, config("constants.CACHE_60"), function () use ($orders)
+        {
+            return $this->getInstalments($orders)->get()->sortBy("deadline_at");
+        });
+
+        $gateways = Transactiongateway::enable()->get()
+            ->sortBy("order")
+            ->pluck("displayName", "name");
+
+        $key = "user:orderCoupons:" . $user->cacheKey() . ":Orders=" . md5($orders->pluck("id")->implode('-'));
+        $orderCoupons = Cache::remember($key, config("constants.CACHE_60"), function () use ($orders) {
+            return $orders->getCoupons();
+        });
+
+        return view("user.ordersList", compact("orders", "gateways", "debitCard", "transactions", "instalments", "orderCoupons"));
+    }
+
+    /**
+     * Showing files to user which he has got for his orders
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function userProductFiles(Request $request)
+    {
+
+        $sideBarMode = "closed";
+        $user = $request->user();
+        $products = $user->products();
+
+
+        $key = "user:userProductFiles:" . $user->cacheKey() . ":P=" . md5($products->pluck("id")->implode('-'));
+        [$videos, $pamphlets] = Cache::remember($key, config("constants.CACHE_60"), function () use ($products) {
+            $products->load('complimentaryproducts');
+            $products->load('children');
+            $products->load('validProductfiles');
+            $productsWithVideo = [];
+            $productsWithPamphlet = [];
+            $pamphlets = collect();
+            $videos = collect();
+            foreach ($products as $product) {
+                if (!in_array($product->id, $productsWithPamphlet) && !in_array($product->id, $productsWithVideo)) {
+
+                    array_push($productsWithPamphlet, $product->id);
+                    array_push($productsWithVideo, $product->id);
+
+                    $parentsArray = $this->makeParentArray($product);
+
+                    $this->addVideoPamphlet($parentsArray, $productsWithPamphlet, $productsWithVideo, $pamphlets, $videos);
+
+                    $childrenArray = $product->children;
+                    $this->addVideoPamphlet($childrenArray, $productsWithPamphlet, $productsWithVideo, $pamphlets, $videos);
+
+                    $pamphletArray = [];
+                    $videoArray = [];
+                    if ($pamphlets->has($product->id)) $pamphletArray = $pamphlets->pull($product->id);
+                    if ($videos->has($product->id)) $videoArray = $videos->pull($product->id);
+
+                    foreach ($product->validProductfiles as $productfile) {
+                        if ($productfile->productfiletype_id == config("constants.PRODUCT_FILE_TYPE_PAMPHLET")) array_push($pamphletArray, ["file" => $productfile->file, "name" => $productfile->name, "product_id" => $productfile->product_id]); else
+                            array_push($videoArray, ["file" => $productfile->file, "name" => $productfile->name, "product_id" => $productfile->product_id]);
+
+                    }
+                    if (!empty($pamphletArray)) $pamphlets->put($product->id, ["productName" => $product->name, "pamphlets" => $pamphletArray]);
+
+                    if (!empty($videoArray)) $videos->put($product->id, ["productName" => $product->name, "videos" => $videoArray]);
+                    $c = $product->complimentaryproducts;
+                    $this->addVideoPamphlet($c, $productsWithPamphlet, $productsWithVideo, $pamphlets, $videos);
+                }
+            }
+            return [$videos, $pamphlets];
+        });
+
+        $isEmptyProducts = $products->isEmpty();
+        $userCompletion = (int)$user->completion();
+
+        return view("user.assetsList", compact('section', 'sideBarMode', 'isEmptyProducts', 'pamphlets', 'videos', 'user', 'userCompletion'));
+    }
+
+    /**
      * Show authenticated user belongings
      *
      * @param
@@ -754,7 +857,6 @@ class UserController extends Controller
         $sideBarMode = "closed";
         return view("user.belongings", compact("belongings", "sideBarMode", "user"));
     }
-
 
     /**
      * Showing a survey to user to take part in
@@ -1177,46 +1279,6 @@ class UserController extends Controller
     }
 
     /**
-     * Display a listing user's orders.
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function userOrders(Request $request)
-    {
-//        if($request->user()->completion("fullAddress")!= 100) {
-//            session()->put("userOrders",true);
-//            return redirect(action("UserController@showProfile"));
-//        }
-
-        $debitCard = Bankaccount::all()->where("user_id", 2)->first();
-        $excludedOrderStatuses = [config("constants.ORDER_STATUS_OPEN"), config("constants.ORDER_STATUS_OPEN_BY_ADMIN"), config("constants.ORDER_STATUS_OPEN_BY_WALLET"), config("constants.ORDER_STATUS_OPEN_DONATE"),];
-        $user = $request->user();
-        $orders = $user->orders->whereNotIn("orderstatus_id", $excludedOrderStatuses)->sortByDesc("completed_at");
-
-        $transactions = $user->orderTransactions()->whereDoesntHave("parents")->where(function ($q) {
-            $q->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))->orWhere("transactionstatus_id", config("constants.TRANSACTION_STATUS_ARCHIVED_SUCCESSFUL"))->orWhere("transactionstatus_id", config("constants.TRANSACTION_STATUS_PENDING"));
-        })->orderByDesc("completed_at")->get()->groupBy("order_id");
-
-        $instalments = Transaction::whereIn("order_id", $orders->pluck("id"))->whereDoesntHave("parents")->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_UNPAID"))->orderBy("deadline_at")->get();
-
-        $gateways = Transactiongateway::all()->where("enable", 1)->sortBy("order")->pluck("displayName", "name");
-
-        $orderCoupons = collect();
-        foreach ($orders as $order) {
-            $orderCoupon = $order->determineCoupontype();
-            if ($orderCoupon !== false) {
-                if ($orderCoupon["type"] == config("constants.DISCOUNT_TYPE_PERCENTAGE")) {
-                    $orderCoupons->put($order->id, ["caption" => "کپن " . $order->coupon->name . " با " . $orderCoupon["discount"] . " % تخفیف"]);
-                } elseif ($orderCoupon["type"] == config("constants.DISCOUNT_TYPE_COST")) {
-                    $orderCoupons->put($order->id, ["caption" => "کپن " . $order->coupon->name . " با " . number_format($orderCoupon["discount"]) . " تومان تخفیف"]);
-                }
-            }
-        }
-        return view("user.ordersList", compact("orders", "gateways", "debitCard", "transactions", "instalments", "orderCoupons"));
-    }
-
-    /**
      * Display a page where user can upaload his consulting questions
      *
      * @return \Illuminate\Http\Response
@@ -1330,68 +1392,6 @@ class UserController extends Controller
             }
         }
         return view("user.completeRegister", compact("formFields", "note", "formByPass", "tables"));
-    }
-
-    /**
-     * Showing files to user which he has got for his orders
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function userProductFiles(Request $request)
-    {
-
-        $sideBarMode = "closed";
-        $user = $request->user();
-        $products = $user->products();
-
-
-        $key = "user:userProductFiles:" . $user->cacheKey() . ":P=" . md5($products->pluck("id")->implode('-'));
-        [$videos, $pamphlets] = Cache::remember($key, config("constants.CACHE_60"), function () use ($products) {
-            $products->load('complimentaryproducts');
-            $products->load('children');
-            $products->load('validProductfiles');
-            $productsWithVideo = [];
-            $productsWithPamphlet = [];
-            $pamphlets = collect();
-            $videos = collect();
-            foreach ($products as $product) {
-                if (!in_array($product->id, $productsWithPamphlet) && !in_array($product->id, $productsWithVideo)) {
-
-                    array_push($productsWithPamphlet, $product->id);
-                    array_push($productsWithVideo, $product->id);
-
-                    $parentsArray = $this->makeParentArray($product);
-
-                    $this->addVideoPamphlet($parentsArray, $productsWithPamphlet, $productsWithVideo, $pamphlets, $videos);
-
-                    $childrenArray = $product->children;
-                    $this->addVideoPamphlet($childrenArray, $productsWithPamphlet, $productsWithVideo, $pamphlets, $videos);
-
-                    $pamphletArray = [];
-                    $videoArray = [];
-                    if ($pamphlets->has($product->id)) $pamphletArray = $pamphlets->pull($product->id);
-                    if ($videos->has($product->id)) $videoArray = $videos->pull($product->id);
-
-                    foreach ($product->validProductfiles as $productfile) {
-                        if ($productfile->productfiletype_id == config("constants.PRODUCT_FILE_TYPE_PAMPHLET")) array_push($pamphletArray, ["file" => $productfile->file, "name" => $productfile->name, "product_id" => $productfile->product_id]); else
-                            array_push($videoArray, ["file" => $productfile->file, "name" => $productfile->name, "product_id" => $productfile->product_id]);
-
-                    }
-                    if (!empty($pamphletArray)) $pamphlets->put($product->id, ["productName" => $product->name, "pamphlets" => $pamphletArray]);
-
-                    if (!empty($videoArray)) $videos->put($product->id, ["productName" => $product->name, "videos" => $videoArray]);
-                    $c = $product->complimentaryproducts;
-                    $this->addVideoPamphlet($c, $productsWithPamphlet, $productsWithVideo, $pamphlets, $videos);
-                }
-            }
-            return [$videos, $pamphlets];
-        });
-
-        $isEmptyProducts = $products->isEmpty();
-        $userCompletion = (int)$user->completion();
-
-        return view("user.assetsList", compact('section', 'sideBarMode', 'isEmptyProducts', 'pamphlets', 'videos', 'user', 'userCompletion'));
     }
 
     /**

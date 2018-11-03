@@ -16,6 +16,7 @@ use Illuminate\{Database\Eloquent\SoftDeletes,
 use Laratrust\Traits\LaratrustUserTrait;
 use Carbon\Carbon;
 use Iatstuti\Database\Support\CascadeSoftDeletes;
+use Laravel\Scout\Builder;
 use Schema;
 use Hash;
 
@@ -404,6 +405,42 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     public function getRememberTokenName()
     {
         return 'remember_token';
+    }
+
+    /**
+     * Get user's orders that user is allowed to see
+     *
+     * @return Builder
+     */
+    public function getShowableOrders():Builder
+    {
+        $excludedOrderStatuses = [
+            config("constants.ORDER_STATUS_OPEN"),
+            config("constants.ORDER_STATUS_OPEN_BY_ADMIN"),
+            config("constants.ORDER_STATUS_OPEN_BY_WALLET"),
+            config("constants.ORDER_STATUS_OPEN_DONATE"),
+        ];
+        return $this->orders()
+                    ->whereNotIn("orderstatus_id", $excludedOrderStatuses);
+    }
+
+    /**
+     * @return Builder
+     */
+    public function getShowableTransactions():Builder
+    {
+        $showableTransactionStatuses = [
+            config("constants.TRANSACTION_STATUS_SUCCESSFUL"),
+            config("constants.TRANSACTION_STATUS_ARCHIVED_SUCCESSFUL"),
+            config("constants.TRANSACTION_STATUS_PENDING"),
+        ];
+        $transactions = $this->orderTransactions()
+            ->whereDoesntHave("parents")
+            ->where(function ($q) use ($showableTransactionStatuses)
+            {
+                $q->whereIn("transactionstatus_id", $showableTransactionStatuses);
+            });
+        return $transactions;
     }
 
     /**
