@@ -3,14 +3,12 @@
 namespace App\Http\Requests;
 
 use App\Traits\CharacterCommon;
-use App\Traits\RequestConvertCharacter;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Config;
 
 class EditProfilePasswordRequest extends FormRequest
 {
     use CharacterCommon;
-    use RequestConvertCharacter;
 
     /**
      * Determine if the user is authorized to make this request.

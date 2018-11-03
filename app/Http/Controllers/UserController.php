@@ -1051,6 +1051,7 @@ class UserController extends Controller
     /**
      * Show the form for completing information of the specified resource.(Created for orduatalaee 97)
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
     public function informationPublicUrl(Request $request)
@@ -1178,6 +1179,7 @@ class UserController extends Controller
     /**
      * Display a listing user's orders.
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
     public function userOrders(Request $request)
@@ -1228,6 +1230,7 @@ class UserController extends Controller
     /**
      * Display the list of uploaded files by user
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
     public function uploads(Request $request)
@@ -1332,6 +1335,7 @@ class UserController extends Controller
     /**
      * Showing files to user which he has got for his orders
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
     public function userProductFiles(Request $request)
@@ -1393,6 +1397,7 @@ class UserController extends Controller
     /**
      * Storing user's work time (for employees)
      *
+     * @param Request $request
      * @param \App\Http\Controllers\EmployeetimesheetController $employeetimesheetController
      * @param \App\Http\Controllers\HomeController $homeController
      * @return \Illuminate\Http\Response
@@ -1660,6 +1665,7 @@ class UserController extends Controller
      * @param  \App\Http\Requests\RegisterForSanatiSharifHighSchoolRequest $request
      * @param EventresultController $eventResultController
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     public function registerForSanatiSharifHighSchool(RegisterForSanatiSharifHighSchoolRequest $request, EventresultController $eventResultController)
     {
@@ -1796,6 +1802,7 @@ class UserController extends Controller
      *
      * @param  \App\Http\Requests\InsertVoucherRequest InsertVoucherRequest
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     public function submitVoucherRequest(InsertVoucherRequest $request)
     {

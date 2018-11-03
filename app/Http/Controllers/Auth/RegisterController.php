@@ -91,7 +91,7 @@ class RegisterController extends Controller
     {
         $storeUserRequest = new InsertUserRequest();
         $storeUserRequest->merge($data);
-        $storeUserRequest->headers->add([ "X-Requested-With" =>"XMLHttpRequest"]);
+        $storeUserRequest->headers->add([ "X-Requested-With" =>"XMLHttpRequest"]); //ToDo : to be tested
         $response =  $this->userController->store($storeUserRequest);
         $responseContent = json_decode($response->getContent()) ;
         $user = $responseContent->user;
