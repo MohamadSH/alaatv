@@ -1294,23 +1294,32 @@ class UserController extends Controller
      */
     public function completeRegister(Request $request)
     {
-        if ($request->user()->completion("afterLoginForm") == 100) {
-            if (session()->has("redirectTo")) return redirect(session()->pull("redirectTo")); else
+        if ($request->user()->completion("afterLoginForm") == 100)
+        {
+            if (session()->has("redirectTo"))
+                return redirect(session()->pull("redirectTo"));
+            else
                 return redirect(action("HomeController@index"));
         }
+
         $previousPath = url()->previous();
-        if (strcmp($previousPath, route('login')) == 0) {
+        if (strcmp($previousPath, route('login')) == 0)
+        {
 //            ToDo: config , obligating this form to the use or not
             if (true) $formByPass = false; else
                 $formByPass = true;
             $note = "برای ورود به سایت لطفا اطلاعات زیر را تکمیل نمایید";
-        } else {
+        } else
+        {
             $note = "برای استفاده از این خدمت سایت لطفا اطلاعات زیر را تکمیل نمایید";
         }
+
         $formFields = Afterloginformcontrol::getFormFields();
         $tables = [];
-        foreach ($formFields as $formField) {
-            if (strpos($formField->name, "_id")) {
+        foreach ($formFields as $formField)
+        {
+            if (strpos($formField->name, "_id"))
+            {
                 $tableName = $formField->name;
                 $tableName = str_replace("_id", "s", $tableName);
                 $tables[$formField->name] = DB::table($tableName)->pluck('name', 'id');

@@ -58,9 +58,13 @@ class LoginController extends Controller
      */
     public function login(Request $request)
     {
+
+        /**  ///////Converting mobile and password numbers to English////////*/
         $request->offsetSet("mobile" ,  $this->convertToEnglish($request->get("mobile")));
         $request->offsetSet("password" , $this->convertToEnglish($request->get("password")));
+        /**  /////////////////////////////////////////////////////*/
 
+        /** ////////Validating mobile and password strings/////////*/
         $validator = Validator::make($request->all(), [
             'mobile' => 'required', 'password' => 'required',
         ]);
@@ -72,17 +76,18 @@ class LoginController extends Controller
                      'validation' => 'خطای ورودی ها'
                  ],"login");
         }
+        /** //////////////////////////////////////////////////////*/
 
-//             $credentials = $this->getCredentials($request);
 
+        /** ////////Login or register this new user/////////*/
+        ///
         $remember = true;
+//        Snippet for remember me checkbox
 //        if($request->has("remember"))
 //            $remember = true;
 //        else
 //            $remember = false;
-
         $intendedUsers = User::where("mobile" , $request->get("mobile"))->get();
-
         foreach ($intendedUsers as $user)
         {
             if (Auth::attempt(['id'=>$user->id,'mobile' => $user->mobile, 'password' => $request->get("password")] , $remember)) {
@@ -100,6 +105,7 @@ class LoginController extends Controller
         }
         if(!Auth::check())
         {
+            //Try to register this new user and login him
             if(User::where("mobile" , $request->get("mobile"))->where("nationalCode" , $request->get("password"))->get()->isEmpty())
             {
                 $registerRequest = new Request();
@@ -119,30 +125,39 @@ class LoginController extends Controller
             }
         }
 
+        // At this point it is either a new user who just was registered or an old user who logged in using his credentials
+        $user = Auth::user();
+
+        /** ///////////////////////////////////////////////////////*/
+
+
+        /** ////////Determine where to redirect this user/////////*/
         $baseUrl = url("/");
         $targetUrl = redirect()->intended()->getTargetUrl();
         if(strcmp($targetUrl , $baseUrl) == 0)
-        {
-            if(strcmp(URL::previous() , route('login')) != 0) $this->redirectTo = URL::previous() ;
+        {// Indicates a strange situation when target url is the home page despite
+        // the fact that there is a probability that user must be redirected to another page except home page
+
+            if(strcmp(URL::previous() , route('login')) != 0)
+                // User first had opened a page and then went to login
+                $this->redirectTo = URL::previous() ;
         }else
         {
             $this->redirectTo = $targetUrl ;
         }
+        /** //////////////////////////////////////////////////////////*/
 
-        //ToDo: config , it has to be replaced with setting
-        if(true)
-        {//config variable for showing the form or not
-            if(Auth::user()->completion("afterLoginForm") != 100)
+        if($user->completion("afterLoginForm") != 100)
+        {
+            if(strcmp(URL::previous() , action("OrderController@checkoutAuth")) == 0)
             {
-                if(strcmp(URL::previous() , action("OrderController@checkoutAuth")) == 0)
-                {
-                    return redirect(action("OrderController@checkoutCompleteInfo"));
-                }else{
-                    session()->put("redirectTo" , $this->redirectTo );
-                    return redirect(action("UserController@completeRegister"));
-                }
-
+                return redirect(action("OrderController@checkoutCompleteInfo"));
+            }else
+            {
+                session()->put("redirectTo" , $this->redirectTo );
+                return redirect(action("UserController@completeRegister"));
             }
+
         }
 
         return redirect($this->redirectTo);
