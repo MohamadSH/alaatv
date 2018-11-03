@@ -12,17 +12,19 @@ class WebsitePageSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('websitepages')->delete();
-        $data = array(
-            array(
-                'url' => '/home',
+        DB::table('websitepages')
+          ->delete();
+        $data = [
+            [
+                'url'         => '/home',
                 'displayName' => 'خانه',
-            ),
-            array(
-                'url' => '/لیست-مقالات',
+            ],
+            [
+                'url'         => '/لیست-مقالات',
                 'displayName' => 'مقالات',
-            ),
-        );
-        DB::table('websitepages')->insert($data); // Query Builder
+            ],
+        ];
+        DB::table('websitepages')
+          ->insert($data); // Query Builder
     }
 }

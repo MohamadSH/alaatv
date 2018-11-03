@@ -12,22 +12,24 @@ class ConsultationStatusSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('consultationstatuses')->delete();
-        $data = array(
-            array(
-                'id' => '1',
-                'name' => 'active',
+        DB::table('consultationstatuses')
+          ->delete();
+        $data = [
+            [
+                'id'          => '1',
+                'name'        => 'active',
                 'displayName' => 'فعال',
                 'description' => 'قابل مشاهده برای کاربران',
-            ),
-            array(
-                'id' => '2',
-                'name' => 'inactive',
+            ],
+            [
+                'id'          => '2',
+                'name'        => 'inactive',
                 'displayName' => 'غیر فعال',
                 'description' => 'غیر قابل مشاهده برای کاربران',
-            )
-        );
+            ],
+        ];
 
-        DB::table('consultationstatuses')->insert($data); // Query Builder
+        DB::table('consultationstatuses')
+          ->insert($data); // Query Builder
     }
 }

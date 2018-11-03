@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AlterTableEventsAddColumnDisplayname extends Migration
 {
@@ -15,9 +15,9 @@ class AlterTableEventsAddColumnDisplayname extends Migration
     {
         Schema::table('events', function (Blueprint $table) {
             $table->string("displayName")
-                ->nullable()
-                ->comment("نام قابل نمایش")
-                ->after("name");
+                  ->nullable()
+                  ->comment("نام قابل نمایش")
+                  ->after("name");
 
         });
     }
@@ -31,8 +31,7 @@ class AlterTableEventsAddColumnDisplayname extends Migration
     {
         Schema::table('events', function (Blueprint $table) {
 
-            if (Schema::hasColumn('events', 'displayName'))
-            {
+            if (Schema::hasColumn('events', 'displayName')) {
                 $table->dropColumn('displayName');
             }
         });

@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Schema;
 
 class AlterDropTablesColumns extends Migration
 {
@@ -14,8 +13,7 @@ class AlterDropTablesColumns extends Migration
     public function up()
     {
         Schema::table('attribute_attributegroup', function ($table) {
-            if (Schema::hasColumn('attribute_attributegroup', 'attributetype_id'))
-            {
+            if (Schema::hasColumn('attribute_attributegroup', 'attributetype_id')) {
                 $table->dropForeign('attribute_attributegroup_attributetype_id_foreign');
                 $table->dropColumn('attributetype_id');
             }

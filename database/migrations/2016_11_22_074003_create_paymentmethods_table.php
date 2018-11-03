@@ -1,9 +1,9 @@
 <?php
 
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
 
 class CreatePaymentmethodsTable extends Migration
 {
@@ -16,8 +16,12 @@ class CreatePaymentmethodsTable extends Migration
     {
         Schema::create('paymentmethods', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name')->nullable()->comment('نام این روش');
-            $table->longText('description')->nullable()->comment('توضیح این روش');
+            $table->string('name')
+                  ->nullable()
+                  ->comment('نام این روش');
+            $table->longText('description')
+                  ->nullable()
+                  ->comment('توضیح این روش');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AlterTableEventresultsAddStatus extends Migration
 {
@@ -15,15 +15,15 @@ class AlterTableEventresultsAddStatus extends Migration
     {
         Schema::table('eventresults', function (Blueprint $table) {
             $table->unsignedInteger("eventresultstatus_id")
-                    ->nullable()
-                    ->comment("آیدی مشخص کننده وضعیت نتیجه")
-                    ->after("event_id");
+                  ->nullable()
+                  ->comment("آیدی مشخص کننده وضعیت نتیجه")
+                  ->after("event_id");
 
             $table->foreign('eventresultstatus_id')
-                ->references('id')
-                ->on('eventresultstatuses')
-                ->onDelete('cascade')
-                ->onupdate('cascade');
+                  ->references('id')
+                  ->on('eventresultstatuses')
+                  ->onDelete('cascade')
+                  ->onupdate('cascade');
 
         });
     }
@@ -37,8 +37,7 @@ class AlterTableEventresultsAddStatus extends Migration
     {
         Schema::table('eventresults', function (Blueprint $table) {
 
-            if (Schema::hasColumn('eventresults', 'eventresultstatus_id'))
-            {
+            if (Schema::hasColumn('eventresults', 'eventresultstatus_id')) {
                 $table->dropForeign('eventresults_eventresultstatus_id_foreign');
                 $table->dropColumn('eventresultstatus_id');
             }

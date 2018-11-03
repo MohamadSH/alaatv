@@ -12,23 +12,25 @@ class CheckoutStatusSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('checkoutstatuses')->delete();
-        $data = array(
-            array(
-                'id' => '1',
-                'name' => 'unpaid',
+        DB::table('checkoutstatuses')
+          ->delete();
+        $data = [
+            [
+                'id'          => '1',
+                'name'        => 'unpaid',
                 'displayName' => 'تسویه نشده',
                 'description' => 'تسویه نشده است',
-            ),
-            array(
-                'id' => '2',
-                'name' => 'paid',
+            ],
+            [
+                'id'          => '2',
+                'name'        => 'paid',
                 'displayName' => 'تسویه شده',
                 'description' => 'تسویه شده است',
-            ),
+            ],
 
-        );
+        ];
 
-        DB::table('checkoutstatuses')->insert($data); // Query Builder
+        DB::table('checkoutstatuses')
+          ->insert($data); // Query Builder
     }
 }

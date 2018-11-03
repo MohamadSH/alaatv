@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AddIndexOnTablesMigration extends Migration
 {
@@ -17,45 +17,45 @@ class AddIndexOnTablesMigration extends Migration
         $dbSchemaManager = $conn->getDoctrineSchemaManager();
 
 
-        Schema::table('products', function(Blueprint $table) use($conn,$dbSchemaManager)
-        {
-            if (! $dbSchemaManager->listTableDetails('products')->hasIndex('products_order_index'))
+        Schema::table('products', function (Blueprint $table) use ($conn, $dbSchemaManager) {
+            if (!$dbSchemaManager->listTableDetails('products')
+                                 ->hasIndex('products_order_index'))
                 $table->index('order');
         });
-        Schema::table('contents', function(Blueprint $table) use($conn,$dbSchemaManager)
-        {
-            if (! $dbSchemaManager->listTableDetails('contents')->hasIndex('contents_created_at_index'))
+        Schema::table('contents', function (Blueprint $table) use ($conn, $dbSchemaManager) {
+            if (!$dbSchemaManager->listTableDetails('contents')
+                                 ->hasIndex('contents_created_at_index'))
                 $table->index('created_at');
         });
-        Schema::table('contentset_content', function(Blueprint $table) use ($conn,$dbSchemaManager)
-        {
-            if (! $dbSchemaManager->listTableDetails('contentset_content')->hasIndex('contentset_content_order_index'))
+        Schema::table('contentset_content', function (Blueprint $table) use ($conn, $dbSchemaManager) {
+            if (!$dbSchemaManager->listTableDetails('contentset_content')
+                                 ->hasIndex('contentset_content_order_index'))
                 $table->index('order');
         });
-        Schema::table('contentsets', function(Blueprint $table) use ($conn,$dbSchemaManager)
-        {
-            if (! $dbSchemaManager->listTableDetails('contentsets')->hasIndex('contentsets_created_at_index'))
+        Schema::table('contentsets', function (Blueprint $table) use ($conn, $dbSchemaManager) {
+            if (!$dbSchemaManager->listTableDetails('contentsets')
+                                 ->hasIndex('contentsets_created_at_index'))
                 $table->index('created_at');
         });
-        Schema::table('attributevalues', function(Blueprint $table) use ($conn,$dbSchemaManager)
-        {
-            if (! $dbSchemaManager->listTableDetails('attributevalues')->hasIndex('attributevalues_order_index'))
+        Schema::table('attributevalues', function (Blueprint $table) use ($conn, $dbSchemaManager) {
+            if (!$dbSchemaManager->listTableDetails('attributevalues')
+                                 ->hasIndex('attributevalues_order_index'))
                 $table->index('order');
         });
-        Schema::table('attribute_attributegroup', function(Blueprint $table) use ($conn,$dbSchemaManager)
-        {
-            if (! $dbSchemaManager->listTableDetails('attribute_attributegroup')->hasIndex('attribute_attributegroup_order_index'))
+        Schema::table('attribute_attributegroup', function (Blueprint $table) use ($conn, $dbSchemaManager) {
+            if (!$dbSchemaManager->listTableDetails('attribute_attributegroup')
+                                 ->hasIndex('attribute_attributegroup_order_index'))
                 $table->index('order');
         });
-        Schema::table('attributegroups', function(Blueprint $table) use ($conn,$dbSchemaManager)
-        {
-            if (! $dbSchemaManager->listTableDetails('attributegroups')->hasIndex('attributegroups_order_index'))
+        Schema::table('attributegroups', function (Blueprint $table) use ($conn, $dbSchemaManager) {
+            if (!$dbSchemaManager->listTableDetails('attributegroups')
+                                 ->hasIndex('attributegroups_order_index'))
                 $table->index('order');
         });
-        Schema::table('disk_file', function(Blueprint $table) use ($conn,$dbSchemaManager)
-        {
-            if (! $dbSchemaManager->listTableDetails('disk_file')->hasIndex('disk_file_priority_index'))
-            $table->index('priority');
+        Schema::table('disk_file', function (Blueprint $table) use ($conn, $dbSchemaManager) {
+            if (!$dbSchemaManager->listTableDetails('disk_file')
+                                 ->hasIndex('disk_file_priority_index'))
+                $table->index('priority');
         });
     }
 
@@ -72,44 +72,44 @@ class AddIndexOnTablesMigration extends Migration
         $dbSchemaManager = $conn->getDoctrineSchemaManager();
 
 
-        Schema::table('products', function(Blueprint $table) use($conn,$dbSchemaManager)
-        {
-            if ($dbSchemaManager->listTableDetails('products')->hasIndex('products_order_index'))
+        Schema::table('products', function (Blueprint $table) use ($conn, $dbSchemaManager) {
+            if ($dbSchemaManager->listTableDetails('products')
+                                ->hasIndex('products_order_index'))
                 $table->dropIndex('products_order_index');
         });
-        Schema::table('contents', function(Blueprint $table) use($conn,$dbSchemaManager)
-        {
-            if ($dbSchemaManager->listTableDetails('contents')->hasIndex('contents_created_at_index'))
+        Schema::table('contents', function (Blueprint $table) use ($conn, $dbSchemaManager) {
+            if ($dbSchemaManager->listTableDetails('contents')
+                                ->hasIndex('contents_created_at_index'))
                 $table->dropIndex('contents_created_at_index');
         });
-        Schema::table('contentset_content', function(Blueprint $table) use ($conn,$dbSchemaManager)
-        {
-            if ($dbSchemaManager->listTableDetails('contentset_content')->hasIndex('contentset_content_order_index'))
+        Schema::table('contentset_content', function (Blueprint $table) use ($conn, $dbSchemaManager) {
+            if ($dbSchemaManager->listTableDetails('contentset_content')
+                                ->hasIndex('contentset_content_order_index'))
                 $table->dropIndex('contentset_content_order_index');
         });
-        Schema::table('contentsets', function(Blueprint $table) use ($conn,$dbSchemaManager)
-        {
-            if ($dbSchemaManager->listTableDetails('contentsets')->hasIndex('contentsets_created_at_index'))
+        Schema::table('contentsets', function (Blueprint $table) use ($conn, $dbSchemaManager) {
+            if ($dbSchemaManager->listTableDetails('contentsets')
+                                ->hasIndex('contentsets_created_at_index'))
                 $table->dropIndex('contentsets_created_at_index');
         });
-        Schema::table('attributevalues', function(Blueprint $table) use ($conn,$dbSchemaManager)
-        {
-            if ($dbSchemaManager->listTableDetails('attributevalues')->hasIndex('attributevalues_order_index'))
+        Schema::table('attributevalues', function (Blueprint $table) use ($conn, $dbSchemaManager) {
+            if ($dbSchemaManager->listTableDetails('attributevalues')
+                                ->hasIndex('attributevalues_order_index'))
                 $table->dropIndex('attributevalues_order_index');
         });
-        Schema::table('attribute_attributegroup', function(Blueprint $table) use ($conn,$dbSchemaManager)
-        {
-            if ($dbSchemaManager->listTableDetails('attribute_attributegroup')->hasIndex('attribute_attributegroup_order_index'))
+        Schema::table('attribute_attributegroup', function (Blueprint $table) use ($conn, $dbSchemaManager) {
+            if ($dbSchemaManager->listTableDetails('attribute_attributegroup')
+                                ->hasIndex('attribute_attributegroup_order_index'))
                 $table->dropIndex('attribute_attributegroup_order_index');
         });
-        Schema::table('attributegroups', function(Blueprint $table) use ($conn,$dbSchemaManager)
-        {
-            if ($dbSchemaManager->listTableDetails('attributegroups')->hasIndex('attributegroups_order_index'))
+        Schema::table('attributegroups', function (Blueprint $table) use ($conn, $dbSchemaManager) {
+            if ($dbSchemaManager->listTableDetails('attributegroups')
+                                ->hasIndex('attributegroups_order_index'))
                 $table->dropIndex('attributegroups_order_index');
         });
-        Schema::table('disk_file', function(Blueprint $table) use ($conn,$dbSchemaManager)
-        {
-            if ($dbSchemaManager->listTableDetails('disk_file')->hasIndex('disk_file_priority_index'))
+        Schema::table('disk_file', function (Blueprint $table) use ($conn, $dbSchemaManager) {
+            if ($dbSchemaManager->listTableDetails('disk_file')
+                                ->hasIndex('disk_file_priority_index'))
                 $table->dropIndex('disk_file_priority_index');
         });
     }

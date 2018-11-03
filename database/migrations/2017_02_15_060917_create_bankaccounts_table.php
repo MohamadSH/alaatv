@@ -1,9 +1,9 @@
 <?php
 
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
 
 class CreateBankaccountsTable extends Migration
 {
@@ -16,24 +16,34 @@ class CreateBankaccountsTable extends Migration
     {
         Schema::create('bankaccounts', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger("user_id")->nullable()->comment("آی دی مشخص کننده کاربر صاحب حساب");
-            $table->unsignedInteger("bank_id")->nullable()->comment("آی دی مشخص کننده بانک حساب");
-            $table->string("accountNumber")->unique()->nullable()->comment("شاره حساب");
-            $table->string("cardNumber")->unique()->nullable()->comment("شماره کارت اعتباری حساب");
+            $table->unsignedInteger("user_id")
+                  ->nullable()
+                  ->comment("آی دی مشخص کننده کاربر صاحب حساب");
+            $table->unsignedInteger("bank_id")
+                  ->nullable()
+                  ->comment("آی دی مشخص کننده بانک حساب");
+            $table->string("accountNumber")
+                  ->unique()
+                  ->nullable()
+                  ->comment("شاره حساب");
+            $table->string("cardNumber")
+                  ->unique()
+                  ->nullable()
+                  ->comment("شماره کارت اعتباری حساب");
             $table->timestamps();
             $table->softDeletes();
 
             $table->foreign('user_id')
-                ->references('id')
-                ->on('users')
-                ->onDelete('cascade')
-                ->onupdate('cascade');
+                  ->references('id')
+                  ->on('users')
+                  ->onDelete('cascade')
+                  ->onupdate('cascade');
 
             $table->foreign('bank_id')
-                ->references('id')
-                ->on('banks')
-                ->onDelete('cascade')
-                ->onupdate('cascade');
+                  ->references('id')
+                  ->on('banks')
+                  ->onDelete('cascade')
+                  ->onupdate('cascade');
         });
         DB::statement("ALTER TABLE `bankaccounts` comment 'شماره حساب ها'");
     }

@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AlterTableBlocksAddClassColumn extends Migration
 {
@@ -14,7 +14,9 @@ class AlterTableBlocksAddClassColumn extends Migration
     public function up()
     {
         Schema::table('blocks', function (Blueprint $table) {
-            $table->string('class',20)->nullable()->after('tags');;
+            $table->string('class', 20)
+                  ->nullable()
+                  ->after('tags');;
         });
     }
 

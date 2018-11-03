@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Schema;
 
 class RenameTableOnlinetransactiongateways extends Migration
 {
@@ -23,6 +22,6 @@ class RenameTableOnlinetransactiongateways extends Migration
      */
     public function down()
     {
-        Schema::rename( "transactiongateways","onlinetransactiongateways");
+        Schema::rename("transactiongateways", "onlinetransactiongateways");
     }
 }

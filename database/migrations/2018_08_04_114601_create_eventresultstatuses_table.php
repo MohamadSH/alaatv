@@ -1,9 +1,9 @@
 <?php
 
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
 
 class CreateEventresultstatusesTable extends Migration
 {
@@ -16,9 +16,15 @@ class CreateEventresultstatusesTable extends Migration
     {
         Schema::create('eventresultstatuses', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name')->nullable()->comment('نام این وضعیت');
-            $table->string('displayName')->nullable()->comment('نام قابل نمایش این وضعیت');
-            $table->text('description')->nullable()->comment('توضیح این وضعیت');
+            $table->string('name')
+                  ->nullable()
+                  ->comment('نام این وضعیت');
+            $table->string('displayName')
+                  ->nullable()
+                  ->comment('نام قابل نمایش این وضعیت');
+            $table->text('description')
+                  ->nullable()
+                  ->comment('توضیح این وضعیت');
             $table->timestamps();
             $table->softDeletes();
         });

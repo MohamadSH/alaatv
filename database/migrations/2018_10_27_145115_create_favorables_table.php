@@ -19,12 +19,16 @@ class CreateFavorablesTable extends Migration
             $table->string('favorable_type');
             $table->timestamps();
 
-            $table->unique(['user_id', 'favorable_id', 'favorable_type']);
+            $table->unique([
+                               'user_id',
+                               'favorable_id',
+                               'favorable_type',
+                           ]);
             $table->foreign('user_id')
-                ->references('id')
-                ->on('users')
-                ->onDelete('cascade')
-                ->onupdate('cascade');
+                  ->references('id')
+                  ->on('users')
+                  ->onDelete('cascade')
+                  ->onupdate('cascade');
         });
     }
 

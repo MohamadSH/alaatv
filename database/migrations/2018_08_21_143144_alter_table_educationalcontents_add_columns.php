@@ -19,33 +19,33 @@ class AlterTableEducationalContentsAddColumns extends Migration
         Schema::table('educationalcontents', function (Blueprint $table) {
             if (!Schema::hasColumn('educationalcontents', 'file')) {
                 $table->text('file')
-                    ->nullable()
-                    ->comment("فایل های هر محتوا")
-                    ->after("context");
+                      ->nullable()
+                      ->comment("فایل های هر محتوا")
+                      ->after("context");
             }
             if (!Schema::hasColumn('educationalcontents', 'duration')) {
                 $table->time('duration')
-                    ->comment("مدت زمان فیلم")
-                    ->nullable()
-                    ->after("file");
+                      ->comment("مدت زمان فیلم")
+                      ->nullable()
+                      ->after("file");
             }
             if (!Schema::hasColumn('educationalcontents', 'thumbnail')) {
                 $table->text('thumbnail')
-                    ->nullable()
-                    ->comment("عکس هر محتوا")
-                    ->after("duration");
+                      ->nullable()
+                      ->comment("عکس هر محتوا")
+                      ->after("duration");
             }
             if (!Schema::hasColumn('educationalcontents', 'isFree')) {
                 $table->boolean('isFree')
-                    ->default(true)
-                    ->comment("عکس هر محتوا")
-                    ->after("thumbnail");
+                      ->default(true)
+                      ->comment("عکس هر محتوا")
+                      ->after("thumbnail");
             }
             if (!Schema::hasColumn('educationalcontents', 'slug')) {
-                $table->string('slug',250)
-                    ->nullable()
-                    ->comment("slug")
-                    ->after("name");
+                $table->string('slug', 250)
+                      ->nullable()
+                      ->comment("slug")
+                      ->after("name");
             }
         });
 
@@ -56,7 +56,8 @@ class AlterTableEducationalContentsAddColumns extends Migration
         foreach ($contents as $content) {
             try {
                 $content->fixFiles();
-            } catch (Exception $e) {
+            }
+            catch (Exception $e) {
                 Log::error("Content-" . $content->id . ":\n\r" . $e->getMessage());
             }
             $progress->advance();

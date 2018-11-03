@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -15,16 +13,16 @@ use Illuminate\Http\Request;
 
 Auth::routes();
 
-Route::post('uploadFile' , 'HomeController@uploadFile');
+Route::post('uploadFile', 'HomeController@uploadFile');
 
 Route::group(['prefix' => 'v1'], function () {
     Route::group(['prefix' => 'rt'], function () {
 
-        Route::get('id/{bucket}/{id}',"API\TagController@get");
-        Route::put('id/{bucket}/{id}',"API\TagController@add");
-        Route::delete('id/{bucket}/{id}',"API\TagController@remove");
-        Route::get('tags/{bucket}',"API\TagController@index");
-        Route::get('flush',"API\TagController@flush");
+        Route::get('id/{bucket}/{id}', "API\TagController@get");
+        Route::put('id/{bucket}/{id}', "API\TagController@add");
+        Route::delete('id/{bucket}/{id}', "API\TagController@remove");
+        Route::get('tags/{bucket}', "API\TagController@index");
+        Route::get('flush', "API\TagController@flush");
 
     });
 });

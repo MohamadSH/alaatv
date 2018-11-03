@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AlterTableOrdersDropPaymentmethods extends Migration
 {
@@ -27,13 +27,15 @@ class AlterTableOrdersDropPaymentmethods extends Migration
     public function down()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->unsignedInteger('paymentmethod_id')->nullable()->comment('آیدی مشخص کننده روش پرداخت');
+            $table->unsignedInteger('paymentmethod_id')
+                  ->nullable()
+                  ->comment('آیدی مشخص کننده روش پرداخت');
 
             $table->foreign('paymentmethod_id')
-                ->references('id')
-                ->on('paymentmethods')
-                ->onDelete('cascade')
-                ->onupdate('cascade');
+                  ->references('id')
+                  ->on('paymentmethods')
+                  ->onDelete('cascade')
+                  ->onupdate('cascade');
         });
     }
 }

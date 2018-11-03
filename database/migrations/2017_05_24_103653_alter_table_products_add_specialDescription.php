@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Schema;
 
 class AlterTableProductsAddSpecialDescription extends Migration
 {
@@ -14,7 +13,10 @@ class AlterTableProductsAddSpecialDescription extends Migration
     public function up()
     {
         Schema::table('products', function ($table) {
-            $table->longText('specialDescription')->nullable()->comment("توضیحات خاص برای محصول")->after('longDescription');
+            $table->longText('specialDescription')
+                  ->nullable()
+                  ->comment("توضیحات خاص برای محصول")
+                  ->after('longDescription');
         });
     }
 

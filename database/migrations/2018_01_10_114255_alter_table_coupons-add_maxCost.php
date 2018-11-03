@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Schema;
 
 class AlterTableCouponsAddMaxCost extends Migration
 {
@@ -14,7 +13,10 @@ class AlterTableCouponsAddMaxCost extends Migration
     public function up()
     {
         Schema::table('coupons', function ($table) {
-            $table->integer('maxCost')->nullable()->comment("بیشسینه قیمت مورد نیاز برای استفاده از این کپن")->after('discount');
+            $table->integer('maxCost')
+                  ->nullable()
+                  ->comment("بیشسینه قیمت مورد نیاز برای استفاده از این کپن")
+                  ->after('discount');
         });
     }
 

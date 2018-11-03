@@ -22,13 +22,17 @@ class CreateBlockablesTable extends Migration
             $table->string('blockable_type');
             $table->timestamps();
 
-            $table->unique(['block_id','blockable_id', 'blockable_type']);
+            $table->unique([
+                               'block_id',
+                               'blockable_id',
+                               'blockable_type',
+                           ]);
 
             $table->foreign('block_id')
-                ->references('id')
-                ->on('blocks')
-                ->onDelete('cascade')
-                ->onupdate('cascade');
+                  ->references('id')
+                  ->on('blocks')
+                  ->onDelete('cascade')
+                  ->onupdate('cascade');
         });
     }
 

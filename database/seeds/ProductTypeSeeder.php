@@ -12,27 +12,38 @@ class ProductTypeSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('producttypes')->delete();
-        $data = array(
-            array(
-                'id' => '1',
+        DB::table('producttypes')
+          ->delete();
+        $data =[
+            [
+                'id'          => '1',
                 'displayName' => 'ساده',
-                'name' => 'simple',
+                'name'        => 'simple',
                 'description' => 'کالای بدون انواع صفت مانند رنگهای مختلف',
-            ),
-            array(
-                'id' => '2',
+                'created_at'  => null,
+                'updated_at'  => '2018-10-13 15:30:48',
+                'deleted_at'  => null,
+            ],
+            [
+                'id'          => '2',
                 'displayName' => 'قابل پیکربندی',
-                'name' => 'configurable',
+                'name'        => 'configurable',
                 'description' => 'کالای دارای انواع مختلف صفت مانند رنگ های مختلف',
-            ),
-            array(
-                'id' => '3',
+                'created_at'  => null,
+                'updated_at'  => '2018-10-13 15:30:48',
+                'deleted_at'  => null,
+            ],
+            [
+                'id'          => '3',
                 'displayName' => 'قابل انتخاب',
-                'name' => 'selectable',
+                'name'        => 'selectable',
                 'description' => 'کالا قابل انتخاب از بین کالاهای زیر مجموعه خود است',
-            ),
-        );
-        DB::table('producttypes')->insert($data); // Query Builder
+                'created_at'  => '2017-08-13 16:40:08',
+                'updated_at'  => '2018-10-15 18:10:59',
+                'deleted_at'  => null,
+            ],
+        ];
+        DB::table('producttypes')
+          ->insert($data); // Query Builder
     }
 }

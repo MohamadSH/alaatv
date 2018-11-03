@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AlterTableChildproductParentProductAddColumns extends Migration
 {
@@ -14,14 +14,20 @@ class AlterTableChildproductParentProductAddColumns extends Migration
     public function up()
     {
         Schema::table('childproduct_parentproduct', function (Blueprint $table) {
-            $table->unsignedInteger('control_id')->nullable()->comment('آیدی مشخص کننده کنترل انتخاب محصول فرزند(با توجه به نوع محصول والد)')->after("isDefault");
-            $table->string("description")->nullable()->comment('توضیحات انتخاب محصول فرزند')->after("control_id");
+            $table->unsignedInteger('control_id')
+                  ->nullable()
+                  ->comment('آیدی مشخص کننده کنترل انتخاب محصول فرزند(با توجه به نوع محصول والد)')
+                  ->after("isDefault");
+            $table->string("description")
+                  ->nullable()
+                  ->comment('توضیحات انتخاب محصول فرزند')
+                  ->after("control_id");
 
             $table->foreign('control_id')
-                ->references('id')
-                ->on('attributecontrols')
-                ->onDelete('cascade')
-                ->onupdate('cascade');
+                  ->references('id')
+                  ->on('attributecontrols')
+                  ->onDelete('cascade')
+                  ->onupdate('cascade');
 
         });
     }

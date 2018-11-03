@@ -12,51 +12,53 @@ class BloodTypeSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('bloodtypes')->delete();
-        $data = array(
-            array(
-                'id' => '1',
-                'name' => 'O+',
+        DB::table('bloodtypes')
+          ->delete();
+        $data = [
+            [
+                'id'          => '1',
+                'name'        => 'O+',
                 'displayName' => 'O مثبت',
-            ),
-            array(
-                'id' => '2',
-                'name' => 'O−',
+            ],
+            [
+                'id'          => '2',
+                'name'        => 'O−',
                 'displayName' => 'O منفی',
-            ),
-            array(
-                'id' => '3',
-                'name' => 'A+',
+            ],
+            [
+                'id'          => '3',
+                'name'        => 'A+',
                 'displayName' => 'A مثبت',
-            ),
-            array(
-                'id' => '4',
-                'name' => 'A−',
+            ],
+            [
+                'id'          => '4',
+                'name'        => 'A−',
                 'displayName' => 'A منفی',
-            ),
-            array(
-                'id' => '5',
-                'name' => 'B+',
+            ],
+            [
+                'id'          => '5',
+                'name'        => 'B+',
                 'displayName' => 'B مثبت',
-            ),
-            array(
-                'id' => '6',
-                'name' => 'B−',
+            ],
+            [
+                'id'          => '6',
+                'name'        => 'B−',
                 'displayName' => 'B منفی',
-            ),
-            array(
-                'id' => '7',
-                'name' => 'AB+',
+            ],
+            [
+                'id'          => '7',
+                'name'        => 'AB+',
                 'displayName' => 'AB مثبت',
-            ),
-            array(
-                'id' => '8',
-                'name' => 'AB−',
+            ],
+            [
+                'id'          => '8',
+                'name'        => 'AB−',
                 'displayName' => 'AB منفی',
-            )
+            ],
 
-        );
+        ];
 
-        DB::table('bloodtypes')->insert($data); // Query Builder
+        DB::table('bloodtypes')
+          ->insert($data); // Query Builder
     }
 }

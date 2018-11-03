@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AlterTableCouponsAddColumn extends Migration
 {
@@ -14,13 +14,16 @@ class AlterTableCouponsAddColumn extends Migration
     public function up()
     {
         Schema::table('coupons', function (Blueprint $table) {
-            $table->unsignedInteger('coupontype_id')->nullable()->comment("آی دی مشخص کننده نوع کپن")->after('id');
+            $table->unsignedInteger('coupontype_id')
+                  ->nullable()
+                  ->comment("آی دی مشخص کننده نوع کپن")
+                  ->after('id');
 
             $table->foreign('coupontype_id')
-                ->references('id')
-                ->on('coupontypes')
-                ->onDelete('cascade')
-                ->onupdate('cascade');
+                  ->references('id')
+                  ->on('coupontypes')
+                  ->onDelete('cascade')
+                  ->onupdate('cascade');
 
         });
     }

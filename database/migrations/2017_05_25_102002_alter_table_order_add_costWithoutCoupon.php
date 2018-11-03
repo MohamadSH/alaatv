@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Schema;
 
 class AlterTableOrderAddCostWithoutCoupon extends Migration
 {
@@ -14,7 +13,10 @@ class AlterTableOrderAddCostWithoutCoupon extends Migration
     public function up()
     {
         Schema::table('orders', function ($table) {
-            $table->integer('costwithoutcoupon')->nullable()->comment("بخشی از قیمت که مشمول کپن تخفیف نمی شود")->after('cost');
+            $table->integer('costwithoutcoupon')
+                  ->nullable()
+                  ->comment("بخشی از قیمت که مشمول کپن تخفیف نمی شود")
+                  ->after('cost');
         });
     }
 

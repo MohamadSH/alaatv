@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
@@ -14,18 +15,24 @@ class LaratrustSetupTables extends Migration
         // Create table for storing roles
         Schema::create('roles', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name')->unique();
-            $table->string('display_name')->nullable();
-            $table->string('description')->nullable();
+            $table->string('name')
+                  ->unique();
+            $table->string('display_name')
+                  ->nullable();
+            $table->string('description')
+                  ->nullable();
             $table->timestamps();
         });
 
         // Create table for storing permissions
         Schema::create('permissions', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name')->unique();
-            $table->string('display_name')->nullable();
-            $table->string('description')->nullable();
+            $table->string('name')
+                  ->unique();
+            $table->string('display_name')
+                  ->nullable();
+            $table->string('description')
+                  ->nullable();
             $table->timestamps();
         });
 
@@ -35,10 +42,17 @@ class LaratrustSetupTables extends Migration
             $table->unsignedInteger('user_id');
             $table->string('user_type');
 
-            $table->foreign('role_id')->references('id')->on('roles')
-                ->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('role_id')
+                  ->references('id')
+                  ->on('roles')
+                  ->onUpdate('cascade')
+                  ->onDelete('cascade');
 
-            $table->primary(['user_id', 'role_id', 'user_type']);
+            $table->primary([
+                                'user_id',
+                                'role_id',
+                                'user_type',
+                            ]);
         });
 
         // Create table for associating permissions to users (Many To Many Polymorphic)
@@ -47,10 +61,17 @@ class LaratrustSetupTables extends Migration
             $table->unsignedInteger('user_id');
             $table->string('user_type');
 
-            $table->foreign('permission_id')->references('id')->on('permissions')
-                ->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('permission_id')
+                  ->references('id')
+                  ->on('permissions')
+                  ->onUpdate('cascade')
+                  ->onDelete('cascade');
 
-            $table->primary(['user_id', 'permission_id', 'user_type']);
+            $table->primary([
+                                'user_id',
+                                'permission_id',
+                                'user_type',
+                            ]);
         });
 
         // Create table for associating permissions to roles (Many-to-Many)
@@ -58,12 +79,21 @@ class LaratrustSetupTables extends Migration
             $table->unsignedInteger('permission_id');
             $table->unsignedInteger('role_id');
 
-            $table->foreign('permission_id')->references('id')->on('permissions')
-                ->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('role_id')->references('id')->on('roles')
-                ->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('permission_id')
+                  ->references('id')
+                  ->on('permissions')
+                  ->onUpdate('cascade')
+                  ->onDelete('cascade');
+            $table->foreign('role_id')
+                  ->references('id')
+                  ->on('roles')
+                  ->onUpdate('cascade')
+                  ->onDelete('cascade');
 
-            $table->primary(['permission_id', 'role_id']);
+            $table->primary([
+                                'permission_id',
+                                'role_id',
+                            ]);
         });
     }
 

@@ -12,46 +12,48 @@ class PermissionSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('permissions')->delete();
-        $data = array(
-            array(
-                'id' => '1',
-                'name' => 'adminPanel',
+        DB::table('permissions')
+          ->delete();
+        $data = [
+            [
+                'id'           => '1',
+                'name'         => 'adminPanel',
                 'display_name' => 'پنل ادمین',
-                'description' => 'دسترسی به پنل ادمین',
-            ),
-            array(
-                'id' => '2',
-                'name' => 'listPermission',
+                'description'  => 'دسترسی به پنل ادمین',
+            ],
+            [
+                'id'           => '2',
+                'name'         => 'listPermission',
                 'display_name' => 'مشاهده لیست دسترسی ها',
-                'description' => 'دسترسی به لیست دسترسی ها',
-            ),
-            array(
-                'id' => '3',
-                'name' => 'insertPermission',
+                'description'  => 'دسترسی به لیست دسترسی ها',
+            ],
+            [
+                'id'           => '3',
+                'name'         => 'insertPermission',
                 'display_name' => 'درج دسترسی',
-                'description' => 'اجازه درج دسترسی',
-            ),
-            array(
-                'id' => '4',
-                'name' => 'showPermission',
+                'description'  => 'اجازه درج دسترسی',
+            ],
+            [
+                'id'           => '4',
+                'name'         => 'showPermission',
                 'display_name' => 'نمایش دسترسی',
-                'description' => 'اجازه مشاهده اطلاعات دسترسی - پیش نیاز : مشاهده لیست دسترسی ها',
-            ),
-            array(
-                'id' => '5',
-                'name' => 'editPermission',
+                'description'  => 'اجازه مشاهده اطلاعات دسترسی - پیش نیاز : مشاهده لیست دسترسی ها',
+            ],
+            [
+                'id'           => '5',
+                'name'         => 'editPermission',
                 'display_name' => 'اصلاح دسترسی',
-                'description' => 'اجازه اصلاح دسترسی - پیش نیاز : مشاهده لیست دسترسی ها - نمایش دسترسی',
-            ),
-            array(
-                'id' => '6',
-                'name' => 'removePermission',
+                'description'  => 'اجازه اصلاح دسترسی - پیش نیاز : مشاهده لیست دسترسی ها - نمایش دسترسی',
+            ],
+            [
+                'id'           => '6',
+                'name'         => 'removePermission',
                 'display_name' => 'حذف دسترسی',
-                'description' => 'اجازه حذف دسترسی - پیش نیاز : لیست دسترسی ها',
-            ),
-        );
+                'description'  => 'اجازه حذف دسترسی - پیش نیاز : لیست دسترسی ها',
+            ],
+        ];
 
-        DB::table('permissions')->insert($data); // Query Builder
+        DB::table('permissions')
+          ->insert($data); // Query Builder
     }
 }

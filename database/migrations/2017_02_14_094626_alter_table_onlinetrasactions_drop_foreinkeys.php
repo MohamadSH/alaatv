@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AlterTableOnlinetrasactionsDropForeinkeys extends Migration
 {
@@ -29,22 +29,22 @@ class AlterTableOnlinetrasactionsDropForeinkeys extends Migration
     {
         Schema::table('onlinetransactions', function (Blueprint $table) {
             $table->foreign('order_id')
-                ->references('id')
-                ->on('orders')
-                ->onDelete('cascade')
-                ->onupdate('cascade');
+                  ->references('id')
+                  ->on('orders')
+                  ->onDelete('cascade')
+                  ->onupdate('cascade');
 
             $table->foreign('onlinetransactiongateway_id')
-                ->references('id')
-                ->on('onlinetransactiongateways')
-                ->onDelete('cascade')
-                ->onupdate('cascade');
+                  ->references('id')
+                  ->on('onlinetransactiongateways')
+                  ->onDelete('cascade')
+                  ->onupdate('cascade');
 
             $table->foreign('transactionstatus_id')
-                ->references('id')
-                ->on('transactionstatuses')
-                ->onDelete('cascade')
-                ->onupdate('cascade');
+                  ->references('id')
+                  ->on('transactionstatuses')
+                  ->onDelete('cascade')
+                  ->onupdate('cascade');
         });
     }
 }

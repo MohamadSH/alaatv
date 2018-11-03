@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Schema;
 
 class AlterTableOrdersAddDiscount extends Migration
 {
@@ -14,7 +13,10 @@ class AlterTableOrdersAddDiscount extends Migration
     public function up()
     {
         Schema::table('orders', function ($table) {
-            $table->integer('discount')->default(0)->comment("تخفیف خاص برای این سفارش به تومان")->after('cost');
+            $table->integer('discount')
+                  ->default(0)
+                  ->comment("تخفیف خاص برای این سفارش به تومان")
+                  ->after('cost');
         });
     }
 

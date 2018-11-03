@@ -12,28 +12,39 @@ class PaymentStatusSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('paymentstatuses')->delete();
-        $data = array(
-            array(
-                'id' => '1',
-                'name' => 'unpaid',
+        DB::table('paymentstatuses')
+          ->delete();
+        $data = [
+            [
+                'id'          => '1',
+                'name'        => 'unpaid',
                 'displayName' => 'پرداخت نشده',
                 'description' => 'هیچ مبلغی پرداخت نشده است',
-            ),
-            array(
-                'id' => '2',
-                'name' => 'indebted',
+                'created_at'  => null,
+                'updated_at'  => null,
+                'deleted_at'  => null,
+            ],
+            [
+                'id'          => '2',
+                'name'        => 'indebted',
                 'displayName' => 'پرداخت قسطی',
                 'description' => 'بخشی از مبلغ پرداخت شده است',
-            ),
-            array(
-                'id' => '3',
-                'name' => 'paid',
+                'created_at'  => null,
+                'updated_at'  => null,
+                'deleted_at'  => null,
+            ],
+            [
+                'id'          => '3',
+                'name'        => 'paid',
                 'displayName' => 'پرداخت شده',
                 'description' => 'تمام مبلغ پرداخت شده است',
-            ),
-        );
+                'created_at'  => null,
+                'updated_at'  => null,
+                'deleted_at'  => null,
+            ],
+        ];
 
-        DB::table('paymentstatuses')->insert($data); // Query Builder
+        DB::table('paymentstatuses')
+          ->insert($data); // Query Builder
     }
 }

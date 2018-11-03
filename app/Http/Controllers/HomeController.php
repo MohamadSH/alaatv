@@ -1771,8 +1771,8 @@ class HomeController extends Controller
 
         /** END OF INITIALIZING   */
 
-        $donateProductArray = config("constants.DONATE_PRODUCT");
-        array_push($donateProductArray, config("constants.CUSTOM_DONATE_PRODUCT"));
+        $donateProductArray = Product::DONATE_PRODUCT;
+        array_push($donateProductArray, Product::CUSTOM_DONATE_PRODUCT);
         $orders = Order::whereHas("orderproducts", function ($q) use ($donateProductArray) {
             $q->whereIn("product_id", $donateProductArray);
         })

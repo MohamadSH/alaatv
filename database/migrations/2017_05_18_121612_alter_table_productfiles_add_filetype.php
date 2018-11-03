@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AlterTableProductfilesAddFiletype extends Migration
 {
@@ -14,13 +14,16 @@ class AlterTableProductfilesAddFiletype extends Migration
     public function up()
     {
         Schema::table('productfiles', function (Blueprint $table) {
-            $table->unsignedInteger('productfiletype_id')->nullable()->comment("آی دی مشخص کننده نوع فایل")->after('product_id');
+            $table->unsignedInteger('productfiletype_id')
+                  ->nullable()
+                  ->comment("آی دی مشخص کننده نوع فایل")
+                  ->after('product_id');
 
             $table->foreign('productfiletype_id')
-                ->references('id')
-                ->on('productfiletypes')
-                ->onDelete('cascade')
-                ->onupdate('cascade');
+                  ->references('id')
+                  ->on('productfiletypes')
+                  ->onDelete('cascade')
+                  ->onupdate('cascade');
         });
     }
 

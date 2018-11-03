@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Schema;
 
 class AlterTableBonsAddBontype extends Migration
 {
@@ -14,13 +13,16 @@ class AlterTableBonsAddBontype extends Migration
     public function up()
     {
         Schema::table('bons', function ($table) {
-            $table->unsignedInteger('bontype_id')->nullable()->comment("آی دی مشحص کننده نوع بن")->after('displayName');
+            $table->unsignedInteger('bontype_id')
+                  ->nullable()
+                  ->comment("آی دی مشحص کننده نوع بن")
+                  ->after('displayName');
 
             $table->foreign('bontype_id')
-                ->references('id')
-                ->on('bontypes')
-                ->onDelete('cascade')
-                ->onupdate('cascade');
+                  ->references('id')
+                  ->on('bontypes')
+                  ->onDelete('cascade')
+                  ->onupdate('cascade');
         });
     }
 

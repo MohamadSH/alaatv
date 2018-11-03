@@ -12,20 +12,22 @@ class GenderSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('genders')->delete();
-        $data = array(
-            array(
-                'id' => '1',
-                'name' => 'آقا',
+        DB::table('genders')
+          ->delete();
+        $data = [
+            [
+                'id'          => '1',
+                'name'        => 'آقا',
                 'description' => 'جنست مذکر',
-            ),
-            array(
-                'id' => '2',
-                'name' => 'خانم',
+            ],
+            [
+                'id'          => '2',
+                'name'        => 'خانم',
                 'description' => 'جنسست مونث',
-            )
-        );
+            ],
+        ];
 
-        DB::table('genders')->insert($data); // Query Builder
+        DB::table('genders')
+          ->insert($data); // Query Builder
     }
 }

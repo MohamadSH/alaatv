@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AlterTableUserAddColumns extends Migration
 {
@@ -15,14 +15,14 @@ class AlterTableUserAddColumns extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->timestamp("birthdate")
-                ->nullable()
-                ->comment("تاریخ تولد")
-                ->after("gender_id");
+                  ->nullable()
+                  ->comment("تاریخ تولد")
+                  ->after("gender_id");
 
             $table->string("introducedBy")
-                ->nullable()
-                ->comment("نحوه ی آشنایی با شرکت")
-                ->after("bio");
+                  ->nullable()
+                  ->comment("نحوه ی آشنایی با شرکت")
+                  ->after("bio");
         });
     }
 
@@ -34,13 +34,11 @@ class AlterTableUserAddColumns extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            if (Schema::hasColumn('users', 'birthdate'))
-            {
+            if (Schema::hasColumn('users', 'birthdate')) {
                 $table->dropColumn('birthdate');
             }
 
-            if (Schema::hasColumn('users', 'introducedBy'))
-            {
+            if (Schema::hasColumn('users', 'introducedBy')) {
                 $table->dropColumn('introducedBy');
             }
         });

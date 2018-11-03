@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Schema;
 
 class AlterTableEventresultsAddParticipationCodeHash extends Migration
 {
@@ -14,7 +13,10 @@ class AlterTableEventresultsAddParticipationCodeHash extends Migration
     public function up()
     {
         Schema::table('eventresults', function ($table) {
-            $table->string('participationCodeHash')->nullable()->comment("هش شماره داوطلبی")->after('participationCode');
+            $table->string('participationCodeHash')
+                  ->nullable()
+                  ->comment("هش شماره داوطلبی")
+                  ->after('participationCode');
         });
     }
 

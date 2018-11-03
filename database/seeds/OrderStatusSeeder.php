@@ -12,66 +12,68 @@ class OrderStatusSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('orderstatuses')->delete();
+        DB::table('orderstatuses')
+          ->delete();
 
-        $data = array(
-            array(
-                'id' => '1',
-                'name' => 'open',
+        $data = [
+            [
+                'id'          => '1',
+                'name'        => 'open',
                 'displayName' => 'باز',
                 'description' => 'این سفارش توسط کاربر باز شده است و در حال حاضر باز و قابل استفاده می باشد',
-            ),
-            array(
-                'id' => '2',
-                'name' => 'closed',
+            ],
+            [
+                'id'          => '2',
+                'name'        => 'closed',
                 'displayName' => 'ثبت نهایی',
                 'description' => 'مراحل این سفارش با موفقیت به اتمام رسیده و بسته شده است',
-            ),
-            array(
-                'id' => '3',
-                'name' => 'canceled',
+            ],
+            [
+                'id'          => '3',
+                'name'        => 'canceled',
                 'displayName' => 'لغو شده',
                 'description' => 'این سفارش توسط کاربر لغو شده است',
-            ),
-            array(
-                'id' => '4',
-                'name' => 'openByAdmin',
+            ],
+            [
+                'id'          => '4',
+                'name'        => 'openByAdmin',
                 'displayName' => 'باز مدیریتی',
                 'description' => 'سفارش توسط مسئول سایت باز شده است',
-            ),
-            array(
-                'id' => '5',
-                'name' => 'posted',
+            ],
+            [
+                'id'          => '5',
+                'name'        => 'posted',
                 'displayName' => 'تحویل پست شده',
                 'description' => 'سفارش تحویل پست داده شده',
-            ),
-            array(
-                'id' => '6',
-                'name' => 'refunded',
+            ],
+            [
+                'id'          => '6',
+                'name'        => 'refunded',
                 'displayName' => 'بازگشت هزینه',
                 'description' => 'هزینه ی سفارش به دلایلی مانند لغو سفارش از طرف مشتری بازگردانده شده است',
-            ),
-            array(
-                'id' => '7',
-                'name' => 'readyToPost',
+            ],
+            [
+                'id'          => '7',
+                'name'        => 'readyToPost',
                 'displayName' => 'آماده به ارسال',
                 'description' => 'مرسوله ی سفارش آماده برای ارسال می باشد',
-            ),
-            array(
-                'id' => '8',
-                'name' => 'openDonate',
+            ],
+            [
+                'id'          => '8',
+                'name'        => 'openDonate',
                 'displayName' => 'سفارش باز کمک مالی',
                 'description' => 'سفارشی که برای کمک مالی باز شده است',
-            ),
-            array(
-                'id' => '9',
-                'name' => 'pending',
+            ],
+            [
+                'id'          => '9',
+                'name'        => 'pending',
                 'displayName' => 'در حال بررسی',
                 'description' => 'سفارش در حال بررسی توسط مسئولین سایت می باشد',
-            ),
-        );
+            ],
+        ];
 
-        DB::table('orderstatuses')->insert($data); // Query Builder
+        DB::table('orderstatuses')
+          ->insert($data); // Query Builder
 
     }
 }

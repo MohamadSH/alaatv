@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AlterTableContentsetAddPhoto extends Migration
 {
@@ -13,9 +13,11 @@ class AlterTableContentsetAddPhoto extends Migration
      */
     public function up()
     {
-        Schema::table("contentsets", function (Blueprint $table)
-        {
-            $table->string("photo")->nullable()->comment("عکس پوستر")->after("description");
+        Schema::table("contentsets", function (Blueprint $table) {
+            $table->string("photo")
+                  ->nullable()
+                  ->comment("عکس پوستر")
+                  ->after("description");
         });
     }
 
@@ -26,10 +28,8 @@ class AlterTableContentsetAddPhoto extends Migration
      */
     public function down()
     {
-        Schema::table("contentsets", function (Blueprint $table)
-        {
-            if (Schema::hasColumn("products", 'photo'))
-            {
+        Schema::table("contentsets", function (Blueprint $table) {
+            if (Schema::hasColumn("products", 'photo')) {
                 $table->dropColumn('photo');
             }
         });

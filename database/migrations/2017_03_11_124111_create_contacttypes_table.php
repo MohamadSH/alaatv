@@ -1,9 +1,9 @@
 <?php
 
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
 
 class CreateContacttypesTable extends Migration
 {
@@ -16,10 +16,18 @@ class CreateContacttypesTable extends Migration
     {
         Schema::create('contacttypes', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('displayName')->nullable()->comment('نام قابل نمایش نوع');
-            $table->string('name')->nullable()->comment('نام این نوع در سیستم');
-            $table->longText('description')->nullable()->comment('توضیحات این نوع');
-            $table->tinyInteger('isEnable')->default(1)->comment('نوع دفترچه تلفن فعال است یا خیر');
+            $table->string('displayName')
+                  ->nullable()
+                  ->comment('نام قابل نمایش نوع');
+            $table->string('name')
+                  ->nullable()
+                  ->comment('نام این نوع در سیستم');
+            $table->longText('description')
+                  ->nullable()
+                  ->comment('توضیحات این نوع');
+            $table->tinyInteger('isEnable')
+                  ->default(1)
+                  ->comment('نوع دفترچه تلفن فعال است یا خیر');
             $table->timestamps();
             $table->softDeletes();
         });

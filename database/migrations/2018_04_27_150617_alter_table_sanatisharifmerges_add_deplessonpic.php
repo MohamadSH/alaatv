@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AlterTableSanatisharifmergesAddDeplessonpic extends Migration
 {
@@ -13,9 +13,11 @@ class AlterTableSanatisharifmergesAddDeplessonpic extends Migration
      */
     public function up()
     {
-        Schema::table("sanatisharifmerges", function (Blueprint $table)
-        {
-            $table->string("pic")->nullable()->comment("عکس دپلسن")->after("departmentlessonid");
+        Schema::table("sanatisharifmerges", function (Blueprint $table) {
+            $table->string("pic")
+                  ->nullable()
+                  ->comment("عکس دپلسن")
+                  ->after("departmentlessonid");
         });
     }
 
@@ -26,10 +28,8 @@ class AlterTableSanatisharifmergesAddDeplessonpic extends Migration
      */
     public function down()
     {
-        Schema::table("sanatisharifmerges", function (Blueprint $table)
-        {
-            if (Schema::hasColumn("sanatisharifmerges", 'pic'))
-            {
+        Schema::table("sanatisharifmerges", function (Blueprint $table) {
+            if (Schema::hasColumn("sanatisharifmerges", 'pic')) {
                 $table->dropColumn('pic');
             }
         });

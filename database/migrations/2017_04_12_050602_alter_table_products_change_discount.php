@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AlterTableProductsChangeDiscount extends Migration
 {
@@ -14,7 +14,8 @@ class AlterTableProductsChangeDiscount extends Migration
     public function up()
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->float('discount')->change();
+            $table->float('discount')
+                  ->change();
         });
     }
 
@@ -26,7 +27,8 @@ class AlterTableProductsChangeDiscount extends Migration
     public function down()
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->integer('discount')->change();
+            $table->integer('discount')
+                  ->change();
         });
     }
 }

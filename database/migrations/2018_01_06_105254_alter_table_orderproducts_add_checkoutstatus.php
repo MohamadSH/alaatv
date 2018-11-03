@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Schema;
 
 class AlterTableOrderproductsAddCheckoutstatus extends Migration
 {
@@ -14,13 +13,16 @@ class AlterTableOrderproductsAddCheckoutstatus extends Migration
     public function up()
     {
         Schema::table('orderproducts', function ($table) {
-            $table->unsignedInteger('checkoutstatus_id')->nullable()->comment("آی دی مشحص کننده وضعیت تسویه حساب این آیتم")->after('product_id');
+            $table->unsignedInteger('checkoutstatus_id')
+                  ->nullable()
+                  ->comment("آی دی مشحص کننده وضعیت تسویه حساب این آیتم")
+                  ->after('product_id');
 
             $table->foreign('checkoutstatus_id')
-                ->references('id')
-                ->on('checkoutstatuses')
-                ->onDelete('cascade')
-                ->onupdate('cascade');
+                  ->references('id')
+                  ->on('checkoutstatuses')
+                  ->onDelete('cascade')
+                  ->onupdate('cascade');
         });
     }
 

@@ -12,41 +12,57 @@ class PaymentMethodSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('paymentmethods')->delete();
-        $data = array(
-            array(
-                'id' => '1',
-                'name'=>'online',
+        DB::table('paymentmethods')
+          ->delete();
+        $data = [
+            [
+                'id'          => '1',
+                'name'        => 'online',
                 'displayName' => 'آنلاین',
                 'description' => 'پرداخت به روش آنلاین',
-            ),
-            array(
-                'id' => '2',
-                'name' => 'ATM',
+                'created_at'  => null,
+                'updated_at'  => null,
+                'deleted_at'  => null,
+            ],
+            [
+                'id'          => '2',
+                'name'        => 'ATM',
                 'displayName' => 'عابر بانک',
                 'description' => 'پرداخت از طریق عابر بانک',
-            ),
-            array(
-                'id' => '3',
-                'name' => 'POS',
+                'created_at'  => null,
+                'updated_at'  => null,
+                'deleted_at'  => null,
+            ],
+            [
+                'id'          => '3',
+                'name'        => 'POS',
                 'displayName' => 'کارت خوان',
                 'description' => 'پرداخت از طریق کارت خوان',
-            ),
-            array(
-                'id' => '4',
-                'name' => 'paycheck',
+                'created_at'  => null,
+                'updated_at'  => null,
+                'deleted_at'  => null,
+            ],
+            [
+                'id'          => '4',
+                'name'        => 'paycheck',
                 'displayName' => 'چک بانکی',
                 'description' => 'پرداخت با چک بانکی',
-            )
-//            ,
-//            array(
-//                'id' => '5',
-//                'name' => 'cash',
-//                'displayName' => 'نقدی',
-//                    'description' => 'پرداخت به صورت نقدی',
-//            )
-        );
+                'created_at'  => '2017-02-23 00:00:00',
+                'updated_at'  => '2017-02-23 00:00:00',
+                'deleted_at'  => null,
+            ],
+            [
+                'id'          => '5',
+                'name'        => 'wallet',
+                'displayName' => 'کیف پول',
+                'description' => 'پرداخت از طریق اعتبار کیف پول',
+                'created_at'  => '2018-05-17 14:45:29',
+                'updated_at'  => '2018-05-17 14:45:29',
+                'deleted_at'  => null,
+            ],
+        ];
 
-        DB::table('paymentmethods')->insert($data); // Query Builder
+        DB::table('paymentmethods')
+          ->insert($data); // Query Builder
     }
 }

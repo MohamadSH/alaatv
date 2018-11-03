@@ -16,9 +16,9 @@ class AlterTableUsersAddColumnMobile extends Migration
         Schema::table('users', function (Blueprint $table) {
             if (!Schema::hasColumn('users', 'mobile_verified_code')) {
                 $table->char('mobile_verified_code', 6)
-                    ->nullable()
-                    ->after('mobile')
-                    ->comment("کد تایید شماره موبایل");
+                      ->nullable()
+                      ->after('mobile')
+                      ->comment("کد تایید شماره موبایل");
             }
         });
     }

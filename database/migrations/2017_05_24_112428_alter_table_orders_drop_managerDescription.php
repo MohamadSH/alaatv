@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AlterTableOrdersDropManagerDescription extends Migration
 {
@@ -26,7 +26,10 @@ class AlterTableOrdersDropManagerDescription extends Migration
     public function down()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->longText("managerDescription")->nullable()->comment("توضیحات مسئول سایت")->after("customerDescription");
+            $table->longText("managerDescription")
+                  ->nullable()
+                  ->comment("توضیحات مسئول سایت")
+                  ->after("customerDescription");
         });
     }
 }

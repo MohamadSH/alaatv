@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AlterTableConsultationsAddThumbnail extends Migration
 {
@@ -14,7 +14,9 @@ class AlterTableConsultationsAddThumbnail extends Migration
     public function up()
     {
         Schema::table('consultations', function (Blueprint $table) {
-            $table->string('thumbnail')->nullable()->comment('عکس مشاوره');
+            $table->string('thumbnail')
+                  ->nullable()
+                  ->comment('عکس مشاوره');
         });
     }
 

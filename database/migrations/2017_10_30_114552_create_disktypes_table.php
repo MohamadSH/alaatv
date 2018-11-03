@@ -1,9 +1,9 @@
 <?php
 
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
 
 class CreateDisktypesTable extends Migration
 {
@@ -16,9 +16,11 @@ class CreateDisktypesTable extends Migration
     {
         Schema::create('disktypes', function (Blueprint $table) {
             $table->increments('id');
-            $table->string("name")->unique()->comment("نام نوع دیسک") ;
+            $table->string("name")
+                  ->unique()
+                  ->comment("نام نوع دیسک");
             $table->timestamps();
-            $table->softDeletes() ;
+            $table->softDeletes();
         });
         DB::statement("ALTER TABLE `disktypes` comment 'جدول نوع دیسک ها'");
     }

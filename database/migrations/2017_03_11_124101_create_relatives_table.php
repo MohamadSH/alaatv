@@ -1,9 +1,9 @@
 <?php
 
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
 
 class CreateRelativesTable extends Migration
 {
@@ -16,9 +16,15 @@ class CreateRelativesTable extends Migration
     {
         Schema::create('relatives', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name')->nullable()->comment('نام رکورد');
-            $table->string('displayName')->nullable()->comment('نام قابل نمایش رکورد');
-            $table->longText('description')->nullable()->comment('توضیح رکورد');
+            $table->string('name')
+                  ->nullable()
+                  ->comment('نام رکورد');
+            $table->string('displayName')
+                  ->nullable()
+                  ->comment('نام قابل نمایش رکورد');
+            $table->longText('description')
+                  ->nullable()
+                  ->comment('توضیح رکورد');
             $table->timestamps();
             $table->softDeletes();
         });

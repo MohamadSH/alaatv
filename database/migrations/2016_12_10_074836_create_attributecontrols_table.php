@@ -1,9 +1,9 @@
 <?php
 
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
 
 class CreateAttributecontrolsTable extends Migration
 {
@@ -16,8 +16,12 @@ class CreateAttributecontrolsTable extends Migration
     {
         Schema::create('attributecontrols', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name')->nullable()->comment('نام کنترل صفت');
-            $table->longText('description')->nullable()->comment('توضیح درباره کنترل');
+            $table->string('name')
+                  ->nullable()
+                  ->comment('نام کنترل صفت');
+            $table->longText('description')
+                  ->nullable()
+                  ->comment('توضیح درباره کنترل');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -1,9 +1,9 @@
 <?php
 
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
 
 class CreateSlideshowsTable extends Migration
 {
@@ -16,12 +16,18 @@ class CreateSlideshowsTable extends Migration
     {
         Schema::create('slideshows', function (Blueprint $table) {
             $table->increments('id');
-            $table->string("title")->nullable();
-            $table->string("shortDescription" , 200)->nullable();
-            $table->string("photo")->nullable();
-            $table->string("link")->nullable();
-            $table->integer("order")->default(0);
-            $table->tinyInteger("isEnable")->default(1);
+            $table->string("title")
+                  ->nullable();
+            $table->string("shortDescription", 200)
+                  ->nullable();
+            $table->string("photo")
+                  ->nullable();
+            $table->string("link")
+                  ->nullable();
+            $table->integer("order")
+                  ->default(0);
+            $table->tinyInteger("isEnable")
+                  ->default(1);
             $table->timestamps();
             $table->softDeletes();
         });

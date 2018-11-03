@@ -17,9 +17,12 @@ class CreateCategoriesTable extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('description')->nullable();
-            $table->boolean('enable')->default(1);
-            $table->text('tags')->nullable();
+            $table->string('description')
+                  ->nullable();
+            $table->boolean('enable')
+                  ->default(1);
+            $table->text('tags')
+                  ->nullable();
             $table->timestamps();
             $table->nestedSet();
         });

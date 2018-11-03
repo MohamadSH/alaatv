@@ -18,18 +18,18 @@ class AlterTablesContentSet extends Migration
         Schema::table('educationalcontents', function (Blueprint $table) {
             if (!Schema::hasColumn('educationalcontents', 'contentset_id')) {
                 $table->unsignedInteger('contentset_id')
-                    ->nullable()
-                    ->after('contenttype_id');
+                      ->nullable()
+                      ->after('contenttype_id');
                 $table->foreign('contentset_id')
-                    ->references('id')
-                    ->on('contentsets')
-                    ->onDelete('cascade')
-                    ->onupdate('cascade');
+                      ->references('id')
+                      ->on('contentsets')
+                      ->onDelete('cascade')
+                      ->onupdate('cascade');
             }
             if (!Schema::hasColumn('educationalcontents', 'order')) {
                 $table->integer("order")
-                    ->default(0)
-                    ->comment("ترتیب");
+                      ->default(0)
+                      ->comment("ترتیب");
             }
 
         });
@@ -45,16 +45,18 @@ class AlterTablesContentSet extends Migration
 
             $order = optional(optional(optional($content->contentsets->where("pivot.isDefault", 1))->first())->pivot)->order;
             $content->forceFill([
-                'contentset_id' => optional($content->contentsets->where("pivot.isDefault", 1)->first())->id,
-                'order' => $order > 0 ? $order : 0
-            ])->save();
+                                    'contentset_id' => optional($content->contentsets->where("pivot.isDefault", 1)
+                                                                                     ->first())->id,
+                                    'order'         => $order > 0 ? $order : 0,
+                                ])
+                    ->save();
 
             $content->timestamps = true;
             $progress->advance();
         }
         $progress->finish();
         $output->writeln('Done!');
-//        Schema::dropIfExists('contentset_educationalcontent');
+        //        Schema::dropIfExists('contentset_educationalcontent');
     }
 
     /**

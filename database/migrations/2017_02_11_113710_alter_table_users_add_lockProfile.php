@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Schema;
 
 class AlterTableUsersAddLockProfile extends Migration
 {
@@ -14,7 +13,10 @@ class AlterTableUsersAddLockProfile extends Migration
     public function up()
     {
         Schema::table('users', function ($table) {
-            $table->tinyInteger('lockProfile')->default(0)->comment("قفل بودن با نبودن پروفایل")->after('userstatus_id');
+            $table->tinyInteger('lockProfile')
+                  ->default(0)
+                  ->comment("قفل بودن با نبودن پروفایل")
+                  ->after('userstatus_id');
         });
     }
 

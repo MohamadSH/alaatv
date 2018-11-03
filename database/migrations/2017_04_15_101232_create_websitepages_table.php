@@ -1,9 +1,9 @@
 <?php
 
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
 
 class CreateWebsitepagesTable extends Migration
 {
@@ -16,9 +16,14 @@ class CreateWebsitepagesTable extends Migration
     {
         Schema::create('websitepages', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('url')->comment("آدرس مختص این صفحه");
-            $table->string('displayName')->nullable()->comment("نام قابل نمایش این صفحه");
-            $table->longText('description')->nullable()->comment("توضیح درباره صفحه");
+            $table->string('url')
+                  ->comment("آدرس مختص این صفحه");
+            $table->string('displayName')
+                  ->nullable()
+                  ->comment("نام قابل نمایش این صفحه");
+            $table->longText('description')
+                  ->nullable()
+                  ->comment("توضیح درباره صفحه");
             $table->timestamps();
             $table->softDeletes();
         });

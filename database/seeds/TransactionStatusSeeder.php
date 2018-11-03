@@ -12,45 +12,81 @@ class TransactionStatusSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('transactionstatuses')->delete();
-        $data = array(
-            array(
-                'id' => '1',
-                'name' => 'transferredToPay',
+        DB::table('transactionstatuses')
+          ->delete();
+        $data = [
+            [
+                'id'          => '1',
+                'name'        => 'transferredToPay',
                 'displayName' => 'ارجاع به بانک',
+                'order'       => '7',
                 'description' => 'ارجاع داده شده با بانک جهت پرداخت',
-            ),
-            array(
-                'id' => '2',
-                'name' => 'unsuccessful',
+                'created_at'  => null,
+                'updated_at'  => null,
+                'deleted_at'  => null,
+            ],
+            [
+                'id'          => '2',
+                'name'        => 'unsuccessful',
                 'displayName' => 'نا موفق',
+                'order'       => '4',
                 'description' => 'تراکنش بانکی ناموفق بوده است',
-            ),
-            array(
-                'id' => '3',
-                'name' => 'successful',
+                'created_at'  => null,
+                'updated_at'  => null,
+                'deleted_at'  => null,
+            ],
+            [
+                'id'          => '3',
+                'name'        => 'successful',
                 'displayName' => 'موفق',
+                'order'       => '1',
                 'description' => 'تراکنش بانکی موفق بوده است',
-            ),
-            array(
-                'id' => '4',
-                'name' => 'pending',
+                'created_at'  => null,
+                'updated_at'  => null,
+                'deleted_at'  => null,
+            ],
+            [
+                'id'          => '4',
+                'name'        => 'pending',
                 'displayName' => 'منتظر تایید',
+                'order'       => '2',
                 'description' => 'پرداخت انجام شده هنوز تایید نشده است',
-            ),
-            array(
-                'id' => '5',
-                'name' => 'archivedSuccessful',
+                'created_at'  => '2017-06-01 00:00:00',
+                'updated_at'  => '2017-06-01 00:00:00',
+                'deleted_at'  => null,
+            ],
+            [
+                'id'          => '5',
+                'name'        => 'archivedSuccessful',
                 'displayName' => 'موفق بایگانی شده',
+                'order'       => '6',
                 'description' => 'تراکنش موفقی که بایگانی شده است',
-            ),
-            array(
-                'id' => '6',
-                'name' => 'unpaid',
+                'created_at'  => '2017-12-23 17:11:12',
+                'updated_at'  => '2017-12-23 17:11:12',
+                'deleted_at'  => null,
+            ],
+            [
+                'id'          => '6',
+                'name'        => 'unpaid',
                 'displayName' => 'منتظر پرداخت',
+                'order'       => '3',
                 'description' => 'تراکنشی که قرار است در تاریخ معین شده پرداخت شود',
-            ),
-        );
-        DB::table('transactionstatuses')->insert($data); // Query Builder
+                'created_at'  => '2018-02-26 11:30:45',
+                'updated_at'  => '2018-02-26 11:30:45',
+                'deleted_at'  => null,
+            ],
+            [
+                'id'          => '7',
+                'name'        => 'suspended',
+                'displayName' => 'معلق',
+                'order'       => '5',
+                'description' => 'تراکنش تایید شده ای که در حالت معلق قرار دارد',
+                'created_at'  => '2018-05-31 16:39:16',
+                'updated_at'  => '2018-05-31 16:39:16',
+                'deleted_at'  => null,
+            ],
+        ];
+        DB::table('transactionstatuses')
+          ->insert($data); // Query Builder
     }
 }

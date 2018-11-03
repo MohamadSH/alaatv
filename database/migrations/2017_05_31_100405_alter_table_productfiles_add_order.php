@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Schema;
 
 class AlterTableProductfilesAddOrder extends Migration
 {
@@ -14,7 +13,10 @@ class AlterTableProductfilesAddOrder extends Migration
     public function up()
     {
         Schema::table('productfiles', function ($table) {
-            $table->integer('order')->default(0)->comment("ترتیب فایل")->after('description');
+            $table->integer('order')
+                  ->default(0)
+                  ->comment("ترتیب فایل")
+                  ->after('description');
         });
     }
 

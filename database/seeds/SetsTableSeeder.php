@@ -12,7 +12,8 @@ class SetsTableSeeder extends Seeder
     public function run()
     {
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-        DB::table('contentsets')->delete();
+        DB::table('contentsets')
+          ->delete();
         /* `AzmoonOnline`.`contentsets` */
         $contentsets = [
             [
@@ -2708,7 +2709,8 @@ class SetsTableSeeder extends Seeder
                 'deleted_at'  => null,
             ],
         ];
-        DB::table('contentsets')->insert($contentsets);
+        DB::table('contentsets')
+          ->insert($contentsets);
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AlterTableContentsetsAddColumnSmallName extends Migration
 {
@@ -14,7 +14,9 @@ class AlterTableContentsetsAddColumnSmallName extends Migration
     public function up()
     {
         Schema::table('contentsets', function (Blueprint $table) {
-            $table->string('small_name')->after('name')->nullable();
+            $table->string('small_name')
+                  ->after('name')
+                  ->nullable();
         });
     }
 

@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AlterTableContentsAddContenttypeId extends Migration
 {
@@ -14,13 +14,16 @@ class AlterTableContentsAddContenttypeId extends Migration
     public function up()
     {
         Schema::table('contents', function (Blueprint $table) {
-            $table->unsignedInteger("contenttype_id")->nullable()->comment("آی دی مشخص کننده نوع محتوا")->after("author_id");
+            $table->unsignedInteger("contenttype_id")
+                  ->nullable()
+                  ->comment("آی دی مشخص کننده نوع محتوا")
+                  ->after("author_id");
 
             $table->foreign('contenttype_id')
-                ->references('id')
-                ->on('contenttypes')
-                ->onDelete('cascade')
-                ->onupdate('cascade');
+                  ->references('id')
+                  ->on('contenttypes')
+                  ->onDelete('cascade')
+                  ->onupdate('cascade');
         });
     }
 
@@ -31,10 +34,8 @@ class AlterTableContentsAddContenttypeId extends Migration
      */
     public function down()
     {
-        Schema::table('contents', function (Blueprint $table)
-        {
-            if (Schema::hasColumn('contents', 'contenttype_id'))
-            {
+        Schema::table('contents', function (Blueprint $table) {
+            if (Schema::hasColumn('contents', 'contenttype_id')) {
                 $table->dropForeign('contents_contenttype_id_foreign');
                 $table->dropColumn('contenttype_id');
             }

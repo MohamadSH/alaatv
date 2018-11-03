@@ -16,13 +16,13 @@ class CreateBlocksTable extends Migration
         Schema::create('blocks', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title', 50)
-                ->nullable();
+                  ->nullable();
             $table->text('tags')
-                ->nullable();
+                  ->nullable();
             $table->tinyInteger('order', false, true)
-                ->default(0);
+                  ->default(0);
             $table->boolean('enable')
-                ->default(true);
+                  ->default(true);
             $table->timestamps();
         });
     }

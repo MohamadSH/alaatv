@@ -1,9 +1,9 @@
 <?php
 
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
 
 class CreateContenttypesTable extends Migration
 {
@@ -16,11 +16,21 @@ class CreateContenttypesTable extends Migration
     {
         Schema::create('contenttypes', function (Blueprint $table) {
             $table->increments('id');
-            $table->string("name")->nullable()->comment("نام");
-            $table->string("displayName")->nullable()->comment("نام قابل نمایش");
-            $table->text("description")->nullable()->comment("توضیح");
-            $table->integer("order")->default(0)->comment("ترتیب");
-            $table->tinyInteger("enable")->default(1)->comment("فعال یا غیر فعال");
+            $table->string("name")
+                  ->nullable()
+                  ->comment("نام");
+            $table->string("displayName")
+                  ->nullable()
+                  ->comment("نام قابل نمایش");
+            $table->text("description")
+                  ->nullable()
+                  ->comment("توضیح");
+            $table->integer("order")
+                  ->default(0)
+                  ->comment("ترتیب");
+            $table->tinyInteger("enable")
+                  ->default(1)
+                  ->comment("فعال یا غیر فعال");
             $table->timestamps();
             $table->softDeletes();
         });

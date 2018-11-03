@@ -872,11 +872,11 @@ class OrderController extends Controller
                                              ->get()
                                              ->isNotEmpty();
 
-        $orderHasDonate = $order->hasProducts(Config::get("constants.DONATE_PRODUCT"));
+        $orderHasDonate = $order->hasProducts(Product::DONATE_PRODUCT);
 
         $donateCost = 0;
         if ($orderHasDonate) {
-            $donateCost = config("constants.DONATE_PRODUCT_COST");
+            $donateCost =Product::getDonateProductCost();
         }
 
         $credit = $user->getTotalWalletBalance();
@@ -1136,10 +1136,10 @@ class OrderController extends Controller
                     $paymentMethods = ["onlinePayment" => "آنلاین"];
                 }
 
-                $orderHasDonate = $order->hasProducts(Config::get("constants.DONATE_PRODUCT"));
+                $orderHasDonate = $order->hasProducts(Product::DONATE_PRODUCT);
                 $donateCost = 0;
                 if ($orderHasDonate) {
-                    $donateCost = config("constants.DONATE_PRODUCT_COST");
+                    $donateCost =Product::getDonateProductCost();
                 }
 
                 $credit = $user->getTotalWalletBalance();
@@ -2242,7 +2242,7 @@ class OrderController extends Controller
         }
         $request->offsetSet("mode", "donate");
         $request->offsetSet("cost", $amount);
-        $product = Product::FindOrFail(config("constants.CUSTOM_DONATE_PRODUCT"));
+        $product = Product::FindOrFail(Product::CUSTOM_DONATE_PRODUCT);
         $response = $this->addOrderproduct($request, $product);
         $responseStatus = $response->getStatusCode();
         $result = json_decode($response->getContent());
@@ -2308,7 +2308,7 @@ class OrderController extends Controller
             }
 
             if (isset($openOrder)) {
-                $restorableProducts = Config::get("constants.DONATE_PRODUCT");
+                $restorableProducts = Product::DONATE_PRODUCT;
                 $createFlag = true;
                 if (in_array($product->id, $restorableProducts)) {
                     $oldOrderproduct = $openOrder->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))

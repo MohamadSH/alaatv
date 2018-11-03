@@ -1,9 +1,9 @@
 <?php
 
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
 
 class CreateWallettypesTable extends Migration
 {
@@ -16,11 +16,17 @@ class CreateWallettypesTable extends Migration
     {
         Schema::create('wallettypes', function (Blueprint $table) {
             $table->increments('id');
-            $table->string("name")->unique()->comment("نام") ;
-            $table->string("displayName")->nullable()->comment("نام قابل نمایش") ;
-            $table->string("description")->nullable()->comment("توضیح کوتاه") ;
+            $table->string("name")
+                  ->unique()
+                  ->comment("نام");
+            $table->string("displayName")
+                  ->nullable()
+                  ->comment("نام قابل نمایش");
+            $table->string("description")
+                  ->nullable()
+                  ->comment("توضیح کوتاه");
             $table->timestamps();
-            $table->softDeletes() ;
+            $table->softDeletes();
         });
         DB::statement("ALTER TABLE `wallettypes` comment 'جدول انواع کیف پول'");
     }

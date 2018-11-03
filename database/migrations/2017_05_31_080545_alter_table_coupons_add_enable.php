@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Schema;
 
 class AlterTableCouponsAddEnable extends Migration
 {
@@ -14,7 +13,10 @@ class AlterTableCouponsAddEnable extends Migration
     public function up()
     {
         Schema::table('coupons', function ($table) {
-            $table->tinyInteger('enable')->default(1)->comment("فعال یا غیرفعال بودن کپن برای استفاده جدید")->after('name');
+            $table->tinyInteger('enable')
+                  ->default(1)
+                  ->comment("فعال یا غیرفعال بودن کپن برای استفاده جدید")
+                  ->after('name');
         });
     }
 

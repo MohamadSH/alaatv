@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Schema;
 
 class AlterTableUsersAddPasswordRegeneratedAt extends Migration
 {
@@ -14,7 +13,10 @@ class AlterTableUsersAddPasswordRegeneratedAt extends Migration
     public function up()
     {
         Schema::table('users', function ($table) {
-            $table->dateTime('passwordRegenerated_at')->nullable()->comment("تاریخ آخرین تولید خودکار(بازیابی) رمز عبور")->after('remember_token');
+            $table->dateTime('passwordRegenerated_at')
+                  ->nullable()
+                  ->comment("تاریخ آخرین تولید خودکار(بازیابی) رمز عبور")
+                  ->after('remember_token');
         });
     }
 

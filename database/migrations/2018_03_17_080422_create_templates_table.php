@@ -1,9 +1,9 @@
 <?php
 
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
 
 class CreateTemplatesTable extends Migration
 {
@@ -16,7 +16,9 @@ class CreateTemplatesTable extends Migration
     {
         Schema::create('templates', function (Blueprint $table) {
             $table->increments('id');
-            $table->string("name")->nullable()->comment("نام");
+            $table->string("name")
+                  ->nullable()
+                  ->comment("نام");
             $table->timestamps();
             $table->softDeletes();
         });

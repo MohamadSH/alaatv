@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AlterTableProductvouchersAddUnique extends Migration
 {
@@ -15,8 +15,8 @@ class AlterTableProductvouchersAddUnique extends Migration
     {
         Schema::table('productvouchers', function (Blueprint $table) {
             $table->string("code")
-                ->unique()
-                ->change();
+                  ->unique()
+                  ->change();
         });
     }
 
@@ -28,9 +28,9 @@ class AlterTableProductvouchersAddUnique extends Migration
     public function down()
     {
         Schema::table('productvouchers', function (Blueprint $table) {
-            if (Schema::hasColumn('productvouchers', 'code'))
-            {
-                $table->string('code')->change();
+            if (Schema::hasColumn('productvouchers', 'code')) {
+                $table->string('code')
+                      ->change();
             }
         });
     }

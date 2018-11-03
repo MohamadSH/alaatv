@@ -1,9 +1,9 @@
 <?php
 
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
 
 class CreateSurveysTable extends Migration
 {
@@ -16,8 +16,12 @@ class CreateSurveysTable extends Migration
     {
         Schema::create('surveys', function (Blueprint $table) {
             $table->increments('id');
-            $table->string("name")->nullable()->comment("نام مصاحبه");
-            $table->longText("description")->nullable()->comment("توضیح درباره مصاحبه");
+            $table->string("name")
+                  ->nullable()
+                  ->comment("نام مصاحبه");
+            $table->longText("description")
+                  ->nullable()
+                  ->comment("توضیح درباره مصاحبه");
             $table->timestamps();
             $table->softDeletes();
         });

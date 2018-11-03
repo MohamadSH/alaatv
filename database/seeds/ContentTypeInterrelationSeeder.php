@@ -12,16 +12,18 @@ class ContentTypeInterrelationSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('contenttypeinterrelations')->delete();
-        $data = array(
-            array(
-                'id' => '1',
-                'name' => 'parent-child',
+        DB::table('contenttypeinterrelations')
+          ->delete();
+        $data = [
+            [
+                'id'          => '1',
+                'name'        => 'parent-child',
                 'displayName' => 'فرزند-والد',
                 'description' => 'به طوری قرارداری اولی والد دومی می باشد',
-            ),
-        );
+            ],
+        ];
 
-        DB::table('contenttypeinterrelations')->insert($data); // Query Builder
+        DB::table('contenttypeinterrelations')
+          ->insert($data); // Query Builder
     }
 }

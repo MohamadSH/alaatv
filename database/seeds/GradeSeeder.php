@@ -12,28 +12,30 @@ class GradeSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('grades')->delete();
-        $data = array(
-            array(
-                'id' => '1',
-                'name' => 'dahom',
+        DB::table('grades')
+          ->delete();
+        $data = [
+            [
+                'id'          => '1',
+                'name'        => 'dahom',
                 'displayName' => 'دهم',
                 'description' => 'مقطع دهم نظام آموزشی جدید',
-            ),
-            array(
-                'id' => '2',
-                'name' => 'yazdahom',
+            ],
+            [
+                'id'          => '2',
+                'name'        => 'yazdahom',
                 'displayName' => 'یازدهم',
                 'description' => 'مقطع یازدهم نظام آموزشی جدید',
-            ),
-            array(
-                'id' => '3',
-                'name' => 'konkoor',
+            ],
+            [
+                'id'          => '3',
+                'name'        => 'konkoor',
                 'displayName' => 'کنکوری',
                 'description' => 'مقطع کنکور(دوازدهم نظام آموزشی جدید)',
-            ),
-        );
+            ],
+        ];
 
-        DB::table('grades')->insert($data); // Query Builder
+        DB::table('grades')
+          ->insert($data); // Query Builder
     }
 }

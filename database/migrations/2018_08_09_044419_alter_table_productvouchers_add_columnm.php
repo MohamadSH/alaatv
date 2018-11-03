@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AlterTableProductvouchersAddColumnm extends Migration
 {
@@ -15,15 +15,15 @@ class AlterTableProductvouchersAddColumnm extends Migration
     {
         Schema::table('productvouchers', function (Blueprint $table) {
             $table->unsignedInteger("user_id")
-                ->nullable()
-                ->comment("آی دی مشخص کننده کاربر که کد به اون تخصیص داده شده است")
-                ->after("product_id");
+                  ->nullable()
+                  ->comment("آی دی مشخص کننده کاربر که کد به اون تخصیص داده شده است")
+                  ->after("product_id");
 
             $table->foreign('user_id')
-                ->references('id')
-                ->on('users')
-                ->onDelete('cascade')
-                ->onupdate('cascade');
+                  ->references('id')
+                  ->on('users')
+                  ->onDelete('cascade')
+                  ->onupdate('cascade');
         });
     }
 
@@ -35,8 +35,7 @@ class AlterTableProductvouchersAddColumnm extends Migration
     public function down()
     {
         Schema::table('productvouchers', function (Blueprint $table) {
-            if (Schema::hasColumn('productvouchers', 'user_id'))
-            {
+            if (Schema::hasColumn('productvouchers', 'user_id')) {
                 $table->dropForeign('productvouchers_user_id_foreign');
                 $table->dropColumn('user_id');
             }

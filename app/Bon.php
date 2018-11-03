@@ -4,6 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Config;
 
 /**
  * App\Bon
@@ -74,6 +76,19 @@ class Bon extends Model
         );
     }
 
+    public static function getAlaaBonDisplayName()
+    {
+        return Cache::tags('bon')
+                    ->remember('getAlaaBon', Config::get('constants.CACHE_600'), function () {
+                        $myBone = \App\Bon::where("name", Config::get("constants.BON1"))
+                                          ->get();
+                        $bonName = null;
+                        if ($myBone->isNotEmpty()) {
+                            $bonName = $myBone->first()->displayName;
+                        }
+                        return $bonName;
+                    });
+    }
     public function products()
     {
         return $this->belongsToMany('\App\Product')

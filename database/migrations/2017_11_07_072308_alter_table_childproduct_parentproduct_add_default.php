@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AlterTableChildproductParentproductAddDefault extends Migration
 {
@@ -14,7 +14,10 @@ class AlterTableChildproductParentproductAddDefault extends Migration
     public function up()
     {
         Schema::table('childproduct_parentproduct', function (Blueprint $table) {
-            $table->tinyInteger('isDefault')->default(0)->comment('فرزند پیش فرض بودن یا نبودن')->after("child_id");
+            $table->tinyInteger('isDefault')
+                  ->default(0)
+                  ->comment('فرزند پیش فرض بودن یا نبودن')
+                  ->after("child_id");
         });
     }
 

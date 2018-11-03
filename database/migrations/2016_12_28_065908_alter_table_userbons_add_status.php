@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Schema;
 
 class AlterTableUserbonsAddStatus extends Migration
 {
@@ -14,13 +13,16 @@ class AlterTableUserbonsAddStatus extends Migration
     public function up()
     {
         Schema::table('userbons', function ($table) {
-            $table->unsignedInteger('userbonstatus_id')->nullable()->comment("آی دی مشخص کننده وضعیت این بن کاربر")->after('usedNumber');
+            $table->unsignedInteger('userbonstatus_id')
+                  ->nullable()
+                  ->comment("آی دی مشخص کننده وضعیت این بن کاربر")
+                  ->after('usedNumber');
 
             $table->foreign('userbonstatus_id')
-                ->references('id')
-                ->on('userbonstatuses')
-                ->onDelete('cascade')
-                ->onupdate('cascade');
+                  ->references('id')
+                  ->on('userbonstatuses')
+                  ->onDelete('cascade')
+                  ->onupdate('cascade');
         });
     }
 

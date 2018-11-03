@@ -12,22 +12,24 @@ class MajorInterrelationTypeSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('majorinterrelationtypes')->delete();
-        $data = array(
-            array(
-                'id' => '1',
-                'name' => 'parent-child',
+        DB::table('majorinterrelationtypes')
+          ->delete();
+        $data = [
+            [
+                'id'          => '1',
+                'name'        => 'parent-child',
                 'displayName' => 'فرزند-والد',
                 'description' => 'به طوری قرارداری اولی والد دومی می باشد',
-            ),
-            array(
-                'id' => '2',
-                'name' => 'accessible',
+            ],
+            [
+                'id'          => '2',
+                'name'        => 'accessible',
                 'displayName' => 'مجاز بودن',
                 'description' => 'رشته دوم برای رشته اول مجاز است',
-            )
-        );
+            ],
+        ];
 
-        DB::table('majorinterrelationtypes')->insert($data); // Query Builder
+        DB::table('majorinterrelationtypes')
+          ->insert($data); // Query Builder
     }
 }

@@ -12,22 +12,24 @@ class ProductFileTypeSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('productfiletypes')->delete();
-        $data = array(
-            array(
-                'id' => '1',
-                'name' => 'pamphlet',
+        DB::table('productfiletypes')
+          ->delete();
+        $data = [
+            [
+                'id'          => '1',
+                'name'        => 'pamphlet',
                 'displayName' => 'جزوه',
                 'description' => 'فایل از نوع جزوه است',
-            ),
-            array(
-                'id' => '2',
-                'name' => 'video',
+            ],
+            [
+                'id'          => '2',
+                'name'        => 'video',
                 'displayName' => 'فیلم',
                 'description' => 'فایل از نوع فیلم است',
-            )
-        );
+            ],
+        ];
 
-        DB::table('productfiletypes')->insert($data); // Query Builder
+        DB::table('productfiletypes')
+          ->insert($data); // Query Builder
     }
 }

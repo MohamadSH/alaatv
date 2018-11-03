@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Schema;
 
 class AlterTableOrderproductsAddCost extends Migration
 {
@@ -14,7 +13,10 @@ class AlterTableOrderproductsAddCost extends Migration
     public function up()
     {
         Schema::table('orderproducts', function ($table) {
-            $table->integer('cost')->nullable()->comment("مبلغ این آیتم سبد")->after('product_id');
+            $table->integer('cost')
+                  ->nullable()
+                  ->comment("مبلغ این آیتم سبد")
+                  ->after('product_id');
         });
     }
 

@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AlterTableProductAddTagsColumn extends Migration
 {
@@ -13,9 +13,11 @@ class AlterTableProductAddTagsColumn extends Migration
      */
     public function up()
     {
-        Schema::table("products", function (Blueprint $table)
-        {
-            $table->text("tags")->nullable()->comment("تگ ها")->after("specialDescription");
+        Schema::table("products", function (Blueprint $table) {
+            $table->text("tags")
+                  ->nullable()
+                  ->comment("تگ ها")
+                  ->after("specialDescription");
         });
     }
 
@@ -26,10 +28,8 @@ class AlterTableProductAddTagsColumn extends Migration
      */
     public function down()
     {
-        Schema::table("products", function (Blueprint $table)
-        {
-            if (Schema::hasColumn("products", 'tags'))
-            {
+        Schema::table("products", function (Blueprint $table) {
+            if (Schema::hasColumn("products", 'tags')) {
                 $table->dropColumn('tags');
             }
         });

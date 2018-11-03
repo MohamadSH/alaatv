@@ -1,9 +1,9 @@
 <?php
 
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
 
 class CreateContenttypeinterrelationsTable extends Migration
 {
@@ -16,9 +16,15 @@ class CreateContenttypeinterrelationsTable extends Migration
     {
         Schema::create('contenttypeinterrelations', function (Blueprint $table) {
             $table->increments('id');
-            $table->string("name")->nullable()->comment("نام");
-            $table->string("displayName")->nullable()->comment("نام قابل نمایش");
-            $table->text("description")->nullable()->comment("توضیح");
+            $table->string("name")
+                  ->nullable()
+                  ->comment("نام");
+            $table->string("displayName")
+                  ->nullable()
+                  ->comment("نام قابل نمایش");
+            $table->text("description")
+                  ->nullable()
+                  ->comment("توضیح");
             $table->timestamps();
             $table->softDeletes();
         });

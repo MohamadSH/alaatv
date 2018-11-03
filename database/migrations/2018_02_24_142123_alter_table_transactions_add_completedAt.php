@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AlterTableTransactionsAddCompletedAt extends Migration
 {
@@ -14,8 +14,14 @@ class AlterTableTransactionsAddCompletedAt extends Migration
     public function up()
     {
         Schema::table('transactions', function (Blueprint $table) {
-            $table->timestamp("deadline_at")->nullable()->comment("مهلت پرداخت")->after("created_at");
-            $table->timestamp("completed_at")->nullable()->comment("تاریخ پرداخت")->after("deadline_at");
+            $table->timestamp("deadline_at")
+                  ->nullable()
+                  ->comment("مهلت پرداخت")
+                  ->after("created_at");
+            $table->timestamp("completed_at")
+                  ->nullable()
+                  ->comment("تاریخ پرداخت")
+                  ->after("deadline_at");
         });
     }
 

@@ -1,9 +1,9 @@
 <?php
 
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
 
 class CreateAttributetypesTable extends Migration
 {
@@ -16,8 +16,12 @@ class CreateAttributetypesTable extends Migration
     {
         Schema::create('attributetypes', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name')->nullable()->comment("نام این نوع");
-            $table->longText('description')->nullable()->comment("توضیح درباره این نوع");
+            $table->string('name')
+                  ->nullable()
+                  ->comment("نام این نوع");
+            $table->longText('description')
+                  ->nullable()
+                  ->comment("توضیح درباره این نوع");
             $table->timestamps();
             $table->softDeletes();
         });

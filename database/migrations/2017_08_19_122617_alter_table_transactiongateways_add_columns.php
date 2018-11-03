@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AlterTableTransactiongatewaysAddColumns extends Migration
 {
@@ -14,8 +14,14 @@ class AlterTableTransactiongatewaysAddColumns extends Migration
     public function up()
     {
         Schema::table('transactiongateways', function (Blueprint $table) {
-            $table->string('certificatePrivateKeyFile')->nullable()->comment('فایل گواهی اس اس ال برای کلید خصوصی امضا دیجیتال')->after("merchantNumber");
-            $table->string('certificatePrivateKeyPassword')->nullable()->comment('رمز عبور برای کلید خصوصی امضا دیجیتال')->after("certificatePrivateKeyFile");
+            $table->string('certificatePrivateKeyFile')
+                  ->nullable()
+                  ->comment('فایل گواهی اس اس ال برای کلید خصوصی امضا دیجیتال')
+                  ->after("merchantNumber");
+            $table->string('certificatePrivateKeyPassword')
+                  ->nullable()
+                  ->comment('رمز عبور برای کلید خصوصی امضا دیجیتال')
+                  ->after("certificatePrivateKeyFile");
         });
     }
 

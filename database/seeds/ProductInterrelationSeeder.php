@@ -12,15 +12,17 @@ class ProductInterrelationSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('productinterrelations')->delete();
-        $data = array(
-            array(
-                'id' => '1',
-                'name' => 'gift',
+        DB::table('productinterrelations')
+          ->delete();
+        $data = [
+            [
+                'id'          => '1',
+                'name'        => 'gift',
                 'displayName' => 'هدیه',
                 'description' => 'به طوری قرارداری دومی هدیه اولی می باشد',
-            )
-        );
-        DB::table('productinterrelations')->insert($data); // Query Builder
+            ],
+        ];
+        DB::table('productinterrelations')
+          ->insert($data); // Query Builder
     }
 }

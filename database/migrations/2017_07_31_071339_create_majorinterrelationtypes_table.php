@@ -1,9 +1,9 @@
 <?php
 
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
 
 class CreateMajorinterrelationtypesTable extends Migration
 {
@@ -16,9 +16,15 @@ class CreateMajorinterrelationtypesTable extends Migration
     {
         Schema::create('majorinterrelationtypes', function (Blueprint $table) {
             $table->increments('id');
-            $table->string("name")->nullable()->comment("نام نوع");
-            $table->string("displayName")->nullable()->comment("نام قابل نمایش نوع");
-            $table->string("description")->nullable()->comment("توضیح درباره این نوع رابطه");
+            $table->string("name")
+                  ->nullable()
+                  ->comment("نام نوع");
+            $table->string("displayName")
+                  ->nullable()
+                  ->comment("نام قابل نمایش نوع");
+            $table->string("description")
+                  ->nullable()
+                  ->comment("توضیح درباره این نوع رابطه");
             $table->timestamps();
             $table->softDeletes();
         });

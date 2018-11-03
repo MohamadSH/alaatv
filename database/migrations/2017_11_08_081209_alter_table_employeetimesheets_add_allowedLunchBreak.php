@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AlterTableEmployeetimesheetsAddAllowedLunchBreak extends Migration
 {
@@ -14,7 +14,10 @@ class AlterTableEmployeetimesheetsAddAllowedLunchBreak extends Migration
     public function up()
     {
         Schema::table('employeetimesheets', function (Blueprint $table) {
-            $table->integer('allowedLunchBreakInSec')->nullable()->comment('مدت زمان مجاز برای استراحت ناهار')->after("userFinishTime");
+            $table->integer('allowedLunchBreakInSec')
+                  ->nullable()
+                  ->comment('مدت زمان مجاز برای استراحت ناهار')
+                  ->after("userFinishTime");
         });
     }
 

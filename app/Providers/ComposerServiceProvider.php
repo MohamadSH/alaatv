@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Block;
+use App\Bon;
+use App\Classes\Format\webBlockCollectionFormatter;
+use App\Classes\Format\webSetCollectionFormatter;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -21,6 +25,18 @@ class ComposerServiceProvider extends ServiceProvider
             $sideBarMode = "closed";
             $view->with(compact('sideBarMode'));
         });
+
+        /**
+         *  lessons
+         */
+        View::composer([
+                           'pages.dashboard1',
+                           'partials.sidebar',
+                       ], function ($view) {
+            $sections = (new webBlockCollectionFormatter(new webSetCollectionFormatter()))->format(Block::getBlocks());
+            $view->with(compact('sections'));
+        });
+        view()->share('bonName', Bon::getAlaaBonDisplayName());
     }
 
     /**

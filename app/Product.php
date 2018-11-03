@@ -119,6 +119,9 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
     |--------------------------------------------------------------------------
     */
 
+    public const DONATE_PRODUCT = [ 180 ];
+    public const CUSTOM_DONATE_PRODUCT = 182;
+
     public const AMOUNT_LIMIT               = [
         'نامحدود',
         'محدود',
@@ -193,6 +196,9 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
     |--------------------------------------------------------------------------
     */
 
+    public static function getDonateProductCost(){
+        return Product::find(self::DONATE_PRODUCT[0])->basePrice;
+    }
     /**
      * Gets specific number of products
      *
@@ -1019,7 +1025,7 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
         return Cache::remember($key, Config::get("constants.CACHE_600"), function () {
 
             //ToDo : should be removed in future
-            if (in_array($this->id, Config::get("constants.DONATE_PRODUCT")))
+            if (in_array($this->id, self::DONATE_PRODUCT))
                 return true;
             $grandParent = $this->getGrandParent();
             if ($grandParent !== false) {

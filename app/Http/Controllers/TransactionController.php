@@ -239,7 +239,7 @@ class TransactionController extends Controller
                     $extraCost = 0;
                     if ($transactionOrderproducts->isNotEmpty()) {
                         $orderDiscount = $transaction->order->discount;
-                        $donateProducts = array_merge(config("constants.DONATE_PRODUCT"), [config("constants.CUSTOM_DONATE_PRODUCT")]);
+                        $donateProducts = array_merge(Product::DONATE_PRODUCT, [Product::CUSTOM_DONATE_PRODUCT]);
                         $numOfOrderproducts = $transaction->order
                             ->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
                             ->whereNotIn("product_id", $donateProducts)
@@ -424,8 +424,8 @@ class TransactionController extends Controller
                 if (isset($user)) {
                     $walletCost = $cost;
                     $subtractedAmount = 0;
-                    if ($order->hasProducts(Config::get("constants.DONATE_PRODUCT"))) {
-                        $subtractedAmount = config("constants.DONATE_PRODUCT_COST");
+                    if ($order->hasProducts(Product::DONATE_PRODUCT)) {
+                        $subtractedAmount =Product::getDonateProductCost();
                         $walletCost = $walletCost - $subtractedAmount;
 
                     }

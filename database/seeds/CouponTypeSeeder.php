@@ -12,21 +12,23 @@ class CouponTypeSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('coupontypes')->delete();
-        $data = array(
-            array(
-                'id' => '1',
+        DB::table('coupontypes')
+          ->delete();
+        $data = [
+            [
+                'id'          => '1',
                 'displayName' => 'کلی',
-                'name' => 'overall',
-                'description' => 'کپن برای همه محصولات سبد'
-            ),
-            array(
-                'id' => '2',
+                'name'        => 'overall',
+                'description' => 'کپن برای همه محصولات سبد',
+            ],
+            [
+                'id'          => '2',
                 'displayName' => 'جزئی',
-                'name' => 'partial',
-                'description' => 'کپن برای بعضی از محصولات سبد'
-            )
-        );
-        DB::table('coupontypes')->insert($data); // Query Builder
+                'name'        => 'partial',
+                'description' => 'کپن برای بعضی از محصولات سبد',
+            ],
+        ];
+        DB::table('coupontypes')
+          ->insert($data); // Query Builder
     }
 }

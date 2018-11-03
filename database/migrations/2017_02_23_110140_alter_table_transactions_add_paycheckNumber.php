@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AlterTableTransactionsAddPaycheckNumber extends Migration
 {
@@ -14,7 +14,10 @@ class AlterTableTransactionsAddPaycheckNumber extends Migration
     public function up()
     {
         Schema::table('transactions', function (Blueprint $table) {
-            $table->string("paycheckNumber")->nullable()->comment("شماره چک (در صورت پرداخت با چک بانکی)")->after("referenceNumber");
+            $table->string("paycheckNumber")
+                  ->nullable()
+                  ->comment("شماره چک (در صورت پرداخت با چک بانکی)")
+                  ->after("referenceNumber");
         });
     }
 

@@ -12,22 +12,24 @@ class MajorTypeSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('majortypes')->delete();
-        $data = array(
-            array(
-                'id' => '1',
-                'name' => 'highschool',
+        DB::table('majortypes')
+          ->delete();
+        $data = [
+            [
+                'id'          => '1',
+                'name'        => 'highschool',
                 'displayName' => 'دبیرستانی',
                 'description' => 'رشته های دبیرستانی',
-            ),
-            array(
-                'id' => '2',
-                'name' => 'university',
+            ],
+            [
+                'id'          => '2',
+                'name'        => 'university',
                 'displayName' => 'دانشگاهی',
                 'description' => 'رشته های دانشگاهی',
-            ),
-        );
+            ],
+        ];
 
-        DB::table('majortypes')->insert($data); // Query Builder
+        DB::table('majortypes')
+          ->insert($data); // Query Builder
     }
 }

@@ -48,19 +48,19 @@ return [
 
         'local' => [
             'driver' => 'local',
-            'root' => storage_path('app'),
+            'root'   => storage_path('app'),
         ],
 
         'public' => [
-            'driver' => 'local',
-            'root' => storage_path('app/public'),
-            'url' => env('APP_URL') . '/storage',
+            'driver'     => 'local',
+            'root'       => storage_path('app/public'),
+            'url'        => env('APP_URL') . '/storage',
             'visibility' => 'public',
         ],
 
         'profileImage' => [
-            'driver' => 'local',
-            'root' => storage_path('app/public/profile/images'),
+            'driver'     => 'local',
+            'root'       => storage_path('app/public/profile/images'),
             'visibility' => 'public',
 
             /*            'driver'     => 'sftp',
@@ -74,196 +74,196 @@ return [
         ],
 
         'assignmentQuestionFile' => [
-            'driver' => 'local',
-            'root' => storage_path('app/public/assignment/questionFiles'),
+            'driver'     => 'local',
+            'root'       => storage_path('app/public/assignment/questionFiles'),
             'visibility' => 'public',
         ],
 
         'assignmentSolutionFile' => [
-            'driver' => 'local',
-            'root' => storage_path('app/public/assignment/solutionFiles'),
+            'driver'     => 'local',
+            'root'       => storage_path('app/public/assignment/solutionFiles'),
             'visibility' => 'public',
         ],
 
         'productImage' => [
-            'driver' => 'local',
-            'root' => storage_path('app/public/product/images'),
+            'driver'     => 'local',
+            'root'       => storage_path('app/public/product/images'),
             'visibility' => 'public',
         ],
 
         'productCatalog_PDF' => [
-            'driver' => 'local',
-            'root' => storage_path('app/public/product/catalog/pdf'),
+            'driver'     => 'local',
+            'root'       => storage_path('app/public/product/catalog/pdf'),
             'visibility' => 'public',
         ],
 
         'consultingAudioQuestions' => [
-            'driver' => 'local',
-            'root' => storage_path('app/public/userUploads/consultingAudioQuestions'),
+            'driver'     => 'local',
+            'root'       => storage_path('app/public/userUploads/consultingAudioQuestions'),
             'visibility' => 'public',
         ],
 
         'consultationThumbnail' => [
-            'driver' => 'local',
-            'root' => storage_path('app/public/consultation/thumbnails'),
+            'driver'     => 'local',
+            'root'       => storage_path('app/public/consultation/thumbnails'),
             'visibility' => 'public',
         ],
-        'articleImage' => [
-            'driver' => 'local',
-            'root' => storage_path('app/public/article/images'),
+        'articleImage'          => [
+            'driver'     => 'local',
+            'root'       => storage_path('app/public/article/images'),
             'visibility' => 'public',
         ],
 
         'homeSlideShowPic' => [
-            'driver' => 'local',
-            'root' => storage_path('app/public/slideShow/home'),
+            'driver'     => 'local',
+            'root'       => storage_path('app/public/slideShow/home'),
             'visibility' => 'public',
         ],
 
-//        'articleSlideShowPic' => [
-//            'driver' => 'local',
-//            'root'   => storage_path('app/public/slideShow/article'),
-//            'visibility' => 'public',
-//        ],
+        //        'articleSlideShowPic' => [
+        //            'driver' => 'local',
+        //            'root'   => storage_path('app/public/slideShow/article'),
+        //            'visibility' => 'public',
+        //        ],
 
         'orderFile' => [
-            'driver' => 'local',
-            'root' => storage_path('app/public/orderFiles'),
+            'driver'     => 'local',
+            'root'       => storage_path('app/public/orderFiles'),
             'visibility' => 'public',
         ],
 
         'general' => [
-            'driver' => 'local',
-            'root' => storage_path('app/public/general'),
+            'driver'     => 'local',
+            'root'       => storage_path('app/public/general'),
             'visibility' => 'public',
         ],
 
-        'productFile' => [
-            'driver' => 'local',
-            'root' => storage_path('app/public/product/files'),
+        'productFile'     => [
+            'driver'     => 'local',
+            'root'       => storage_path('app/public/product/files'),
             'visibility' => 'public',
         ],
         'productFileSFTP' => [
-            'driver' => 'sftp',
-            'host' => env('SFTP_HOST', ''),
-            'port' => env('SFTP_PORT', '22'),
-            'username' => env('SFTP_USERNAME', ''),
-            'password' => env('SFTP_PASSSWORD', ''),
+            'driver'     => 'sftp',
+            'host'       => env('SFTP_HOST', ''),
+            'port'       => env('SFTP_PORT', '22'),
+            'username'   => env('SFTP_USERNAME', ''),
+            'password'   => env('SFTP_PASSSWORD', ''),
             'privateKey' => env('SFTP_PRIVATE_KEY_PATH', ''),
-            'root' => env('SFTP_ROOT', ''),
-            'timeout' => env('SFTP_TIMEOUT', '10'),
-            'prefix' => null,
-            'dHost' => "dl.takhtekhak.com/",
-            'dProtocol' => "https://",
+            'root'       => env('SFTP_ROOT', ''),
+            'timeout'    => env('SFTP_TIMEOUT', '10'),
+            'prefix'     => null,
+            'dHost'      => "dl.takhtekhak.com/",
+            'dProtocol'  => "https://",
         ],
-        'alaaCdnSFTP' => [
-            'driver' => 'sftp',
-            'host' => env('SFTP_HOST', ''),
-            'port' => env('SFTP_PORT', '22'),
-            'username' => env('SFTP_USERNAME', ''),
-            'password' => env('SFTP_PASSSWORD', ''),
+        'alaaCdnSFTP'     => [
+            'driver'     => 'sftp',
+            'host'       => env('SFTP_HOST', ''),
+            'port'       => env('SFTP_PORT', '22'),
+            'username'   => env('SFTP_USERNAME', ''),
+            'password'   => env('SFTP_PASSSWORD', ''),
             'privateKey' => env('SFTP_PRIVATE_KEY_PATH', ''),
-            'root' => "/alaa_media/cdn/",
-            'timeout' => env('SFTP_TIMEOUT', '10'),
-            'prefix' => null,
-            'dHost' => "cdn.sanatisharif.ir",
-            'dProtocol' => "https://",
+            'root'       => "/alaa_media/cdn/",
+            'timeout'    => env('SFTP_TIMEOUT', '10'),
+            'prefix'     => null,
+            'dHost'      => "cdn.sanatisharif.ir",
+            'dProtocol'  => "https://",
         ],
 
         'eventReport' => [
-            'driver' => 'local',
-            'root' => storage_path('app/public/event/userReports'),
+            'driver'     => 'local',
+            'root'       => storage_path('app/public/event/userReports'),
             'visibility' => 'public',
         ],
 
         'entekhabReshte' => [
-            'driver' => 'local',
-            'root' => storage_path('app/public/entekhabReshte'),
+            'driver'     => 'local',
+            'root'       => storage_path('app/public/entekhabReshte'),
             'visibility' => 'public',
         ],
 
         'exam' => [
-            'driver' => 'local',
-            'root' => storage_path('app/public/educationalContent/exam'),
+            'driver'     => 'local',
+            'root'       => storage_path('app/public/educationalContent/exam'),
             'visibility' => 'public',
         ],
 
         'examSftp' => [
-            'driver' => 'sftp',
-            'host' => env('SFTP_HOST', ''),
-            'port' => env('SFTP_PORT', '22'),
-            'username' => env('SFTP_USERNAME', ''),
-            'password' => env('SFTP_PASSSWORD', ''),
+            'driver'     => 'sftp',
+            'host'       => env('SFTP_HOST', ''),
+            'port'       => env('SFTP_PORT', '22'),
+            'username'   => env('SFTP_USERNAME', ''),
+            'password'   => env('SFTP_PASSSWORD', ''),
             'privateKey' => env('SFTP_PRIVATE_KEY_PATH', ''),
-            'root' => env('SFTP_ROOT', ''),
-            'timeout' => env('SFTP_TIMEOUT', '10'),
-            'prefix' => '/public/c/exam/',
-            'dHost' => "dl.takhtekhak.com/",
-            'dProtocol' => "https://",
+            'root'       => env('SFTP_ROOT', ''),
+            'timeout'    => env('SFTP_TIMEOUT', '10'),
+            'prefix'     => '/public/c/exam/',
+            'dHost'      => "dl.takhtekhak.com/",
+            'dProtocol'  => "https://",
         ],
 
 
         'pamphlet' => [
-            'driver' => 'local',
-            'root' => storage_path('app/public/content/pamphlet'),
+            'driver'     => 'local',
+            'root'       => storage_path('app/public/content/pamphlet'),
             'visibility' => 'public',
         ],
 
         'pamphletSftp' => [
-            'driver' => 'sftp',
-            'host' => env('SFTP_HOST', ''),
-            'port' => env('SFTP_PORT', '22'),
-            'username' => env('SFTP_USERNAME', ''),
-            'password' => env('SFTP_PASSSWORD', ''),
+            'driver'     => 'sftp',
+            'host'       => env('SFTP_HOST', ''),
+            'port'       => env('SFTP_PORT', '22'),
+            'username'   => env('SFTP_USERNAME', ''),
+            'password'   => env('SFTP_PASSSWORD', ''),
             'privateKey' => env('SFTP_PRIVATE_KEY_PATH', ''),
-            'root' => env('SFTP_ROOT', ''),
-            'timeout' => env('SFTP_TIMEOUT', '10'),
+            'root'       => env('SFTP_ROOT', ''),
+            'timeout'    => env('SFTP_TIMEOUT', '10'),
 
-            'dHost' => "dl.takhtekhak.com/",
+            'dHost'     => "dl.takhtekhak.com/",
             'dProtocol' => "https://",
-            'prefix' => '/public/c/pamphlet/',
+            'prefix'    => '/public/c/pamphlet/',
 
         ],
 
         'book' => [
-            'driver' => 'local',
-            'root' => storage_path('app/public/content/book'),
+            'driver'     => 'local',
+            'root'       => storage_path('app/public/content/book'),
             'visibility' => 'public',
         ],
 
         'bookSftp' => [
-            'driver' => 'sftp',
-            'host' => env('SFTP_HOST', ''),
-            'port' => env('SFTP_PORT', '22'),
-            'username' => env('SFTP_USERNAME', ''),
-            'password' => env('SFTP_PASSSWORD', ''),
+            'driver'     => 'sftp',
+            'host'       => env('SFTP_HOST', ''),
+            'port'       => env('SFTP_PORT', '22'),
+            'username'   => env('SFTP_USERNAME', ''),
+            'password'   => env('SFTP_PASSSWORD', ''),
             'privateKey' => env('SFTP_PRIVATE_KEY_PATH', ''),
-            'root' => env('SFTP_ROOT', ''),
-            'timeout' => env('SFTP_TIMEOUT', '10'),
-            'prefix' => '/public/c/book/',
-            'dHost' => "dl.takhtekhak.com/",
-            'dProtocol' => "https://",
+            'root'       => env('SFTP_ROOT', ''),
+            'timeout'    => env('SFTP_TIMEOUT', '10'),
+            'prefix'     => '/public/c/book/',
+            'dHost'      => "dl.takhtekhak.com/",
+            'dProtocol'  => "https://",
         ],
 
         'digitalSignatureCertificates' => [
-            'driver' => 'local',
-            'root' => storage_path('app/public/digitalSignatures/certificates'),
+            'driver'     => 'local',
+            'root'       => storage_path('app/public/digitalSignatures/certificates'),
             'visibility' => 'public',
         ],
 
         'digitalSignatures' => [
-            'driver' => 'local',
-            'root' => storage_path('app/public/digitalSignatures/signatures'),
+            'driver'     => 'local',
+            'root'       => storage_path('app/public/digitalSignatures/signatures'),
             'visibility' => 'public',
         ],
 
         's3' => [
             'driver' => 's3',
-            'key' => env('AWS_ACCESS_KEY_ID'),
+            'key'    => env('AWS_ACCESS_KEY_ID'),
             'secret' => env('AWS_SECRET_ACCESS_KEY'),
             'region' => env('AWS_DEFAULT_REGION'),
             'bucket' => env('AWS_BUCKET'),
-            'url' => env('AWS_URL'),
+            'url'    => env('AWS_URL'),
         ],
 
     ],

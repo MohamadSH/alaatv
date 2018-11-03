@@ -12,22 +12,24 @@ class WallettypeSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('wallettypes')->delete();
-        $data = array(
-            array(
-                'id' => '1',
-                'name' => 'main',
+        DB::table('wallettypes')
+          ->delete();
+        $data = [
+            [
+                'id'          => '1',
+                'name'        => 'main',
                 'displayName' => 'اصلی',
                 'description' => 'کیف پول اصلی کاربر',
-            ),
-            array(
-                'id' => '2',
-                'name' => 'gift',
+            ],
+            [
+                'id'          => '2',
+                'name'        => 'gift',
                 'displayName' => 'هدیه',
                 'description' => 'کیف پول هدیه کاربر',
-            )
-        );
+            ],
+        ];
 
-        DB::table('wallettypes')->insert($data); // Query Builder
+        DB::table('wallettypes')
+          ->insert($data); // Query Builder
     }
 }

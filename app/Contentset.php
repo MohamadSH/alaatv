@@ -106,7 +106,7 @@ class Contentset extends Model implements Taggable
     {
         $key = "ContentSet:getLastContent" . $this->cacheKey();
         return Cache::tags('set')
-                    ->remember($key, Config::get("constants.CACHE_60"), function () {
+                    ->remember($key, Config::get("constants.CACHE_300"), function () {
                         return $this->contents()
                                     ->active()
                                     ->get()

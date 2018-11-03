@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Schema;
 
 class AlterTableMajorAddMajortype extends Migration
 {
@@ -14,13 +13,16 @@ class AlterTableMajorAddMajortype extends Migration
     public function up()
     {
         Schema::table('majors', function ($table) {
-            $table->unsignedInteger('majortype_id')->nullable()->comment("آی دی مشخص کننده نوع رشته")->after('name');
+            $table->unsignedInteger('majortype_id')
+                  ->nullable()
+                  ->comment("آی دی مشخص کننده نوع رشته")
+                  ->after('name');
 
             $table->foreign('majortype_id')
-                ->references('id')
-                ->on('majortypes')
-                ->onDelete('cascade')
-                ->onupdate('cascade');
+                  ->references('id')
+                  ->on('majortypes')
+                  ->onDelete('cascade')
+                  ->onupdate('cascade');
         });
     }
 

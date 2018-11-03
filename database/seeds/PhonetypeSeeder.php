@@ -12,22 +12,24 @@ class PhonetypeSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('phonetypes')->delete();
-        $data = array(
-            array(
-                'id' => '1',
-                'name' => 'mobile',
+        DB::table('phonetypes')
+          ->delete();
+        $data = [
+            [
+                'id'          => '1',
+                'name'        => 'mobile',
                 'displayName' => 'موبایل',
                 'description' => 'شماره تلفن از نوع موبایل است',
-            ),
-            array(
-                'id' => '2',
-                'name' => 'home',
+            ],
+            [
+                'id'          => '2',
+                'name'        => 'home',
                 'displayName' => 'منزل',
                 'description' => 'شماره تلفن از نوع ثابت است',
-            )
-        );
+            ],
+        ];
 
-        DB::table('phonetypes')->insert($data); // Query Builder
+        DB::table('phonetypes')
+          ->insert($data); // Query Builder
     }
 }

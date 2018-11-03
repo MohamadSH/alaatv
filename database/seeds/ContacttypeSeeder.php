@@ -12,23 +12,25 @@ class ContacttypeSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('contacttypes')->delete();
-        $data = array(
-            array(
-                'id' => '1',
-                'name' => 'simple',
+        DB::table('contacttypes')
+          ->delete();
+        $data = [
+            [
+                'id'          => '1',
+                'name'        => 'simple',
                 'displayName' => 'ساده',
                 'description' => 'دفترچه تلفن از ساده است',
-            ),
+            ],
 
-            array(
-                'id' => '2',
-                'name' => 'emergency',
+            [
+                'id'          => '2',
+                'name'        => 'emergency',
                 'displayName' => 'اضطراری',
                 'description' => 'دفترچه تلفن از اضطراری است',
-            )
-        );
+            ],
+        ];
 
-        DB::table('contacttypes')->insert($data); // Query Builder
+        DB::table('contacttypes')
+          ->insert($data); // Query Builder
     }
 }
