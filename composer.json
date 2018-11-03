@@ -12,6 +12,7 @@
         "doctrine/dbal": "^2.5",
         "econea/nusoap": "v0.9.5.3",
         "fideloper/proxy": "^4.0",
+        "google/apiclient": "^2.0",
         "greggilbert/recaptcha": "^2.1",
         "guzzlehttp/guzzle": "^6.3",
         "iatstuti/laravel-cascade-soft-deletes": "^1.2",
