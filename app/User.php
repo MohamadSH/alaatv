@@ -226,6 +226,26 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     /** Setter mutator for major_id
      * @param $value
      */
+    public function setFirstNameAttribute($value): void
+    {
+        if ($this->strIsEmpty($value)) {
+            $this->attributes["firstName"] = null;
+        }
+    }
+
+    /** Setter mutator for major_id
+     * @param $value
+     */
+    public function setLastNameAttribute($value): void
+    {
+        if ($this->strIsEmpty($value)) {
+            $this->attributes["lastName"] = null;
+        }
+    }
+
+    /** Setter mutator for major_id
+     * @param $value
+     */
     public function setMajorIdAttribute($value): void
     {
         if ($value == 0) {

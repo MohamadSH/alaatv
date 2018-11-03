@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\UserController;
 use App\Http\Middleware\CompleteInfo;
 use App\Traits\CharacterCommon;
 use App\User;
@@ -52,7 +53,7 @@ class LoginController extends Controller
     /**
      * Handle a login request to the application.
      *
-     * @param  LoginRequest $request
+     * @param Request $request
      * @return Response
      */
     public function login(Request $request)
@@ -104,9 +105,9 @@ class LoginController extends Controller
                 $registerRequest = new Request();
                 $registerRequest->offsetSet("mobile" ,  $request->get("mobile"));
                 $registerRequest->offsetSet("nationalCode" , $request->get("password"));
-                $registerRequest->offsetSet("firstName" ,  null);
-                $registerRequest->offsetSet("lastName" , null);
-                $registerController = new RegisterController();
+                $registerRequest->offsetSet("photo" , config('constants.PROFILE_DEFAULT_IMAGE'));
+                $registerRequest->offsetSet("userstatus_id" , 1); //ToDo : to be replaced with constants
+                $registerController = new RegisterController(new UserController());
                 $registerController->register($registerRequest);
             }else
             {

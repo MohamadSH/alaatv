@@ -680,13 +680,14 @@ class UserController extends Controller
             $user = new User();
             $this->fillContentFromRequest($request, $user);
 
+            $done = false;
             if ($user->save())
             {
                 $this->attachRoles($request->get("roles"), $request->user() , $user);
 
                 $responseStatusCode = Response::HTTP_OK;
                 $responseContent = "درج کاربر با موفقیت انجام شد";
-                $storedUserId = $user->id;
+                $done = true;
 
             } else
             {
@@ -697,7 +698,7 @@ class UserController extends Controller
             return $this->response->setStatusCode($responseStatusCode)
                                     ->setContent([
                                             "message" => $responseContent,
-                                            "userId" => (isset($storedUserId) ? $storedUserId : 0)
+                                            "user" => ($done ? $user : null)
                                     ]);
         } catch (\Exception    $e)
         {
