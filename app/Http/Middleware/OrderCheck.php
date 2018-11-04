@@ -43,7 +43,7 @@ class OrderCheck
                 $request->offsetSet("paymentstatus_id", Config::get("constants.PAYMENT_STATUS_UNPAID"));
                 $request->offsetSet("orderstatus_id", Config::get("constants.ORDER_STATUS_OPEN"));
                 $request->offsetSet("user_id", Auth::user()->id);
-                $controller = new OrderController();
+                $controller = new OrderController(new \App\Websitesetting ());
                 $order = $controller->store($request);
 
             } else {

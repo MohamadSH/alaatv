@@ -3,6 +3,7 @@
 
 use App\Http\Controllers\UserController;
 use function GuzzleHttp\Promise\all;
+use Illuminate\Validation\Rule;
 
 trait UserCommon
 {
@@ -166,7 +167,13 @@ trait UserCommon
         return $response;
     }
 
-    public function getInsertUserValidationRules()
+    /**
+     * Returns validation rules for inserting a user
+     *
+     * @param array $data
+     * @return array
+     */
+    public function getInsertUserValidationRules(array $data): array
     {
         $rules = [
             'firstName'     => 'required|max:255',
@@ -174,10 +181,10 @@ trait UserCommon
             'mobile'        => [
                 'required',
                 'digits:11',
-                'phone:AUTO,IR,mobile',
+                Rule::phone()->mobile()->country('AUTO,IR'),
                 \Illuminate\Validation\Rule::unique('users')
-                    ->where(function ($query) {
-                        $query->where('nationalCode', $_REQUEST["nationalCode"])
+                    ->where(function ($query) use ($data) {
+                        $query->where('nationalCode', $data["nationalCode"])
                             ->where('deleted_at', null);
                     }),
             ],
@@ -187,8 +194,8 @@ trait UserCommon
                 'digits:10',
                 'validate:nationalCode',
                 \Illuminate\Validation\Rule::unique('users')
-                    ->where(function ($query) {
-                        $query->where('mobile', $_REQUEST["mobile"])
+                    ->where(function ($query) use ($data) {
+                        $query->where('mobile', $data["mobile"])
                             ->where('deleted_at', null);
                     }),
             ],

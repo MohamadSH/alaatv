@@ -356,16 +356,6 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
         }
     }
 
-    /** Setter mutator for userstatus_id
-     * @param $value
-     */
-    public function setUserstatusIdAttribute($value): void
-    {
-        if ($value == 0) {
-            $this->attributes["userstatus_id"] = null;
-        }
-    }
-
     /** Setter mutator for bloodtype_id
      * @param $value
      */

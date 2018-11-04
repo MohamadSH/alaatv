@@ -611,7 +611,10 @@ class UserController extends Controller
             if ($softDeletedUsers->isNotEmpty()) {
                 $softDeletedUsers->first()
                                  ->restore();
-                return response()->setStatusCode(Response::HTTP_OK);
+                return response(
+                    [] ,
+                    Response::HTTP_OK
+                );
             }
 
             $user = new User();
@@ -619,7 +622,8 @@ class UserController extends Controller
 
             $done = false;
             if ($user->save()) {
-                $this->attachRoles($request->get("roles"), $request->user(), $user);
+                if($request->has("roles"))
+                    $this->attachRoles($request->get("roles"), $request->user(), $user);
 
                 $responseStatusCode = Response::HTTP_OK;
                 $responseContent = "درج کاربر با موفقیت انجام شد";
@@ -630,21 +634,25 @@ class UserController extends Controller
                 $responseContent = "خطا در ذخیره کاربر";
             }
 
-            return response()->setStatusCode($responseStatusCode)
-                                  ->setContent([
-                                                   "message" => $responseContent,
-                                                   "user"    => ($done ? $user : null),
-                                               ]);
+            return response(
+                        [
+                            "message" => $responseContent,
+                            "user"    => ($done ? $user : null),
+                        ] ,
+                        $responseStatusCode
+                    );
         }
         catch (\Exception    $e) {
             $message = "unexpected error";
-            return response()->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR)
-                                  ->setContent([
-                                                   "message" => $message,
-                                                   "error"   => $e->getMessage(),
-                                                   "line"    => $e->getLine(),
-                                                   "file"    => $e->getFile(),
-                                               ]);
+            return response(
+                [
+                    "message" => $message,
+                    "error"   => $e->getMessage(),
+                    "line"    => $e->getLine(),
+                    "file"    => $e->getFile(),
+               ] ,
+             Response::HTTP_INTERNAL_SERVER_ERROR
+        );
         }
 
     }
@@ -667,6 +675,7 @@ class UserController extends Controller
 
         $user->mobile_verified_at = $mobileVerifiedAt ? Carbon::now()
                                                               ->setTimezone("Asia/Tehran") : null;
+
         $user->password = $hasPassword ? bcrypt($request->get("password")) : null;
         $user->lockProfile = $lockProfile ? 1 : 0;
         $user->firstName = $request->get("firstName");
@@ -676,7 +685,6 @@ class UserController extends Controller
         $user->nationalCode = $request->get("nationalCode");
         $user->userstatus_id = $request->get("userstatus_id");
         $user->techCode = $request->get("techCode");
-
         $file = $this->getRequestFile($request, "photo");
         if ($file !== false)
             $this->storePhotoOfUser($user, $file);
@@ -713,11 +721,10 @@ class UserController extends Controller
      * @param User  $staffUser
      * @param User  $user
      */
-    private function attachRoles(array $newRoleIds, User $staffUser, User $user): void
+    private function attachRoles(array $newRoleIds = [], User $staffUser, User $user): void
     {
         if ($staffUser->can(config('constants.INSET_USER_ROLE'))) {
             $oldRoles = $user->roles;
-            $newRoleIds = is_array($newRoleIds) ? $newRoleIds : [];
             $totalRoles = array_merge($oldRoles, $newRoleIds);
             $this->checkGivenRoles($totalRoles, $staffUser);
 
@@ -1183,15 +1190,24 @@ class UserController extends Controller
                     'h'        => '150',
                     'filename' => $user->photo,
                 ]);
-                $response = response()->setStatusCode(Response::HTTP_OK)
-                                           ->setContent(["newPhoto" => $newPhotoSrc]);
+                $response =  response(
+                                [
+                                    "newPhoto" => $newPhotoSrc,
+                                ] ,
+                                Response::HTTP_OK
+                            );
             } else {
                 session()->put("success", "اطلاعات شما با موفقیت اصلاح شد");
             }
         } else {
             if ($request->ajax()) {
                 $isAjax = true;
-                $response = response()->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
+                $response = response(
+                           [
+                               "message" => "Service Unavailable" ,
+                            ],
+                            Response::HTTP_SERVICE_UNAVAILABLE
+                        ) ;
             } else {
                 session()->put("error", \Lang::get("responseText.Database error."));
             }
@@ -1666,7 +1682,12 @@ class UserController extends Controller
 
         if (isset($done))
             if ($done) {
-                return response()->setStatusCode(200);
+                return  response(
+                    [
+                        "message" => "OK",
+                    ] ,
+                    Response::HTTP_OK
+                ) ;
             } else {
                 if (isset($userBonTaken) && $userBonTaken) {
                     foreach ($userbons as $userbon) {
@@ -1682,11 +1703,20 @@ class UserController extends Controller
                         $userbon->update();
                     }
                 }
-                return response()->setStatusCode(503)
-                                      ->setContent(["message" => $message]);
+                return  response(
+                            [
+                                ["message" => $message],
+                            ] ,
+                            Response::HTTP_SERVICE_UNAVAILABLE
+                );
+
             } else
-            return response()->setStatusCode(503)
-                                  ->setContent(["message" => "عملیاتی انجام نشد"]);
+                return response(
+                    [
+                        ["message" => "عملیاتی انجام نشد"],
+                    ] ,
+                    Response::HTTP_SERVICE_UNAVAILABLE
+                );
     }
 
     /**
@@ -1729,7 +1759,10 @@ class UserController extends Controller
             if ($order->user_id != $request->user()->id)
                 abort(403);
         } else {
-            return response()->setStatusCode(422);
+            return response(
+                [] ,
+                Response::HTTP_UNPROCESSABLE_ENTITY
+            ) ;
         }
         /**
          * User's basic info
@@ -1872,7 +1905,8 @@ class UserController extends Controller
         $this->fillContentFromRequest($request, $user);
 
         if ($user->update()) {
-            $this->attachRoles($request->get("roles"), $request->user(), $user);
+            $request->has("roles");
+                $this->attachRoles($request->get("roles"), $request->user(), $user);
 
             $message = "اطلاعات با موفقیت اصلاح شد";
             if ($request->ajax()) {
@@ -1890,8 +1924,12 @@ class UserController extends Controller
         }
 
         if ($request->ajax())
-            return response()->setStatusCode($status)
-                                  ->setContent(["message" => $message]);
+            return response(
+                [
+                    "message" => $message
+                ] ,
+                $status
+            );
         else
             return redirect()->back();
     }

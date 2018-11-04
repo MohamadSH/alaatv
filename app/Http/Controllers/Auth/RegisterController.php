@@ -94,7 +94,7 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
-        $totalUserrules = $this->getInsertUserValidationRules();
+        $totalUserrules = $this->getInsertUserValidationRules($data);
         $rules = [
             "mobile" => $totalUserrules["mobile"],
             "nationalCode" => $totalUserrules["nationalCode"],
@@ -115,8 +115,7 @@ class RegisterController extends Controller
         $response = $this->callUserControllerStore($data);
         $responseContent = json_decode($response->getContent());
         $user = $responseContent->user;
-
-        return $user;
+        return User::Find($user->id);
     }
 
 }
