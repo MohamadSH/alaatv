@@ -1669,7 +1669,7 @@ class OrderController extends Controller
             // the new order was not created and no action is necessary.in fact he just lost his last order to add to.
         }
 
-        if ($request->has("fromAPI")) {
+        if ($request->ajax()) {
             if (!$failed)
                 return $this->response
                     ->setStatusCode(200);

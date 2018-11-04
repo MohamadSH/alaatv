@@ -4781,7 +4781,7 @@ class HomeController extends Controller
                                         $request->offsetSet("gender_id", 2);
                                     }
                                 }
-                                $request->offsetSet("fromAPI", true);
+                                $request->headers->add(["X-Requested-With" => "XMLHttpRequest"]);
                                 $response = $this->registerUserAndGiveOrderproduct($request);
                                 if ($response->getStatusCode() == 200) {
                                     $counter++;
@@ -4984,7 +4984,7 @@ class HomeController extends Controller
             } else
                 session()->put("error", $giftOrderMessage);
 
-            if ($request->has("fromAPI")) {
+            if ($request->ajax()) {
                 if ($giftOrderDone) {
                     return $this->response
                         ->setStatusCode(200);

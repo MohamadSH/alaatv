@@ -1875,21 +1875,21 @@ class UserController extends Controller
             $this->attachRoles($request->get("roles"), $request->user(), $user);
 
             $message = "اطلاعات با موفقیت اصلاح شد";
-            if ($request->has("fromAPI")) {
+            if ($request->ajax()) {
                 $status = Response::HTTP_OK;
             } else {
                 session()->put("success", $message);
             }
         } else {
             $message = \Lang::get("responseText.Database error.");
-            if ($request->has("fromAPI")) {
+            if ($request->ajax()) {
                 $status = Response::HTTP_SERVICE_UNAVAILABLE;
             } else {
                 session()->put("error", $message);
             }
         }
 
-        if ($request->has("fromAPI"))
+        if ($request->ajax())
             return response()->setStatusCode($status)
                                   ->setContent(["message" => $message]);
         else
@@ -1948,7 +1948,7 @@ class UserController extends Controller
                 $updateRequest->offsetSet("lastName", $request->get("lastName"));
             $updateRequest->offsetSet("major_id", $request->get("major_id"));
             $updateRequest->offsetSet("grade_id", $request->get("grade_id"));
-            $updateRequest->offsetSet("fromAPI", 1);
+            $updateRequest->headers->add(["X-Requested-With" => "XMLHttpRequest"]);
             $response = $this->update($updateRequest, $user);
             if ($response->getStatusCode() == 503) {
                 session()->put("error", "خطایی در ثبت اطلاعات شما رخ داد. لطفا مجددا اقدام نمایید");
@@ -1966,7 +1966,7 @@ class UserController extends Controller
             $evenResultRequest->offsetSet("user_id", $user->id);
             $evenResultRequest->offsetSet("event_id", $event->id);
             $evenResultRequest->offsetSet("participationCodeHash", $request->get("score"));
-            $evenResultRequest->offsetSet("fromAPI", 1);
+            $evenResultRequest->headers->add(["X-Requested-With" => "XMLHttpRequest"]);
             $response = $eventResultController->store($evenResultRequest);
             if ($response->getStatusCode() == 503) {
                 session()->put("error", "خطایی در ثبت نام شما رخ داد. لطفا مجددا اقدام نمایید");
@@ -2095,7 +2095,7 @@ class UserController extends Controller
         }
 
         $updateRequest = new EditUserRequest();
-        $updateRequest->offsetSet("fromAPI", 1);
+        $updateRequest->headers->add(["X-Requested-With" => "XMLHttpRequest"]);
         $updateRequest->offsetSet("postalCode", $request->get("postalCode"));
         $updateRequest->offsetSet("email", $request->get("email"));
         $updateRequest->offsetSet("gender_id", $request->get("gender_id"));

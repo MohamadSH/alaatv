@@ -89,7 +89,7 @@ trait HasWallet
 
             $request->offsetSet("user_id", $this->id);
             $request->offsetSet("wallettype_id", $walletType);
-            $request->offsetSet("fromAPI", 1);
+            $request->headers->add(["X-Requested-With" => "XMLHttpRequest"]);
             $response = $walletController->store($request);
             if ($response->getStatusCode() == 200) {
                 $result = json_decode($response->getContent());
@@ -158,7 +158,7 @@ trait HasWallet
 
             $request->offsetSet("user_id", $this->id);
             $request->offsetSet("wallettype_id", $walletType);
-            $request->offsetSet("fromAPI", 1);
+            $request->headers->add(["X-Requested-With" => "XMLHttpRequest"]);
             $response = $walletController->store($request);
             if ($response->getStatusCode() == 200) {
                 $result = json_decode($response->getContent());
