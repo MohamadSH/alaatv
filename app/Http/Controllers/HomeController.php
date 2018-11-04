@@ -6,11 +6,11 @@ use App\{Assignmentstatus,
     Attribute,
     Attributecontrol,
     Attributeset,
-    Block,
     Bon,
     Category,
     Checkoutstatus,
     Classes\Format\BlockCollectionFormatter,
+    Classes\Report\GaReportFactory,
     Classes\Search\ContentSearch,
     Consultationstatus,
     Content,
@@ -189,9 +189,43 @@ class HomeController extends Controller
 
     }
 
+    function printResults(&$reports)
+    {
+        for ($reportIndex = 0; $reportIndex < count($reports); $reportIndex++) {
+            $report = $reports[$reportIndex];
+            $header = $report->getColumnHeader();
+            $dimensionHeaders = $header->getDimensions();
+            $metricHeaders = $header->getMetricHeader()
+                                    ->getMetricHeaderEntries();
+            $rows = $report->getData()
+                           ->getRows();
+
+            for ($rowIndex = 0; $rowIndex < count($rows); $rowIndex++) {
+                $row = $rows[$rowIndex];
+                $dimensions = $row->getDimensions();
+                $metrics = $row->getMetrics();
+                for ($i = 0; $i < count($dimensionHeaders) && $i < count($dimensions); $i++) {
+                    print($dimensionHeaders[$i] . ": " . $dimensions[$i] . "\n");
+                }
+
+                for ($j = 0; $j < count($metrics); $j++) {
+                    $values = $metrics[$j]->getValues();
+                    for ($k = 0; $k < count($values); $k++) {
+                        $entry = $metricHeaders[$k];
+                        print($entry->getName() . ": " . $values[$k] . "\n");
+                    }
+                }
+            }
+        }
+    }
+
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
-        return $formatter->format(Block::getBlocks());
+        $out = (new GaReportFactory())->createGaReportGetUsersFromPageView()
+                                      ->getReport('/c/6560');
+        dump("here!");
+        dd($out);
+        //        return $formatter->format(Block::getBlocks());
         dump($request->route('ab'));
         dd("Done!");
 

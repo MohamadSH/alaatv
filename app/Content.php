@@ -266,6 +266,20 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
     */
 
     /**
+     *
+     * @param $value
+     *
+     * @return mixed
+     */
+    public function getPage_viewAttribute($value){
+        return json_decode($value);
+    }
+
+    public function getPageViewAttribute(){
+        return $this->page_view->page_views;
+    }
+
+    /**
      * Get the content's title .
      *
      * @param $value
@@ -586,6 +600,15 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
         $explodedDateTime = explode(" ", $this->validSince);
         $explodedTime = $explodedDateTime[1];
         return $this->convertDate($this->validSince, "toJalali") . " " . $explodedTime;
+    }
+
+    /**
+     * Set th content's page_view.
+     *
+     * @param $input
+     */
+    public function setPage_viewAttribute($input){
+        $this->attributes['page_view'] = json_encode($input, JSON_UNESCAPED_UNICODE);
     }
 
     /**
