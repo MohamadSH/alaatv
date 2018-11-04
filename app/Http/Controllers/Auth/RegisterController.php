@@ -94,29 +94,13 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
-        return Validator::make($data, [
-            //ToDo : Should be included from a common file with UserController@store
-            'mobile'       => [
-                'required',
-                'digits:11',
-//                'phone:AUTO,IR,mobile',
-                Rule::unique('users')
-                    ->where(function ($query) use ($data) {
-                        $query->where('nationalCode', $data["nationalCode"])
-                              ->where('deleted_at', null);
-                    }),
-            ],
-            'nationalCode' => [
-                'required',
-                'digits:10',
-                'validate:nationalCode',
-                Rule::unique('users')
-                    ->where(function ($query) use ($data) {
-                        $query->where('mobile', $data["mobile"])
-                              ->where('deleted_at', null);
-                    }),
-            ],
-        ]);
+        $totalUserrules = $this->getInsertUserValidationRules();
+        $rules = [
+            "mobile" => $totalUserrules["mobile"],
+            "nationalCode" => $totalUserrules["nationalCode"],
+        ];
+
+        return Validator::make($data, $rules);
     }
 
     /**
