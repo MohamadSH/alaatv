@@ -14,7 +14,8 @@ use App\Traits\Helper;
 use App\Traits\MustVerifyMobileNumberTrait;
 use Carbon\Carbon;
 use Iatstuti\Database\Support\CascadeSoftDeletes;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -502,11 +503,11 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     |--------------------------------------------------------------------------
     */
     /**
-     * Get user's orders that user is allowed to see
+     * Get user's orders that he is allowed to see
      *
-     * @return Builder
+     * @return HasMany
      */
-    public function getShowableOrders():Builder
+    public function getShowableOrders():HasMany
     {
         $excludedOrderStatuses = [
             config("constants.ORDER_STATUS_OPEN"),
@@ -519,9 +520,11 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     }
 
     /**
-     * @return Builder
+     * Gets user's transactions that he is allowed to see
+     *
+     * @return HasManyThrough
      */
-    public function getShowableTransactions():Builder
+    public function getShowableTransactions():HasManyThrough
     {
         $showableTransactionStatuses = [
             config("constants.TRANSACTION_STATUS_SUCCESSFUL"),
@@ -537,7 +540,12 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
         return $transactions;
     }
 
-    public function getInstalments()
+    /**
+     * Gets user's instalments
+     *
+     * @return HasManyThrough
+     */
+    public function getInstalments():HasManyThrough
     {
         //ToDo : to be tested
         return $this->orderTransactions()
