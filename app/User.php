@@ -9,17 +9,19 @@ use App\Collection\UserCollection;
 use App\Traits\APIRequestCommon;
 use App\Traits\DateTrait;
 use App\Traits\HasWallet;
+use App\Traits\CharacterCommon;
 use App\Traits\Helper;
 use App\Traits\MustVerifyMobileNumberTrait;
 use Carbon\Carbon;
 use Iatstuti\Database\Support\CascadeSoftDeletes;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\{Auth, Cache, Config, DB};
 use Laratrust\Traits\LaratrustUserTrait;
 use Schema;
-
+use Hash;
 
 /**
  * App\User
@@ -230,6 +232,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     use HasWallet;
     use Notifiable;
     use APIRequestCommon;
+    use CharacterCommon;
 
     /*
     |--------------------------------------------------------------------------
@@ -292,13 +295,6 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
      * @var array
      */
     protected $fillable = [
-        'firstName',
-        'lastName',
-        'nameSlug',
-        'mobile',
-        'password',
-        'nationalCode',
-        'photo',
         'province',
         'city',
         'address',
@@ -308,7 +304,6 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
         'grade_id',
         'birthdate',
         'gender_id',
-        'userstatus_id',
         'email',
         'bio',
         'introducedBy',
@@ -330,11 +325,294 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
         'remember_token',
     ];
 
+    /** Setter mutator for major_id
+     * @param $value
+     */
+    public function setFirstNameAttribute($value): void
+    {
+        if ($this->strIsEmpty($value)) {
+            $this->attributes["firstName"] = null;
+        }
+    }
+
+    /** Setter mutator for major_id
+     * @param $value
+     */
+    public function setLastNameAttribute($value): void
+    {
+        if ($this->strIsEmpty($value)) {
+            $this->attributes["lastName"] = null;
+        }
+    }
+
+    /** Setter mutator for major_id
+     * @param $value
+     */
+    public function setMajorIdAttribute($value): void
+    {
+        if ($value == 0) {
+            $this->attributes["major_id"] = null;
+        }
+    }
+
+    /** Setter mutator for userstatus_id
+     * @param $value
+     */
+    public function setUserstatusIdAttribute($value): void
+    {
+        if ($value == 0) {
+            $this->attributes["userstatus_id"] = null;
+        }
+    }
+
+    /** Setter mutator for bloodtype_id
+     * @param $value
+     */
+    public function setBloodtypeIdAttribute($value): void
+    {
+        if ($value == 0) {
+            $this->attributes["bloodtype_id"] = null;
+        }
+    }
+
+    /** Setter mutator for grade_id
+     * @param $value
+     */
+    public function setGenderIdAttribute($value): void
+    {
+        if ($value == 0) {
+            $this->attributes["gender_id"] = null;
+        }
+    }
+
+    /** Setter mutator for grade_id
+     * @param $value
+     */
+    public function setGradeIdAttribute($value): void
+    {
+        if ($value == 0) {
+            $this->attributes["grade_id"] = null;
+        }
+    }
+
+    /** Setter mutator for email
+     * @param $value
+     */
+    public function setEmailAttribute($value): void
+    {
+        if ($this->strIsEmpty($value)) {
+            $this->attributes["email"] = null;
+        }
+    }
+
+    /** Setter mutator for phone
+     * @param $value
+     */
+    public function setPhoneAttribute($value): void
+    {
+        if ($this->strIsEmpty($value)) {
+            $this->attributes["phone"] = null;
+        }
+    }
+
+    /** Setter mutator for city
+     * @param $value
+     */
+    public function setCityAttribute($value): void
+    {
+        if ($this->strIsEmpty($value)) {
+            $this->attributes["city"] = null;
+        }
+    }
+
+    /** Setter mutator for province
+     * @param $value
+     */
+    public function setProvinceAttribute($value): void
+    {
+        if ($this->strIsEmpty($value)) {
+            $this->attributes["province"] = null;
+        }
+    }
+
+    /** Setter mutator for address
+     * @param $value
+     */
+    public function setAddressAttribute($value): void
+    {
+        if ($this->strIsEmpty($value)) {
+            $this->attributes["address"] = null;
+        }
+    }
+
+    /** Setter mutator for postalCode
+     * @param $value
+     */
+    public function setPostalCodeAttribute($value): void
+    {
+        if ($this->strIsEmpty($value)) {
+            $this->attributes["postalCode"] = null;
+        }
+    }
+
+    /** Setter mutator for school
+     * @param $value
+     */
+    public function setSchoolAttribute($value): void
+    {
+        if ($this->strIsEmpty($value)) {
+            $this->attributes["school"] = null;
+        }
+    }
+
+    /** Setter mutator for allergy
+     * @param $value
+     */
+    public function setAllergyAttribute($value): void
+    {
+        if ($this->strIsEmpty($value)) {
+            $this->attributes["allergy"] = null;
+        }
+    }
+
+    /** Setter mutator for medicalCondition
+     * @param $value
+     */
+    public function setMedicalConditionAttribute($value): void
+    {
+        if ($this->strIsEmpty($value)) {
+            $this->attributes["medicalCondition"] = null;
+        }
+    }
+
+    /** Setter mutator for discount
+     * @param $value
+     */
+    public function setDietAttribute($value): void
+    {
+        if ($this->strIsEmpty($value)) {
+            $this->attributes["diet"] = null;
+        }
+    }
+
+
     /*
     |--------------------------------------------------------------------------
     | scope methods
     |--------------------------------------------------------------------------
     */
+    /**
+     * Get user's orders that user is allowed to see
+     *
+     * @return Builder
+     */
+    public function getShowableOrders():Builder
+    {
+        $excludedOrderStatuses = [
+            config("constants.ORDER_STATUS_OPEN"),
+            config("constants.ORDER_STATUS_OPEN_BY_ADMIN"),
+            config("constants.ORDER_STATUS_OPEN_BY_WALLET"),
+            config("constants.ORDER_STATUS_OPEN_DONATE"),
+        ];
+        return $this->orders()
+            ->whereNotIn("orderstatus_id", $excludedOrderStatuses);
+    }
+
+    /**
+     * @return Builder
+     */
+    public function getShowableTransactions():Builder
+    {
+        $showableTransactionStatuses = [
+            config("constants.TRANSACTION_STATUS_SUCCESSFUL"),
+            config("constants.TRANSACTION_STATUS_ARCHIVED_SUCCESSFUL"),
+            config("constants.TRANSACTION_STATUS_PENDING"),
+        ];
+        $transactions = $this->orderTransactions()
+            ->whereDoesntHave("parents")
+            ->where(function ($q) use ($showableTransactionStatuses)
+            {
+                $q->whereIn("transactionstatus_id", $showableTransactionStatuses);
+            });
+        return $transactions;
+    }
+
+    public function getInstalments()
+    {
+        //ToDo : to be tested
+        return $this->orderTransactions()
+            ->whereDoesntHave("parents")
+            ->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_UNPAID"));
+    }
+
+    /**
+     *
+     */
+    public function getReverseFullNameAttribute()
+    {
+        return ucfirst($this->lastName) . ' ' . ucfirst($this->firstName);
+    }
+
+    public function getLottery()
+    {
+        $exchangeAmount = 0;
+        $userPoints = 0;
+        $userLottery = null;
+        $prizeCollection = collect();
+        $lotteryRank = null;
+        $lottery = null;
+        $lotteryMessage = "";
+        $lotteryName = "";
+
+        $now = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now());
+        $startTime2 = Carbon::create(2018, 06, 15, 07, 00, 00, 'Asia/Tehran');
+        $endTime2 = Carbon::create(2018, 06, 15, 23, 59, 30, 'Asia/Tehran');
+        $flag2 = ($now->between($startTime2, $endTime2));
+        if ($flag2) {
+            $bon = Bon::where("name", Config::get("constants.BON2"))->first();
+            $userPoints = 0;
+            if (isset($bon)) {
+                $userPoints = $this->userHasBon($bon->name);
+                $exchangeAmount = $userPoints * config("constants.HAMAYESH_LOTTERY_EXCHANGE_AMOUNT");
+            }
+            if ($userPoints <= 0) {
+                $lottery = Lottery::where("name", Config::get("constants.LOTTERY_NAME"))->get()->first();
+                if (isset($lottery)) {
+                    $userLottery = $this->lotteries()->where("lottery_id", $lottery->id)->get()->first();
+                    if (isset($userLottery)) {
+                        $lotteryName = $lottery->displayName;
+                        $lotteryMessage = "شما در قرعه کشی " . $lotteryName . " شرکت داده شدید و متاسفانه برنده نشدید.";
+                        if (isset($userLottery->pivot->prizes)) {
+                            $lotteryRank = $userLottery->pivot->rank;
+                            if ($lotteryRank == 0) {
+                                $lotteryMessage = "شما از قرعه کشی " . $lotteryName . " انصراف دادید.";
+                            } else {
+                                $lotteryMessage = "شما در قرعه کشی " . $lotteryName . " برنده " . $lotteryRank . " شدید.";
+                            }
+
+                            $prizes = json_decode($userLottery->pivot->prizes)->items;
+                            $prizeCollection = collect();
+                            foreach ($prizes as $prize) {
+                                if (isset($prize->objectId)) {
+                                    $id = $prize->objectId;
+                                    $model_name = $prize->objectType;
+                                    $model = new $model_name;
+                                    $modelObject = $model->find($id);
+
+                                    $prizeCollection->push(["name" => $prize->name]);
+                                } else {
+                                    $prizeCollection->push(["name" => $prize->name]);
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+
+        return [$exchangeAmount, $userPoints, $userLottery, $prizeCollection, $lotteryRank, $lottery, $lotteryMessage, $lotteryName];
+    }
 
     /**
      * @return UserCollection
@@ -787,33 +1065,6 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
 
     }
 
-    public function getfullName($mode = "firstNameFirst")
-    {
-        $fullName = "";
-        switch ($mode) {
-            case "firstNameFirst":
-                if (isset($this->firstName[0]) || isset($this->lastName[0])) {
-                    if (isset($this->firstName[0]))
-                        $fullName .= $this->firstName . " ";
-                    if (isset($this->lastName[0]))
-                        $fullName .= $this->lastName;
-
-                }
-                break;
-            case "lastNameFirst":
-                if (isset($this->firstName[0]) || isset($this->lastName[0])) {
-                    if (isset($this->firstName[0]))
-                        $fullName .= $this->lastName . " ";
-                    if (isset($this->lastName[0]))
-                        $fullName .= $this->firstName;
-                }
-                break;
-            default:
-                break;
-        }
-
-        return $fullName;
-    }
 
     public function getFullNameAttribute($value)
     {
@@ -939,5 +1190,41 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
             return false;
         }
         return true;
+    }
+
+    /**
+     * Locks user's profile
+     */
+    public function lockProfile(): void
+    {
+        $this->lockProfile = 1;
+    }
+
+    /**
+     * Compares user's password with a new password
+     *
+     * @param $password
+     * @return bool
+     *  True : equal / False : not equal
+     */
+    public function compareWithCurrentPassword($password) : bool
+    {
+        if (Hash::check($password, $this->password))
+        {
+            $result = true;
+        }else
+        {
+            $result = false;
+        }
+
+        return $result ;
+    }
+
+    /**
+     * @param $newPassword
+     */
+    public function changePassword($newPassword):void
+    {
+        $this->fill(['password' => bcrypt($newPassword)]);
     }
 }

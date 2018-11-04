@@ -94,6 +94,7 @@ class UserController extends Controller
         $this->callMiddlewares([]);
     }
 
+
     /**
      * @param Agent $agent
      *
@@ -811,30 +812,36 @@ class UserController extends Controller
      */
     public function userOrders(Request $request)
     {
-        $debitCard = Bankaccount::all()
-                                ->where("user_id", 2)
-                                ->first();
+        $debitCard = Bankaccount::all()->where("user_id", 2)->first();
 
         $user = $request->user();
-        $orders = $user->getShowableOrders()
-                       ->get()
-                       ->sortByDesc("completed_at");
 
-        $transactions = $user->getShowableTransactions()
-                             ->get()
-                             ->sortByDesc("completed_at")
-                             ->groupBy("order_id");
+        $key = "user:orders:" . $user->cacheKey();
+        $orders = Cache::remember($key, config("constants.CACHE_60"), function () use ($user)
+        {
+            return  $user->getShowableOrders()->get()->sortByDesc("completed_at");
+        });
 
-        $instalments = $this->getInstalments($orders)
-                            ->get()
-                            ->sortBy("deadline_at");
+        $key = "user:transactions:" . $user->cacheKey();
+        $transactions = Cache::remember($key, config("constants.CACHE_60"), function () use ($user)
+        {
+            return $user->getShowableTransactions()->get()->sortByDesc("completed_at")->groupBy("order_id");
+        });
 
-        $gateways = Transactiongateway::enable()
-                                      ->get()
-                                      ->sortBy("order")
-                                      ->pluck("displayName", "name");
+        $key = "user:instalments:" . $user->cacheKey();
+        $instalments = Cache::remember($key, config("constants.CACHE_60"), function () use ($user)
+        {
+            return $user->getInstalments()->get()->sortBy("deadline_at");
+        });
 
-        $orderCoupons = $orders->getCoupons();
+        $gateways = Transactiongateway::enable()->get()
+            ->sortBy("order")
+            ->pluck("displayName", "name");
+
+        $key = "user:orderCoupons:" . $user->cacheKey() . ":Orders=" . md5($orders->pluck("id")->implode('-'));
+        $orderCoupons = Cache::remember($key, config("constants.CACHE_60"), function () use ($orders) {
+            return $orders->getCoupons();
+        });
 
         return view("user.ordersList", compact("orders", "gateways", "debitCard", "transactions", "instalments", "orderCoupons"));
     }
