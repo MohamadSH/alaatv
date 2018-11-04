@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\UserController;
 use App\Http\Requests\InsertUserRequest;
-use App\Traits\{CharacterCommon, Helper};
+use App\Traits\{CharacterCommon, Helper, UserCommon};
 use App\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -18,6 +18,7 @@ class RegisterController extends Controller
 {
     use CharacterCommon;
     use Helper;
+    use UserCommon;
     /*
     |--------------------------------------------------------------------------
     | Register Controller
@@ -37,18 +38,16 @@ class RegisterController extends Controller
      * @var string
      */
     protected $redirectTo;
-    protected $userController;
 
     /**
      * Create a new controller instance.
      *
      * @param UserController $userController
      */
-    public function __construct(UserController $userController)
+    public function __construct()
     {
         $this->middleware('guest');
         $this->redirectTo = action("ProductController@search");
-        $this->userController = $userController;
     }
 
     /**
@@ -100,7 +99,7 @@ class RegisterController extends Controller
             'mobile'       => [
                 'required',
                 'digits:11',
-                'phone:AUTO,IR,mobile',
+//                'phone:AUTO,IR,mobile',
                 Rule::unique('users')
                     ->where(function ($query) use ($data) {
                         $query->where('nationalCode', $data["nationalCode"])
@@ -129,10 +128,7 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $storeUserRequest = new InsertUserRequest();
-        $storeUserRequest->merge($data);
-        $storeUserRequest->headers->add(["X-Requested-With" => "XMLHttpRequest"]); //ToDo : to be tested
-        $response = $this->userController->store($storeUserRequest);
+        $response = $this->callUserControllerStore($data);
         $responseContent = json_decode($response->getContent());
         $user = $responseContent->user;
 

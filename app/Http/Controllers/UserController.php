@@ -86,12 +86,11 @@ class UserController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    public function __construct(Agent $agent, Websitesetting $setting, Response $response)
+    public function __construct(Agent $agent, Websitesetting $setting)
     {
-        $this->response = $response;
         $this->setting = $setting->setting;
         $authException = $this->getAuthExceptionArray($agent);
-        $this->callMiddlewares([]);
+        $this->callMiddlewares($authException);
     }
 
 
@@ -612,7 +611,7 @@ class UserController extends Controller
             if ($softDeletedUsers->isNotEmpty()) {
                 $softDeletedUsers->first()
                                  ->restore();
-                return $this->response->setStatusCode(Response::HTTP_OK);
+                return response()->setStatusCode(Response::HTTP_OK);
             }
 
             $user = new User();
@@ -631,7 +630,7 @@ class UserController extends Controller
                 $responseContent = "خطا در ذخیره کاربر";
             }
 
-            return $this->response->setStatusCode($responseStatusCode)
+            return response()->setStatusCode($responseStatusCode)
                                   ->setContent([
                                                    "message" => $responseContent,
                                                    "user"    => ($done ? $user : null),
@@ -639,7 +638,7 @@ class UserController extends Controller
         }
         catch (\Exception    $e) {
             $message = "unexpected error";
-            return $this->response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR)
+            return response()->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR)
                                   ->setContent([
                                                    "message" => $message,
                                                    "error"   => $e->getMessage(),
@@ -1184,7 +1183,7 @@ class UserController extends Controller
                     'h'        => '150',
                     'filename' => $user->photo,
                 ]);
-                $response = $this->response->setStatusCode(Response::HTTP_OK)
+                $response = response()->setStatusCode(Response::HTTP_OK)
                                            ->setContent(["newPhoto" => $newPhotoSrc]);
             } else {
                 session()->put("success", "اطلاعات شما با موفقیت اصلاح شد");
@@ -1192,7 +1191,7 @@ class UserController extends Controller
         } else {
             if ($request->ajax()) {
                 $isAjax = true;
-                $response = $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
+                $response = response()->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
             } else {
                 session()->put("error", \Lang::get("responseText.Database error."));
             }
@@ -1667,7 +1666,7 @@ class UserController extends Controller
 
         if (isset($done))
             if ($done) {
-                return $this->response->setStatusCode(200);
+                return response()->setStatusCode(200);
             } else {
                 if (isset($userBonTaken) && $userBonTaken) {
                     foreach ($userbons as $userbon) {
@@ -1683,10 +1682,10 @@ class UserController extends Controller
                         $userbon->update();
                     }
                 }
-                return $this->response->setStatusCode(503)
+                return response()->setStatusCode(503)
                                       ->setContent(["message" => $message]);
             } else
-            return $this->response->setStatusCode(503)
+            return response()->setStatusCode(503)
                                   ->setContent(["message" => "عملیاتی انجام نشد"]);
     }
 
@@ -1730,7 +1729,7 @@ class UserController extends Controller
             if ($order->user_id != $request->user()->id)
                 abort(403);
         } else {
-            return $this->response->setStatusCode(422);
+            return response()->setStatusCode(422);
         }
         /**
          * User's basic info
@@ -1891,7 +1890,7 @@ class UserController extends Controller
         }
 
         if ($request->has("fromAPI"))
-            return $this->response->setStatusCode($status)
+            return response()->setStatusCode($status)
                                   ->setContent(["message" => $message]);
         else
             return redirect()->back();

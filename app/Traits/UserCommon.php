@@ -1,6 +1,9 @@
 <?php namespace App\Traits;
 
 
+use App\Http\Controllers\UserController;
+use function GuzzleHttp\Promise\all;
+
 trait UserCommon
 {
     /**
@@ -151,5 +154,15 @@ trait UserCommon
         return \App\Transaction::whereIn("order_id", $orders->pluck("id"))
                                ->whereDoesntHave("parents")
                                ->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_UNPAID"));
+    }
+
+    public function callUserControllerStore($data)
+    {
+        $storeUserRequest = new \App\Http\Requests\InsertUserRequest();
+        $storeUserRequest->merge($data);
+        $storeUserRequest->headers->add(["X-Requested-With" => "XMLHttpRequest"]);
+        $userController = new UserController(new \Jenssegers\Agent\Agent(), new \App\Websitesetting());
+        $response = $userController->store($storeUserRequest);
+        return $response;
     }
 }
