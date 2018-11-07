@@ -147,7 +147,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('removeArabiHozouri', 'OrderController@removeArabiHozouri');
         Route::get('uploadQuestion', 'UserController@uploadConsultingQuestion')
              ->middleware('completeInfo');
-        Route::put('updateProfileAtLogin', 'UserController@updateProfileAtLogin');
+        Route::post('updateProfileAtLogin', 'UserController@updateProfileAtLogin');
         Route::put('updatePassword', 'UserController@updatePassword');
         Route::get('orders', 'UserController@userOrders');
         Route::get('question', 'UserController@uploads');

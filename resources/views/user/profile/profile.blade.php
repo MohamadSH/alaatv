@@ -86,18 +86,19 @@
                                             اطلاعات شخصی
                                         </a>
                                     </li>
-                                    @permission((Config::get('constants.EDIT_USER_ACCESS')))
-                                    <li @if(strcmp(session('tabPane') , "tab_1_3") == 0) {{ "class=active" }} @endif>
-                                        <a href="#tab_1_3" data-toggle="tab">تغییر رمز عبور</a>
-                                    </li>
-                                    @endpermission
+                                    {{--For re-enabling first you need to complete updating password in UserController@update (using the existed snippet)--}}
+                                    {{--@permission((Config::get('constants.EDIT_USER_ACCESS')))--}}
+                                    {{--<li @if(strcmp(session('tabPane') , "tab_1_3") == 0) {{ "class=active" }} @endif>--}}
+                                        {{--<a href="#tab_1_3" data-toggle="tab">تغییر رمز عبور</a>--}}
+                                    {{--</li>--}}
+                                    {{--@endpermission--}}
                                 </ul>
                             </div>
 
                             <div class="portlet-body">
                                 <div class="tab-content">
                                     <!-- PERSONAL INFO TAB -->
-                                    <div class="tab-pane" id="tab_1_1">
+                                    <div class="tab-pane active" id="tab_1_1">
                                         @if(!$user->lockProfile)
                                             @include('user.profile.profileEditView' , ["withBio"=>true , "withBirthdate"=>false , "withIntroducer"=>false , "text2"=>"کاربر گرامی ، پس از تکمیل اطلاعات شخصی(فیلد های پایین) امکان اصلاح اطلاعات ثبت شده وجود نخواهد داشت. لذا خواهشمند هستیم این اطلاعات را در صحت و دقت کامل تکمیل نمایید . باتشکر"])
                                         @else
@@ -106,97 +107,93 @@
                                     </div>
                                     <!-- END PERSONAL INFO TAB -->
                                     <!-- CHANGE PASSWORD TAB -->
-                                    <div class="tab-pane" id="tab_1_3">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <!-- BEGIN Portlet PORTLET-->
-                                                <div class="portlet light bg-inverse">
-                                                    <div class="portlet-title">
-                                                        <div class="caption font-purple-plum">
-                                                            <span class="caption-subject bold uppercase"> درخواست رمز عبور اتوماتیک</span>
-                                                            <span class="caption-helper">ارسال از طریق پیامک</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="portlet-body">
-                                                        <div class="row">
-                                                            <form action="{{ action("UserController@sendGeneratedPassword") }}"
-                                                                  method="post">
-                                                                {{ csrf_field() }}
-                                                                <div class="form-actions">
-                                                                    برای ارسال پیامک رمز عبور جدید بر روی این دکمه کلیک
-                                                                    کنید
-                                                                    <button type="submit" class="btn yellow">ارسال پیامک
-                                                                        رمز عبور
-                                                                    </button>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- END Portlet PORTLET-->
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <!-- BEGIN Portlet PORTLET-->
-                                                <div class="portlet light bg-inverse">
-                                                    <div class="portlet-title">
-                                                        <div class="caption font-purple-plum">
-                                                            <span class="caption-subject bold uppercase"> رمز عبور دلخواه</span>
-                                                            <span class="caption-helper">تنظیم رمز عبور دلخواه</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="portlet-body">
-                                                        <form action="{{action("UserController@updatePassword" )}}"
-                                                              method="post">
-                                                            <input type="hidden" name="_method" value="PUT">
-                                                            {{ csrf_field() }}
-                                                            <div class="form-group {{ $errors->has('oldPassword') ? ' has-error' : '' }}">
-                                                                <label class="control-label">رمز عبور فعلی</label>
-                                                                <input type="password" class="form-control"
-                                                                       name="oldPassword"/>
-                                                                @if ($errors->has('oldPassword'))
-                                                                    <span class="help-block">
-                                                                <strong>{{ $errors->first('oldPassword') }}</strong>
-                                                              </span>
-                                                                @endif
-                                                            </div>
-                                                            <div class="form-group {{ $errors->has('password') ? ' has-error' : '' }}">
-                                                                <label class="control-label">رمز عبور جدید</label>
-                                                                <input type="password" class="form-control"
-                                                                       name="password"/>
-                                                                @if ($errors->has('password'))
-                                                                    <span class="help-block">
-                                                                <strong>{{ $errors->first('password') }}</strong>
-                                                              </span>
-                                                                @endif
-                                                            </div>
+                                    {{--<div class="tab-pane" id="tab_1_3">--}}
+                                        {{--<div class="row">--}}
+                                            {{--<div class="col-md-12">--}}
+                                                {{--<!-- BEGIN Portlet PORTLET-->--}}
+                                                {{--<div class="portlet light bg-inverse">--}}
+                                                    {{--<div class="portlet-title">--}}
+                                                        {{--<div class="caption font-purple-plum">--}}
+                                                            {{--<span class="caption-subject bold uppercase"> درخواست رمز عبور اتوماتیک</span>--}}
+                                                            {{--<span class="caption-helper">ارسال از طریق پیامک</span>--}}
+                                                        {{--</div>--}}
+                                                    {{--</div>--}}
+                                                    {{--<div class="portlet-body">--}}
+                                                        {{--<div class="row">--}}
+                                                            {{--<form action="{{ action("UserController@sendGeneratedPassword") }}"--}}
+                                                                  {{--method="post">--}}
+                                                                {{--{{ csrf_field() }}--}}
+                                                                {{--<div class="form-actions">--}}
+                                                                    {{--برای ارسال پیامک رمز عبور جدید بر روی این دکمه کلیک--}}
+                                                                    {{--کنید--}}
+                                                                    {{--<button type="submit" class="btn yellow">ارسال پیامک--}}
+                                                                        {{--رمز عبور--}}
+                                                                    {{--</button>--}}
+                                                                {{--</div>--}}
+                                                            {{--</form>--}}
+                                                        {{--</div>--}}
+                                                    {{--</div>--}}
+                                                {{--</div>--}}
+                                                {{--<!-- END Portlet PORTLET-->--}}
+                                            {{--</div>--}}
+                                        {{--</div>--}}
+                                        {{--<div class="row">--}}
+                                            {{--<div class="col-md-12">--}}
+                                                {{--<!-- BEGIN Portlet PORTLET-->--}}
+                                                {{--<div class="portlet light bg-inverse">--}}
+                                                    {{--<div class="portlet-title">--}}
+                                                        {{--<div class="caption font-purple-plum">--}}
+                                                            {{--<span class="caption-subject bold uppercase"> رمز عبور دلخواه</span>--}}
+                                                            {{--<span class="caption-helper">تنظیم رمز عبور دلخواه</span>--}}
+                                                        {{--</div>--}}
+                                                    {{--</div>--}}
+                                                    {{--<div class="portlet-body">--}}
+                                                        {{--{!! Form::open(['method' => 'PUT', 'action' => ['UserController@update' , Auth::user()]]) !!}--}}
+                                                            {{--{!! Form::hidden('updateType',"password") !!}--}}
+                                                            {{--<div class="form-group {{ $errors->has('oldPassword') ? ' has-error' : '' }}">--}}
+                                                                {{--<label class="control-label">رمز عبور فعلی</label>--}}
+                                                                {{--<input type="password" class="form-control"--}}
+                                                                       {{--name="oldPassword"/>--}}
+                                                                {{--@if ($errors->has('oldPassword'))--}}
+                                                                    {{--<span class="help-block">--}}
+                                                                {{--<strong>{{ $errors->first('oldPassword') }}</strong>--}}
+                                                              {{--</span>--}}
+                                                                {{--@endif--}}
+                                                            {{--</div>--}}
+                                                            {{--<div class="form-group {{ $errors->has('password') ? ' has-error' : '' }}">--}}
+                                                                {{--<label class="control-label">رمز عبور جدید</label>--}}
+                                                                {{--<input type="password" class="form-control"--}}
+                                                                       {{--name="password"/>--}}
+                                                                {{--@if ($errors->has('password'))--}}
+                                                                    {{--<span class="help-block">--}}
+                                                                {{--<strong>{{ $errors->first('password') }}</strong>--}}
+                                                              {{--</span>--}}
+                                                                {{--@endif--}}
+                                                            {{--</div>--}}
 
-                                                            <div class="form-group {{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
-                                                                <label class="control-label">تکرار رمز عبور جدید</label>
-                                                                <input type="password" class="form-control"
-                                                                       name="password_confirmation"/>
-                                                                @if ($errors->has('password_confirmation'))
-                                                                    <span class="help-block">
-                                                                 <strong>{{ $errors->first('password_confirmation') }}</strong>
-                                                            </span>
-                                                                @endif
-                                                            </div>
+                                                            {{--<div class="form-group {{ $errors->has('password_confirmation') ? ' has-error' : '' }}">--}}
+                                                                {{--<label class="control-label">تکرار رمز عبور جدید</label>--}}
+                                                                {{--<input type="password" class="form-control"--}}
+                                                                       {{--name="password_confirmation"/>--}}
+                                                                {{--@if ($errors->has('password_confirmation'))--}}
+                                                                    {{--<span class="help-block">--}}
+                                                                 {{--<strong>{{ $errors->first('password_confirmation') }}</strong>--}}
+                                                            {{--</span>--}}
+                                                                {{--@endif--}}
+                                                            {{--</div>--}}
 
-                                                            <div class="margin-top-10">
-                                                                <button type="submit" class="btn green"> تغییر</button>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                                <!-- END Portlet PORTLET-->
-                                            </div>
-                                        </div>
+                                                            {{--<div class="margin-top-10">--}}
+                                                                {{--<button type="submit" class="btn green"> تغییر</button>--}}
+                                                            {{--</div>--}}
+                                                        {{--{!! Form::close() !!}--}}
+                                                    {{--</div>--}}
+                                                {{--</div>--}}
+                                                {{--<!-- END Portlet PORTLET-->--}}
+                                            {{--</div>--}}
+                                        {{--</div>--}}
 
-                                    </div>
+                                    {{--</div>--}}
                                     <!-- END CHANGE PASSWORD TAB -->
-                                    @endif
-
                                 </div>
                             </div>
                         </div>
@@ -241,7 +238,7 @@
     <script src="/assets/pages/scripts/profile.min.js" type="text/javascript"></script>
     <script src="/assets/pages/scripts/dashboard.min.js" type="text/javascript"></script>
     <script src="/assets/pages/scripts/ui-toastr.min.js" type="text/javascript"></script>
-    <script src="/js/extraJS/scripts/profileUploadPhoto.js" type="text/javascript"></script>
+    <script src="/js/extraJS/scripts/profileUploadPhoto4.js" type="text/javascript"></script>
     <script src="/js/extraJS/scripts/verificationCode.js" type="text/javascript"></script>
     <script>
         /**

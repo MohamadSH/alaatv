@@ -28,6 +28,7 @@ class EditProfileInfoAtLoginRequest extends FormRequest
      */
     public function rules()
     {
+        //ToDo : Could be in a middleware
         $afterLoginFields = Afterloginformcontrol::getFormFields()
                                                  ->pluck('name', 'id')
                                                  ->toArray();

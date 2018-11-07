@@ -6,7 +6,7 @@
              @endif class="img-responsive" id="profilePhoto" alt="عکس پروفایل">
         @if(isset($withPhotoUpload) && $withPhotoUpload)
             <div class="row text-center margin-top-10">
-                {!! Form::open(['files'=>true,'method' => 'POST','action' => ['UserController@updateProfile']  , 'id'=>'profilePhotoAjaxForm' ]) !!}
+                {!! Form::open(['action' => ['UserController@update' , Auth::user()]  , 'id'=>'profilePhotoAjaxForm' ]) !!}
                 {!! Form::submit('بارگذاری', ['class' => 'btn blue' , 'id'=>'uploadProfilePhotoAjaxSubmit' , 'style'=>'display:none' ]) !!}
                 <div class="fileinput fileinput-new" data-provides="fileinput">
                                                                 <span class="btn green btn-file">

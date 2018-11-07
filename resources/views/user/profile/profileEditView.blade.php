@@ -10,7 +10,8 @@
     </p>
 @endif
 
-{!! Form::model($user,['method' => 'PUT','action' => [(isset($formAction))?$formAction:'UserController@updateProfile'] , 'role'=>'form' ]) !!}
+{!! Form::model($user,['method' => 'PUT','action' => [(isset($formAction))?$formAction:'UserController@update' , Auth::user()] , 'role'=>'form' ]) !!}
+{!! Form::hidden('updateType',"profile") !!}
 <div class="form-group {{ $errors->has('province') ? ' has-error' : '' }}">
     <label for="province" class="control-label ">استان</label>
     @if(isset($requiredFields) && in_array("province" , $requiredFields))
@@ -166,7 +167,7 @@
     <div class="row static-info margin-top-20">
         <div class="form-group  {{ $errors->has('bio') ? ' has-error' : '' }}">
             <div class="col-md-12">
-                {!! Form::textarea('bio',null,['class' => 'form-control' , 'placeholder'=>'درباره ی شما' , 'rows'=>'13']) !!}
+                {!! Form::textarea('bio',(!is_null(old("bio"))?old("bio"):$user->bio),['class' => 'form-control' , 'placeholder'=>'درباره ی شما' , 'rows'=>'13']) !!}
             </div>
         </div>
     </div>

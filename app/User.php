@@ -296,6 +296,13 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
      * @var array
      */
     protected $fillable = [
+        'firstName',
+        'lastName',
+        'nameSlug',
+        'mobile',
+        'nationalCode',
+        'userstatus_id',
+        'techCode',
         'province',
         'city',
         'address',
@@ -326,14 +333,31 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
         'remember_token',
     ];
 
+    private static $secureFillable = [
+        "firstName",
+        "lastName" ,
+        "password" ,
+        "nationalCode",
+        "nameSlug",
+        "mobile",
+        "userstatus_id",
+        "techCode",
+    ];
+
+    private static $beProtected = [
+        "roles"
+    ] ;
+
     /** Setter mutator for major_id
      * @param $value
      */
     public function setFirstNameAttribute($value): void
     {
-        if ($this->strIsEmpty($value)) {
+        if ($this->strIsEmpty($value))
             $this->attributes["firstName"] = null;
-        }
+        else
+            $this->attributes["firstName"] = $value;
+
     }
 
     /** Setter mutator for major_id
@@ -341,9 +365,10 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
      */
     public function setLastNameAttribute($value): void
     {
-        if ($this->strIsEmpty($value)) {
+        if ($this->strIsEmpty($value))
             $this->attributes["lastName"] = null;
-        }
+        else
+            $this->attributes["lastName"] = $value;
     }
 
     /** Setter mutator for major_id
@@ -351,9 +376,10 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
      */
     public function setMajorIdAttribute($value): void
     {
-        if ($value == 0) {
+        if ($value == 0)
             $this->attributes["major_id"] = null;
-        }
+        else
+            $this->attributes["major_id"] = $value;
     }
 
     /** Setter mutator for bloodtype_id
@@ -361,9 +387,10 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
      */
     public function setBloodtypeIdAttribute($value): void
     {
-        if ($value == 0) {
+        if ($value == 0)
             $this->attributes["bloodtype_id"] = null;
-        }
+        else
+            $this->attributes["bloodtype_id"] = $value;
     }
 
     /** Setter mutator for grade_id
@@ -371,9 +398,10 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
      */
     public function setGenderIdAttribute($value): void
     {
-        if ($value == 0) {
+        if ($value == 0)
             $this->attributes["gender_id"] = null;
-        }
+        else
+            $this->attributes["gender_id"] = $value;
     }
 
     /** Setter mutator for grade_id
@@ -381,9 +409,10 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
      */
     public function setGradeIdAttribute($value): void
     {
-        if ($value == 0) {
+        if ($value == 0)
             $this->attributes["grade_id"] = null;
-        }
+        else
+            $this->attributes["grade_id"] = $value;
     }
 
     /** Setter mutator for email
@@ -391,9 +420,10 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
      */
     public function setEmailAttribute($value): void
     {
-        if ($this->strIsEmpty($value)) {
+        if ($this->strIsEmpty($value))
             $this->attributes["email"] = null;
-        }
+        else
+            $this->attributes["email"] = $value;
     }
 
     /** Setter mutator for phone
@@ -401,9 +431,10 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
      */
     public function setPhoneAttribute($value): void
     {
-        if ($this->strIsEmpty($value)) {
+        if ($this->strIsEmpty($value))
             $this->attributes["phone"] = null;
-        }
+        else
+            $this->attributes["phone"] = $value;
     }
 
     /** Setter mutator for city
@@ -411,9 +442,10 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
      */
     public function setCityAttribute($value): void
     {
-        if ($this->strIsEmpty($value)) {
+        if ($this->strIsEmpty($value))
             $this->attributes["city"] = null;
-        }
+        else
+            $this->attributes["city"] = $value;
     }
 
     /** Setter mutator for province
@@ -421,9 +453,10 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
      */
     public function setProvinceAttribute($value): void
     {
-        if ($this->strIsEmpty($value)) {
+        if ($this->strIsEmpty($value))
             $this->attributes["province"] = null;
-        }
+        else
+            $this->attributes["province"] = $value;
     }
 
     /** Setter mutator for address
@@ -431,9 +464,10 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
      */
     public function setAddressAttribute($value): void
     {
-        if ($this->strIsEmpty($value)) {
+        if ($this->strIsEmpty($value))
             $this->attributes["address"] = null;
-        }
+        else
+            $this->attributes["address"] = $value;
     }
 
     /** Setter mutator for postalCode
@@ -441,9 +475,10 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
      */
     public function setPostalCodeAttribute($value): void
     {
-        if ($this->strIsEmpty($value)) {
+        if ($this->strIsEmpty($value))
             $this->attributes["postalCode"] = null;
-        }
+        else
+            $this->attributes["postalCode"] = $value;
     }
 
     /** Setter mutator for school
@@ -451,9 +486,10 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
      */
     public function setSchoolAttribute($value): void
     {
-        if ($this->strIsEmpty($value)) {
+        if ($this->strIsEmpty($value))
             $this->attributes["school"] = null;
-        }
+        else
+            $this->attributes["school"] = $value;
     }
 
     /** Setter mutator for allergy
@@ -461,9 +497,10 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
      */
     public function setAllergyAttribute($value): void
     {
-        if ($this->strIsEmpty($value)) {
+        if ($this->strIsEmpty($value))
             $this->attributes["allergy"] = null;
-        }
+        else
+            $this->attributes["allergy"] = $value;
     }
 
     /** Setter mutator for medicalCondition
@@ -471,9 +508,10 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
      */
     public function setMedicalConditionAttribute($value): void
     {
-        if ($this->strIsEmpty($value)) {
+        if ($this->strIsEmpty($value))
             $this->attributes["medicalCondition"] = null;
-        }
+        else
+            $this->attributes["medicalCondition"] = $value;
     }
 
     /** Setter mutator for discount
@@ -481,9 +519,10 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
      */
     public function setDietAttribute($value): void
     {
-        if ($this->strIsEmpty($value)) {
+        if ($this->strIsEmpty($value))
             $this->attributes["diet"] = null;
-        }
+        else
+            $this->attributes["diet"] = $value;
     }
 
 
@@ -843,7 +882,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
         return new UserCollection($models);
     }
 
-    public function getRememberToken()
+    /*public function getRememberToken()
     {
         return $this->remember_token;
     }
@@ -856,7 +895,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     public function getRememberTokenName()
     {
         return 'remember_token';
-    }
+    }*/
 
     public function products()
     {
@@ -1224,5 +1263,31 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     public function changePassword($newPassword):void
     {
         $this->fill(['password' => bcrypt($newPassword)]);
+    }
+
+    /**
+     *  Determines whether user's profile is locked or not
+     *
+     * @return bool
+     */
+    public function isUserProfileLocked(): bool
+    {
+        return $this->lockProfile == 1;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getSecureFillable(): array
+    {
+        return self::$secureFillable;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getBeProtected(): array
+    {
+        return self::$beProtected;
     }
 }

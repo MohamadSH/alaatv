@@ -1,10 +1,5 @@
 <?php namespace App\Traits;
 
-
-use App\Http\Controllers\UserController;
-use function GuzzleHttp\Promise\all;
-use Illuminate\Validation\Rule;
-
 trait UserCommon
 {
     /**
@@ -134,18 +129,6 @@ trait UserCommon
     }
 
     /**
-     *  Determines whether user's profile is locked or not
-     *
-     * @param \App\User $user
-     *
-     * @return bool
-     */
-    public function isUserProfileLocked(\App\User $user): bool
-    {
-        return $user->lockProfile == 1;
-    }
-
-    /**
      * @param $orders
      *
      * @return \App\Transaction|\Illuminate\Database\Eloquent\Builder
@@ -157,12 +140,18 @@ trait UserCommon
                                ->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_UNPAID"));
     }
 
+    /**
+     * Call UserController@store
+     *
+     * @param $data
+     * @return \Illuminate\Http\Response
+     */
     public function callUserControllerStore($data)
     {
         $storeUserRequest = new \App\Http\Requests\InsertUserRequest();
         $storeUserRequest->merge($data);
-        $storeUserRequest->headers->add(["X-Requested-With" => "XMLHttpRequest"]);
-        $userController = new UserController(new \Jenssegers\Agent\Agent(), new \App\Websitesetting());
+        RequestCommon::convertRequestToAjax($storeUserRequest);
+        $userController = new \App\Http\Controllers\UserController(new \Jenssegers\Agent\Agent(), new \App\Websitesetting());
         $response = $userController->store($storeUserRequest);
         return $response;
     }
@@ -181,7 +170,7 @@ trait UserCommon
             'mobile'        => [
                 'required',
                 'digits:11',
-                Rule::phone()->mobile()->country('AUTO,IR'),
+                \Illuminate\Validation\Rule::phone()->mobile()->country('AUTO,IR'),
                 \Illuminate\Validation\Rule::unique('users')
                     ->where(function ($query) use ($data) {
                         $query->where('nationalCode', $data["nationalCode"])
