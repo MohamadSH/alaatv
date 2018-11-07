@@ -86,29 +86,6 @@ trait Helper
         return $str;
     }
 
-    public function userSeen(string $path, User $user)
-    {
-
-        $productSeenCount = 0;
-
-        if (isset($websitepage->id)) {
-            if (!$user->seensitepages->contains($websitepage->id))
-                $user->seensitepages()
-                     ->attach($websitepage->id);
-            else {
-                $user->seensitepages()
-                     ->updateExistingPivot($websitepage->id, [
-                         "numberOfVisit" => $user->seensitepages()
-                                                 ->where("id", $websitepage->id)
-                                                 ->first()->pivot->numberOfVisit + 1,
-                         "updated_at"    => Carbon::now(),
-                     ]);
-            }
-            $productSeenCount = $websitepage->userschecked()
-                                            ->count();
-        }
-        return $productSeenCount;
-    }
 
     public function mergeCollections($firstCollection, $secondCollection): Collection
     {

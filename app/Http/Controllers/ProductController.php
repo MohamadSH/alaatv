@@ -21,7 +21,6 @@ use App\{Attribute,
     Traits\MetaCommon,
     Traits\ProductCommon,
     Traits\RequestCommon,
-    Traits\UserSeenTrait,
     User,
     Websitesetting};
 use Illuminate\Foundation\Http\{FormRequest};
@@ -41,7 +40,6 @@ class ProductController extends Controller
     use ProductCommon;
     use MetaCommon;
     use MathCommon;
-    use UserSeenTrait;
     use CharacterCommon;
     use RequestCommon;
 
@@ -391,7 +389,7 @@ class ProductController extends Controller
 
         $otherProductChunks = $this->makeOtherProducts($product, 4);
 
-        $productSeenCount = $this->getSeenCountFromRequest($request);
+        $productSeenCount = $product->pageView;
 
         $productAllFiles = $this->makeAllFileCollection($product);
 

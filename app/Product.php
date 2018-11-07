@@ -9,7 +9,7 @@ use App\Classes\{Advertisable,
     SEO\SeoMetaTagsGenerator,
     Taggable};
 use App\Collection\ProductCollection;
-use App\Traits\{APIRequestCommon, CharacterCommon, DateTrait, favorableTraits, Helper, ProductCommon};
+use App\Traits\{APIRequestCommon, CharacterCommon, DateTrait, favorableTraits, Helper, ProductCommon, ModelTrackerTrait};
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\{Eloquent\Builder, Eloquent\Model, Eloquent\SoftDeletes};
@@ -96,6 +96,8 @@ use Illuminate\Support\{Collection, Facades\Cache, Facades\Config};
  * @method static \Illuminate\Database\Query\Builder|\App\Product withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Product withoutTrashed()
  * @mixin \Eloquent
+ * @property string|null $page_view
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Product wherePageView($value)
  */
 class Product extends Model implements Advertisable, Taggable, SeoInterface, FavorableInterface
 {
@@ -113,6 +115,8 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
     use APIRequestCommon;
     use DateTrait;
     use favorableTraits;
+    use ModelTrackerTrait;
+
     /*
     |--------------------------------------------------------------------------
     | Properties

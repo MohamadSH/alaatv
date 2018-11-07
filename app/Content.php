@@ -14,6 +14,7 @@ use App\Traits\APIRequestCommon;
 use App\Traits\DateTrait;
 use App\Traits\favorableTraits;
 use App\Traits\Helper;
+use App\Traits\ModelTrackerTrait;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
@@ -103,6 +104,8 @@ use Stevebauman\Purify\Facades\Purify;
  * @property-read \App\Contentset|null                                        $set
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereContentsetId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereSlug($value)
+ * @property mixed $page_view
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Content wherePageView($value)
  */
 class Content extends Model implements Advertisable, Taggable, SeoInterface, FavorableInterface
 {
@@ -117,6 +120,7 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
     use Helper;
     use DateTrait;
     use favorableTraits;
+    use ModelTrackerTrait;
 
     /*
     |--------------------------------------------------------------------------
@@ -264,20 +268,6 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
     | Accessor
     |--------------------------------------------------------------------------
     */
-
-    /**
-     *
-     * @param $value
-     *
-     * @return mixed
-     */
-    public function getPage_viewAttribute($value){
-        return json_decode($value);
-    }
-
-    public function getPageViewAttribute(){
-        return $this->page_view->page_views;
-    }
 
     /**
      * Get the content's title .

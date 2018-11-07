@@ -13,7 +13,7 @@ class AlterTableContentAddPageViewsColumn extends Migration
      */
     public function up()
     {
-        Schema::table('contents', function (Blueprint $table) {
+        Schema::table('educationalcontents', function (Blueprint $table) {
             $table->string('page_view')
                   ->nullable()
                   ->after('order');
@@ -27,7 +27,7 @@ class AlterTableContentAddPageViewsColumn extends Migration
      */
     public function down()
     {
-        Schema::table('contents', function (Blueprint $table) {
+        Schema::table('educationalcontents', function (Blueprint $table) {
             $table->dropColumn('page_view');
         });
     }

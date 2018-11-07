@@ -430,8 +430,6 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
         return $this->hasMany('\App\Userupload');
     }
 
-    //Site pages that user has seen
-
     public function bankaccounts()
     {
         return $this->hasMany('\App\Bankaccount');
@@ -841,34 +839,6 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
         return true;
     }
 
-    public function seen($path)
-    {
-        $path = "/" . ltrim($path, "/");
-
-        $SeenCount = 0;
-        $websitepage = Websitepage::firstOrNew(["url" => $path]);
-        if (!isset($websitepage->id)) {
-            $websitepage->save();
-        }
-        if (isset($websitepage->id)) {
-            if (!$this->seensitepages->contains($websitepage->id))
-                $this->seensitepages()
-                     ->attach($websitepage->id);
-            else {
-                $this->seensitepages()
-                     ->updateExistingPivot($websitepage->id, [
-                         "numberOfVisit" => $this->seensitepages()
-                                                 ->where("id", $websitepage->id)
-                                                 ->first()->pivot->numberOfVisit + 1,
-                         "updated_at"    => Carbon::now(),
-                     ]);
-            }
-            $SeenCount = $websitepage->userschecked()
-                                     ->count();
-        }
-
-        return $SeenCount;
-    }
 
     public function seensitepages()
     {

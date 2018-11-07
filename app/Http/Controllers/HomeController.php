@@ -221,106 +221,12 @@ class HomeController extends Controller
 
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
-        $out = (new GaReportFactory())->createGaReportGetUsersFromPageView()
-                                      ->getReport('/c/6560');
-        dump("here!");
-        dd($out);
-        //        return $formatter->format(Block::getBlocks());
-        dump($request->route('ab'));
-        dd("Done!");
-
-        $categories = Category::active()
-                              ->get()
-                              ->toTree();
-        return view('partials.tree', compact('categories'));
-
-        /*        $nodes = Category::get()->toTree();
-
-                $traverse = function ($categories, $prefix = '-') use (&$traverse) {
-                    foreach ($categories as $category) {
-                        if($category->enable == false )
-                            continue;
-                        echo PHP_EOL.$prefix.' '.(isset($category->name) ? $category->name : '!!!'). '<br>';
-
-                        $traverse($category->children, $prefix.'-');
-                    }
-                };
-
-                dd($traverse($nodes));
-
-                dd(
-                    (new AuthorTagManagerViaApi())->getTags(37227)
-                );
-                $c = Content::create(
-                    [
-                        'name' => 'test8',
-                        'tags'=>  [
-                            "فیلم",
-                            "رشته_ریاضی",
-                            "متوسطه2",
-                            "کنکور",
-                            "ضبط_کلاس_درس",
-                            "نظام_آموزشی_قدیم",
-                            "پیش",
-                            "شبیه_ساز_کلاس_درس",
-                            "گسسته",
-                            "رضا_شامیزاده",
-                        ],
-                        'enable' => 1,
-                        'contenttype_id' => 8
-                    ]
-                );
-
-                dd($c);
-
-
-                $nodes = Category::get();
-                dd($nodes->toTree());*/
-        $filters = [
-            'tag'   => [
-                'جلال_موقاری',
-            ],
-            'name'  => 'شناسی، دیروز، امروز و فردا (قسمت 1)-گفتار1: زیست شناسی',
-            'order' => 1,
-        ];
-        $a = new ContentSearch();
-        dd($a->apply($filters)
-             ->take(5)
-             ->videos());
-        dd(Str::uuid()
-              ->toString());
-
         try {
-            $files = [
-                "s" => "m",
-            ];
-            foreach (optional($files) as $key => $file) {
-                dump($file);
-            }
-            dd("s");
-            $time = $request->get("sohrab");
-            dd($time);
+            $out = (new GaReportFactory())->createGaReportGetUsersFromPageView()
+                                          ->getReport('/c/6560');
+            dump("here!");
+            dd($out);
 
-            //            $adItems = Contentset::find(199)->contents;
-            $adItems = Content::whereHas("contentsets", function ($q) {
-                $q->where("id", 199);
-            })
-                              ->where("enable", 1)
-                              ->orderBy("order")
-                              ->get();
-            return ("so");
-            $e = Content::find(6560);
-            dd($e->validSince);
-            //            dd($e->thumbnail);
-            //            dd( parse_url("https://cdn.sanatisharif.ir/media/156/HD_720p/008uuui.mp4")['path']);
-            $b = \App\Classes\LinkGenerator::create(null, "productFileSFTP", null, "/paid/85/fizik-1.mp4");
-            $a = \App\Classes\LinkGenerator::create("bee26d8a-f739-4372-98a7-856b8b1d2621", null, null, "sanatish/140/160923111124.pdf");
-
-            $c = \App\Classes\LinkGenerator::create("bb1ef4e5-a572-46da-b4cc-1574f08ce903", "alaaCdnSFTP", null, "/media/156/HD_720p/008uuui.mp4");
-            $d = \App\Classes\LinkGenerator::create("bb1ef4e5-a572-46da-b4cc-1574f08ce903", "alaaCdnSFTP", "https://cdn.sanatisharif.ir/media/156/HD_720p/008uuui.mp4", "/media/156/HD_720p/008uuui.mp4");
-            return [
-                "userSeen" => $c->getLinks(['content_id' => 1]),
-            ];
         }
         catch (\Exception    $e) {
             $message = "unexpected error";
@@ -2047,7 +1953,6 @@ class HomeController extends Controller
         if (Auth::check()) {
             $baseUrl = url("/");
             $contentPath = str_replace($baseUrl, "", action("HomeController@donate"));
-            $seenCount = $this->userSeen($contentPath);
         }
 
 
@@ -2383,123 +2288,6 @@ class HomeController extends Controller
     public function bot(Request $request)
     {
         try {
-            if ($request->has("userseen")) {
-                $websitepages = Websitepage::where('url', 'like', '%/c/%')
-                                           ->pluck("id")
-                                           ->toArray();
-
-                $outputFileName = "userseen_part11.csv";
-                $userseen = \Illuminate\Support\Facades\DB::table('userseensitepages')
-                                                          ->whereIn("websitepage_id", $websitepages)
-                                                          ->limit(2000)
-                                                          ->offset(20000)
-                                                          ->get();
-                $outputCollection = collect();
-                foreach ($userseen as $value) {
-                    $user = User::Find($value->user_id);
-                    $lastVisit = $value->updated_at;
-
-                    $websitepage = Websitepage::Find($value->websitepage_id);
-                    $url = optional($websitepage)->url;
-                    $urlExplode = explode("/", $url);
-                    $contentId = isset($urlExplode[2]) ? $urlExplode[2] : 0;
-
-                    $content = Content::find($contentId);
-
-                    $mobile = substr(optional($user)->mobile, 0, 4) . "*******";
-                    $contentset = $content->set;
-                    if (isset($content->user))
-                        $author = $content->user->firstName . " " . $content->user->lastName;
-                    else
-                        $author = "";
-                    $tags = implode(" , ", optional($content->tags)->tags);
-
-                    $seenCount = optional($websitepage)
-                        ->userschecked()
-                        ->count();
-
-                    $outputCollection->push([
-                                                "name"        => optional($user)->firstName,
-                                                "lastName"    => optional($user)->lastName,
-                                                'mobile'      => $mobile,
-                                                'city'        => optional($user)->city,
-                                                'province'    => optional($user)->province,
-                                                'school'      => optional($user)->school,
-                                                'major'       => optional($user->major)->name,
-                                                'grade'       => optional($user->grade)->displayName,
-                                                'gender'      => optional($user->gender)->name,
-                                                'email'       => optional($user)->email,
-                                                "url"         => $url,
-                                                "title"       => optional($content)->name,
-                                                "description" => optional($content)->description,
-                                                "contentset"  => optional($contentset)->name,
-                                                "teacher"     => $author,
-                                                "tags"        => $tags,
-                                                "seenCount"   => $seenCount,
-                                                "lastSeen"    => isset($lastVisit) ? $lastVisit : "",
-                                            ]);
-                }
-
-                $headers = [
-                    "Content-type"        => "application/csv; charset=UTF-8",
-                    "Content-Encoding"    => "UTF-8",
-                    "Content-Disposition" => "attachment; filename=file.csv",
-                    "Pragma"              => "no-cache",
-                    "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
-                    "Expires"             => "0",
-                ];
-
-                $columns = [
-                    'نام',
-                    'نام خانوادگی',
-                    'شماره موبایل',
-                    'شهر',
-                    'استان',
-                    'مدرسه',
-                    'رشته',
-                    'مقطع',
-                    'جنسیت',
-                    'ایمیل',
-                    'آدرس صفحه',
-                    'عنوان محتوا',
-                    'توضیح محتوا',
-                    'نام درس',
-                    'نام معلم',
-                    'تگ ها',
-                    'تعداد کل بازدیدهای این محتوا',
-                    'آخرین بازدید',
-                ];
-
-                $file = fopen('/home/alaa/' . $outputFileName, 'w');
-                fputcsv($file, $columns);
-
-                foreach ($outputCollection as $item) {
-                    $row = $this->convertArray([
-                                                   $item["name"],
-                                                   $item["lastName"],
-                                                   $item["mobile"],
-                                                   $item["city"],
-                                                   $item["province"],
-                                                   $item["school"],
-                                                   $item["major"],
-                                                   $item["grade"],
-                                                   $item["gender"],
-                                                   $item["email"],
-                                                   $item["url"],
-                                                   $item["title"],
-                                                   $item["description"],
-                                                   $item["contentset"],
-                                                   $item["teacher"],
-                                                   $item["tags"],
-                                                   $item["seenCount"],
-                                                   $item["lastSeen"],
-                                               ]);
-                    fputcsv($file, $row);
-                }
-                fclose($file);
-                dd($file);
-            }
-
             if ($request->has("emptyorder")) {
                 $orders = Order::whereIn("orderstatus_id", [
                     config("constants.ORDER_STATUS_CLOSED"),
