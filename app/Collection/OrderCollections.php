@@ -8,7 +8,7 @@
 
 namespace App\Collection;
 
-
+use App\Order;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Collection as BaseCollection;
 

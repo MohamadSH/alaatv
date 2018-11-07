@@ -116,9 +116,10 @@ class LoginController extends Controller
                 $registerRequest = new Request();
                 $registerRequest->offsetSet("mobile", $request->get("mobile"));
                 $registerRequest->offsetSet("nationalCode", $request->get("password"));
+                $registerRequest->offsetSet("password", $request->get("password"));
                 $registerRequest->offsetSet("photo", config('constants.PROFILE_DEFAULT_IMAGE'));
                 $registerRequest->offsetSet("userstatus_id", 1); //ToDo : to be replaced with constants
-                $registerController = new RegisterController(new UserController());
+                $registerController = new RegisterController();
                 $registerController->register($registerRequest);
             } else {
                 return redirect()

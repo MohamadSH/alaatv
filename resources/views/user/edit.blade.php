@@ -50,6 +50,7 @@
                 </div>
                 <div class="portlet-body form">
                     {!! Form::model($user,['files'=>true,'method' => 'PUT','action' => ['UserController@update',$user], 'class'=>'form-horizontal']) !!}
+                    {!! Form::hidden('updateType',"total") !!}
                     @include('user.form',[$userStatuses , $majors ])
                     {!! Form::close() !!}
                 </div>

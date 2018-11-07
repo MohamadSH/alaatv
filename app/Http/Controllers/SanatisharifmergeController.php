@@ -3639,7 +3639,6 @@ class SanatisharifmergeController extends Controller
                         $warningCounter++;
                         dump("Warning contentset was not exist. id: " . $sanatisharifRecord->departmentlessonid);
                     }
-                    $storeContentReuest->offsetSet("fromAPI", true);
 
                     $controller = new ContentController();
                     $response = $controller->store($storeContentReuest);

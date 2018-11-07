@@ -190,7 +190,7 @@ class LotteryController extends Controller
                         $counter++;
                         $user->lotteries()
                              ->attach($lottery->id, ["rank" => $counter]);
-                        echo "<span style='color:red;font-weight: bolder'>" . "#$counter: " . "</span>" . $user->getfullName() . " - $user->mobile" . " - $user->nationalCode" . " Points: " . $userbon->totalNumber;
+                        echo "<span style='color:red;font-weight: bolder'>" . "#$counter: " . "</span>" . $user->full_name . " - $user->mobile" . " - $user->nationalCode" . " Points: " . $userbon->totalNumber;
                         echo "<br>";
                         $successCounter++;
 

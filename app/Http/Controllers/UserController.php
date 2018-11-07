@@ -86,13 +86,13 @@ class UserController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    public function __construct(Agent $agent, Websitesetting $setting, Response $response)
+    public function __construct(Agent $agent, Websitesetting $setting)
     {
-        $this->response = $response;
         $this->setting = $setting->setting;
         $authException = $this->getAuthExceptionArray($agent);
-        $this->callMiddlewares([]);
+        $this->callMiddlewares($authException);
     }
+
 
     /**
      * @param Agent $agent
@@ -115,6 +115,7 @@ class UserController extends Controller
         $this->middleware('permission:' . config('constants.INSERT_USER_ACCESS'), ['only' => 'create']);
         $this->middleware('permission:' . config('constants.REMOVE_USER_ACCESS'), ['only' => 'destroy']);
         $this->middleware('permission:' . config('constants.SHOW_USER_ACCESS'), ['only' => 'edit']);
+        $this->middleware('trimUserUpdateRequest', ['only' => 'update']);
     }
 
     /**
@@ -611,7 +612,10 @@ class UserController extends Controller
             if ($softDeletedUsers->isNotEmpty()) {
                 $softDeletedUsers->first()
                                  ->restore();
-                return $this->response->setStatusCode(Response::HTTP_OK);
+                return response(
+                    [],
+                    Response::HTTP_OK
+                );
             }
 
             $user = new User();
@@ -619,7 +623,8 @@ class UserController extends Controller
 
             $done = false;
             if ($user->save()) {
-                $this->attachRoles($request->get("roles"), $request->user(), $user);
+                if ($request->has("roles"))
+                    $this->attachRoles($request->get("roles"), $request->user(), $user);
 
                 $responseStatusCode = Response::HTTP_OK;
                 $responseContent = "درج کاربر با موفقیت انجام شد";
@@ -630,21 +635,25 @@ class UserController extends Controller
                 $responseContent = "خطا در ذخیره کاربر";
             }
 
-            return $this->response->setStatusCode($responseStatusCode)
-                                  ->setContent([
-                                                   "message" => $responseContent,
-                                                   "user"    => ($done ? $user : null),
-                                               ]);
+            return response(
+                [
+                    "message" => $responseContent,
+                    "user"    => ($done ? $user : null),
+                ],
+                $responseStatusCode
+            );
         }
         catch (\Exception    $e) {
             $message = "unexpected error";
-            return $this->response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR)
-                                  ->setContent([
-                                                   "message" => $message,
-                                                   "error"   => $e->getMessage(),
-                                                   "line"    => $e->getLine(),
-                                                   "file"    => $e->getFile(),
-                                               ]);
+            return response(
+                [
+                    "message" => $message,
+                    "error"   => $e->getMessage(),
+                    "line"    => $e->getLine(),
+                    "file"    => $e->getFile(),
+                ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
 
     }
@@ -659,23 +668,22 @@ class UserController extends Controller
     private function fillContentFromRequest(FormRequest $request, User &$user): void
     {
         $inputData = $request->all();
-        $mobileVerifiedAt = $request->has("mobileNumberVerification");
+        $hasMobileVerifiedAt = $request->has("mobileNumberVerification");
         $hasPassword = $request->has("password");
-        $lockProfile = $request->has("lockProfile");
+        $hasLockProfile = $request->has("lockProfile");
 
         $user->fill($inputData);
 
-        $user->mobile_verified_at = $mobileVerifiedAt ? Carbon::now()
-                                                              ->setTimezone("Asia/Tehran") : null;
-        $user->password = $hasPassword ? bcrypt($request->get("password")) : null;
-        $user->lockProfile = $lockProfile ? 1 : 0;
-        $user->firstName = $request->get("firstName");
-        $user->lastName = $request->get("lastName");
-        $user->nameSlug = $request->get("nameSlug");
-        $user->mobile = $request->get("mobile");
-        $user->nationalCode = $request->get("nationalCode");
-        $user->userstatus_id = $request->get("userstatus_id");
-        $user->techCode = $request->get("techCode");
+        if ($hasMobileVerifiedAt)
+            $user->mobile_verified_at = ($request->get("mobileNumberVerification") == "1") ? Carbon::now()
+                                                                                                   ->setTimezone("Asia/Tehran") : null;
+
+
+        if ($hasPassword)
+            $user->password = bcrypt($request->get("password"));
+
+        if ($hasLockProfile)
+            $user->lockProfile = $request->get("lockProfile") == "1" ? 1 : 0;
 
         $file = $this->getRequestFile($request, "photo");
         if ($file !== false)
@@ -690,11 +698,11 @@ class UserController extends Controller
 
     /**
      * @param User $user
-     * @param File $file
+     * @param      $file
      *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
-    private function storePhotoOfUser(User &$user, File $file): void
+    private function storePhotoOfUser(User &$user, $file): void
     {
         $extension = $file->getClientOriginalExtension();
         $fileName = basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
@@ -713,12 +721,12 @@ class UserController extends Controller
      * @param User  $staffUser
      * @param User  $user
      */
-    private function attachRoles(array $newRoleIds, User $staffUser, User $user): void
+    private function attachRoles(array $newRoleIds = [], User $staffUser, User $user): void
     {
         if ($staffUser->can(config('constants.INSET_USER_ROLE'))) {
-            $oldRoles = $user->roles;
-            $newRoleIds = is_array($newRoleIds) ? $newRoleIds : [];
-            $totalRoles = array_merge($oldRoles, $newRoleIds);
+            $oldRolesIds = $user->roles->pluck("id")
+                                       ->toArray();
+            $totalRoles = array_merge($oldRolesIds, $newRoleIds);
             $this->checkGivenRoles($totalRoles, $staffUser);
 
             if (!empty($newRoleIds)) {
@@ -816,25 +824,39 @@ class UserController extends Controller
                                 ->first();
 
         $user = $request->user();
-        $orders = $user->getShowableOrders()
-                       ->get()
-                       ->sortByDesc("completed_at");
 
-        $transactions = $user->getShowableTransactions()
-                             ->get()
-                             ->sortByDesc("completed_at")
-                             ->groupBy("order_id");
+        $key = "user:orders:" . $user->cacheKey();
+        $orders = Cache::remember($key, config("constants.CACHE_60"), function () use ($user) {
+            return $user->getShowableOrders()
+                        ->get()
+                        ->sortByDesc("completed_at");
+        });
 
-        $instalments = $this->getInstalments($orders)
-                            ->get()
-                            ->sortBy("deadline_at");
+        $key = "user:transactions:" . $user->cacheKey();
+        $transactions = Cache::remember($key, config("constants.CACHE_60"), function () use ($user) {
+            return $user->getShowableTransactions()
+                        ->get()
+                        ->sortByDesc("completed_at")
+                        ->groupBy("order_id");
+        });
+
+        $key = "user:instalments:" . $user->cacheKey();
+        $instalments = Cache::remember($key, config("constants.CACHE_60"), function () use ($user) {
+            return $user->getInstalments()
+                        ->get()
+                        ->sortBy("deadline_at");
+        });
 
         $gateways = Transactiongateway::enable()
                                       ->get()
                                       ->sortBy("order")
                                       ->pluck("displayName", "name");
 
-        $orderCoupons = $orders->getCoupons();
+        $key = "user:orderCoupons:" . $user->cacheKey() . ":Orders=" . md5($orders->pluck("id")
+                                                                                  ->implode('-'));
+        $orderCoupons = Cache::remember($key, config("constants.CACHE_60"), function () use ($orders) {
+            return $orders->getCoupons();
+        });
 
         return view("user.ordersList", compact("orders", "gateways", "debitCard", "transactions", "instalments", "orderCoupons"));
     }
@@ -1133,101 +1155,6 @@ class UserController extends Controller
     }
 
     /**
-     * Update the user's profile information with dynamic form at login
-     *
-     * @param EditProfileInfoAtLoginRequest $request
-     *
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
-     */
-    public function updateProfileAtLogin(EditProfileInfoAtLoginRequest $request)
-    {
-        $updateProfileRequest = new EditProfileInfoRequest();
-        $updateProfileRequest->merge($request->all());
-        $this->updateProfile($updateProfileRequest);
-
-    }
-
-    /**
-     * Update the user's profile information ( some limited information )
-     *
-     * @param  \app\Http\Requests\EditProfileInfoRequest $request
-     *
-     * @return \Illuminate\Http\Response
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
-     */
-    public function updateProfile(EditProfileInfoRequest $request)
-    {
-        $user = $request->user();
-        $user->fill($request->all());
-
-        $file = $this->getRequestFile($request, "photo");
-        if ($file !== false)
-            $this->storePhotoOfUser($user, $file);
-
-        if ($user->completion("lockProfile") == 100)
-            $user->lockProfile();
-
-        $isAjax = false;
-        if ($user->update()) {
-            if ($request->ajax()) {
-                $isAjax = true;
-                $newPhotoSrc = route('image', [
-                    'category' => '1',
-                    'w'        => '150',
-                    'h'        => '150',
-                    'filename' => $user->photo,
-                ]);
-                $response = $this->response->setStatusCode(Response::HTTP_OK)
-                                           ->setContent(["newPhoto" => $newPhotoSrc]);
-            } else {
-                session()->put("success", "اطلاعات شما با موفقیت اصلاح شد");
-            }
-        } else {
-            if ($request->ajax()) {
-                $isAjax = true;
-                $response = $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
-            } else {
-                session()->put("error", \Lang::get("responseText.Database error."));
-            }
-        }
-
-        if ($isAjax) {
-            return $response;
-        } else {
-            return redirect()->back();
-        }
-    }
-
-    /**
-     * Update the specified resource's password in storage..
-     *
-     * @param  \app\Http\Requests\EditProfilePasswordRequest $request
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function updatePassword(EditProfilePasswordRequest $request)
-    {
-        $user = $request->user();
-        $oldPassword = $request->oldPassword;
-        $newPassword = $request->password;
-
-        $confirmation = $this->userPasswordConfirmation($user, $oldPassword, $newPassword);
-
-        if ($confirmation["confirmed"]) {
-            $user->changePassword($newPassword);
-            if ($user->update()) {
-                session()->put("success", "رمز عبور با موفقیت تغییر یافت.");
-            } else {
-                session()->put("error", "خطا در تغییر رمز عبور ، لطفا دوباره اقدام نمایید.");
-            }
-        } else {
-            session()->put("error", $confirmation["message"]);
-        }
-
-        return redirect()->back();
-    }
-
-    /**
      * Remove the specified resource from storage.
      *
      * @param  User $user
@@ -1499,7 +1426,7 @@ class UserController extends Controller
 
         if ($request->user()
                     ->completion("afterLoginForm") == 100) {
-            redirect($targetUrl);
+            return redirect($targetUrl);
         }
 
         $previousPath = url()->previous();
@@ -1660,7 +1587,12 @@ class UserController extends Controller
 
         if (isset($done))
             if ($done) {
-                return $this->response->setStatusCode(200);
+                return response(
+                    [
+                        "message" => "OK",
+                    ],
+                    Response::HTTP_OK
+                );
             } else {
                 if (isset($userBonTaken) && $userBonTaken) {
                     foreach ($userbons as $userbon) {
@@ -1676,11 +1608,20 @@ class UserController extends Controller
                         $userbon->update();
                     }
                 }
-                return $this->response->setStatusCode(503)
-                                      ->setContent(["message" => $message]);
+                return response(
+                    [
+                        ["message" => $message],
+                    ],
+                    Response::HTTP_SERVICE_UNAVAILABLE
+                );
+
             } else
-            return $this->response->setStatusCode(503)
-                                  ->setContent(["message" => "عملیاتی انجام نشد"]);
+            return response(
+                [
+                    ["message" => "عملیاتی انجام نشد"],
+                ],
+                Response::HTTP_SERVICE_UNAVAILABLE
+            );
     }
 
     /**
@@ -1723,7 +1664,10 @@ class UserController extends Controller
             if ($order->user_id != $request->user()->id)
                 abort(403);
         } else {
-            return $this->response->setStatusCode(422);
+            return response(
+                [],
+                Response::HTTP_UNPROCESSABLE_ENTITY
+            );
         }
         /**
          * User's basic info
@@ -1852,6 +1796,7 @@ class UserController extends Controller
 
     /**
      * Update the specified resource in storage.
+     * Note: Requests to this method must pass \App\Http\Middleware\trimUserRequest middle ware
      *
      * @param  \app\Http\Requests\EditUserRequest $request
      * @param  User                               $user
@@ -1865,27 +1810,70 @@ class UserController extends Controller
 
         $this->fillContentFromRequest($request, $user);
 
+        if ($user->completion("lockProfile") == 100)
+            $user->lockProfile();
+
+        /** snippet code for changing user's password
+         *  note that an admin user can change any passwords and that works fine
+         *  but when a user is updating his password it needs some extra work as you can see below
+         *  and this extra work should not conflict with updating passwords by admin
+         */
+        //        $oldPassword = $request->oldPassword;
+        //        $newPassword = $request->password;
+        //
+        //        $confirmation = $this->userPasswordConfirmation($user, $oldPassword, $newPassword);
+        //
+        //        if ($confirmation["confirmed"]) {
+        //            $user->changePassword($newPassword);
+        //            if ($user->update()) {
+        //                session()->put("success", "رمز عبور با موفقیت تغییر یافت.");
+        //            } else {
+        //                session()->put("error", "خطا در تغییر رمز عبور ، لطفا دوباره اقدام نمایید.");
+        //            }
+        //        } else {
+        //            session()->put("error", $confirmation["message"]);
+        //        }
+
+
+        $isAjax = false;
         if ($user->update()) {
-            $this->attachRoles($request->get("roles"), $request->user(), $user);
+
+            if ($request->has("roles"))
+                $this->attachRoles($request->get("roles"), $request->user(), $user);
+
+            $newPhotoSrc = route('image', [
+                'category' => '1',
+                'w'        => '150',
+                'h'        => '150',
+                'filename' => $user->photo,
+            ]);
 
             $message = "اطلاعات با موفقیت اصلاح شد";
-            if ($request->has("fromAPI")) {
+            if ($request->ajax()) {
+                $isAjax = true;
                 $status = Response::HTTP_OK;
             } else {
-                session()->put("success", $message);
+                session()->flash("success", $message);
             }
         } else {
+
             $message = \Lang::get("responseText.Database error.");
-            if ($request->has("fromAPI")) {
+            if ($request->ajax()) {
+                $isAjax = true;
                 $status = Response::HTTP_SERVICE_UNAVAILABLE;
             } else {
-                session()->put("error", $message);
+                session()->flash("error", $message);
             }
         }
 
-        if ($request->has("fromAPI"))
-            return $this->response->setStatusCode($status)
-                                  ->setContent(["message" => $message]);
+        if ($isAjax)
+            return response(
+                [
+                    "newPhoto" => isset($newPhotoSrc) ? $newPhotoSrc : null,
+                    "message"  => $message,
+                ],
+                $status
+            );
         else
             return redirect()->back();
     }
@@ -1942,7 +1930,7 @@ class UserController extends Controller
                 $updateRequest->offsetSet("lastName", $request->get("lastName"));
             $updateRequest->offsetSet("major_id", $request->get("major_id"));
             $updateRequest->offsetSet("grade_id", $request->get("grade_id"));
-            $updateRequest->offsetSet("fromAPI", 1);
+            RequestCommon::convertRequestToAjax($updateRequest);
             $response = $this->update($updateRequest, $user);
             if ($response->getStatusCode() == 503) {
                 session()->put("error", "خطایی در ثبت اطلاعات شما رخ داد. لطفا مجددا اقدام نمایید");
@@ -1960,7 +1948,7 @@ class UserController extends Controller
             $evenResultRequest->offsetSet("user_id", $user->id);
             $evenResultRequest->offsetSet("event_id", $event->id);
             $evenResultRequest->offsetSet("participationCodeHash", $request->get("score"));
-            $evenResultRequest->offsetSet("fromAPI", 1);
+            RequestCommon::convertRequestToAjax($evenResultRequest);
             $response = $eventResultController->store($evenResultRequest);
             if ($response->getStatusCode() == 503) {
                 session()->put("error", "خطایی در ثبت نام شما رخ داد. لطفا مجددا اقدام نمایید");
@@ -2050,21 +2038,8 @@ class UserController extends Controller
                 $userHasRegistered = true;
             }
         }
-
-        $verificationMessageStatusSent = config("constants.VERIFICATION_MESSAGE_STATUS_SENT");
-        $verificationMessage = $user->verificationmessages->where("verificationmessagestatus_id", $verificationMessageStatusSent)
-                                                          ->sortByDesc("created_at")
-                                                          ->first();
-        $hasRequestedVerificationCode = false;
-        if (isset($verificationMessage)) {
-            $hasRequestedVerificationCode = true;
-            $now = Carbon::now();
-            if ($now->diffInMinutes($verificationMessage->created_at) > config('constants.MOBILE_VERIFICATION_WAIT_TIME')) {
-                $hasRequestedVerificationCode = false;
-            }
-        }
-
-        return view("user.submitVoucherRequest", compact("user", "genders", "majors", "sideBarMode", "userHasRegistered", "rank", "userVoucher", "hasRequestedVerificationCode"));
+        $mobileVerificationCode = $user->getMobileVerificationCode();
+        return view("user.submitVoucherRequest", compact("user", "genders", "majors", "sideBarMode", "userHasRegistered", "rank", "userVoucher", "mobileVerificationCode"));
     }
 
     /**
@@ -2089,7 +2064,7 @@ class UserController extends Controller
         }
 
         $updateRequest = new EditUserRequest();
-        $updateRequest->offsetSet("fromAPI", 1);
+        RequestCommon::convertRequestToAjax($updateRequest);
         $updateRequest->offsetSet("postalCode", $request->get("postalCode"));
         $updateRequest->offsetSet("email", $request->get("email"));
         $updateRequest->offsetSet("gender_id", $request->get("gender_id"));

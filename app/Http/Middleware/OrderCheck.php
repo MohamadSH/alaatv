@@ -16,6 +16,17 @@ class OrderCheck
     use ProductCommon;
 
     /**
+     * @var OrderController
+     */
+    private $orderController;
+
+    public function __construct(OrderController $controller)
+    {
+        $this->orderController = $controller;
+    }
+
+
+    /**
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request $request
@@ -24,7 +35,7 @@ class OrderCheck
      *
      * @return mixed
      */
-    public function handle($request, Closure $next, $guard = null)
+    public function handle(Request $request, Closure $next, $guard = null)
     {
         /**
          * Initiating an order for the user
@@ -39,11 +50,10 @@ class OrderCheck
                                  ->openOrders()
                                  ->get();
             if ($openOrder->isEmpty()) {
-                $request = new Request();
                 $request->offsetSet("paymentstatus_id", Config::get("constants.PAYMENT_STATUS_UNPAID"));
                 $request->offsetSet("orderstatus_id", Config::get("constants.ORDER_STATUS_OPEN"));
                 $request->offsetSet("user_id", Auth::user()->id);
-                $controller = new OrderController();
+                $controller = $this->orderController;
                 $order = $controller->store($request);
 
             } else {
@@ -95,8 +105,6 @@ class OrderCheck
                                     if ($attributevalues->isNotEmpty()) {
                                         $orderproduct->attributevalues()
                                                      ->attach($attributevalues->first()->id, ["extraCost" => $attributevalues->first()->pivot->extraCost]);
-                                    } else {
-
                                     }
                                 }
                             }

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Collection\OrderCollections;
 use App\Traits\DateTrait;
 use App\Traits\Helper;
 use App\Traits\ProductCommon;
@@ -120,6 +121,18 @@ class Order extends Model
         'checkOutDateTime',
         'completed_at',
     ];
+
+    /**
+     * Create a new Eloquent Collection instance.
+     *
+     * @param  array $models
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function newCollection(array $models = [])
+    {
+        return new OrderCollections($models);
+    }
 
     public static function orderStatusFilter($orders, $orderStatusesId)
     {

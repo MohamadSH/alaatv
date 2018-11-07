@@ -140,7 +140,7 @@ class EventresultController extends Controller
         if ($eventResult->save()) {
             if ($userUpdate)
                 $user->update();
-            if ($request->has("fromAPI")) {
+            if ($request->ajax()) {
                 $participationCode = $eventResult->participationCode;
                 $message = "نتیجه با موفقیت درج شد";
                 $status = 200;
@@ -148,14 +148,14 @@ class EventresultController extends Controller
                 session()->put("success", "کارنامه با موفقیت درج شد");
             }
         } else {
-            if ($request->has("fromAPI")) {
+            if ($request->ajax()) {
                 $message = "خطا در درج نتیجه";
                 $status = 503;
             } else {
                 session()->put("error", \Lang::get("responseText.Database error."));
             }
         }
-        if ($request->has("fromAPI"))
+        if ($request->ajax())
             return $this->response->setStatusCode($status)
                                   ->setContent([
                                                    "message"           => $message,

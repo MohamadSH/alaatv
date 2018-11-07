@@ -66,6 +66,6 @@ class Kernel extends HttpKernel
         'permission'    => \Laratrust\Middleware\LaratrustPermission::class,
         'ability'       => \Laratrust\Middleware\LaratrustAbility::class,
         'convert'       => ModifyRequestInputMiddleware::class,
-
+        'trimUserUpdateRequest' => \App\Http\Middleware\TrimUserUpdateRequest::class,
     ];
 }

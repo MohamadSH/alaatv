@@ -133,9 +133,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('info', "UserController@informationPublicUrl");
         Route::get('{user}/info', 'UserController@information');
         Route::post('{user}/completeInfo', 'UserController@completeInformation');
-        Route::put('updateProfile', 'UserController@updateProfile');
-        Route::post('updatePhoto', 'UserController@updatePhoto');
-        Route::put('updatePassword', 'UserController@updatePassword');
         Route::get('orders', 'UserController@userOrders');
         Route::get('question', 'UserController@uploads');
         Route::get('getVerificationCode', 'UserController@sendVerificationCode');
@@ -147,8 +144,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('removeArabiHozouri', 'OrderController@removeArabiHozouri');
         Route::get('uploadQuestion', 'UserController@uploadConsultingQuestion')
              ->middleware('completeInfo');
-        Route::put('updateProfileAtLogin', 'UserController@updateProfileAtLogin');
-        Route::put('updatePassword', 'UserController@updatePassword');
         Route::get('orders', 'UserController@userOrders');
         Route::get('question', 'UserController@uploads');
         Route::get('getVerificationCode', 'UserController@sendVerificationCode');

@@ -230,13 +230,13 @@
     <script src="/assets/pages/scripts/ui-toastr.min.js" type="text/javascript"></script>
     <script src="/assets/extra/persian-datepicker/dist/js/persian-datepicker-1.1.3.min.js"
             type="text/javascript"></script>
-    <script src="/js/extraJS/scripts/profileUploadPhoto3.js" type="text/javascript"></script>
+    <script src="/js/extraJS/scripts/profileUploadPhoto4.js" type="text/javascript"></script>
     <script src="/js/extraJS/scripts/verificationCode.js" type="text/javascript"></script>
 @endsection
 
 @section("extraJS")
     <script type="text/javascript">
-        var mobileVerification = {{$user->hasVerifiedMobile()}};
+        var mobileVerification = {{($user->hasVerifiedMobile())?1:0}};
         /**
          * Set token for ajax request
          */

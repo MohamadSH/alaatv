@@ -1,6 +1,5 @@
 <?php namespace App\Traits;
 
-
 trait UserCommon
 {
     /**
@@ -130,18 +129,6 @@ trait UserCommon
     }
 
     /**
-     *  Determines whether user's profile is locked or not
-     *
-     * @param \App\User $user
-     *
-     * @return bool
-     */
-    public function isUserProfileLocked(\App\User $user): bool
-    {
-        return $user->lockProfile == 1;
-    }
-
-    /**
      * @param $orders
      *
      * @return \App\Transaction|\Illuminate\Database\Eloquent\Builder
@@ -151,5 +138,64 @@ trait UserCommon
         return \App\Transaction::whereIn("order_id", $orders->pluck("id"))
                                ->whereDoesntHave("parents")
                                ->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_UNPAID"));
+    }
+
+    /**
+     * Call UserController@store
+     *
+     * @param $data
+     * @return \Illuminate\Http\Response
+     */
+    public function callUserControllerStore($data)
+    {
+        $storeUserRequest = new \App\Http\Requests\InsertUserRequest();
+        $storeUserRequest->merge($data);
+        RequestCommon::convertRequestToAjax($storeUserRequest);
+        $userController = new \App\Http\Controllers\UserController(new \Jenssegers\Agent\Agent(), new \App\Websitesetting());
+        $response = $userController->store($storeUserRequest);
+        return $response;
+    }
+
+    /**
+     * Returns validation rules for inserting a user
+     *
+     * @param array $data
+     * @return array
+     */
+    public function getInsertUserValidationRules(array $data): array
+    {
+        $rules = [
+            'firstName'     => 'required|max:255',
+            'lastName'      => 'required|max:255',
+            'mobile'        => [
+                'required',
+                'digits:11',
+                \Illuminate\Validation\Rule::phone()->mobile()->country('AUTO,IR'),
+                \Illuminate\Validation\Rule::unique('users')
+                    ->where(function ($query) use ($data) {
+                        $query->where('nationalCode', $data["nationalCode"])
+                            ->where('deleted_at', null);
+                    }),
+            ],
+            'password'      => 'required|min:6',
+            'nationalCode'  => [
+                'required',
+                'digits:10',
+                'validate:nationalCode',
+                \Illuminate\Validation\Rule::unique('users')
+                    ->where(function ($query) use ($data) {
+                        $query->where('mobile', $data["mobile"])
+                            ->where('deleted_at', null);
+                    }),
+            ],
+            'userstatus_id' => 'required|exists:userstatuses,id',
+            'photo'         => 'image|mimes:jpeg,jpg,png|max:512',
+            'postalCode'    => 'sometimes|nullable|numeric',
+            'major_id'      => 'sometimes|nullable|exists:majors,id',
+            'gender_id'     => 'sometimes|nullable|exists:genders,id',
+            'email'         => 'sometimes|nullable|email',
+        ];
+
+        return $rules;
     }
 }
