@@ -149,6 +149,7 @@
 @show
 <!-- BEGIN CONTENT -->
     <div class="page-content-wrapper" xmlns="http://www.w3.org/1999/xhtml">
+        @yield('custom-menu')
         <!-- BEGIN CONTENT BODY -->
         <div
                 @section("contentClass")
@@ -167,64 +168,6 @@
                 </div>
             @endif
         <!-- BEGIN PAGE HEADER-->
-            {{--@section("themePanel")--}}
-            {{--@include("partials.themePanel")--}}
-            {{--@show--}}
-            {{--@if(strcmp(url()->current() , action("Auth\LoginController@showLoginForm")) != 0 &&--}}
-            {{--strcmp(url()->current() , action("HomeController@error403")) != 0 &&--}}
-            {{--strcmp(url()->current() , action("HomeController@error404")) != 0 &&--}}
-            {{--isset($pageName) &&--}}
-            {{--strcmp($pageName , "productLiveView") != 0 &&--}}
-            {{--strcmp($pageName , "admin") != 0)--}}
-            {{--@if(\App\Product::where('id',65)->first()->isHappening() === true || \App\Product::where('id',65)->first()->isHappening()< config::get("constants.HOURS_AFTER_HAMAYESH"))--}}
-            {{--<div class="row" >--}}
-            {{--<div class="col-md-12">--}}
-            {{--<a href="{{action("ProductController@showLiveView" , 65)}}">--}}
-            {{--<div class="portlet light ">--}}
-            {{--<div class="portlet-body">--}}
-            {{--<div id="pulsate-regular1" style="padding:5px;"><h4 class="text-center bold" >@if(\App\Product::where('id',65)->first()->isHappening() === true) برای پخش آنلاین همایش ریاضی تجربی کلیک کنید @else برای دانلود همایش ریاضی تجربی کلیک کنید @endif</h4></div>--}}
-            {{--</div>--}}
-            {{--</div>--}}
-            {{--</a>--}}
-            {{--</div>--}}
-            {{--</div>--}}
-            {{--@elseif(\App\Product::where('id',65)->first()->isHappening()<0)--}}
-            {{--<div class="col-md-12 coming-soon-countdown" style="background: #67809f">--}}
-            {{--<h3 class="text-center bg-font-dark bold">زمان باقی مانده تا آپلود همایش ریاضی تجربی</h3>--}}
-            {{--<div class="col-md-4"></div>--}}
-            {{--<div class="col-md-8">--}}
-            {{--<div id="defaultCountdown" class="font-red"> </div>--}}
-            {{--</div>--}}
-            {{--</div>--}}
-            {{--<script type="application/javascript">--}}
-            {{--var ComingSoon = function () {--}}
-            {{--return {--}}
-            {{--//main function to initiate the module--}}
-            {{--init: function () {--}}
-            {{--var austDay = new Date("2017-05-12T07:30:00Z");--}}
-            {{--$('#defaultCountdown').countdown({until: austDay});--}}
-            {{--}--}}
-
-            {{--};--}}
-
-            {{--}();--}}
-            {{--jQuery(document).ready(function() {--}}
-            {{--ComingSoon.init();--}}
-            {{--});--}}
-            {{--</script>--}}
-            {{--@endif--}}
-
-            @section("pageBar")
-                @include("partials.pageBar")
-            @show
-        <!-- END PAGE HEADER-->
-            {{--ADMIN NOTIFICATION--}}
-            {{--@if(isset($pageName) && strcmp($pageName , "admin") == 0 )--}}
-            {{--<div class="note note-warning">--}}
-            {{--<h4 class="block"><strong>توجه!</strong></h4>--}}
-            {{--<strong class="font-red">ادمین محترم با توجه به تغییرات صورت گرفته در پنل ادمین ،لطفا کش مرورگر خود را خالی کنید!</strong>--}}
-            {{--</div>--}}
-            {{--@endif--}}
             @yield("content")
         </div>
         <!-- END CONTENT BODY -->
