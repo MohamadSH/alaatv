@@ -531,11 +531,11 @@ h1, h2, h3, h4, h5, h6, p {
     content: "\f104" !important;
 }
 
-.right_menu.in_filter {
+.in_filter .right_menu {
     transform: translate(100%);
 }
 
-.right_menu.in_filter .close_filter {
+.in_filter .right_menu .close_filter {
     transform: translate(-34px);
 }
 
@@ -552,8 +552,33 @@ h1, h2, h3, h4, h5, h6, p {
         right: 54px !important;
     }
 
+    .page-sidebar-closed .page-content-wrapper.in_filter .page-content {
+        margin-right: 54px !important;
+    }
+
     .page-sidebar-closed .page-content-wrapper .page-content {
         margin-right: 379px !important;
+    }
+
+    .page-content-wrapper.in_filter .page-content {
+        margin-right: 196px !important;
+    }
+
+    .page-content-wrapper .page-content {
+        margin-right: 520px !important;
+    }
+
+    .page-sidebar.navbar-collapse {
+        position: absolute;
+        bottom: 0;
+        top: 0;
+    }
+
+    .page-footer {
+        position: absolute;
+        width: 100%;
+        z-index: 1000;
+        background: #ff9000;
     }
 }
 

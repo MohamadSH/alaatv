@@ -1,20 +1,17 @@
 $(document).ready(function () {
-
     /**
      * show_hid filter
      */
     $("#close_filter .right_icon").on('click', function () {
-        $(".right_menu").addClass("in_filter");
+        $(".page-content-wrapper").addClass("in_filter");
         $(this).hide();
         $("#close_filter .left_icon").show();
-        $(".page-content-wrapper .page-content").css({'margin-right': '195px'});
     });
     $("#close_filter .left_icon").hide();
     $("#close_filter .left_icon").on('click', function () {
-        $(".right_menu").removeClass("in_filter");
+        $(".page-content-wrapper").removeClass("in_filter");
         $(this).hide();
         $("#close_filter .right_icon").show();
-        $(".page-content-wrapper .page-content").css({'margin-right': '520px'});
     });
 
     /**
@@ -48,6 +45,7 @@ $(document).ready(function () {
                 $(this).parent().removeClass('fill');
             }
         });
+
         /**
          * scroll
          */
@@ -55,19 +53,18 @@ $(document).ready(function () {
 
             /**
              * enable scrolling buttons by default
-             * @type {boolean}
              */
             $.mCustomScrollbar.defaults.scrollButtons.enable = true;
+
             /**
              * enable 2 axis scrollbars by default
-             * @type {string}
              */
             $.mCustomScrollbar.defaults.axis = "yx";
-
 
             $("#content-rds").mCustomScrollbar({theme: "rounded-dots"});
 
         });
+
         $('.check_item').on('click', function () {
             $(this).addClass('active_menu').siblings().removeClass('active_menu');
         });
