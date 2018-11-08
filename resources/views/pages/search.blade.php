@@ -113,7 +113,7 @@
                             <div class="clearfix"></div>
                         </div>
                     </li>
-                    {{--<li>
+                    <li>
                         <h4 class="titel_fillter center mrg_20">
                             انتخاب نوع سوال
                         </h4>
@@ -170,7 +170,7 @@
                             </div>
                             <div class="clearfix"></div>
                         </div>
-                    </li>--}}
+                    </li>
                     <li>
                         <h4 class="titel_fillter center mrg_20">
                             جستجو بر اساس رشته , پایه و کتاب درسی
@@ -541,7 +541,7 @@
                             </ul>
                         </div>
                     </li>
-                    {{--<li>
+                    <li>
                         <h4 class="titel_fillter center mrg_20">
                             انتخاب منابع
                         </h4>
@@ -598,7 +598,7 @@
                                 <div class="clearfix"></div>
                             </div>
                         </div>
-                    </li>--}}
+                    </li>
                 </ul>
             </div>
         </div>

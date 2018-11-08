@@ -90,13 +90,14 @@ class WebsiteSettingController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  int                      $id
+     * @param                           $setting
      *
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     public function update(Request $request, $setting)
     {
-        $wSetting = json_decode($setting->setting);
+        $wSetting = json_decode($setting)->setting;
 
         $wSetting->site->name = $request->get("siteName");
         $wSetting->site->titleBar = $request->get("titleBar");

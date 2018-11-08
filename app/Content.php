@@ -592,14 +592,7 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
         return $this->convertDate($this->validSince, "toJalali") . " " . $explodedTime;
     }
 
-    /**
-     * Set th content's page_view.
-     *
-     * @param $input
-     */
-    public function setPage_viewAttribute($input){
-        $this->attributes['page_view'] = json_encode($input, JSON_UNESCAPED_UNICODE);
-    }
+
 
     /**
      * Set the content's thumbnail.

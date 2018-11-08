@@ -12,17 +12,20 @@ namespace App\Traits;
 trait ModelTrackerTrait
 {
     /**
+     * Set th content's page_view.
+     *
+     * @param $input
+     */
+    public function setPageViewAttribute($input){
+        $this->attributes['page_view'] = json_encode($input, JSON_UNESCAPED_UNICODE);
+    }
+    /**
      *
      * @param $value
      *
      * @return mixed
      */
-    public function getPage_viewAttribute($value){
-        return json_decode($value);
+    public function getPageViewAttribute($value){
+        return optional(json_decode($value))->page_views;
     }
-
-    public function getPageViewAttribute(){
-        return $this->page_view->page_views;
-    }
-
 }
