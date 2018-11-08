@@ -191,6 +191,30 @@ mix.scripts(
     'public/js/custom-filter-menu-all.js'
 ).version();
 
+mix.styles(
+    [
+        'public/assets/extra/slick/slick/slick.css',
+        'public/assets/extra/slick/slick/slick-theme.css',
+        'public/assets/extra/acm/custom-search.css',
+        'public/css/custom-filter-menu-all.css'
+    ],
+    'public/css/search-extra-all.css'
+).version();
+
+mix.scripts(
+    [
+        'public/js/Page_Level_Script_all.js',
+        'public/assets/global/plugins/fancybox/source/jquery.fancybox.pack.js',
+        'public/assets/pages/scripts/search.min.js',
+        'public/assets/extra/slick/slick/slick.min.js',
+        'public/js/extraJS/slugify/text2slug.js',
+        'public/assets/extra/acm/custom-search.js',
+        'public/js/custom-filter-menu-all.js'
+    ],
+    'public/js/search-extra-all.js'
+).version();
+mix.copy('public/assets/extra/slick/slick/fonts', 'public/css/fonts');
+
 // mix.scripts(
 //     [
 //         'public/js/core_all.js',

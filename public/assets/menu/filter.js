@@ -3,15 +3,29 @@ $(document).ready(function () {
      * show_hid filter
      */
     $("#close_filter .right_icon").on('click', function () {
+        $("#js-grid-juicy-contentset").cubeportfolio('destroy');
+        $("#js-grid-juicy-projects").cubeportfolio('destroy');
+
         $(".page-content-wrapper").addClass("in_filter");
         $(this).hide();
         $("#close_filter .left_icon").show();
+
+
+        initialPortfolio("#js-grid-juicy-contentset");
+        initialPortfolio("#js-grid-juicy-projects");
     });
     $("#close_filter .left_icon").hide();
     $("#close_filter .left_icon").on('click', function () {
+        $("#js-grid-juicy-contentset").cubeportfolio('destroy');
+        $("#js-grid-juicy-projects").cubeportfolio('destroy');
+
         $(".page-content-wrapper").removeClass("in_filter");
         $(this).hide();
         $("#close_filter .right_icon").show();
+
+
+        initialPortfolio("#js-grid-juicy-contentset");
+        initialPortfolio("#js-grid-juicy-projects");
     });
 
     /**

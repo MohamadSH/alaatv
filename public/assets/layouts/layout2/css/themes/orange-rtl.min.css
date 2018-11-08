@@ -92,7 +92,9 @@
 .page-sidebar .page-sidebar-menu li > a > .arrow.open::before, .page-sidebar .page-sidebar-menu li > a > .arrow::before, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu li > a > .arrow.open::before, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu li > a > .arrow::before {
     color: #fff !important;;
 }
-
+.search_popup .search_checkbox.fill input::before {
+    color: #ff9000 !important;
+}
 /*......*/
 .page-header.navbar .page-logo {
     background: #333;
@@ -455,7 +457,7 @@
 
 @media (max-width: 767px) {
     .page-header.navbar {
-        background: #17C4BB
+        background: #333;
     }
 
     .page-header.navbar .top-menu .navbar-nav > li.dropdown > .dropdown-toggle:hover {
