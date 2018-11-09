@@ -30,6 +30,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Websitepage withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Websitepage withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Websitepage newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Websitepage newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Websitepage query()
  */
 class Websitepage extends Model
 {

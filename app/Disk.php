@@ -28,6 +28,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Disk withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Disk withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Disk newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Disk newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Disk query()
  */
 class Disk extends Model
 {

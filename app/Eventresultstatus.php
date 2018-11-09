@@ -22,6 +22,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresultstatus whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresultstatus whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresultstatus newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresultstatus newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresultstatus query()
  */
 class Eventresultstatus extends Model
 {

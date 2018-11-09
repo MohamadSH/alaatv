@@ -29,6 +29,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Gender withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Gender withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Gender newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Gender newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Gender query()
  */
 class Gender extends Model
 {

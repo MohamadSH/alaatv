@@ -40,6 +40,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Question withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Question withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Question newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Question newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Question query()
  */
 class Question extends Model
 {

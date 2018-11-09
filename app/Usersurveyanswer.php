@@ -36,6 +36,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Usersurveyanswer withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Usersurveyanswer withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Usersurveyanswer newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Usersurveyanswer newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Usersurveyanswer query()
  */
 class Usersurveyanswer extends Model
 {

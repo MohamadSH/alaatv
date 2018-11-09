@@ -28,6 +28,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Contenttypeinterrelation withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Contenttypeinterrelation withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Contenttypeinterrelation newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Contenttypeinterrelation newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Contenttypeinterrelation query()
  */
 class Contenttypeinterrelation extends Model
 {

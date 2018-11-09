@@ -32,6 +32,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Assignmentstatus withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Assignmentstatus withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Assignmentstatus newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Assignmentstatus newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Assignmentstatus query()
  */
 class Assignmentstatus extends Model
 {

@@ -31,6 +31,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Orderfile withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Orderfile withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderfile newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderfile newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderfile query()
  */
 class Orderfile extends Model
 {

@@ -29,6 +29,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Survey withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Survey withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Survey newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Survey newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Survey query()
  */
 class Survey extends Model
 {

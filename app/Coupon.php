@@ -58,6 +58,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Coupon withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Coupon withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon query()
  */
 class Coupon extends Model
 {

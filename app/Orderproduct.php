@@ -59,6 +59,9 @@ use Illuminate\Support\Facades\Config;
  * @method static \Illuminate\Database\Query\Builder|\App\Orderproduct withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Orderproduct withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct query()
  */
 class Orderproduct extends Model
 {

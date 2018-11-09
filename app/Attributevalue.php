@@ -35,6 +35,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Attributevalue withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Attributevalue withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributevalue newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributevalue newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributevalue query()
  */
 class Attributevalue extends Model
 {

@@ -40,6 +40,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Userupload withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Userupload withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Userupload newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Userupload newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Userupload query()
  */
 class Userupload extends Model
 {

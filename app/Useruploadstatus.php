@@ -31,6 +31,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Useruploadstatus withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Useruploadstatus withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Useruploadstatus newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Useruploadstatus newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Useruploadstatus query()
  */
 class Useruploadstatus extends Model
 {

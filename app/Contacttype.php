@@ -31,6 +31,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Contacttype withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Contacttype withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Contacttype newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Contacttype newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Contacttype query()
  */
 class Contacttype extends Model
 {

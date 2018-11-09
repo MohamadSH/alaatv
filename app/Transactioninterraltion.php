@@ -22,6 +22,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Transactioninterraltion whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Transactioninterraltion whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transactioninterraltion newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transactioninterraltion newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transactioninterraltion query()
  */
 class Transactioninterraltion extends Model
 {

@@ -30,6 +30,9 @@ use Webpatser\Uuid\Uuid;
  * @method static \Illuminate\Database\Query\Builder|\App\File withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\File withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\File newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\File newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\File query()
  */
 class File extends Model
 {

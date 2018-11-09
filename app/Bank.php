@@ -27,6 +27,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Bank withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Bank withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Bank newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Bank newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Bank query()
  */
 class Bank extends Model
 {

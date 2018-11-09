@@ -22,6 +22,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Checkoutstatus whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Checkoutstatus whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Checkoutstatus newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Checkoutstatus newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Checkoutstatus query()
  */
 class Checkoutstatus extends Model
 {

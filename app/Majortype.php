@@ -29,6 +29,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Majortype withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Majortype withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Majortype newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Majortype newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Majortype query()
  */
 class Majortype extends Model
 {

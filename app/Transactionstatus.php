@@ -31,6 +31,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Transactionstatus withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Transactionstatus withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transactionstatus newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transactionstatus newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transactionstatus query()
  */
 class Transactionstatus extends Model
 {

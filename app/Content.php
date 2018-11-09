@@ -106,6 +106,9 @@ use Stevebauman\Purify\Facades\Purify;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereSlug($value)
  * @property mixed $page_view
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Content wherePageView($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Content newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Content newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Content query()
  */
 class Content extends Model implements Advertisable, Taggable, SeoInterface, FavorableInterface
 {

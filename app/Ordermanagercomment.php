@@ -30,6 +30,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Ordermanagercomment withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Ordermanagercomment withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Ordermanagercomment newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Ordermanagercomment newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Ordermanagercomment query()
  */
 class Ordermanagercomment extends Model
 {

@@ -32,6 +32,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Userstatus withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Userstatus withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Userstatus newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Userstatus newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Userstatus query()
  */
 class Userstatus extends Model
 {

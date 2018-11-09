@@ -54,6 +54,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Userbon withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Userbon withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Userbon newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Userbon newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Userbon query()
  */
 class Userbon extends Model
 {

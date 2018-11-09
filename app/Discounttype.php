@@ -22,6 +22,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Discounttype whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Discounttype whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Discounttype newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Discounttype newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Discounttype query()
  */
 class Discounttype extends Model
 {

@@ -32,6 +32,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Consultationstatus withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Consultationstatus withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Consultationstatus newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Consultationstatus newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Consultationstatus query()
  */
 class Consultationstatus extends Model
 {

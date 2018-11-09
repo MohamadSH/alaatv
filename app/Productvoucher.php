@@ -35,6 +35,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Productvoucher withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Productvoucher withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Productvoucher newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Productvoucher newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Productvoucher query()
  */
 class Productvoucher extends Model
 {

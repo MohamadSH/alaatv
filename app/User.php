@@ -7,13 +7,15 @@ use App\Classes\Verification\MustVerifyMobileNumber;
 use App\Collection\ContentCollection;
 use App\Collection\UserCollection;
 use App\Traits\APIRequestCommon;
+use App\Traits\CharacterCommon;
 use App\Traits\DateTrait;
 use App\Traits\HasWallet;
-use App\Traits\CharacterCommon;
 use App\Traits\Helper;
 use App\Traits\MustVerifyMobileNumberTrait;
 use Carbon\Carbon;
+use Hash;
 use Iatstuti\Database\Support\CascadeSoftDeletes;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -22,7 +24,6 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\{Auth, Cache, Config, DB};
 use Laratrust\Traits\LaratrustUserTrait;
 use Schema;
-use Hash;
 
 /**
  * App\User
@@ -222,8 +223,18 @@ use Hash;
  *                    $favoredSet
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereMobileVerifiedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereMobileVerifiedCode($value)
+ * @property string|null $email_verified_at
+ * @property-read mixed  $reverse_full_name
+ * @property-write mixed $first_name
+ * @property-write mixed $last_name
+ * @property-write mixed $medical_condition
+ * @property-write mixed $postal_code
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereEmailVerifiedAt($value)
  */
-class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
+class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, MustVerifyEmail
 {
     use MustVerifyMobileNumberTrait;
     use Helper;
@@ -256,6 +267,8 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
         'updated_at',
         'deleted_at',
         'birthdate',
+        'mobile_verified_code',
+        'email_verified_at',
     ];
     protected $lockProfile = [
         "province",
@@ -335,8 +348,8 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
 
     private static $secureFillable = [
         "firstName",
-        "lastName" ,
-        "password" ,
+        "lastName",
+        "password",
         "nationalCode",
         "nameSlug",
         "mobile",
@@ -345,10 +358,11 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     ];
 
     private static $beProtected = [
-        "roles"
-    ] ;
+        "roles",
+    ];
 
     /** Setter mutator for major_id
+     *
      * @param $value
      */
     public function setFirstNameAttribute($value): void
@@ -361,6 +375,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     }
 
     /** Setter mutator for major_id
+     *
      * @param $value
      */
     public function setLastNameAttribute($value): void
@@ -372,6 +387,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     }
 
     /** Setter mutator for major_id
+     *
      * @param $value
      */
     public function setMajorIdAttribute($value): void
@@ -383,6 +399,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     }
 
     /** Setter mutator for bloodtype_id
+     *
      * @param $value
      */
     public function setBloodtypeIdAttribute($value): void
@@ -394,6 +411,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     }
 
     /** Setter mutator for grade_id
+     *
      * @param $value
      */
     public function setGenderIdAttribute($value): void
@@ -405,6 +423,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     }
 
     /** Setter mutator for grade_id
+     *
      * @param $value
      */
     public function setGradeIdAttribute($value): void
@@ -416,6 +435,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     }
 
     /** Setter mutator for email
+     *
      * @param $value
      */
     public function setEmailAttribute($value): void
@@ -427,6 +447,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     }
 
     /** Setter mutator for phone
+     *
      * @param $value
      */
     public function setPhoneAttribute($value): void
@@ -438,6 +459,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     }
 
     /** Setter mutator for city
+     *
      * @param $value
      */
     public function setCityAttribute($value): void
@@ -449,6 +471,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     }
 
     /** Setter mutator for province
+     *
      * @param $value
      */
     public function setProvinceAttribute($value): void
@@ -460,6 +483,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     }
 
     /** Setter mutator for address
+     *
      * @param $value
      */
     public function setAddressAttribute($value): void
@@ -471,6 +495,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     }
 
     /** Setter mutator for postalCode
+     *
      * @param $value
      */
     public function setPostalCodeAttribute($value): void
@@ -482,6 +507,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     }
 
     /** Setter mutator for school
+     *
      * @param $value
      */
     public function setSchoolAttribute($value): void
@@ -493,6 +519,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     }
 
     /** Setter mutator for allergy
+     *
      * @param $value
      */
     public function setAllergyAttribute($value): void
@@ -504,6 +531,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     }
 
     /** Setter mutator for medicalCondition
+     *
      * @param $value
      */
     public function setMedicalConditionAttribute($value): void
@@ -515,6 +543,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
     }
 
     /** Setter mutator for discount
+     *
      * @param $value
      */
     public function setDietAttribute($value): void
@@ -536,7 +565,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
      *
      * @return HasMany
      */
-    public function getShowableOrders():HasMany
+    public function getShowableOrders(): HasMany
     {
         $excludedOrderStatuses = [
             config("constants.ORDER_STATUS_OPEN"),
@@ -545,7 +574,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
             config("constants.ORDER_STATUS_OPEN_DONATE"),
         ];
         return $this->orders()
-            ->whereNotIn("orderstatus_id", $excludedOrderStatuses);
+                    ->whereNotIn("orderstatus_id", $excludedOrderStatuses);
     }
 
     /**
@@ -553,7 +582,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
      *
      * @return HasManyThrough
      */
-    public function getShowableTransactions():HasManyThrough
+    public function getShowableTransactions(): HasManyThrough
     {
         $showableTransactionStatuses = [
             config("constants.TRANSACTION_STATUS_SUCCESSFUL"),
@@ -561,11 +590,10 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
             config("constants.TRANSACTION_STATUS_PENDING"),
         ];
         $transactions = $this->orderTransactions()
-            ->whereDoesntHave("parents")
-            ->where(function ($q) use ($showableTransactionStatuses)
-            {
-                $q->whereIn("transactionstatus_id", $showableTransactionStatuses);
-            });
+                             ->whereDoesntHave("parents")
+                             ->where(function ($q) use ($showableTransactionStatuses) {
+                                 $q->whereIn("transactionstatus_id", $showableTransactionStatuses);
+                             });
         return $transactions;
     }
 
@@ -574,12 +602,12 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
      *
      * @return HasManyThrough
      */
-    public function getInstalments():HasManyThrough
+    public function getInstalments(): HasManyThrough
     {
         //ToDo : to be tested
         return $this->orderTransactions()
-            ->whereDoesntHave("parents")
-            ->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_UNPAID"));
+                    ->whereDoesntHave("parents")
+                    ->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_UNPAID"));
     }
 
     /**
@@ -606,16 +634,22 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
         $endTime2 = Carbon::create(2018, 06, 15, 23, 59, 30, 'Asia/Tehran');
         $flag2 = ($now->between($startTime2, $endTime2));
         if ($flag2) {
-            $bon = Bon::where("name", Config::get("constants.BON2"))->first();
+            $bon = Bon::where("name", Config::get("constants.BON2"))
+                      ->first();
             $userPoints = 0;
             if (isset($bon)) {
                 $userPoints = $this->userHasBon($bon->name);
                 $exchangeAmount = $userPoints * config("constants.HAMAYESH_LOTTERY_EXCHANGE_AMOUNT");
             }
             if ($userPoints <= 0) {
-                $lottery = Lottery::where("name", Config::get("constants.LOTTERY_NAME"))->get()->first();
+                $lottery = Lottery::where("name", Config::get("constants.LOTTERY_NAME"))
+                                  ->get()
+                                  ->first();
                 if (isset($lottery)) {
-                    $userLottery = $this->lotteries()->where("lottery_id", $lottery->id)->get()->first();
+                    $userLottery = $this->lotteries()
+                                        ->where("lottery_id", $lottery->id)
+                                        ->get()
+                                        ->first();
                     if (isset($userLottery)) {
                         $lotteryName = $lottery->displayName;
                         $lotteryMessage = "شما در قرعه کشی " . $lotteryName . " شرکت داده شدید و متاسفانه برنده نشدید.";
@@ -648,7 +682,16 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
             }
         }
 
-        return [$exchangeAmount, $userPoints, $userLottery, $prizeCollection, $lotteryRank, $lottery, $lotteryMessage, $lotteryName];
+        return [
+            $exchangeAmount,
+            $userPoints,
+            $userLottery,
+            $prizeCollection,
+            $lotteryRank,
+            $lottery,
+            $lotteryMessage,
+            $lotteryName,
+        ];
     }
 
     /**
@@ -1211,26 +1254,25 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber
      * Compares user's password with a new password
      *
      * @param $password
+     *
      * @return bool
      *  True : equal / False : not equal
      */
-    public function compareWithCurrentPassword($password) : bool
+    public function compareWithCurrentPassword($password): bool
     {
-        if (Hash::check($password, $this->password))
-        {
+        if (Hash::check($password, $this->password)) {
             $result = true;
-        }else
-        {
+        } else {
             $result = false;
         }
 
-        return $result ;
+        return $result;
     }
 
     /**
      * @param $newPassword
      */
-    public function changePassword($newPassword):void
+    public function changePassword($newPassword): void
     {
         $this->fill(['password' => bcrypt($newPassword)]);
     }

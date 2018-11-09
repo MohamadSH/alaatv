@@ -30,6 +30,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Afterloginformcontrol withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Afterloginformcontrol withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Afterloginformcontrol newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Afterloginformcontrol newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Afterloginformcontrol query()
  */
 class Afterloginformcontrol extends Model
 {

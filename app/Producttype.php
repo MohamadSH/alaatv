@@ -29,6 +29,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Producttype withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Producttype withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Producttype newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Producttype newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Producttype query()
  */
 class Producttype extends Model
 {

@@ -22,6 +22,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Productinterrelation whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Productinterrelation whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Productinterrelation newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Productinterrelation newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Productinterrelation query()
  */
 class Productinterrelation extends Model
 {

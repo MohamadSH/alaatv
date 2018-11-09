@@ -260,7 +260,7 @@ Route::resource('c', 'ContentController');
 Route::resource("sanatisharifmerge", "SanatisharifmergeController");
 Route::resource('article', 'ArticleController');
 Route::resource('block', 'BlockController');
-Auth::routes();
+Auth::routes(['verify' => true]);
 
 Route::group(['prefix' => 'mobile'], function () {
     Route::get("verify", "MobileVerificationController@show")

@@ -36,6 +36,9 @@ use Illuminate\Support\Facades\Cache;
  * @method static \Illuminate\Database\Query\Builder|\App\Contenttype withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Contenttype withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Contenttype newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Contenttype newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Contenttype query()
  */
 class Contenttype extends Model
 {
