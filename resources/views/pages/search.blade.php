@@ -620,7 +620,6 @@
         </div>
     </div>--}}
     <div class="row">
-
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
             <!-- BEGIN PORTLET-->
             <div class="portlet light " id="productPortlet">
@@ -638,19 +637,6 @@
                 </div>
             </div>
             <!-- END PORTLET-->
-        </div>
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
-            <div class="portlet light contentPortlet">
-                <div class="portlet-title tabbable-line">
-                    <div class="caption">
-                        <i class="icon-globe font-dark hide"></i>
-                        <span class="caption-subject font-dark bold uppercase">دوره های آموزشی آلاء</span>
-                        {{--{!! $tagLabels !!}--}}
-                    </div>
-                </div>
-                <div class="portlet-body " id="tab_contentset">
-                </div>
-            </div>
         </div>
     </div>
     @foreach($ads1 as $image => $link)
@@ -704,7 +690,6 @@
     -- js variables
     -->
     <div style="display: none">
-
         <input id="js-var-tags" type="hidden" value='@json($tags,JSON_UNESCAPED_UNICODE)'>
         <input id="js-var-extraTags" type="hidden" value='@json($extraTags,JSON_UNESCAPED_UNICODE)'>
         <input id="js-var-contentIndexUrl" type="hidden" value='{{action('ContentController@index')}}'>

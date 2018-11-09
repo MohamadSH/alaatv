@@ -36,7 +36,7 @@ mix.styles(
         'public/assets/global/plugins/morris/morris.css',
         'public/assets/global/plugins/fullcalendar/fullcalendar.min.css',
         'public/assets/global/plugins/jqvmap/jqvmap/jqvmap.css',
-        'public/assets/global/plugins/cubeportfolio/css/cubeportfolio.css',
+        'public/assets/global/plugins/cubeportfolio/css/cubeportfolio.min.css',
         'public/assets/global/plugins/jquery-notific8/jquery.notific8.min.css',
     ],
     'public/css/home_page_level_plugin_all.css'

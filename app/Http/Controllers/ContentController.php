@@ -147,6 +147,7 @@ class ContentController extends Controller
                 ->setPageName($contentType . 'Page')
                 ->apply($filters);
 
+//            dump(${$contentType . 'Result'});
             if ($isApp) {
                 $data = ${$contentType . 'Result'}->getCollection();
             } else {
@@ -166,6 +167,7 @@ class ContentController extends Controller
             $items->push($data);
         }
 
+//        dd(".");
         if ($isApp) {
             $response = $this->makeJsonForAndroidApp($items);
             return response()->json($response, Response::HTTP_OK);
