@@ -29,10 +29,10 @@
         "path": {
             "src": "./../src",
             "node_modules": "./node_modules",
-            "demo_api_url": "https://keenthemes.com/metronic/themes/themes/metronic/dist/preview/"
+            "demo_api_url": ""
         },
         "dist": [
-            "./../dist/**/assets"
+            "./../../../../public/assets"
         ]
     },
     "build": {
