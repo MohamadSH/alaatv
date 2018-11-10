@@ -2,6 +2,7 @@
     "config": {
         "demo": "demo12",
         "debug": false,
+        "rtl": true,
         "compile": {
             "rtl": {
                 "enabled": true,

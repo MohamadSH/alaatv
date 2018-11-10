@@ -550,6 +550,10 @@ class Order extends Model
         return $this->obtainOrderCost()["totalCost"];
     }
 
+    public function getNumberOfProductsAttribute()
+    {
+        return $this->orderproducts->count();
+    }
     public function orderproducts($type = null)
     {
         if (isset($type))

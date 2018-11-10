@@ -270,3 +270,4 @@ Route::group(['prefix' => 'mobile'], function () {
     Route::get("resend", "MobileVerificationController@resend")
          ->name('mobile.verification.resend');
 });
+Route::view('uiTest','app');
