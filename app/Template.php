@@ -25,6 +25,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Template withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Template withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Template newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Template newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Template query()
  */
 class Template extends Model
 {

@@ -29,6 +29,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Bontype withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Bontype withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Bontype newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Bontype newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Bontype query()
  */
 class Bontype extends Model
 {

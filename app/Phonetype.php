@@ -31,6 +31,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Phonetype withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Phonetype withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Phonetype newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Phonetype newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Phonetype query()
  */
 class Phonetype extends Model
 {

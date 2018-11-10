@@ -8,6 +8,7 @@ use App\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\{Facades\Auth, Facades\Session, Facades\URL, Facades\Validator};
+use Illuminate\Validation\Rule;
 
 class LoginController extends Controller
 {

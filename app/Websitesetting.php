@@ -26,6 +26,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Websitesetting withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Websitesetting withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Websitesetting newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Websitesetting newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Websitesetting query()
  */
 class Websitesetting extends Model
 {

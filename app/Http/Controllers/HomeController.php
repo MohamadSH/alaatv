@@ -6,11 +6,11 @@ use App\{Assignmentstatus,
     Attribute,
     Attributecontrol,
     Attributeset,
-    Block,
     Bon,
     Category,
     Checkoutstatus,
     Classes\Format\BlockCollectionFormatter,
+    Classes\Report\GaReportFactory,
     Classes\Search\ContentSearch,
     Consultationstatus,
     Content,
@@ -193,105 +193,12 @@ class HomeController extends Controller
 
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
-        $user = User::FindOrFail(1);
-        dd($user->hasVerifiedMobile());
-
-        return $formatter->format(Block::getBlocks());
-        dump($request->route('ab'));
-        dd("Done!");
-
-        $categories = Category::active()
-                              ->get()
-                              ->toTree();
-        return view('partials.tree', compact('categories'));
-
-        /*        $nodes = Category::get()->toTree();
-
-                $traverse = function ($categories, $prefix = '-') use (&$traverse) {
-                    foreach ($categories as $category) {
-                        if($category->enable == false )
-                            continue;
-                        echo PHP_EOL.$prefix.' '.(isset($category->name) ? $category->name : '!!!'). '<br>';
-
-                        $traverse($category->children, $prefix.'-');
-                    }
-                };
-
-                dd($traverse($nodes));
-
-                dd(
-                    (new AuthorTagManagerViaApi())->getTags(37227)
-                );
-                $c = Content::create(
-                    [
-                        'name' => 'test8',
-                        'tags'=>  [
-                            "فیلم",
-                            "رشته_ریاضی",
-                            "متوسطه2",
-                            "کنکور",
-                            "ضبط_کلاس_درس",
-                            "نظام_آموزشی_قدیم",
-                            "پیش",
-                            "شبیه_ساز_کلاس_درس",
-                            "گسسته",
-                            "رضا_شامیزاده",
-                        ],
-                        'enable' => 1,
-                        'contenttype_id' => 8
-                    ]
-                );
-
-                dd($c);
-
-
-                $nodes = Category::get();
-                dd($nodes->toTree());*/
-        $filters = [
-            'tag'   => [
-                'جلال_موقاری',
-            ],
-            'name'  => 'شناسی، دیروز، امروز و فردا (قسمت 1)-گفتار1: زیست شناسی',
-            'order' => 1,
-        ];
-        $a = new ContentSearch();
-        dd($a->apply($filters)
-             ->take(5)
-             ->videos());
-        dd(Str::uuid()
-              ->toString());
-
         try {
-            $files = [
-                "s" => "m",
-            ];
-            foreach (optional($files) as $key => $file) {
-                dump($file);
-            }
-            dd("s");
-            $time = $request->get("sohrab");
-            dd($time);
+            $out = (new GaReportFactory())->createGaReportGetUsersFromPageView()
+                                          ->getReport('/c/6560');
+            dump("here!");
+            dd($out);
 
-            //            $adItems = Contentset::find(199)->contents;
-            $adItems = Content::whereHas("contentsets", function ($q) {
-                $q->where("id", 199);
-            })
-                              ->where("enable", 1)
-                              ->orderBy("order")
-                              ->get();
-            return ("so");
-            $e = Content::find(6560);
-            dd($e->validSince);
-            //            dd($e->thumbnail);
-            //            dd( parse_url("https://cdn.sanatisharif.ir/media/156/HD_720p/008uuui.mp4")['path']);
-            $b = \App\Classes\LinkGenerator::create(null, "productFileSFTP", null, "/paid/85/fizik-1.mp4");
-            $a = \App\Classes\LinkGenerator::create("bee26d8a-f739-4372-98a7-856b8b1d2621", null, null, "sanatish/140/160923111124.pdf");
-
-            $c = \App\Classes\LinkGenerator::create("bb1ef4e5-a572-46da-b4cc-1574f08ce903", "alaaCdnSFTP", null, "/media/156/HD_720p/008uuui.mp4");
-            $d = \App\Classes\LinkGenerator::create("bb1ef4e5-a572-46da-b4cc-1574f08ce903", "alaaCdnSFTP", "https://cdn.sanatisharif.ir/media/156/HD_720p/008uuui.mp4", "/media/156/HD_720p/008uuui.mp4");
-            return [
-                "userSeen" => $c->getLinks(['content_id' => 1]),
-            ];
         }
         catch (\Exception    $e) {
             $message = "unexpected error";
@@ -2018,7 +1925,6 @@ class HomeController extends Controller
         if (Auth::check()) {
             $baseUrl = url("/");
             $contentPath = str_replace($baseUrl, "", action("HomeController@donate"));
-            $seenCount = $this->userSeen($contentPath);
         }
 
 

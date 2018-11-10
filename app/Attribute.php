@@ -40,6 +40,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Attribute withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Attribute withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Attribute newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Attribute newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Attribute query()
  */
 class Attribute extends Model
 {

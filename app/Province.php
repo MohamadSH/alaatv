@@ -25,6 +25,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Province withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Province withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Province newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Province newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Province query()
  */
 class Province extends Model
 {

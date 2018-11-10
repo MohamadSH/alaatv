@@ -7,14 +7,7 @@ use App\Content;
 use App\Contentset;
 use App\Contenttype;
 use App\Http\Requests\{ContentIndexRequest, EditContentRequest, InsertContentRequest, Request};
-use App\Traits\{APIRequestCommon,
-    CharacterCommon,
-    FileCommon,
-    Helper,
-    MetaCommon,
-    ProductCommon,
-    RequestCommon,
-    UserSeenTrait};
+use App\Traits\{APIRequestCommon, CharacterCommon, FileCommon, Helper, MetaCommon, ProductCommon, RequestCommon};
 use App\User;
 use App\Websitesetting;
 use Carbon\Carbon;
@@ -38,7 +31,6 @@ class ContentController extends Controller
     use ProductCommon;
     use Helper;
     use FileCommon;
-    use UserSeenTrait;
     use RequestCommon;
     use APIRequestCommon;
     use CharacterCommon;
@@ -155,6 +147,7 @@ class ContentController extends Controller
                 ->setPageName($contentType . 'Page')
                 ->apply($filters);
 
+//            dump(${$contentType . 'Result'});
             if ($isApp) {
                 $data = ${$contentType . 'Result'}->getCollection();
             } else {
@@ -174,6 +167,7 @@ class ContentController extends Controller
             $items->push($data);
         }
 
+//        dd(".");
         if ($isApp) {
             $response = $this->makeJsonForAndroidApp($items);
             return response()->json($response, Response::HTTP_OK);
@@ -341,7 +335,8 @@ class ContentController extends Controller
             ] = $this->getContentInformation($content);
 
             $this->generateSeoMetaTags($content);
-            $seenCount = $this->getSeenCountFromRequest($request);
+            $seenCount = $content->pageView;
+
             $userCanSeeCounter = optional(auth()->user())->CanSeeCounter();
 
             $result = compact("seenCount", "author", "content", "rootContentType", "childContentType", "contentSet", "contentsWithSameSet", "videosWithSameSet", "pamphletsWithSameSet", "contentSetName", "videoSources"

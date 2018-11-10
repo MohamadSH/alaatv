@@ -14,6 +14,7 @@ use App\Traits\APIRequestCommon;
 use App\Traits\DateTrait;
 use App\Traits\favorableTraits;
 use App\Traits\Helper;
+use App\Traits\ModelTrackerTrait;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
@@ -103,6 +104,11 @@ use Stevebauman\Purify\Facades\Purify;
  * @property-read \App\Contentset|null                                        $set
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereContentsetId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereSlug($value)
+ * @property mixed $page_view
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Content wherePageView($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Content newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Content newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Content query()
  */
 class Content extends Model implements Advertisable, Taggable, SeoInterface, FavorableInterface
 {
@@ -117,6 +123,7 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
     use Helper;
     use DateTrait;
     use favorableTraits;
+    use ModelTrackerTrait;
 
     /*
     |--------------------------------------------------------------------------
@@ -587,6 +594,8 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
         $explodedTime = $explodedDateTime[1];
         return $this->convertDate($this->validSince, "toJalali") . " " . $explodedTime;
     }
+
+
 
     /**
      * Set the content's thumbnail.

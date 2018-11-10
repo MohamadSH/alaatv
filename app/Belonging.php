@@ -17,6 +17,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Belonging withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Belonging withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Belonging newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Belonging newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Belonging query()
  */
 class Belonging extends Model
 {

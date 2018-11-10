@@ -28,6 +28,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Majorinterrelationtypes withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Majorinterrelationtypes withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Majorinterrelationtypes newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Majorinterrelationtypes newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Majorinterrelationtypes query()
  */
 class Majorinterrelationtypes extends Model
 {

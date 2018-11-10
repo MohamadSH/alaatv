@@ -41,6 +41,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Major withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Major withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Major newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Major newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Major query()
  */
 class Major extends Model
 {

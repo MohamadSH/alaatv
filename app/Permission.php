@@ -29,6 +29,9 @@ use Laratrust\Models\LaratrustPermission;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Permission whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Permission whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Permission newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Permission newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Permission query()
  */
 class Permission extends LaratrustPermission
 {

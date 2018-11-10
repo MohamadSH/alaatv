@@ -35,6 +35,9 @@ use Illuminate\Support\Facades\DB;
  * @method static \Illuminate\Database\Query\Builder|\App\Attributeset withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Attributeset withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributeset newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributeset newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributeset query()
  */
 class Attributeset extends Model
 {

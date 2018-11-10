@@ -6,6 +6,7 @@ use App\Block;
 use App\Bon;
 use App\Classes\Format\webBlockCollectionFormatter;
 use App\Classes\Format\webSetCollectionFormatter;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -37,6 +38,7 @@ class ComposerServiceProvider extends ServiceProvider
             $view->with(compact('sections'));
         });
         view()->share('bonName', Bon::getAlaaBonDisplayName());
+        view()->share('userIpAddress', Request::ip());
     }
 
     /**

@@ -43,6 +43,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Article withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Article withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Article newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Article newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Article query()
  */
 class Article extends Model
 {

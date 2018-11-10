@@ -29,6 +29,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Paymentstatus withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Paymentstatus withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Paymentstatus newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Paymentstatus newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Paymentstatus query()
  */
 class Paymentstatus extends Model
 {

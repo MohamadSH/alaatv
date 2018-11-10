@@ -45,6 +45,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Eventresult withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Eventresult withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresult newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresult newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresult query()
  */
 class Eventresult extends Model
 {

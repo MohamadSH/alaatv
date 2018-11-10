@@ -1,5 +1,8 @@
 let mix = require('laravel-mix');
 
+/*mix.js('resources/js/app.js', 'public/js')
+    .sass('resources/sass/app.scss', 'public/css');*/
+
 mix.styles([
     'public/assets/extra/fonts/IRANSans/css/fontiran.css',
     'public/assets/extra/fonts/IRANSans/css/style.css',
@@ -12,12 +15,12 @@ mix.styles([
         'public/assets/extra/fonts/IRANSans/farsi_numeral',
         'public/assets/extra/fonts/IRANSans/fonts',
         'public/assets/global/plugins/simple-line-icons/fonts']
-    , 'public/fonts') .version();
-mix.copy('public/assets/global/plugins/simple-line-icons/fonts','public/css/fonts');
+    , 'public/fonts').version();
+mix.copy('public/assets/global/plugins/simple-line-icons/fonts', 'public/css/fonts');
 mix.copyDirectory(
     [
         'public/assets/extra/fonts/IRANSans'
-    ],'public'
+    ], 'public'
 );
 mix.styles([
     'public/assets/global/css/components-md-rtl.min.css',
@@ -26,7 +29,7 @@ mix.styles([
 
 mix.styles([
     'public/assets/layouts/layout2/css/layout-rtl.min.css',
-    'public/assets/layouts/layout2/css/themes/blue-rtl.min.css',
+    'public/assets/layouts/layout2/css/themes/orange-rtl.min.css',
     'public/assets/layouts/layout2/css/custom-rtl.min.css',
 ], 'public/css/head_layout_all.css').version();
 
@@ -36,7 +39,7 @@ mix.styles(
         'public/assets/global/plugins/morris/morris.css',
         'public/assets/global/plugins/fullcalendar/fullcalendar.min.css',
         'public/assets/global/plugins/jqvmap/jqvmap/jqvmap.css',
-        'public/assets/global/plugins/cubeportfolio/css/cubeportfolio.css',
+        'public/assets/global/plugins/cubeportfolio/css/cubeportfolio.min.css',
         'public/assets/global/plugins/jquery-notific8/jquery.notific8.min.css',
     ],
     'public/css/home_page_level_plugin_all.css'
@@ -63,7 +66,6 @@ mix.styles(
 ).version();
 
 
-
 mix.styles(
     [
         'public/assets/pages/css/portfolio-rtl.min.css',
@@ -84,14 +86,14 @@ mix.styles(
     ],
     'public/css/page_level_style_all.css'
 ).version();
-mix.copy('public/assets/global/plugins/jstree/dist/themes/default/32px.png','public/css/32px.png');
-mix.copy('public/assets/global/plugins/jstree/dist/themes/default/32px_line.png','public/css/32px_line.png');
-mix.copy('public/assets/global/plugins/jstree/dist/themes/default/32px_original.png','public/css/32px_original.png');
-mix.copy('public/assets/global/plugins/jstree/dist/themes/default/40px.png','public/css/40px.png');
-mix.copy('public/assets/global/plugins/jstree/dist/themes/default/throbber.gif','public/css/throbber.gif');
+mix.copy('public/assets/global/plugins/jstree/dist/themes/default/32px.png', 'public/css/32px.png');
+mix.copy('public/assets/global/plugins/jstree/dist/themes/default/32px_line.png', 'public/css/32px_line.png');
+mix.copy('public/assets/global/plugins/jstree/dist/themes/default/32px_original.png', 'public/css/32px_original.png');
+mix.copy('public/assets/global/plugins/jstree/dist/themes/default/40px.png', 'public/css/40px.png');
+mix.copy('public/assets/global/plugins/jstree/dist/themes/default/throbber.gif', 'public/css/throbber.gif');
 mix.copy(['public/assets/layouts/layout2/img',
     'public/assets/global/plugins/cubeportfolio/img',
-],'public/img');
+], 'public/img');
 
 
 mix.scripts([
@@ -142,7 +144,7 @@ mix.scripts(
         'public/assets/global/plugins/jquery-ui/jquery-ui.min.js',
         'public/assets/global/plugins/jquery-notific8/jquery.notific8.min.js',
         'public/assets/global/plugins/bootstrap-toastr/toastr.min.js'
-    ],  'public/js/home_footer_Page_Level_Plugin.js').version();
+    ], 'public/js/home_footer_Page_Level_Plugin.js').version();
 
 mix.scripts(
     [
@@ -151,7 +153,7 @@ mix.scripts(
         'public/assets/global/plugins/bootstrap-toastr/toastr.min.js',
         'public/assets/global/plugins/bootstrap-tabdrop/js/bootstrap-tabdrop.js',
         'public/assets/global/plugins/icheck/icheck.min.js'
-    ],'public/js/footer_Page_Level_Plugin.js'
+    ], 'public/js/footer_Page_Level_Plugin.js'
 ).version();
 
 mix.scripts(
@@ -161,7 +163,7 @@ mix.scripts(
         'public/js/extraJS/jquery-ui/jquery-ui.js',
         'public/assets/pages/scripts/ui-modals.min.js',
         'public/assets/pages/scripts/form-icheck.min.js',
-    ],'public/js/Page_Level_Script_all.js'
+    ], 'public/js/Page_Level_Script_all.js'
 ).version();
 
 mix.styles(
@@ -175,6 +177,47 @@ mix.styles(
     'public/css/all.css'
 ).version();
 
+mix.styles(
+    [
+        'public/assets/menu/style.css',
+        'public/assets/menu/jquery.mCustomScrollbar.css',
+        'public/assets/menu/1.css'
+    ],
+    'public/css/custom-filter-menu-all.css'
+).version();
+
+mix.scripts(
+    [
+        'public/assets/menu/jquery.mCustomScrollbar.concat.min.js',
+        'public/assets/menu/filter.js'
+    ],
+    'public/js/custom-filter-menu-all.js'
+).version();
+
+mix.styles(
+    [
+        'public/assets/extra/slick/slick/slick.css',
+        'public/assets/extra/slick/slick/slick-theme.css',
+        'public/assets/extra/acm/custom-search.css',
+        'public/css/custom-filter-menu-all.css'
+    ],
+    'public/css/search-extra-all.css'
+).version();
+
+mix.scripts(
+    [
+        'public/js/Page_Level_Script_all.js',
+        'public/assets/global/plugins/fancybox/source/jquery.fancybox.pack.js',
+        'public/assets/pages/scripts/search.min.js',
+        'public/assets/extra/slick/slick/slick.min.js',
+        'public/js/extraJS/slugify/text2slug.js',
+        'public/assets/extra/acm/custom-search.js',
+        'public/js/custom-filter-menu-all.js'
+    ],
+    'public/js/search-extra-all.js'
+).version();
+mix.copy('public/assets/extra/slick/slick/fonts', 'public/css/fonts');
+
 // mix.scripts(
 //     [
 //         'public/js/core_all.js',
@@ -187,7 +230,7 @@ mix.styles(
 //     ],'public/js/all.js'
 // ).version();
 
-mix.copyDirectory('public/assets/global/plugins/bootstrap/fonts/','public/fonts/').version();
+mix.copyDirectory('public/assets/global/plugins/bootstrap/fonts/', 'public/fonts/').version();
 
-mix.copyDirectory('public/assets/global/img/','public/img/').version();
-mix.copy('public/assets/global/plugins/datatables/images','public/plugins/datatables/images');
+mix.copyDirectory('public/assets/global/img/', 'public/img/').version();
+mix.copy('public/assets/global/plugins/datatables/images', 'public/plugins/datatables/images');

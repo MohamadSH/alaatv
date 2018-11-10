@@ -113,9 +113,9 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         $response = $this->callUserControllerStore($data);
-        $responseContent = json_decode($response->getContent());
-        $user = $responseContent->user;
-        return User::Find($user->id);
+        $responseContent = json_decode($response->getContent(),true);
+        $user = $responseContent["user"];
+        return User::hydrate($user)->first();
     }
 
 }

@@ -30,6 +30,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Productfiletype withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Productfiletype withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Productfiletype newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Productfiletype newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Productfiletype query()
  */
 class Productfiletype extends Model
 {

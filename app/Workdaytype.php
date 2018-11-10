@@ -20,6 +20,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Workdaytype whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Workdaytype whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Workdaytype newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Workdaytype newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Workdaytype query()
  */
 class Workdaytype extends Model
 {

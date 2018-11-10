@@ -33,6 +33,9 @@ use Laratrust\Models\LaratrustRole;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Role whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Role whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Role newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Role newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Role query()
  */
 class Role extends LaratrustRole
 {

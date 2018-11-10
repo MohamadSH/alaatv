@@ -26,6 +26,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Bloodtype withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Bloodtype withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Bloodtype newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Bloodtype newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Bloodtype query()
  */
 class Bloodtype extends Model
 {

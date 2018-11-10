@@ -27,6 +27,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\City withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\City withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\City newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\City newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\City query()
  */
 class City extends Model
 {

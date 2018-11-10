@@ -38,6 +38,9 @@ use Illuminate\Support\Facades\Cache;
  * @method static \Illuminate\Database\Query\Builder|\App\Slideshow withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Slideshow withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Slideshow newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Slideshow newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Slideshow query()
  */
 class Slideshow extends Model
 {

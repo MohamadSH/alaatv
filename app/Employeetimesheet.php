@@ -73,6 +73,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Employeetimesheet withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Employeetimesheet withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet query()
  */
 class Employeetimesheet extends Model
 {

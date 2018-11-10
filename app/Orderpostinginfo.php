@@ -29,6 +29,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Orderpostinginfo withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Orderpostinginfo withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderpostinginfo newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderpostinginfo newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderpostinginfo query()
  */
 class Orderpostinginfo extends Model
 {

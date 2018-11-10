@@ -54,6 +54,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Transactiongateway withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Transactiongateway withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transactiongateway enable($enable = 1)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transactiongateway newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transactiongateway newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transactiongateway query()
  */
 class Transactiongateway extends Model
 {

@@ -85,6 +85,8 @@ use Illuminate\Support\Facades\Config;
  * @method static \Illuminate\Database\Query\Builder|\App\Order withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Order withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Order newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Order newQuery()
  */
 class Order extends Model
 {

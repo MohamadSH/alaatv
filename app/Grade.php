@@ -29,6 +29,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Grade withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Grade withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Grade newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Grade newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Grade query()
  */
 class Grade extends Model
 {

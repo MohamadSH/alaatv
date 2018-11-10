@@ -31,6 +31,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Relative withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Relative withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Relative newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Relative newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Relative query()
  */
 class Relative extends Model
 {

@@ -20,7 +20,7 @@
         "intervention/imagecache": "^2.3",
         "jenssegers/agent": "^2.5",
         "kalnoy/nestedset": "^4.3",
-        "laravel/framework": "5.6.*",
+        "laravel/framework": "5.7.*",
         "laravel/horizon": "^1.2",
         "laravel/scout": "^4.0",
         "laravel/tinker": "^1.0",
@@ -33,7 +33,8 @@
         "watson/sitemap": "^2.0",
         "webpatser/laravel-uuid": "^3.0",
         "yab/laravel-scout-mysql-driver": "^2.0",
-        "zarinpal/zarinpal": "^1.3"
+        "zarinpal/zarinpal": "^1.3",
+      "ext-json": "*"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.1",

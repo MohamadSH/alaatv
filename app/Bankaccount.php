@@ -34,6 +34,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Bankaccount withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Bankaccount withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Bankaccount newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Bankaccount newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Bankaccount query()
  */
 class Bankaccount extends Model
 {

@@ -44,6 +44,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Employeeschedule withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Employeeschedule withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeeschedule newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeeschedule newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeeschedule query()
  */
 class Employeeschedule extends Model
 {

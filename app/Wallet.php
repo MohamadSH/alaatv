@@ -33,6 +33,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Wallet withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Wallet withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet query()
  */
 class Wallet extends Model
 {

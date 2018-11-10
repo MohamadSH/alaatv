@@ -46,6 +46,9 @@ use Illuminate\Support\Facades\Config;
  * @property string|null                                           $small_name
  * @property-read mixed                                            $short_name
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset whereSmallName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset query()
  */
 class Contentset extends Model implements Taggable
 {

@@ -34,6 +34,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Lottery withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Lottery withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Lottery newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Lottery newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Lottery query()
  */
 class Lottery extends Model
 {

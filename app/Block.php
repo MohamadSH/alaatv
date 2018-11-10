@@ -32,6 +32,9 @@ use Illuminate\Support\Facades\Cache;
  * @mixin \Eloquent
  * @property string|null                                           $class
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Block whereClass($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Block newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Block newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Block query()
  */
 class Block extends Model
 {

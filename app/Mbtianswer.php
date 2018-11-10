@@ -30,6 +30,9 @@ use Illuminate\Support\Facades\Config;
  * @method static \Illuminate\Database\Query\Builder|\App\Mbtianswer withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Mbtianswer withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Mbtianswer newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Mbtianswer newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Mbtianswer query()
  */
 class Mbtianswer extends Model
 {

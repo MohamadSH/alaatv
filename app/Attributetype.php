@@ -26,6 +26,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Attributetype withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Attributetype withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributetype newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributetype newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributetype query()
  */
 class Attributetype extends Model
 {

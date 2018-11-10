@@ -35,6 +35,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Attributegroup withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Attributegroup withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributegroup newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributegroup newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributegroup query()
  */
 class Attributegroup extends Model
 {
