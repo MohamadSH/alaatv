@@ -1,1 +1,1 @@
-{!! Form::select("userstatus_id" , $userStatuses, null, ['class' => 'form-control']) !!}
+{!! Form::select("userStatus[]" , $userStatuses, null, ['class' => 'form-control']) !!}

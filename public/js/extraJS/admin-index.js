@@ -952,6 +952,8 @@ $(document).ready(function () {
         format: 'YYYY/MM/DD',
         altFieldFormatter: function(unixDate){
             var d = new Date(unixDate).toISOString();
+            d = d.substring(0, d.indexOf('T'));
+            d += " 00:00:00";
             return d;
         }
     });
@@ -965,6 +967,8 @@ $(document).ready(function () {
         format: 'YYYY/MM/DD',
         altFieldFormatter: function(unixDate){
             var d = new Date(unixDate).toISOString();
+            d = d.substring(0, d.indexOf('T'));
+            d += " 00:00:00";
             return d;
         }
     });
@@ -978,6 +982,8 @@ $(document).ready(function () {
         format: 'YYYY/MM/DD',
         altFieldFormatter: function(unixDate){
             var d = new Date(unixDate).toISOString();
+            d = d.substring(0, d.indexOf('T'));
+            d += " 00:00:00";
             return d;
         }
     });
@@ -991,6 +997,8 @@ $(document).ready(function () {
         format: 'YYYY/MM/DD',
         altFieldFormatter: function(unixDate){
             var d = new Date(unixDate).toISOString();
+            d = d.substring(0, d.indexOf('T'));
+            d += " 00:00:00";
             return d;
         }
     });

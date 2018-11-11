@@ -10,13 +10,16 @@ namespace App\Classes\Search\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
 
-class CreatedAtSince extends FilterAbstract
+class HasRole extends FilterAbstract
 {
-    protected $attribute = 'created_at';
+    protected $attribute = 'id';
+    protected $relation = 'roles';
 
     public function apply(Builder $builder, $value, FilterCallback $callback): Builder
     {
-        return $builder->where($this->attribute, ">=", $value);
+        return $builder->whereHas($this->relation, function ($q) use ($value) {
+                 $q->whereIn($this->attribute, $value);
+             });
     }
 
 }

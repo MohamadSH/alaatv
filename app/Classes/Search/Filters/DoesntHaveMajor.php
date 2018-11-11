@@ -10,13 +10,13 @@ namespace App\Classes\Search\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
 
-class CreatedAtSince extends FilterAbstract
+class DoesntHaveMajor extends FilterAbstract
 {
-    protected $attribute = 'created_at';
+    protected $attribute = 'major_id';
 
     public function apply(Builder $builder, $value, FilterCallback $callback): Builder
     {
-        return $builder->where($this->attribute, ">=", $value);
+            return $builder->whereNull($this->attribute);
     }
 
 }

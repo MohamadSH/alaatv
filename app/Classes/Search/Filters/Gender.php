@@ -10,13 +10,16 @@ namespace App\Classes\Search\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
 
-class CreatedAtSince extends FilterAbstract
+class Gender extends FilterAbstract
 {
-    protected $attribute = 'created_at';
+    protected $attribute = 'gender_id';
 
     public function apply(Builder $builder, $value, FilterCallback $callback): Builder
     {
-        return $builder->where($this->attribute, ">=", $value);
+        if($value == 0)
+            return $builder->whereNull($this->attribute);
+        else
+            return $builder->where($this->attribute, $value);
     }
 
 }

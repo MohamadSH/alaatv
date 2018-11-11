@@ -6,6 +6,8 @@ use App\{Afterloginformcontrol,
     Bankaccount,
     Bloodtype,
     Bon,
+    Classes\Search\UserSearch,
+    Classes\SEO\SeoDummyTags,
     Contact,
     Employeeschedule,
     Employeetimesheet,
@@ -13,14 +15,12 @@ use App\{Afterloginformcontrol,
     Gender,
     Grade,
     Http\Controllers\Auth\RegisterController,
-    Http\Requests\EditProfileInfoAtLoginRequest,
-    Http\Requests\EditProfileInfoRequest,
-    Http\Requests\EditProfilePasswordRequest,
     Http\Requests\EditUserRequest,
     Http\Requests\InsertUserRequest,
     Http\Requests\InsertVoucherRequest,
     Http\Requests\PasswordRecoveryRequest,
     Http\Requests\RegisterForSanatiSharifHighSchoolRequest,
+    Http\Requests\UserIndexRequest,
     Lottery,
     Major,
     Order,
@@ -31,8 +31,10 @@ use App\{Afterloginformcontrol,
     Traits\CharacterCommon,
     Traits\DateTrait,
     Traits\Helper,
+    Traits\MetaCommon,
     Traits\ProductCommon,
     Traits\RequestCommon,
+    Traits\SearchCommon,
     Traits\UserCommon,
     Transactiongateway,
     User,
@@ -70,6 +72,8 @@ class UserController extends Controller
     use CharacterCommon;
     use Helper;
     use UserCommon;
+    use SearchCommon;
+    use MetaCommon;
 
     /*
     |--------------------------------------------------------------------------
@@ -77,6 +81,7 @@ class UserController extends Controller
     |--------------------------------------------------------------------------
     */
 
+    const PARTIAL_INDEX_TEMPLATE = "user.index";
     protected $response;
     protected $setting;
 
@@ -119,6 +124,23 @@ class UserController extends Controller
     }
 
     /**
+     * @param Collection $items
+     *
+     * @return \Illuminate\Http\Response
+     */
+    private function makeJsonForAndroidApp(Collection $items)
+    {
+        $items = $items->pop();
+        $key = md5($items->pluck("id")
+            ->implode(","));
+        $response = Cache::remember($key, config("constants.CACHE_60"), function () use ($items) {
+            $response = collect();
+
+        });
+        return $response;
+    }
+
+    /**
      * Finding tech person based on his tech code
      *
      * @param Request $request
@@ -137,91 +159,57 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param UserIndexRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(UserIndexRequest $request)
     {
-        $createdTimeEnable = Input::get('createdTimeEnable');
-        $createdSinceDate = Input::get('createdSinceDate');
-        $createdTillDate = Input::get('createdTillDate');
-        if (strlen($createdSinceDate) > 0 && strlen($createdTillDate) > 0 && isset($createdTimeEnable)) {
-            $createdSinceDate = Carbon::parse($createdSinceDate)
-                                      ->format('Y-m-d') . " 00:00:00";
-            $createdTillDate = Carbon::parse($createdTillDate)
-                                     ->format('Y-m-d') . " 23:59:59";
-            $users = User::whereBetween('created_at', [
-                $createdSinceDate,
-                $createdTillDate,
-            ])
-                         ->orderBy('created_at', 'Desc');
+        $filters = $request->all();
+        $isApp = $this->isRequestFromApp($request);
+        $items = collect();
+        $pageName = 'userPage';
+        $userResult = (new UserSearch)->setPageName($pageName)
+            ->apply($filters);
+        dd($userResult->getCollection());
+        if ($isApp) {
+            $items->push($userResult->getCollection());
         } else {
-            $users = User::orderBy('created_at', 'Desc');
+            if ($userResult->total() > 0) {
+                $partialIndex = $this->getPartialSearchFromIds($userResult, self::PARTIAL_INDEX_TEMPLATE);
+            } else {
+                $partialSearch = null;
+                $partialIndex = null;
+            }
+            $items->push([
+                "totalitems" => $userResult->total(),
+                "view"       => $partialSearch,
+                "indexView"  => $partialIndex,
+            ]);
         }
 
-        $updatedSinceDate = Input::get('updatedSinceDate');
-        $updatedTillDate = Input::get('updatedTillDate');
-        $updatedTimeEnable = Input::get('updatedTimeEnable');
-        if (strlen($updatedSinceDate) > 0 && strlen($updatedTillDate) > 0 && isset($updatedTimeEnable)) {
-            $users = $this->timeFilterQuery($users, $updatedSinceDate, $updatedTillDate, 'updated_at');
+        if ($isApp) {
+            $response = $this->makeJsonForAndroidApp($items);
+            return response()->json($response, Response::HTTP_OK);
+        }
+        if (request()->ajax()) {
+            return $this->response->setStatusCode(Response::HTTP_OK)
+                ->setContent([
+                    "items"     => $items,
+                ]);
         }
 
-        //filter by firstName, lastName, nationalCode, mobile
-        $firstName = trim(Input::get('firstName'));
-        if (isset($firstName) && strlen($firstName) > 0) {
-            $users = $users->where('firstName', 'like', '%' . $firstName . '%');
-        }
+        $url = $request->url();
+        $this->generateSeoMetaTags(new SeoDummyTags("مدیریت کاربران", "مدیریت کاربران سایت", $url, $url, route('image', [
+            'category' => '11',
+            'w'        => '100',
+            'h'        => '100',
+            'filename' => $this->setting->site->siteLogo,
+        ]), '100', '100', null));
 
-        $lastName = trim(Input::get('lastName'));
-        if (isset($lastName) && strlen($lastName) > 0) {
-            $users = $users->where('lastName', 'like', '%' . $lastName . '%');
-        }
+        return view("product.portfolio", compact("products", "costCollection"));
 
-        $nationalCode = trim(Input::get('nationalCode'));
-        if (isset($nationalCode) && strlen($nationalCode) > 0) {
-            $users = $users->where('nationalCode', 'like', '%' . $nationalCode . '%');
-        }
+        //====================OLD CODE==========================================
 
-        $mobile = trim(Input::get('mobile'));
-        if (isset($mobile) && strlen($mobile) > 0) {
-            $users = $users->where('mobile', 'like', '%' . $mobile . '%');
-        }
-
-        //filter by role, major , coupon
-        $roleEnable = Input::get('roleEnable');
-        $rolesId = Input::get('roles');
-        if (isset($roleEnable) && isset($rolesId)) {
-            $users = $users->roleFilter($rolesId);
-        }
-
-        $majorEnable = Input::get('majorEnable');
-        $majorsId = Input::get('majors');
-        if (isset($majorEnable) && isset($majorsId)) {
-            $users = $users->majorFilter($majorsId);
-        }
-
-        $couponEnable = Input::get('couponEnable');
-        $couponsId = Input::get('coupons');
-        if (isset($couponEnable) && isset($couponsId)) {
-            if (in_array(0, $couponsId))
-                $users = $users->whereHas("orders", function ($q) use ($couponsId) {
-                    $q->whereDoesntHave("coupon")
-                      ->whereNotIn('orderstatus_id', [
-                          config("constants.ORDER_STATUS_OPEN"),
-                          config("constants.ORDER_STATUS_CANCELED"),
-                          config("constants.ORDER_STATUS_OPEN_BY_ADMIN"),
-                      ]);
-                }); else
-                $users = $users->whereHas("orders", function ($q) use ($couponsId) {
-                    $q->whereIn("coupon_id", $couponsId)
-                      ->whereNotIn('orderstatus_id', [
-                          config("constants.ORDER_STATUS_OPEN"),
-                          config("constants.ORDER_STATUS_CANCELED"),
-                          config("constants.ORDER_STATUS_OPEN_BY_ADMIN"),
-                      ]);
-                });
-        }
-
-        //filter by product
         $seenProductEnable = Input::get('productEnable');
         $productsId = Input::get('products');
         if (isset($seenProductEnable) && isset($productsId)) {
@@ -240,11 +228,13 @@ class UserController extends Controller
         if (isset($orderProductEnable) || isset($productsId)) {
             if (in_array(-1, $productsId)) {
                 $users = $users->whereDoesntHave("orders", function ($q) {
-                    $q->where("orderstatus_id", "<>", 1)
-                      ->where("orderstatus_id", "<>", 3)
-                      ->where("orderstatus_id", "<>", 4);
+                    $q->whereNotIn("orderstatus_id", [
+                        config("constants.ORDER_STATUS_OPEN"),
+                        config("constants.ORDER_STATUS_CANCELED"),
+                        config("constants.ORDER_STATUS_OPEN_BY_ADMIN")
+                    ]);
                 });
-            } else if (in_array(0, $productsId)) {
+            } elseif (in_array(0, $productsId)) {
                 $users = $users->whereHas("orders", function ($query) {
                     $query->whereNotIn('orderstatus_id', [
                         config("constants.ORDER_STATUS_OPEN"),
@@ -252,17 +242,17 @@ class UserController extends Controller
                         config("constants.ORDER_STATUS_OPEN_BY_ADMIN"),
                     ]);
                 });
-            } else if (isset($productsId)) {
+            } elseif (isset($productsId)) {
                 $products = Product::whereIn('id', $productsId)
-                                   ->get();
+                    ->get();
                 foreach ($products as $product) {
                     if ($product->producttype_id == config("constants.PRODUCT_TYPE_CONFIGURABLE"))
                         if ($product->hasChildren()) {
-                            $productsId = array_merge($productsId, Product::whereHas('parents', function ($q) use ($productsId) {
-                                $q->whereIn("parent_id", $productsId);
+                            $productsId = array_merge($productsId, Product::whereHas('parents', function ($q) use ($product) {
+                                $q->whereIn("parent_id", $product->id);
                             })
-                                                                          ->pluck("id")
-                                                                          ->toArray());
+                                ->pluck("id")
+                                ->toArray());
                         }
                 }
 
@@ -271,21 +261,21 @@ class UserController extends Controller
                     if (in_array(0, $checkoutStatuses)) {
                         $orders = Order::whereHas("orderproducts", function ($q) use ($productsId) {
                             $q->whereIn("product_id", $productsId)
-                              ->whereNull("checkoutstatus_id");
+                                ->whereNull("checkoutstatus_id");
                         })
-                                       ->whereNotIn('orderstatus_id', [config("constants.ORDER_STATUS_OPEN")]);
+                            ->whereNotIn('orderstatus_id', [config("constants.ORDER_STATUS_OPEN")]);
                     } else {
                         $orders = Order::whereHas("orderproducts", function ($q) use ($productsId, $checkoutStatuses) {
                             $q->whereIn("product_id", $productsId)
-                              ->whereIn("checkoutstatus_id", $checkoutStatuses);
+                                ->whereIn("checkoutstatus_id", $checkoutStatuses);
                         })
-                                       ->whereNotIn('orderstatus_id', [config("constants.ORDER_STATUS_OPEN")]);
+                            ->whereNotIn('orderstatus_id', [config("constants.ORDER_STATUS_OPEN")]);
                     }
                 } else {
                     $orders = Order::whereHas("orderproducts", function ($q) use ($productsId) {
                         $q->whereIn("product_id", $productsId);
                     })
-                                   ->whereNotIn('orderstatus_id', [config("constants.ORDER_STATUS_OPEN")]);
+                        ->whereNotIn('orderstatus_id', [config("constants.ORDER_STATUS_OPEN")]);
                 }
 
                 $createdSinceDate = Input::get('completedSinceDate');
@@ -296,75 +286,69 @@ class UserController extends Controller
                 }
                 $orders = $orders->get();
                 $users = $users->whereIn("id", $orders->pluck("user_id")
-                                                      ->toArray());
+                    ->toArray());
             }
-        } else if (Input::has("checkoutStatusEnable")) {
+        }
+        elseif (Input::has("checkoutStatusEnable")) {
             $checkoutStatuses = Input::get("checkoutStatuses");
             if (in_array(0, $checkoutStatuses)) {
                 $orders = Order::whereHas("orderproducts", function ($q) use ($productsId) {
                     $q->whereNull("checkoutstatus_id");
                 })
-                               ->whereNotIn('orderstatus_id', [config("constants.ORDER_STATUS_OPEN")]);
+                    ->whereNotIn('orderstatus_id', [config("constants.ORDER_STATUS_OPEN")]);
             } else {
                 $orders = Order::whereHas("orderproducts", function ($q) use ($productsId, $checkoutStatuses) {
                     $q->whereIn("checkoutstatus_id", $checkoutStatuses);
                 })
-                               ->whereNotIn('orderstatus_id', [config("constants.ORDER_STATUS_OPEN")]);
+                    ->whereNotIn('orderstatus_id', [config("constants.ORDER_STATUS_OPEN")]);
             }
             $orders = $orders->get();
             $users = $users->whereIn("id", $orders->pluck("user_id")
-                                                  ->toArray());
+                ->toArray());
         }
 
         $paymentStatusesId = Input::get('paymentStatuses');
         if (isset($paymentStatusesId)) {
+            //Converted : Used the below solution
             //Muhammad Shahrokhi : kar nemikone!
             //            $users = $users->whereHas("orders" , function ($q) use ($paymentStatusesId) {
             //                $q->whereIn("paymentstatus_id", $paymentStatusesId)->whereNotIn('orderstatus_id', [1]);
             //            }
+
+
             if (!isset($orders))
-                $orders = Order::all(); else $orders = Order::paymentStatusFilter($orders, $paymentStatusesId);
+                $orders = Order::all();
+            else
+                $orders = Order::paymentStatusFilter($orders, $paymentStatusesId);
+
             $users = $users->whereIn("id", $orders->pluck("user_id")
                                                   ->toArray());
         }
 
         $orderStatusesId = Input::get('orderStatuses');
         if (isset($orderStatusesId)) {
+            //Converted : Used the below solution
             //Muhammad Shahrokhi : kar nemikone!
             //            $users = $users->whereHas("orders" , function ($q) use ($orderStatusesId) {
             //                $q->whereIn("orderstatus_id", $orderStatusesId)->whereNotIn('orderstatus_id', [1]);
             //            });
             if (!isset($orders))
-                $orders = Order::all(); else $orders = Order::orderStatusFilter($orders, $orderStatusesId);
+                $orders = Order::all();
+            else
+                $orders = Order::orderStatusFilter($orders, $orderStatusesId);
+
             $users = $users->whereIn("id", $orders->pluck("user_id")
                                                   ->toArray());
-        }
-        //filter by gender ,lockProfile , mobileVerification
-        $genderId = Input::get("gender_id");
-        if (isset($genderId) && strlen($genderId) > 0) {
-            if ($genderId == 0)
-                $users = $users->whereDoesntHave("gender"); else
-                $users = $users->where("gender_id", $genderId);
-        }
-
-        $userstatusId = Input::get("userstatus_id");
-        if (isset($userstatusId) && strlen($userstatusId) > 0 && $userstatusId != 0) {
-            $users = $users->where("userstatus_id", $userstatusId);
-        }
-
-        $lockProfileStatus = Input::get("lockProfileStatus");
-        if (isset($lockProfileStatus) && strlen($lockProfileStatus) > 0) {
-            $users = $users->where("lockProfile", $lockProfileStatus);
         }
 
         $mobileNumberVerification = Input::get("mobileNumberVerification");
         if (isset($mobileNumberVerification) && strlen($mobileNumberVerification) > 0) {
             if ($mobileNumberVerification)
-                $users = $users->whereNotNull("mobile_verified_at"); else
+                $users = $users->whereNotNull("mobile_verified_at");
+            else
                 $users = $users->whereNull("mobile_verified_at");
         }
 
-        //filter by postalCode, province , city, address, school , email
         $withoutPostalCode = Input::get("withoutPostalCode");
         if (isset($withoutPostalCode)) {
             $users = $users->where(function ($q) {
@@ -372,6 +356,7 @@ class UserController extends Controller
                   ->orWhere("postalCode", "");
             });
         } else {
+            //Converted
             $postalCode = Input::get("postalCode");
             if (isset($postalCode) && strlen($postalCode) > 0)
                 $users = $users->where('postalCode', 'like', '%' . $postalCode . '%');
@@ -384,6 +369,7 @@ class UserController extends Controller
                   ->orWhere("province", "");
             });
         } else {
+            //Converted
             $province = Input::get("province");
             if (isset($province) && strlen($province) > 0)
                 $users = $users->where('province', 'like', '%' . $province . '%');
@@ -396,27 +382,17 @@ class UserController extends Controller
                   ->orWhere("city", "");
             });
         } else {
+            //Converted
             $city = Input::get("city");
             if (isset($city) && strlen($city) > 0)
                 $users = $users->where('city', 'like', '%' . $city . '%');
         }
 
-        //        $withoutAddress = Input::get("withoutAddress");
-        //        if(isset($withoutAddress)) {
-        //            $users = $users->where(function ($q){
-        //                $q->whereNull("address")->orWhere("address" , "");
-        //            });
-        //        }
-        //        else{
-        //            $address = Input::get("address");
-        //            if (isset($address) && strlen($address) > 0)
-        //                $users = $users->where('address', 'like', '%' . $address . '%');
-        //        }
-
         $addressSpecialFilter = Input::get("addressSpecialFilter");
         if (isset($addressSpecialFilter)) {
             switch ($addressSpecialFilter) {
                 case "0":
+                    //Converted
                     $address = Input::get("address");
                     if (isset($address) && strlen($address) > 0)
                         $users = $users->where('address', 'like', '%' . $address . '%');
@@ -466,9 +442,6 @@ class UserController extends Controller
             if (isset($email) && strlen($email) > 0)
                 $users = $users->where('email', 'like', '%' . $email . '%');
         }
-
-        //sort by
-
 
         $users = $users->get();
         /**
@@ -827,7 +800,7 @@ class UserController extends Controller
 
         $key = "user:orders:" . $user->cacheKey();
         $orders = Cache::remember($key, config("constants.CACHE_60"), function () use ($user) {
-            return $user->getShowableOrders()
+            return $user->getClosedOrders()
                         ->get()
                         ->sortByDesc("completed_at");
         });

@@ -44,7 +44,7 @@ class ContentSearch extends SearchAbstract
 
     protected function getResults(Builder $query)
     {
-        $result = $query->active()
+        $result = $query->active()  //ToDo: This condition has conflict with admin
                         ->orderBy("created_at", "desc")
                         ->paginate($this->numberOfItemInEachPage,
                                    ['*'],

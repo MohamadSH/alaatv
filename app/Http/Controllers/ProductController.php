@@ -21,6 +21,7 @@ use App\{Attribute,
     Traits\MetaCommon,
     Traits\ProductCommon,
     Traits\RequestCommon,
+    Traits\SearchCommon,
     User,
     Websitesetting};
 use Illuminate\Foundation\Http\{FormRequest};
@@ -42,6 +43,7 @@ class ProductController extends Controller
     use MathCommon;
     use CharacterCommon;
     use RequestCommon;
+    use SearchCommon ;
 
 
     /*
@@ -181,18 +183,6 @@ class ProductController extends Controller
         ]), '100', '100', null));
 
         return view("product.portfolio", compact("products", "costCollection"));
-    }
-
-    /**
-     * @param $query
-     *
-     * @return string
-     */
-    private function getPartialSearchFromIds($query, $layout)
-    {
-        $partialSearch = View::make($layout, ['items' => $query])
-                             ->render();
-        return $partialSearch;
     }
 
     /**

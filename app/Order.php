@@ -124,6 +124,12 @@ class Order extends Model
         'completed_at',
     ];
 
+    const  OPEN_ORDER_STATUSES = [
+            1,
+            4,
+            8,
+        ];
+
     /**
      * Create a new Eloquent Collection instance.
      *

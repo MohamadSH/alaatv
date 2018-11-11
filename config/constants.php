@@ -454,4 +454,8 @@ return [
     //WALLET TYPES
     'WALLET_TYPE_MAIN'                         => 1,
     'WALLET_TYPE_GIFT'                         => 2,
+
+    //USER STATUSES
+    'USER_STATUS_ACTIVE'                       => 1,
+    'USER_STATUS_INACTIVE'                     => 2,
 ];

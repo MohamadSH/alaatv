@@ -10,13 +10,14 @@ namespace App\Classes\Search\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
 
-class CreatedAtSince extends FilterAbstract
+class DoesntHaveOrder extends FilterAbstract
 {
-    protected $attribute = 'created_at';
+    protected $attribute = '';
+    protected $relation = 'orders';
 
     public function apply(Builder $builder, $value, FilterCallback $callback): Builder
     {
-        return $builder->where($this->attribute, ">=", $value);
+            return $builder->whereDoesntHave($this->relation);
     }
 
 }
