@@ -7,11 +7,9 @@ use App\{Assignmentstatus,
     Attributecontrol,
     Attributeset,
     Bon,
-    Category,
     Checkoutstatus,
     Classes\Format\BlockCollectionFormatter,
     Classes\Report\GaReportFactory,
-    Classes\Search\ContentSearch,
     Consultationstatus,
     Content,
     Contentset,
@@ -66,8 +64,7 @@ use Auth;
 use Carbon\Carbon;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\{Config, File, Input, Route, Storage};
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\{Config, File, Input, Notification, Route, Storage};
 use League\Flysystem\Filesystem;
 use League\Flysystem\Sftp\SftpAdapter;
 use Maatwebsite\ExcelLight\Excel;
@@ -2097,6 +2094,69 @@ class HomeController extends Controller
         }
 
 
+    }
+
+    /**
+     * Send a custom SMS to the user
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function sendSMS(Request $request)
+    {
+        $from = $request->get("smsProviderNumber");
+        $message = $request->get("message");
+        $usersId = $request->get("users");
+        $usersId = explode(',', $usersId);
+        $relatives = $request->get("relatives");
+        $relatives = explode(',', $relatives);
+
+        $smsNumber = config('constants.SMS_PROVIDER_DEFAULT_NUMBER');
+        $users = User::whereIn("id", $usersId)->get();
+        if ($users->isEmpty())
+            return $this->response->setStatusCode(451);
+
+        if (!isset($from) || strlen($from) == 0)
+            $from = $smsNumber;
+
+        $mobiles = [];
+        $finalUsers = collect();
+        foreach ($users as $user) {
+            if (in_array(0, $relatives))
+                array_push($mobiles, ltrim($user->mobile, '0'));
+            if (in_array(1, $relatives)) {
+                if (!$user->contacts->isEmpty()) {
+                    $fatherMobiles = $user->contacts->where("relative_id", 1)->first()->phones->where("phonetype_id", 1)->sortBy("priority");
+                    if (!$fatherMobiles->isEmpty())
+                        foreach ($fatherMobiles as $fatherMobile) {
+                            array_push($mobiles, ltrim($fatherMobile->phoneNumber, '0'));
+                        }
+
+                }
+            }
+            if (in_array(2, $relatives)) {
+                if (!$user->contacts->isEmpty()) {
+                    $motherMobiles = $user->contacts->where("relative_id", 2)->first()->phones->where("phonetype_id", 1)->sortBy("priority");
+                    if (!$motherMobiles->isEmpty())
+                        foreach ($motherMobiles as $motherMobile) {
+                            array_push($mobiles, ltrim($motherMobile->phoneNumber, '0'));
+                        }
+                }
+            }
+        }
+        $smsInfo = array();
+        $smsInfo["message"] = $message;
+        $smsInfo["to"] = $mobiles;
+        $smsInfo["from"] = $from;
+        $response = $this->medianaSendSMS($smsInfo);
+    //Sending notification to user collection
+//        Notification::send($users, new GeneralNotice($message));
+        if (!$response["error"]) {
+            $smsCredit = $this->medianaGetCredit();
+            return $this->response->setContent($smsCredit)->setStatusCode(200);
+        } else {
+            return $this->response->setStatusCode(503);
+        }
     }
 
     /**

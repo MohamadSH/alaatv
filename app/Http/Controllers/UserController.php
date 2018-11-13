@@ -81,7 +81,9 @@ class UserController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    const PARTIAL_INDEX_TEMPLATE = "user.index";
+    const PARTIAL_MAIN_INDEX_TEMPLATE = "user.index";
+    const PARTIAL_SMS_INDEX_TEMPLATE = "user.index";
+    const PARTIAL_REPORT_INDEX_TEMPLATE = "admin.partials.getReportIndex";
     protected $response;
     protected $setting;
 
@@ -164,6 +166,7 @@ class UserController extends Controller
      */
     public function index(UserIndexRequest $request)
     {
+        $tags = $request->get('tags');
         $filters = $request->all();
         $isApp = $this->isRequestFromApp($request);
         $items = collect();
@@ -175,15 +178,19 @@ class UserController extends Controller
             $items->push($userResult->getCollection());
         } else {
             if ($userResult->total() > 0) {
-                $partialIndex = $this->getPartialSearchFromIds($userResult, self::PARTIAL_INDEX_TEMPLATE);
+                $mainIndex = $this->getPartialSearchFromIds($userResult, self::PARTIAL_MAIN_INDEX_TEMPLATE);
+                $smsIndex = $this->getPartialSearchFromIds($userResult, self::PARTIAL_SMS_INDEX_TEMPLATE);
+                $reportIndex = $this->getPartialSearchFromIds($userResult, self::PARTIAL_REPORT_INDEX_TEMPLATE);
             } else {
-                $partialSearch = null;
-                $partialIndex = null;
+                $mainIndex = null;
+                $smsIndex = null;
+                $reportIndex = null ;
             }
             $items->push([
                 "totalitems" => $userResult->total(),
-                "view"       => $partialSearch,
-                "indexView"  => $partialIndex,
+                "mainIndex"       => $mainIndex,
+                "smsIndex"  => $smsIndex,
+                "reportIndex"  => $reportIndex,
             ]);
         }
 
@@ -210,6 +217,7 @@ class UserController extends Controller
 
         //====================OLD CODE==========================================
 
+        //Converted
         $seenProductEnable = Input::get('productEnable');
         $productsId = Input::get('products');
         if (isset($seenProductEnable) && isset($productsId)) {
@@ -307,6 +315,7 @@ class UserController extends Controller
                 ->toArray());
         }
 
+        //Converted
         $paymentStatusesId = Input::get('paymentStatuses');
         if (isset($paymentStatusesId)) {
             //Converted : Used the below solution
@@ -325,6 +334,7 @@ class UserController extends Controller
                                                   ->toArray());
         }
 
+        //Converted
         $orderStatusesId = Input::get('orderStatuses');
         if (isset($orderStatusesId)) {
             //Converted : Used the below solution
@@ -341,6 +351,7 @@ class UserController extends Controller
                                                   ->toArray());
         }
 
+        //Converted
         $mobileNumberVerification = Input::get("mobileNumberVerification");
         if (isset($mobileNumberVerification) && strlen($mobileNumberVerification) > 0) {
             if ($mobileNumberVerification)
@@ -349,6 +360,7 @@ class UserController extends Controller
                 $users = $users->whereNull("mobile_verified_at");
         }
 
+        //Converted
         $withoutPostalCode = Input::get("withoutPostalCode");
         if (isset($withoutPostalCode)) {
             $users = $users->where(function ($q) {
@@ -356,12 +368,12 @@ class UserController extends Controller
                   ->orWhere("postalCode", "");
             });
         } else {
-            //Converted
             $postalCode = Input::get("postalCode");
             if (isset($postalCode) && strlen($postalCode) > 0)
                 $users = $users->where('postalCode', 'like', '%' . $postalCode . '%');
         }
 
+        //Converted
         $withoutProvince = Input::get("withoutProvince");
         if (isset($withoutProvince)) {
             $users = $users->where(function ($q) {
@@ -369,12 +381,12 @@ class UserController extends Controller
                   ->orWhere("province", "");
             });
         } else {
-            //Converted
             $province = Input::get("province");
             if (isset($province) && strlen($province) > 0)
                 $users = $users->where('province', 'like', '%' . $province . '%');
         }
 
+        //Converted
         $withoutCity = Input::get("withoutCity");
         if (isset($withoutCity)) {
             $users = $users->where(function ($q) {
@@ -382,17 +394,16 @@ class UserController extends Controller
                   ->orWhere("city", "");
             });
         } else {
-            //Converted
             $city = Input::get("city");
             if (isset($city) && strlen($city) > 0)
                 $users = $users->where('city', 'like', '%' . $city . '%');
         }
 
+        //Converted
         $addressSpecialFilter = Input::get("addressSpecialFilter");
         if (isset($addressSpecialFilter)) {
             switch ($addressSpecialFilter) {
                 case "0":
-                    //Converted
                     $address = Input::get("address");
                     if (isset($address) && strlen($address) > 0)
                         $users = $users->where('address', 'like', '%' . $address . '%');
@@ -419,6 +430,7 @@ class UserController extends Controller
                 $users = $users->where('address', 'like', '%' . $address . '%');
         }
 
+        //Converted
         $withoutSchool = Input::get("withoutSchool");
         if (isset($withoutSchool)) {
             $users = $users->where(function ($q) {
@@ -431,6 +443,7 @@ class UserController extends Controller
                 $users = $users->where('school', 'like', '%' . $school . '%');
         }
 
+        //Converted
         $withoutEmail = Input::get("withoutEmail");
         if (isset($withoutEmail)) {
             $users = $users->where(function ($q) {
@@ -511,6 +524,8 @@ class UserController extends Controller
         } else if (strcmp($previousPath, action("HomeController@admin")) == 0) {
             $index = "user.index";
         } else if (strcmp($previousPath, action("HomeController@adminReport")) == 0) {
+            $index = "admin.partials.getReportIndex";
+
             $minCost = Input::get("minCost");
             if (isset($minCost[0])) {
                 foreach ($users as $key => $user) {
@@ -528,7 +543,6 @@ class UserController extends Controller
                         $users->forget($key);
                 }
             }
-            $index = "admin.partials.getReportIndex";
 
             if (Input::has("lotteries")) {
                 $lotteryId = Input::get("lotteries");
