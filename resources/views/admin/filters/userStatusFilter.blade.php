@@ -1,1 +1,1 @@
-{!! Form::select("userStatus[]" , $userStatuses, null, ['class' => 'form-control']) !!}
+{!! Form::select("userStatus" , $userStatuses, null, ['class' => 'form-control' , 'placeholder'=>'انتخاب وضعیت']) !!}

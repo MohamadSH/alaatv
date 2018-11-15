@@ -865,7 +865,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     public function closedorderproducts()
     {
         return $this->hasManyThrough("\App\Orderproduct", "\App\Order")
-            ->whereNotIn("orderstatus_id", Order::OPEN_ORDER_STATUSES);
+                    ->whereNotIn("orders.orderstatus_id", Order::OPEN_ORDER_STATUSES);
     }
 
     /**

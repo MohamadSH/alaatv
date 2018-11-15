@@ -8,7 +8,6 @@
 
 namespace App\Traits;
 
-
 trait SearchCommon
 {
     /**
@@ -20,7 +19,7 @@ trait SearchCommon
      */
     private function getPartialSearchFromIds($query, $layout)
     {
-        $partialSearch = \Illuminate\Support\View::make($layout, ['items' => $query])
+        $partialSearch = \Illuminate\Support\Facades\View::make($layout, ['items' => $query])
             ->render();
         return $partialSearch;
     }

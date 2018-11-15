@@ -283,27 +283,27 @@ var TableDatatablesManaged = function () {
         $('body').on('click', '.group-checkable', function () {
             if (jQuery(this).is(":checked")) {
                 user_id = [];
-                fatherNumbers = 0;
-                motherNumbers = 0;
+                // fatherNumbers = 0;
+                // motherNumbers = 0;
                 $('input[type="checkbox"]', allPages).prop('checked', true);
                 for(var i = 0; i < allPages.length; i++) {
                     user_id.push(allPages[i].id);
-                    if($('#fatherNumbers'+allPages[i].id).val()){
-                        fatherNumbers += parseInt($('#fatherNumbers'+allPages[i].id).val());
-                    }
-                    if($('#matherNumbers'+allPages[i].id).val()){
-                        motherNumbers += parseInt($('#matherNumbers'+allPages[i].id).val());
-                    }
+                    // if($('#fatherNumbers'+allPages[i].id).val()){
+                    //     fatherNumbers += parseInt($('#fatherNumbers'+allPages[i].id).val());
+                    // }
+                    // if($('#matherNumbers'+allPages[i].id).val()){
+                    //     motherNumbers += parseInt($('#matherNumbers'+allPages[i].id).val());
+                    // }
                 }
             }
             else {
                 $('input[type="checkbox"]', allPages).prop('checked', false);
                 user_id = [];
-                fatherNumbers = 0;
-                motherNumbers = 0;
+                // fatherNumbers = 0;
+                // motherNumbers = 0;
             }
         })
-    }
+    };
 
 
     return {

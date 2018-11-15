@@ -236,10 +236,9 @@ $(document).on("click", "#user-portlet .reload", function (){
         statusCode: {
             200:function (response) {
                 // console.log(response);
-                var responseJson = response;
                 var newDataTable =$("#user_table").DataTable();
                 newDataTable.destroy();
-                $('#user_table > tbody').html(responseJson.index);
+                $('#user_table > tbody').html(response.items[0].mainIndex);
                 if(response === null || response === "" ) {
                     $('#user_table > thead > tr').children('th:first').removeClass().addClass("none");
                 }
@@ -784,22 +783,31 @@ $(document).on("click", "#role-portlet .reload", function (){
 $('#userCreatedTimeEnable').click(function () {
     if($('#userCreatedTimeEnable').prop('checked') == true) {
         $('#userCreatedSince').attr('disabled' ,false);
+        $('#userCreatedSinceAlt').attr('disabled' ,false);
         $('#userCreatedTill').attr('disabled' ,false);
+        $('#userCreatedTillAlt').attr('disabled' ,false);
     }
     else {
         $('#userCreatedSince').attr('disabled' ,true);
+        $('#userCreatedSinceAlt').attr('disabled' ,true);
         $('#userCreatedTill').attr('disabled' ,true);
+        $('#userCreatedTillAlt').attr('disabled' ,true);
     }
 });
 
 $('#userUpdatedTimeEnable').click(function () {
-    if($('#userUpdatedTimeEnable').prop('checked') == true) {
+    if($('#userUpdatedTimeEnable').prop('checked') == true)
+    {
         $('#userUpdatedSince').attr('disabled' ,false);
+        $('#userUpdatedSinceAlt').attr('disabled' ,false);
         $('#userUpdatedTill').attr('disabled' ,false);
+        $('#userUpdatedTillAlt').attr('disabled' ,false);
     }
     else {
         $('#userUpdatedSince').attr('disabled' ,true);
+        $('#userUpdatedSinceAlt').attr('disabled' ,true);
         $('#userUpdatedTill').attr('disabled' ,true);
+        $('#userUpdatedTillAlt').attr('disabled' ,true);
     }
 });
 

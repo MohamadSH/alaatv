@@ -191,6 +191,8 @@ class HomeController extends Controller
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
         try {
+            $users = User::where("lastName" , "شاهرخی")->get();
+            $uniqueUsers = $users->groupBy("nationalCode");
             $out = (new GaReportFactory())->createGaReportGetUsersFromPageView()
                                           ->getReport('/c/6560');
             dump("here!");
@@ -377,7 +379,6 @@ class HomeController extends Controller
     public function admin()
     {
         $userStatuses = Userstatus::pluck('displayName', 'id');
-        $userStatuses->prepend("انتخاب وضعیت");
         $majors = Major::pluck('name', 'id');
         $genders = Gender::pluck('name', 'id');
         $gendersWithUnknown = clone $genders;
@@ -813,7 +814,6 @@ class HomeController extends Controller
         $pageName = "admin";
 
         $userStatuses = Userstatus::pluck('name', 'id');
-        $userStatuses->prepend("انتخاب وضعیت");
         $majors = Major::pluck('name', 'id');
         $genders = Gender::pluck('name', 'id');
         $gendersWithUnknown = clone $genders;
@@ -836,8 +836,9 @@ class HomeController extends Controller
             1 => "تایید شده",
         ];
 
-        $relatives = Relative::pluck('displayName', 'id');
-        $relatives->prepend('فرد');
+        $relatives = ["فرد"];
+//        $relatives = Relative::pluck('displayName', 'id');
+//        $relatives->prepend('فرد');
 
         $sortBy = [
             "updated_at" => "تاریخ اصلاح",
@@ -960,7 +961,6 @@ class HomeController extends Controller
     public function adminReport()
     {
         $userStatuses = Userstatus::pluck('displayName', 'id');
-        $userStatuses->prepend("انتخاب وضعیت");
         $majors = Major::pluck('name', 'id');
         $genders = Gender::pluck('name', 'id');
         $gendersWithUnknown = clone $genders;
