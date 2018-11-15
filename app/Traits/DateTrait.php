@@ -14,6 +14,18 @@ trait DateTrait
         return $this->convertDate($this->created_at, "toJalali");
     }
 
+    /**
+     *  Converting Completed field to jalali
+     *
+     * @return string
+     */
+    public function CompletedAt_Jalali()
+    {
+        $explodedDateTime = explode(" ", $this->completed_at);
+//        $explodedTime = $explodedDateTime[1] ;
+        return $this->convertDate($this->completed_at, "toJalali");
+    }
+
     public function convertDate($date, $convertType)
     {
         if (strcmp($convertType, 'toJalali') == 0 && strlen($date) > 0) {
