@@ -11,6 +11,7 @@
 @endif
 <div class="col-md-1" style="padding-left: 0px">
     <label class="control-label" style="float: right;">
+        بدون هیچ سفارشی
         <label class="mt-checkbox mt-checkbox-outline">
             <input type="checkbox" id="" value="1"
                    name="doesntHaveOrder">
@@ -20,6 +21,7 @@
 </div>
 <div class="col-md-1" style="padding-left: 0px">
     <label class="control-label" style="float: right;">
+        حداقل یک سفارش نهایی شده دارد
         <label class="mt-checkbox mt-checkbox-outline">
             <input type="checkbox" id="" value="1"
                    name="hasClosedOrder">

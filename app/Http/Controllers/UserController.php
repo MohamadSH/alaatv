@@ -251,7 +251,9 @@ class UserController extends Controller
         $sortType = Input::get("sortType");
         if (strlen($sortBy) > 0 && strlen($sortType) > 0) {
             if (strcmp($sortType, "desc") == 0)
-                $users = $users->sortByDesc($sortBy); else $users = $users->sortBy($sortBy);
+                $users = $users->sortByDesc($sortBy);
+            else
+                $users = $users->sortBy($sortBy);
         }
 
         $previousPath = url()->previous();
@@ -263,6 +265,8 @@ class UserController extends Controller
         $reportType = "";
 
         if (strcmp($previousPath, action("HomeController@adminSMS")) == 0) {
+            $index = "user.index2";
+
             $uniqueUsers = $users->groupBy("nationalCode");
             $users = collect();
             foreach ($uniqueUsers as $user) {
@@ -274,7 +278,6 @@ class UserController extends Controller
                     $users->push($user->first());
                 }
             }
-            $index = "user.index2";
             $usersId = $users->pluck("id");
             $usersIdCount = $usersId->count();
             $numberOfFatherPhones = Phone::whereIn('contact_id', Contact::whereIn('user_id', $usersId)
