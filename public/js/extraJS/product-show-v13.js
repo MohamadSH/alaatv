@@ -163,12 +163,6 @@ $(document).on("ifChanged change", ".extraAttribute", function ()
     refreshPrice([] , [] , attributeState);
 });
 
-$(document).on("ifChanged switchChange.bootstrapSwitch", ".product", function ()
-{
-    var productsState = getProductSelectValues() ;
-    refreshPrice([] , productsState , []);
-});
-
 function childClick( explicitClassName) {
     var className = explicitClassName.split(' ')[0];
     var parentId = className.split('_')[1];
@@ -288,6 +282,13 @@ $(document).on("switchChange.bootstrapSwitch", "[class^='hasParent']", function 
     }
     var className = $(this).attr("class");
     childClick(className);
+});
+
+$(document).on("ifChanged switchChange.bootstrapSwitch", ".product", function ()
+{
+    var productsState = getProductSelectValues() ;
+    console.log(productsState);
+    refreshPrice([] , productsState , []);
 });
 
 $(document).on("click", "#orderButton2", function (){
