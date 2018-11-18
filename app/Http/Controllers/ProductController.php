@@ -363,6 +363,9 @@ class ProductController extends Controller
      */
     public function show(Request $request, Product $product)
     {
+        if(isset($product->redirectUrl))
+            return redirect($product->redirectUrl, 301);
+
         $this->generateSeoMetaTags($product);
 
         $descriptionIframe = $request->partial;
@@ -582,7 +585,6 @@ class ProductController extends Controller
         $extraAttributeValues = $request->get("extraAttributeValues");
         $user = $this->getCustomer($request);
         //        return (new AlaaCashier($product,$user))->getPrice();
-
 
         $key = "product:refreshPrice:Product"
             . "\\"
