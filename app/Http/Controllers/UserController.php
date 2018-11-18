@@ -641,22 +641,16 @@ class UserController extends Controller
             $products->load('complimentaryproducts');
             $products->load('children');
             $products->load('validProductfiles');
-            $productsWithVideo = [];
-            $productsWithPamphlet = [];
             $pamphlets = collect();
             $videos = collect();
             foreach ($products as $product) {
-                if (!in_array($product->id, $productsWithPamphlet) && !in_array($product->id, $productsWithVideo)) {
-
-                    array_push($productsWithPamphlet, $product->id);
-                    array_push($productsWithVideo, $product->id);
 
                     $parentsArray = $this->makeParentArray($product);
 
-                    $this->addVideoPamphlet($parentsArray, $productsWithPamphlet, $productsWithVideo, $pamphlets, $videos);
+                    $this->addVideoPamphlet($parentsArray, $pamphlets, $videos);
 
                     $childrenArray = $product->children;
-                    $this->addVideoPamphlet($childrenArray, $productsWithPamphlet, $productsWithVideo, $pamphlets, $videos);
+                    $this->addVideoPamphlet($childrenArray, $pamphlets, $videos);
 
                     $pamphletArray = [];
                     $videoArray = [];
@@ -691,8 +685,7 @@ class UserController extends Controller
                             "videos"      => $videoArray,
                         ]);
                     $c = $product->complimentaryproducts;
-                    $this->addVideoPamphlet($c, $productsWithPamphlet, $productsWithVideo, $pamphlets, $videos);
-                }
+                    $this->addVideoPamphlet($c, $pamphlets, $videos);
             }
             return [
                 $videos,
@@ -710,20 +703,16 @@ class UserController extends Controller
      * Filling product's pamphlets and videos collection ( called by reference )
      *
      * @param            $productArray
-     * @param            $productsWithPamphlet
-     * @param            $productsWithVideo
      * @param Collection $pamphlets
      * @param Collection $videos
      */
-    private function addVideoPamphlet($productArray, &$productsWithPamphlet, &$productsWithVideo, Collection &$pamphlets, Collection &$videos)
+    private function addVideoPamphlet($productArray, Collection &$pamphlets, Collection &$videos)
     {
         if (!empty($productArray)) {
             $videoArray = [];
             $pamphletArray = [];
             foreach ($productArray as $product) {
                 if (!in_array($product->id, $pamphletArray) && !in_array($product->id, $videoArray)) {
-                    array_push($productsWithPamphlet, $product->id);
-                    array_push($productsWithVideo, $product->id);
 
                     if (isset($pamphlets[$product->id]))
                         $pamphletArray = $pamphlets[$product->id]; else
@@ -763,7 +752,7 @@ class UserController extends Controller
                         ]);
                 }
 
-                $this->addVideoPamphlet($product->complimentaryproducts, $productsWithPamphlet, $productsWithVideo, $pamphlets, $videos);
+                $this->addVideoPamphlet($product->complimentaryproducts, $pamphlets, $videos);
             }
         }
     }
