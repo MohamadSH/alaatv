@@ -178,6 +178,7 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
         'introVideo',
         'isFree',
         'specialDescription',
+        'redirectUrl',
     ];
 
     /**
@@ -1508,14 +1509,14 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
     {
         $cost = 0;
         if ($this->hasParents()) {
-            $parent = $this->parents->first();
-            $parentProductType = $parent->producttype_id;
-            if ($parentProductType == config("constants.PRODUCT_TYPE_CONFIGURABLE")) {
-                if ($this->basePrice != 0 && $this->basePrice != $parent->basePrice)
+            $grandParent = $this->getGrandParent();
+            $grandParentProductType = $grandParent->producttype_id;
+            if ($grandParentProductType == config("constants.PRODUCT_TYPE_CONFIGURABLE")) {
+                if ($this->basePrice != 0 && $this->basePrice != $grandParent->basePrice)
                     $cost += $this->basePrice;
                 else
-                    $cost += $parent->basePrice;
-            } else if ($parentProductType == config("constants.PRODUCT_TYPE_SELECTABLE")) {
+                    $cost += $grandParent->basePrice;
+            } else if ($grandParentProductType == config("constants.PRODUCT_TYPE_SELECTABLE")) {
                 if ($this->basePrice == 0) {
                     $children = $this->children;
                     foreach ($children as $child) {
@@ -1641,5 +1642,14 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
         }
 
         return $discountAmount;
+    }
+
+    /**
+     * Disables the product
+     *
+     */
+    public function disable():void
+    {
+        $this->enable = 0 ;
     }
 }
