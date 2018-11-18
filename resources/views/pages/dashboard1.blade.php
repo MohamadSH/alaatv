@@ -1,293 +1,110 @@
 @extends("app" , ["pageName"=>$pageName])
 
-
-@section("pageBar")
-
+@section('right-aside')
 @endsection
-
-@section("bodyClass")
-    class="page-header-fixed page-sidebar-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-md"
-@endsection
-
-@section("gtagJs")
-    {{--<!-- Event snippet for Make-A-Payment conversion page -->--}}
-    {{--<script>--}}
-    {{--gtag('event', 'conversion', {--}}
-    {{--'send_to': 'AW-927952751/0L57COfS9YEBEO_evboD',--}}
-    {{--'transaction_id': ''--}}
-    {{--});--}}
-    {{--</script>--}}
-@endsection
-
-@section("css")
-    <link rel="stylesheet" href="{{ mix('/css/all.css') }}">
-    <link rel="stylesheet" type="text/css" href="/assets/extra/slick/slick/slick.css">
-    <link rel="stylesheet" type="text/css" href="/assets/extra/slick/slick/slick-theme.css">
-    <style type="text/css">
-        .search-content-3 .tile-container > .tile-thumbnail {
-            height: 100px !important;
-        }
-
-        /**
-         product slider styles
-         */
-
-        * {
-            box-sizing: border-box;
-        }
-
-        .slider {
-            width: 70%;
-            margin: 100px auto;
-        }
-
-        .slick-slide {
-            /*margin: 0px 20px;*/
-        }
-
-        .slick-slide img {
-            width: 100%;
-        }
-
-        .slick-prev:before,
-        .slick-next:before {
-            color: black;
-        }
-
-        .slick-slide {
-            transition: all ease-in-out .3s;
-            opacity: .2;
-        }
-
-        .slick-active {
-            opacity: 1;
-        }
-
-        .slick-current {
-            opacity: 1;
-        }
-
-    </style>
-@endsection
-
 @section("content")
-    <style>
-        p.ribbon-content {
-            font-weight: bold;
-            text-decoration: none !important;
-        }
-
-        .mt-element-ribbon {
-            margin-bottom: 8px;
-
-        }
-
-        a.mt-element-ribbon {
-            text-decoration: none;
-        }
-    </style>
-    {{--<div class="row">--}}
-    {{--<div class="col-lg-12 col-md-12 col-xs-12">--}}
-    {{--<div class="portlet light portlet-fit ">--}}
-    {{--<div class="portlet-body "  >--}}
-    {{--<div class="row">--}}
-    {{--<div class="col-md-3">--}}
-    {{--<a  href="/landing/4">--}}
-    {{--<div class="mt-element-ribbon  bg-red-flamingo">--}}
-    {{--<div class="ribbon ribbon-left ribbon-vertical-left ribbon-shadow ribbon-border-dash-vert ribbon-color-primary uppercase">--}}
-    {{--<div class="ribbon-sub ribbon-bookmark"></div>--}}
-    {{--<i class="fa fa-star"></i>--}}
-    {{--</div>--}}
-    {{--<p class="ribbon-content font-white">--}}
-    {{--آلاء - همایش طلایی کنکور(80%)--}}
-    {{--</p>--}}
-    {{--</div>--}}
-    {{--</a>--}}
-
-    {{--</div>--}}
-    {{--<div class="col-md-3">--}}
-    {{--<div class="mt-element-ribbon bg-blue" >--}}
-    {{--<a  href="javascript:void(0)"--}}
-    {{--onclick="$('html, body').animate({scrollTop: $('.konkoor').offset().top - 80}, 2000);">--}}
-    {{--<div class="ribbon ribbon-left ribbon-vertical-left ribbon-shadow ribbon-border-dash-vert ribbon-color-primary uppercase">--}}
-    {{--<div class="ribbon-sub ribbon-bookmark"></div>--}}
-    {{--<i class="fa fa-star"></i>--}}
-    {{--</div>--}}
-    {{--<p class="ribbon-content font-white">--}}
-    {{--آلاء - تدریس کنکور، رایگان و کامل--}}
-    {{--</p>--}}
-    {{--</a>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--<div class="col-md-3">--}}
-    {{--<div class="mt-element-ribbon bg-green-jungle" >--}}
-    {{--<a  href="javascript:void(0)"--}}
-    {{--onclick="$('html, body').animate({scrollTop: $('.dahom').offset().top  - 80}, 2000);">--}}
-    {{--<div class="ribbon ribbon-left ribbon-vertical-left ribbon-shadow ribbon-border-dash-vert ribbon-color-primary uppercase">--}}
-    {{--<div class="ribbon-sub ribbon-bookmark"></div>--}}
-    {{--<i class="fa fa-star"></i>--}}
-    {{--</div>--}}
-    {{--<p class="ribbon-content font-white">--}}
-    {{--آلاء - تدریس دهم، رایگان--}}
-    {{--</p>--}}
-    {{--</a>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-
-    {{--<div class="col-md-3">--}}
-
-    {{--<div class="mt-element-ribbon bg-yellow-lemon" >--}}
-    {{--<a  href="javascript:void(0)"--}}
-    {{--onclick="$('html, body').animate({scrollTop: $('.yazdahom').offset().top  - 80}, 2000);">--}}
-    {{--<div class="ribbon ribbon-left ribbon-vertical-left ribbon-shadow ribbon-border-dash-vert ribbon-color-primary uppercase">--}}
-    {{--<div class="ribbon-sub ribbon-bookmark"></div>--}}
-    {{--<i class="fa fa-star"></i>--}}
-    {{--</div>--}}
-    {{--<p class="ribbon-content font-white">--}}
-    {{--آلاء - تدریس یازدهم، رایگان--}}
-    {{--</p>--}}
-    {{--</a>--}}
-    {{--</div>--}}
-
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--<div class="clearfix"></div>--}}
     @include("partials.slideShow1" ,["marginBottom"=>"25"])
-    <div class="clearfix"></div>
-    {{--<div class="row">--}}
-    {{--<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">--}}
-    {{--<a class="dashboard-stat dashboard-stat-v2 blue" >--}}
-    {{--<div class="visual">--}}
-    {{--<i class="fa fa-user"></i>--}}
-    {{--</div>--}}
-    {{--<div class="details">--}}
-    {{--<div class="number">--}}
-    {{--<span data-counter="counterup" data-value="@if(isset($userCount)){{$userCount}} @else 0 @endif">0</span>--}}
-    {{--</div>--}}
-    {{--<div class="desc"> تعداد کل کاربران </div>--}}
-    {{--</div>--}}
-    {{--</a>--}}
-    {{--</div>--}}
-    {{--<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">--}}
-    {{--<a class="dashboard-stat dashboard-stat-v2 red">--}}
-    {{--<div class="visual">--}}
-    {{--<i class="fa fa-question"></i>--}}
-    {{--</div>--}}
-    {{--<div class="details">--}}
-    {{--<div class="number">--}}
-    {{--<span data-counter="counterup" data-value="@if(isset($consultingQuestionCount)){{$consultingQuestionCount}}@else 0 @endif">0</span> </div>--}}
-    {{--<div class="desc"> تعداد کل سؤالات مشاوره ای </div>--}}
-    {{--</div>--}}
-    {{--</a>--}}
-    {{--</div>--}}
-    {{--<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">--}}
-    {{--<a class="dashboard-stat dashboard-stat-v2 green">--}}
-    {{--<div class="visual">--}}
-    {{--<i class="fa fa-play"></i>--}}
-    {{--</div>--}}
-    {{--<div class="details">--}}
-    {{--<div class="number">--}}
-    {{--<span data-counter="counterup" data-value="@if(isset($consultationCount)){{$consultationCount}} @else 0 @endif">0</span>--}}
-    {{--</div>--}}
-    {{--<div class="desc"> تعداد کل مشاوره ها </div>--}}
-    {{--</div>--}}
-    {{--</a>--}}
-    {{--</div>--}}
-    {{--<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">--}}
-    {{--<a class="dashboard-stat dashboard-stat-v2 green">--}}
-    {{--<div class="visual">--}}
-    {{--<i class="attachPermissions" aria-hidden="true"></i>--}}
-    {{--</div>--}}
-    {{--<div class="details">--}}
-    {{--<div class="number">--}}
-    {{--<span data-counter="counterup" data-value="@if(isset($ordooRegisteredCount)){{$ordooRegisteredCount}} @else 0 @endif">0</span>--}}
-    {{--</div>--}}
-    {{--<div class="desc"> ثبت نام اردو تا الان </div>--}}
-    {{--</div>--}}
-    {{--</a>--}}
-    {{--</div>--}}
-    {{--<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">--}}
-    {{--<a class="dashboard-stat dashboard-stat-v2 purple">--}}
-    {{--<div class="visual">--}}
-    {{--<i class="fa fa-calendar"></i>--}}
-    {{--</div>--}}
-    {{--<div class="details">--}}
-    {{--<div class="number" dir="ltr" >--}}
-    {{--<span data-counter="counterup" data-value="@if(isset($currentYear)) {{$currentYear}} @else 0 @endif">0</span>/<span data-counter="counterup" data-value="@if(isset($currentMonth)) {{$currentMonth}} @else 0 @endif">0</span>/<span data-counter="counterup" data-value="@if(isset($currentDay)) {{$currentDay}} @else 0 @endif">0</span> </div>--}}
-    {{--<div class="desc"> امروز </div>--}}
-    {{--</div>--}}
-    {{--</a>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    <!-- END DASHBOARD STATS 1-->
-
-    {{--Product Portfolio--}}
-
-    {{--<div class="row">--}}
-    {{--<div class="col-md-12">--}}
-    {{--<div class="portfolio-content portfolio-1" >--}}
-    {{--@if($products->isEmpty())--}}
-    {{--<div class="note " style="background-color: #00d4db;">--}}
-    {{--<h4 class="block bold" style="text-align: center">کاربر گرامی در حال حاضر موردی برای ثبت نام وجود ندارد. همایشها و اردوهای بعدی به زودی اعلام خواهند شد.</h4>--}}
-    {{--</div>--}}
-    {{--@else--}}
-    {{--@include("partials.portfolioGrid" , ["withFilterButton" => false , "withAd"=>true])--}}
-    {{--@endif--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--End of Product Portfolio--}}
-    @foreach($sections as $section)
-        <div class="row">
-            <div class="col-md-12 {{$section["class"]}}">
-                <h4 style="font-weight: bold">{{$section["descriptiveName"]}}
-                    <a style="float: left; padding: 10px; width: 15%"
-                       href="{{urldecode(action("ContentController@index" , ["tags" => $section["tags"]]))}}"
-                       class="btn btn-success">بیشتر</a>
-                </h4>
-
-                <hr style="border-color: #17233a">
-                <div class="search-page search-content-3">
-                    <section class="lessonSlider1 slider" style="width: 95%;margin-top: 0px ; margin-bottom: 15px;">
-                        @foreach($section["lessons"] as $lesson)
-                            <div class="col-md-4">
-                                <div class="tile-container">
-                                    <div class="tile-thumbnail">
-                                        <a href="{{(isset($lesson["content_id"]) && $lesson["content_id"]>0)?action("ContentController@show", $lesson["content_id"]):""}}">
-                                            <img src="
-                                            @if(isset($lesson["pic"]) && strlen($lesson["pic"])>0)
-                                            {{$lesson["pic"]."?w=253&h=142"}}
-                                            @else
-                                                    http://via.placeholder.com/195x195
-                                            @endif " alt="{{$lesson["displayName"]}}"/>
-                                        </a>
-                                    </div>
-                                    <div class="tile-title" style="height: 145px;">
-                                        <h5 class="bold">
-                                            <a href="{{(isset($lesson["content_id"]) && $lesson["content_id"]>0)?action("ContentController@show", $lesson["content_id"]):""}}">{{$lesson["displayName"]}}</a>
-                                        </h5>
-                                        {{--<a href="javascript:;">--}}
-                                        {{--<i class="icon-question font-blue"></i>--}}
-                                        {{--</a>--}}
-                                        {{--<a href="javascript:;">--}}
-                                        {{--<i class="icon-plus font-green-meadow"></i>--}}
-                                        {{--</a>--}}
-                                        <div class="tile-desc">
-                                            <p>مدرس:
-                                                <span class="font-blue">{{$lesson["author"]}}</span>
-                                                {{--<span class="font-grey-salt">25 mins ago</span>--}}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
+    <div class = "m--clearfix"></div>
+    <!--begin:: Widgets/Stats-->
+    <div class = "m-portlet ">
+        <div class = "m-portlet__body  m-portlet__body--no-padding">
+            <div class = "row m-row--no-padding m-row--col-separator-xl">
+                <div class = "col-xs-3 col-md-3 col-lg-3 col-xl-3 m--bg-warning">
+                    <a target="_self" onclick="$('html,body').animate({scrollTop: $('.konkoor1').offset().top - 100},'slow');" href="#konkoor1">
+                        <!--begin::Total Profit-->
+                        <div class = "m-widget24 m--align-center">
+                            <div class = "m-widget24__item">
+                                <h2 class = "m-widget24__title">
+                                    کنکور نظام قدیم
+                                </h2>
+                                <br>
+                                <span class = "m-widget24__desc m--font-light">
+				            آلاء
+				            </span>
+                                <div class = "m--space-10"></div>
                             </div>
-                        @endforeach
-                    </section>
+                        </div>
+                        <!--end::Total Profit-->
+                    </a>
                 </div>
+                <div class = "col-xs-3 col-md-3 col-lg-3 col-xl-3 m--bg-accent">
+                    <a target="_self" onclick="$('html,body').animate({scrollTop: $('.konkoor2').offset().top - 100},'slow');" href="#konkoor2" >
+                    <!--begin::Total Profit-->
+                    <div class = "m-widget24 m--align-center">
+                        <div class = "m-widget24__item">
+                            <h2 class = "m-widget24__title">
+                                کنکور نظام جدید
+                            </h2>
+                            <br>
+                            <span class = "m-widget24__desc m--font-light">
+				            آلاء
+				            </span>
+                            <div class = "m--space-10"></div>
+                        </div>
+                    </div>
+                    <!--end::Total Profit-->
+                    </a>
+                </div>
+                <div class = "col-xs-3 col-md-3 col-lg-3 col-xl-3 m--bg-success">
+                    <a target="_self" onclick="$('html,body').animate({scrollTop: $('.yazdahom').offset().top - 100},'slow');"  href="#yazdahom">
+                    <!--begin::Total Profit-->
+                    <div class = "m-widget24 m--align-center">
+                        <div class = "m-widget24__item">
+                            <h2 class = "m-widget24__title">
+                                پایه یازدهم
+                            </h2>
+                            <br>
+                            <span class = "m-widget24__desc m--font-light">
+				            آلاء
+				            </span>
+                            <div class = "m--space-10"></div>
+                        </div>
+                    </div>
+                    <!--end::Total Profit-->
+                    </a>
+                </div>
+                <div class = "col-xs-3 col-md-3 col-lg-3 col-xl-3 m--bg-fill-info">
+                    <a target="_self" onclick="$('html,body').animate({scrollTop: $('.dahom').offset().top - 100},'slow');"  href="#dahom">
+                    <!--begin::Total Profit-->
+                    <div class = "m-widget24 m--align-center">
+                        <div class = "m-widget24__item">
+                            <h2 class = "m-widget24__title">
+                                پایه دهم
+                            </h2>
+                            <br>
+                            <span class = "m-widget24__desc m--font-light">
+				            آلاء
+				            </span>
+                            <div class = "m--space-10"></div>
+                        </div>
+                    </div>
+                    <!--end::Total Profit-->
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--end:: Widgets/Stats-->
+    @foreach($sections as $section)
+        <div class = "row {{$section["class"]}}">
+            <div class = "col-xl-12 m--margin-bottom-5">
+                <a href = "{{urldecode(action("ContentController@index" , ["tags" => $section["tags"]]))}}" class = "m-link m-link--primary">
+                    <h3 style = "font-weight: bold">{{$section["descriptiveName"]}} </h3>
+                </a>
+            </div>
+            <div class="owl-carousel owl-theme">
+            @foreach($section["lessons"] as $lesson)
+                @include('partials.widgets.set1',[
+                'widgetActionName' => $section["descriptiveName"].'/ نمایش همه',
+                'widgetActionLink' => urldecode(action("ContentController@index" , ["tags" => $section["tags"]])),
+                'widgetTitle'      => $lesson["displayName"],
+                'widgetPic'        => (isset($lesson["pic"]) && strlen($lesson["pic"])>0 ?  $lesson["pic"]."?w=253&h=142" : 'https://via.placeholder.com/235x142'),
+                'widgetAuthor' => $lesson["author"],
+                'widgetLink'       => (isset($lesson["content_id"]) && $lesson["content_id"]>0 ? action("ContentController@show", $lesson["content_id"]):""),
+                'widgetCount' => $lesson["content_count"],
+                'widgetScroll' => 1
+                ])
+            @endforeach
             </div>
         </div>
         @foreach($section["ads"] as $image => $link)
@@ -295,394 +112,33 @@
         @endforeach
     @endforeach
 
-    <div class="row margin-top-10">
-        <div class="col-md-12">
-            <!-- BEGIN Portlet PORTLET-->
-            <div class="portlet light">
-                <div class="portlet-body">
-                    <div class="row">
-                        <div class="col-lg-3 col-md-2 col-sd-2 col-xs-12 text-center">
-                            <img src="/assets/extra/Alaa-logo.gif" style="width: 50%;" alt="فیلم کنکور آلاء"/>
-                        </div>
-                        <div class="col-lg-9 col-md-10 col-sd-10 col-xs-12">
-                            <h4></h4>
-                            <p class="text-justify" style="line-height:normal">
-                                آلاء پنجره ای است رو به دور نمای آموزش کشور که می کوشد با اساتید کار بلد و مخاطبان پر
-                                تعداد و متعهد خود آموزش همگانی را
-                                در چهار گوشه ی این سرزمین در دسترس فرزندان ایران قرار دهد.
-                            </p>
-                            <p class="text-justify" style="line-height:normal">
-                                خدمات اصلی آموزش در آلاء کاملا رایگان بوده و درآمد خدمات جانبی آن صرف برپا نگه داشتن و
-                                دوام این مجموعه عام المنفعه می شود. محصولات ما پیش تر با نام های آلاء و تخته خاک در
-                                اختیار مخاطبان قرار می گرفت که
-                                برای سهولت در مدیریت و دسترسی کاربران اکنون انحصارا با نام آلاء منتشر می شود.
-                            </p>
-                        </div>
-                    </div>
+
+    <div class = "m-portlet">
+        <div class = "m-portlet__body  m-portlet__body--no-padding">
+
+            <div class="m-stack m-stack--ver m-stack--general m-stack--demo">
+                <div class="m-stack__item m-stack__item--center m-stack__item--middle">
+                    <img src = "/assets/extra/Alaa-logo.gif" class="img-fluid m--img-centered" alt = "فیلم کنکور آلاء"/>
+                </div>
+                <div class="m-stack__item m-stack__item--center m-stack__item--middle">
+                    <p class = "text-justify">
+                        آلاء پنجره ای است رو به دور نمای آموزش کشور که می کوشد با اساتید کار بلد و مخاطبان پر تعداد و متعهد خود آموزش همگانی را در چهار گوشه ی این سرزمین در دسترس فرزندان ایران قرار دهد.
+                        <br>
+                        خدمات اصلی آموزش در آلاء کاملا رایگان بوده و درآمد خدمات جانبی آن صرف برپا نگه داشتن و دوام این مجموعه عام المنفعه می شود. محصولات ما پیش تر با نام های آلاء و تخته خاک در اختیار مخاطبان قرار می گرفت که برای سهولت در مدیریت و دسترسی کاربران اکنون انحصارا با نام آلاء منتشر می شود.
+                    </p>
+                </div>
+                <div class="m-stack__item m-stack__item--center m-stack__item--middle">
+                    <img src = "/assets/extra/sharif-logo.png" class="img-fluid m--img-centered" alt = "دبیرستان دانشگاه شریف آلاء"/>
+                </div>
+                <div class="m-stack__item m-stack__item--center m-stack__item--middle">
+                    <p class = "text-justify" >
+                        دبیرستان دانشگاه صنعتی شریف در سال 1383 تاسیس و زیر نظر دانشگاه صنعتی شریف فعالیت خود را آغاز کرد.
+                        فعالیت های آموزشی آلاء با نظارت دبیرستان دانشگاه شریف انجام می شود.
+                    </p>
                 </div>
             </div>
-            <!-- END Portlet PORTLET-->
         </div>
     </div>
 
     @include("partials.certificates")
-
-    {{--<div class="row">--}}
-    {{--<div class="col-md-6" id="consultationColumn" >--}}
-    {{--<div class="portlet light portlet-fit">--}}
-    {{--<div class="portlet-title">--}}
-    {{--<div class="caption">--}}
-    {{--<i class="fa fa-video-camera font-red"></i>--}}
-    {{--<span class="caption-subject bold font-red uppercase"> تایملاین مشاوره</span>--}}
-    {{--<span class="caption-helper">فیلمهای مشاوره</span>--}}
-    {{--</div>--}}
-    {{--<div class="actions">--}}
-    {{--<a href="{{action("UserController@uploadConsultingQuestion")}}" class="btn btn-transparent dark btn-outline btn-circle btn-sm active">--}}
-    {{--برای پرسیدن سؤال مشاوره ای کلیک کنید</a>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-
-    {{--<div class="portlet-body">--}}
-    {{--<div class="scroller timeline  white-bg white-bg @if($consultations->count() <= 1) dashboard-consultation-scroll-empty @else dashboard-consultation-scroll-notEmpty @endif">--}}
-    {{--@include("consultation.index" , ["pageName"=>$pageName])--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--<div class="col-md-6" >--}}
-    {{--<div class="portlet light portlet-fit">--}}
-    {{--<div class="portlet-title">--}}
-
-    {{--<div class="caption">--}}
-
-    {{--<i class="fa fa-book font-red"></i>--}}
-    {{--<a href="{{action("ContentController@search")}}"><span class="caption-subject bold font-red "> آخرین مطالب </span></a>--}}
-    {{--<span class="caption-helper">جزوه ، کتاب ، آزمون</span>--}}
-
-    {{--</div>--}}
-    {{--</div>--}}
-
-    {{--<div class="portlet-body">--}}
-    {{--@if($contents->isEmpty())--}}
-    {{--<div class="timeline  white-bg white-bg">--}}
-    {{--<h4 class="block bold text-center" >کاربر گرامی در حال حاضر مطلبی برای مشاهده وجود ندارد.</h4>--}}
-    {{--</div>--}}
-    {{--@else--}}
-    {{--<div class="scroller timeline  white-bg white-bg @if($articles->count() <= 1) height-165 @else height-400 @endif">--}}
-
-    {{--</div>--}}
-    {{--<div class="scroller" data-always-visible="1" data-rail-visible="0">--}}
-    {{--@include("content.index" , ["pageName"=>"dashboard"])--}}
-    {{--</div>--}}
-    {{--@endif--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--<div class="row">--}}
-    {{--<div class="col-md-12 ">--}}
-    {{--<div class="portlet light portlet-fit ">--}}
-    {{--<div class="portlet-title">--}}
-    {{--<div class="caption">--}}
-    {{--<i class="icon-microphone font-dark hide"></i>--}}
-    {{--<span class="caption-subject bold font-yellow uppercase"> همایش های نوروز ۹۵ آلاء</span>--}}
-    {{--<span class="caption-helper">برای تماشای فیلم ها بر روی دروس کلیک کنید</span>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--<div class="portlet-body">--}}
-    {{--<div class="row">--}}
-    {{--<div class="col-md-4">--}}
-    {{--<a target="_blank" href="http://sanatisharif.ir/Sanati-Sharif-Lesson/11/19/">--}}
-    {{--<div class="mt-widget-2">--}}
-    {{--<div class="mt-head" style="background-image: url(/assets/extra/hamayesh-fizik-95.jpg);">--}}
-    {{--<div class="mt-head-user">--}}
-    {{--<div class="mt-head-user-img">--}}
-    {{--<img src="http://sanatisharif.ir/images/alaa-index.gif" alt="آلاء">--}}
-    {{--</div>--}}
-    {{--<div class="mt-head-user-info">--}}
-    {{--<span class="mt-user-name">آقای کازرانیان</span>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--<div class="mt-body">--}}
-    {{--<h3 class="mt-body-title"> همایش فیزیک </h3>--}}
-    {{--<p class="mt-body-description"> فیلم های همایش فیزیک در اردوی طلایی نوروز ۹۵  </p>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--</a>--}}
-    {{--<a target="_blank" href="http://sanatisharif.ir/Sanati-Sharif-Lesson/15/19/">--}}
-    {{--<div class="mt-widget-2">--}}
-    {{--<div class="mt-head" style="background-image: url(/assets/extra/hamayesh-zist-95.jpg);">--}}
-    {{--<div class="mt-head-user">--}}
-    {{--<div class="mt-head-user-img">--}}
-    {{--<img src="http://sanatisharif.ir/images/alaa-index.gif" alt="آلاء">--}}
-    {{--</div>--}}
-    {{--<div class="mt-head-user-info">--}}
-    {{--<span class="mt-user-name">آقای رحیمی</span>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--<div class="mt-body">--}}
-    {{--<h3 class="mt-body-title"> همایش زیست </h3>--}}
-    {{--<p class="mt-body-description"> فیلم های همایش زیست در اردوی طلایی نوروز </p>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--</a>--}}
-
-    {{--</div>--}}
-    {{--<div class="col-md-4">--}}
-    {{--<a target="_blank" href="http://sanatisharif.ir/Sanati-Sharif-Lesson/10/19/">--}}
-    {{--<div class="mt-widget-2">--}}
-    {{--<div class="mt-head" style="background-image: url(/assets/extra/hamayesh-shimi-95.jpg);">--}}
-    {{--<div class="mt-head-user">--}}
-    {{--<div class="mt-head-user-img">--}}
-    {{--<img src="http://sanatisharif.ir/images/alaa-index.gif" alt="آلاء">--}}
-    {{--</div>--}}
-    {{--<div class="mt-head-user-info">--}}
-    {{--<span class="mt-user-name">آقای آقاجانی</span>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--<div class="mt-body">--}}
-    {{--<h3 class="mt-body-title"> همایش شیمی </h3>--}}
-    {{--<p class="mt-body-description"> فیلم های همایش شیمی در اردوی طلایی نوروز ۹۵ </p>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--</a>--}}
-    {{--<a target="_blank" href="http://sanatisharif.ir/Sanati-Sharif-Lesson/5/19/">--}}
-    {{--<div class="mt-widget-2">--}}
-    {{--<div class="mt-head" style="background-image: url(http://sanatisharif.ir/departmentlesson/arabi-124.jpg);">--}}
-    {{--<div class="mt-head-user">--}}
-    {{--<div class="mt-head-user-img">--}}
-    {{--<img src="http://sanatisharif.ir/images/alaa-index.gif" alt="آلاء">--}}
-    {{--</div>--}}
-    {{--<div class="mt-head-user-info">--}}
-    {{--<span class="mt-user-name">آقای ناصح زاده</span>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--<div class="mt-body">--}}
-    {{--<h3 class="mt-body-title"> همایش عربی </h3>--}}
-    {{--<p class="mt-body-description"> فیلم های همایش عربی در اردوی طلایی نوروز ۹۵ </p>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--</a>--}}
-
-    {{--</div>--}}
-    {{--<div class="col-md-4">--}}
-    {{--<a target="_blank" href="http://sanatisharif.ir/Sanati-Sharif-Lesson/45/19/">--}}
-    {{--<div class="mt-widget-2">--}}
-    {{--<div class="mt-head" style="background-image: url(assets/extra/hamayesh-adabiyat-95.jpg);">--}}
-    {{--<div class="mt-head-user">--}}
-    {{--<div class="mt-head-user-img">--}}
-    {{--<img src="http://sanatisharif.ir/images/alaa-index.gif" alt="آلاء">--}}
-    {{--</div>--}}
-    {{--<div class="mt-head-user-info">--}}
-    {{--<span class="mt-user-name" style="background: rgba(0, 0, 0, 0.6);">آقای حسین خانی</span>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--<div class="mt-body">--}}
-    {{--<h3 class="mt-body-title"> جمع بندی آرایه های ادبی </h3>--}}
-    {{--<p class="mt-body-description"> فیلم های جمع بندی آرایه های ادبی اردوی طلایی نوروز ۹۵ </p>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--</a>--}}
-    {{--<a target="_blank" href="http://sanatisharif.ir/Sanati-Sharif-Lesson/19/19/">--}}
-    {{--<div class="mt-widget-2">--}}
-    {{--<div class="mt-head" style="background-image: url(http://sanatisharif.ir/departmentlesson/jabr.jpg);">--}}
-    {{--<div class="mt-head-user">--}}
-    {{--<div class="mt-head-user-img">--}}
-    {{--<img src="http://sanatisharif.ir/images/alaa-index.gif" alt="آلاء">--}}
-    {{--</div>--}}
-    {{--<div class="mt-head-user-info">--}}
-    {{--<span class="mt-user-name" style="background: rgba(0, 0, 0, 0.6);">آقای حسین کرد</span>--}}
-
-
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--<div class="mt-body">--}}
-    {{--<h3 class="mt-body-title"> همایش جبر و احتمال </h3>--}}
-    {{--<p class="mt-body-description"> فیلم های همایش جبر رو احتمال در اردوی طلایی نوروز ۹۵ </p>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--</a>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--</div></div>--}}
-    {{--</div>--}}
-
-@endsection
-@section("footerPageLevelPlugin")
-    <script src="{{ mix('/js/footer_Page_Level_Plugin.js') }}" type="text/javascript"></script>
-@endsection
-@section("footerPageLevelScript")
-    <script src="{{ mix('/js/Page_Level_Script_all.js') }}" type="text/javascript"></script>
-    <script type="text/javascript">
-                @if(Config::has("constants.SPECIAL_OFFER_DEADLINE"))
-        var ComingSoon = function () {
-
-                return {
-                    //main function to initiate the module
-                    init: function () {
-                        var finish = new Date({{Config::get("constants.SPECIAL_OFFER_DEADLINE")}});
-                        $('#defaultCountdown').countdown({
-                            until: finish, format: 'DHMS',
-                            layout: '<span class="countdown_row countdown_show4" >' +
-                                '{d<}' +
-                                '<span class="countdown_section bg-green" style="width: 24%"  >' +
-                                '<label class="countdown_amount" >{dn}</label>' +
-                                '<br>{dl}' +
-                                '</span>' +
-                                '{d>}' +
-                                '{h<}' +
-                                '<span class="countdown_section bg-green" style="width: 24%">' +
-                                '<label class="countdown_amount">{hn}</label>' +
-                                '<br>{hl}' +
-                                '</span>' +
-                                '{h>}' +
-                                '{m<}' +
-                                '<span class="countdown_section bg-green" style="width: 24%">' +
-                                '<label class="countdown_amount">{mn}</label>' +
-                                '<br>{ml}' +
-                                '</span>' +
-                                '{m>}' +
-                                '{s<}' +
-                                '<span class="countdown_section bg-green" style="width: 24%">' +
-                                '<label class="countdown_amount">{sn}</label>' +
-                                '<br>{sl}' +
-                                '</span>' +
-                                '{s>}' +
-                                '</span>',
-                            description: 'تا پایان'
-                        });
-                    }
-
-                };
-
-            }();
-
-        jQuery(document).ready(function () {
-            ComingSoon.init();
-        });
-        @endif
-    </script>
-@endsection
-
-@section("extraJS")
-    <script src="/assets/extra/slick/slick/slick.min.js" type="text/javascript" charset="utf-8"></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            initialSlick($(".lessonSlider1"));
-        });
-
-        function initialSlick(element) {
-            element.slick({
-                auto: true,
-                dots: true,
-                infinite: false,
-                speed: 300,
-                slidesToShow: 4,
-                slidesToScroll: 4,
-                responsive: [
-                    {
-                        breakpoint: 1024,
-                        settings: {
-                            slidesToShow: 3,
-                            slidesToScroll: 3,
-                            infinite: true,
-                            dots: true
-                        }
-                    },
-                    {
-                        breakpoint: 600,
-                        settings: {
-                            slidesToShow: 2,
-                            slidesToScroll: 2
-                        }
-                    },
-                    {
-                        breakpoint: 480,
-                        settings: {
-                            slidesToShow: 1,
-                            slidesToScroll: 1,
-                            dots: false
-                        }
-                    }
-                    // You can unslick at a given breakpoint now by adding:
-                    // settings: "unslick"
-                    // instead of a settings object
-                ],
-                rtl: true
-            });
-        }
-
-        (function ($, window, document, undefined) {
-            'use strict';
-
-            // init cubeportfolio
-            $('#js-grid-juicy-projects').cubeportfolio({
-                filters: '#js-filters-juicy-projects',
-                loadMore: '#js-loadMore-juicy-projects',
-                loadMoreAction: 'click',
-                layoutMode: 'grid',
-                defaultFilter: '*',
-                animationType: 'quicksand',
-                gapHorizontal: 35,
-                gapVertical: 30,
-                gridAdjustment: 'responsive',
-                mediaQueries: [{
-                    width: 1500,
-                    cols: 5
-                }, {
-                    width: 1100,
-                    cols: 4
-                }, {
-                    width: 800,
-                    cols: 3
-                }, {
-                    width: 480,
-                    cols: 2
-                }, {
-                    width: 320,
-                    cols: 1
-                }],
-                caption: 'overlayBottomReveal',
-                displayType: 'sequentially',
-                displayTypeSpeed: 80,
-
-                // lightbox
-                lightboxDelegate: '.cbp-lightbox',
-                lightboxGallery: true,
-                lightboxTitleSrc: 'data-title',
-                lightboxCounter: '<div class="cbp-popup-lightbox-counter" style="direction:ltr">@{{current}} of @{{total}}</div>',
-
-                // singlePage popup
-                singlePageDelegate: '.cbp-singlePage',
-                singlePageDeeplinking: true,
-                singlePageStickyNavigation: true,
-                singlePageCounter: '<div class="cbp-popup-singlePage-counter" style="direction:ltr">@{{current}} of @{{total}}</div>',
-                singlePageCallback: function (url, element) {
-                    // to update singlePage content use the following method: this.updateSinglePage(yourContent)
-                    var t = this;
-
-                    $.ajax({
-                        url: url,
-                        type: 'GET',
-                        dataType: 'html',
-                        timeout: 10000
-                    })
-                        .done(function (result) {
-                            t.updateSinglePage(result);
-                        })
-                        .fail(function () {
-                            t.updateSinglePage('AJAX Error! Please refresh the page!');
-                        });
-                },
-            });
-
-        })(jQuery, window, document);
-    </script>
 @endsection

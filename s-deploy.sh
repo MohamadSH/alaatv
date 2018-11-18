@@ -1,6 +1,7 @@
 #!/bin/bash
 
 cd /home/alaa/project/sohrab/alaaTv
+#npm run dev
 echo -e "x57par" | sudo -S service php7.2-fpm restart
 
 #php artisan down

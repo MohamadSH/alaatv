@@ -268,7 +268,7 @@
                                     </a>
                                 </li>
                                 <li class = "m-nav__item">
-                                    <a href = "{{action("OrderController@checkoutReview")}}" class = "m-nav__link">
+                                    <a href = "{{ action("OrderController@checkoutReview") }}" class = "m-nav__link">
                                         <span class = "m-nav__link-icon">
                                             <span class = "m-nav__link-icon-wrapper"><i class = "flaticon-shopping-basket"></i></span>
                                             <span class = "m-nav__link-badge m-badge m-badge--danger">{{ Auth::user()->numberOfProductsInBasket }}</span>

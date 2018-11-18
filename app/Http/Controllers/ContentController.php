@@ -359,7 +359,7 @@ class ContentController extends Controller
      */
     private function getContentInformation(Content $content): array
     {
-        $author = $content->author;
+        $author = $content->authorName;
 
         [
             $contentsWithSameSet,

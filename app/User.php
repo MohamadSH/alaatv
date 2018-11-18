@@ -1151,9 +1151,10 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
 
     public function getPhotoAttribute($value)
     {
-        if(is_null($value))
-            return Config::get('constants.PROFILE_DEFAULT_IMAGE');
-        return $value;
+        $profileImage = ($value != null ? $value : Config::get('constants.PROFILE_DEFAULT_IMAGE'));
+        $profileImage = route('image', ['category'=>'1','w'=>'39' , 'h'=>'39' ,  'filename' =>  $profileImage ]);
+
+        return $profileImage;
     }
 
     public function getShortNameAttribute()

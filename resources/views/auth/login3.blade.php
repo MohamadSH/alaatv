@@ -29,7 +29,7 @@ License: You must have a valid license purchased only from themeforest(the above
     <meta content="login page" name="description"/>
     <meta content="Alaa" name="author"/>
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
-    <link rel="stylesheet" href="{{ mix('/css/mandatory_all.css') }}">
+    <link rel="stylesheet" href="{{ mix('/css/all.css') }}">
     <!-- END GLOBAL MANDATORY STYLES -->
     <!-- BEGIN PAGE LEVEL PLUGINS -->
     <link href="/assets/global/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css"/>
@@ -95,7 +95,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <script src="/assets/global/plugins/ie8.fix.min.js"></script>
 <![endif]-->
 <!-- BEGIN CORE PLUGINS -->
-<script src="{{ mix('/js/core_all.js') }}" type="text/javascript"></script>
+<script src="{{ mix('/js/all.js') }}" type="text/javascript"></script>
 <!-- END CORE PLUGINS -->
 <!-- BEGIN PAGE LEVEL PLUGINS -->
 <script src="/assets/global/plugins/jquery-validation/js/jquery.validate.min.js" type="text/javascript"></script>

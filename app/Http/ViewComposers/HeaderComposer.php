@@ -37,10 +37,7 @@ class HeaderComposer
     public function compose(View $view)
     {
         $user = $this->request->user();
-
-
-        $profileImage = ($user != null ? $user->photo : $this->defaultProfileImg);
-        $profileImage = route('image', ['category'=>'1','w'=>'39' , 'h'=>'39' ,  'filename' =>  $profileImage ]);
+        $profileImage = ($user != null ? $user->photo : route('image', ['category'=>'1','w'=>'39' , 'h'=>'39' ,  'filename' =>  $this->defaultProfileImg ]));
         $view->with(compact('profileImage'));
     }
 }

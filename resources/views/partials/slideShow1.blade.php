@@ -1,28 +1,27 @@
 @if($slides->count() > 0)
-    <div class="row margin-bottom-@if(isset($marginBottom)){{$marginBottom}}@endif">
-        <div class="col-md-12">
-            <div id="myCarousel" class="carousel slide" data-ride="carousel">
-                <!-- Indicators -->
+    <div class="row m--margin-bottom-20">
+        <div class="col-xl-12">
+            <div id="carouselMainSlideShow" class="carousel slide" data-ride="carousel">
                 @if($slides->count() > 1)
-                    <ol class="carousel-indicators margin-bottom-20">
-                        @foreach($slides as $slide)
-                            <li data-target="#myCarousel" data-slide-to="{{$slideCounter  - 1}}"
-                                class="@if($slideCounter++ == 1) active @endif"></li>
+                    <ol class="carousel-indicators">
+                        @foreach($slides as $key => $slide)
+                            <li data-target="#carouselMainSlideShow" data-slide-to="{{$key}}"
+                                class="@if($key == 0) active @endif"></li>
                         @endforeach
 
                     </ol>
                 @endif
 
-            <!-- Wrapper for slides -->
-                <div class="carousel-inner" role="listbox">
-                    @foreach($slides as $slide)
-                        <div class="item @if($slides->first()->id == $slide->id) active @endif">
+                <div class="carousel-inner">
+                    @foreach($slides as $key => $slide)
+                        <div class="carousel-item @if($key == 0) active @endif">
                             @if(isset($slide->link) && strlen($slide->link)>0)
                                 <a href="{{$slide->link}}">
                                     @endif
-                                    <img src="{{ route('image', ['category'=>$slideDisk,'w'=>'1280' , 'h'=>'500' ,  'filename' =>  $slide->photo ]) }}"
+                                    <img class="d-block w-100"
+                                         src="{{ route('image', ['category'=>$slideDisk,'w'=>'1280' , 'h'=>'500' ,  'filename' =>  $slide->photo ]) }}"
                                          alt="عکس اسلاید @if(isset($slide->title[0])) {{$slide->title}} @endif">
-                                    <div class="carousel-caption">
+                                    <div class="carousel-caption d-none d-md-block">
                                         @if(isset($slide->title[0]))<h4 class="bold">{{$slide->title}}</h4>@endif
                                         @if(isset($slide->shortDescription[0]))<p
                                                 class="bold">{{$slide->shortDescription}}</p>@endif
@@ -33,16 +32,17 @@
                         </div>
                     @endforeach
                 </div>
+
                 @if($slides->count() > 1)
-                <!-- Left and right controls -->
-                    <a class="left carousel-control margin-right-0" href="#myCarousel" role="button" data-slide="prev">
-                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                        <span class="sr-only">Previous</span>
+                    <a class="carousel-control-next" href="#carouselMainSlideShow" role="button" data-slide="next">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">بعدی</span>
                     </a>
-                    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
-                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                        <span class="sr-only">Next</span>
+                    <a class="carousel-control-prev" href="#carouselMainSlideShow" role="button" data-slide="prev">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">قبلی</span>
                     </a>
+
                 @endif
             </div>
             @if(isset($withDownArrow) && $withDownArrow)
