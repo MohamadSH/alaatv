@@ -9,7 +9,6 @@ use App\{Assignmentstatus,
     Bon,
     Checkoutstatus,
     Classes\Format\BlockCollectionFormatter,
-    Classes\Report\GaReportFactory,
     Consultationstatus,
     Content,
     Contentset,
@@ -39,7 +38,6 @@ use App\{Assignmentstatus,
     Producttype,
     Productvoucher,
     Question,
-    Relative,
     Role,
     Slideshow,
     Traits\APIRequestCommon,
@@ -64,7 +62,7 @@ use Auth;
 use Carbon\Carbon;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\{Config, File, Input, Notification, Route, Storage};
+use Illuminate\Support\Facades\{Config, File, Input, Route, Storage};
 use League\Flysystem\Filesystem;
 use League\Flysystem\Sftp\SftpAdapter;
 use Maatwebsite\ExcelLight\Excel;
@@ -191,12 +189,6 @@ class HomeController extends Controller
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
         try {
-            $users = User::where("lastName" , "شاهرخی")->get();
-            $uniqueUsers = $users->groupBy("nationalCode");
-            $out = (new GaReportFactory())->createGaReportGetUsersFromPageView()
-                                          ->getReport('/c/6560');
-            dump("here!");
-            dd($out);
 
         }
         catch (\Exception    $e) {
@@ -3707,7 +3699,6 @@ class HomeController extends Controller
                 }
                 dd("Tags DONE!");
             }
-
         }
         catch (\Exception    $e) {
             $message = "unexpected error";
