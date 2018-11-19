@@ -4,7 +4,7 @@
 @section("headPageLevelPlugin")
     <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/global/plugins/bootstrap-summernote/summernote.css" rel="stylesheet" type="text/css"/>
-    <link href="/assets/extra/persian-datepicker/dist/css/persian-datepicker-0.4.5.css" rel="stylesheet"
+    <link href="/acm/extra/persian-datepicker/dist/css/persian-datepicker-0.4.5.css" rel="stylesheet"
           type="text/css"/>
     <link href="/assets/global/plugins/jquery-multi-select/css/multi-select-rtl.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/global/plugins/bootstrap-multiselect/css/bootstrap-multiselect.css" rel="stylesheet"
@@ -58,7 +58,7 @@
 @section("footerPageLevelPlugin")
     <script src="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
     <script src="/assets/global/plugins/bootstrap-summernote/summernote.min.js" type="text/javascript"></script>
-    <script src="/assets/extra/persian-datepicker/lib/persian-date.js" type="text/javascript"></script>
+    <script src="/acm/extra/persian-datepicker/lib/persian-date.js" type="text/javascript"></script>
     <script src="/assets/global/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js"
             type="text/javascript"></script>
     <script src="/assets/global/plugins/jquery.input-ip-address-control-1.0.min.js" type="text/javascript"></script>
@@ -68,7 +68,7 @@
 
 @section("footerPageLevelScript")
     <script src="/assets/pages/scripts/components-editors.min.js" type="text/javascript"></script>
-    <script src="/assets/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js"
+    <script src="/acm/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js"
             type="text/javascript"></script>
     <script src="/assets/pages/scripts/form-input-mask.min.js" type="text/javascript"></script>
     <script src="/assets/pages/scripts/components-bootstrap-multiselect.min.js" type="text/javascript"></script>

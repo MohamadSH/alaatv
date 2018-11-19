@@ -302,7 +302,7 @@
                                                         @foreach($order->orderproducts as $orderproduct)
                                                             @if(isset($orderproduct->product->id))
                                                                 <span class="bold " style="font-style: italic; ">@if($orderproduct->orderproducttype_id == Config::get("constants.ORDER_PRODUCT_GIFT"))
-                                                                        <img src="/assets/extra/gift-box.png"
+                                                                        <img src="/acm/extra/gift-box.png"
                                                                              width="25">@endif<a style="color:#607075"
                                                                                                  target="_blank"
                                                                                                  href="@if($orderproduct->product->hasParents()){{action("ProductController@show",$orderproduct->product->parents->first())}} @else  {{action("ProductController@show",$orderproduct->product)}} @endif">

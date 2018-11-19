@@ -26,7 +26,7 @@
 @section("content")
     <!-- BEGIN CONTENT HEADER -->
     <div class="row margin-bottom-40 about-header"
-         style="background-size: 1154px 500px ;background-image: url(/assets/extra/conference.jpg);">
+         style="background-size: 1154px 500px ;background-image: url(/acm/extra/conference.jpg);">
         <div class="col-md-12" style="background: rgba(0, 0, 0, 0.6);color: #fff; height: 100%">
             <h1>درباره ما</h1>
             <h2><span class="font-green-haze bold">آلاء </span>با همکاری <span class="font-yellow-mint bold">آلاء</span>در

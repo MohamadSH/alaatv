@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="Designer" content="Developed by Am!n">
     {!! SEO::generate(true) !!}
-    <link rel="stylesheet" href="/assets/extra/schoolRegisterLanding/css/additionals.min.css">
-    <link rel="stylesheet" href="/assets/extra/schoolRegisterLanding/css/styles.min.css">
+    <link rel="stylesheet" href="/acm/extra/schoolRegisterLanding/css/additionals.min.css">
+    <link rel="stylesheet" href="/acm/extra/schoolRegisterLanding/css/styles.min.css">
     <style>
         @if($errors->has('grade_id'))
             .gradeSelect {
@@ -21,11 +21,11 @@
         }
         @endif
     </style>
-    <script src="/assets/extra/schoolRegisterLanding/js/jquery-2.2.4.min.js"></script>
+    <script src="/acm/extra/schoolRegisterLanding/js/jquery-2.2.4.min.js"></script>
 
     <!--[if lt IE 9]>
-    <script type='text/javascript' src='/assets/extra/schoolRegisterLanding/js/html5shiv.js'></script>
-    <script type='text/javascript' src='/assets/extra/schoolRegisterLanding/js/respond.min.js'></script>
+    <script type='text/javascript' src='/acm/extra/schoolRegisterLanding/js/html5shiv.js'></script>
+    <script type='text/javascript' src='/acm/extra/schoolRegisterLanding/js/respond.min.js'></script>
     <![endif]-->
     <script async src="https://www.googletagmanager.com/gtag/js?id={{Config('constants.google.analytics')}}"></script>
     <script>
@@ -164,7 +164,7 @@
 
 </div><!-- #site_wrap -->
 
-<script src="/assets/extra/schoolRegisterLanding/js/plugins.min.js"></script>
+<script src="/acm/extra/schoolRegisterLanding/js/plugins.min.js"></script>
 <script>
     jQuery(document).ready(function () {
         jQuery('select.nice-select-instance').niceSelect();

@@ -27,7 +27,7 @@
     @section("gtagJs")
 
     @show
-    <link rel="stylesheet" href="/assets/extra/acm/custom-app.css">
+    <link rel="stylesheet" href="/acm/extra/acm/custom-app.css">
 
 
     <!--gta-track-click-->

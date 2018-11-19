@@ -2,7 +2,7 @@
 @extends("app",["pageName"=>$pageName])
 
 @section("headPageLevelPlugin")
-    {{--<link href="/assets/extra/persian-datepicker/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>--}}
+    {{--<link href="/acm/extra/persian-datepicker/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>--}}
     <link href="/assets/global/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap-rtl.css" rel="stylesheet"
           type="text/css"/>
@@ -186,7 +186,7 @@
 @section("footerPageLevelPlugin")
     <script src="/assets/global/scripts/datatable.js" type="text/javascript"></script>
     <script src="/assets/global/plugins/datatables/datatables.min.js" type="text/javascript"></script>
-    {{--<script src="/assets/extra/persian-datepicker/lib/bootstrap/js/bootstrap.min.js" type="text/javascript" ></script>--}}
+    {{--<script src="/acm/extra/persian-datepicker/lib/bootstrap/js/bootstrap.min.js" type="text/javascript" ></script>--}}
     <script src="/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js"
             type="text/javascript"></script>
     <script src="/assets/global/plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type="text/javascript"></script>

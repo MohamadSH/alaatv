@@ -1,7 +1,7 @@
 @extends("app" , ["pageName"=>"ConsultingQuestion"])
 
 @section("headPageLevelPlugin")
-    <link href="/assets/extra/jplayer/dist/skin/blue.monday/css/jplayer.blue.monday.min.css" rel="stylesheet"
+    <link href="/acm/extra/jplayer/dist/skin/blue.monday/css/jplayer.blue.monday.min.css" rel="stylesheet"
           type="text/css"/>
 @endsection
 
@@ -128,7 +128,7 @@
 
 @section("extraJS")
 
-    <script src="/assets/extra/jplayer/dist/jplayer/jquery.jplayer.min.js" type="text/javascript"></script>
+    <script src="/acm/extra/jplayer/dist/jplayer/jquery.jplayer.min.js" type="text/javascript"></script>
     @while(--$counter)
         <script type="text/javascript">
             $(document).ready(function () {
@@ -152,7 +152,7 @@
                             $(this).jPlayer("setMedia", stream).jPlayer("play");
                         }
                     },
-                    swfPath: "/assets/extra/jplayer/dist/jplayer",
+                    swfPath: "/acm/extra/jplayer/dist/jplayer",
                     cssSelectorAncestor: "#jp_container_{{$counter}}",
                     supplied: "mp3",
                     preload: "none",

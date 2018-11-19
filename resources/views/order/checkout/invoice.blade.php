@@ -400,9 +400,9 @@
 
         <td class='imagecell' colspan='7' rowspan='1'
             style='width:748.83pt;height:19.52pt;border-top:medium double black;border-right:medium double black;'>
-            <img src='/assets/extra/invoice(5)_1_image1.png' width='128' height='122' alt="Picture 1" class='imagediv'
+            <img src='/acm/extra/invoice(5)_1_image1.png' width='128' height='122' alt="Picture 1" class='imagediv'
                  style='margin-top: -0.1pt; margin-left: 0.33pt; z-index:1;width:87pt;height:91.5pt;'>
-            <img src='/assets/extra/invoice(5)_1_image2.png' width='126' height='124' alt="Picture 1" class='imagediv'
+            <img src='/acm/extra/invoice(5)_1_image2.png' width='126' height='124' alt="Picture 1" class='imagediv'
                  style='margin-top: 3.6pt; margin-left: 644.49pt; z-index:2;width:94.5pt;height:93pt;'>
             <table border='0' cellpadding='0' cellspacing='0' summary='Helper container'>
                 <tr>
@@ -414,7 +414,7 @@
         </td>
         <td class='flx7' style='border:medium double black;padding:0' colspan='1' rowspan='5'><span class='flx7'
                                                                                                     style='height:97.6pt;'>  <img
-                        src='/assets/extra/invoice(5)_1_text_3_90.png' width='36' height='130' alt="iTECS"
+                        src='/acm/extra/invoice(5)_1_text_3_90.png' width='36' height='130' alt="iTECS"
                         style='display: block; border:none; width:27pt;height:97.5pt;'>
 </span></td>
     </tr>
@@ -468,7 +468,7 @@
 
         <td class='flx13' style='border-top:medium double black;' dir="rtl">نام:</td>
         <td class='flx7' style='border:medium double black;padding:0' colspan='1' rowspan='2'><img
-                    src='/assets/extra/invoice(5)_1_text_9_90.png' width='36' height='50' alt="مشتری"
+                    src='/acm/extra/invoice(5)_1_text_9_90.png' width='36' height='50' alt="مشتری"
                     style='display: block; border:none; width:27pt;height:37.5pt;'>
         </td>
     </tr>

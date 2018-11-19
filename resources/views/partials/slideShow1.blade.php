@@ -52,7 +52,7 @@
                        onclick="$('html,body').animate({scrollTop: $('#learn-more').offset().top},'slow');"
                        id="move-to-products">
                         {{--<i class="fa fa-angle-down fa-3x font-white"></i>--}}
-                        <img id="toggle" class="toggleAnim" alt="slideShowArrow" src="/assets/extra/symbol.png">
+                        <img id="toggle" class="toggleAnim" alt="slideShowArrow" src="/acm/extra/symbol.png">
                         <style>
                             img.toggleAnim {
                                 -webkit-filter: invert(1);

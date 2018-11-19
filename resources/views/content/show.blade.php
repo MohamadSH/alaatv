@@ -585,7 +585,7 @@
         var player = videojs('video-{{$content->id}}', {nuevo: true}, function () {
             this.nuevoPlugin({
                 // plugin options here
-                logocontrolbar: '/assets/extra/Alaa-logo.gif',
+                logocontrolbar: '/acm/extra/Alaa-logo.gif',
                 logourl: '//sanatisharif.ir',
 
                 videoInfo: true,

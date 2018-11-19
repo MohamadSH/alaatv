@@ -40,7 +40,7 @@
 
     <title></title>
 
-    <link rel="stylesheet" href="/assets/extra/landing4/css/stylesheet2.css"/>
+    <link rel="stylesheet" href="/acm/extra/landing4/css/stylesheet2.css"/>
     <!--[if lt IE 10]>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flexibility/2.0.1/flexibility.js"></script>
     <![endif]-->
@@ -155,7 +155,7 @@
                 </header>
                 <figure>
                     <a href="javascript:void(0)" title="">
-                        <img src="/assets/extra/landing4/images/content/1.png" alt="1" title="1">
+                        <img src="/acm/extra/landing4/images/content/1.png" alt="1" title="1">
                     </a>
                 </figure>
             </article>
@@ -185,7 +185,7 @@
                                     </strong>
                                     <figure>
                                         <a href="javascript:void(0)" title="">
-                                            <img src="/assets/extra/landing4/images/slider/S8.png" alt="" title="">
+                                            <img src="/acm/extra/landing4/images/slider/S8.png" alt="" title="">
                                         </a>
                                     </figure>
                                 </article>
@@ -208,7 +208,7 @@
                                     </strong>
                                     <figure>
                                         <a href="javascript:void(0)" title="">
-                                            <img src="/assets/extra/landing4/images/slider/S9.png" alt="" title="">
+                                            <img src="/acm/extra/landing4/images/slider/S9.png" alt="" title="">
                                         </a>
                                     </figure>
                                 </article>
@@ -233,7 +233,7 @@
                                     </strong>
                                     <figure>
                                         <a href="javascript:void(0)" title="">
-                                            <img src="/assets/extra/landing4/images/slider/S10.png" alt="" title="">
+                                            <img src="/acm/extra/landing4/images/slider/S10.png" alt="" title="">
                                         </a>
                                     </figure>
                                 </article>
@@ -255,7 +255,7 @@
                                     </strong>
                                     <figure>
                                         <a href="javascript:void(0)" title="">
-                                            <img src="/assets/extra/landing4/images/slider/S11.png" alt="" title="">
+                                            <img src="/acm/extra/landing4/images/slider/S11.png" alt="" title="">
                                         </a>
                                     </figure>
                                 </article>
@@ -281,7 +281,7 @@
                                     </strong>
                                     <figure>
                                         <a href="javascript:void(0)" title="">
-                                            <img src="/assets/extra/landing4/images/slider/S10.png" alt="" title="">
+                                            <img src="/acm/extra/landing4/images/slider/S10.png" alt="" title="">
                                         </a>
                                     </figure>
                                 </article>
@@ -305,7 +305,7 @@
                                     </strong>
                                     <figure>
                                         <a href="javascript:void(0)" title="">
-                                            <img src="/assets/extra/landing4/images/slider/S1.png" alt="" title="">
+                                            <img src="/acm/extra/landing4/images/slider/S1.png" alt="" title="">
                                         </a>
                                     </figure>
                                 </article>
@@ -326,7 +326,7 @@
                             {{--</strong>--}}
                             {{--<figure>--}}
                             {{--<a href="javascript:void(0)" title="">--}}
-                            {{--<img src="/assets/extra/landing4/images/slider/S7.png" alt="" title="">--}}
+                            {{--<img src="/acm/extra/landing4/images/slider/S7.png" alt="" title="">--}}
                             {{--</a>--}}
                             {{--</figure>--}}
                             {{--</article>--}}
@@ -351,7 +351,7 @@
                                     </strong>
                                     <figure>
                                         <a href="javascript:void(0)" title="">
-                                            <img src="/assets/extra/landing4/images/slider/S5.png" alt="" title="">
+                                            <img src="/acm/extra/landing4/images/slider/S5.png" alt="" title="">
                                         </a>
                                     </figure>
                                 </article>
@@ -375,7 +375,7 @@
                                     </strong>
                                     <figure>
                                         <a href="javascript:void(0)" title="">
-                                            <img src="/assets/extra/landing4/images/slider/S2.png" alt="" title="">
+                                            <img src="/acm/extra/landing4/images/slider/S2.png" alt="" title="">
                                         </a>
                                     </figure>
                                 </article>
@@ -400,7 +400,7 @@
                                     </strong>
                                     <figure>
                                         <a href="javascript:void(0)" title="">
-                                            <img src="/assets/extra/landing4/images/slider/S3.png" alt="" title="">
+                                            <img src="/acm/extra/landing4/images/slider/S3.png" alt="" title="">
                                         </a>
                                     </figure>
                                 </article>
@@ -424,7 +424,7 @@
                                     </strong>
                                     <figure>
                                         <a href="javascript:void(0)" title="">
-                                            <img src="/assets/extra/landing4/images/slider/S6.png" alt="" title="">
+                                            <img src="/acm/extra/landing4/images/slider/S6.png" alt="" title="">
                                         </a>
                                     </figure>
                                 </article>
@@ -448,7 +448,7 @@
                                     </strong>
                                     <figure>
                                         <a href="javascript:void(0)" title="">
-                                            <img src="/assets/extra/landing4/images/slider/S4.png" alt="" title="">
+                                            <img src="/acm/extra/landing4/images/slider/S4.png" alt="" title="">
                                         </a>
                                     </figure>
                                 </article>
@@ -472,7 +472,7 @@
                                     </strong>
                                     <figure>
                                         <a href="javascript:void(0)" title="">
-                                            <img src="/assets/extra/landing4/images/slider/S4.png" alt="" title="">
+                                            <img src="/acm/extra/landing4/images/slider/S4.png" alt="" title="">
                                         </a>
                                     </figure>
                                 </article>
@@ -509,8 +509,8 @@
                 <div class="ttla">هدیه خرید آلاء <span>برای کسانی که تا 26 اردیبهشت خرید می کنند</span></div>
 
                 <div class="bnra">
-                    <img class="banner" src="/assets/extra/landing4/images/banner2.png" alt="banner">
-                    <img class="infinite animated pulse shadow" src="/assets/extra/landing4/images/shadow.png"
+                    <img class="banner" src="/acm/extra/landing4/images/banner2.png" alt="banner">
+                    <img class="infinite animated pulse shadow" src="/acm/extra/landing4/images/shadow.png"
                          alt="banner">
                 </div><!-- .bnra -->
 
@@ -588,7 +588,7 @@
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/S8.png" alt="1" title="1">
+                                <img src="/acm/extra/landing4/images/professors/S8.png" alt="1" title="1">
                             </a>
                             <figcaption>
                                 <header>
@@ -616,7 +616,7 @@
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/S9.png" alt="1" title="1">
+                                <img src="/acm/extra/landing4/images/professors/S9.png" alt="1" title="1">
                             </a>
                             <figcaption>
                                 <header>
@@ -654,7 +654,7 @@
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/S3.png" alt="1" title="1">
+                                <img src="/acm/extra/landing4/images/professors/S3.png" alt="1" title="1">
                             </a>
                             <figcaption>
                                 <header>
@@ -692,7 +692,7 @@
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/S6.png" alt="1" title="1">
+                                <img src="/acm/extra/landing4/images/professors/S6.png" alt="1" title="1">
                             </a>
                             <figcaption>
                                 <header>
@@ -728,7 +728,7 @@
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/S1.png" alt="1" title="1">
+                                <img src="/acm/extra/landing4/images/professors/S1.png" alt="1" title="1">
                             </a>
                             <figcaption>
                                 <header>
@@ -762,7 +762,7 @@
                     {{--<article class="art-professors">--}}
                     {{--<figure>--}}
                     {{--<a href="javascript2:void(0)" title="">--}}
-                    {{--<img src="/assets/extra/landing4/images/professors/S7.png" alt="1" title="1">--}}
+                    {{--<img src="/acm/extra/landing4/images/professors/S7.png" alt="1" title="1">--}}
                     {{--</a>--}}
                     {{--<figcaption>--}}
                     {{--<header>--}}
@@ -795,7 +795,7 @@
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/S5.png" alt="1" title="1">
+                                <img src="/acm/extra/landing4/images/professors/S5.png" alt="1" title="1">
                             </a>
                             <figcaption>
                                 <header>
@@ -832,7 +832,7 @@
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/S10.png" alt="1" title="1">
+                                <img src="/acm/extra/landing4/images/professors/S10.png" alt="1" title="1">
                             </a>
                             <figcaption>
                                 <header>
@@ -862,7 +862,7 @@
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/S10.png" alt="1" title="1">
+                                <img src="/acm/extra/landing4/images/professors/S10.png" alt="1" title="1">
                             </a>
                             <figcaption>
                                 <header>
@@ -891,7 +891,7 @@
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/S11.png" alt="1" title="1">
+                                <img src="/acm/extra/landing4/images/professors/S11.png" alt="1" title="1">
                             </a>
                             <figcaption>
                                 <header>
@@ -918,7 +918,7 @@
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/S2.png" alt="1" title="1">
+                                <img src="/acm/extra/landing4/images/professors/S2.png" alt="1" title="1">
                             </a>
                             <figcaption>
                                 <header>
@@ -952,7 +952,7 @@
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/S4.png" alt="1" title="1">
+                                <img src="/acm/extra/landing4/images/professors/S4.png" alt="1" title="1">
                             </a>
                             <figcaption>
                                 <header>
@@ -982,7 +982,7 @@
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/S4.png" alt="1" title="1">
+                                <img src="/acm/extra/landing4/images/professors/S4.png" alt="1" title="1">
                             </a>
                             <figcaption>
                                 <header>
@@ -1017,7 +1017,7 @@
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/S5.png" alt="1" title="1">
+                                <img src="/acm/extra/landing4/images/professors/S5.png" alt="1" title="1">
                             </a>
                             <figcaption>
                                 <header>
@@ -1053,7 +1053,7 @@
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/S3.png" alt="1" title="1">
+                                <img src="/acm/extra/landing4/images/professors/S3.png" alt="1" title="1">
                             </a>
                             <figcaption>
                                 <header>
@@ -1091,7 +1091,7 @@
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/S6.png" alt="1" title="1">
+                                <img src="/acm/extra/landing4/images/professors/S6.png" alt="1" title="1">
                             </a>
                             <figcaption>
                                 <header>
@@ -1131,7 +1131,7 @@
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/S10.png" alt="1" title="1">
+                                <img src="/acm/extra/landing4/images/professors/S10.png" alt="1" title="1">
                             </a>
                             <figcaption>
                                 <header>
@@ -1161,7 +1161,7 @@
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/S10.png" alt="1" title="1">
+                                <img src="/acm/extra/landing4/images/professors/S10.png" alt="1" title="1">
                             </a>
                             <figcaption>
                                 <header>
@@ -1190,7 +1190,7 @@
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/S11.png" alt="1" title="1">
+                                <img src="/acm/extra/landing4/images/professors/S11.png" alt="1" title="1">
                             </a>
                             <figcaption>
                                 <header>
@@ -1217,7 +1217,7 @@
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/S4.png" alt="1" title="1">
+                                <img src="/acm/extra/landing4/images/professors/S4.png" alt="1" title="1">
                             </a>
                             <figcaption>
                                 <header>
@@ -1247,7 +1247,7 @@
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/S2.png" alt="1" title="1">
+                                <img src="/acm/extra/landing4/images/professors/S2.png" alt="1" title="1">
                             </a>
                             <figcaption>
                                 <header>
@@ -1281,7 +1281,7 @@
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/S3.png" alt="1" title="1">
+                                <img src="/acm/extra/landing4/images/professors/S3.png" alt="1" title="1">
                             </a>
                             <figcaption>
                                 <header>
@@ -1319,7 +1319,7 @@
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/S6.png" alt="1" title="1">
+                                <img src="/acm/extra/landing4/images/professors/S6.png" alt="1" title="1">
                             </a>
                             <figcaption>
                                 <header>
@@ -1359,7 +1359,7 @@
                     <article class="art-professors">
                         <figure>
                             <a href="javascript2:void(0)" title="">
-                                <img src="/assets/extra/landing4/images/professors/S4.png" alt="1" title="1">
+                                <img src="/acm/extra/landing4/images/professors/S4.png" alt="1" title="1">
                             </a>
                             <figcaption>
                                 <header>
@@ -1396,8 +1396,8 @@
             <div class="ttla">هدیه خرید آلاء <span>برای کسانی که تا 26 اردیبهشت خرید می کنند</span></div>
 
             <div class="bnra">
-                <img class="banner" src="/assets/extra/landing4/images/banner2.png" alt="banner">
-                <img class="infinite animated pulse shadow" src="/assets/extra/landing4/images/shadow.png" alt="banner">
+                <img class="banner" src="/acm/extra/landing4/images/banner2.png" alt="banner">
+                <img class="infinite animated pulse shadow" src="/acm/extra/landing4/images/shadow.png" alt="banner">
             </div><!-- .bnra -->
 
             <div class="gifts">
@@ -1512,11 +1512,11 @@
     </ul>
 </nav>
 
-<script src="/assets/extra/landing4/js/jquery-1.12.4.min.js"></script>
+<script src="/acm/extra/landing4/js/jquery-1.12.4.min.js"></script>
 
-<script src="/assets/extra/landing4/js/swiper.jquery.min.js" defer="defer"></script>
-<script src="/assets/extra/landing4/js/menu.min.js" defer="defer"></script>
-<script src="/assets/extra/landing4/js/script.js" defer="defer"></script>
+<script src="/acm/extra/landing4/js/swiper.jquery.min.js" defer="defer"></script>
+<script src="/acm/extra/landing4/js/menu.min.js" defer="defer"></script>
+<script src="/acm/extra/landing4/js/script.js" defer="defer"></script>
 <script>
     $('a.link').click(function () {
         var id = $(this).data('role');

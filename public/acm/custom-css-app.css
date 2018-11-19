@@ -7,3 +7,6 @@
 .a--full-width{
     width:100%;
 }
+.owl-prev, .owl-next{
+    font-size: 2.5rem !important;
+}

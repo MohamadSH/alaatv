@@ -118,7 +118,7 @@
 
             <div class="m-stack m-stack--ver m-stack--general m-stack--demo">
                 <div class="m-stack__item m-stack__item--center m-stack__item--middle">
-                    <img src = "/assets/extra/Alaa-logo.gif" class="img-fluid m--img-centered" alt = "فیلم کنکور آلاء"/>
+                    <img src = "/acm/extra/Alaa-logo.gif" class="img-fluid m--img-centered" alt = "فیلم کنکور آلاء"/>
                 </div>
                 <div class="m-stack__item m-stack__item--center m-stack__item--middle">
                     <p class = "text-justify">
@@ -128,7 +128,7 @@
                     </p>
                 </div>
                 <div class="m-stack__item m-stack__item--center m-stack__item--middle">
-                    <img src = "/assets/extra/sharif-logo.png" class="img-fluid m--img-centered" alt = "دبیرستان دانشگاه شریف آلاء"/>
+                    <img src = "/acm/extra/sharif-logo.png" class="img-fluid m--img-centered" alt = "دبیرستان دانشگاه شریف آلاء"/>
                 </div>
                 <div class="m-stack__item m-stack__item--center m-stack__item--middle">
                     <p class = "text-justify" >

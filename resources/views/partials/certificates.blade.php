@@ -4,7 +4,7 @@
             <div class="m-portlet__body">
                 <a onclick='window.open("https://trustseal.enamad.ir/Verify.aspx?id=107263&amp;p=hkhFyri8v2dbkqqJ", "Popup","toolbar=no, location=no, statusbar=no, menubar=no, scrollbars=1, resizable=0, width=580, height=600, top=30")'>
                     <img class="img-fluid m--img-centered"
-                            src="/assets/extra/namad0.jpg" alt="enamad.ir"></a>
+                            src="/acm/extra/namad0.jpg" alt="enamad.ir"></a>
                 <span> از مرکز توسعه تجارت الکترونیکی ایران</span>
                 <button type="button" class="btn blue bg-font-dark"
                         onclick='window.open("https://trustseal.enamad.ir/Verify.aspx?id=107263&amp;p=hkhFyri8v2dbkqqJ", "Popup","toolbar=no, location=no, statusbar=no, menubar=no, scrollbars=1, resizable=0, width=580, height=600, top=30")'>
@@ -32,7 +32,7 @@
 
             <div class="portlet light certificate-box" >
                 <div class="card-icon">
-                    <a target="_blank" onclick="window.open('https://ecunion.ir/verify/itecsgroup.com?token=35220325acf0232a85b3', 'Popup','toolbar=no, location=no, statusbar=no, menubar=no, scrollbars=1, resizable=0, width=580, height=600, top=30')" style="cursor:pointer" ><img src="/assets/extra/kasbo_kar_majazi.png" alt="iranianasnaf.ir"></a>
+                    <a target="_blank" onclick="window.open('https://ecunion.ir/verify/itecsgroup.com?token=35220325acf0232a85b3', 'Popup','toolbar=no, location=no, statusbar=no, menubar=no, scrollbars=1, resizable=0, width=580, height=600, top=30')" style="cursor:pointer" ><img src="/acm/extra/kasbo_kar_majazi.png" alt="iranianasnaf.ir"></a>
                 </div>
                 <div class="card-desc">
                     <span> عضویت اتحادیه کسب و کارهای مجازی </span>

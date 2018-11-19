@@ -613,7 +613,7 @@
                 @endif
                 {!! Form::close() !!}
                 <div class="row text-center">
-                    <img id="content-search-loading" src="/assets/extra/load2.GIF" alt="loading"
+                    <img id="content-search-loading" src="/acm/extra/load2.GIF" alt="loading"
                          style="display: none ; width: 20px;">
                 </div>
             </div>

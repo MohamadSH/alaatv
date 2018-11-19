@@ -409,7 +409,7 @@
                                         <div class="portlet sale-summary">
                                             <div class="portlet-title">
                                                 <div class="caption font-red sbold"><img
-                                                            src="/assets/extra/gift-box.png" width="25"> محصولات
+                                                            src="/acm/extra/gift-box.png" width="25"> محصولات
                                                     هدیه
                                                 </div>
                                             </div>
