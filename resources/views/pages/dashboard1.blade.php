@@ -116,7 +116,7 @@
     <div class = "m-portlet">
         <div class = "m-portlet__body  m-portlet__body--no-padding">
 
-            <div class="m-stack m-stack--ver m-stack--general m-stack--demo">
+            <div class="m-stack m-stack--ver m-stack--desktop-and-tablet m-stack--demo ">
                 <div class="m-stack__item m-stack__item--center m-stack__item--middle">
                     <img src = "/acm/extra/Alaa-logo.gif" class="img-fluid m--img-centered" alt = "فیلم کنکور آلاء"/>
                 </div>

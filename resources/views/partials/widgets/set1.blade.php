@@ -8,7 +8,7 @@
                 'widgetLink' => (isset($lesson["content_id"]) && $lesson["content_id"]>0 ? action("ContentController@show", $lesson["content_id"]):""),
                 ])
                 --}}
-<div class = "@if($widgetScroll) carousel item @else col-xl-3 col-md-3 col-xs-3 @endif">
+<div class = "@if($widgetScroll) item @else col-xl-3 col-md-3 col-xs-3 @endif">
     <!--begin:: Widgets/Blog-->
     <div class = "m-portlet m-portlet--bordered-semi m-portlet--full-height  m-portlet--rounded-force">
         <div class = "m-portlet__head m-portlet__head--fit">

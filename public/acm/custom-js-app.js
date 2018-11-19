@@ -7,8 +7,6 @@ jQuery(document).ready( function() {
             rtl:true,
             nav:false,
             margin:15,
-            touchDrag  : true,
-            mouseDrag  : true,
             responsive:{
                 0:{
                     items:1
@@ -24,13 +22,13 @@ jQuery(document).ready( function() {
                 }
             }
         });
-        $(this).on('mousewheel', '.owl-stage', function (e) {
+        /*$(this).on('mousewheel', '.owl-stage', function (e) {
             if (e.deltaY>0) {
                 $(this).trigger('next.owl');
             } else {
                 $(this).trigger('prev.owl');
             }
             e.preventDefault();
-        });
+        });*/
     });
 });
