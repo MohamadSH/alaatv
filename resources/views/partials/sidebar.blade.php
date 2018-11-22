@@ -21,7 +21,7 @@
                 <a href = "{{ action("ProductController@search") }}" class = "m-menu__link ">
                     <span class = "m-menu__item-here"></span>
                     <i class = "m-menu__link-icon flaticon-shopping-basket"></i>
-                    <span class = "m-menu__link-text">خدمات جانبی</span>
+                    <span class = "m-menu__link-text">محصولات آموزشی</span>
                 </a>
             </li>
 

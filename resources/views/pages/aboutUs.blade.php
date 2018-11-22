@@ -4,9 +4,7 @@
     <link rel="stylesheet" href="{{ mix('/css/all.css') }}">
 @endsection
 
-{{--@section("title")--}}
-{{--<title>آلاء|درباره ما</title>--}}
-{{--@endsection--}}
+
 
 @section("pageBar")
     <div class="page-bar">

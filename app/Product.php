@@ -672,6 +672,25 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
     }
 
     /**
+     * @param User|null $user
+     * @return null|string
+     */
+    public function getPriceTextAttribute(User $user = null): ?string
+    {
+        if($this->isFree)
+            return 'رایگان';
+        if($this->basePrice == 0)
+            return 'تعیین قیمت: پس از انتخاب محصول';
+        return $this->calculatePayablePrice($user)['cost'];
+    }
+    public function getPhotoAttribute()
+    {
+        $productImage = $this->image ;
+        $productImage = (isset($productImage[0]) ? route('image', ['category'=>'4','w'=>'256' , 'h'=>'256' ,  'filename' =>  $productImage ]) : '/acm/image/255x255.png');
+        return $productImage;
+    }
+
+    /**
      * Gets product's meta tags array
      *
      * @return array

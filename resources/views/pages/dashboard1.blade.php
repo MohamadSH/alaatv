@@ -5,6 +5,17 @@
 @section("content")
     @include("partials.slideShow1" ,["marginBottom"=>"25"])
     <div class = "m--clearfix"></div>
+    @if(Session::has("customer_id"))
+        <div class="note bg-yellow-lemon">
+            <h3 class="block"><strong>توجه!</strong></h3>
+            <p><strong> شما در وضعیت درج سفارش
+                        برای {{Session::get("customer_firstName")}} {{Session::get("customer_lastName")}} می باشید.
+                    <a href="{{action("OrderController@exitAdminInsertOrder")}}" class="btn btn-lg red">بیرون
+                                                                                                        آمدن از وضعیت درج سفارش
+                                                                                                        برای {{Session::get("customer_firstName")}} {{Session::get("customer_lastName")}}</a></strong>
+            </p>
+        </div>
+    @endif
     <!--begin:: Widgets/Stats-->
     <div class = "m-portlet ">
         <div class = "m-portlet__body  m-portlet__body--no-padding">
@@ -104,9 +115,11 @@
                 'widgetCount' => $lesson["content_count"],
                 'widgetScroll' => 1
                 ])
+
             @endforeach
             </div>
         </div>
+        <hr/>
         @foreach($section["ads"] as $image => $link)
             @include('partials.bannerAds', ['img'=>$image , 'link'=>$link])
         @endforeach
