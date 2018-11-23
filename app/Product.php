@@ -379,15 +379,16 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
      */
     public function scopeValid($query)
     {
+        $now = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
+            ->timezone('Asia/Tehran');
+
         return $query
-            ->where(function ($q) {
-                $q->where('validSince', '<', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
-                                                   ->timezone('Asia/Tehran'))
+            ->where(function ($q) use ($now) {
+                $q->where('validSince', '<', $now)
                   ->orWhereNull('validSince');
             })
-            ->where(function ($q) {
-                $q->where('validUntil', '>', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
-                                                   ->timezone('Asia/Tehran'))
+            ->where(function ($q) use ($now) {
+                $q->where('validUntil', '>', $now)
                   ->orWhereNull('validUntil');
             });
     }
