@@ -91,11 +91,6 @@
                                 </a>
                             </li>
                             <li data-jstree='{ "type" : "file","disabled" : false }'>
-                                <a href="{{ action("HomeController@aboutUs") }}">
-                                    درباره ما
-                                </a>
-                            </li>
-                            <li data-jstree='{ "type" : "file","disabled" : false }'>
                                 <a href="{{ action("HomeController@certificates") }}">
                                     مجوزها
                                 </a>

@@ -21,7 +21,6 @@ Route::get('500', 'HomeController@error500');
 Route::get('error', 'HomeController@errorPage');
 Route::get('download', "HomeController@download");
 Route::get('d/{data}', "HomeController@newDownload");
-Route::get('aboutUs', 'HomeController@aboutUs');
 Route::get('contactUs', 'HomeController@contactUs');
 Route::get('rules', 'HomeController@rules');
 Route::get('articleList', 'ArticleController@showList');

@@ -16,7 +16,7 @@ var mApp = function() {
         warning:    '#ffb822',
         danger:     '#f4516c',
         focus:      '#9816f4'
-    }
+    };
 
     /**
     * Initializes bootstrap tooltip
@@ -34,7 +34,7 @@ var mApp = function() {
                 <div class="tooltip-inner"></div>\
             </div>'
         });
-    }
+    };
     
     /**
     * Initializes bootstrap tooltips
@@ -44,7 +44,7 @@ var mApp = function() {
         $('[data-toggle="m-tooltip"]').each(function() {
             initTooltip($(this));
         });
-    }
+    };
 
     /**
     * Initializes bootstrap popover
@@ -62,7 +62,7 @@ var mApp = function() {
                 <div class="popover-body"></div>\
             </div>'
         });
-    }
+    };
 
     /**
     * Initializes bootstrap popovers
@@ -72,7 +72,7 @@ var mApp = function() {
         $('[data-toggle="m-popover"]').each(function() {
             initPopover($(this));
         });
-    }
+    };
 
     /**
     * Initializes bootstrap file input
@@ -83,7 +83,7 @@ var mApp = function() {
             var fileName = $(this).val();
             $(this).next('.custom-file-label').addClass("selected").html(fileName);
         });
-    }           
+    };
 
     /**
     * Initializes metronic portlet
@@ -92,7 +92,7 @@ var mApp = function() {
         // init portlet tools
         var el = $(el);
         var portlet = new mPortlet(el[0], options);
-    }
+    };
 
     /**
     * Initializes metronic portlets
@@ -107,7 +107,7 @@ var mApp = function() {
                 el.data('portlet-initialized', true);
             }
         });
-    }
+    };
 
     /**
     * Initializes scrollable contents
@@ -123,7 +123,7 @@ var mApp = function() {
                 }
             }});
         });
-    }
+    };
 
     /**
     * Initializes bootstrap alerts
@@ -133,7 +133,7 @@ var mApp = function() {
         $('body').on('click', '[data-close=alert]', function() {
             $(this).closest('.alert').hide();
         });
-    }
+    };
 
     /**
     * Initializes Metronic custom tabs
@@ -162,7 +162,7 @@ var mApp = function() {
 
             $(this).data('tabs-initialized', true);
         });
-    }
+    };
 
 	var hideTouchWarning = function() {
 		jQuery.event.special.touchstart = {
@@ -212,7 +212,7 @@ var mApp = function() {
         * Initializes components
         */
         initComponents: function() {
-            hideTouchWarning();
+            // hideTouchWarning();
             initScrollers();
             initTooltips();
             initPopovers();
