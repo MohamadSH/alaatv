@@ -1,202 +1,197 @@
 @extends("app" , ["pageName"=>"contactUs"])
 
-@section("css")
-    <link rel="stylesheet" href="{{ mix('/css/all.css') }}">
-@endsection
-
 @section("pageBar")
-    <div class="page-bar">
-        <ul class="page-breadcrumb">
-            <li>
-                <i class="icon-home"></i>
-                <a href="{{action("HomeController@index")}}">خانه</a>
-                <i class="fa fa-angle-left"></i>
+    <nav aria-label = "breadcrumb">
+        <ol class = "breadcrumb">
+            <li class = "breadcrumb-item">
+                <i class = "flaticon-home-2"></i>
+                <a href = "{{action("HomeController@index")}}">خانه</a>
             </li>
-            <li>
-                <span>تماس با ما</span>
+            <li class = "breadcrumb-item active" aria-current = "page">
+                تماس با ما
             </li>
-        </ul>
-    </div>
+        </ol>
+    </nav>
 @endsection
-
-{{--@section('title')--}}
-{{--<title>آلاء|تماس با ما</title>--}}
-{{--@endsection--}}
 
 @section("content")
     @include("systemMessage.flash")
-    <div class="c-content-contact-1 c-opt-1">
-        <div class="row" data-auto-height=".c-height">
-            <div class="col-lg-8 col-md-6 c-desktop"></div>
-            <div class="col-lg-4 col-md-6">
-                <div class="c-body">
-                    <div class="c-section" style="text-align: right">
-                        <h3>@if(isset($wSetting->branches->main->displayName)){{$wSetting->branches->main->displayName}}@endif</h3>
-                    </div>
-                    <div class="c-section" style="text-align: right">
-                        <div class="c-content-label uppercase bg-blue">آدرس</div>
-                        <p>
-                            @if(isset($wSetting->branches->main->address->city)){{$wSetting->branches->main->address->city}}
-                            ، @endif @if(isset($wSetting->branches->main->address->street)) {{$wSetting->branches->main->address->street}}
-                            <br>
-                            @endif
-                            @if(isset($wSetting->branches->main->address->avenue)){{$wSetting->branches->main->address->avenue}}
-                            <br>
-                            @endif
-                            @if(isset($wSetting->branches->main->address->extra)){{$wSetting->branches->main->address->extra}}
-                            ، @endif @if(isset($wSetting->branches->main->address->plateNumber)){{$wSetting->branches->main->address->plateNumber}}@endif
-                        </p>
-                    </div>
-                    <div class="c-section" style="text-align: right;direction: ltr">
-                        <div class="c-content-label uppercase bg-blue">شماره تماس</div>
-                        @foreach($wSetting->branches->main->contacts as $contact)
-                            <p dir="rtl">
-                                {{$contact->number}}@if(strlen($contact->description)>0)
-                                    -  {{$contact->description}}@endif
-                            </p>
-                        @endforeach
-                    </div>
-                    @if(isset($wSetting->branches->main->address->postalCode))
-                        <div class="c-section" style="text-align: right;direction: ltr">
-                            <div class="c-content-label uppercase bg-blue">کد پستی</div>
-                            <p dir="rtl">
-                                {{$wSetting->branches->main->address->postalCode}}
-                            </p>
+
+    <div class = "row">
+        <div class = "col-xl-6 col-md-6">
+            <!--begin::Portlet-->
+            <div class = "m-portlet">
+                <div class = "m-portlet__head">
+                    <div class = "m-portlet__head-caption">
+                        <div class = "m-portlet__head-title">
+						<span class = "m-portlet__head-icon m--hide">
+						<i class = "la la-gear"></i>
+						</span>
+                            <h3 class = "m-portlet__head-text">
+                                ارسال پیام به آلاء
+                            </h3>
                         </div>
-                    @endif
-                    @if(isset($emergencyContacts) && $emergencyContacts->isNotEmpty())
-                        <div class="c-section" style="text-align: right;direction: ltr">
-                            <div class="c-content-label uppercase bg-blue">تلفن ضروری</div>
-                            @foreach($emergencyContacts as $contact)
-                                <p dir="rtl">
-                                    {{$contact["number"]}}@if(strlen($contact["description"])>0)
-                                        -  {{$contact["description"]}}@endif
+                    </div>
+                </div>
+                <!--begin::Form-->
+                {!! Form::open(['method' => 'POST','action' => ['HomeController@sendMail'],'class' => 'm-form']) !!}
+                    <div class = "m-portlet__body">
+                        <div class = "form-group m-form__group row {{ $errors->has('fullName') ? ' has-danger' : '' }}">
+                            <label for = "example-text-input" class = "col-3 col-form-label">نام کامل:</label>
+                            <div class = "col-9">
+                                <input type = "text" name="fullName" class = "form-control m-input" value="{{ old("fullName") }}" placeholder = "نام و نام خانوادگی">
+                                @if ($errors->has('fullName'))
+                                    <div class="form-control-feedback">{{ $errors->first('fullName') }}</div>
+                                @endif
+                                <span class = "m-form__help">لطفا نام کامل خود را وارد نمایید</span>
+                            </div>
+                        </div>
+                        <div class = "form-group m-form__group row {{ $errors->has('email') ? ' has-danger' : '' }}">
+                            <label for = "example-text-input" class = "col-3 col-form-label">ایمیل شما:</label>
+                            <div class = "col-9">
+                                <input type = "email" name="email" class = "form-control m-input" value="{{ old("email") }}" placeholder = "ایمیل خود را وارد نمایید">
+                                <span class = "m-form__help">ما ایمیل شما را به هیچ کس نخواهیم داد.</span>
+                                @if ($errors->has('email'))
+                                    <div class="form-control-feedback">{{ $errors->first('email') }}</div>
+                                @endif
+                            </div>
+                        </div>
+                        <div class = "form-group m-form__group row {{ $errors->has('phone') ? ' has-danger' : '' }}">
+                            <label for = "example-text-input" class = "col-3 col-form-label">شماره شما:</label>
+                            <div class = "col-9">
+                                <input type = "number" name="phone" class = "form-control m-input" value="{{ old("phone") }}" placeholder = "شماره خود را وارد نمایید">
+                                <span class = "m-form__help">ما شماره شما را به هیچ کس نخواهیم داد.</span>
+                                @if ($errors->has('phone'))
+                                    <div class="form-control-feedback">{{ $errors->first('phone') }}</div>
+                                @endif
+                            </div>
+                        </div>
+                        <div class = "form-group m-form__group row {{ $errors->has('message') ? ' has-danger' : '' }}">
+                            <label for = "example-text-input" class = "col-3 col-form-label">پیام شما:</label>
+                            <div class = "col-9">
+                                <textarea rows="8" class="form-control m-input" name="message" placeholder="متن پیام شما . . . ">{{ old("message") }}</textarea>
+                                <span class = "m-form__help">اگر هنگام خرید مسئله مالی رخ داده است، به جای ارسال پیام تماس بگیرید تا سریع تر بررسی شود.</span>
+                                @if ($errors->has('message'))
+                                    <div class="form-control-feedback">{{ $errors->first('message') }}</div>
+                                @endif
+                            </div>
+                        </div>
+                        <div class = "form-group m-form__group row {{ $errors->has('g-recaptcha-response') ? ' has-danger' : '' }}">
+                            <label for = "example-text-input" class = "col-3 col-form-label">ربات نیستم:</label>
+                            <div class = "col-9">
+                                {!! Recaptcha::render() !!}
+                                @if ($errors->has('g-recaptcha-response'))
+                                    <div class="form-control-feedback">{{ $errors->first('g-recaptcha-response') }}</div>
+                                @endif
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class = "m-portlet__foot m-portlet__foot--fit">
+                        <div class = "m-form__actions m-form__actions--solid">
+                            <div class = "row">
+                                <div class = "col-3">
+
+                                </div>
+                                <div class = "col-9">
+                                    <button type = "submit" class = "btn btn-brand">ارسال</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {!! Form::close() !!}
+                <!--end::Form-->
+            </div>
+            <!--end::Portlet-->
+        </div>
+        <div class = "col-xl-6 col-md-6">
+            <!--begin:: Widgets/Blog-->
+            <div class="m-portlet m-portlet--head-overlay m-portlet--full-height  m-portlet--rounded-force">
+                <div class="m-portlet__head m-portlet__head--fit-">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <h3 class="m-portlet__head-text m--font-light">
+                                راه های ارتباطی با آلاء
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="m-portlet__body">
+                    <div class="m-widget27 m-portlet-fit--sides">
+                        <div class="m-widget27__pic">
+                            <img src="./assets/app/media/img/bg/bg-4.jpg" alt="">
+                            <div class="m-widget27__btn">
+                                <button type="button" class="btn m-btn--pill btn-secondary m-btn m-btn--custom m-btn--bolder">دفتر مرکزی</button>
+                            </div>
+                        </div>
+                        <div class="m-widget27__container">
+                            <h5>نشانی</h5>
+                            <p>
+                                @if(isset($wSetting->branches->main->address->city)){{$wSetting->branches->main->address->city}}
+                                ، @endif @if(isset($wSetting->branches->main->address->street)) {{$wSetting->branches->main->address->street}}
+                                @endif
+                                @if(isset($wSetting->branches->main->address->avenue)){{$wSetting->branches->main->address->avenue}}
+                                @endif
+                                @if(isset($wSetting->branches->main->address->extra)){{$wSetting->branches->main->address->extra}}
+                                ، @endif @if(isset($wSetting->branches->main->address->plateNumber)){{$wSetting->branches->main->address->plateNumber}}@endif
+                            </p>
+                            <hr>
+                            <h5>شماره تماس</h5>
+                            @foreach($wSetting->branches->main->contacts as $contact)
+                                <p dir = "rtl">
+                                    {{$contact->number}}@if(strlen($contact->description)>0)
+                                        -  {{$contact->description}}@endif
                                 </p>
                             @endforeach
+                            <hr>
+                            @if(isset($emergencyContacts) && $emergencyContacts->isNotEmpty())
+                                <div class = "c-section" style = "text-align: right;direction: ltr">
+                                    <div class = "c-content-label uppercase bg-blue">تلفن ضروری</div>
+                                    @foreach($emergencyContacts as $contact)
+                                        <p dir = "rtl">
+                                            {{$contact["number"]}}@if(strlen($contact["description"])>0)
+                                                -  {{$contact["description"]}}@endif
+                                        </p>
+                                    @endforeach
+                                </div>
+                                <hr>
+                            @endif
+                            <h5> شبکه های اجتماعی</h5>
+                            <ul class="list-inline">
+                                @if(isset($wSetting->socialNetwork->telegram->channel->link) && strlen($wSetting->socialNetwork->telegram->channel->link) > 0)
+                                    <li class="list-inline-item">
+                                        <a target = "_blank" href = "{{$wSetting->socialNetwork->telegram->channel->link}}">
+                                            <i class = "fab fa-telegram  m--icon-font-size-lg5"></i>
+                                        </a>
+                                    </li>
+                                @endif
+                                @if(isset($wSetting->socialNetwork->instagram->main->link) && strlen($wSetting->socialNetwork->instagram->main->link) > 0)
+                                    <li class="list-inline-item">
+                                        <a target = "_blank" href = "{{$wSetting->socialNetwork->instagram->main->link}}">
+                                            <i class = "fab fa-instagram  m--icon-font-size-lg5"></i>
+                                        </a>
+                                    </li>
+                                @endif
+                            </ul>
+                            <hr>
+                            <h5>ارتباط با ادمین</h5>
+                            <ul class="list-inline ">
+                                @if(isset($wSetting->socialNetwork->telegram->channel->admin) && strlen($wSetting->socialNetwork->telegram->channel->admin) > 0)
+                                    <li class="list-inline-item">
+                                        <a target = "_blank" href = "{{$wSetting->socialNetwork->telegram->channel->admin}}">
+                                            <i class = "fab fa-telegram  m--icon-font-size-lg5"></i>
+                                        </a>
+                                    </li>
+                                @endif
+                            </ul>
+                            <hr>
+                            <h5>موسسه غیرتجاری توسعه علمی آموزشی عدالت محور آلاء</h5>
+                            خدمات اصلی آموزش توسط آلاء رایگان ارائه می شوند و آلاء با فروش محصولات آموزشی جانبی، هزینه های خود را تامین می کند.
                         </div>
-                    @endif
-                    <div class="c-section" style="text-align: right">
-                        <div class="c-content-label uppercase bg-blue">شبکه های اجتماعی</div>
-                        <br/>
-                        <ul class="c-content-iconlist-1">
-                            @if(isset($wSetting->socialNetwork->telegram->channel->link) && strlen($wSetting->socialNetwork->telegram->channel->link) > 0)
-                                <li>
-                                    <a target="_blank" href="{{$wSetting->socialNetwork->telegram->channel->link}}">
-                                        <i class="fa fa-telegram"></i>
-                                    </a>
-                                </li>
-                            @endif
-                            @if(isset($wSetting->socialNetwork->instagram->main->link) && strlen($wSetting->socialNetwork->instagram->main->link) > 0)
-                                <li>
-                                    <a target="_blank" href="{{$wSetting->socialNetwork->instagram->main->link}}">
-                                        <i class="fa fa-instagram"></i>
-                                    </a>
-                                </li>
-                            @endif
-                        </ul>
-                    </div>
-                    <div class="c-section" style="text-align: right">
-                        <div class="c-content-label uppercase bg-blue">ارتباط با ادمین</div>
-                        <br/>
-                        <ul class="c-content-iconlist-1">
-                            @if(isset($wSetting->socialNetwork->telegram->channel->admin) && strlen($wSetting->socialNetwork->telegram->channel->admin) > 0)
-                                <li>
-                                    <a target="_blank" href="{{$wSetting->socialNetwork->telegram->channel->admin}}">
-                                        <i class="fa fa-telegram"></i>
-                                    </a>
-                                </li>
-                            @endif
-                        </ul>
                     </div>
                 </div>
             </div>
-        </div>
-        <div id="" class="c-content-contact-1-gmap"
-             style="height: 615px;background-image: url(/img/extra/contact_us_background.png);background-size: cover;"></div>
-    </div>
-    <div class="c-content-feedback-1 c-option-1">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="c-contact">
-                    <div class="c-content-title-1">
-                        <h3 class="uppercase">تماس با ما</h3>
-                        <div class="c-line-left bg-dark"></div>
-                        <p class="c-font-lowercase">شما می توانید برای ارتباط با ما به آدرس دبیرستان مراجعه نموده و یا
-                            با شماره تلفن دبیرستان تماس حاصل فرمایید. همچنین می توانید از طریق فرم زیر پیام ، نظر و یا
-                            پیشنهاد خود را برای ما ارسال نمایید</p>
-                    </div>
-                    {!! Form::open(['method' => 'POST','action' => ['HomeController@sendMail']]) !!}
-                    <div class="form-group {{ $errors->has('fullName') ? ' has-error' : '' }}">
-                        <span style="color:red;">*</span>
-                        <input type="text" name="fullName" value="{{old("fullName")}}" placeholder="نام کامل"
-                               class="form-control input-md">
-                        @if ($errors->has('fullName'))
-                            <span class="help-block">
-                                        <strong>{{ $errors->first('fullName') }}</strong>
-                                    </span>
-                        @endif
-                    </div>
-                    <div class="form-group {{ $errors->has('email') ? ' has-error' : '' }}">
-                        <input type="text" name="email" value="{{old("email")}}" placeholder="ایمیل"
-                               class="form-control input-md">
-                        @if ($errors->has('email'))
-                            <span class="help-block">
-                                    <strong>{{ $errors->first('email') }}</strong>
-                                </span>
-                        @endif
-                    </div>
-                    <div class="form-group {{ $errors->has('phone') ? ' has-error' : '' }}">
-                        <input type="text" name="phone" value="{{old("phone")}}" placeholder="تلفن تماس"
-                               class="form-control input-md">
-                        @if ($errors->has('phone'))
-                            <span class="help-block">
-                                            <strong>{{ $errors->first('phone') }}</strong>
-                                        </span>
-                        @endif
-                    </div>
-
-                    <div class="form-group {{ $errors->has('message') ? ' has-error' : '' }}">
-                        <span style="color:red;">*</span>
-                        <textarea rows="8" name="message" placeholder="متن پیام ..."
-                                  class="form-control input-md">{{old("message")}}</textarea>
-                        @if ($errors->has('message'))
-                            <span class="help-block">
-                                        <strong>{{ $errors->first('message') }}</strong>
-                                    </span>
-                        @endif
-                    </div>
-                    {{--<div class="form-group {{ $errors->has('g-recaptcha-response') ? ' has-error' : '' }}">--}}
-                    {{--<span style="color:red;">*</span>--}}
-                    {{--<label for="securityQuestion">سوال امنیتی</label>--}}
-                    {{--<input type="text" name="securityQuestion"  placeholder="حاصل 4+3 چند می شود؟ (جواب را به حروف بنویسید) " class="form-control input-md">--}}
-                    {{--@if ($errors->has('g-recaptcha-response'))--}}
-                    {{--<span class="help-block">--}}
-                    {{--<strong>{{ $errors->first('g-recaptcha-response') }}</strong>--}}
-                    {{--</span>--}}
-                    {{--@endif--}}
-                    {{--</div>--}}
-                    <div class="form-group {{ $errors->has('g-recaptcha-response') ? ' has-error' : '' }}">
-                        {!! Recaptcha::render() !!}
-                        @if ($errors->has('g-recaptcha-response'))
-                            <span class="help-block">
-                                <strong>{{ $errors->first('g-recaptcha-response') }}</strong>
-                                </span>
-                        @endif
-                    </div>
-                    <button type="submit" class="btn grey">ارسال</button>
-                    {!! Form::close() !!}
-                </div>
-            </div>
+            <!--end:: Widgets/Blog-->
         </div>
     </div>
-@endsection
-
-@section("footerPageLevelPlugin")
-    <script src="https://maps.google.com/maps/api/js?sensor=false&key=AIzaSyCbQCgACu0rgugWcMB1QeXNMrroEvs1WTo"
-            type="text/javascript"></script>
-    <script src="/assets/global/plugins/gmaps/gmaps.min.js" type="text/javascript"></script>
-@endsection
-
-@section("footerPageLevelScript")
-    <script src="/js/extraJS/contactUs.js" type="text/javascript"></script>
 @endsection

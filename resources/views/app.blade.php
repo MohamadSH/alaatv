@@ -67,70 +67,72 @@
 
 <!-- begin:: Page -->
 <div class = "m-grid m-grid--hor m-grid--root m-page">
-    <!-- BEGIN: Header -->
-@section("header")
-    @include("partials.header1")
-@show
-<!-- END: Header -->
-    <!-- begin::Body -->
-    <div class = "m-grid__item m-grid__item--fluid m-grid m-grid--ver-desktop m-grid--desktop m-body">
-        @section("sidebar")
-            @include("partials.sidebar")
+    @section("body")
+        <!-- BEGIN: Header -->
+        @section("header")
+            @include("partials.header1")
         @show
+        <!-- END: Header -->
+        <!-- begin::Body -->
+        <div class = "m-grid__item m-grid__item--fluid m-grid m-grid--ver-desktop m-grid--desktop m-body">
+            @section("sidebar")
+                @include("partials.sidebar")
+            @show
 
-        <div class = "m-grid__item m-grid__item--fluid m-wrapper">
-            <div class = "m-content">
-                @yield('pageBar')
-                @yield("content")
-            </div>
-        </div>
-
-        @section('right-aside')
-        {{--<!-- BEGIN: Right Aside -->
-            <div class = "m-grid__item m-aside-right">
-
-                <div>
-                    <h6 class="m-badge m-badge--warning m-badge--wide m-badge--rounded">ترافیک رایگان آلاء</h6>
-                    <p class="text-justify">
-                        دانلود آسیاتکی ها از سایت آلاء رایگان است.
-                        <br>
-                        اگر آسیاتک ندارید، از
-                        <a href = "/v/asiatech" class="m-link m--font-boldest">اینجا</a>
-                        کد تخفیف
-                        <span>
-                            100%
-                        </span>
-                        آسیاتک را <strong> رایگان </strong> دریافت کنید.
-                    </p>
+            <div class = "m-grid__item m-grid__item--fluid m-wrapper">
+                <div class = "m-content">
+                    @yield('pageBar')
+                    @yield("content")
                 </div>
-                <div class = "m-separator m-separator--dashed m--space-10"></div>
-                <div>
-                    <h6 class="m-badge m-badge--warning m-badge--wide m-badge--rounded"> کمک مالی به آلاء</h6>
-                        <p class="mb-0 text-justify">
-                            ما هرکاری که می کنیم، به تغییر وضعیت موجود اعتقاد داریم،
-                            ما به متفاوت فکر کردن اعتقاد داریم.
+            </div>
+
+            @section('right-aside')
+            {{--<!-- BEGIN: Right Aside -->
+                <div class = "m-grid__item m-aside-right">
+
+                    <div>
+                        <h6 class="m-badge m-badge--warning m-badge--wide m-badge--rounded">ترافیک رایگان آلاء</h6>
+                        <p class="text-justify">
+                            دانلود آسیاتکی ها از سایت آلاء رایگان است.
                             <br>
-                            روش ما برای به چالش کشیدن وضعیت موجود، تولید محتواهای کامل، جامع و بررسی دقیق پیشنهادهای  شما و نظرات کارشناسان آموزشی است.
-                            <br>
-                            اینگونه هست که ما بهترین فیلم های آموزشی را تولید می کنیم.
-                            <br>
-                            <a href="{{ action("HomeController@donate") }}" class="m-link m--font-boldest">
-                                ما برای حفظ و توسعه خدمات، نیاز به کمک های مالی شما آلایی ها داریم.
-                            </a>
+                            اگر آسیاتک ندارید، از
+                            <a href = "/v/asiatech" class="m-link m--font-boldest">اینجا</a>
+                            کد تخفیف
+                            <span>
+                                100%
+                            </span>
+                            آسیاتک را <strong> رایگان </strong> دریافت کنید.
                         </p>
-                        <footer class="blockquote-footer">سهراب ابوذرخانی فرد <cite title="موسسه غیرتجاری توسعه علمی آموزشی عدالت محور آلاء">موسسه غیرتجاری آلاء</cite></footer>
+                    </div>
+                    <div class = "m-separator m-separator--dashed m--space-10"></div>
+                    <div>
+                        <h6 class="m-badge m-badge--warning m-badge--wide m-badge--rounded"> کمک مالی به آلاء</h6>
+                            <p class="mb-0 text-justify">
+                                ما هرکاری که می کنیم، به تغییر وضعیت موجود اعتقاد داریم،
+                                ما به متفاوت فکر کردن اعتقاد داریم.
+                                <br>
+                                روش ما برای به چالش کشیدن وضعیت موجود، تولید محتواهای کامل، جامع و بررسی دقیق پیشنهادهای  شما و نظرات کارشناسان آموزشی است.
+                                <br>
+                                اینگونه هست که ما بهترین فیلم های آموزشی را تولید می کنیم.
+                                <br>
+                                <a href="{{ action("HomeController@donate") }}" class="m-link m--font-boldest">
+                                    ما برای حفظ و توسعه خدمات، نیاز به کمک های مالی شما آلایی ها داریم.
+                                </a>
+                            </p>
+                            <footer class="blockquote-footer">سهراب ابوذرخانی فرد <cite title="موسسه غیرتجاری توسعه علمی آموزشی عدالت محور آلاء">موسسه غیرتجاری آلاء</cite></footer>
+                    </div>
+
                 </div>
+            <!-- END: Right Aside -->--}}
+            @show
+        </div>
+        <!-- end:: Body -->
 
-            </div>
-        <!-- END: Right Aside -->--}}
+        <input id="js-var-userIp" class="m--hide" type="hidden" value='{{ $userIpAddress }}'>
+        <input id="js-var-userId" class="m--hide" type="hidden" value='{{ optional(Auth::user())->id }}'>
+        @section("footer")
+            @include("partials.footer1")
         @show
-    </div>
-    <!-- end:: Body -->
-
-    <input id="js-var-userIp" class="m--hide" type="hidden" value='{{ $userIpAddress }}'>
-    <input id="js-var-userId" class="m--hide" type="hidden" value='{{ optional(Auth::user())->id }}'>
-    @section("footer")
-        @include("partials.footer1")
     @show
 </div>
 <!-- end:: Page -->
