@@ -124,7 +124,6 @@ class ProductController extends Controller
         $pageName = 'productPage';
         $productResult = (new ProductSearch)->setPageName($pageName)
                                             ->apply($filters);
-
         //        dd($productResult->where('enable','=',0));
         if ($isApp) {
             $items->push($productResult->getCollection());
@@ -386,7 +385,7 @@ class ProductController extends Controller
 
         $productAllFiles = $this->makeAllFileCollection($product);
 
-        $productSamplePhotos = $product->sample_photos;
+        $productSamplePhotos = $product->getPhotos();
 
         $giftCollection = $product->getGifts();
 

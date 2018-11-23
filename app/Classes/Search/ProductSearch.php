@@ -48,7 +48,9 @@ class ProductSearch extends SearchAbstract
      */
     protected function getResults(Builder $query)
     {
-        $result = $query->active()
+        $result = $query
+//            Conflict with admin panel
+                      ->active()
                         ->doesntHave('parents')
                         ->whereNull('deleted_at')
                         ->orderBy("created_at", "desc")
