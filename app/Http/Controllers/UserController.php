@@ -265,33 +265,9 @@ class UserController extends Controller
         $reportType = "";
 
         if (strcmp($previousPath, action("HomeController@adminSMS")) == 0) {
-            $index = "user.index2";
-
-            $uniqueUsers = $users->groupBy("nationalCode");
-            $users = collect();
-            foreach ($uniqueUsers as $user) {
-                if ($user->whereNotNull("mobile_verified_at")
-                         ->isNotEmpty()) {
-                    $users->push($user->whereNotNUll("mobile_verified_at")
-                                      ->first());
-                } else {
-                    $users->push($user->first());
-                }
-            }
-            $usersId = $users->pluck("id");
-            $usersIdCount = $usersId->count();
-            $numberOfFatherPhones = Phone::whereIn('contact_id', Contact::whereIn('user_id', $usersId)
-                                                                        ->where('relative_id', 1)
-                                                                        ->pluck('id'))
-                                         ->where("phonetype_id", 1)
-                                         ->count();
-            $numberOfMotherPhones = Phone::whereIn('contact_id', Contact::whereIn('user_id', $usersId)
-                                                                        ->where('relative_id', 2)
-                                                                        ->pluck('id'))
-                                         ->where("phonetype_id", 1)
-                                         ->count();
+            //Converted
         } else if (strcmp($previousPath, action("HomeController@admin")) == 0) {
-            $index = "user.index";
+            //Converted
         } else if (strcmp($previousPath, action("HomeController@adminReport")) == 0) {
             $index = "admin.partials.getReportIndex";
 
@@ -325,6 +301,7 @@ class UserController extends Controller
             if (Input::has("seePaidCost"))
                 $seePaidCost = true;
         }
+
         $result = [
             'index'                => View::make($index, compact('users', 'products', 'paymentStatusesId', 'reportType', 'hasPishtaz', 'orders', 'seePaidCost', 'lotteries'))
                                           ->render(),
