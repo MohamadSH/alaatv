@@ -65,7 +65,6 @@ use Illuminate\Support\{Collection, Facades\Cache, Facades\Config};
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Productfile[]    $productfiles
  * @property-read \App\Producttype|null                                          $producttype
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Product configurable()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product enable()
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Product onlyTrashed()
  * @method static bool|null restore()
@@ -940,6 +939,7 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
         $key = "product:SamplePhotos:" . $this->cacheKey();
         $productSamplePhotos = Cache::remember($key, config("constants.CACHE_60"), function () {
             return $this->photos()
+                        ->enable()
                         ->get()
                         ->sortBy("order");
         });
@@ -1166,18 +1166,19 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
         $key = "product:getGifts:" . $this->cacheKey();
         return Cache::remember($key, Config::get("constants.CACHE_60"), function () {
             $gifts = collect();
-
-            foreach ($this->gifts as $gift) {
-                $gifts->push($gift);
-            }
-
+            $gifts = $gifts->merge($this->gifts);
 
             $grandParent = $this->getGrandParent();
             if ($grandParent !== false) {
-                foreach ($grandParent->gifts as $gift) {
-                    $gifts->push($gift);
-                }
+                $gifts = $gifts->merge($grandParent->gifts);
             }
+
+            $allChildren =  $this->getAllChildren();
+            foreach ($allChildren as $child)
+            {
+                $gifts = $gifts->merge($child->gifts);
+            }
+
             return $gifts;
         });
     }
@@ -1651,5 +1652,56 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
     public function disable():void
     {
         $this->enable = 0 ;
+    }
+
+    /**
+     * Enables the product
+     *
+     */
+    public function enable():void
+    {
+        $this->enable = 1;
+    }
+
+    /**
+     * Gets a collection containing all of product children
+     *
+     * @return mixed
+     */
+    public function getAllChildren()
+    {
+        $key = "product:makeChildrenArray:" . $this->cacheKey();
+        return Cache::remember($key, Config::get("constants.CACHE_0"), function () {
+            $children = collect();
+            if ($this->hasChildren()) {
+                $thisChildren = $this->children;
+                $children = $children->merge($thisChildren);
+                foreach ($thisChildren as $child)
+                {
+                    $children = $children->merge($child->getAllChildren());
+                }
+            }
+            return $children;
+        });
+    }
+
+    /**
+     * Makes a collection of product phoots
+     *
+     */
+    public function getPhotos()
+    {
+        $photos = collect();
+        $thisPhotos = $this->sample_photos;
+        $photos = $photos->merge($thisPhotos);
+
+        $allChildren =  $this->getAllChildren();
+        foreach ($allChildren as $child)
+        {
+            $childPhotos = $child->sample_photos;
+            $photos = $photos->merge($childPhotos);
+        }
+
+        return $photos;
     }
 }

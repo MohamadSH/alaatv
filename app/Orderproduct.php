@@ -333,4 +333,16 @@ class Orderproduct extends Model
                     ->where("relationtype_id", Config::get("constants.ORDER_PRODUCT_INTERRELATION_PARENT_CHILD"));
     }
 
+    public static function deleteOpenedTransactions(array $intendedProductsId , array $intendedOrderStatuses):void
+    {
+        Orderproduct::whereIn("product_id" , $intendedProductsId)
+            ->whereHas("order",function ($q) use ($intendedOrderStatuses){
+                $q->whereIn("orderstatus_id" , $intendedOrderStatuses)
+                    ->whereDoesntHave("transactions" , function ($q2)
+                    {
+                        $q2->where("transactionstatus_id" , config("constants.TRANSACTION_STATUS_TRANSFERRED_TO_PAY"));
+                    });
+            })->delete();
+    }
+
 }
