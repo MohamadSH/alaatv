@@ -1061,7 +1061,7 @@ var mUtil = function() {
 
                     target = target.parentNode;
                 }
-            };
+            }
 
             mUtil.addEvent(element, event, mUtilDelegatedEventHandlers[eventId]);
 
@@ -1557,7 +1557,7 @@ var mApp = function() {
         * Initializes components
         */
         initComponents: function() {
-            hideTouchWarning();
+            // hideTouchWarning();
             initScrollers();
             initTooltips();
             initPopovers();
@@ -6108,7 +6108,8 @@ var mMenu = function(elementId, options) {
         handleLinkClick: function(e) {
             if ( Plugin.eventTrigger('linkClick', this) === false ) {
                 e.preventDefault();
-            }
+            };
+
             if ( Plugin.getSubmenuMode(this) === 'dropdown' || Plugin.isConditionalSubmenuDropdown() ) {
                 Plugin.handleSubmenuDropdownClose(e, this);
             }
@@ -6818,7 +6819,7 @@ var mOffcanvas = function(elementId, options) {
         /**
          * Handles offcanvas toggle
          */
-        toggle: function () {
+        toggle: function() {;
             Plugin.eventTrigger('toggle'); 
 
             if (the.state == 'shown') {
@@ -7779,7 +7780,7 @@ var mQuicksearch = function(elementId, options) {
                 if (key == 13) {
                     e.preventDefault();
                 }
-            };
+            }
 
             if (the.options.mode == 'default') {
                 mUtil.addEvent(the.input, 'focus', Plugin.showDropdown);
@@ -8510,7 +8511,7 @@ var mWizard = function(elementId, options) {
 
             mUtil.on(element, '.m-wizard__step a.m-wizard__step-number', 'click', function() {
                 var step = this.closest('.m-wizard__step');
-                var steps = mUtil.parents(this, '.m-wizard__steps');
+                var steps = mUtil.parents(this, '.m-wizard__steps')
                 var find = mUtil.findAll(steps, '.m-wizard__step');
                 var num;
 
@@ -9191,7 +9192,7 @@ var mLayout = function() {
         }        
 
         header = new mHeader('m_header', options);
-    };
+    }
 
     //== Hor menu
     var initHorMenu = function() { 
@@ -9217,7 +9218,7 @@ var mLayout = function() {
                 expandAll: false   // allow having multiple expanded accordions in the menu
             }
         });
-    };
+    }
 
     //== Aside menu
     var initLeftAsideMenu = function() {
@@ -9261,7 +9262,7 @@ var mLayout = function() {
                 expandAll: false   // allow having multiple expanded accordions in the menu
             }            
         });
-    };
+    }
 
     //== Aside
     var initLeftAside = function() {
@@ -9317,7 +9318,7 @@ var mLayout = function() {
                 }, 500);
             }); 
         } 
-    };
+    }
 
     //== Sidebar toggle
     var initLeftAsideToggle = function() {
@@ -9341,7 +9342,7 @@ var mLayout = function() {
             // server side code and add "m-brand--minimize m-aside-left--minimize" classes to 
             // the body tag in order to initialize the minimized left aside mode during page loading.
         });
-    };
+    }
 
     //== Sidebar hide
     var initLeftAsideHide = function() {
@@ -9365,14 +9366,14 @@ var mLayout = function() {
             // server side code and add "m-brand--minimize m-aside-left--minimize" classes to 
             // the body tag in order to initialize the minimized left aside mode during page loading.
         });
-    };
+    }
 
     //== Topbar
     var initTopbar = function() {
         $('#m_aside_header_topbar_mobile_toggle').click(function() {
             $('body').toggleClass('m-topbar--on');
         });           
-    };
+    }
 
     //== Quicksearch
     var initQuicksearch = function() {
@@ -9404,7 +9405,7 @@ var mLayout = function() {
                 }
             });
         });  
-    };
+    }
 
     //== Scrolltop
     var initScrollTop = function() {
@@ -9412,7 +9413,7 @@ var mLayout = function() {
             offset: 300,
             speed: 600
         });
-    };
+    }
 
     return {
         init: function() {  
@@ -9494,7 +9495,7 @@ var mQuickSidebar = function() {
                 return height;                    
             }
         });
-    };
+    }
 
     var initSettings = function() { 
         var settings = mUtil.find( mUtil.get('m_quick_sidebar_tabs_settings'),  '.m-list-settings'); 
@@ -9511,7 +9512,7 @@ var mQuickSidebar = function() {
                 return mUtil.getViewPort().height - topbarAsideTabs.outerHeight(true) - 60;            
             }
         });
-    };
+    }
 
     var initLogs = function() {
         var logs = mUtil.find( mUtil.get('m_quick_sidebar_tabs_logs'),  '.m-list-timeline'); 
@@ -9528,13 +9529,13 @@ var mQuickSidebar = function() {
                 return mUtil.getViewPort().height - topbarAsideTabs.outerHeight(true) - 60;            
             }
         });
-    };
+    }
 
     var initOffcanvasTabs = function() {
         initMessages();
         initSettings();
         initLogs();
-    };
+    }
 
     var initOffcanvas = function() {
         var topbarAsideObj = new mOffcanvas('m_quick_sidebar', {
@@ -9556,7 +9557,7 @@ var mQuickSidebar = function() {
                 initOffcanvasTabs();
             }, 1000);                         
         });
-    };
+    }
 
     return {     
         init: function() {  
