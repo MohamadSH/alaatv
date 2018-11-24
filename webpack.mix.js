@@ -24,3 +24,8 @@ mix.scripts(
     ],
     'public/js/all.js'
 ).version();
+
+mix.scripts(
+    ['public/acm/login.js'],
+    'public/js/login.js'
+).version();

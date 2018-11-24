@@ -1,115 +1,99 @@
-<!DOCTYPE html>
-<!-- 
-Template Name: Metronic - Responsive Admin Dashboard Template build with Twitter Bootstrap 3.3.7
-Version: 4.7.1
-Author: KeenThemes
-Website: http://www.keenthemes.com/
-Contact: support@keenthemes.com
-Follow: www.twitter.com/keenthemes
-Dribbble: www.dribbble.com/keenthemes
-Like: www.facebook.com/keenthemes
-Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes
-Renew Support: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes
-License: You must have a valid license purchased only from themeforest(the above link) in order to legally use the theme for your project.
--->
-<!--[if IE 8]>
-<html lang="en" class="ie8 no-js"> <![endif]-->
-<!--[if IE 9]>
-<html lang="en" class="ie9 no-js"> <![endif]-->
-<!--[if !IE]><!-->
-<html lang="en" dir="rtl">
-<!--<![endif]-->
-<!-- BEGIN HEAD -->
+@extends("app" , ["pageName"=>"login"])
 
-<head>
-    <meta charset="utf-8"/>
-    <title>ورود</title>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta content="width=device-width, initial-scale=1" name="viewport"/>
-    <meta content="login page" name="description"/>
-    <meta content="Alaa" name="author"/>
-    <!-- BEGIN GLOBAL MANDATORY STYLES -->
-    <link rel="stylesheet" href="{{ mix('/css/all.css') }}">
-    <!-- END GLOBAL MANDATORY STYLES -->
-    <!-- BEGIN PAGE LEVEL PLUGINS -->
-    <link href="/assets/global/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/assets/global/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css"/>
-    <!-- END PAGE LEVEL PLUGINS -->
-    <!-- BEGIN THEME GLOBAL STYLES -->
-    <link href="/assets/global/css/components-md-rtl.min.css" rel="stylesheet" id="style_components" type="text/css"/>
-    <link href="/assets/global/css/plugins-md-rtl.min.css" rel="stylesheet" type="text/css"/>
-    <!-- END THEME GLOBAL STYLES -->
-    <!-- BEGIN PAGE LEVEL STYLES -->
-    <link href="/assets/pages/css/login-rtl.min.css" rel="stylesheet" type="text/css"/>
-    <!-- END PAGE LEVEL STYLES -->
-    <!-- BEGIN THEME LAYOUT STYLES -->
-    <!-- END THEME LAYOUT STYLES -->
-    <link rel="shortcut icon" href="favicon.ico"/>
-    <script async src="https://www.googletagmanager.com/gtag/js?id={{Config('constants.google.analytics')}}"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
+@section("body")
+    <div class = "m-grid__item m-grid__item--fluid m-grid m-grid--ver-desktop m-grid--desktop m-grid--tablet-and-mobile m-grid--hor-tablet-and-mobile m-login m-login--1 m-login--signin" id = "m_login">
+        <div class = "m-grid__item m-grid__item--order-tablet-and-mobile-2 m-login__aside">
+            <div class = "m-stack m-stack--hor m-stack--desktop">
+                <div class = "m-stack__item m-stack__item--fluid">
+                    <div class = "m-login__wrapper">
+                        <div class = "m-login__logo">
+                            <a href = "#">
+                                <img src = "/acm/image/alaa_sharif.png" class = "img-fluid">
+                            </a>
+                        </div>
 
-        function gtag() {
-            dataLayer.push(arguments);
-        }
+                        <div class = "m-login__signin">
+                            <div class = "m-login__head">
+                                <h3 class = "m-login__title">ورود به آلاء</h3>
+                                <div class = "m-login__desc">با کد ملی ایران نیازی به ثبت نام نیست.</div>
+                            </div>
 
-        var dimensionValue = '{{ request()->ip() }}';
+                            @include('partials.loginForm')
+                        </div>
 
-        gtag('js', new Date());
+                        <div class = "m-login__signup">
+                            <div class = "m-login__head">
+                                <h3 class = "m-login__title">ثبت نام</h3>
+                                <div class = "m-login__desc">ویژه کسانی که کد ملی ایران ندارند.</div>
+                            </div>
+                            <form class = "m-login__form m-form" action = "">
+                                <div class = "form-group m-form__group">
+                                    <input class = "form-control m-input" type = "text" placeholder = "نام کامل" name = "fullname">
+                                </div>
+                                <div class = "form-group m-form__group">
+                                    <input class = "form-control m-input" type = "text" placeholder = "ایمیل" name = "email" autocomplete = "off">
+                                </div>
+                                <div class = "form-group m-form__group">
+                                    <input class = "form-control m-input" type = "password" placeholder = "رمز عبور دلخواه" name = "password">
+                                </div>
+                                <div class = "form-group m-form__group">
+                                    <input class = "form-control m-input m-login__form-input--last" type = "password" placeholder = "رمز خود را تکرار کنید" name = "rpassword">
+                                </div>
 
-        gtag('config', "{{Config('constants.google.analytics')}}", {
-            'custom_map': {'dimension2': 'dimension2'}
-        });
-        @if(Auth::check())
-        gtag('set', {'user_id': '{{ Auth::user() ->id }}'}); // Set the user ID using signed-in user_id.
-        @endif
-        // Sends the custom dimension to Google Analytics.
-        gtag('event', 'hit', {'dimension2': dimensionValue});
-    </script>
-    @section("gtagJs")
+                                <div class = "m-login__form-action">
+                                    <button id = "m_login_signup_submit" class = "btn btn-focus m-btn m-btn--pill m-btn--custom m-btn--air">ثبت نام</button>
+                                    <button id = "m_login_signup_cancel" class = "btn btn-outline-focus  m-btn m-btn--pill m-btn--custom">بازگشت</button>
+                                </div>
+                            </form>
+                        </div>
 
-    @show
-</head>
-<!-- END HEAD -->
+                        <div class = "m-login__forget-password">
+                            <div class = "m-login__head">
+                                <h3 class = "m-login__title">رمز عبور خود را فراموش کرده اید ؟</h3>
+                                <div class = "m-login__desc">ایمیل و یا شماره موبایل خود را برای دریافت رمز وارد نمایید</div>
+                            </div>
+                            <form class = "m-login__form m-form" action = "">
+                                <div class = "form-group m-form__group">
+                                    <input class = "form-control m-input" type = "text" placeholder = "ایمیل یا موبایل" name = "email" id = "m_email" autocomplete = "off">
+                                </div>
+                                <div class = "m-login__form-action">
+                                    <button id = "m_login_forget_password_submit" class = "btn btn-focus m-btn m-btn--pill m-btn--custom m-btn--air">ارسال رمز</button>
+                                    <button id = "m_login_forget_password_cancel" class = "btn btn-outline-focus m-btn m-btn--pill m-btn--custom">بازگشت</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
 
-<body class=" login">
-<!-- BEGIN LOGO -->
-<div class="logo bg-font-dark">
-    <a href="{{action("HomeController@index")}}">
-        <img @if(isset($wSetting->site->siteLogo))src="{{route('image', ['category'=>'11','w'=>'135' , 'h'=>'67' ,  'filename' =>  $wSetting->site->siteLogo ])}}"
-             @endif alt=""/> </a>
-    <h3>آلاء - خدمات نوین آموزش</h3>
-    <h4>مجری توسعه عدالت آموزشی</h4>
-</div>
-<!-- END LOGO -->
-<!-- BEGIN LOGIN -->
-<div class="content">
-    <!-- BEGIN LOGIN FORM -->
-@include("partials.loginForm" ,["withHeader"=>false])
-<!-- END LOGIN FORM -->
-</div>
-<div class="copyright"> Copyright © Alaa 2017</div>
-<!--[if lt IE 9]>
-<script src="/assets/global/plugins/respond.min.js"></script>
-<script src="/assets/global/plugins/excanvas.min.js"></script>
-<script src="/assets/global/plugins/ie8.fix.min.js"></script>
-<![endif]-->
-<!-- BEGIN CORE PLUGINS -->
-<script src="{{ mix('/js/all.js') }}" type="text/javascript"></script>
-<!-- END CORE PLUGINS -->
-<!-- BEGIN PAGE LEVEL PLUGINS -->
-<script src="/assets/global/plugins/jquery-validation/js/jquery.validate.min.js" type="text/javascript"></script>
-<script src="/assets/global/plugins/jquery-validation/js/additional-methods.min.js" type="text/javascript"></script>
-<script src="/assets/global/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>
-<!-- END PAGE LEVEL PLUGINS -->
-<!-- BEGIN THEME GLOBAL SCRIPTS -->
-<script src="/assets/global/scripts/app.min.js" type="text/javascript"></script>
-<!-- END THEME GLOBAL SCRIPTS -->
-<!-- BEGIN PAGE LEVEL SCRIPTS -->
-<script src="/assets/pages/scripts/login.min.js" type="text/javascript"></script>
-<!-- END PAGE LEVEL SCRIPTS -->
-<!-- BEGIN THEME LAYOUT SCRIPTS -->
-<!-- END THEME LAYOUT SCRIPTS -->
-</body>
+                </div>
+                <div class = "m-stack__item m-stack__item--center">
 
-</html>
+                    <div class = "m-login__account">
+						<span class = "m-login__account-msg">
+اگر 						کد ملی ایران ندارید :
+						</span>&nbsp;&nbsp;
+                        <a href = "javascript:" id = "m_login_signup" class = "m-link m-link--focus m-login__account-link">ثبت نام کنید!</a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class = "m-grid__item m-grid__item--fluid m-grid m-grid--center m-grid--hor m-grid__item--order-tablet-and-mobile-1	m-login__content m-grid-item--center" style = "background-image: url(/assets/app/media/img//bg/bg-4.jpg)">
+            <div class = "m-grid__item">
+                <h3 class = "m-login__welcome">آلایی شوید</h3>
+                <p class = "m-login__msg">
+                    با نظارت دبیرستان دانشگاه صنعتی شریف
+                    <br>
+                    متوسطه دوم و مهارت آموزی
+                </p>
+            </div>
+        </div>
+    </div>
+
+    {{--@include("partials.loginForm" ,["withHeader"=>false])--}}
+@endsection
+
+@section('page-js')
+    <!--begin::Login page js -->
+    <script src = "{{ mix('/js/login.js') }}" type = "text/javascript"></script>
+    <!--end::Login page js -->
+@endsection

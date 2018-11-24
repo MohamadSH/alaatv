@@ -127,13 +127,12 @@
             @show
         </div>
         <!-- end:: Body -->
-
-        <input id="js-var-userIp" class="m--hide" type="hidden" value='{{ $userIpAddress }}'>
-        <input id="js-var-userId" class="m--hide" type="hidden" value='{{ optional(Auth::user())->id }}'>
         @section("footer")
             @include("partials.footer1")
         @show
     @show
+        <input id="js-var-userIp" class="m--hide" type="hidden" value='{{ $userIpAddress }}'>
+        <input id="js-var-userId" class="m--hide" type="hidden" value='{{ optional(Auth::user())->id }}'>
 </div>
 <!-- end:: Page -->
 
@@ -169,6 +168,7 @@
 <!--begin::Global Theme Bundle -->
 <script src = "{{ mix('/js/all.js') }}" type = "text/javascript"></script>
 <!--end::Global Theme Bundle -->
+@yield('page-js')
 </body>
 <!-- end::Body -->
 </html>
