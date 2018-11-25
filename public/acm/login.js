@@ -16,6 +16,18 @@ var SnippetLogin = function() {
         alert.find('span').html(msg);
     };
 
+    var showValidationError = function(div,msg){
+        var message = $('<div class = "form-control-feedback">' + msg + '</div>');
+        div.find('.form-control-feedback').remove();
+        message.appendTo(div);
+        mUtil.animateClass(message[0], 'fadeIn animated');
+    };
+
+    var redirect = function (path) {
+        // similar behavior as an HTTP redirect
+        window.location.replace(path);
+    };
+
     //== Private Functions
 
     var displaySignUpForm = function() {
@@ -72,12 +84,13 @@ var SnippetLogin = function() {
             e.preventDefault();
             var btn = $(this);
             var form = $(this).closest('form');
+            var mobileDiv = $('#m-login__form_mobile');
+            var nCodeDiv = $('#m-login__form_code');
 
             form.validate({
                 rules: {
                     mobile: {
                         required: true,
-                        number: true
                     },
                     password: {
                         required: true
@@ -97,7 +110,30 @@ var SnippetLogin = function() {
                 	// similate 2s delay
                 	setTimeout(function() {
 	                    btn.removeClass('m-loader m-loader--right m-loader--light').attr('disabled', false);
-	                    showErrorMsg(form, 'danger', 'Incorrect username or password. Please try again.');
+	                    // showErrorMsg(form, 'danger', 'Incorrect username or password. Please try again.');
+                        if(response.status === 1){
+                            redirect(response.redirectTo);
+                        }
+
+                    }, 2000);
+                },
+                error:function (data) {
+                    var errors = data.responseJSON.errors; // An array with all errors.
+                    // console.log(errors);
+                    // similate 2s delay
+                    setTimeout(function() {
+                        btn.removeClass('m-loader m-loader--right m-loader--light').attr('disabled', false);
+
+                        showErrorMsg(form, 'danger', 'خطا در ورود اطلاعات!');
+                        console.debug(errors.nationalCode);
+                        if(typeof errors.nationalCode !== 'undefined'){
+                            nCodeDiv.addClass('has-danger');
+                            showValidationError(nCodeDiv,errors.nationalCode[0]);
+                        }
+                        if(typeof errors.mobile !== 'undefined'){
+                            mobileDiv.addClass('has-danger');
+                            showValidationError(mobileDiv,errors.mobile[0]);
+                        }
                     }, 2000);
                 }
             });

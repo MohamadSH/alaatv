@@ -23,7 +23,6 @@ class ModifyRequestInputMiddleware
      */
     public function handle($request, Closure $next, $index)
     {
-
         $this->replaceNumbers($request, explode("|", $index));
         return $next($request);
 

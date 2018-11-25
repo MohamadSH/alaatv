@@ -3,14 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\UserController;
-use App\Http\Requests\InsertUserRequest;
 use App\Traits\{CharacterCommon, Helper, UserCommon};
 use App\User;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\URL;
 use Validator;
 
 
@@ -33,21 +32,13 @@ class RegisterController extends Controller
     use RegistersUsers;
 
     /**
-     * Where to redirect users after login / registration.
-     *
-     * @var string
-     */
-    protected $redirectTo;
-
-    /**
      * Create a new controller instance.
      *
-     * @param UserController $userController
      */
     public function __construct()
     {
         $this->middleware('guest');
-        $this->redirectTo = action("ProductController@search");
+        $this->middleware('convert:mobile|passport|nationalCode');
     }
 
     /**
@@ -58,31 +49,7 @@ class RegisterController extends Controller
      */
     public function showRegistrationForm()
     {
-        return redirect(action("HomeController@index"));
-    }
-
-    /**
-     * Handle a registration request for the application.
-     *
-     * @param  \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function register(Request $request)
-    {
-        $request->offsetSet("mobile", $this->convertToEnglish($request->get("mobile")));
-        $request->offsetSet("nationalCode", $this->convertToEnglish($request->get("nationalCode")));
-
-        $this->validator($request->all())
-             ->validate();
-
-        event(new Registered($user = $this->create($request->all())));
-
-        $this->guard()
-             ->login($user);
-
-        return $this->registered($request, $user)
-            ?: redirect($this->redirectPath());
+        return view('auth.login3');
     }
 
     /**
@@ -113,9 +80,56 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         $response = $this->callUserControllerStore($data);
-        $responseContent = json_decode($response->getContent(),true);
+        $responseContent = json_decode($response->getContent(), true);
         $user = $responseContent["user"];
         return User::hydrate($user)->first();
     }
 
+    /**
+     * The user has been registered.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  mixed $user
+     * @return mixed
+     */
+    protected function registered(Request $request, $user)
+    {
+        if ($request->expectsJson())
+            return response()->json([
+                'status' => 1,
+                'msg' => 'user registered',
+                'redirectTo' => $this->redirectTo(),
+                'data' => [
+                    '   user' => $user
+                ]
+            ], Response::HTTP_OK);
+    }
+
+    protected function redirectTo()
+    {
+        $baseUrl = url("/");
+        $targetUrl = redirect()
+            ->intended()
+            ->getTargetUrl();
+        $redirectTo = $baseUrl;
+        if (strcmp($targetUrl, $baseUrl) == 0) {
+            // Indicates a strange situation when target url is the home page despite
+            // the fact that there is a probability that user must be redirected to another page except home page
+
+            if (strcmp(URL::previous(), route('login')) != 0)
+                // User first had opened a page and then went to login
+                $redirectTo = URL::previous();
+        } else {
+            $redirectTo = $targetUrl;
+        }
+
+        if (Auth::user()->completion("afterLoginForm") != 100) {
+            if (strcmp(URL::previous(), action("OrderController@checkoutAuth")) == 0) {
+                $redirectTo = action("OrderController@checkoutCompleteInfo");
+            } else {
+                $redirectTo = action("UserController@completeRegister", ["redirect" => $redirectTo]);
+            }
+        }
+        return $redirectTo;
+    }
 }

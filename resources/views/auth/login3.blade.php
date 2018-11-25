@@ -21,7 +21,7 @@
                             @include('partials.loginForm')
                         </div>
 
-                        <div class = "m-login__signup">
+                        {{--<div class = "m-login__signup">
                             <div class = "m-login__head">
                                 <h3 class = "m-login__title">ثبت نام</h3>
                                 <div class = "m-login__desc">ویژه کسانی که کد ملی ایران ندارند.</div>
@@ -45,9 +45,9 @@
                                     <button id = "m_login_signup_cancel" class = "btn btn-outline-focus  m-btn m-btn--pill m-btn--custom">بازگشت</button>
                                 </div>
                             </form>
-                        </div>
+                        </div>--}}
 
-                        <div class = "m-login__forget-password">
+{{--                        <div class = "m-login__forget-password">
                             <div class = "m-login__head">
                                 <h3 class = "m-login__title">رمز عبور خود را فراموش کرده اید ؟</h3>
                                 <div class = "m-login__desc">ایمیل و یا شماره موبایل خود را برای دریافت رمز وارد نمایید</div>
@@ -61,11 +61,11 @@
                                     <button id = "m_login_forget_password_cancel" class = "btn btn-outline-focus m-btn m-btn--pill m-btn--custom">بازگشت</button>
                                 </div>
                             </form>
-                        </div>
+                        </div>--}}
                     </div>
 
                 </div>
-                <div class = "m-stack__item m-stack__item--center">
+{{--                <div class = "m-stack__item m-stack__item--center">
 
                     <div class = "m-login__account">
 						<span class = "m-login__account-msg">
@@ -74,7 +74,7 @@
                         <a href = "javascript:" id = "m_login_signup" class = "m-link m-link--focus m-login__account-link">ثبت نام کنید!</a>
                     </div>
 
-                </div>
+                </div>--}}
             </div>
         </div>
         <div class = "m-grid__item m-grid__item--fluid m-grid m-grid--center m-grid--hor m-grid__item--order-tablet-and-mobile-1	m-login__content m-grid-item--center" style = "background-image: url(/assets/app/media/img//bg/bg-4.jpg)">

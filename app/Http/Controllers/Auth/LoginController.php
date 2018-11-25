@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\{Controller, UserController};
+use App\Http\Controllers\{Controller};
 use App\Traits\CharacterCommon;
-use App\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
-use Illuminate\Support\{Facades\Auth, Facades\Session, Facades\URL, Facades\Validator};
-use Illuminate\Validation\Rule;
+use Illuminate\Http\Response;
+use Illuminate\Support\{Facades\Auth, Facades\URL};
 
 class LoginController extends Controller
 {
 
     use CharacterCommon;
+    /**
+     * @var RegisterController
+     */
+    private $registerController;
 
     /*
     |--------------------------------------------------------------------------
@@ -29,140 +32,76 @@ class LoginController extends Controller
     use AuthenticatesUsers;
 
     /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    protected $redirectTo;
-
-    /**
      * Create a new controller instance.
      *
-     * @return void
+     * @param RegisterController $registerController
      */
-    public function __construct()
+    public function __construct(RegisterController $registerController)
     {
-        $this->middleware('guest', ['except' => 'logout']);
-        $this->redirectTo = action("HomeController@index");
+        $this->middleware('guest')->except('logout');
+        $this->middleware('convert:mobile|passport|nationalCode');
+        $this->registerController = $registerController;
+    }
+
+    /**
+     * Get the login username to be used by the controller.
+     *
+     * @return string
+     */
+    public function username()
+    {
+        return 'mobile';
     }
 
     /**
      * Handle a login request to the application.
      *
-     * @param Request $request
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
      *
-     * @return Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function login(Request $request)
     {
+        $request->offsetSet("nationalCode", $request->get("password"));
+        $request->offsetSet("userstatus_id", 1);
 
-        /**  ///////Converting mobile and password numbers to English////////*/
-        $request->offsetSet("mobile", $this->convertToEnglish($request->get("mobile")));
-        $request->offsetSet("password", $this->convertToEnglish($request->get("password")));
-        /**  /////////////////////////////////////////////////////*/
+        /**
+         * Validating mobile and password strings
+         */
+        $this->validateLogin($request);
 
-        /** ////////Validating mobile and password strings/////////*/
-        $validator = Validator::make($request->all(), [
-            'mobile'   => 'required',
-            'password' => 'required',
-        ]);
+        /**
+         * Login or register this new user
+         */
 
-        if ($validator->fails()) {
-            return redirect()
-                ->back()
-                ->withInput($request->only('mobile', 'remember'))
-                ->withErrors([
-                                 'validation' => 'خطای ورودی ها',
-                             ], "login");
+        // If the class is using the ThrottlesLogins trait, we can automatically throttle
+        // the login attempts for this application. We'll key this by the username and
+        // the IP address of the client making these requests into this application.
+        if ($this->hasTooManyLoginAttempts($request)) {
+            $this->fireLockoutEvent($request);
+            return $this->sendLockoutResponse($request);
         }
-        /** //////////////////////////////////////////////////////*/
 
-
-        /** ////////Login or register this new user/////////*/
-        ///
-        $remember = true;
-        //        Snippet for remember me checkbox
-        //        if($request->has("remember"))
-        //            $remember = true;
-        //        else
-        //            $remember = false;
-        $intendedUsers = User::where("mobile", $request->get("mobile"))
-                             ->get();
-        foreach ($intendedUsers as $user) {
-            if (Auth::attempt([
-                                  'id'       => $user->id,
-                                  'mobile'   => $user->mobile,
-                                  'password' => $request->get("password"),
-                              ], $remember)) {
-                if (strcmp(Auth::user()->userstatus->name, "inactive") == 0) {
-                    Auth::logout();
-                    Session::flush();
-                    return redirect()
-                        ->back()
-                        ->withInput($request->only('mobile', 'remember'))
-                        ->withErrors([
-                                         'inActive' => 'حساب کاربری شما غیر فعال شده است!',
-                                     ], "login");
-                }
-                break;
-            }
-        }
-        if (!Auth::check()) {
-            //Try to register this new user and login him
-            if (User::where("mobile", $request->get("mobile"))
-                    ->where("nationalCode", $request->get("password"))
-                    ->get()
-                    ->isEmpty()) {
-                $registerRequest = new Request();
-                $registerRequest->offsetSet("mobile", $request->get("mobile"));
-                $registerRequest->offsetSet("nationalCode", $request->get("password"));
-                $registerRequest->offsetSet("password", $request->get("password"));
-                $registerRequest->offsetSet("photo", config('constants.PROFILE_DEFAULT_IMAGE'));
-                $registerRequest->offsetSet("userstatus_id", 1); //ToDo : to be replaced with constants
-                $registerController = new RegisterController();
-                $registerController->register($registerRequest);
+        if ($this->attemptLogin($request)) {
+            if (auth()->user()->userstatus_id == 1) {
+                return $this->sendLoginResponse($request);
             } else {
                 return redirect()
                     ->back()
                     ->withInput($request->only('mobile', 'remember'))
                     ->withErrors([
-                                     'credential' => 'اطلاعات وارد شده معتبر نمی باشند ',
-                                 ], "login");
+                        'inActive' => 'حساب کاربری شما غیر فعال شده است!',
+                    ], "login");
             }
         }
 
-        // At this point it is either a new user who just was registered or an old user who logged in using his credentials
-        $user = Auth::user();
+        // If the login attempt was unsuccessful we will increment the number of attempts
+        // to login and redirect the user back to the login form. Of course, when this
+        // user surpasses their maximum number of attempts they will get locked out.
+        $this->incrementLoginAttempts($request);
 
-        /** ///////////////////////////////////////////////////////*/
-
-
-        /** ////////Determine where to redirect this user/////////*/
-        $baseUrl = url("/");
-        $targetUrl = redirect()
-            ->intended()
-            ->getTargetUrl();
-        if (strcmp($targetUrl, $baseUrl) == 0) {// Indicates a strange situation when target url is the home page despite
-            // the fact that there is a probability that user must be redirected to another page except home page
-
-            if (strcmp(URL::previous(), route('login')) != 0)
-                // User first had opened a page and then went to login
-                $this->redirectTo = URL::previous();
-        } else {
-            $this->redirectTo = $targetUrl;
-        }
-        /** //////////////////////////////////////////////////////////*/
-
-        if ($user->completion("afterLoginForm") != 100) {
-            if (strcmp(URL::previous(), action("OrderController@checkoutAuth")) == 0) {
-                return redirect(action("OrderController@checkoutCompleteInfo"));
-            } else {
-                return redirect(action("UserController@completeRegister", ["redirect" => $this->redirectTo]));
-            }
-
-        }
-
-        return redirect($this->redirectTo);
+        return $this->registerController->register($request);
     }
 
     /**
@@ -173,5 +112,64 @@ class LoginController extends Controller
     public function showLoginForm()
     {
         return view('auth.login3');
+    }
+
+    /**
+     * Get the needed authorization credentials from the request.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return array
+     */
+    protected function credentials(Request $request)
+    {
+        return $request->only($this->username(), 'nationalCode', 'password');
+    }
+
+    protected function redirectTo()
+    {
+        $baseUrl = url("/");
+        $targetUrl = redirect()
+            ->intended()
+            ->getTargetUrl();
+        $redirectTo = $baseUrl;
+        if (strcmp($targetUrl, $baseUrl) == 0) {
+            // Indicates a strange situation when target url is the home page despite
+            // the fact that there is a probability that user must be redirected to another page except home page
+
+            if (strcmp(URL::previous(), route('login')) != 0)
+                // User first had opened a page and then went to login
+                $redirectTo = URL::previous();
+        } else {
+            $redirectTo = $targetUrl;
+        }
+
+        if (Auth::user()->completion("afterLoginForm") != 100) {
+            if (strcmp(URL::previous(), action("OrderController@checkoutAuth")) == 0) {
+                $redirectTo = action("OrderController@checkoutCompleteInfo");
+            } else {
+                $redirectTo = action("UserController@completeRegister", ["redirect" => $redirectTo]);
+            }
+        }
+        return $redirectTo;
+    }
+
+    /**
+     * The user has been authenticated.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  mixed $user
+     * @return mixed
+     */
+    protected function authenticated(Request $request, $user)
+    {
+        if ($request->expectsJson())
+            return response()->json([
+                'status' => 1,
+                'msg' => 'user sign in.',
+                'redirectTo' => $this->redirectTo(),
+                'data' => [
+                    '   user' => $user
+                ]
+            ], Response::HTTP_OK);
     }
 }
