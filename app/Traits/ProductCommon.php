@@ -54,7 +54,7 @@ trait ProductCommon
     {
         $exclusiveOtherProducts = Product::getExclusiveOtherProducts();
 
-        $otherProducts = $product->getOtherProducts();
+        $otherProducts = $product->getOtherProducts()->sortByDesc("created_at" );
 
         $totalOtherProducts = $this->mergeCollections($exclusiveOtherProducts, $otherProducts);
 

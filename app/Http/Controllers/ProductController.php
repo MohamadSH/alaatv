@@ -253,8 +253,8 @@ class ProductController extends Controller
     private function fillProductFromRequest(FormRequest $request, Product &$product): void
     {
         $inputData = $request->all();
-        $files = [$request->file];
-        $images = [$request->image];
+        $files = $request->has("files")?[$request->files]:[];
+        $images = $request->has("image")?[$request->image]:[];
         $isFree = $request->has("isFree");
 
         $product->fill($inputData);

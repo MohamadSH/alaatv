@@ -134,9 +134,6 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
         'محدود',
     ];
     public const EXCLUSIVE_RELATED_PRODUCTS = [
-        91,
-        92,
-        104,
     ];
 
     public const EXCLUDED_RELATED_PRODUCTS = [
@@ -808,6 +805,8 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
     {
         if ($value == 0) {
             $this->attributes["amount"] = null;
+        }else {
+            $this->attributes["amount"] = $value;
         }
     }
 
@@ -820,6 +819,9 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
         if ($this->strIsEmpty($value)) {
             $this->attributes["discount"] = null;
         }
+        else {
+            $this->attributes["discount"] = $value;
+        }
     }
 
     /** Setter mutator for discount
@@ -830,6 +832,9 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
     {
         if ($this->strIsEmpty($value)) {
             $this->attributes["shortDescription"] = null;
+        }
+        else{
+            $this->attributes["shortDescription"] = $value;
         }
     }
 
@@ -842,6 +847,9 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
         if ($this->strIsEmpty($value)) {
             $this->attributes["longDescription"] = null;
         }
+        else {
+            $this->attributes["longDescription"] = $value;
+        }
     }
 
     /** Setter mutator for discount
@@ -852,6 +860,8 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
     {
         if ($this->strIsEmpty($value)) {
             $this->attributes["specialDescription"] = null;
+        }else {
+            $this->attributes["specialDescription"] = $value;
         }
     }
 
