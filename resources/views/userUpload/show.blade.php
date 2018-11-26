@@ -15,7 +15,7 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="index.html">خانه</a>
+                <a href="index.html">@lang('page.Home')</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>

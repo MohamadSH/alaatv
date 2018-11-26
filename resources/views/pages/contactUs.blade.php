@@ -5,10 +5,10 @@
         <ol class = "breadcrumb">
             <li class = "breadcrumb-item">
                 <i class = "flaticon-home-2"></i>
-                <a href = "{{action("HomeController@index")}}">خانه</a>
+                <a href = "{{action("HomeController@index")}}">@lang('page.Home')</a>
             </li>
             <li class = "breadcrumb-item active" aria-current = "page">
-                تماس با ما
+                @lang('page.contact us')
             </li>
         </ol>
     </nav>

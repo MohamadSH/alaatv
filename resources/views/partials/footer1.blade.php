@@ -38,7 +38,7 @@
                         </a>
                     </li>
                     <li class = "m-nav__item m-nav__item">
-                        <a href = "{{ action("HomeController@contactUs") }}" class = "m-nav__link" data-toggle = "m-tooltip" title = "تماس با ما" data-placement = "left">
+                        <a href = "{{ action("HomeController@contactUs") }}" class = "m-nav__link" data-toggle = "m-tooltip" title = "@lang('page.contact us')" data-placement = "left">
                             <i class = "m-nav__link-icon flaticon-info m--icon-font-size-lg3"></i>
                         </a>
                     </li>

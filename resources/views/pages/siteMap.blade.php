@@ -9,7 +9,7 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{{action("HomeController@index")}}">خانه</a>
+                <a href="{{action("HomeController@index")}}">@lang('page.Home')</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
@@ -87,7 +87,7 @@
                             </li>
                             <li data-jstree='{ "type" : "file","disabled" : false }'>
                                 <a href="{{ action("HomeController@contactUs") }}">
-                                    تماس با ما
+                                    @lang('page.contact us')
                                 </a>
                             </li>
                             <li data-jstree='{ "type" : "file","disabled" : false }'>

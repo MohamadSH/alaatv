@@ -1,36 +1,33 @@
 @extends("app")
 
-@section("css")
-    <link rel="stylesheet" href="{{ mix('/css/all.css') }}">
-    <link href="/video-js/video-js.min.css" rel="stylesheet">
-    <style>
-        @media screen and (max-width: 480px) {
-            .google-docs {
-                height: 350px;
-            }
-        }
-
-        .mt-element-list {
-            background-color: white;
-        }
-
-    </style>
-
-@endsection
-
-
-@section("bodyClass")
-    class = "page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-sidebar-closed page-md"
+@section("page-css")
+    <link href="/acm/video-js/video-js.min.css" rel="stylesheet">
 @endsection
 
 @section("pageBar")
+    <nav aria-label = "breadcrumb">
+        <ol class = "breadcrumb">
+            <li class = "breadcrumb-item">
+                <i class = "flaticon-home-2"></i>
+                <a href = "{{action("HomeController@index")}}">@lang('page.Home')</a>
+            </li>
+            <li class = "breadcrumb-item">
+                <i class = "flaticon-home-2"></i>
+                <a href = "{{ action("ContentController@index") }}">@lang('content.Educational Content Of Alaa')</a>
+            </li>
+            <li class = "breadcrumb-item active" aria-current = "page">
+                @lang('page.contact us')
+            </li>
+        </ol>
+    </nav>
 @endsection
+
 @section("pageBar")
     <div class="page-bar">
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{{action("HomeController@index")}}">@lang('content.Home')</a>
+                <a href="{{action("HomeController@index")}}">@lang('page.Home')</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>

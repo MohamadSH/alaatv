@@ -83,7 +83,7 @@
                 <a href = "{{ action("HomeController@contactUs") }}" class = "m-menu__link ">
                     <span class = "m-menu__item-here"></span>
                     <i class = "m-menu__link-icon flaticon-support"></i>
-                    <span class = "m-menu__link-text">تماس با ما</span>
+                    <span class = "m-menu__link-text">@lang('page.contact us')</span>
                 </a>
             </li>
             <li class = "m-menu__item " aria-haspopup = "true" m-menu-link-redirect = "1">
