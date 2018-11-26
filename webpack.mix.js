@@ -12,7 +12,7 @@ mix.styles(
     'public/css/all.css')
     .version();
 
-mix.copyDirectory('public/assets/vendors/base','public/css');
+mix.copyDirectory('public/assets/vendors/base', 'public/css');
 // mix.copyDirectory('public/acm/webFonts/fonts','public/css/fonts');
 
 mix.scripts(
@@ -28,4 +28,13 @@ mix.scripts(
 mix.scripts(
     ['public/acm/login.js'],
     'public/js/login.js'
+).version();
+
+mix.scripts(
+    [
+        'public/acm/video-js/video.min.js',
+        'public/acm/video-js/nuevo/nuevo.min.js',
+        'public/acm/page-content-show.js'
+    ],
+    'public/js/content-show.js'
 ).version();
