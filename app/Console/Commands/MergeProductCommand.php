@@ -2,11 +2,13 @@
 
 namespace App\Console\Commands;
 
+use App\Classes\Search\Tag\ProductTagManagerViaApi;
 use App\Http\Controllers\ProductController;
 use App\Orderproduct;
 use App\Product;
 use App\Traits\APIRequestCommon;
 use App\Traits\ProductCommon;
+use App\Traits\TaggableTrait;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Http\Response;
@@ -17,6 +19,7 @@ class MergeProductCommand extends Command
 {
     use ProductCommon;
     use APIRequestCommon;
+    use TaggableTrait;
     /**
      * The name and signature of the console command.
      *
@@ -30,7 +33,9 @@ class MergeProductCommand extends Command
      * @var string
      */
     protected $description = 'Merging old products';
-    protected $productArray;
+
+    private $productArray;
+    private $tagging ;
 
     /**
      * @return array
@@ -40,254 +45,249 @@ class MergeProductCommand extends Command
         $initialArray = [];
         if(Schema::hasTable("products"))
         {
-            $parentShimiProductId = 231;
-            $parentShimiProduct = Product::FindOrFail($parentShimiProductId); //All Shimi product
+            $allOfShimiProductId = 231;
+            $allOfShimiProduct = Product::FindOrFail($allOfShimiProductId); //All Shimi product
+            $shimiSubCategory1Id = 244;
+            $shimiSubCategory1 = Product::FindOrFail($shimiSubCategory1Id); //All Difransiel product
             $shimiChildren =
                 [
                     [
-                        "name" => "جمع بندی شیمی ۲ و۳ آقای صنیعی",
+                        "title" => "جمع بندی شیمی ۲ و۳ آقای صنیعی",
                         "id" => 91,
                         "description" => "شامل 16 ساعت و 17 دقیقه فیلم با حجم 1.7 گیگ",
-                        "newCost" => 5000 ,
-                        "discount" => 0,
                         "type" =>1,
                     ],
                     [
-                        "name" => "همایش طلایی مسائل ترکیبی شیمی کنکور آقای صنیعی",
-                        "id" => 217,
-                        "description" => "شامل 5 ساعت 55 دقیقه فیلم با حجم 828 مگابایت",
-                        "newCost" =>5000 ,
-                        "discount" => 0,
-                        "type" =>1,
+                        "title" => "همایش های طلایی",
+                        "description" => "شامل 16 ساعت و 35 دقیقه فیلم با حجم 2 گیگ",
+                        "parent" => $shimiSubCategory1,
+                        "children"=>[
+                            [
+                                "title" => "همایش حل مسائل شیمی کنکور آقای صنیعی",
+                                "id" => 100,
+                                "description" => "شامل 10 ساعت و 40 دقیقه فیلم با حجم 1.2 گیگ",
+                                "type" =>2,
+                            ],
+                            [
+                                "title" => "همایش حل مسائل ترکیبی شیمی کنکور آقای صنیعی",
+                                "id" => 217,
+                                "description" => "شامل 5 ساعت 55 دقیقه فیلم با حجم 828 مگابایت",
+                                "type" =>1,
+                            ],
+                        ],
                     ],
                     [
-                        "name" => "همایش حل مسائل شیمی آقای صنیعی",
-                        "id" => 100,
-                        "description" => "شامل 10 ساعت و 40 دقیقه فیلم با حجم 1.2 گیگ",
-                        "newCost" =>5000 ,
-                        "discount" => 0,
-                        "type" =>2,
-                    ]
-                    ,
-                    [
-                        "name" => "همایش 5+1 شیمی آقای صنیعی",
+                        "title" => "همایش 5+1 شیمی (پیش 1) آقای صنیعی",
                         "id" => 145,
                         "description" => "شامل 8 ساعت و 58 دقیقه فیلم با حجم 956 مگ",
-                        "newCost" => 5000,
-                        "discount" => 0,
                         "type" =>2,
                     ]
                     ,
                 ];
 
-            $parentPhysicProductId = 233;
-            $parentPhysicProduct = Product::FindOrFail($parentPhysicProductId); //All Physic product
+            $allOfPhysicProductId = 233;
+            $allOfPhysicProduct = Product::FindOrFail($allOfPhysicProductId); //All Physic product
+            $physicSubCategory1Id = 245;
+            $physicSubCategory1 = Product::FindOrFail($physicSubCategory1Id); //All Difransiel product
             $physicChildren = [
                 [
-                    "name" => "جمع بندی فیزیک ۲ و ۳ آقای طلوعی",
+                    "title" => "جمع بندی",
                     "id" => 92,
                     "description" => "شامل 19 ساعت و 38 دقیقه فیلم با حجم 2.3 گیگ",
-                    "newCost" => 5000 ,
-                    "discount" => 0,
                     "type" =>1,
                 ],
                 [
-                    "name" => "همایش طلایی فیزیک کنکور طلوعی",
-                    "id" => 216,
-                    "description" => "شامل 21 ساعت و 8 دقیقه فیلم با حجم 2.7 گیگ",
-                    "newCost" => 5000,
-                    "discount" => 0,
-                    "type" =>1,
-                ]
-                ,
+                    "title" => "همایش های طلایی",
+                    "description" => "شامل 22 ساعت و 58 دقیقه فیلم با حجم 3.9 گیگ",
+                    "parent" => $physicSubCategory1,
+                    "children"=>[
+                        [
+                            "title" => "همایش طلایی فیزیک کنکور آقای طلوعی",
+                            "id" => 216,
+                            "description" => "شامل 21 ساعت و 8 دقیقه فیلم با حجم 2.7 گیگ",
+                            "type" =>1,
+                        ],
+                        [
+                            "title" => "همایش طلایی 200 تست فیزیک کنکور آقای طلوعی",
+                            "id" => 88,
+                            "description" => "شامل 21 ساعت و 50 دقیقه فیلم با حجم 1.2 گیگ",
+                            "type" =>2,
+                        ],
+                    ],
+                ],
                 [
-                    "name" => "همایش ۱+۵ فیزیک آقای طلوعی",
+                    "title" => "همایش ۱+۵ فیزیک (پیش 1) آقای طلوعی",
                     "id" => 157,
                     "description" => "شامل 10 ساعت و 5 دقیقه فیلم با حجم 986 مگابایت",
-                    "newCost" =>5000 ,
-                    "discount" => 0,
                     "type" =>2,
-                ]
-                ,
-                [
-                    "name" => "همایش 200 تست فیزیک آقای طلوعی",
-                    "id" => 88,
-                    "description" => "شامل 21 ساعت و 50 دقیقه فیلم با حجم 1.2 گیگ",
-                    "newCost" => 5000,
-                    "discount" => 0,
-                    "type" =>2,
-                ]
-                ,
+                ],
             ];
 
-            $parentZistProductId = 235;
-            $parentZistProduct = Product::FindOrFail($parentZistProductId); //All Zist product
+            $allOfZistProductId = 235;
+            $allOfZistProduct = Product::FindOrFail($allOfZistProductId); //All Zist product
+            $zistSubCategory1Id = 246;
+            $zistSubCategory1 = Product::FindOrFail($zistSubCategory1Id); //All Difransiel product
             $zistChildren = [
                 [
-                    "name" => "همایش زیست شناسی آقای پازوکی",
-                    "id" => 109,
-                    "description" => "شامل 12 ساعت و 39 دقیقه فیلم با حجم 1.8 گیگ",
-                    "newCost" => 5000 ,
-                    "discount" => 0,
-                    "type" =>2,
-                ]
-                ,
+                    "title" => "همایش های طلایی",
+                    "description" => "شامل 37 ساعت و 7 دقیقه فیلم با حجم 5.1 گیگ",
+                    "parent" => $zistSubCategory1,
+                    "children"=>[
+                        [
+                            "title" => "همایش طلایی زیست کنکور آقای چلاجور",
+                            "id" => 212,
+                            "description" => "شامل 18 ساعت و 20 دقیقه فیلم با حجم 2.4 گیگ",
+                            "type" =>1,
+                        ],
+                        [
+                            "title" => "همایش طلایی ژنتیک کنکور آقای آل علی",
+                            "id" => 221,
+                            "description" => "شامل 6 ساعت و 8 دقیقه فیلم با حجم 940 مگابایت",
+                            "type" =>1,
+                        ],
+                        [
+                            "title" => "همایش طلایی زیست آقای پازوکی",
+                            "id" => 109,
+                            "description" => "شامل 12 ساعت و 39 دقیقه فیلم با حجم 1.8 گیگ",
+                            "type" =>2,
+                        ],
+                    ],
+                ],
                 [
-                    "name" => "همایش ۱+۵ زیست آقای جعفری",
+                    "title" => "همایش ۱+۵ زیست (پیش 1) آقای جعفری",
                     "id" => 141,
                     "description" => "شامل 8 ساعت و 42 دقیقه فیلم با حجم 919 گیگ",
-                    "newCost" =>5000 ,
-                    "discount" => 0,
                     "type" =>2,
-                ]
-                ,
-                [
-                    "name" => "همایش طلایی زیست کنکور آقای چلاجور",
-                    "id" => 212,
-                    "description" => "شامل 18 ساعت و 20 دقیقه فیلم با حجم 2.4 گیگ",
-                    "newCost" => 5000,
-                    "discount" => 0,
-                    "type" =>1,
-                ]
-                ,
-                [
-                    "name" => "همایش طلایی ژنتیک کنکور آقای آل علی",
-                    "id" => 221,
-                    "description" => "شامل 6 ساعت و 8 دقیقه فیلم با حجم 940 مگابایت",
-                    "newCost" => 5000,
-                    "discount" => 0,
-                    "type" =>1,
-                ]
-                ,
+                ],
             ];
 
-            $parentArabiProductId = 237;
-            $parentArabiProduct = Product::FindOrFail($parentArabiProductId); //All Arabi product
+            $allOfArabiProductId = 237;
+            $allOfArabiProduct = Product::FindOrFail($allOfArabiProductId); //All Arabi product
             $ArabiChildren = [
                 [
-                    "name" => "همایش 200 تست طلایی کنکور عربی آقای ناصح زاده",
+                    "title" => "همایش 200 تست طلایی کنکور عربی آقای ناصح زاده",
                     "id" => 214,
                     "description" => "شامل 7 ساعت و 1 دقیقه فیلم با حجم 1.2 گیگ",
-                    "newCost" => 5000 ,
-                    "discount" => 0,
                     "type" =>1,
                 ],
                 [
-                    "name" => "همایش 5+1 عربی آقای آهویی",
+                    "title" => "همایش 5+1 عربی آقای آهویی",
                     "id" => 149,
                     "description" => "شامل 5 ساعت و 36 دقیقه فیلم با حجم 677 مگابایت",
-                    "newCost" => 5000 ,
-                    "discount" => 0,
                     "type" =>2,
                 ],
             ];
 
-            $parentDiniProductId = 239;
-            $parentDiniProduct = Product::FindOrFail($parentDiniProductId); //All Dini product
+            $allOfDiniProductId = 239;
+            $allOfDiniProduct = Product::FindOrFail($allOfDiniProductId); //All Dini product
             $DiniChildren = [
                 [
-                    "name" => "همایش طلایی دین و زندگی خانم کاغذی",
+                    "title" => "همایش طلایی دین و زندگی خانم کاغذی",
                     "id" => 211,
                     "description" => "شامل 18 ساعت و 9 دقیقه فیلم با حجم 2.1 گیگ",
-                    "newCost" => 5000 ,
-                    "discount" => 0,
                     "type" =>1,
                 ],
                 [
-                    "name" => "همایش دین و زندگی آقای رنجبرزاده",
+                    "title" => "همایش طلایی دین و زندگی آقای رنجبرزاده",
                     "id" => 105,
                     "description" => "شامل 7 ساعت و 20 دقیقه فیلم با حجم 1 گیگ",
-                    "newCost" => 5000 ,
-                    "discount" => 0,
                     "type" =>2,
                 ],
             ];
 
-            $parentRiyaziTajrobiProductId = 241;
-            $parentRiyaziTajrobiProduct = Product::FindOrFail($parentRiyaziTajrobiProductId); //All RiyaziTajrobi product
+            $allOfRiyaziTajrobiProductId = 241;
+            $allOfRiyaziTajrobiProduct = Product::FindOrFail($allOfRiyaziTajrobiProductId); //All RiyaziTajrobi product
+            $riyaziTajrobiCategory1Id = 247;
+            $riyaziTajrobiCategory1 = Product::FindOrFail($riyaziTajrobiCategory1Id); //All Difransiel product
+            $riyaziTajrobiCategory2Id = 248;
+            $riyaziTajrobiCategory2 = Product::FindOrFail($riyaziTajrobiCategory2Id); //All Difransiel product
             $RiyaziTajrobiChildren = [
                 [
-                    "name" => "همایش طلایی ریاضی تجربی کنکور آقای نباخته",
-                    "id" => 220,
-                    "description" => "شامل 8 ساعت و 2 دقیقه فیلم با حجم 953 مگابایت",
-                    "newCost" => 5000 ,
-                    "discount" => 0,
-                    "type" =>1,
+                    "title" => "همایش های طلایی",
+                    "description" => "شامل 31 ساعت و 9 دقیقه فیلم با حجم 10.5 گیگ",
+                    "parent" => $riyaziTajrobiCategory1,
+                    "children"=>[
+                        [
+                            "title" => "همایش طلایی ریاضی تجربی کنکور آقای نباخته",
+                            "id" => 220,
+                            "description" => "شامل 8 ساعت و 2 دقیقه فیلم با حجم 953 مگابایت",
+                            "type" =>1,
+                        ],
+                        [
+                            "title" => "همایش طلایی ریاضی تجربی کنکور آقای امینی راد",
+                            "id" => 219,
+                            "description" => "شامل 12 ساعت و 17 دقیقه فیلم با حجم 1.6 گیگ",
+                            "type" =>1,
+                        ],
+                        [
+                            "title" => "همایش ریاضی تجربی آقای شامی زاده",
+                            "id" => 90,
+                            "description" => "شامل 10 ساعت و 50 دقیقه فیلم با حجم 8 گیگ",
+                            "type" =>2,
+                        ],
+                    ],
                 ],
                 [
-                    "name" => "همایش طلایی ریاضی تجربی کنکور آقای امینی",
-                    "id" => 219,
-                    "description" => "شامل 12 ساعت و 17 دقیقه فیلم با حجم 1.6 گیگ",
-                    "newCost" => 5000 ,
-                    "discount" => 0,
-                    "type" =>1,
-                ],
-                [
-                    "name" => "همایش 1+5 ریاضی تجربی آقای نباخته",
-                    "id" => 137,
-                    "description" => "شامل 7 ساعت و 7 دقیقه فیلم با حجم 442 مگابایت",
-                    "newCost" => 5000 ,
-                    "discount" => 0,
-                    "type" =>2,
-                ],
-                [
-                    "name" => "همایش 1+5 ریاضی تجربی آقای امینی",
-                    "id" => 133,
-                    "description" => "شامل 8 ساعت و 12 دقیقه فیلم با حجم 934 مگابایت",
-                    "newCost" => 5000 ,
-                    "discount" => 0,
-                    "type" =>2,
-                ],
-                [
-                    "name" => "همایش ریاضی تجربی آقای شامیزاده",
-                    "id" => 90,
-                    "description" => "شامل 10 ساعت و 50 دقیقه فیلم با حجم 8 گیگ",
-                    "newCost" => 5000 ,
-                    "discount" => 0,
-                    "type" =>2,
+                    "title" => "همایش های 1+5",
+                    "description" => "شامل 15 ساعت و 19 دقیقه فیلم با حجم 1.3 گیگ",
+                    "parent" => $riyaziTajrobiCategory2,
+                    "children"=>[
+                        [
+                            "title" => "همایش 1+5 ریاضی تجربی آقای نباخته",
+                            "id" => 137,
+                            "description" => "شامل 7 ساعت و 7 دقیقه فیلم با حجم 442 مگابایت",
+                            "type" =>2,
+                        ],
+                        [
+                            "title" => "همایش 1+5 ریاضی تجربی آقای امینی راد",
+                            "id" => 133,
+                            "description" => "شامل 8 ساعت و 12 دقیقه فیلم با حجم 934 مگابایت",
+                            "type" =>2,
+                        ],
+                    ],
                 ],
             ];
 
-            $parentDifransielProductId = 243;
-            $parentDifransielProduct = Product::FindOrFail($parentDifransielProductId); //All Difransiel product
+            $allOfDifransielProductId = 243;
+            $allOfDifransielProduct = Product::FindOrFail($allOfDifransielProductId); //All Difransiel product
+            $difransielSubCategory1Id = 249;
+            $difransielSubCategory1 = Product::FindOrFail($difransielSubCategory1Id); //All Difransiel product
             $DifransielChildren = [
                 [
-                    "name" => "همایش طلایی 48 تست کنکور ریاضی آقای ثابتی",
+                    "title" => "همایش طلایی 48 تست کنکور ریاضی آقای ثابتی",
                     "id" => 218,
                     "description" => "شامل 21 ساعت و 54 دقیقه فیلم با حجم 3 گیگ",
-                    "newCost" => 5000 ,
-                    "discount" => 0,
                     "type" =>1,
                 ],
                 [
-                    "name" => "همایش 1+5 دیفرانسیل آقای ثابتی",
-                    "id" => 125,
-                    "description" => "شامل 5 ساعت و 12 دقیقه فیلم با حجم 630 مگابایت",
-                    "newCost" => 5000 ,
-                    "discount" => 0,
-                    "type" =>2,
+                    "title" => "جمع بندی دیفرانسیل و ریاضی پایه آقای ثابتی",
+                    "parent" => $difransielSubCategory1,
+                    "description" => "شامل 9 ساعت و 36 دقیقه فیلم با حجم 840 مگابایت",
+                    "children"=>[
+                        [
+                            "title" => "همایش 1+5 دیفرانسیل (پیش 1) آقای ثابتی",
+                            "id" => 125,
+                            "description" => "شامل 5 ساعت و 12 دقیقه فیلم با حجم 630 مگابایت",
+                            "type" =>2,
+                        ],
+                        [
+                            "title" => "همایش دیفرانسیل و ریاضی پایه کنکور آقای ثابتی",
+                            "id" => 96,
+                            "description" => "شامل 4 ساعت و 24 دقیقه فیلم با حجم 210 مگابایت",
+                            "type" =>2,
+                        ],
+                    ],
+                    "type" =>1,
                 ],
                 [
-                    "name" => "همایش دیفرانسیل و ریاضی پایه کنکور آقای ثابتی",
-                    "id" => 96,
-                    "description" => "شامل 4 ساعت و 24 دقیقه فیلم با حجم 210 مگابایت",
-                    "newCost" => 5000 ,
-                    "discount" => 0,
-                    "type" =>2,
-                ],
-                [
-                    "name" => "همایش 1+5 تحلیلی آقای ثابتی",
+                    "title" => "همایش 1+5 تحلیلی (پیش 1) آقای ثابتی",
                     "id" => 121,
                     "description" => "شامل 5 ساعت و 31 دقیقه فیلم با حجم 648 گیگ",
-                    "newCost" => 5000 ,
-                    "discount" => 0,
                     "type" =>2,
                 ],[
-                    "name" => "همایش 5+1 گسسته آقای مؤذنی پور",
+                    "title" => "همایش 1+5 گسسته (پیش 1) آقای مؤذنی پور",
                     "id" => 165,
                     "description" => "شامل 5 ساعت و 10 دقیقه فیلم با حجم 601 گیگ",
-                    "newCost" => 5000 ,
-                    "discount" => 0,
                     "type" =>2,
                 ]
             ];
@@ -296,37 +296,37 @@ class MergeProductCommand extends Command
             $initialArray =  [
                 [
                     "title" => "Shimi",
-                    "parent" => $parentShimiProduct ,
+                    "parent" => $allOfShimiProduct ,
                     "children" => $shimiChildren
                 ],
                 [
                     "title" => "Physics",
-                    "parent" => $parentPhysicProduct ,
+                    "parent" => $allOfPhysicProduct ,
                     "children" => $physicChildren
                 ],
                 [
                     "title" => "Zist",
-                    "parent" => $parentZistProduct ,
+                    "parent" => $allOfZistProduct ,
                     "children" => $zistChildren
                 ],
                 [
                     "title" => "Arabi",
-                    "parent" => $parentArabiProduct ,
+                    "parent" => $allOfArabiProduct ,
                     "children" => $ArabiChildren
                 ],
                 [
                     "title" => "Dini",
-                    "parent" => $parentDiniProduct ,
+                    "parent" => $allOfDiniProduct ,
                     "children" => $DiniChildren
                 ],
                 [
                     "title" => "RiyaziTajrobi",
-                    "parent" => $parentRiyaziTajrobiProduct ,
+                    "parent" => $allOfRiyaziTajrobiProduct ,
                     "children" => $RiyaziTajrobiChildren
                 ],
                 [
                     "title" => "Difransiel",
-                    "parent" => $parentDifransielProduct ,
+                    "parent" => $allOfDifransielProduct ,
                     "children" => $DifransielChildren
                 ],
             ];
@@ -339,12 +339,13 @@ class MergeProductCommand extends Command
     /**
      * Create a new command instance.
      *
-     * @return void
+     * @param ProductTagManagerViaApi $tagging
      */
-    public function __construct()
+    public function __construct(ProductTagManagerViaApi $tagging)
     {
         parent::__construct();
         $this->productArray = $this->initializing();
+        $this->tagging = $tagging;
     }
 
     /**
@@ -384,119 +385,221 @@ class MergeProductCommand extends Command
     {
         $bar = $this->output->createProgressBar($productCount);
         foreach ($this->productArray as $productElement) {
-            $finalProduct = $productElement["parent"];
-            if($finalProduct->hasChildren())
-            {// It means it had been processed before
-                $this->info("This product was skipped because had been processed before.");
-                $this->info("\n Total Progress:");
-                $bar->advance();
-                $this->info("\n\n");
+
+            $allCategoryProduct = $this->getParent($productElement);
+            $totalGrandChildrenCost = 0;
+            $totalGrandChildrenDiscount = 50;
+
+            if($allCategoryProduct->hasParents())
+            {
+                $grandParent =  $allCategoryProduct->getGrandParent();
+            }
+            else
+            {
+                //This should not happen
+                $this->info("Warning! Could not find grandparent for #".$allCategoryProduct->id);
                 continue;
             }
 
-            $childrenCount = count($productElement["children"]);
-            $this->info("Found ".$childrenCount." items for ".$productElement["title"]);
-            $subBar = $this->output->createProgressBar($childrenCount);
-            if($childrenCount >0)
-                foreach ($productElement["children"] as $child) {
-                $newProductId = $child["id"];
+            $children = $productElement["children"];
+             foreach ($children as $child) {
+                 $grandChildren = $this->extractChildren($child , $allCategoryProduct );
 
-                $hasConfigurableParent = false;
-                if ($child["type"] == config("constants.PRODUCT_TYPE_CONFIGURABLE"))
-                    $hasConfigurableParent = true;
+                 $newParent = $this->getParent($child);
+                 $parent = $allCategoryProduct;
+                 if(isset($newParent))
+                 {
+                     $parent = $newParent;
+                     $allCategoryProduct->children()
+                         ->updateExistingPivot($parent->id, ["description" => $child["description"]]);
+                 }
 
-                if ($hasConfigurableParent)
-                {
-                    $originalProduct = Product::Find($child["id"]);
-                    if (isset($originalProduct)) {
-                        $response = $productController->copy($originalProduct);
-                        $responseContent = json_decode($response->getContent());
-                        if ($response->getStatusCode() == Response::HTTP_OK)
-                            $newProductId = $responseContent->newProductId;
+                 $grandChildrenCount = count($grandChildren);
+                 $this->info("\n Found ".$grandChildrenCount." items for ".$productElement["title"]);
+                 $subBar = $this->output->createProgressBar($grandChildrenCount);
+                 foreach ($grandChildren as $grandChild)
+                 {
+                     $newProductId = $grandChild["id"];
 
-                    }
-                }
+                     $hasConfigurableParent = false;
+                     if ($grandChild["type"] == config("constants.PRODUCT_TYPE_CONFIGURABLE"))
+                         $hasConfigurableParent = true;
 
-                $newProduct = Product::Find($newProductId);
+                     if ($hasConfigurableParent)
+                     {
+                         $originalProduct = Product::Find($grandChild["id"]);
+                         if(!isset($originalProduct))
+                         {
+                             $this->info("\n Could not find original product #:".$grandChild["id"]);
+                             continue;
+                         }
 
-                if($hasConfigurableParent)
-                {
-                    $this->copyProductFiles($originalProduct, $newProduct);
+                         if (isset($originalProduct)) {
+                             $newProductId = $this->copyOriginalProduct($productController, $originalProduct);
+                         }
+                     }
 
-                    $newProductPhotoInfo = [
-                        "title" => "نمونه جزوه ".$child["name"] ,
-                        "description" => ""
-                    ];
-                    $this->copyProductPhotos($originalProduct, $newProduct , $newProductPhotoInfo);
+                     $newProduct = Product::Find($newProductId);
+                     if(!isset($newProduct))
+                     {
+                         $this->info("\n Could not find new product of original product #:".$grandChild["id"]);
+                         continue;
+                     }
+                     $totalGrandChildrenCost += $newProduct->basePrice;
 
-                    $originalProduct->disable();
-                    $originalProduct->update();
+                     $newCost = $newProduct->basePrice;
+                     $newDiscount = $newProduct->discount;
+                     if($hasConfigurableParent)
+                     {
+                         $newCost = $originalProduct->basePrice;
+                         $newDiscount = $originalProduct->discount;
 
-                    if ($originalProduct->hasParents()) {
-                        $originalProductParent = $originalProduct->parents->first();
-                        $this->copyProductFiles($originalProductParent, $newProduct);
+                         $this->copyProductBelongings($originalProduct, $newProduct, $grandChild["title"]);
 
-                        $newProductPhotoInfo = [
-                            "title" => "نمونه جزوه ".$child["name"] ,
-                            "description" => ""
-                        ];
-                        $this->copyProductPhotos($originalProductParent, $newProduct,$newProductPhotoInfo);
+                         $originalProduct->disable();
+                         $originalProduct->update();
 
-                        $originalProductParent->disable();
-                        $originalProductParent->update();
-                    }
+                         if ($originalProduct->hasParents()) {
+                             $originalProductParent = $originalProduct->parents->first();
+                             $this->copyProductBelongings($originalProductParent, $newProduct, $grandChild["title"]);
 
-                    $this->info("Deleting orderproducts");
-                    Orderproduct::deleteOpenedTransactions([$originalProduct->id], [config("constants.ORDER_STATUS_OPEN")]);
-                }
+                             $originalProductParent->disable();
+                             $originalProductParent->update();
+                         }
 
-                $newProduct->name = $child["name"];
-                $newProduct->basePrice = $child["newCost"];
-                $newProduct->discount = $child["discount"];
-                if($finalProduct->hasParents())
-                {
-                    $finalProductGrandParent =  $finalProduct->getGrandParent();
-                    if(isset($finalProductGrandParent))
-                    {
-                        $finalProductGrandParent->enable();
-                        $finalProductGrandParent->update();
+                         $this->info("Deleting orderproducts");
+                         Orderproduct::deleteOpenedTransactions([$originalProduct->id], [config("constants.ORDER_STATUS_OPEN")]);
+                     }
 
-                        $itemTagsArray = $finalProductGrandParent->tags->tags ;
-                        $params = [
-                            "tags"=> json_encode($itemTagsArray) ,
-                        ];
 
-                        if(isset($finalProductGrandParent->created_at) && strlen($finalProductGrandParent->created_at) > 0 )
-                            $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $finalProductGrandParent->created_at )->timestamp;
+                     ///////////////////////////
+                     //Update new product //////
+                     ///////////////////////////
+                     $this->setNewProductAttributes($newProduct,$grandChild["title"], $newCost, $newDiscount, $grandParent);
+                     $newProduct->update();
+                     ////////////////////////////
+                     /////////////End ///////////
+                     ////////////////////////////
 
-                        $response =  $this->sendRequest(
-                            config("constants.TAG_API_URL")."id/product/".$finalProductGrandParent->id ,
-                            "PUT",
-                            $params
-                        );
-                        if($response["statusCode"] != 200)
-                            $this->info("Failed on setting tags for product #".$finalProductGrandParent->id ."\n");
+                     ///////////////////////////
+                     //Attaching children //////
+                     ///////////////////////////
+                     $parent->children()->attach($newProductId, ["control_id" => 2, "description" => $grandChild["description"], "created_at" => Carbon::now(), "updated_at" => Carbon::now(),]);
+                     ///////////////////////////
+                     ////////////End////////////
+                     ///////////////////////////
 
-                    }
-                    else{
-                        $this->info("Could not enable parent of #".$finalProduct->id ."\n");
-                    }
-                }
-                $newProduct->redirectUrl = action("ProductController@show" , $finalProductGrandParent);
-                $newProduct->update();
-                $finalProduct->children()->attach($newProductId, ["control_id" => 2, "description" => $child["description"], "created_at" => Carbon::now(), "updated_at" => Carbon::now(),]);
-                $finalProduct->enable();
-                $finalProduct->update();
-                $subBar->advance();
+                     $subBar->advance();
+                 }
+                 $subBar->finish();
             }
 
-            $subBar->finish();
-            $this->info("\n Total Progress:");
+            ///////////////////////////////////////
+            //Update grandparent and setting tags///
+            ////////////////////////////////////////
+            $grandParent->enable();
+            $grandParent->update();
+            $this->setTags($grandParent);
+            ///////////////////////////
+            //////////End//////////////
+            ///////////////////////////
+
+            $allCategoryProduct->basePrice = $totalGrandChildrenCost;
+            $allCategoryProduct->discount = $totalGrandChildrenDiscount;
+            $allCategoryProduct->enable();
+            $allCategoryProduct->update();
+
+            $this->info("\n\n");
+            $this->info("Total Progress:");
             $bar->advance();
             $this->info("\n\n");
         }
 
         $bar->finish();
         $this->info("\n");
+    }
+
+    /**
+     * Extracts children
+     *
+     * @param $child
+     * @param Product $currentParent
+     * @return array
+     */
+    private function extractChildren($child , Product $currentParent) :array
+    {
+        if (isset($child["children"]))
+            $grandChildren = $child["children"];
+        else
+            $grandChildren = [$child];
+
+        return $grandChildren ;
+    }
+
+    /**
+     * @param $productElement
+     * @return mixed
+     */
+    private function getParent($productElement)
+    {
+        $parent = null ;
+        if(isset($productElement["parent"]))
+            $parent = $productElement["parent"];
+        return $parent;
+    }
+
+    /**
+     * @param Product $product
+     * @return void
+     */
+    private function setTags(Product $product): void
+    {
+       $this->sendTagsOfTaggableToApi($product ,$this->tagging );
+    }
+
+    /**
+     * @param $title
+     * @param $newProduct
+     * @param $newCost
+     * @param $newDiscount
+     * @param $grandParent
+     */
+    private function setNewProductAttributes($newProduct, $title, $newCost, $newDiscount, $grandParent): void
+    {
+        $newProduct->name = $title;
+        $newProduct->basePrice = $newCost;
+        $newProduct->discount = $newDiscount;
+        $newProduct->redirectUrl = action("ProductController@show", $grandParent);
+    }
+
+    /**
+     * @param $originalProduct
+     * @param $newProduct
+     * @param $title
+     * @return void
+     */
+    private function copyProductBelongings($originalProduct, $newProduct, $title): void
+    {
+
+        $this->copyProductFiles($originalProduct, $newProduct);
+
+        $newProductPhotoInfo = ["title" => "نمونه جزوه " . $title, "description" => ""];
+        $this->copyProductPhotos($originalProduct, $newProduct, $newProductPhotoInfo);
+    }
+
+    /**
+     * @param ProductController $productController
+     * @param $originalProduct
+     * @return mixed
+     */
+    private function copyOriginalProduct(ProductController $productController, $originalProduct)
+    {
+        $response = $productController->copy($originalProduct);
+        $responseContent = json_decode($response->getContent());
+        if ($response->getStatusCode() == Response::HTTP_OK)
+            $newProductId = $responseContent->newProductId;
+        else
+            $newProductId = 0;
+        return $newProductId;
     }
 }
