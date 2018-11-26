@@ -3,8 +3,6 @@
 @section("css")
     <link rel="stylesheet" href="{{ mix('/css/all.css') }}">
     <link href="/video-js/video-js.min.css" rel="stylesheet">
-    <!-- If you'd like to support IE8 (for Video.js versions prior to v7) -->
-    <script src="/video-js/videojs-ie8.min.js"></script>
     <style>
         @media screen and (max-width: 480px) {
             .google-docs {

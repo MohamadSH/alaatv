@@ -35,10 +35,11 @@ class RegisterController extends Controller
      * Create a new controller instance.
      *
      */
-    public function __construct()
+    public function __construct(Request $request)
     {
         $this->middleware('guest');
         $this->middleware('convert:mobile|passport|nationalCode');
+        $request->offsetSet("userstatus_id",$request->get('userstatus_id',2));
     }
 
     /**
