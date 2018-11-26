@@ -23,7 +23,7 @@
         @endif
     </div>
     <div id="m-login__form_code" class = "form-group m-form__group {{ $errors->has('nationalCode') ? ' has-danger' : '' }}">
-        <input class = "form-control m-input m-login__form-input--last" type = "password" placeholder = "کد ملی" value = "{{ old('password') }}" name = "password">
+        <input class = "form-control m-input m-login__form-input--last " type = "password" placeholder = "کد ملی" value = "{{ old('password') }}" name = "password">
         @if ($errors->has('nationalCode'))
             <div class = "form-control-feedback">{{ $errors->first('nationalCode') }}</div>
         @endif

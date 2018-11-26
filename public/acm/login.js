@@ -17,6 +17,8 @@ var SnippetLogin = function() {
     };
 
     var showValidationError = function(div,msg){
+        div.removeClass('has-danger');
+        div.addClass('has-danger');
         var message = $('<div class = "form-control-feedback">' + msg + '</div>');
         div.find('.form-control-feedback').remove();
         message.appendTo(div);
@@ -127,11 +129,9 @@ var SnippetLogin = function() {
                         showErrorMsg(form, 'danger', 'خطا در ورود اطلاعات!');
                         console.debug(errors.nationalCode);
                         if(typeof errors.nationalCode !== 'undefined'){
-                            nCodeDiv.addClass('has-danger');
                             showValidationError(nCodeDiv,errors.nationalCode[0]);
                         }
                         if(typeof errors.mobile !== 'undefined'){
-                            mobileDiv.addClass('has-danger');
                             showValidationError(mobileDiv,errors.mobile[0]);
                         }
                     }, 2000);

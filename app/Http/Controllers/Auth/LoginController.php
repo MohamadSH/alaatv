@@ -63,7 +63,7 @@ class LoginController extends Controller
      */
     public function login(Request $request)
     {
-        $request->offsetSet("nationalCode", $request->get("password"));
+        $request->offsetSet("nationalCode", substr($request->get("password"),0,10));
         $request->offsetSet("userstatus_id", 1);
 
         /**
