@@ -28,7 +28,7 @@
 
 
 @section("content")
-    <div class = "row row-eq-height">
+    <div class = "row">
         <div class = "col-xl-8 col-lg-8 col-md-8 col-sm-6">
             <!--begin::Portlet-->
             <div class = "m-portlet m-portlet--mobile m-portlet--body-progress-">
@@ -107,14 +107,105 @@
                                 </div>
                             </div>
                         </div>
-                        <hr>
+                        <div class="m-separator m-separator--space m-separator--dashed"></div>
                     @endif
-                    @if(!empty($tags))
+                    <h3 class = "m--regular-font-size-lg4 m--font-boldest2 m--font-focus">
+                        لینک های مستقیم دانلود این فیلم
+                    </h3>
+                    @if(isset($content->file) and $content->file->isNotEmpty())
+                        <div class = "col-xl-4 text-justify">
+
+                            <p>
+                                با IDM یا ADM و یا wget  دانلود کنید.
+                            </p>
+                        @foreach($content->file->get('video') as $file)
+                            <!--begin::m-widget4-->
+                                <div class = "m-widget4">
+                                    <div class = "m-widget4__item">
+                                        <div class = "m-widget4__img m-widget4__img--icon">
+                                            <img src = "/assets/app/media/img/files/mp4.svg" alt = "">
+                                        </div>
+                                        <div class = "m-widget4__info">
+                                            <a href = "{{ $file->link }}?download=1" class = "m-link">
+                                            <span class = "m-widget4__text">
+                                            دانلود فایل {{$file->caption}}{{ isset($file->size[0]) ? "(".$file->size. ")":""  }}
+                                            </span>
+                                            </a>
+                                        </div>
+                                        <div class = "m-widget4__ext">
+                                            <a href = "{{ $file->link }}?download=1" class = "m-widget4__icon">
+                                                <i class = "la la-download"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!--end::Widget 4-->
+                            @endforeach
+                        </div>
+                    @endif
+                    <div class="m-separator m-separator--space m-separator--dashed"></div>
+                @if(!empty($tags))
                         @include("partials.search.tagLabel" , ["tags"=>$tags])
                     @endif
                 </div>
             </div>
             <!--end::Portlet-->
+            @if($pamphletsWithSameSet->count() > 0)
+                <!--begin::Portlet-->
+                <div class="m-portlet m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="m_portlet_tools_7">
+                    <div class="m-portlet__head">
+                        <div class="m-portlet__head-caption">
+                            <div class="m-portlet__head-title">
+                            <span class="m-portlet__head-icon">
+                                <i class="flaticon-share"></i>
+                            </span>
+                                <h3 class="m-portlet__head-text m--icon-font-size-sm3">
+                                     جزوات {{ $contentSetName }}
+                                </h3>
+                            </div>
+                        </div>
+                        <div class="m-portlet__head-tools">
+                            <ul class="m-portlet__nav">
+                                <li class="m-portlet__nav-item">
+                                    <a href="#"  m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon"><i class="la la-angle-down"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="m-portlet__body">
+                        <div class="m-scrollable" data-scrollable = "true" data-height = "450" data-scrollbar-shown = "true">
+                        @foreach($pamphletsWithSameSet as  $item)
+                            <!--begin::m-widget4-->
+                                <div class = "m-widget4">
+                                    <div class = "m-widget4__item">
+                                        <div class = "m-widget4__img m-widget4__img--icon">
+                                            <img src = "/assets/app/media/img/files/pdf.svg" alt = "">
+                                        </div>
+                                        <div class = "m-widget4__info">
+                                            <a href = "{{ action("ContentController@show" , $item["content"]) }}" class = "m-link m--font-light">
+                                                <span class = "m-widget4__text ">
+                                                {{ $item["content"]->name }}
+                                                </span>
+                                            </a>
+
+                                        </div>
+                                        <div class = "m-widget4__ext">
+                                            <a href = "{{ $item["content"]->name }}" class = "m-widget4__icon">
+                                                <i class = "m--link la 	la-long-arrow-left"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!--end::Widget 4-->
+                                <div class="m-separator m-separator--space m-separator--dashed"></div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+                <!--end::Portlet-->
+            @endif
         </div>
         <div class = "col-xl-4 col-lg-4 col-md-4 col-sm-6">
             <!--begin::Portlet-->
@@ -134,14 +225,14 @@
                     </div>
                 </div>
                 <div class = "m-portlet__body">
-                    <div id = "playListScroller" class = "m-scrollable" data-scrollable = "true" data-height = "350" data-scrollbar-shown = "true">
+                    <div id = "playListScroller" class = "m-scrollable" data-scrollable = "true" data-height = "{{ min($videosWithSameSet->count(),11) * 103 }}" data-scrollbar-shown = "true">
                         <div class = "m-portlet__body-progress">Loading</div>
                     @if(isset($videosWithSameSet))
                         <!--begin::m-widget5-->
                             <div class = "m-widget5">
                                 @foreach($videosWithSameSet as $item)
                                     <div class = "m-widget5__item" id = "playlistItem_{{ $item["content"]->id }}">
-                                        <div class = "m-widget5__content">
+                                        <div class = "m-widget5__content  {{ $item["content"]->id == $content->id ? 'm--bg-primary' : '' }}">
                                             <div class = "m-widget5__pic">
                                                 <img class = "m-widget7__img" src = "{{ isset($item["thumbnail"]) ? $item["thumbnail"]."?w=210&h=118":'' }}" alt = "{{ $item["content"]->name }}">
                                             </div>
@@ -167,82 +258,16 @@
                 </div>
             </div>
             <!--end::Portlet-->
-            <!--begin:: Widgets/Download Files-->
-            <div class = "m-portlet">
-                <div class = "m-portlet__head">
-                    <div class = "m-portlet__head-caption">
-                        <div class = "m-portlet__head-title">
-                            <h3 class = "m-portlet__head-text">
-                                لینک های مستقیم دانلود این فیلم
-                            </h3>
-                        </div>
-                    </div>
-                </div>
-                <div class = "m-portlet__body">
-                    @if(isset($content->file) and $content->file->isNotEmpty())
-                        <div class = "text-justify">
-                            <p>
-                                پیشنهاد می کنیم برای دانلود، از نرم افزار Internet Download Manager در ویندوز و یا ADM در اندروید و یا wget در لینوکس استفاده بفرمایید.
-                            </p>
-                            <p>
-                                جهت دانلود روی یکی از دکمه های زیر کلیک کنید:
-                            </p>
-                        @foreach($content->file->get('video') as $file)
-                            <!--begin::m-widget4-->
-                                <div class = "m-widget4">
-                                    <div class = "m-widget4__item">
-                                        <div class = "m-widget4__img m-widget4__img--icon">
-                                            <img src = "/assets/app/media/img/files/mp4.svg" alt = "">
-                                        </div>
-                                        <div class = "m-widget4__info">
-                                            <a href = "{{ $file->link }}?download=1" class = "m-link">
-                                            <span class = "m-widget4__text">
-                                            فایل {{$file->caption}}{{ isset($file->size[0]) ? "(".$file->size. ")":""  }}
-                                            </span>
-                                            </a>
-                                        </div>
-                                        <div class = "m-widget4__ext">
-                                            <a href = "{{ $file->link }}?download=1" class = "m-widget4__icon">
-                                                <i class = "la la-download"></i>
-                                            </a>
-                                        </div>
-                                    </div>
 
-                                </div>
-                                <!--end::Widget 4-->
-                            @endforeach
-                        </div>
-                    @endif
-
-                </div>
-            </div>
-            <!--end:: Widgets/Download Files-->
         </div>
     </div>
     <div class="row">
-        <div class="col-xl-12">
-            <!--begin::Portlet-->
-            <div class="m-portlet m-portlet--creative m-portlet--first m-portlet--bordered-semi">
-                <div class="m-portlet__head">
-                    <div class="m-portlet__head-caption">
-                        <div class="m-portlet__head-title">
-						<span class="m-portlet__head-icon m--hide">
-							<i class="flaticon-statistics"></i>
-						</span>
-                            <h3 class="m-portlet__head-text">
-                                {{ $contentSetName }}
-                            </h3>
-                            <h2 class="m-portlet__head-label m-portlet__head-label--danger">
-                                <span>لیست جزوات</span>
-                            </h2>
-                        </div>
-                    </div>
-                </div>
-                <div class="m-portlet__body">
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled.
-                </div>
-            </div>
-            <!--end::Portlet-->
+        <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12">
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xl-4">
         </div>
     </div>
     {{--<div class = "row">
@@ -368,7 +393,7 @@
                                 <div class = "row">
                                     <div class = "col-md-12">
                                         @if(!empty($tags))
-                                            <hr>
+                                            <div class="m-separator m-separator--space m-separator--dashed"></div>
                                             @include("partials.search.tagLabel" , ["tags"=>$tags])
                                         @endif
                                     </div>
@@ -508,7 +533,7 @@
                                 <div class = "row">
                                     <div class = "col-md-12">
                                         @if(!empty($tags))
-                                            <hr>
+                                            <div class="m-separator m-separator--space m-separator--dashed"></div>
                                             @include("partials.search.tagLabel" , ["tags"=>$tags])
                                         @endif
                                     </div>
