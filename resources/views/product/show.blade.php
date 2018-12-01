@@ -18,35 +18,46 @@
 @endsection
 @section("content")
     @include("systemMessage.flash")
-
     <div class="row">
-        {{--<div class="col-xl-12">--}}
+        <div class="col-xl-12">
             <!--begin::Portlet-->
             <div class = "m-portlet m-portlet--mobile m-portlet--body-progress-">
                 <div class = "m-portlet__body">
                     <div class = "m-portlet__body-progress">Loading</div>
-                    <div class="col-xl-4  m--marginless">
-                        <img src="{{ route('image', ['category'=>'4','w'=>'338' , 'h'=>'338' ,  'filename' =>  $product->image ]) }}"
-                             alt="عکس محصول@if(isset($product->name[0])) {{$product->name}} @endif"
-                             class="img-fluid m--marginless"/>
-                        <div class = "m--clearfix"></div>
-                        <div class = "m-separator m-separator--space m-separator--dashed"></div>
-                    </div>
-                    <div class="col-xl-8  m--marginless">
-                        <h3>{{$product->name}}</h3>
-                        <div class = "m-separator m-separator--space m-separator--dashed"></div>
-                        @if( isset($product->longDescription[0] ) )
+                    <div class="d-flex flex-wrap flex-md-nowrap ">
+                        <div class="flex-shrink-1 m--padding-right-10 m--margin-right-10">
+                            <img src="{{ route('image', ['category'=>'4','w'=>'338' , 'h'=>'338' ,  'filename' =>  $product->image ]) }}"
+                                 alt="عکس محصول@if(isset($product->name[0])) {{$product->name}} @endif"
+                                 class="img-fluid m--marginless"/>
+                        </div>
+                        <div class="flex-grow-1 m--padding-top-10 m--margin-top-10">
+                            <h3>{{$product->name}}</h3>
+                            <div class = "m-separator m-separator--space m-separator--dashed"></div>
                             <div>
-                                {!!   $product->longDescription !!}
+                                @if(in_array($productType ,[Config::get("constants.PRODUCT_TYPE_SELECTABLE")]))
+                                    @if(isset($product->children) && !empty($product->children))
+                                        @each('product.partials.showChildren', $product->children, 'product')
+                                    @endif
+                                @endif
                             </div>
-                        @endif
+                        </div>
                     </div>
-
                 </div>
             </div>
             <!--end::Portlet-->
-        {{--</div>--}}
-</div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xl-12">
+            <div>
+                @if( isset($product->longDescription[0] ) )
+                    <div>
+                        {!!   $product->longDescription !!}
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div>
 @if(!isset($descriptionIframe) || !$descriptionIframe)
 <div class="row">
 <div class="col-md-12">

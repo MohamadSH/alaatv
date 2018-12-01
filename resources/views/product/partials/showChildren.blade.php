@@ -1,3 +1,4 @@
+<input data-switch="true" type="checkbox" checked="checked" data-on-text="True" data-handle-width="50" data-off-text="False" data-on-color="success">
 <li style="border:none">
     <label class="bold">
         @if(isset($product->pivot->control_id) && $product->pivot->control_id ==  Config::get("constants.CONTROL_SWITCH"))
