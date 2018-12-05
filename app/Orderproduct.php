@@ -3,6 +3,9 @@
 namespace App;
 
 
+use App\Classes\Checkout\Alaa\AlaaOrderproductGroupPriceCalculatorFromNewBase;
+use App\Classes\Checkout\Alaa\OrderproductCheckout;
+use App\Collection\OrderproductCollection;
 use App\Traits\ProductCommon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -168,20 +171,17 @@ class Orderproduct extends Model
         );
     }
 
-    public function calculatePayableCost($withOrderCoupon = false)
+    private function calculatePayableCost($calculateCost = true)
     {
+        $alaaCashierFacade = new OrderproductCheckout($this , $calculateCost);
+        $priceInfo = json_decode($alaaCashierFacade->checkout());
+        $orderproductPriceInfo = $priceInfo->orderproductsInfo->calculatedOrderproducts[0]->priceInfo;
+        return $orderproductPriceInfo   ;
+
+        //////////////////////////OLD CODE///////////////////////////////////
+
         $costArray = $this->obtainOrderproductCost(false);
         if ($withOrderCoupon) {
-            //            $couponType = $this->order->determineCoupontype();
-            //            if($couponType !== false  && $this->includedInCoupon)
-            //            {
-            //                if($couponType["type"] == Config::get("constants.DISCOUNT_TYPE_PERCENTAGE"))
-            //                    return (int)( ((1-($costArray["bonDiscount"]/100)) * ( ( (1-($costArray["productDiscount"]/100))*$costArray["cost"]) - $costArray["productDiscountAmount"]))*(1-($couponType["discount"]/100)));
-            //                elseif($couponType["type"] == Config::get("constants.DISCOUNT_TYPE_COST"))
-            //                    return (int)( ((1-($costArray["bonDiscount"]/100)) * ( ( (1-($costArray["productDiscount"]/100))*$costArray["cost"]) - $costArray["productDiscountAmount"])) - $couponType["discount"] );
-            //
-            //            }else
-            //            {
             return (int)((1 - ($costArray["bonDiscount"] / 100)) * (((1 - ($costArray["productDiscount"] / 100)) * $costArray["cost"]) - $costArray["productDiscountAmount"]));
             //            }
         } else {
@@ -198,6 +198,18 @@ class Orderproduct extends Model
      */
     public function obtainOrderproductCost($calculateCost = true)
     {
+        $priceInfo = $this->calculatePayableCost($calculateCost);
+        return [
+            "cost"                  => $priceInfo->cost,
+            "extraCost"             => $priceInfo->extraCost,
+            "productDiscount"       => $priceInfo->productDiscount,
+            'bonDiscount'           => $priceInfo->bonDiscount,
+            "productDiscountAmount" => $priceInfo->productDiscountAmount,
+            'customerPrice'          => $priceInfo->customerCost,
+            'totalPrice'            => $priceInfo->totalCost
+        ];
+
+        ////////////////////////////Old Code/////////////////////
         $costArray = [];
         $bonDiscount = 0;
         $productDiscount = 0;
@@ -258,7 +270,7 @@ class Orderproduct extends Model
             "productDiscount"       => $productDiscount,
             'bonDiscount'           => $bonDiscount,
             "productDiscountAmount" => (int)$productDiscountAmount,
-            'CustomerCost'          => (int)(((int)$cost * (1 - ($productDiscount / 100))) * (1 - ($bonDiscount / 100)) - $productDiscountAmount),
+            'customerPrice'          => (int)(((int)$cost * (1 - ($productDiscount / 100))) * (1 - ($bonDiscount / 100)) - $productDiscountAmount),
         ];
     }
 
@@ -283,7 +295,8 @@ class Orderproduct extends Model
     {
         if (isset($costArray["cost"]))
             $this->cost = $costArray["cost"];
-        else $this->cost = null;
+        else
+            $this->cost = null;
 
         if ($this->isGiftType()) {
             $this->discountPercentage = 100;
@@ -345,4 +358,15 @@ class Orderproduct extends Model
             })->delete();
     }
 
+    /**
+     * Create a new Eloquent Collection instance.
+     *
+     * @param  array $models
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function newCollection(array $models = [])
+    {
+        return new OrderproductCollection($models);
+    }
 }

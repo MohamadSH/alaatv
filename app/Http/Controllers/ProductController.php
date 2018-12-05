@@ -583,7 +583,7 @@ class ProductController extends Controller
         $selectedSubProductIds = $request->get("products");
         $extraAttributeValues = $request->get("extraAttributeValues");
         $user = $this->getCustomer($request);
-        //        return (new AlaaCashier($product,$user))->getPrice();
+        //        return (new AlaaProductPriceCalculator($product,$user))->getPrice();
 
         $key = "product:refreshPrice:Product"
             . "\\"
@@ -636,7 +636,7 @@ class ProductController extends Controller
                                     $costArray = $product->calculatePayablePrice();
 
                                 $cost += $costArray["cost"];
-                                $costForCustomer += $costArray["CustomerCost"];
+                                $costForCustomer += $costArray["customerPrice"];
                             }
                             //TODO:// age mahsool tamumshod ya yaft nashod chi?
                             //            elseif (!isset($simpleProduct))

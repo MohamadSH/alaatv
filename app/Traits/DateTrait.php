@@ -26,6 +26,32 @@ trait DateTrait
         return $this->convertDate($this->completed_at, "toJalali");
     }
 
+    /**
+     * Converting validSince field to Jalali
+     *
+     * @return string
+     */
+    public function ValidSince_Jalali()
+    {
+        $explodedDateTime = explode(" ", $this->validSince);
+        $explodedTime = $explodedDateTime[1];
+        $explodedDate = $this->convertDate($this->validSince, "toJalali");
+        return ($explodedDate . " " . $explodedTime);
+    }
+
+    /**
+     * Converting validUntil field to Jalali
+     *
+     * @return string
+     */
+    public function ValidUntil_Jalali()
+    {
+        $explodedDateTime = explode(" ", $this->validUntil);
+        $explodedTime = $explodedDateTime[1];
+        $explodedDate = $this->convertDate($this->validUntil, "toJalali");
+        return ($explodedDate . " " . $explodedTime);
+    }
+
     public function convertDate($date, $convertType)
     {
         if (strcmp($convertType, 'toJalali') == 0 && strlen($date) > 0) {

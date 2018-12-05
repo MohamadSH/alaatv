@@ -705,7 +705,7 @@ class OrderController extends Controller
             session()->put("success", "اطلاعات سفارش با موفقیت اصلاح شد.");
 
             $asiatechProduct = config("constants.ASIATECH_FREE_ADSL");
-            if ($order->hasProducts([$asiatechProduct]) &&
+            if ($order->hasTheseProducts([$asiatechProduct]) &&
                 $order->orderstatus_id == config("constants.ORDER_STATUS_CLOSED")) {
                 $orderUser = $order->user;
                 $nowDateTime = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
@@ -872,7 +872,7 @@ class OrderController extends Controller
                                              ->get()
                                              ->isNotEmpty();
 
-        $orderHasDonate = $order->hasProducts(Product::DONATE_PRODUCT);
+        $orderHasDonate = $order->hasTheseProducts(Product::DONATE_PRODUCT);
 
         $donateCost = 0;
         if ($orderHasDonate) {
@@ -1136,7 +1136,7 @@ class OrderController extends Controller
                     $paymentMethods = ["onlinePayment" => "آنلاین"];
                 }
 
-                $orderHasDonate = $order->hasProducts(Product::DONATE_PRODUCT);
+                $orderHasDonate = $order->hasTheseProducts(Product::DONATE_PRODUCT);
                 $donateCost = 0;
                 if ($orderHasDonate) {
                     $donateCost = Product::getDonateProductCost();
@@ -1178,7 +1178,7 @@ class OrderController extends Controller
                                       ->firstOrFail();
             $order = Order::FindorFail($transaction->order_id);
 
-            $usedCoupon = $order->hasUsedCoupon();
+            $usedCoupon = $order->hasProductsThatUseItsCoupon();
             if (!$usedCoupon) {
                 /** if order has not used coupon reverse it    */
 
@@ -1323,7 +1323,7 @@ class OrderController extends Controller
                 return redirect(action(("HomeController@error403")));
             $order = Order::FindorFail($transaction->order_id);
 
-            $usedCoupon = $order->hasUsedCoupon();
+            $usedCoupon = $order->hasProductsThatUseItsCoupon();
             if (!$usedCoupon) {
                 /** if order has not used coupon reverse it    */
 
@@ -1491,7 +1491,7 @@ class OrderController extends Controller
             if ($request->has('paymentmethod')) {
                 $paymentMethod = $request->get('paymentmethod');
 
-                $usedCoupon = $order->hasUsedCoupon();
+                $usedCoupon = $order->hasProductsThatUseItsCoupon();
                 if (!$usedCoupon) {
                     /** if order has not used coupon reverse it    */
                     $order->detachCoupon();

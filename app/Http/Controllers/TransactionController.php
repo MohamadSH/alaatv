@@ -285,7 +285,7 @@ class TransactionController extends Controller
                         foreach ($transactionOrderproducts as $orderproduct) {
                             if (in_array($orderproduct->id, $checkedOrderproducts))
                                 continue;
-                            $orderproductCost = (int)($orderproduct->calculatePayableCost());
+                            $orderproductCost = (int)($orderproduct->obtainOrderproductCost(false)["totalPrice"]);
 
                             $orderproductCost = $orderproductCost - $orderDiscountPerItem;
                             $orderproductCost = $orderproductCost + $orderRefundPerItem;
@@ -424,7 +424,7 @@ class TransactionController extends Controller
                 if (isset($user)) {
                     $walletCost = $cost;
                     $subtractedAmount = 0;
-                    if ($order->hasProducts(Product::DONATE_PRODUCT)) {
+                    if ($order->hasTheseProducts(Product::DONATE_PRODUCT)) {
                         $subtractedAmount = Product::getDonateProductCost();
                         $walletCost = $walletCost - $subtractedAmount;
 

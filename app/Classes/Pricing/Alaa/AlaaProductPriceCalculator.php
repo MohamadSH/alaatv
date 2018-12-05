@@ -2,16 +2,16 @@
 /**
  * Created by PhpStorm.
  * User: mohamamad
- * Date: 10/11/2018
- * Time: 2:51 PM
+ * Date: 11/30/2018
+ * Time: 5:00 PM
  */
 
-namespace App\Classes\Pricing\Alaa;
+namespace App\Classes\Checkout\Alaa;
 
 
-use App\Classes\Abstracts\Cashier;
+use App\Classes\Abstracts\checkout\ProductPriceCalculator;
 
-class AlaaCashier Extends Cashier
+class AlaaProductPriceCalculator extends ProductPriceCalculator
 {
     public function getPrice(): string
     {

@@ -98,9 +98,11 @@ class OrderproductController extends Controller
         ) {
             switch ($parentProductType) {
                 case "configurable" :
-                    if (session()->has("adminOrder_id"))
+                    if (session()->has("adminOrder_id")) {
                         $children = $product->children;
-                    else $children = $product->children->where("enable", 1);
+                    } else {
+                        $children = $product->children->where("enable", 1);
+                    }
 
                     foreach ($children as $child) {
                         $attributevalues = $child->attributevalues;

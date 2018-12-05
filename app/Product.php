@@ -3,8 +3,8 @@
 namespace App;
 
 use App\Classes\{Advertisable,
+    Checkout\Alaa\AlaaProductPriceCalculator,
     FavorableInterface,
-    Pricing\Alaa\AlaaCashier,
     SEO\SeoInterface,
     SEO\SeoMetaTagsGenerator,
     Taggable};
@@ -1270,7 +1270,7 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
         $costArray = [];
         $costInfo = $this->obtainCostInfo($user);
         $costArray["cost"] = $costInfo->info->productCost;
-        $costArray["CustomerCost"] = $costInfo->price;
+        $costArray["customerPrice"] = $costInfo->price;
         $costArray["productDiscount"] = $costInfo->info->discount->info->product->info->percentage;
         $costArray["productDiscountAmount"] = $costInfo->info->discount->info->product->info->amount;
         $costArray["bonDiscount"] = $costInfo->info->discount->info->bon->info->$bonName->totalPercentage;
@@ -1292,7 +1292,7 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
 
         return Cache::tags('bon')
                     ->remember($key, config("constants.CACHE_60"), function () use ($user) {
-                        $cost = new AlaaCashier($this, $user);
+                        $cost = new AlaaProductPriceCalculator($this, $user);
                         return json_decode($cost->getPrice());
                     });
     }
