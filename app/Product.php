@@ -680,8 +680,8 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
         if($this->isFree)
             return 'رایگان';
         if($this->basePrice == 0)
-            return 'تعیین قیمت: پس از انتخاب محصول';
-        return $this->calculatePayablePrice($user)['cost'];
+            return  'تعیین قیمت: پس از انتخاب محصول';
+        return number_format($this->calculatePayablePrice($user)['cost']) . ' ' . 'تومان';
     }
     public function getPhotoAttribute()
     {

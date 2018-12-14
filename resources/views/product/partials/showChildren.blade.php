@@ -10,7 +10,8 @@
                 <span class = "m-nav__link-text">
                     <div class = "form-group m-form__group row">
                         <div>
-{{--                            @if(isset($product->pivot->control_id) && $product->pivot->control_id ==  Config::get("constants.CONTROL_SWITCH"))--}}
+
+                            @if(isset($product->pivot->control_id) && ( $product->pivot->control_id ==  Config::get("constants.CONTROL_SWITCH") || $product->pivot->control_id == Config::get("constants.CONTROL_GROUPED_CHECKBOX") ))
                                 <span class = "m-switch m-switch--icon {{ $color > 0 ? 'm-switch--primary' : 'm-switch--warning' }}">
                                     <label>
                                         <input name = "products[]" value = "{{ $product->id }}" type = "checkbox" class = "hasParent_{{ $product->pivot->parent_id }} {{ count($product->children)>0 ? "hasChildren" : "" }} product"
@@ -18,8 +19,8 @@
                                         <span></span>
                                     </label>
                                 </span>
-                            {{--@else--}}
-                            {{--@endif--}}
+                            @else
+                            @endif
                         </div>
                         <label class = "col-form-label">{{$product->name}}</label>
                     </div>
