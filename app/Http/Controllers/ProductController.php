@@ -182,7 +182,7 @@ class ProductController extends Controller
             'filename' => $this->setting->site->siteLogo,
         ]), '100', '100', null));
 
-        return view("pages.product-search", compact("products", "costCollection"));
+        return view("product.portfolio", compact("products", "costCollection"));
     }
 
     /**

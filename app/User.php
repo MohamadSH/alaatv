@@ -995,7 +995,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     public function userHasBon($bonName = null): int
     {
         if(is_null($bonName ))
-            $bonName = Config::get("constants.BON1");
+            $bonName = config("constants.BON1");
         $key = "user:userHasBon:" . $this->cacheKey() . "-" . $bonName;
 
         return Cache::tags('bon')
