@@ -3,6 +3,9 @@
 namespace App;
 
 
+use App\Classes\Checkout\Alaa\AlaaOrderproductGroupPriceCalculatorFromNewBase;
+use App\Classes\Checkout\Alaa\OrderproductCheckout;
+use App\Collection\OrderproductCollection;
 use App\Traits\ProductCommon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -168,20 +171,18 @@ class Orderproduct extends Model
         );
     }
 
-    public function calculatePayableCost($withOrderCoupon = false)
+    private function calculatePayableCost($calculateCost = true)
     {
+        $alaaCashierFacade = new OrderproductCheckout($this , $calculateCost);
+        $priceInfo = $alaaCashierFacade->checkout();
+        $calculatedOrderproducts = $priceInfo["orderproductsInfo"]["calculatedOrderproducts"];
+        $orderproductPriceInfo = $calculatedOrderproducts->getNewPriceForItem($calculatedOrderproducts->first());
+        return $orderproductPriceInfo   ;
+
+        //////////////////////////OLD CODE///////////////////////////////////
+
         $costArray = $this->obtainOrderproductCost(false);
         if ($withOrderCoupon) {
-            //            $couponType = $this->order->determineCoupontype();
-            //            if($couponType !== false  && $this->includedInCoupon)
-            //            {
-            //                if($couponType["type"] == Config::get("constants.DISCOUNT_TYPE_PERCENTAGE"))
-            //                    return (int)( ((1-($costArray["bonDiscount"]/100)) * ( ( (1-($costArray["productDiscount"]/100))*$costArray["cost"]) - $costArray["productDiscountAmount"]))*(1-($couponType["discount"]/100)));
-            //                elseif($couponType["type"] == Config::get("constants.DISCOUNT_TYPE_COST"))
-            //                    return (int)( ((1-($costArray["bonDiscount"]/100)) * ( ( (1-($costArray["productDiscount"]/100))*$costArray["cost"]) - $costArray["productDiscountAmount"])) - $couponType["discount"] );
-            //
-            //            }else
-            //            {
             return (int)((1 - ($costArray["bonDiscount"] / 100)) * (((1 - ($costArray["productDiscount"] / 100)) * $costArray["cost"]) - $costArray["productDiscountAmount"]));
             //            }
         } else {
@@ -198,6 +199,18 @@ class Orderproduct extends Model
      */
     public function obtainOrderproductCost($calculateCost = true)
     {
+        $priceInfo = $this->calculatePayableCost($calculateCost);
+        return [
+            "cost"                  => $priceInfo["cost"],
+            "extraCost"             => $priceInfo["extraCost"],
+            "productDiscount"       => $priceInfo["productDiscount"],
+            'bonDiscount'           => $priceInfo["bonDiscount"],
+            "productDiscountAmount" => $priceInfo["productDiscountAmount"],
+            'customerPrice'          => $priceInfo["customerCost"],
+            'totalPrice'            => $priceInfo["totalCost"],
+        ];
+
+        ////////////////////////////Old Code/////////////////////
         $costArray = [];
         $bonDiscount = 0;
         $productDiscount = 0;
@@ -258,17 +271,35 @@ class Orderproduct extends Model
             "productDiscount"       => $productDiscount,
             'bonDiscount'           => $bonDiscount,
             "productDiscountAmount" => (int)$productDiscountAmount,
-            'CustomerCost'          => (int)(((int)$cost * (1 - ($productDiscount / 100))) * (1 - ($bonDiscount / 100)) - $productDiscountAmount),
+            'customerPrice'          => (int)(((int)$cost * (1 - ($productDiscount / 100))) * (1 - ($bonDiscount / 100)) - $productDiscountAmount),
         ];
     }
 
-    public function getTotalBonNumber()
+    /**
+     * Obtains orderproduct's total bon discount decimal value
+     *
+     * @return int
+     */
+    public function getTotalBonDiscountDecimalValue():int
     {
-        $totalBonNumver = 0;
+        $totalBonNumber = 0;
         foreach ($this->userbons as $userbon) {
-            $totalBonNumver += $userbon->pivot->discount * $userbon->pivot->usageNumber;
+            $totalBonNumber += $userbon->pivot->discount * $userbon->pivot->usageNumber;
         }
-        return $totalBonNumver;
+
+        return $totalBonNumber;
+    }
+
+    /**
+     * Get orderproduct's total bon discount
+     *
+     * @return mixed
+     */
+    public function getTotalBonDiscountPercentage()
+    {
+        $totalBonDiscountValue = $this->getTotalBonDiscountDecimalValue();
+
+        return max($totalBonDiscountValue / 100 , 1);
     }
 
     public function isNormalType()
@@ -283,7 +314,8 @@ class Orderproduct extends Model
     {
         if (isset($costArray["cost"]))
             $this->cost = $costArray["cost"];
-        else $this->cost = null;
+        else
+            $this->cost = null;
 
         if ($this->isGiftType()) {
             $this->discountPercentage = 100;
@@ -333,4 +365,136 @@ class Orderproduct extends Model
                     ->where("relationtype_id", Config::get("constants.ORDER_PRODUCT_INTERRELATION_PARENT_CHILD"));
     }
 
+    public static function deleteOpenedTransactions(array $intendedProductsId , array $intendedOrderStatuses):void
+    {
+        Orderproduct::whereIn("product_id" , $intendedProductsId)
+            ->whereHas("order",function ($q) use ($intendedOrderStatuses){
+                $q->whereIn("orderstatus_id" , $intendedOrderStatuses)
+                    ->whereDoesntHave("transactions" , function ($q2)
+                    {
+                        $q2->where("transactionstatus_id" , config("constants.TRANSACTION_STATUS_TRANSFERRED_TO_PAY"));
+                    });
+            })->delete();
+    }
+
+    /**
+     * Create a new Eloquent Collection instance.
+     *
+     * @param  array $models
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function newCollection(array $models = [])
+    {
+        return new OrderproductCollection($models);
+    }
+
+
+    /**
+     * @param $value
+     * @return float|int
+     */
+    public function getDiscountPercentageAttribute($value)
+    {
+        return $value / 100 ;
+    }
+
+    /**
+     * Checks whether orderproduct included in coupon or not and
+     * fills the appropriate table column
+     *
+     * @param Coupon $coupon
+     *
+     * @return bool
+     */
+    public function IsOrderproductIncludedInCoupon(Coupon $coupon)
+    {
+        if ($coupon->coupon_type == config("constants.COUPON_TYPE_OVERALL")) {
+            $flag = true;
+        } else {
+            $flag = $this->product->hasThisCoupon($coupon);
+        }
+
+        return $flag;
+    }
+
+    /**
+     * Sets orderproduct including in coupon
+     *
+     */
+    public function includeInCoupon():void
+    {
+        $this->includedInCoupon = 1;
+        $this->update();
+    }
+
+    /**
+     * Sets orderproduct excluding from coupon
+     *
+     */
+    public function excludeFromCoupon():void
+    {
+        $this->includedInCoupon = 0;
+        $this->update();
+    }
+
+    /**
+     * Determines whether orderproduct is available to purchase or not
+     * @return bool
+     */
+    public function isPurchasable():bool
+    {
+        return $this->product->isEnableToPurchase() ;
+    }
+
+    /**
+     * Updates orderproduct's attribute values
+     *
+     */
+    public function renewAttributeValue():void
+    {
+        $extraAttributes = $this->attributevalues;
+        $myParent = $this->product->getGrandParent();
+
+        foreach ($extraAttributes as $extraAttribute) {
+            $productAttributevalue = $myParent->attributevalues->where("id", $extraAttribute->id)->first();
+
+            if (!isset($productAttributevalue)) {
+                $this->attributevalues()
+                    ->detach($productAttributevalue);
+            } else {
+                $newExtraCost = $productAttributevalue->pivot->extraCost;
+                $this->attributevalues()
+                    ->updateExistingPivot($extraAttribute->id, ["extraCost" => $newExtraCost]);
+            }
+        }
+    }
+
+    public function renewUserBons()
+    {
+        $userbons = $this->userbons;
+        if ($userbons->isNotEmpty()) {
+            $bonName = config("constants.BON1");
+
+            $bons = $this->product->getTotalBons($bonName);
+
+            if ($bons->isEmpty()) {
+                foreach ($userbons as $userBon) {
+                    $this->userbons()->detach($userBon);
+
+                    $userBon->usedNumber = 0;
+                    $userBon->userbonstatus_id = config("constants.USERBON_STATUS_ACTIVE");
+                    $userBon->update();
+                }
+
+            } else {
+                $bon = $bons->first();
+                foreach ($userbons as $userbon) {
+                    $newDiscount = $bon->pivot->discount;
+                    $this->userbons()
+                        ->updateExistingPivot($userbon->id, ["discount" => $newDiscount]);
+                }
+            }
+        }
+    }
 }

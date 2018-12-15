@@ -72,6 +72,7 @@ Route::group(['prefix' => 'orderproduct'], function () {
 });
 
 Route::group(['prefix' => 'landing'], function () {
+    Route::get('5', 'ProductController@landing5');
     Route::get('1', 'ProductController@landing1');
     Route::get('2', 'ProductController@landing2');
     Route::get('3', [

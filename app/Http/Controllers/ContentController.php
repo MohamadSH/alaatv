@@ -7,7 +7,14 @@ use App\Content;
 use App\Contentset;
 use App\Contenttype;
 use App\Http\Requests\{ContentIndexRequest, EditContentRequest, InsertContentRequest, Request};
-use App\Traits\{APIRequestCommon, CharacterCommon, FileCommon, Helper, MetaCommon, ProductCommon, RequestCommon};
+use App\Traits\{APIRequestCommon,
+    CharacterCommon,
+    FileCommon,
+    Helper,
+    MetaCommon,
+    ProductCommon,
+    RequestCommon,
+    SearchCommon};
 use App\User;
 use App\Websitesetting;
 use Carbon\Carbon;
@@ -35,6 +42,7 @@ class ContentController extends Controller
     use APIRequestCommon;
     use CharacterCommon;
     use MetaCommon;
+    use SearchCommon;
 
     /*
     |--------------------------------------------------------------------------
@@ -182,24 +190,6 @@ class ContentController extends Controller
                              ]);
         }
         return view("pages.search", compact("items", "contentTypes", 'tags'));
-    }
-
-    /**
-     * @param        $query
-     * @param string $layout
-     *
-     * @return string
-     */
-    private function getPartialSearchFromIds($query, string $layout)
-    {
-        $partialSearch = View::make(
-            $layout,
-            [
-                'items' => $query,
-            ]
-        )
-                             ->render();
-        return $partialSearch;
     }
 
     /**

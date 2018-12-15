@@ -6,6 +6,8 @@ use App\{Afterloginformcontrol,
     Bankaccount,
     Bloodtype,
     Bon,
+    Classes\Search\UserSearch,
+    Classes\SEO\SeoDummyTags,
     Contact,
     Employeeschedule,
     Employeetimesheet,
@@ -13,14 +15,12 @@ use App\{Afterloginformcontrol,
     Gender,
     Grade,
     Http\Controllers\Auth\RegisterController,
-    Http\Requests\EditProfileInfoAtLoginRequest,
-    Http\Requests\EditProfileInfoRequest,
-    Http\Requests\EditProfilePasswordRequest,
     Http\Requests\EditUserRequest,
     Http\Requests\InsertUserRequest,
     Http\Requests\InsertVoucherRequest,
     Http\Requests\PasswordRecoveryRequest,
     Http\Requests\RegisterForSanatiSharifHighSchoolRequest,
+    Http\Requests\UserIndexRequest,
     Lottery,
     Major,
     Order,
@@ -31,8 +31,10 @@ use App\{Afterloginformcontrol,
     Traits\CharacterCommon,
     Traits\DateTrait,
     Traits\Helper,
+    Traits\MetaCommon,
     Traits\ProductCommon,
     Traits\RequestCommon,
+    Traits\SearchCommon,
     Traits\UserCommon,
     Transactiongateway,
     User,
@@ -70,6 +72,8 @@ class UserController extends Controller
     use CharacterCommon;
     use Helper;
     use UserCommon;
+    use SearchCommon;
+    use MetaCommon;
 
     /*
     |--------------------------------------------------------------------------
@@ -77,7 +81,9 @@ class UserController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    protected $response;
+    const PARTIAL_MAIN_INDEX_TEMPLATE = "user.index";
+    const PARTIAL_SMS_INDEX_TEMPLATE = "user.index2";
+    const PARTIAL_REPORT_INDEX_TEMPLATE = "admin.partials.getReportIndex";
     protected $setting;
 
     /*
@@ -119,6 +125,23 @@ class UserController extends Controller
     }
 
     /**
+     * @param Collection $items
+     *
+     * @return \Illuminate\Http\Response
+     */
+    private function makeJsonForAndroidApp(Collection $items)
+    {
+        $items = $items->pop();
+        $key = md5($items->pluck("id")
+            ->implode(","));
+        $response = Cache::remember($key, config("constants.CACHE_60"), function () use ($items) {
+            $response = collect();
+
+        });
+        return $response;
+    }
+
+    /**
      * Finding tech person based on his tech code
      *
      * @param Request $request
@@ -137,338 +160,68 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param UserIndexRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(UserIndexRequest $request)
     {
-        $createdTimeEnable = Input::get('createdTimeEnable');
-        $createdSinceDate = Input::get('createdSinceDate');
-        $createdTillDate = Input::get('createdTillDate');
-        if (strlen($createdSinceDate) > 0 && strlen($createdTillDate) > 0 && isset($createdTimeEnable)) {
-            $createdSinceDate = Carbon::parse($createdSinceDate)
-                                      ->format('Y-m-d') . " 00:00:00";
-            $createdTillDate = Carbon::parse($createdTillDate)
-                                     ->format('Y-m-d') . " 23:59:59";
-            $users = User::whereBetween('created_at', [
-                $createdSinceDate,
-                $createdTillDate,
-            ])
-                         ->orderBy('created_at', 'Desc');
+        $tags = $request->get('tags');
+        $filters = array_filter($request->all()); //Removes null fields
+        $isApp = $this->isRequestFromApp($request);
+        $items = collect();
+        $pageName = 'userPage';
+        $userResult = (new UserSearch)->setPageName($pageName)
+            ->apply($filters);
+        if ($isApp) {
+            $items->push($userResult->getCollection());
         } else {
-            $users = User::orderBy('created_at', 'Desc');
-        }
-
-        $updatedSinceDate = Input::get('updatedSinceDate');
-        $updatedTillDate = Input::get('updatedTillDate');
-        $updatedTimeEnable = Input::get('updatedTimeEnable');
-        if (strlen($updatedSinceDate) > 0 && strlen($updatedTillDate) > 0 && isset($updatedTimeEnable)) {
-            $users = $this->timeFilterQuery($users, $updatedSinceDate, $updatedTillDate, 'updated_at');
-        }
-
-        //filter by firstName, lastName, nationalCode, mobile
-        $firstName = trim(Input::get('firstName'));
-        if (isset($firstName) && strlen($firstName) > 0) {
-            $users = $users->where('firstName', 'like', '%' . $firstName . '%');
-        }
-
-        $lastName = trim(Input::get('lastName'));
-        if (isset($lastName) && strlen($lastName) > 0) {
-            $users = $users->where('lastName', 'like', '%' . $lastName . '%');
-        }
-
-        $nationalCode = trim(Input::get('nationalCode'));
-        if (isset($nationalCode) && strlen($nationalCode) > 0) {
-            $users = $users->where('nationalCode', 'like', '%' . $nationalCode . '%');
-        }
-
-        $mobile = trim(Input::get('mobile'));
-        if (isset($mobile) && strlen($mobile) > 0) {
-            $users = $users->where('mobile', 'like', '%' . $mobile . '%');
-        }
-
-        //filter by role, major , coupon
-        $roleEnable = Input::get('roleEnable');
-        $rolesId = Input::get('roles');
-        if (isset($roleEnable) && isset($rolesId)) {
-            $users = $users->roleFilter($rolesId);
-        }
-
-        $majorEnable = Input::get('majorEnable');
-        $majorsId = Input::get('majors');
-        if (isset($majorEnable) && isset($majorsId)) {
-            $users = $users->majorFilter($majorsId);
-        }
-
-        $couponEnable = Input::get('couponEnable');
-        $couponsId = Input::get('coupons');
-        if (isset($couponEnable) && isset($couponsId)) {
-            if (in_array(0, $couponsId))
-                $users = $users->whereHas("orders", function ($q) use ($couponsId) {
-                    $q->whereDoesntHave("coupon")
-                      ->whereNotIn('orderstatus_id', [
-                          config("constants.ORDER_STATUS_OPEN"),
-                          config("constants.ORDER_STATUS_CANCELED"),
-                          config("constants.ORDER_STATUS_OPEN_BY_ADMIN"),
-                      ]);
-                }); else
-                $users = $users->whereHas("orders", function ($q) use ($couponsId) {
-                    $q->whereIn("coupon_id", $couponsId)
-                      ->whereNotIn('orderstatus_id', [
-                          config("constants.ORDER_STATUS_OPEN"),
-                          config("constants.ORDER_STATUS_CANCELED"),
-                          config("constants.ORDER_STATUS_OPEN_BY_ADMIN"),
-                      ]);
-                });
-        }
-
-        //filter by product
-        $seenProductEnable = Input::get('productEnable');
-        $productsId = Input::get('products');
-        if (isset($seenProductEnable) && isset($productsId)) {
-            $productUrls = [];
-            $baseUrl = url("/");
-            foreach ($productsId as $productId) {
-                array_push($productUrls, str_replace($baseUrl, "", action("ProductController@show", $productId)));
-            }
-            $users = $users->whereHas('seensitepages', function ($q) use ($productUrls) {
-                $q->whereIn("url", $productUrls);
-            });
-        }
-
-        $orderProductEnable = Input::get("orderProductEnable");
-        $productsId = Input::get('orderProducts');
-        if (isset($orderProductEnable) || isset($productsId)) {
-            if (in_array(-1, $productsId)) {
-                $users = $users->whereDoesntHave("orders", function ($q) {
-                    $q->where("orderstatus_id", "<>", 1)
-                      ->where("orderstatus_id", "<>", 3)
-                      ->where("orderstatus_id", "<>", 4);
-                });
-            } else if (in_array(0, $productsId)) {
-                $users = $users->whereHas("orders", function ($query) {
-                    $query->whereNotIn('orderstatus_id', [
-                        config("constants.ORDER_STATUS_OPEN"),
-                        config("constants.ORDER_STATUS_CANCELED"),
-                        config("constants.ORDER_STATUS_OPEN_BY_ADMIN"),
-                    ]);
-                });
-            } else if (isset($productsId)) {
-                $products = Product::whereIn('id', $productsId)
-                                   ->get();
-                foreach ($products as $product) {
-                    if ($product->producttype_id == config("constants.PRODUCT_TYPE_CONFIGURABLE"))
-                        if ($product->hasChildren()) {
-                            $productsId = array_merge($productsId, Product::whereHas('parents', function ($q) use ($productsId) {
-                                $q->whereIn("parent_id", $productsId);
-                            })
-                                                                          ->pluck("id")
-                                                                          ->toArray());
-                        }
-                }
-
-                if (Input::has("checkoutStatusEnable")) {
-                    $checkoutStatuses = Input::get("checkoutStatuses");
-                    if (in_array(0, $checkoutStatuses)) {
-                        $orders = Order::whereHas("orderproducts", function ($q) use ($productsId) {
-                            $q->whereIn("product_id", $productsId)
-                              ->whereNull("checkoutstatus_id");
-                        })
-                                       ->whereNotIn('orderstatus_id', [config("constants.ORDER_STATUS_OPEN")]);
-                    } else {
-                        $orders = Order::whereHas("orderproducts", function ($q) use ($productsId, $checkoutStatuses) {
-                            $q->whereIn("product_id", $productsId)
-                              ->whereIn("checkoutstatus_id", $checkoutStatuses);
-                        })
-                                       ->whereNotIn('orderstatus_id', [config("constants.ORDER_STATUS_OPEN")]);
-                    }
-                } else {
-                    $orders = Order::whereHas("orderproducts", function ($q) use ($productsId) {
-                        $q->whereIn("product_id", $productsId);
-                    })
-                                   ->whereNotIn('orderstatus_id', [config("constants.ORDER_STATUS_OPEN")]);
-                }
-
-                $createdSinceDate = Input::get('completedSinceDate');
-                $createdTillDate = Input::get('completedTillDate');
-                $createdTimeEnable = Input::get('completedTimeEnable');
-                if (strlen($createdSinceDate) > 0 && strlen($createdTillDate) > 0 && isset($createdTimeEnable)) {
-                    $orders = $this->timeFilterQuery($orders, $createdSinceDate, $createdTillDate, 'created_at');
-                }
-                $orders = $orders->get();
-                $users = $users->whereIn("id", $orders->pluck("user_id")
-                                                      ->toArray());
-            }
-        } else if (Input::has("checkoutStatusEnable")) {
-            $checkoutStatuses = Input::get("checkoutStatuses");
-            if (in_array(0, $checkoutStatuses)) {
-                $orders = Order::whereHas("orderproducts", function ($q) use ($productsId) {
-                    $q->whereNull("checkoutstatus_id");
-                })
-                               ->whereNotIn('orderstatus_id', [config("constants.ORDER_STATUS_OPEN")]);
+            if ($userResult->total() > 0) {
+                $mainIndex = $this->getPartialSearchFromIds($userResult, self::PARTIAL_MAIN_INDEX_TEMPLATE);
+                $smsIndex = $this->getPartialSearchFromIds($userResult, self::PARTIAL_SMS_INDEX_TEMPLATE);
+//                $reportIndex = $this->getPartialSearchFromIds($userResult, self::PARTIAL_REPORT_INDEX_TEMPLATE);
             } else {
-                $orders = Order::whereHas("orderproducts", function ($q) use ($productsId, $checkoutStatuses) {
-                    $q->whereIn("checkoutstatus_id", $checkoutStatuses);
-                })
-                               ->whereNotIn('orderstatus_id', [config("constants.ORDER_STATUS_OPEN")]);
-            }
-            $orders = $orders->get();
-            $users = $users->whereIn("id", $orders->pluck("user_id")
-                                                  ->toArray());
-        }
-
-        $paymentStatusesId = Input::get('paymentStatuses');
-        if (isset($paymentStatusesId)) {
-            //Muhammad Shahrokhi : kar nemikone!
-            //            $users = $users->whereHas("orders" , function ($q) use ($paymentStatusesId) {
-            //                $q->whereIn("paymentstatus_id", $paymentStatusesId)->whereNotIn('orderstatus_id', [1]);
-            //            }
-            if (!isset($orders))
-                $orders = Order::all(); else $orders = Order::paymentStatusFilter($orders, $paymentStatusesId);
-            $users = $users->whereIn("id", $orders->pluck("user_id")
-                                                  ->toArray());
-        }
-
-        $orderStatusesId = Input::get('orderStatuses');
-        if (isset($orderStatusesId)) {
-            //Muhammad Shahrokhi : kar nemikone!
-            //            $users = $users->whereHas("orders" , function ($q) use ($orderStatusesId) {
-            //                $q->whereIn("orderstatus_id", $orderStatusesId)->whereNotIn('orderstatus_id', [1]);
-            //            });
-            if (!isset($orders))
-                $orders = Order::all(); else $orders = Order::orderStatusFilter($orders, $orderStatusesId);
-            $users = $users->whereIn("id", $orders->pluck("user_id")
-                                                  ->toArray());
-        }
-        //filter by gender ,lockProfile , mobileVerification
-        $genderId = Input::get("gender_id");
-        if (isset($genderId) && strlen($genderId) > 0) {
-            if ($genderId == 0)
-                $users = $users->whereDoesntHave("gender"); else
-                $users = $users->where("gender_id", $genderId);
-        }
-
-        $userstatusId = Input::get("userstatus_id");
-        if (isset($userstatusId) && strlen($userstatusId) > 0 && $userstatusId != 0) {
-            $users = $users->where("userstatus_id", $userstatusId);
-        }
-
-        $lockProfileStatus = Input::get("lockProfileStatus");
-        if (isset($lockProfileStatus) && strlen($lockProfileStatus) > 0) {
-            $users = $users->where("lockProfile", $lockProfileStatus);
-        }
-
-        $mobileNumberVerification = Input::get("mobileNumberVerification");
-        if (isset($mobileNumberVerification) && strlen($mobileNumberVerification) > 0) {
-            if ($mobileNumberVerification)
-                $users = $users->whereNotNull("mobile_verified_at"); else
-                $users = $users->whereNull("mobile_verified_at");
-        }
-
-        //filter by postalCode, province , city, address, school , email
-        $withoutPostalCode = Input::get("withoutPostalCode");
-        if (isset($withoutPostalCode)) {
-            $users = $users->where(function ($q) {
-                $q->whereNull("postalCode")
-                  ->orWhere("postalCode", "");
-            });
-        } else {
-            $postalCode = Input::get("postalCode");
-            if (isset($postalCode) && strlen($postalCode) > 0)
-                $users = $users->where('postalCode', 'like', '%' . $postalCode . '%');
-        }
-
-        $withoutProvince = Input::get("withoutProvince");
-        if (isset($withoutProvince)) {
-            $users = $users->where(function ($q) {
-                $q->whereNull("province")
-                  ->orWhere("province", "");
-            });
-        } else {
-            $province = Input::get("province");
-            if (isset($province) && strlen($province) > 0)
-                $users = $users->where('province', 'like', '%' . $province . '%');
-        }
-
-        $withoutCity = Input::get("withoutCity");
-        if (isset($withoutCity)) {
-            $users = $users->where(function ($q) {
-                $q->whereNull("city")
-                  ->orWhere("city", "");
-            });
-        } else {
-            $city = Input::get("city");
-            if (isset($city) && strlen($city) > 0)
-                $users = $users->where('city', 'like', '%' . $city . '%');
-        }
-
-        //        $withoutAddress = Input::get("withoutAddress");
-        //        if(isset($withoutAddress)) {
-        //            $users = $users->where(function ($q){
-        //                $q->whereNull("address")->orWhere("address" , "");
-        //            });
-        //        }
-        //        else{
-        //            $address = Input::get("address");
-        //            if (isset($address) && strlen($address) > 0)
-        //                $users = $users->where('address', 'like', '%' . $address . '%');
-        //        }
-
-        $addressSpecialFilter = Input::get("addressSpecialFilter");
-        if (isset($addressSpecialFilter)) {
-            switch ($addressSpecialFilter) {
-                case "0":
-                    $address = Input::get("address");
-                    if (isset($address) && strlen($address) > 0)
-                        $users = $users->where('address', 'like', '%' . $address . '%');
-                    break;
-                case "1":
-                    $users = $users->where(function ($q) {
-                        $q->whereNull("address")
-                          ->orWhere("address", "");
-                    });
-                    break;
-                case  "2":
-                    $users = $users->where(function ($q) {
-                        $q->whereNotNull("address")
-                          ->Where("address", "<>", "");
-                    });
-                    break;
-                default:
-                    break;
+                $mainIndex = null;
+                $smsIndex = null;
+                $reportIndex = null ;
             }
 
-        } else {
-            $address = Input::get("address");
-            if (isset($address) && strlen($address) > 0)
-                $users = $users->where('address', 'like', '%' . $address . '%');
+            $uniqueUsers = $userResult->getCollection()->getUniqueUsers();
+
+            $items->push([
+                "totalitems" => $userResult->total(),
+                "totalUniqueItems" => $uniqueUsers->count(),
+                "itemIds"  => $userResult->pluck("id"),
+                "uniqueItemsIds"    => $uniqueUsers->pluck("id"),
+                "mainIndex"       => $mainIndex,
+                "smsIndex"  => $smsIndex,
+//                "reportIndex"  => $reportIndex,
+            ]);
+        }
+        if ($isApp) {
+            $response = $this->makeJsonForAndroidApp($items);
+            return response()->json($response, Response::HTTP_OK);
+        }
+        if (request()->ajax()) {
+            return response(
+                [
+                    "items"     => $items,
+                ]
+                , Response::HTTP_OK );
         }
 
-        $withoutSchool = Input::get("withoutSchool");
-        if (isset($withoutSchool)) {
-            $users = $users->where(function ($q) {
-                $q->whereNull("school")
-                  ->orWhere("school", "");
-            });
-        } else {
-            $school = Input::get("school");
-            if (isset($school) && strlen($school) > 0)
-                $users = $users->where('school', 'like', '%' . $school . '%');
-        }
+        $url = $request->url();
+        $this->generateSeoMetaTags(new SeoDummyTags("مدیریت کاربران", "مدیریت کاربران سایت", $url, $url, route('image', [
+            'category' => '11',
+            'w'        => '100',
+            'h'        => '100',
+            'filename' => $this->setting->site->siteLogo,
+        ]), '100', '100', null));
 
-        $withoutEmail = Input::get("withoutEmail");
-        if (isset($withoutEmail)) {
-            $users = $users->where(function ($q) {
-                $q->whereNull("email")
-                  ->orWhere("email", "");
-            });
-        } else {
-            $email = Input::get("email");
-            if (isset($email) && strlen($email) > 0)
-                $users = $users->where('email', 'like', '%' . $email . '%');
-        }
+        return redirect()->back();
 
-        //sort by
-
+        //======================================================================
+        //=============================OLD CODE=================================
+        //======================================================================
 
         $users = $users->get();
         /**
@@ -498,7 +251,9 @@ class UserController extends Controller
         $sortType = Input::get("sortType");
         if (strlen($sortBy) > 0 && strlen($sortType) > 0) {
             if (strcmp($sortType, "desc") == 0)
-                $users = $users->sortByDesc($sortBy); else $users = $users->sortBy($sortBy);
+                $users = $users->sortByDesc($sortBy);
+            else
+                $users = $users->sortBy($sortBy);
         }
 
         $previousPath = url()->previous();
@@ -510,34 +265,12 @@ class UserController extends Controller
         $reportType = "";
 
         if (strcmp($previousPath, action("HomeController@adminSMS")) == 0) {
-            $uniqueUsers = $users->groupBy("nationalCode");
-            $users = collect();
-            foreach ($uniqueUsers as $user) {
-                if ($user->whereNotNull("mobile_verified_at")
-                         ->isNotEmpty()) {
-                    $users->push($user->whereNotNUll("mobile_verified_at")
-                                      ->first());
-                } else {
-                    $users->push($user->first());
-                }
-
-            }
-            $index = "user.index2";
-            $usersId = $users->pluck("id");
-            $usersIdCount = $usersId->count();
-            $numberOfFatherPhones = Phone::whereIn('contact_id', Contact::whereIn('user_id', $usersId)
-                                                                        ->where('relative_id', 1)
-                                                                        ->pluck('id'))
-                                         ->where("phonetype_id", 1)
-                                         ->count();
-            $numberOfMotherPhones = Phone::whereIn('contact_id', Contact::whereIn('user_id', $usersId)
-                                                                        ->where('relative_id', 2)
-                                                                        ->pluck('id'))
-                                         ->where("phonetype_id", 1)
-                                         ->count();
+            //Converted
         } else if (strcmp($previousPath, action("HomeController@admin")) == 0) {
-            $index = "user.index";
+            //Converted
         } else if (strcmp($previousPath, action("HomeController@adminReport")) == 0) {
+            $index = "admin.partials.getReportIndex";
+
             $minCost = Input::get("minCost");
             if (isset($minCost[0])) {
                 foreach ($users as $key => $user) {
@@ -555,7 +288,6 @@ class UserController extends Controller
                         $users->forget($key);
                 }
             }
-            $index = "admin.partials.getReportIndex";
 
             if (Input::has("lotteries")) {
                 $lotteryId = Input::get("lotteries");
@@ -569,6 +301,7 @@ class UserController extends Controller
             if (Input::has("seePaidCost"))
                 $seePaidCost = true;
         }
+
         $result = [
             'index'                => View::make($index, compact('users', 'products', 'paymentStatusesId', 'reportType', 'hasPishtaz', 'orders', 'seePaidCost', 'lotteries'))
                                           ->render(),
@@ -827,7 +560,7 @@ class UserController extends Controller
 
         $key = "user:orders:" . $user->cacheKey();
         $orders = Cache::remember($key, config("constants.CACHE_60"), function () use ($user) {
-            return $user->getShowableOrders()
+            return $user->getClosedOrders()
                         ->get()
                         ->sortByDesc("completed_at");
         });
@@ -885,22 +618,16 @@ class UserController extends Controller
             $products->load('complimentaryproducts');
             $products->load('children');
             $products->load('validProductfiles');
-            $productsWithVideo = [];
-            $productsWithPamphlet = [];
             $pamphlets = collect();
             $videos = collect();
             foreach ($products as $product) {
-                if (!in_array($product->id, $productsWithPamphlet) && !in_array($product->id, $productsWithVideo)) {
-
-                    array_push($productsWithPamphlet, $product->id);
-                    array_push($productsWithVideo, $product->id);
 
                     $parentsArray = $this->makeParentArray($product);
 
-                    $this->addVideoPamphlet($parentsArray, $productsWithPamphlet, $productsWithVideo, $pamphlets, $videos);
+                    $this->addVideoPamphlet($parentsArray, $pamphlets, $videos);
 
                     $childrenArray = $product->children;
-                    $this->addVideoPamphlet($childrenArray, $productsWithPamphlet, $productsWithVideo, $pamphlets, $videos);
+                    $this->addVideoPamphlet($childrenArray, $pamphlets, $videos , "digChildren");
 
                     $pamphletArray = [];
                     $videoArray = [];
@@ -935,8 +662,7 @@ class UserController extends Controller
                             "videos"      => $videoArray,
                         ]);
                     $c = $product->complimentaryproducts;
-                    $this->addVideoPamphlet($c, $productsWithPamphlet, $productsWithVideo, $pamphlets, $videos);
-                }
+                    $this->addVideoPamphlet($c, $pamphlets, $videos);
             }
             return [
                 $videos,
@@ -954,20 +680,16 @@ class UserController extends Controller
      * Filling product's pamphlets and videos collection ( called by reference )
      *
      * @param            $productArray
-     * @param            $productsWithPamphlet
-     * @param            $productsWithVideo
      * @param Collection $pamphlets
      * @param Collection $videos
      */
-    private function addVideoPamphlet($productArray, &$productsWithPamphlet, &$productsWithVideo, Collection &$pamphlets, Collection &$videos)
+    private function addVideoPamphlet($productArray, Collection &$pamphlets, Collection &$videos , $mode = "default")
     {
         if (!empty($productArray)) {
             $videoArray = [];
             $pamphletArray = [];
             foreach ($productArray as $product) {
                 if (!in_array($product->id, $pamphletArray) && !in_array($product->id, $videoArray)) {
-                    array_push($productsWithPamphlet, $product->id);
-                    array_push($productsWithVideo, $product->id);
 
                     if (isset($pamphlets[$product->id]))
                         $pamphletArray = $pamphlets[$product->id]; else
@@ -1007,7 +729,10 @@ class UserController extends Controller
                         ]);
                 }
 
-                $this->addVideoPamphlet($product->complimentaryproducts, $productsWithPamphlet, $productsWithVideo, $pamphlets, $videos);
+                if($mode == "digChildren")
+                    $this->addVideoPamphlet($product->children,$pamphlets,$videos);
+
+                $this->addVideoPamphlet($product->complimentaryproducts, $pamphlets, $videos);
             }
         }
     }

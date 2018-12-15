@@ -66,6 +66,7 @@ class OrderproductController extends Controller
     public function store(Request $request)
     {
         $product_id = $request->get("product_id");
+
         $product = Product::FindorFail($product_id);
         if ($request->has("userId_bhrk")) {
             $userId = $request->get("userId_bhrk");
@@ -98,9 +99,11 @@ class OrderproductController extends Controller
         ) {
             switch ($parentProductType) {
                 case "configurable" :
-                    if (session()->has("adminOrder_id"))
+                    if (session()->has("adminOrder_id")) {
                         $children = $product->children;
-                    else $children = $product->children->where("enable", 1);
+                    } else {
+                        $children = $product->children->where("enable", 1);
+                    }
 
                     foreach ($children as $child) {
                         $attributevalues = $child->attributevalues;

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Traits\DateTrait;
 use App\Traits\Helper;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -54,6 +55,7 @@ class Productfile extends Model
 {
     use SoftDeletes;
     use Helper;
+    use DateTrait;
     /**      * The attributes that should be mutated to dates.        */
     protected $dates = [
         'created_at',

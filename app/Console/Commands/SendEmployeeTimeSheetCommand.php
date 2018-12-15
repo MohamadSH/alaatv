@@ -139,7 +139,7 @@ class SendEmployeeTimeSheetCommand extends Command
                     $employeeTimeSheet->finishLunchBreak = $employeeTimeSheet->clockOut;
             }
 
-            $employeeTimeSheet->managerComment = $employeeTimeSheet->managerComment . " ثبت توسط سیستم : مرخصی یا تعطیلی غیر رسمی";
+//            $employeeTimeSheet->managerComment = $employeeTimeSheet->managerComment . " ثبت توسط سیستم : مرخصی یا تعطیلی غیر رسمی";
             $employeeTimeSheet->timeSheetLock = 1;
 
             if ($employeeTimeSheet->update())

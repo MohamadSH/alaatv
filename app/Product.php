@@ -3,8 +3,8 @@
 namespace App;
 
 use App\Classes\{Advertisable,
+    Checkout\Alaa\AlaaProductPriceCalculator,
     FavorableInterface,
-    Pricing\Alaa\AlaaCashier,
     SEO\SeoInterface,
     SEO\SeoMetaTagsGenerator,
     Taggable};
@@ -65,7 +65,6 @@ use Illuminate\Support\{Collection, Facades\Cache, Facades\Config};
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Productfile[]    $productfiles
  * @property-read \App\Producttype|null                                          $producttype
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Product configurable()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product enable()
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Product onlyTrashed()
  * @method static bool|null restore()
@@ -135,9 +134,6 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
         'محدود',
     ];
     public const EXCLUSIVE_RELATED_PRODUCTS = [
-        91,
-        92,
-        104,
     ];
 
     public const EXCLUDED_RELATED_PRODUCTS = [
@@ -178,6 +174,7 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
         'introVideo',
         'isFree',
         'specialDescription',
+        'redirectUrl',
     ];
 
     /**
@@ -379,15 +376,16 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
      */
     public function scopeValid($query)
     {
+        $now = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
+            ->timezone('Asia/Tehran');
+
         return $query
-            ->where(function ($q) {
-                $q->where('validSince', '<', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
-                                                   ->timezone('Asia/Tehran'))
+            ->where(function ($q) use ($now) {
+                $q->where('validSince', '<', $now)
                   ->orWhereNull('validSince');
             })
-            ->where(function ($q) {
-                $q->where('validUntil', '>', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
-                                                   ->timezone('Asia/Tehran'))
+            ->where(function ($q) use ($now) {
+                $q->where('validUntil', '>', $now)
                   ->orWhereNull('validUntil');
             });
     }
@@ -607,13 +605,8 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
     {
         $key = "product:getGrandParent:" . $this->cacheKey();
         return Cache::remember($key, Config::get("constants.CACHE_60"), function () {
-            $counter = 1;
-            $parentsArray = [];
-            $myProduct = $this;
-            while ($myProduct->hasParents()) {
-                $parentsArray = array_add($parentsArray, $counter++, $myProduct->parents->first());
-                $myProduct = $myProduct->parents->first();
-            }
+            $parentsArray = $this->makeParentArray($this);
+
             if (empty($parentsArray))
                 return false;
             else
@@ -757,7 +750,7 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
                 foreach ($parentsArray as $parent) {
                     // ToDo : It does not check parents in a hierarchy to the root
                     $bons = $parent->getBons($bonName);
-                    if (!$bons->isEmpty())
+                    if ($bons->isNotEmpty())
                         break;
                 }
             }
@@ -776,14 +769,14 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
     {
         $key = "product:BoneName:" . $this->cacheKey() . "-bone:" . $bonName;
         return Cache::remember($key, Config::get("constants.CACHE_600"), function () use ($bonName, $enable) {
-            $bons = $this->bons;
+            $bons = $this->bons();
             if (strlen($bonName) > 0)
                 $bons = $bons->where("name", $bonName);
 
             if ($enable)
-                $bons = $bons->where("isEnable", $enable);
+                $bons = $bons->enable();
 
-            return $bons;
+            return $bons->get();
         });
 
     }
@@ -826,6 +819,8 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
     {
         if ($value == 0) {
             $this->attributes["amount"] = null;
+        }else {
+            $this->attributes["amount"] = $value;
         }
     }
 
@@ -838,6 +833,9 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
         if ($this->strIsEmpty($value)) {
             $this->attributes["discount"] = null;
         }
+        else {
+            $this->attributes["discount"] = $value;
+        }
     }
 
     /** Setter mutator for discount
@@ -848,6 +846,9 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
     {
         if ($this->strIsEmpty($value)) {
             $this->attributes["shortDescription"] = null;
+        }
+        else{
+            $this->attributes["shortDescription"] = $value;
         }
     }
 
@@ -860,6 +861,9 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
         if ($this->strIsEmpty($value)) {
             $this->attributes["longDescription"] = null;
         }
+        else {
+            $this->attributes["longDescription"] = $value;
+        }
     }
 
     /** Setter mutator for discount
@@ -870,6 +874,8 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
     {
         if ($this->strIsEmpty($value)) {
             $this->attributes["specialDescription"] = null;
+        }else {
+            $this->attributes["specialDescription"] = $value;
         }
     }
 
@@ -958,6 +964,7 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
         $key = "product:SamplePhotos:" . $this->cacheKey();
         $productSamplePhotos = Cache::remember($key, config("constants.CACHE_60"), function () {
             return $this->photos()
+                        ->enable()
                         ->get()
                         ->sortBy("order");
         });
@@ -1173,6 +1180,49 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
         return isset($this->amount);
     }
 
+    /**
+     * Checks whether this product is free or not
+     *
+     * @return bool
+     */
+    public function isFree():bool{
+        return ($this->isFree)?true:false;
+    }
+
+    /**
+     *
+     * Checks whether this product has this coupon or not
+     * @param Coupon $coupon
+     * @return bool
+     */
+    public function hasThisCoupon(Coupon $coupon):bool
+    {
+        $flag = true;
+        if (!in_array($coupon->id, $this->coupons->pluck('id')->toArray())) {
+            $flag = false;
+            $parentsArray = $this->makeParentArray($this);
+            foreach ($parentsArray as $parent) {
+                if (in_array($coupon->id, $parent->coupons->pluck('id')->toArray())) {
+                    $flag = true;
+                    break;
+                }
+            }
+        }
+
+        return $flag;
+    }
+
+    /**
+     * Checks whether this product has this bon or not
+     *
+     * @param $bonId
+     * @return bool
+     */
+    public function hasBon($bonId)
+    {
+        return $this->bons->where("id" , $bonId)->isNotEmpty();
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Other
@@ -1184,18 +1234,19 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
         $key = "product:getGifts:" . $this->cacheKey();
         return Cache::remember($key, Config::get("constants.CACHE_60"), function () {
             $gifts = collect();
-
-            foreach ($this->gifts as $gift) {
-                $gifts->push($gift);
-            }
-
+            $gifts = $gifts->merge($this->gifts);
 
             $grandParent = $this->getGrandParent();
             if ($grandParent !== false) {
-                foreach ($grandParent->gifts as $gift) {
-                    $gifts->push($gift);
-                }
+                $gifts = $gifts->merge($grandParent->gifts);
             }
+
+            $allChildren =  $this->getAllChildren();
+            foreach ($allChildren as $child)
+            {
+                $gifts = $gifts->merge($child->gifts);
+            }
+
             return $gifts;
         });
     }
@@ -1276,8 +1327,9 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
         $costArray = [];
         $costInfo = $this->obtainCostInfo($user);
         $costArray["cost"] = $costInfo->info->productCost;
-        $costArray["CustomerCost"] = $costInfo->price;
-        $costArray["productDiscount"] = $costInfo->info->discount->info->product->info->percentage;
+        $costArray["customerPrice"] = $costInfo->price;
+        $costArray["productDiscount"] = $costInfo->info->discount->info->product->info->percentageBase->percentage;
+        $costArray["productDiscountValue"] = $costInfo->info->discount->info->product->info->percentageBase->decimalValue;
         $costArray["productDiscountAmount"] = $costInfo->info->discount->info->product->info->amount;
         $costArray["bonDiscount"] = $costInfo->info->discount->info->bon->info->$bonName->totalPercentage;
         $costArray["customerDiscount"] = $costInfo->info->discount->totalAmount;
@@ -1298,7 +1350,7 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
 
         return Cache::tags('bon')
                     ->remember($key, config("constants.CACHE_60"), function () use ($user) {
-                        $cost = new AlaaCashier($this, $user);
+                        $cost = new AlaaProductPriceCalculator($this, $user);
                         return json_decode($cost->getPrice());
                     });
     }
@@ -1526,31 +1578,31 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
     public function obtainPrice()
     {
         $cost = 0;
-        if ($this->hasParents()) {
-            $parent = $this->parents->first();
-            $parentProductType = $parent->producttype_id;
-            if ($parentProductType == config("constants.PRODUCT_TYPE_CONFIGURABLE")) {
-                if ($this->basePrice != 0 && $this->basePrice != $parent->basePrice)
-                    $cost += $this->basePrice;
-                else
-                    $cost += $parent->basePrice;
-            } else if ($parentProductType == config("constants.PRODUCT_TYPE_SELECTABLE")) {
-                if ($this->basePrice == 0) {
-                    $children = $this->children;
-                    foreach ($children as $child) {
-                        $cost += $child->basePrice;
+        if(!$this->isFree())
+            if ($this->hasParents()) {
+                $grandParent = $this->getGrandParent();
+                $grandParentProductType = $grandParent->producttype_id;
+                if ($grandParentProductType == config("constants.PRODUCT_TYPE_CONFIGURABLE")) {
+                    if ($this->basePrice != 0 && $this->basePrice != $grandParent->basePrice)
+                        $cost += $this->basePrice;
+                    else
+                        $cost += $grandParent->basePrice;
+                } else if ($grandParentProductType == config("constants.PRODUCT_TYPE_SELECTABLE")) {
+                    if ($this->basePrice == 0) {
+                        $children = $this->children;
+                        foreach ($children as $child) {
+                            $cost += $child->basePrice;
+                        }
+                    } else {
+                        $cost += $this->basePrice;
                     }
-                } else {
-                    $cost += $this->basePrice;
                 }
+            } else {
+                $cost += $this->basePrice;
             }
-        } else {
-            $cost += $this->basePrice;
-        }
 
         // Adding attributes extra cost
-        $attributevalues = $this->attributevalues('main')
-                                ->get();
+        $attributevalues = $this->attributevalues('main')->get();
         foreach ($attributevalues as $attributevalue) {
             if (isset($attributevalue->pivot->extraCost))
                 $cost += $attributevalue->pivot->extraCost;
@@ -1580,11 +1632,11 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
     }
 
     /**
-     * Obtains product's discount percentage
+     * Obtains discount value base on product parents
      *
-     * @return float|int
+     * @return float
      */
-    public function obtainDiscount()
+    public function getFinalDiscountValue()
     {
         $discount = 0;
         if ($this->hasParents()) {
@@ -1604,6 +1656,17 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
             $discount = $this->discount;
         }
 
+        return $discount;
+    }
+
+    /**
+     * Obtains product's discount percentage
+     *
+     * @return float|int
+     */
+    public function obtainDiscount()
+    {
+        $discount = $this->getFinalDiscountValue();
         return $discount / 100;
     }
 
@@ -1660,5 +1723,65 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
         }
 
         return $discountAmount;
+    }
+
+    /**
+     * Disables the product
+     *
+     */
+    public function disable():void
+    {
+        $this->enable = 0 ;
+    }
+
+    /**
+     * Enables the product
+     *
+     */
+    public function enable():void
+    {
+        $this->enable = 1;
+    }
+
+    /**
+     * Gets a collection containing all of product children
+     *
+     * @return mixed
+     */
+    public function getAllChildren()
+    {
+        $key = "product:makeChildrenArray:" . $this->cacheKey();
+        return Cache::remember($key, Config::get("constants.CACHE_0"), function () {
+            $children = collect();
+            if ($this->hasChildren()) {
+                $thisChildren = $this->children;
+                $children = $children->merge($thisChildren);
+                foreach ($thisChildren as $child)
+                {
+                    $children = $children->merge($child->getAllChildren());
+                }
+            }
+            return $children;
+        });
+    }
+
+    /**
+     * Makes a collection of product phoots
+     *
+     */
+    public function getPhotos()
+    {
+        $photos = collect();
+        $thisPhotos = $this->sample_photos;
+        $photos = $photos->merge($thisPhotos);
+
+        $allChildren =  $this->getAllChildren();
+        foreach ($allChildren as $child)
+        {
+            $childPhotos = $child->sample_photos;
+            $photos = $photos->merge($childPhotos);
+        }
+
+        return $photos;
     }
 }

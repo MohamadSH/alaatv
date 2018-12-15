@@ -9,6 +9,26 @@
         </label>
     </div>
 @endif
+<div class="col-md-1" style="padding-left: 0px">
+    <label class="control-label" style="float: right;">
+        بدون هیچ سفارشی
+        <label class="mt-checkbox mt-checkbox-outline">
+            <input type="checkbox" id="" value="1"
+                   name="doesntHaveOrder">
+            <span class="bg-grey-cararra"></span>
+        </label>
+    </label>
+</div>
+<div class="col-md-1" style="padding-left: 0px">
+    <label class="control-label" style="float: right;">
+        حداقل یک سفارش نهایی شده دارد
+        <label class="mt-checkbox mt-checkbox-outline">
+            <input type="checkbox" id="" value="1"
+                   name="hasClosedOrder">
+            <span class="bg-grey-cararra"></span>
+        </label>
+    </label>
+</div>
 @if(isset($withCheckbox))
     <div class="col-md-11" @if(isset($withCheckbox) && $withCheckbox) style="padding-right: 0px" @endif>
         @endif

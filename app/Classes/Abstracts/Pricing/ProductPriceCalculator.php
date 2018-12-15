@@ -2,17 +2,17 @@
 /**
  * Created by PhpStorm.
  * User: mohamamad
- * Date: 10/11/2018
- * Time: 2:33 PM
+ * Date: 11/30/2018
+ * Time: 4:59 PM
  */
 
-namespace App\Classes\Abstracts;
-
+namespace App\Classes\Abstracts\checkout;
 
 use App\Product;
 use App\User;
 
-abstract class Cashier
+abstract class ProductPriceCalculator
+
 {
     /*
     |--------------------------------------------------------------------------
@@ -22,6 +22,7 @@ abstract class Cashier
 
     protected $bonName;
     protected $rawCost;
+    protected $discountValue;
     protected $discountPercentage;
     protected $bonDiscountPercentage;
     protected $totalBonNumber;
@@ -36,6 +37,7 @@ abstract class Cashier
     public function __construct(Product $product, User $user = null)
     {
         $this->rawCost = $product->obtainPrice();
+        $this->discountValue = $product->getFinalDiscountValue();
         $this->discountPercentage = $product->obtainDiscount();
         $this->discountCashAmount = $product->obtainDiscountAmount();
 
@@ -68,9 +70,9 @@ abstract class Cashier
     /**
      * @param int $rawCost
      *
-     * @return Cashier
+     * @return ProductPriceCalculator
      */
-    public function setRawCost($rawCost): Cashier
+    public function setRawCost($rawCost): ProductPriceCalculator
     {
         $this->rawCost = $rawCost;
         return $this;
@@ -79,9 +81,9 @@ abstract class Cashier
     /**
      * @param int $discountPercentage
      *
-     * @return Cashier
+     * @return ProductPriceCalculator
      */
-    public function setDiscountPercentage($discountPercentage): Cashier
+    public function setDiscountPercentage($discountPercentage): ProductPriceCalculator
     {
         $this->discountPercentage = $discountPercentage;
         return $this;
@@ -90,9 +92,9 @@ abstract class Cashier
     /**
      * @param int $bonDiscountPercentage
      *
-     * @return Cashier
+     * @return ProductPriceCalculator
      */
-    public function setBonDiscountPercentage($bonDiscountPercentage): Cashier
+    public function setBonDiscountPercentage($bonDiscountPercentage): ProductPriceCalculator
     {
         $this->bonDiscountPercentage = $bonDiscountPercentage;
         return $this;
@@ -101,9 +103,9 @@ abstract class Cashier
     /**
      * @param int $totalBonNumber
      *
-     * @return Cashier
+     * @return ProductPriceCalculator
      */
-    public function setTotalBonNumber(int $totalBonNumber): Cashier
+    public function setTotalBonNumber(int $totalBonNumber): ProductPriceCalculator
     {
         $this->totalBonNumber = $totalBonNumber;
         return $this;
@@ -112,9 +114,9 @@ abstract class Cashier
     /**
      * @param int $discountCashAmount
      *
-     * @return Cashier
+     * @return ProductPriceCalculator
      */
-    public function setDiscountCashAmount($discountCashAmount): Cashier
+    public function setDiscountCashAmount($discountCashAmount): ProductPriceCalculator
     {
         $this->discountCashAmount = $discountCashAmount;
         return $this;

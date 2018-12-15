@@ -31,4 +31,29 @@ class UserCollection extends Collection
         return $users;
     }
 
+    /**
+     * Makes uniques collection of this user collection
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getUniqueUsers()
+    {
+        $uniqueUsers = $this->groupBy("nationalCode");
+        $users = collect();
+        foreach ($uniqueUsers as $user) {
+            $verifiedUsers = $user->getUsersWithVerifiedMobiles();
+            if ($verifiedUsers->isNotEmpty()) {
+                $users->push($verifiedUsers->first());
+            } else {
+                $users->push($user->first());
+            }
+        }
+
+        return $users;
+    }
+
+    public function getUsersWithVerifiedMobiles()
+    {
+        return $this->where("mobile_verified_at" , "<>" , null);
+    }
 }
