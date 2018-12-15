@@ -23,10 +23,10 @@ class AlaaOrderproductSumCalculator extends OrderproductSumCalculator
         $totalRawPriceWhichHasDiscount = 0 ;
         $totalRawPriceWhichDoesntHaveDiscount = 0 ;//totalRawPriceWhichDoesntHaveDiscount
         foreach ($calculatedOrderproducts as $orderproduct) {
-            $orderproductPriceInfo = $orderproduct->priceInfo;
+            $orderproductPriceInfo = $calculatedOrderproducts->getNewPriceForItem($orderproduct);
 
-            $orderproductPrice = $orderproductPriceInfo->totalCost;
-            $orderproductExtraPrice = $orderproductPriceInfo->extraCost;
+            $orderproductPrice = $orderproductPriceInfo["totalCost"];
+            $orderproductExtraPrice = $orderproductPriceInfo["extraCost"];
 
             if ($orderproduct->includedInCoupon == 1) {
                 $totalRawPriceWhichHasDiscount += $orderproductPrice;

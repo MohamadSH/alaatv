@@ -219,4 +219,12 @@ class Coupon extends Model
             $validationCode,
         ];
     }
+
+    public function getCouponTypeAttribute()
+    {
+        if(!isset($this->coupontype->id))
+            return config("constants.COUPON_TYPE_OVERALL");
+        else
+            return $this->coupontype->id;
+    }
 }

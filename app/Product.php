@@ -605,13 +605,8 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
     {
         $key = "product:getGrandParent:" . $this->cacheKey();
         return Cache::remember($key, Config::get("constants.CACHE_60"), function () {
-            $counter = 1;
-            $parentsArray = [];
-            $myProduct = $this;
-            while ($myProduct->hasParents()) {
-                $parentsArray = array_add($parentsArray, $counter++, $myProduct->parents->first());
-                $myProduct = $myProduct->parents->first();
-            }
+            $parentsArray = $this->makeParentArray($this);
+
             if (empty($parentsArray))
                 return false;
             else
@@ -736,7 +731,7 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
                 foreach ($parentsArray as $parent) {
                     // ToDo : It does not check parents in a hierarchy to the root
                     $bons = $parent->getBons($bonName);
-                    if (!$bons->isEmpty())
+                    if ($bons->isNotEmpty())
                         break;
                 }
             }
@@ -755,14 +750,14 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
     {
         $key = "product:BoneName:" . $this->cacheKey() . "-bone:" . $bonName;
         return Cache::remember($key, Config::get("constants.CACHE_600"), function () use ($bonName, $enable) {
-            $bons = $this->bons;
+            $bons = $this->bons();
             if (strlen($bonName) > 0)
                 $bons = $bons->where("name", $bonName);
 
             if ($enable)
-                $bons = $bons->where("isEnable", $enable);
+                $bons = $bons->enable();
 
-            return $bons;
+            return $bons->get();
         });
 
     }
@@ -1166,6 +1161,49 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
         return isset($this->amount);
     }
 
+    /**
+     * Checks whether this product is free or not
+     *
+     * @return bool
+     */
+    public function isFree():bool{
+        return ($this->isFree)?true:false;
+    }
+
+    /**
+     *
+     * Checks whether this product has this coupon or not
+     * @param Coupon $coupon
+     * @return bool
+     */
+    public function hasThisCoupon(Coupon $coupon):bool
+    {
+        $flag = true;
+        if (!in_array($coupon->id, $this->coupons->pluck('id')->toArray())) {
+            $flag = false;
+            $parentsArray = $this->makeParentArray($this);
+            foreach ($parentsArray as $parent) {
+                if (in_array($coupon->id, $parent->coupons->pluck('id')->toArray())) {
+                    $flag = true;
+                    break;
+                }
+            }
+        }
+
+        return $flag;
+    }
+
+    /**
+     * Checks whether this product has this bon or not
+     *
+     * @param $bonId
+     * @return bool
+     */
+    public function hasBon($bonId)
+    {
+        return $this->bons->where("id" , $bonId)->isNotEmpty();
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Other
@@ -1271,7 +1309,8 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
         $costInfo = $this->obtainCostInfo($user);
         $costArray["cost"] = $costInfo->info->productCost;
         $costArray["customerPrice"] = $costInfo->price;
-        $costArray["productDiscount"] = $costInfo->info->discount->info->product->info->percentage;
+        $costArray["productDiscount"] = $costInfo->info->discount->info->product->info->percentageBase->percentage;
+        $costArray["productDiscountValue"] = $costInfo->info->discount->info->product->info->percentageBase->decimalValue;
         $costArray["productDiscountAmount"] = $costInfo->info->discount->info->product->info->amount;
         $costArray["bonDiscount"] = $costInfo->info->discount->info->bon->info->$bonName->totalPercentage;
         $costArray["customerDiscount"] = $costInfo->info->discount->totalAmount;
@@ -1520,31 +1559,31 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
     public function obtainPrice()
     {
         $cost = 0;
-        if ($this->hasParents()) {
-            $grandParent = $this->getGrandParent();
-            $grandParentProductType = $grandParent->producttype_id;
-            if ($grandParentProductType == config("constants.PRODUCT_TYPE_CONFIGURABLE")) {
-                if ($this->basePrice != 0 && $this->basePrice != $grandParent->basePrice)
-                    $cost += $this->basePrice;
-                else
-                    $cost += $grandParent->basePrice;
-            } else if ($grandParentProductType == config("constants.PRODUCT_TYPE_SELECTABLE")) {
-                if ($this->basePrice == 0) {
-                    $children = $this->children;
-                    foreach ($children as $child) {
-                        $cost += $child->basePrice;
+        if(!$this->isFree())
+            if ($this->hasParents()) {
+                $grandParent = $this->getGrandParent();
+                $grandParentProductType = $grandParent->producttype_id;
+                if ($grandParentProductType == config("constants.PRODUCT_TYPE_CONFIGURABLE")) {
+                    if ($this->basePrice != 0 && $this->basePrice != $grandParent->basePrice)
+                        $cost += $this->basePrice;
+                    else
+                        $cost += $grandParent->basePrice;
+                } else if ($grandParentProductType == config("constants.PRODUCT_TYPE_SELECTABLE")) {
+                    if ($this->basePrice == 0) {
+                        $children = $this->children;
+                        foreach ($children as $child) {
+                            $cost += $child->basePrice;
+                        }
+                    } else {
+                        $cost += $this->basePrice;
                     }
-                } else {
-                    $cost += $this->basePrice;
                 }
+            } else {
+                $cost += $this->basePrice;
             }
-        } else {
-            $cost += $this->basePrice;
-        }
 
         // Adding attributes extra cost
-        $attributevalues = $this->attributevalues('main')
-                                ->get();
+        $attributevalues = $this->attributevalues('main')->get();
         foreach ($attributevalues as $attributevalue) {
             if (isset($attributevalue->pivot->extraCost))
                 $cost += $attributevalue->pivot->extraCost;
@@ -1574,11 +1613,11 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
     }
 
     /**
-     * Obtains product's discount percentage
+     * Obtains discount value base on product parents
      *
-     * @return float|int
+     * @return float
      */
-    public function obtainDiscount()
+    public function getFinalDiscountValue()
     {
         $discount = 0;
         if ($this->hasParents()) {
@@ -1598,6 +1637,17 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
             $discount = $this->discount;
         }
 
+        return $discount;
+    }
+
+    /**
+     * Obtains product's discount percentage
+     *
+     * @return float|int
+     */
+    public function obtainDiscount()
+    {
+        $discount = $this->getFinalDiscountValue();
         return $discount / 100;
     }
 

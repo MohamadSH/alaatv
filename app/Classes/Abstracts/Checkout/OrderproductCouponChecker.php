@@ -20,10 +20,11 @@ abstract class OrderproductCouponChecker extends CheckoutProcessor
     {
         $orderproductsToCalculateFromNewBase = $cashier->getRawOrderproductsToCalculateFromBase();
         $coupon = $cashier->getOrderCoupon();
-        if(!isset($orderproductsToCalculateFromNewBase) || !isset($coupon))
-        {
-            throw new Exception('Orderproducts and coupon have not been set to determine included orderproducts in coupon');
-        }
+        if(!isset($orderproductsToCalculateFromNewBase))
+            throw new Exception('Orderproducts to recalculate have not been set');
+
+        if(!isset($coupon))
+            throw new Exception('Order coupon has not been set');
 
         $checkedOrderproducts =  $this->IsIncludedInCoupon($orderproductsToCalculateFromNewBase , $coupon);
 

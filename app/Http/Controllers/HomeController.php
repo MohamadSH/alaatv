@@ -191,33 +191,48 @@ class HomeController extends Controller
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
         try{
-          /*  $orderproducts = Orderproduct::FindOrFail(108196);
-            $alaaCashierFacade = new OrderproductCheckout($orderproducts , true);
-            $priceInfo = json_decode($alaaCashierFacade->checkout());
-            $orderproductPriceInfo = $priceInfo->orderproductsInfo->calculatedOrderproducts[0]->priceInfo;
-            dd($orderproductPriceInfo)   ;*/
 
-//            $order1 = Order::FindOrFail(234876);
-//            $order1 = Order::FindOrFail(234813);
-            $order1 = Order::FindOrFail(248053);
+            $users = User::whereIn("id" , [1,2,3])->get();
+            foreach ($users as $user)
+            {
+                $user->firstName .= "3";
+                $user->update();
+            }
 
-            $calculateOrderCost = false;
+            dd($users);
+
+            /*$orderproduct = Orderproduct::FindOrFail(108196);
+            dd($orderproduct->obtainOrderproductCost(false));*/
+
+            $order = Order::FindOrFail(248131);
+//            $orderCost = $order->obtainOrderCost(false,false , "REOBTAIN");
+//            $orderCost = $order->obtainOrderCost(true,false,"REOBTAIN");
+//            $orderCost = $order->obtainOrderCost(false,true,"REOBTAIN");
+//            $orderCost = $order->obtainOrderCost(true,true,"REOBTAIN");
+//            $orderCost = $order->obtainOrderCost(false,false );
+//            $orderCost = $order->obtainOrderCost(true,false);
+//            $orderCost = $order->obtainOrderCost(false,true);
+            $orderCost = $order->obtainOrderCost(true,true);
+            dd($orderCost);
+
+            $calculateOrderCost = true;
             $calculateOrderproductCost = true;
 
             if($calculateOrderCost) {
                 $orderproductsToCalculateFromBaseIds = [];
                 if($calculateOrderproductCost)
                 {
-                    $orderproductsToCalculateFromBaseIds = $order1->normalOrderproducts->pluck("id")->toArray();
+                    $orderproductsToCalculateFromBaseIds = $order->normalOrderproducts->pluck("id")->toArray();
                 }
 
-                $alaaCashierFacade = new \App\Classes\Checkout\Alaa\OrderCheckout($order1 , $orderproductsToCalculateFromBaseIds);
+                $alaaCashierFacade = new \App\Classes\Checkout\Alaa\OrderCheckout($order , $orderproductsToCalculateFromBaseIds);
             }
             else{
-                $alaaCashierFacade = new \App\Classes\Checkout\Alaa\ReObtainOrderFromRecords($order1);
+                $alaaCashierFacade = new \App\Classes\Checkout\Alaa\ReObtainOrderFromRecords($order);
             }
 
             $priceInfo = json_decode($alaaCashierFacade->checkout());
+
             dd($priceInfo);
         }
         catch (\Exception    $e) {

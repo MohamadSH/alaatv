@@ -66,6 +66,7 @@ class OrderproductController extends Controller
     public function store(Request $request)
     {
         $product_id = $request->get("product_id");
+
         $product = Product::FindorFail($product_id);
         if ($request->has("userId_bhrk")) {
             $userId = $request->get("userId_bhrk");

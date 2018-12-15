@@ -11,6 +11,7 @@ namespace App\Classes\Checkout\Alaa;
 use App\Classes\Abstracts\Cashier;
 use App\Classes\Checkout\Alaa\AlaaCashier;
 use App\Classes\Interfaces\CheckoutInvoker;
+use App\Collection\OrderproductCollection;
 use App\Orderproduct;
 
 class OrderproductCheckout extends CheckoutInvoker
@@ -42,12 +43,12 @@ class OrderproductCheckout extends CheckoutInvoker
 
     protected function initiateCashier():Cashier
     {
-        $orderproductsToCalculateFromBase = collect();
-        $orderproductsToCalculateFromRecord = collect();
+        $orderproductsToCalculateFromBase = new OrderproductCollection();
+        $orderproductsToCalculateFromRecord = new OrderproductCollection();
         if($this->recalculate)
-            $orderproductsToCalculateFromBase = collect([$this->orderproduct]);
+            $orderproductsToCalculateFromBase = new OrderproductCollection([$this->orderproduct]);
         else
-            $orderproductsToCalculateFromRecord = collect([$this->orderproduct]);
+            $orderproductsToCalculateFromRecord = new OrderproductCollection([$this->orderproduct]);
 
         $alaaCashier = new AlaaCashier();
         $alaaCashier->setRawOrderproductsToCalculateFromBase($orderproductsToCalculateFromBase);

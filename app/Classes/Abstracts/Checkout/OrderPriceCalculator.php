@@ -18,13 +18,15 @@ abstract class OrderPriceCalculator extends CheckoutProcessor
     {
         $totalRawPriceWhichDoesntHaveDiscount = $cashier->getTotalRawPriceWhichDoesntHaveDiscount();
         $totalPriceWithDiscount = $cashier->getTotalPriceWithDiscount();
-        if(!isset($totalRawPriceWhichDoesntHaveDiscount) || !isset($totalPriceWithDiscount))
-        {
-            throw new Exception('Could not calculate total price');
-        }
+        if(!isset($totalRawPriceWhichDoesntHaveDiscount))
+            throw new Exception('Total price which does not have coupon discount has not been set');
+
+        if(!isset($totalPriceWithDiscount))
+            throw new Exception('Total price which has been calculated from coupon discount has not been set');
 
         $totalPrice =  $this->calculateOrderPrice($totalRawPriceWhichDoesntHaveDiscount , $totalPriceWithDiscount );
 
+        $cashier->setFinalPrice($totalPrice);
         $cashier->setTotalPrice($totalPrice);
 
         return $this->next($cashier) ;

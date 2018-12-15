@@ -20,9 +20,7 @@ abstract class OrderproductSumCalculator extends CheckoutProcessor
     {
         $calculatedOrderproducts = $cashier->getCalculatedOrderproducts();
         if(!isset($calculatedOrderproducts))
-        {
-            throw new Exception('There is no calculated orderproducts');
-        }
+            throw new Exception('Calculated orderproducts have not been set');
 
         [
             $totalRawPriceWhichHasDiscount,
@@ -31,7 +29,8 @@ abstract class OrderproductSumCalculator extends CheckoutProcessor
         = $this->calculateSum($calculatedOrderproducts);
 
         $cashier->setTotalRawPriceWhichDoesntHaveDiscount($totalRawPriceWhichDoesntHaveDiscount)
-                ->setTotalRawPriceWhichHasDiscount($totalRawPriceWhichHasDiscount);
+                ->setTotalRawPriceWhichHasDiscount($totalRawPriceWhichHasDiscount)
+                ->setTotalPriceWithDiscount($totalRawPriceWhichHasDiscount);
 
         return $this->next($cashier) ;
     }

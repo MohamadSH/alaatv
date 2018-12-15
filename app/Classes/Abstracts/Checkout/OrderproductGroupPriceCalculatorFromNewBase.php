@@ -19,9 +19,7 @@ abstract class OrderproductGroupPriceCalculatorFromNewBase extends CheckoutProce
     {
         $orderproductsToCalculateFromNewBase = $cashier->getRawOrderproductsToCalculateFromBase();
         if(!isset($orderproductsToCalculateFromNewBase))
-        {
-            throw new Exception('There is no orderproducts');
-        }
+            throw new Exception('Orderproducts to recalculate have not been set');
 
         $calculatedOrderproductsFromNewBase = $this->getOrderproductGroupPrice($orderproductsToCalculateFromNewBase);
 

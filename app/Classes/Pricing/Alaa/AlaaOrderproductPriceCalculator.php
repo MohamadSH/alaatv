@@ -17,6 +17,6 @@ class AlaaOrderproductPriceCalculator extends OrderproductPriceCalculator
     {
         $priceInfo = $this->getOrderproductPrice() ;
 
-        return json_encode($priceInfo) ;
+        return $priceInfo;
     }
 }

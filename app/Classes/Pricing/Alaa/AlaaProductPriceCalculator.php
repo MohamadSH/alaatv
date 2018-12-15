@@ -36,7 +36,10 @@ class AlaaProductPriceCalculator extends ProductPriceCalculator
                             'totalAmount' => $this->getProductDiscount(),
                             'info'        => [
                                 'amount'     => $this->discountCashAmount,
-                                'percentage' => $this->discountPercentage,
+                                'percentageBase' => [
+                                    'percentage' => $this->discountPercentage,
+                                    'decimalValue' => $this->discountValue,
+                                ]
                             ],
                         ],
                     ],

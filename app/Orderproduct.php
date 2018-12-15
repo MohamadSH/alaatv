@@ -174,8 +174,9 @@ class Orderproduct extends Model
     private function calculatePayableCost($calculateCost = true)
     {
         $alaaCashierFacade = new OrderproductCheckout($this , $calculateCost);
-        $priceInfo = json_decode($alaaCashierFacade->checkout());
-        $orderproductPriceInfo = $priceInfo->orderproductsInfo->calculatedOrderproducts[0]->priceInfo;
+        $priceInfo = $alaaCashierFacade->checkout();
+        $calculatedOrderproducts = $priceInfo["orderproductsInfo"]["calculatedOrderproducts"];
+        $orderproductPriceInfo = $calculatedOrderproducts->getNewPriceForItem($calculatedOrderproducts->first());
         return $orderproductPriceInfo   ;
 
         //////////////////////////OLD CODE///////////////////////////////////
@@ -200,13 +201,13 @@ class Orderproduct extends Model
     {
         $priceInfo = $this->calculatePayableCost($calculateCost);
         return [
-            "cost"                  => $priceInfo->cost,
-            "extraCost"             => $priceInfo->extraCost,
-            "productDiscount"       => $priceInfo->productDiscount,
-            'bonDiscount'           => $priceInfo->bonDiscount,
-            "productDiscountAmount" => $priceInfo->productDiscountAmount,
-            'customerPrice'          => $priceInfo->customerCost,
-            'totalPrice'            => $priceInfo->totalCost
+            "cost"                  => $priceInfo["cost"],
+            "extraCost"             => $priceInfo["extraCost"],
+            "productDiscount"       => $priceInfo["productDiscount"],
+            'bonDiscount'           => $priceInfo["bonDiscount"],
+            "productDiscountAmount" => $priceInfo["productDiscountAmount"],
+            'customerPrice'          => $priceInfo["customerCost"],
+            'totalPrice'            => $priceInfo["totalCost"],
         ];
 
         ////////////////////////////Old Code/////////////////////
@@ -274,13 +275,31 @@ class Orderproduct extends Model
         ];
     }
 
-    public function getTotalBonNumber()
+    /**
+     * Obtains orderproduct's total bon discount decimal value
+     *
+     * @return int
+     */
+    public function getTotalBonDiscountDecimalValue():int
     {
-        $totalBonNumver = 0;
+        $totalBonNumber = 0;
         foreach ($this->userbons as $userbon) {
-            $totalBonNumver += $userbon->pivot->discount * $userbon->pivot->usageNumber;
+            $totalBonNumber += $userbon->pivot->discount * $userbon->pivot->usageNumber;
         }
-        return $totalBonNumver;
+
+        return $totalBonNumber;
+    }
+
+    /**
+     * Get orderproduct's total bon discount
+     *
+     * @return mixed
+     */
+    public function getTotalBonDiscountPercentage()
+    {
+        $totalBonDiscountValue = $this->getTotalBonDiscountDecimalValue();
+
+        return max($totalBonDiscountValue / 100 , 1);
     }
 
     public function isNormalType()
@@ -368,5 +387,114 @@ class Orderproduct extends Model
     public function newCollection(array $models = [])
     {
         return new OrderproductCollection($models);
+    }
+
+
+    /**
+     * @param $value
+     * @return float|int
+     */
+    public function getDiscountPercentageAttribute($value)
+    {
+        return $value / 100 ;
+    }
+
+    /**
+     * Checks whether orderproduct included in coupon or not and
+     * fills the appropriate table column
+     *
+     * @param Coupon $coupon
+     *
+     * @return bool
+     */
+    public function IsOrderproductIncludedInCoupon(Coupon $coupon)
+    {
+        if ($coupon->coupon_type == config("constants.COUPON_TYPE_OVERALL")) {
+            $flag = true;
+        } else {
+            $flag = $this->product->hasThisCoupon($coupon);
+        }
+
+        return $flag;
+    }
+
+    /**
+     * Sets orderproduct including in coupon
+     *
+     */
+    public function includeInCoupon():void
+    {
+        $this->includedInCoupon = 1;
+        $this->update();
+    }
+
+    /**
+     * Sets orderproduct excluding from coupon
+     *
+     */
+    public function excludeFromCoupon():void
+    {
+        $this->includedInCoupon = 0;
+        $this->update();
+    }
+
+    /**
+     * Determines whether orderproduct is available to purchase or not
+     * @return bool
+     */
+    public function isPurchasable():bool
+    {
+        return $this->product->isEnableToPurchase() ;
+    }
+
+    /**
+     * Updates orderproduct's attribute values
+     *
+     */
+    public function renewAttributeValue():void
+    {
+        $extraAttributes = $this->attributevalues;
+        $myParent = $this->product->getGrandParent();
+
+        foreach ($extraAttributes as $extraAttribute) {
+            $productAttributevalue = $myParent->attributevalues->where("id", $extraAttribute->id)->first();
+
+            if (!isset($productAttributevalue)) {
+                $this->attributevalues()
+                    ->detach($productAttributevalue);
+            } else {
+                $newExtraCost = $productAttributevalue->pivot->extraCost;
+                $this->attributevalues()
+                    ->updateExistingPivot($extraAttribute->id, ["extraCost" => $newExtraCost]);
+            }
+        }
+    }
+
+    public function renewUserBons()
+    {
+        $userbons = $this->userbons;
+        if ($userbons->isNotEmpty()) {
+            $bonName = config("constants.BON1");
+
+            $bons = $this->product->getTotalBons($bonName);
+
+            if ($bons->isEmpty()) {
+                foreach ($userbons as $userBon) {
+                    $this->userbons()->detach($userBon);
+
+                    $userBon->usedNumber = 0;
+                    $userBon->userbonstatus_id = config("constants.USERBON_STATUS_ACTIVE");
+                    $userBon->update();
+                }
+
+            } else {
+                $bon = $bons->first();
+                foreach ($userbons as $userbon) {
+                    $newDiscount = $bon->pivot->discount;
+                    $this->userbons()
+                        ->updateExistingPivot($userbon->id, ["discount" => $newDiscount]);
+                }
+            }
+        }
     }
 }

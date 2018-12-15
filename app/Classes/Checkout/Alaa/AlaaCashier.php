@@ -17,17 +17,20 @@ class AlaaCashier Extends Cashier
         $priceInfo = [
             "order"=> $this->order ,
             "totalPriceInfo" => [
-                    "totalRawPriceWhichHasDiscount"      => $this->totalRawPriceWhichHasDiscount,
+                    "totalRawPriceWhichHasDiscount"             => $this->totalRawPriceWhichHasDiscount,
                     "totalRawPriceWhichDoesntHaveDiscount"      => $this->totalRawPriceWhichDoesntHaveDiscount ,
-                    "totalPriceWithDiscount"      => $this->totalPriceWithDiscount ,
-                    "finalPrice"      =>  $this->finalPrice ,
+                    "totalPriceWithDiscount"                    => $this->totalPriceWithDiscount ,
+                    "totalPrice"                                => $this->totalPrice,
+                    "finalPrice"                                => $this->finalPrice ,
             ],
-            "orderproductsInfo" => [
-                "rawOrderproductsToCalculateFromBase" => $this->rawOrderproductsToCalculateFromBase ,
-                "rawOrderproductsToCalculateFromRecord" => $this->rawOrderproductsToCalculateFromRecord ,
-                "calculatedOrderproducts" => $this->calculatedOrderproducts,
+            "orderproductsInfo" =>
+            [
+                "rawOrderproductsToCalculateFromBase"           => $this->rawOrderproductsToCalculateFromBase ,
+                "rawOrderproductsToCalculateFromRecord"         => $this->rawOrderproductsToCalculateFromRecord ,
+                "calculatedOrderproducts"                       => $this->calculatedOrderproducts,
             ],
         ];
-        return json_encode($priceInfo);
+//        return json_encode($priceInfo);
+        return $priceInfo   ;
     }
 }

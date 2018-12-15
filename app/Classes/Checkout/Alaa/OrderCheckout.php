@@ -17,22 +17,20 @@ class OrderCheckout extends CheckoutInvoker
 {
     private $order ;
     private $orderproductsToCalculateFromBaseIds;
+    private $recheckIncludedOrderproductsInCoupon;
 
 
     /**
      * OrderCheckout constructor.
      * @param Order $order
      * @param array $orderproductsToCalculateFromBaseIds
+     * @param bool $recheckIncludedOrderproductsInCoupon
      */
-    public function __construct(Order $order , array $orderproductsToCalculateFromBaseIds = [])
+    public function __construct(Order $order , array $orderproductsToCalculateFromBaseIds = [] , $recheckIncludedOrderproductsInCoupon = false)
     {
-        $this->order = $order ;
+        $this->order = $order;
         $this->orderproductsToCalculateFromBaseIds = $orderproductsToCalculateFromBaseIds;
-    }
-
-    public function setChainClassesNameSpace($chainClassesNameSpace): void
-    {
-
+        $this->recheckIncludedOrderproductsInCoupon = $recheckIncludedOrderproductsInCoupon;
     }
 
     /**
@@ -41,7 +39,8 @@ class OrderCheckout extends CheckoutInvoker
     protected function fillChainArray():array
     {
         $chainCells = [];
-        if ($this->order->hasCoupon()) {
+
+        if ($this->recheckIncludedOrderproductsInCoupon) {
             $chainCells = ["AlaaOrderproductCouponChecker"];
         }
 
@@ -49,9 +48,10 @@ class OrderCheckout extends CheckoutInvoker
             "AlaaOrderproductGroupPriceCalculatorFromNewBase",
             "AlaaOrderproductGroupPriceCalculatorFromRecord",
             "AlaaOrderproductSumCalculator",
-            "AlaaCouponCalculator",
+            "AlaaOrderCouponCalculatorBasedOnPercentage",
+            "AlaaOrderCouponCalculatorBasedOnCostAmount",
             "AlaaOrderPriceCalculator",
-            "AlaaOrderDiscountCalculator",
+            "AlaaOrderDiscountCostAmountCalculator",
         ]);
         return $chainCells;
     }
@@ -65,11 +65,22 @@ class OrderCheckout extends CheckoutInvoker
         $orderproductsToCalculateFromBase = $orderproducts->whereIn("id" , $this->orderproductsToCalculateFromBaseIds);
         $orderproductsToCalculateFromRecord = $orderproducts->whereNotIn("id" , $this->orderproductsToCalculateFromBaseIds);
 
+        $couponDiscountCostAmount = 0 ;
+        $couponDiscountPercentage = 0;
+        $couponType = $this->order->getCouponDiscountTypeAttribute();
+        if($couponType !== false)
+        {
+            if($couponType["type"] == config("constants.DISCOUNT_TYPE_PERCENTAGE"))
+                $couponDiscountPercentage = $couponType["discount"] / 100;
+            elseif($couponType["type"] == config("constants.DISCOUNT_TYPE_COST"))
+                $couponDiscountCostAmount = $couponType["discount"];
+        }
         $alaaCashier = new AlaaCashier();
         $alaaCashier->setOrder($this->order)
                     ->setOrderCoupon($this->order->coupon)
-                    ->setOrderDiscount($this->order->discount)
-                    ->setOrderCouponDiscountType($this->order->coupon_discount_type)
+                    ->setOrderDiscountCostAmount($this->order->discount)
+                    ->setOrderCouponDiscountPercentage($couponDiscountPercentage)
+                    ->setOrderCouponDiscountCostAmount($couponDiscountCostAmount)
                     ->setRawOrderproductsToCalculateFromBase($orderproductsToCalculateFromBase)
                     ->setRawOrderproductsToCalculateFromRecord($orderproductsToCalculateFromRecord);
 

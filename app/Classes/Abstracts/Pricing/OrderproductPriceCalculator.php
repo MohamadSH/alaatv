@@ -99,12 +99,6 @@ abstract class OrderproductPriceCalculator
     {
         $priceArray = $this->obtainOrderproductPrice($orderproduct);
 
-        //ToDo: Does not belong here
-        /** Updating orderproduct cost with new numbers*/
-        $orderproduct->fillCostValues($priceArray);
-        $orderproduct->update();
-        /** End */
-
         return $priceArray ;
     }
 
@@ -117,73 +111,40 @@ abstract class OrderproductPriceCalculator
      */
     protected function obtainOrderproductPrice(Orderproduct $orderproduct , $calculate = true) :array
     {
-        $price = 0;
-        $bonDiscount = 0;
-        $productDiscount = 0;
-        $productDiscountAmount = 0;
-        $orderProductExtraPrice = 0;
         if ($calculate) {
-            $product = $orderproduct->product;
-            if ($product->isFree)
-                $price = null;
-            else {
+                $product = $orderproduct->product;
+
                 $priceArray = $product->calculatePayablePrice();
                 $price = $priceArray["cost"];
-                $productDiscount = $priceArray["productDiscount"];
+                $productDiscountPercentage = $priceArray["productDiscount"];
+                $productDiscountValue = $priceArray["productDiscountValue"];
                 $productDiscountAmount = $priceArray["productDiscountAmount"];
-
-                foreach ($orderproduct->attributevalues as $attributevalue) {
-                    $orderProductExtraPrice += $attributevalue->pivot->extraCost;
-                }
-
-                $userbons = $orderproduct->userbons;
-                foreach ($userbons as $userbon) {
-                    $bons = $product->bons->where("id", $userbon->bon_id)
-                        ->where("isEnable", 1);
-                    if ($bons->isEmpty()) {
-                        $parentsArray = $orderproduct->makeParentArray($product);
-                        if (!empty($parentsArray)) {
-                            foreach ($parentsArray as $parent) {
-                                $bons = $parent->bons->where("id", $userbon->bon_id)
-                                    ->where("isEnable", 1);
-                                if (!$bons->isEmpty())
-                                    break;
-                            }
-                        }
-                    }
-                    if (!$bons->isEmpty()) {
-                        $bonDiscount += $userbon->pivot->discount * $userbon->pivot->usageNumber;
-                    }
-                }
-            }
         } else {
-            $price = $orderproduct->cost;
-            $productDiscount = $orderproduct->discountPercentage;
-            $productDiscountAmount = $orderproduct->discountAmount;
-
-            foreach ($orderproduct->attributevalues as $attributevalue) {
-                $orderProductExtraPrice += $attributevalue->pivot->extraCost;
-            }
-
-            $userbons = $orderproduct->userbons;
-            foreach ($userbons as $userbon) {
-                $bonDiscount += $userbon->pivot->discount * $userbon->pivot->usageNumber;
-            }
+                $price = $orderproduct->cost;
+                $productDiscountValue      = $orderproduct->getOriginal("discountPercentage");
+                $productDiscountPercentage = $orderproduct->discountPercentage;
+                $productDiscountAmount     = $orderproduct->discountAmount;
         }
+
+        $orderProductExtraPrice = $orderproduct->getExtraCost();
+        $totalBonDiscountPercentage = $orderproduct->getTotalBonDiscountPercentage();
 
         $price = (int)$price;
 
-        $customerPrice = (int)(($price * (1 - ($productDiscount / 100))) * (1 - ($bonDiscount / 100)) - $productDiscountAmount);
+        $customerPrice = (int)(($price * (1 - $productDiscountPercentage)) * (1 - $totalBonDiscountPercentage) - $productDiscountAmount);
         $totalPrice = $orderproduct->quantity * $customerPrice;
 
         return [
-            "cost"                  => $price,
-            "extraCost"             => $orderProductExtraPrice,
-            "productDiscount"       => $productDiscount,
-            'bonDiscount'           => $bonDiscount,
-            "productDiscountAmount" => (int)$productDiscountAmount,
-            'customerCost'          => $customerPrice,
-            'totalCost'             => $totalPrice
+            ///////////////Details///////////////////////
+            "cost"                            => $price,
+            "extraCost"                       => $orderProductExtraPrice,
+            "productDiscount"                 => $productDiscountValue,
+            "productDiscountPercentage"       => $productDiscountPercentage,
+            'bonDiscount'                     => $totalBonDiscountPercentage,
+            "productDiscountAmount"           => (int)$productDiscountAmount,
+            ////////////////////Total///////////////////////
+            'customerCost'                    => $customerPrice,
+            'totalCost'                       => $totalPrice
         ];
     }
 }

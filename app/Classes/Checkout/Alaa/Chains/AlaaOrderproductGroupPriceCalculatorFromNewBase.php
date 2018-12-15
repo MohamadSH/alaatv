@@ -23,7 +23,7 @@ class AlaaOrderproductGroupPriceCalculatorFromNewBase extends OrderproductGroupP
         foreach ($orderproductsToCalculateFromBase as $orderproduct)
         {
             $priceInfo =  $this->getOrderproductPrice($orderproduct);
-            $orderproduct->priceInfo = $priceInfo ;
+            $orderproductsToCalculateFromBase->setNewPriceForItem($orderproduct , $priceInfo);
         }
 
         return $orderproductsToCalculateFromBase ;
@@ -40,6 +40,6 @@ class AlaaOrderproductGroupPriceCalculatorFromNewBase extends OrderproductGroupP
     {
         $orderproductCalculator = new AlaaOrderproductPriceCalculator($orderproduct);
         $orderproductCalculator->setMode(self::MODE);
-        return json_decode($orderproductCalculator->getPrice());
+        return $orderproductCalculator->getPrice();
     }
 }

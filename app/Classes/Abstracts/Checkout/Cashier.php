@@ -15,16 +15,20 @@ abstract class Cashier
 {
     protected $order;
     protected $orderCoupon;
-    protected $orderDiscount;
-    protected $orderCouponDiscountType;
+    protected $orderDiscountCostAmount;
+    protected $orderCouponDiscountPercentage;
+    protected $orderCouponDiscountCostAmount;
     protected $rawOrderproductsToCalculateFromBase; //orderproducts that should be recalculated based on new conditions
     protected $rawOrderproductsToCalculateFromRecord; //orderproducts that should be calculated based recorded data
     protected $calculatedOrderproducts;
     protected $totalRawPriceWhichHasDiscount;
-    protected $totalPriceWithDiscount; //It is total raw price which has discount after calculating it's discount
+    protected $temporaryTotalPriceWithDiscount;
+    protected $totalPriceWithDiscount; //It is totalRawPriceWhichHasDiscount after calculating it's discount
     protected $totalRawPriceWhichDoesntHaveDiscount;
-    protected $totalPrice; // Total price without before calculating Order's discount
+    protected $totalPrice; // Total price before calculating Order's discount
+    protected $temporaryFinalPrice;
     protected $finalPrice;
+
 
     /**
      * Presents Cashier's price data
@@ -54,23 +58,32 @@ abstract class Cashier
     }
 
     /**
-     * @param mixed $orderDiscount
+     * @param mixed $orderDiscountCostAmount
      * @return Cashier
      */
-    public function setOrderDiscount($orderDiscount)
+    public function setOrderDiscountCostAmount($orderDiscountCostAmount)
     {
-        $this->orderDiscount = $orderDiscount;
+        $this->orderDiscountCostAmount = $orderDiscountCostAmount;
         return $this;
     }
 
-
     /**
-     * @param mixed $orderCouponDiscountType
+     * @param mixed $orderCouponDiscountPercentage
      * @return Cashier
      */
-    public function setOrderCouponDiscountType($orderCouponDiscountType)
+    public function setOrderCouponDiscountPercentage($orderCouponDiscountPercentage)
     {
-        $this->orderCouponDiscountType = $orderCouponDiscountType;
+        $this->orderCouponDiscountPercentage = $orderCouponDiscountPercentage;
+        return $this;
+    }
+
+    /**
+     * @param mixed $orderCouponDiscountCostAmount
+     * @return Cashier
+     */
+    public function setOrderCouponDiscountCostAmount($orderCouponDiscountCostAmount)
+    {
+        $this->orderCouponDiscountCostAmount = $orderCouponDiscountCostAmount;
         return $this;
     }
 
@@ -106,16 +119,6 @@ abstract class Cashier
     }
 
     /**
-     * @param mixed $totalPriceWithDiscount
-     * @return Cashier
-     */
-    public function setTotalPriceWithDiscount($totalPriceWithDiscount)
-    {
-        $this->totalPriceWithDiscount = $totalPriceWithDiscount;
-        return $this;
-    }
-
-    /**
      * @param mixed $totalRawPriceWhichDoesntHaveDiscount
      * @return Cashier
      */
@@ -132,6 +135,28 @@ abstract class Cashier
     public function setTotalRawPriceWhichHasDiscount($totalRawPriceWhichHasDiscount)
     {
         $this->totalRawPriceWhichHasDiscount = $totalRawPriceWhichHasDiscount;
+        $this->temporaryTotalPriceWithDiscount = $totalRawPriceWhichHasDiscount;
+        return $this;
+    }
+
+    /**
+     * @param mixed $temporaryTotalPriceWithDiscount
+     * @return Cashier
+     */
+    public function setTemporaryTotalPriceWithDiscount($temporaryTotalPriceWithDiscount)
+    {
+        $this->temporaryTotalPriceWithDiscount = $temporaryTotalPriceWithDiscount;
+        return $this;
+    }
+
+    /**
+     * @param mixed $totalPriceWithDiscount
+     * @return Cashier
+     */
+    public function setTotalPriceWithDiscount($totalPriceWithDiscount)
+    {
+        $this->totalPriceWithDiscount = $totalPriceWithDiscount;
+        $this->temporaryTotalPriceWithDiscount = $totalPriceWithDiscount;
         return $this;
     }
 
@@ -142,6 +167,17 @@ abstract class Cashier
     public function setTotalPrice($totalPrice)
     {
         $this->totalPrice = $totalPrice;
+        $this->temporaryFinalPrice = $totalPrice;
+        return $this;
+    }
+
+    /**
+     * @param mixed $temporaryFinalPrice
+     * @return Cashier
+     */
+    public function setTemporaryFinalPrice($temporaryFinalPrice)
+    {
+        $this->temporaryFinalPrice = $temporaryFinalPrice;
         return $this;
     }
 
@@ -152,6 +188,7 @@ abstract class Cashier
     public function setFinalPrice($finalPrice)
     {
         $this->finalPrice = $finalPrice;
+        $this->temporaryFinalPrice = $finalPrice;
         return $this;
     }
 
@@ -174,18 +211,25 @@ abstract class Cashier
     /**
      * @return mixed
      */
-    public function getOrderDiscount()
+    public function getOrderDiscountCostAmount()
     {
-        return $this->orderDiscount;
+        return $this->orderDiscountCostAmount;
     }
-
 
     /**
      * @return mixed
      */
-    public function getOrderCouponDiscountType()
+    public function getOrderCouponDiscountPercentage()
     {
-        return $this->orderCouponDiscountType;
+        return $this->orderCouponDiscountPercentage;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOrderCouponDiscountCostAmount()
+    {
+        return $this->orderCouponDiscountCostAmount;
     }
 
     /**
@@ -215,14 +259,6 @@ abstract class Cashier
     /**
      * @return mixed
      */
-    public function getTotalPriceWithDiscount()
-    {
-        return $this->totalPriceWithDiscount;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getTotalRawPriceWhichDoesntHaveDiscount()
     {
         return $this->totalRawPriceWhichDoesntHaveDiscount;
@@ -239,9 +275,33 @@ abstract class Cashier
     /**
      * @return mixed
      */
+    public function getTemporaryTotalPriceWithDiscount()
+    {
+        return $this->temporaryTotalPriceWithDiscount;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTotalPriceWithDiscount()
+    {
+        return $this->totalPriceWithDiscount;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getTotalPrice()
     {
         return $this->totalPrice;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTemporaryFinalPrice()
+    {
+        return $this->temporaryFinalPrice;
     }
 
     /**

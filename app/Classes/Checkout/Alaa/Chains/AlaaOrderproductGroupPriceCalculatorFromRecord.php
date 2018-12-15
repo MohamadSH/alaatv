@@ -24,7 +24,7 @@ class AlaaOrderproductGroupPriceCalculatorFromRecord extends OrderproductGroupPr
         foreach ($orderproductsToCalculateFromRecord as $orderproduct)
         {
             $priceInfo =  $this->getOrderproductPrice($orderproduct);
-            $orderproduct->priceInfo = $priceInfo ;
+            $orderproductsToCalculateFromRecord->setNewPriceForItem($orderproduct , $priceInfo);
         }
 
         return $orderproductsToCalculateFromRecord;
@@ -40,7 +40,7 @@ class AlaaOrderproductGroupPriceCalculatorFromRecord extends OrderproductGroupPr
     {
         $orderproductCalculator = new AlaaOrderproductPriceCalculator($orderproduct);
         $orderproductCalculator->setMode(self::MODE);
-        return json_decode($orderproductCalculator->getPrice());
+        return $orderproductCalculator->getPrice();
     }
 
 }

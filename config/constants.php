@@ -362,13 +362,13 @@ return [
     'HAMAYESH_LOTTERY_EXCHANGE_AMOUNT'         => 30000,
 
     //Cache
-    'CACHE_600'                                => 600,
-    'CACHE_300'                                => 300,
-    'CACHE_60'                                 => 60,
-    'CACHE_10'                                 => 10,
-    'CACHE_5'                                  => 5,
-    'CACHE_3'                                  => 3,
-    'CACHE_1'                                  => 1,
+    'CACHE_600'                                => 0,
+    'CACHE_300'                                => 0,
+    'CACHE_60'                                 => 0,
+    'CACHE_10'                                 => 0,
+    'CACHE_5'                                  => 0,
+    'CACHE_3'                                  => 0,
+    'CACHE_1'                                  => 0,
     'CACHE_0'                                  => 0,
 
     //
@@ -458,4 +458,8 @@ return [
     //USER STATUSES
     'USER_STATUS_ACTIVE'                       => 1,
     'USER_STATUS_INACTIVE'                     => 2,
+
+    //COUPON TYPES
+    'COUPON_TYPE_OVERALL'                      => 1,
+    'COUPON_TYPE_PARTIAL'                      => 2,
 ];

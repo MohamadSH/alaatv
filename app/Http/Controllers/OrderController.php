@@ -838,15 +838,15 @@ class OrderController extends Controller
                           'width'  => 100,
                       ]);
 
-        [
-            $user,
-            $order,
-            $orderproducts,
-        ] = $this->getUserOrder();
+        $orderInfo = $this->getUserOrder();
 
-        $renewedOrderproducts = $this->renewOrderproducs($orderproducts);
-        $orderproductsRawCost = (int)$renewedOrderproducts["rawCost"];
-        $orderproducts = $renewedOrderproducts["orderproducts"];
+        $user = $orderInfo["owner"];
+        $order = $orderInfo["order"];
+        $orderproducts = $orderInfo["purchasedOrderproducts"];
+
+        $newOrderProductInfo = $orderproducts->renewOrderproducs();
+        $orderproductsRawCost = (int)$newOrderProductInfo["rawCost"];
+
         $costCollection = collect();
         $orderproductLinks = collect();
         foreach ($orderproducts as $orderproduct) {
@@ -866,6 +866,9 @@ class OrderController extends Controller
                              ->get()
                              ->first();
         $orderCostArray = $renewedOrder->obtainOrderCost(true);
+        $calculatedOrderproducts = $orderCostArray["calculatedOrderproducts"];
+        $calculatedOrderproducts->updateCostValues();
+
         $orderCost = $orderCostArray["rawCostWithDiscount"] + $orderCostArray["rawCostWithoutDiscount"];
         $orderHasOrdrooGheireHozoori = $order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
                                              ->whereIn("product_id", Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_NOT_DEFAULT"))
@@ -904,107 +907,16 @@ class OrderController extends Controller
         $order = $user->orders->where("orderstatus_id", $orderstatus_id)
                               ->first();
 
-        $orderproducts = $order->orderproducts->sortByDesc("created_at");
-        return [
-            $user,
-            $order,
-            $orderproducts,
-        ];
-    }
+        $allOrderproducts = $order->orderproducts->sortByDesc("created_at");
 
-    private function renewOrderproducs($orderproducts)
-    {
-        $renewedOrderproducts = collect();
-        $orderproductsRawCost = 0;
-        /**
-         * Updating each orderproduct
-         */
-        foreach ($orderproducts as $orderproduct) {
-            //ToDo : Make it better
-            if (!$orderproduct->product->isEnableToPurchase() && !$orderproduct->isGiftType() && !session()->has("adminOrder_id")) {
-                $orderproductController = new OrderproductController();
-                $orderproductController->destroy($orderproduct);
-            } else {
-                $extraAttributes = $orderproduct->attributevalues;
-                foreach ($extraAttributes as $extraAttribute) {
-                    $myParent = $this->makeParentArray($orderproduct->product);
-                    $myParent = end($myParent);
-                    $productAttributevalue = $myParent->attributevalues->where("id", $extraAttribute->id)
-                                                                       ->first();
-
-                    if (!isset($productAttributevalue)) {
-                        $orderproduct->attributevalues()
-                                     ->detach($productAttributevalue);
-                    } else {
-                        $newExtraCost = $productAttributevalue->pivot->extraCost;
-                        $orderproduct->attributevalues()
-                                     ->updateExistingPivot($extraAttribute->id, ["extraCost" => $newExtraCost]);
-                    }
-                }
-                $userbons = $orderproduct->userbons;
-                if (!$userbons->isEmpty()) {
-                    $bonName = Config::get("constants.BON1");
-                    $bons = $orderproduct->product->bons->where("name", $bonName)
-                                                        ->where("pivot.discount", ">", "0")
-                                                        ->where("isEnable", 1);
-                    if ($bons->isEmpty()) {
-                        $parentsArray = $this->makeParentArray($orderproduct->product);
-                        if (!empty($parentsArray)) {
-                            foreach ($parentsArray as $parent) {
-                                $bons = $parent->bons->where("name", $bonName)
-                                                     ->where("isEnable", 1);
-                                if (!$bons->isEmpty())
-                                    break;
-                            }
-                        }
-                    }
-
-                    if ($bons->isEmpty()) {
-                        foreach ($userbons as $userBon) {
-                            $orderproduct->userbons()
-                                         ->detach($userBon);
-                            $userBon->usedNumber = 0;
-                            $userBon->userbonstatus_id = Config::get("constants.USERBON_STATUS_ACTIVE");
-                            $userBon->update();
-                        }
-
-                    } else {
-                        $bon = $bons->first();
-                        foreach ($userbons as $userbon) {
-                            $newDiscount = $bon->pivot->discount;
-                            $orderproduct->userbons()
-                                         ->updateExistingPivot($userbon->id, ["discount" => $newDiscount]);
-                        }
-                    }
-                }
-
-                $newOrderproduct = Orderproduct::where("id", $orderproduct->id)
-                                               ->get()
-                                               ->first();
-
-                if (!isset($newOrderproduct))
-                    continue;
-
-                $renewedOrderproducts->push($newOrderproduct);
-                $orderproductCost = $newOrderproduct->obtainOrderproductCost();
-
-                $newOrderproduct->fillCostValues($orderproductCost);
-
-                if (isset($orderproductCost["cost"]))
-                    $orderproductsRawCost += $newOrderproduct->cost + $orderproductCost["extraCost"];
-
-                $newOrderproduct->update();
-
-            }
-        }
-
-        /**
-         *  end
-         */
+        $purchasedOrderproducts = $allOrderproducts->where("orderproducttype_id" , config("constants.ORDER_PRODUCT_TYPE_DEFAULT"));
+        $giftOrderproducts = $allOrderproducts->where("orderproducttype_id" , config("constants.ORDER_PRODUCT_GIFT"));
 
         return [
-            "rawCost"       => $orderproductsRawCost,
-            'orderproducts' => $renewedOrderproducts,
+            "owner" => $user,
+            "order" => $order,
+            "purchasedOrderproducts" => $purchasedOrderproducts,
+            "giftOrderproducts" => $giftOrderproducts,
         ];
     }
 
@@ -1020,11 +932,12 @@ class OrderController extends Controller
         if (!Auth::check())
             return redirect(action("OrderController@checkoutAuth"));
 
-        [
-            $user,
-            $order,
-            $orderproducts,
-        ] = $this->getUserOrder();
+        $orderInfo = $this->getUserOrder();
+
+        $user = $orderInfo["owner"];
+        $order = $orderInfo["order"];
+        $orderproducts = $orderInfo["purchasedOrderproducts"];
+
         $costCollection = collect();
         foreach ($orderproducts as $orderproduct) {
             $costArray = $orderproduct->obtainOrderproductCost(false);
@@ -1036,6 +949,9 @@ class OrderController extends Controller
 
         }
         $orderCostArray = $order->obtainOrderCost(true);
+        $calculatedOrderproducts = $orderCostArray["calculatedOrderproducts"];
+        $calculatedOrderproducts->updateCostValues();
+
         $orderCost = $orderCostArray["rawCostWithDiscount"] + $orderCostArray["rawCostWithoutDiscount"];
         $user = $order->user;
 
@@ -1089,11 +1005,11 @@ class OrderController extends Controller
         $previousPath = url()->previous();
         if (strcmp($previousPath, action("OrderController@checkoutReview")) == 0
             || strcmp($previousPath, action("OrderController@checkoutPayment")) == 0) {
-            [
-                $user,
-                $order,
-                $orderproducts,
-            ] = $this->getUserOrder();
+             $orderInfo = $this->getUserOrder();
+
+            $user = $orderInfo["owner"];
+            $order = $orderInfo["order"];
+            $orderproducts = $orderInfo["purchasedOrderproducts"];
 
             if ($orderproducts->isNotEmpty()) {
                 $gateways = Transactiongateway::all()
@@ -1101,7 +1017,7 @@ class OrderController extends Controller
                                               ->sortBy("order")
                                               ->pluck("displayName", "name");
 
-                $this->renewOrderproducs($orderproducts);
+                $orderproducts->renewOrderproducs();
 
                 $renewedOrder = Order::where("id", $order->id)
                                      ->get()

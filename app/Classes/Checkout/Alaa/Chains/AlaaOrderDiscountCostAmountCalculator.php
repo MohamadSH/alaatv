@@ -9,15 +9,12 @@
 namespace App\Classes\Checkout\Alaa\Chains;
 
 
-use App\Classes\Abstracts\Checkout\OrderDiscountCalculator;
+use App\Classes\Abstracts\Checkout\OrderDiscountCostAmountCalculator;
 
-class AlaaOrderDiscountCalculator extends OrderDiscountCalculator
+class AlaaOrderDiscountCostAmountCalculator extends OrderDiscountCostAmountCalculator
 {
-    //ToDo : High likely a strategy method could be applied
-
     protected function calculateOrderDiscount($totalPrice, $discount)
     {
         return $totalPrice - $discount;
     }
-
 }

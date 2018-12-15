@@ -2,13 +2,13 @@
 
 namespace App\Console\Commands;
 
-use App\Classes\Search\Tag\ProductTagManagerViaApi;
+//use App\Classes\Search\Tag\ProductTagManagerViaApi;
 use App\Http\Controllers\ProductController;
 use App\Orderproduct;
 use App\Product;
 use App\Traits\APIRequestCommon;
 use App\Traits\ProductCommon;
-use App\Traits\TaggableTrait;
+//use App\Traits\TaggableTrait;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Http\Response;
@@ -19,7 +19,7 @@ class MergeProductCommand extends Command
 {
     use ProductCommon;
     use APIRequestCommon;
-    use TaggableTrait;
+//    use TaggableTrait;  //Has not been merged in to project yet
     /**
      * The name and signature of the console command.
      *
@@ -171,7 +171,7 @@ class MergeProductCommand extends Command
                     "type" =>1,
                 ],
                 [
-                    "title" => "همایش 5+1 عربی آقای آهویی",
+                    "title" => "همایش 5+1 عربی (پیش 1) آقای آهویی",
                     "id" => 149,
                     "description" => "شامل 5 ساعت و 36 دقیقه فیلم با حجم 677 مگابایت",
                     "type" =>2,
@@ -341,11 +341,12 @@ class MergeProductCommand extends Command
      *
      * @param ProductTagManagerViaApi $tagging
      */
-    public function __construct(ProductTagManagerViaApi $tagging)
+//    public function __construct(ProductTagManagerViaApi $tagging)
+    public function __construct()
     {
         parent::__construct();
         $this->productArray = $this->initializing();
-        $this->tagging = $tagging;
+//        $this->tagging = $tagging;
     }
 
     /**
@@ -388,7 +389,7 @@ class MergeProductCommand extends Command
 
             $allCategoryProduct = $this->getParent($productElement);
             $totalGrandChildrenCost = 0;
-            $totalGrandChildrenDiscount = 50;
+            $totalGrandChildrenDiscount = 25;
 
             if($allCategoryProduct->hasParents())
             {
@@ -554,7 +555,31 @@ class MergeProductCommand extends Command
      */
     private function setTags(Product $product): void
     {
-       $this->sendTagsOfTaggableToApi($product ,$this->tagging );
+//       $this->sendTagsOfTaggableToApi($product ,$this->tagging );
+        if(isset($product->tags) && isset($product->tags->tags))
+        {
+            $itemTagsArray = $product->tags->tags ;
+            $params = [
+                "tags"=> json_encode($itemTagsArray) ,
+            ];
+
+            if(isset($product->created_at) && strlen($product->created_at) > 0 )
+                $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $product->created_at )->timestamp;
+
+            $response =  $this->sendRequest(
+                config("constants.TAG_API_URL")."id/product/".$product->id ,
+                "PUT",
+                $params
+            );
+
+            if($response["statusCode"] == 200)
+            {
+                //
+            }
+            else
+            {
+            }
+        }
     }
 
     /**

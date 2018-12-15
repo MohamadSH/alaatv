@@ -416,18 +416,22 @@ class Order extends Model
                 $orderproductsToCalculateFromBaseIds = $this->normalOrderproducts->pluck("id")->toArray();
             }
 
-            $alaaCashierFacade = new OrderCheckout($this , $orderproductsToCalculateFromBaseIds);
+            $reCheckIncludedOrderproductsInCoupon = false;
+            if($this->hasCoupon())
+                $reCheckIncludedOrderproductsInCoupon = ($mode=="REOBTAIN")?false:true;
+            $alaaCashierFacade = new OrderCheckout($this , $orderproductsToCalculateFromBaseIds , $reCheckIncludedOrderproductsInCoupon );
         }
         else{
             $alaaCashierFacade = new ReObtainOrderFromRecords($this);
         }
 
-        $priceInfo = json_decode($alaaCashierFacade->checkout());
+        $priceInfo = $alaaCashierFacade->checkout();
 
         return [
-            "rawCostWithDiscount"    => $priceInfo->totalPriceInfo->totalRawPriceWhichHasDiscount,
-            'rawCostWithoutDiscount' =>  $priceInfo->totalPriceInfo->totalRawPriceWhichDoesntHaveDiscount,
-            "totalCost"              => $priceInfo->totalPriceInfo->finalPrice,
+            "rawCostWithDiscount"    => $priceInfo["totalPriceInfo"]["totalRawPriceWhichHasDiscount"],
+            'rawCostWithoutDiscount' =>  $priceInfo["totalPriceInfo"]["totalRawPriceWhichDoesntHaveDiscount"],
+            "totalCost"              => $priceInfo["totalPriceInfo"]["finalPrice"],
+            "calculatedOrderproducts"=> $priceInfo["orderproductsInfo"]["calculatedOrderproducts"],
         ];
 
         ////////////////////Old Code///////////////////////////////////
@@ -735,6 +739,19 @@ class Order extends Model
     public function refreshCost()
     {
         $orderCost = $this->obtainOrderCost(true);
+        $calculatedOrderproducts = $orderCost["calculatedOrderproducts"];
+        $calculatedOrderproducts->updateCostValues();
+
+        $calculatedOrderproducts = $orderCost["calculatedOrderproducts"];
+        foreach ($calculatedOrderproducts as $orderproduct)
+        {
+            $newPriceInfo = $orderproduct->newPriceInfo ;
+            $orderproduct->fillCostValues($newPriceInfo);
+            $this->timestamps = false;
+            $orderproduct->update();
+            $this->timestamps = true;
+        }
+
         $this->cost = $orderCost["rawCostWithDiscount"];
         $this->costwithoutcoupon = $orderCost["rawCostWithoutDiscount"];
         $this->timestamps = false;

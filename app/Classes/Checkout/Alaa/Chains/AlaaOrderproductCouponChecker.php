@@ -11,41 +11,24 @@ namespace App\Classes\Checkout\Alaa\Chains;
 
 use App\Classes\Abstracts\Checkout\OrderproductCouponChecker;
 use App\Coupon;
+use App\Traits\ProductCommon;
 use Illuminate\Support\Collection;
 
 class AlaaOrderproductCouponChecker extends OrderproductCouponChecker
 {
+    use ProductCommon;
+
     protected function IsIncludedInCoupon(Collection $orderproducts , Coupon $coupon) :Collection
     {
         foreach ($orderproducts as $orderproduct)
         {
-            if (!isset($coupon->coupontype->id) || $coupon->coupontype->id == config("constants.COUPON_TYPE_OVERALL")) {
-                $orderproduct->includedInCoupon = 1;
-            } else {
-                $flag = true;
-                if (!in_array($coupon->id, $orderproduct->product->coupons->pluck('id')
-                    ->toArray())) {
-                    $flag = false;
-                    $parentsArray = $this->makeParentArray($orderproduct->product);
-                    foreach ($parentsArray as $parent) {
-                        if (in_array($coupon->id, $parent->coupons->pluck('id')
-                            ->toArray())) {
-                            $flag = true;
-                            break;
-                        }
-                    }
-                }
-                if ($flag) {
-                    $orderproduct->includedInCoupon = 1;
-                } else {
-                    $orderproduct->includedInCoupon = 0;
-                }
-            }
+            $isOrderproductIncludedInCoupon =  $orderproduct->IsOrderproductIncludedInCoupon($coupon);
 
-            $orderproduct->update();
+            if($isOrderproductIncludedInCoupon)
+                $orderproduct->includeInCoupon();
+            else
+                $orderproduct->excludeFromCoupon();
         }
-
         return $orderproducts ;
     }
-
 }

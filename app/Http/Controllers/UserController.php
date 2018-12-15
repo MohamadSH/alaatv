@@ -627,7 +627,7 @@ class UserController extends Controller
                     $this->addVideoPamphlet($parentsArray, $pamphlets, $videos);
 
                     $childrenArray = $product->children;
-                    $this->addVideoPamphlet($childrenArray, $pamphlets, $videos);
+                    $this->addVideoPamphlet($childrenArray, $pamphlets, $videos , "digChildren");
 
                     $pamphletArray = [];
                     $videoArray = [];
@@ -683,7 +683,7 @@ class UserController extends Controller
      * @param Collection $pamphlets
      * @param Collection $videos
      */
-    private function addVideoPamphlet($productArray, Collection &$pamphlets, Collection &$videos)
+    private function addVideoPamphlet($productArray, Collection &$pamphlets, Collection &$videos , $mode = "default")
     {
         if (!empty($productArray)) {
             $videoArray = [];
@@ -728,6 +728,9 @@ class UserController extends Controller
                             "videos"      => $videoArray,
                         ]);
                 }
+
+                if($mode == "digChildren")
+                    $this->addVideoPamphlet($product->children,$pamphlets,$videos);
 
                 $this->addVideoPamphlet($product->complimentaryproducts, $pamphlets, $videos);
             }
