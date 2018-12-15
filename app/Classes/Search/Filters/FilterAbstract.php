@@ -15,7 +15,7 @@ use LogicException;
 class FilterAbstract implements Filter
 {
     protected $attribute;
-
+    protected $relation;
 
     public function __construct()
     {
@@ -31,7 +31,7 @@ class FilterAbstract implements Filter
 
     protected function getSearchValue($value)
     {
-        return $value;
+        return trim($value);
     }
 
     /**

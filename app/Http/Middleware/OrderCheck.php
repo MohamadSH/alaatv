@@ -111,7 +111,7 @@ class OrderCheck
 
                             $costArray = $orderproduct->obtainOrderproductCost();
                             if (isset($costArray["cost"]))
-                                $orderproduct->cost = $costArray["CustomerCost"];
+                                $orderproduct->cost = $costArray["customerPrice"];
                             else
                                 $orderproduct->cost = null;
                             $orderproduct->update();

@@ -23,14 +23,19 @@ $(document).on("click", "#filterButton", function (){
             200:function (response) {
                 // console.log(response);
                 // console.log(response.responseText);
-                // response = $.parseJSON(response);
-                $("#allUsers").val(response.allUsers);
-                $("#allUsersNumber").val(response.allUsersNumber);
-                $("#numberOfFatherPhones").val(response.numberOfFatherPhones);
-                $("#numberOfMotherPhones").val(response.numberOfMotherPhones);
+
+                $("#allUsers").val(response.items[0].uniqueItemsIds);
+                $("#allUsersNumber").val(response.items[0].totalUniqueItems);
+
+                // Has been emilinated in backend
+                // $("#numberOfFatherPhones").val(response.numberOfFatherPhones);
+
+                // Has been eliminated in backend
+                // $("#numberOfMotherPhones").val(response.numberOfMotherPhones);
+
                 var newDataTable =$("#sms_table").DataTable();
                 newDataTable.destroy();
-                $('#sms_table > tbody').html(response.index);
+                $('#sms_table > tbody').html(response.items[0].smsIndex);
                 if (App.isAngularJsApp() === false) {
                     TableDatatablesManaged.init();
                 }
@@ -40,7 +45,7 @@ $(document).on("click", "#filterButton", function (){
                 else{
                     $('#sms_table > thead > tr').children('th:first').removeClass("none");
                 }
-                makeDataTable("user_table");
+
                 $("#sms-portlet-loading").addClass("hidden");
                 $(".filter").each(function () {
                     if($(this).val() !== "" && $(this).val() !== null) {
@@ -288,23 +293,31 @@ $(document).on("click", "#sendSmsButton", function (){
 
 $('#userCreatedTimeEnable').click(function () {
     if($('#userCreatedTimeEnable').prop('checked') == true) {
-        $('#userCreatedSince').attr('disabled' ,false);
+        $('#userCreatedSince').attr('disabled' ,false)
+        $('#userCreatedSinceAlt').attr('disabled' ,false);;
         $('#userCreatedTill').attr('disabled' ,false);
+        $('#userCreatedTillAlt').attr('disabled' ,false);
     }
     else {
         $('#userCreatedSince').attr('disabled' ,true);
+        $('#userCreatedSinceAlt').attr('disabled' ,true);
         $('#userCreatedTill').attr('disabled' ,true);
+        $('#userCreatedTillAlt').attr('disabled' ,true);
     }
 });
 
 $('#userUpdatedTimeEnable').click(function () {
     if($('#userUpdatedTimeEnable').prop('checked') == true) {
         $('#userUpdatedSince').attr('disabled' ,false);
+        $('#userUpdatedSinceAlt').attr('disabled' ,false);
         $('#userUpdatedTill').attr('disabled' ,false);
+        $('#userUpdatedTillAlt').attr('disabled' ,false);
     }
     else {
         $('#userUpdatedSince').attr('disabled' ,true);
+        $('#userUpdatedSinceAlt').attr('disabled' ,true);
         $('#userUpdatedTill').attr('disabled' ,true);
+        $('#userUpdatedTillAlt').attr('disabled' ,true);
     }
 });
 

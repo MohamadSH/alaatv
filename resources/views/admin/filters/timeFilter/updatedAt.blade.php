@@ -9,11 +9,13 @@
 </label>
 <div class="col-md-3 col-xs-12">
     <input id="{{$id}}UpdatedSince" type="text" class="form-control" @if(!isset($default)) disabled="disabled" @endif>
-    <input name="updatedSinceDate" id="{{$id}}UpdatedSinceAlt" type="text" class="form-control hidden">
+    <input name="updatedAtSince" id="{{$id}}UpdatedSinceAlt" type="text" class="form-control hidden"
+           @if(!isset($default)) disabled="disabled" @endif>
 </div>
 <label class="control-label" style="float: right;">تا تاریخ
 </label>
 <div class="col-md-3 col-xs-12">
     <input id="{{$id}}UpdatedTill" type="text" class="form-control" @if(!isset($default)) disabled="disabled" @endif>
-    <input name="updatedTillDate" id="{{$id}}UpdatedTillAlt" type="text" class="form-control hidden">
+    <input name="updatedAtTill" id="{{$id}}UpdatedTillAlt" type="text" class="form-control hidden"
+           @if(!isset($default)) disabled="disabled" @endif>
 </div>

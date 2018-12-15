@@ -64,9 +64,23 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Coupon extends Model
 {
+
+    /*
+    |--------------------------------------------------------------------------
+    | Traits
+    |--------------------------------------------------------------------------
+    */
+
     use SoftDeletes;
     use Helper;
     use DateTrait;
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Properties
+    |--------------------------------------------------------------------------
+    */
 
     /**      * The attributes that should be mutated to dates.        */
     protected $dates = [
@@ -93,6 +107,12 @@ class Coupon extends Model
         'discounttype_id',
     ];
 
+    /*
+    |--------------------------------------------------------------------------
+    | Relations
+    |--------------------------------------------------------------------------
+    */
+
     public function marketers()
     {
         return $this->belongsToMany('App\User');
@@ -117,6 +137,58 @@ class Coupon extends Model
     {
         return $this->belongsTo("\App\Discounttype");
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Accessor
+    |--------------------------------------------------------------------------
+    */
+
+    /*
+    |--------------------------------------------------------------------------
+    | Scopes
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Scope a query to only include enable(or disable) Coupons.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeEnable($query)
+    {
+        return $query->where('enable', '=', 1);
+    }
+
+    /**
+     * Scope a query to only include valid Coupons.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeValid($query)
+    {
+        $now = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
+        ->timezone('Asia/Tehran');
+        return $query
+            ->where(function ($q) use ($now) {
+                $q->where('validSince', '<', $now)
+                    ->orWhereNull('validSince');
+            })
+            ->where(function ($q) use ($now){
+                $q->where('validUntil', '>', $now)
+                    ->orWhereNull('validUntil');
+            });
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Others
+    |--------------------------------------------------------------------------
+    */
 
     /**
      * Validates a coupon
@@ -148,27 +220,11 @@ class Coupon extends Model
         ];
     }
 
-    /**
-     * @return string
-     * Converting validSince field to jalali
-     */
-    public function ValidSince_Jalali()
+    public function getCouponTypeAttribute()
     {
-        $explodedDateTime = explode(" ", $this->validSince);
-        $explodedTime = $explodedDateTime[1];
-        $explodedDate = $this->convertDate($this->validSince, "toJalali");
-        return ($explodedDate . " " . $explodedTime);
-    }
-
-    /**
-     * @return string
-     * Converting validUntil field to jalali
-     */
-    public function ValidUntil_Jalali()
-    {
-        $explodedDateTime = explode(" ", $this->validUntil);
-        $explodedTime = $explodedDateTime[1];
-        $explodedDate = $this->convertDate($this->validUntil, "toJalali");
-        return ($explodedDate . " " . $explodedTime);
+        if(!isset($this->coupontype->id))
+            return config("constants.COUPON_TYPE_OVERALL");
+        else
+            return $this->coupontype->id;
     }
 }

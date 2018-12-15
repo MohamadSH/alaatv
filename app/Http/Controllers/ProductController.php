@@ -21,11 +21,13 @@ use App\{Attribute,
     Traits\MetaCommon,
     Traits\ProductCommon,
     Traits\RequestCommon,
+    Traits\SearchCommon,
     User,
     Websitesetting};
 use Illuminate\Foundation\Http\{FormRequest};
 use Illuminate\Http\{Request, Response};
 use Illuminate\Support\{Collection, Facades\Cache, Facades\File, Facades\Input, Facades\Storage, Facades\View};
+use SEO;
 
 class ProductController extends Controller
 {
@@ -42,6 +44,7 @@ class ProductController extends Controller
     use MathCommon;
     use CharacterCommon;
     use RequestCommon;
+    use SearchCommon ;
 
 
     /*
@@ -122,7 +125,6 @@ class ProductController extends Controller
         $pageName = 'productPage';
         $productResult = (new ProductSearch)->setPageName($pageName)
                                             ->apply($filters);
-
         //        dd($productResult->where('enable','=',0));
         if ($isApp) {
             $items->push($productResult->getCollection());
@@ -181,18 +183,6 @@ class ProductController extends Controller
         ]), '100', '100', null));
 
         return view("product.portfolio", compact("products", "costCollection"));
-    }
-
-    /**
-     * @param $query
-     *
-     * @return string
-     */
-    private function getPartialSearchFromIds($query, $layout)
-    {
-        $partialSearch = View::make($layout, ['items' => $query])
-                             ->render();
-        return $partialSearch;
     }
 
     /**
@@ -264,8 +254,8 @@ class ProductController extends Controller
     private function fillProductFromRequest(FormRequest $request, Product &$product): void
     {
         $inputData = $request->all();
-        $files = [$request->file];
-        $images = [$request->image];
+        $files = $request->has("files")?[$request->files]:[];
+        $images = $request->has("image")?[$request->image]:[];
         $isFree = $request->has("isFree");
 
         $product->fill($inputData);
@@ -356,11 +346,21 @@ class ProductController extends Controller
      */
     private function attachBonToProduct(Product $product, $bonId, $bonDiscount, $bonPlus): void
     {
-        $product->bons()
-                ->attach($bonId, [
+        $bonQueryBuilder = $product->bons();
+
+        if($product->hasBon($bonId)){
+            $bonQueryBuilder
+                    ->updateExistingPivot($bonId , [
                     'discount' => $bonDiscount,
                     'bonPlus'  => $bonPlus,
-                ]);
+                    ]);
+        }else{
+            $bonQueryBuilder
+                    ->attach($bonId, [
+                        'discount' => $bonDiscount,
+                        'bonPlus'  => $bonPlus,
+                    ]);
+        }
     }
 
     /**
@@ -373,6 +373,9 @@ class ProductController extends Controller
      */
     public function show(Request $request, Product $product)
     {
+        if(isset($product->redirectUrl))
+            return redirect($product->redirectUrl, 301);
+
         $this->generateSeoMetaTags($product);
 
         $descriptionIframe = $request->partial;
@@ -393,7 +396,7 @@ class ProductController extends Controller
 
         $productAllFiles = $this->makeAllFileCollection($product);
 
-        $productSamplePhotos = $product->sample_photos;
+        $productSamplePhotos = $product->getPhotos();
 
         $giftCollection = $product->getGifts();
 
@@ -591,8 +594,7 @@ class ProductController extends Controller
         $selectedSubProductIds = $request->get("products");
         $extraAttributeValues = $request->get("extraAttributeValues");
         $user = $this->getCustomer($request);
-        //        return (new AlaaCashier($product,$user))->getPrice();
-
+        //        return (new AlaaProductPriceCalculator($product,$user))->getPrice();
 
         $key = "product:refreshPrice:Product"
             . "\\"
@@ -645,7 +647,7 @@ class ProductController extends Controller
                                     $costArray = $product->calculatePayablePrice();
 
                                 $cost += $costArray["cost"];
-                                $costForCustomer += $costArray["CustomerCost"];
+                                $costForCustomer += $costArray["customerPrice"];
                             }
                             //TODO:// age mahsool tamumshod ya yaft nashod chi?
                             //            elseif (!isset($simpleProduct))
@@ -1185,6 +1187,78 @@ class ProductController extends Controller
             'filename' => $this->setting->site->siteLogo,
         ]), '100', '100', null));
         return view("product.landing.landing4");
+    }
+
+    /**
+     * Products Special Landing Page
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function landing5(Request $request)
+    {
+
+        $url = $request->url();
+        $title = 'ضربه فنی کنکور نظام قدیم';
+        SEO::setTitle($title);
+        SEO::opengraph()
+            ->setUrl($url);
+        SEO::setCanonical($url);
+        SEO::twitter()
+            ->setSite("آلاء");
+        SEO::setDescription('ضربه فنی کنکور نظام قدیم،رشته ریاضی، رشته تجربی،  رشته انسانی ، زیست، شیمی، فیزیک، زمین شناسی، عربی، ادبیات، شب امتحان، همایش، تحلیل کنکور، جزوه، تست، جمع بندی، طرح 5+1، ریاضیات رشته تجربی، ریاضیات رشته انسانی، ریاضیات رشته ریاضی، جزوه علوم پایه');
+        SEO::opengraph()
+            ->addImage(route('image', [
+                'category' => '11',
+                'w'        => '100',
+                'h'        => '100',
+                'filename' => $this->setting->site->siteLogo,
+            ]), [
+                'height' => 100,
+                'width'  => 100,
+            ]);
+
+        $product_ids = [242, 240, 238, 236, 230, 234, 232, 222, 210, 213];
+        $product = Product::whereIn('id', $product_ids)->orderBy('order')->enable()->get();
+        $reshteIdArray = array(
+
+            242 => 'riazi',
+            240 => 'riazi',
+            238 => 'riazi',
+            236 => 'riazi',
+            230 => 'tajrobi',
+            234 => 'tajrobi',
+            232 => 'tajrobi',
+            222 => 'tajrobi',
+            210 => 'tajrobi',
+            213 => 'tajrobi'
+        );
+        $defaultPrice = array(
+
+//            1 => '107,000',
+//            2 => '39,000',
+
+            238 => '39,000',
+            234 => '49,000',
+            232 => '34,000',
+            230 => '51,400',
+            240 => '107,000',
+            242 => '107,000'
+        );
+        $productsDataForView = array();
+        foreach ($product as $key=>$value) {
+            $productsDataForView[] = array(
+                'type' => $reshteIdArray[$value->id],
+                'price' => (isset($defaultPrice[$value->id]))?$defaultPrice[$value->id]:$value->basePrice,
+                'image' => route('image', ['category'=>'4','w'=>'256' , 'h'=>'256' ,  'filename' =>  $value->image ]),
+                'name' => $value->name,
+                'link' => action('ProductController@show', $value->id)
+            );
+        }
+
+        $products = $productsDataForView;
+        return view("product.landing.landing5", compact("products"));
     }
 
     /**

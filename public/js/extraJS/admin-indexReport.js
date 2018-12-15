@@ -144,17 +144,17 @@ $(document).on("click", "#report-portlet .reload", function (){
         statusCode: {
             200:function (response) {
 
-                var selectedProducts = response.products;
-                $(selectedProducts).map(function()
-                {
-                    $('#report_table thead th:last-child').after('<th class="all">'+this.name+'</th>');
-                });
+                // var selectedProducts = response.products;
+                // $(selectedProducts).map(function()
+                // {
+                //     $('#report_table thead th:last-child').after('<th class="all">'+this.name+'</th>');
+                // });
 
-                var selectedLotteries = response.lotteries;
-                $(selectedLotteries).map(function()
-                {
-                    $('#report_table thead th:last-child').after('<th class="all">قرعه کشی '+this.displayName+'</th>');
-                });
+                // var selectedLotteries = response.lotteries;
+                // $(selectedLotteries).map(function()
+                // {
+                //     $('#report_table thead th:last-child').after('<th class="all">قرعه کشی '+this.displayName+'</th>');
+                // });
                 // console.log(selectedProducts) ;
                 // if($("#orderProducts option:selected").length >0 && $('#orderProductEnable').prop('checked') == true){
                 //     var allFlag = false ;

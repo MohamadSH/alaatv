@@ -1009,7 +1009,6 @@ $("#contentCreatedSince").persianDatepicker({
         var d = new Date(unixDate).toISOString();
         d = d.substring(0, d.indexOf('T'));
         d += " 00:00:00";
-        console.log(d);
         return d;
     }
 });

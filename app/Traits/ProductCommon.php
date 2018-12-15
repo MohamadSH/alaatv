@@ -32,11 +32,13 @@ trait ProductCommon
                     if (!empty($filesArray))
                         $fileCollection->put($product->name, $filesArray);
                 }
-                $allFilesCollection->push([
-                                              "typeName"        => $productfiletype->name,
-                                              "typeDisplayName" => $productfiletype->displayName,
-                                              "files"           => $fileCollection,
-                                          ]);
+
+                if($fileCollection->isNotEmpty())
+                    $allFilesCollection->push([
+                                                  "typeName"        => $productfiletype->name,
+                                                  "typeDisplayName" => $productfiletype->displayName,
+                                                  "files"           => $fileCollection,
+                                              ]);
             }
             return $allFilesCollection;
         });
@@ -52,7 +54,7 @@ trait ProductCommon
     {
         $exclusiveOtherProducts = Product::getExclusiveOtherProducts();
 
-        $otherProducts = $product->getOtherProducts();
+        $otherProducts = $product->getOtherProducts()->sortByDesc("created_at" );
 
         $totalOtherProducts = $this->mergeCollections($exclusiveOtherProducts, $otherProducts);
 
@@ -216,6 +218,50 @@ trait ProductCommon
             }
             return $parentsArray;
         });
+    }
+
+    /**
+     * Copies a product files to another product
+     *
+     * @param Product $sourceProduct
+     * @param Product $destinationProduct
+     */
+    public function copyProductFiles(Product $sourceProduct , Product $destinationProduct):void
+    {
+        $destinationProductFiles =  $sourceProduct->productfiles ;
+        foreach ($destinationProductFiles as $file)
+        {
+            $newFile = $file->replicate();
+            $newFile->product_id = $destinationProduct->id;
+            $newFile->save();
+        }
+    }
+
+    /**
+     * @param Product $sourceProduct
+     * @param Product $destinationProduct
+     * @param array $newPhotoInfo
+     */
+    public function copyProductPhotos(Product $sourceProduct , Product $destinationProduct , array $newPhotoInfo=[]):void
+    {
+        $destinationProductPhotos =  $sourceProduct->photos ;
+        foreach ($destinationProductPhotos as $photo)
+        {
+            $newPhoto = $photo->replicate();
+            $newPhoto->product_id = $destinationProduct->id;
+            $newPhoto->save();
+
+            if(isset($newPhotoInfo["title"]))
+            {
+                $newPhoto->title = $newPhotoInfo["title"];
+                $newPhoto->update();
+            }
+            if(isset($newPhotoInfo["description"]))
+            {
+                $newPhoto->description = $newPhotoInfo["description"];
+                $newPhoto->update();
+            }
+        }
     }
 
 }
