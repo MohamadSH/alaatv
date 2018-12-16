@@ -374,7 +374,7 @@
 
         maxLengthIndicator.css(cssPos);
 
-        return;
+
       }
 
       /**

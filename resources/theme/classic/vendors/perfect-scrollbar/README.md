@@ -265,6 +265,7 @@ perfect-scrollbar dispatches custom events.
 
 ```js
 container.addEventListener('ps-scroll-x', () => ...);
+
 ```
 
 ### `ps-scroll-y`
@@ -312,6 +313,7 @@ You can also watch the reach state via the `reach` property.
 
 ```js
 const ps = new PerfectScrollbar(...);
+
 
 console.log(ps.reach.x); // => 'start' or 'end' or null
 console.log(ps.reach.y); // => 'start' or 'end' or null

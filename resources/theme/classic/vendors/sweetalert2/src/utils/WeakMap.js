@@ -22,6 +22,6 @@ export default typeof WeakMap === 'function' ? WeakMap : ((s, dP, hOP) => {
     set: function set (o, v) {
       dP(o, this[s], { configurable: true, value: v })
     }
-  }
-  return WeakMap
-})(Symbol('WeakMap'), Object.defineProperty, {}.hasOwnProperty)
+  };
+  return WeakMap;
+})(Symbol('WeakMap'), Object.defineProperty, {}.hasOwnProperty);

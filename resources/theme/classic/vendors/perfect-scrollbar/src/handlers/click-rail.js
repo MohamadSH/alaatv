@@ -3,8 +3,9 @@ import updateGeometry from '../update-geometry';
 export default function(i) {
   const element = i.element;
 
-  i.event.bind(i.scrollbarY, 'mousedown', e => e.stopPropagation());
-  i.event.bind(i.scrollbarYRail, 'mousedown', e => {
+  i.event.bind(i.scrollbarY, 'mousedown', e = > e.stopPropagation();
+)
+    i.event.bind(i.scrollbarYRail, 'mousedown', e => {
     const positionTop =
       e.pageY -
       window.pageYOffset -
@@ -15,10 +16,10 @@ export default function(i) {
     updateGeometry(i);
 
     e.stopPropagation();
-  });
-
-  i.event.bind(i.scrollbarX, 'mousedown', e => e.stopPropagation());
-  i.event.bind(i.scrollbarXRail, 'mousedown', e => {
+})
+    i.event.bind(i.scrollbarX, 'mousedown', e = > e.stopPropagation();
+)
+    i.event.bind(i.scrollbarXRail, 'mousedown', e => {
     const positionLeft =
       e.pageX -
       window.pageXOffset -
@@ -29,5 +30,5 @@ export default function(i) {
     updateGeometry(i);
 
     e.stopPropagation();
-  });
+})
 }

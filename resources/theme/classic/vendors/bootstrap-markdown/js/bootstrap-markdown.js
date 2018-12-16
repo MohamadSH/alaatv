@@ -42,7 +42,7 @@
       'footer', 'fullscreen', 'hiddenButtons', 'disabledButtons'];
     $.each(opts,function(_, opt){
       if (typeof $(element).data(opt) !== 'undefined') {
-        options = typeof options == 'object' ? options : {}
+        options = typeof options == 'object' ? options : {};
         options[opt] = $(element).data(opt)
       }
     });
@@ -631,7 +631,7 @@
           ('selectionStart' in e && function() {
               e.selectionStart = start;
               e.selectionEnd = end;
-              return;
+
           }) ||
 
           /* browser not supported */
@@ -698,7 +698,7 @@
         this.setSelection(oldSelection.start,oldSelection.end);
       }
 
-      return;
+
     }
 
   , __parseButtonNameParam: function (names) {

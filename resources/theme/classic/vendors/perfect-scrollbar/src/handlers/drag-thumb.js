@@ -82,5 +82,5 @@ function bindMouseScrollHandler(
 
     e.stopPropagation();
     e.preventDefault();
-  });
+})
 }

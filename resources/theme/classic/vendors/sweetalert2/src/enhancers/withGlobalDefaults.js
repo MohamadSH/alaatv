@@ -3,8 +3,8 @@ import { showWarningsForParams } from '../utils/params'
 
 const deprecationWarning = `\
 "setDefaults" & "resetDefaults" methods are deprecated in favor of "mixin" method and will be removed in the next major release. \
-For new projects, use "mixin". For past projects already using "setDefaults", support will be provided through an additional package.`
-let defaults = {}
+For new projects, use "mixin". For past projects already using "setDefaults", support will be provided through an additional package.`;
+let defaults = {};
 
 export function withGlobalDefaults (ParentSwal) {
   class SwalWithGlobalDefaults extends ParentSwal {
@@ -13,21 +13,21 @@ export function withGlobalDefaults (ParentSwal) {
     }
 
     static setDefaults (params) {
-      warnOnce(deprecationWarning)
+      warnOnce(deprecationWarning);
       if (!params || typeof params !== 'object') {
         throw new TypeError('SweetAlert2: The argument for setDefaults() is required and has to be a object')
       }
-      showWarningsForParams(params)
+      showWarningsForParams(params);
       // assign valid params from `params` to `defaults`
       Object.keys(params).forEach(param => {
-        if (ParentSwal.isValidParameter(param)) {
+        if (ParentSwal.isValidParameter(param);) {
           defaults[param] = params[param]
         }
       })
     }
 
     static resetDefaults () {
-      warnOnce(deprecationWarning)
+      warnOnce(deprecationWarning);
       defaults = {}
     }
   }

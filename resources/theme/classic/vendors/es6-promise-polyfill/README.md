@@ -47,6 +47,7 @@ To use:
 ```js
 var Promise = require('es6-promise-polyfill').Promise;
 var promise = new Promise(...);
+
 ```
 
 ## Usage in IE<9

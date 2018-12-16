@@ -31,6 +31,6 @@ export function remove(element) {
 
 export function queryChildren(element, selector) {
   return Array.prototype.filter.call(element.children, child =>
-    matches(child, selector)
-  );
+    matches(child, selector);
+)
 }

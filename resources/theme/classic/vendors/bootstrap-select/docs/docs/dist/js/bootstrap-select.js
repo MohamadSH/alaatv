@@ -47,9 +47,8 @@
     return array1.length === array2.length && array1.every(function(element, index) {
       return element === array2[index]; 
     });
-  };
-
-  //<editor-fold desc="Shims">
+  }
+    //<editor-fold desc="Shims">
   if (!String.prototype.startsWith) {
     (function () {
       'use strict'; // needed to support `apply`/`call` with `undefined`/`null`
@@ -339,7 +338,7 @@
     TAB: 9, // KeyboardEvent.which value for tab key
     ARROW_UP: 38, // KeyboardEvent.which value for up arrow key
     ARROW_DOWN: 40 // KeyboardEvent.which value for down arrow key
-  }
+  };
 
   var version = {};
   version.full = ($.fn.dropdown.Constructor.VERSION || '').split(' ')[0].split('.');
@@ -354,7 +353,7 @@
     MENULEFT: 'dropdown-menu-left',
     // to-do: replace with more advanced template/customization options
     BUTTONCLASS: version.major === '4' ? 'btn-light' : 'btn-default'
-  }
+  };
 
   var REGEXP_ARROW = new RegExp(keyCodes.ARROW_UP + '|' + keyCodes.ARROW_DOWN);
   var REGEXP_TAB_OR_ESCAPE = new RegExp('^' + keyCodes.TAB + '$|' + keyCodes.ESCAPE);
@@ -995,7 +994,7 @@
         fragment.appendChild(labelTextElement);
 
         return fragment;
-      }
+      };
 
       if (this.options.title && !this.multiple) {
         // this option doesn't create a new <li> element, but does add a new option, so liIndex is decreased

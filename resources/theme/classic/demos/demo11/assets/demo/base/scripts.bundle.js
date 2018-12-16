@@ -1061,7 +1061,7 @@ var mUtil = function() {
 
                     target = target.parentNode;
                 }
-            }
+            };
 
             mUtil.addEvent(element, event, mUtilDelegatedEventHandlers[eventId]);
 
@@ -1361,7 +1361,7 @@ var mApp = function() {
         warning:    '#ffb822',
         danger:     '#f4516c',
         focus:      '#9816f4'
-    }
+    };
 
     /**
     * Initializes bootstrap tooltip
@@ -1379,7 +1379,7 @@ var mApp = function() {
                 <div class="tooltip-inner"></div>\
             </div>'
         });
-    }
+    };
     
     /**
     * Initializes bootstrap tooltips
@@ -1389,7 +1389,7 @@ var mApp = function() {
         $('[data-toggle="m-tooltip"]').each(function() {
             initTooltip($(this));
         });
-    }
+    };
 
     /**
     * Initializes bootstrap popover
@@ -1407,7 +1407,7 @@ var mApp = function() {
                 <div class="popover-body"></div>\
             </div>'
         });
-    }
+    };
 
     /**
     * Initializes bootstrap popovers
@@ -1417,7 +1417,7 @@ var mApp = function() {
         $('[data-toggle="m-popover"]').each(function() {
             initPopover($(this));
         });
-    }
+    };
 
     /**
     * Initializes bootstrap file input
@@ -1428,7 +1428,7 @@ var mApp = function() {
             var fileName = $(this).val();
             $(this).next('.custom-file-label').addClass("selected").html(fileName);
         });
-    }           
+    };
 
     /**
     * Initializes metronic portlet
@@ -1437,7 +1437,7 @@ var mApp = function() {
         // init portlet tools
         var el = $(el);
         var portlet = new mPortlet(el[0], options);
-    }
+    };
 
     /**
     * Initializes metronic portlets
@@ -1452,7 +1452,7 @@ var mApp = function() {
                 el.data('portlet-initialized', true);
             }
         });
-    }
+    };
 
     /**
     * Initializes scrollable contents
@@ -1468,7 +1468,7 @@ var mApp = function() {
                 }
             }});
         });
-    }
+    };
 
     /**
     * Initializes bootstrap alerts
@@ -1478,7 +1478,7 @@ var mApp = function() {
         $('body').on('click', '[data-close=alert]', function() {
             $(this).closest('.alert').hide();
         });
-    }
+    };
 
     /**
     * Initializes Metronic custom tabs
@@ -1507,7 +1507,7 @@ var mApp = function() {
 
             $(this).data('tabs-initialized', true);
         });
-    }
+    };
 
 	var hideTouchWarning = function() {
 		jQuery.event.special.touchstart = {
@@ -6108,8 +6108,7 @@ var mMenu = function(elementId, options) {
         handleLinkClick: function(e) {
             if ( Plugin.eventTrigger('linkClick', this) === false ) {
                 e.preventDefault();
-            };
-
+            }
             if ( Plugin.getSubmenuMode(this) === 'dropdown' || Plugin.isConditionalSubmenuDropdown() ) {
                 Plugin.handleSubmenuDropdownClose(e, this);
             }
@@ -6819,7 +6818,7 @@ var mOffcanvas = function(elementId, options) {
         /**
          * Handles offcanvas toggle
          */
-        toggle: function() {;
+        toggle: function () {
             Plugin.eventTrigger('toggle'); 
 
             if (the.state == 'shown') {
@@ -7780,7 +7779,7 @@ var mQuicksearch = function(elementId, options) {
                 if (key == 13) {
                     e.preventDefault();
                 }
-            }
+            };
 
             if (the.options.mode == 'default') {
                 mUtil.addEvent(the.input, 'focus', Plugin.showDropdown);
@@ -8511,7 +8510,7 @@ var mWizard = function(elementId, options) {
 
             mUtil.on(element, '.m-wizard__step a.m-wizard__step-number', 'click', function() {
                 var step = this.closest('.m-wizard__step');
-                var steps = mUtil.parents(this, '.m-wizard__steps')
+                var steps = mUtil.parents(this, '.m-wizard__steps');
                 var find = mUtil.findAll(steps, '.m-wizard__step');
                 var num;
 
@@ -9190,7 +9189,7 @@ var mLayout = function() {
         }        
 
         header = new mHeader('m_header', options);
-    }
+    };
 
     //== Aside menu
     var initLeftAsideMenu = function() {
@@ -9234,7 +9233,7 @@ var mLayout = function() {
                 expandAll: false   // allow having multiple expanded accordions in the menu
             }            
         });      
-    }
+    };
 
     //== Aside
     var initLeftAside = function() {
@@ -9290,7 +9289,7 @@ var mLayout = function() {
                 }, 500);
             }); 
         }        
-    }
+    };
 
     //== Sidebar toggle
     var initLeftAsideToggle = function() {
@@ -9314,7 +9313,7 @@ var mLayout = function() {
             // server side code and add "m-brand--minimize m-aside-left--minimize" classes to 
             // the body tag in order to initialize the minimized left aside mode during page loading.
         });
-    }
+    };
 
     //== Sidebar hide
     var initLeftAsideHide = function() {
@@ -9337,14 +9336,14 @@ var mLayout = function() {
             // server side code and add "m-brand--minimize m-aside-left--minimize" classes to 
             // the body tag in order to initialize the minimized left aside mode during page loading.
         });
-    }
+    };
 
     //== Topbar
     var initTopbar = function() {
         $('#m_aside_header_topbar_mobile_toggle').click(function() {
             $('body').toggleClass('m-topbar--on');
         });
-    }
+    };
 
     //== Quicksearch
     var initQuicksearch = function() {
@@ -9376,7 +9375,7 @@ var mLayout = function() {
                 }
             });
         });  
-    }
+    };
 
     //== Scrolltop
     var initScrollTop = function() {
@@ -9384,7 +9383,7 @@ var mLayout = function() {
             offset: 300,
             speed: 600
         });
-    }
+    };
 
     return {
         init: function() {  
@@ -9459,7 +9458,7 @@ var mQuickSidebar = function() {
                 return height;                    
             }
         });
-    }
+    };
 
     var initSettings = function() { 
         var settings = mUtil.find( mUtil.get('m_quick_sidebar_tabs_settings'),  '.m-list-settings'); 
@@ -9476,7 +9475,7 @@ var mQuickSidebar = function() {
                 return mUtil.getViewPort().height - topbarAsideTabs.outerHeight(true) - 60;            
             }
         });
-    }
+    };
 
     var initLogs = function() {
         var logs = mUtil.find( mUtil.get('m_quick_sidebar_tabs_logs'),  '.m-list-timeline'); 
@@ -9493,13 +9492,13 @@ var mQuickSidebar = function() {
                 return mUtil.getViewPort().height - topbarAsideTabs.outerHeight(true) - 60;            
             }
         });
-    }
+    };
 
     var initOffcanvasTabs = function() {
         initMessages();
         initSettings();
         initLogs();
-    }
+    };
 
     var initOffcanvas = function() {
         var topbarAsideObj = new mOffcanvas('m_quick_sidebar', {
@@ -9521,7 +9520,7 @@ var mQuickSidebar = function() {
                 initOffcanvasTabs();
             }, 1000);                         
         });
-    }
+    };
 
     return {     
         init: function() {  

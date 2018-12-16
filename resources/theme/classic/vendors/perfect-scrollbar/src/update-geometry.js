@@ -15,16 +15,16 @@ export default function(i) {
   if (!element.contains(i.scrollbarXRail)) {
     // clean up and append
     DOM.queryChildren(element, cls.element.rail('x')).forEach(el =>
-      DOM.remove(el)
-    );
-    element.appendChild(i.scrollbarXRail);
+      DOM.remove(el);
+  )
+      element.appendChild(i.scrollbarXRail);
   }
   if (!element.contains(i.scrollbarYRail)) {
     // clean up and append
     DOM.queryChildren(element, cls.element.rail('y')).forEach(el =>
-      DOM.remove(el)
-    );
-    element.appendChild(i.scrollbarYRail);
+      DOM.remove(el);
+  )
+      element.appendChild(i.scrollbarYRail);
   }
 
   if (

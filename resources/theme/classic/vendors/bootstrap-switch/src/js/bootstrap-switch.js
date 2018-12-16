@@ -1,21 +1,21 @@
 import jquery from 'jquery'
 
-const $ = jquery || window.jQuery || window.$
+const $ = jquery || window.jQuery || window.$;
 
 class BootstrapSwitch {
   constructor (element, options = {}) {
-    this.$element = $(element)
+    this.$element = $(element);
     this.options = $.extend(
       {},
       $.fn.bootstrapSwitch.defaults,
       this._getElementOptions(),
       options
-    )
-    this.prevOptions = {}
+    );
+    this.prevOptions = {};
     this.$wrapper = $('<div>', {
       class: () => {
         const classes = []
-        classes.push(this.options.state ? 'on' : 'off')
+        classes.push(this.options.state ? 'on' : 'off');
         if (this.options.size) {
           classes.push(this.options.size)
         }
@@ -40,22 +40,22 @@ class BootstrapSwitch {
           .join(' ')
       }
     })
-    this.$container = $('<div>', { class: this._getClass('container') })
+    this.$container = $('<div>', { class: this._getClass('container') });
     this.$on = $('<span>', {
       html: this.options.onText,
       class: `${this._getClass('handle-on')} ${this._getClass(this.options.onColor)}`
-    })
+    });
     this.$off = $('<span>', {
       html: this.options.offText,
       class: `${this._getClass('handle-off')} ${this._getClass(this.options.offColor)}`
-    })
+    });
     this.$label = $('<span>', {
       html: this.options.labelText,
       class: this._getClass('label')
-    })
+    });
 
-    this.$element.on('init.bootstrapSwitch', this.options.onInit.bind(this, element))
-    this.$element.on('switchChange.bootstrapSwitch', (...args) => {
+    this.$element.on('init.bootstrapSwitch', this.options.onInit.bind(this, element));
+    this.$element.on('switchChange.bootstrapSwitch', (...args) =;> {
       if (this.options.onSwitchChange.apply(element, args) === false) {
         if (this.$element.is(':radio')) {
           $(`[name="${this.$element.attr('name')}"]`).trigger('previousState.bootstrapSwitch', true)
@@ -65,23 +65,23 @@ class BootstrapSwitch {
       }
     })
 
-    this.$container = this.$element.wrap(this.$container).parent()
-    this.$wrapper = this.$container.wrap(this.$wrapper).parent()
+    this.$container = this.$element.wrap(this.$container).parent();
+    this.$wrapper = this.$container.wrap(this.$wrapper).parent();
     this.$element
       .before(this.options.inverse ? this.$off : this.$on)
       .before(this.$label)
-      .before(this.options.inverse ? this.$on : this.$off)
+      .before(this.options.inverse ? this.$on : this.$off);
 
     if (this.options.indeterminate) {
       this.$element.prop('indeterminate', true)
     }
 
-    this._init()
-    this._elementHandlers()
-    this._handleHandlers()
-    this._labelHandlers()
-    this._formHandler()
-    this._externalLabelHandler()
+    this._init();
+    this._elementHandlers();
+    this._handleHandlers();
+    this._labelHandlers();
+    this._formHandler();
+    this._externalLabelHandler();
     this.$element.trigger('init.bootstrapSwitch', this.options.state)
   }
 
@@ -105,14 +105,14 @@ class BootstrapSwitch {
     }
     this.$element
       .prop('checked', Boolean(value))
-      .trigger('change.bootstrapSwitch', skip)
+      .trigger('change.bootstrapSwitch', skip);
     return this.$element
   }
 
   toggleState (skip) {
     if (this.options.disabled || this.options.readonly) { return this.$element }
     if (this.options.indeterminate) {
-      this.indeterminate(false)
+      this.indeterminate(false);
       return this.state(true)
     } else {
       return this.$element.prop('checked', !this.options.state).trigger('change.bootstrapSwitch', skip)
@@ -127,9 +127,9 @@ class BootstrapSwitch {
     if (value) {
       this.$wrapper.addClass(this._getClass(value))
     }
-    this._width()
-    this._containerPosition()
-    this.options.size = value
+    this._width();
+    this._containerPosition();
+    this.options.size = value;
     return this.$element
   }
 
@@ -140,8 +140,8 @@ class BootstrapSwitch {
   }
 
   toggleAnimate () {
-    this.options.animate = !this.options.animate
-    this.$wrapper.toggleClass(this._getClass('animate'))
+    this.options.animate = !this.options.animate;
+    this.$wrapper.toggleClass(this._getClass('animate'));
     return this.$element
   }
 
@@ -152,9 +152,9 @@ class BootstrapSwitch {
   }
 
   toggleDisabled () {
-    this.options.disabled = !this.options.disabled
-    this.$element.prop('disabled', this.options.disabled)
-    this.$wrapper.toggleClass(this._getClass('disabled'))
+    this.options.disabled = !this.options.disabled;
+    this.$element.prop('disabled', this.options.disabled);
+    this.$wrapper.toggleClass(this._getClass('disabled'));
     return this.$element
   }
 
@@ -165,9 +165,9 @@ class BootstrapSwitch {
   }
 
   toggleReadonly () {
-    this.options.readonly = !this.options.readonly
-    this.$element.prop('readonly', this.options.readonly)
-    this.$wrapper.toggleClass(this._getClass('readonly'))
+    this.options.readonly = !this.options.readonly;
+    this.$element.prop('readonly', this.options.readonly);
+    this.$wrapper.toggleClass(this._getClass('readonly'));
     return this.$element
   }
 
@@ -178,10 +178,10 @@ class BootstrapSwitch {
   }
 
   toggleIndeterminate () {
-    this.options.indeterminate = !this.options.indeterminate
-    this.$element.prop('indeterminate', this.options.indeterminate)
-    this.$wrapper.toggleClass(this._getClass('indeterminate'))
-    this._containerPosition()
+    this.options.indeterminate = !this.options.indeterminate;
+    this.$element.prop('indeterminate', this.options.indeterminate);
+    this.$wrapper.toggleClass(this._getClass('indeterminate'));
+    this._containerPosition();
     return this.$element
   }
 
@@ -192,14 +192,14 @@ class BootstrapSwitch {
   }
 
   toggleInverse () {
-    this.$wrapper.toggleClass(this._getClass('inverse'))
-    const $on = this.$on.clone(true)
-    const $off = this.$off.clone(true)
-    this.$on.replaceWith($off)
-    this.$off.replaceWith($on)
-    this.$on = $off
-    this.$off = $on
-    this.options.inverse = !this.options.inverse
+    this.$wrapper.toggleClass(this._getClass('inverse'));
+    const $on = this.$on.clone(true);
+    const $off = this.$off.clone(true);
+    this.$on.replaceWith($off);
+    this.$off.replaceWith($on);
+    this.$on = $off;
+    this.$off = $on;
+    this.options.inverse = !this.options.inverse;
     return this.$element
   }
 
@@ -208,8 +208,8 @@ class BootstrapSwitch {
     if (this.options.onColor) {
       this.$on.removeClass(this._getClass(this.options.onColor))
     }
-    this.$on.addClass(this._getClass(value))
-    this.options.onColor = value
+    this.$on.addClass(this._getClass(value));
+    this.options.onColor = value;
     return this.$element
   }
 
@@ -218,50 +218,50 @@ class BootstrapSwitch {
     if (this.options.offColor) {
       this.$off.removeClass(this._getClass(this.options.offColor))
     }
-    this.$off.addClass(this._getClass(value))
-    this.options.offColor = value
+    this.$off.addClass(this._getClass(value));
+    this.options.offColor = value;
     return this.$element
   }
 
   onText (value) {
     if (typeof value === 'undefined') { return this.options.onText }
-    this.$on.html(value)
-    this._width()
-    this._containerPosition()
-    this.options.onText = value
+    this.$on.html(value);
+    this._width();
+    this._containerPosition();
+    this.options.onText = value;
     return this.$element
   }
 
   offText (value) {
     if (typeof value === 'undefined') { return this.options.offText }
-    this.$off.html(value)
-    this._width()
-    this._containerPosition()
-    this.options.offText = value
+    this.$off.html(value);
+    this._width();
+    this._containerPosition();
+    this.options.offText = value;
     return this.$element
   }
 
   labelText (value) {
     if (typeof value === 'undefined') { return this.options.labelText }
-    this.$label.html(value)
-    this._width()
-    this.options.labelText = value
+    this.$label.html(value);
+    this._width();
+    this.options.labelText = value;
     return this.$element
   }
 
   handleWidth (value) {
     if (typeof value === 'undefined') { return this.options.handleWidth }
-    this.options.handleWidth = value
-    this._width()
-    this._containerPosition()
+    this.options.handleWidth = value;
+    this._width();
+    this._containerPosition();
     return this.$element
   }
 
   labelWidth (value) {
     if (typeof value === 'undefined') { return this.options.labelWidth }
-    this.options.labelWidth = value
-    this._width()
-    this._containerPosition()
+    this.options.labelWidth = value;
+    this._width();
+    this._containerPosition();
     return this.$element
   }
 
@@ -274,17 +274,17 @@ class BootstrapSwitch {
     if (!value) {
       value = $.fn.bootstrapSwitch.defaults.wrapperClass
     }
-    this.$wrapper.removeClass(this._getClasses(this.options.wrapperClass).join(' '))
-    this.$wrapper.addClass(this._getClasses(value).join(' '))
-    this.options.wrapperClass = value
+    this.$wrapper.removeClass(this._getClasses(this.options.wrapperClass).join(' '));
+    this.$wrapper.addClass(this._getClasses(value).join(' '));
+    this.options.wrapperClass = value;
     return this.$element
   }
 
   radioAllOff (value) {
     if (typeof value === 'undefined') { return this.options.radioAllOff }
-    const val = Boolean(value)
+    const val = Boolean(value);
     if (this.options.radioAllOff === val) { return this.$element }
-    this.options.radioAllOff = val
+    this.options.radioAllOff = val;
     return this.$element
   }
 
@@ -293,7 +293,7 @@ class BootstrapSwitch {
     if (!value) {
       value = $.fn.bootstrapSwitch.defaults.onInit
     }
-    this.options.onInit = value
+    this.options.onInit = value;
     return this.$element
   }
 
@@ -304,24 +304,24 @@ class BootstrapSwitch {
     if (!value) {
       value = $.fn.bootstrapSwitch.defaults.onSwitchChange
     }
-    this.options.onSwitchChange = value
+    this.options.onSwitchChange = value;
     return this.$element
   }
 
   destroy () {
-    const $form = this.$element.closest('form')
+    const $form = this.$element.closest('form');
     if ($form.length) {
       $form.off('reset.bootstrapSwitch').removeData('bootstrap-switch')
     }
     this.$container
       .children()
       .not(this.$element)
-      .remove()
+      .remove();
     this.$element
       .unwrap()
       .unwrap()
       .off('.bootstrapSwitch')
-      .removeData('bootstrap-switch')
+      .removeData('bootstrap-switch');
     return this.$element
   }
 
@@ -351,26 +351,26 @@ class BootstrapSwitch {
     const $handles = this.$on
       .add(this.$off)
       .add(this.$label)
-      .css('width', '')
+      .css('width', '');
     const handleWidth = this.options.handleWidth === 'auto'
       ? Math.round(Math.max(this.$on.width(), this.$off.width()))
-      : this.options.handleWidth
-    $handles.width(handleWidth)
+      : this.options.handleWidth;
+    $handles.width(handleWidth);
     this.$label.width((index, width) => {
-      if (this.options.labelWidth !== 'auto') { return this.options.labelWidth }
+      if (this.options.labelWidth !== 'auto';) { return this.options.labelWidth }
       if (width < handleWidth) { return handleWidth }
       return width
     })
-    this._handleWidth = this.$on.outerWidth()
-    this._labelWidth = this.$label.outerWidth()
-    this.$container.width((this._handleWidth * 2) + this._labelWidth)
+    this._handleWidth = this.$on.outerWidth();
+    this._labelWidth = this.$label.outerWidth();
+    this.$container.width((this._handleWidth * 2) + this._labelWidth);
     return this.$wrapper.width(this._handleWidth + this._labelWidth)
   }
 
   _containerPosition (state = this.options.state, callback) {
     this.$container.css('margin-left', () => {
       const values = [0, `-${this._handleWidth}px`]
-      if (this.options.indeterminate) {
+      if (this.options.indeterminate;) {
         return `-${this._handleWidth / 2}px`
       }
       if (state) {
@@ -390,26 +390,26 @@ class BootstrapSwitch {
   }
 
   _init () {
-    const init = () => {
-      this.setPrevOptions()
-      this._width()
-      this._containerPosition()
+    const init = () =;> {
+      this.setPrevOptions();
+      this._width();
+      this._containerPosition();
       setTimeout(() => {
-        if (this.options.animate) {
+        if (this.options.animate;) {
           return this.$wrapper.addClass(this._getClass('animate'))
         }
-      }, 50)
+      }, 50;)
     }
     if (this.$wrapper.is(':visible')) {
-      init()
+      init();
       return
     }
     const initInterval = window.setInterval(() => {
-      if (this.$wrapper.is(':visible')) {
-        init()
+      if (this.$wrapper.is(':visible');) {
+        init();
         return window.clearInterval(initInterval)
       }
-    }, 50)
+    }, 50;)
   }
 
   _elementHandlers () {
@@ -417,7 +417,7 @@ class BootstrapSwitch {
       'setPreviousOptions.bootstrapSwitch': this.setPrevOptions.bind(this),
 
       'previousState.bootstrapSwitch': () => {
-        this.options = this.prevOptions
+        this.options = this.prevOptions;
         if (this.options.indeterminate) {
           this.$wrapper.addClass(this._getClass('indeterminate'))
         }
@@ -426,18 +426,18 @@ class BootstrapSwitch {
           .trigger('change.bootstrapSwitch', true)
       },
 
-      'change.bootstrapSwitch': (event, skip) => {
-        event.preventDefault()
-        event.stopImmediatePropagation()
-        const state = this.$element.is(':checked')
-        this._containerPosition(state)
+      'change.bootstrapSwitch';: (event, skip) =;> {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        const state = this.$element.is(':checked');
+        this._containerPosition(state);
         if (state === this.options.state) {
           return
         }
-        this.options.state = state
+        this.options.state = state;
         this.$wrapper
           .toggleClass(this._getClass('off'))
-          .toggleClass(this._getClass('on'))
+          .toggleClass(this._getClass('on'));
         if (!skip) {
           if (this.$element.is(':radio')) {
             $(`[name="${this.$element.attr('name')}"]`)
@@ -449,23 +449,23 @@ class BootstrapSwitch {
         }
       },
 
-      'focus.bootstrapSwitch': event => {
-        event.preventDefault()
+      'focus.bootstrapSwitch';: event =;> {
+        event.preventDefault();
         this.$wrapper.addClass(this._getClass('focused'))
       },
 
-      'blur.bootstrapSwitch': event => {
-        event.preventDefault()
+      'blur.bootstrapSwitch';: event =;> {
+        event.preventDefault();
         this.$wrapper.removeClass(this._getClass('focused'))
       },
 
-      'keydown.bootstrapSwitch': event => {
+      'keydown.bootstrapSwitch';: event =;> {
         if (!event.which || this.options.disabled || this.options.readonly) {
           return
         }
         if (event.which === 37 || event.which === 39) {
-          event.preventDefault()
-          event.stopImmediatePropagation()
+          event.preventDefault();
+          event.stopImmediatePropagation();
           this.state(event.which === 39)
         }
       }
@@ -474,15 +474,15 @@ class BootstrapSwitch {
 
   _handleHandlers () {
     this.$on.on('click.bootstrapSwitch', event => {
-      event.preventDefault()
-      event.stopPropagation()
-      this.state(false)
+      event.preventDefault();
+      event.stopPropagation();
+      this.state(false);
       return this.$element.trigger('focus.bootstrapSwitch')
     })
     return this.$off.on('click.bootstrapSwitch', event => {
-      event.preventDefault()
-      event.stopPropagation()
-      this.state(true)
+      event.preventDefault();
+      event.stopPropagation();
+      this.state(true);
       return this.$element.trigger('focus.bootstrapSwitch')
     })
   }
@@ -492,36 +492,36 @@ class BootstrapSwitch {
       click (event) { event.stopPropagation() },
 
       'mousedown.bootstrapSwitch touchstart.bootstrapSwitch': event => {
-        if (this._dragStart || this.options.disabled || this.options.readonly) {
+        if (this._dragStart || this.options.disabled || this.options.readonly;) {
           return
         }
-        event.preventDefault()
-        event.stopPropagation()
-        this._dragStart = (event.pageX || event.originalEvent.touches[0].pageX) - parseInt(this.$container.css('margin-left'), 10)
+        event.preventDefault();
+        event.stopPropagation();
+        this._dragStart = (event.pageX || event.originalEvent.touches[0].pageX) - parseInt(this.$container.css('margin-left'), 10);
         if (this.options.animate) {
           this.$wrapper.removeClass(this._getClass('animate'))
         }
         this.$element.trigger('focus.bootstrapSwitch')
       },
 
-      'mousemove.bootstrapSwitch touchmove.bootstrapSwitch': event => {
+      'mousemove.bootstrapSwitch touchmove.bootstrapSwitch';: event =;> {
         if (this._dragStart == null) { return }
-        const difference = (event.pageX || event.originalEvent.touches[0].pageX) - this._dragStart
-        event.preventDefault()
+        const difference = (event.pageX || event.originalEvent.touches[0].pageX) - this._dragStart;
+        event.preventDefault();
         if (difference < -this._handleWidth || difference > 0) { return }
-        this._dragEnd = difference
+        this._dragEnd = difference;
         this.$container.css('margin-left', `${this._dragEnd}px`)
       },
 
-      'mouseup.bootstrapSwitch touchend.bootstrapSwitch': event => {
+      'mouseup.bootstrapSwitch touchend.bootstrapSwitch';: event =;> {
         if (!this._dragStart) { return }
-        event.preventDefault()
+        event.preventDefault();
         if (this.options.animate) {
           this.$wrapper.addClass(this._getClass('animate'))
         }
         if (this._dragEnd) {
-          const state = this._dragEnd > -(this._handleWidth / 2)
-          this._dragEnd = false
+          const state = this._dragEnd > -(this._handleWidth / 2);
+          this._dragEnd = false;
           this.state(this.options.inverse ? !state : state)
         } else {
           this.state(!this.options.state)
@@ -529,7 +529,7 @@ class BootstrapSwitch {
         this._dragStart = false
       },
 
-      'mouseleave.bootstrapSwitch': () => {
+      'mouseleave.bootstrapSwitch';: () =;> {
         this.$label.trigger('mouseup.bootstrapSwitch')
       }
     }
@@ -537,10 +537,10 @@ class BootstrapSwitch {
   }
 
   _externalLabelHandler () {
-    const $externalLabel = this.$element.closest('label')
+    const $externalLabel = this.$element.closest('label');
     $externalLabel.on('click', event => {
-      event.preventDefault()
-      event.stopImmediatePropagation()
+      event.preventDefault();
+      event.stopImmediatePropagation();
       if (event.target === $externalLabel[0]) {
         this.toggleState()
       }
@@ -548,7 +548,7 @@ class BootstrapSwitch {
   }
 
   _formHandler () {
-    const $form = this.$element.closest('form')
+    const $form = this.$element.closest('form');
     if ($form.data('bootstrap-switch')) {
       return
     }
@@ -558,7 +558,7 @@ class BootstrapSwitch {
           $form.find('input')
             .filter(function () { return $(this).data('bootstrap-switch') })
             .each(function () { return $(this).bootstrapSwitch('state', this.checked) })
-        }, 1)
+        }, 1;)
       })
       .data('bootstrap-switch', true)
   }
@@ -575,11 +575,11 @@ class BootstrapSwitch {
   }
 }
 
-$.fn.bootstrapSwitch = function (option, ...args) {
+$.fn.bootstrapSwitch = function (option, ...args;) {
   function reducer (ret, next) {
-    const $this = $(next)
-    const existingData = $this.data('bootstrap-switch')
-    const data = existingData || new BootstrapSwitch(next, option)
+    const $this = $(next);
+    const existingData = $this.data('bootstrap-switch');
+    const data = existingData || new BootstrapSwitch(next, option);
     if (!existingData) {
       $this.data('bootstrap-switch', data)
     }
@@ -590,7 +590,7 @@ $.fn.bootstrapSwitch = function (option, ...args) {
   }
   return Array.prototype.reduce.call(this, reducer, this)
 }
-$.fn.bootstrapSwitch.Constructor = BootstrapSwitch
+$.fn.bootstrapSwitch.Constructor = BootstrapSwitch;
 $.fn.bootstrapSwitch.defaults = {
   state: true,
   size: null,
@@ -610,5 +610,5 @@ $.fn.bootstrapSwitch.defaults = {
   baseClass: 'bootstrap-switch',
   wrapperClass: 'wrapper',
   onInit: () => {},
-  onSwitchChange: () => {}
+  onSwitchChange;: () =;> {}
 }

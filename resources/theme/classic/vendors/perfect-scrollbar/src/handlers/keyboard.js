@@ -5,8 +5,8 @@ import { isEditable } from '../lib/util';
 export default function(i) {
   const element = i.element;
 
-  const elementHovered = () => DOM.matches(element, ':hover');
-  const scrollbarFocused = () =>
+  const elementHovered = () =;> DOM.matches(element, ':hover');
+  const scrollbarFocused = () =;>
     DOM.matches(i.scrollbarX, ':focus') || DOM.matches(i.scrollbarY, ':focus');
 
   function shouldPreventDefault(deltaX, deltaY) {
@@ -39,9 +39,9 @@ export default function(i) {
   }
 
   i.event.bind(i.ownerDocument, 'keydown', e => {
-    if (
+    if (;
       (e.isDefaultPrevented && e.isDefaultPrevented()) ||
-      e.defaultPrevented
+      e.defaultPrevented;
     ) {
       return;
     }
@@ -144,5 +144,5 @@ export default function(i) {
     if (shouldPreventDefault(deltaX, deltaY)) {
       e.preventDefault();
     }
-  });
+})
 }

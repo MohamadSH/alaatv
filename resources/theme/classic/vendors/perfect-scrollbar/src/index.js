@@ -12,7 +12,7 @@ import keyboard from './handlers/keyboard';
 import wheel from './handlers/mouse-wheel';
 import touch from './handlers/touch';
 
-const defaultSettings = () => ({
+const defaultSettings = () =;> ({
   handlers: ['click-rail', 'drag-thumb', 'keyboard', 'wheel', 'touch'],
   maxScrollbarLength: null,
   minScrollbarLength: null,
@@ -59,8 +59,8 @@ export default class PerfectScrollbar {
     this.contentWidth = null;
     this.contentHeight = null;
 
-    const focus = () => element.classList.add(cls.state.focus);
-    const blur = () => element.classList.remove(cls.state.focus);
+    const focus = () =;> element.classList.add(cls.state.focus);
+    const blur = () =;> element.classList.remove(cls.state.focus);
 
     this.isRtl = CSS.get(element).direction === 'rtl';
     this.isNegativeScroll = (() => {
@@ -150,12 +150,13 @@ export default class PerfectScrollbar {
 
     this.isAlive = true;
 
-    this.settings.handlers.forEach(handlerName => handlers[handlerName](this));
-
-    this.lastScrollTop = Math.floor(element.scrollTop); // for onScroll only
+    this.settings.handlers.forEach(handlerName = > handlers[handlerName](this);
+  )
+      this.lastScrollTop = Math.floor(element.scrollTop); // for onScroll only
     this.lastScrollLeft = element.scrollLeft; // for onScroll only
-    this.event.bind(this.element, 'scroll', e => this.onScroll(e));
-    updateGeometry(this);
+      this.event.bind(this.element, 'scroll', e = > this.onScroll(e);
+  )
+      updateGeometry(this);
   }
 
   update() {
@@ -233,7 +234,7 @@ export default class PerfectScrollbar {
   removePsClasses() {
     this.element.className = this.element.className
       .split(' ')
-      .filter(name => !name.match(/^ps([-_].+|)$/))
+      .filter(name => !name.match(/^ps([-_].+|)$/);)
       .join(' ');
   }
 }
