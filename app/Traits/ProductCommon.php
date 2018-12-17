@@ -5,6 +5,7 @@ use App\Productfiletype;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
+use Auth;
 
 trait ProductCommon
 {
@@ -130,23 +131,40 @@ trait ProductCommon
             $key .= $product->cacheKey() . "-";
         $key = "product:makeCostCollection:" . md5($key);
 
-        return Cache::remember($key, Config::get("constants.CACHE_60"), function () use ($products) {
+        return Cache::remember($key, Config::get("constants.CACHE_0"), function () use ($products) {
             $costCollection = collect();
             foreach ($products as $product) {
-                if ($product->producttype_id == 2) {
-                    $enableChildren = $product->children->where("enable", 1);
-                    if ($enableChildren->count() == 1) {
-                        $costArray = $enableChildren->first()
-                                                    ->calculatePayablePrice();
-                    } else $costArray = $product->calculatePayablePrice();
+                if($product->producttype_id == 2)
+                {
+                    $enableChildren = $product->children->where("enable" , 1);
+                    if($enableChildren->count() == 1 )
+                    {
+                        $costArray = $enableChildren->first()->calculatePayablePrice();
+                    }else $costArray  = $product->calculatePayablePrice();
 
-                } else $costArray = $product->calculatePayablePrice();
+                }elseif($product->producttype_id == 3){
+                    $allChildren =  $product->getAllChildren()->where("pivot.isDefault" , 1);
+                    $costArray = [];
+                    $costArray["productDiscount"] = null;
+                    $costArray["bonDiscount"] = null;
+                    $costArray["costForCustomer"] = 0;
+                    $costArray["cost"] = 0;
+                    if (is_callable(array($this, 'refreshPrice')))
+                    {
+                        $request = new \App\Http\Requests\Request();
+                        $request->offsetSet("products" , $allChildren->pluck("id")->toArray());
+                        $request->offsetSet("type" , "productSelection");
+                        $costInfo = $this->refreshPrice($request , $product);
+                        $costInfo = json_decode($costInfo);
+                        $costArray["costForCustomer"] = $costInfo->costForCustomer;
+                        $costArray["cost"] = $costInfo->cost;
+                    }
+//                    $costArray = $product->calculatePayablePrice();
+                } else{
+                    $costArray = $product->calculatePayablePrice();
+                }
 
-                $costCollection->put($product->id, [
-                    "cost"            => $costArray["cost"],
-                    'productDiscount' => $costArray["productDiscount"],
-                    'bonDiscount'     => $costArray['bonDiscount'],
-                ]);
+                $costCollection->put( $product->id , ["cost"=>$costArray["cost"] , 'productDiscount'=>$costArray["productDiscount"] , 'bonDiscount'=>$costArray['bonDiscount'] ,'costForCustomer'=>isset($costArray['costForCustomer'])?$costArray['costForCustomer']:0 ]);
             }
             return $costCollection;
 

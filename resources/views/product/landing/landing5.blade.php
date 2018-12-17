@@ -7,6 +7,11 @@
 
     <link rel="stylesheet" href="{{ asset('assets\extra\landing5') }}/css/allcss.min.css">
 
+    <style>
+        .redText {
+            color: red;
+        }
+    </style>
     {{--<link rel="stylesheet" href="{{ asset('assets\extra\landing5') }}/css/bootstrap4.min.css">--}}
     {{--<link rel="stylesheet" href="{{ asset('assets\extra\landing5') }}/css/animate.css">--}}
     {{--<link rel="stylesheet" href="{{ asset('assets\extra\landing5') }}/css/style.css">--}}
@@ -31,7 +36,7 @@
                 <div class="container">
                     <div class="row no-gutters slider-text align-items-center justify-content-center" data-scrollax-parent="true">
                         <div class="col-md-6 ftco-animate text-center" data-scrollax=" properties: { translateY: '70%' }">
-                            <h1 class="mb-4" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }"><img class="homePageHeaderHamaiesh" src="/assets/extra/landing3/images/sample/gold-fest.png" alt="همایش طلایی آلاء" ></h1>
+                            <h1 class="mb-4" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }"><img class="homePageHeaderHamaiesh" src="/assets/extra/landing5/images/gold-fest.png?v=1" alt="همایش طلایی آلاء" ></h1>
                             <p><a href="#section2" class="btn btn-primary btn-outline-white px-5 py-3 btnGoToProductSection">مشاهده همایش ها</a></p>
                         </div>
                     </div>
@@ -77,8 +82,18 @@
                                                         <div class="text p-4 d-flex align-items-center">
                                                             <div class="user d-flex align-items-center">
                                                                 <h3>
-                                                                    @if($product['price']=='-') قیمت: پس از انتخاب محصول
-                                                                    @else {{ $product['price'] }} تومان
+                                                                    @if($product['price']==0)
+                                                                        قیمت: پس از انتخاب محصول
+                                                                    @else
+                                                                        @if($product['priceWithDiscount'] != 0)
+                                                                            <strike class="redText">
+                                                                                {{ number_format($product['price']) }} تومان
+                                                                            </strike>
+                                                                        <br>
+                                                                            {{ number_format($product['priceWithDiscount']) }} تومان
+                                                                        @else
+                                                                            {{ number_format($product['price']) }} تومان
+                                                                        @endif
                                                                     @endif
                                                                 </h3>
                                                             </div>
@@ -105,7 +120,7 @@
                     <div class="col-md-10 text-center heading-section ftco-animate">
                         <h2 class="h2">دانلود نمونه فیلم همایش</h2>
                         <p>
-                            <a href="#" class="btn btn-primary mt-3 py-1 px-2">
+                            <a href="{{action("ContentController@show",7884)}}" class="btn btn-primary mt-3 py-1 px-2">
                                 <img src="{{ asset('assets\extra\landing5\images\دانلود-نمونه-فیلم-همایش.png') }}" class="downloadVideoImage"/>
                             </a>
                         </p>
