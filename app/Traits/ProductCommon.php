@@ -131,7 +131,7 @@ trait ProductCommon
             $key .= $product->cacheKey() . "-";
         $key = "product:makeCostCollection:" . md5($key);
 
-        return Cache::remember($key, Config::get("constants.CACHE_0"), function () use ($products) {
+        return Cache::remember($key, Config::get("constants.CACHE_60"), function () use ($products) {
             $costCollection = collect();
             foreach ($products as $product) {
                 if($product->producttype_id == 2)
