@@ -1,105 +1,46 @@
-@if(isset($withHeader) && $withHeader)<h1 class="bold">ورود به سایت آلاء</h1>@endif
-<p> برای ورود <span class="font-red bold" style="line-height: normal">نیازی به ثبت نام نیست. </span> تنها شماره موبایل و
-    کد ملی خود را وارد نمایند</p>
-<form action="{{action("Auth\LoginController@login")}}" class="login-form" method="post">
-    {{ csrf_field() }}
-    <div class="alert alert-danger display-hide">
-        <button class="close" data-close="alert"></button>
-        <span>شماره موبایل و کد ملی خود را وارد نمایید </span>
-    </div>
-    @if (Session::has('warning'))
-        <div class="row">
-            <div class="col-md-12">
-                <div class="alert alert-warning">
-                    <button class="close" data-close="alert"></button>
-                    <span>{{Session::pull('warning')}}</span>
-                </div>
-            </div>
-        </div>
-    @elseif (Session::has('success'))
-        <div class="row">
-            <div class="col-md-12">
-                <div class="alert alert-success">
-                    <button class="close" data-close="alert"></button>
-                    <span>{{Session::pull('success')}}</span>
-                </div>
-            </div>
-        </div>
-    @elseif(Session::has('error'))
-        <div class="row">
-            <div class="col-md-12">
-                <div class="alert alert-danger">
-                    <button class="close" data-close="alert"></button>
-                    <span>{{Session::pull('error')}}</span>
-                </div>
-            </div>
-        </div>
-    @endif
+<form class = "m-login__form m-form" action = "{{ action("Auth\LoginController@login") }}" method = "post">
     @if($errors->login->has('validation'))
-        <div class="row">
-            <div class="col-md-12">
-                <div class="alert alert-danger">
-                    <button class="close" data-close="alert"></button>
-                    <span><strong>{{$errors->login->first('validation')}}</strong></span>
-                </div>
-            </div>
+        <div class = "alert alert-danger">
+            <button class = "close" data-close = "alert"></button>
+            <span><strong>{{$errors->login->first('validation')}}</strong></span>
         </div>
     @elseif($errors->login->has('credential'))
-        <div class="row">
-            <div class="col-md-12">
-                <div class="alert alert-danger" dir="rtl">
-                    <button class="close" data-close="alert"></button>
-                    <span><strong>{{$errors->login->first('credential')}}</strong></span>
-                </div>
-            </div>
+        <div class = "alert alert-danger">
+            <button class = "close" data-close = "alert"></button>
+            <span><strong>{{$errors->login->first('credential')}}</strong></span>
         </div>
     @elseif($errors->login->has('inActive'))
-        <div class="row">
-            <div class="col-md-12">
-                <div class="alert alert-danger" dir="rtl">
-                    <button class="close" data-close="alert"></button>
-                    <span><strong>{{$errors->login->first('inActive')}}</strong></span>
-                </div>
-            </div>
+        <div class = "alert alert-danger" dir = "rtl">
+            <button class = "close" data-close = "alert"></button>
+            <span><strong>{{$errors->login->first('inActive')}}</strong></span>
         </div>
     @endif
-    <div class="row">
-        <div class="col-lg-12 col-md-12 col-sd-12 col-xs-12 {{ $errors->has('mobile') ? ' has-error' : '' }}">
-            <input class="form-control form-control-solid placeholder-no-fix form-group {{ $errors->has('mobile') ? ' has-error' : '' }}"
-                   {{ $errors->has('mobile') ? ' style=margin-bottom:10px' : '' }} value="{{ old('mobile') }}"
-                   type="text" autocomplete="off" placeholder="شماره موبایل" name="mobile"/>
-            @if ($errors->has('mobile'))
-                <span class="help-block">
-                                          <strong>{{ $errors->first('mobile') }}</strong>
-                                    </span>
-            @endif
-        </div>
-        <div class="col-lg-12 col-md-12 col-sd-12 col-xs-12 {{ $errors->has('nationalCode') ? ' has-error' : '' }}">
-            <input class="form-control form-control-solid placeholder-no-fix form-group {{ $errors->has('nationalCode') ? ' has-error' : '' }}"
-                   {{ $errors->has('nationalCode') ? ' style=margin-bottom:10px' : '' }} value="{{ old('password') }}"
-                   type="password" autocomplete="off" placeholder="کد ملی" name="password"/>
-            @if ($errors->has('nationalCode'))
-                <span class="help-block">
-                      <strong>{{ $errors->first('nationalCode') }}</strong>
-                </span>
-            @endif
-        </div>
+    {{ csrf_field() }}
+    <div id="m-login__form_mobile" class = "form-group m-form__group {{ $errors->has('mobile') ? ' has-danger' : '' }}">
+        <input class = "form-control m-input" type = "text" placeholder = "شماره موبایل" value = "{{ old('mobile') }}" name = "mobile" autocomplete = "off">
+        @if ($errors->has('mobile'))
+            <div class = "form-control-feedback">{{ $errors->first('mobile') }}</div>
+        @endif
     </div>
-    <div class="row">
-        {{--<div class="col-sm-5">--}}
-        {{--<div class="md-checkbox-inline">--}}
-        {{--<div class="md-checkbox has-success">--}}
-        {{--<input type="checkbox" name="remember" value="1" id="rememberCheckbox" class="md-check">--}}
-        {{--<label for="rememberCheckbox">--}}
-        {{--<span></span>--}}
-        {{--<span class="check"></span>--}}
-        {{--<span class="box"></span>  مرا بخاطر بسپار </label>--}}
-        {{--</div>--}}
-        {{--</div>--}}
-        {{--</div>--}}
-        <div class="col-sm-7 text-right">
-            <button class="btn blue" type="submit">ورود</button>
+    <div id="m-login__form_code" class = "form-group m-form__group {{ $errors->has('nationalCode') ? ' has-danger' : '' }}">
+        <input class = "form-control m-input m-login__form-input--last " type = "password" placeholder = "کد ملی" value = "{{ old('password') }}" name = "password">
+        @if ($errors->has('nationalCode'))
+            <div class = "form-control-feedback">{{ $errors->first('nationalCode') }}</div>
+        @endif
+    </div>
+    <div class = "row m-login__form-sub">
+        <div class = "col m--align-left m--hide">
+            <label class = "m-checkbox m-checkbox--focus">
+                <input type = "checkbox" name = "remember" value="true" checked>
+                مرا به خاطر بسپار
+                <span></span>
+            </label>
         </div>
+{{--        <div class = "col m--align-right">
+            <a href = "javascript:" id = "m_login_forget_password" class = "m-link">رمز خود را فراموش کردید ؟</a>
+        </div>--}}
+    </div>
+    <div class = "m-login__form-action">
+        <button id = "m_login_signin_submit" class = "btn btn-focus m-btn m-btn--pill m-btn--custom m-btn--air" type = "submit">ورود</button>
     </div>
 </form>
-<!-- BEGIN FORGOT PASSWORD FORM -->

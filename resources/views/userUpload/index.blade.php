@@ -109,7 +109,7 @@
                             $(this).jPlayer("setMedia", stream).jPlayer("play");
                         }
                     },
-                    swfPath: "/assets/extra/jplayer/dist/jplayer",
+                    swfPath: "/acm/extra/jplayer/dist/jplayer",
                     cssSelectorAncestor: "#jp_container_{{$counter++}}",
                     supplied: "mp3",
                     preload: "none",

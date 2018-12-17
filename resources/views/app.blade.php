@@ -1,46 +1,42 @@
 <!DOCTYPE html>
-<!--[if IE 8]>
-<html lang="fa-IR" class="ie8 no-js"> <![endif]-->
-<!--[if IE 9]>
-<html lang="fa-IR" class="ie9 no-js"> <![endif]-->
-<!--[if !IE]><!-->
-<html lang="fa-IR" dir="rtl">
-<!--<![endif]-->
-<!-- BEGIN HEAD -->
-
+<html lang = "fa" direction = "rtl" style = "direction: rtl">
+<!-- begin::Head -->
 <head>
-    <meta charset="utf-8"/>
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta content="width=device-width, initial-scale=1" name="viewport"/>
-    {!! SEO::generate(true) !!}
-    @section("css")
-        <link rel="stylesheet" href="{{ mix('/css/mandatory_all.css') }}">
-        @yield("headPageLevelPlugin")
-        <link rel="stylesheet" href="{{ mix('/css/basic_all.css') }}">
-        @yield("headPageLevelStyle")
-    @section("headThemeLayoutStyle")
-        <link rel="stylesheet" href="{{ mix('/css/head_layout_all.css') }}">
-    @show
-    @show
+    <meta charset = "utf-8"/>
+    <meta name = "viewport" content = "width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
+    <meta name = "csrf-token" content = "{{ csrf_token() }}">
 
-<!-- END THEME LAYOUT STYLES -->
-    <link rel="shortcut icon"
-          href="@if(isset($wSetting->site->favicon)) {{route('image', ['category'=>'11','w'=>'150' , 'h'=>'150' ,  'filename' =>  $wSetting->site->favicon ])}} @endif"/>
+    <!-- begin::seo meta tags -->
+{!! SEO::generate(true) !!}
+    <!-- end:: seo meta tags -->
 
-    <!-- Scripts -->
+    <!--begin::Web font -->
+    <script src = "https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
+    <script>
+        WebFont.load({
+            google: {"families": ["Poppins:300,400,500,600,700", "Roboto:300,400,500,600,700"]},
+            active: function () {
+                sessionStorage.fonts = true;
+            }
+        });
+    </script>
+    <!--end::Web font -->
+
+    <!--begin::Global Theme Styles -->
+    <link href = "{{ mix('/css/all.css') }}" rel = "stylesheet" type = "text/css"/>
+    <!--end::Global Theme Styles -->
+
+    @yield('page-css')
+
+    <link rel = "shortcut icon" href = "@if(isset($wSetting->site->favicon)) {{route('image', ['category'=>'11','w'=>'150' , 'h'=>'150' ,  'filename' =>  $wSetting->site->favicon ])}} @endif"/>
+    <!--begin: csrf token -->
     <script>
         window.Laravel = {!! json_encode([
             'csrfToken' => csrf_token(),
         ]) !!};
     </script>
-
-    @section("gtagJs")
-
-    @show
-    <link rel="stylesheet" href="/assets/extra/acm/custom-app.css">
-
-    <!-- Google Tag Manager -->
+    <!--end: csrf token -->
+    <!--begin Google Tag Manager -->
     <script>
         (function (w, d, s, l, i) {
             w[l] = w[l] || [];
@@ -57,119 +53,122 @@
         })(window, document, 'script', 'dataLayer', 'GTM-PNP8RDW');
     </script>
     <!-- End Google Tag Manager -->
-    <!--gta-track-click-->
 </head>
-<!-- END HEAD -->
+<!-- end::Head -->
 
-<body
-        @section("bodyClass")
-        class="page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-md"
-        @show
->
+<!-- begin::Body -->
+<body class = "m-page--fluid m--skin- m-content--skin-light2 m-header--fixed m-header--fixed-mobile m-aside-left--enabled m-aside-left--skin-dark m-aside-left--fixed m-aside-left--offcanvas m-aside-right--enabled m-footer--push m-aside--offcanvas-default">
+
 <!-- Google Tag Manager (noscript) -->
 <noscript>
-    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PNP8RDW"
-            height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    <iframe src = "https://www.googletagmanager.com/ns.html?id=GTM-PNP8RDW" height = "0" width = "0" style = "display:none;visibility:hidden"></iframe>
 </noscript>
 <!-- End Google Tag Manager (noscript) -->
-@section("header")
-    @include("partials.header1")
-@show
-<!-- BEGIN CONTAINER -->
-<div class="page-container">
-@section("sidebar")
-    @include("partials.sidebar")
-@show
-<!-- BEGIN CONTENT -->
-    <div class="page-content-wrapper" xmlns="http://www.w3.org/1999/xhtml">
 
-        <!-- BEGIN CONTENT BODY -->
-        <div
-                @section("contentClass")
-                class="page-content"
-                @show
-        >
-            @yield('custom-menu')
-            @if(Session::has("customer_id"))
-                <div class="note bg-yellow-lemon">
-                    <h3 class="block"><strong>توجه!</strong></h3>
-                    <p><strong> شما در وضعیت درج سفارش
-                            برای {{Session::get("customer_firstName")}} {{Session::get("customer_lastName")}} می باشید.
-                            <a href="{{action("OrderController@exitAdminInsertOrder")}}" class="btn btn-lg red">بیرون
-                                آمدن از وضعیت درج سفارش
-                                برای {{Session::get("customer_firstName")}} {{Session::get("customer_lastName")}}</a></strong>
-                    </p>
+<!-- begin:: Page -->
+<div class = "m-grid m-grid--hor m-grid--root m-page">
+    @section("body")
+        <!-- BEGIN: Header -->
+        @section("header")
+            @include("partials.header1")
+        @show
+        <!-- END: Header -->
+        <!-- begin::Body -->
+        <div class = "m-grid__item m-grid__item--fluid m-grid m-grid--ver-desktop m-grid--desktop m-body">
+            @section("sidebar")
+                @include("partials.sidebar")
+            @show
+
+            <div class = "m-grid__item m-grid__item--fluid m-wrapper">
+                <div class = "m-content">
+                    @yield('pageBar')
+                    @yield("content")
                 </div>
-            @endif
-        <!-- BEGIN PAGE HEADER-->
-            @yield("content")
+            </div>
+
+            @section('right-aside')
+            {{--<!-- BEGIN: Right Aside -->
+                <div class = "m-grid__item m-aside-right">
+
+                    <div>
+                        <h6 class="m-badge m-badge--warning m-badge--wide m-badge--rounded">ترافیک رایگان آلاء</h6>
+                        <p class="text-justify">
+                            دانلود آسیاتکی ها از سایت آلاء رایگان است.
+                            <br>
+                            اگر آسیاتک ندارید، از
+                            <a href = "/v/asiatech" class="m-link m--font-boldest">اینجا</a>
+                            کد تخفیف
+                            <span>
+                                100%
+                            </span>
+                            آسیاتک را <strong> رایگان </strong> دریافت کنید.
+                        </p>
+                    </div>
+                    <div class = "m-separator m-separator--dashed m--space-10"></div>
+                    <div>
+                        <h6 class="m-badge m-badge--warning m-badge--wide m-badge--rounded"> کمک مالی به آلاء</h6>
+                            <p class="mb-0 text-justify">
+                                ما هرکاری که می کنیم، به تغییر وضعیت موجود اعتقاد داریم،
+                                ما به متفاوت فکر کردن اعتقاد داریم.
+                                <br>
+                                روش ما برای به چالش کشیدن وضعیت موجود، تولید محتواهای کامل، جامع و بررسی دقیق پیشنهادهای  شما و نظرات کارشناسان آموزشی است.
+                                <br>
+                                اینگونه هست که ما بهترین فیلم های آموزشی را تولید می کنیم.
+                                <br>
+                                <a href="{{ action("HomeController@donate") }}" class="m-link m--font-boldest">
+                                    ما برای حفظ و توسعه خدمات، نیاز به کمک های مالی شما آلایی ها داریم.
+                                </a>
+                            </p>
+                            <footer class="blockquote-footer">سهراب ابوذرخانی فرد <cite title="موسسه غیرتجاری توسعه علمی آموزشی عدالت محور آلاء">موسسه غیرتجاری آلاء</cite></footer>
+                    </div>
+
+                </div>
+            <!-- END: Right Aside -->--}}
+            @show
         </div>
-        <!-- END CONTENT BODY -->
-    </div>
-    <div style="display: none">
-        <input id="js-var-userIp" type="hidden" value='{{ $userIpAddress }}'>
-    </div>
-    <!-- END CONTENT -->
-    @yield('custom-menu-footer')
+        <!-- end:: Body -->
+        @section("footer")
+            @include("partials.footer1")
+        @show
+    @show
+        <input id="js-var-userIp" class="m--hide" type="hidden" value='{{ $userIpAddress }}'>
+        <input id="js-var-userId" class="m--hide" type="hidden" value='{{ optional(Auth::user())->id }}'>
 </div>
-<!-- END CONTAINER -->
+<!-- end:: Page -->
 
-<!-- BEGIN FOOTER -->
-@section("footer")
-    @include("partials.footer1")
+@section('quick-sidebar')
+    @include('partials.quickSidebar')
 @show
-<!-- END FOOTER -->
-<!--[if lt IE 9]>
-<script src="/assets/global/plugins/respond.min.js"></script>
-<script src="/assets/global/plugins/excanvas.min.js"></script>
-<![endif]-->
-
-<script>
-    now = new Date();
-    var head = document.getElementsByTagName('head')[0];
-    var script = document.createElement('script');
-    script.type = 'text/javascript';
-    var script_address = 'https://cdn.yektanet.com/rg_woebegone/scripts/1603/rg.complete.js';
-    script.src = script_address + '?v=' + now.getFullYear().toString() + '0'
-        + now.getMonth() + '0' + now.getDate() + '0' + now.getHours();
-    script.async = true;
-    head.appendChild(script);
-</script>
-
-@section("js")
-    <!-- BEGIN CORE PLUGINS -->
-    <script src="{{ mix('/js/core_all.js') }}" type="text/javascript"></script>
-    <!-- END CORE PLUGINS -->
-    <!-- BEGIN PAGE LEVEL PLUGINS -->
-    @yield("footerPageLevelPlugin")
-    <!-- END PAGE LEVEL PLUGINS -->
-    <!-- BEGIN THEME GLOBAL SCRIPTS -->
-    <script src="/assets/global/scripts/app.min.js" type="text/javascript"></script>
-    <!-- END THEME GLOBAL SCRIPTS -->
-    <!-- BEGIN PAGE LEVEL SCRIPTS -->
-    @yield("footerPageLevelScript")
-    <!-- END PAGE LEVEL SCRIPTS -->
-    <!-- BEGIN THEME LAYOUT SCRIPTS -->
-@section("footerThemeLayoutScript")
-    <script src="{{ mix('/js/layout_.js') }}" type="text/javascript"></script>
-@show
-<!-- END THEME LAYOUT SCRIPTS -->
-<!-- BEGIN DEVELOPER SCRIPTS -->
-@show
-@yield("extraJS")
-<!-- END DEVELOPER SCRIPTS -->
-<script>
-    var userIpDimensionValue = $('#js-var-userIp').val();
-    dataLayer.push(
-        {
-            'userIp': userIpDimensionValue,
-            'dimension2': userIpDimensionValue
-            @if(Auth::check())
-            ,
-            'userId': '{{ Auth::user() ->id }}',
-            'user_id': '{{ Auth::user() ->id }}'
-            @endif
-        });
-</script>
+<!-- begin::Scroll Top -->
+<div id = "m_scroll_top" class = "m-scroll-top">
+    <i class = "la la-arrow-up"></i>
+</div>
+<!-- end::Scroll Top -->
+{{--
+<!-- begin::Quick Nav -->
+<ul class = "m-nav-sticky" style = "margin-top: 30px;">
+    <li class = "m-nav-sticky__item" data-toggle = "m-tooltip" title = "سبد خرید" data-placement = "left">
+        <a href = "https://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes" target = "_blank">
+            <i class = "la la-cart-arrow-down"></i>
+        </a>
+    </li>
+    <li class = "m-nav-sticky__item" data-toggle = "m-tooltip" title = "Documentation" data-placement = "left">
+        <a href = "https://keenthemes.com/metronic/documentation.html" target = "_blank">
+            <i class = "la la-code-fork"></i>
+        </a>
+    </li>
+    <li class = "m-nav-sticky__item" data-toggle = "m-tooltip" title = "انجمن" data-placement = "left">
+        <a href = "https://keenthemes.com/forums/forum/support/metronic5/" target = "_blank">
+            <i class = "la la-life-ring"></i>
+        </a>
+    </li>
+</ul>
+<!-- begin::Quick Nav -->
+--}}
+<!--begin::Global Theme Bundle -->
+<script src = "{{ mix('/js/all.js') }}" type = "text/javascript"></script>
+<!--end::Global Theme Bundle -->
+@yield('page-js')
 </body>
+<!-- end::Body -->
 </html>

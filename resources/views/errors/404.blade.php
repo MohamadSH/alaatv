@@ -34,7 +34,7 @@
                 <h3>ظاهرا شما گم شده اید!</h3>
                 <p> صفحه ی مورد نظر شما یافت نشد
                     <br/>
-                    <a href="{{action("HomeController@index")}}"> خانه </a>
+                    <a href="{{action("HomeController@index")}}"> @lang('page.Home') </a>
                 {{--or try the search bar below. </p>--}}
                 {{--<form action="#">--}}
                 {{--<div class="input-group input-medium">--}}

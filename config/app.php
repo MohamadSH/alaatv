@@ -231,7 +231,6 @@ return [
         'Laratrust'    => Laratrust\LaratrustFacade::class,
         'Sitemap'      => Watson\Sitemap\Facades\Sitemap::class,
         'Image'        => Intervention\Image\Facades\Image::class,
-        'Debugbar'     => Barryvdh\Debugbar\Facade::class,
         'SEO'          => Artesaos\SEOTools\Facades\SEOTools::class,
     ],
 

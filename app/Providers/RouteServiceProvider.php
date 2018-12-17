@@ -308,6 +308,8 @@ class RouteServiceProvider extends ServiceProvider
                         $c->load("template");
                     if (!$c->relationLoaded('contentsets'))
                         $c->load("contentsets");
+                    if (!$c->relationLoaded('user'))
+                        $c->load("user");
                 }
                 return $c ?? abort(404);
             });
@@ -315,13 +317,11 @@ class RouteServiceProvider extends ServiceProvider
         });
 
         Route::bind('set', function ($value) {
-            //TODO:// Caching . . .
-            /*$key = "Set:".$value;
+            $key = "Set:".$value;
             return Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($value){
-                return Contentset::where('id', $value)->first() ?? abort(404);
-            });*/
-            return Contentset::where('id', $value)
-                             ->first() ?? abort(404);
+                $set =  Contentset::where('id', $value)->first();
+                return $set ?? abort(404);
+            });
         });
 
         Route::bind("employeetimesheet", function ($value) {

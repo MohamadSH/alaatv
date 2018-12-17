@@ -5,7 +5,7 @@
     {{--<ul class="page-breadcrumb">--}}
     {{--<li>--}}
     {{--<i class="icon-home"></i>--}}
-    {{--<a href="{{action("HomeController@index")}}">خانه</a>--}}
+    {{--<a href="{{action("HomeController@index")}}">@lang('page.Home')</a>--}}
     {{--<i class="fa fa-angle-left"></i>--}}
     {{--</li>--}}
     {{--</ul>--}}
@@ -37,7 +37,7 @@
     {{--<div class="row">--}}
     {{--<div class="col-md-1"></div>--}}
     {{--<div class="col-md-10">--}}
-    {{--<video style="width: 100%" controls  poster="/assets/extra/video-broken.png">--}}
+    {{--<video style="width: 100%" controls  poster="/acm/extra/video-broken.png">--}}
     {{--<source src="" type="video/mp4">--}}
     {{--<span class="bold font-red">مرورگر شما HTML5 را پشتیبانی نمی کند</span>--}}
     {{--</video>--}}

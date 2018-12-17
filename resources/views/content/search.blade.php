@@ -77,7 +77,7 @@
                     </div>
                     {!! Form::close() !!}
                     <div class="row text-center">
-                        <img class="hidden" id="content-table-loading" src="/assets/extra/load2.GIF" alt="loading"
+                        <img class="hidden" id="content-table-loading" src="/acm/extra/load2.GIF" alt="loading"
                              style="width: 20px;">
                     </div>
                 </div>

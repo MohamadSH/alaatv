@@ -1,29 +1,5 @@
 @extends("app",["pageName"=>"search"])
 
-@section("css")
-    <link rel="stylesheet" href="{{ mix('/css/all.css') }}">
-    <link rel="stylesheet" href="{{ mix('/css/search-extra-all.css') }}">
-@endsection
-
-@section("bodyClass")
-    class = "page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-sidebar-closed page-md"
-@endsection
-
-@section("pageBar")
-    {{--<div class="page-bar">--}}
-    {{--<ul class="page-breadcrumb">--}}
-    {{--<li>--}}
-    {{--<i class="icon-home"></i>--}}
-    {{--<a href="{{action("HomeController@index")}}">خانه</a>--}}
-    {{--<i class="fa fa-angle-left"></i>--}}
-    {{--</li>--}}
-    {{--<li>--}}
-    {{--<span>جستجو</span>--}}
-    {{--</li>--}}
-    {{--</ul>--}}
-    {{--</div>--}}
-@endsection
-
 @section('custom-menu')
     <div class="right_menu">
         <div class="button_search">
@@ -566,59 +542,6 @@
     </div>
 @endsection
 @section("content")
-    {{--<div class="search-page search-content-4">
-        <div class="search-bar bordered">
-            <div class="row">
-
-                {!! Form::open(['action'=> 'ContentController@index'  ,'role'=>'form' , 'id' => 'itemFilterForm'  ]) !!}
-                <div class="form-body" id="itemFilterFormBody">
-                    <div class="row">
-                        <div class="col-lg-3 col-md-3 col-sd-3 col-xs-12">
-                            <div class="form-group form-md-line-input form-md-floating-label has-info">
-                                {!! Form::select('tags[]',$majors,$defaultMajor,['class' => 'form-control itemFilter' , 'id'=>'majorSelect' , 'placeholder'=>'همه رشته ها' ]) !!}
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sd-3 col-xs-12">
-                            <div class="form-group form-md-line-input form-md-floating-label has-info">
-                                {!! Form::select('tags[]',$grades,$defaultGrade,['class' => 'form-control itemFilter' , 'id'=>'gradeSelect' , 'placeholder'=>'همه مقطع ها' ]) !!}
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sd-3 col-xs-12">
-                            <div class="form-group form-md-line-input form-md-floating-label has-info">
-                                {!! Form::select('tags[]',$lessons,$defaultLesson,['class' => 'form-control itemFilter'  , 'id'=> 'lessonSelect' , 'placeholder'=>'همه درس ها' ]) !!}
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sd-3 col-xs-12">
-                            <div class="form-group form-md-line-input form-md-floating-label has-info">
-                                {!! Form::select('tags[]',$teachers,$defaultTeacher,['class' => 'form-control itemFilter' , 'id'=> 'teacherSelect'  , 'placeholder'=>'همه دبیرها']) !!}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                @if(isset($extraTags))
-                    @foreach($extraTags as $key => $extraTag)
-                        <span class="tag label label-info tag_{{$key}}"
-                              style="display: inline-block; margin: 2px; padding: 10px;">
-                            <a class="removeTagLabel" data-role="{{$key}}" style="padding-left: 10px">
-                                <i class="fa fa-remove"></i>
-                            </a>
-                        <span>
-                                <a href="{{action("ContentController@index")}}?tags[]={{$extraTag}}"
-                                   class="font-white">{{$extraTag}}</a>
-                        </span>
-                            <input id="tagInput_{{$key}}" class="extraTag" name="tags[]" type="hidden"
-                                   value="{{$extraTag}}">
-                        </span>
-                    @endforeach
-                @endif
-                {!! Form::close() !!}
-                <div class="row text-center">
-                    <img id="content-search-loading" src="/assets/extra/load2.GIF" alt="loading"
-                         style="display: none ; width: 20px;">
-                </div>
-            </div>
-        </div>
-    </div>--}}
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
             <!-- BEGIN PORTLET-->
@@ -696,17 +619,4 @@
         <input id="js-var-productIndexUrl" type="hidden" value='{{action('ProductController@index')}}'>
         <input id="js-var-setIndexUrl" type="hidden" value='{{action('ContentsetController@index')}}'>
     </div>
-@endsection
-
-@section("footerPageLevelPlugin")
-    <script src="{{ mix('/js/footer_Page_Level_Plugin.js') }}" type="text/javascript"></script>
-    <script src="/assets/global/plugins/cubeportfolio/js/jquery.cubeportfolio.min.js" type="text/javascript"></script>
-@endsection
-
-@section("footerPageLevelScript")
-    <script src="/js/extraJS/jQueryNumberFormat/jquery.number.min.js" type="text/javascript"></script>
-@endsection
-
-@section("extraJS")
-    <script src="{{ mix('/js/search-extra-all.js') }}" type="text/javascript" charset="utf-8"></script>
 @endsection

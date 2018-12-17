@@ -29,7 +29,7 @@
 @section("content")
     <div class="row">
         <div class="col-md-12 page-404">
-            <div class="number"><img src="/assets/extra/stop.png" style=""></div>
+            <div class="number"><img src="/acm/extra/stop.png" style=""></div>
             {{--<div class="number font-red"> 404 </div>--}}
             <div class="details">
                 {{--<h1 class="font-red">خطا!</h1>--}}

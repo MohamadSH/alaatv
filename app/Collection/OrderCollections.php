@@ -38,4 +38,16 @@ class OrderCollections extends Collection
 
         return $result;
     }
+
+    /**
+     * @return int
+     */
+    public function getNumberOfProductsInThisOrderCollection() :int
+    {
+        $sum = 0;
+        foreach ($this as $order){
+            $sum += $order->numberOfProducts;
+        }
+        return $sum;
+    }
 }

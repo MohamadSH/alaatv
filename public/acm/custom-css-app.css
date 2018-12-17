@@ -1,0 +1,15 @@
+.a--opacity-7 {
+    opacity: 0.8;
+}
+.a--opacity-8 {
+    opacity: 0.8;
+}
+.a--full-width{
+    width:100%;
+}
+.owl-prev, .owl-next{
+    font-size: 2.5rem !important;
+}
+.a--radius-2{
+    border-radius: 2rem;
+}

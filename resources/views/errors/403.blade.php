@@ -34,7 +34,7 @@
                 <h3>دسترسی غیر مجاز</h3>
                 <p> دسترسی شما به این بخش ممکن نمی باشد
                     <br/>
-                    <a href="{{action("HomeController@index")}}"> خانه </a>
+                    <a href="{{action("HomeController@index")}}"> @lang('page.Home') </a>
                 {{--or try the search bar below. </p>--}}
                 {{--<form action="#">--}}
                 {{--<div class="input-group input-medium">--}}
