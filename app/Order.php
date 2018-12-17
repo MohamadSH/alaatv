@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Classes\Checkout\Alaa\OrderCheckout;
+use App\Classes\Checkout\Alaa\ReObtainOrderFromRecords;
 use App\Collection\OrderCollections;
 use App\Traits\DateTrait;
 use App\Traits\Helper;
@@ -11,7 +13,6 @@ use Carbon\Carbon;
 use Iatstuti\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Config;
 
 /**
  * App\Order
@@ -90,20 +91,34 @@ use Illuminate\Support\Facades\Config;
  */
 class Order extends Model
 {
+    /*
+    |--------------------------------------------------------------------------
+    | Traits methods
+    |--------------------------------------------------------------------------
+    */
+
     use SoftDeletes, CascadeSoftDeletes;
     use Helper;
     use DateTrait;
+    use ProductCommon;
+
+    /*
+    |--------------------------------------------------------------------------
+    | Properties methods
+    |--------------------------------------------------------------------------
+    */
+
     protected $cascadeDeletes = [
         'transactions',
         'files',
     ];
-    /**      * The attributes that should be mutated to dates.        */
+
+    /** The attributes that should be mutated to dates */
     protected $dates = [
         'created_at',
         'updated_at',
         'deleted_at',
     ];
-    use ProductCommon;
 
     /**
      * @var array
@@ -122,6 +137,12 @@ class Order extends Model
         'customerExtraInfo',
         'checkOutDateTime',
         'completed_at',
+    ];
+
+    const  OPEN_ORDER_STATUSES = [
+        1,
+        4,
+        8,
     ];
 
     /**
@@ -188,34 +209,34 @@ class Order extends Model
     public function successfulTransactions()
     {
         return $this->hasMany('App\Transaction')
-                    ->where(function ($q) {
-                        $q->where("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL"))
-                          ->orWhere("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_SUSPENDED"));
-                    });
+            ->where(function ($q) {
+                $q->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
+                    ->orWhere("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUSPENDED"));
+            });
     }
 
     public function pendingTransactions()
     {
         return $this->hasMany('App\Transaction')
-                    ->where("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_PENDING"));
+            ->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_PENDING"));
     }
 
     public function unpaidTransactions()
     {
         return $this->hasMany('App\Transaction')
-                    ->where("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_UNPAID"));
+            ->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_UNPAID"));
     }
 
     public function suspendedTransactions()
     {
         return $this->hasMany('App\Transaction')
-                    ->where("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_SUSPENDED"));
+            ->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUSPENDED"));
     }
 
     public function archivedSuccessfulTransactions()
     {
         return $this->hasMany('App\Transaction')
-                    ->where("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_ARCHIVED_SUCCESSFUL"));
+            ->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_ARCHIVED_SUCCESSFUL"));
     }
 
     public function transactions()
@@ -238,7 +259,7 @@ class Order extends Model
         return $this->hasMany('App\Orderproduct')
                     ->where(function ($q) {
                         $q->whereNull("orderproducttype_id")
-                          ->orWhere("orderproducttype_id", Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"));
+                            ->orWhere("orderproducttype_id", config("constants.ORDER_PRODUCT_TYPE_DEFAULT"));
                     });
 
     }
@@ -246,9 +267,10 @@ class Order extends Model
     public function debt()
     {
         $cost = $this->obtainOrderCost()["totalCost"];
-        if (strcmp($this->orderstatus->name, 'refunded') == 0)
+        if ( $this->orderstatus_id == config("constants.ORDER_STATUS_REFUNDED"))
             return -($this->totalPaidCost() + $this->totalRefund());
-        else return $cost - ($this->totalPaidCost() + $this->totalRefund());
+        else
+            return $cost - ($this->totalPaidCost() + $this->totalRefund());
     }
 
     /**
@@ -261,19 +283,44 @@ class Order extends Model
      */
     public function obtainOrderCost($calculateOrderCost = false, $calculateOrderproductCost = true, $mode = "DEFAULT")
     {
+        if($calculateOrderCost) {
+            $orderproductsToCalculateFromBaseIds = [];
+            if($calculateOrderproductCost)
+            {
+                $orderproductsToCalculateFromBaseIds = $this->normalOrderproducts->pluck("id")->toArray();
+            }
+
+            $reCheckIncludedOrderproductsInCoupon = false;
+            if($this->hasCoupon())
+                $reCheckIncludedOrderproductsInCoupon = ($mode=="REOBTAIN")?false:true;
+            $alaaCashierFacade = new OrderCheckout($this , $orderproductsToCalculateFromBaseIds , $reCheckIncludedOrderproductsInCoupon );
+        }
+        else{
+            $alaaCashierFacade = new ReObtainOrderFromRecords($this);
+        }
+
+        $priceInfo = $alaaCashierFacade->checkout();
+
+        return [
+            "rawCostWithDiscount"    => $priceInfo["totalPriceInfo"]["totalRawPriceWhichHasDiscount"],
+            'rawCostWithoutDiscount' =>  $priceInfo["totalPriceInfo"]["totalRawPriceWhichDoesntHaveDiscount"],
+            "totalCost"              => $priceInfo["totalPriceInfo"]["finalPrice"],
+            "calculatedOrderproducts"=> $priceInfo["orderproductsInfo"]["calculatedOrderproducts"],
+        ];
+
+        ////////////////////Old Code///////////////////////////////////
+
         /**
-         * Muhammad Shahrokhi
-         * Attention : In obtaining order cost I don't coupon validation
-         * In the other words , if he has submitted a coupon for this order before, at the time we
-         * have validated coupon before accepting it.so at this time I believe we can jsut let him use it.
+         * Attention : In obtaining order cost I don't validate coupon
+         * In the other words , if the user has submitted any coupons for this order before, at the time of submitting coupon
+         * we have validated coupon.
+         * By Muhammad Shahrokhi
          */
-        //
+        $totalCostWithoutDiscount = 0;
+        $totalCostWithDiscount = 0;
         if ($calculateOrderCost) {
             $orderproducts = $this->normalOrderproducts->sortByDesc("created_at");
-            $totalCostWithoutDiscount = null;
-            $totalCostWithDiscount = null;
             foreach ($orderproducts as $orderproduct) {
-                $costArray = [];
                 if ($calculateOrderproductCost) {
                     $costArray = $orderproduct->obtainOrderproductCost();
                     /**
@@ -292,8 +339,7 @@ class Order extends Model
                     switch ($mode) {
                         case "DEFAULT" :
                             if ($this->hasCoupon()) {
-
-                                if (!isset($this->coupon->coupontype->id) || $this->coupon->coupontype->id == 1) {
+                                if (!isset($this->coupon->coupontype->id) || $this->coupon->coupontype->id == config("constants.COUPON_TYPE_OVERALL")) {
                                     $totalCostWithDiscount += $orderproductCost;
                                     $orderproduct->includedInCoupon = 1;
                                 } else {
@@ -325,16 +371,8 @@ class Order extends Model
                             $orderproduct->update();
                             break;
                         case "REOBTAIN" :
-                            if ($this->hasCoupon()) {
-                                if (!isset($this->coupon->coupontype->id) || $this->coupon->coupontype->id == 1) {
-                                    $totalCostWithDiscount += $orderproductCost;
-                                } else {
-                                    if ($orderproduct->includedInCoupon == 1) {
-                                        $totalCostWithDiscount += $orderproductCost;
-                                    } else {
-                                        $totalCostWithoutDiscount += $orderproductCost;
-                                    }
-                                }
+                            if ($orderproduct->includedInCoupon == 1) {
+                                $totalCostWithDiscount += $orderproductCost;
                             } else {
                                 $totalCostWithoutDiscount += $orderproductCost;
                             }
@@ -352,45 +390,120 @@ class Order extends Model
             $totalCostWithDiscount = $this->cost;
         }
 
-        if (isset($totalCostWithDiscount))
-            $rawCostWithDiscount = (int)($totalCostWithDiscount);
-        else $rawCostWithDiscount = null;
-
-        if (isset($totalCostWithoutDiscount))
-            $rawCostWithoutDiscount = (int)$totalCostWithoutDiscount;
-        else $rawCostWithoutDiscount = null;
-
         if (isset($totalCostWithDiscount) || isset($totalCostWithoutDiscount))
             $totalCost = ($totalCostWithoutDiscount + intval(round($this->obtainCouponDiscount($totalCostWithDiscount)), 0)) - $this->discount;
-        else $totalCost = null;
+        else
+            $totalCost = null;
 
         if ($totalCost < 0)
             $totalCost = 0;
 
         return [
-            "rawCostWithDiscount"    => $rawCostWithDiscount,
-            'rawCostWithoutDiscount' => $rawCostWithoutDiscount,
+            "rawCostWithDiscount"    => (int)$totalCostWithDiscount,
+            'rawCostWithoutDiscount' => (int)$totalCostWithoutDiscount,
             "totalCost"              => $totalCost,
         ];
 
     }
 
+    /**
+     * Determines this order's coupon discount type
+     * Note: In case it has any coupons returns false
+     *
+     * @return array|bool
+     */
+    public function getCouponDiscountTypeAttribute()
+    {
+        if ($this->hasCoupon()) {
+            if ($this->couponDiscount > 0) {
+                return [
+                    "type"     => config("constants.DISCOUNT_TYPE_PERCENTAGE"),
+                    "discount" => $this->couponDiscount,
+                ];
+            } else {
+                return [
+                    "type"     => config("constants.DISCOUNT_TYPE_COST"),
+                    "discount" => $this->couponDiscountAmount,
+                ];
+            }
+        }
+        return
+            false;
+    }
+
+    /**
+     * Determines whether order has coupon or not
+     * @return bool
+     */
     public function hasCoupon()
     {
         if (isset($this->coupon->id))
             return true;
-        else return false;
+        else
+            return false;
     }
 
-    public function obtainCouponDiscount($totalCost)
+    /**
+     * Determines whether the coupon is usable for this order or not
+     *
+     * @return bool
+     */
+    public function hasProductsThatUseItsCoupon()
     {
-        if (!isset($totalCost) || $totalCost == 0)
-            return $totalCost;
-        $couponType = $this->determineCoupontype();
+        $flag = false;
+        if (isset($this->coupon->id)) {
+            if ($this->coupon->coupontype->id == config("constants.COUPON_TYPE_PARTIAL")) {
+                foreach ($this->orderproducts(config("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->get() as $orderproduct) {
+                    $hasCoupon = true;
+                    if (!in_array($this->coupon->id, $orderproduct->product->coupons->pluck('id')->toArray())) {
+                        $hasCoupon = false;
+                        $parentsArray = $this->makeParentArray($orderproduct->product);
+                        foreach ($parentsArray as $parent) {
+                            if (in_array($this->coupon->id, $parent->coupons->pluck('id')->toArray())) {
+                                $hasCoupon = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if ($hasCoupon) {
+                        $flag = true;
+                        break;
+                    }
+                }
+            } else {
+                $flag = true;
+            }
+        }
+
+        return $flag;
+    }
+
+    /**
+     * Determines if this order has given products
+     *
+     * @param array $products
+     * @return array
+     */
+    public function hasTheseProducts(array $products)
+    {
+        return $this->orderproducts
+            ->whereIn("product_id", $products)
+            ->isNotEmpty();
+    }
+
+    /**
+     * Calculates the discount amount of totalCost relevant to this order's coupon
+     * @param int $totalCost
+     * @return float|int|mixed
+     */
+    public function obtainCouponDiscount(int $totalCost = 0)
+    {
+        $couponType = $this->coupon_discount_type;
         if ($couponType !== false) {
-            if ($couponType["type"] == Config::get("constants.DISCOUNT_TYPE_PERCENTAGE"))
+            if ($couponType["type"] == config("constants.DISCOUNT_TYPE_PERCENTAGE"))
                 $totalCost = ((1 - ($couponType["discount"] / 100)) * $totalCost);
-            else if ($couponType["type"] == Config::get("constants.DISCOUNT_TYPE_COST"))
+            else if ($couponType["type"] == config("constants.DISCOUNT_TYPE_COST"))
                 $totalCost = $totalCost - $couponType["discount"];
         }
         return $totalCost;
@@ -513,7 +626,7 @@ class Order extends Model
         }
 
         if (!$couponRemoved) {
-            $orderproducts = $this->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
+            $orderproducts = $this->orderproducts(config("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
                                   ->get();
 
             $orderHasExtraAttribute = false;
@@ -550,6 +663,11 @@ class Order extends Model
         return $this->obtainOrderCost()["totalCost"];
     }
 
+
+    public function getNumberOfProductsAttribute()
+    {
+        return $this->orderproducts->count();
+    }
     public function orderproducts($type = null)
     {
         if (isset($type))
@@ -590,59 +708,38 @@ class Order extends Model
         return ["result" => $done];
     }
 
-    /**
-     * Determines whether order has used coupon or not
-     *
-     * @return bool
-     */
-    public function hasUsedCoupon()
-    {
-        $flag = false;
-        if (isset($this->coupon->id)) {
-            if ($this->coupon->coupontype->id == 2) {
-                foreach ($this->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
-                              ->get() as $orderproduct) {
-                    $hasCoupon = true;
-                    if (!in_array($this->coupon->id, $orderproduct->product->coupons->pluck('id')
-                                                                                    ->toArray())) {
-                        $hasCoupon = false;
-                        $parentsArray = $this->makeParentArray($orderproduct->product);
-                        foreach ($parentsArray as $parent) {
-                            if (in_array($this->coupon->id, $parent->coupons->pluck('id')
-                                                                            ->toArray())) {
-                                $hasCoupon = true;
-                                break;
-                            }
-                        }
-                    }
-
-                    if ($hasCoupon) {
-                        $flag = true;
-                        break;
-                    }
-                }
-            } else {
-                $flag = true;
-            }
-        }
-
-        return $flag;
-    }
-
     public function cancelOpenOnlineTransactions()
     {
-        $openOnlineTransactions = $this->onlinetransactions->where("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_TRANSFERRED_TO_PAY"));
+        $openOnlineTransactions = $this->onlinetransactions->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_TRANSFERRED_TO_PAY"));
         if ($openOnlineTransactions->isNotEmpty()) {
             foreach ($openOnlineTransactions as $openOnlineTransaction) {
-                $openOnlineTransaction->transactionstatus_id = Config::get("constants.TRANSACTION_STATUS_UNSUCCESSFUL");
+                $openOnlineTransaction->transactionstatus_id = config("constants.TRANSACTION_STATUS_UNSUCCESSFUL");
                 $openOnlineTransaction->update();
             }
         }
     }
 
+    /**
+     * Recalculates order's cost and updates it's cost
+     *
+     * @return array
+     */
     public function refreshCost()
     {
         $orderCost = $this->obtainOrderCost(true);
+        $calculatedOrderproducts = $orderCost["calculatedOrderproducts"];
+        $calculatedOrderproducts->updateCostValues();
+
+        $calculatedOrderproducts = $orderCost["calculatedOrderproducts"];
+        foreach ($calculatedOrderproducts as $orderproduct)
+        {
+            $newPriceInfo = $orderproduct->newPriceInfo ;
+            $orderproduct->fillCostValues($newPriceInfo);
+            $this->timestamps = false;
+            $orderproduct->update();
+            $this->timestamps = true;
+        }
+
         $this->cost = $orderCost["rawCostWithDiscount"];
         $this->costwithoutcoupon = $orderCost["rawCostWithoutDiscount"];
         $this->timestamps = false;
@@ -665,7 +762,7 @@ class Order extends Model
         $checkedProducts = [];
         $user = $this->user;
 
-        $orderproducts = $this->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
+        $orderproducts = $this->orderproducts(config("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
                               ->get();
         foreach ($orderproducts as $orderproduct) {
             if (!isset($user))
@@ -693,7 +790,7 @@ class Order extends Model
                     $userbon->user_id = $user->id;
                     $userbon->bon_id = $bon->id;
                     $userbon->totalNumber = $bon->pivot->bonPlus;
-                    $userbon->userbonstatus_id = Config::get("constants.USERBON_STATUS_ACTIVE");
+                    $userbon->userbonstatus_id = config("constants.USERBON_STATUS_ACTIVE");
                     $userbon->orderproduct_id = $orderproduct->id;
                     if ($userbon->save())
                         $totalSuccessfulBons += $userbon->totalNumber;
@@ -714,12 +811,13 @@ class Order extends Model
      *
      * @param string $paymentStatus
      *
-     * @return array
+     * @param int $orderStatus
+     * @return void
      */
-    public function close($paymentStatus, $orderStatus = null)
+    public function close($paymentStatus, int $orderStatus = null)
     {
         if (!isset($orderStatus))
-            $orderStatus = Config::get("constants.ORDER_STATUS_CLOSED");
+            $orderStatus = config("constants.ORDER_STATUS_CLOSED");
 
         $this->orderstatus_id = $orderStatus;
         $this->paymentstatus_id = $paymentStatus;
@@ -728,19 +826,6 @@ class Order extends Model
 
     }
 
-    /**
-     * Determines if this order has given products
-     *
-     * @param array $product
-     *
-     * @return array
-     */
-    public function hasProducts($products)
-    {
-        return $this->orderproducts
-            ->whereIn("product_id", $products)
-            ->isNotEmpty();
-    }
 
     public function closeWalletPendingTransactions()
     {

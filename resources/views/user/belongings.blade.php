@@ -17,7 +17,7 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{{action("HomeController@index")}}">خانه</a>
+                <a href="{{action("HomeController@index")}}">@lang('page.Home')</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
@@ -53,7 +53,7 @@
             {{--<div class="col-md-4">--}}
             {{--<div class="mt-widget-4">--}}
             {{--<div class="mt-img-container">--}}
-            {{--<img src="../assets/extra/elevator.jpg" /> </div>--}}
+            {{--<img src="../acm/extra/elevator.jpg" /> </div>--}}
             {{--<div class="mt-container bg-purple-opacity">--}}
             {{--<div class="mt-head-title"> {{$belonging->name}} </div>--}}
             {{--<div class="mt-body-icons">تاریخ ثبت :--}}

@@ -12,6 +12,7 @@ use Illuminate\Support\ServiceProvider;
 
 class ComposerServiceProvider extends ServiceProvider
 {
+
     /**
      * Bootstrap services.
      *
@@ -26,6 +27,9 @@ class ComposerServiceProvider extends ServiceProvider
             $sideBarMode = "closed";
             $view->with(compact('sideBarMode'));
         });
+
+
+        View::composer('partials.header1','App\Http\ViewComposers\HeaderComposer');
 
         /**
          *  lessons

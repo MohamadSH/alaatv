@@ -72,6 +72,10 @@ class Contentset extends Model implements Taggable
         'photo',
     ];
 
+    protected $withCount =[
+        'contents',
+    ];
+
     /**
      * Create a new Eloquent Collection instance.
      *
@@ -108,7 +112,7 @@ class Contentset extends Model implements Taggable
     |--------------------------------------------------------------------------
     */
 
-    public function getLastContent(): Content
+    public function getLastContent(): ?Content
     {
         $key = "ContentSet:getLastContent" . $this->cacheKey();
         return Cache::tags('set')

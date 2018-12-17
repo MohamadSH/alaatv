@@ -5,6 +5,7 @@ use App\Productfiletype;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
+use Auth;
 
 trait ProductCommon
 {
@@ -32,11 +33,13 @@ trait ProductCommon
                     if (!empty($filesArray))
                         $fileCollection->put($product->name, $filesArray);
                 }
-                $allFilesCollection->push([
-                                              "typeName"        => $productfiletype->name,
-                                              "typeDisplayName" => $productfiletype->displayName,
-                                              "files"           => $fileCollection,
-                                          ]);
+
+                if($fileCollection->isNotEmpty())
+                    $allFilesCollection->push([
+                                                  "typeName"        => $productfiletype->name,
+                                                  "typeDisplayName" => $productfiletype->displayName,
+                                                  "files"           => $fileCollection,
+                                              ]);
             }
             return $allFilesCollection;
         });
@@ -52,7 +55,7 @@ trait ProductCommon
     {
         $exclusiveOtherProducts = Product::getExclusiveOtherProducts();
 
-        $otherProducts = $product->getOtherProducts();
+        $otherProducts = $product->getOtherProducts()->sortByDesc("created_at" );
 
         $totalOtherProducts = $this->mergeCollections($exclusiveOtherProducts, $otherProducts);
 
@@ -131,20 +134,37 @@ trait ProductCommon
         return Cache::remember($key, Config::get("constants.CACHE_60"), function () use ($products) {
             $costCollection = collect();
             foreach ($products as $product) {
-                if ($product->producttype_id == 2) {
-                    $enableChildren = $product->children->where("enable", 1);
-                    if ($enableChildren->count() == 1) {
-                        $costArray = $enableChildren->first()
-                                                    ->calculatePayablePrice();
-                    } else $costArray = $product->calculatePayablePrice();
+                if($product->producttype_id == 2)
+                {
+                    $enableChildren = $product->children->where("enable" , 1);
+                    if($enableChildren->count() == 1 )
+                    {
+                        $costArray = $enableChildren->first()->calculatePayablePrice();
+                    }else $costArray  = $product->calculatePayablePrice();
 
-                } else $costArray = $product->calculatePayablePrice();
+                }elseif($product->producttype_id == 3){
+                    $allChildren =  $product->getAllChildren()->where("pivot.isDefault" , 1);
+                    $costArray = [];
+                    $costArray["productDiscount"] = null;
+                    $costArray["bonDiscount"] = null;
+                    $costArray["costForCustomer"] = 0;
+                    $costArray["cost"] = 0;
+                    if (is_callable(array($this, 'refreshPrice')))
+                    {
+                        $request = new \App\Http\Requests\Request();
+                        $request->offsetSet("products" , $allChildren->pluck("id")->toArray());
+                        $request->offsetSet("type" , "productSelection");
+                        $costInfo = $this->refreshPrice($request , $product);
+                        $costInfo = json_decode($costInfo);
+                        $costArray["costForCustomer"] = $costInfo->costForCustomer;
+                        $costArray["cost"] = $costInfo->cost;
+                    }
+//                    $costArray = $product->calculatePayablePrice();
+                } else{
+                    $costArray = $product->calculatePayablePrice();
+                }
 
-                $costCollection->put($product->id, [
-                    "cost"            => $costArray["cost"],
-                    'productDiscount' => $costArray["productDiscount"],
-                    'bonDiscount'     => $costArray['bonDiscount'],
-                ]);
+                $costCollection->put( $product->id , ["cost"=>$costArray["cost"] , 'productDiscount'=>$costArray["productDiscount"] , 'bonDiscount'=>$costArray['bonDiscount'] ,'costForCustomer'=>isset($costArray['costForCustomer'])?$costArray['costForCustomer']:0 ]);
             }
             return $costCollection;
 
@@ -216,6 +236,50 @@ trait ProductCommon
             }
             return $parentsArray;
         });
+    }
+
+    /**
+     * Copies a product files to another product
+     *
+     * @param Product $sourceProduct
+     * @param Product $destinationProduct
+     */
+    public function copyProductFiles(Product $sourceProduct , Product $destinationProduct):void
+    {
+        $destinationProductFiles =  $sourceProduct->productfiles ;
+        foreach ($destinationProductFiles as $file)
+        {
+            $newFile = $file->replicate();
+            $newFile->product_id = $destinationProduct->id;
+            $newFile->save();
+        }
+    }
+
+    /**
+     * @param Product $sourceProduct
+     * @param Product $destinationProduct
+     * @param array $newPhotoInfo
+     */
+    public function copyProductPhotos(Product $sourceProduct , Product $destinationProduct , array $newPhotoInfo=[]):void
+    {
+        $destinationProductPhotos =  $sourceProduct->photos ;
+        foreach ($destinationProductPhotos as $photo)
+        {
+            $newPhoto = $photo->replicate();
+            $newPhoto->product_id = $destinationProduct->id;
+            $newPhoto->save();
+
+            if(isset($newPhotoInfo["title"]))
+            {
+                $newPhoto->title = $newPhotoInfo["title"];
+                $newPhoto->update();
+            }
+            if(isset($newPhotoInfo["description"]))
+            {
+                $newPhoto->description = $newPhotoInfo["description"];
+                $newPhoto->update();
+            }
+        }
     }
 
 }

@@ -7,11 +7,10 @@ use App\{Assignmentstatus,
     Attributecontrol,
     Attributeset,
     Bon,
-    Category,
     Checkoutstatus,
+    Classes\Checkout\Alaa\AlaaCashier,
+    Classes\Checkout\Alaa\OrderproductCheckout,
     Classes\Format\BlockCollectionFormatter,
-    Classes\Report\GaReportFactory,
-    Classes\Search\ContentSearch,
     Consultationstatus,
     Content,
     Contentset,
@@ -41,7 +40,6 @@ use App\{Assignmentstatus,
     Producttype,
     Productvoucher,
     Question,
-    Relative,
     Role,
     Slideshow,
     Traits\APIRequestCommon,
@@ -67,7 +65,6 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\{Config, File, Input, Route, Storage};
-use Illuminate\Support\Str;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Sftp\SftpAdapter;
 use Maatwebsite\ExcelLight\Excel;
@@ -193,12 +190,50 @@ class HomeController extends Controller
 
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
-        try {
-            $out = (new GaReportFactory())->createGaReportGetUsersFromPageView()
-                                          ->getReport('/c/6560');
-            dump("here!");
-            dd($out);
+        try{
 
+            $users = User::whereIn("id" , [1,2,3])->get();
+            foreach ($users as $user)
+            {
+                $user->firstName .= "3";
+                $user->update();
+            }
+
+            dd($users);
+
+            /*$orderproduct = Orderproduct::FindOrFail(108196);
+            dd($orderproduct->obtainOrderproductCost(false));*/
+
+            $order = Order::FindOrFail(248131);
+//            $orderCost = $order->obtainOrderCost(false,false , "REOBTAIN");
+//            $orderCost = $order->obtainOrderCost(true,false,"REOBTAIN");
+//            $orderCost = $order->obtainOrderCost(false,true,"REOBTAIN");
+//            $orderCost = $order->obtainOrderCost(true,true,"REOBTAIN");
+//            $orderCost = $order->obtainOrderCost(false,false );
+//            $orderCost = $order->obtainOrderCost(true,false);
+//            $orderCost = $order->obtainOrderCost(false,true);
+            $orderCost = $order->obtainOrderCost(true,true);
+            dd($orderCost);
+
+            $calculateOrderCost = true;
+            $calculateOrderproductCost = true;
+
+            if($calculateOrderCost) {
+                $orderproductsToCalculateFromBaseIds = [];
+                if($calculateOrderproductCost)
+                {
+                    $orderproductsToCalculateFromBaseIds = $order->normalOrderproducts->pluck("id")->toArray();
+                }
+
+                $alaaCashierFacade = new \App\Classes\Checkout\Alaa\OrderCheckout($order , $orderproductsToCalculateFromBaseIds);
+            }
+            else{
+                $alaaCashierFacade = new \App\Classes\Checkout\Alaa\ReObtainOrderFromRecords($order);
+            }
+
+            $priceInfo = json_decode($alaaCashierFacade->checkout());
+
+            dd($priceInfo);
         }
         catch (\Exception    $e) {
             $message = "unexpected error";
@@ -380,7 +415,6 @@ class HomeController extends Controller
     public function admin()
     {
         $userStatuses = Userstatus::pluck('displayName', 'id');
-        $userStatuses->prepend("انتخاب وضعیت");
         $majors = Major::pluck('name', 'id');
         $genders = Gender::pluck('name', 'id');
         $gendersWithUnknown = clone $genders;
@@ -816,7 +850,6 @@ class HomeController extends Controller
         $pageName = "admin";
 
         $userStatuses = Userstatus::pluck('name', 'id');
-        $userStatuses->prepend("انتخاب وضعیت");
         $majors = Major::pluck('name', 'id');
         $genders = Gender::pluck('name', 'id');
         $gendersWithUnknown = clone $genders;
@@ -839,8 +872,9 @@ class HomeController extends Controller
             1 => "تایید شده",
         ];
 
-        $relatives = Relative::pluck('displayName', 'id');
-        $relatives->prepend('فرد');
+        $relatives = ["فرد"];
+//        $relatives = Relative::pluck('displayName', 'id');
+//        $relatives->prepend('فرد');
 
         $sortBy = [
             "updated_at" => "تاریخ اصلاح",
@@ -963,7 +997,6 @@ class HomeController extends Controller
     public function adminReport()
     {
         $userStatuses = Userstatus::pluck('displayName', 'id');
-        $userStatuses->prepend("انتخاب وضعیت");
         $majors = Major::pluck('name', 'id');
         $genders = Gender::pluck('name', 'id');
         $gendersWithUnknown = clone $genders;
@@ -2097,6 +2130,69 @@ class HomeController extends Controller
         }
 
 
+    }
+
+    /**
+     * Send a custom SMS to the user
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function sendSMS(Request $request)
+    {
+        $from = $request->get("smsProviderNumber");
+        $message = $request->get("message");
+        $usersId = $request->get("users");
+        $usersId = explode(',', $usersId);
+        $relatives = $request->get("relatives");
+        $relatives = explode(',', $relatives);
+
+        $smsNumber = config('constants.SMS_PROVIDER_DEFAULT_NUMBER');
+        $users = User::whereIn("id", $usersId)->get();
+        if ($users->isEmpty())
+            return $this->response->setStatusCode(451);
+
+        if (!isset($from) || strlen($from) == 0)
+            $from = $smsNumber;
+
+        $mobiles = [];
+        $finalUsers = collect();
+        foreach ($users as $user) {
+            if (in_array(0, $relatives))
+                array_push($mobiles, ltrim($user->mobile, '0'));
+            if (in_array(1, $relatives)) {
+                if (!$user->contacts->isEmpty()) {
+                    $fatherMobiles = $user->contacts->where("relative_id", 1)->first()->phones->where("phonetype_id", 1)->sortBy("priority");
+                    if (!$fatherMobiles->isEmpty())
+                        foreach ($fatherMobiles as $fatherMobile) {
+                            array_push($mobiles, ltrim($fatherMobile->phoneNumber, '0'));
+                        }
+
+                }
+            }
+            if (in_array(2, $relatives)) {
+                if (!$user->contacts->isEmpty()) {
+                    $motherMobiles = $user->contacts->where("relative_id", 2)->first()->phones->where("phonetype_id", 1)->sortBy("priority");
+                    if (!$motherMobiles->isEmpty())
+                        foreach ($motherMobiles as $motherMobile) {
+                            array_push($mobiles, ltrim($motherMobile->phoneNumber, '0'));
+                        }
+                }
+            }
+        }
+        $smsInfo = array();
+        $smsInfo["message"] = $message;
+        $smsInfo["to"] = $mobiles;
+        $smsInfo["from"] = $from;
+        $response = $this->medianaSendSMS($smsInfo);
+    //Sending notification to user collection
+//        Notification::send($users, new GeneralNotice($message));
+        if (!$response["error"]) {
+            $smsCredit = $this->medianaGetCredit();
+            return $this->response->setContent($smsCredit)->setStatusCode(200);
+        } else {
+            return $this->response->setStatusCode(503);
+        }
     }
 
     /**
@@ -3647,7 +3743,6 @@ class HomeController extends Controller
                 }
                 dd("Tags DONE!");
             }
-
         }
         catch (\Exception    $e) {
             $message = "unexpected error";

@@ -120,7 +120,7 @@
                                             @if(isset($orderproduct->product->id))
                                                 <span class="bold " style="font-style: italic; ">
                                                     @if($orderproduct->orderproducttype_id == Config::get("constants.ORDER_PRODUCT_GIFT"))
-                                                        <img src="/assets/extra/gift-box.png" width="25">
+                                                        <img src="/acm/extra/gift-box.png" width="25">
                                                     @endif
                                                     <a style="color:#607075" target="_blank"
                                                        href="@if($orderproduct->product->hasParents())

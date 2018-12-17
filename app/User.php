@@ -565,16 +565,10 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
      *
      * @return HasMany
      */
-    public function getShowableOrders(): HasMany
+    public function getClosedOrders(): HasMany
     {
-        $excludedOrderStatuses = [
-            config("constants.ORDER_STATUS_OPEN"),
-            config("constants.ORDER_STATUS_OPEN_BY_ADMIN"),
-            config("constants.ORDER_STATUS_OPEN_BY_WALLET"),
-            config("constants.ORDER_STATUS_OPEN_DONATE"),
-        ];
         return $this->orders()
-                    ->whereNotIn("orderstatus_id", $excludedOrderStatuses);
+                    ->whereNotIn("orderstatus_id", Order::OPEN_ORDER_STATUSES);
     }
 
     /**
@@ -745,11 +739,25 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
 
     }
 
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param array $roles
+     * @return mixed
+     */
     public function scopeRole($query, array $roles)
     {
         return $query->whereHas('roles', function ($q) use ($roles) {
             $q->whereIn("id", $roles);
         });
+    }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return mixed
+     */
+    public function scopeActive($query)
+    {
+        return $query->where("userstatus_id" , config("constants.USER_STATUS_ACTIVE"));
     }
 
     public function major()
@@ -775,7 +783,11 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     public function openOrders()
     {
         return $this->hasMany('App\Order')
-                    ->where("orderstatus_id", Config::get("constants.ORDER_STATUS_OPEN"));
+                    ->where("orderstatus_id",config("constants.ORDER_STATUS_OPEN"));
+    }
+
+    public function getNumberOfProductsInBasketAttribute(){
+        return $this->openOrders->getNumberOfProductsInThisOrderCollection();
     }
 
     public function userbons()
@@ -852,6 +864,12 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     public function orderproducts()
     {
         return $this->hasManyThrough("\App\Orderproduct", "\App\Order");
+    }
+
+    public function closedorderproducts()
+    {
+        return $this->hasManyThrough("\App\Orderproduct", "\App\Order")
+                    ->whereNotIn("orders.orderstatus_id", Order::OPEN_ORDER_STATUSES);
     }
 
     /**
@@ -960,6 +978,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
                                  "products.*",
                              ])
                     ->where('users.id', '=', $this->getKey())
+//                    ->orderBy("products.created_at")
                     ->whereNull('products.deleted_at')
                     ->distinct()
                     ->get();
@@ -973,8 +992,10 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
      *
      * @return int
      */
-    public function userHasBon($bonName): int
+    public function userHasBon($bonName = null): int
     {
+        if(is_null($bonName ))
+            $bonName = config("constants.BON1");
         $key = "user:userHasBon:" . $this->cacheKey() . "-" . $bonName;
 
         return Cache::tags('bon')
@@ -1143,6 +1164,22 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
 
     }
 
+    public function getPhotoAttribute($value)
+    {
+        $profileImage = ($value != null ? $value : Config::get('constants.PROFILE_DEFAULT_IMAGE'));
+        $profileImage = route('image', ['category'=>'1','w'=>'39' , 'h'=>'39' ,  'filename' =>  $profileImage ]);
+
+        return $profileImage;
+    }
+
+    public function getShortNameAttribute()
+    {
+        if(isset($this->firstName))
+            return ucfirst($this->firstName);
+        if(isset($this->lastName))
+            return ucfirst($this->lastName);
+        return 'کاربر آلایی';
+    }
 
     public function getFullNameAttribute($value)
     {

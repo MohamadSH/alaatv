@@ -6,7 +6,7 @@
     </label>
 </div>
 <div class="col-md-10">
-    {!! Form::select('roles[]', $roles, null, ['multiple' => 'multiple','class' => 'mt-multiselect btn btn-default', 'id' => 'roles' ,
+    {!! Form::select('hasRole[]', $roles, null, ['multiple' => 'multiple','class' => 'mt-multiselect btn btn-default', 'id' => 'roles' ,
                         "data-label" => "left" , "data-width" => "100%" , "data-filter" => "true" , "data-height" => "200" ,
                         "title" => "نقش ها" , "disabled"]) !!}
     {{--<select class="mt-multiselect btn btn-default" multiple="multiple" data-label="left" data-width="100%" data-filter="true" data-height="200"--}}

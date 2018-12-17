@@ -1,0 +1,65 @@
+//
+//** Override The Base Framework Config For This Demo
+//
+
+//== Example(reduce font size from 14px to 13px globally for desktop mode only)
+
+//== The body element font settings
+$m--root-font: (
+        size: (
+                desktop: 13px,
+                tablet: 13px,
+                mobile: 13px
+        ),
+        weight: 300,
+        color: (
+                light: #333333,
+                dark: #efefef
+        )
+);
+
+
+$m--font-families: (
+        regular: 'IRANSans',
+        heading: 'IRANSans'
+);
+
+//== Global arrow style
+$m--arrow-style: 'classic'; // supported options: smooth, classic
+
+//== Global rounded border mode
+$m--rounded: false; // access to this value calling rounded() in SASS code
+$enable-rounded: $m--rounded; // pass rounded corners setting to bootstrap SASS
+
+$m-aside-left-color: #ff9a17;
+$m--brand-color: #333;
+
+$custom-font-color: (
+        default: #ffffff,
+        section:#ffffff,
+        icon:(
+                default: #333,
+                open: #ff4e0b,
+                expanded: #333,
+                active: #ff4e0b,
+        ),
+        bullet:(
+                default: #ffffff,
+                open: #ffffff,
+                expanded: #ffffff,
+                active: #ff4e0b,
+        ),
+        arrow:(
+                default: #ffffff,
+                active: #ff4e0b,
+                expanded: #ffffff,
+                open: #ffffff,
+        ),
+        text:(
+                open:#ffffff,
+                default: #ffffff,
+                active: #ffffff,
+                expanded: #ffffff,
+        ),
+        bg:#ff9000,
+);

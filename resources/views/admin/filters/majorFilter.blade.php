@@ -14,9 +14,9 @@
         {{--"title" => "رشته ها" , "disabled"]) !!}--}}
         @if(isset($dropdown) && $dropdown)
             @if(isset($dropdownClass))
-                {!! Form::select('majors[]',$majors,null,['class' => 'form-control '.$dropdownClass ]) !!}
+                {!! Form::select('major[]',$majors,null,['class' => 'form-control '.$dropdownClass ]) !!}
             @else
-                {!! Form::select('majors[]',$majors,null,['class' => 'form-control']) !!}
+                {!! Form::select('major[]',$majors,null,['class' => 'form-control']) !!}
             @endif
         @else
             <select class="mt-multiselect btn btn-default" multiple="multiple" data-label="left" data-width="100%"

@@ -8,7 +8,6 @@
 
 namespace App\Collection;
 
-use App\Order;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Collection as BaseCollection;
 
@@ -23,7 +22,7 @@ class OrderCollections extends Collection
         $result = collect();
 
         foreach ($items as $order) {
-            $orderCoupon = $order->determineCoupontype();
+            $orderCoupon = $order->coupon_discount_type;
             if ($orderCoupon !== false) {
                 if ($orderCoupon["type"] == config("constants.DISCOUNT_TYPE_PERCENTAGE")) {
                     $result->put($order->id, [
@@ -38,5 +37,17 @@ class OrderCollections extends Collection
         }
 
         return $result;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNumberOfProductsInThisOrderCollection() :int
+    {
+        $sum = 0;
+        foreach ($this as $order){
+            $sum += $order->numberOfProducts;
+        }
+        return $sum;
     }
 }

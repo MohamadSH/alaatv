@@ -21,7 +21,6 @@ Route::get('500', 'HomeController@error500');
 Route::get('error', 'HomeController@errorPage');
 Route::get('download', "HomeController@download");
 Route::get('d/{data}', "HomeController@newDownload");
-Route::get('aboutUs', 'HomeController@aboutUs');
 Route::get('contactUs', 'HomeController@contactUs');
 Route::get('rules', 'HomeController@rules');
 Route::get('articleList', 'ArticleController@showList');
@@ -73,6 +72,8 @@ Route::group(['prefix' => 'orderproduct'], function () {
 });
 
 Route::group(['prefix' => 'landing'], function () {
+    Route::get('6', 'ProductController@landing6');
+    Route::get('5', 'ProductController@landing5');
     Route::get('1', 'ProductController@landing1');
     Route::get('2', 'ProductController@landing2');
     Route::get('3', [
@@ -270,3 +271,4 @@ Route::group(['prefix' => 'mobile'], function () {
     Route::get("resend", "MobileVerificationController@resend")
          ->name('mobile.verification.resend');
 });
+Route::view('uiTest','pages.certificates');

@@ -4,7 +4,7 @@
     <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/global/plugins/bootstrap-sweetalert/sweetalert.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/global/plugins/bootstrap-toastr/toastr-rtl.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/assets/extra/persian-datepicker/dist/css/persian-datepicker-1.1.3.css" rel="stylesheet"
+    <link href="/acm/extra/persian-datepicker/dist/css/persian-datepicker-1.1.3.css" rel="stylesheet"
           type="text/css"/>
 @endsection
 
@@ -26,7 +26,7 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{{action("HomeController@index")}}">خانه</a>
+                <a href="{{action("HomeController@index")}}">@lang('page.Home')</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
@@ -221,14 +221,14 @@
     <script src="/assets/global/plugins/bootstrap-toastr/toastr.min.js" type="text/javascript"></script>
     <script src="/assets/global/plugins/jquery.sparkline.min.js" type="text/javascript"></script>
     <script src="/assets/global/plugins/morris/morris.min.js" type="text/javascript"></script>
-    <script src="/assets/extra/persian-datepicker/lib/persian-date-1.0.5.min.js" type="text/javascript"></script>
+    <script src="/acm/extra/persian-datepicker/lib/persian-date-1.0.5.min.js" type="text/javascript"></script>
 @endsection
 
 @section("footerPageLevelScript")
     <script src="/assets/pages/scripts/profile.min.js" type="text/javascript"></script>
     <script src="/assets/pages/scripts/dashboard.min.js" type="text/javascript"></script>
     <script src="/assets/pages/scripts/ui-toastr.min.js" type="text/javascript"></script>
-    <script src="/assets/extra/persian-datepicker/dist/js/persian-datepicker-1.1.3.min.js"
+    <script src="/acm/extra/persian-datepicker/dist/js/persian-datepicker-1.1.3.min.js"
             type="text/javascript"></script>
     <script src="/js/extraJS/scripts/profileUploadPhoto4.js" type="text/javascript"></script>
     <script src="/js/extraJS/scripts/verificationCode.js" type="text/javascript"></script>

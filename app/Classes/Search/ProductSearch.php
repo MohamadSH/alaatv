@@ -17,6 +17,7 @@ class ProductSearch extends SearchAbstract
 {
     protected $model        = "App\Product";
     protected $pageName     = 'productPage';
+    protected $numberOfItemInEachPage = 28;
     protected $validFilters = [
         'name',
         'tags',
@@ -48,7 +49,9 @@ class ProductSearch extends SearchAbstract
      */
     protected function getResults(Builder $query)
     {
-        $result = $query->active()
+        $result = $query
+//            Conflict with admin panel
+                      ->active()
                         ->doesntHave('parents')
                         ->whereNull('deleted_at')
                         ->orderBy("created_at", "desc")

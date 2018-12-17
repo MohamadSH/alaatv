@@ -12,7 +12,7 @@
     {{--"title" => "انتخاب کپن" , "disabled"]) !!}--}}
     <select class="mt-multiselect btn btn-default" multiple="multiple" data-label="left" data-width="100%"
             data-filter="true" data-height="200"
-            id="coupons" name="coupons[]" title="انتخاب کپن" disabled>
+            id="coupons" name="hasCoupon[]" title="انتخاب کپن" disabled>
         <option value="-1" class="font-blue bold">کپن دار ها</option>
         <option value="0" class="font-red bold">بدون کپن ها</option>
         @foreach($coupons as $key => $value)

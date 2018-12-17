@@ -42,7 +42,7 @@
 
     <title>همایش طلایی کنکور آلاء</title>
 
-    <link rel="stylesheet" href="/assets/extra/landing3/css/stylesheet9.css"/>
+    <link rel="stylesheet" href="/acm/extra/landing3/css/stylesheet9.css"/>
     <!--[if lt IE 10]>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flexibility/2.0.1/flexibility.js"></script>
     <![endif]-->
@@ -93,7 +93,7 @@
     {{--<section class="lottery-banner">
         <div class="container clearfix">
             <div class="bnra">
-                <img class="banner" src="/assets/extra/landing3/images/banner5.png" alt="قرعه کشی آلاء">
+                <img class="banner" src="/acm/extra/landing3/images/banner5.png" alt="قرعه کشی آلاء">
             </div><!-- .bnra -->
         </div><!-- .container -->
     </section>--}}
@@ -105,7 +105,7 @@
                         <h2></h2>
                     </header>
                     <a href="">
-                        <img src="/assets/extra/landing3/images/sample/gold-fest.png" alt="همایش طلایی آلاء">
+                        <img src="/acm/extra/landing3/images/sample/gold-fest.png" alt="همایش طلایی آلاء">
                     </a>
                 </figure>
             </section>
@@ -117,7 +117,7 @@
                                 <a href="" title="همه رشته ها">
                                     <h1>
                                         <figure class="fig-img-content-field">
-                                            <img src="/assets/extra/landing3/images/sample/res-all2.png"
+                                            <img src="/acm/extra/landing3/images/sample/res-all2.png"
                                                  alt="همایش کنکور همه رشته ها" title="همه رشته ها">
                                         </figure>
                                     </h1>
@@ -137,7 +137,7 @@
                                             <figure>
                                                 <a href="{{ action('ProductController@show',210) }}" data-role="210"
                                                    title="همایش طلایی ادبیات کنکور دکتر سبطی">
-                                                    <img src="/assets/extra/landing3/images/professors/G9.png"
+                                                    <img src="/acm/extra/landing3/images/professors/G9.png"
                                                          alt="همایش طلایی ادبیات کنکور دکتر سبطی آلاء"
                                                          title="همایش طلایی ادبیات کنکور دکتر سبطی">
                                                 </a>
@@ -172,7 +172,7 @@
                                             <figure>
                                                 <a href="{{ action('ProductController@show',211) }}" data-role="211"
                                                    title="همایش طلایی دین و زندگی کنکور">
-                                                    <img src="/assets/extra/landing3/images/professors/G10.png"
+                                                    <img src="/acm/extra/landing3/images/professors/G10.png"
                                                          alt="همایش طلایی دین و زندگی کنکور آلاء"
                                                          title="همایش طلایی دین و زندگی کنکور">
                                                 </a>
@@ -207,7 +207,7 @@
                                             <figure>
                                                 <a href="{{ action('ProductController@show',216) }}" data-role="216"
                                                    title="همایش طلایی فیزیک کنکور">
-                                                    <img src="/assets/extra/landing3/images/professors/1.png"
+                                                    <img src="/acm/extra/landing3/images/professors/1.png"
                                                          alt="همایش طلایی فیزیک کنکور آلاء"
                                                          title="همایش طلایی فیزیک کنکور">
                                                 </a>
@@ -242,7 +242,7 @@
                                             <figure>
                                                 <a href="{{ action('ProductController@show',217) }}" data-role="217"
                                                    title="همایش طلایی شیمی کنکور">
-                                                    <img src="/assets/extra/landing3/images/professors/G7.png"
+                                                    <img src="/acm/extra/landing3/images/professors/G7.png"
                                                          alt="همایش طلایی شیمی کنکور آلاء"
                                                          title="همایش طلایی شیمی کنکور">
                                                 </a>
@@ -277,7 +277,7 @@
                                             <figure>
                                                 <a href="{{ action('ProductController@show',214) }}" data-role="214"
                                                    title="همایش طلایی عربی کنکور">
-                                                    <img src="/assets/extra/landing3/images/professors/G2.png"
+                                                    <img src="/acm/extra/landing3/images/professors/G2.png"
                                                          alt="همایش طلایی عربی کنکور آلاء"
                                                          title="همایش طلایی عربی کنکور">
                                                 </a>
@@ -312,7 +312,7 @@
                                             <figure>
                                                 <a href="{{ action('ProductController@show',220) }}" data-role="220"
                                                    title="همایش طلایی ریاضی تجربی کنکور">
-                                                    <img src="/assets/extra/landing3/images/professors/G3.png"
+                                                    <img src="/acm/extra/landing3/images/professors/G3.png"
                                                          alt="همایش طلایی ریاضی تجربی کنکور آلاء"
                                                          title="همایش طلایی ریاضی تجربی کنکور">
                                                 </a>
@@ -347,7 +347,7 @@
                                             <figure>
                                                 <a href="{{ action('ProductController@show',219) }}" data-role="219"
                                                    title="همایش طلایی ریاضی تجربی کنکور">
-                                                    <img src="/assets/extra/landing3/images/professors/G5.png"
+                                                    <img src="/acm/extra/landing3/images/professors/G5.png"
                                                          alt="همایش طلایی ریاضی تجربی کنکور آلاء"
                                                          title="همایش طلایی ریاضی تجربی کنکور">
                                                 </a>
@@ -382,7 +382,7 @@
                                             <figure>
                                                 <a href="{{ action('ProductController@show',213) }}" data-role="213"
                                                    title="همایش طلایی زمین شناسی کنکور">
-                                                    <img src="/assets/extra/landing3/images/professors/G1.png"
+                                                    <img src="/acm/extra/landing3/images/professors/G1.png"
                                                          alt="همایش طلایی زمین شناسی کنکور آلاء"
                                                          title="همایش طلایی زمین شناسی کنکور">
                                                 </a>
@@ -417,7 +417,7 @@
                                             <figure>
                                                 <a href="{{ action('ProductController@show',212) }}" data-role="212"
                                                    title="همایش طلایی زیست شناسی کنکور">
-                                                    <img src="/assets/extra/landing3/images/professors/G1.png"
+                                                    <img src="/acm/extra/landing3/images/professors/G1.png"
                                                          alt="همایش طلایی زیست شناسی کنکور آلاء"
                                                          title="همایش طلایی زیست شناسی کنکور آلاء">
                                                 </a>
@@ -452,7 +452,7 @@
                                             <figure>
                                                 <a href="{{ action('ProductController@show',222) }}" data-role="222"
                                                    title="همایش طلایی ریاضی انسانی کنکور">
-                                                    <img src="/assets/extra/landing3/images/professors/G5.png"
+                                                    <img src="/acm/extra/landing3/images/professors/G5.png"
                                                          alt="همایش طلایی ریاضی انسای کنکور آلاء"
                                                          title="همایش طلایی ریاضی انسانی کنکور">
                                                 </a>
@@ -495,7 +495,7 @@
                                 <a href="javascript:void(0)" title="رشته تجربی">
                                     <h1>
                                         <figure class="fig-img-content-field">
-                                            <img src="/assets/extra/landing3/images/sample/res-experiential2.png"
+                                            <img src="/acm/extra/landing3/images/sample/res-experiential2.png"
                                                  alt="رشته تجربی" title="رشته تجربی">
                                         </figure>
                                     </h1>
@@ -516,7 +516,7 @@
                                             <figure>
                                                 <a href="{{ action('ProductController@show',213) }}" data-role="213"
                                                    title="همایش طلایی زمین شناسی کنکور">
-                                                    <img src="/assets/extra/landing3/images/professors/G1.png"
+                                                    <img src="/acm/extra/landing3/images/professors/G1.png"
                                                          alt="همایش طلایی زمین شناسی کنکور آلاء"
                                                          title="همایش طلایی زمین شناسی کنکور">
                                                 </a>
@@ -551,7 +551,7 @@
                                             <figure>
                                                 <a href="{{ action('ProductController@show',219) }}" data-role="219"
                                                    title="همایش طلایی ریاضی تجربی کنکور">
-                                                    <img src="/assets/extra/landing3/images/professors/G5.png"
+                                                    <img src="/acm/extra/landing3/images/professors/G5.png"
                                                          alt="همایش طلایی ریاضی تجربی کنکور آلاء"
                                                          title="همایش طلایی ریاضی تجربی کنکور">
                                                 </a>
@@ -586,7 +586,7 @@
                                             <figure>
                                                 <a href="{{ action('ProductController@show',220) }}" data-role="220"
                                                    title="همایش طلایی ریاضی تجربی کنکور">
-                                                    <img src="/assets/extra/landing3/images/professors/G3.png"
+                                                    <img src="/acm/extra/landing3/images/professors/G3.png"
                                                          alt="همایش طلایی ریاضی تجربی کنکور آلاء"
                                                          title="همایش طلایی ریاضی تجربی کنکور">
                                                 </a>
@@ -621,7 +621,7 @@
                                             <figure>
                                                 <a href="{{ action('ProductController@show',212) }}" data-role="212"
                                                    title="همایش طلایی زیست شناسی کنکور">
-                                                    <img src="/assets/extra/landing3/images/professors/G1.png"
+                                                    <img src="/acm/extra/landing3/images/professors/G1.png"
                                                          alt="همایش طلایی زیست شناسی کنکور آلاء"
                                                          title="همایش طلایی زیست شناسی کنکور آلاء">
                                                 </a>
@@ -656,7 +656,7 @@
                                             <figure>
                                                 <a href="{{ action('ProductController@show',221) }}" data-role="221"
                                                    title="همایش طلایی زیست شناسی کنکور">
-                                                    <img src="/assets/extra/landing3/images/professors/G11.png"
+                                                    <img src="/acm/extra/landing3/images/professors/G11.png"
                                                          alt="همایش طلایی زیست شناسی کنکور آلاء"
                                                          title="همایش طلایی زیست شناسی کنکور">
                                                 </a>
@@ -699,7 +699,7 @@
                                 <a href="javascript:void(0)" title="رشته ریاضی">
                                     <h1>
                                         <figure class="fig-img-content-field">
-                                            <img src="/assets/extra/landing3/images/sample/res-math2.png"
+                                            <img src="/acm/extra/landing3/images/sample/res-math2.png"
                                                  alt="رشته ریاضی" title="رشته ریاضی">
                                         </figure>
                                     </h1>
@@ -719,7 +719,7 @@
                                             <figure>
                                                 <a href="{{ action('ProductController@show',218) }}" data-role="218"
                                                    title="همایش طلایی دیفرانسیل کنکور">
-                                                    <img src="/assets/extra/landing3/images/professors/G6.png"
+                                                    <img src="/acm/extra/landing3/images/professors/G6.png"
                                                          alt="همایش طلایی دیفرانسیل کنکور آلاء"
                                                          title="همایش طلایی دیفرانسیل کنکور">
                                                 </a>
@@ -754,7 +754,7 @@
                                             <figure>
                                                 <a href="{{ action('ProductController@show',214) }}" data-role="214"
                                                    title="همایش طلایی عربی کنکور">
-                                                    <img src="/assets/extra/landing3/images/professors/G2.png"
+                                                    <img src="/acm/extra/landing3/images/professors/G2.png"
                                                          alt="همایش طلایی عربی کنکور آلاء"
                                                          title="همایش طلایی عربی کنکور">
                                                 </a>
@@ -789,7 +789,7 @@
                                             <figure>
                                                 <a href="{{ action('ProductController@show',217) }}" data-role="217"
                                                    title="همایش طلایی شیمی کنکور">
-                                                    <img src="/assets/extra/landing3/images/professors/G7.png"
+                                                    <img src="/acm/extra/landing3/images/professors/G7.png"
                                                          alt="همایش طلایی شیمی کنکور آلاء"
                                                          title="همایش طلایی شیمی کنکور">
                                                 </a>
@@ -824,7 +824,7 @@
                                             <figure>
                                                 <a href="{{ action('ProductController@show',210) }}" data-role="210"
                                                    title="همایش طلایی ادبیات کنکور دکتر سبطی">
-                                                    <img src="/assets/extra/landing3/images/professors/G9.png"
+                                                    <img src="/acm/extra/landing3/images/professors/G9.png"
                                                          alt="همایش طلایی ادبیات کنکور دکتر سبطی آلاء"
                                                          title="همایش طلایی ادبیات کنکور دکتر سبطی">
                                                 </a>
@@ -859,7 +859,7 @@
                                             <figure>
                                                 <a href="{{ action('ProductController@show',211) }}" data-role="211"
                                                    title="همایش طلایی دین و زندگی کنکور">
-                                                    <img src="/assets/extra/landing3/images/professors/G10.png"
+                                                    <img src="/acm/extra/landing3/images/professors/G10.png"
                                                          alt="همایش طلایی دین و زندگی کنکور آلاء"
                                                          title="همایش طلایی دین و زندگی کنکور">
                                                 </a>
@@ -894,7 +894,7 @@
                                             <figure>
                                                 <a href="{{ action('ProductController@show',216) }}" data-role="216"
                                                    title="همایش طلایی فیزیک کنکور">
-                                                    <img src="/assets/extra/landing3/images/professors/1.png"
+                                                    <img src="/acm/extra/landing3/images/professors/1.png"
                                                          alt="همایش طلایی فیزیک کنکور آلاء"
                                                          title="همایش طلایی فیزیک کنکور">
                                                 </a>
@@ -984,8 +984,8 @@
 
     </footer>
 </div>
-<script src="/assets/extra/landing3/js/jquery-1.12.4.min.js"></script>
-<script src="/assets/extra/landing3/js/swiper2.jquery.min.js" defer="defer"></script>
-<script src="/assets/extra/landing3/js/script3.js" defer="defer"></script>
+<script src="/acm/extra/landing3/js/jquery-1.12.4.min.js"></script>
+<script src="/acm/extra/landing3/js/swiper2.jquery.min.js" defer="defer"></script>
+<script src="/acm/extra/landing3/js/script3.js" defer="defer"></script>
 </body>
 </html>

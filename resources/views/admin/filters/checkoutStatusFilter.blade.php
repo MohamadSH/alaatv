@@ -8,7 +8,7 @@
 </div>
 
 <div class="col-md-10">
-    {!! Form::select('checkoutStatuses[]', $checkoutStatuses, null, ['multiple' => 'multiple','class' => 'mt-multiselect btn btn-default',
+    {!! Form::select('checkoutStatus[]', $checkoutStatuses, null, ['multiple' => 'multiple','class' => 'mt-multiselect btn btn-default',
                         'id' => (isset($dropdownId))?$dropdownId:'checkoutStatuses' , "data-label" => "left" , "data-width" => "100%" , "data-filter" => "true" ,
                         "data-height" => "200" , "title" => "وضعیت تسویه" , "disabled"]) !!}
 

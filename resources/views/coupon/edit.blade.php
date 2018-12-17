@@ -4,7 +4,7 @@
 @section("headPageLevelPlugin")
     <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/global/plugins/jquery-multi-select/css/multi-select-rtl.css" rel="stylesheet" type="text/css"/>
-    <link href="/assets/extra/persian-datepicker/dist/css/persian-datepicker-0.4.5.css" rel="stylesheet"
+    <link href="/acm/extra/persian-datepicker/dist/css/persian-datepicker-0.4.5.css" rel="stylesheet"
           type="text/css"/>
 @endsection
 @section("pageBar")
@@ -12,7 +12,7 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{{action("HomeController@index")}}">خانه</a>
+                <a href="{{action("HomeController@index")}}">@lang('page.Home')</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
@@ -65,13 +65,13 @@
     <script src="/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
     <script src="/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js" type="text/javascript"></script>
     <script src="/assets/global/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>
-    <script src="/assets/extra/persian-datepicker/lib/persian-date.js" type="text/javascript"></script>
+    <script src="/acm/extra/persian-datepicker/lib/persian-date.js" type="text/javascript"></script>
 
 @endsection
 
 @section("footerPageLevelScript")
     <script src="/assets/pages/scripts/components-multi-select.min.js" type="text/javascript"></script>
-    <script src="/assets/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js"
+    <script src="/acm/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js"
             type="text/javascript"></script>
 @endsection
 @section("extraJS")

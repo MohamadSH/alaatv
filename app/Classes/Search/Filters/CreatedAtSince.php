@@ -10,7 +10,7 @@ namespace App\Classes\Search\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
 
-class createdAtSince extends FilterAbstract
+class CreatedAtSince extends FilterAbstract
 {
     protected $attribute = 'created_at';
 
