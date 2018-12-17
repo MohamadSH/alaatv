@@ -38,3 +38,29 @@ mix.scripts(
     ],
     'public/js/content-show.js'
 ).version();
+
+
+mix.scripts(
+    [
+        'public/assets/extra/landing5/js/jquery.min.js',
+        'public/assets/extra/landing5/js/jquery-migrate-3.0.1.min.js',
+        'public/assets/extra/landing5/js/jquery.easing.1.3.js',
+        'public/assets/extra/landing5/js/jquery.waypoints.min.js',
+        'public/assets/extra/landing5/js/particles.js-master/dist/particles.js',
+        'public/assets/extra/landing5/js/modernizr-2.6.2.min.js',
+        'public/assets/extra/landing5/js/ninjaScroll.js',
+        'public/assets/extra/landing5/js/jquery.mousewheel.js',
+        'public/assets/extra/landing5/js/main.js'
+    ],
+    'public/assets/extra/landing5/js/alljs.min.js'
+);
+
+mix.styles(
+    [
+        'public/assets/extra/landing5/css/bootstrap4.min.css',
+        'public/assets/extra/landing5/css/animate.css',
+        'public/assets/extra/landing5/css/style.css',
+        'public/assets/extra/landing5/css/fonts.css'
+    ],
+    'public/assets/extra/landing5/css/allcss.min.css'
+);
