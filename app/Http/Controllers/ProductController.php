@@ -1264,6 +1264,92 @@ class ProductController extends Controller
                 'link' => action('ProductController@show', $value->id)
             );
         }
+
+
+        $products = array(
+            array(
+                'type' => 'riazi',
+                'price' => '-',
+                'priceWithDiscount' => '-',
+                'image' => 'http://192.168.4.2:9070/image/4/256/256/p10_20181119064116.jpg',
+                'name' => '??????? ???? ????? ????? ???? ????',
+                'link' => action('ProductController@show', 242)
+            ),
+            array(
+                'type' => 'riazi',
+                'price' => '-',
+                'priceWithDiscount' => '-',
+                'image' => 'http://192.168.4.2:9070/image/4/256/256/p6%20%282%29_20181119064128.jpg',
+                'name' => '????? ????? ????? ???? ????',
+                'link' => action('ProductController@show', 240),
+            ),
+            array(
+                'type' => 'riazi',
+                'price' => '-',
+                'priceWithDiscount' => '-',
+                'image' => 'http://192.168.4.2:9070/image/4/256/256/p8_20181119115159.jpg',
+                'name' => '??? ? ????? ????? ???? ????',
+                'link' => action('ProductController@show', 238),
+            ),
+            array(
+                'type' => 'riazi',
+                'price' => '-',
+                'priceWithDiscount' => '-',
+                'image' => 'http://192.168.4.2:9070/image/4/256/256/p7_20181119115215.jpg',
+                'name' => '???? ????? ???? ????',
+                'link' => action('ProductController@show', 236),
+            ),
+            array(
+                'type' => 'tajrobi',
+                'price' => '-',
+                'priceWithDiscount' => '-',
+                'image' => 'http://192.168.4.2:9070/image/4/256/256/p2_20181118125322.jpg',
+                'name' => '???? ????? ???? ????',
+                'link' => action('ProductController@show', 230),
+            ),
+            array(
+                'type' => 'tajrobi',
+                'price' => '-',
+                'priceWithDiscount' => '-',
+                'image' => 'http://192.168.4.2:9070/image/4/256/256/p5_20181119115230.jpg',
+                'name' => '???? ????? ???? ????',
+                'link' => action('ProductController@show', 234),
+            ),
+            array(
+                'type' => 'tajrobi',
+                'price' => '-',
+                'priceWithDiscount' => '-',
+                'image' => 'http://192.168.4.2:9070/image/4/256/256/p4_20181118125640.jpg',
+                'name' => '????? ????? ???? ????',
+                'link' => action('ProductController@show', 232),
+            ),
+            array(
+                'type' => 'tajrobi',
+                'price' => '49,000',
+                'priceWithDiscount' => '40,000',
+                'image' => 'http://192.168.4.2:9070/image/4/256/256/p-14_20180506124007.jpg',
+                'name' => '????? ????? ????? ?????? ?????',
+                'link' => action('ProductController@show', 222),
+            ),
+            array(
+                'type' => 'tajrobi',
+                'price' => '49,000',
+                'priceWithDiscount' => '40,000',
+                'image' => 'http://192.168.4.2:9070/image/4/256/256/p-10_20180428111412.jpg',
+                'name' => '????? ????? ?????? ?????',
+                'link' => action('ProductController@show', 210),
+            ),
+            array(
+                'type' => 'tajrobi',
+                'price' => '49,000',
+                'priceWithDiscount' => '40,000',
+                'image' => 'http://192.168.4.2:9070/image/4/256/256/p-12_20180428111303.jpg',
+                'name' => '????? ????? ???? ????? ?????',
+                'link' => action('ProductController@show', 213),
+            )
+
+        );
+
         $products = $productsDataForView;
 
         return view("product.landing.landing5", compact("products"));
@@ -1282,147 +1368,6 @@ class ProductController extends Controller
         $producIds = [
             271,270,269,268,267,266,265
         ];
-//        $url = $request->url();
-//        $title = 'همایش های 5+1 ویژه کنکور 98';
-//        SEO::setTitle($title);
-//        SEO::opengraph()
-//            ->setUrl($url);
-//        SEO::setCanonical($url);
-//        SEO::twitter()
-//            ->setSite("آلاء");
-//        SEO::setDescription('ضربه فنی کنکور نظام قدیم،رشته ریاضی، رشته تجربی،  رشته انسانی ، زیست، شیمی، فیزیک، زمین شناسی، عربی، ادبیات، شب امتحان، همایش، تحلیل کنکور، جزوه، تست، جمع بندی، طرح 5+1، ریاضیات رشته تجربی، ریاضیات رشته انسانی، ریاضیات رشته ریاضی، جزوه علوم پایه');
-//        SEO::opengraph()
-//            ->addImage(route('image', [
-//                'category' => '11',
-//                'w'        => '100',
-//                'h'        => '100',
-//                'filename' => $this->setting->site->siteLogo,
-//            ]), [
-//                'height' => 100,
-//                'width'  => 100,
-//            ]);
-//
-////        $product_ids = [242, 240, 238, 236, 230, 234, 232, 222, 210, 213];
-//        $product_ids = [1, 2];
-//        $product = Product::whereIn('id', $product_ids)->orderBy('order')->enable()->get();
-//        $reshteIdArray = array(
-//
-//            1 => 'riazi',
-//            2 => 'tajrobi',
-//
-//            242 => 'riazi',
-//            240 => 'riazi',
-//            238 => 'riazi',
-//            236 => 'riazi',
-//            230 => 'tajrobi',
-//            234 => 'tajrobi',
-//            232 => 'tajrobi',
-//            222 => 'tajrobi',
-//            210 => 'tajrobi',
-//            213 => 'tajrobi'
-//        );
-//        $defaultPrice = array(
-//
-//            1 => '107,000',
-//            2 => '39,000',
-//
-//            238 => '39,000',
-//            234 => '49,000',
-//            232 => '34,000',
-//            230 => '57,200',
-//            242 => '107,000'
-//        );
-//        $productsDataForView = array();
-//        foreach ($product as $key=>$value) {
-//            $productsDataForView[] = array(
-//                'type' => $reshteIdArray[$value->id],
-//                'price' => (isset($defaultPrice[$value->id]))?$defaultPrice[$value->id]:$value->basePrice,
-//                'image' => route('image', ['category'=>'4','w'=>'256' , 'h'=>'256' ,  'filename' =>  $value->image ]),
-//                'name' => $value->name,
-//                'link' => action('ProductController@show', $value->id)
-//            );
-//        }
-//
-//        $products = array(
-//            array(
-//                'type' => 'riazi',
-//                'price' => '-',
-//                'image' => 'http://192.168.4.2:9070/image/4/256/256/p10_20181119064116.jpg',
-//                'name' => 'ریاضیات رشته ریاضی کنکور نظام قدیم',
-//                'link' => action('ProductController@show', 242)
-//            ),
-//            array(
-//                'type' => 'riazi',
-//                'price' => '-',
-//                'image' => 'http://192.168.4.2:9070/image/4/256/256/p6%20%282%29_20181119064128.jpg',
-//                'name' => 'ریاضی تجربی کنکور نظام قدیم',
-//                'link' => action('ProductController@show', 240),
-//            ),
-//            array(
-//                'type' => 'riazi',
-//                'price' => '-',
-//                'image' => 'http://192.168.4.2:9070/image/4/256/256/p8_20181119115159.jpg',
-//                'name' => 'دین و زندگی کنکور نظام قدیم',
-//                'link' => action('ProductController@show', 238),
-//            ),
-//            array(
-//                'type' => 'riazi',
-//                'price' => '-',
-//                'image' => 'http://192.168.4.2:9070/image/4/256/256/p7_20181119115215.jpg',
-//                'name' => 'عربی کنکور نظام قدیم',
-//                'link' => action('ProductController@show', 236),
-//            ),
-//            array(
-//                'type' => 'tajrobi',
-//                'price' => '-',
-//                'image' => 'http://192.168.4.2:9070/image/4/256/256/p2_20181118125322.jpg',
-//                'name' => 'شیمی کنکور نظام قدیم',
-//                'link' => action('ProductController@show', 230),
-//            ),
-//            array(
-//                'type' => 'tajrobi',
-//                'price' => '-',
-//                'image' => 'http://192.168.4.2:9070/image/4/256/256/p5_20181119115230.jpg',
-//                'name' => 'زیست کنکور نظام قدیم',
-//                'link' => action('ProductController@show', 234),
-//            ),
-//            array(
-//                'type' => 'tajrobi',
-//                'price' => '-',
-//                'image' => 'http://192.168.4.2:9070/image/4/256/256/p4_20181118125640.jpg',
-//                'name' => 'فیزیک کنکور نظام قدیم',
-//                'link' => action('ProductController@show', 232),
-//            ),
-//            array(
-//                'type' => 'tajrobi',
-//                'price' => '49,000',
-//                'image' => 'http://192.168.4.2:9070/image/4/256/256/p-14_20180506124007.jpg',
-//                'name' => 'همایش طلایی ریاضی انسانی کنکور',
-//                'link' => action('ProductController@show', 222),
-//            ),
-//            array(
-//                'type' => 'tajrobi',
-//                'price' => '49,000',
-//                'image' => 'http://192.168.4.2:9070/image/4/256/256/p-10_20180428111412.jpg',
-//                'name' => 'همایش طلایی ادبیات کنکور',
-//                'link' => action('ProductController@show', 210),
-//            ),
-//            array(
-//                'type' => 'tajrobi',
-//                'price' => '49,000',
-//                'image' => 'http://192.168.4.2:9070/image/4/256/256/p-12_20180428111303.jpg',
-//                'name' => 'همایش طلایی زمین شناسی کنکور',
-//                'link' => action('ProductController@show', 213),
-//            )
-//
-//        );
-////        $products = $productsDataForView;
-//        return view("product.landing.landing5", compact("products"));
-
-
-
-
-
 
         $productIds = $producIds;
 //        $productIds = config("constants.HAMAYESH_PRODUCT");

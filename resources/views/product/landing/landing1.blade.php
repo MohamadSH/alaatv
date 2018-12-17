@@ -88,14 +88,14 @@
 
         <div class="col-md-3 col-md-pull-9">
             {{--<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">--}}
-            {{--<img src="/img/extra/landing/hamayeshAD-256x56.jpg" style="width: 100%;">--}}
+            {{--<img src="/assets/extra/landing1/img/hamayeshAD-256x56.jpg" style="width: 100%;">--}}
             {{--</div>--}}
             {{--<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">--}}
                 {{--<div class="dashboard-stat2 " style="padding: 0px">--}}
 
                     {{--<div class="progress-info" style="font-style:italic">--}}
                         {{--<div class="status" style="font-size: medium">--}}
-                            {{--<img src="/img/extra/landing/hamayeshAD-1397.jpg" style="width: 100%;">--}}
+                            {{--<img src="/assets/extra/landing1/img/hamayeshAD-1397.jpg" style="width: 100%;">--}}
                         {{--</div>--}}
 
                     {{--</div>--}}
@@ -131,7 +131,7 @@
                         </div>
                         <div class="icon">
                             <!--<i class="icon-like"></i>-->
-                            <img src="/img/extra/landing/like.png" style="height: 40px;">
+                            <img src="/assets/extra/landing1/img/like.png" style="height: 40px;">
                         </div>
                     </div>
                     <div class="progress-info" style="font-style:italic">
@@ -207,7 +207,7 @@
                         </div>
                         <div class="icon">
                             <!--<i class="icon-user"></i>-->
-                            <img src="/img/extra/landing/teacher-128.png" style="height: 40px;">
+                            <img src="/assets/extra/landing1/img/teacher-128.png" style="height: 40px;">
                         </div>
                     </div>
                     <div class="progress-info" style="font-style:italic">
