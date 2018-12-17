@@ -140,20 +140,44 @@ class Order extends Model
     ];
 
     const  OPEN_ORDER_STATUSES = [
-            1,
-            4,
-            8,
-        ];
+        1,
+        4,
+        8,
+    ];
 
-    /*
-    |--------------------------------------------------------------------------
-    | Relations
-    |--------------------------------------------------------------------------
-    */
-
-    public function files()
+    /**
+     * Create a new Eloquent Collection instance.
+     *
+     * @param  array $models
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function newCollection(array $models = [])
     {
-        return $this->hasMany('\App\Orderfile');
+        return new OrderCollections($models);
+    }
+
+    public static function orderStatusFilter($orders, $orderStatusesId)
+    {
+        return $orders->whereIn('orderstatus_id', $orderStatusesId);
+    }
+
+    public static function UserMajorFilter($orders, $majorsId)
+    {
+        if (in_array(0, $majorsId))
+            $orders = $orders->whereHas('user', function ($q) use ($majorsId) {
+                $q->whereDoesntHave("major");
+            });
+        else
+            $orders = $orders->whereHas('user', function ($q) use ($majorsId) {
+                $q->whereIn("major_id", $majorsId);
+            });
+        return $orders;
+    }
+
+    public static function paymentStatusFilter($orders, $paymentStatusesId)
+    {
+        return $orders->whereIn('paymentstatus_id', $paymentStatusesId);
     }
 
     public function user()
@@ -176,15 +200,10 @@ class Order extends Model
         return $this->belongsTo('App\Coupon');
     }
 
-    public function transactions()
-    {
-        return $this->hasMany('App\Transaction');
-    }
-
     public function onlinetransactions()
     {
         return $this->hasMany('App\Transaction')
-            ->where('paymentmethod_id', 1);
+                    ->where('paymentmethod_id', 1);
     }
 
     public function successfulTransactions()
@@ -220,174 +239,29 @@ class Order extends Model
             ->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_ARCHIVED_SUCCESSFUL"));
     }
 
+    public function transactions()
+    {
+        return $this->hasMany('App\Transaction');
+    }
+
+    public function files()
+    {
+        return $this->hasMany('\App\Orderfile');
+    }
+
     public function orderpostinginfos()
     {
         return $this->hasMany('\App\Orderpostinginfo');
     }
 
-    public function orderproducts($type = null)
-    {
-        if (isset($type))
-            if ($type == config("constants.ORDER_PRODUCT_TYPE_DEFAULT")) {
-                return $this->hasMany('App\Orderproduct')
-                    ->where(function ($q) use ($type) {
-                        $q->where("orderproducttype_id", $type)
-                            ->orWhereNull("orderproducttype_id");
-                    });
-            } else {
-                return $this->hasMany('App\Orderproduct')
-                    ->where("orderproducttype_id", $type);
-            }
-        else
-            return $this->hasMany('App\Orderproduct');
-    }
-
     public function normalOrderproducts()
     {
         return $this->hasMany('App\Orderproduct')
-            ->where(function ($q) {
-                $q->whereNull("orderproducttype_id")
-                    ->orWhere("orderproducttype_id", config("constants.ORDER_PRODUCT_TYPE_DEFAULT"));
-            });
+                    ->where(function ($q) {
+                        $q->whereNull("orderproducttype_id")
+                            ->orWhere("orderproducttype_id", config("constants.ORDER_PRODUCT_TYPE_DEFAULT"));
+                    });
 
-    }
-
-    public function ordermanagercomments()
-    {
-        return $this->hasMany('App\Ordermanagercomment');
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Accessor
-    |--------------------------------------------------------------------------
-    */
-
-    /*
-    |--------------------------------------------------------------------------
-    | Mutator
-    |--------------------------------------------------------------------------
-    */
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Booleans
-    |--------------------------------------------------------------------------
-    */
-
-    /**
-     * Determines whether order has coupon or not
-     * @return bool
-     */
-    public function hasCoupon()
-    {
-        if (isset($this->coupon->id))
-            return true;
-        else
-            return false;
-    }
-
-    /**
-     * Determines whether the coupon is usable for this order or not
-     *
-     * @return bool
-     */
-    public function hasProductsThatUseItsCoupon()
-    {
-        $flag = false;
-        if (isset($this->coupon->id)) {
-            if ($this->coupon->coupontype->id == config("constants.COUPON_TYPE_PARTIAL")) {
-                foreach ($this->orderproducts(config("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->get() as $orderproduct) {
-                    $hasCoupon = true;
-                    if (!in_array($this->coupon->id, $orderproduct->product->coupons->pluck('id')->toArray())) {
-                        $hasCoupon = false;
-                        $parentsArray = $this->makeParentArray($orderproduct->product);
-                        foreach ($parentsArray as $parent) {
-                            if (in_array($this->coupon->id, $parent->coupons->pluck('id')->toArray())) {
-                                $hasCoupon = true;
-                                break;
-                            }
-                        }
-                    }
-
-                    if ($hasCoupon) {
-                        $flag = true;
-                        break;
-                    }
-                }
-            } else {
-                $flag = true;
-            }
-        }
-
-        return $flag;
-    }
-
-    /**
-     * Determines if this order has given products
-     *
-     * @param array $products
-     * @return array
-     */
-    public function hasTheseProducts(array $products)
-    {
-        return $this->orderproducts
-            ->whereIn("product_id", $products)
-            ->isNotEmpty();
-    }
-
-    /*
-   |--------------------------------------------------------------------------
-   | Static methods
-   |--------------------------------------------------------------------------
-   */
-
-    public static function orderStatusFilter($orders, $orderStatusesId)
-    {
-        return $orders->whereIn('orderstatus_id', $orderStatusesId);
-    }
-
-    public static function UserMajorFilter($orders, $majorsId)
-    {
-        if (in_array(0, $majorsId))
-            $orders = $orders->whereHas('user', function ($q) use ($majorsId) {
-                $q->whereDoesntHave("major");
-            });
-        else
-            $orders = $orders->whereHas('user', function ($q) use ($majorsId) {
-                $q->whereIn("major_id", $majorsId);
-            });
-        return $orders;
-    }
-
-    public static function paymentStatusFilter($orders, $paymentStatusesId)
-    {
-        return $orders->whereIn('paymentstatus_id', $paymentStatusesId);
-    }
-
-    /*
-   |--------------------------------------------------------------------------
-   | Private methods
-   |--------------------------------------------------------------------------
-   */
-
-    /*
-    |--------------------------------------------------------------------------
-    | Others
-    |--------------------------------------------------------------------------
-    */
-
-    /**
-     * Create a new Eloquent Collection instance.
-     *
-     * @param  array $models
-     *
-     * @return \Illuminate\Database\Eloquent\Collection
-     */
-    public function newCollection(array $models = [])
-    {
-        return new OrderCollections($models);
     }
 
     public function debt()
@@ -533,23 +407,6 @@ class Order extends Model
     }
 
     /**
-     * Calculates the discount amount of totalCost relevant to this order's coupon
-     * @param int $totalCost
-     * @return float|int|mixed
-     */
-    public function obtainCouponDiscount(int $totalCost = 0)
-    {
-        $couponType = $this->coupon_discount_type;
-        if ($couponType !== false) {
-            if ($couponType["type"] == config("constants.DISCOUNT_TYPE_PERCENTAGE"))
-                $totalCost = ((1 - ($couponType["discount"] / 100)) * $totalCost);
-            else if ($couponType["type"] == config("constants.DISCOUNT_TYPE_COST"))
-                $totalCost = $totalCost - $couponType["discount"];
-        }
-        return $totalCost;
-    }
-
-    /**
      * Determines this order's coupon discount type
      * Note: In case it has any coupons returns false
      *
@@ -574,6 +431,102 @@ class Order extends Model
             false;
     }
 
+    /**
+     * Determines whether order has coupon or not
+     * @return bool
+     */
+    public function hasCoupon()
+    {
+        if (isset($this->coupon->id))
+            return true;
+        else
+            return false;
+    }
+
+    /**
+     * Determines whether the coupon is usable for this order or not
+     *
+     * @return bool
+     */
+    public function hasProductsThatUseItsCoupon()
+    {
+        $flag = false;
+        if (isset($this->coupon->id)) {
+            if ($this->coupon->coupontype->id == config("constants.COUPON_TYPE_PARTIAL")) {
+                foreach ($this->orderproducts(config("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->get() as $orderproduct) {
+                    $hasCoupon = true;
+                    if (!in_array($this->coupon->id, $orderproduct->product->coupons->pluck('id')->toArray())) {
+                        $hasCoupon = false;
+                        $parentsArray = $this->makeParentArray($orderproduct->product);
+                        foreach ($parentsArray as $parent) {
+                            if (in_array($this->coupon->id, $parent->coupons->pluck('id')->toArray())) {
+                                $hasCoupon = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if ($hasCoupon) {
+                        $flag = true;
+                        break;
+                    }
+                }
+            } else {
+                $flag = true;
+            }
+        }
+
+        return $flag;
+    }
+
+    /**
+     * Determines if this order has given products
+     *
+     * @param array $products
+     * @return array
+     */
+    public function hasTheseProducts(array $products)
+    {
+        return $this->orderproducts
+            ->whereIn("product_id", $products)
+            ->isNotEmpty();
+    }
+
+    /**
+     * Calculates the discount amount of totalCost relevant to this order's coupon
+     * @param int $totalCost
+     * @return float|int|mixed
+     */
+    public function obtainCouponDiscount(int $totalCost = 0)
+    {
+        $couponType = $this->coupon_discount_type;
+        if ($couponType !== false) {
+            if ($couponType["type"] == config("constants.DISCOUNT_TYPE_PERCENTAGE"))
+                $totalCost = ((1 - ($couponType["discount"] / 100)) * $totalCost);
+            else if ($couponType["type"] == config("constants.DISCOUNT_TYPE_COST"))
+                $totalCost = $totalCost - $couponType["discount"];
+        }
+        return $totalCost;
+    }
+
+    public function determineCoupontype()
+    {
+        if ($this->hasCoupon()) {
+            if ($this->couponDiscount > 0) {
+                return [
+                    "type"     => Config::get("constants.DISCOUNT_TYPE_PERCENTAGE"),
+                    "discount" => $this->couponDiscount,
+                ];
+            } else {
+                return [
+                    "type"     => Config::get("constants.DISCOUNT_TYPE_COST"),
+                    "discount" => $this->couponDiscountAmount,
+                ];
+            }
+        }
+        return false;
+    }
+
     public function totalPaidCost()
     {
         if ($this->transactions->isEmpty())
@@ -588,6 +541,19 @@ class Order extends Model
             return 0;
         else return $this->successfulTransactions->where('cost', '<', 0)
                                                  ->sum("cost");
+    }
+
+
+    public function CompletedAt_Jalali()
+    {
+        $explodedDateTime = explode(" ", $this->completed_at);
+        //        $explodedTime = $explodedDateTime[1] ;
+        return $this->convertDate($this->completed_at, "toJalali");
+    }
+
+    public function ordermanagercomments()
+    {
+        return $this->hasMany('App\Ordermanagercomment');
     }
 
     public function usedBonSum()
@@ -695,6 +661,28 @@ class Order extends Model
     public function totalCost()
     {
         return $this->obtainOrderCost()["totalCost"];
+    }
+
+
+    public function getNumberOfProductsAttribute()
+    {
+        return $this->orderproducts->count();
+    }
+    public function orderproducts($type = null)
+    {
+        if (isset($type))
+            if ($type == Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT")) {
+                return $this->hasMany('App\Orderproduct')
+                            ->where(function ($q) use ($type) {
+                                $q->where("orderproducttype_id", $type)
+                                  ->orWhereNull("orderproducttype_id");
+                            });
+            } else {
+                return $this->hasMany('App\Orderproduct')
+                            ->where("orderproducttype_id", $type);
+            }
+        else
+            return $this->hasMany('App\Orderproduct');
     }
 
     /**
@@ -837,6 +825,7 @@ class Order extends Model
                                     ->timezone('Asia/Tehran');
 
     }
+
 
     public function closeWalletPendingTransactions()
     {

@@ -786,6 +786,10 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
                     ->where("orderstatus_id",config("constants.ORDER_STATUS_OPEN"));
     }
 
+    public function getNumberOfProductsInBasketAttribute(){
+        return $this->openOrders->getNumberOfProductsInThisOrderCollection();
+    }
+
     public function userbons()
     {
         return $this->hasMany('\App\Userbon');
@@ -988,8 +992,10 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
      *
      * @return int
      */
-    public function userHasBon($bonName): int
+    public function userHasBon($bonName = null): int
     {
+        if(is_null($bonName ))
+            $bonName = config("constants.BON1");
         $key = "user:userHasBon:" . $this->cacheKey() . "-" . $bonName;
 
         return Cache::tags('bon')
@@ -1158,6 +1164,22 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
 
     }
 
+    public function getPhotoAttribute($value)
+    {
+        $profileImage = ($value != null ? $value : Config::get('constants.PROFILE_DEFAULT_IMAGE'));
+        $profileImage = route('image', ['category'=>'1','w'=>'39' , 'h'=>'39' ,  'filename' =>  $profileImage ]);
+
+        return $profileImage;
+    }
+
+    public function getShortNameAttribute()
+    {
+        if(isset($this->firstName))
+            return ucfirst($this->firstName);
+        if(isset($this->lastName))
+            return ucfirst($this->lastName);
+        return 'کاربر آلایی';
+    }
 
     public function getFullNameAttribute($value)
     {

@@ -398,17 +398,21 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
     /**
      * Get the content's author .
      *
-     * @return string
+     * @return User
      */
-    public function getAuthorAttribute(): string
+    public function getAuthorAttribute(): User
     {
         $content = $this;
         $key = "content:author" . $content->cacheKey();
-        $author = Cache::tags(["user"])
+        return Cache::tags(["user"])
                        ->remember($key, Config::get("constants.CACHE_60"), function () use ($content) {
-                           return optional($this->user)->full_name;
+                           return $this->user;
                        });
-        return isset($author) ? $author : "";
+    }
+
+    public function getAuthorNameAttribute(): string
+    {
+        return $this->author->full_name;
     }
 
     /**
@@ -561,7 +565,7 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
             'playerWidth'          => '854',
             'playerHeight'         => '480',
             'videoDirectUrl'       => optional(optional(optional($this->file->first())->where('res', '480p'))->first())->link,
-            'videoActorName'       => $this->author,
+            'videoActorName'       => $this->authorName,
             'videoActorRole'       => 'دبیر',
             'videoDirector'        => 'آلاء',
             'videoWriter'          => 'آلاء',
@@ -571,7 +575,7 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
             'videoWidth'           => '854',
             'videoHeight'          => '480',
             'videoType'            => 'video/mp4',
-            'articleAuthor'        => $this->author,
+            'articleAuthor'        => $this->authorName,
             'articleModifiedTime'  => $this->updated_at,
             'articlePublishedTime' => $this->validSince,
         ];

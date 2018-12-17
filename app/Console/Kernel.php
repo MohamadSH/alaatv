@@ -26,16 +26,18 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        $schedule->command('telescope:prune --hours=48')
+            ->daily();
         $schedule->command('horizon:snapshot')
-                 ->everyFiveMinutes();
+            ->everyFiveMinutes();
 
         $schedule->command('backup:mysql-dump')
-                 ->timezone('Asia/Tehran')
-                 ->dailyAt('04:30');
+            ->timezone('Asia/Tehran')
+            ->dailyAt('04:30');
 
         $schedule->command('alaaTv:employee:send:timeSheet 0')
-                 ->dailyAt('22:30')
-                 ->timezone('Asia/Tehran');
+            ->dailyAt('22:30')
+            ->timezone('Asia/Tehran');
     }
 
     /**

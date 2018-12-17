@@ -2,8 +2,8 @@
 <html>
 <head>
     <title>Be right back.</title>
-    <link href="/assets/extra/fonts/IRANSans/css/fontiran.css" rel="stylesheet" type="text/css"/>
-    <link href="/assets/extra/fonts/IRANSans/css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/extra/fonts/IRANSans/css/fontiran.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/extra/fonts/IRANSans/css/style.css" rel="stylesheet" type="text/css"/>
     {{--<link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">--}}
 
     <style>

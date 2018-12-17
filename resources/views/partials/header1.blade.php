@@ -1,173 +1,367 @@
-<!-- BEGIN HEADER -->
-<div class="page-header navbar navbar-fixed-top">
-    <!-- BEGIN HEADER INNER -->
-    <div class="page-header-inner ">
-        <!-- BEGIN LOGO -->
-        <div class="page-logo">
+{{--<style>
+    span,p,body,h1, h2, h3, h4, h5, h6,input, textarea {
+        font-family: IRANSans !important;
+    }
+</style>--}}
+<!-- BEGIN: Header -->
+<header id = "m_header" class = "m-grid__item    m-header " m-minimize-offset = "200" m-minimize-mobile-offset = "200">
+    <div class = "m-container m-container--fluid m-container--full-height">
+        <div class = "m-stack m-stack--ver m-stack--desktop">
+            <!-- BEGIN: Brand -->
+            <div class = "m-stack__item m-brand  m-brand--skin-dark ">
+                <div class = "m-stack m-stack--ver m-stack--general">
+                    <div class = "m-stack__item m-stack__item--middle m-brand__logo">
+                        <a href = "{{action("HomeController@index")}}" class = "m-brand__logo-wrapper">
+                            <img alt = "لوگوی سایت آلاء" src = "{{route('image', ['category'=>'11','w'=>'135' , 'h'=>'67' ,  'filename' =>  optional($wSetting->site)->siteLogo ])}}"/>
+                        </a>
+                    </div>
+                    <div class = "m-stack__item m-stack__item--middle m-brand__tools">
 
-            <a href="{{action("HomeController@index")}}">
-                <img @if(isset($wSetting->site->siteLogo))src="{{route('image', ['category'=>'11','w'=>'135' , 'h'=>'67' ,  'filename' =>  $wSetting->site->siteLogo ])}}"
-                     @endif alt="لوگو سایت" class="logo-default img-responsive" style="width: 100%"/> </a>
-            <div class="menu-toggler sidebar-toggler">
-                <!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
-            </div>
-        </div>
-        <!-- END LOGO -->
-        <!-- BEGIN RESPONSIVE MENU TOGGLER -->
-        <a href="javascript:" class="menu-toggler responsive-toggler" data-toggle="collapse"
-           data-target=".navbar-collapse"> </a>
-        <!-- END RESPONSIVE MENU TOGGLER -->
-        <!-- BEGIN PAGE ACTIONS -->
-        <div class="page-actions">
-            <div class="btn-group">
-                <a target="_blank"
-                   href="{{isset($wSetting->socialNetwork->telegram->channel->link) ? $wSetting->socialNetwork->telegram->channel->link : ""}}"
-                   class="btn btn-circle btn-outline blue dropdown-toggle">
-                    <i class="fa fa-telegram fa-lg" aria-hidden="true"></i>&nbsp;
-                    <span>کانال تلگرام</span>
-                    {{--<i class="fa fa-angle-down"></i>--}}
-                </a>
-            </div>
-            {{--<div class="btn-group" style="margin-top: 10%;">--}}
-            {{--<a target="_blank" href="{{isset($wSetting->socialNetwork->telegram->channel->link) ? $wSetting->socialNetwork->telegram->channel->link : ""}}"  >--}}
-            {{--<i class="fa fa-telegram dropdown-toggle" aria-hidden="true" style="font-size: 30px" ></i>--}}
-            {{--</a>--}}
-            {{--<a target="_blank" href="{{isset($wSetting->socialNetwork->instagram->page->link) ? $wSetting->socialNetwork->instagram->page->link: ""}}"  >--}}
-            {{--<i class="fa fa-instagram fa-lg dropdown-toggle" aria-hidden="true" style="font-size: 35px"></i>--}}
-            {{--</a>--}}
-            {{--</div>--}}
-        </div>
-        <!-- DOC: Remove "hide" class to enable the page header actions -->
-        <!-- END PAGE ACTIONS -->
-        <!-- BEGIN PAGE TOP -->
-        <div class="page-top">
-            <!-- BEGIN HEADER SEARCH BOX -->
-            <!-- DOC: Apply "search-form-expanded" right after the "search-form" class to have half expanded search box -->
-            <form class="search-form search-form-expanded" action="{{ action("ContentController@index") }}"
-                  method="GET">
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="جستجو ..." name="search">
-                    <span class="input-group-btn">
-                                <a href="javascript:" class="btn submit">
-                                    <i class="icon-magnifier"></i>
-                                </a>
-                            </span>
+                        <!-- BEGIN: Responsive Aside Left Menu Toggler -->
+                        <a href = "javascript:" id = "m_aside_left_offcanvas_toggle" class = "m-brand__icon m-brand__toggler m-brand__toggler--left m--visible-tablet-and-mobile-inline-block">
+                            <span></span>
+                        </a>
+                        <!-- END -->
+
+                        <!-- BEGIN: Aside Hide Toggle -->
+                        <a href = "javascript:" id = "m_aside_left_hide_toggle" class = "m-brand__icon m-brand__toggler m-brand__toggler--left m--hidden-tablet-and-mobile">
+                            <span></span>
+                        </a>
+                        <!-- END -->
+
+
+                        <!-- BEGIN: Responsive Header Menu Toggler -->
+                        <a id = "m_aside_header_menu_mobile_toggle" href = "javascript:" class = "m-brand__icon m-brand__toggler m--visible-tablet-and-mobile-inline-block">
+                            <span></span>
+                        </a>
+                        <!-- END -->
+
+
+                        <!-- BEGIN: Topbar Toggler -->
+                        <a id = "m_aside_header_topbar_mobile_toggle" href = "javascript:" class = "m-brand__icon m--visible-tablet-and-mobile-inline-block">
+                            <i class = "flaticon-more"></i>
+                        </a>
+                        <!-- BEGIN: Topbar Toggler -->
+                    </div>
                 </div>
-            </form>
-            <!-- END HEADER SEARCH BOX -->
-            {{--<div class="col-md-2 col-md-offset-1" style="margin-top: 0.5%;">--}}
-            {{--<a href="#" ><img style="width: 45px;height: 45px;" src="/assets/extra/namad.jpg" alt="نماد اعتماد الکترونیکی" onclick='window.open("https://trustseal.enamad.ir/Verify.aspx?id=58663&p=yncraqgwhwmbhwmbfuix", "Popup","toolbar=no, location=no, statusbar=no, menubar=no, scrollbars=1, resizable=0, width=580, height=600, top=30")' height="60" width="60"></a>--}}
-            {{--<a href="#" ><img style="width: 45px;height: 45px;" src="/assets/extra/samandehi.png" alt="ستاد ساماندهی" onclick='window.open("https://logo.samandehi.ir/Verify.aspx?id=75951&p=jyoedshwpfvldshwrfth", "Popup","toolbar=no, scrollbars=no, location=no, statusbar=no, menubar=no, resizable=0, width=450, height=630, top=30")' height="60" width="60"></a>--}}
-            {{--<img style="width: 45px;height: 45px;" src="/assets/extra/asnaf.jpg" alt="اتاق اصناف"  height="45" width="45">--}}
-            {{--</div>--}}
-            <div class="top-menu">
-                <ul class="nav navbar-nav pull-right">
-                    <!-- BEGIN NOTIFICATION DROPDOWN -->
-                    <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
-                    <!-- END NOTIFICATION DROPDOWN -->
-                    <!-- BEGIN INBOX DROPDOWN -->
-                    <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
-                    <!-- END INBOX DROPDOWN -->
-                    <!-- BEGIN TODO DROPDOWN -->
-                    <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
-                    <!-- END TODO DROPDOWN -->
-                    <!-- BEGIN USER LOGIN DROPDOWN -->
-                    <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
-                    @if(Auth::check())
-                        @if(isset($bonName))
-                            <li class="dropdown dropdown-extended dropdown-notification">
-                                <a href="javascript:" class="dropdown-toggle">
-                                    <span> {{$bonName}} </span>
-                                    <span class="badge badge-default"> {{Auth::user()->userHasBon(Config::get("constants.BON1"))}} </span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                </ul>
-                            </li>
-                        @endif
-                        <li class="dropdown dropdown-extended dropdown-notification">
-                            <a href="javascript:" class="dropdown-toggle">
-                                <span>کیف پول</span>
-                                <span class="badge badge-default"> {{number_format(Auth::user()->getTotalWalletBalance())}}
-                                    تومان </span>
-                            </a>
-                            <ul class="dropdown-menu">
-                            </ul>
-                        </li>
-                        <li class="dropdown dropdown-extended dropdown-notification">
-                            <a href="{{action("OrderController@checkoutReview")}}" class="dropdown-toggle">
-                                <i class="icon-basket"></i>
-                                @if(!Auth::user()->orders->where("orderstatus_id" , 1)->isEmpty())
-                                    <span class="badge badge-default">
-                                        {{Auth::user()->orders->where("orderstatus_id" , Config::get("constants.ORDER_STATUS_OPEN"))->first()->orderproducts->count()}}
-                                    </span>
-                                @endif
-                            </a>
-                            <ul class="dropdown-menu">
-                            </ul>
-                        </li>
-
-                        <li class="dropdown dropdown-user">
-                            <a href="javascript:" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
-                               data-close-others="true">
-                                @if(isset(Auth::user()->photo) && strlen(Auth::user()->photo)>0)
-                                    <img alt="عکس پروفایل" class="img-circle"
-                                         src="{{ route('image', ['category'=>'1','w'=>'39' , 'h'=>'39' ,  'filename' =>  Auth::user()->photo ]) }}"/>
-                                @endif
-                                <span class="username username-hide-on-mobile">@if(!isset(Auth::user()->firstName) && !isset(Auth::user()->lastName))
-                                        کاربر
-                                        ناشناس @else @if(isset(Auth::user()->firstName)) {{Auth::user()->firstName }} @endif @if(isset(Auth::user()->lastName)){{Auth::user()->lastName}} @endif @endif</span>
-                                <i class="fa fa-angle-down"></i>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-default">
-                                <li>
-                                    <a href="{{ action("UserController@show",Auth::user())  }}">
-                                        <i class="icon-user"></i> پروفایل </a>
-                                </li>
-                                <li>
-                                    <a href="{{ action("UserController@userProductFiles")  }}">
-                                        <i class="fa fa-cloud-download "></i> فیلم ها و جزوه های من </a>
-                                </li>
-                                <li>
-                                    <a href="{{ action("UserController@userOrders")  }}">
-                                        <i class="fa fa-list-alt "></i>سفارشهای من </a>
-                                </li>
-                                <li>
-                                    <a href="{{ url('/logout') }}"
-                                       onclick="event.preventDefault();
-                                                         document.getElementById('logout-form').submit();">
-                                        <i class="icon-key"></i> خروج
-                                    </a>
-                                    <form id="logout-form" action="{{ url('/logout') }}" method="POST"
-                                          style="display: none;">
-                                        {{ csrf_field() }}
-                                    </form>
-                                </li>
-                            </ul>
-                        </li>
-                    @else
-                        <li class="dropdown dropdown-user">
-                            <a href="{{route("login")}}" class="dropdown-toggle">
-                                <span class="username font-blue">ورود / ثبت نام</span>
-                            </a>
-                        </li>
-                @endif
-                <!-- END USER LOGIN DROPDOWN -->
-                    <!-- BEGIN QUICK SIDEBAR TOGGLER -->
-                    <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
-                {{--<li class="dropdown dropdown-extended quick-sidebar-toggler">--}}
-                {{--<span class="sr-only">Toggle Quick Sidebar</span>--}}
-                {{--<i class="icon-logout"></i>--}}
-                {{--</li>--}}
-                <!-- END QUICK SIDEBAR TOGGLER -->
-                </ul>
             </div>
-            <!-- END TOP NAVIGATION MENU -->
+            <!-- END: Brand -->
+            <div class = "m-stack__item m-stack__item--fluid m-header-head" id = "m_header_nav">
+                <!-- BEGIN: Horizontal Menu -->
+                <button class = "m-aside-header-menu-mobile-close  m-aside-header-menu-mobile-close--skin-dark " id = "m_aside_header_menu_mobile_close_btn">
+                    <i class = "la la-close"></i>
+                </button>
+                <div id = "m_header_menu" class = "m-header-menu m-aside-header-menu-mobile m-aside-header-menu-mobile--offcanvas  m-header-menu--skin-dark m-header-menu--submenu-skin-light m-aside-header-menu-mobile--skin-dark m-aside-header-menu-mobile--submenu-skin-dark ">
+                    <ul class = "m-menu__nav ">
+                        <li class = "m-menu__item  m-menu__item--submenu m-menu__item--rel" m-menu-submenu-toggle = "hover" m-menu-link-redirect = "1" aria-haspopup = "true">
+                            <a href = "javascript:" class = "m-menu__link m-menu__toggle" title = "فیلم و جزوه دهم آلاء">
+                                <i class = "m-menu__link-icon flaticon-add"></i>
+                                <span class = "m-menu__link-text">مقطع دهم</span>
+                                <i class = "m-menu__hor-arrow la la-angle-down"></i>
+                                <i class = "m-menu__ver-arrow la la-angle-right"></i>
+                            </a>
+                            <div class = "m-menu__submenu m-menu__submenu--classic m-menu__submenu--left">
+                                <ul class = "m-menu__subnav">
+                                    <li class = "m-menu__item " m-menu-link-redirect = "1" aria-haspopup = "true">
+                                        <a href = "#" class = "m-menu__link ">
+                                            <i class = "m-menu__link-icon flaticon-diagram"></i>
+                                            <span class = "m-menu__link-title">
+                                                <span class = "m-menu__link-wrap">
+                                                    <span class = "m-menu__link-text">رشته ریاضی</span>
+                                                    <span class = "m-menu__link-badge">
+                                                        <span class = "m-badge m-badge--success">1</span>
+                                                    </span>
+                                                </span>
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class = "m-menu__item " m-menu-link-redirect = "1" aria-haspopup = "true">
+                                        <a href = "#" class = "m-menu__link ">
+                                            <i class = "m-menu__link-icon flaticon-diagram"></i>
+                                            <span class = "m-menu__link-title">
+                                                <span class = "m-menu__link-wrap">
+                                                    <span class = "m-menu__link-text">رشته تجربی</span>
+                                                    <span class = "m-menu__link-badge">
+                                                        <span class = "m-badge m-badge--success">2</span>
+                                                    </span>
+                                                </span>
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class = "m-menu__item " m-menu-link-redirect = "1" aria-haspopup = "true">
+                                        <a href = "#" class = "m-menu__link ">
+                                            <i class = "m-menu__link-icon flaticon-diagram"></i>
+                                            <span class = "m-menu__link-title">
+                                                <span class = "m-menu__link-wrap">
+                                                    <span class = "m-menu__link-text">رشته انسانی</span>
+                                                    <span class = "m-menu__link-badge">
+                                                        <span class = "m-badge m-badge--success">3</span>
+                                                    </span>
+                                                </span>
+                                            </span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class = "m-menu__item  m-menu__item--submenu m-menu__item--rel" m-menu-submenu-toggle = "hover" m-menu-link-redirect = "1" aria-haspopup = "true">
+                            <a href = "javascript:" class = "m-menu__link m-menu__toggle" title = "فیلم و جزوه یازدهم آلاء">
+                                <i class = "m-menu__link-icon flaticon-line-graph"></i>
+                                <span class = "m-menu__link-text">یازدهم</span>
+                                <i class = "m-menu__hor-arrow la la-angle-down"></i>
+                                <i class = "m-menu__ver-arrow la la-angle-right"></i>
+                            </a>
+                            <div class = "m-menu__submenu m-menu__submenu--classic m-menu__submenu--left">
+                                <ul class = "m-menu__subnav">
+                                    <li class = "m-menu__item " m-menu-link-redirect = "1" aria-haspopup = "true">
+                                        <a href = "#" class = "m-menu__link ">
+                                            <i class = "m-menu__link-icon flaticon-diagram"></i>
+                                            <span class = "m-menu__link-title">
+                                                <span class = "m-menu__link-wrap">
+                                                    <span class = "m-menu__link-text">رشته ریاضی</span>
+                                                    <span class = "m-menu__link-badge">
+                                                        <span class = "m-badge m-badge--success">1</span>
+                                                    </span>
+                                                </span>
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class = "m-menu__item " m-menu-link-redirect = "1" aria-haspopup = "true">
+                                        <a href = "#" class = "m-menu__link ">
+                                            <i class = "m-menu__link-icon flaticon-diagram"></i>
+                                            <span class = "m-menu__link-title">
+                                                <span class = "m-menu__link-wrap">
+                                                    <span class = "m-menu__link-text">رشته تجربی</span>
+                                                    <span class = "m-menu__link-badge">
+                                                        <span class = "m-badge m-badge--success">2</span>
+                                                    </span>
+                                                </span>
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class = "m-menu__item " m-menu-link-redirect = "1" aria-haspopup = "true">
+                                        <a href = "#" class = "m-menu__link ">
+                                            <i class = "m-menu__link-icon flaticon-diagram"></i>
+                                            <span class = "m-menu__link-title">
+                                                <span class = "m-menu__link-wrap">
+                                                    <span class = "m-menu__link-text">رشته انسانی</span>
+                                                    <span class = "m-menu__link-badge">
+                                                        <span class = "m-badge m-badge--success">3</span>
+                                                    </span>
+                                                </span>
+                                            </span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class = "m-menu__item  m-menu__item--submenu m-menu__item--rel" m-menu-submenu-toggle = "hover" m-menu-link-redirect = "1" aria-haspopup = "true">
+                            <a href = "javascript:" class = "m-menu__link m-menu__toggle" title = "Non functional dummy link">
+                                <i class = "m-menu__link-icon flaticon-paper-plane"></i>
+                                <span class = "m-menu__link-title">
+                                    <span class = "m-menu__link-wrap">
+                                        <span class = "m-menu__link-text">کنکور آلاء</span>
+                                        <span class = "m-menu__link-badge">
+                                            <span class = "m-badge m-badge--brand m-badge--wide">جدید و قدیم</span>
+                                        </span>
+                                    </span>
+                                </span>
+                                <i class = "m-menu__hor-arrow la la-angle-down"></i>
+                                <i class = "m-menu__ver-arrow la la-angle-right"></i>
+                            </a>
+                            <div class = "m-menu__submenu m-menu__submenu--classic m-menu__submenu--left">
+                                <ul class = "m-menu__subnav">
+                                    <li class = "m-menu__item " m-menu-link-redirect = "1" aria-haspopup = "true">
+                                        <a href = "#" class = "m-menu__link ">
+                                            <i class = "m-menu__link-icon flaticon-diagram"></i>
+                                            <span class = "m-menu__link-title">
+                                                <span class = "m-menu__link-wrap">
+                                                    <span class = "m-menu__link-text">رشته ریاضی</span>
+                                                    <span class = "m-menu__link-badge">
+                                                        <span class = "m-badge m-badge--success">1</span>
+                                                    </span>
+                                                </span>
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class = "m-menu__item " m-menu-link-redirect = "1" aria-haspopup = "true">
+                                        <a href = "#" class = "m-menu__link ">
+                                            <i class = "m-menu__link-icon flaticon-diagram"></i>
+                                            <span class = "m-menu__link-title">
+                                                <span class = "m-menu__link-wrap">
+                                                    <span class = "m-menu__link-text">رشته تجربی</span>
+                                                    <span class = "m-menu__link-badge">
+                                                        <span class = "m-badge m-badge--success">2</span>
+                                                    </span>
+                                                </span>
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class = "m-menu__item " m-menu-link-redirect = "1" aria-haspopup = "true">
+                                        <a href = "#" class = "m-menu__link ">
+                                            <i class = "m-menu__link-icon flaticon-diagram"></i>
+                                            <span class = "m-menu__link-title">
+                                                <span class = "m-menu__link-wrap">
+                                                    <span class = "m-menu__link-text">رشته انسانی</span>
+                                                    <span class = "m-menu__link-badge">
+                                                        <span class = "m-badge m-badge--success">3</span>
+                                                    </span>
+                                                </span>
+                                            </span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <!-- END: Horizontal Menu -->
+                <!-- BEGIN: Topbar -->
+                <div id = "m_header_topbar" class = "m-topbar  m-stack m-stack--ver m-stack--general">
+                    <div class = "m-stack__item m-topbar__nav-wrapper">
+                        <ul class = "m-topbar__nav m-nav m-nav--inline">
+                            <li class = "m-nav__item m-dropdown m-dropdown--large m-dropdown--arrow m-dropdown--align-center m-dropdown--mobile-full-width m-dropdown--skin-light	m-list-search m-list-search--skin-light" m-dropdown-toggle = "click" id = "m_quicksearch" m-quicksearch-mode = "dropdown" m-dropdown-persistent = "1">
+
+                                <a href = "#" class = "m-nav__link m-dropdown__toggle">
+                                    <span class = "m-nav__link-icon"><span class = "m-nav__link-icon-wrapper"><i class = "flaticon-search-1"></i></span></span>
+                                </a>
+                                <div class = "m-dropdown__wrapper">
+                                    <span class = "m-dropdown__arrow m-dropdown__arrow--center"></span>
+                                    <div class = "m-dropdown__inner ">
+                                        <div class = "m-dropdown__header">
+                                            <form class = "m-list-search__form">
+                                                <div class = "m-list-search__form-wrapper">
+                                                    <span class = "m-list-search__form-input-wrapper">
+                                                        <input id = "m_quicksearch_input" autocomplete = "off" type = "text" name = "q" class = "m-list-search__form-input" value = "" placeholder = "دنبال چی می گردی ؟....">
+                                                    </span>
+                                                    <span class = "m-list-search__form-icon-close" id = "m_quicksearch_close">
+                                                        <i class = "la la-remove"></i>
+                                                    </span>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class = "m-dropdown__body">
+                                            <div class = "m-dropdown__scrollable m-scrollable" data-scrollable = "true" data-height = "300" data-mobile-height = "200">
+                                                <div class = "m-dropdown__content"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            @if(Auth::check())
+                                @if(isset($bonName))
+                                    <li class = "m-nav__item">
+                                        <a href = "#" class = "m-nav__link">
+                                            <span class = "m-nav__link-icon">
+                                                <span class = "m-nav__link-icon-wrapper">{{ $bonName }}</span>
+                                                <span class = "m-nav__link-badge m-badge  m-badge--accent">{{ Auth::user()->userHasBon() }}</span>
+                                            </span>
+                                        </a>
+                                    </li>
+                                @endif
+                                <li class = "m-nav__item">
+                                    <a href = "{{ action("UserController@userOrders") }}" class = "m-nav__link">
+                                        <span class = "m-nav__link-icon">
+                                            <span class = "m-nav__link-icon-wrapper"><i class = "flaticon-coins"></i></span>
+                                            <span class = "m-nav__link-badge m-badge  m-badge--accent">{{ number_format(Auth::user()->getTotalWalletBalance()) }}</span>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class = "m-nav__item">
+                                    <a href = "{{ action("OrderController@checkoutReview") }}" class = "m-nav__link">
+                                        <span class = "m-nav__link-icon">
+                                            <span class = "m-nav__link-icon-wrapper"><i class = "flaticon-shopping-basket"></i></span>
+                                            <span class = "m-nav__link-badge m-badge m-badge--danger">{{ Auth::user()->numberOfProductsInBasket }}</span>
+                                        </span>
+                                    </a>
+                                </li>
+                            @endif
+                            <li class = "m-nav__item m-topbar__user-profile  m-dropdown m-dropdown--medium m-dropdown--arrow  m-dropdown--align-right m-dropdown--mobile-full-width m-dropdown--skin-light" m-dropdown-toggle = "click">
+                                <a href = "#" class = "m-nav__link m-dropdown__toggle">
+                                    <span class = "m-topbar__userpic">
+                                        <img src = "{{ $profileImage }}" class = "m--img-rounded m--marginless m--img-centered" alt = "عکس پروفایل"/>
+                                    </span>
+                                    <span class = "m-nav__link-icon m-topbar__usericon  m--hide">
+                                        <span class = "m-nav__link-icon-wrapper"><i class = "flaticon-user-ok"></i></span>
+                                    </span>
+                                    <span class = "m-topbar__username m--hide">
+                                        @if (Auth::check())
+                                            {{ Auth::user()->shortName }}
+                                        @endif
+                                    </span>
+                                </a>
+                                <div class = "m-dropdown__wrapper">
+                                    <span class = "m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust"></span>
+                                    <div class = "m-dropdown__inner">
+                                        <div class = "m-dropdown__header m--align-center">
+                                            <div class = "m-card-user m-card-user--skin-light">
+                                                <div class = "m-card-user__pic">
+                                                    <img src = "{{ $profileImage }}" class = "m--img-rounded m--marginless" alt = "عکس پروفایل"/>
+                                                </div>
+                                                @if( Auth::check() )
+                                                    <div class = "m-card-user__details">
+                                                        <span class = "m-card-user__name m--font-weight-500">{{ Auth::user()->fullName }}</span>
+                                                        <a href = "" class = "m-card-user__email m--font-weight-300 m-link">{{ Auth::user()->email }}</a>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <div class = "m-dropdown__body">
+                                            <div class = "m-dropdown__content">
+                                                <ul class = "m-nav m-nav--skin-light">
+                                                    <li class = "m-nav__section m--hide">
+                                                        <span class = "m-nav__section-text"> ---- </span>
+                                                    </li>
+                                                    @if( Auth::check() )
+                                                        <li class = "m-nav__item">
+                                                            <a href = "{{ action("UserController@show",Auth::user()) }}" class = "m-nav__link">
+                                                                <i class = "m-nav__link-icon flaticon-profile-1"></i>
+                                                                <span class = "m-nav__link-title">
+                                                                <span class = "m-nav__link-wrap">
+                                                                    <span class = "m-nav__link-text">پروفایل</span>
+                                                                </span>
+                                                            </span>
+                                                            </a>
+                                                        </li>
+
+                                                        <li class = "m-nav__item">
+                                                            <a href = "{{ action("UserController@userProductFiles")  }}" class = "m-nav__link">
+                                                                <i class = "m-nav__link-icon flaticon-share"></i>
+                                                                <span class = "m-nav__link-text">فیلم ها و جزوه های من</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class = "m-nav__item">
+                                                            <a href = "{{ action("UserController@userOrders")  }}" class = "m-nav__link">
+                                                                <i class = "m-nav__link-icon flaticon-chat-1"></i>
+                                                                <span class = "m-nav__link-text">سفارشهای من</span>
+                                                            </a>
+                                                        </li>
+                                                    @endif
+                                                    <li class = "m-nav__separator m-nav__separator--fit"></li>
+                                                    <li class = "m-nav__item">
+                                                        @if( Auth::check() )
+                                                            <a href = "{{ url('/logout') }}" class = "btn m-btn--pill btn-secondary m-btn m-btn--custom m-btn--label-brand m-btn--bolder">خروج</a>
+                                                        @else
+
+                                                            <a href = "{{ route("login") }}" class = "btn m-btn--pill btn-secondary m-btn m-btn--custom m-btn--label-brand m-btn--bolder">ورود / ثبت نام</a>
+                                                        @endif
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li id = "m_quick_sidebar_toggle" class = "m-nav__item">
+                                <a href = "#" class = "m-nav__link m-dropdown__toggle">
+                                    <span class = "m-nav__link-icon"><i class = "flaticon-grid-menu"></i></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- END: Topbar -->
+            </div>
         </div>
-        <!-- END PAGE TOP -->
     </div>
-    <!-- END HEADER INNER -->
-</div>
-<!-- END HEADER -->
-<!-- BEGIN HEADER & CONTENT DIVIDER -->
-<div class="clearfix"></div>
-<!-- END HEADER & CONTENT DIVIDER -->
+</header><!-- END: Header -->

@@ -6,9 +6,9 @@
     <meta name="Designer" content="Developed by Am!n">
     {!! SEO::generate(true) !!}
 
-    <link rel="stylesheet" href="/assets/extra/donate/css/styles.min.css">
+    <link rel="stylesheet" href="/acm/extra/donate/css/styles.min.css">
 
-    <script src="/assets/extra/donate/js/jquery-2.2.4.min.js"></script>
+    <script src="/acm/extra/donate/js/jquery-2.2.4.min.js"></script>
 
     <!--[if lt IE 9]>
     <script type='text/javascript' src='aseets/js/html5shiv.js'></script>
@@ -23,7 +23,7 @@
             مجری طرح توسعه عدالت آموزشی
         </h1>
 
-        <img class="hearts" src="/assets/extra/donate/images/hearts.png" alt="hearts">
+        <img class="hearts" src="/acm/extra/donate/images/hearts.png" alt="hearts">
 
         {!! Form::open(['method'=>'POST' , 'action'=>'OrderController@donateOrder' , 'class'=>'donation-form']) !!}
         <p>با کمک های شما عزیزان مجموعه آلا به راحتی بر روی کیفیت خدمات کار می کند</p>
@@ -241,13 +241,13 @@
 
     <footer class="site-footer">
         <a class="copyright" href="{{action("HomeController@index")}}">
-            <img src="/assets/extra/donate/images/copyright.png" alt="Copyright">
+            <img src="/acm/extra/donate/images/copyright.png" alt="Copyright">
         </a>
     </footer>
 
 </div><!-- #site_wrap -->
 
-<script src="/assets/extra/donate/js/Chart.bundle.min.js"></script>
+<script src="/acm/extra/donate/js/Chart.bundle.min.js"></script>
 
 <script>
     var MONTHS = {!! $chartData->pluck("month")->toJson() !!};

@@ -162,7 +162,7 @@
             </div>
             <div class="form-actions">
                 <button id="register-back-btn" type="button" class="btn red btn-outline" onclick="location.href = '/'">
-                    خانه
+                    @lang('page.Home')
                 </button>
                 <button type="submit" id="register-submit-btn" class="btn green pull-right"> ثبت نام</button>
             </div>
@@ -326,7 +326,7 @@
                     </label>
                 </div>
                 <div class="form-actions col-md-4">
-                    {{--<button id="register-back-btn" type="button" class="btn red btn-outline" onclick="location.href = '/'"> خانه </button>--}}
+                    {{--<button id="register-back-btn" type="button" class="btn red btn-outline" onclick="location.href = '/'"> @lang('page.Home') </button>--}}
                     <button type="submit" id="register-submit-btn" class="btn green pull-right"> ثبت نام</button>
                 </div>
                 <div class="form-group col-md-12">
@@ -402,7 +402,7 @@
                     <!-- /.modal-dialog -->
                 </div>
                 <div class="form-actions col-md-4">
-                    {{--<button id="register-back-btn" type="button" class="btn red btn-outline" onclick="location.href = '/'"> خانه </button>--}}
+                    {{--<button id="register-back-btn" type="button" class="btn red btn-outline" onclick="location.href = '/'"> @lang('page.Home') </button>--}}
                     <button type="submit" id="register-submit-btn" class="btn green pull-right"> ثبت نام</button>
                 </div>
             @endif
@@ -775,7 +775,7 @@
                         onclick="location.href = '@if(session()->has("redirectTo"))  {{session()->get("redirectTo")}}@else {{action("HomeController@index")}} @endif' ">
                     بعدا پر می کنم
                 </button>
-            @elseif(isset($hasHomeButton)) <a href="{{action("HomeController@index")}}" class="btn red"> خانه </a>
+            @elseif(isset($hasHomeButton)) <a href="{{action("HomeController@index")}}" class="btn red"> @lang('page.Home') </a>
             @endif
             @if(!Auth::user()->lockProfile)
                 <button type="submit" class="btn green"> ادامه</button>

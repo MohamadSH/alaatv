@@ -209,7 +209,7 @@
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                                     <div class="row static-info no-print" style="text-align: center;">
                                                         @if($orderproduct->orderproducttype_id == Config::get("constants.ORDER_PRODUCT_GIFT"))
-                                                            <img src="/assets/extra/gift-box.png">
+                                                            <img src="/acm/extra/gift-box.png">
                                                         @elseif(($orderproduct->product_id != Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_DEFAULT")) || ($orderproduct->product_id == Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_DEFAULT") && !$orderHasOrdrooGheireHozoori))
                                                             <button class="btn red btn-outline btn-circle btn-lg removeOrderproduct"
                                                                     data-action="{{action("OrderproductController@destroy",$orderproduct->id)}}">

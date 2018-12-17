@@ -33,7 +33,7 @@
                 {{--<p> تیم ما در حال برطرف کردن این خطا می باشند . لطفا چند دقیقه دیگر دوباره اقدام خود را تکرار کنیید--}}
                 {{--<br/> </p>--}}
                 <p>
-                    <a href="{{action("HomeController@index")}}" class="btn red btn-outline"> خانه </a>
+                    <a href="{{action("HomeController@index")}}" class="btn red btn-outline"> @lang('page.Home') </a>
                     <br></p>
             </div>
         </div>

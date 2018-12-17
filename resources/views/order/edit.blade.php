@@ -13,7 +13,7 @@
     <link href="/assets/global/plugins/bootstrap-sweetalert/sweetalert.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/global/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/global/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/assets/extra/persian-datepicker/dist/css/persian-datepicker-0.4.5.css" rel="stylesheet"
+    <link href="/acm/extra/persian-datepicker/dist/css/persian-datepicker-0.4.5.css" rel="stylesheet"
           type="text/css"/>
 @endsection
 @section("metadata")
@@ -25,7 +25,7 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{{action("HomeController@index")}}">خانه</a>
+                <a href="{{action("HomeController@index")}}">@lang('page.Home')</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
@@ -138,7 +138,7 @@
                                     <tr class="odd gradeX">
                                         <td>
                                             @if($orderproduct->orderproducttype_id == Config::get("constants.ORDER_PRODUCT_GIFT"))
-                                                <img src="/assets/extra/gift-box.png" width="25">
+                                                <img src="/acm/extra/gift-box.png" width="25">
                                             @else
                                                 <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
                                                     <input name="orderproductsCheckbox[]" type="checkbox"
@@ -561,7 +561,7 @@
     <script src="/assets/global/plugins/bootstrap-sweetalert/sweetalert.min.js" type="text/javascript"></script>
     <script src="/assets/global/plugins/jquery-repeater/jquery.repeater.js" type="text/javascript"></script>
     <script src="/assets/global/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>
-    <script src="/assets/extra/persian-datepicker/lib/persian-date.js" type="text/javascript"></script>
+    <script src="/acm/extra/persian-datepicker/lib/persian-date.js" type="text/javascript"></script>
 @endsection
 
 @section("footerPageLevelScript")
@@ -569,7 +569,7 @@
     <script src="/assets/pages/scripts/ui-toastr.min.js" type="text/javascript"></script>
     <script src="/assets/pages/scripts/ui-confirmations.min.js" type="text/javascript"></script>
     <script src="/js/extraJS/scripts/makeSelect2Single.js" type="text/javascript"></script>
-    <script src="/assets/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js"
+    <script src="/acm/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js"
             type="text/javascript"></script>
 @endsection
 @section("extraJS")

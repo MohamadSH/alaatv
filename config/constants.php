@@ -216,8 +216,8 @@ return [
     'MBTI_NUMBER_OF_QUESTIONS'       => '80',
 
     //loading gif
-    'FILTER_LOADING_GIF'             => '/assets/extra/loading-cogs.gif',
-    'ADMIN_LOADING_BAR_GIF'          => '/assets/extra/filter-loading-bar.gif',
+    'FILTER_LOADING_GIF'             => '/acm/extra/loading-cogs.gif',
+    'ADMIN_LOADING_BAR_GIF'          => '/acm/extra/filter-loading-bar.gif',
 
     //sms payment
     'COST_PER_SMS_1'                 => 100,

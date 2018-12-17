@@ -17,6 +17,7 @@ class ProductSearch extends SearchAbstract
 {
     protected $model        = "App\Product";
     protected $pageName     = 'productPage';
+    protected $numberOfItemInEachPage = 28;
     protected $validFilters = [
         'name',
         'tags',

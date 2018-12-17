@@ -7,7 +7,6 @@
  */
 
 return [
-    'Home'                                               => 'خانه',
     'Educational Content Of Alaa'                        => 'محتوای آموزشی آلاء',
     'File Removed Successful'                            => "فایل محتوا با موفقیت حذف شد",
     'show'                                               => 'نمایش',
