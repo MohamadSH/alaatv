@@ -88,6 +88,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @mixin \Eloquent
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Order newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Order newQuery()
+ * @property-read array|bool $coupon_discount_type
+ * @property-read mixed $number_of_products
  */
 class Order extends Model
 {

@@ -97,6 +97,8 @@ use Illuminate\Support\{Collection, Facades\Cache, Facades\Config};
  * @mixin \Eloquent
  * @property string|null $page_view
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Product wherePageView($value)
+ * @property string|null $redirectUrl آدرسی که صفحه محصول به آن به صورت همیشگی ریدایرکت می شود
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereRedirectUrl($value)
  */
 class Product extends Model implements Advertisable, Taggable, SeoInterface, FavorableInterface
 {
