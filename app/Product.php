@@ -1784,4 +1784,17 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
 
         return $photos;
     }
+
+    /** edit amount of product
+     *
+     * @param Product $product
+     * @param int $value
+     */
+    public function decreaseProductAmountWithValue(Product $product, $value): void
+    {
+        if (isset($product->amount)) {
+            $product->amount = $product->amount - 1;
+            $product->update();
+        }
+    }
 }

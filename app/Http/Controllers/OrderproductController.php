@@ -33,6 +33,11 @@ class OrderproductController extends Controller
                 'update',
             ],
         ]);
+        $this->middleware('OrderCheck', [
+            'only' => [
+                'store',
+            ],
+        ]);
 
     }
 
