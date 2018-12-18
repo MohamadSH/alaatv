@@ -210,7 +210,7 @@
         </svg>
     </div>
 
-    <script src="{{ asset('assets\extra\landing5') }}/js/alljs.min.js"></script>
+    <script src="{{ asset('acm\extra\landing5') }}/js/alljs.min.js"></script>
 
     {{--<script src="{{ asset('assets\extra\landing5') }}/js/jquery.min.js"></script>--}}
     {{--<script src="{{ asset('assets\extra\landing5') }}/js/jquery-migrate-3.0.1.min.js"></script>--}}
