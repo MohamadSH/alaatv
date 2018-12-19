@@ -6,18 +6,18 @@
  * Time: 12:00 PM
  */
 
-namespace App\Classes\Order\OrederProduct\RefinementProduct;
+namespace App\Classes\Order\OrderProduct\RefinementProduct;
 
 use App\Product;
 
 class RefinementSimple
 {
-    private $request;
+//    private $data;
     private $product;
 
-    public function __construct(Product $product, Request $request) {
+    public function __construct(Product $product, $data) {
 
-        $this->request = $request;
+//        $this->data = $data;
         $this->product = $product;
 //
 //        $simpleProduct = $product;
@@ -32,7 +32,7 @@ class RefinementSimple
 //        }
     }
 
-    public function getProducts():Product {
+    public function getProducts() {
 
         $simpleProduct = collect();
         $simpleProduct->push($this->product);

@@ -16,28 +16,38 @@ use App\Traits\ProductCommon;
 
 class OrderproductBons
 {
+    use ProductCommon;
+
     private $user;
     private $order;
     private $orderProdutcs;
+    private $data; // withoutBon, extraAttribute, attributes or product ids in array
 
-    public function __construct(User $user, Order $order) {
+    public function __construct(User $user, Order $order, $data) {
         $this->user = $user;
         $this->order = $order;
-        $this->orderProdutcs = $this->order->orderproducts();
+        $this->data = $data;
+        $this->orderProdutcs = $this->order->orderproducts;
     }
 
     public function applyBons() {
 
+        $productIds = [];
         foreach ($this->orderProdutcs as $key=>$productItem) {
+            $productIds[] = $productItem->product_id;
+        }
+        $products = Product::whereIn('id', $productIds)->get();
 
+        foreach ($products as $key=>$productItem) {
             $isFreeFlag = ($productItem->isFree || ($productItem->hasParents() && $productItem->parents()->first()->isFree));
 
             if (!$isFreeFlag &&
                 $productItem->basePrice != 0 &&
-                !$this->request->has("withoutBon")) {
+                !isset($this->data["withoutBon"])) {
+
 
                 // get bons of product
-                $bons = $this->getProductBons($productItem);
+                $bons = $this->getProductBons($productItem->id);
 
                 // if product or parent have bon, record thtat
                 if (!$bons->isEmpty()) {
@@ -68,15 +78,15 @@ class OrderproductBons
         $bonName = config("constants.BON1");
         $bons = $product->bons->where("name", $bonName)
             ->where("pivot.discount", ">", "0")
-            ->enable();
-//                    ->where("isEnable", 1);
+//            ->enable();
+            ->where("isEnable", 1);
 
         // if product haven't bon check parents bons
         if ($bons->isEmpty()) {
             $parentsArray = $this->makeParentArray($product);
             if (!empty($parentsArray)) {
                 foreach ($parentsArray as $parent) {
-                    $bons = $this->getProductBons($parent);
+                    $bons = $this->getProductBons($parent->id);
                     if (!$bons->isEmpty())
                         break;
                 }

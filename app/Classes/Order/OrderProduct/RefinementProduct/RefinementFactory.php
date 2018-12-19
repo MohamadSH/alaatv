@@ -6,25 +6,28 @@
  * Time: 11:53 AM
  */
 
-namespace App\Classes\Order\OrederProduct\RefinementProduct;
+namespace App\Classes\Order\OrderProduct\RefinementProduct;
 
-use Illuminate\Http\Request;
+use App\Product;
+use Mockery\Exception;
 
 class RefinementFactory
 {
-    public function __construct(Request $request) {
+    public $RefinementClass;
 
-        $productId = $request->get("product_id");
+    public function __construct($productId, $data=null) {
+
         $product = Product::FindorFail($productId);
 
         $typeName = $product->producttype->name;
 
-        $className = 'Refinement'.ucfirst($typeName);
+        $className = 'App\Classes\Order\OrderProduct\RefinementProduct\Refinement'.ucfirst($typeName);
         if(class_exists($className)) {
-            $RefinementClass = new $className($product, $request);
-            return $RefinementClass;
-        } else {
-            throw new Exception('Type Name not found.');
+            $RefinementClass = new $className($product, $data);
+//            return $RefinementClass;
+            $this->RefinementClass = $RefinementClass;
+        } else if($typeName=='configurable') {
+            throw new Exception('Type Name {'.$typeName.'} not found.');
         }
 //
 //        scp ali@192.168.4.2:/project/tree/. /c/Users/Public/Desktop/
@@ -42,5 +45,9 @@ class RefinementFactory
 //                throw new Exception('Type Name not found.');
 //            }
 //        }
+    }
+
+    public function getRefinementClass() {
+        return $this->RefinementClass;
     }
 }

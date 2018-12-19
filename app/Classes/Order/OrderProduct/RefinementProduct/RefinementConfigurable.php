@@ -6,7 +6,7 @@
  * Time: 12:11 PM
  */
 
-namespace App\Classes\Order\OrederProduct\RefinementProduct;
+namespace App\Classes\Order\OrderProduct\RefinementProduct;
 
 use App\Product;
 
@@ -15,9 +15,21 @@ class RefinementConfigurable
     private $attributes;
     private $product;
 
-    public function __construct(Product $product, Request $request) {
-        $this->attributes = $request->get("attribute");
+    public function __construct(Product $product, $data) {
+        $this->attributes = $data["attribute"];
         $this->product = $product;
+    }
+
+    public function getProducts() {
+        $childrens = $this->product->children;
+        foreach ($childrens as $child) {
+            $childHaveAllAttributes = $this->checkAttributesOfChild($this->attributes, $child);
+            if($childHaveAllAttributes) {
+                $simpleProduct = collect();
+                $simpleProduct->push($child);
+                return $simpleProduct;
+            }
+        }
     }
 
     private function checkAttributesOfChild($attributes, $child) {
@@ -33,17 +45,6 @@ class RefinementConfigurable
             return $child;
         } else {
             return false;
-        }
-    }
-
-    public function getProducts():Product {
-        $childrens = $this->product->children;
-        foreach ($childrens as $child) {
-            $childHaveAllAttributes = $this->checkAttributesOfChild($this->attributes, $child);
-            if($childHaveAllAttributes) {
-                $simpleProduct = collect();
-                return $simpleProduct->push($child);
-            }
         }
     }
 }

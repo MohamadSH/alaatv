@@ -68,6 +68,7 @@ Route::group(['prefix' => 'checkout'], function () {
     Route::any('verifyPayment', "OrderController@verifyPayment");
 });
 Route::group(['prefix' => 'orderproduct'], function () {
+    Route::get('store', 'OrderproductController@store');
     Route::post('checkout', 'OrderproductController@checkOutOrderproducts');
 });
 

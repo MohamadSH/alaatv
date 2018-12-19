@@ -63,8 +63,18 @@ class OrderCheck
             /**
              *  end
              */
+//            $productId = 155;
+//            $data = [
+//                'attribute' => [1,3,9,49,53],
+//                'extraAttribute' => [60, 21]
+//            ];
 
-            (new OrderUtility($user, $order, $request))->storeOrderProducts();
+            $productId = 240;
+            $data = [
+                'products' => []
+            ];
+
+            (new OrderUtility($user, $order, $productId, $data))->storeOrderProducts();
 
 
 //            /**

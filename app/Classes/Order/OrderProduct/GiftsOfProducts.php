@@ -6,13 +6,13 @@
  * Time: 4:38 PM
  */
 
-namespace App\Classes\Order;
+namespace App\Classes\Order\OrderProduct;
 
 use App\Product;
 use App\Order;
 use App\Orderproduct;
 
-class GiftsOfProducts extends AbstractOrderproductHandler
+class GiftsOfProducts
 {
     private $orderProdutcs;
     private $order;

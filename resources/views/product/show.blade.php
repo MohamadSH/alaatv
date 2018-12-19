@@ -192,7 +192,7 @@
                                                         <span id = "a_product-discount"></span>
                                                     </h5>
 
-                                                    <a href="{{ action("OrderproductController@store", $product)  }}" class="btn btn-primary btn-lg m-btn  m-btn m-btn--icon">
+                                                    <a href="#" class="btn btn-primary btn-lg m-btn  m-btn m-btn--icon btnAddToCart">
                                                         <span>
                                                             <i class="flaticon-shopping-basket"></i>
                                                             <span>افزودن به سبد خرید</span>
@@ -288,7 +288,7 @@
                         </div>
                         <div class="m-portlet__head-tools">
                             <div class="btn-group">
-                                <button type="button" class="btn btn-primary  m-btn m-btn--icon m-btn--wide m-btn--md">
+                                <button type="button" class="btn btn-primary  m-btn m-btn--icon m-btn--wide m-btn--md btnAddToCart">
                                     <span>
                                         <i class="flaticon-shopping-basket"></i>
                                         <span>افزودن به سبد خرید</span>
@@ -320,4 +320,87 @@
             <!--end::Portlet-->
         </div>
     </div>
+
+@endsection
+@section("page-js")
+    <script type = "text/javascript">
+        function setCookie(cname, cvalue, exdays) {
+            var d = new Date();
+            d.setTime(d.getTime() + (exdays*24*60*60*1000));
+            var expires = "expires="+ d.toUTCString();
+            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        }
+        function getCookie(cname) {
+            var name = cname + "=";
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var ca = decodedCookie.split(';');
+            for(var i = 0; i <ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+
+        function getUserCartFromCookie() {
+            let userCart = getCookie('userCart');
+            if(userCart.length>0) {
+                return JSON.parse(userCart);
+            } else {
+                return [];
+            }
+        }
+
+        function addToCartInCookie() {
+
+            let userCart = getUserCartFromCookie();
+
+            let data = {
+                'productId': {{ $product->id }},
+                'simpleInfoAttributes': {!! $simpleInfoAttributes->toJson() !!},
+                'checkboxInfoAttributes': {!! $checkboxInfoAttributes->toJson() !!}
+            };
+
+            let dataId = data.product.id;
+
+
+            let userHaveThisProduct = false;
+            for (var index in userCart) {
+                if(userCart[index].product.id == dataId) {
+                    userHaveThisProduct = true;
+                } else {
+                    userHaveThisProduct = false;
+                }
+            }
+
+            if(!userHaveThisProduct) {
+                userCart.push(data);
+            }
+
+            setCookie('userCart', JSON.stringify(userCart), 7);
+
+            console.log('UserCartFromCookie: ', getUserCartFromCookie());
+        }
+
+        $(document).ready(function(){
+            // setCookie('ali', 'krasus', 1);
+            // alert(getCookie('ali'));
+
+            $(document).on('click', '.btnAddToCart', function() {
+                // addToCartInCookie();
+
+                let data = {
+                    'product_children': {!! $product->children !!}, // 240
+                    'simpleInfoAttributes': {!! $simpleInfoAttributes->toJson() !!},
+                    'checkboxInfoAttributes': {!! $checkboxInfoAttributes->toJson() !!}
+                };
+
+                console.log('UserCartFromCookie: ', data);
+            });
+        });
+    </script>
 @endsection

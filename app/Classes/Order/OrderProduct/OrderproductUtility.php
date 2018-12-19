@@ -12,26 +12,27 @@ use App\Product;
 use App\Order;
 use App\User;
 use App\Orderproduct;
-use Illuminate\Http\Request;
 use App\Traits\ProductCommon;
+use mysql_xdevapi\Collection;
 
-class OrderproductUtility extends AbstractOrderproductHandler
+class OrderproductUtility
 {
     use ProductCommon;
 
     private $orderProdutcs;
     private $order;
     private $products;
-    private $request;
+    private $data; // extraAttribute, attributes or product ids in array
     private $user;
     private $orderstatus;
 
-    public function __construct(User $user, Order $order, Product $products, Request $request) {
+    public function __construct(User $user, Order $order, $products, $data) {
         $this->order = $order;
         $this->products = $products;
-        $this->request = $request;
+        $this->data = $data;
         $this->user = $user;
         $this->orderstatus = $this->order->orderstatus->id;
+
 //        $this->orderProdutcs = $this->order->orderproducts();
     }
 
@@ -57,6 +58,7 @@ class OrderproductUtility extends AbstractOrderproductHandler
                         break;
                     }
                 }
+
                 if ($orderHasProduct) {
                     continue;
                 }
@@ -92,20 +94,19 @@ class OrderproductUtility extends AbstractOrderproductHandler
                 /**
                  * Adding selected extra attributes to the orderproduct
                  */
-                $extraAttributes = $this->request->get("extraAttribute");
+
+
+                $extraAttributes = $this->data['extraAttribute'];
                 if (isset($extraAttributes)) {
                     foreach ($extraAttributes as $value) {
                         $myParent = $this->makeParentArray($productItem);
                         $myParent = end($myParent);
                         $attributevalue = $myParent->attributevalues->where("id", $value);
                         if ($attributevalue->isNotEmpty()) {
-                            if ($attributevalue->first()->id != 48 || !$hasPishtazExtraValue) {
-                                $orderproduct->attributevalues()
-                                ->attach($attributevalue->first()->id, ["extraCost" => $attributevalue->first()->pivot->extraCost]);
-                            }
-                            if ($attributevalue->first()->id == 48) {
-                                $hasPishtazExtraValue = true;
-                            }
+                            $orderproduct->attributevalues()->attach(
+                                $attributevalue->first()->id,
+                                ["extraCost" => $attributevalue->first()->pivot->extraCost]
+                            );
                         }
                     }
                 }
@@ -116,6 +117,7 @@ class OrderproductUtility extends AbstractOrderproductHandler
                 /**
                  * Obtaining product amount
                  */
+
                 (new Product())->decreaseProductAmountWithValue($productItem, 1);
 //                if (isset($productItem->amount)) {
 //                    $productItem->amount = $productItem->amount - 1;
