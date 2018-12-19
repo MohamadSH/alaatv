@@ -33,11 +33,11 @@ class OrderproductController extends Controller
                 'update',
             ],
         ]);
-        $this->middleware('OrderCheck', [
-            'only' => [
-                'store',
-            ],
-        ]);
+//        $this->middleware('OrderCheck', [
+//            'only' => [
+//                'store',
+//            ],
+//        ]);
 
     }
 
@@ -70,6 +70,8 @@ class OrderproductController extends Controller
      */
     public function store(Request $request)
     {
+
+
         $product_id = $request->get("product_id");
 
         $product = Product::FindorFail($product_id);

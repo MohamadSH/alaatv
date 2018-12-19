@@ -30,7 +30,10 @@
                             <div class = "row">
                                 <div class = "col-lg-3">
                                     <div class = "">
-                                        <img src = "{{ route('image', ['category'=>'4','w'=>'338' , 'h'=>'338' ,  'filename' =>  $product->image ]) }}" alt = "عکس محصول@if(isset($product->name[0])) {{$product->name}} @endif" class = "img-fluid m--marginless"/>
+                                        <?PHP
+                                        $gg =  route('image', ['category'=>'4','w'=>'338' , 'h'=>'338' ,  'filename' =>  $product->image ]);
+                                        ?>
+                                        <img src = "{{ str_replace('http://192.168.4.2:9071', 'https://sanatisharif.ir', $gg) }}" alt = "عکس محصول@if(isset($product->name[0])) {{$product->name}} @endif" class = "img-fluid m--marginless"/>
                                     </div>
                                     @if(isset($productSamplePhotos) && $productSamplePhotos->isNotEmpty())
                                         <div class="m--space-10"></div>
@@ -42,7 +45,12 @@
                                                         <a href="{{ route('image', ['category'=>'4','w'=>'1400' , 'h'=>'2000' ,  'filename' =>  $samplePhoto->file ]) }}"
                                                            target="_blank"
                                                            class="m-nav-grid__item">
-                                                            <img src="{{ route('image', ['category'=>'4','w'=>'100' , 'h'=>'135' ,  'filename' =>  $samplePhoto->file ]) }}"
+                                                            <?PHP
+                                                            $gg = route('image', ['category'=>'4','w'=>'100' , 'h'=>'135' ,  'filename' =>  $samplePhoto->file ]);
+
+                                                            echo $gg;
+                                                            ?>
+                                                            <img src="{{ str_replace('http://192.168.4.2:9071', 'https://sanatisharif.ir', $gg)  }}"
                                                                  alt="@if(isset($samplePhoto->title[0])) {{$samplePhoto->title}} @else نمونه عکس {{$product->name}} @endif">
                                                             {{--<span class="m-nav-grid__text">{{ isset($samplePhoto->title[0]) ? $samplePhoto->title : '--' }}</span>
                                                             <br>--}}
@@ -184,7 +192,7 @@
                                                         <span id = "a_product-discount"></span>
                                                     </h5>
 
-                                                    <a href="#" class="btn btn-primary btn-lg m-btn  m-btn m-btn--icon">
+                                                    <a href="{{ action("OrderproductController@store", $product)  }}" class="btn btn-primary btn-lg m-btn  m-btn m-btn--icon">
                                                         <span>
                                                             <i class="flaticon-shopping-basket"></i>
                                                             <span>افزودن به سبد خرید</span>
