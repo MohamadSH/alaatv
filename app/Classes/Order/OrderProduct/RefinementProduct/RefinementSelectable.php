@@ -21,8 +21,7 @@ class RefinementSelectable
     }
 
     public function getProducts() {
-        dd($this->selectedProductsIds);
-        $selectedProductsItems = Product::whereIn('id', $this->selectedProductsIds);
+        $selectedProductsItems = Product::whereIn('id', $this->selectedProductsIds)->get();
 
         if( count($this->selectedProductsIds) !== count($selectedProductsItems) ) {
             throw new Exception('produc ids not valid!');
@@ -39,12 +38,6 @@ class RefinementSelectable
                 }
             }
         }
-
-//        $RefinedSelectedProductsId = [];
-//        foreach ($selectedProductsItems as $key => $productItem) {
-//            $RefinedSelectedProductsId[] = $productItem->id;
-//        }
-//        return $RefinedSelectedProductsId;
 
         return $selectedProductsItems;
     }

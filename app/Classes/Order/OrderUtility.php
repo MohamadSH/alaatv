@@ -14,7 +14,7 @@ use App\User;
 use App\Classes\Order\OrderProduct\RefinementProduct\RefinementFactory;
 use App\Classes\Order\OrderProduct\OrderproductUtility;
 use App\Classes\Order\OrderProduct\OrderproductBons;
-use App\Classes\Order\OrderProduct\GiftsOfProducts;
+use App\Classes\Order\OrderProduct\OrderProductGifts;
 
 
 class OrderUtility
@@ -32,7 +32,7 @@ class OrderUtility
         $this->data = $data;
         $this->user = $user;
         $this->orderstatus = $this->order->orderstatus->id;
-        $this->orderProdutcs = $this->order->orderproducts();
+//        $this->orderProdutcs = $this->order->orderproducts();
     }
 
     public function storeOrderProducts() {
@@ -45,8 +45,20 @@ class OrderUtility
 
         (new OrderproductBons($this->user, $this->order, $this->data))->applyBons();
 
-        (new GiftsOfProducts($this->order))->addOrderGifts();
+        (new OrderProductGifts($this->order))->addOrderGifts();
 
+        dd($this->getOrderPrductIds());
+
+
+    }
+
+    private function getOrderPrductIds() {
+        $array['OrderPrductIds'] = [];
+        $orderproduct = $this->order->orderproducts()->get();
+        foreach ($orderproduct as $item) {
+            $array['OrderPrductIds'][] = $item->product_id;
+        }
+        return $array;
     }
 
 }

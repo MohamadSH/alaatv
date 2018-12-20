@@ -12,6 +12,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 
+
+use App\Order;
+use App\Userbon;
+use Illuminate\Support\Facades\DB;
+
 class OrderCheck
 {
     use ProductCommon;
@@ -44,6 +49,8 @@ class OrderCheck
          */
         if (Auth::guard($guard)->check()) {
 
+//            $this->resetOrders();
+
             $user = $request->user();
             /**
              * Making an open order for the user or retrieving the existing one
@@ -56,23 +63,72 @@ class OrderCheck
                 $request->offsetSet("user_id", Auth::user()->id);
                 $controller = $this->orderController;
                 $order = $controller->store($request);
-
             } else {
                 $order = $openOrder->first();
             }
             /**
              *  end
              */
-//            $productId = 155;
+
+
+            /**
+             * simple product
+             * 157 is childe of 155 and gift of 155 is 270
+             * with bon from father
+             */
+            $productId = 157;
+            $data = [
+                'products' => [241, 247],
+                'attribute' => [1,3,9,49,53],
+                'extraAttribute' => [60, 21]
+            ];
+            /**
+             * simple product
+             * without bon
+             */
+//            $productId = 259;
 //            $data = [
+//                'products' => [241, 247],
 //                'attribute' => [1,3,9,49,53],
 //                'extraAttribute' => [60, 21]
 //            ];
 
-            $productId = 240;
-            $data = [
-                'products' => []
-            ];
+
+            /**
+             * configurable product
+             * gift of 155 is 270
+             * hase bon
+             * configure product with child (156, 157)
+             */
+//            $productId = 155;
+//            $data = [
+//                'products' => [241, 247],
+//                'attribute' => [1,3,9,49,53], // => 156
+//                'extraAttribute' => [60, 21]
+//            ];
+
+
+            /**
+             * selectable product
+             * 241 chids: 247, 248
+             * 247 chids: 219, 220, 258
+             * 248 chids: 259, 260
+             */
+//            $productId = 240;
+//            $data = [
+//                'products' => [
+//                    241,
+//                    247,
+//                    219,
+//                    220,
+//                    258,
+//                    248,
+//                    259,
+//                    260
+//                ],
+//                'attribute' => [1,3,9,49,53],
+//                'extraAttribute' => [60, 21]
+//            ];
 
             (new OrderUtility($user, $order, $productId, $data))->storeOrderProducts();
 
@@ -163,6 +219,20 @@ class OrderCheck
 
         }
         return $next($request);
+    }
+
+    private function resetOrders() {
+
+
+        $Userbon = Userbon::findOrFail(1);
+        $Userbon->usedNumber = 0;
+        $Userbon->userbonstatus_id = 1;
+        $Userbon->update();
+        DB::table('orders')->delete();
+        DB::table('orderproducts')->delete();
+        DB::table('attributevalue_orderproduct')->delete();
+
+        dd('OrdersReset Done!');
     }
 
 }

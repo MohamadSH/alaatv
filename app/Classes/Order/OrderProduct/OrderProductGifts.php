@@ -12,23 +12,24 @@ use App\Product;
 use App\Order;
 use App\Orderproduct;
 
-class GiftsOfProducts
+class OrderProductGifts
 {
     private $orderProdutcs;
     private $order;
 
     public function __construct(Order $order) {
         $this->order = $order;
-        $this->orderProdutcs = $this->order->orderproducts();
+        $this->orderProdutcs = $this->order->orderproducts()->get();
     }
 
     public function addOrderGifts() {
         foreach ($this->orderProdutcs as $key=>$orderproductItem) {
-            $giftsOfOrderProductItem = $orderproductItem->getGifts();
+            $giftsOfOrderProductItem = $orderproductItem->product->getGifts();
             foreach ($giftsOfOrderProductItem as $giftItem) {
                 $orderHaveThisGift = $this->chengeTypeOfOrderpruductsToGift($giftItem);
                 if(!$orderHaveThisGift) {
-                    Orderproduct::attachGift($giftItem);
+
+                    $orderproductItem->attachGift($giftItem);
                 }
             }
         }

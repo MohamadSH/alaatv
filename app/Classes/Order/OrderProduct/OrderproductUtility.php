@@ -19,12 +19,12 @@ class OrderproductUtility
 {
     use ProductCommon;
 
-    private $orderProdutcs;
-    private $order;
-    private $products;
-    private $data; // extraAttribute, attributes or product ids in array
-    private $user;
-    private $orderstatus;
+    protected $orderProdutcs;
+    protected $order;
+    protected $products;
+    protected $data; // extraAttribute, attributes or product ids in array
+    protected $user;
+    protected $orderstatus;
 
     public function __construct(User $user, Order $order, $products, $data) {
         $this->order = $order;
@@ -32,60 +32,42 @@ class OrderproductUtility
         $this->data = $data;
         $this->user = $user;
         $this->orderstatus = $this->order->orderstatus->id;
-
-//        $this->orderProdutcs = $this->order->orderproducts();
     }
 
     public function store() {
 
-        $hasPishtazExtraValue = false;
-
         foreach ($this->products as $key=>$productItem) {
 
-            $donateFlag = false;
-            if (isset($this->orderstatus) && $this->orderstatus == config("constants.ORDER_STATUS_OPEN_DONATE")) {
-                $donateFlag = true;
+            //ToDo : must consider fonate product and remove that from orderProduct list
+//            $donateFlag = false;
+//            if (isset($this->orderstatus) && $this->orderstatus == config("constants.ORDER_STATUS_OPEN_DONATE")) {
+//                $donateFlag = true;
+//            }
+
+
+            /**
+             * check that product exist in OrderProduct list
+             */
+            $orderHasProduct = false;
+            foreach ($this->order->orderproducts as $singleOrderproduct) {
+//                if ($donateFlag) {
+//                    $singleOrderproduct->delete();
+//                } else
+//
+                if ($productItem->id == $singleOrderproduct->product->id) {
+                    $orderHasProduct = true;
+                    // can increase amount of orderproduct
+                    break;
+                }
+            }
+            if ($orderHasProduct) {
+                continue;
             }
 
-//            if ($this->order->orderproducts->isNotEmpty()) {
-                $orderHasProduct = false;
-                foreach ($this->order->orderproducts as $singleOrderproduct) {
-                    if ($donateFlag) {
-                        $singleOrderproduct->delete();
-                    } else if ($productItem->id == $singleOrderproduct->product->id) {
-                        $orderHasProduct = true;
-                        // can increase amount of orderproduct
-                        break;
-                    }
-                }
 
-                if ($orderHasProduct) {
-                    continue;
-                }
-//            }
-
-
-
-
-            //ToDo : must consider donate in another place
-//            if ($this->order->orderproducts->isNotEmpty()) {
-//                $orderHasProduct = false;
-//                foreach ($this->order->orderproducts as $singleOrderproduct) {
-//                    if ($donateFlag) {
-//                        $singleOrderproduct->delete();
-//                    } else if ($productItem->id == $singleOrderproduct->product->id) {
-//                        $orderHasProduct = true;
-//                        // can increase amount of orderproduct
-//                        // must be break ?????????????????
-//                        continue;
-//                    }
-//                }
-//                if ($orderHasProduct) {
-//                    continue;
-//                }
-//            }
-
-
+            /**
+             * store OrderProduct
+             */
             $orderproductStoreResult = (new Orderproduct())->store($this->order, $productItem);
             if ($orderproductStoreResult['status']) {
 
@@ -94,8 +76,6 @@ class OrderproductUtility
                 /**
                  * Adding selected extra attributes to the orderproduct
                  */
-
-
                 $extraAttributes = $this->data['extraAttribute'];
                 if (isset($extraAttributes)) {
                     foreach ($extraAttributes as $value) {
@@ -110,22 +90,12 @@ class OrderproductUtility
                         }
                     }
                 }
-                /**
-                 * end
-                 */
+
 
                 /**
                  * Obtaining product amount
                  */
-
                 (new Product())->decreaseProductAmountWithValue($productItem, 1);
-//                if (isset($productItem->amount)) {
-//                    $productItem->amount = $productItem->amount - 1;
-//                    $productItem->update();
-//                }
-                /**
-                 * end
-                 */
 
 
                 //ToDo : must consider cost in another place
@@ -151,4 +121,28 @@ class OrderproductUtility
         }
     }
 
+    protected function getSavedOrderProductWithProductModel() {
+        $this->orderProdutcs = $this->order->orderproducts()->get();
+        $productIds = [];
+        foreach ($this->orderProdutcs as $key=>$productItem) {
+            $productIds[] = $productItem->product_id;
+        }
+        $products = Product::whereIn('id', $productIds)->get();
+
+        if(count($this->orderProdutcs) !== count($products)) {
+            throw new Exception('OrderProducts is not valid!');
+        }
+        $productAndOrderProduct = [];
+        foreach ($this->orderProdutcs as $orderProdutcItem) {
+            foreach ($products as $productItem) {
+                if($orderProdutcItem->product_id==$productItem->id) {
+                    $productAndOrderProduct[] = [
+                        'product' => $productItem,
+                        'orderProdutc' => $orderProdutcItem
+                    ];
+                }
+            }
+        }
+        return $productAndOrderProduct;
+    }
 }

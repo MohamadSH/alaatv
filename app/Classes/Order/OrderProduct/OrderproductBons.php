@@ -13,41 +13,35 @@ use App\Order;
 use App\User;
 use App\Orderproduct;
 use App\Traits\ProductCommon;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Config;
 
 class OrderproductBons
 {
     use ProductCommon;
 
-    private $user;
-    private $order;
-    private $orderProdutcs;
-    private $data; // withoutBon, extraAttribute, attributes or product ids in array
-
     public function __construct(User $user, Order $order, $data) {
         $this->user = $user;
         $this->order = $order;
         $this->data = $data;
-        $this->orderProdutcs = $this->order->orderproducts;
+        $this->orderProdutcs = $this->order->orderproducts()->get();
     }
 
     public function applyBons() {
 
-        $productIds = [];
-        foreach ($this->orderProdutcs as $key=>$productItem) {
-            $productIds[] = $productItem->product_id;
-        }
-        $products = Product::whereIn('id', $productIds)->get();
+        // put all product and orderProduct together in one array
+//        $savedOrderProductWithProductModel = $this->getSavedOrderProductWithProductModel();
 
-        foreach ($products as $key=>$productItem) {
-            $isFreeFlag = ($productItem->isFree || ($productItem->hasParents() && $productItem->parents()->first()->isFree));
+        foreach ($this->orderProdutcs as $key=>$value) {
+            $isFreeFlag = ($value->product->isFree || ($value->product->hasParents() && $value->product->parents()->first()->isFree));
 
             if (!$isFreeFlag &&
-                $productItem->basePrice != 0 &&
+                $value->product->basePrice != 0 &&
                 !isset($this->data["withoutBon"])) {
 
 
                 // get bons of product
-                $bons = $this->getProductBons($productItem->id);
+                $bons = $this->getProductBons($value->product->id);
 
                 // if product or parent have bon, record thtat
                 if (!$bons->isEmpty()) {
@@ -56,7 +50,7 @@ class OrderproductBons
                     if (!$userbons->isEmpty()) {
                         foreach ($userbons as $userbon) {
                             $totalBonNumber = $userbon->totalNumber - $userbon->usedNumber;
-                            $productItem->userbons()
+                            $value->userbons()
                                 ->attach($userbon->id, [
                                     "usageNumber" => $totalBonNumber,
                                     "discount"    => $bon->pivot->discount,
@@ -95,4 +89,5 @@ class OrderproductBons
 
         return $bons;
     }
+
 }
