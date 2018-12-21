@@ -57,7 +57,7 @@
                                 </div>
                                 <div class = "col-lg-6">
                                     <div class = "m-demo" data-code-preview = "true" data-code-html = "true" data-code-js = "false">
-                                        <div class = "m-demo__preview">
+                                        <div class = "m-demo__preview m--padding-10">
                                             {!! Form::open(['method' => 'POST','action' => ['OrderproductController@store'] ]) !!}
                                             <div class="row">
                                                 <div class="col-lg-6">
@@ -127,7 +127,19 @@
                                                     <ul class = "m-nav m-nav--active-bg" id = "m_nav" role = "tablist">
                                                         @if(isset($product->children) && !empty($product->children))
                                                             @foreach($product->children as $p)
-                                                                @include('product.partials.showChildren',['product' => $p , 'color' => 1])
+                                                                @include('product.partials.showChildren',['product' => $p,
+                                                                 'color' => 1,
+                                                                 'colors' => [
+                                                                        '1' => 'm-switch--primary',
+                                                                        '2' => 'm-switch--warning',
+                                                                        '3' => 'm-switch--accent',
+                                                                        '4' => 'm-switch--success',
+                                                                        '5' => 'm-switch--brand',
+                                                                        '6' => 'm-switch--info',
+                                                                        '7' => 'm-switch--metal',
+                                                                        '8' => 'm-switch--danger'
+                                                                    ]
+                                                                 ])
                                                             @endforeach
                                                         @endif
                                                     </ul>
