@@ -66,10 +66,10 @@ mix.scripts(
 
 mix.styles(
     [
-        'public/assets/extra/landing5/css/bootstrap4.min.css',
-        'public/assets/extra/landing5/css/animate.css',
-        'public/assets/extra/landing5/css/style.css',
-        'public/assets/extra/landing5/css/fonts.css'
+        'public/acm/extra/landing5/css/bootstrap4.min.css',
+        'public/acm/extra/landing5/css/animate.css',
+        'public/acm/extra/landing5/css/style.css',
+        'public/acm/extra/landing5/css/fonts.css'
     ],
     'public/css/landing5-allcss.min.css'
 );
