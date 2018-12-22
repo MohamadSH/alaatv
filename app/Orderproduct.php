@@ -65,6 +65,7 @@ use Illuminate\Support\Facades\Config;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct query()
+ * @property-read float|int $discount_percentage
  */
 class Orderproduct extends Model
 {

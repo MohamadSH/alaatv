@@ -6,11 +6,14 @@ use App\{Assignmentstatus,
     Attribute,
     Attributecontrol,
     Attributeset,
+    Block,
     Bon,
     Checkoutstatus,
     Classes\Checkout\Alaa\AlaaCashier,
     Classes\Checkout\Alaa\OrderproductCheckout,
     Classes\Format\BlockCollectionFormatter,
+    Classes\Format\webBlockCollectionFormatter,
+    Classes\Format\webSetCollectionFormatter,
     Consultationstatus,
     Content,
     Contentset,
@@ -191,6 +194,12 @@ class HomeController extends Controller
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
         try{
+
+//            $set = Contentset::findOrFail(1);
+//            dd($set->contents_count);
+            //
+            $sections = (new webBlockCollectionFormatter(new webSetCollectionFormatter()))->format(Block::getBlocks());
+            dd($sections);
 
             $users = User::whereIn("id" , [1,2,3])->get();
             foreach ($users as $user)

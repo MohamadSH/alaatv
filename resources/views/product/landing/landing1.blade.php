@@ -1,10 +1,10 @@
 @extends("app")
 @section("headPageLevelPlugin")
-    <link href="/assets/pages/css/blog-rtl.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/assets/global/plugins/cubeportfolio/css/cubeportfolio.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/extra/landing1/css/blog-rtl.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/extra/landing1/plugins/cubeportfolio/css/cubeportfolio.css" rel="stylesheet" type="text/css"/>
 @endsection
 @section("headPageLevelStyle")
-    <link href="/assets/pages/css/portfolio-rtl.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/extra/landing1/css/portfolio-rtl.min.css" rel="stylesheet" type="text/css"/>
     {{--<link href="/assets/pages/css/coming-soon-rtl.min.css" rel="stylesheet" type="text/css"/>--}}
 @endsection
 
@@ -233,14 +233,14 @@
 @endsection
 
 @section("footerPageLevelPlugin")
-    <script src="/assets/global/plugins/cubeportfolio/js/jquery.cubeportfolio.min.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/horizontal-timeline/horizontal-timeline.js" type="text/javascript"></script>
+    <script src="/acm/extra/landing1/plugins/cubeportfolio/js/jquery.cubeportfolio.min.js" type="text/javascript"></script>
+    <script src="/acm/extra/landing1/plugins/horizontal-timeline/horizontal-timeline.js" type="text/javascript"></script>
     {{--<script src="/assets/global/plugins/countdown/jquery.countdown.min.js" type="text/javascript"></script>--}}
 @endsection
 
 @section("footerPageLevelScript")
-    <script src="/assets/pages/scripts/portfolio-3.min.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/backstretch/jquery.backstretch.min.js" type="text/javascript"></script>
+    <script src="/acm/extra/landing1/scripts/portfolio-3.min.js" type="text/javascript"></script>
+    <script src="/acm/extra/landing1/plugins/backstretch/jquery.backstretch.min.js" type="text/javascript"></script>
     {{--<script src="/assets/pages/scripts/coming-soon.min.js" type="text/javascript"></script>--}}
     <script type="text/javascript">
         // var ComingSoon = function () {
