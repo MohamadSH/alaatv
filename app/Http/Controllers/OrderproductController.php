@@ -107,59 +107,56 @@ class OrderproductController extends Controller
      *
      * @return bool (order Have This Gift)
      */
-    private function chengeTypeOfOrderPruductToGift($orderProdutcs, Product $gift) {
+    private function chengeTypeOfOrderPruductToGift(Product $gift, Orderproduct $orderproductOfGift) {
         $orderHaveThisGift = false;
+        $orderProdutcs = $orderproductOfGift->order->orderproducts()->get();
         foreach ($orderProdutcs as $key=>$orderproductItem) {
             if($gift->id===$orderproductItem->product_id){
                 $orderHaveThisGift = true;
                 $orderProduct = Orderproduct::FindorFail($orderproductItem->id);
-                $orderProduct->orderproducttype_id = Config::get("constants.ORDER_PRODUCT_GIFT");
-                $orderProduct->save();
+                $orderProduct->delete();
+                $orderproductOfGift->attachGift($gift);
                 break;
             }
         }
         return $orderHaveThisGift;
     }
-    private function applyOrderGifts($orderProdutcs) {
-        foreach ($orderProdutcs as $key=>$orderProductItem) {
-            $giftsOfOrderProductItem = $orderProductItem->product->getGifts();
-            foreach ($giftsOfOrderProductItem as $giftItem) {
-                $orderHaveThisGift = $this->chengeTypeOfOrderPruductToGift($orderProdutcs, $giftItem);
-                if(!$orderHaveThisGift) {
-                    $orderProductItem->attachGift($giftItem);
-                }
+    private function applyOrderGifts($orderProdutc) {
+        $giftsOfOrderProductItem = $orderProdutc->product->getGifts();
+        foreach ($giftsOfOrderProductItem as $giftItem) {
+            $orderHaveThisGift = $this->chengeTypeOfOrderPruductToGift($giftItem, $orderProdutc);
+            if(!$orderHaveThisGift) {
+                $orderProdutc->attachGift($giftItem);
             }
         }
     }
 
+    private function applyOrderBons($orderProdutc, $user) {
 
-    private function applyOrderBons($orderProdutcs, $user) {
-        foreach ($orderProdutcs as $key=>$value) {
-            $isFreeFlag = ($value->product->isFree || ($value->product->hasParents() && $value->product->parents()->first()->isFree));
+        $isFreeFlag = ($orderProdutc->product->isFree || ($orderProdutc->product->hasParents() && $orderProdutc->product->parents()->first()->isFree));
 
-            if (!$isFreeFlag && $value->product->basePrice != 0) {
+        if (!$isFreeFlag && $orderProdutc->product->basePrice != 0) {
 
-                // get Bons of product
-                $bons = $this->getProductBons($value->product->id);
+            // get Bons of product
+            $bons = $this->getProductBons($orderProdutc->product->id);
 
-                // if product or parent have bon, record thtat
-                if (!$bons->isEmpty()) {
-                    $bon = $bons->first();
-                    $userBons = $user->userValidBons($bon);
-                    if (!$userBons->isEmpty()) {
-                        foreach ($userBons as $userBon) {
-                            $totalBonNumber = $userBon->totalNumber - $userBon->usedNumber;
-                            $value->userbons()
-                                ->attach($userBon->id, [
-                                    "usageNumber" => $totalBonNumber,
-                                    "discount"    => $bon->pivot->discount,
-                                ]);
-                            $userBon->usedNumber = $userBon->usedNumber + $totalBonNumber;
-                            $userBon->userbonstatus_id = Config::get("constants.USERBON_STATUS_USED");
-                            $userBon->update();
-                        }
-                        Cache::tags('bon')->flush();
+            // if product or parent have bon, record thtat
+            if (!$bons->isEmpty()) {
+                $bon = $bons->first();
+                $userBons = $user->userValidBons($bon);
+                if (!$userBons->isEmpty()) {
+                    foreach ($userBons as $userBon) {
+                        $totalBonNumber = $userBon->totalNumber - $userBon->usedNumber;
+                        $orderProdutc->userbons()
+                            ->attach($userBon->id, [
+                                "usageNumber" => $totalBonNumber,
+                                "discount"    => $bon->pivot->discount,
+                            ]);
+                        $userBon->usedNumber = $userBon->usedNumber + $totalBonNumber;
+                        $userBon->userbonstatus_id = Config::get("constants.USERBON_STATUS_USED");
+                        $userBon->update();
                     }
+                    Cache::tags('bon')->flush();
                 }
             }
         }
@@ -188,6 +185,93 @@ class OrderproductController extends Controller
         return $bons;
     }
 
+    private function getSmapleData($case) {
+        switch ($case) {
+            case 'simple1':
+                /**
+                 * simple product
+                 * without bon
+                 * don't have extraAttribute
+                 */
+                return [
+                    'productId' => 259,
+                    'data' => [
+                        'products' => [241, 247],
+                        'attribute' => [1,3,9,49,53],
+                        'extraAttribute' => [60, 21]
+                    ]
+                ];
+            case 'simple2':
+                /**
+                 * simple product
+                 * 157 is childe of 155 and gift of 155 is 270
+                 * with bon from father
+                 */
+                return [
+                    'productId' => 157,
+                    'data' => [
+                        'products' => [241, 247],
+                        'attribute' => [1,3,9,49,53],
+                        'extraAttribute' => [60, 21]
+                    ]
+                ];
+            case 'selectable':
+                /**
+                 * selectable product
+                 * 241 chids: 247, 248
+                 * 247 chids: 219, 220, 258
+                 * 248 chids: 259, 260
+                 * don't have extraAttribute
+                 */
+                return [
+                    'productId' => 240,
+                    'data' => [
+                        'products' => [
+                            241,
+                                247,
+                                    219,
+                                    220,
+                                    258,
+
+                                248,
+                                    259,
+                                    260
+                        ],
+                        'attribute' => [1,3,9,49,53],
+                        'extraAttribute' => [60, 21]
+                    ]
+                ];
+            case 'configurable':
+                /**
+                 * configurable product
+                 * gift of 155 is 270
+                 * hase bon
+                 * configure product with child (156, 157)
+                 */
+                return [
+                    'productId' => 155,
+                    'data' => [
+                        'products' => [241, 247],
+                        'attribute' => [1,3,9,49,53],
+                        'extraAttribute' => [60, 21]
+                    ]
+                ];
+            default:
+                /**
+                 * simple product
+                 * without bon
+                 * don't have extraAttribute
+                 */
+                return [
+                    'productId' => 259,
+                    'data' => [
+                        'products' => [241, 247],
+                        'attribute' => [1,3,9,49,53],
+                        'extraAttribute' => [60, 21]
+                    ]
+                ];
+        }
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -198,6 +282,7 @@ class OrderproductController extends Controller
     public function store(Request $request)
     {
         $productId = $request->get('productId');
+        $orderId = $request->get('orderId');
         $data = [
             'products' => $request->get('products'),
             'attribute' => $request->get('attribute'),
@@ -205,78 +290,16 @@ class OrderproductController extends Controller
             'withoutBon' => $request->get('withoutBon')
         ];
 
-        /**
-         * simple product
-         * without bon
-         * don't have extraAttribute
-         */
-//            $productId = 259;
-//            $data = [
-//                'products' => [241, 247],
-//                'attribute' => [1,3,9,49,53],
-//                'extraAttribute' => [60, 21]
-//            ];
-
-
-
-        /**
-         * simple product
-         * 157 is childe of 155 and gift of 155 is 270
-         * with bon from father
-         */
-//        $productId = 157;
-//        $data = [
-//            'products' => [241, 247],
-//            'attribute' => [1,3,9,49,53],
-//            'extraAttribute' => [60, 21]
-//        ];
-
-
-        /**
-         * configurable product
-         * gift of 155 is 270
-         * hase bon
-         * configure product with child (156, 157)
-         */
-            $productId = 155;
-            $data = [
-                'products' => [241, 247],
-                'attribute' => [1,3,9,49,53], // => 156
-                'extraAttribute' => [60, 21]
-            ];
-
-
-        /**
-         * selectable product
-         * 241 chids: 247, 248
-         * 247 chids: 219, 220, 258
-         * 248 chids: 259, 260
-         * don't have extraAttribute
-         */
-//            $productId = 240;
-//            $data = [
-//                'products' => [
-////                    241,
-//                        247,
-//                            219,
-//                            220,
-//                            258,
-//
-////                        248,
-////                            259,
-////                            260
-//                ],
-//                'attribute' => [1,3,9,49,53],
-//                'extraAttribute' => [60, 21]
-//            ];
-
+        $smapleData = $this->getSmapleData('simple1');
+        $orderId = $smapleData['productId'];
+        $data = $smapleData['data'];
 
         $user = $request->user();
-        $openOrder = $user->openOrders()->first();
+        $order = Order::FindorFail($orderId);
 
         $simpleProducts = (new RefinementFactory($productId, $data))->getRefinementClass()->getProducts();
 
-        $notDuplicateProduct = $this->checkProductExistInOrderProduct($openOrder->orderproducts()->get(), $simpleProducts);
+        $notDuplicateProduct = $this->checkProductExistInOrderProduct($order->orderproducts()->get(), $simpleProducts);
 
         /**
          * save orderproduct and attach extraAttribute
@@ -284,19 +307,20 @@ class OrderproductController extends Controller
         foreach ($notDuplicateProduct as $key=>$productItem) {
             $orderproduct = new Orderproduct();
             $orderproduct->product_id = $productItem->id;
-            $orderproduct->order_id = $openOrder->id;
+            $orderproduct->order_id = $order->id;
             if ($orderproduct->save()) {
+
                 $this->attachExtraAttributes($data['extraAttribute'], $orderproduct);
+
+                if(!isset($this->data["withoutBon"])) {
+                    $this->applyOrderBons($orderproduct, $user);
+                }
+
+                $this->applyOrderGifts($orderproduct);
             }
         }
 
-        if(!isset($this->data["withoutBon"])) {
-            $this->applyOrderBons($openOrder->orderproducts()->get(), $user);
-        }
-
-        $this->applyOrderGifts($openOrder->orderproducts()->get());
-
-        return $openOrder->orderproducts()->get();
+        return $order->orderproducts()->get();
 
 
 
