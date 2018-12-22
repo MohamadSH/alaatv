@@ -61,7 +61,7 @@ mix.scripts(
         'public/assets/extra/landing5/js/jquery.mousewheel.js',
         'public/assets/extra/landing5/js/main.js'
     ],
-    'public/css/landing5-allcss.min.css'
+    'public/assets/extra/landing5/js/alljs.min.js'
 );
 
 mix.styles(
@@ -71,5 +71,5 @@ mix.styles(
         'public/assets/extra/landing5/css/style.css',
         'public/assets/extra/landing5/css/fonts.css'
     ],
-    'public/assets/extra/landing5/css/allcss.min.css'
+    'public/css/landing5-allcss.min.css'
 );
