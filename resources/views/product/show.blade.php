@@ -34,7 +34,7 @@
                                     </div>
                                     @if(isset($productSamplePhotos) && $productSamplePhotos->isNotEmpty())
                                         <div class="m--space-10"></div>
-                                        <h5>نمونه جزوه</h5>
+                                        <h5>نمونه جزوه {{ $product->name }}</h5>
                                         <div class="m-nav-grid">
                                             @foreach ($productSamplePhotos->chunk(3) as $chunk)
                                                 <div class="m-nav-grid__row">
@@ -44,9 +44,8 @@
                                                            class="m-nav-grid__item">
                                                             <img src="{{ route('image', ['category'=>'4','w'=>'100' , 'h'=>'135' ,  'filename' =>  $samplePhoto->file ]) }}"
                                                                  alt="@if(isset($samplePhoto->title[0])) {{$samplePhoto->title}} @else نمونه عکس {{$product->name}} @endif">
-                                                            {{--<span class="m-nav-grid__text">{{ isset($samplePhoto->title[0]) ? $samplePhoto->title : '--' }}</span>
-                                                            <br>--}}
-                                                            <span class="m-nav-grid__text">{{ isset($samplePhoto->description[0]) ? $samplePhoto->description : '--' }}</span>
+                                                            <span class="m-nav-grid__text">{{ $samplePhoto->title ?? $samplePhoto->title }}</span>
+                                                            <span class="m-nav-grid__text">{{ $samplePhoto->description ?? $samplePhoto->description }}</span>
                                                         </a>
                                                     @endforeach
                                                 </div>

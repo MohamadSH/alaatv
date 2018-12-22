@@ -155,7 +155,7 @@ class ContentController extends Controller
                 ->setPageName($contentType . 'Page')
                 ->apply($filters);
 
-//            dump(${$contentType . 'Result'});
+//            dd(${$contentType . 'Result'}->getCollection());
             if ($isApp) {
                 $data = ${$contentType . 'Result'}->getCollection();
             } else {
@@ -174,8 +174,6 @@ class ContentController extends Controller
             }
             $items->push($data);
         }
-
-//        dd(".");
         if ($isApp) {
             $response = $this->makeJsonForAndroidApp($items);
             return response()->json($response, Response::HTTP_OK);
@@ -189,7 +187,8 @@ class ContentController extends Controller
                                  "tagLabels" => $tags,
                              ]);
         }
-        return view("pages.search", compact("items", "contentTypes", 'tags'));
+        $pageName = "content-search";
+        return view("pages.content-search", compact("items", "contentTypes", 'tags','pageName'));
     }
 
     /**
@@ -230,8 +229,7 @@ class ContentController extends Controller
 
                 $thumbnail = $item->files->where('pivot.label', 'thumbnail')
                                          ->first();
-                $contenSets = $item->set;
-                $sessionNumber = $contenSets->pivot->order;
+                $sessionNumber = $item->order;
                 $response->push(
                     [
                         "videoId"          => $item->id,
