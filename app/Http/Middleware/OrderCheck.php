@@ -71,68 +71,6 @@ class OrderCheck
              */
 
 
-            /**
-             * simple product
-             * 157 is childe of 155 and gift of 155 is 270
-             * with bon from father
-             */
-            $productId = 157;
-            $data = [
-                'products' => [241, 247],
-                'attribute' => [1,3,9,49,53],
-                'extraAttribute' => [60, 21]
-            ];
-            /**
-             * simple product
-             * without bon
-             */
-//            $productId = 259;
-//            $data = [
-//                'products' => [241, 247],
-//                'attribute' => [1,3,9,49,53],
-//                'extraAttribute' => [60, 21]
-//            ];
-
-
-            /**
-             * configurable product
-             * gift of 155 is 270
-             * hase bon
-             * configure product with child (156, 157)
-             */
-//            $productId = 155;
-//            $data = [
-//                'products' => [241, 247],
-//                'attribute' => [1,3,9,49,53], // => 156
-//                'extraAttribute' => [60, 21]
-//            ];
-
-
-            /**
-             * selectable product
-             * 241 chids: 247, 248
-             * 247 chids: 219, 220, 258
-             * 248 chids: 259, 260
-             */
-//            $productId = 240;
-//            $data = [
-//                'products' => [
-//                    241,
-//                    247,
-//                    219,
-//                    220,
-//                    258,
-//                    248,
-//                    259,
-//                    260
-//                ],
-//                'attribute' => [1,3,9,49,53],
-//                'extraAttribute' => [60, 21]
-//            ];
-
-            (new OrderUtility($user, $order, $productId, $data))->storeOrderProducts();
-
-
 //            /**
 //             *  Putting found order id in session
 //             */

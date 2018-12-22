@@ -357,38 +357,20 @@ class Orderproduct extends Model
         return $giftOrderproduct;
     }
 
-    /** store product to orderproduct
-     *
-     * @param Product $product
-     * @param Order $order
-     *
-     * @return array[status, data]
-     */
-    public function store(Order $order, Product $product)
-    {
-        $orderproduct = new Orderproduct();
-        $orderproduct->product_id = $product->id;
-        $orderproduct->order_id = $order->id;
-        return [
-            'status' => $orderproduct->save(),
-            'data' => $orderproduct
-        ];
-    }
-
     /** change type of orderproduct to Gift type
      *
      * @param Product $gift
      *
      * @return Orderproduct
      */
-    public function changeOrderproductTypeToGift($orderproductId)
-    {
-        $orderproduct = Orderproduct::FindorFail($orderproductId);
-        $orderproduct->orderproducttype_id = Config::get("constants.ORDER_PRODUCT_GIFT");
-        $orderproduct->save();
-
-        return $orderproduct;
-    }
+//    public function changeOrderproductTypeToGift($orderproductId)
+//    {
+//        $orderproduct = Orderproduct::FindorFail($orderproductId);
+//        $orderproduct->orderproducttype_id = Config::get("constants.ORDER_PRODUCT_GIFT");
+//        $orderproduct->save();
+//
+//        return $orderproduct;
+//    }
 
 
 

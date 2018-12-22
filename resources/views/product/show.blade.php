@@ -30,10 +30,7 @@
                             <div class = "row">
                                 <div class = "col-lg-3">
                                     <div class = "">
-                                        <?PHP
-                                        $gg =  route('image', ['category'=>'4','w'=>'338' , 'h'=>'338' ,  'filename' =>  $product->image ]);
-                                        ?>
-                                        <img src = "{{ str_replace('http://192.168.4.2:9071', 'https://sanatisharif.ir', $gg) }}" alt = "عکس محصول@if(isset($product->name[0])) {{$product->name}} @endif" class = "img-fluid m--marginless"/>
+                                        <img src = "{{ route('image', ['category'=>'4','w'=>'338' , 'h'=>'338' ,  'filename' =>  $product->image ]) }}" alt = "عکس محصول@if(isset($product->name[0])) {{$product->name}} @endif" class = "img-fluid m--marginless"/>
                                     </div>
                                     @if(isset($productSamplePhotos) && $productSamplePhotos->isNotEmpty())
                                         <div class="m--space-10"></div>
@@ -45,12 +42,7 @@
                                                         <a href="{{ route('image', ['category'=>'4','w'=>'1400' , 'h'=>'2000' ,  'filename' =>  $samplePhoto->file ]) }}"
                                                            target="_blank"
                                                            class="m-nav-grid__item">
-                                                            <?PHP
-                                                            $gg = route('image', ['category'=>'4','w'=>'100' , 'h'=>'135' ,  'filename' =>  $samplePhoto->file ]);
-
-                                                            echo $gg;
-                                                            ?>
-                                                            <img src="{{ str_replace('http://192.168.4.2:9071', 'https://sanatisharif.ir', $gg)  }}"
+                                                            <img src="{{ route('image', ['category'=>'4','w'=>'100' , 'h'=>'135' ,  'filename' =>  $samplePhoto->file ])  }}"
                                                                  alt="@if(isset($samplePhoto->title[0])) {{$samplePhoto->title}} @else نمونه عکس {{$product->name}} @endif">
                                                             {{--<span class="m-nav-grid__text">{{ isset($samplePhoto->title[0]) ? $samplePhoto->title : '--' }}</span>
                                                             <br>--}}
@@ -323,84 +315,7 @@
 
 @endsection
 @section("page-js")
-    <script type = "text/javascript">
-        function setCookie(cname, cvalue, exdays) {
-            var d = new Date();
-            d.setTime(d.getTime() + (exdays*24*60*60*1000));
-            var expires = "expires="+ d.toUTCString();
-            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-        }
-        function getCookie(cname) {
-            var name = cname + "=";
-            var decodedCookie = decodeURIComponent(document.cookie);
-            var ca = decodedCookie.split(';');
-            for(var i = 0; i <ca.length; i++) {
-                var c = ca[i];
-                while (c.charAt(0) == ' ') {
-                    c = c.substring(1);
-                }
-                if (c.indexOf(name) == 0) {
-                    return c.substring(name.length, c.length);
-                }
-            }
-            return "";
-        }
-
-        function getUserCartFromCookie() {
-            let userCart = getCookie('userCart');
-            if(userCart.length>0) {
-                return JSON.parse(userCart);
-            } else {
-                return [];
-            }
-        }
-
-        function addToCartInCookie() {
-
-            let userCart = getUserCartFromCookie();
-
-            let data = {
-                'productId': {{ $product->id }},
-                'simpleInfoAttributes': {!! $simpleInfoAttributes->toJson() !!},
-                'checkboxInfoAttributes': {!! $checkboxInfoAttributes->toJson() !!}
-            };
-
-            let dataId = data.product.id;
-
-
-            let userHaveThisProduct = false;
-            for (var index in userCart) {
-                if(userCart[index].product.id == dataId) {
-                    userHaveThisProduct = true;
-                } else {
-                    userHaveThisProduct = false;
-                }
-            }
-
-            if(!userHaveThisProduct) {
-                userCart.push(data);
-            }
-
-            setCookie('userCart', JSON.stringify(userCart), 7);
-
-            console.log('UserCartFromCookie: ', getUserCartFromCookie());
-        }
-
-        $(document).ready(function(){
-            // setCookie('ali', 'krasus', 1);
-            // alert(getCookie('ali'));
-
-            $(document).on('click', '.btnAddToCart', function() {
-                // addToCartInCookie();
-
-                let data = {
-                    'product_children': {!! $product->children !!}, // 240
-                    'simpleInfoAttributes': {!! $simpleInfoAttributes->toJson() !!},
-                    'checkboxInfoAttributes': {!! $checkboxInfoAttributes->toJson() !!}
-                };
-
-                console.log('UserCartFromCookie: ', data);
-            });
-        });
-    </script>
+    <script src="{{ mix('/js/product-show.js') }}"></script>
+    {{--<script src="{{ asset('/acm/product-show-v13.js') }}"></script>--}}
+    {{--<script src="{{ asset('/acm/page-product-show.js') }}"></script>--}}
 @endsection

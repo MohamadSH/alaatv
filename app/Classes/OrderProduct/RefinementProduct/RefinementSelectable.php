@@ -6,7 +6,7 @@
  * Time: 12:11 PM
  */
 
-namespace App\Classes\Order\OrderProduct\RefinementProduct;
+namespace App\Classes\OrderProduct\RefinementProduct;
 
 use App\Product;
 
