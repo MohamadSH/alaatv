@@ -315,7 +315,8 @@
 
 @endsection
 @section("page-js")
-    <script src="{{ mix('/js/product-show.js') }}"></script>
-    {{--<script src="{{ asset('/acm/product-show-v13.js') }}"></script>--}}
-    {{--<script src="{{ asset('/acm/page-product-show.js') }}"></script>--}}
+    {{--<script src="{{ mix('/js/product-show.js') }}"></script>--}}
+    <script src="{{ asset('/acm/product-show-v13.js') }}"></script>
+    <script src="{{ asset('/acm/page-product-show.js') }}"></script>
+    <script src="{{ asset('/acm/page-product-saveCookie.js') }}"></script>
 @endsection
