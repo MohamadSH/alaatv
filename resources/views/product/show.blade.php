@@ -42,7 +42,7 @@
                                                         <a href="{{ route('image', ['category'=>'4','w'=>'1400' , 'h'=>'2000' ,  'filename' =>  $samplePhoto->file ]) }}"
                                                            target="_blank"
                                                            class="m-nav-grid__item">
-                                                            <img src="{{ route('image', ['category'=>'4','w'=>'100' , 'h'=>'135' ,  'filename' =>  $samplePhoto->file ]) }}"
+                                                            <img src="{{ route('image', ['category'=>'4','w'=>'100' , 'h'=>'135' ,  'filename' =>  $samplePhoto->file ])  }}"
                                                                  alt="@if(isset($samplePhoto->title[0])) {{$samplePhoto->title}} @else نمونه عکس {{$product->name}} @endif">
                                                             {{--<span class="m-nav-grid__text">{{ isset($samplePhoto->title[0]) ? $samplePhoto->title : '--' }}</span>
                                                             <br>--}}
@@ -184,7 +184,7 @@
                                                         <span id = "a_product-discount"></span>
                                                     </h5>
 
-                                                    <a href="#" class="btn btn-primary btn-lg m-btn  m-btn m-btn--icon">
+                                                    <a href="#" class="btn btn-primary btn-lg m-btn  m-btn m-btn--icon btnAddToCart">
                                                         <span>
                                                             <i class="flaticon-shopping-basket"></i>
                                                             <span>افزودن به سبد خرید</span>
@@ -280,7 +280,7 @@
                         </div>
                         <div class="m-portlet__head-tools">
                             <div class="btn-group">
-                                <button type="button" class="btn btn-primary  m-btn m-btn--icon m-btn--wide m-btn--md">
+                                <button type="button" class="btn btn-primary  m-btn m-btn--icon m-btn--wide m-btn--md btnAddToCart">
                                     <span>
                                         <i class="flaticon-shopping-basket"></i>
                                         <span>افزودن به سبد خرید</span>
@@ -312,4 +312,10 @@
             <!--end::Portlet-->
         </div>
     </div>
+
+@endsection
+@section("page-js")
+    <script src="{{ mix('/js/product-show.js') }}"></script>
+    {{--<script src="{{ asset('/acm/product-show-v13.js') }}"></script>--}}
+    {{--<script src="{{ asset('/acm/page-product-show.js') }}"></script>--}}
 @endsection

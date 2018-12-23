@@ -40,6 +40,15 @@ mix.scripts(
 ).version();
 
 
+// TODO : must convert to mix.script
+mix.babel(
+    [
+            'public/acm/product-show-v13.js',
+            'public/acm/page-product-show.js'
+    ],
+    'public/js/product-show.js'
+).version();
+
 mix.scripts(
     [
             'public/acm/extra/landing5/js/jquery.min.js',

@@ -358,6 +358,23 @@ class Orderproduct extends Model
         return $giftOrderproduct;
     }
 
+    /** change type of orderproduct to Gift type
+     *
+     * @param Product $gift
+     *
+     * @return Orderproduct
+     */
+//    public function changeOrderproductTypeToGift($orderproductId)
+//    {
+//        $orderproduct = Orderproduct::FindorFail($orderproductId);
+//        $orderproduct->orderproducttype_id = Config::get("constants.ORDER_PRODUCT_GIFT");
+//        $orderproduct->save();
+//
+//        return $orderproduct;
+//    }
+
+
+
     public function parents()
     {
         return $this->belongsToMany('App\Orderproduct', 'orderproduct_orderproduct', 'op2_id', 'op1_id')
