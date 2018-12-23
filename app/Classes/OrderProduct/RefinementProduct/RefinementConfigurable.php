@@ -10,7 +10,7 @@ namespace App\Classes\OrderProduct\RefinementProduct;
 
 use App\Product;
 
-class RefinementConfigurable
+class RefinementConfigurable extends RefinementAbstractClass
 {
     private $attributes;
     private $product;

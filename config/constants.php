@@ -162,6 +162,7 @@ return [
     'INSERT_MAJOR'                                => 'insertMajor',
     'GET_USER_REPORT'                             => 'getUserReport',
     'TELEMARKETING_PANEL_ACCESS'                  => 'telemarketingPanel',
+    'INSERT_ORDERPRODUCT_ACCESS'                  => 'insertOrderproduct',
 
 
     //Technician

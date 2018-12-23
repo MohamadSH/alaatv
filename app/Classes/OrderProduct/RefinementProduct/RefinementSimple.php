@@ -10,7 +10,7 @@ namespace App\Classes\OrderProduct\RefinementProduct;
 
 use App\Product;
 
-class RefinementSimple
+class RefinementSimple extends RefinementAbstractClass
 {
     private $product;
 
@@ -19,7 +19,6 @@ class RefinementSimple
     }
 
     public function getProducts() {
-
         $simpleProduct = collect();
         $simpleProduct->push($this->product);
         return $simpleProduct;

@@ -68,7 +68,7 @@ Route::group(['prefix' => 'checkout'], function () {
     Route::any('verifyPayment', "OrderController@verifyPayment");
 });
 Route::group(['prefix' => 'orderproduct'], function () {
-    Route::get('store', 'OrderproductController@store');
+//    Route::post('store', 'OrderproductController@store');
     Route::post('checkout', 'OrderproductController@checkOutOrderproducts');
 });
 
@@ -257,7 +257,9 @@ Route::group(['prefix' => 'product'], function () {
 Route::get("ctag", "ContentController@retrieveTags");
 Route::resource('set', 'ContentsetController');
 Route::resource('product', 'ProductController');
+
 Route::resource('orderproduct', 'OrderproductController');
+
 Route::resource('c', 'ContentController');
 Route::resource("sanatisharifmerge", "SanatisharifmergeController");
 Route::resource('article', 'ArticleController');

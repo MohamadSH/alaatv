@@ -69,5 +69,6 @@ class Kernel extends HttpKernel
         'convert'       => ModifyRequestInputMiddleware::class,
         'trimUserUpdateRequest' => \App\Http\Middleware\TrimUserUpdateRequest::class,
         'OrderCheck' => \App\Http\Middleware\OrderCheck::class,
+        'AddCookieToCart' => \App\Http\Middleware\AddCookieToCart::class,
     ];
 }

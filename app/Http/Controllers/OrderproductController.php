@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\URL;
+use App\Http\Requests\OrderProduct\OrderProductStoreRequest;
 
 
 use App\Classes\OrderProduct\RefinementProduct\RefinementFactory;
@@ -41,7 +42,11 @@ class OrderproductController extends Controller
                 'store',
             ],
         ]);
-
+        $this->middleware('AddCookieToCart', [
+            'only' => [
+                'store',
+            ],
+        ]);
     }
 
     /**
@@ -91,12 +96,14 @@ class OrderproductController extends Controller
     private function attachExtraAttributes($extraAttribute, Orderproduct $orderproduct) {
         $myParent = $this->makeParentArray($orderproduct->product);
         $myParent = end($myParent);
-        $attributesValue = $myParent->attributevalues->whereIn("id", $extraAttribute);
-        foreach ($attributesValue as $value) {
-            $orderproduct->attributevalues()->attach(
-                $value->id,
-                ["extraCost" => $value->pivot->extraCost]
-            );
+        if($myParent) {
+            $attributesValue = $myParent->attributevalues->whereIn("id", $extraAttribute);
+            foreach ($attributesValue as $value) {
+                $orderproduct->attributevalues()->attach(
+                    $value->id,
+                    ["extraCost" => $value->pivot->extraCost]
+                );
+            }
         }
     }
 
@@ -113,8 +120,7 @@ class OrderproductController extends Controller
         foreach ($orderProdutcs as $key=>$orderproductItem) {
             if($gift->id===$orderproductItem->product_id){
                 $orderHaveThisGift = true;
-                $orderProduct = Orderproduct::FindorFail($orderproductItem->id);
-                $orderProduct->delete();
+                $orderproductItem->delete();
                 $orderproductOfGift->attachGift($gift);
                 break;
             }
@@ -185,93 +191,6 @@ class OrderproductController extends Controller
         return $bons;
     }
 
-    private function getSmapleData($case) {
-        switch ($case) {
-            case 'simple1':
-                /**
-                 * simple product
-                 * without bon
-                 * don't have extraAttribute
-                 */
-                return [
-                    'productId' => 259,
-                    'data' => [
-                        'products' => [241, 247],
-                        'attribute' => [1,3,9,49,53],
-                        'extraAttribute' => [60, 21]
-                    ]
-                ];
-            case 'simple2':
-                /**
-                 * simple product
-                 * 157 is childe of 155 and gift of 155 is 270
-                 * with bon from father
-                 */
-                return [
-                    'productId' => 157,
-                    'data' => [
-                        'products' => [241, 247],
-                        'attribute' => [1,3,9,49,53],
-                        'extraAttribute' => [60, 21]
-                    ]
-                ];
-            case 'selectable':
-                /**
-                 * selectable product
-                 * 241 chids: 247, 248
-                 * 247 chids: 219, 220, 258
-                 * 248 chids: 259, 260
-                 * don't have extraAttribute
-                 */
-                return [
-                    'productId' => 240,
-                    'data' => [
-                        'products' => [
-                            241,
-                                247,
-                                    219,
-                                    220,
-                                    258,
-
-                                248,
-                                    259,
-                                    260
-                        ],
-                        'attribute' => [1,3,9,49,53],
-                        'extraAttribute' => [60, 21]
-                    ]
-                ];
-            case 'configurable':
-                /**
-                 * configurable product
-                 * gift of 155 is 270
-                 * hase bon
-                 * configure product with child (156, 157)
-                 */
-                return [
-                    'productId' => 155,
-                    'data' => [
-                        'products' => [241, 247],
-                        'attribute' => [1,3,9,49,53],
-                        'extraAttribute' => [60, 21]
-                    ]
-                ];
-            default:
-                /**
-                 * simple product
-                 * without bon
-                 * don't have extraAttribute
-                 */
-                return [
-                    'productId' => 259,
-                    'data' => [
-                        'products' => [241, 247],
-                        'attribute' => [1,3,9,49,53],
-                        'extraAttribute' => [60, 21]
-                    ]
-                ];
-        }
-    }
     /**
      * Store a newly created resource in storage.
      *
@@ -279,20 +198,17 @@ class OrderproductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+
+    public function store(OrderProductStoreRequest $request)
     {
-        $productId = $request->get('productId');
-        $orderId = $request->get('orderId');
+        $productId = $request->get('product_id');
+        $orderId = $request->get('order_id');
         $data = [
             'products' => $request->get('products'),
             'attribute' => $request->get('attribute'),
             'extraAttribute' => $request->get('extraAttribute'),
             'withoutBon' => $request->get('withoutBon')
         ];
-
-        $smapleData = $this->getSmapleData('simple1');
-        $orderId = $smapleData['productId'];
-        $data = $smapleData['data'];
 
         $user = $request->user();
         $order = Order::FindorFail($orderId);
@@ -312,7 +228,7 @@ class OrderproductController extends Controller
 
                 $this->attachExtraAttributes($data['extraAttribute'], $orderproduct);
 
-                if(!isset($this->data["withoutBon"])) {
+                if(!isset($this->data["withoutBon"]) || !$this->data["withoutBon"]) {
                     $this->applyOrderBons($orderproduct, $user);
                 }
 

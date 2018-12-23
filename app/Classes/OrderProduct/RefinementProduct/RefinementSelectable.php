@@ -10,7 +10,7 @@ namespace App\Classes\OrderProduct\RefinementProduct;
 
 use App\Product;
 
-class RefinementSelectable
+class RefinementSelectable extends RefinementAbstractClass
 {
     private $selectedProductsIds;
     private $product;
