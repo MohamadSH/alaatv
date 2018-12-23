@@ -90,6 +90,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Order newQuery()
  * @property-read array|bool $coupon_discount_type
  * @property-read mixed $number_of_products
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Order query()
  */
 class Order extends Model
 {

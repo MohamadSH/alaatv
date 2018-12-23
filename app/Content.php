@@ -126,6 +126,7 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
     use favorableTraits;
     use ModelTrackerTrait;
 
+
     /*
     |--------------------------------------------------------------------------
     | Properties
@@ -169,6 +170,7 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
         'isFree',
         'enable',
     ];
+
 
     /**
      * @return array

@@ -99,6 +99,19 @@ use Illuminate\Support\{Collection, Facades\Cache, Facades\Config};
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Product wherePageView($value)
  * @property string|null $redirectUrl آدرسی که صفحه محصول به آن به صورت همیشگی ریدایرکت می شود
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereRedirectUrl($value)
+ * @property-read \App\Collection\UserCollection|\App\User[] $favoriteBy
+ * @property-read mixed $photo
+ * @property-read null|string $price_text
+ * @property-read mixed $sample_photos
+ * @property-write mixed $long_description
+ * @property-write mixed $short_description
+ * @property-write mixed $special_description
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Product active()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Product enable()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Product newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Product newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Product query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Product valid()
  */
 class Product extends Model implements Advertisable, Taggable, SeoInterface, FavorableInterface
 {
