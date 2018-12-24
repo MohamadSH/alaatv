@@ -42,11 +42,6 @@ class OrderproductController extends Controller
                 'store',
             ],
         ]);
-        $this->middleware('AddCookieToCart', [
-            'only' => [
-                'store',
-            ],
-        ]);
     }
 
     /**
