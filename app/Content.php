@@ -171,6 +171,16 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
         'enable',
     ];
 
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'url',
+        'author'
+    ];
+
 
     /**
      * @return array
@@ -274,6 +284,11 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
     | Accessor
     |--------------------------------------------------------------------------
     */
+
+    public function getUrlAttribute($value): string
+    {
+        return action("ContentController@show",$this);
+    }
 
     /**
      * Get the content's title .

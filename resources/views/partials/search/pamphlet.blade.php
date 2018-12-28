@@ -1,3 +1,4 @@
+<i class="la la-file-pdf-o"></i>
 @if($items->isNotEmpty())
     <ul class="feeds">
     @foreach($items as $content)

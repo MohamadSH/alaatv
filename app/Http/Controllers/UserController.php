@@ -171,7 +171,7 @@ class UserController extends Controller
         $items = collect();
         $pageName = 'userPage';
         $userResult = (new UserSearch)->setPageName($pageName)
-            ->apply($filters);
+            ->get($filters);
         if ($isApp) {
             $items->push($userResult->getCollection());
         } else {

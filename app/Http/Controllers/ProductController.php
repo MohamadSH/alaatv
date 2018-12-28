@@ -127,7 +127,7 @@ class ProductController extends Controller
         $items = collect();
         $pageName = 'productPage';
         $productResult = (new ProductSearch)->setPageName($pageName)
-                                            ->apply($filters);
+                                            ->get($filters);
         //        dd($productResult->where('enable','=',0));
         if ($isApp) {
             $items->push($productResult->getCollection());

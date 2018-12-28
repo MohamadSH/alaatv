@@ -83,7 +83,7 @@ class ContentsetController extends Controller
         $pageName = 'contentsetPage';
         $contentsetResult = (new ContentsetSearch())
             ->setPageName($pageName)
-            ->apply($filters);
+            ->get($filters);
 
         if ($isApp) {
             $items->push($contentsetResult->getCollection());

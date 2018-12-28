@@ -365,6 +365,16 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         "roles",
     ];
 
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'full_name',
+
+    ];
+
     /** Setter mutator for major_id
      *
      * @param $value

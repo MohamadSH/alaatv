@@ -59,6 +59,16 @@ class Contenttype extends Model
         'enable',
     ];
 
+    public static function List() :array
+    {
+        return [
+            "video",
+            "pamphlet",
+            "article",
+        ];
+    }
+
+
     public static function getRootContentType()
     {
         return Cache::tags('contentType')

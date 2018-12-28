@@ -28,7 +28,7 @@ class ProductSearch extends SearchAbstract
      *
      * @return mixed
      */
-    public function apply(array $filters)
+    protected function apply(array $filters)
     {
         $this->pageNum = $this->setPageNum($filters);
         $key = $this->makeCacheKey($filters);

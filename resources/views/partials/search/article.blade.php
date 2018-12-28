@@ -1,3 +1,4 @@
+<i class="la la-comment"></i>
 @if($items->isNotEmpty())
     <ul class="feeds">
     @foreach($items as $content)
