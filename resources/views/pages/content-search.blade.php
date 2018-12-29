@@ -12,13 +12,16 @@
 
 @section("content")
     <div class="row">
+        @include('partials.search.contentset',['items' => $result->get('set')])
+    </div>
+    <div class="row">
         @include('partials.search.video',['items' => $result->get('video')])
     </div>
     <div class="row">
-
+        @include('partials.search.pamphlet',['items' => $result->get('pamphlet')])
     </div>
     <div class="row">
-
+        @include('partials.search.article',['items' => $result->get('article')])
     </div>
 @endsection
 {{--

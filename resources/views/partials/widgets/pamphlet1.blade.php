@@ -55,9 +55,9 @@
                         </div>
                     </div>
                 </div>
-                <div class = "m-widget19__action">
+                {{--<div class = "m-widget19__action">
                     <a href = "{{ $widgetLink }}" class = "btn m-btn--pill    btn-outline-warning m-btn m-btn--outline-2x ">نمایش فیلم های این دوره</a>
-                </div>
+                </div>--}}
             </div>
         </div>
     </div>

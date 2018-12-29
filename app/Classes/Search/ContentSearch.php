@@ -17,6 +17,7 @@ class ContentSearch extends SearchAbstract
 {
     protected $model        = "App\Content";
     protected $pageName     = 'contentPage';
+//    protected $numberOfItemInEachPage = 2;
     protected $validFilters = [
         'name',
         'tags',

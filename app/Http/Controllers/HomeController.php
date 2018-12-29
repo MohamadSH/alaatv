@@ -199,7 +199,7 @@ class HomeController extends Controller
 //            dd($set->contents_count);
             //
             $sections = (new webBlockCollectionFormatter(new webSetCollectionFormatter()))->format(Block::getBlocks());
-            dd($sections);
+            return json_encode($sections);
 
             $users = User::whereIn("id" , [1,2,3])->get();
             foreach ($users as $user)
@@ -291,31 +291,31 @@ class HomeController extends Controller
                           'width'  => 100,
                       ]);
 
-        //        $consultationstatus_active = Consultationstatus::all()->where("name", "active")->first();
-        //        $consultingQuestionCount = Userupload::all()->count();
-        //        $consultations = Consultation::all()->sortByDesc("created_at")->where("consultationstatus_id", $consultationstatus_active->id);
-        //        $consultationCount = $consultations->count();
-        //        $userCount = User::count();
+        /*        $consultationstatus_active = Consultationstatus::all()->where("name", "active")->first();
+                $consultingQuestionCount = Userupload::all()->count();
+                $consultations = Consultation::all()->sortByDesc("created_at")->where("consultationstatus_id", $consultationstatus_active->id);
+                $consultationCount = $consultations->count();
+                $userCount = User::count();
 
-        //        $todayDate = $this->convertDate(Carbon::now()->toDateTimeString(), "toJalali");
-        //        $todayDate = explode("/", $todayDate);
-        //        $currentDay = $todayDate[2];
-        //        $currentMonth = $todayDate[1];
-        //        $currentYear = $todayDate[0];
-        //        $contents = Content::enable()
-        //            ->valid()
-        //            ->orderBy("validSince", "DESC")
-        //            ->take(10)
-        //            ->get();
-        //        $contentCollection = collect();
-        //        foreach ($contents as $content) {
-        //            $contentCollection
-        //                ->push([
-        //                    "id" => $content->id,
-        //                    "displayName" => $content->display_name,
-        //                    "validSince_Jalali" => explode(" ", $content->validSince_Jalali())[0]
-        //                ]);
-        //        }
+                $todayDate = $this->convertDate(Carbon::now()->toDateTimeString(), "toJalali");
+                $todayDate = explode("/", $todayDate);
+                $currentDay = $todayDate[2];
+                $currentMonth = $todayDate[1];
+                $currentYear = $todayDate[0];
+                $contents = Content::enable()
+                    ->valid()
+                    ->orderBy("validSince", "DESC")
+                    ->take(10)
+                    ->get();
+                $contentCollection = collect();
+                foreach ($contents as $content) {
+                    $contentCollection
+                        ->push([
+                            "id" => $content->id,
+                            "displayName" => $content->display_name,
+                            "validSince_Jalali" => explode(" ", $content->validSince_Jalali())[0]
+                        ]);
+                }*/
 
         $slides = Slideshow::getMainBanner();
         $slideCounter = 1;

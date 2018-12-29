@@ -17,6 +17,7 @@ class ContentsetSearch extends SearchAbstract
 {
     protected $model        = "App\Contentset";
     protected $pageName     = 'contentsetPage';
+//    protected $numberOfItemInEachPage = 2;
     protected $validFilters = [
         'name',
         'tags',

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Classes\Search\ContentSearch;
+use App\Classes\Search\ContentsetSearch;
 use App\Collection\ContentCollection;
 use App\Content;
 use App\Contentset;
@@ -60,6 +61,10 @@ class ContentController extends Controller
      * @var ContentSearch
      */
     private $contentSearch;
+    /**
+     * @var ContentsetSearch
+     */
+    private $setSearch;
 
     /*
     |--------------------------------------------------------------------------
@@ -67,13 +72,14 @@ class ContentController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    public function __construct(Agent $agent, Response $response, Websitesetting $setting, ContentSearch $contentSearch)
+    public function __construct(Agent $agent, Response $response, Websitesetting $setting, ContentSearch $contentSearch, ContentsetSearch $setSearch)
     {
         $this->response = $response;
         $this->setting = $setting->setting;
         $authException = $this->getAuthExceptionArray($agent);
         $this->callMiddlewares($authException);
         $this->contentSearch = $contentSearch;
+        $this->setSearch = $setSearch;
     }
 
     /**
@@ -136,7 +142,7 @@ class ContentController extends Controller
      *
      * @param ContentIndexRequest $request
      *
-     * @param Collection $items
+     *
      * @return \Illuminate\Http\Response
      */
     public function index(ContentIndexRequest $request)
@@ -145,9 +151,12 @@ class ContentController extends Controller
         $tags = (array)$request->get('tags');
         $filters = $request->all();
 //        dd($filters);
+
         $result = $this->contentSearch->get(compact('filters','contentTypes'));
+        $result->offsetSet('set', $this->setSearch->get($filters));
+
         $pageName = "content-search";
-        if (request()->ajax()) {
+        if (request ()->ajax()) {
             return $this->response
                 ->setStatusCode(Response::HTTP_OK)
                 ->setContent([

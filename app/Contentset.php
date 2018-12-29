@@ -76,6 +76,11 @@ class Contentset extends Model implements Taggable
         'contents',
     ];
 
+    protected $appends = [
+        'url',
+        'shortName',
+        'author'
+    ];
     /**
      * Create a new Eloquent Collection instance.
      *
@@ -162,6 +167,19 @@ class Contentset extends Model implements Taggable
     {
         return json_decode($value);
     }
+
+    public function getUrlAttribute($value): string
+    {
+//        return action("ContentsetController@show",$this);
+        $contentId = optional($this->getLastContent())->id;
+        return $contentId ?? action("ContentController@show", $contentId);
+    }
+    public function getAuthorAttribute($value): User
+    {
+//        return action("ContentsetController@show",$this);
+        return optional($this->getLastContent())->author;
+    }
+
 
     public function retrievingTags()
     {

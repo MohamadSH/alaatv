@@ -372,6 +372,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
      */
     protected $appends = [
         'full_name',
+        'photo'
 
     ];
 
