@@ -10,14 +10,18 @@ namespace App\Classes\OrderProduct\RefinementProduct;
 
 use App\Product;
 
-class RefinementSelectable extends RefinementAbstractClass
+class RefinementSelectable implements RefinementInterface
 {
     private $selectedProductsIds;
     private $product;
 
     public function __construct(Product $product, $data) {
-        $this->selectedProductsIds = $data["products"];
-        $this->product = $product;
+        if(isset($data['products'])) {
+            $this->selectedProductsIds = $data["products"];
+            $this->product = $product;
+        } else {
+            throw new Exception('products not set!');
+        }
     }
 
     public function getProducts() {

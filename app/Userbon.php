@@ -7,6 +7,7 @@ use App\Traits\Helper;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Config;
 
 /**
  * App\Userbon
@@ -121,5 +122,15 @@ class Userbon extends Model
         else if (isset($this->validUntil) && Carbon::now() > $this->validUntil)
             return 0;
         else return $this->totalNumber - $this->usedNumber;
+    }
+
+
+    public function void()
+    {
+        $remainBonNumber = $this->totalNumber - $this->usedNumber;
+        $this->usedNumber = $this->usedNumber + $remainBonNumber;
+        $this->userbonstatus_id = Config::get("constants.USERBON_STATUS_USED");
+        $this->update();
+        return $remainBonNumber;
     }
 }

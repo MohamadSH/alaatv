@@ -18,13 +18,16 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\URL;
 use App\Http\Requests\OrderProduct\OrderProductStoreRequest;
+use App\Traits\OrderCommon;
 
 
 use App\Classes\OrderProduct\RefinementProduct\RefinementFactory;
 
 class OrderproductController extends Controller
 {
+    use OrderCommon;
     use ProductCommon;
+
     protected $response;
 
     function __construct()
@@ -37,7 +40,12 @@ class OrderproductController extends Controller
                 'update',
             ],
         ]);
-        $this->middleware('OrderCheck', [
+        $this->middleware('CheckHasOpenOrder', [
+            'only' => [
+                'store',
+            ],
+        ]);
+        $this->middleware('CheckPermissionForSendOrderId', [
             'only' => [
                 'store',
             ],
@@ -64,127 +72,13 @@ class OrderproductController extends Controller
         //
     }
 
-
-
-
-
-    private function checkProductExistInOrderProduct($orderProduct, $products) {
-        $notDuplicateProduct = [];
-        foreach ($products as $product) {
-            $orderHasProduct = false;
-            foreach ($orderProduct as $singleOrderproduct) {
-//                if ($donateFlag) {
-//                    $singleOrderproduct->delete();
-//                } else
-                if ($product->id == $singleOrderproduct->product->id) {
-                    $orderHasProduct = true;
-                }
-            }
-            if($orderHasProduct) {
-                // can increase amount of product
-            } else {
-                $notDuplicateProduct[] = $product;
-            }
-        }
-        return $notDuplicateProduct;
-    }
-    private function attachExtraAttributes($extraAttribute, Orderproduct $orderproduct) {
-        $myParent = $this->makeParentArray($orderproduct->product);
-        $myParent = end($myParent);
-        if($myParent) {
-            $attributesValue = $myParent->attributevalues->whereIn("id", $extraAttribute);
-            foreach ($attributesValue as $value) {
-                $orderproduct->attributevalues()->attach(
-                    $value->id,
-                    ["extraCost" => $value->pivot->extraCost]
-                );
-            }
+    private function applyOrderGifts($order, $orderProduct, $product) {
+        $giftsOfProduct = $product->getGifts();
+        foreach ($giftsOfProduct as $giftItem) {
+            $this->attachGift($order, $giftItem, $orderProduct);
         }
     }
 
-
-    /** chenge Type Of Orderpruduct That Is Gift Of Other OrderProduct To Gift
-     *
-     * @param Product $gift
-     *
-     * @return bool (order Have This Gift)
-     */
-    private function chengeTypeOfOrderPruductToGift(Product $gift, Orderproduct $orderproductOfGift) {
-        $orderHaveThisGift = false;
-        $orderProdutcs = $orderproductOfGift->order->orderproducts()->get();
-        foreach ($orderProdutcs as $key=>$orderproductItem) {
-            if($gift->id===$orderproductItem->product_id){
-                $orderHaveThisGift = true;
-                $orderproductItem->delete();
-                $orderproductOfGift->attachGift($gift);
-                break;
-            }
-        }
-        return $orderHaveThisGift;
-    }
-    private function applyOrderGifts($orderProdutc) {
-        $giftsOfOrderProductItem = $orderProdutc->product->getGifts();
-        foreach ($giftsOfOrderProductItem as $giftItem) {
-            $orderHaveThisGift = $this->chengeTypeOfOrderPruductToGift($giftItem, $orderProdutc);
-            if(!$orderHaveThisGift) {
-                $orderProdutc->attachGift($giftItem);
-            }
-        }
-    }
-
-    private function applyOrderBons($orderProdutc, $user) {
-
-        $isFreeFlag = ($orderProdutc->product->isFree || ($orderProdutc->product->hasParents() && $orderProdutc->product->parents()->first()->isFree));
-
-        if (!$isFreeFlag && $orderProdutc->product->basePrice != 0) {
-
-            // get Bons of product
-            $bons = $this->getProductBons($orderProdutc->product->id);
-
-            // if product or parent have bon, record thtat
-            if (!$bons->isEmpty()) {
-                $bon = $bons->first();
-                $userBons = $user->userValidBons($bon);
-                if (!$userBons->isEmpty()) {
-                    foreach ($userBons as $userBon) {
-                        $totalBonNumber = $userBon->totalNumber - $userBon->usedNumber;
-                        $orderProdutc->userbons()
-                            ->attach($userBon->id, [
-                                "usageNumber" => $totalBonNumber,
-                                "discount"    => $bon->pivot->discount,
-                            ]);
-                        $userBon->usedNumber = $userBon->usedNumber + $totalBonNumber;
-                        $userBon->userbonstatus_id = Config::get("constants.USERBON_STATUS_USED");
-                        $userBon->update();
-                    }
-                    Cache::tags('bon')->flush();
-                }
-            }
-        }
-    }
-    private function getProductBons($productId) {
-
-        $product = Product::findOrFail($productId);
-        $bonName = config("constants.BON1");
-        $bons = $product->bons->where("name", $bonName)
-            ->where("pivot.discount", ">", "0")
-//            ->enable();
-            ->where("isEnable", 1);
-
-        // if product haven't bon check parents bons
-        if ($bons->isEmpty()) {
-            $parentsArray = $this->makeParentArray($product);
-            if (!empty($parentsArray)) {
-                foreach ($parentsArray as $parent) {
-                    $bons = $this->getProductBons($parent->id);
-                    if (!$bons->isEmpty())
-                        break;
-                }
-            }
-        }
-
-        return $bons;
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -205,12 +99,18 @@ class OrderproductController extends Controller
             'withoutBon' => $request->get('withoutBon')
         ];
 
-        $user = $request->user();
+//        $user = $request->user();
         $order = Order::FindorFail($orderId);
+        $user = $order->user;
 
         $simpleProducts = (new RefinementFactory($productId, $data))->getRefinementClass()->getProducts();
 
-        $notDuplicateProduct = $this->checkProductExistInOrderProduct($order->orderproducts()->get(), $simpleProducts);
+//        dd($order->orderproducts()->get());
+
+        $notDuplicateProduct = $order->checkProductsExistInOrderProducts($simpleProducts);
+
+//        dd('after total');
+//        dd($notDuplicateProduct);
 
         /**
          * save orderproduct and attach extraAttribute
@@ -221,13 +121,16 @@ class OrderproductController extends Controller
             $orderproduct->order_id = $order->id;
             if ($orderproduct->save()) {
 
-                $this->attachExtraAttributes($data['extraAttribute'], $orderproduct);
+                $productItem->decreaseProductAmountWithValue(1);
+
+                $orderproduct->attachExtraAttributes($data['extraAttribute']);
 
                 if(!isset($this->data["withoutBon"]) || !$this->data["withoutBon"]) {
-                    $this->applyOrderBons($orderproduct, $user);
+                    $orderproduct->applyOrderBons($user);
+//                    $this->applyOrderBons($orderproduct, $user);
                 }
 
-                $this->applyOrderGifts($orderproduct);
+                $this->applyOrderGifts($order, $orderproduct, $productItem);
             }
         }
 

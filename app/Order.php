@@ -838,4 +838,16 @@ class Order extends Model
             $transaction->update();
         }
     }
+
+    public function checkProductsExistInOrderProducts($products) {
+        $notDuplicateProduct = [];
+        foreach ($products as $product) {
+            if($this->hasTheseProducts([$product->id])) {
+                // can increase amount of product
+            } else {
+                $notDuplicateProduct[] = $product;
+            }
+        }
+        return $notDuplicateProduct;
+    }
 }

@@ -10,7 +10,7 @@ namespace App\Classes\OrderProduct\RefinementProduct;
 
 use App\Product;
 
-class RefinementSimple extends RefinementAbstractClass
+class RefinementSimple implements RefinementInterface
 {
     private $product;
 

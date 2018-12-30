@@ -337,27 +337,6 @@ class Orderproduct extends Model
             return false;
     }
 
-    /** Attaches a gift to the order of this orderproduct which is related to this orderproduct
-     *
-     * @param Product $gift
-     *
-     * @return Orderproduct
-     */
-    public function attachGift(Product $gift)
-    {
-        $giftOrderproduct = new Orderproduct();
-        $giftOrderproduct->orderproducttype_id = Config::get("constants.ORDER_PRODUCT_GIFT");
-        $giftOrderproduct->order_id = $this->order->id;
-        $giftOrderproduct->product_id = $gift->id;
-        $giftOrderproduct->cost = $gift->calculatePayablePrice()["cost"];
-        $giftOrderproduct->discountPercentage = 100;
-        $giftOrderproduct->save();
-
-        $giftOrderproduct->parents()
-                         ->attach($this, ["relationtype_id" => Config::get("constants.ORDER_PRODUCT_INTERRELATION_PARENT_CHILD")]);
-        return $giftOrderproduct;
-    }
-
     /** change type of orderproduct to Gift type
      *
      * @param Product $gift
@@ -514,5 +493,70 @@ class Orderproduct extends Model
                 }
             }
         }
+    }
+
+    public function attachExtraAttributes($extraAttribute) {
+        $grandParent = $this->product->getGrandParent();
+        if($grandParent) {
+            $attributesValue = $grandParent->attributevalues->whereIn("id", $extraAttribute);
+            foreach ($attributesValue as $value) {
+                $this->attributevalues()->attach(
+                    $value->id,
+                    ["extraCost" => $value->pivot->extraCost]
+                );
+            }
+        }
+    }
+
+    public function applyOrderBons($user) {
+
+        $isFreeFlag = ($this->product->isFree || ($this->product->hasParents() && $this->product->parents()->first()->isFree));
+
+        if (!$isFreeFlag && $this->product->basePrice != 0) {
+
+            // get Bons of product
+            $bons = $this->getProductBons($this->product->id);
+
+            // if product or parent have bon, record thtat
+            if (!$bons->isEmpty()) {
+                $bon = $bons->first();
+                $userBons = $user->userValidBons($bon);
+                if (!$userBons->isEmpty()) {
+                    foreach ($userBons as $userBon) {
+                        $remainBonNumber = $userBon->void();
+                        $this->userbons()
+                            ->attach($userBon->id, [
+                                "usageNumber" => $remainBonNumber,
+                                "discount"    => $bon->pivot->discount,
+                            ]);
+                    }
+                    Cache::tags('bon')->flush();
+                }
+            }
+        }
+    }
+
+    private function getProductBons($productId) {
+
+        $product = Product::findOrFail($productId);
+        $bonName = config("constants.BON1");
+        $bons = $product->bons->where("name", $bonName)
+            ->where("pivot.discount", ">", "0")
+//            ->enable();
+            ->where("isEnable", 1);
+
+        // if product haven't bon check parents bons
+        if ($bons->isEmpty()) {
+            $parentsArray = $this->makeParentArray($product);
+            if (!empty($parentsArray)) {
+                foreach ($parentsArray as $parent) {
+                    $bons = $this->getProductBons($parent->id);
+                    if (!$bons->isEmpty())
+                        break;
+                }
+            }
+        }
+
+        return $bons;
     }
 }
