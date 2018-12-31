@@ -195,9 +195,8 @@ class HomeController extends Controller
     {
         try{
 
-//            $set = Contentset::findOrFail(1);
-//            dd($set->contents_count);
-            //
+            dd(collect($keyoardButtom)->flatten(1));
+
             $sections = (new webBlockCollectionFormatter(new webSetCollectionFormatter()))->format(Block::getBlocks());
             return json_encode($sections);
 
