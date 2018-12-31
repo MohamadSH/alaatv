@@ -33,6 +33,19 @@ trait OrderCommon
         ];
     }
 
+
+    /**
+     * @param Order $order
+     * @param Orderproduct $orderProduct
+     * @param Product $product
+     */
+    private function applyOrderGifts(Order $order, Orderproduct $orderProduct, Product $product) {
+        $giftsOfProduct = $product->getGifts();
+        foreach ($giftsOfProduct as $giftItem) {
+            $this->attachGift($order, $giftItem, $orderProduct);
+        }
+    }
+
     /** Attaches a gift to the order of this orderproduct which is related to this orderproduct
      *
      * @param Order $order

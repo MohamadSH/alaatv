@@ -508,7 +508,7 @@ class Orderproduct extends Model
         }
     }
 
-    public function applyOrderBons($user) {
+    public function applyBons($user) {
 
         $isFreeFlag = ($this->product->isFree || ($this->product->hasParents() && $this->product->parents()->first()->isFree));
 

@@ -40,16 +40,12 @@ class OrderproductController extends Controller
                 'update',
             ],
         ]);
-        $this->middleware('CheckHasOpenOrder', [
-            'only' => [
-                'store',
-            ],
-        ]);
-        $this->middleware('CheckPermissionForSendOrderId', [
-            'only' => [
-                'store',
-            ],
-        ]);
+        $this->middleware([
+                'CheckHasOpenOrder',
+                'CheckPermissionForSendOrderId'
+            ], [
+                'only' => ['store']
+            ]);
     }
 
     /**
@@ -72,13 +68,6 @@ class OrderproductController extends Controller
         //
     }
 
-    private function applyOrderGifts($order, $orderProduct, $product) {
-        $giftsOfProduct = $product->getGifts();
-        foreach ($giftsOfProduct as $giftItem) {
-            $this->attachGift($order, $giftItem, $orderProduct);
-        }
-    }
-
 
     /**
      * Store a newly created resource in storage.
@@ -99,11 +88,11 @@ class OrderproductController extends Controller
             'withoutBon' => $request->get('withoutBon')
         ];
 
-//        $user = $request->user();
         $order = Order::FindorFail($orderId);
+        $product = Product::FindorFail($productId);
         $user = $order->user;
 
-        $simpleProducts = (new RefinementFactory($productId, $data))->getRefinementClass()->getProducts();
+        $simpleProducts = (new RefinementFactory($product, $data))->getRefinementClass()->getProducts();
 
 //        dd($order->orderproducts()->get());
 
@@ -126,8 +115,7 @@ class OrderproductController extends Controller
                 $orderproduct->attachExtraAttributes($data['extraAttribute']);
 
                 if(!isset($this->data["withoutBon"]) || !$this->data["withoutBon"]) {
-                    $orderproduct->applyOrderBons($user);
-//                    $this->applyOrderBons($orderproduct, $user);
+                    $orderproduct->applyBons($user);
                 }
 
                 $this->applyOrderGifts($order, $orderproduct, $productItem);

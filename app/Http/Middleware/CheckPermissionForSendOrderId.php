@@ -40,21 +40,21 @@ class CheckPermissionForSendOrderId
      */
     public function handle(Request $request, Closure $next, $guard = null)
     {
-       /*$this->resetOrders();
+//       $this->resetOrders();
 
         $user = $request->user();
 
-        $sampleData = $this->getSmapleData('simple1', $user, $request); // simple product
-        $sampleData = $this->getSmapleData('simple2', $user, $request);// 270 is gift of 155
+//        $sampleData = $this->getSmapleData('simple1', $user, $request); // simple product
+//        $sampleData = $this->getSmapleData('simple2', $user, $request);// 270 is gift of 155
         $sampleData = $this->getSmapleData('simple3', $user, $request);// 157 is childe of 155 and gift of 155 is 270
-        $sampleData = $this->getSmapleData('selectable', $user, $request);
-        $sampleData = $this->getSmapleData('configurable', $user, $request);
-        $request->offsetSet('order_id', $sampleData['orderId']);
+//        $sampleData = $this->getSmapleData('selectable', $user, $request);
+//        $sampleData = $this->getSmapleData('configurable', $user, $request);
+//        $request->offsetSet('order_id', $sampleData['orderId']);
         $request->offsetSet('product_id', $sampleData['productId']);
         $request->offsetSet('products', $sampleData['data']['products']);
         $request->offsetSet('attribute', $sampleData['data']['attribute']);
         $request->offsetSet('extraAttribute', $sampleData['data']['extraAttribute']);
-        $request->offsetSet('withoutBon', false);*/
+        $request->offsetSet('withoutBon', false);
 
         /**
          * Initiating an order for the user
@@ -163,13 +163,13 @@ class CheckPermissionForSendOrderId
                     'productId' => 240,
                     'data' => [
                         'products' => [
-//                            241,
-//                                247,
+                            241,
+                                247,
                             219,
                             220,
                             258,
 
-//                                248,
+                                248,
                             259,
                             260
                         ],

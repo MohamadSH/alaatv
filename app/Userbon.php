@@ -128,7 +128,7 @@ class Userbon extends Model
     public function void()
     {
         $remainBonNumber = $this->totalNumber - $this->usedNumber;
-        $this->usedNumber = $this->usedNumber + $remainBonNumber;
+        $this->usedNumber = $this->totalNumber;
         $this->userbonstatus_id = Config::get("constants.USERBON_STATUS_USED");
         $this->update();
         return $remainBonNumber;

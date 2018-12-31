@@ -9,6 +9,7 @@
 namespace App\Classes\OrderProduct\RefinementProduct;
 
 use App\Product;
+use Exception;
 
 class RefinementSelectable implements RefinementInterface
 {
@@ -25,23 +26,9 @@ class RefinementSelectable implements RefinementInterface
     }
 
     public function getProducts() {
-        $selectedProductsItems = Product::whereIn('id', $this->selectedProductsIds)->get();
+        $selectedProductsItems = Product::whereIn('id', $this->selectedProductsIds)->enable()->get();
 
-        if( count($this->selectedProductsIds) !== count($selectedProductsItems) ) {
-            throw new Exception('produc ids not valid!');
-        }
-
-        foreach ($selectedProductsItems as $key => $productItem) {
-            if (!$productItem->enable) {
-                continue;
-            }
-            if ($productItem->hasParents()) {
-                if (in_array($productItem->parents->first()->id, $this->selectedProductsIds)) {
-                    $selectedProductsItems->forget($key);
-                    $selectedProductsItems = $this->removeChildren($selectedProductsItems, $productItem);
-                }
-            }
-        }
+        $selectedProductsItems->keepOnlyParents();
 
         return $selectedProductsItems;
     }
