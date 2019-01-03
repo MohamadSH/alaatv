@@ -13,7 +13,7 @@
             'widgetActionLink' => $lesson->url,
             'widgetTitle'      => $lesson->shortName,
             'widgetPic'        => (($lesson->photo) && strlen($lesson->photo)>0 ? $lesson->photo."?w=253&h=142" : 'https://via.placeholder.com/235x142'),
-            'widgetAuthor'     => $lesson->author,
+            'widgetAuthor'     => optional($lesson->author),
             'widgetLink'       => $lesson->url,
             'widgetCount'      => $lesson->contents_count,
             'widgetScroll'     => 1

@@ -1,6 +1,7 @@
 var Alaasearch = function () {
 
     var videoAjaxLock = 0;
+    var setAjaxLock = 0;
     function makeWidgetFromJsonResponse(data) {
 
         // console.log(data);
@@ -99,7 +100,7 @@ var Alaasearch = function () {
                 contentType: "application/json; charset=utf-8",
                 statusCode: {
                     200:function (response) {
-                        // console.log(response.result[type]);
+                        console.log("type:"+type);
                         addContentToOwl(owl,response.result[type].data);
                         // responseMessage = response.responseText;
                         callback(response.result[type].next_page_url);
@@ -126,12 +127,18 @@ var Alaasearch = function () {
         switch (type) {
             case 'video':
                 videoAjaxLock = 1;
+                break;
+            case 'set':
+                setAjaxLock = 1;
         }
     }
     function unLockAjax(type) {
         switch (type) {
             case 'video':
                 videoAjaxLock = 0;
+                break;
+            case 'set':
+                setAjaxLock = 0;
         }
     }
 
@@ -157,8 +164,24 @@ var Alaasearch = function () {
 
                 load(event, nextPageUrl.val(), owl, owlType,function (newPageUrl) {
                     // console.log("PRE:" + nextPageUrl.val());
-                    nextPageUrl.val(newPageUrl);
+                    nextPageUrl.val(decodeURI(newPageUrl));
                     // console.log("NEW:" + nextPageUrl.val());
+                    unLockAjax(owlType);
+                });
+            }
+        });
+    }
+    function loadAjaxSet() {
+        $('#set-carousel.owl-carousel').on('change.owl.carousel', function(event) {
+            var owlType = "set";
+            var nextPageUrl = $('#owl--js-var-next-page-set-url');
+            var owl = $(this);
+            console.log("nextPageUrl:"+nextPageUrl.val());
+            if( !setAjaxLock ) {
+                load(event, nextPageUrl.val(), owl, owlType,function (newPageUrl) {
+                     console.log("PRE:" + nextPageUrl.val());
+                    nextPageUrl.val(decodeURI(newPageUrl));
+                     console.log("NEW:" + nextPageUrl.val());
                     unLockAjax(owlType);
                 });
             }
@@ -169,6 +192,7 @@ var Alaasearch = function () {
     }
     function loadAjaxContent() {
         loadAjaxVideo();
+        loadAjaxSet();
     }
 
 

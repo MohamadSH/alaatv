@@ -69,7 +69,7 @@ class ContentSearch extends SearchAbstract
                         //            dump("in cache");
                         $query = $this->applyDecoratorsFromFiltersArray($filters, $this->model->newQuery());
 
-                        return $this->getResults($query);
+                        return $this->getResults($query)->appends($filters);
                     });
     }
 
@@ -98,15 +98,4 @@ class ContentSearch extends SearchAbstract
             $decorator->setTagManager(new ContentTagManagerViaApi());
         return $decorator;
     }
-
-    /**
-     * @param array $params
-     * @return array
-     */
-    private function getFromParams(array $params, $index): array
-    {
-        return (array)array_get(array_merge(...$params), $index);
-    }
-
-
 }

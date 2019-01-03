@@ -11,7 +11,7 @@
         'widgetActionLink' => action("ContentController@show" , $content),
         'widgetTitle'      => $content->name ?? $content->name ,
         'widgetPic'        => $content->thumbnail ??  $content->thumbnail,
-        'widgetAuthor'     => $content->author,
+        'widgetAuthor'     => optional($content->author),
         'widgetLink'       => action("ContentController@show" , $content),
         'widgetCount'      => 0,
         'widgetScroll'     => 0

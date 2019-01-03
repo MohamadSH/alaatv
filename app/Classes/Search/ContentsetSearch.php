@@ -31,6 +31,7 @@ class ContentsetSearch extends SearchAbstract
     protected function apply(array $filters)
     {
         $this->pageNum = $this->setPageNum($filters);
+//dd($this->pageNum);
         $key = $this->makeCacheKey($filters);
         return Cache::tags([
                                'contentset',
@@ -38,7 +39,7 @@ class ContentsetSearch extends SearchAbstract
                            ])
                     ->remember($key, $this->cacheTime, function () use ($filters) {
                         $query = $this->applyDecoratorsFromFiltersArray($filters, $this->model->newQuery());
-                        return $this->getResults($query);
+                        return $this->getResults($query)->appends($filters);
                     });
     }
 

@@ -150,7 +150,6 @@ class ContentController extends Controller
         $contentTypes = array_filter($request->get('contentType',Contenttype::List()));
         $tags = (array)$request->get('tags');
         $filters = $request->all();
-//        dd($filters);
 
         $result = $this->contentSearch->get(compact('filters','contentTypes'));
         $result->offsetSet('set', $this->setSearch->get($filters));

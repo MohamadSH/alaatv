@@ -41,7 +41,7 @@ abstract class SearchAbstract
     }
 
     public function get(array ...$params){
-        return $this->apply($params);
+        return $this->apply($params[0]);
     }
 
     abstract protected function apply(array $filters);
@@ -126,5 +126,14 @@ abstract class SearchAbstract
     {
         return isset($filters[$this->pageName]) ? $filters[$this->pageName] : SearchAbstract::DEFAULT_PAGE_NUMBER;
 
+    }
+
+    /**
+     * @param array $params
+     * @return array
+     */
+    protected function getFromParams(array $params, $index): array
+    {
+        return (array)array_get(array_merge(...$params), $index);
     }
 }

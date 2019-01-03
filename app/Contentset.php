@@ -172,9 +172,9 @@ class Contentset extends Model implements Taggable
     {
 //        return action("ContentsetController@show",$this);
         $contentId = optional($this->getLastContent())->id;
-        return $contentId ?? action("ContentController@show", $contentId);
+        return isset($contentId) ? action("ContentController@show", $contentId) : "";
     }
-    public function getAuthorAttribute($value): User
+    public function getAuthorAttribute($value): ?User
     {
 //        return action("ContentsetController@show",$this);
         return optional($this->getLastContent())->author;
