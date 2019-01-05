@@ -46,9 +46,9 @@ class CheckPermissionForSendOrderId
 
 //        $sampleData = $this->getSmapleData('simple1', $user, $request); // simple product
 //        $sampleData = $this->getSmapleData('simple2', $user, $request);// 270 is gift of 155
-        $sampleData = $this->getSmapleData('simple3', $user, $request);// 157 is childe of 155 and gift of 155 is 270
+//        $sampleData = $this->getSmapleData('simple3', $user, $request);// 157 is childe of 155 and gift of 155 is 270
 //        $sampleData = $this->getSmapleData('selectable', $user, $request);
-//        $sampleData = $this->getSmapleData('configurable', $user, $request);
+        $sampleData = $this->getSmapleData('configurable', $user, $request);
 //        $request->offsetSet('order_id', $sampleData['orderId']);
         $request->offsetSet('product_id', $sampleData['productId']);
         $request->offsetSet('products', $sampleData['data']['products']);
@@ -122,7 +122,7 @@ class CheckPermissionForSendOrderId
             case 'simple2':
                 /**
                  * simple product
-                 * hase bon
+                 * has bon
                  * 270 is gift of 155
                  * don't have extraAttribute
                  */
@@ -138,7 +138,7 @@ class CheckPermissionForSendOrderId
             case 'simple3':
                 /**
                  * simple product
-                 * 157 is childe of 155 and gift of 155 is 270
+                 * 157 is child of 155 and gift of 155 is 270
                  * with bon from father
                  */
                 return [
@@ -163,15 +163,16 @@ class CheckPermissionForSendOrderId
                     'productId' => 240,
                     'data' => [
                         'products' => [
-                            241,
-                                247,
-                            219,
-                            220,
-                            258,
+//                            241,
+//
+//                                247,
+//                                    219,
+//                                    220,
+//                                    258,
 
-                                248,
-                            259,
-                            260
+//                                248,
+                                    259,
+                                    260
                         ],
                         'attribute' => [1,3,9,49,53],
                         'extraAttribute' => [60, 21]

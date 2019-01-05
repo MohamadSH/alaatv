@@ -26,7 +26,7 @@ class RefinementSelectable implements RefinementInterface
     }
 
     public function getProducts() {
-        $selectedProductsItems = Product::whereIn('id', $this->selectedProductsIds)->enable()->get();
+        $selectedProductsItems = Product::whereIn('id', $this->selectedProductsIds)->get();
 
         $selectedProductsItems->keepOnlyParents();
 

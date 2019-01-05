@@ -34,23 +34,18 @@ class OrderProductStoreRequest extends FormRequest
      */
     public function rules()
     {
+        $rules = [
+            'product_id'     => 'required|exists:products,id|activeProduct',
+            'products.*'       => 'sometimes|exists:products,id|activeProduct',
+            'attribute'      => 'sometimes|exists:attributevalues,id',
+            'extraAttribute' => 'sometimes|exists:attributevalues,id',
+            'withoutBon'     => 'sometimes|boolean'
+        ];
         if($this->hasePermition) {
-            return [
-                'order_id'       => 'required|exists:orders,id',
-                'product_id'     => 'required|exists:products,id',
-                'products'       => 'sometimes|exists:products,id',
-                'attribute'      => 'sometimes|exists:attributevalues,id',
-                'extraAttribute' => 'sometimes|exists:attributevalues,id',
-                'withoutBon'     => 'sometimes|boolean'
-            ];
-        } else {
-            return [
-                'product_id'     => 'required|exists:products,id',
-                'products'       => 'sometimes|exists:products,id',
-                'attribute'      => 'sometimes|exists:attributevalues,id',
-                'extraAttribute' => 'sometimes|exists:attributevalues,id',
-                'withoutBon'     => 'sometimes|boolean'
-            ];
+            $rules['order_id'] = 'required|exists:orders,id';
+            $rules['product_id'] = 'required|exists:products,id';
+            $rules['products.*'] = 'sometimes|exists:products,id';
         }
+        return $rules;
     }
 }

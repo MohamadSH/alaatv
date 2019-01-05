@@ -54,6 +54,9 @@ class AppServiceProvider extends ServiceProvider
 
         });
 
+        Validator::extend('activeProduct', function ($attribute, $value, $parameters, $validator) {
+            return Product::findOrFail($value)->active;
+        });
     }
 
     /**

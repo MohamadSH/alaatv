@@ -29,6 +29,7 @@ class CheckHasOpenOrder
      *
      * @param  \Illuminate\Http\Request $request
      * @param  \Closure $next
+     * @param null $guard
      * @return mixed
      */
     public function handle(Request $request, Closure $next, $guard = null)
