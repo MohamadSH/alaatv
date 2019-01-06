@@ -143,6 +143,7 @@ class OrderproductController extends Controller
             $orderproduct = new Orderproduct();
             $orderproduct->product_id = $productItem->id;
             $orderproduct->order_id = $order->id;
+            $orderproduct->orderproducttype_id = config("constants.ORDER_PRODUCT_TYPE_DEFAULT");
             if ($orderproduct->save()) {
 
                 $productItem->decreaseProductAmountWithValue(1);
