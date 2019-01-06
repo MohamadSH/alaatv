@@ -71,5 +71,6 @@ class Kernel extends HttpKernel
         'CheckPermissionForSendOrderId' => \App\Http\Middleware\CheckPermissionForSendOrderId::class,
         'CheckHasOpenOrder' => \App\Http\Middleware\CheckHasOpenOrder::class,
         'AddCookieToCart' => \App\Http\Middleware\AddCookieToCart::class,
+        'checkPermissionForSendExtraAttributesCost' => \App\Http\Middleware\checkPermissionForSendExtraAttributesCost::class,
     ];
 }

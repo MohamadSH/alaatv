@@ -494,23 +494,6 @@ class Orderproduct extends Model
     }
 
     /**
-     * @param $extraAttributesId
-     */
-    public function attachExtraAttributes($extraAttributesId): void
-    {
-        $grandParent = $this->product->getGrandParent();
-        if ($grandParent) {
-            $attributesValue = $grandParent->getAttributesValueByIds($extraAttributesId);
-            foreach ($attributesValue as $value) {
-                $this->attributevalues()->attach(
-                    $value->id,
-                    ["extraCost" => $value->pivot->extraCost]
-                );
-            }
-        }
-    }
-
-    /**
      * @param $userBons
      * @param Bon $bon
      */

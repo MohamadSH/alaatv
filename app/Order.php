@@ -5,6 +5,7 @@ namespace App;
 use App\Classes\Checkout\Alaa\OrderCheckout;
 use App\Classes\Checkout\Alaa\ReObtainOrderFromRecords;
 use App\Collection\OrderCollections;
+use App\Collection\ProductCollection;
 use App\Traits\DateTrait;
 use App\Traits\Helper;
 use App\Traits\ProductCommon;
@@ -839,13 +840,17 @@ class Order extends Model
         }
     }
 
-    public function checkProductsExistInOrderProducts($products) {
-        $notDuplicateProduct = [];
+    /**
+     * @param $products
+     * @return ProductCollection
+     */
+    public function checkProductsExistInOrderProducts($products): ProductCollection {
+        $notDuplicateProduct = new ProductCollection();
         foreach ($products as $product) {
             if($this->hasTheseProducts([$product->id])) {
                 // can increase amount of product
             } else {
-                $notDuplicateProduct[] = $product;
+                $notDuplicateProduct->push($product);
             }
         }
         return $notDuplicateProduct;

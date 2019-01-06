@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Attribute;
+use App\Attributevalue;
 use App\Bon;
 use App\Checkoutstatus;
 use App\Http\Requests\InsertUserBonRequest;
@@ -42,7 +43,8 @@ class OrderproductController extends Controller
         ]);
         $this->middleware([
             'CheckHasOpenOrder',
-            'CheckPermissionForSendOrderId'
+            'CheckPermissionForSendOrderId',
+            'checkPermissionForSendExtraAttributesCost'
         ], [
             'only' => ['store']
         ]);
@@ -104,6 +106,19 @@ class OrderproductController extends Controller
         }
     }
 
+    /**
+     * @param array $extraAttributes
+     * @param Orderproduct $orderProduct
+     */
+    public function attachExtraAttributes(array $extraAttributes, Orderproduct $orderProduct): void
+    {
+        foreach ($extraAttributes as $value) {
+            $orderProduct->attributevalues()->attach(
+                $value['id'],
+                ["extraCost" => $value['cost']]
+            );
+        }
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -140,19 +155,19 @@ class OrderproductController extends Controller
          * save orderproduct and attach extraAttribute
          */
         foreach ($notDuplicateProduct as $key => $productItem) {
-            $orderproduct = new Orderproduct();
-            $orderproduct->product_id = $productItem->id;
-            $orderproduct->order_id = $order->id;
-            $orderproduct->orderproducttype_id = config("constants.ORDER_PRODUCT_TYPE_DEFAULT");
-            if ($orderproduct->save()) {
+            $orderProduct = new Orderproduct();
+            $orderProduct->product_id = $productItem->id;
+            $orderProduct->order_id = $order->id;
+            $orderProduct->orderproducttype_id = config("constants.ORDER_PRODUCT_TYPE_DEFAULT");
+            if ($orderProduct->save()) {
 
                 $productItem->decreaseProductAmountWithValue(1);
 
-                $orderproduct->attachExtraAttributes($data['extraAttribute']);
+                $this->attachExtraAttributes($data['extraAttribute'], $orderProduct);
 
-                $this->applyOrderProductBon($data, $user, $orderproduct);
+                $this->applyOrderProductBon($data, $user, $orderProduct);
 
-                $this->applyOrderGifts($order, $orderproduct, $productItem);
+                $this->applyOrderGifts($order, $orderProduct, $productItem);
             }
         }
 

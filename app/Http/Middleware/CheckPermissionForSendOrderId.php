@@ -56,13 +56,9 @@ class CheckPermissionForSendOrderId
         $request->offsetSet('extraAttribute', $sampleData['data']['extraAttribute']);
         $request->offsetSet('withoutBon', false);
 
-        /**
-         * Initiating an order for the user
-         * at the moment he opens the website
-         */
         if (Auth::guard($guard)->check()) {
             if($request->has('order_id')) {
-                if($this->user->can(config("constants.INSERT_ORDERPRODUCT_ACCESS"))) {
+                if(!$this->user->can(config("constants.INSERT_ORDERPRODUCT_ACCESS"))) {
                     return response()->json([
                         'error' => 'Forbidden'
                     ], 403);
@@ -116,7 +112,16 @@ class CheckPermissionForSendOrderId
                     'data' => [
                         'products' => [241, 247],
                         'attribute' => [1,3,9,49,53],
-                        'extraAttribute' => [60, 21]
+                        'extraAttribute' => [
+                            [
+                                'id'=>60,
+                                'cost'=>600
+                            ],
+                            [
+                                'id'=>21,
+                                'cost'=>700
+                            ]
+                        ]
                     ]
                 ];
             case 'simple2':
@@ -132,7 +137,16 @@ class CheckPermissionForSendOrderId
                     'data' => [
                         'products' => [],
                         'attribute' => [],
-                        'extraAttribute' => [60, 21]
+                        'extraAttribute' => [
+                            [
+                                'id'=>60,
+                                'cost'=>600
+                            ],
+                            [
+                                'id'=>21,
+                                'cost'=>700
+                            ]
+                        ]
                     ]
                 ];
             case 'simple3':
@@ -147,7 +161,16 @@ class CheckPermissionForSendOrderId
                     'data' => [
                         'products' => [241, 247],
                         'attribute' => [1,3,9,49,53],
-                        'extraAttribute' => [60, 21]
+                        'extraAttribute' => [
+                            [
+                                'id'=>60,
+                                'cost'=>600
+                            ],
+                            [
+                                'id'=>21,
+                                'cost'=>700
+                            ]
+                        ]
                     ]
                 ];
             case 'selectable':
@@ -175,7 +198,16 @@ class CheckPermissionForSendOrderId
                                     260
                         ],
                         'attribute' => [1,3,9,49,53],
-                        'extraAttribute' => [60, 21]
+                        'extraAttribute' => [
+                            [
+                                'id'=>60,
+                                'cost'=>600
+                            ],
+                            [
+                                'id'=>21,
+                                'cost'=>700
+                            ]
+                        ]
                     ]
                 ];
             case 'configurable':
@@ -191,7 +223,16 @@ class CheckPermissionForSendOrderId
                     'data' => [
                         'products' => [241, 247],
                         'attribute' => [1,3,9,49,53], // => 156
-                        'extraAttribute' => [60, 21]
+                        'extraAttribute' => [
+                            [
+                                'id'=>60,
+                                'cost'=>600
+                            ],
+                            [
+                                'id'=>21,
+                                'cost'=>700
+                            ]
+                        ]
                     ]
                 ];
             default:
@@ -206,7 +247,16 @@ class CheckPermissionForSendOrderId
                     'data' => [
                         'products' => [241, 247],
                         'attribute' => [1,3,9,49,53],
-                        'extraAttribute' => [60, 21]
+                        'extraAttribute' => [
+                            [
+                                'id'=>60,
+                                'cost'=>600
+                            ],
+                            [
+                                'id'=>21,
+                                'cost'=>700
+                            ]
+                        ]
                     ]
                 ];
         }
