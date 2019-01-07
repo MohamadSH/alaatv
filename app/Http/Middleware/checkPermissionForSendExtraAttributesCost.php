@@ -1,0 +1,90 @@
+<?php
+
+namespace App\Http\Middleware;
+
+use App\Http\Controllers\OrderController;
+use App\Product;
+use Closure;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+
+class checkPermissionForSendExtraAttributesCost
+{
+    /**
+     * @var OrderController
+     */
+    private $orderController;
+    private $user;
+
+    /**
+     * OrderCheck constructor.
+     * @param Request $request
+     * @param OrderController $controller
+     */
+    public function __construct(Request $request, OrderController $controller)
+    {
+        $this->orderController = $controller;
+        $this->user = $request->user();
+    }
+
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Closure $next
+     * @param null $guard
+     * @return mixed
+     */
+    public function handle(Request $request, Closure $next, $guard = null)
+    {
+        if (Auth::guard($guard)->check()) {
+            if ($request->has('extraAttribute')) {
+                if (!$this->user->can(config("constants.ATTACH_EXTRA_ATTRIBUTE_ACCESS"))) {
+
+                    $productId = $request->get('product_id');
+                    $product = Product::findOrFail($productId);
+
+                    $attributesValues = $this->getAttributesValuesFromProduct($request, $product);
+
+                    $this->syncExtraAttributesCost($request, $attributesValues);
+                }
+            }
+        } else {
+            return response()->json([
+                'error' => 'Unauthenticated'
+            ], Response::HTTP_UNAUTHORIZED);
+        }
+        return $next($request);
+    }
+
+    /**
+     * @param Request $request
+     * @param array $attributesValues
+     */
+    public function syncExtraAttributesCost(Request $request, $attributesValues)
+    {
+        $extraAttributes = $request->get('extraAttribute');
+        foreach ($attributesValues as $key => $attributesValue) {
+            foreach ($extraAttributes as $key1 => $extraAttribute) {
+                if ($extraAttribute['id'] == $attributesValue['id']) {
+                    $extraAttributes[$key1]['cost'] = $attributesValue->pivot->extraCost;
+                }
+            }
+        }
+        $request->offsetSet("extraAttribute", $extraAttributes);
+    }
+
+    /**
+     * @param Request $request
+     * @param Product $product
+     * @return mixed
+     */
+    public function getAttributesValuesFromProduct(Request $request, Product $product)
+    {
+        $extraAttributes = $request->get('extraAttribute');
+        $extraAttributesId = array_column($extraAttributes, 'id');
+        $attributesValues = $product->getAttributesValueByIds($extraAttributesId);
+        return $attributesValues;
+    }
+}

@@ -42,7 +42,7 @@
                                                         <a href="{{ route('image', ['category'=>'4','w'=>'1400' , 'h'=>'2000' ,  'filename' =>  $samplePhoto->file ]) }}"
                                                            target="_blank"
                                                            class="m-nav-grid__item">
-                                                            <img src="{{ route('image', ['category'=>'4','w'=>'100' , 'h'=>'135' ,  'filename' =>  $samplePhoto->file ]) }}"
+                                                            <img src="{{ route('image', ['category'=>'4','w'=>'100' , 'h'=>'135' ,  'filename' =>  $samplePhoto->file ])  }}"
                                                                  alt="@if(isset($samplePhoto->title[0])) {{$samplePhoto->title}} @else نمونه عکس {{$product->name}} @endif">
                                                             {{--<span class="m-nav-grid__text">{{ isset($samplePhoto->title[0]) ? $samplePhoto->title : '--' }}</span>
                                                             <br>--}}
@@ -184,7 +184,7 @@
                                                         <span id = "a_product-discount"></span>
                                                     </h5>
 
-                                                    <a href="#" class="btn btn-primary btn-lg m-btn  m-btn m-btn--icon">
+                                                    <a href="#" class="btn btn-primary btn-lg m-btn  m-btn m-btn--icon btnAddToCart">
                                                         <span>
                                                             <i class="flaticon-shopping-basket"></i>
                                                             <span>افزودن به سبد خرید</span>
@@ -280,7 +280,7 @@
                         </div>
                         <div class="m-portlet__head-tools">
                             <div class="btn-group">
-                                <button type="button" class="btn btn-primary  m-btn m-btn--icon m-btn--wide m-btn--md">
+                                <button type="button" class="btn btn-primary  m-btn m-btn--icon m-btn--wide m-btn--md btnAddToCart">
                                     <span>
                                         <i class="flaticon-shopping-basket"></i>
                                         <span>افزودن به سبد خرید</span>
@@ -312,4 +312,66 @@
             <!--end::Portlet-->
         </div>
     </div>
+
+
+    {!! Form::open(['route' => 'orderproduct.store']) !!}
+
+    <div class="form-group">
+        {!! Form::label('order_id', 'Your Name') !!}
+        {!! Form::text('order_id', 76, ['class' => 'form-control']) !!}
+    </div>
+
+    <div class="form-group">
+        {!! Form::label('email', 'E-mail Address') !!}
+        {!! Form::text('email', null, ['class' => 'form-control']) !!}
+    </div>
+
+    <div class="form-group">
+        {!! Form::textarea('msg', null, ['class' => 'form-control']) !!}
+    </div>
+
+    {!! Form::submit('Submit', ['class' => 'btn btn-info']) !!}
+
+    {!! Form::close() !!}
+
+
+    <div class="panel panel-success">
+        <div class="panel-heading">پنل ساخت کد تخفیف</div>
+        <div class="panel-body">
+
+
+            <form method="post" action="{{ action('couponController@create') }}" accept-charset="UTF-8">
+
+            <select class="js-selectProduct-single" name="state" style="width: 100%;">
+                <option value="AL">Alabama</option>
+                <option value="WY">Wyoming</option>
+            </select>
+            <br>
+                <input type="submit" value="ساخت کد" class="btn btn-info" >
+            <hr>
+
+            <div class="alert alert-success" role="alert">کد تخفیف ساخته شده: <strong id="createdCoupon">{{ $createdCoupon }}</strong></div>
+            <div class="alert alert-danger" role="alert">مشکلی در ساخت کد تخفیف رخ داده است.</div>
+
+
+            </form>
+
+        </div>
+    </div>
+
+@endsection
+@section("page-js")
+    {{--<script src="{{ mix('/js/product-show.js') }}"></script>--}}
+    <script src="{{ asset('/acm/product-show-v13.js') }}"></script>
+    <script src="{{ asset('/acm/page-product-show.js') }}"></script>
+    <script src="{{ asset('/acm/page-product-saveCookie.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            $('.js-selectProduct-single').select2({
+                placeholder: 'یک محصول را انتخاب کنید:'
+            });
+        });
+    </script>
+
+
 @endsection

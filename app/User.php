@@ -233,6 +233,10 @@ use Schema;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereEmailVerifiedAt($value)
+ * @property-read \App\Collection\OrderproductCollection|\App\Orderproduct[] $closedorderproducts
+ * @property-read mixed $number_of_products_in_basket
+ * @property-read mixed $short_name
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User active()
  */
 class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, MustVerifyEmail
 {

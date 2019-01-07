@@ -29,16 +29,17 @@ class ComposerServiceProvider extends ServiceProvider
         });
 
 
-        View::composer('partials.header1','App\Http\ViewComposers\HeaderComposer');
+        View::composer('partials.header1', 'App\Http\ViewComposers\HeaderComposer');
 
         /**
          *  lessons
          */
         View::composer([
-                           'pages.dashboard1',
-                           'partials.sidebar',
-                       ], function ($view) {
+            'pages.dashboard1',
+            'partials.sidebar',
+        ], function ($view) {
             $sections = (new webBlockCollectionFormatter(new webSetCollectionFormatter()))->format(Block::getBlocks());
+//            dd($sections);
             $view->with(compact('sections'));
         });
         view()->share('bonName', Bon::getAlaaBonDisplayName());

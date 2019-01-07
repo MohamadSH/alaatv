@@ -97,6 +97,8 @@ use Illuminate\Support\{Collection, Facades\Cache, Facades\Config};
  * @mixin \Eloquent
  * @property string|null $page_view
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Product wherePageView($value)
+ * @property string|null $redirectUrl آدرسی که صفحه محصول به آن به صورت همیشگی ریدایرکت می شود
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereRedirectUrl($value)
  */
 class Product extends Model implements Advertisable, Taggable, SeoInterface, FavorableInterface
 {
@@ -175,6 +177,10 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
         'isFree',
         'specialDescription',
         'redirectUrl',
+    ];
+
+    protected $appends = [
+        'active'
     ];
 
     /**
@@ -1783,5 +1789,55 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
         }
 
         return $photos;
+    }
+
+    /** edit amount of product
+     * @param int $value
+     */
+    public function decreaseProductAmountWithValue($value): void
+    {
+        if (isset($this->amount) && $this->amount>0) {
+            $this->amount = $this->amount - 1;
+            $this->update();
+        }
+    }
+
+    public function getActiveAttribute() {
+        if($this->validSince!=null) {
+            $now = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran');
+            if(Carbon::parse($this->validSince)->lte($now) && Carbon::parse($this->validUntil)->gte($now)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * @param string $bonName
+     * @return bool
+     */
+    public function canApplyBon(string $bonName) {
+        return (
+            !(
+                $this->isFree ||
+                ($this->hasParents() && $this->parents()->first()->isFree)
+            )
+            &&
+            (
+                $this->basePrice != 0
+            )
+            &&
+            $this->getTotalBons($bonName)->isNotEmpty()
+        );
+    }
+
+    /**
+     * @param array $attributesId
+     * @return mixed
+     */
+    public function getAttributesValueByIds(array $attributesId) {
+        return $this->attributevalues->whereIn("id", $attributesId);
     }
 }

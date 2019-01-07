@@ -54,6 +54,9 @@ class AppServiceProvider extends ServiceProvider
 
         });
 
+        Validator::extend('activeProduct', function ($attribute, $value, $parameters, $validator) {
+            return Product::findOrFail($value)->active;
+        });
     }
 
     /**
@@ -66,7 +69,6 @@ class AppServiceProvider extends ServiceProvider
         if ($this->app->environment() !== 'production') {
             $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
             $this->app->register(TelescopeServiceProvider::class);
-
         }
 
     }
