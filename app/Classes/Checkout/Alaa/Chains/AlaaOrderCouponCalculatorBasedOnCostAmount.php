@@ -9,7 +9,7 @@
 namespace App\Classes\Checkout\Alaa\Chains;
 
 
-use App\Classes\Abstracts\OrderCouponCalculatorBasedOnCostAmount;
+use App\Classes\Abstracts\Checkout\OrderCouponCalculatorBasedOnCostAmount;
 
 class AlaaOrderCouponCalculatorBasedOnCostAmount extends OrderCouponCalculatorBasedOnCostAmount
 {

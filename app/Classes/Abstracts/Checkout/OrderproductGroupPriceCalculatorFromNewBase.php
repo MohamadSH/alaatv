@@ -6,10 +6,8 @@
  * Time: 4:09 PM
  */
 
-namespace App\Classes\Abstracts;
+namespace App\Classes\Abstracts\Checkout;
 
-
-use App\Classes\Abstracts\checkout\CheckoutProcessor;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Exception;
 

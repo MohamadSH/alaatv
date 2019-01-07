@@ -2,11 +2,13 @@
 
 namespace App;
 
+use App\Collection\ProductCollection;
 use App\Traits\DateTrait;
 use App\Traits\Helper;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Collection;
 
 /**
  * App\Coupon
@@ -107,6 +109,12 @@ class Coupon extends Model
         'discounttype_id',
     ];
 
+    const COUPON_VALIDATION_STATUS_OK = 0;
+    const COUPON_VALIDATION_STATUS_DISABLED = 1;
+    const COUPON_VALIDATION_STATUS_USAGE_TIME_NOT_BEGUN = 2;
+    const COUPON_VALIDATION_STATUS_EXPIRED = 3;
+    const COUPON_VALIDATION_STATUS_USAGE_LIMIT_FINISHED = 4;
+
     /*
     |--------------------------------------------------------------------------
     | Relations
@@ -193,38 +201,99 @@ class Coupon extends Model
     /**
      * Validates a coupon
      *
-     * @return array
+     * @return int
      */
     public function validateCoupon()
     {
-        $message = "";
-        $validationCode = 0;
-        if (!$this->enable) {
-            $message = "کپن وارد شده غیر فعال می باشد";
-            $validationCode = 1;
-        } else if (isset($this->validSince) && Carbon::now() < $this->validSince) {
-            $message = "تاریخ استفاده از کپن آغاز نشده است";
-            $validationCode = 2;
-        } else if (isset($this->validUntil) && Carbon::now() > $this->validUntil) {
-            $message = "تاریخ استفاده از کپن به پایان رسیده است";
-            $validationCode = 3;
-        } else if (isset($this->usageLimit) && $this->usageNumber >= $this->usageLimit) {
-            $message = "تعداد مجاز استفاده از کپن به پایان رسیده است";
-            $validationCode = 4;
+
+        $validationStatus = Coupon::COUPON_VALIDATION_STATUS_OK;
+        if (!$this->isEnable()) {
+            $validationStatus = Coupon::COUPON_VALIDATION_STATUS_DISABLED;
+        }elseif(!$this->hasPassedSinceTime()) {
+            $validationStatus = Coupon::COUPON_VALIDATION_STATUS_USAGE_TIME_NOT_BEGUN;
+        }elseif(!$this->hasTimeToUntilTime()) {
+            $validationStatus = Coupon::COUPON_VALIDATION_STATUS_EXPIRED;
+        }elseif(!$this->hasTotalNumberFinished()) {
+            $validationStatus = Coupon::COUPON_VALIDATION_STATUS_USAGE_LIMIT_FINISHED;
         }
 
+        return $validationStatus;
+    }
 
-        return [
-            $message,
-            $validationCode,
-        ];
+    /**
+     * Determines whether this coupon is enabled or not
+     *
+     * @return bool
+     */
+    public function isEnable():bool
+    {
+        if($this->enable)
+            return true ;
+        else
+            return false;
+    }
+
+    /**
+     * Determines whether this coupon usage time has started or not
+     *
+     *  @return bool
+     */
+    public function hasPassedSinceTime():bool
+    {
+        if( !isset($this->validSince) || Carbon::now()->setTimezone("Asia/Tehran") >= $this->validSince)
+            return true;
+        else
+            return false;
+    }
+
+    /**
+     * Determines whether this coupon usage time has ended or not
+     *
+     *  @return bool
+     */
+    public function hasTimeToUntilTime():bool
+    {
+        if( !isset($this->validUntil) || Carbon::now()->setTimezone("Asia/Tehran") <= $this->validUntil)
+            return true;
+        else
+            return false;
+    }
+
+    /**
+     * Determines whether this coupon total number has finished or not
+     *
+     *  @return bool
+     */
+    public function hasTotalNumberFinished():bool
+    {
+        if(isset($this->usageLimit) && $this->usageNumber >= $this->usageLimit)
+            return true;
+        else
+            return false ;
     }
 
     public function getCouponTypeAttribute()
     {
-        if(!isset($this->coupontype->id))
+        if(!isset($this->coupontype_id))
             return config("constants.COUPON_TYPE_OVERALL");
         else
-            return $this->coupontype->id;
+            return $this->coupontype_id;
     }
+
+    /**
+     * Determines whether this coupon has the passed product or not
+     *
+     * @param Product $product
+     * @return bool
+     */
+    public function hasProduct(Product $product):bool
+    {
+        $flag = true;
+        if ($this->coupon_type == config("constants.COUPON_TYPE_PARTIAL")) {
+            $couponProducts = $this->products;
+            $flag = $couponProducts->contains($product);
+        }
+        return $flag;
+    }
+
 }

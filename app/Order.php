@@ -4,7 +4,9 @@ namespace App;
 
 use App\Classes\Checkout\Alaa\OrderCheckout;
 use App\Classes\Checkout\Alaa\ReObtainOrderFromRecords;
+use App\Classes\Pricing\Alaa\AlaaInvoiceGenerator;
 use App\Collection\OrderCollections;
+use App\Collection\ProductCollection;
 use App\Traits\DateTrait;
 use App\Traits\Helper;
 use App\Traits\ProductCommon;
@@ -13,6 +15,8 @@ use Carbon\Carbon;
 use Iatstuti\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
+use phpDocumentor\Reflection\DocBlock\Tags\Uses;
 
 /**
  * App\Order
@@ -137,6 +141,10 @@ class Order extends Model
         'customerExtraInfo',
         'checkOutDateTime',
         'completed_at',
+    ];
+
+    protected $appends = [
+        "invoice"
     ];
 
     const  OPEN_ORDER_STATUSES = [
@@ -302,108 +310,14 @@ class Order extends Model
         $priceInfo = $alaaCashierFacade->checkout();
 
         return [
-            "rawCostWithDiscount"    => $priceInfo["totalPriceInfo"]["totalRawPriceWhichHasDiscount"],
-            'rawCostWithoutDiscount' =>  $priceInfo["totalPriceInfo"]["totalRawPriceWhichDoesntHaveDiscount"],
-            "totalCost"              => $priceInfo["totalPriceInfo"]["finalPrice"],
-            "calculatedOrderproducts"=> $priceInfo["orderproductsInfo"]["calculatedOrderproducts"],
+            "sumOfOrderproductsRawCost" => $priceInfo["totalPriceInfo"]["sumOfOrderproductsRawCost"],
+            "rawCostWithDiscount"       => $priceInfo["totalPriceInfo"]["totalRawPriceWhichHasDiscount"],
+            'rawCostWithoutDiscount'    =>  $priceInfo["totalPriceInfo"]["totalRawPriceWhichDoesntHaveDiscount"],
+            "totalCost"                 => $priceInfo["totalPriceInfo"]["finalPrice"],
+            "priceToPay"                => $priceInfo["totalPriceInfo"]["priceToPay"],
+            "amountPaidByWallet"        => $priceInfo["totalPriceInfo"]["amountPaidByWallet"],
+            "calculatedOrderproducts"   => $priceInfo["orderproductsInfo"]["calculatedOrderproducts"],
         ];
-
-        ////////////////////Old Code///////////////////////////////////
-
-        /**
-         * Attention : In obtaining order cost I don't validate coupon
-         * In the other words , if the user has submitted any coupons for this order before, at the time of submitting coupon
-         * we have validated coupon.
-         * By Muhammad Shahrokhi
-         */
-        $totalCostWithoutDiscount = 0;
-        $totalCostWithDiscount = 0;
-        if ($calculateOrderCost) {
-            $orderproducts = $this->normalOrderproducts->sortByDesc("created_at");
-            foreach ($orderproducts as $orderproduct) {
-                if ($calculateOrderproductCost) {
-                    $costArray = $orderproduct->obtainOrderproductCost();
-                    /**
-                     * Updating orderproduct cost with new numbers
-                     */
-                    $orderproduct->fillCostValues($costArray);
-
-                    $orderproduct->update();
-                } else {
-                    $costArray = $orderproduct->obtainOrderproductCost(false);
-                }
-
-                if (isset($costArray["cost"])) {
-                    $orderproductCost = $orderproduct->quantity * ((1 - ($costArray["bonDiscount"] / 100)) * (((1 - ($costArray["productDiscount"] / 100)) * $costArray["cost"]) - $costArray["productDiscountAmount"]));
-                    $orderproductExtraCost = $costArray["extraCost"];
-                    switch ($mode) {
-                        case "DEFAULT" :
-                            if ($this->hasCoupon()) {
-                                if (!isset($this->coupon->coupontype->id) || $this->coupon->coupontype->id == config("constants.COUPON_TYPE_OVERALL")) {
-                                    $totalCostWithDiscount += $orderproductCost;
-                                    $orderproduct->includedInCoupon = 1;
-                                } else {
-                                    $flag = true;
-                                    if (!in_array($this->coupon->id, $orderproduct->product->coupons->pluck('id')
-                                                                                                    ->toArray())) {
-                                        $flag = false;
-                                        $parentsArray = $this->makeParentArray($orderproduct->product);
-                                        foreach ($parentsArray as $parent) {
-                                            if (in_array($this->coupon->id, $parent->coupons->pluck('id')
-                                                                                            ->toArray())) {
-                                                $flag = true;
-                                                break;
-                                            }
-                                        }
-                                    }
-                                    if ($flag) {
-                                        $totalCostWithDiscount += $orderproductCost;
-                                        $orderproduct->includedInCoupon = 1;
-                                    } else {
-                                        $totalCostWithoutDiscount += $orderproductCost;
-                                        $orderproduct->includedInCoupon = 0;
-                                    }
-                                }
-                            } else {
-                                $totalCostWithoutDiscount += $orderproductCost;
-                                $orderproduct->includedInCoupon = 0;
-                            }
-                            $orderproduct->update();
-                            break;
-                        case "REOBTAIN" :
-                            if ($orderproduct->includedInCoupon == 1) {
-                                $totalCostWithDiscount += $orderproductCost;
-                            } else {
-                                $totalCostWithoutDiscount += $orderproductCost;
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-
-                    $totalCostWithoutDiscount += $orderproductExtraCost;
-
-                }
-            }
-        } else {
-            $totalCostWithoutDiscount = $this->costwithoutcoupon;
-            $totalCostWithDiscount = $this->cost;
-        }
-
-        if (isset($totalCostWithDiscount) || isset($totalCostWithoutDiscount))
-            $totalCost = ($totalCostWithoutDiscount + intval(round($this->obtainCouponDiscount($totalCostWithDiscount)), 0)) - $this->discount;
-        else
-            $totalCost = null;
-
-        if ($totalCost < 0)
-            $totalCost = 0;
-
-        return [
-            "rawCostWithDiscount"    => (int)$totalCostWithDiscount,
-            'rawCostWithoutDiscount' => (int)$totalCostWithoutDiscount,
-            "totalCost"              => $totalCost,
-        ];
-
     }
 
     /**
@@ -514,12 +428,12 @@ class Order extends Model
         if ($this->hasCoupon()) {
             if ($this->couponDiscount > 0) {
                 return [
-                    "type"     => Config::get("constants.DISCOUNT_TYPE_PERCENTAGE"),
+                    "type"     => config("constants.DISCOUNT_TYPE_PERCENTAGE"),
                     "discount" => $this->couponDiscount,
                 ];
             } else {
                 return [
-                    "type"     => Config::get("constants.DISCOUNT_TYPE_COST"),
+                    "type"     => config("constants.DISCOUNT_TYPE_COST"),
                     "discount" => $this->couponDiscountAmount,
                 ];
             }
@@ -587,75 +501,21 @@ class Order extends Model
     }
 
     /**
-     * Checks which order products this coupon does not submit to
-     *
-     * @param \App\Order $order
-     *
-     * @return array
+     * @return \Illuminate\Support\Collection
      */
-    public function reviewCoupon()
-    {
-        $infoMessage = "";
-        $warningMessage = "";
-        $errorMessage = "";
+    public function reviewCouponProducts(){
+        $orderproducts = $this->orderproducts->whereType([config("constants.ORDER_PRODUCT_TYPE_DEFAULT")]);
 
-        $collapseCoupon = false;
-        if (isset($this->coupon->maxCost) && $this->totalCost() > $this->coupon->maxCost) {
-            $collapseCoupon = true;
-            $errorMessage .= "حداکثر مبلغ سبد خرید برای استفاده از این کپن " . number_format($this->coupon->maxCost) . " تومان  می باشد.";
-        }
-
-        [
-            $couponValidationMessage,
-            $couponValidationCode,
-        ] = $this->coupon->validateCoupon();
-        if (strlen($couponValidationMessage) > 0 && $couponValidationCode != 4) {
-            $collapseCoupon = true;
-        }
-
-        $couponRemoved = false;
-        if ($collapseCoupon) {
-            $orderController = new \App\Http\Controllers\OrderController();
-            $orderController->removeCoupon();
-            if (session()->has("couponMessageSuccess")) {
-                $couponRemoved = true;
-                session()->forget("couponMessageSuccess");
-            } else if (session()->has("couponMessageError")) {
-                session()->forget("couponMessageError");
+        $coupon = $this->coupon;
+        $notIncludedProducts = new  ProductCollection();
+        if(isset($coupon))
+            foreach ($orderproducts->products as $product)
+            {
+                if(!$coupon->hasProduct($product))
+                    $notIncludedProducts->push($product);
             }
-        }
 
-        if (!$couponRemoved) {
-            $orderproducts = $this->orderproducts(config("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
-                                  ->get();
-
-            $orderHasExtraAttribute = false;
-            foreach ($orderproducts as $orderproduct) {
-                if ($orderproduct->attributevalues->isNotEmpty()) {
-                    $orderHasExtraAttribute = true;
-                    break;
-                }
-            }
-            if ($orderHasExtraAttribute)
-                $infoMessage .= "کد تخفیف شامل قیمت ویژگی های افزوده (مانند پست) نمی باشد.";
-
-            if ($this->coupon->coupontype->id == 2) {
-
-                $couponProducts = $this->coupon->products->pluck('id')
-                                                         ->toArray();
-                foreach ($orderproducts as $orderproduct) {
-                    if (!in_array($orderproduct->product->id, $couponProducts))
-                        $warningMessage .= "این کپن برای `" . $orderproduct->product->name . "` تخفیف ندارد. ";
-                }
-            }
-        }
-
-        return [
-            "warning"       => $warningMessage,
-            "info"          => $infoMessage,
-            "error"         => $errorMessage,
-            "couponRemoved" => $couponRemoved,
-        ];
+        return $notIncludedProducts;
     }
 
     public function totalCost()
@@ -668,44 +528,96 @@ class Order extends Model
     {
         return $this->orderproducts->count();
     }
-    public function orderproducts($type = null)
+
+    public function orderproducts($type = null , $filters = [])
     {
         if (isset($type))
-            if ($type == Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT")) {
-                return $this->hasMany('App\Orderproduct')
+            if ($type == config("constants.ORDER_PRODUCT_TYPE_DEFAULT")) {
+                $relation =  $this->hasMany('App\Orderproduct')
                             ->where(function ($q) use ($type) {
                                 $q->where("orderproducttype_id", $type)
                                   ->orWhereNull("orderproducttype_id");
                             });
             } else {
-                return $this->hasMany('App\Orderproduct')
+                $relation =  $this->hasMany('App\Orderproduct')
                             ->where("orderproducttype_id", $type);
             }
         else
-            return $this->hasMany('App\Orderproduct');
+            $relation =  $this->hasMany('App\Orderproduct');
+
+        foreach ($filters as $filter)
+        {
+            if(isset($filter["isArray"]))
+                $relation->whereIn($filter["attribute"] , $filter["value"]);
+            else
+                $relation->where($filter["attribute"] , $filter["value"]);
+        }
+
+        return $relation;
+    }
+
+    /**
+     * Gets this order's products
+     *
+     * @param array $orderproductTypes
+     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Support\Collection
+     */
+    public function products(array $orderproductTypes=[]){
+        $result = DB::table('products')
+            ->join('orderproducts', function ($join) use ($orderproductTypes) {
+                if(empty($orderproductTypes))
+                    $join->on('products.id', '=', 'orderproducts.product_id')
+                        ->whereNull('orderproducts.deleted_at');
+                else
+                    $join->on('products.id', '=', 'orderproducts.product_id')
+                        ->whereNull('orderproducts.deleted_at')
+                        ->whereIn("orderproducttype_id" , $orderproductTypes );
+            })
+            ->join('orders', function ($join) {
+                $join->on('orders.id', '=', 'orderproducts.order_id')
+                    ->whereNull('orders.deleted_at');
+            })
+            ->select([
+                "products.*",
+            ])
+            ->where('orders.id', '=', $this->getKey())
+            ->whereNull('products.deleted_at')
+            ->distinct()
+            ->get();
+        $result = Product::hydrate($result->toArray());
+
+        return $result;
     }
 
     /**
      * Detaches coupon from this order
      *
-     * @return array
+     * @return bool
      */
-    public function detachCoupon()
+    public function detachCoupon():bool
     {
         $done = false;
-        if (isset($this->coupon->id)) {
+        if (isset($this->coupon)) {
             $coupon = $this->coupon;
-            $coupon->usageNumber = $coupon->usageNumber - 1;
+            $coupon->usageNumber--;
             if ($coupon->update())
-                ;
             {
                 $this->coupon_id = null;
                 $this->couponDiscount = 0;
                 $this->couponDiscountAmount = 0;
-                $done = true;
+                $this->timestamps = false;
+                if($this->update())
+                {
+                    $done = true;
+                }
+                else{
+                    $coupon->usageNumber++;
+                    $coupon->update();
+                }
+                $this->timestamps = true;
             }
         }
-        return ["result" => $done];
+        return $done;
     }
 
     public function cancelOpenOnlineTransactions()
@@ -836,4 +748,12 @@ class Order extends Model
             $transaction->update();
         }
     }
+
+    public function getInvoiceAttribute()
+    {
+        $invoiceGenerator = new AlaaInvoiceGenerator($this);
+        $invoiceInfo = $invoiceGenerator->generateInvoice();
+        return $invoiceInfo;
+    }
+
 }

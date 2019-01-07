@@ -9,7 +9,7 @@
 namespace App\Classes\Checkout\Alaa\Chains;
 
 
-use App\Classes\Abstracts\OrderPriceCalculator;
+use App\Classes\Abstracts\Checkout\OrderPriceCalculator;
 
 class AlaaOrderPriceCalculator extends OrderPriceCalculator
 {

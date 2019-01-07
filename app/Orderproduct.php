@@ -177,17 +177,7 @@ class Orderproduct extends Model
         $priceInfo = $alaaCashierFacade->checkout();
         $calculatedOrderproducts = $priceInfo["orderproductsInfo"]["calculatedOrderproducts"];
         $orderproductPriceInfo = $calculatedOrderproducts->getNewPriceForItem($calculatedOrderproducts->first());
-        return $orderproductPriceInfo   ;
-
-        //////////////////////////OLD CODE///////////////////////////////////
-
-        $costArray = $this->obtainOrderproductCost(false);
-        if ($withOrderCoupon) {
-            return (int)((1 - ($costArray["bonDiscount"] / 100)) * (((1 - ($costArray["productDiscount"] / 100)) * $costArray["cost"]) - $costArray["productDiscountAmount"]));
-            //            }
-        } else {
-            return (int)((1 - ($costArray["bonDiscount"] / 100)) * (((1 - ($costArray["productDiscount"] / 100)) * $costArray["cost"]) - $costArray["productDiscountAmount"]));
-        }
+        return $orderproductPriceInfo;
     }
 
     /**
@@ -206,72 +196,8 @@ class Orderproduct extends Model
             "productDiscount"       => $priceInfo["productDiscount"],
             'bonDiscount'           => $priceInfo["bonDiscount"],
             "productDiscountAmount" => $priceInfo["productDiscountAmount"],
-            'customerPrice'          => $priceInfo["customerCost"],
+            'customerPrice'         => $priceInfo["customerCost"],
             'totalPrice'            => $priceInfo["totalCost"],
-        ];
-
-        ////////////////////////////Old Code/////////////////////
-        $costArray = [];
-        $bonDiscount = 0;
-        $productDiscount = 0;
-        $productDiscountAmount = 0;
-        $orderProductExtraCost = 0;
-        if ($calculateCost) {
-            $product = $this->product;
-            if ($product->isFree)
-                $costArray["cost"] = null;
-            else {
-                $costArray = $product->calculatePayablePrice();
-
-                foreach ($this->attributevalues as $attributevalue) {
-                    $orderProductExtraCost += $attributevalue->pivot->extraCost;
-                }
-
-                $userbons = $this->userbons;
-                foreach ($userbons as $userbon) {
-                    $bons = $product->bons->where("id", $userbon->bon_id)
-                                          ->where("isEnable", 1);
-                    if ($bons->isEmpty()) {
-                        $parentsArray = $this->makeParentArray($product);
-                        if (!empty($parentsArray)) {
-                            foreach ($parentsArray as $parent) {
-                                $bons = $parent->bons->where("id", $userbon->bon_id)
-                                                     ->where("isEnable", 1);
-                                if (!$bons->isEmpty())
-                                    break;
-                            }
-                        }
-                    }
-                    if (!$bons->isEmpty()) {
-                        $bonDiscount += $userbon->pivot->discount * $userbon->pivot->usageNumber;
-                    }
-                }
-                $productDiscount = $costArray["productDiscount"];
-                $productDiscountAmount = $costArray["productDiscountAmount"];
-                $costArray["cost"] = (int)$costArray["cost"];
-            }
-        } else {
-            $costArray["cost"] = $this->cost;
-            foreach ($this->attributevalues as $attributevalue) {
-                $orderProductExtraCost += $attributevalue->pivot->extraCost;
-            }
-            $userbons = $this->userbons;
-            foreach ($userbons as $userbon) {
-                $bonDiscount += $userbon->pivot->discount * $userbon->pivot->usageNumber;
-            }
-
-            $productDiscount = $this->discountPercentage;
-            $productDiscountAmount = $this->discountAmount;
-        }
-
-        $cost = (int)$costArray["cost"];
-        return [
-            "cost"                  => $cost,
-            "extraCost"             => $orderProductExtraCost,
-            "productDiscount"       => $productDiscount,
-            'bonDiscount'           => $bonDiscount,
-            "productDiscountAmount" => (int)$productDiscountAmount,
-            'customerPrice'          => (int)(((int)$cost * (1 - ($productDiscount / 100))) * (1 - ($bonDiscount / 100)) - $productDiscountAmount),
         ];
     }
 
@@ -299,7 +225,7 @@ class Orderproduct extends Model
     {
         $totalBonDiscountValue = $this->getTotalBonDiscountDecimalValue();
 
-        return max($totalBonDiscountValue / 100 , 1);
+        return min($totalBonDiscountValue / 100 , 1);
     }
 
     public function isNormalType()
@@ -397,25 +323,6 @@ class Orderproduct extends Model
     public function getDiscountPercentageAttribute($value)
     {
         return $value / 100 ;
-    }
-
-    /**
-     * Checks whether orderproduct included in coupon or not and
-     * fills the appropriate table column
-     *
-     * @param Coupon $coupon
-     *
-     * @return bool
-     */
-    public function IsOrderproductIncludedInCoupon(Coupon $coupon)
-    {
-        if ($coupon->coupon_type == config("constants.COUPON_TYPE_OVERALL")) {
-            $flag = true;
-        } else {
-            $flag = $this->product->hasThisCoupon($coupon);
-        }
-
-        return $flag;
     }
 
     /**

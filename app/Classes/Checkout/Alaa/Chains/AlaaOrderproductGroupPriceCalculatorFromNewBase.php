@@ -8,7 +8,7 @@
 
 namespace App\Classes\Checkout\Alaa\Chains;
 
-use App\Classes\Abstracts\OrderproductGroupPriceCalculatorFromNewBase;
+use App\Classes\Abstracts\Checkout\OrderproductGroupPriceCalculatorFromNewBase;
 use App\Classes\Abstracts\Pricing\OrderproductPriceCalculator;
 use App\Classes\Pricing\Alaa\AlaaOrderproductPriceCalculator;
 use App\Orderproduct;

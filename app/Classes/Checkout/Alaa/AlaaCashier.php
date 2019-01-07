@@ -8,7 +8,7 @@
 
 namespace App\Classes\Checkout\Alaa;
 
-use App\Classes\Abstracts\Cashier;
+use App\Classes\Abstracts\Checkout\Cashier;
 
 class AlaaCashier Extends Cashier
 {
@@ -20,8 +20,12 @@ class AlaaCashier Extends Cashier
                     "totalRawPriceWhichHasDiscount"             => $this->totalRawPriceWhichHasDiscount,
                     "totalRawPriceWhichDoesntHaveDiscount"      => $this->totalRawPriceWhichDoesntHaveDiscount ,
                     "totalPriceWithDiscount"                    => $this->totalPriceWithDiscount ,
+                    "sumOfOrderproductsRawCost"                 => $this->sumOfOrderproductsRawCost,
+                    "sumOfOrderproductsCustomerCost"            => $this->sumOfOrderproductsCustomerCost,
                     "totalPrice"                                => $this->totalPrice,
+                    "amountPaidByWallet"                        => $this->amountPaidByWallet,
                     "finalPrice"                                => $this->finalPrice ,
+                    "priceToPay"                                => $this->priceToPay,
             ],
             "orderproductsInfo" =>
             [

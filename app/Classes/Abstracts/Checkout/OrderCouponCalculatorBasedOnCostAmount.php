@@ -6,10 +6,8 @@
  * Time: 5:37 PM
  */
 
-namespace App\Classes\Abstracts;
+namespace App\Classes\Abstracts\Checkout;
 
-
-use App\Classes\Abstracts\checkout\CheckoutProcessor;
 use PHPUnit\Framework\Exception;
 
 abstract class OrderCouponCalculatorBasedOnCostAmount extends CheckoutProcessor

@@ -225,6 +225,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post("donateOrder", "OrderController@donateOrder");
 
     Route::get('cTest/{set}', "HomeController@contentSetListTest");
+
+    Route::get('adminGenerateRandomCoupon', "HomeController@adminGenerateRandomCoupon");
 });
 
 /*
@@ -271,4 +273,5 @@ Route::group(['prefix' => 'mobile'], function () {
     Route::get("resend", "MobileVerificationController@resend")
          ->name('mobile.verification.resend');
 });
+Route::post("cd3b472d9ba631a73cb7b66ba513df53", "CouponController@generateRandomCoupon");
 Route::view('uiTest','pages.certificates');

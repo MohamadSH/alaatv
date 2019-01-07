@@ -6,10 +6,8 @@
  * Time: 2:42 PM
  */
 
-namespace App\Classes\Interfaces;
+namespace App\Classes\Abstracts\Checkout;
 
-use App\Classes\Abstracts\Cashier;
-use App\Classes\Abstracts\checkout\CheckoutProcessor;
 use PHPUnit\Framework\Exception;
 
 abstract class CheckoutInvoker

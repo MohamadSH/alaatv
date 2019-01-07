@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Afterloginformcontrol;
 use App\Bankaccount;
 use App\Bon;
+use App\Classes\Pricing\Alaa\AlaaInvoiceGenerator;
+use App\Collection\OrderproductCollection;
 use App\Coupon;
 use App\Helpers\ENPayment;
+use App\Http\Requests\CheckoutReviewRequest;
 use App\Http\Requests\DonateRequest;
 use App\Http\Requests\EditOrderRequest;
 use App\Http\Requests\InsertTransactionRequest;
@@ -25,6 +28,7 @@ use App\Product;
 use App\Productvoucher;
 use App\Traits\APIRequestCommon;
 use App\Traits\Helper;
+use App\Traits\MetaCommon;
 use App\Traits\ProductCommon;
 use App\Traits\RequestCommon;
 use App\Transaction;
@@ -56,6 +60,7 @@ class OrderController extends Controller
     protected $setting;
     use ProductCommon;
     use RequestCommon;
+    use MetaCommon;
 
     function __construct(Websitesetting $setting)
     {
@@ -66,6 +71,11 @@ class OrderController extends Controller
         $this->middleware('permission:' . Config::get('constants.REMOVE_ORDER_ACCESS'), ['only' => 'destroy']);
         $this->middleware('permission:' . Config::get('constants.SHOW_ORDER_ACCESS'), ['only' => 'edit']);
         $this->middleware('permission:' . Config::get('constants.INSERT_ORDER_ACCESS'), ['only' => 'exitAdminInsertOrder']);
+        //ToDo : add open order middle ware
+        $this->middleware(['StoreOrderproductCookieInOpenOrder','OrderCheckoutReview',], ['only' => ['checkoutReview',],]);
+        //ToDo : add open order middle ware
+        $this->middleware('OrderCheckoutPayment', ['only' => ['checkoutPayment'],]);
+        $this->middleware('SubmitOrderCoupon', ['only' => ['submitCoupon'],]);
         $this->setting = $setting->setting;
     }
 
@@ -809,116 +819,58 @@ class OrderController extends Controller
     /**
      * Showing authentication step in the checkout process
      *
-     * @param
-     *
+     * @param CheckoutReviewRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function checkoutReview(Request $request)
+    public function checkoutReview(CheckoutReviewRequest $request)
     {
-        if (!Auth::check())
-            return redirect(action("OrderController@checkoutAuth"));
+        $this->generateCustomMeta([
+            "title"     => "آلاء|بازبینی سفارش",
+            "url"       => $request->url(),
+            'siteName'  => "آلاء" ,
+            "description"   => optional($this->setting)->site->seo->homepage->metaDescription,
+            "image" => optional($this->setting)->site->siteLogo
+        ]);
 
-        $url = $request->url();
-        $title = "آلاء|بازبینی سفارش";
-        SEO::setTitle($title);
-        SEO::opengraph()
-           ->setUrl($url);
-        SEO::setCanonical($url);
-        SEO::twitter()
-           ->setSite("آلاء");
-        SEO::setDescription($this->setting->site->seo->homepage->metaDescription);
-        SEO::opengraph()
-           ->addImage(route('image', [
-               'category' => '11',
-               'w'        => '100',
-               'h'        => '100',
-               'filename' => $this->setting->site->siteLogo,
-           ]), [
-                          'height' => 100,
-                          'width'  => 100,
-                      ]);
+        $invoiceInfo=[];
+        $user = $request->user();
 
-        $orderInfo = $this->getUserOrder();
+        if(isset($user))
+        {
+            $order = Order::Find($request->order_id);
+            $order->load(["orderproducts" , "orderproducts.userbons" , "orderproducts.attributevalues" ,  "orderproducts.product" ]);
 
-        $user = $orderInfo["owner"];
-        $order = $orderInfo["order"];
-        $orderproducts = $orderInfo["purchasedOrderproducts"];
+            if(isset($order))
+            {
+                $invoiceGenerator = new AlaaInvoiceGenerator($order);
+                $invoiceInfo = $invoiceGenerator->generateInvoice();
+                $response = response(["invoiceInfo"=>$invoiceInfo] , Response::HTTP_OK);
+            }
+            else
+                $response = response(["message"=>"Order not found"] , Response::HTTP_BAD_REQUEST);
 
-        $newOrderProductInfo = $orderproducts->renewOrderproducs();
-        $orderproductsRawCost = (int)$newOrderProductInfo["rawCost"];
+        }else{
+            $cookieOrderproducts = json_decode($request->header("cartItems"));
+            if(isset($cookieOrderproducts))
+            {
+                $fakeOrderproducts = $this->convertOrderproductObjectsToCollection($cookieOrderproducts);
+                $groupPriceInfo =  $fakeOrderproducts->calculateGroupPrice();
 
-        $costCollection = collect();
-        $orderproductLinks = collect();
-        foreach ($orderproducts as $orderproduct) {
-            $costArray = $orderproduct->obtainOrderproductCost(false);
-            $costCollection->put($orderproduct->id, [
-                "cost"                  => $costArray["cost"],
-                'extraCost'             => $costArray["extraCost"],
-                'bonDiscount'           => $costArray['bonDiscount'],
-                "productDiscount"       => $costArray['productDiscount'],
-                "productDiscountAmount" => $costArray['productDiscountAmount'],
-            ]);
-            $orderproductLink = $orderproduct->product->makeProductLink();
-            if (strlen($orderproductLink) > 0)
-                $orderproductLinks->put($orderproduct->id, $orderproductLink);
-        }
-        $renewedOrder = Order::where("id", $order->id)
-                             ->get()
-                             ->first();
-        $orderCostArray = $renewedOrder->obtainOrderCost(true);
-        $calculatedOrderproducts = $orderCostArray["calculatedOrderproducts"];
-        $calculatedOrderproducts->updateCostValues();
-
-        $orderCost = $orderCostArray["rawCostWithDiscount"] + $orderCostArray["rawCostWithoutDiscount"];
-        $orderHasOrdrooGheireHozoori = $order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
-                                             ->whereIn("product_id", Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_NOT_DEFAULT"))
-                                             ->get()
-                                             ->isNotEmpty();
-
-        $orderHasDonate = $order->hasTheseProducts(Product::DONATE_PRODUCT);
-
-        $donateCost = 0;
-        if ($orderHasDonate) {
-            $donateCost = Product::getDonateProductCost();
+                $invoiceInfo["purchasedOrderproducts"] = $fakeOrderproducts;
+                $invoiceInfo["costCollection"]         = $groupPriceInfo["newPrices"];
+                $invoiceInfo["orderproductsRawCost"]   = $groupPriceInfo["rawCost"];
+                $invoiceInfo["payableCost"]            = $invoiceInfo["totalCost"] = $groupPriceInfo["customerCost"];
+                $invoiceInfo["paidByWallet"]           = 0 ;
+            }
+            $response = response(["invoiceInfo"=>$invoiceInfo] , Response::HTTP_OK);
         }
 
-        $credit = $user->getTotalWalletBalance();
-        $costWithWallet = $orderCost - $donateCost;
-        $walletUse = min($costWithWallet, $credit);
-        $payableCost = max($orderCost - $walletUse, 0);
-
-        return view("order.checkout.review", compact("user", "orderproducts", "orderCost", "orderproductsRawCost",
-                                                     'costCollection', 'orderproductLinks', 'orderHasOrdrooGheireHozoori', 'credit', 'walletUse', 'payableCost'));
+        if($request->ajax())
+            return $response;
+        else
+            return view("order.checkout.review", compact("invoiceInfo"));
     }
 
-    private function getUserOrder()
-    {
-        $user = Auth::user();
-        if (session()->has("adminOrder_id")) {
-            if (!$user->can(Config::get('constants.INSERT_ORDER_ACCESS')))
-                return redirect(action("HomeController@error403"));
-            $user_id = session()->get("customer_id");
-            $user = User::FindOrFail($user_id);
-            $orderstatus_id = Config::get("constants.ORDER_STATUS_OPEN_BY_ADMIN");
-        } else {
-            $orderstatus_id = Config::get("constants.ORDER_STATUS_OPEN");
-        }
-
-        $order = $user->orders->where("orderstatus_id", $orderstatus_id)
-                              ->first();
-
-        $allOrderproducts = $order->orderproducts->sortByDesc("created_at");
-
-        $purchasedOrderproducts = $allOrderproducts->where("orderproducttype_id" , config("constants.ORDER_PRODUCT_TYPE_DEFAULT"));
-        $giftOrderproducts = $allOrderproducts->where("orderproducttype_id" , config("constants.ORDER_PRODUCT_GIFT"));
-
-        return [
-            "owner" => $user,
-            "order" => $order,
-            "purchasedOrderproducts" => $purchasedOrderproducts,
-            "giftOrderproducts" => $giftOrderproducts,
-        ];
-    }
 
     /**
      * Showing the checkout invoice for printing
@@ -927,12 +879,12 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function checkoutInvoice()
+    public function checkoutInvoice(Request $request)
     {
         if (!Auth::check())
             return redirect(action("OrderController@checkoutAuth"));
 
-        $orderInfo = $this->getUserOrder();
+        $orderInfo = $this->getUserOpenOrderInfo($request->user());
 
         $user = $orderInfo["owner"];
         $order = $orderInfo["order"];
@@ -946,7 +898,6 @@ class OrderController extends Controller
                 'extraCost'   => $costArray["extraCost"],
                 'bonDiscount' => $costArray['bonDiscount'],
             ]);
-
         }
         $orderCostArray = $order->obtainOrderCost(true);
         $calculatedOrderproducts = $orderCostArray["calculatedOrderproducts"];
@@ -959,7 +910,6 @@ class OrderController extends Controller
                                               ->toDateTimeString(), "toJalali");
         return view("order.checkout.invoice", compact("orderproducts", "orderCost", 'costCollection', 'user', 'todayDate'));
 
-
     }
 
     /**
@@ -971,106 +921,59 @@ class OrderController extends Controller
      */
     public function checkoutPayment(Request $request)
     {
-        if (!Auth::check())
-            return redirect(action("OrderController@checkoutAuth"));
+        $this->generateCustomMeta([
+            "title"     => "آلاء|پرداخت",
+            "url"       => $request->url(),
+            'siteName'  => "آلاء" ,
+            "description"   => optional($this->setting)->site->seo->homepage->metaDescription,
+            "image" => optional($this->setting)->site->siteLogo
+        ]);
 
 
-        $url = $request->url();
-        $title = "آلاء | پرداخت";
-        SEO::setTitle($title);
-        SEO::opengraph()
-           ->setUrl($url);
-        SEO::setCanonical($url);
-        SEO::twitter()
-           ->setSite("آلاء");
-        SEO::setDescription($this->setting->site->seo->homepage->metaDescription);
-        SEO::opengraph()
-           ->addImage(route('image', [
-               'category' => '11',
-               'w'        => '100',
-               'h'        => '100',
-               'filename' => $this->setting->site->siteLogo,
-           ]), [
-                          'height' => 100,
-                          'width'  => 100,
-                      ]);
+        $order = Order::Find($request->order_id);
+        if(isset($order)) {
+            $order->load(["user" , "coupon" , "coupon.products" ,"orderproducts" , "orderproducts.userbons" , "orderproducts.attributevalues" , "orderproducts.product" ]);
+            $credit = optional($order->user)->getTotalWalletBalance();
+            $orderHasDonate = $order->hasTheseProducts(Product::DONATE_PRODUCT);
+            $gateways = Transactiongateway::enable()->get()->sortBy("order")->pluck("displayName", "name");
 
-        if (session()->has("couponMessageSuccess"))
-            session()->flash('success', session()->pull("couponMessageSuccess"));
-        else if (session()->has("couponMessageError"))
-            session()->flash('error', session()->pull("couponMessageError"));
-        else if (session()->has("couponMessageInfo"))
-            session()->flash('info', session()->pull("couponMessageInfo"));
-
-        $previousPath = url()->previous();
-        if (strcmp($previousPath, action("OrderController@checkoutReview")) == 0
-            || strcmp($previousPath, action("OrderController@checkoutPayment")) == 0) {
-             $orderInfo = $this->getUserOrder();
-
-            $user = $orderInfo["owner"];
-            $order = $orderInfo["order"];
-            $orderproducts = $orderInfo["purchasedOrderproducts"];
-
-            if ($orderproducts->isNotEmpty()) {
-                $gateways = Transactiongateway::all()
-                                              ->where("enable", 1)
-                                              ->sortBy("order")
-                                              ->pluck("displayName", "name");
-
-                $orderproducts->renewOrderproducs();
-
-                $renewedOrder = Order::where("id", $order->id)
-                                     ->get()
-                                     ->first();
-                $orderCost = $renewedOrder->refreshCost()["newCost"];
-                $cost = $renewedOrder->totalCost();
-                $totalRawCost = $orderCost["rawCostWithDiscount"] + $orderCost["rawCostWithoutDiscount"];
-
-                if ($renewedOrder->hasCoupon()) {
-                    $validateCouponProduct = $renewedOrder->reviewCoupon();
-                    if (strlen($validateCouponProduct["warning"]) > 0)
-                        session()->flash('warning', $validateCouponProduct["warning"]);
-                    if (strlen($validateCouponProduct["info"]) > 0)
-                        session()->flash('info', $validateCouponProduct["info"]);
-                    if (strlen($validateCouponProduct["error"]) > 0)
-                        session()->flash('error', $validateCouponProduct["error"]);
-                    if ($validateCouponProduct["couponRemoved"]) {
-                        $renewedOrder = Order::where("id", $order->id)
-                                             ->get()
-                                             ->first();
-                        $orderCost = $renewedOrder->refreshCost()["newCost"];
-                        $cost = $renewedOrder->totalCost();
-                        $totalRawCost = $orderCost["rawCostWithDiscount"] + $orderCost["rawCostWithoutDiscount"];
-                    }
-                }
-                $coupon = $renewedOrder->coupon;
-
-                if ($cost == 0) {
-                    $paymentMethods = ["offlinePayment" => "کارت به کارت"];
-                } else {
-                    //                    $paymentMethods = array("onlinePayment" => "آنلاین" , "offlinePayment" => "کارت به کارت");
-                    $paymentMethods = ["onlinePayment" => "آنلاین"];
-                }
-
-                $orderHasDonate = $order->hasTheseProducts(Product::DONATE_PRODUCT);
-                $donateCost = 0;
-                if ($orderHasDonate) {
-                    $donateCost = Product::getDonateProductCost();
-                }
-
-                $credit = $user->getTotalWalletBalance();
-                $costWithWallet = $cost - $donateCost;
-                $walletUse = min($costWithWallet, $credit);
-                $payableCost = max($cost - $walletUse, 0);
-
-                return view("order.checkout.payment", compact("gateways", "cost", "coupon", "paymentMethods", "orderHasDonate",
-                                                              "totalRawCost", "credit", "walletPaymentAmount", "walletUse", "payableCost"));
-            } else {
-                return redirect(action("OrderController@checkoutReview"));
+            $couponValidationStatus = optional($order->coupon)->validateCoupon();
+            if(in_array($couponValidationStatus , [Coupon::COUPON_VALIDATION_STATUS_DISABLED , Coupon::COUPON_VALIDATION_STATUS_USAGE_TIME_NOT_BEGUN , Coupon::COUPON_VALIDATION_STATUS_EXPIRED]))
+            {
+                $order->detachCoupon();
+                $order = $order->fresh();
             }
-        } else {
-            return redirect(action("OrderController@checkoutReview"));
+            $coupon = $order->coupon;
+            $notIncludedProductsInCoupon = $order->reviewCouponProducts();
+
+//            $invoiceGenerator = new AlaaInvoiceGenerator($order);
+//            $invoiceInfo = $invoiceGenerator->generateInvoice();
+
+            $response = response([
+                "order"                         => $order,
+//                "invoiceInfo"                   => $invoiceInfo,
+                "credit"                        => $credit,
+                "coupon"                        => $coupon,
+                "notIncludedProductsInCoupon"   => $notIncludedProductsInCoupon,
+                "orderHasDonate"                => $orderHasDonate
+            ] , Response::HTTP_OK);
         }
+        else {
+            $response = response(["message"=>"Order not found"] , Response::HTTP_BAD_REQUEST);
+        }
+
+        if($request->ajax())
+            return $response;
+        else
+            return view("order.checkout.payment" ,
+                   compact(
+               "gateways",
+                        "coupon",
+                       "reviewCouponProductsWarning",
+                        "orderHasDonate",
+                        "credit",
+                        "invoiceInfo"
+                   ));
 
     }
 
@@ -1676,73 +1579,52 @@ class OrderController extends Controller
     public function submitCoupon(SubmitCouponRequest $request)
     {
         $couponCode = $request->coupon;
-        $coupon = Coupon::all()
-                        ->where("code", $couponCode)
-                        ->first();
-        $user = Auth::user();
+        $coupon = Coupon::all()->where("code", $couponCode)->first();
         if (isset($coupon)) {
-            if (session()->has("adminOrder_id")) {
-                if (!$user->can(Config::get('constants.INSERT_ORDER_ACCESS')))
-                    return redirect(action("HomeController@error403"));
-                $order_id = session()->get("adminOrder_id");
-                $order = Order::FindorFail($order_id);
-            } else {
-                $order_id = session()->get("order_id");
-                $order = Order::where("id", $order_id)
-                              ->get()
-                              ->first();
-                if ($order->user->id != $user->id)
-                    return redirect(action("HomeController@error403"));
-            }
+            $order_id = $request->order_id;
+            $order = Order::Find($order_id);
+            $order->load("coupon");
 
-            [
-                $validateCoupon,
-                $validateCouponCode,
-            ] = $coupon->validateCoupon();
+            $couponValidationStatus = $coupon->validateCoupon();
 
-            if (strlen($validateCoupon) == 0) {
-                $order->refreshCost();
-                $cost = $order->totalCost();
-                if (!isset($coupon->maxCost) || $cost <= $coupon->maxCost) {
-                    if (isset($order->coupon->id)) {
-                        $oldCoupon = $order->coupon;
+            if ($couponValidationStatus == Coupon::COUPON_VALIDATION_STATUS_OK) {
+                    $oldCoupon = $order->coupon;
+                    if (isset($oldCoupon)) {
                         $flag = ($oldCoupon->usageNumber > 0);
-                        if ($oldCoupon->id != $coupon->id) {
-                            if ($flag)
-                                $oldCoupon->usageNumber = $oldCoupon->usageNumber - 1;
-                            if ($oldCoupon->update()) {
-                                $coupon->usageNumber = $coupon->usageNumber + 1;
-                                if ($coupon->update()) {
-                                    $order->coupon_id = $coupon->id;
-                                    if ($coupon->discounttype_id == Config::get("constants.DISCOUNT_TYPE_COST")) {
-                                        $order->couponDiscount = 0;
-                                        $order->couponDiscountAmount = (int)$coupon->discount;
-                                    } else {
-                                        $order->couponDiscount = $coupon->discount;
-                                        $order->couponDiscountAmount = 0;
-                                    }
-                                    $order->timestamps = false;
-                                    if ($order->update()) {
-                                        session()->put('couponMessageSuccess', 'کپن شما با موفقیت ثبت شد!');
-                                    } else {
-                                        if ($flag)
+                            if ($oldCoupon->id != $coupon->id) {
+                                if ($flag)
+                                    $oldCoupon->usageNumber = $oldCoupon->usageNumber - 1;
+                                if ($oldCoupon->update()) {
+                                    $coupon->usageNumber = $coupon->usageNumber + 1;
+                                    if ($coupon->update()) {
+                                        $order->coupon_id = $coupon->id;
+                                        if ($coupon->discounttype_id == Config::get("constants.DISCOUNT_TYPE_COST")) {
+                                            $order->couponDiscount = 0;
+                                            $order->couponDiscountAmount = (int)$coupon->discount;
+                                        } else {
+                                            $order->couponDiscount = $coupon->discount;
+                                            $order->couponDiscountAmount = 0;
+                                        }
+                                        $order->timestamps = false;
+                                        if ($order->update()) {
+                                            session()->put('couponMessageSuccess', 'کپن شما با موفقیت ثبت شد!');
+                                        } else {
                                             $oldCoupon->usageNumber = $oldCoupon->usageNumber + 1;
+                                            $oldCoupon->update();
+                                            $coupon->usageNumber = $coupon->usageNumber - 1;
+                                            $coupon->update();
+                                            session()->put('couponMessageError', "خطای پایگاه داده در ثبت کپن!");
+                                        }
+                                        $order->timestamps = true;
+                                    } else {
+                                        $oldCoupon->usageNumber = $oldCoupon->usageNumber + 1;
                                         $oldCoupon->update();
-                                        $coupon->usageNumber = $coupon->usageNumber - 1;
-                                        $coupon->update();
                                         session()->put('couponMessageError', "خطای پایگاه داده در ثبت کپن!");
                                     }
-                                    $order->timestamps = true;
                                 } else {
-                                    if ($flag)
-                                        $oldCoupon->usageNumber = $oldCoupon->usageNumber + 1;
-                                    $oldCoupon->update();
                                     session()->put('couponMessageError', "خطای پایگاه داده در ثبت کپن!");
                                 }
-                            } else {
-                                session()->put('couponMessageError', "خطای پایگاه داده در ثبت کپن!");
                             }
-                        }
                     } else {
                         $coupon->usageNumber = $coupon->usageNumber + 1;
                         if ($coupon->update()) {
@@ -1767,47 +1649,61 @@ class OrderController extends Controller
                             session()->put('couponMessageError', "خطای پایگاه داده در ثبت کپن!");
                         }
                     }
-                } else {
-                    session()->put('couponMessageError', "حداکثر مبلغ سبد خرید برای استفاده از این کپن " . number_format($coupon->maxCost) . " تومان  می باشد.");
-                }
             } else {
-                session()->put('couponMessageError', $validateCoupon);
+                switch ($couponValidationStatus)
+                {
+                    case Coupon::COUPON_VALIDATION_STATUS_DISABLED:
+                        $couponValidatonResponseText = "کپن وارد شده غیر فعال می باشد";
+                        break;
+                    case Coupon::COUPON_VALIDATION_STATUS_USAGE_LIMIT_FINISHED:
+                        $couponValidatonResponseText = "تعداد مجاز استفاده از کپن به پایان رسیده است";
+                        break;
+                    case Coupon::COUPON_VALIDATION_STATUS_EXPIRED:
+                        $couponValidatonResponseText = "تاریخ استفاده از کپن به پایان رسیده است";
+                        break;
+                    case Coupon::COUPON_VALIDATION_STATUS_USAGE_TIME_NOT_BEGUN:
+                        $couponValidatonResponseText = "تاریخ استفاده از کپن آغاز نشده است";
+                        break;
+                    default:
+                        $couponValidatonResponseText="";
+                        break;
+                }
+                session()->put('couponMessageError', $couponValidatonResponseText);
             }
 
         } else {
             session()->put('couponMessageError', "کد وارد شده اشتباه می باشد");
         }
-        return redirect()->back();
+
+        if($request->ajax())
+            return response([],Response::HTTP_OK);
+        else
+            return redirect()->back();
     }
 
     /**
      * Cancels a coupon for the order
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function removeCoupon()
+    public function removeCoupon(Request $request)
     {
-        $user = Auth::user();
-        if (session()->has("adminOrder_id")) {
-            if (!$user->can(Config::get('constants.INSERT_ORDER_ACCESS')))
-                return redirect(action("HomeController@error403"));
-            $order_id = session()->get("adminOrder_id");
-            $order = Order::FindorFail($order_id);
-        } else {
-            $order_id = session()->get("order_id");
-            $order = Order::FindorFail($order_id);
-            if ($order->user->id != $user->id)
-                return redirect(action("HomeController@error403"));
-        }
-
-        $result = $order->detachCoupon();
-        if ($result) {
-            if ($order->update())
-                session()->put('couponMessageSuccess', "کپن سفارش شما با موفیت حذف شد");
-            else
-                session()->put('couponMessageError', "خطای پایگاه داده");
-        } else {
-            session()->put('couponMessageError', "خطای پایگاه داده");
+        $user = $request->user();
+        //ToDo : there is not order_id in session any more
+        if(isset($user))
+        {
+            $order = $user->openOrders()->get()->first();
+            if(isset($order))
+            {
+                $result = $order->detachCoupon();
+                if ($result)
+                        session()->put('couponMessageSuccess', "کپن سفارش شما با موفیت حذف شد");
+                else
+                    session()->put('couponMessageError', "خطای پایگاه داده");
+            }
+        }else{
+            session()->put('couponMessageError', "کاربر یافت نشد");
         }
 
         return redirect()->back();
@@ -2153,7 +2049,7 @@ class OrderController extends Controller
             $donateOrder->paymentstatus_id = config("constants.PAYMENT_STATUS_PAID");
             $donateOrder->user_id = $user->id;
             if ($donateOrder->save()) {
-                $user->fresh();
+                $user = $user->fresh();
             }
         }
         $request->offsetSet("mode", "donate");
@@ -2254,7 +2150,7 @@ class OrderController extends Controller
                     $orderproductController->store($request);
                 }
 
-                $openOrder->fresh();
+                $openOrder = $openOrder->fresh();
                 $orderCost = $openOrder->obtainOrderCost(true, false);
                 $openOrder->cost = $orderCost["rawCostWithDiscount"];
                 $openOrder->costwithoutcoupon = $orderCost["rawCostWithoutDiscount"];
@@ -2446,5 +2342,44 @@ class OrderController extends Controller
                                  "file"    => $e->getFile(),
                              ]);
         }
+    }
+
+    /**
+     * @param array $cookieOrderproducts
+     * @return OrderproductCollection
+     */
+    private function convertOrderproductObjectsToCollection(array $cookieOrderproducts): OrderproductCollection
+    {
+        $fakeOrderproducts = new OrderproductCollection();
+
+        foreach ($cookieOrderproducts as $key => $cookieOrderproduct) {
+            $grandParentProductId = optional($cookieOrderproduct)->product_id;
+            $childrenIds = optional($cookieOrderproduct)->productIds;
+            $attributes = optional($cookieOrderproduct)->attributes;
+
+            $data = [
+                "atttibutes" => $attributes ,
+                "products" => $childrenIds
+            ];
+            $grandParentProduct = Product::Find($grandParentProductId);
+            if(!isset($grandParentProduct))
+                continue;
+
+//          ToDo : send request to appropriate class for analyzing prdocuts' input data
+//            $products = (new RefinementFactory( $grandParentProduct, $data ))->getRefinementClass()->getProducts();
+
+            //Fake data
+            $products = Product::whereIn("id", [264])->get();
+            foreach ($products as $product) {
+                $fakeOrderproduct = new Orderproduct();
+                $fakeOrderproduct->id = $product->id;
+                $fakeOrderproduct->product_id = $product->id;
+                $fakeOrderproduct->updated_at = Carbon::now();
+                $fakeOrderproduct->created_at = Carbon::now();
+            }
+            $fakeOrderproducts->push($fakeOrderproduct);
+        }
+
+        return $fakeOrderproducts;
     }
 }

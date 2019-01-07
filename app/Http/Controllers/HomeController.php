@@ -131,6 +131,7 @@ class HomeController extends Controller
         $this->middleware('permission:' . Config::get("constants.REPORT_ADMIN_PANEL_ACCESS"), ['only' => 'adminReport']);
         $this->middleware('permission:' . Config::get("constants.LIST_EDUCATIONAL_CONTENT_ACCESS"), ['only' => 'contentSetListTest']);
         $this->middleware('ability:' . Config::get("constants.ROLE_ADMIN") . ',' . Config::get("constants.TELEMARKETING_PANEL_ACCESS"), ['only' => 'adminTeleMarketing']);
+        $this->middleware('permission:' . Config::get('constants.INSERT_COUPON_ACCESS'), ['only' => 'adminGenerateRandomCoupon']);
         $this->middleware('role:admin', [
             'only' => [
                 'bot',
@@ -150,6 +151,7 @@ class HomeController extends Controller
 
     public function contentSetListTest(Request $request, Contentset $set)
     {
+
         $contents = $set->contents()
                         ->get();
         return view('listTest', compact('set', 'contents'));
@@ -191,49 +193,13 @@ class HomeController extends Controller
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
         try{
+            $order = Order::Find(248132);
 
-            $users = User::whereIn("id" , [1,2,3])->get();
-            foreach ($users as $user)
-            {
-                $user->firstName .= "3";
-                $user->update();
-            }
+            $response = response([
+                "order" => $order ,
+            ] , Response::HTTP_OK);
 
-            dd($users);
-
-            /*$orderproduct = Orderproduct::FindOrFail(108196);
-            dd($orderproduct->obtainOrderproductCost(false));*/
-
-            $order = Order::FindOrFail(248131);
-//            $orderCost = $order->obtainOrderCost(false,false , "REOBTAIN");
-//            $orderCost = $order->obtainOrderCost(true,false,"REOBTAIN");
-//            $orderCost = $order->obtainOrderCost(false,true,"REOBTAIN");
-//            $orderCost = $order->obtainOrderCost(true,true,"REOBTAIN");
-//            $orderCost = $order->obtainOrderCost(false,false );
-//            $orderCost = $order->obtainOrderCost(true,false);
-//            $orderCost = $order->obtainOrderCost(false,true);
-            $orderCost = $order->obtainOrderCost(true,true);
-            dd($orderCost);
-
-            $calculateOrderCost = true;
-            $calculateOrderproductCost = true;
-
-            if($calculateOrderCost) {
-                $orderproductsToCalculateFromBaseIds = [];
-                if($calculateOrderproductCost)
-                {
-                    $orderproductsToCalculateFromBaseIds = $order->normalOrderproducts->pluck("id")->toArray();
-                }
-
-                $alaaCashierFacade = new \App\Classes\Checkout\Alaa\OrderCheckout($order , $orderproductsToCalculateFromBaseIds);
-            }
-            else{
-                $alaaCashierFacade = new \App\Classes\Checkout\Alaa\ReObtainOrderFromRecords($order);
-            }
-
-            $priceInfo = json_decode($alaaCashierFacade->checkout());
-
-            dd($priceInfo);
+            return $response;
         }
         catch (\Exception    $e) {
             $message = "unexpected error";
@@ -5957,4 +5923,15 @@ class HomeController extends Controller
         return view("admin.insertUserAndOrderproduct", compact("majors", "genders", "pageName"));
     }
 
+    /**
+     * Temporary method for generating special couopns
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function adminGenerateRandomCoupon(Request $request)
+    {
+        $productCollection = $products = $this->makeProductCollection();
+        return view("admin.generateSpecialCoupon" , compact("productCollection"));
+    }
 }

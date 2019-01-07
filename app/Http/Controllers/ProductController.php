@@ -381,7 +381,6 @@ class ProductController extends Controller
 
         $this->generateSeoMetaTags($product);
 
-        $descriptionIframe = $request->partial;
         $productType = $product->producttype->id;
 
         $allAttributeCollection = $product->getAllAttributes();
@@ -392,7 +391,6 @@ class ProductController extends Controller
         $extraCheckboxCollection = $allAttributeCollection["extraCheckboxCollection"];
         $simpleInfoAttributes = $allAttributeCollection["simpleInfoAttributes"];
         $checkboxInfoAttributes = $allAttributeCollection["checkboxInfoAttributes"];
-
         $otherProductChunks = $this->makeOtherProducts($product, 4);
 
         $productSeenCount = $product->pageView;
@@ -402,7 +400,6 @@ class ProductController extends Controller
         $productSamplePhotos = $product->getPhotos();
 
         $giftCollection = $product->getGifts();
-
 
         return view("product.show", compact("product",
                                             "productType",
@@ -414,9 +411,7 @@ class ProductController extends Controller
                                             "extraSelectCollection",
                                             "extraCheckboxCollection",
                                             'groupedCheckboxCollection',
-                                            "descriptionIframe",
                                             "productAllFiles",
-                                            "exclusiveOtherProducts",
                                             "productSamplePhotos",
                                             "giftCollection"
         ));
