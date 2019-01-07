@@ -6,11 +6,14 @@ use App\{Assignmentstatus,
     Attribute,
     Attributecontrol,
     Attributeset,
+    Block,
     Bon,
     Checkoutstatus,
     Classes\Checkout\Alaa\AlaaCashier,
     Classes\Checkout\Alaa\OrderproductCheckout,
     Classes\Format\BlockCollectionFormatter,
+    Classes\Format\webBlockCollectionFormatter,
+    Classes\Format\webSetCollectionFormatter,
     Consultationstatus,
     Content,
     Contentset,
@@ -151,7 +154,6 @@ class HomeController extends Controller
 
     public function contentSetListTest(Request $request, Contentset $set)
     {
-
         $contents = $set->contents()
                         ->get();
         return view('listTest', compact('set', 'contents'));
@@ -193,13 +195,55 @@ class HomeController extends Controller
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
         try{
-            $order = Order::Find(248132);
 
-            $response = response([
-                "order" => $order ,
-            ] , Response::HTTP_OK);
+//            $set = Contentset::findOrFail(1);
+//            dd($set->contents_count);
+            //
+            $sections = (new webBlockCollectionFormatter(new webSetCollectionFormatter()))->format(Block::getBlocks());
+            dd($sections);
 
-            return $response;
+            $users = User::whereIn("id" , [1,2,3])->get();
+            foreach ($users as $user)
+            {
+                $user->firstName .= "3";
+                $user->update();
+            }
+
+            dd($users);
+
+            /*$orderproduct = Orderproduct::FindOrFail(108196);
+            dd($orderproduct->obtainOrderproductCost(false));*/
+
+            $order = Order::FindOrFail(248131);
+//            $orderCost = $order->obtainOrderCost(false,false , "REOBTAIN");
+//            $orderCost = $order->obtainOrderCost(true,false,"REOBTAIN");
+//            $orderCost = $order->obtainOrderCost(false,true,"REOBTAIN");
+//            $orderCost = $order->obtainOrderCost(true,true,"REOBTAIN");
+//            $orderCost = $order->obtainOrderCost(false,false );
+//            $orderCost = $order->obtainOrderCost(true,false);
+//            $orderCost = $order->obtainOrderCost(false,true);
+            $orderCost = $order->obtainOrderCost(true,true);
+            dd($orderCost);
+
+            $calculateOrderCost = true;
+            $calculateOrderproductCost = true;
+
+            if($calculateOrderCost) {
+                $orderproductsToCalculateFromBaseIds = [];
+                if($calculateOrderproductCost)
+                {
+                    $orderproductsToCalculateFromBaseIds = $order->normalOrderproducts->pluck("id")->toArray();
+                }
+
+                $alaaCashierFacade = new \App\Classes\Checkout\Alaa\OrderCheckout($order , $orderproductsToCalculateFromBaseIds);
+            }
+            else{
+                $alaaCashierFacade = new \App\Classes\Checkout\Alaa\ReObtainOrderFromRecords($order);
+            }
+
+            $priceInfo = json_decode($alaaCashierFacade->checkout());
+
+            dd($priceInfo);
         }
         catch (\Exception    $e) {
             $message = "unexpected error";

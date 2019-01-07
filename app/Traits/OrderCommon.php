@@ -1,5 +1,10 @@
 <?php namespace App\Traits;
 
+use App\Order;
+use App\Orderproduct;
+use App\Product;
+use Illuminate\Support\Facades\Config;
+
 trait OrderCommon
 {
     protected function payOrderCostByWallet($user, $order, $cost)
@@ -26,5 +31,40 @@ trait OrderCommon
             "result" => $walletPaidFlag,
             "cost"   => $cost,
         ];
+    }
+
+
+    /**
+     * @param Order $order
+     * @param Orderproduct $orderProduct
+     * @param Product $product
+     */
+    private function applyOrderGifts(Order $order, Orderproduct $orderProduct, Product $product) {
+        $giftsOfProduct = $product->getGifts();
+        foreach ($giftsOfProduct as $giftItem) {
+            $this->attachGift($order, $giftItem, $orderProduct);
+        }
+    }
+
+    /** Attaches a gift to the order of this orderproduct which is related to this orderproduct
+     *
+     * @param Order $order
+     * @param Product $gift
+     * @param Orderproduct $orderproduct
+     * @return Orderproduct
+     */
+    public function attachGift(Order $order, Product $gift, Orderproduct $orderproduct): Orderproduct
+    {
+        $giftOrderproduct = new Orderproduct();
+        $giftOrderproduct->orderproducttype_id = Config::get("constants.ORDER_PRODUCT_GIFT");
+        $giftOrderproduct->order_id = $order->id;
+        $giftOrderproduct->product_id = $gift->id;
+        $giftOrderproduct->cost = $gift->calculatePayablePrice()["cost"];
+        $giftOrderproduct->discountPercentage = 100;
+        $giftOrderproduct->save();
+
+        $giftOrderproduct->parents()
+            ->attach($orderproduct, ["relationtype_id" => Config::get("constants.ORDER_PRODUCT_INTERRELATION_PARENT_CHILD")]);
+        return $giftOrderproduct;
     }
 }

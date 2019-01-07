@@ -92,6 +92,8 @@ use phpDocumentor\Reflection\DocBlock\Tags\Uses;
  * @mixin \Eloquent
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Order newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Order newQuery()
+ * @property-read array|bool $coupon_discount_type
+ * @property-read mixed $number_of_products
  */
 class Order extends Model
 {
@@ -756,4 +758,20 @@ class Order extends Model
         return $invoiceInfo;
     }
 
+
+    /**
+     * @param $products
+     * @return ProductCollection
+     */
+    public function checkProductsExistInOrderProducts($products): ProductCollection {
+        $notDuplicateProduct = new ProductCollection();
+        foreach ($products as $product) {
+            if($this->hasTheseProducts([$product->id])) {
+                // can increase amount of product
+            } else {
+                $notDuplicateProduct->push($product);
+            }
+        }
+        return $notDuplicateProduct;
+    }
 }

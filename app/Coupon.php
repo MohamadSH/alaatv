@@ -63,6 +63,9 @@ use Illuminate\Support\Collection;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon query()
+ * @property-read mixed $coupon_type
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon enable()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon valid()
  */
 class Coupon extends Model
 {

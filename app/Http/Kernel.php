@@ -37,7 +37,7 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \App\Http\Middleware\OrderCheck::class,
+//            \App\Http\Middleware\OrderCheck::class,
         ],
 
         'api' => [
@@ -68,6 +68,10 @@ class Kernel extends HttpKernel
         'ability'       => \Laratrust\Middleware\LaratrustAbility::class,
         'convert'       => ModifyRequestInputMiddleware::class,
         'trimUserUpdateRequest' => \App\Http\Middleware\TrimUserUpdateRequest::class,
+        'CheckPermissionForSendOrderId' => \App\Http\Middleware\CheckPermissionForSendOrderId::class,
+        'CheckHasOpenOrder' => \App\Http\Middleware\CheckHasOpenOrder::class,
+        'AddCookieToCart' => \App\Http\Middleware\AddCookieToCart::class,
+        'checkPermissionForSendExtraAttributesCost' => \App\Http\Middleware\checkPermissionForSendExtraAttributesCost::class,
         'StoreOrderproductCookieInOpenOrder'    => \App\Http\Middleware\StoreOrderproductCookieInOpenOrder::class,
         'OrderCheckoutReview'    => \App\Http\Middleware\OrderCheckoutReview::class,
         'OrderCheckoutPayment'    => \App\Http\Middleware\OrderCheckoutPayment::class,

@@ -1,0 +1,42 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Alaaa
+ * Date: 12/16/2018
+ * Time: 11:53 AM
+ */
+
+namespace App\Classes\OrderProduct\RefinementProduct;
+
+use App\Product;
+use Mockery\Exception;
+
+class RefinementFactory
+{
+    private $RefinementClass;
+    private $product;
+    private $data;
+
+    public function __construct(Product $product, $data=null) {
+        $this->product = $product;
+        $this->data = $data;
+    }
+
+    public function getRefinementClass() {
+        return $this->setupRefinementClass();
+    }
+
+    /**
+     * @return mixed
+     */
+    private function setupRefinementClass()
+    {
+        $typeName = $this->product->producttype->name;
+        $className = __NAMESPACE__ . '\Refinement' . ucfirst($typeName);
+        if (class_exists($className)) {
+            return new $className($this->product, $this->data);
+        } else {
+            throw new Exception('Type Name {' . $typeName . '} not found.');
+        }
+    }
+}

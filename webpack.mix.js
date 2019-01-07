@@ -40,6 +40,15 @@ mix.scripts(
 ).version();
 
 
+// TODO : must convert to mix.script
+mix.babel(
+    [
+            'public/acm/product-show-v13.js',
+            'public/acm/page-product-show.js'
+    ],
+    'public/js/product-show.js'
+).version();
+
 mix.scripts(
     [
             'public/acm/extra/landing5/js/jquery.min.js',
@@ -52,7 +61,7 @@ mix.scripts(
             'public/acm/extra/landing5/js/jquery.mousewheel.js',
             'public/acm/extra/landing5/js/main.js'
     ],
-    'public/js/landing5_alljs.min.js'
+    'public/js/landing5-alljs.min.js'
 );
 
 mix.styles(
@@ -62,5 +71,5 @@ mix.styles(
             'public/acm/extra/landing5/css/style.css',
             'public/acm/extra/landing5/css/fonts.css'
     ],
-    'public/css/landing5_allcss.min.css'
+    'public/css/landing5-allcss.min.css'
 );
