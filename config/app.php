@@ -177,6 +177,8 @@ return [
         App\Providers\TagManagerProvider::class,
         App\Providers\InterfaceBindingProvider::class,
 
+        Larabookir\Gateway\GatewayServiceProvider::class,
+
     ],
     /*
     |--------------------------------------------------------------------------
@@ -232,6 +234,10 @@ return [
         'Sitemap'      => Watson\Sitemap\Facades\Sitemap::class,
         'Image'        => Intervention\Image\Facades\Image::class,
         'SEO'          => Artesaos\SEOTools\Facades\SEOTools::class,
+
+
+        'Gateway' => Larabookir\Gateway\Gateway::class,
+
     ],
 
 ];

@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Http\Controllers\OrderController;
 use App\Userbon;
 use Closure;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
@@ -61,7 +62,7 @@ class CheckPermissionForSendOrderId
                 if(!$this->user->can(config("constants.INSERT_ORDERPRODUCT_ACCESS"))) {
                     return response()->json([
                         'error' => 'Forbidden'
-                    ], 403);
+                    ], Response::HTTP_FORBIDDEN);
                 }
             } else {
                 $request->offsetSet('order_id', $this->user->openOrders()->first()->id);
@@ -69,7 +70,7 @@ class CheckPermissionForSendOrderId
         } else {
             return response()->json([
                 'error' => 'Unauthenticated'
-            ], 401);
+            ], Response::HTTP_UNAUTHORIZED);
         }
         return $next($request);
     }

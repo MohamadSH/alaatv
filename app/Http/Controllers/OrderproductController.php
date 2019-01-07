@@ -7,6 +7,7 @@ use App\Attributevalue;
 use App\Bon;
 use App\Checkoutstatus;
 use App\Http\Requests\InsertUserBonRequest;
+use App\Http\Requests\OrderProduct\AttachExtraAttributesRequest;
 use App\Order;
 use App\Orderproduct;
 use App\Product;
@@ -48,6 +49,7 @@ class OrderproductController extends Controller
         ], [
             'only' => ['store']
         ]);
+        $this->middleware('checkPermissionForSendExtraAttributesCost', ['only' => ['attachExtraAttributes']]);
     }
 
     /**
@@ -107,11 +109,12 @@ class OrderproductController extends Controller
     }
 
     /**
-     * @param array $extraAttributes
+     * @param AttachExtraAttributesRequest $request
      * @param Orderproduct $orderProduct
      */
-    public function attachExtraAttributes(array $extraAttributes, Orderproduct $orderProduct): void
+    public function attachExtraAttributes(AttachExtraAttributesRequest $request, Orderproduct $orderProduct): void
     {
+        $extraAttributes = $request->get('extraAttribute');
         foreach ($extraAttributes as $value) {
             $orderProduct->attributevalues()->attach(
                 $value['id'],
@@ -163,7 +166,9 @@ class OrderproductController extends Controller
 
                 $productItem->decreaseProductAmountWithValue(1);
 
-                $this->attachExtraAttributes($data['extraAttribute'], $orderProduct);
+                $attachExtraAttributesRequest =new AttachExtraAttributesRequest();
+                $attachExtraAttributesRequest->offsetSet('extraAttribute', $data['extraAttribute']);
+                $this->attachExtraAttributes($attachExtraAttributesRequest, $orderProduct);
 
                 $this->applyOrderProductBon($data, $user, $orderProduct);
 
