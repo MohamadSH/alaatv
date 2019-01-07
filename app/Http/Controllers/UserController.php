@@ -947,7 +947,7 @@ class UserController extends Controller
         $product = $orderproduct->product;
         if (in_array($product->id, config("constants.ORDOO_HOZOORI_NOROOZ_97_PRODUCT")))
             $userHasMedicalQuestions = true; else $userHasMedicalQuestions = false;
-        $grandParent = $product->getGrandParent();
+        $grandParent = $product->grandParent;
         if ($grandParent !== false) {
             $userProduct = $grandParent->name;
         } else {

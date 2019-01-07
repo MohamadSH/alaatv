@@ -41,6 +41,7 @@ abstract class SearchAbstract
     }
 
     public function get(array ...$params){
+//        dd($params[0]);
         return $this->apply($params[0]);
     }
 

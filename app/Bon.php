@@ -67,6 +67,16 @@ class Bon extends Model
         'enable',
     ];
 
+    protected $hidden = [
+      'pivot',
+      'deleted_at',
+      'isEnable',
+      'bontype_id',
+      'order',
+      'created_at',
+      'updated_at'
+    ];
+
     public static function getAlaaBonDisplayName()
     {
         return Cache::tags('bon')

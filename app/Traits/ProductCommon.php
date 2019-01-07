@@ -208,8 +208,8 @@ trait ProductCommon
             $flag = true;
             foreach ($products as $key => $product) {
                 if (isset($products[$key + 1])) {
-                    if ($product->getGrandParent() !== false && $products[$key + 1]->getGrandParent() !== false) {
-                        if ($product->getGrandParent()->id != $products[$key + 1]->getGrandParent()->id) {
+                    if ($product->grandParent != null && $products[$key + 1]->grandParent != null) {
+                        if ($product->grandParent->id != $products[$key + 1]->grandParent->id) {
                             $flag = false;
                             break;
                         }

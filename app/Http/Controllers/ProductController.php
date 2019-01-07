@@ -123,41 +123,9 @@ class ProductController extends Controller
     {
         $tags = $request->get('tags');
         $filters = $request->all();
-        $isApp = $this->isRequestFromApp($request);
-        $items = collect();
         $pageName = 'productPage';
         $productResult = (new ProductSearch)->setPageName($pageName)
                                             ->get($filters);
-        //        dd($productResult->where('enable','=',0));
-        if ($isApp) {
-            $items->push($productResult->getCollection());
-        } else {
-            if ($productResult->total() > 0) {
-                //                $partialSearch = View::make('product.index', ['products' => $productResult])->render();
-                $partialSearch = $this->getPartialSearchFromIds($productResult, self::PARTIAL_SEARCH_TEMPLATE);
-                $partialIndex = $this->getPartialSearchFromIds($productResult, self::PARTIAL_INDEX_TEMPLATE);
-            } else {
-                $partialSearch = null;
-                $partialIndex = null;
-            }
-            $items->push([
-                             "totalitems" => $productResult->total(),
-                             "view"       => $partialSearch,
-                             "indexView"  => $partialIndex,
-                         ]);
-        }
-
-        if ($isApp) {
-            $response = $this->makeJsonForAndroidApp($items);
-            return response()->json($response, Response::HTTP_OK);
-        }
-        if (request()->ajax()) {
-            return $this->response->setStatusCode(Response::HTTP_OK)
-                                  ->setContent([
-                                                   "items"     => $items,
-                                                   "tagLabels" => $tags,
-                                               ]);
-        }
         //        if (session()->has("adminOrder_id"))
         //            $adminOrder = true;
         //        else
@@ -175,7 +143,6 @@ class ProductController extends Controller
         //        }
 
         $products = $productResult;
-        $costCollection = $this->makeCostCollection($products);
 
         $url = $request->url();
         $this->generateSeoMetaTags(new SeoDummyTags("محصولات " . $this->setting->site->name, 'کارگاه تست کنکور، همایش، جمع بندی و اردوطلایی نوروز آلاء', $url, $url, route('image', [
@@ -185,7 +152,7 @@ class ProductController extends Controller
             'filename' => $this->setting->site->siteLogo,
         ]), '100', '100', null));
 
-        return view("pages.product-search", compact("products", "costCollection"));
+        return view("pages.product-search", compact("products"));
     }
 
     /**
@@ -379,12 +346,15 @@ class ProductController extends Controller
         if(isset($product->redirectUrl))
             return redirect($product->redirectUrl, 301);
 
+        if($product->grandParent != null )
+            return redirect($product->grandParent->url, 301);
+//        return $product;
         $this->generateSeoMetaTags($product);
 
-        $descriptionIframe = $request->partial;
         $productType = $product->producttype->id;
 
         $allAttributeCollection = $product->getAllAttributes();
+        return $allAttributeCollection;
         $this->addSimpleInfoAttributes($product); // ToDo : $product["simpleInfoAttributes"] has not been used
         $selectCollection = $allAttributeCollection["selectCollection"];
         $groupedCheckboxCollection = $allAttributeCollection["groupedCheckboxCollection"];
@@ -401,9 +371,6 @@ class ProductController extends Controller
 
         $productSamplePhotos = $product->getPhotos();
 
-        $giftCollection = $product->getGifts();
-
-
         return view("product.show", compact("product",
                                             "productType",
                                             "productSeenCount",
@@ -414,7 +381,6 @@ class ProductController extends Controller
                                             "extraSelectCollection",
                                             "extraCheckboxCollection",
                                             'groupedCheckboxCollection',
-                                            "descriptionIframe",
                                             "productAllFiles",
                                             "exclusiveOtherProducts",
                                             "productSamplePhotos",

@@ -33,7 +33,6 @@
                 'widgetPrice'      => $product->priceText,
                 'widgetPriceLabel' => ($product->isFree || $product->basePrice == 0 ? 0 : 1)
                 ])
-
             @endforeach
         @endif
     </div>

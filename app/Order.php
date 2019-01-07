@@ -776,7 +776,7 @@ class Order extends Model
             $simpleProduct = $orderproduct->product;
             $bons = $simpleProduct->bons->where("name", $bonName);
             if ($bons->isEmpty()) {
-                $grandParent = $simpleProduct->getGrandParent();
+                $grandParent = $simpleProduct->GrandParent();
                 if ($grandParent !== false) {
                     $simpleProduct = $grandParent;
                     $bons = $grandParent->bons->where("name", $bonName)

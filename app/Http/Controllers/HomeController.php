@@ -195,6 +195,9 @@ class HomeController extends Controller
     {
         try{
 
+            $product = Product::findOrFail(232)->load('children');
+            return $product;
+
             dd(collect($keyoardButtom)->flatten(1));
 
             $sections = (new webBlockCollectionFormatter(new webSetCollectionFormatter()))->format(Block::getBlocks());

@@ -455,7 +455,7 @@ class Orderproduct extends Model
     public function renewAttributeValue():void
     {
         $extraAttributes = $this->attributevalues;
-        $myParent = $this->product->getGrandParent();
+        $myParent = $this->product->grandParent;
 
         foreach ($extraAttributes as $extraAttribute) {
             $productAttributevalue = $myParent->attributevalues->where("id", $extraAttribute->id)->first();

@@ -155,7 +155,7 @@ class ContentController extends Controller
         $result->offsetSet('set', $this->setSearch->get($filters));
 
         $pageName = "content-search";
-        if (request ()->ajax()) {
+        if (request ()->ajax() || true) {
             return $this->response
                 ->setStatusCode(Response::HTTP_OK)
                 ->setContent([

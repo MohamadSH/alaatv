@@ -215,7 +215,7 @@
 
                                 </div>
                                 <div class="col-lg-3">
-                                    @if(isset($giftCollection) && $giftCollection->isNotEmpty())
+                                    @if(optional($product->gift)->isNotEmpty())
                                         <div class="portlet sale-summary">
                                             <div class="portlet-title">
                                                 <div class="caption font-red sbold"><img
@@ -225,13 +225,13 @@
                                             </div>
                                             <div class="portlet-body" style="padding: 0px">
                                                 <ul class="list-unstyled">
-                                                    @foreach($giftCollection as $gift)
+                                                    @foreach($product->gift as $gift)
                                                         <li class="text-center bold">
-                                                            @if(strlen($gift["link"])>0)
+                                                            @if(strlen($gift->url)>0)
                                                                 <a target="_blank"
-                                                                   href="{{$gift["link"]}}">{{$gift["product"]->name}}</a>
+                                                                   href="{{ $gift->url }}">{{ $gift->name }}</a>
                                                             @else
-                                                                {{$gift["product"]->name}}
+                                                                {{ $gift->name }}
                                                             @endif
                                                         </li>
                                                     @endforeach
