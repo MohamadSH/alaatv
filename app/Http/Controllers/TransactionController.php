@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Coupon;
 use App\Helpers\ENPayment;
 use App\Http\Requests\EditTransactionRequest;
 use App\Http\Requests\InsertTransactionRequest;
@@ -365,6 +366,7 @@ class TransactionController extends Controller
         $order = Order::findOrFail($order_id);
         if ($order->orderproducts->isEmpty())
             return redirect(action("OrderController@checkoutReview"));
+
         if (!$this->checkOrderAuthority($order)) {
             $message = "سفارش مورد نظر متعلق به شما نمی باشد";
             $controller = new HomeController();
@@ -407,15 +409,13 @@ class TransactionController extends Controller
         if (!$request->has("forcePay_bhrk") && $order->orderstatus_id == config("constants.ORDER_STATUS_OPEN"))
             $order->refreshCost();
 
-        if ($order->hasCoupon()) {
-            $validateCouponProduct = $order->reviewCoupon();
-            if ($validateCouponProduct["couponRemoved"]) {
-                $order = Order::where("id", $order->id)
-                              ->get()
-                              ->first();
+            $couponValidationStatus = optional($order->coupon)->validateCoupon();
+            if($couponValidationStatus != Coupon::COUPON_VALIDATION_STATUS_OK && $couponValidationStatus != Coupon::COUPON_VALIDATION_STATUS_USAGE_LIMIT_FINISHED){
+                $order->detachCoupon();
+                $order = $order->fresh();
                 $order->refreshCost();
             }
-        }
+
         if (isset($transaction)) {
             $cost = $transaction->cost;
         } else {
@@ -512,7 +512,8 @@ class TransactionController extends Controller
                 $response = $this->update($request, $unpaidTransaction);
                 if ($response->getStatusCode() == 200)
                     $zarinPal->redirect();
-                else dd("مشکل در برقراری ارتباط با درگاه زرین پال");
+                else
+                    dd("مشکل در برقراری ارتباط با درگاه زرین پال");
             } else {
                 $request = new InsertTransactionRequest();
                 $request->offsetSet("order_id", $order->id);
@@ -526,7 +527,8 @@ class TransactionController extends Controller
                 $response = $this->store($request);
                 if ($response->getStatusCode() == 200)
                     $zarinPal->redirect();
-                else dd("مشکل در برقراری ارتباط با درگاه زرین پال");
+                else
+                    dd("مشکل در برقراری ارتباط با درگاه زرین پال");
             }
         } else return $answer['error'];
     }

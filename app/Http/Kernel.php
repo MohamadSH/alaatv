@@ -68,5 +68,9 @@ class Kernel extends HttpKernel
         'ability'       => \Laratrust\Middleware\LaratrustAbility::class,
         'convert'       => ModifyRequestInputMiddleware::class,
         'trimUserUpdateRequest' => \App\Http\Middleware\TrimUserUpdateRequest::class,
+        'StoreOrderproductCookieInOpenOrder'    => \App\Http\Middleware\StoreOrderproductCookieInOpenOrder::class,
+        'OrderCheckoutReview'    => \App\Http\Middleware\OrderCheckoutReview::class,
+        'OrderCheckoutPayment'    => \App\Http\Middleware\OrderCheckoutPayment::class,
+        'SubmitOrderCoupon'    => \App\Http\Middleware\SubmitOrderCoupon::class,
     ];
 }

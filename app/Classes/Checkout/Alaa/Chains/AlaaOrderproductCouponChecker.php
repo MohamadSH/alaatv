@@ -22,9 +22,9 @@ class AlaaOrderproductCouponChecker extends OrderproductCouponChecker
     {
         foreach ($orderproducts as $orderproduct)
         {
-            $isOrderproductIncludedInCoupon =  $orderproduct->IsOrderproductIncludedInCoupon($coupon);
+            $couponHasProduct = $coupon->hasProduct($orderproduct->product);
 
-            if($isOrderproductIncludedInCoupon)
+            if($couponHasProduct)
                 $orderproduct->includeInCoupon();
             else
                 $orderproduct->excludeFromCoupon();

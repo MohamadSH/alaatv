@@ -6,10 +6,8 @@
  * Time: 4:09 PM
  */
 
-namespace App\Classes\Abstracts;
+namespace App\Classes\Abstracts\Checkout;
 
-
-use App\Classes\Abstracts\checkout\CheckoutProcessor;
 use PHPUnit\Framework\Exception;
 
 abstract class OrderPriceCalculator extends CheckoutProcessor
@@ -26,8 +24,9 @@ abstract class OrderPriceCalculator extends CheckoutProcessor
 
         $totalPrice =  $this->calculateOrderPrice($totalRawPriceWhichDoesntHaveDiscount , $totalPriceWithDiscount );
 
-        $cashier->setFinalPrice($totalPrice);
         $cashier->setTotalPrice($totalPrice);
+        $cashier->setPriceToPay($totalPrice);
+        $cashier->setFinalPrice($totalPrice);
 
         return $this->next($cashier) ;
     }

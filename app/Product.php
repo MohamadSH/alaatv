@@ -634,7 +634,8 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
                 $counter++;
             }
             if ($myProduct->id == $this->id || $counter != $depth)
-                return false; else
+                return false;
+            else
                 return true;
         });
 
@@ -1640,14 +1641,14 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
     {
         $discount = 0;
         if ($this->hasParents()) {
-            $parent = $this->parents->first();
-            $parentProductType = $parent->producttype_id;
-            if ($parentProductType == config("constants.PRODUCT_TYPE_CONFIGURABLE")) {
+            $grandParent = $this->getGrandParent();
+            $grandParentProductType = $grandParent->producttype_id;
+            if ($grandParentProductType == config("constants.PRODUCT_TYPE_CONFIGURABLE")) {
                 if ($this->discount > 0)
                     $discount += $this->discount;
-                else if ($parent->discount > 0)
+                else if ($grandParent->discount > 0)
                     $discount += $this->parents->first()->discount;
-            } else if ($parentProductType == config("constants.PRODUCT_TYPE_SELECTABLE")) {
+            } else if ($grandParentProductType == config("constants.PRODUCT_TYPE_SELECTABLE")) {
                 if ($this->basePrice != 0) {
                     $discount = $this->discount;
                 }
@@ -1655,7 +1656,6 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
         } else {
             $discount = $this->discount;
         }
-
         return $discount;
     }
 

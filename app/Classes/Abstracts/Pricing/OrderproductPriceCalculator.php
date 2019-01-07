@@ -113,7 +113,6 @@ abstract class OrderproductPriceCalculator
     {
         if ($calculate) {
                 $product = $orderproduct->product;
-
                 $priceArray = $product->calculatePayablePrice();
                 $price = $priceArray["cost"];
                 $productDiscountPercentage = $priceArray["productDiscount"];

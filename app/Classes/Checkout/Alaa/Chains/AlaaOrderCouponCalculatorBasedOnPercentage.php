@@ -8,7 +8,6 @@
 
 namespace App\Classes\Checkout\Alaa\Chains;
 
-
 use App\Classes\Abstracts\Checkout\OrderCouponCalculatorBasedOnPercentage;
 
 class AlaaOrderCouponCalculatorBasedOnPercentage extends OrderCouponCalculatorBasedOnPercentage

@@ -69,6 +69,7 @@ class Wallet extends Model
      *
      * @param  integer $amount
      * @param  boolean $shouldAccept
+     * @return array
      */
     public function forceWithdraw($amount)
     {
@@ -79,8 +80,7 @@ class Wallet extends Model
      * Attempt to add credits to this wallet
      *
      * @param  integer $amount
-     * @param  string  $type
-     * @param  array   $meta
+     * @param null $orderId
      * @param  boolean $shouldAccept
      *
      * @return array
@@ -155,10 +155,6 @@ class Wallet extends Model
      * Attempt to move credits from this wallet
      *
      * @param  integer $amount
-     * @param  string  $type
-     * @param  array   $meta
-     * @param  boolean $shouldAccept
-     *
      * @return array
      */
     public function deposit($amount)
