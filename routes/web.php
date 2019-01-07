@@ -68,7 +68,7 @@ Route::group(['prefix' => 'checkout'], function () {
     Route::any('verifyPayment', "OrderController@verifyPayment");
 });
 Route::group(['prefix' => 'orderproduct'], function () {
-//    Route::post('store', 'OrderproductController@store');
+    Route::get('store', 'OrderproductController@store');
     Route::post('checkout', 'OrderproductController@checkOutOrderproducts');
 });
 
@@ -193,7 +193,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('attributeset', 'AttributesetController');
     Route::resource('attributegroup', 'AttributegroupController');
     Route::resource('userupload', 'UseruploadController');
-    Route::resource('verificationmessage', 'VerificationmessageController');
+//    Route::resource('verificationmessage', 'VerificationmessageController');
     Route::resource('contact', 'ContactController');
     Route::resource('phone', 'PhoneController');
     Route::resource('afterloginformcontrol', 'AfterLoginFormController');

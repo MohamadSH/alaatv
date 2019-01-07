@@ -13,21 +13,30 @@ use Mockery\Exception;
 
 class RefinementFactory
 {
-    public $RefinementClass;
+    private $RefinementClass;
+    private $product;
+    private $data;
 
-    public function __construct($productId, $data=null) {
-        $product = Product::FindorFail($productId);
-        $typeName = $product->producttype->name;
-        $className = 'App\Classes\OrderProduct\RefinementProduct\Refinement'.ucfirst($typeName);
-        if(class_exists($className)) {
-            $RefinementClass = new $className($product, $data);
-            $this->RefinementClass = $RefinementClass;
-        } else if($typeName=='configurable') {
-            throw new Exception('Type Name {'.$typeName.'} not found.');
-        }
+    public function __construct(Product $product, $data=null) {
+        $this->product = $product;
+        $this->data = $data;
     }
 
     public function getRefinementClass() {
-        return $this->RefinementClass;
+        return $this->setupRefinementClass();
+    }
+
+    /**
+     * @return mixed
+     */
+    private function setupRefinementClass()
+    {
+        $typeName = $this->product->producttype->name;
+        $className = __NAMESPACE__ . '\Refinement' . ucfirst($typeName);
+        if (class_exists($className)) {
+            return new $className($this->product, $this->data);
+        } else {
+            throw new Exception('Type Name {' . $typeName . '} not found.');
+        }
     }
 }

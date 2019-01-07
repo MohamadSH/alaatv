@@ -151,4 +151,14 @@ return [
         'each item in array should be instance of std class' => 'each item in array should be instance of std class',
         'should be An array'                                 => ':attribute should be An array',
     ],
+
+
+
+
+
+
+
+
+
+    'activeProduct' => 'The :attribute is not active product.',
 ];

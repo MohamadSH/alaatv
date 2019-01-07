@@ -10,21 +10,25 @@ namespace App\Classes\OrderProduct\RefinementProduct;
 
 use App\Product;
 
-class RefinementConfigurable extends RefinementAbstractClass
+class RefinementConfigurable implements RefinementInterface
 {
     private $attributes;
     private $product;
 
     public function __construct(Product $product, $data) {
-        $this->attributes = $data["attribute"];
-        $this->product = $product;
+        if(isset($data['attribute'])) {
+            $this->attributes = $data["attribute"];
+            $this->product = $product;
+        } else {
+            throw new Exception('attribute not set!');
+        }
     }
 
     public function getProducts() {
-        $childrens = $this->product->children;
-        foreach ($childrens as $child) {
-            $childHaveAllAttributes = $this->checkAttributesOfChild($this->attributes, $child);
-            if($childHaveAllAttributes) {
+        $children = $this->product->children;
+        foreach ($children as $child) {
+            $childHasAllAttributes = $this->checkAttributesOfChild($this->attributes, $child);
+            if($childHasAllAttributes) {
                 $simpleProduct = collect();
                 $simpleProduct->push($child);
                 return $simpleProduct;

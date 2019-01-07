@@ -9,7 +9,7 @@
 namespace App\Classes\OrderProduct\RefinementProduct;
 
 
-abstract class RefinementAbstractClass
+interface RefinementInterface
 {
-    public function getProducts() {}
+    public function getProducts();
 }

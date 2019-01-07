@@ -179,6 +179,10 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
         'redirectUrl',
     ];
 
+    protected $appends = [
+        'active'
+    ];
+
     /**
      * All of the relationships to be touched.
      *
@@ -1788,15 +1792,52 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
     }
 
     /** edit amount of product
-     *
-     * @param Product $product
      * @param int $value
      */
-    public function decreaseProductAmountWithValue(Product $product, $value): void
+    public function decreaseProductAmountWithValue($value): void
     {
-        if (isset($product->amount)) {
-            $product->amount = $product->amount - 1;
-            $product->update();
+        if (isset($this->amount) && $this->amount>0) {
+            $this->amount = $this->amount - 1;
+            $this->update();
         }
+    }
+
+    public function getActiveAttribute() {
+        if($this->validSince!=null) {
+            $now = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran');
+            if(Carbon::parse($this->validSince)->lte($now) && Carbon::parse($this->validUntil)->gte($now)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * @param string $bonName
+     * @return bool
+     */
+    public function canApplyBon(string $bonName) {
+        return (
+            !(
+                $this->isFree ||
+                ($this->hasParents() && $this->parents()->first()->isFree)
+            )
+            &&
+            (
+                $this->basePrice != 0
+            )
+            &&
+            $this->getTotalBons($bonName)->isNotEmpty()
+        );
+    }
+
+    /**
+     * @param array $attributesId
+     * @return mixed
+     */
+    public function getAttributesValueByIds(array $attributesId) {
+        return $this->attributevalues->whereIn("id", $attributesId);
     }
 }
