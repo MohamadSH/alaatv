@@ -6,10 +6,7 @@
  * Time: 4:08 PM
  */
 
-namespace App\Classes\Abstracts\checkout;
-
-
-use App\Classes\Abstracts\Cashier;
+namespace App\Classes\Abstracts\Checkout;
 
 abstract class CheckoutProcessor
 {

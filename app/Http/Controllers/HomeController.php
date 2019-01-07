@@ -134,6 +134,7 @@ class HomeController extends Controller
         $this->middleware('permission:' . Config::get("constants.REPORT_ADMIN_PANEL_ACCESS"), ['only' => 'adminReport']);
         $this->middleware('permission:' . Config::get("constants.LIST_EDUCATIONAL_CONTENT_ACCESS"), ['only' => 'contentSetListTest']);
         $this->middleware('ability:' . Config::get("constants.ROLE_ADMIN") . ',' . Config::get("constants.TELEMARKETING_PANEL_ACCESS"), ['only' => 'adminTeleMarketing']);
+        $this->middleware('permission:' . Config::get('constants.INSERT_COUPON_ACCESS'), ['only' => 'adminGenerateRandomCoupon']);
         $this->middleware('role:admin', [
             'only' => [
                 'bot',
@@ -5966,4 +5967,15 @@ class HomeController extends Controller
         return view("admin.insertUserAndOrderproduct", compact("majors", "genders", "pageName"));
     }
 
+    /**
+     * Temporary method for generating special couopns
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function adminGenerateRandomCoupon(Request $request)
+    {
+        $productCollection = $products = $this->makeProductCollection();
+        return view("admin.generateSpecialCoupon" , compact("productCollection"));
+    }
 }

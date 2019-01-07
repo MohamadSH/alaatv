@@ -72,5 +72,9 @@ class Kernel extends HttpKernel
         'CheckHasOpenOrder' => \App\Http\Middleware\CheckHasOpenOrder::class,
         'AddCookieToCart' => \App\Http\Middleware\AddCookieToCart::class,
         'checkPermissionForSendExtraAttributesCost' => \App\Http\Middleware\checkPermissionForSendExtraAttributesCost::class,
+        'StoreOrderproductCookieInOpenOrder'    => \App\Http\Middleware\StoreOrderproductCookieInOpenOrder::class,
+        'OrderCheckoutReview'    => \App\Http\Middleware\OrderCheckoutReview::class,
+        'OrderCheckoutPayment'    => \App\Http\Middleware\OrderCheckoutPayment::class,
+        'SubmitOrderCoupon'    => \App\Http\Middleware\SubmitOrderCoupon::class,
     ];
 }

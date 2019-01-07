@@ -8,8 +8,6 @@
 
 namespace App\Classes\Abstracts\Checkout;
 
-
-use App\Classes\Abstracts\Cashier;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Exception;
 

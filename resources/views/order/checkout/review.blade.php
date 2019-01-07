@@ -24,7 +24,7 @@
                 <div class="portlet-body">
                     <div class="row">
                         @include("partials.checkoutSteps" , ["step"=>2])
-                        @if( $orderproducts->isEmpty() )
+                        @if( !isset($invoiceInfo["purchasedOrderproducts"]) || $invoiceInfo["purchasedOrderproducts"]->isEmpty() )
                             <div class="row static-info">
                                 <div class="col-md-12 " style="text-align: center">
                                     <h3 class="bold font-yellow-gold">موردی انتخاب نشده است!</h3>
@@ -36,7 +36,7 @@
                             </div>
                         @else
                             <div class="col-md-12" id="printBill-div" style="direction: rtl">
-                                <div class="portlet @if($orderproducts->isEmpty() ) yellow-gold @else dark @endif  box">
+                                <div class="portlet @if($invoiceInfo["purchasedOrderproducts"]->isEmpty() ) yellow-gold @else dark @endif  box">
                                     <div class="portlet-title">
                                         <div class="caption">
                                             فاکتور سفارش
@@ -50,7 +50,7 @@
                                     </div>
                                     <div class="portlet-body">
 
-                                        {{--@if( $orderproducts->isEmpty() )--}}
+                                        {{--@if( $invoiceInfo["purchasedOrderproducts"]->isEmpty() )--}}
                                         {{--<div class="row static-info">--}}
                                         {{--<div class="col-md-12 " style="text-align: center">--}}
                                         {{--<h3 class="bold">موردی انتخاب نشده است!</h3>--}}
@@ -61,12 +61,12 @@
                                         {{--</div>--}}
                                         {{--@else--}}
                                         <div class="clearfix" style="height: 15px;"></div>
-                                        @foreach($orderproducts as $orderproduct)
+                                        @foreach($invoiceInfo["purchasedOrderproducts"] as $orderproduct)
                                             <div class="row ">
                                                 <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 no-print">
-                                                    @if($orderproductLinks->has($orderproduct->id))
+                                                    @if(isset($invoiceInfo["orderproductLinks"]) && $invoiceInfo["orderproductLinks"]->has($orderproduct->id))
                                                         <a target="_blank"
-                                                           href="{{$orderproductLinks[$orderproduct->id]}}"><img
+                                                           href="{{$invoiceInfo["orderproductLinks"][$orderproduct->id]}}"><img
                                                                     src="{{ route('image', ['category'=>'4','w'=>'148' , 'h'=>'148' ,  'filename' =>  $orderproduct->product->getRootImage() ]) }}"
                                                                     alt="عکس محصول" width="100%"></a>
                                                     @else
@@ -125,19 +125,19 @@
                                                         {{--<a href="{{action("OrderController@verifyPayment")}}"   class="btn green btn-outline">تکمیل سفارش<i class="fa fa-arrow-left" aria-hidden="true"></i></a>--}}
                                                         {{--</div>--}}
                                                     @else
-                                                        @if($costCollection[$orderproduct->id]["cost"] == 0)
+                                                        @if($invoiceInfo["costCollection"][$orderproduct->id]["cost"] == 0)
                                                             <div class="row static-info">
                                                                 <div class="col-md-4 name" style="font-style: italic">
                                                                     قیمت محصول
                                                                 </div>
-                                                                <div class="col-md-8 value">{{number_format($costCollection[$orderproduct->id]["cost"])}}
+                                                                <div class="col-md-8 value">{{number_format($invoiceInfo["costCollection"][$orderproduct->id]["cost"])}}
                                                                     تومان
                                                                 </div>
-                                                                @if($costCollection[$orderproduct->id]["extraCost"]>0)
+                                                                @if($invoiceInfo["costCollection"][$orderproduct->id]["extraCost"]>0)
                                                                     <div class="col-md-4 name"
                                                                          style="font-style: italic"> قیمت برای شما
                                                                     </div>
-                                                                    <div class="col-md-8 value"> {{number_format($costCollection[$orderproduct->id]["cost"]+$costCollection[$orderproduct->id]["extraCost"])}}
+                                                                    <div class="col-md-8 value"> {{number_format($invoiceInfo["costCollection"][$orderproduct->id]["cost"]+$invoiceInfo["costCollection"][$orderproduct->id]["extraCost"])}}
                                                                         تومان
                                                                     </div>
                                                                 @endif
@@ -147,31 +147,31 @@
                                                                 <div class="col-md-4 name" style="font-style: italic">
                                                                     قیمت محصول
                                                                 </div>
-                                                                <div class="col-md-8 value"> {{number_format($costCollection[$orderproduct->id]["cost"])}}
+                                                                <div class="col-md-8 value"> {{number_format($invoiceInfo["costCollection"][$orderproduct->id]["cost"])}}
                                                                     تومان
                                                                 </div>
                                                                 @if($orderproduct->isGiftType())
                                                                     <div class="col-md-4 name font-red bold"
                                                                          style="font-style: italic"> تخفیف
                                                                     </div>
-                                                                    <div class="col-md-8 value font-red bold"> {{number_format($costCollection[$orderproduct->id]["cost"])}}
+                                                                    <div class="col-md-8 value font-red bold"> {{number_format($invoiceInfo["costCollection"][$orderproduct->id]["cost"])}}
                                                                         تومان
                                                                     </div>
                                                                 @else
-                                                                    @if($costCollection[$orderproduct->id]["productDiscount"] > 0 || $costCollection[$orderproduct->id]["productDiscountAmount"]>0)
+                                                                    @if($invoiceInfo["costCollection"][$orderproduct->id]["productDiscount"] > 0 || $invoiceInfo["costCollection"][$orderproduct->id]["productDiscountAmount"]>0)
                                                                         <div class="col-md-4 name font-red bold"
                                                                              style="font-style: italic"> تخفیف محصول
                                                                         </div>
-                                                                        <div class="col-md-8 value font-red bold"> {{number_format((($costCollection[$orderproduct->id]["productDiscount"]/100)*$costCollection[$orderproduct->id]["cost"]) + $costCollection[$orderproduct->id]["productDiscountAmount"])}}
+                                                                        <div class="col-md-8 value font-red bold"> {{number_format((($invoiceInfo["costCollection"][$orderproduct->id]["productDiscount"]/100)*$invoiceInfo["costCollection"][$orderproduct->id]["cost"]) + $invoiceInfo["costCollection"][$orderproduct->id]["productDiscountAmount"])}}
                                                                             تومان
                                                                         </div>
                                                                     @endif
-                                                                    @if($costCollection[$orderproduct->id]["bonDiscount"]>0)
+                                                                    @if($invoiceInfo["costCollection"][$orderproduct->id]["bonDiscount"]>0)
                                                                         <div class="col-md-4 name font-red-intense bold"
                                                                              style="font-style: italic"> تخفیف بن
                                                                         </div>
 
-                                                                        <div class="col-md-8 value font-red-intense"> {{number_format(($costCollection[$orderproduct->id]["bonDiscount"]/100) * ( ( (1-($costCollection[$orderproduct->id]["productDiscount"]/100))*$costCollection[$orderproduct->id]["cost"]) - $costCollection[$orderproduct->id]["productDiscountAmount"])) }}
+                                                                        <div class="col-md-8 value font-red-intense"> {{number_format(($invoiceInfo["costCollection"][$orderproduct->id]["bonDiscount"]/100) * ( ( (1-($invoiceInfo["costCollection"][$orderproduct->id]["productDiscount"]/100))*$invoiceInfo["costCollection"][$orderproduct->id]["cost"]) - $invoiceInfo["costCollection"][$orderproduct->id]["productDiscountAmount"])) }}
                                                                             تومان
                                                                             ({{$orderproduct->userbons->sum("pivot.usageNumber")}}
                                                                             بن)
@@ -199,7 +199,7 @@
                                                                 <div class="col-md-4 name font-blue-steel bold"
                                                                      style="font-style: italic"> قیمت برای شما
                                                                 </div>
-                                                                <div class="col-md-8 value font-blue-steel"> {{number_format((int)((1-($costCollection[$orderproduct->id]["bonDiscount"]/100)) * ( ( (1-($costCollection[$orderproduct->id]["productDiscount"]/100))*$costCollection[$orderproduct->id]["cost"]) - $costCollection[$orderproduct->id]["productDiscountAmount"]))+$costCollection[$orderproduct->id]["extraCost"])}}
+                                                                <div class="col-md-8 value font-blue-steel"> {{number_format((int)((1-($invoiceInfo["costCollection"][$orderproduct->id]["bonDiscount"]/100)) * ( ( (1-($invoiceInfo["costCollection"][$orderproduct->id]["productDiscount"]/100))*$invoiceInfo["costCollection"][$orderproduct->id]["cost"]) - $invoiceInfo["costCollection"][$orderproduct->id]["productDiscountAmount"]))+$invoiceInfo["costCollection"][$orderproduct->id]["extraCost"])}}
                                                                     تومان
                                                                 </div>
                                                             </div>
@@ -219,9 +219,9 @@
                                                 </div>
                                             </div>
                                             @if(!$orderproduct->product->isFree)
-                                                @if(isset($costCollection[$orderproduct->id]["bonDiscount"]) &&
-                                                          $costCollection[$orderproduct->id]["bonDiscount"]==0 &&
-                                                          Auth::user()->userHasBon(Config::get("constants.BON1")) &&
+                                                @if(isset($invoiceInfo["costCollection"][$orderproduct->id]["bonDiscount"]) &&
+                                                          $invoiceInfo["costCollection"][$orderproduct->id]["bonDiscount"]==0 &&
+                                                          Auth::check() && Auth::user()->userHasBon(Config::get("constants.BON1")) &&
                                                           !$orderproduct->product->bons->where("name" , Config::get("constants.BON1"))->where("pivot.discount",">","0")->where("isEnable" , 1)->isEmpty())
                                                     <div class="custom-alerts alert alert-warning fade in margin-top-40 no-print">
                                                         <i class="fa fa-exclamation-circle"></i> توجه
@@ -238,26 +238,26 @@
                                                 <div class="well">
                                                     <div class="row static-info align-reverse">
                                                         <div class="col-md-12 name  bold" style="text-align: center">
-                                                            جمع کل : {{number_format($orderproductsRawCost)}} تومان
+                                                            جمع کل : {{number_format($invoiceInfo["orderproductsRawCost"])}} تومان
                                                         </div>
                                                     </div>
-                                                    @if($orderproductsRawCost > $orderCost)
+                                                    @if($invoiceInfo["orderproductsRawCost"] > $invoiceInfo["totalCost"])
                                                         <div class="row static-info align-reverse">
                                                             <div class="col-md-12 name bold font-red"
                                                                  style="text-align: center"> مبلغ با لحاظ تخفیف
-                                                                : {{number_format($orderCost)}} تومان
+                                                                : {{number_format($invoiceInfo["totalCost"])}} تومان
                                                             </div>
                                                         </div>
                                                     @endif
                                                     <div class="row static-info align-reverse">
                                                         <div class="col-md-12 name bold" style="text-align: center">
-                                                            استفاده از کیف پول : {{number_format($walletUse)}} تومان
+                                                            استفاده از کیف پول : {{number_format($invoiceInfo["paidByWallet"])}} تومان
                                                         </div>
                                                     </div>
                                                     <div class="row static-info align-reverse">
                                                         <div class="col-md-12 name font-blue bold"
                                                              style="text-align: center"> قابل پرداخت
-                                                            : {{number_format($payableCost)}} تومان
+                                                            : {{number_format($invoiceInfo["payableCost"])}} تومان
                                                         </div>
                                                     </div>
                                                     <div class="row static-info align-reverse no-print">

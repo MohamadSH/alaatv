@@ -133,14 +133,14 @@
                                             </div>
                                             {!! Form::close() !!}
                                         </div>
-                                    @elseif(!isset($cost) || $cost == 0)
+                                    @elseif(!isset($invoiceInfo["totalCost"]) || $invoiceInfo["totalCost"] == 0)
                                         <div class="row">
                                             {!! Form::open(['method' => 'GET','action' => ['OrderController@verifyPayment'] , 'id'=>'paymentForm' , 'class'=>'form-horizontal' ]) !!}
                                             <div class="col-md-12 margin-top-20">
                                                 {!! Form::textarea('customerDescription',null,['class' => 'form-control' , 'placeholder'=>'اگر توضیحی درباره سفارش خود دارید لطفا اینجا بنویسید' , 'rows'=>'3']) !!}
                                             </div>
                                             <div class="col-md-12 margin-top-40" style="text-align: center;">
-                                                <span class="label bg-green-soft" style="font-size: 15px">مبلغ قابل پرداخت: {{number_format($cost)}}</span>
+                                                <span class="label bg-green-soft" style="font-size: 15px">مبلغ قابل پرداخت: {{number_format($invoiceInfo["totalCost"])}}</span>
                                             </div>
                                             <div class="col-md-12 margin-top-20" style="text-align: center;">
                                                 <a href="{{action("OrderController@checkoutReview")}}"
@@ -161,13 +161,9 @@
                                                     <label class="col-lg-5 col-md-5 col-sd-5 col-xs-5 text-center control-label"
                                                            style="text-align: center" for="gateway">روش پرداخت </label>
                                                     <div class="col-lg-7 col-md-7 col-sd-7 col-xs-7">
-                                                        @if(count($paymentMethods)>1)
-
-                                                            {!! Form::select('paymentmethod',$paymentMethods,null,['class' => 'form-control' , 'id'=>'paymentMethod']) !!}
-                                                        @else
-                                                            <text class="form-control-static bold"> {{current($paymentMethods)}} </text>
-                                                            {!! Form::hidden('paymentmethod',key($paymentMethods) , ['id'=>'paymentMethod']) !!}
-                                                        @endif
+                                                        {{--{!! Form::select('paymentmethod',["onlinePayment" => "آنلاین"],null,['class' => 'form-control' , 'id'=>'paymentMethod']) !!}--}}
+                                                        <text class="form-control-static bold"> آنلاین </text>
+                                                        {!! Form::hidden('paymentmethod', 'onlinePayment' , ['id'=>'paymentMethod']) !!}
                                                     </div>
 
                                                 </div>
@@ -196,7 +192,7 @@
                                                                 {{($credit>0)?"جمع کل:":"مبلغ قابل پرداخت:"}}
                                                                 <lable id="totalCost"
                                                                        style="text-decoration: line-through;">
-                                                                    {{number_format($totalRawCost)}}
+                                                                    {{number_format($invoiceInfo["totalRawCost"])}}
                                                                 </lable>
                                                             تومان
                                                             </span>
@@ -204,7 +200,7 @@
                                                         <div class="col-lg-12 col-md-12 margin-top-20 text-left">
                                                             <span class="bold font-red"
                                                                   style="padding: 0px 5px 0px 5px; font-size: 15px">
-                                                                    برای شما {{number_format($cost)}} تومان
+                                                                    برای شما {{number_format($invoiceInfo["totalCost"])}} تومان
                                                             </span>
                                                         </div>
                                                     @else
@@ -212,7 +208,7 @@
                                                             <span class="bold font-blue-sharp" style="font-size: 15px">
                                                                 {{($credit>0)?"جمع کل:":"مبلغ قابل پرداخت:"}}
                                                                 <lable id="totalCost">
-                                                                    {{number_format($cost)}}
+                                                                    {{number_format($invoiceInfo["totalCost"])}}
                                                                 </lable>
                                                             تومان
                                                             </span>
@@ -223,7 +219,7 @@
                                                         <span class="bold font-blue-sharp" style="font-size: 15px">
                                                             استفاده از کیف پول:
                                                                     <lable id="totalCost">
-                                                                        {{number_format($walletUse)}}
+                                                                        {{number_format($invoiceInfo["paidByWallet"])}}
                                                                     </lable>
                                                                     تومان
                                                         </span>
@@ -231,7 +227,7 @@
                                                         <div class="col-lg-12 col-md-12 margin-top-20 text-left">
                                                             <span class="bold font-blue-sharp" style="font-size: 15px">مبلغ قابل پرداخت:
                                                                         <lable id="totalCost">
-                                                                            {{number_format( $payableCost)}}
+                                                                            {{number_format( $invoiceInfo["payableCost"])}}
                                                                         </lable>
                                                                         تومان
                                                             </span>
@@ -251,7 +247,7 @@
                                                     </a>
                                                     <button type="submit" class="btn green btn-outline"
                                                             style="width: 100px">
-                                                        {{($payableCost == 0)?"ثبت نهایی":"پرداخت"}}
+                                                        {{($invoiceInfo["payableCost"] == 0)?"ثبت نهایی":"پرداخت"}}
                                                     </button>
                                                 </div>
                                             </div>

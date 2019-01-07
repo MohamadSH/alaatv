@@ -175,7 +175,7 @@
                                             @if($orderproduct->product->isFree)
                                                 رایگان
                                             @else
-                                                {{number_format($orderproduct->calculatePayableCost(true))}}
+                                                {{number_format($orderproduct->obtainOrderproductCost(true)["customerPrice"])}}
                                             @endif
                                         </td>
                                         <td class="text-center">
@@ -183,7 +183,7 @@
                                         </td>
                                         <td class="text-center">
                                             {{$orderproduct->userbons->sum("pivot.usageNumber")}} بن <span
-                                                    class="label label-sm label-info label-mini"> {{$orderproduct->getTotalBonNumber()}}
+                                                    class="label label-sm label-info label-mini"> {{$orderproduct->getTotalBonDiscountPercentage()}}
                                                 % </span>
                                         </td>
                                         <td class="text-center">
@@ -256,7 +256,7 @@
                                                         <div class="col-md-2">
                                                             پرداخت شده:
                                                             <text class="form-control-static font-blue"
-                                                                  id="orderproductExchangeOriginalCost_{{$orderproduct->id}}">{{$orderproduct->calculatePayableCost(true)}}</text>
+                                                                  id="orderproductExchangeOriginalCost_{{$orderproduct->id}}">{{$orderproduct->obtainOrderproductCost(true)["totalPrice"]}}</text>
                                                         </div>
                                                         <div class="col-md-4">
                                                             <label class="col-md-4 control-label ">محصول جدید</label>
