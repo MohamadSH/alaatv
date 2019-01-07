@@ -6,10 +6,8 @@
  * Time: 5:56 PM
  */
 
-namespace App\Classes\Abstracts;
+namespace App\Classes\Abstracts\Checkout;
 
-
-use App\Classes\Abstracts\checkout\CheckoutProcessor;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Exception;
 
@@ -22,15 +20,13 @@ abstract class OrderproductSumCalculator extends CheckoutProcessor
         if(!isset($calculatedOrderproducts))
             throw new Exception('Calculated orderproducts have not been set');
 
-        [
-            $totalRawPriceWhichHasDiscount,
-            $totalRawPriceWhichDoesntHaveDiscount
-        ]
-        = $this->calculateSum($calculatedOrderproducts);
+        $priceSumInfo = $this->calculateSum($calculatedOrderproducts);
 
-        $cashier->setTotalRawPriceWhichDoesntHaveDiscount($totalRawPriceWhichDoesntHaveDiscount)
-                ->setTotalRawPriceWhichHasDiscount($totalRawPriceWhichHasDiscount)
-                ->setTotalPriceWithDiscount($totalRawPriceWhichHasDiscount);
+        $cashier->setTotalRawPriceWhichDoesntHaveDiscount($priceSumInfo["totalRawPriceWhichDoesntHaveDiscount"])
+                ->setTotalRawPriceWhichHasDiscount($priceSumInfo["totalRawPriceWhichHasDiscount"])
+                ->setTotalPriceWithDiscount($priceSumInfo["totalRawPriceWhichHasDiscount"])
+                ->setSumOfOrderproductsRawCost($priceSumInfo["sumOfOrderproductsRawCost"])
+                ->setSumOfOrderproductsCustomerCost($priceSumInfo["sumOfOrderproductsCustomerCost"]);
 
         return $this->next($cashier) ;
     }

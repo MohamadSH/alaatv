@@ -9,10 +9,13 @@
 namespace App\Collection;
 
 use App\Classes\Abstracts\Pricing\OrderproductPriceCalculator;
-use App\Classes\Pricing\Alaa\AlaaOrderproductPriceCalculator;
+use App\Classes\Checkout\Alaa\GroupOrderproductCheckout;
+use App\Classes\Facade\ControllerFacades\CallOrderproductControllerStoreFacade;
 use App\Http\Controllers\OrderproductController;
+use App\Order;
 use App\Orderproduct;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Request;
 
 class OrderproductCollection extends Collection
 {
@@ -91,13 +94,10 @@ class OrderproductCollection extends Collection
     /**
      * Updates orderproduct items' cost up to new conditions
      *
-     * @return array
+     * @return void
      */
-    public function renewOrderproducs()
+    public function reCheckOrderproducs():void
     {
-        $totalRawCost = 0;
-        /** Updating each orderproduct */
-
         foreach ($this as $orderproduct) {
             if (!$orderproduct->isPurchasable()) {
                 $orderproductController = new OrderproductController();
@@ -111,21 +111,81 @@ class OrderproductCollection extends Collection
 //                $orderproduct->renewUserBons();
 
                 $orderproduct->fresh();
-
-                //ToDo : Should be removed and be replaced with an event
-                $orderproductCost = $orderproduct->obtainOrderproductCost();
-
-                $orderproduct->fillCostValues($orderproductCost);
-
-                $totalRawCost += $orderproductCost["cost"] + $orderproductCost["extraCost"];
-
-                $orderproduct->update();
             }
         }
-        /** end */
+    }
+
+    /**
+     * @return array
+     */
+    public function getNewPrices(): array
+    {
+        return $this->newPrices;
+    }
+
+    /**
+     * Makes links of every orderproduct
+     *
+     * @return mixed
+     */
+    public function makeLinks():\Illuminate\Support\Collection{
+        $orderproductLinks = collect();
+        foreach ($this as $orderproduct)
+        {
+            $orderproductLink = $orderproduct->product->makeProductLink();
+            if (strlen($orderproductLink) > 0)
+                $orderproductLinks->put($orderproduct->id, $orderproductLink);
+        }
+        return $orderproductLinks;
+    }
+
+    /**
+     * Calculates orderproducts prices of this collection
+     *
+     * @return array
+     */
+    public function calculateGroupPrice(){
+        $alaaGroupOrderproductCollection = new GroupOrderproductCheckout($this , $this->pluck("id")->toArray());
+        $priceInfo = $alaaGroupOrderproductCollection->checkout();
+        $calculatedOrderproducts = $priceInfo["orderproductsInfo"]["calculatedOrderproducts"];
+        $newPrices = $calculatedOrderproducts->newPrices;
+        $rawCost = $priceInfo["totalPriceInfo"]["sumOfOrderproductsRawCost"];
+        $customerCost = $priceInfo["totalPriceInfo"]["sumOfOrderproductsCustomerCost"];
 
         return [
-            "rawCost"       => $totalRawCost,
+            "newPrices" => $newPrices,
+            "rawCost" => $rawCost,
+            "customerCost" => $customerCost,
         ];
+    }
+
+    /**
+     *  Filters type of orderproducts of this collection
+     * @param array $type
+     * @return OrderproductCollection
+     */
+    public function whereType(array $type){
+        //ToDo : Should be modified after setting orderproduct types
+        if(in_array(config("constants.ORDER_PRODUCT_TYPE_DEFAULT") , $type))
+            return $this->where("orderproducttype_id" , null);
+        else
+            return $this->whereIn("orderproducttype_id" , $type);
+    }
+
+
+    /**
+     * Makes a ProductCollection having every orderprodcut's product
+     *
+     * @return ProductCollection
+     */
+    public function getProducts()
+    {
+        $products = new ProductCollection();
+        foreach ($this as $orderproduct)
+        {
+            $products->push($orderproduct->product);
+        }
+
+        return $products;
     }
 }

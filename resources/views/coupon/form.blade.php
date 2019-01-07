@@ -53,17 +53,17 @@
             </div>
         </div>
 
-        <div class="form-group {{ $errors->has('maxCost') ? ' has-error' : '' }}">
-            <label class="col-md-3 control-label" for="maxCost">حداکثر مبلغ خرید مجاز(تومان)</label>
-            <div class="col-md-9">
-                {!! Form::text('maxCost', null, ['class' => 'form-control', 'id' => 'maxCost' , 'dir'=>"ltr" ]) !!}
-                @if ($errors->has('maxCost'))
-                    <span class="help-block">
-                    <strong>{{ $errors->first('maxCost') }}</strong>
-                </span>
-                @endif
-            </div>
-        </div>
+        {{--<div class="form-group {{ $errors->has('maxCost') ? ' has-error' : '' }}">--}}
+            {{--<label class="col-md-3 control-label" for="maxCost">حداکثر مبلغ خرید مجاز(تومان)</label>--}}
+            {{--<div class="col-md-9">--}}
+                {{--{!! Form::text('maxCost', null, ['class' => 'form-control', 'id' => 'maxCost' , 'dir'=>"ltr" ]) !!}--}}
+                {{--@if ($errors->has('maxCost'))--}}
+                    {{--<span class="help-block">--}}
+                    {{--<strong>{{ $errors->first('maxCost') }}</strong>--}}
+                {{--</span>--}}
+                {{--@endif--}}
+            {{--</div>--}}
+        {{--</div>--}}
 
         <div class="form-group {{ $errors->has('usageLimit') ? ' has-error' : '' }}">
             <label class="col-md-3 control-label" for="usageLimit">حداکثر تعداد مجاز برای استفاده از این کپن</label>
@@ -196,6 +196,7 @@
         </div>
     </div>
 @else
+    {!! Form::hidden('discounttype_id',1) !!}
     <div class="col-md-12">
         <p class="caption-subject font-dark bold uppercase"> وارد کردن اطلاعات زیر الزامی می باشد: </p>
     </div>
@@ -235,12 +236,12 @@
             </span>
         </p>
 
-        <p>
-            {!! Form::text('maxCost', null, ['class' => 'form-control', 'id' => 'maxCost' , 'placeholder'=>'حداکثر مبلغ مجاز خرید']) !!}
-            <span class="help-block" id="maxCost">
-                    <strong></strong>
-            </span>
-        </p>
+        {{--<p>--}}
+            {{--{!! Form::text('maxCost', null, ['class' => 'form-control', 'id' => 'maxCost' , 'placeholder'=>'حداکثر مبلغ مجاز خرید']) !!}--}}
+            {{--<span class="help-block" id="maxCost">--}}
+                    {{--<strong></strong>--}}
+            {{--</span>--}}
+        {{--</p>--}}
 
         <p>
             {!! Form::text('usageLimit', null, ['class' => 'form-control', 'id' => 'couponUsageLimit'  , 'placeholder'=>'حداکثر تعداد مجاز برای استفاده از این کپن']) !!}

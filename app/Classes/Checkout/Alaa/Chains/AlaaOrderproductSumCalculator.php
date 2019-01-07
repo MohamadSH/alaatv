@@ -8,8 +8,7 @@
 
 namespace App\Classes\Checkout\Alaa\Chains;
 
-
-use App\Classes\Abstracts\OrderproductSumCalculator;
+use App\Classes\Abstracts\Checkout\OrderproductSumCalculator;
 use Illuminate\Support\Collection;
 
 class AlaaOrderproductSumCalculator extends OrderproductSumCalculator
@@ -20,6 +19,8 @@ class AlaaOrderproductSumCalculator extends OrderproductSumCalculator
      */
     protected function calculateSum(Collection $calculatedOrderproducts) :array
     {
+        $sumOfOrderproductsRawPrice = 0;
+        $sumOfOrderproductsCustomerPrice = 0;
         $totalRawPriceWhichHasDiscount = 0 ;
         $totalRawPriceWhichDoesntHaveDiscount = 0 ;//totalRawPriceWhichDoesntHaveDiscount
         foreach ($calculatedOrderproducts as $orderproduct) {
@@ -27,7 +28,8 @@ class AlaaOrderproductSumCalculator extends OrderproductSumCalculator
 
             $orderproductPrice = $orderproductPriceInfo["totalCost"];
             $orderproductExtraPrice = $orderproductPriceInfo["extraCost"];
-
+            $sumOfOrderproductsRawPrice += $orderproductPriceInfo["cost"];
+            $sumOfOrderproductsCustomerPrice += $orderproductPriceInfo["customerCost"];
             if ($orderproduct->includedInCoupon == 1) {
                 $totalRawPriceWhichHasDiscount += $orderproductPrice;
             } else {
@@ -38,8 +40,10 @@ class AlaaOrderproductSumCalculator extends OrderproductSumCalculator
         }
 
         return [
-            $totalRawPriceWhichHasDiscount ,
-            $totalRawPriceWhichDoesntHaveDiscount
+            "totalRawPriceWhichHasDiscount" => $totalRawPriceWhichHasDiscount ,
+            "totalRawPriceWhichDoesntHaveDiscount" => $totalRawPriceWhichDoesntHaveDiscount,
+            "sumOfOrderproductsRawCost" => $sumOfOrderproductsRawPrice,
+            "sumOfOrderproductsCustomerCost" => $sumOfOrderproductsCustomerPrice
         ];
     }
 }

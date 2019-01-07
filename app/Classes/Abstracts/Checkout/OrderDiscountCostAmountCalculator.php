@@ -8,8 +8,6 @@
 
 namespace App\Classes\Abstracts\Checkout;
 
-
-use App\Classes\Abstracts\Cashier;
 use PHPUnit\Framework\Exception;
 
 abstract class OrderDiscountCostAmountCalculator extends CheckoutProcessor

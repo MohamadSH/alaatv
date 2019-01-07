@@ -8,9 +8,8 @@
 
 namespace App\Classes\Checkout\Alaa;
 
-use App\Classes\Abstracts\Cashier;
-use App\Classes\Checkout\Alaa\AlaaCashier;
-use App\Classes\Interfaces\CheckoutInvoker;
+use App\Classes\Abstracts\Checkout\Cashier;
+use App\Classes\Abstracts\Checkout\CheckoutInvoker;
 use App\Order;
 
 class OrderCheckout extends CheckoutInvoker
@@ -52,6 +51,7 @@ class OrderCheckout extends CheckoutInvoker
             "AlaaOrderCouponCalculatorBasedOnCostAmount",
             "AlaaOrderPriceCalculator",
             "AlaaOrderDiscountCostAmountCalculator",
+            "AlaaOrderPayablePriceByWalletCalculator",
         ]);
         return $chainCells;
     }

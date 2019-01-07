@@ -174,21 +174,11 @@ class Orderproduct extends Model
 
     private function calculatePayableCost($calculateCost = true)
     {
-        $alaaCashierFacade = new OrderproductCheckout($this, $calculateCost);
+        $alaaCashierFacade = new OrderproductCheckout($this , $calculateCost);
         $priceInfo = $alaaCashierFacade->checkout();
         $calculatedOrderproducts = $priceInfo["orderproductsInfo"]["calculatedOrderproducts"];
         $orderproductPriceInfo = $calculatedOrderproducts->getNewPriceForItem($calculatedOrderproducts->first());
         return $orderproductPriceInfo;
-
-        //////////////////////////OLD CODE///////////////////////////////////
-
-        $costArray = $this->obtainOrderproductCost(false);
-        if ($withOrderCoupon) {
-            return (int)((1 - ($costArray["bonDiscount"] / 100)) * (((1 - ($costArray["productDiscount"] / 100)) * $costArray["cost"]) - $costArray["productDiscountAmount"]));
-            //            }
-        } else {
-            return (int)((1 - ($costArray["bonDiscount"] / 100)) * (((1 - ($costArray["productDiscount"] / 100)) * $costArray["cost"]) - $costArray["productDiscountAmount"]));
-        }
     }
 
     /**
@@ -202,77 +192,13 @@ class Orderproduct extends Model
     {
         $priceInfo = $this->calculatePayableCost($calculateCost);
         return [
-            "cost" => $priceInfo["cost"],
-            "extraCost" => $priceInfo["extraCost"],
-            "productDiscount" => $priceInfo["productDiscount"],
-            'bonDiscount' => $priceInfo["bonDiscount"],
+            "cost"                  => $priceInfo["cost"],
+            "extraCost"             => $priceInfo["extraCost"],
+            "productDiscount"       => $priceInfo["productDiscount"],
+            'bonDiscount'           => $priceInfo["bonDiscount"],
             "productDiscountAmount" => $priceInfo["productDiscountAmount"],
-            'customerPrice' => $priceInfo["customerCost"],
-            'totalPrice' => $priceInfo["totalCost"],
-        ];
-
-        ////////////////////////////Old Code/////////////////////
-        $costArray = [];
-        $bonDiscount = 0;
-        $productDiscount = 0;
-        $productDiscountAmount = 0;
-        $orderProductExtraCost = 0;
-        if ($calculateCost) {
-            $product = $this->product;
-            if ($product->isFree)
-                $costArray["cost"] = null;
-            else {
-                $costArray = $product->calculatePayablePrice();
-
-                foreach ($this->attributevalues as $attributevalue) {
-                    $orderProductExtraCost += $attributevalue->pivot->extraCost;
-                }
-
-                $userbons = $this->userbons;
-                foreach ($userbons as $userbon) {
-                    $bons = $product->bons->where("id", $userbon->bon_id)
-                        ->where("isEnable", 1);
-                    if ($bons->isEmpty()) {
-                        $parentsArray = $this->makeParentArray($product);
-                        if (!empty($parentsArray)) {
-                            foreach ($parentsArray as $parent) {
-                                $bons = $parent->bons->where("id", $userbon->bon_id)
-                                    ->where("isEnable", 1);
-                                if (!$bons->isEmpty())
-                                    break;
-                            }
-                        }
-                    }
-                    if (!$bons->isEmpty()) {
-                        $bonDiscount += $userbon->pivot->discount * $userbon->pivot->usageNumber;
-                    }
-                }
-                $productDiscount = $costArray["productDiscount"];
-                $productDiscountAmount = $costArray["productDiscountAmount"];
-                $costArray["cost"] = (int)$costArray["cost"];
-            }
-        } else {
-            $costArray["cost"] = $this->cost;
-            foreach ($this->attributevalues as $attributevalue) {
-                $orderProductExtraCost += $attributevalue->pivot->extraCost;
-            }
-            $userbons = $this->userbons;
-            foreach ($userbons as $userbon) {
-                $bonDiscount += $userbon->pivot->discount * $userbon->pivot->usageNumber;
-            }
-
-            $productDiscount = $this->discountPercentage;
-            $productDiscountAmount = $this->discountAmount;
-        }
-
-        $cost = (int)$costArray["cost"];
-        return [
-            "cost" => $cost,
-            "extraCost" => $orderProductExtraCost,
-            "productDiscount" => $productDiscount,
-            'bonDiscount' => $bonDiscount,
-            "productDiscountAmount" => (int)$productDiscountAmount,
-            'customerPrice' => (int)(((int)$cost * (1 - ($productDiscount / 100))) * (1 - ($bonDiscount / 100)) - $productDiscountAmount),
+            'customerPrice'         => $priceInfo["customerCost"],
+            'totalPrice'            => $priceInfo["totalCost"],
         ];
     }
 
@@ -281,7 +207,7 @@ class Orderproduct extends Model
      *
      * @return int
      */
-    public function getTotalBonDiscountDecimalValue(): int
+    public function getTotalBonDiscountDecimalValue():int
     {
         $totalBonNumber = 0;
         foreach ($this->userbons as $userbon) {
@@ -300,7 +226,7 @@ class Orderproduct extends Model
     {
         $totalBonDiscountValue = $this->getTotalBonDiscountDecimalValue();
 
-        return max($totalBonDiscountValue / 100, 1);
+        return min($totalBonDiscountValue / 100 , 1);
     }
 
     public function isNormalType()
@@ -356,18 +282,19 @@ class Orderproduct extends Model
     public function parents()
     {
         return $this->belongsToMany('App\Orderproduct', 'orderproduct_orderproduct', 'op2_id', 'op1_id')
-            ->withPivot('relationtype_id')
-            ->join('orderproductinterrelations', 'relationtype_id', 'orderproductinterrelations.id')
-            ->where("relationtype_id", Config::get("constants.ORDER_PRODUCT_INTERRELATION_PARENT_CHILD"));
+                    ->withPivot('relationtype_id')
+                    ->join('orderproductinterrelations', 'relationtype_id', 'orderproductinterrelations.id')
+                    ->where("relationtype_id", Config::get("constants.ORDER_PRODUCT_INTERRELATION_PARENT_CHILD"));
     }
 
-    public static function deleteOpenedTransactions(array $intendedProductsId, array $intendedOrderStatuses): void
+    public static function deleteOpenedTransactions(array $intendedProductsId , array $intendedOrderStatuses):void
     {
-        Orderproduct::whereIn("product_id", $intendedProductsId)
-            ->whereHas("order", function ($q) use ($intendedOrderStatuses) {
-                $q->whereIn("orderstatus_id", $intendedOrderStatuses)
-                    ->whereDoesntHave("transactions", function ($q2) {
-                        $q2->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_TRANSFERRED_TO_PAY"));
+        Orderproduct::whereIn("product_id" , $intendedProductsId)
+            ->whereHas("order",function ($q) use ($intendedOrderStatuses){
+                $q->whereIn("orderstatus_id" , $intendedOrderStatuses)
+                    ->whereDoesntHave("transactions" , function ($q2)
+                    {
+                        $q2->where("transactionstatus_id" , config("constants.TRANSACTION_STATUS_TRANSFERRED_TO_PAY"));
                     });
             })->delete();
     }
@@ -391,33 +318,14 @@ class Orderproduct extends Model
      */
     public function getDiscountPercentageAttribute($value)
     {
-        return $value / 100;
-    }
-
-    /**
-     * Checks whether orderproduct included in coupon or not and
-     * fills the appropriate table column
-     *
-     * @param Coupon $coupon
-     *
-     * @return bool
-     */
-    public function IsOrderproductIncludedInCoupon(Coupon $coupon)
-    {
-        if ($coupon->coupon_type == config("constants.COUPON_TYPE_OVERALL")) {
-            $flag = true;
-        } else {
-            $flag = $this->product->hasThisCoupon($coupon);
-        }
-
-        return $flag;
+        return $value / 100 ;
     }
 
     /**
      * Sets orderproduct including in coupon
      *
      */
-    public function includeInCoupon(): void
+    public function includeInCoupon():void
     {
         $this->includedInCoupon = 1;
         $this->update();
@@ -427,7 +335,7 @@ class Orderproduct extends Model
      * Sets orderproduct excluding from coupon
      *
      */
-    public function excludeFromCoupon(): void
+    public function excludeFromCoupon():void
     {
         $this->includedInCoupon = 0;
         $this->update();
@@ -437,16 +345,16 @@ class Orderproduct extends Model
      * Determines whether orderproduct is available to purchase or not
      * @return bool
      */
-    public function isPurchasable(): bool
+    public function isPurchasable():bool
     {
-        return $this->product->isEnableToPurchase();
+        return $this->product->isEnableToPurchase() ;
     }
 
     /**
      * Updates orderproduct's attribute values
      *
      */
-    public function renewAttributeValue(): void
+    public function renewAttributeValue():void
     {
         $extraAttributes = $this->attributevalues;
         $myParent = $this->product->getGrandParent();

@@ -22,23 +22,21 @@ trait ProductCommon
             $productfiletypes = Productfiletype::all();
             $allFilesCollection = collect();
             foreach ($productfiletypes as $productfiletype) {
-                $fileCollection = collect();
                 $filesArray = $product->makeFileArray($productfiletype->name);
-                if (!empty($filesArray))
-                    $fileCollection->put($product->name, $filesArray);
 
                 foreach ($product->children as $child) {
-                    $filesArray = $child->makeFileArray($productfiletype->name);
+                    $childFilesArray = $child->makeFileArray($productfiletype->name);
 
                     if (!empty($filesArray))
-                        $fileCollection->put($product->name, $filesArray);
+                        $filesArray = array_merge($filesArray , $childFilesArray);
                 }
 
-                if($fileCollection->isNotEmpty())
+                if(!empty($filesArray))
                     $allFilesCollection->push([
                                                   "typeName"        => $productfiletype->name,
                                                   "typeDisplayName" => $productfiletype->displayName,
-                                                  "files"           => $fileCollection,
+                                                  "title"           => $product->name,
+                                                  "files"           => $filesArray,
                                               ]);
             }
             return $allFilesCollection;

@@ -6,6 +6,7 @@ use App\Coupon;
 use App\Coupontype;
 use App\Http\Requests\EditCouponRequest;
 use App\Http\Requests\InsertCouponRequest;
+use App\Http\Requests\Request;
 use App\Product;
 use Carbon\Carbon;
 use Illuminate\Http\Response;
@@ -20,7 +21,7 @@ class CouponController extends Controller
         $this->response = new Response();
 
         $this->middleware('permission:' . Config::get('constants.LIST_COUPON_ACCESS'), ['only' => 'index']);
-        $this->middleware('permission:' . Config::get('constants.INSERT_COUPON_ACCESS'), ['only' => 'create']);
+        $this->middleware('permission:' . Config::get('constants.INSERT_COUPON_ACCESS'), ['only' => 'create' , 'store' , 'generateRandomCoupon']);
         $this->middleware('permission:' . Config::get('constants.REMOVE_COUPON_ACCESS'), ['only' => 'destroy']);
         $this->middleware('permission:' . Config::get('constants.SHOW_COUPON_ACCESS'), ['only' => 'edit']);
     }
@@ -85,7 +86,7 @@ class CouponController extends Controller
             $coupon->validUntil = null;
         }
 
-        if ($request->get('limitStatus') == 0) {
+        if ($request->get('limitStatus') === 0) {
             $coupon->usageLimit = null;
         }
         $coupon->discount = preg_replace('/\s+/', '', $coupon->discount);
@@ -94,7 +95,8 @@ class CouponController extends Controller
 
         if ($request->has("enable"))
             $coupon->enable = 1;
-        else $coupon->enable = 0;
+        else
+            $coupon->enable = 0;
 
         $coupon->maxCost = preg_replace('/\s+/', '', $coupon->maxCost);
         if (strlen($coupon->maxCost) == 0)
@@ -103,10 +105,9 @@ class CouponController extends Controller
         if ($coupon->save()) {
             $coupon->products()
                    ->sync($request->get('products', []));
-            return $this->response->setStatusCode(200)
-                                  ->setContent(["id" => $coupon->id]);
+            return $this->response->setStatusCode(200)->setContent(["message"=>"کد تخفیف با موفقیت درج شد" , "id"=>$coupon->id , "code"=>$coupon->code]);
         } else {
-            return $this->response->setStatusCode(503);
+            return $this->response->setStatusCode(503)->setContent(["message"=>"خطا در درج کد" ]);
         }
     }
 
@@ -186,7 +187,7 @@ class CouponController extends Controller
             $coupon->validUntil = null;
         }
 
-        if ($request->get('limitStatus') == 0) {
+        if ($request->get('limitStatus') === 0) {
             $coupon->usageLimit = null;
         }
 
@@ -216,5 +217,61 @@ class CouponController extends Controller
     {
         $coupon->delete();
         return redirect()->back();
+    }
+
+    /**
+     * This method was made temporarily for a period of time in Dey 1398
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function generateRandomCoupon(Request $request)
+    {
+        try{
+            $coupons = Coupon::all();
+
+            do{
+                $code = rand(10000 , 99999);
+            }while($coupons->where("code" , $code)->isNotEmpty());
+
+            $request->offsetSet("code" , $code);
+            if($request->has("products") && !empty($request->gat("products")))
+                $request->offsetSet("coupontype_id" ,2);
+            else
+                $request->offsetSet("coupontype_id" ,1);
+
+            if($request->has("validSinceDate"))
+            {
+                $request->offsetSet("validSinceEnable" , true);
+                $request->offsetSet("validSince" , $request->get("validSinceDate"));
+                if($request->has("validSinceTime"))
+                    $request->offsetSet("sinceTime" , $request->get("validSinceTime"));
+            }
+
+            if($request->has("validTillDate"))
+            {
+                $request->offsetSet("validUntilEnable" , true);
+                $request->offsetSet("validUntil" , $request->get("validTillDate"));
+                if($request->has("validTillTime"))
+                    $request->offsetSet("untilTime" , $request->get("validTillTime"));
+            }
+
+            $storeCouponRequest = new \App\Http\Requests\InsertCouponRequest();
+            $storeCouponRequest->merge($request->all());
+            $response =  $this->store($storeCouponRequest);
+
+            return $response ;
+
+        }catch (\Exception    $e) {
+            $message = "unexpected error";
+            return $this->response
+                ->setStatusCode(503)
+                ->setContent([
+                    "message"=>$message ,
+                    "error"=>$e->getMessage() ,
+                    "line"=>$e->getLine() ,
+                    "file"=>$e->getFile()
+                ]);
+        }
     }
 }
