@@ -62,10 +62,10 @@ Route::group(['prefix' => 'checkout'], function () {
         Route::get('review', "OrderController@checkoutReview");
         Route::get('payment', "OrderController@checkoutPayment");
     });
-    Route::get('successfulPayment', "OrderController@successfulPayment");
-    Route::get('failedPayment', "OrderController@failedPayment");
-    Route::get('returnFromPayment', "OrderController@otherPayment");
-    Route::any('verifyPayment', "OrderController@verifyPayment");
+    Route::get('successfulPayment', "PaymentController@successfulPayment");
+    Route::get('failedPayment', "PaymentController@failedPayment");
+    Route::get('returnFromPayment', "PaymentController@otherPayment");
+    Route::any('verifyPayment', "PaymentController@verifyPayment");
 });
 Route::group(['prefix' => 'orderproduct'], function () {
     Route::get('store', 'OrderproductController@store');
@@ -112,7 +112,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post("completeTransaction/{transaction}", "TransactionController@completeTransaction");
     Route::post("myTransaction/{transaction}", "TransactionController@limitedUpdate");
     Route::get('getUnverifiedTransactions', 'TransactionController@getUnverifiedTransactions');
-    Route::any('paymentRedirect', 'TransactionController@paymentRedirect');
+    Route::any('paymentRedirect', 'PaymentController@paymentRedirect');
     Route::get('exitAdminInsertOrder', 'OrderController@exitAdminInsertOrder');
     Route::post('exchangeOrderproduct/{order}', 'OrderController@exchangeOrderproduct');
     Route::get('MBTI-Participation', "MbtianswerController@create");

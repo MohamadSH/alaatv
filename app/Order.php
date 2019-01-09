@@ -774,4 +774,27 @@ class Order extends Model
         }
         return $notDuplicateProduct;
     }
+
+    /**
+     * @return int
+     */
+    public function getDonateCost(): int
+    {
+        $donateCost = 0;
+        if ($this->hasTheseProducts(Product::DONATE_PRODUCT)) {
+            $donateCost = Product::getDonateProductCost();
+        }
+        return $donateCost;
+    }
+
+    /**
+     * @param Order $order
+     */
+    public function closeOrderWithIndebtedStatus(): void
+    {
+        $this->close(Config::get("constants.PAYMENT_STATUS_INDEBTED"));
+        $this->timestamps = false;
+        $this->update();
+        $this->timestamps = true;
+    }
 }

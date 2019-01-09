@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Classes\Payment\RefinementRequest\RefinementRequest;
 use App\Coupon;
 use App\Helpers\ENPayment;
 use App\Http\Requests\EditTransactionRequest;
@@ -15,6 +16,7 @@ use App\Traits\OrderCommon;
 use App\Transaction;
 use App\Transactiongateway;
 use App\Transactionstatus;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -24,7 +26,6 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
-use Zarinpal\Drivers\SoapDriver;
 use Zarinpal\Zarinpal;
 
 class TransactionController extends Controller
@@ -41,6 +42,12 @@ class TransactionController extends Controller
         $this->middleware('permission:' . Config::get('constants.EDIT_TRANSACTION_ACCESS'), ['only' => 'update']);
         $this->middleware('role:admin', ['only' => 'getUnverifiedTransactions']);
         //        $this->middleware('permission:'.Config::get('constants.INSERT_TRANSACTION_ACCESS'),['only'=>'store']);
+
+        $this->middleware([
+            'CheckHasOpenOrder'
+        ], [
+            'only' => ['paymentRedirect']
+        ]);
     }
 
     /**
@@ -350,118 +357,6 @@ class TransactionController extends Controller
         //
     }
 
-    public function paymentRedirect(Request $request)
-    {
-        $gateway = $request->get('gateway');
-        $description = "";
-        /**
-         *  Finding and authorizing the order to be paid
-         */
-
-        if ($request->has('order_id'))
-            $order_id = $request->get('order_id');
-        else
-            $order_id = session()->get("order_id");
-
-        $order = Order::findOrFail($order_id);
-        if ($order->orderproducts->isEmpty())
-            return redirect(action("OrderController@checkoutReview"));
-
-        if (!$this->checkOrderAuthority($order)) {
-            $message = "سفارش مورد نظر متعلق به شما نمی باشد";
-            $controller = new HomeController();
-            return $controller->errorPage($message);
-        }
-
-        if ($request->has("transaction_id")) {
-            $transaction = Transaction::FindOrFail($request->get("transaction_id"));
-            if ($transaction->order_id != $order->id)
-                abort("403");
-            $description .= "پرداخت قسط -";
-        }
-        /**
-         *  end
-         */
-
-        /**
-         *  Setting some info and description
-         */
-        $user = $order->user;
-        $description .= "آلاء - " . $user->mobile . " - محصولات: ";
-
-        foreach ($order->orderproducts as $orderproduct) {
-            if (isset($orderproduct->product->id))
-                $description .= $orderproduct->product->name . " , ";
-            else
-                $description .= "یک محصول نامشخص , ";
-        }
-
-        if ($request->has("customerDescription")) {
-            $customerDescription = $request->get("customerDescription");
-            $order->customerDescription = $customerDescription;
-            $order->timestamps = false;
-            $order->update();
-            $order->timestamps = true;
-        }
-        /**
-         *  end
-         */
-        if (!$request->has("forcePay_bhrk") && $order->orderstatus_id == config("constants.ORDER_STATUS_OPEN"))
-            $order->refreshCost();
-
-            $couponValidationStatus = optional($order->coupon)->validateCoupon();
-            if($couponValidationStatus != Coupon::COUPON_VALIDATION_STATUS_OK && $couponValidationStatus != Coupon::COUPON_VALIDATION_STATUS_USAGE_LIMIT_FINISHED){
-                $order->detachCoupon();
-                $order = $order->fresh();
-                $order->refreshCost();
-            }
-
-        if (isset($transaction)) {
-            $cost = $transaction->cost;
-        } else {
-            $cost = $order->totalCost() - $order->totalPaidCost();
-            if ($request->has("payByWallet")) {
-                if (isset($user)) {
-                    $walletCost = $cost;
-                    $subtractedAmount = 0;
-                    if ($order->hasTheseProducts(Product::DONATE_PRODUCT)) {
-                        $subtractedAmount = Product::getDonateProductCost();
-                        $walletCost = $walletCost - $subtractedAmount;
-
-                    }
-
-                    $walletPayResult = $this->payOrderCostByWallet($user, $order, $walletCost);
-                    if ($walletPayResult["result"]) {
-                        $remainedCost = $walletPayResult["cost"];
-                        $cost = $remainedCost + $subtractedAmount;
-                        $order->close(Config::get("constants.PAYMENT_STATUS_INDEBTED"));
-                        $order->timestamps = false;
-                        $order->update();
-                        $order->timestamps = true;
-                    }
-                }
-            }
-        }
-
-        switch ($gateway) {
-            case "zarinpal":
-                if (isset($cost) && $cost > 0) {
-                    $this->zarinReqeust($order, (int)$cost, $description);
-                } else {
-                    session()->put("closedOrder_id", $order->id);
-                    return redirect(action("OrderController@verifyPayment"));
-                }
-                break;
-            case "enbank":
-                if (isset($cost))
-                    return $this->ENBankRequest($order, (int)$cost);
-                else return redirect(action("OrderController@verifyPayment"));
-                break;
-            default:
-                break;
-        }
-        return redirect(action("HomeController@error404"));
-    }
 
     /** checks whether the order belongs to the user or not
      *
@@ -475,62 +370,6 @@ class TransactionController extends Controller
             return true;
         else
             return false;
-    }
-
-    /**
-     * Making request to ZarinPal gateway
-     *
-     * @param  \app\Order $order
-     * @param  integer    $cost
-     * @param  String     $description
-     *
-     * @return \Illuminate\Http\Response
-     */
-    protected function zarinReqeust($order, $cost, $description)
-    {
-        $zarinGate = Transactiongateway::all()
-                                       ->where('name', 'zarinpal')
-                                       ->first();
-        $merchant = $zarinGate->merchantNumber;
-        $zarinPal = new Zarinpal($merchant, new SoapDriver(), "zarinGate");
-
-        //ToDo : putting verify url in .env or database
-        $answer = $zarinPal->request(action("OrderController@verifyPayment"), (int)$cost, $description);
-        if (isset($answer['Authority']) && strlen($answer['Authority']) > 0) {
-            $order->cancelOpenOnlineTransactions();
-
-            $unpaidTransactions = $order->unpaidTransactions->where("cost", $cost);
-            if ($unpaidTransactions->isNotEmpty()) {
-                $unpaidTransaction = $unpaidTransactions->first();
-                $request = new EditTransactionRequest();
-                $request->offsetSet("authority", $answer['Authority']);
-                $request->offsetSet("transactiongateway_id", $zarinGate->id);
-                $request->offsetSet("destinationBankAccount_id", 1);
-                $request->offsetSet("paymentmethod_id", Config::get("constants.PAYMENT_METHOD_ONLINE"));
-                $request->offsetSet("apirequest", true);
-                $request->offsetSet("gateway", $zarinPal);
-                $response = $this->update($request, $unpaidTransaction);
-                if ($response->getStatusCode() == 200)
-                    $zarinPal->redirect();
-                else
-                    dd("مشکل در برقراری ارتباط با درگاه زرین پال");
-            } else {
-                $request = new InsertTransactionRequest();
-                $request->offsetSet("order_id", $order->id);
-                $request->offsetSet("cost", $cost);
-                $request->offsetSet("authority", $answer['Authority']);
-                $request->offsetSet("transactiongateway_id", $zarinGate->id);
-                $request->offsetSet("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_TRANSFERRED_TO_PAY"));
-                $request->offsetSet("destinationBankAccount_id", 1);
-                $request->offsetSet("paymentmethod_id", Config::get("constants.PAYMENT_METHOD_ONLINE"));
-                $request->offsetSet("gateway", $zarinPal);
-                $response = $this->store($request);
-                if ($response->getStatusCode() == 200)
-                    $zarinPal->redirect();
-                else
-                    dd("مشکل در برقراری ارتباط با درگاه زرین پال");
-            }
-        } else return $answer['error'];
     }
 
     /**
@@ -558,6 +397,7 @@ class TransactionController extends Controller
             $transaction->managerComment = null;
         if (strlen($transaction->paymentmethod_id) == 0)
             $transaction->paymentmethod_id = null;
+
         if ($request->has("deadline_at") && strlen($request->get("deadline_at")) > 0) {
             $deadline_at = Carbon::parse($request->get("deadline_at"))
                                  ->addDay()
@@ -571,6 +411,7 @@ class TransactionController extends Controller
                                   ->format('Y-m-d');
             $transaction->completed_at = $completed_at;
         }
+
         if ($transaction->update()) {
             if ($request->ajax() || $request->has("apirequest")) {
                 return $this->response->setStatusCode(200);
@@ -598,6 +439,26 @@ class TransactionController extends Controller
      */
     public function store(InsertTransactionRequest $request)
     {
+        $result = $this->storeTransaction($request);
+
+        return response()->json([
+            'error' => $result['message']
+        ], $result['statusCode']);
+
+        /*$result['statusCode'] = Response::HTTP_OK;
+        $result['message'] = $transactionMessage;
+        $result['transaction'] = $transaction;
+        $result['order'] = $order;*/
+    }
+
+    public function storeTransaction(InsertTransactionRequest $request)
+    {
+        $result = [
+            'statusCode' => Response::HTTP_OK,
+            'message' => '',
+            'transaction' => null
+        ];
+
         $order = Order::findOrFail($request->get("order_id"));
 
         /**
@@ -607,21 +468,21 @@ class TransactionController extends Controller
             ->getRoutes()
             ->match(app('request')->create(URL::previous()))
             ->getName();
-        if (strcmp($previousRoute, "order.edit") == 0)
+        if (strcmp($previousRoute, "order.edit") == 0) {
             $comesFromAdmin = true;
-        else $comesFromAdmin = false;
+        } else {
+            $comesFromAdmin = false;
+        }
         /**
          *  end
          */
 
         if ($request->has("comesFromAdmin")) {
-            if (!Auth::user()
-                     ->can(Config::get("constants.INSERT_TRANSACTION_ACCESS"))) {
-                $message = "سفارش مورد نظر متعلق به شما نمی باشد";
-                $controller = new HomeController();
-                return $controller->errorPage($message);
+            if (!Auth::user()->can(Config::get("constants.INSERT_TRANSACTION_ACCESS"))) {
+                $result['statusCode'] = Response::HTTP_FORBIDDEN;
+                $result['message'] = "سفارش مورد نظر متعلق به شما نمی باشد";
+                return $result;
             }
-
             $comesFromAdmin = true;
         }
 
@@ -629,9 +490,9 @@ class TransactionController extends Controller
          * Check the order authority
          */
         if (!$comesFromAdmin && !$this->checkOrderAuthority($order)) {
-            $message = "سفارش مورد نظر متعلق به شما نمی باشد";
-            $controller = new HomeController();
-            return $controller->errorPage($message);
+            $result['statusCode'] = Response::HTTP_FORBIDDEN;
+            $result['message'] = "سفارش مورد نظر متعلق به شما نمی باشد";
+            return $result;
         }
         /**
          *  end
@@ -642,11 +503,10 @@ class TransactionController extends Controller
          *  For inserting online transactions
          */
         if ($request->has("authority")) {
-            $transaction = Transaction::all()
-                                      ->where("authority", $request->get("authority"))
-                                      ->first();
-            if (isset($transaction))
+            $transaction = Transaction::where("authority", $request->get("authority"))->first();
+            if (isset($transaction)) {
                 $newTransaction = false;
+            }
         }
         /**
          *  end
@@ -659,20 +519,24 @@ class TransactionController extends Controller
              *  For inserting online transactions
              */
 
+            if($result['statusCode'] != Response::HTTP_OK) {
+                return $result;
+            }
+
             if ($transaction->order->user->id != $order->user->id) {
-                session()->put("error", "تراکنشی با این شماره Authority قبلا برای شخص دیگری ثبت شده است");
-                return redirect()->back();
+                $result['statusCode'] = Response::HTTP_FORBIDDEN;
+                $result['message'] = "تراکنشی با این شماره Authority قبلا برای شخص دیگری ثبت شده است";
+                return $result;
             }
             if ($request->get("cost") != $transaction->cost) {
-                session()->put("error", "مبلغ وارد شده با تراکنش تصدیق نشده ای که یافت شد همخوانی ندارد");
-                return redirect()->back();
+                $result['statusCode'] = Response::HTTP_FORBIDDEN;
+                $result['message'] = "مبلغ وارد شده با تراکنش تصدیق نشده ای که یافت شد همخوانی ندارد";
+                return $result;
             }
             /**
              * Verifying transactions
              **/
-            $zarinGate = Transactiongateway::all()
-                                           ->where('name', 'zarinpal')
-                                           ->first();
+            $zarinGate = Transactiongateway::where('name', 'zarinpal')->first();
             $merchant = $zarinGate->merchantNumber;
             $zarinPal = new Zarinpal($merchant, new SoapDriver(), "zarinGate");
             $result = $zarinPal->verifyWithExtra($transaction->cost, $transaction->authority);
@@ -680,34 +544,38 @@ class TransactionController extends Controller
                 $transaction->transactionID = $result["RefID"];
                 $transaction->order_id = $order->id;
                 $transaction->transactionstatus_id = Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL");
-                $transactionMessage = "تراکنش با موفقیت تصدیق شد و اطلاعات آن ثبت گردید";
                 if ($transaction->update()) {
-                    session()->put("success", $transactionMessage);
-                    return redirect()->back();
+                    $result['statusCode'] = Response::HTTP_OK;
+                    $result['message'] = "تراکنش با موفقیت تصدیق شد و اطلاعات آن ثبت گردید";
+                    $result['transaction'] = $transaction;
+                    return $result;
                 } else {
-                    session()->put("error", "خطای پایگاه داده در ثبت تراکنش");
-                    return redirect()->back();
+                    $result['statusCode'] = Response::HTTP_INTERNAL_SERVER_ERROR;
+                    $result['message'] = "خطای پایگاه داده در ثبت تراکنش";
+                    return $result;
                 }
             } else if (strcmp($result["Status"], "verified before") == 0) {
                 $transaction->transactionID = $result["RefID"];
                 $transaction->order_id = $order->id;
                 $transaction->transactionstatus_id = Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL");
-                $transactionMessage = "این تراکنش قبلا تصدیق شده بود. اطلاعات تراکنش ثبت شد";
                 if ($transaction->update()) {
-                    session()->put("success", $transactionMessage);
-                    return redirect()->back();
+                    $result['statusCode'] = Response::HTTP_OK;
+                    $result['message'] = "این تراکنش قبلا تصدیق شده بود. اطلاعات تراکنش ثبت شد";
+                    $result['transaction'] = $transaction;
+                    return $result;
                 } else {
-                    session()->put("error", "خطای پایگاه داده در ثبت تراکنش");
-                    return redirect()->back();
+                    $result['statusCode'] = Response::HTTP_INTERNAL_SERVER_ERROR;
+                    $result['message'] = "خطای پایگاه داده در ثبت تراکنش";
+                    return $result;
                 }
             } else if (strcmp($result["Status"], "error") == 0) {
-                $transactionMessage = "پاسخ سرویس دهنده خطای " . $result["error"] . " می باشد";
-                session()->put("error", $transactionMessage);
-                return redirect()->back();
+                $result['statusCode'] = Response::HTTP_INTERNAL_SERVER_ERROR;
+                $result['message'] = "پاسخ سرویس دهنده خطای " . $result["error"] . " می باشد";
+                return $result;
             } else {
-                $transactionMessage = "پاسخ نامعتبر از سرویس دهنده";
-                session()->put("error", $transactionMessage);
-                return redirect()->back();
+                $result['statusCode'] = Response::HTTP_INTERNAL_SERVER_ERROR;
+                $result['message'] = "پاسخ نامعتبر از سرویس دهنده";
+                return $result;
             }
 
 
@@ -730,7 +598,7 @@ class TransactionController extends Controller
 
         if ($request->has("completed_at") && strlen($request->get("completed_at")) > 0) {
             $completed_at = Carbon::parse($request->get("completed_at"))
-                                  ->format('Y-m-d');
+                ->format('Y-m-d');
             $transaction->completed_at = $completed_at;
 
         } else {
@@ -739,7 +607,7 @@ class TransactionController extends Controller
 
         if ($request->has("deadline_at") && strlen($request->get("deadline_at")) > 0) {
             $deadline_at = Carbon::parse($request->get("deadline_at"))
-                                 ->format('Y-m-d');
+                ->format('Y-m-d');
             $transaction->deadline_at = $deadline_at;
             $transaction->completed_at = null;
         }
@@ -748,7 +616,10 @@ class TransactionController extends Controller
              *  An online transaction
              */
             if (isset($gateway)) {
-                return $this->response->setStatusCode(200);
+                $result['statusCode'] = Response::HTTP_OK;
+                $result['message'] = "تراکنش با موفقیت ثبت شد.";
+                $result['transaction'] = $transaction;
+                return $result;
             } /**
              *  An offline transaction
              */
@@ -764,16 +635,23 @@ class TransactionController extends Controller
                 else $transactionMessage = "تراکنش با موفقیت درج شد";
                 $order->timestamps = false;
                 if (!$order->update()) {
-                    session()->put("error", "خطای پایگاه داده در به روز رسانی سفارش شما");
-                    return redirect()->back();
+                    $result['statusCode'] = Response::HTTP_INTERNAL_SERVER_ERROR;
+                    $result['message'] = "خطای پایگاه داده در به روز رسانی سفارش شما";
+                    $result['transaction'] = $transaction;
+                    return $result;
                 }
                 $order->timestamps = true;
-                session()->put("success", $transactionMessage);
-                return redirect()->back();
+
+                $result['statusCode'] = Response::HTTP_OK;
+                $result['message'] = $transactionMessage;
+                $result['transaction'] = $transaction;
+                $result['order'] = $order;
+                return $result;
             }
         } else {
-            session()->put("error", "خطای پایگاه داده در ثبت تراکنش");
-            return redirect()->back();
+            $result['statusCode'] = Response::HTTP_INTERNAL_SERVER_ERROR;
+            $result['message'] = "خطای پایگاه داده در ثبت تراکنش";
+            return $result;
         }
     }
 
