@@ -787,14 +787,86 @@ class Order extends Model
         return $donateCost;
     }
 
-    /**
-     * @param Order $order
-     */
-    public function closeOrderWithIndebtedStatus(): void
+    public function closeOrderWithIndebtedStatus()
     {
-        $this->close(Config::get("constants.PAYMENT_STATUS_INDEBTED"));
+        $this->close(config("constants.PAYMENT_STATUS_INDEBTED"));
         $this->timestamps = false;
         $this->update();
         $this->timestamps = true;
+    }
+
+    public function detachUnusedCoupon()
+    {
+        $usedCoupon = $this->hasProductsThatUseItsCoupon();
+        if (!$usedCoupon) {
+            /** if order has not used coupon reverse it    */
+            $this->detachCoupon();
+        }
+    }
+
+
+    /**
+     * @param Transaction $transaction
+     * @return bool
+     */
+    public function changePaymentStatusToPaidOrIndebted(Transaction $transaction)
+    {
+        $this->close(config("constants.PAYMENT_STATUS_PAID"));
+        if ($transaction->cost < (int)$this->totalCost()) {
+            if ((int)$this->totalPaidCost() < (int)$this->totalCost())
+                $this->paymentstatus_id = config("constants.PAYMENT_STATUS_INDEBTED");
+        }
+
+        $this->timestamps = false;
+        $updateStatus = $this->update();
+        $this->timestamps = true;
+        return $updateStatus;
+    }
+
+
+    /**
+     * @return bool
+     */
+    public function setCanceledAndUnpaid()
+    {
+        $this->close(config("constants.PAYMENT_STATUS_UNPAID"), config("constants.ORDER_STATUS_CANCELED"));
+        $this->timestamps = false;
+        $updateStatus = $this->update();
+        $this->timestamps = true;
+        return $updateStatus;
+    }
+
+    /**
+     * @return array
+     */
+    public function refundWalletTransaction(): array
+    {
+        $walletTransactions = $this->suspendedTransactions()
+            ->walletMethod();
+        $totalWalletRefund = 0;
+        $closeOrderFlag = false;
+        foreach ($walletTransactions as $transaction) {
+            $wallet = $transaction->wallet;
+            $amount = $transaction->cost;
+            if (isset($wallet)) {
+                $response = $wallet->deposit($amount);
+                if ($response["result"]) {
+                    $transaction->delete();
+                    $totalWalletRefund += $amount;
+                }/*else {}*/
+            }/*else {
+                $response = $user->deposit($amount, config("constants.WALLET_TYPE_GIFT"));
+                if ($response["result"]) {
+                    $transaction->delete();
+                    $totalWalletRefund += $amount;
+                } else {}
+            }*/
+            $closeOrderFlag = true;
+        }
+
+        return array(
+            'totalWalletRefund'=>$totalWalletRefund,
+            'closeOrderFlag'=>$closeOrderFlag
+        );
     }
 }

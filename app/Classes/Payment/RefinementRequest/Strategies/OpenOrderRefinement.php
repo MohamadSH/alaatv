@@ -38,9 +38,9 @@ class OpenOrderRefinement extends RefinementClass
     }
 
     /**
-     * @return Order
+     * @return Order|null
      */
-    private function getOpenOrder(): Order
+    private function getOpenOrder(): ?Order
     {
         $openOrder = $this->user->openOrders()->with(['transactions', 'coupon'])->first();
         return $openOrder;

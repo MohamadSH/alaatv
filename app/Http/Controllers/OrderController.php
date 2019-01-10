@@ -929,7 +929,6 @@ class OrderController extends Controller
             "image" => optional($this->setting)->site->siteLogo
         ]);
 
-
         $order = Order::Find($request->order_id);
         if(isset($order)) {
             $order->load(["user" , "coupon" , "coupon.products" ,"orderproducts" , "orderproducts.userbons" , "orderproducts.attributevalues" , "orderproducts.product" ]);
@@ -997,8 +996,7 @@ class OrderController extends Controller
         $copyOrderRequest->offsetSet("couponDiscount", $order->couponDiscount);
         $copyOrderRequest->offsetSet("couponDiscountAmount", $order->couponDiscountAmount);
         $copyOrderRequest->offsetSet("checkOutDateTime", $order->checkOutDateTime);
-        $orderController = new  OrderController();
-        $newOrder = $orderController->store($copyOrderRequest);
+        $newOrder = $this->store($copyOrderRequest);
         if ($newOrder) {
             $orderproducts = $order->orderproducts;
             foreach ($orderproducts as $orderproduct) {

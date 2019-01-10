@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Classes\Payment\RefinementRequest\RefinementRequest;
-use App\Coupon;
-use App\Helpers\ENPayment;
 use App\Http\Requests\EditTransactionRequest;
 use App\Http\Requests\InsertTransactionRequest;
 use App\Order;
@@ -16,14 +13,12 @@ use App\Traits\OrderCommon;
 use App\Transaction;
 use App\Transactiongateway;
 use App\Transactionstatus;
-use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use Zarinpal\Zarinpal;
@@ -653,154 +648,6 @@ class TransactionController extends Controller
             $result['message'] = "خطای پایگاه داده در ثبت تراکنش";
             return $result;
         }
-    }
-
-    /**
-     * Making request to ENBank gateway
-     *
-     * @param  integer    $cost
-     * @param  \app\Order $order
-     *
-     * @return \Illuminate\Http\Response
-     */
-    protected function ENBankRequest($order, $cost)
-    {
-        $homeController = new HomeController();
-        if (!Auth::user()
-                 ->hasRole("admin")) {
-            $message = "در حال حاضر استفاده از این سرویس مقدور نمی باشد";
-            return $homeController->errorPage($message);
-        }
-
-        $enBankGate = Transactiongateway::all()
-                                        ->where('name', 'enbank')
-                                        ->first();
-        $request = new InsertTransactionRequest();
-        $request->offsetSet("order_id", $order->id);
-        $request->offsetSet("cost", $cost);
-        $request->offsetSet("transactiongateway_id", $enBankGate->id);
-        $request->offsetSet("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_TRANSFERRED_TO_PAY"));
-        $request->offsetSet("destinationBankAccount_id", 1);
-        $onlinePaymentMethod = Paymentmethod::all()
-                                            ->where("name", "online")
-                                            ->first();
-        $request->offsetSet("paymentmethod_id", $onlinePaymentMethod->id);
-        $request->offsetSet("gateway", $enBankGate);
-        $transaction = $this->store($request);
-        if (!isset($transaction)) {
-            $message = "خطا در ایجاد تراکنش";
-            return $homeController->errorPage($message);
-        }
-
-        $resNumber = $transaction->id;
-        $amount = ((int)$cost) * 10;   //tabdile gheymat be rial
-        $csrfToken = csrf_token();
-        $redirectUrl = action("OrderController@verifyPayment") . "?_token=" . $csrfToken;
-
-        /////////////////state1
-        $ENBank = new ENPayment();
-
-        $login = $ENBank->login($enBankGate->merchantNumber, $enBankGate->merchantPassword);
-        if (isset($login["error"])) {
-            $message = "خطا در ورود";
-            return $homeController->errorPage($message);
-        } else {
-            $sessionId = $login["sessionId"];
-        }
-
-        $params['resNum'] = $resNumber;
-        $params['amount'] = $amount;
-        $params['redirectUrl'] = $redirectUrl;
-        $params['transType'] = "enGoods";
-        $params['WSContext'] = [
-            'SessionId' => $sessionId,
-            'UserId'    => $enBankGate->merchantNumber,
-            'Password'  => $enBankGate->merchantPassword,
-        ];
-
-        $getPurchaseParamsToSign = $ENBank->getPurchaseParamsToSign($params);
-        if (isset($getPurchaseParamsToSign['error'])) {
-            $message = "پاسخی از بانک دریافت نشد";
-            return $homeController->errorPage($message);
-        } else {
-            $uniqueId = $getPurchaseParamsToSign['uniqueId'];
-            $dataToSign = $getPurchaseParamsToSign['dataToSign'];
-        }
-        dump($uniqueId);
-        dump($dataToSign);
-        ///////////////////////state2
-
-        $fileToSign = "ENBank-toSign-" . $transaction->id . ".txt";
-        Storage::disk(Config::get("constants.DISK17"))
-               ->put($fileToSign, $dataToSign);
-        $fileToSignRealPath = Storage::disk(Config::get("constants.DISK17"))
-                                     ->path($fileToSign);
-
-        $signedFile = "ENBank-signed-" . $transaction->id . ".txt";
-        Storage::disk(Config::get("constants.DISK17"))
-               ->put($signedFile, "");
-        $signedFileRealPath = Storage::disk(Config::get("constants.DISK17"))
-                                     ->path($signedFile);
-
-        $myCertificate = Storage::disk(Config::get("constants.DISK16"))
-                                ->path($enBankGate->certificatePrivateKeyFile);
-        openssl_pkcs7_sign($fileToSignRealPath, $signedFileRealPath, 'file://' . $myCertificate,
-                           [
-                               'file://' . $myCertificate,
-                               $enBankGate->certificatePrivateKeyPassword,
-                           ],
-                           [], PKCS7_NOSIGS
-        );
-
-
-        $data = Storage::disk(Config::get("constants.DISK17"))
-                       ->get($signedFile);
-        $parts = explode("\n\n", $data, 2);
-        $string = $parts[1];
-
-        $parts1 = explode("\n\n", $string, 2);
-        $signature = $parts1[0];
-        ///////////////////////state3
-
-        $login = $ENBank->login($enBankGate->merchantNumber, $enBankGate->merchantPassword);
-        if (isset($login["error"])) {
-            $message = "خطا در ورود";
-            return $homeController->errorPage($message);
-        } else {
-            $sessionId = $login["sessionId"];
-        }
-
-        $params['signature'] = $signature;
-        $params['WSContext'] = [
-            'SessionId' => $sessionId,
-            'UserId'    => $enBankGate->merchantNumber,
-            'Password'  => $enBankGate->merchantPassword,
-        ];
-        $params['uniqueId'] = $uniqueId;
-
-        $generateSignedPurchase = $ENBank->generateSignedPurchaseToken($params);
-        if (isset($generateSignedPurchase['error'])) {
-            $message = "در هنگام اتصال به درگاه ، پاسخی از بانک دریافت نشد";
-            return $homeController->errorPage($message);
-        } else {
-            $generateSignedPurchaseToken = $generateSignedPurchase['token'];
-            $redirectFormInfo = [];
-            $redirectFormInfo["token"] = $generateSignedPurchaseToken;
-            $redirectFormInfo["language"] = "fa";
-
-            //            $postUrl = "https://pna.shaparak.ir/CardServices/tokenController" ;
-            $postUrl = "https://pna.shaparak.ir/_ipgw_/payment/";
-            $requestMethod = "POST";
-            $transaction->authority = $generateSignedPurchaseToken;
-            if ($transaction->update()) {
-                return view("order.checkout.paymentRedirect", compact("postUrl", "requestMethod", "redirectFormInfo"));
-            } else {
-                $message = "خطای پایگاه داده در ذخیره تراکنش";
-                return $homeController->errorPage($message);
-            }
-
-        }
-
     }
 
     /**

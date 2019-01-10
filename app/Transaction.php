@@ -4,9 +4,9 @@ namespace App;
 
 use App\Traits\DateTrait;
 use App\Traits\Helper;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Config;
 
 /**
  * App\Transaction
@@ -45,41 +45,43 @@ use Illuminate\Support\Facades\Config;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[] $children
  * @property-read \App\Bankaccount                                            $destinationBankAccount
  * @property-read \App\Order|null                                             $order
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[] $parents
+ * @property-read \Illuminate\Database\Eloquent\Collection|Transaction[] $parents
  * @property-read \App\Paymentmethod|null                                     $paymentmethod
  * @property-read \App\Bankaccount                                            $sourceBankAccount
  * @property-read \App\Transactiongateway|null                                $transactiongateway
  * @property-read \App\Transactionstatus|null                                 $transactionstatus
  * @property-read \App\Wallet|null                                            $wallet
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|\App\Transaction onlyTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Transaction onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereAuthority($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereCompletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereCost($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereDeadlineAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereDestinationBankAccountId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereManagerComment($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereOrderId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction wherePaycheckNumber($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction wherePaymentmethodId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereReferenceNumber($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereSourceBankAccountId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereTraceNumber($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereTransactionID($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereTransactiongatewayId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereTransactionstatusId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereWalletId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Transaction withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Transaction withoutTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereAuthority($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereCompletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereCost($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereDeadlineAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereDestinationBankAccountId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereManagerComment($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereOrderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Transaction wherePaycheckNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Transaction wherePaymentmethodId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereReferenceNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereSourceBankAccountId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereTraceNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereTransactionID($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereTransactiongatewayId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereTransactionstatusId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereWalletId($value)
+ * @method static \Illuminate\Database\Query\Builder|Transaction withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Transaction withoutTrashed()
  * @mixin \Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Transaction newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Transaction newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Transaction query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Transaction authority(string $authority)
+ * @method static \Illuminate\Database\Eloquent\Builder|Transaction walletMethod()
  */
 class Transaction extends Model
 {
@@ -144,6 +146,9 @@ class Transaction extends Model
         return $this->belongsTo('\App\Bankaccount', 'bankaccounts', 'destinationBankAccount_id', 'id');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function wallet()
     {
         return $this->belongsTo("\App\Wallet");
@@ -155,7 +160,7 @@ class Transaction extends Model
      */
     public function DeadlineAt_Jalali()
     {
-        $explodedDateTime = explode(" ", $this->deadline_at);
+        /*$explodedDateTime = explode(" ", $this->deadline_at);*/
         //        $explodedTime = $explodedDateTime[1] ;
         return $this->convertDate($this->deadline_at, "toJalali");
     }
@@ -166,7 +171,7 @@ class Transaction extends Model
                     ->withPivot('relationtype_id')
                     ->join('transactioninterraltions', 'relationtype_id', 'transactioninterraltions.id')
             //            ->select('major1_id AS id', 'majorinterrelationtypes.name AS pivot_relationName' , 'majorinterrelationtypes.displayName AS pivot_relationDisplayName')
-                    ->where("relationtype_id", Config::get("constants.TRANSACTION_INTERRELATION_PARENT_CHILD"));
+                    ->where("relationtype_id", config("constants.TRANSACTION_INTERRELATION_PARENT_CHILD"));
     }
 
     public function children()
@@ -174,7 +179,7 @@ class Transaction extends Model
         return $this->belongsToMany('App\Transaction', 'transaction_transaction', 't1_id', 't2_id')
                     ->withPivot('relationtype_id')
                     ->join('transactioninterraltions', 'relationtype_id', 'contenttypeinterraltions.id')
-                    ->where("relationtype_id", Config::get("constants.TRANSACTION_INTERRELATION_PARENT_CHILD"));
+                    ->where("relationtype_id", config("constants.TRANSACTION_INTERRELATION_PARENT_CHILD"));
     }
 
     public function getGrandParent()
@@ -220,4 +225,43 @@ class Transaction extends Model
         else return false;
     }
 
+
+    /**
+     * @param string $refID
+     * @return bool
+     */
+    public function changeStatusToSuccessfull(string $refID)
+    {
+        $this->transactionID = $refID;
+        $this->transactionstatus_id = config("constants.TRANSACTION_STATUS_SUCCESSFUL");
+        $this->completed_at = Carbon::now();
+        return $this->update();
+    }
+
+    /**
+     * @return bool
+     */
+    public function changeStatusToUnsuccessful()
+    {
+        $this->transactionstatus_id = config("constants.TRANSACTION_STATUS_UNSUCCESSFUL");
+        $this->completed_at = Carbon::now();
+        return $this->update();
+    }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string $authority
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeAuthority($query, string $authority) {
+        return $query->where('authority', $authority);
+    }
+
+    /**
+     * @param $query
+     * @return mixed
+     */
+    public function scopeWalletMethod($query) {
+        return $query->where("paymentmethod_id", config("constants.PAYMENT_METHOD_WALLET"));
+    }
 }
