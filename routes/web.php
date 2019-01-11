@@ -223,8 +223,6 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get("donate", "DonateController");
     Route::post("donateOrder", "OrderController@donateOrder");
-
-    Route::get('cTest/{set}', "HomeController@contentSetListTest");
 });
 
 /*
@@ -232,6 +230,10 @@ Route::group(['prefix' => 'product'], function () {
 
 });
 */
+
+/*Route::group(['prefix' => 's'], function(){
+    Route::get('{set}', "SetController@show");
+});*/
 
 Route::group(['prefix' => 'c'], function () {
 
@@ -254,7 +256,7 @@ Route::group(['prefix' => 'product'], function () {
 });
 
 Route::get("ctag", "ContentController@retrieveTags");
-Route::resource('set', 'ContentsetController');
+Route::resource('set', 'SetController');
 Route::resource('product', 'ProductController');
 Route::resource('orderproduct', 'OrderproductController');
 Route::resource('c', 'ContentController');

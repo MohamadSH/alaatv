@@ -117,14 +117,15 @@ class ProductController extends Controller
      *
      * @param ProductIndexRequest $request
      *
+     * @param ProductSearch $productSearch
      * @return \Illuminate\Http\Response
      */
-    public function index(ProductIndexRequest $request)
+    public function index(ProductIndexRequest $request, ProductSearch $productSearch)
     {
         $tags = $request->get('tags');
         $filters = $request->all();
         $pageName = 'productPage';
-        $productResult = (new ProductSearch)->setPageName($pageName)
+        $productResult = $productSearch->setPageName($pageName)
                                             ->get($filters);
 
         $products = $productResult;
@@ -146,7 +147,7 @@ class ProductController extends Controller
                 ]);
         }
 
-        return view("pages.product-search", compact("products"));
+        return view("pages.product-search", compact("products",'tags'));
     }
 
 

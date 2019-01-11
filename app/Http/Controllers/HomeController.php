@@ -150,14 +150,6 @@ class HomeController extends Controller
 
     }
 
-    public function contentSetListTest(Request $request, Contentset $set)
-    {
-        $contents = $set->contents()
-                        ->get();
-        return view('listTest', compact('set', 'contents'));
-    }
-
-
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
         try{
