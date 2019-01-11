@@ -1147,7 +1147,7 @@ class UserController extends Controller
         if ($request->has("redirectTo"))
             $targetUrl = $request->get("redirectTo");
         else
-            $targetUrl = action("HomeController@index");
+            $targetUrl = action("IndexPageController");
 
         if ($request->user()
                     ->completion("afterLoginForm") == 100) {

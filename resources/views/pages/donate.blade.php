@@ -240,7 +240,7 @@
     {{--</div><!-- .provinces-charts -->--}}
 
     <footer class="site-footer">
-        <a class="copyright" href="{{action("HomeController@index")}}">
+        <a class="copyright" href="{{action("IndexPageController")}}">
             <img src="/acm/extra/donate/images/copyright.png" alt="Copyright">
         </a>
     </footer>

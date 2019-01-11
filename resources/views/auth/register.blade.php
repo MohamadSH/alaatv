@@ -3,7 +3,7 @@
 @section("content")
     <!-- BEGIN LOGO -->
     <div class="logo">
-        <a href="{{action("HomeController@index")}}">
+        <a href="{{action("IndexPageController")}}">
             <img src="/assets/pages/img/logo-big.png" alt="ثبت نام"/> </a>
     </div>
     <!-- END LOGO -->
