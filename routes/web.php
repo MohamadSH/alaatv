@@ -21,8 +21,8 @@ Route::get('500', 'HomeController@error500');
 Route::get('error', 'HomeController@errorPage');
 Route::get('download', "HomeController@download");
 Route::get('d/{data}', "HomeController@newDownload");
-Route::get('contactUs', 'HomeController@contactUs');
-Route::get('rules', 'HomeController@rules');
+Route::get('contactUs', 'ContactUsController');
+Route::get('rules', 'RulesPageController');
 Route::get('articleList', 'ArticleController@showList');
 Route::get("debug", 'HomeController@debug');
 Route::get("telgramAgent2", "HomeController@telgramAgent");
@@ -221,7 +221,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get("copycontenttotakhtekhak", "SanatisharifmergeController@copyContent");
     Route::get("tagbot", "HomeController@tagbot");
 
-    Route::get("donate", "HomeController@donate");
+    Route::get("donate", "DonateController");
     Route::post("donateOrder", "OrderController@donateOrder");
 
     Route::get('cTest/{set}', "HomeController@contentSetListTest");

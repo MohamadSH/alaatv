@@ -115,7 +115,7 @@
                                 <br>
                                 اینگونه هست که ما بهترین فیلم های آموزشی را تولید می کنیم.
                                 <br>
-                                <a href="{{ action("HomeController@donate") }}" class="m-link m--font-boldest">
+                                <a href="{{ action("DonateController") }}" class="m-link m--font-boldest">
                                     ما برای حفظ و توسعه خدمات، نیاز به کمک های مالی شما آلایی ها داریم.
                                 </a>
                             </p>

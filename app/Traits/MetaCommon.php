@@ -32,7 +32,7 @@ trait MetaCommon
      */
 
 
-    function generateKeywordsMeta($text /* the text */,
+    private function generateKeywordsMeta($text /* the text */,
                                   $article_kw = '' /*  if some keywords are written by hand (by the author) ,
  												$article_kw = 'Obama, Washington, economy, jobs, USA , jobless,  politics , politic ,,, houses '; */,
                                   $global_kw = ''/*if we have a default keyword for the whole site*/,
@@ -94,7 +94,7 @@ trait MetaCommon
         return $keywords;
     }
 
-    public function generateSeoMetaTags(SeoInterface $item)
+    protected function generateSeoMetaTags(SeoInterface $item)
     {
         try {
             $seo = new SeoMetaTagsGenerator($item);

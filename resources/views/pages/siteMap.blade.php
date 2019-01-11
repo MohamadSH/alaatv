@@ -86,7 +86,7 @@
                                 </ul>
                             </li>
                             <li data-jstree='{ "type" : "file","disabled" : false }'>
-                                <a href="{{ action("HomeController@contactUs") }}">
+                                <a href="{{ action("ContactUsController") }}">
                                     @lang('page.contact us')
                                 </a>
                             </li>
