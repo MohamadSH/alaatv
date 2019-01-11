@@ -49,6 +49,8 @@ use Illuminate\Support\Facades\Config;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset query()
+ * @property-read mixed $author
+ * @property-read mixed $url
  */
 class Contentset extends Model implements Taggable
 {

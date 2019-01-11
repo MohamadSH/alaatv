@@ -110,6 +110,7 @@ use Stevebauman\Purify\Facades\Purify;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Content newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Content query()
  * @property-read mixed $author_name
+ * @property-read mixed $url
  */
 class Content extends Model implements Advertisable, Taggable, SeoInterface, FavorableInterface
 {

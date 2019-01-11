@@ -118,6 +118,14 @@ use Illuminate\Support\{Collection, Facades\Cache, Facades\Config};
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Product newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Product query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Product valid()
+ * @property int|null $grand_id
+ * @property-read \Collection|null $attributes
+ * @property-read mixed $gift
+ * @property-read mixed $grand_parent
+ * @property-read mixed $type
+ * @property-read mixed $url
+ * @property-read \App\Product $grand
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereGrandId($value)
  */
 class Product extends Model implements Advertisable, Taggable, SeoInterface, FavorableInterface
 {

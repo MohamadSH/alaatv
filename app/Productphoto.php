@@ -40,6 +40,7 @@ use Illuminate\Support\Facades\Log;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Productphoto newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Productphoto newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Productphoto query()
+ * @property-read mixed $url
  */
 class Productphoto extends Model
 {

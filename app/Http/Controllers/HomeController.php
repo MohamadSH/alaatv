@@ -158,38 +158,6 @@ class HomeController extends Controller
         return view('listTest', compact('set', 'contents'));
     }
 
-    /*private function slug($title, $separator = '-')
-    {
-        $title = str_replace("‌",' ',$title);
-        $title = mb_strtolower($title, "utf-8");
-        // Convert all dashes/underscores into separator
-        $flip = $separator == '-' ? '_' : '-';
-
-        $title = preg_replace('!['.preg_quote($flip).']+!u', $separator, $title);
-
-        // Replace @ with the word 'at'
-        $title = str_replace('@', $separator.'at'.$separator, $title);
-
-        // Remove all characters that are not the separator, letters, numbers, or whitespace.
-        $title = preg_replace('![^'.preg_quote($separator).'\pL\pN\s]+!u', '', mb_strtolower($title));
-
-        // Replace all separator characters and whitespace by a single separator
-        $title = preg_replace('!['.preg_quote($separator).'\s]+!u', $separator, $title);
-
-        $title = trim($title, $separator);
-        $title = preg_replace("/[^a-z0-9_\s-ء-يپچژکگیۃۂۀہ]/u", '', $title);
-        $title = preg_replace("/[^a-z0-9_\s-ءاآؤئبپتثجچحخدذرزژسشصضطظعغفقكکگلمنوهی]/u", '', $title);
-
-        $title = preg_replace("/[\s-_]+/", ' ', $title);
-        $title = preg_replace("/[\s_]/", $separator, $title);
-        return $title;
-    }*/
-
-    public function telgramAgent(Request $request)
-    {
-        //        Log::debug($request->headers->all());
-
-    }
 
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
