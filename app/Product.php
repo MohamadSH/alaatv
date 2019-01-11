@@ -202,7 +202,9 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
         'gift',
         'url',
         'type',
-        'photo'
+        'photo',
+        'attributes',
+        'samplePhotos'
     ];
 
     protected $hidden = [
@@ -223,7 +225,9 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
         'enable',
         'image',
         'pivot',
-        'created_at'
+        'created_at',
+        'attributevalues',
+        'grand'
 
     ];
 
@@ -442,10 +446,9 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
 
     /**
      * Gets product's all attributes
-     *
-     * @return array
+     * @return Collection|null
      */
-    public function getAllAttributes(): array
+    protected function getAllAttributes(): ?Collection
     {
         $product = $this;
         $key = 'product:' . "getAllAttributes:" . $product->id;
@@ -477,12 +480,18 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
                         case "select":
                             if ($attributeType->name == "extra") {
                                 $select = [];
-                                $this->makeSelectAttributes($attributevalues, $select);
-                                if (!empty($select))
-                                    $extraSelectCollection->put($attribute->id, [
-                                        "attributeDescription" => $attribute->displayName,
-                                        "attributevalues"      => $select,
-                                    ]);
+                                $this->makeSelectAttributes($attributevalues, $select,'extra');
+                                if (!empty($select)) {
+                                    $at = [];
+                                    foreach ($select as $s) {
+                                        $at[] = array_merge($s, [
+                                            "displayName"          => $attribute->displayName,
+                                            "attributeDescription" => $attribute->displayName,
+                                        ]);
+                                    }
+                                    $extraSelectCollection->put($attribute->id, $at);
+
+                                }
 
                             } else if ($attributeType->name == "main" && $productType == Config::get("constants.PRODUCT_TYPE_CONFIGURABLE")) {
                                 if ($attributevalues->count() == 1) {
@@ -514,6 +523,8 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
 
                                     $groupedCheckbox->put($attributevalue->id, [
                                         "index"       => $attributevalueIndex,
+                                        'displayName' => $attribute->displayName,
+                                        "name"        => $attributevalueIndex,
                                         "value"       => $attributevalue->id,
                                         "type"        => $attributeType->name,
                                         "productType" => $product->producttype->name,
@@ -550,7 +561,9 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
 
                                             }
                                             $groupedCheckbox = array_add($groupedCheckbox, $attributevalue->id, [
+                                                "displayName"           => null,
                                                 "index"                 => $attributevalueIndex,
+                                                "name"                  => $attributevalueIndex,
                                                 "extraCost"             => $attributevalueExtraCost,
                                                 "extraCostWithDiscount" => $attributevalueExtraCostWithDiscount,
                                                 "value"                 => $attributevalue->id,
@@ -573,19 +586,51 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
 
             }
 
-            return [
-                "selectCollection"          => $selectCollection,
-                "groupedCheckboxCollection" => $groupedCheckboxCollection,
-                "extraSelectCollection"     => $extraSelectCollection,
-                "extraCheckboxCollection"   => $extraCheckboxCollection,
-                "simpleInfoAttributes"      => $simpleInfoAttributes,
-                "checkboxInfoAttributes"    => $checkboxInfoAttributes,
+            $productAttributes = [
+                //main Attribute
+                "dropDown"   => $selectCollection,
+                "checkBox"   => $groupedCheckboxCollection,
+
+
+                //info Attribute
+                "simple"     => $simpleInfoAttributes,
+                "check_box_" => $checkboxInfoAttributes,
+
+                //extra Attribute
+                "check_box"  => $extraCheckboxCollection,
+                "drop_down"  => $extraSelectCollection,
+
             ];
 
+//            return $productAttributes;
+            $attributesResult = collect();
+            foreach ($productAttributes as $key => $values) {
+//                dump([$key,$values]);
+                foreach ($values as $attributes) {
+//                    dump($attributes);
+                    $data = collect();
+                    foreach ($attributes as $item) {
+                        $type = array_get($item, 'type');
+                        $title = array_get($item, 'displayName');
+                        $data->push([
+                            "name" => array_get($item, 'name'),
+                            "id"   => array_get($item, 'value'),
+                        ]);
+                    }
+                    if (count($attributes) > 0)
+                        $attributesResult->pushAt($type,json_decode(json_encode([
+                            "type"    => $type,
+                            "title"   => $title,
+                            "control" => camel_case($key),
+                            'data'    => $data
+                        ])));
+                }
+            }
+            return $attributesResult;
         });
     }
 
-    private function makeSelectAttributes(&$attributevalues, &$result)
+    private function makeSelectAttributes(&$attributevalues, &$result, $type='main')
     {
         foreach ($attributevalues as $attributevalue) {
             $attributevalueIndex = $attributevalue->name;
@@ -599,7 +644,15 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
                     $attributevalueIndex .= "(-" . number_format($attributevalue->pivot->extraCost) . " تومان)";
             }
 
-            $result = array_add($result, $attributevalue->id, $attributevalueIndex);
+            $result = array_merge($result, [
+                $attributevalue->id => [
+                    "value" => $attributevalue->id,
+                    "name"  => $attributevalueIndex,
+                    "index" => $attributevalueIndex,
+                    "type"  => $type
+                ]
+            ]);
+//            $result = array_add($result, $attributevalue->id, $attributevalueIndex);
         }
     }
 
@@ -997,24 +1050,8 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
     |--------------------------------------------------------------------------
     */
 
-    public function getSamplePhotosAttribute()
-    {
-        $key = "product:SamplePhotos:" . $this->cacheKey();
-        $productSamplePhotos = Cache::remember($key, config("constants.CACHE_60"), function () {
-            return $this->photos()
-                        ->enable()
-                        ->get()
-                        ->sortBy("order");
-        });
 
-        return $productSamplePhotos;
-    }
 
-    public function photos()
-    {
-        $photos = $this->hasMany('\App\Productphoto');
-        return $photos;
-    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
@@ -1303,11 +1340,20 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
 
     public function getTypeAttribute()
     {
-        return $this->producttype->name;
+
         return [
+            'id'   => $this->producttype->id,
             'type' => $this->producttype->name,
             'hint' => $this->producttype->displayName,
         ];
+    }
+
+    /**
+     * @return Collection|null
+     */
+    public function getAttributesAttribute(): ?Collection
+    {
+        return $this->getAllAttributes();
     }
 
     public function getUrlAttribute($value): string
@@ -1833,22 +1879,39 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
         });
     }
 
+    public function photos()
+    {
+        $photos = $this->hasMany('\App\Productphoto');
+        return $photos;
+    }
+
+
     /**
      * Makes a collection of product phoots
      *
      */
-    public function getPhotos()
+    public function getSamplePhotosAttribute() :?Collection
     {
-        $photos = collect();
-        $thisPhotos = $this->sample_photos;
-        $photos = $photos->merge($thisPhotos);
+        $key = "product:SamplePhotos:" . $this->cacheKey();
+        $productSamplePhotos = Cache::remember($key, config("constants.CACHE_60"), function () {
+            $photos = collect();
 
-        $allChildren = $this->getAllChildren();
-        foreach ($allChildren as $child) {
-            $childPhotos = $child->sample_photos;
-            $photos = $photos->merge($childPhotos);
-        }
+            $thisPhotos = $this->photos()
+                                ->enable()
+                                ->get();
 
-        return $photos;
+
+            $photos = $photos->merge($thisPhotos);
+            $allChildren = $this->getAllChildren();
+            foreach ($allChildren as $child) {
+                $childPhotos = $child->photos()
+                                     ->enable()
+                                     ->get();
+                $photos = $photos->merge($childPhotos);
+            }
+            return $photos->sortBy("order");
+        });
+
+        return $productSamplePhotos->count() > 0 ? $productSamplePhotos : null;
     }
 }

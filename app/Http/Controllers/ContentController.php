@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Classes\Search\ContentSearch;
 use App\Classes\Search\ContentsetSearch;
+use App\Classes\Search\ProductSearch;
 use App\Collection\ContentCollection;
 use App\Content;
 use App\Contentset;
 use App\Contenttype;
 use App\Http\Requests\{ContentIndexRequest, EditContentRequest, InsertContentRequest, Request};
+use App\Product;
 use App\Traits\{APIRequestCommon,
     CharacterCommon,
     FileCommon,
@@ -66,13 +68,18 @@ class ContentController extends Controller
      */
     private $setSearch;
 
+    /**
+     * @var ProductSearch
+     */
+    private $productSearch;
+
     /*
     |--------------------------------------------------------------------------
     | Private methods
     |--------------------------------------------------------------------------
     */
 
-    public function __construct(Agent $agent, Response $response, Websitesetting $setting, ContentSearch $contentSearch, ContentsetSearch $setSearch)
+    public function __construct(Agent $agent, Response $response, Websitesetting $setting, ContentSearch $contentSearch, ContentsetSearch $setSearch, ProductSearch $productSearch)
     {
         $this->response = $response;
         $this->setting = $setting->setting;
@@ -80,6 +87,7 @@ class ContentController extends Controller
         $this->callMiddlewares($authException);
         $this->contentSearch = $contentSearch;
         $this->setSearch = $setSearch;
+        $this->productSearch = $productSearch;
     }
 
     /**
@@ -153,6 +161,7 @@ class ContentController extends Controller
 
         $result = $this->contentSearch->get(compact('filters','contentTypes'));
         $result->offsetSet('set', $this->setSearch->get($filters));
+        $result->offsetSet('product', $this->productSearch->get($filters));
 
         $pageName = "content-search";
         if (request ()->ajax() || true) {

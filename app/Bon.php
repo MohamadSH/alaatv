@@ -74,7 +74,7 @@ class Bon extends Model
       'bontype_id',
       'order',
       'created_at',
-      'updated_at'
+      'updated_at',
     ];
 
     public static function getAlaaBonDisplayName()

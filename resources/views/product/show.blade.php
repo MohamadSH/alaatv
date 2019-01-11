@@ -32,17 +32,17 @@
                                     <div class = "">
                                         <img src = "{{ route('image', ['category'=>'4','w'=>'338' , 'h'=>'338' ,  'filename' =>  $product->image ]) }}" alt = "عکس محصول@if(isset($product->name[0])) {{$product->name}} @endif" class = "img-fluid m--marginless"/>
                                     </div>
-                                    @if(isset($productSamplePhotos) && $productSamplePhotos->isNotEmpty())
+                                    @if($product->samplePhotos !== null)
                                         <div class="m--space-10"></div>
                                         <h5>نمونه جزوه {{ $product->name }}</h5>
                                         <div class="m-nav-grid">
-                                            @foreach ($productSamplePhotos->chunk(3) as $chunk)
+                                            @foreach ($product->samplePhotos->chunk(3) as $chunk)
                                                 <div class="m-nav-grid__row">
                                                     @foreach ($chunk as $samplePhoto)
-                                                        <a href="{{ route('image', ['category'=>'4','w'=>'1400' , 'h'=>'2000' ,  'filename' =>  $samplePhoto->file ]) }}"
+                                                        <a href="{{ $samplePhoto->url }}"
                                                            target="_blank"
                                                            class="m-nav-grid__item">
-                                                            <img src="{{ route('image', ['category'=>'4','w'=>'100' , 'h'=>'135' ,  'filename' =>  $samplePhoto->file ]) }}"
+                                                            <img src="{{ $samplePhoto->url('100','135') }}"
                                                                  alt="@if(isset($samplePhoto->title[0])) {{$samplePhoto->title}} @else نمونه عکس {{$product->name}} @endif">
                                                             <span class="m-nav-grid__text">{{ $samplePhoto->title ?? $samplePhoto->title }}</span>
                                                             <span class="m-nav-grid__text">{{ $samplePhoto->description ?? $samplePhoto->description }}</span>
@@ -58,70 +58,60 @@
                                     <div class = "m-demo" data-code-preview = "true" data-code-html = "true" data-code-js = "false">
                                         <div class = "m-demo__preview m--padding-10">
                                             {!! Form::open(['method' => 'POST','action' => ['OrderproductController@store'] ]) !!}
-                                            <div class="row">
-                                                <div class="col-lg-6">
-                                                    <div class="m-list-search">
-                                                        <div class="m-list-search__results">
-                                                            <span class="m-list-search__result-category m-list-search__result-category--first">
-                                                                ویژگی‌ها
-                                                            </span>
-                                                            @foreach($simpleInfoAttributes as $key => $simpleInfoAttribute)
-                                                                <a href="#" class="m-list-search__result-item">
-                                                                    <span class="m-list-search__result-item-icon"><i class="flaticon-like m--font-warning"></i></span>
-                                                                    <span class="m-list-search__result-item-text">{{$key . ': ' . collect($simpleInfoAttribute)->implode('name',',') }}</span>
-                                                                </a>
-                                                                @foreach($simpleInfoAttribute as $k => $info)
-                                                                    @if(isset($info["type"]) && strcmp($info["type"],"information") != 0 )
-                                                                        <input type = "hidden" value = "{{ $info["value"] }}" name = "attribute[]">
-                                                                    @endif
-                                                                @endforeach
-                                                            @endforeach
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-6">
-                                                    @if(isset($checkboxInfoAttributes) && !$checkboxInfoAttributes->isEmpty())
-                                                        <div class="m-list-search">
-                                                            <div class="m-list-search__results">
-                                                            <span class="m-list-search__result-category m-list-search__result-category--first">
-                                                                دارای
-                                                            </span>
-                                                                @foreach($checkboxInfoAttributes as $checkboxArray)
-                                                                    @foreach($checkboxArray as $info)
+                                            @if($product->attributes->get('information') !== null)
+                                                <div class="row">
+                                                    @foreach($product->attributes->get('information')->chunk(2) as $key => $chunk)
+                                                        <div class="col-lg-6">
+                                                            <div class="m-list-search">
+                                                                <div class="m-list-search__results">
+                                                                    <span class="m-list-search__result-category m-list-search__result-category--first">
+                                                                        {{ $key == 0 ? 'ویژگی‌ها' : 'دارای'}}
+                                                                    </span>
+                                                                    @foreach($chunk as $attribute)
                                                                         <a href="#" class="m-list-search__result-item">
-                                                                            <span class="m-list-search__result-item-icon"><i class="la la-check m--font-focus"></i></span>
-                                                                            <span class="m-list-search__result-item-text">{{ $info["index"]  }}</span>
+                                                                            <span class="m-list-search__result-item-icon">
+                                                                                @if(strcmp($attribute->control , 'checkBox') == 0 )
+                                                                                    <i class="la la-check m--font-focus"></i>
+                                                                                @else
+                                                                                    <i class="flaticon-like m--font-warning"></i>
+                                                                                @endif
+                                                                            </span>
+                                                                            <span class="m-list-search__result-item-text">{{$attribute->title . ': ' . collect($attribute->data)->implode('name',',') }}</span>
                                                                         </a>
+                                                                        @if(strcmp($attribute->type,"information") != 0 )
+                                                                            @foreach($attribute->data as $data)
+                                                                                    <input type = "hidden" value = "{{ $data->id }}" name = "attribute[]">
+                                                                            @endforeach
+                                                                        @endif
                                                                     @endforeach
-                                                                @endforeach
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    @endif
+                                                    @endforeach
                                                 </div>
-                                            </div>
-                                                <div class = "m-separator m-separator--space m-separator--dashed"></div>
+                                            @endif
+                                            <div class = "m-separator m-separator--space m-separator--dashed"></div>
 
-
-                                                @if((isset($extraSelectCollection) && !$extraSelectCollection->isEmpty()) ||
-                                                    (isset($extraCheckboxCollection) && !$extraCheckboxCollection->isEmpty()))
-                                                    <div class="portlet sale-summary">
-                                                        <div class="portlet-title">
-                                                            <div class="caption font-red sbold">انتخاب خدمت</div>
-                                                        </div>
-                                                        <div class="portlet-body">
-                                                            <ul class="list-unstyled">
+                                            @if($product->attributes->get('extra') !== null)
+                                                <div class="portlet sale-summary">
+                                                    <div class="portlet-title">
+                                                        <div class="caption font-red sbold">تعیین مشخصات</div>
+                                                    </div>
+                                                    <div class="portlet-body">
+                                                        <ul class="list-unstyled">
+                                                        @foreach($product->attributes->get('extra') as $attribute)
                                                                 <li style="margin: 0% 5% 0% 5%">
                                                                     @include("product.partials.extraSelectCollection")
                                                                     @include("product.partials.extraCheckboxCollection" , ["withExtraCost"])
                                                                 </li>
-                                                            </ul>
-                                                        </div>
+                                                        @endforeach
+                                                        </ul>
                                                     </div>
-                                                    <div class = "m-separator m-separator--space m-separator--dashed"></div>
-                                                @endif
+                                                </div>
+                                                <div class = "m-separator m-separator--space m-separator--dashed"></div>
+                                            @endif
 
-                                                @if(in_array($productType ,[Config::get("constants.PRODUCT_TYPE_SELECTABLE")]))
+                                                @if(in_array($product->producttype->id ,[Config::get("constants.PRODUCT_TYPE_SELECTABLE")]))
 
                                                     <ul class = "m-nav m-nav--active-bg" id = "m_nav" role = "tablist">
                                                         @if(isset($product->children) && !empty($product->children))
@@ -143,9 +133,9 @@
                                                         @endif
                                                     </ul>
                                                     <div class = "m-separator m-separator--space m-separator--dashed"></div>
-                                                @elseif(in_array($productType ,[Config::get("constants.PRODUCT_TYPE_SIMPLE")]))
+                                                @elseif(in_array($product->producttype->id ,[Config::get("constants.PRODUCT_TYPE_SIMPLE")]))
 
-                                                @elseif(in_array($productType, [Config::get("constants.PRODUCT_TYPE_CONFIGURABLE")]))
+                                                @elseif(in_array($product->producttype->id, [Config::get("constants.PRODUCT_TYPE_CONFIGURABLE")]))
                                                         @if((isset($selectCollection) && !$selectCollection->isEmpty()) ||
                                                          (isset($groupedCheckboxCollection) && !$groupedCheckboxCollection->isEmpty()))
                                                             <li style="margin: 0% 5% 0% 5%">

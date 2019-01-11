@@ -11,61 +11,6 @@ trait ProductCommon
 {
     /**
      * @param Product $product
-     *
-     * @return Collection
-     */
-    function makeAllFileCollection(Product $product): Collection
-    {
-        $key = "product:validProductfiles:pamphlet|video" . $product->cacheKey();
-
-        return Cache::remember($key, config("constants.CACHE_60"), function () use ($product) {
-            $productfiletypes = Productfiletype::all();
-            $allFilesCollection = collect();
-            foreach ($productfiletypes as $productfiletype) {
-                $fileCollection = collect();
-                $filesArray = $product->makeFileArray($productfiletype->name);
-                if (!empty($filesArray))
-                    $fileCollection->put($product->name, $filesArray);
-
-                foreach ($product->children as $child) {
-                    $filesArray = $child->makeFileArray($productfiletype->name);
-
-                    if (!empty($filesArray))
-                        $fileCollection->put($product->name, $filesArray);
-                }
-
-                if($fileCollection->isNotEmpty())
-                    $allFilesCollection->push([
-                                                  "typeName"        => $productfiletype->name,
-                                                  "typeDisplayName" => $productfiletype->displayName,
-                                                  "files"           => $fileCollection,
-                                              ]);
-            }
-            return $allFilesCollection;
-        });
-    }
-
-    /**
-     * @param Product $product
-     * @param         $chunk
-     *
-     * @return Collection
-     */
-    public function makeOtherProducts(Product $product, $chunk)
-    {
-        $exclusiveOtherProducts = Product::getExclusiveOtherProducts();
-
-        $otherProducts = $product->getOtherProducts()->sortByDesc("created_at" );
-
-        $totalOtherProducts = $this->mergeCollections($exclusiveOtherProducts, $otherProducts);
-
-        $otherProductChunks = $totalOtherProducts->chunk($chunk);
-
-        return $otherProductChunks;
-    }
-
-    /**
-     * @param Product $product
      * @param         $extraAttributeValues
      *
      * @return int|float

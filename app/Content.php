@@ -181,6 +181,19 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
         'author'
     ];
 
+    protected $hidden = [
+      'user',
+      'deleted_at',
+      'validSince',
+      'enable',
+      'metaKeywords',
+      'metaDescription',
+      'metaTitle',
+      'author_id',
+      'template_id',
+      'slug',
+    ];
+
 
     /**
      * @return array

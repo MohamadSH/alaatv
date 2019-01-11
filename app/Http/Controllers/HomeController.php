@@ -195,6 +195,15 @@ class HomeController extends Controller
     {
         try{
 
+
+            $c = collect(["a" => 1,"b" => 2]);
+            $c->pushAt("a",2);
+            $c->pushAt("a",collect(["m","s"]));
+//            dump($c->pushAt("a",2));
+            return $c;
+            dump(collect($c));
+            dd(collect(1));
+
             $product = Product::findOrFail(232)->load('children');
             return $product;
 

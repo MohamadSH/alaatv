@@ -4,21 +4,22 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Log;
 
 /**
  * App\Productphoto
  *
- * @property int                 $id
- * @property int                 $product_id  آیدی مشخص کننده محصول عکس
- * @property string|null         $file        فایل عکس
- * @property string|null         $title       تایتل عکس
- * @property string              $description توضیح کوتاه یا تیتر دوم عکس
- * @property int                 $order       ترتیب عکس
- * @property int                 $enable      فعال/غیر فعال بودن عکس
+ * @property int $id
+ * @property int $product_id  آیدی مشخص کننده محصول عکس
+ * @property string|null $file        فایل عکس
+ * @property string|null $title       تایتل عکس
+ * @property string $description توضیح کوتاه یا تیتر دوم عکس
+ * @property int $order       ترتیب عکس
+ * @property int $enable      فعال/غیر فعال بودن عکس
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property \Carbon\Carbon|null $deleted_at
- * @property-read \App\Product   $product
+ * @property-read \App\Product $product
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Productphoto onlyTrashed()
  * @method static bool|null restore()
@@ -60,6 +61,21 @@ class Productphoto extends Model
         'product_id',
     ];
 
+    protected $hidden = [
+        'id',
+        'file',
+        'order',
+        'deleted_at',
+        'created_at',
+        'enable',
+        'updated_at',
+        'product_id'
+    ];
+
+    protected $appends = [
+        'url'
+    ];
+
     public function product()
     {
         return $this->belongsTo('\App\Product');
@@ -75,5 +91,19 @@ class Productphoto extends Model
     public function scopeEnable($query)
     {
         return $query->where('enable', '=', 1);
+    }
+
+    public function url($w, $h){
+        return route('image', [
+            'category' => '4',
+            'w'        => $w,
+            'h'        => $h,
+            'filename' => $this->file
+        ]);
+    }
+
+    public function getUrlAttribute($value): string
+    {
+        return $this->url('1400','2000');
     }
 }

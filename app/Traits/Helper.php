@@ -85,13 +85,4 @@ trait Helper
         $str = str_replace("=", "", $str);
         return $str;
     }
-
-
-    public function mergeCollections($firstCollection, $secondCollection): Collection
-    {
-        $merge = $firstCollection->toBase()
-                                 ->merge($secondCollection);
-
-        return $merge;
-    }
 }
