@@ -9,23 +9,29 @@
 namespace App\Classes\Payment\RefinementRequest\Strategies;
 
 
-use App\Classes\Payment\RefinementRequest\RefinementClass;
+use App\Classes\Payment\RefinementRequest\Refinement;
 use App\Order;
 use App\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class TransactionRefinement extends RefinementClass
+class TransactionRefinement extends Refinement
 {
     public function __construct(Request $request)
     {
         parent::__construct($request);
         $this->transaction = $this->getTransaction();
-        $this->order = $this->getOrder();
-        $this->order->cancelOpenOnlineTransactions();
-        $this->user = $this->order->user;
-        $this->cost = $this->transaction->cost;
-        $this->statusCode = Response::HTTP_OK;
+        if($this->transaction) {
+            $this->order = $this->getOrder();
+            $this->order->cancelOpenOnlineTransactions();
+            $this->user = $this->order->user;
+            $this->cost = $this->transaction->cost;
+            $this->statusCode = Response::HTTP_OK;
+            $this->setDescription($this->request);
+        } else {
+            $this->statusCode = Response::HTTP_NOT_FOUND;
+            $this->message = 'تراکنشی یافت نشد.';
+        }
     }
 
     /**
@@ -33,7 +39,7 @@ class TransactionRefinement extends RefinementClass
      */
     protected function getTransaction(): Transaction
     {
-        $transaction = Transaction::FindOrFail($this->request->get("transaction_id"));
+        $transaction = Transaction::find($this->request->get("transaction_id"));
         return $transaction;
     }
 
@@ -44,5 +50,15 @@ class TransactionRefinement extends RefinementClass
     {
         $order = $this->transaction->order->load(['transactions', 'coupon']);
         return $order;
+    }
+
+    /**
+     * @param Request $request
+     */
+    private function setDescription(Request $request): void
+    {
+        if ($request->has("transaction_id")) {
+            $this->description .= "پرداخت قسط -";
+        }
     }
 }

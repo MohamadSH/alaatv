@@ -9,11 +9,11 @@
 namespace App\Classes\Payment\RefinementRequest\Strategies;
 
 
-use App\Classes\Payment\RefinementRequest\RefinementClass;
+use App\Classes\Payment\RefinementRequest\Refinement;
 use App\Order;
 use Illuminate\Http\Request;
 
-class OrderIdRefinement extends RefinementClass
+class OrderIdRefinement extends Refinement
 {
     private $orderId;
 
@@ -22,13 +22,18 @@ class OrderIdRefinement extends RefinementClass
         parent::__construct($request);
         $this->orderId = $this->request->get('order_id');
         $this->order = $this->getOrder();
-        $this->user = $this->order->user;
-        list($this->order, $this->cost) = $this->getOrderCost($this->order);
-        $this->order->cancelOpenOnlineTransactions();
-        $result = $this->getTransaction();
-        $this->statusCode = $result['statusCode'];
-        $this->message = $result['message'];
-        $this->transaction = $result['transaction'];
+        if($this->order) {
+            $this->user = $this->order->user;
+            list($this->order, $this->cost) = $this->getOrderCost($this->order);
+            $this->order->cancelOpenOnlineTransactions();
+            $result = $this->getTransaction();
+            $this->statusCode = $result['statusCode'];
+            $this->message = $result['message'];
+            $this->transaction = $result['transaction'];
+        } else {
+            $this->statusCode = Response::HTTP_NOT_FOUND;
+            $this->message = 'سفارشی یافت نشد.';
+        }
     }
 
     /**
@@ -36,7 +41,7 @@ class OrderIdRefinement extends RefinementClass
      */
     private function getOrder(): Order
     {
-        $order = Order::with(['transactions', 'coupon'])->findOrFail($this->orderId);
+        $order = Order::with(['transactions', 'coupon'])->find($this->orderId);
         return $order;
     }
 }

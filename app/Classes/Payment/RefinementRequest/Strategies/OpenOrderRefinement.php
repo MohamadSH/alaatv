@@ -8,12 +8,13 @@
 
 namespace App\Classes\Payment\RefinementRequest\Strategies;
 
-use App\Classes\Payment\RefinementRequest\RefinementClass;
+use App\Classes\Payment\RefinementRequest\Refinement;
+use App\Classes\Payment\RefinementRequest\RefinementInterface;
 use App\Order;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class OpenOrderRefinement extends RefinementClass
+class OpenOrderRefinement extends Refinement
 {
     private $openOrder;
 

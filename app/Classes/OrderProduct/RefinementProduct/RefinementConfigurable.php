@@ -34,6 +34,7 @@ class RefinementConfigurable implements RefinementInterface
                 return $simpleProduct;
             }
         }
+        return null;
     }
 
     private function checkAttributesOfChild($attributes, $child) {

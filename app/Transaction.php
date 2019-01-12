@@ -225,29 +225,6 @@ class Transaction extends Model
         else return false;
     }
 
-
-    /**
-     * @param string $refID
-     * @return bool
-     */
-    public function changeStatusToSuccessfull(string $refID)
-    {
-        $this->transactionID = $refID;
-        $this->transactionstatus_id = config("constants.TRANSACTION_STATUS_SUCCESSFUL");
-        $this->completed_at = Carbon::now();
-        return $this->update();
-    }
-
-    /**
-     * @return bool
-     */
-    public function changeStatusToUnsuccessful()
-    {
-        $this->transactionstatus_id = config("constants.TRANSACTION_STATUS_UNSUCCESSFUL");
-        $this->completed_at = Carbon::now();
-        return $this->update();
-    }
-
     /**
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param string $authority
@@ -258,10 +235,23 @@ class Transaction extends Model
     }
 
     /**
-     * @param $query
-     * @return mixed
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeWalletMethod($query) {
         return $query->where("paymentmethod_id", config("constants.PAYMENT_METHOD_WALLET"));
+    }
+
+    public function depositThisWalletTransaction() {
+        $wallet = $this->wallet;
+        $amount = $this->cost;
+        if (isset($wallet)) {
+            $response = $wallet->deposit($amount);
+        } else {
+            $response = [
+                "result"       => false,
+            ];
+        }
+        return $response;
     }
 }

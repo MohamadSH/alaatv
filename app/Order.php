@@ -781,8 +781,9 @@ class Order extends Model
     public function getDonateCost(): int
     {
         $donateCost = 0;
-        if ($this->hasTheseProducts(Product::DONATE_PRODUCT)) {
-            $donateCost = Product::getDonateProductCost();
+        $orderProducts = $this->orderproducts->whereIn('product_id', Product::DONATE_PRODUCT);
+        foreach ($orderProducts as $orderProduct) {
+            $donateCost = $orderProduct->cost;
         }
         return $donateCost;
     }
@@ -806,30 +807,17 @@ class Order extends Model
 
 
     /**
-     * @param Transaction $transaction
      * @return bool
      */
-    public function changePaymentStatusToPaidOrIndebted(Transaction $transaction)
+    public function changePaymentStatusToPaidOrIndebted()
     {
-        $this->close(config("constants.PAYMENT_STATUS_PAID"));
-        if ($transaction->cost < (int)$this->totalCost()) {
-            if ((int)$this->totalPaidCost() < (int)$this->totalCost())
-                $this->paymentstatus_id = config("constants.PAYMENT_STATUS_INDEBTED");
-        }
+        $paymentstatus_id = null;
+        if ((int)$this->totalPaidCost() < (int)$this->totalCost())
+            $paymentstatus_id = config("constants.PAYMENT_STATUS_INDEBTED");
+        else
+            $paymentstatus_id = config("constants.PAYMENT_STATUS_PAID");
+        $this->close($paymentstatus_id);
 
-        $this->timestamps = false;
-        $updateStatus = $this->update();
-        $this->timestamps = true;
-        return $updateStatus;
-    }
-
-
-    /**
-     * @return bool
-     */
-    public function setCanceledAndUnpaid()
-    {
-        $this->close(config("constants.PAYMENT_STATUS_UNPAID"), config("constants.ORDER_STATUS_CANCELED"));
         $this->timestamps = false;
         $updateStatus = $this->update();
         $this->timestamps = true;
@@ -846,21 +834,27 @@ class Order extends Model
         $totalWalletRefund = 0;
         $closeOrderFlag = false;
         foreach ($walletTransactions as $transaction) {
-            $wallet = $transaction->wallet;
-            $amount = $transaction->cost;
-            if (isset($wallet)) {
-                $response = $wallet->deposit($amount);
-                if ($response["result"]) {
-                    $transaction->delete();
-                    $totalWalletRefund += $amount;
-                }/*else {}*/
-            }/*else {
-                $response = $user->deposit($amount, config("constants.WALLET_TYPE_GIFT"));
-                if ($response["result"]) {
-                    $transaction->delete();
-                    $totalWalletRefund += $amount;
-                } else {}
-            }*/
+            $response = $transaction->depositThisWalletTransaction();
+            if ($response["result"]) {
+                $transaction->delete();
+                $totalWalletRefund += $transaction->cost;
+            }
+
+//            $wallet = $transaction->wallet;
+//            $amount = $transaction->cost;
+//            if (isset($wallet)) {
+//                $response = $wallet->deposit($amount);
+//                if ($response["result"]) {
+//                    $transaction->delete();
+//                    $totalWalletRefund += $amount;
+//                }/*else {}*/
+//            }/*else {
+//                $response = $user->deposit($amount, config("constants.WALLET_TYPE_GIFT"));
+//                if ($response["result"]) {
+//                    $transaction->delete();
+//                    $totalWalletRefund += $amount;
+//                } else {}
+//            }*/
             $closeOrderFlag = true;
         }
 
@@ -869,4 +863,15 @@ class Order extends Model
             'closeOrderFlag'=>$closeOrderFlag
         );
     }
+
+    /**
+     * @param $customerDescription
+     */
+    public function setCustomerDescription($customerDescription) {
+        $this->customerDescription = $customerDescription;
+        $this->timestamps = false;
+        $this->update();
+        $this->timestamps = true;
+    }
+
 }

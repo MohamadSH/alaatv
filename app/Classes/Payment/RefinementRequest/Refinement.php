@@ -17,7 +17,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
 
-class RefinementClass
+abstract class Refinement
 {
     public $request;
     public $statusCode;
@@ -27,6 +27,7 @@ class RefinementClass
     public $cost;
     public $donateCost;
     public $transaction;
+    public $description;
     protected $unpaidTransactions;
 
 
@@ -36,12 +37,13 @@ class RefinementClass
         $this->donateCost = 0;
         $this->statusCode = Response::HTTP_BAD_REQUEST;
         $this->message = '';
+        $this->description = '';
     }
 
     /**
      * @return array
      */
-    public function getData()
+    public function getData(): array
     {
         return [
             'statusCode' => $this->statusCode,
@@ -51,6 +53,7 @@ class RefinementClass
             'cost' => $this->cost,
             'donateCost' => $this->donateCost,
             'transaction' => $this->transaction,
+            'description' => $this->description,
         ];
     }
 
@@ -95,15 +98,14 @@ class RefinementClass
             $result['transaction'] = $transaction;
         } else {
             $transactionController = new TransactionController();
-            $request = new InsertTransactionRequest();
-            $request->offsetSet("order_id", $this->order->id);
-            $request->offsetSet("cost", $this->cost);
-            $request->offsetSet("transactiongateway_id", $zarinGate->id);
-            $request->offsetSet("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_TRANSFERRED_TO_PAY"));
-            $request->offsetSet("destinationBankAccount_id", 1);
-            $request->offsetSet("paymentmethod_id", Config::get("constants.PAYMENT_METHOD_ONLINE"));
-            $request->offsetSet("gateway", true);
-            $result = $transactionController->storeTransaction($request);
+            $data['gateway'] = true;
+            $data['cost'] = $this->cost;
+            $data['order_id'] = $this->order->id;
+            $data['destinationBankAccount_id'] = 1;
+            $data['transactiongateway_id'] = $zarinGate->id;
+            $data['paymentmethod_id'] = Config::get("constants.PAYMENT_METHOD_ONLINE");
+            $data['transactionstatus_id'] = Config::get("constants.TRANSACTION_STATUS_TRANSFERRED_TO_PAY");
+            $result = $transactionController->storeTransaction($data);
         }
         return $result;
     }

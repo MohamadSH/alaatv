@@ -37,12 +37,6 @@ class TransactionController extends Controller
         $this->middleware('permission:' . Config::get('constants.EDIT_TRANSACTION_ACCESS'), ['only' => 'update']);
         $this->middleware('role:admin', ['only' => 'getUnverifiedTransactions']);
         //        $this->middleware('permission:'.Config::get('constants.INSERT_TRANSACTION_ACCESS'),['only'=>'store']);
-
-        $this->middleware([
-            'CheckHasOpenOrder'
-        ], [
-            'only' => ['paymentRedirect']
-        ]);
     }
 
     /**
@@ -407,7 +401,8 @@ class TransactionController extends Controller
             $transaction->completed_at = $completed_at;
         }
 
-        if ($transaction->update()) {
+//        if ($transaction->update()) {
+        if ($this->modify($transaction)) {
             if ($request->ajax() || $request->has("apirequest")) {
                 return $this->response->setStatusCode(200);
 
@@ -425,6 +420,9 @@ class TransactionController extends Controller
         }
     }
 
+    public function modify(Transaction $transaction) {
+        return $transaction->update();
+    }
     /**
      * Store a newly created resource in storage
      *
@@ -434,7 +432,7 @@ class TransactionController extends Controller
      */
     public function store(InsertTransactionRequest $request)
     {
-        $result = $this->storeTransaction($request);
+        $result = $this->storeTransaction($request->all());
 
         return response()->json([
             'error' => $result['message']
@@ -446,7 +444,7 @@ class TransactionController extends Controller
         $result['order'] = $order;*/
     }
 
-    public function storeTransaction(InsertTransactionRequest $request)
+    public function storeTransaction($data)
     {
         $result = [
             'statusCode' => Response::HTTP_OK,
@@ -454,7 +452,7 @@ class TransactionController extends Controller
             'transaction' => null
         ];
 
-        $order = Order::findOrFail($request->get("order_id"));
+        $order = Order::findOrFail($data["order_id"]);
 
         /**
          *  Check to find whether it comes from admin panel or user panel
@@ -472,7 +470,7 @@ class TransactionController extends Controller
          *  end
          */
 
-        if ($request->has("comesFromAdmin")) {
+        if (isset($data["comesFromAdmin"])) {
             if (!Auth::user()->can(Config::get("constants.INSERT_TRANSACTION_ACCESS"))) {
                 $result['statusCode'] = Response::HTTP_FORBIDDEN;
                 $result['message'] = "سفارش مورد نظر متعلق به شما نمی باشد";
@@ -497,8 +495,8 @@ class TransactionController extends Controller
         /**
          *  For inserting online transactions
          */
-        if ($request->has("authority")) {
-            $transaction = Transaction::where("authority", $request->get("authority"))->first();
+        if (isset($data["authority"])) {
+            $transaction = Transaction::where("authority", $data["authority"])->first();
             if (isset($transaction)) {
                 $newTransaction = false;
             }
@@ -508,7 +506,7 @@ class TransactionController extends Controller
          */
         if ($newTransaction) {
             $transaction = new Transaction();
-            $transaction->fill($request->all());
+            $transaction->fill($data);
         } else {
             /**
              *  For inserting online transactions
@@ -523,7 +521,7 @@ class TransactionController extends Controller
                 $result['message'] = "تراکنشی با این شماره Authority قبلا برای شخص دیگری ثبت شده است";
                 return $result;
             }
-            if ($request->get("cost") != $transaction->cost) {
+            if ($data["cost"] != $transaction->cost) {
                 $result['statusCode'] = Response::HTTP_FORBIDDEN;
                 $result['message'] = "مبلغ وارد شده با تراکنش تصدیق نشده ای که یافت شد همخوانی ندارد";
                 return $result;
@@ -589,10 +587,10 @@ class TransactionController extends Controller
             $transaction->authority = null;
         if (strlen($transaction->paycheckNumber) == 0)
             $transaction->paycheckNumber = null;
-        $gateway = $request->get("gateway");//for requests coming from checkout/payment and user order list
+        $gateway = $data["gateway"];//for requests coming from checkout/payment and user order list
 
-        if ($request->has("completed_at") && strlen($request->get("completed_at")) > 0) {
-            $completed_at = Carbon::parse($request->get("completed_at"))
+        if (isset($data["completed_at"]) && strlen($data["completed_at"]) > 0) {
+            $completed_at = Carbon::parse($data["completed_at"])
                 ->format('Y-m-d');
             $transaction->completed_at = $completed_at;
 
@@ -600,8 +598,8 @@ class TransactionController extends Controller
             $transaction->completed_at = Carbon::now();
         }
 
-        if ($request->has("deadline_at") && strlen($request->get("deadline_at")) > 0) {
-            $deadline_at = Carbon::parse($request->get("deadline_at"))
+        if (isset($data["deadline_at"]) && strlen($data["deadline_at"]) > 0) {
+            $deadline_at = Carbon::parse($data["deadline_at"])
                 ->format('Y-m-d');
             $transaction->deadline_at = $deadline_at;
             $transaction->completed_at = null;

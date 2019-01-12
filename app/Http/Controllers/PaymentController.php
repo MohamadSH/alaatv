@@ -2,26 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Classes\Payment\RefinementRequest\RefinementRequest;
-use App\Http\Requests\EditTransactionRequest;
-use App\Order;
-use App\Traits\OrderCommon;
-use App\Transaction;
-use App\Transactiongateway;
-use App\User;
 use Auth;
-use Illuminate\Http\{Request, Response};
-use Zarinpal\Zarinpal;
-use App\Bankaccount;
 use App\Bon;
+use App\User;
+use App\Order;
+use Carbon\Carbon;
+use App\Bankaccount;
+use App\Transaction;
+use Zarinpal\Zarinpal;
+use App\Transactiongateway;
+use App\Traits\OrderCommon;
 use App\Notifications\InvoicePaid;
+use Illuminate\Http\{Request, Response};
+use App\Http\Requests\EditTransactionRequest;
 use Illuminate\Support\Facades\{Config, Cache};
+use App\Classes\Payment\RefinementRequest\Refinement;
+use App\Classes\Payment\RefinementRequest\RefinementLauncher;
+use App\Classes\Payment\RefinementRequest\Strategies\{OpenOrderRefinement, OrderIdRefinement, TransactionRefinement};
 
 class PaymentController extends Controller
 {
     use OrderCommon;
 
     private $orderController;
+    private $transactionController;
 
     /**
      * @var Order
@@ -38,14 +42,30 @@ class PaymentController extends Controller
      */
     private $user;
 
+    /**
+     * @var Refinement
+     */
+    private $refinementRequest;
+
+    /**
+     * @var int
+     */
+    private $cost;
+    /**
+     * @var string
+     */
+    private $description;
+
     private $zarinpalAuthority;
     private $zarinpalRefId;
     private $zarinpalStatus;
     private $zarinpalError;
 
-    public function __construct(OrderController $orderController)
+
+    public function __construct(OrderController $orderController, TransactionController $transactionController)
     {
         $this->orderController = $orderController;
+        $this->transactionController = $transactionController;
     }
 
     /**
@@ -56,11 +76,9 @@ class PaymentController extends Controller
     {
 //        $request->offsetSet("order_id", 137);
 //        $request->offsetSet("transaction_id", 65);
+//        $request->offsetSet("payByWallet", true);
 
-        $refinementRequest = new RefinementRequest($request);
-        $data = $refinementRequest->getData();
-
-//        dd($data);
+        $data = $this->RefinementRequest($request);
 
         if($data['statusCode']!=Response::HTTP_OK) {
             return response()->json([
@@ -68,37 +86,46 @@ class PaymentController extends Controller
             ], $data['statusCode']);
         }
 
-        $user = $data['user'];
-        $order = $data['order'];
-        $cost = $data['cost'];
+        $this->user = $data['user'];
+        $this->order = $data['order'];
+        $this->cost = (int)$data['cost'];
         $donateCost = $data['donateCost'];
-        $transaction = $data['transaction'];
+        $this->transaction = $data['transaction'];
+        $this->description = $data['description'];
 
-        $description = $this->setDescription($request, $order, $user);
+        $this->setDescription();
 
-        $this->setCustomerDescription($request, $order);
+        $this->setCustomerDescription($request);
 
         if ($request->has("payByWallet")) {
-            $remainedCost = $this->payByWallet($cost, $donateCost, $order, $user);
-            $cost = $remainedCost;
+            $remainedCost = $this->payByWallet($donateCost);
+            $this->cost = (int)$remainedCost;
         }
 
-        if ($cost > 0) {
-            $this->zarinReqeust((int)$cost, $description, $transaction);
+        if ($this->isRedirectable()) {
+            $this->zarinRequest();
+            return redirect(action("HomeController@error404"));
         } else {
-            return redirect(action('PaymentController@verifyPayment', ['type' => 'offline', 'gateway' => 'wallet']));
+            return redirect(action('PaymentController@verifyPayment', ['type' => 'offline', 'paymentMethod' => 'wallet', 'coi' => $this->order->id]));
         }
-        return redirect(action("HomeController@error404"));
+    }
+
+    /**
+     * @return bool
+     */
+    private function isRedirectable() {
+        if ($this->cost > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
      * Making request to ZarinPal gateway
-     * @param int $cost
-     * @param string $description
-     * @param Transaction $transaction
      * @return mixed
      */
-    protected function zarinReqeust(int $cost, string  $description, Transaction $transaction)
+    protected function zarinRequest()
     {
         $zarinGate = Transactiongateway::where('name', 'zarinpal')->first();
         $merchant = $zarinGate->merchantNumber;
@@ -107,13 +134,12 @@ class PaymentController extends Controller
         $zarinpal->isZarinGate(); // active zarinGate mode
 
         //ToDo : putting verify url in .env or database
-        $results = $zarinpal->request(action('PaymentController@verifyPayment', ['type' => 'online', 'gateway' => 'zarinpal']), (int)$cost, $description);
+        $results = $zarinpal->request(action('PaymentController@verifyPayment', ['type' => 'online', 'paymentMethod' => 'zarinpal']), (int)$this->cost, $this->description);
 
 //        $answer = $zarinpal->request(action("OrderController@verifyPayment"), (int)$cost, $description);
 
         if (isset($results['Authority']) && strlen($results['Authority']) > 0) {
 
-            $transactionController = new TransactionController();
             $request = new EditTransactionRequest();
             $request->offsetSet("authority", $results['Authority']);
             $request->offsetSet("transactiongateway_id", $zarinGate->id);
@@ -121,7 +147,7 @@ class PaymentController extends Controller
             $request->offsetSet("paymentmethod_id", config("constants.PAYMENT_METHOD_ONLINE"));
             $request->offsetSet("apirequest", true);
             $request->offsetSet("gateway", $zarinpal);
-            $response = $transactionController->update($request, $transaction);
+            $response = $this->transactionController->update($request, $this->transaction);
             if ($response->getStatusCode() == 200) {
                 $zarinpal->redirect();
                 return null;
@@ -135,47 +161,31 @@ class PaymentController extends Controller
         }
     }
 
-    /**
-     * @param Request $request
-     * @param Order $order
-     * @param User $user
-     * @return string
-     */
-    private function setDescription(Request $request, Order $order, User $user): string
+    private function setDescription()
     {
-        $description = '';
+        $this->description .= "آلاء - " . $this->user->mobile . " - محصولات: ";
 
-        if ($request->has("transaction_id")) {
-            $description .= "پرداخت قسط -";
-        }
-
-        $description .= "آلاء - " . $user->mobile . " - محصولات: ";
-
-        $orderProducts = $order->orderproducts;
+        $orderProducts = $this->order->orderproducts;
         foreach ($orderProducts as $orderProduct) {
             if (isset($orderProduct->product->id))
-                $description .= $orderProduct->product->name . " , ";
+                $this->description .= $orderProduct->product->name . " , ";
             else
-                $description .= "یک محصول نامشخص , ";
+                $this->description .= "یک محصول نامشخص , ";
         }
-        return $description;
     }
 
     /**
-     * @param int $cost
      * @param int $donateCost
-     * @param Order $order
-     * @param User $user
      * @return int
      */
-    private function payByWallet(int $cost, int $donateCost, Order $order, User $user): int
+    private function payByWallet(int $donateCost): int
     {
-        $deductibleCostFromWallet = $cost - $donateCost;
+        $deductibleCostFromWallet = $this->cost - $donateCost;
         $remainedCost = $deductibleCostFromWallet;
-        $walletPayResult = $this->payOrderCostByWallet($user, $order, $deductibleCostFromWallet);
+        $walletPayResult = $this->payOrderCostByWallet($this->user, $this->order, $deductibleCostFromWallet);
         if ($walletPayResult["result"]) {
             $remainedCost = $walletPayResult["cost"];
-            $order->closeOrderWithIndebtedStatus();
+            $this->closeOrderWithIndebtedStatus();
         }
         $remainedCost = $remainedCost + $donateCost;
         return $remainedCost;
@@ -183,16 +193,12 @@ class PaymentController extends Controller
 
     /**
      * @param Request $request
-     * @param Order $order
      */
-    private function setCustomerDescription(Request $request, Order $order): void
+    private function setCustomerDescription(Request $request): void
     {
         if ($request->has("customerDescription")) {
             $customerDescription = $request->get("customerDescription");
-            $order->customerDescription = $customerDescription;
-            $order->timestamps = false;
-            $order->update();
-            $order->timestamps = true;
+            $this->order->setCustomerDescription($customerDescription);
         }
     }
 
@@ -200,17 +206,17 @@ class PaymentController extends Controller
     /**
      * Verify customer online payment after coming back from payment gateway
      * @param string $type
-     * @param string $gateway
+     * @param string $paymentMethod
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function verifyPayment(string $type, string $gateway, Request $request)
+    public function verifyPayment(string $type, string $paymentMethod, Request $request)
     {
         $result = [
             'sendSMS' => false
         ];
         if($type=='online') {
-            if($gateway=='zarinpal') {
+            if($paymentMethod=='zarinpal') {
                 $result = $this->handleZarinpal($request, $result);
             }
         } else if($type=='offline') {
@@ -349,8 +355,7 @@ class PaymentController extends Controller
             $user = $this->order->user;
             $this->order = $this->order->fresh();
             $user->notify(new InvoicePaid($this->order));
-            Cache::tags('bon')
-                ->flush();
+            Cache::tags('bon')->flush();
         }
 
 
@@ -456,10 +461,9 @@ class PaymentController extends Controller
     private function verifyZarinpal(): array
     {
         $zarinpal = new Zarinpal($this->transaction->transactiongateway->merchantNumber);
+        $zarinpal->enableSandbox();
         $result = $zarinpal->verify($this->zarinpalStatus, $this->transaction->cost, $this->zarinpalAuthority);
-
         $this->zarinpalError = (strcmp(array_get($result, "Status"), 'error') == 0)? array_get($result, "error") : null;
-
 
         if (strcmp(array_get($result, "Status"), 'success') == 0) {
             $this->zarinpalStatus = 'success';
@@ -515,7 +519,7 @@ class PaymentController extends Controller
      */
     private function updateOrderPaymentStatus(array $result): array
     {
-        $orderUpdateStatus = $this->order->changePaymentStatusToPaidOrIndebted($this->transaction);
+        $orderUpdateStatus = $this->order->changePaymentStatusToPaidOrIndebted();
 
         if ($orderUpdateStatus)
             $result = array_add($result, "saveOrder", 1);
@@ -539,7 +543,7 @@ class PaymentController extends Controller
      */
     private function zarinpalHandleSuccessStatus(array $result): array
     {
-        $this->transaction->changeStatusToSuccessfull($this->zarinpalRefId);
+        $this->changeTransactionStatusToSuccessfull();
 
         /** Wallet transactions */
         $this->order->closeWalletPendingTransactions();
@@ -564,7 +568,10 @@ class PaymentController extends Controller
         if ($this->order->orderstatus_id == config("constants.ORDER_STATUS_OPEN")) {
             $result = $this->zarinpalCanceledStatusHandleOpenOrder($result);
         } else if ($this->order->orderstatus_id == config("constants.ORDER_STATUS_OPEN_DONATE")) {
-            /*$updateStatus = $order->setCanceledAndUnpaid();*/
+            /*$order->close(config("constants.PAYMENT_STATUS_UNPAID"), config("constants.ORDER_STATUS_CANCELED"));
+            $order->timestamps = false;
+            $updateStatus = $order->update();
+            $order->timestamps = true;*/
             $result["tryAgain"] = false;
         } else {
             $result = $this->zarinpalCanceledStatusHandleOtherTypeOrder($result);
@@ -580,9 +587,12 @@ class PaymentController extends Controller
     {
         $result["tryAgain"] = true;
 
-        $updateStatus = $this->order->setCanceledAndUnpaid();
+        $this->order->close(config("constants.PAYMENT_STATUS_UNPAID"), config("constants.ORDER_STATUS_CANCELED"));
+        $this->order->timestamps = false;
+        $updateStatus = $this->order->update();
+        $this->order->timestamps = true;
 
-        $this->transaction->changeStatusToUnsuccessful();
+        $this->changeTransactionStatusToUnsuccessful();
 
         if ($updateStatus) {
             $this->copyOrderWithOpenAndUnpaidStatus();
@@ -610,7 +620,10 @@ class PaymentController extends Controller
         }
 
         if ($closeOrderFlag) {
-            $this->order->setCanceledAndUnpaid();
+            $this->order->close(config("constants.PAYMENT_STATUS_UNPAID"), config("constants.ORDER_STATUS_CANCELED"));
+            $this->order->timestamps = false;
+            $this->order->update();
+            $this->order->timestamps = true;
         }
         return $result;
     }
@@ -660,5 +673,45 @@ class PaymentController extends Controller
         }
         dd($result);
         return $result;
+    }
+
+    /**
+     * @param Request $request
+     * @return array
+     */
+    private function RefinementRequest(Request $request)
+    {
+        if ($request->has('transaction_id')) { // closed order
+            $this->refinementRequest = new RefinementLauncher(new TransactionRefinement($request));
+        } else if ($request->has('order_id')) { // closed order
+            $this->refinementRequest = new RefinementLauncher(new OrderIdRefinement($request));
+        } else { // open order
+            $this->refinementRequest = new RefinementLauncher(new OpenOrderRefinement($request));
+        }
+        $data = $this->refinementRequest->getData();
+        return $data;
+    }
+
+    private function changeTransactionStatusToSuccessfull(): void
+    {
+        $this->transaction->transactionID = $this->zarinpalRefId;
+        $this->transaction->transactionstatus_id = config("constants.TRANSACTION_STATUS_SUCCESSFUL");
+        $this->transaction->completed_at = Carbon::now();
+        $this->transactionController->modify($this->transaction);
+    }
+
+    private function changeTransactionStatusToUnsuccessful(): void
+    {
+        $this->transaction->transactionstatus_id = config("constants.TRANSACTION_STATUS_UNSUCCESSFUL");
+        $this->transaction->completed_at = Carbon::now();
+        $this->transactionController->modify($this->transaction);
+    }
+
+    private function closeOrderWithIndebtedStatus(): void
+    {
+        $this->order->close(config("constants.PAYMENT_STATUS_INDEBTED"));
+        $this->order->timestamps = false;
+        $this->order->update();
+        $this->order->timestamps = true;
     }
 }
