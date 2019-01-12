@@ -5,17 +5,6 @@
 @section("content")
     @include("partials.slideShow1" ,["marginBottom"=>"25"])
     <div class = "m--clearfix"></div>
-    @if(Session::has("customer_id"))
-        <div class="note bg-yellow-lemon">
-            <h3 class="block"><strong>توجه!</strong></h3>
-            <p><strong> شما در وضعیت درج سفارش
-                        برای {{Session::get("customer_firstName")}} {{Session::get("customer_lastName")}} می باشید.
-                    <a href="{{action("OrderController@exitAdminInsertOrder")}}" class="btn btn-lg red">بیرون
-                                                                                                        آمدن از وضعیت درج سفارش
-                                                                                                        برای {{Session::get("customer_firstName")}} {{Session::get("customer_lastName")}}</a></strong>
-            </p>
-        </div>
-    @endif
     <!--begin:: Widgets/Stats-->
     <div class = "m-portlet ">
         <div class = "m-portlet__body  m-portlet__body--no-padding">
@@ -107,7 +96,7 @@
             @foreach($section["lessons"] as $lesson)
                 @include('partials.widgets.set1',[
                 'widgetActionName' => $section["descriptiveName"].'/ نمایش همه',
-                'widgetActionLink' => urldecode(action("ContentController@index" , ["tags" => $section["tags"]])),
+                'widgetActionLink' => $section["url"],
                 'widgetTitle'      => $lesson["displayName"],
                 'widgetPic'        => (isset($lesson["pic"]) && strlen($lesson["pic"])>0 ?  $lesson["pic"]."?w=253&h=142" : 'https://via.placeholder.com/235x142'),
                 'widgetAuthor' => $lesson["author"],

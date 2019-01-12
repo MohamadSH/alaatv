@@ -83,6 +83,15 @@ class Contentset extends Model implements Taggable
         'shortName',
         'author'
     ];
+
+    protected $hidden = [
+        'deleted_at',
+        'small_name',
+        'pivot',
+        'enable',
+        'display',
+
+    ];
     /**
      * Create a new Eloquent Collection instance.
      *
@@ -176,10 +185,21 @@ class Contentset extends Model implements Taggable
         $contentId = optional($this->getLastContent())->id;
         return isset($contentId) ? action("ContentController@show", $contentId) : "";
     }
+
+    /**
+     * @param $value
+     * @return User|null
+     */
     public function getAuthorAttribute($value): ?User
     {
 //        return action("ContentsetController@show",$this);
-        return optional($this->getLastContent())->author;
+        return optional(optional($this->getLastContent())->author)
+            ->setVisible([
+                'id',
+                'firstName',
+                'lastName',
+                'photo'
+            ]);
     }
 
 

@@ -53,6 +53,24 @@ class Block extends Model
         'enable',
     ];
 
+    protected $appends = [
+      'url'
+    ];
+    protected $hidden =[
+        'enable',
+        'tags',
+        'created_at'
+    ];
+
+    /**
+     * @param $value
+     * @return string
+     */
+    public function getUrlAttribute($value):?string
+    {
+        return urldecode(action("ContentController@index" , ["tags" => $this->tags]));
+    }
+
     public static function getBlocks()
     {
         $blocks = Cache::tags('block')
@@ -90,8 +108,6 @@ class Block extends Model
      * Scope a query to only include enable Blocks.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param int                                   $enable
-     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeEnable($query)

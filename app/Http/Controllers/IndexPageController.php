@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Block;
+use App\Classes\Format\webBlockCollectionFormatter;
+use App\Classes\Format\webSetCollectionFormatter;
 use App\Classes\SEO\SeoDummyTags;
 use App\Slideshow;
 use App\Traits\MetaCommon;
@@ -27,7 +30,9 @@ class IndexPageController extends Controller
      */
     public function __invoke(Request $request)
     {
-
+        return Block::getBlocks();
+        $sections = (new webBlockCollectionFormatter(new webSetCollectionFormatter()))->format(Block::getBlocks());
+dd($sections);
         $url = $request->url();
         $this->generateSeoMetaTags(new SeoDummyTags($this->setting->site->seo->homepage->metaTitle, $this->setting->site->seo->homepage->metaDescription, $url, $url, route('image', [
             'category' => '11',
