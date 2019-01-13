@@ -633,11 +633,13 @@ class Order extends Model
         }
     }
 
+
     /**
      * Recalculates order's cost and updates it's cost
      *
      * @return array
      */
+    //ToDo : must refresh donate product cost
     public function refreshCost()
     {
         $orderCost = $this->obtainOrderCost(true);
@@ -783,7 +785,7 @@ class Order extends Model
         $donateCost = 0;
         $orderProducts = $this->orderproducts->whereIn('product_id', Product::DONATE_PRODUCT);
         foreach ($orderProducts as $orderProduct) {
-            $donateCost = $orderProduct->cost;
+            $donateCost += $orderProduct->cost;
         }
         return $donateCost;
     }

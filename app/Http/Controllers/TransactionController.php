@@ -452,8 +452,16 @@ class TransactionController extends Controller
             'transaction' => null
         ];
 
-        $order = Order::findOrFail($data["order_id"]);
+        $order = Order::find($data["order_id"]);
 
+        if(!isset($order)) {
+            $result = [
+                'statusCode' => Response::HTTP_NOT_FOUND,
+                'message' => 'سفارش شما یافت نشد.',
+                'transaction' => null
+            ];
+            return $result;
+        }
         /**
          *  Check to find whether it comes from admin panel or user panel
          */

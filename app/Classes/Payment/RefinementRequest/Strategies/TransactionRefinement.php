@@ -9,18 +9,18 @@
 namespace App\Classes\Payment\RefinementRequest\Strategies;
 
 
-use App\Classes\Payment\RefinementRequest\Refinement;
 use App\Order;
 use App\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Classes\Payment\RefinementRequest\Refinement;
 
 class TransactionRefinement extends Refinement
 {
-    public function __construct(Request $request)
+    public function __construct()
     {
-        parent::__construct($request);
-        $this->transaction = $this->getTransaction();
+        parent::__construct();
+        $this->transaction = $this->getNewTransaction();
         if($this->transaction) {
             $this->order = $this->getOrder();
             $this->order->cancelOpenOnlineTransactions();

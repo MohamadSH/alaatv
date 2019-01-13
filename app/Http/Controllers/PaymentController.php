@@ -52,6 +52,10 @@ class PaymentController extends Controller
      */
     private $cost;
     /**
+     * @var int
+     */
+    private $donateCost;
+    /**
      * @var string
      */
     private $description;
@@ -70,15 +74,18 @@ class PaymentController extends Controller
 
     /**
      * @param Request $request
+     * @param string $paymentMethod
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function paymentRedirect(Request $request)
+    public function paymentRedirect(Request $request, string $paymentMethod)
     {
 //        $request->offsetSet("order_id", 137);
 //        $request->offsetSet("transaction_id", 65);
-//        $request->offsetSet("payByWallet", true);
+        $request->offsetSet("payByWallet", true);
 
-        $data = $this->RefinementRequest($request);
+        $refinementRequestStrategy = $this->gteRefinementRequestStrategy($request);
+
+        $data = $this->lunchRefinementRequest($request, $refinementRequestStrategy);
 
         if($data['statusCode']!=Response::HTTP_OK) {
             return response()->json([
@@ -86,24 +93,19 @@ class PaymentController extends Controller
             ], $data['statusCode']);
         }
 
-        $this->user = $data['user'];
-        $this->order = $data['order'];
-        $this->cost = (int)$data['cost'];
-        $donateCost = $data['donateCost'];
-        $this->transaction = $data['transaction'];
-        $this->description = $data['description'];
-
         $this->setDescription();
 
         $this->setCustomerDescription($request);
 
         if ($request->has("payByWallet")) {
-            $remainedCost = $this->payByWallet($donateCost);
+            $remainedCost = $this->payByWallet();
             $this->cost = (int)$remainedCost;
         }
 
         if ($this->isRedirectable()) {
-            $this->zarinRequest();
+            if($paymentMethod == 'zarinpal') {
+                $this->zarinRequest();
+            }
             return redirect(action("HomeController@error404"));
         } else {
             return redirect(action('PaymentController@verifyPayment', ['type' => 'offline', 'paymentMethod' => 'wallet', 'coi' => $this->order->id]));
@@ -134,19 +136,18 @@ class PaymentController extends Controller
         $zarinpal->isZarinGate(); // active zarinGate mode
 
         //ToDo : putting verify url in .env or database
-        $results = $zarinpal->request(action('PaymentController@verifyPayment', ['type' => 'online', 'paymentMethod' => 'zarinpal']), (int)$this->cost, $this->description);
+        $results = $zarinpal->request(action('PaymentController@verifyPayment', ['type' => 'online', 'paymentMethod' => 'zarinpal']), (int)$this->transaction->cost, $this->description);
 
 //        $answer = $zarinpal->request(action("OrderController@verifyPayment"), (int)$cost, $description);
 
         if (isset($results['Authority']) && strlen($results['Authority']) > 0) {
-
             $request = new EditTransactionRequest();
-            $request->offsetSet("authority", $results['Authority']);
-            $request->offsetSet("transactiongateway_id", $zarinGate->id);
-            $request->offsetSet("destinationBankAccount_id", 1);
-            $request->offsetSet("paymentmethod_id", config("constants.PAYMENT_METHOD_ONLINE"));
-            $request->offsetSet("apirequest", true);
             $request->offsetSet("gateway", $zarinpal);
+            $request->offsetSet("apirequest", true);
+            $request->offsetSet("authority", $results['Authority']);
+            $request->offsetSet("destinationBankAccount_id", 1);
+            $request->offsetSet("transactiongateway_id", $zarinGate->id);
+            $request->offsetSet("paymentmethod_id", config("constants.PAYMENT_METHOD_ONLINE"));
             $response = $this->transactionController->update($request, $this->transaction);
             if ($response->getStatusCode() == 200) {
                 $zarinpal->redirect();
@@ -175,19 +176,18 @@ class PaymentController extends Controller
     }
 
     /**
-     * @param int $donateCost
      * @return int
      */
-    private function payByWallet(int $donateCost): int
+    private function payByWallet(): int
     {
-        $deductibleCostFromWallet = $this->cost - $donateCost;
+        $deductibleCostFromWallet = $this->cost - $this->donateCost;
         $remainedCost = $deductibleCostFromWallet;
         $walletPayResult = $this->payOrderCostByWallet($this->user, $this->order, $deductibleCostFromWallet);
         if ($walletPayResult["result"]) {
             $remainedCost = $walletPayResult["cost"];
             $this->closeOrderWithIndebtedStatus();
         }
-        $remainedCost = $remainedCost + $donateCost;
+        $remainedCost = $remainedCost + $this->donateCost;
         return $remainedCost;
     }
 
@@ -677,19 +677,17 @@ class PaymentController extends Controller
 
     /**
      * @param Request $request
-     * @return array
+     * @return Refinement
      */
-    private function RefinementRequest(Request $request)
+    private function gteRefinementRequestStrategy(Request $request): Refinement
     {
         if ($request->has('transaction_id')) { // closed order
-            $this->refinementRequest = new RefinementLauncher(new TransactionRefinement($request));
+            return new TransactionRefinement();
         } else if ($request->has('order_id')) { // closed order
-            $this->refinementRequest = new RefinementLauncher(new OrderIdRefinement($request));
+            return new OrderIdRefinement();
         } else { // open order
-            $this->refinementRequest = new RefinementLauncher(new OpenOrderRefinement($request));
+            return new OpenOrderRefinement();
         }
-        $data = $this->refinementRequest->getData();
-        return $data;
     }
 
     private function changeTransactionStatusToSuccessfull(): void
@@ -713,5 +711,24 @@ class PaymentController extends Controller
         $this->order->timestamps = false;
         $this->order->update();
         $this->order->timestamps = true;
+    }
+
+    /**
+     * @param Request $request
+     * @param Refinement $refinementRequestStrategy
+     * @return array
+     */
+    private function lunchRefinementRequest(Request $request, Refinement $refinementRequestStrategy): array
+    {
+        $this->refinementRequest = new RefinementLauncher($request, $refinementRequestStrategy);
+        $data = $this->refinementRequest->getData();
+
+        $this->user = $data['user'];
+        $this->order = $data['order'];
+        $this->cost = (int)$data['cost'];
+        $this->donateCost = $data['donateCost'];
+        $this->transaction = $data['transaction'];
+        $this->description = $data['description'];
+        return $data;
     }
 }

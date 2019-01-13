@@ -147,6 +147,11 @@ class OrderproductController extends Controller
 
         $simpleProducts = (new RefinementFactory($product, $data))->getRefinementClass()->getProducts();
 
+        if($simpleProducts->isEmpty()) {
+            return response()->json([
+                'error' => 'محصول مورد نظر یافت نشد.'
+            ], Response::HTTP_NOT_FOUND);
+        }
 //        dd($order->orderproducts()->get());
 
         $notDuplicateProduct = $order->checkProductsExistInOrderProducts($simpleProducts);

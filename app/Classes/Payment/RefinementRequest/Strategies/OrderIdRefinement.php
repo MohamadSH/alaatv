@@ -9,24 +9,23 @@
 namespace App\Classes\Payment\RefinementRequest\Strategies;
 
 
-use App\Classes\Payment\RefinementRequest\Refinement;
 use App\Order;
-use Illuminate\Http\Request;
+use App\Classes\Payment\RefinementRequest\Refinement;
 
 class OrderIdRefinement extends Refinement
 {
     private $orderId;
 
-    public function __construct(Request $request)
+    public function __construct()
     {
-        parent::__construct($request);
+        parent::__construct();
         $this->orderId = $this->request->get('order_id');
         $this->order = $this->getOrder();
         if($this->order) {
             $this->user = $this->order->user;
             list($this->order, $this->cost) = $this->getOrderCost($this->order);
             $this->order->cancelOpenOnlineTransactions();
-            $result = $this->getTransaction();
+            $result = $this->getNewTransaction();
             $this->statusCode = $result['statusCode'];
             $this->message = $result['message'];
             $this->transaction = $result['transaction'];

@@ -112,7 +112,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post("completeTransaction/{transaction}", "TransactionController@completeTransaction");
     Route::post("myTransaction/{transaction}", "TransactionController@limitedUpdate");
     Route::get('getUnverifiedTransactions', 'TransactionController@getUnverifiedTransactions');
-    Route::any('paymentRedirect', 'PaymentController@paymentRedirect');
+    Route::any('paymentRedirect/{paymentMethod}', 'PaymentController@paymentRedirect');
     Route::get('exitAdminInsertOrder', 'OrderController@exitAdminInsertOrder');
     Route::post('exchangeOrderproduct/{order}', 'OrderController@exchangeOrderproduct');
     Route::get('MBTI-Participation', "MbtianswerController@create");

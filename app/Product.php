@@ -124,7 +124,7 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
     |--------------------------------------------------------------------------
     */
 
-    public const DONATE_PRODUCT        = [180];
+    public const DONATE_PRODUCT        = [180, 181];
     public const CUSTOM_DONATE_PRODUCT = 182;
 
     public const AMOUNT_LIMIT               = [

@@ -8,7 +8,6 @@
 
 namespace App\Classes\OrderProduct\RefinementProduct;
 
-
 interface RefinementInterface
 {
     public function getProducts();
