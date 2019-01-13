@@ -25,7 +25,10 @@ class RefinementConfigurable implements RefinementInterface
         }
     }
 
-    public function getProducts() {
+    /**
+     * @return ProductCollection|null
+     */
+    public function getProducts(): ?ProductCollection {
         $children = $this->product->children;
         $simpleProduct = new ProductCollection();
         foreach ($children as $child) {

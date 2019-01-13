@@ -20,7 +20,7 @@ use App\Classes\Payment\RefinementRequest\Refinement;
 use App\Classes\Payment\RefinementRequest\RefinementLauncher;
 use App\Classes\Payment\RefinementRequest\Strategies\{OpenOrderRefinement, OrderIdRefinement, TransactionRefinement};
 
-class PaymentController extends Controller
+class OnlinePaymentController extends Controller
 {
     use OrderCommon;
 
@@ -85,7 +85,10 @@ class PaymentController extends Controller
 
         $refinementRequestStrategy = $this->gteRefinementRequestStrategy($request);
 
-        $data = $this->lunchRefinementRequest($request, $refinementRequestStrategy);
+        $inputData = $request->all();
+        $inputData['transactionController'] = $this->transactionController;
+        $inputData['user'] = $request->user();
+        $data = $this->launchRefinementRequest($inputData, $refinementRequestStrategy);
 
         if($data['statusCode']!=Response::HTTP_OK) {
             return response()->json([
@@ -185,7 +188,12 @@ class PaymentController extends Controller
         $walletPayResult = $this->payOrderCostByWallet($this->user, $this->order, $deductibleCostFromWallet);
         if ($walletPayResult["result"]) {
             $remainedCost = $walletPayResult["cost"];
-            $this->closeOrderWithIndebtedStatus();
+
+            $this->order->close(config("constants.PAYMENT_STATUS_INDEBTED"));
+            //ToDo : use updateWithoutTimestamp
+            $this->order->timestamps = false;
+            $this->order->update();
+            $this->order->timestamps = true;
         }
         $remainedCost = $remainedCost + $this->donateCost;
         return $remainedCost;
@@ -198,7 +206,12 @@ class PaymentController extends Controller
     {
         if ($request->has("customerDescription")) {
             $customerDescription = $request->get("customerDescription");
-            $this->order->setCustomerDescription($customerDescription);
+            $this->order->customerDescription = $customerDescription;
+            //ToDo : use updateWithoutTimestamp
+            $this->order->timestamps = false;
+            $this->order->update();
+            $this->order->timestamps = true;
+
         }
     }
 
@@ -297,6 +310,7 @@ class PaymentController extends Controller
                 }
 
                 $this->order->close(Config::get("constants.PAYMENT_STATUS_UNPAID"));
+                //ToDo : use updateWithoutTimestamp
                 $this->order->timestamps = false;
                 if ($this->order->update())
                     $result = array_add($result, "saveOrder", 1);
@@ -314,6 +328,7 @@ class PaymentController extends Controller
                 if ($cost == 0 &&
                     (isset($this->order->cost) || isset($this->order->costwithoutcoupon))) {
                     $this->order->close(Config::get("constants.PAYMENT_STATUS_PAID"));
+                    //ToDo : use updateWithoutTimestamp
                     $this->order->timestamps = false;
                     if ($this->order->update())
                         $result = array_add($result, "saveOrder", 1);
@@ -519,7 +534,18 @@ class PaymentController extends Controller
      */
     private function updateOrderPaymentStatus(array $result): array
     {
-        $orderUpdateStatus = $this->order->changePaymentStatusToPaidOrIndebted();
+        $paymentstatus_id = null;
+        if ((int)$this->order->totalPaidCost() < (int)$this->order->totalCost())
+            $paymentstatus_id = config("constants.PAYMENT_STATUS_INDEBTED");
+        else
+            $paymentstatus_id = config("constants.PAYMENT_STATUS_PAID");
+        $this->order->close($paymentstatus_id);
+
+        //ToDo : use updateWithoutTimestamp
+        $this->order->timestamps = false;
+        $orderUpdateStatus = $this->order->update();
+        $this->order->timestamps = true;
+
 
         if ($orderUpdateStatus)
             $result = array_add($result, "saveOrder", 1);
@@ -569,6 +595,7 @@ class PaymentController extends Controller
             $result = $this->zarinpalCanceledStatusHandleOpenOrder($result);
         } else if ($this->order->orderstatus_id == config("constants.ORDER_STATUS_OPEN_DONATE")) {
             /*$order->close(config("constants.PAYMENT_STATUS_UNPAID"), config("constants.ORDER_STATUS_CANCELED"));
+            //ToDo : use updateWithoutTimestamp
             $order->timestamps = false;
             $updateStatus = $order->update();
             $order->timestamps = true;*/
@@ -588,6 +615,7 @@ class PaymentController extends Controller
         $result["tryAgain"] = true;
 
         $this->order->close(config("constants.PAYMENT_STATUS_UNPAID"), config("constants.ORDER_STATUS_CANCELED"));
+        //ToDo : use updateWithoutTimestamp
         $this->order->timestamps = false;
         $updateStatus = $this->order->update();
         $this->order->timestamps = true;
@@ -621,6 +649,7 @@ class PaymentController extends Controller
 
         if ($closeOrderFlag) {
             $this->order->close(config("constants.PAYMENT_STATUS_UNPAID"), config("constants.ORDER_STATUS_CANCELED"));
+            //ToDo : use updateWithoutTimestamp
             $this->order->timestamps = false;
             $this->order->update();
             $this->order->timestamps = true;
@@ -692,35 +721,27 @@ class PaymentController extends Controller
 
     private function changeTransactionStatusToSuccessfull(): void
     {
-        $this->transaction->transactionID = $this->zarinpalRefId;
-        $this->transaction->transactionstatus_id = config("constants.TRANSACTION_STATUS_SUCCESSFUL");
-        $this->transaction->completed_at = Carbon::now();
-        $this->transactionController->modify($this->transaction);
+        $data['completed_at'] = Carbon::now();
+        $data['transactionID'] = $this->zarinpalRefId;
+        $data['transactionstatus_id'] = config("constants.TRANSACTION_STATUS_SUCCESSFUL");
+        $this->transactionController->modify($this->transaction, $data);
     }
 
     private function changeTransactionStatusToUnsuccessful(): void
     {
-        $this->transaction->transactionstatus_id = config("constants.TRANSACTION_STATUS_UNSUCCESSFUL");
-        $this->transaction->completed_at = Carbon::now();
-        $this->transactionController->modify($this->transaction);
-    }
-
-    private function closeOrderWithIndebtedStatus(): void
-    {
-        $this->order->close(config("constants.PAYMENT_STATUS_INDEBTED"));
-        $this->order->timestamps = false;
-        $this->order->update();
-        $this->order->timestamps = true;
+        $data['completed_at'] = Carbon::now();
+        $data['transactionstatus_id'] = config("constants.TRANSACTION_STATUS_UNSUCCESSFUL");
+        $this->transactionController->modify($this->transaction, $data);
     }
 
     /**
-     * @param Request $request
+     * @param array $inputData
      * @param Refinement $refinementRequestStrategy
      * @return array
      */
-    private function lunchRefinementRequest(Request $request, Refinement $refinementRequestStrategy): array
+    private function launchRefinementRequest(array $inputData, Refinement $refinementRequestStrategy): array
     {
-        $this->refinementRequest = new RefinementLauncher($request, $refinementRequestStrategy);
+        $this->refinementRequest = new RefinementLauncher($inputData, $refinementRequestStrategy);
         $data = $this->refinementRequest->getData();
 
         $this->user = $data['user'];

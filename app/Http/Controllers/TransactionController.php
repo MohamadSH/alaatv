@@ -371,7 +371,29 @@ class TransactionController extends Controller
      */
     public function update(EditTransactionRequest $request, Transaction $transaction)
     {
-        $transaction->fill($request->all());
+        $result = $this->modify($transaction, $request->all());
+
+        if ($request->ajax() || $request->has("apirequest")) {
+            return $this->response->setStatusCode($result['statusCode']);
+        } else {
+            session()->put("success", $result['message']);
+            return redirect()->back();
+        }
+    }
+
+    /**
+     * @param Transaction $transaction
+     * @param array $data
+     * @return array
+     */
+    public function modify(Transaction $transaction, array $data) {
+        $result = [
+            'statusCode' => Response::HTTP_OK,
+            'message' => '',
+            'transaction' => $transaction
+        ];
+
+        $transaction->fill($data);
         if (strlen($transaction->referenceNumber) == 0)
             $transaction->referenceNumber = null;
         if (strlen($transaction->traceNumber) == 0)
@@ -387,42 +409,33 @@ class TransactionController extends Controller
         if (strlen($transaction->paymentmethod_id) == 0)
             $transaction->paymentmethod_id = null;
 
-        if ($request->has("deadline_at") && strlen($request->get("deadline_at")) > 0) {
-            $deadline_at = Carbon::parse($request->get("deadline_at"))
-                                 ->addDay()
-                                 ->format('Y-m-d');
+        if (isset($data["deadline_at"]) && strlen($data["deadline_at"]) > 0) {
+            $deadline_at = Carbon::parse($data["deadline_at"])
+                ->addDay()
+                ->format('Y-m-d');
             $transaction->deadline_at = $deadline_at;
         }
 
-        if ($request->has("completed_at") && strlen($request->get("completed_at")) > 0) {
-            $completed_at = Carbon::parse($request->get("completed_at"))
-                                  ->addDay()
-                                  ->format('Y-m-d');
+        if (isset($data["completed_at"]) && strlen($data["completed_at"]) > 0) {
+            $completed_at = Carbon::parse($data["completed_at"])
+                ->addDay()
+                ->format('Y-m-d');
             $transaction->completed_at = $completed_at;
         }
 
-//        if ($transaction->update()) {
-        if ($this->modify($transaction)) {
-            if ($request->ajax() || $request->has("apirequest")) {
-                return $this->response->setStatusCode(200);
-
-            } else {
-                session()->put("success", "تراکنش با موفقیت اصلاح شد");
-                return redirect()->back();
-            }
+        if ($transaction->update()) {
+            $result['statusCode'] = Response::HTTP_OK;
+            $result['message'] = 'تراکنش با موفقیت اصلاح شد';
+            $result['transaction'] = $transaction;
+            return $result;
         } else {
-            if ($request->ajax() || $request->has("apirequest")) {
-                return $this->response->setStatusCode(503);
-            } else {
-                session()->put("success", "خطای پایگاه داده");
-                return redirect()->back();
-            }
+            $result['statusCode'] = Response::HTTP_SERVICE_UNAVAILABLE;
+            $result['message'] = 'خطای پایگاه داده';
+            $result['transaction'] = $transaction;
+            return $result;
         }
     }
 
-    public function modify(Transaction $transaction) {
-        return $transaction->update();
-    }
     /**
      * Store a newly created resource in storage
      *
@@ -749,8 +762,8 @@ class TransactionController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \app\Transaction
-     *
      * @return \Illuminate\Http\Response
+     * @throws \Exception
      */
     public function destroy(Transaction $transaction)
     {

@@ -807,25 +807,6 @@ class Order extends Model
         }
     }
 
-
-    /**
-     * @return bool
-     */
-    public function changePaymentStatusToPaidOrIndebted()
-    {
-        $paymentstatus_id = null;
-        if ((int)$this->totalPaidCost() < (int)$this->totalCost())
-            $paymentstatus_id = config("constants.PAYMENT_STATUS_INDEBTED");
-        else
-            $paymentstatus_id = config("constants.PAYMENT_STATUS_PAID");
-        $this->close($paymentstatus_id);
-
-        $this->timestamps = false;
-        $updateStatus = $this->update();
-        $this->timestamps = true;
-        return $updateStatus;
-    }
-
     /**
      * @return array
      */
@@ -865,15 +846,4 @@ class Order extends Model
             'closeOrderFlag'=>$closeOrderFlag
         );
     }
-
-    /**
-     * @param $customerDescription
-     */
-    public function setCustomerDescription($customerDescription) {
-        $this->customerDescription = $customerDescription;
-        $this->timestamps = false;
-        $this->update();
-        $this->timestamps = true;
-    }
-
 }

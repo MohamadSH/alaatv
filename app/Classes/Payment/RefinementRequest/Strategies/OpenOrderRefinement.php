@@ -19,32 +19,34 @@ class OpenOrderRefinement extends Refinement
      */
     private $openOrder;
 
-    public function __construct()
+    /**
+     * @return Refinement
+     */
+    function loadData(): Refinement
     {
-        parent::__construct();
-        $this->user = $this->request->user();
-        $this->openOrder = $this->getOpenOrder();
+        if($this->statusCode!=Response::HTTP_OK) {
+            return $this;
+        }
+        $this->getOpenOrder();
         if ($this->openOrder && $this->openOrder->orderproducts->isNotEmpty()) {
             $this->order = $this->openOrder;
-            list($this->order, $this->cost) = $this->getOrderCost($this->order);
+            $this->getOrderCost();
             $this->donateCost = $this->order->getDonateCost();
             $this->order->cancelOpenOnlineTransactions();
             $result = $this->getNewTransaction();
             $this->statusCode = $result['statusCode'];
             $this->message = $result['message'];
             $this->transaction = $result['transaction'];
+            $this->statusCode = Response::HTTP_OK;
         } else {
             $this->message = 'سبد خرید شما خالیست';
             $this->statusCode = Response::HTTP_BAD_REQUEST;
         }
+        return $this;
     }
 
-    /**
-     * @return Order|null
-     */
-    private function getOpenOrder(): ?Order
+    private function getOpenOrder(): void
     {
-        $openOrder = $this->user->openOrders()->with(['transactions', 'coupon'])->first();
-        return $openOrder;
+        $this->openOrder = $this->user->openOrders()->with(['transactions', 'coupon'])->first();
     }
 }

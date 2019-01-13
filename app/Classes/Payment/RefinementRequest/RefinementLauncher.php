@@ -8,8 +8,6 @@
 
 namespace App\Classes\Payment\RefinementRequest;
 
-use Illuminate\Http\Request;
-
 class RefinementLauncher
 {
     /**
@@ -18,18 +16,18 @@ class RefinementLauncher
     private $refinement;
 
     /**
-     * @var Request
+     * @var array
      */
-    private $request;
+    private $inputData;
 
     /**
      * RefinementLauncher constructor.
-     * @param Request $request
+     * @param array $inputData
      * @param Refinement $refinement
      */
-    public function __construct(Request $request, Refinement $refinement) {
+    public function __construct(array $inputData, Refinement $refinement) {
         $this->refinement = $refinement;
-        $this->request = $request;
+        $this->inputData = $inputData;
     }
 
     /**
@@ -37,7 +35,9 @@ class RefinementLauncher
      */
     public function getData() {
         return $this->refinement
-            ->setRequest($this->request)
+            ->setData($this->inputData)
+            ->validateData()
+            ->loadData()
             ->getData();
     }
 }

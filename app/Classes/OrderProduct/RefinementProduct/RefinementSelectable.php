@@ -8,8 +8,9 @@
 
 namespace App\Classes\OrderProduct\RefinementProduct;
 
-use App\Product;
 use Exception;
+use App\Product;
+use App\Collection\ProductCollection;
 
 class RefinementSelectable implements RefinementInterface
 {
@@ -25,24 +26,14 @@ class RefinementSelectable implements RefinementInterface
         }
     }
 
-    public function getProducts() {
+    /**
+     * @return ProductCollection|null
+     */
+    public function getProducts(): ?ProductCollection {
         $selectedProductsItems = Product::whereIn('id', $this->selectedProductsIds)->get();
 
         $selectedProductsItems->keepOnlyParents();
 
-        return $selectedProductsItems;
-    }
-
-    private function removeChildren($selectedProductsItems, Product $productItem) {
-        $childrenArray = $productItem->children;
-        foreach ($childrenArray as $child) {
-            foreach ($selectedProductsItems as $key=>$item) {
-                if($item->id==$child->id) {
-                    $selectedProductsItems->forget($key);
-                    $selectedProductsItems = $this->removeChildren($selectedProductsItems, $child);
-                }
-            }
-        }
         return $selectedProductsItems;
     }
 }

@@ -16,31 +16,34 @@ class OrderIdRefinement extends Refinement
 {
     private $orderId;
 
-    public function __construct()
+    /**
+     * @return Refinement
+     */
+    function loadData(): Refinement
     {
-        parent::__construct();
-        $this->orderId = $this->request->get('order_id');
-        $this->order = $this->getOrder();
-        if($this->order) {
+        if($this->statusCode!=Response::HTTP_OK) {
+            return $this;
+        }
+        $this->orderId = $this->inputData['order_id'];
+        $this->getOrder();
+        if(isset($this->order)) {
             $this->user = $this->order->user;
-            list($this->order, $this->cost) = $this->getOrderCost($this->order);
+            $this->getOrderCost();
             $this->order->cancelOpenOnlineTransactions();
             $result = $this->getNewTransaction();
             $this->statusCode = $result['statusCode'];
             $this->message = $result['message'];
             $this->transaction = $result['transaction'];
+            $this->statusCode = Response::HTTP_OK;
         } else {
             $this->statusCode = Response::HTTP_NOT_FOUND;
             $this->message = 'سفارشی یافت نشد.';
         }
+        return $this;
     }
 
-    /**
-     * @return Order
-     */
-    private function getOrder(): Order
+    private function getOrder(): void
     {
-        $order = Order::with(['transactions', 'coupon'])->find($this->orderId);
-        return $order;
+        $this->order = Order::with(['transactions', 'coupon'])->find($this->orderId);
     }
 }

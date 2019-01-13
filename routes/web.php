@@ -65,7 +65,7 @@ Route::group(['prefix' => 'checkout'], function () {
     Route::get('successfulPayment', "PaymentController@successfulPayment");
     Route::get('failedPayment', "PaymentController@failedPayment");
     Route::get('returnFromPayment', "PaymentController@otherPayment");
-    Route::any('verifyPayment/{type}/{paymentMethod}', "PaymentController@verifyPayment");
+    Route::any('verifyPayment/online/{paymentMethod}', "OnlinePaymentController@verifyPayment");
 });
 Route::group(['prefix' => 'orderproduct'], function () {
     Route::get('store', 'OrderproductController@store');

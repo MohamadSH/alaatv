@@ -64,41 +64,41 @@ use Illuminate\Support\{Collection, Facades\Cache, Facades\Config};
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Productphoto[]   $photos
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Productfile[]    $productfiles
  * @property-read \App\Producttype|null                                          $producttype
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product configurable()
+ * @method static Builder|Product configurable()
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|\App\Product onlyTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Product onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product simple()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereAmount($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereAttributesetId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereBasePrice($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereDiscount($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereEnable($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereFile($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereImage($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereIntroVideo($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereIsFree($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereLongDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereOrder($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereProducttypeId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereShortDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereSlogan($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereSpecialDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereTags($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereValidSince($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereValidUntil($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Product withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Product withoutTrashed()
+ * @method static Builder|Product simple()
+ * @method static Builder|Product whereAmount($value)
+ * @method static Builder|Product whereAttributesetId($value)
+ * @method static Builder|Product whereBasePrice($value)
+ * @method static Builder|Product whereCreatedAt($value)
+ * @method static Builder|Product whereDeletedAt($value)
+ * @method static Builder|Product whereDiscount($value)
+ * @method static Builder|Product whereEnable($value)
+ * @method static Builder|Product whereFile($value)
+ * @method static Builder|Product whereId($value)
+ * @method static Builder|Product whereImage($value)
+ * @method static Builder|Product whereIntroVideo($value)
+ * @method static Builder|Product whereIsFree($value)
+ * @method static Builder|Product whereLongDescription($value)
+ * @method static Builder|Product whereName($value)
+ * @method static Builder|Product whereOrder($value)
+ * @method static Builder|Product whereProducttypeId($value)
+ * @method static Builder|Product whereShortDescription($value)
+ * @method static Builder|Product whereSlogan($value)
+ * @method static Builder|Product whereSpecialDescription($value)
+ * @method static Builder|Product whereTags($value)
+ * @method static Builder|Product whereUpdatedAt($value)
+ * @method static Builder|Product whereValidSince($value)
+ * @method static Builder|Product whereValidUntil($value)
+ * @method static \Illuminate\Database\Query\Builder|Product withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Product withoutTrashed()
  * @mixin \Eloquent
  * @property string|null $page_view
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product wherePageView($value)
+ * @method static Builder|Product wherePageView($value)
  * @property string|null $redirectUrl آدرسی که صفحه محصول به آن به صورت همیشگی ریدایرکت می شود
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereRedirectUrl($value)
+ * @method static Builder|Product whereRedirectUrl($value)
  */
 class Product extends Model implements Advertisable, Taggable, SeoInterface, FavorableInterface
 {
@@ -769,7 +769,7 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
      * Gets product's bon collection and filters it by bon name and enable/disable
      *
      * @param string $bonName
-     *
+     * @param int $enable
      * @return Collection
      */
     public function getBons($bonName = "", $enable = 1): Collection
@@ -795,7 +795,7 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
      */
     public function validSince_Jalali(): string
     {
-        $explodedDateTime = explode(" ", $this->validSince);
+        /*$explodedDateTime = explode(" ", $this->validSince);*/
         //        $explodedTime = $explodedDateTime[1] ;
         return $this->convertDate($this->validSince, "toJalali");
     }
@@ -807,7 +807,7 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
      */
     public function validUntil_Jalali(): string
     {
-        $explodedDateTime = explode(" ", $this->validUntil);
+        /*$explodedDateTime = explode(" ", $this->validUntil);*/
         //        $explodedTime = $explodedDateTime[1] ;
         return $this->convertDate($this->validUntil, "toJalali");
     }
@@ -1349,7 +1349,7 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
      *
      * @param User|null $user
      *
-     * @return
+     * @return mixed
      */
     private function obtainCostInfo(User $user = null)
     {
@@ -1452,8 +1452,6 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
     }
 
     /**
-     * @param $productFileTypes
-     *
      * @return Collection
      */
     public function productFileTypesOrder(): collection
@@ -1541,9 +1539,7 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
 
     /** Makes an array of files with specific type
      *
-     * @param Product $product
-     * @param string  $type
-     *
+     * @param string $type
      * @return array
      */
     public function makeFileArray($type): array
@@ -1794,10 +1790,14 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
     /** edit amount of product
      * @param int $value
      */
-    public function decreaseProductAmountWithValue($value): void
+    public function decreaseProductAmountWithValue(int $value): void
     {
         if (isset($this->amount) && $this->amount>0) {
-            $this->amount = $this->amount - 1;
+            if($this->amount<$value) {
+                $this->amount = 0;
+            } else {
+                $this->amount -= $value;
+            }
             $this->update();
         }
     }

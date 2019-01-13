@@ -8,7 +8,12 @@
 
 namespace App\Classes\OrderProduct\RefinementProduct;
 
+use App\Collection\ProductCollection;
+
 interface RefinementInterface
 {
-    public function getProducts();
+    /**
+     * @return ProductCollection|null
+     */
+    public function getProducts(): ?ProductCollection;
 }

@@ -20,7 +20,7 @@ abstract class Refinement
     /**
      * @var Request
      */
-    public $request;
+    public $inputData;
 
     /**
      * @var int
@@ -68,21 +68,37 @@ abstract class Refinement
      */
     protected $transactionController;
 
-    public function __construct(TransactionController $transactionController)
+    public function __construct()
     {
         $this->donateCost = 0;
-        $this->statusCode = Response::HTTP_BAD_REQUEST;
+        $this->statusCode = Response::HTTP_OK;
         $this->message = '';
         $this->description = '';
-        $this->transactionController = $transactionController;
     }
 
     /**
-     * @param Request $request
+     * @param array $inputData
      * @return $this
      */
-    public function setRequest(Request $request) {
-        $this->request = $request;
+    public function setData(array $inputData) {
+        $this->inputData = $inputData;
+        $this->transactionController = $this->inputData['transactionController'];
+        $this->user = $this->inputData['user'];
+        return $this;
+    }
+
+    /**
+     * @return Refinement
+     */
+    public function validateData(): Refinement {
+        if(!isset($this->user)) {
+            $this->message = 'user not set';
+            $this->statusCode = Response::HTTP_BAD_REQUEST;
+        }
+        if(!isset($this->transactionController)) {
+            $this->message = 'transactionController not set';
+            $this->statusCode = Response::HTTP_BAD_REQUEST;
+        }
         return $this;
     }
 
@@ -103,30 +119,20 @@ abstract class Refinement
         ];
     }
 
-    /**
-     * @param Order $order
-     * @return array
-     */
-    protected function getOrderCost(Order $order): array
+    protected function getOrderCost(): void
     {
-        $order = $this->validateCoupon($order);
-        $order->refreshCost();
-        $cost = $order->totalCost() - $order->totalPaidCost();
-        return array($order, $cost);
+        $this->validateCoupon();
+        $this->order->refreshCost();
+        $this->cost = $this->order->totalCost() - $this->order->totalPaidCost();
     }
 
-    /**
-     * @param Order $order
-     * @return Order
-     */
-    protected function validateCoupon(Order $order): Order
+    protected function validateCoupon(): void
     {
-        $couponValidationStatus = optional($order->coupon)->validateCoupon();
+        $couponValidationStatus = optional($this->order->coupon)->validateCoupon();
         if ($couponValidationStatus != Coupon::COUPON_VALIDATION_STATUS_OK && $couponValidationStatus != Coupon::COUPON_VALIDATION_STATUS_USAGE_LIMIT_FINISHED) {
-            $order->detachCoupon();
-            $order = $order->fresh();
+            $this->order->detachCoupon();
+            $this->order->fresh();
         }
-        return $order;
     }
 
     /**
@@ -144,4 +150,9 @@ abstract class Refinement
         $result = $this->transactionController->storeTransaction($data);
         return $result;
     }
+
+    /**
+     * @return Refinement
+     */
+    abstract function loadData(): Refinement;
 }

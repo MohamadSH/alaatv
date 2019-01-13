@@ -9,55 +9,48 @@
 namespace App\Classes\Payment\RefinementRequest\Strategies;
 
 
-use App\Order;
 use App\Transaction;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Classes\Payment\RefinementRequest\Refinement;
 
 class TransactionRefinement extends Refinement
 {
-    public function __construct()
+    /**
+     * @return Refinement
+     */
+    function loadData(): Refinement
     {
-        parent::__construct();
-        $this->transaction = $this->getNewTransaction();
+        if($this->statusCode!=Response::HTTP_OK) {
+            return $this;
+        }
+        $this->getTransaction();
         if($this->transaction) {
-            $this->order = $this->getOrder();
+            $this->getOrder();
             $this->order->cancelOpenOnlineTransactions();
             $this->user = $this->order->user;
             $this->cost = $this->transaction->cost;
             $this->statusCode = Response::HTTP_OK;
-            $this->setDescription($this->request);
+            $this->setDescription();
         } else {
             $this->statusCode = Response::HTTP_NOT_FOUND;
             $this->message = 'تراکنشی یافت نشد.';
         }
+        return $this;
     }
 
-    /**
-     * @return Transaction
-     */
-    protected function getTransaction(): Transaction
+    private function getTransaction(): void
     {
-        $transaction = Transaction::find($this->request->get("transaction_id"));
-        return $transaction;
+        $this->transaction = Transaction::find($this->inputData["transaction_id"]);
     }
 
-    /**
-     * @return Order
-     */
-    private function getOrder(): Order
+    private function getOrder(): void
     {
-        $order = $this->transaction->order->load(['transactions', 'coupon']);
-        return $order;
+        $this->order = $this->transaction->order->load(['transactions', 'coupon']);
     }
 
-    /**
-     * @param Request $request
-     */
-    private function setDescription(Request $request): void
+    private function setDescription(): void
     {
-        if ($request->has("transaction_id")) {
+        if (isset($this->inputData["transaction_id"])) {
             $this->description .= "پرداخت قسط -";
         }
     }
