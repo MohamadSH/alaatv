@@ -2,20 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Auth;
 use App\Bon;
 use App\User;
 use App\Order;
 use Carbon\Carbon;
-use App\Bankaccount;
 use App\Transaction;
 use Zarinpal\Zarinpal;
 use App\Transactiongateway;
 use App\Traits\OrderCommon;
 use App\Notifications\InvoicePaid;
 use Illuminate\Http\{Request, Response};
-use App\Http\Requests\EditTransactionRequest;
-use Illuminate\Support\Facades\{Config, Cache};
+use Illuminate\Support\Facades\Cache;
 use App\Classes\Payment\RefinementRequest\Refinement;
 use App\Classes\Payment\RefinementRequest\RefinementLauncher;
 use App\Classes\Payment\RefinementRequest\Strategies\{OpenOrderRefinement, OrderIdRefinement, TransactionRefinement};
@@ -60,11 +57,11 @@ class OnlinePaymentController extends Controller
      */
     private $description;
 
+    private $zarinpalCardPanHash;
     private $zarinpalAuthority;
-    private $zarinpalRefId;
     private $zarinpalStatus;
+    private $zarinpalRefId;
     private $zarinpalError;
-
 
     public function __construct(OrderController $orderController, TransactionController $transactionController)
     {
@@ -107,11 +104,18 @@ class OnlinePaymentController extends Controller
 
         if ($this->isRedirectable()) {
             if($paymentMethod == 'zarinpal') {
-                $this->zarinRequest();
+//                $this->zarinRequest();
+
+                return response($this->zarinRequest())
+                    ->withHeaders([
+                        'laravel_session' => 'eyJpdiI6IkdtMWVuNklOU2xOdHJiY3g1Nmt5cGc9PSIsInZhbHVlIjoiTW02NWJkWXZFaDAzMGdYUTZvaHFoM1VNRExwM3F5ZDFTVFwvYmZsdDk0OSthM0hMa2RQa3pXWXZkMmJJU2djWVgiLCJtYWMiOiJkYmU1NGM3MGNhODk2MzU5NzA1MWE1NTU3NDZkNTAzMjI0NTMzYjdmMTFhZjk3ZjI2NTg0MjdlNmRmN2UxMWU0In0%3D',
+                        'XSRF-TOKEN' => 'eyJpdiI6IkpxQ0NhbnEyQkRqZEI5Q1lJWDQ2NkE9PSIsInZhbHVlIjoicURORzNSK1VWcDcydDlNTGN5a0NpUFhhdWh5N0RTTWFhQ25ha1N5aXZqd2YrTTdvdFRiK015SUdua20wY3hEQSIsIm1hYyI6ImQwMmExODlhZmRjZWNlMmI3NTY1MzNmODUxNmVjY2Q3MjZiNzdmZmE3M2YwN2E5YmU4YzZkMDcwMjNiNTQ0NTgifQ%3D%3D',
+                    ]);
+
             }
             return redirect(action("HomeController@error404"));
         } else {
-            return redirect(action('PaymentController@verifyPayment', ['type' => 'offline', 'paymentMethod' => 'wallet', 'coi' => $this->order->id]));
+            return redirect(action('OnlinePaymentController@verifyPayment', ['type' => 'offline', 'paymentMethod' => 'wallet', 'coi' => $this->order->id]));
         }
     }
 
@@ -139,20 +143,19 @@ class OnlinePaymentController extends Controller
         $zarinpal->isZarinGate(); // active zarinGate mode
 
         //ToDo : putting verify url in .env or database
-        $results = $zarinpal->request(action('PaymentController@verifyPayment', ['type' => 'online', 'paymentMethod' => 'zarinpal']), (int)$this->transaction->cost, $this->description);
+        $results = $zarinpal->request(action('OnlinePaymentController@verifyPayment', ['type' => 'online', 'paymentMethod' => 'zarinpal']), (int)$this->transaction->cost, $this->description);
 
 //        $answer = $zarinpal->request(action("OrderController@verifyPayment"), (int)$cost, $description);
 
         if (isset($results['Authority']) && strlen($results['Authority']) > 0) {
-            $request = new EditTransactionRequest();
-            $request->offsetSet("gateway", $zarinpal);
-            $request->offsetSet("apirequest", true);
-            $request->offsetSet("authority", $results['Authority']);
-            $request->offsetSet("destinationBankAccount_id", 1);
-            $request->offsetSet("transactiongateway_id", $zarinGate->id);
-            $request->offsetSet("paymentmethod_id", config("constants.PAYMENT_METHOD_ONLINE"));
-            $response = $this->transactionController->update($request, $this->transaction);
-            if ($response->getStatusCode() == 200) {
+            $data["apirequest"] = true;
+            $data["gateway"] = $zarinpal;
+            $data["destinationBankAccount_id"] = 1;
+            $data["authority"] = $results['Authority'];
+            $data["transactiongateway_id"] = $zarinGate->id;
+            $data["paymentmethod_id"] = config("constants.PAYMENT_METHOD_ONLINE");
+            $result = $this->transactionController->modify($this->transaction, $data);
+            if ($result['statusCode'] == Response::HTTP_OK) {
                 $zarinpal->redirect();
                 return null;
             }
@@ -215,156 +218,23 @@ class OnlinePaymentController extends Controller
         }
     }
 
-
     /**
      * Verify customer online payment after coming back from payment gateway
-     * @param string $type
      * @param string $paymentMethod
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function verifyPayment(string $type, string $paymentMethod, Request $request)
+    public function verifyPayment(string $paymentMethod, Request $request)
     {
         $result = [
-            'sendSMS' => false
+            'sendSMS' => false,
+            'Status' => 'error'
         ];
-        if($type=='online') {
-            if($paymentMethod=='zarinpal') {
-                $result = $this->handleZarinpal($request, $result);
-            }
-        } else if($type=='offline') {
-            $result = [];
-            if (session()->has("adminOrder_id")) {
-                $result["isAdminOrder"] = true;
-                $this->user = Auth::user();
-                if (!$this->user->can(config('constants.INSERT_ORDER_ACCESS')))
-                    return redirect(action("HomeController@error403"));
 
-                $order_id = session()->get("adminOrder_id");
-                $this->order = Order::FindorFail($order_id);
-
-                $result["customer_firstName"] = session()->get("customer_firstName");
-                $result["customer_lastName"] = session()->get("customer_lastName");
-                session()->forget("adminOrder_id");
-                session()->forget("customer_id");
-                session()->forget("customer_firstName");
-                session()->forget("customer_lastName");
-            } else if (session()->has("closedOrder_id")) {
-                $this->user = Auth::user();
-                $result["isAdminOrder"] = false;
-
-                $order_id = session()->get("closedOrder_id");
-                session()->forget("closedOrder_id");
-                $this->order = Order::FindorFail($order_id);
-
-                if ($this->order->user->id != $this->user->id)
-                    abort(403);
-            } else if (session()->has("order_id")) {
-                $this->user = Auth::user();
-                $result["isAdminOrder"] = false;
-
-                $order_id = session()->get("order_id");
-                session()->forget("order_id");
-                $this->order = Order::FindorFail($order_id);
-
-                if ($this->order->orderstatus_id != Config::get("constants.ORDER_STATUS_OPEN"))
-                    abort(403);
-                if ($this->order->user->id != $this->user->id)
-                    abort(403);
-            } else {
-                abort(404);
-            }
-
-            if ($this->order->orderproducts->isEmpty())
-                return redirect(action("OrderController@checkoutReview"));
-
-            if ($request->has("customerDescription")) {
-                $customerDescription = $request->get("customerDescription");
-                $this->order->customerDescription = $customerDescription;
-            }
-            if ($request->has('paymentmethod')) {
-                $paymentMethod = $request->get('paymentmethod');
-
-                $this->order->detachUnusedCoupon();
-
-                $debitCard = Bankaccount::all()
-                    ->where("user_id", 2)
-                    ->first();
-                if (isset($debitCard)) {
-                    $result["debitCardNumber"] = $debitCard->cardNumber;
-                    $result["debitCardBank"] = $debitCard->bank->name;
-                    $result["debitCardOwner"] = $debitCard->user->firstName . " " . $debitCard->user->lastName;
-                }
-
-                switch ($paymentMethod) {
-                    case "inPersonPayment" :
-                        $result["Status"] = "inPersonPayment";
-                        break;
-                    case "offlinePayment":
-
-                        $result["Status"] = "offlinePayment";
-                        break;
-                    default :
-                        return redirect(action(("HomeController@error404")));
-                        break;
-                }
-
-                $this->order->close(Config::get("constants.PAYMENT_STATUS_UNPAID"));
-                //ToDo : use updateWithoutTimestamp
-                $this->order->timestamps = false;
-                if ($this->order->update())
-                    $result = array_add($result, "saveOrder", 1);
-                else
-                    $result = array_add($result, "saveOrder", 0);
-                $this->order->timestamps = true;
-                $result["sendSMS"] = true;
-
-            } else {
-                /** Wallet transactions */
-                $this->order->closeWalletPendingTransactions();
-                /** End */
-                $cost = $this->order->totalCost() - $this->order->totalPaidCost();
-
-                if ($cost == 0 &&
-                    (isset($this->order->cost) || isset($this->order->costwithoutcoupon))) {
-                    $this->order->close(Config::get("constants.PAYMENT_STATUS_PAID"));
-                    //ToDo : use updateWithoutTimestamp
-                    $this->order->timestamps = false;
-                    if ($this->order->update())
-                        $result = array_add($result, "saveOrder", 1);
-                    else
-                        $result = array_add($result, "saveOrder", 0);
-                    $this->order->timestamps = true;
-                    /** Attaching user bons for this order */
-                    $bonName = Config::get("constants.BON1");
-                    $bon = Bon::where("name", $bonName)
-                        ->first();
-                    if (isset($bon)) {
-                        [
-                            $givenBonNumber,
-                            $failedBonNumber,
-                        ] = $this->order->giveUserBons($bonName);
-
-                        if ($givenBonNumber == 0)
-                            if ($failedBonNumber > 0)
-                                $result = array_add($result, "saveBon", -1);
-                            else
-                                $result = array_add($result, "saveBon", 0);
-                        else
-                            $result = array_add($result, "saveBon", $givenBonNumber);
-
-                        $bonDisplayName = $bon->displayName;
-                        $result = array_add($result, "bonName", $bonDisplayName);
-                    }
-                    $result["Status"] = "freeProduct";
-                    $result["sendSMS"] = true;
-                }
-            }
+        if($paymentMethod=='zarinpal') {
+            $result = $this->handleZarinpal($request, $result);
         }
 
-        /**
-         * Sending SMS to Ordoo 97 customers
-         */
         $sendSMS = $result['sendSMS'];
         if ($sendSMS && isset($this->order)) {
             $user = $this->order->user;
@@ -373,33 +243,20 @@ class OnlinePaymentController extends Controller
             Cache::tags('bon')->flush();
         }
 
+        $request->session()->flash('result', $result);
 
-        if (isset($result['Status'])) {
-            if (isset($result['RefID']) || strcmp($result['Status'], 'freeProduct') == 0) {
-                session()->put('verifyPayment', 1);
-                return redirect(action("OrderController@successfulPayment", [
-                    "result" => $result,
-                ]));
-            } else if (strcmp($result["Status"], 'canceled') == 0 ||
-                (strcmp($result["Status"], 'error') == 0 && isset($result["error"]) && strcmp($result["error"], '-22') == 0)) {
-                if (isset($result["tryAgain"]) && $result["tryAgain"]) {
-                    session()->put("verifyPayment", 1);
-                    return redirect(action("OrderController@failedPayment", [
-                        "result" => $result,
-                    ]));
-                }
-            }
+        if (isset($result['transactionID'])) {
+            $status = 'successful';
+        } else {
+            $status = 'failed';
         }
 
-        return redirect(action("OrderController@otherPayment", [
-            "result" => $result,
-        ]));
-
-        //        return view('order.checkout.verification',compact('result')) ;
         //'Status'(index) going to be 'success', 'error' or 'canceled'
+        return redirect(action("OnlinePaymentController@showPaymentStatus", [
+            'status' => $status,
+            'paymentMethod' => $paymentMethod
+        ]));
     }
-
-
 
     /**
      * Successful payments
@@ -426,7 +283,6 @@ class OnlinePaymentController extends Controller
             return redirect(action("HomeController@error403"));
         }
     }
-
 
     /**
      *  repeat an old payment
@@ -478,14 +334,16 @@ class OnlinePaymentController extends Controller
         $zarinpal = new Zarinpal($this->transaction->transactiongateway->merchantNumber);
         $zarinpal->enableSandbox();
         $result = $zarinpal->verify($this->zarinpalStatus, $this->transaction->cost, $this->zarinpalAuthority);
-        $this->zarinpalError = (strcmp(array_get($result, "Status"), 'error') == 0)? array_get($result, "error") : null;
+        $this->zarinpalError = (strcmp($result['Status'], 'error') == 0)? $result['error'] : null;
 
-        if (strcmp(array_get($result, "Status"), 'success') == 0) {
+        if (isset($result['RefID']) && strcmp($result['Status'], 'success') == 0) {
+            $this->zarinpalRefId = $result['RefID'];
             $this->zarinpalStatus = 'success';
-        } else if (strcmp(array_get($result, "Status"), 'canceled') == 0 ||
-            (strcmp(array_get($result, "Status"), 'error') == 0 && (
-                    strcmp(array_get($result, "error"), '-22') == 0 || //وارد درگاه بانک شده و انصراف زده
-                    strcmp(array_get($result, "error"), '-21') == 0 // قبل از ورود به درگاه بانک در همان صفحه زرین پال انصراف زده
+            $this->zarinpalCardPanHash = $result['ExtraDetail']['Transaction']['CardPanHash'];
+        } else if (strcmp($result['Status'], 'canceled') == 0 ||
+            (strcmp($result['Status'], 'error') == 0 && (
+                    strcmp($result['error'], '-22') == 0 || //وارد درگاه بانک شده و انصراف زده
+                    strcmp($result['error'], '-21') == 0 // قبل از ورود به درگاه بانک در همان صفحه زرین پال انصراف زده
                 ))) {
             $this->zarinpalStatus = 'canceled';
         } else {
@@ -497,7 +355,6 @@ class OnlinePaymentController extends Controller
             $result["Status"] = "success";
             $result["RefID"] = "mohamad" . rand(0, 1000);
         }*/
-
         return $result;
     }
 
@@ -562,24 +419,24 @@ class OnlinePaymentController extends Controller
         $this->orderController->copy($this->order, $request);
     }
 
-
     /**
      * @param array $result
      * @return array
      */
     private function zarinpalHandleSuccessStatus(array $result): array
     {
-        $this->changeTransactionStatusToSuccessfull();
+        $this->changeTransactionStatusToSuccessful();
 
-        /** Wallet transactions */
         $this->order->closeWalletPendingTransactions();
-        /** End */
+
         $result = $this->updateOrderPaymentStatus($result);
 
         /** Attaching user bons for this order */
         $result = $this->givesOrderBonsToUser($this->order, $result);
 
+        $result['transactionID'] = $this->zarinpalRefId;
         $result['sendSMS'] = true;
+        $result['Status'] = 'success';
         return $result;
     }
 
@@ -687,20 +544,12 @@ class OnlinePaymentController extends Controller
             abort(Response::HTTP_NOT_FOUND);
         }
 
-//        $this->zarinpalStatus = 'success';
-//        $this->zarinpalAuthority = '000000000000000000000000000099314972';
-//        $this->zarinpalRefId = '1';
-//
-//        $this->zarinpalStatus = 'canceled';
-//        $this->zarinpalAuthority = '000000000000000000000000000099314972';
-//        $this->zarinpalRefId = '1';
-
         if ($this->zarinpalStatus === 'success') {
             $result = $this->zarinpalHandleSuccessStatus($result);
         } else if ($this->zarinpalStatus === 'canceled') {
             $result = $this->zarinpalHandleCanceledStatus($result);
         }
-        dd($result);
+
         return $result;
     }
 
@@ -719,7 +568,7 @@ class OnlinePaymentController extends Controller
         }
     }
 
-    private function changeTransactionStatusToSuccessfull(): void
+    private function changeTransactionStatusToSuccessful(): void
     {
         $data['completed_at'] = Carbon::now();
         $data['transactionID'] = $this->zarinpalRefId;
@@ -751,5 +600,19 @@ class OnlinePaymentController extends Controller
         $this->transaction = $data['transaction'];
         $this->description = $data['description'];
         return $data;
+    }
+
+    /**
+     * @param Request $request
+     * @param string $status
+     * @param string $paymentMethod
+     */
+    public function showPaymentStatus(Request $request, string $status, string $paymentMethod) {
+        $result = $request->session()->get('result');
+        dd([
+            'status' => $status,
+            'paymentMethod' => $paymentMethod,
+            'result' => $result
+        ]);
     }
 }

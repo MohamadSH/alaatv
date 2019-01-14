@@ -62,10 +62,11 @@ Route::group(['prefix' => 'checkout'], function () {
         Route::get('review', "OrderController@checkoutReview");
         Route::get('payment', "OrderController@checkoutPayment");
     });
-    Route::get('successfulPayment', "PaymentController@successfulPayment");
-    Route::get('failedPayment', "PaymentController@failedPayment");
-    Route::get('returnFromPayment', "PaymentController@otherPayment");
+    Route::get('successfulPayment', "OnlinePaymentController@successfulPayment");
+    Route::get('failedPayment', "OnlinePaymentController@failedPayment");
+    Route::get('returnFromPayment', "OnlinePaymentController@otherPayment");
     Route::any('verifyPayment/online/{paymentMethod}', "OnlinePaymentController@verifyPayment");
+    Route::any('verifyPayment/online/{status}/{paymentMethod}', "OnlinePaymentController@showPaymentStatus");
 });
 Route::group(['prefix' => 'orderproduct'], function () {
     Route::get('store', 'OrderproductController@store');
@@ -112,7 +113,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post("completeTransaction/{transaction}", "TransactionController@completeTransaction");
     Route::post("myTransaction/{transaction}", "TransactionController@limitedUpdate");
     Route::get('getUnverifiedTransactions', 'TransactionController@getUnverifiedTransactions');
-    Route::any('paymentRedirect/{paymentMethod}', 'PaymentController@paymentRedirect');
+    Route::any('paymentRedirect/{paymentMethod}', 'OnlinePaymentController@paymentRedirect');
     Route::get('exitAdminInsertOrder', 'OrderController@exitAdminInsertOrder');
     Route::post('exchangeOrderproduct/{order}', 'OrderController@exchangeOrderproduct');
     Route::get('MBTI-Participation', "MbtianswerController@create");
