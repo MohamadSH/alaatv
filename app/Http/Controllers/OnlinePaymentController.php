@@ -21,7 +21,14 @@ class OnlinePaymentController extends Controller
 {
     use OrderCommon;
 
+    /**
+     * @var OrderController
+     */
     private $orderController;
+
+    /**
+     * @var TransactionController
+     */
     private $transactionController;
 
     /**
@@ -57,6 +64,11 @@ class OnlinePaymentController extends Controller
      */
     private $description;
 
+    /**
+     * @var string
+     */
+    private $device;
+
     private $zarinpalCardPanHash;
     private $zarinpalAuthority;
     private $zarinpalStatus;
@@ -72,13 +84,16 @@ class OnlinePaymentController extends Controller
     /**
      * @param Request $request
      * @param string $paymentMethod
+     * @param string $device
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function paymentRedirect(Request $request, string $paymentMethod)
+    public function paymentRedirect(Request $request, string $paymentMethod, string $device)
     {
 //        $request->offsetSet("order_id", 137);
 //        $request->offsetSet("transaction_id", 65);
         $request->offsetSet("payByWallet", true);
+
+        $this->device = $device;
 
         $refinementRequestStrategy = $this->gteRefinementRequestStrategy($request);
 
@@ -104,14 +119,7 @@ class OnlinePaymentController extends Controller
 
         if ($this->isRedirectable()) {
             if($paymentMethod == 'zarinpal') {
-//                $this->zarinRequest();
-
-                return response($this->zarinRequest())
-                    ->withHeaders([
-                        'laravel_session' => 'eyJpdiI6IkdtMWVuNklOU2xOdHJiY3g1Nmt5cGc9PSIsInZhbHVlIjoiTW02NWJkWXZFaDAzMGdYUTZvaHFoM1VNRExwM3F5ZDFTVFwvYmZsdDk0OSthM0hMa2RQa3pXWXZkMmJJU2djWVgiLCJtYWMiOiJkYmU1NGM3MGNhODk2MzU5NzA1MWE1NTU3NDZkNTAzMjI0NTMzYjdmMTFhZjk3ZjI2NTg0MjdlNmRmN2UxMWU0In0%3D',
-                        'XSRF-TOKEN' => 'eyJpdiI6IkpxQ0NhbnEyQkRqZEI5Q1lJWDQ2NkE9PSIsInZhbHVlIjoicURORzNSK1VWcDcydDlNTGN5a0NpUFhhdWh5N0RTTWFhQ25ha1N5aXZqd2YrTTdvdFRiK015SUdua20wY3hEQSIsIm1hYyI6ImQwMmExODlhZmRjZWNlMmI3NTY1MzNmODUxNmVjY2Q3MjZiNzdmZmE3M2YwN2E5YmU4YzZkMDcwMjNiNTQ0NTgifQ%3D%3D',
-                    ]);
-
+                $this->zarinRequest();
             }
             return redirect(action("HomeController@error404"));
         } else {
@@ -143,7 +151,7 @@ class OnlinePaymentController extends Controller
         $zarinpal->isZarinGate(); // active zarinGate mode
 
         //ToDo : putting verify url in .env or database
-        $results = $zarinpal->request(action('OnlinePaymentController@verifyPayment', ['type' => 'online', 'paymentMethod' => 'zarinpal']), (int)$this->transaction->cost, $this->description);
+        $results = $zarinpal->request(action('OnlinePaymentController@verifyPayment', ['type' => 'online', 'paymentMethod' => 'zarinpal', 'device' => $this->device]), (int)$this->transaction->cost, $this->description);
 
 //        $answer = $zarinpal->request(action("OrderController@verifyPayment"), (int)$cost, $description);
 
@@ -221,15 +229,18 @@ class OnlinePaymentController extends Controller
     /**
      * Verify customer online payment after coming back from payment gateway
      * @param string $paymentMethod
+     * @param string $device
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function verifyPayment(string $paymentMethod, Request $request)
+    public function verifyPayment(string $paymentMethod, string $device, Request $request)
     {
         $result = [
             'sendSMS' => false,
             'Status' => 'error'
         ];
+
+        $this->device = $device;
 
         if($paymentMethod=='zarinpal') {
             $result = $this->handleZarinpal($request, $result);
@@ -603,15 +614,18 @@ class OnlinePaymentController extends Controller
     }
 
     /**
-     * @param Request $request
      * @param string $status
      * @param string $paymentMethod
+     * @param string $device
+     * @param Request $request
      */
-    public function showPaymentStatus(Request $request, string $status, string $paymentMethod) {
+    public function showPaymentStatus(string $status, string $paymentMethod, string $device, Request $request) {
         $result = $request->session()->get('result');
+        $this->device = $device;
         dd([
             'status' => $status,
             'paymentMethod' => $paymentMethod,
+            'device' => $device,
             'result' => $result
         ]);
     }
