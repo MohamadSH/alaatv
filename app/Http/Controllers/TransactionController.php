@@ -373,7 +373,7 @@ class TransactionController extends Controller
     {
         $result = $this->modify($transaction, $request->all());
 
-        if ($request->ajax() || $request->has("apirequest")) {
+        if ($request->ajax()) {
             return $this->response->setStatusCode($result['statusCode']);
         } else {
             session()->put("success", $result['message']);
