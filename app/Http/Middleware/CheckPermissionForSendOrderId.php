@@ -59,7 +59,7 @@ class CheckPermissionForSendOrderId
                     ], Response::HTTP_FORBIDDEN);
                 }
             } else {
-                $request->offsetSet('order_id', $this->user->openOrders()->first()->id);
+                $request->offsetSet('order_id', $this->user->openOrders->first()->id);
             }
         } else {
             return response()->json([
@@ -81,7 +81,7 @@ class CheckPermissionForSendOrderId
 //
 //
 //
-//        $openOrder = $user->openOrders()->get();
+//        $openOrder = $user->openOrders;
 //
 //        if ($openOrder->isEmpty()) {
 //            $request->offsetSet("paymentstatus_id", Config::get("constants.PAYMENT_STATUS_UNPAID"));

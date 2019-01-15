@@ -1046,9 +1046,7 @@ class UserController extends Controller
         if ($completionPercentage == 100) {
             if ($user->completion("lockProfile") == 100) {
                 $user->lockProfile();
-                $user->timestamps = false;
-                $user->update();
-                $user->timestamps = true;
+                $user->updateWithoutTimestamp();
             }
         }
         return view("user.completeInfo", compact("user", "parentsNumber", "majors", "genders", "bloodTypes", "grades", "userProduct", "order", "orderFiles", "userHasMedicalQuestions", "lockedFields", "completionPercentage", "customerExtraInfo"));

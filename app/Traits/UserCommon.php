@@ -141,22 +141,6 @@ trait UserCommon
     }
 
     /**
-     * Call UserController@store
-     *
-     * @param $data
-     * @return \Illuminate\Http\Response
-     */
-    public function callUserControllerStore($data)
-    {
-        $storeUserRequest = new \App\Http\Requests\InsertUserRequest();
-        $storeUserRequest->merge($data);
-        RequestCommon::convertRequestToAjax($storeUserRequest);
-        $userController = new \App\Http\Controllers\UserController(new \Jenssegers\Agent\Agent(), new \App\Websitesetting());
-        $response = $userController->store($storeUserRequest);
-        return $response;
-    }
-
-    /**
      * Returns validation rules for inserting a user
      *
      * @param array $data

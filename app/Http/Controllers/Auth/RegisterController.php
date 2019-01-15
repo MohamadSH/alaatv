@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Traits\{CharacterCommon, Helper, UserCommon};
+use App\Http\Controllers\UserController;
+use App\Traits\{CharacterCommon, Helper, RequestCommon, UserCommon};
 use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
+use \App\Http\Requests\InsertUserRequest as InsertUserRequest;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
@@ -30,13 +32,21 @@ class RegisterController extends Controller
     */
 
     use RegistersUsers;
+    use RequestCommon;
+
+    protected $userController;
+    protected $insertUserRequest;
 
     /**
      * Create a new controller instance.
-     *
+     * @param Request $request
+     * @param UserController $userController
+     * @param InsertUserRequest $insertUserRequest
      */
-    public function __construct(Request $request)
+    public function __construct(Request $request , UserController $userController , InsertUserRequest $insertUserRequest)
     {
+        $this->userController = $userController;
+        $this->insertUserRequest = $insertUserRequest;
         $this->middleware('guest');
         $this->middleware('convert:mobile|passport|nationalCode');
         $request->offsetSet("userstatus_id",$request->get('userstatus_id',2));
@@ -80,7 +90,10 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $response = $this->callUserControllerStore($data);
+        $this->insertUserRequest->merge($data);
+        RequestCommon::convertRequestToAjax($this->insertUserRequest);
+
+        $response = $this->userController->store($this->insertUserRequest);
         $responseContent = json_decode($response->getContent(), true);
         $user = $responseContent["user"];
         return User::hydrate($user)->first();

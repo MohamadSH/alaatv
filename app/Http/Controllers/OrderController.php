@@ -62,7 +62,7 @@ class OrderController extends Controller
     use RequestCommon;
     use MetaCommon;
 
-    function __construct(Websitesetting $setting)
+    function __construct(Websitesetting $setting  , Request $request)
     {
         $this->response = new Response();
 
@@ -71,11 +71,10 @@ class OrderController extends Controller
         $this->middleware('permission:' . Config::get('constants.REMOVE_ORDER_ACCESS'), ['only' => 'destroy']);
         $this->middleware('permission:' . Config::get('constants.SHOW_ORDER_ACCESS'), ['only' => 'edit']);
         $this->middleware('permission:' . Config::get('constants.INSERT_ORDER_ACCESS'), ['only' => 'exitAdminInsertOrder']);
-        //ToDo : add open order middle ware
-        $this->middleware(['StoreOrderproductCookieInOpenOrder','OrderCheckoutReview',], ['only' => ['checkoutReview',],]);
-        //ToDo : add open order middle ware
-        $this->middleware('OrderCheckoutPayment', ['only' => ['checkoutPayment'],]);
+        $this->middleware(['CheckHasOpenOrder','StoreOrderproductCookieInOpenOrder','OrderCheckoutReview',], ['only' => ['checkoutReview',],]);
+        $this->middleware(['CheckHasOpenOrder','OrderCheckoutPayment',], ['only' => ['checkoutPayment'],]);
         $this->middleware('SubmitOrderCoupon', ['only' => ['submitCoupon'],]);
+        $this->middleware('RemoveOrderCoupon', ['only' => ['removeCoupon'],]);
         $this->setting = $setting->setting;
     }
 
@@ -946,12 +945,12 @@ class OrderController extends Controller
             $coupon = $order->coupon;
             $notIncludedProductsInCoupon = $order->reviewCouponProducts();
 
-//            $invoiceGenerator = new AlaaInvoiceGenerator($order);
-//            $invoiceInfo = $invoiceGenerator->generateInvoice();
+            $invoiceGenerator = new AlaaInvoiceGenerator($order);
+            $invoiceInfo = $invoiceGenerator->generateInvoice();
 
             $response = response([
-                "order"                         => $order,
-//                "invoiceInfo"                   => $invoiceInfo,
+//                "order"                         => $order,
+                "invoiceInfo"                   => $invoiceInfo,
                 "credit"                        => $credit,
                 "coupon"                        => $coupon,
                 "notIncludedProductsInCoupon"   => $notIncludedProductsInCoupon,
@@ -1259,158 +1258,24 @@ class OrderController extends Controller
                 }
 
             }
-        } else {
-            $result = [];
-            if (session()->has("adminOrder_id")) {
-                $result["isAdminOrder"] = true;
-
-                if (!$user->can(Config::get('constants.INSERT_ORDER_ACCESS')))
-                    return redirect(action("HomeController@error403"));
-
-                $order_id = session()->get("adminOrder_id");
-                $order = Order::FindorFail($order_id);
-
-                $result["customer_firstName"] = session()->get("customer_firstName");
-                $result["customer_lastName"] = session()->get("customer_lastName");
-                session()->forget("adminOrder_id");
-                session()->forget("customer_id");
-                session()->forget("customer_firstName");
-                session()->forget("customer_lastName");
-            } else if (session()->has("closedOrder_id")) {
-                $result["isAdminOrder"] = false;
-
-                $order_id = session()->get("closedOrder_id");
-                session()->forget("closedOrder_id");
-                $order = Order::FindorFail($order_id);
-
-                if ($order->user->id != $user->id)
-                    abort(403);
-            } else if (session()->has("order_id")) {
-                $result["isAdminOrder"] = false;
-
-                $order_id = session()->get("order_id");
-                session()->forget("order_id");
-                $order = Order::FindorFail($order_id);
-
-                if ($order->orderstatus_id != Config::get("constants.ORDER_STATUS_OPEN"))
-                    abort(403);
-                if ($order->user->id != $user->id)
-                    abort(403);
-            } else {
-                abort(404);
-            }
-
-            if ($order->orderproducts->isEmpty())
-                return redirect(action("OrderController@checkoutReview"));
-
-            if ($request->has("customerDescription")) {
-                $customerDescription = $request->get("customerDescription");
-                $order->customerDescription = $customerDescription;
-            }
-            if ($request->has('paymentmethod')) {
-                $paymentMethod = $request->get('paymentmethod');
-
-                $usedCoupon = $order->hasProductsThatUseItsCoupon();
-                if (!$usedCoupon) {
-                    /** if order has not used coupon reverse it    */
-                    $order->detachCoupon();
-                }
-
-                $debitCard = Bankaccount::all()
-                                        ->where("user_id", 2)
-                                        ->first();
-                if (isset($debitCard)) {
-                    $result["debitCardNumber"] = $debitCard->cardNumber;
-                    $result["debitCardBank"] = $debitCard->bank->name;
-                    $result["debitCardOwner"] = $debitCard->user->firstName . " " . $debitCard->user->lastName;
-                }
-
-                switch ($paymentMethod) {
-                    case "inPersonPayment" :
-                        $result["Status"] = "inPersonPayment";
-                        break;
-                    case "offlinePayment":
-
-                        $result["Status"] = "offlinePayment";
-                        break;
-                    default :
-                        return redirect(action(("HomeController@error404")));
-                        break;
-                }
-
-                $order->close(Config::get("constants.PAYMENT_STATUS_UNPAID"));
-                $order->timestamps = false;
-                if ($order->update())
-                    $result = array_add($result, "saveOrder", 1);
-                else
-                    $result = array_add($result, "saveOrder", 0);
-                $order->timestamps = true;
-                $sendSMS = true;
-
-            } else {
-                /** Wallet transactions */
-                $order->closeWalletPendingTransactions();
-                /** End */
-                $cost = $order->totalCost() - $order->totalPaidCost();
-
-                if ($cost == 0 &&
-                    (isset($order->cost) || isset($order->costwithoutcoupon))) {
-                    $order->close(Config::get("constants.PAYMENT_STATUS_PAID"));
-                    $order->timestamps = false;
-                    if ($order->update())
-                        $result = array_add($result, "saveOrder", 1);
-                    else
-                        $result = array_add($result, "saveOrder", 0);
-                    $order->timestamps = true;
-                    /** Attaching user bons for this order */
-                    $bonName = Config::get("constants.BON1");
-                    $bon = Bon::where("name", $bonName)
-                              ->first();
-                    if (isset($bon)) {
-                        [
-                            $givenBonNumber,
-                            $failedBonNumber,
-                        ] = $order->giveUserBons($bonName);
-
-                        if ($givenBonNumber == 0)
-                            if ($failedBonNumber > 0)
-                                $result = array_add($result, "saveBon", -1);
-                            else
-                                $result = array_add($result, "saveBon", 0);
-                        else
-                            $result = array_add($result, "saveBon", $givenBonNumber);
-
-                        $bonDisplayName = $bon->displayName;
-                        $result = array_add($result, "bonName", $bonDisplayName);
-                    }
-                    $result["Status"] = "freeProduct";
-                    $sendSMS = true;
-                }
-            }
         }
 
-        /**
-         * Sending SMS to Ordoo 97 customers
-         */
         if ($sendSMS && isset($order)) {
             $user = $order->user;
             $order = $order->fresh();
             $user->notify(new InvoicePaid($order));
-            Cache::tags('bon')
-                 ->flush();
+            Cache::tags('bon')->flush();
         }
 
 
         if (isset($result["Status"])) {
             if (isset($result["RefID"]) || strcmp($result["Status"], 'freeProduct') == 0) {
-                session()->put("verifyPayment", 1);
                 return redirect(action("OrderController@successfulPayment", [
                     "result" => $result,
                 ]));
             } else if (strcmp($result["Status"], 'canceled') == 0 ||
                 (strcmp($result["Status"], 'error') == 0 && isset($result["error"]) && strcmp($result["error"], '-22') == 0)) {
                 if (isset($result["tryAgain"]) && $result["tryAgain"]) {
-                    session()->put("verifyPayment", 1);
                     return redirect(action("OrderController@failedPayment", [
                         "result" => $result,
                     ]));
@@ -1421,9 +1286,6 @@ class OrderController extends Controller
         return redirect(action("OrderController@otherPayment", [
             "result" => $result,
         ]));
-
-        //        return view('order.checkout.verification',compact('result')) ;
-        //'Status'(index) going to be 'success', 'error' or 'canceled'
     }
 
     /**
@@ -1605,8 +1467,7 @@ class OrderController extends Controller
                                             $order->couponDiscount = $coupon->discount;
                                             $order->couponDiscountAmount = 0;
                                         }
-                                        $order->timestamps = false;
-                                        if ($order->update()) {
+                                        if ($order->updateWithoutTimestamp()) {
                                             session()->put('couponMessageSuccess', 'کپن شما با موفقیت ثبت شد!');
                                         } else {
                                             $oldCoupon->usageNumber = $oldCoupon->usageNumber + 1;
@@ -1615,7 +1476,6 @@ class OrderController extends Controller
                                             $coupon->update();
                                             session()->put('couponMessageError', "خطای پایگاه داده در ثبت کپن!");
                                         }
-                                        $order->timestamps = true;
                                     } else {
                                         $oldCoupon->usageNumber = $oldCoupon->usageNumber + 1;
                                         $oldCoupon->update();
@@ -1636,15 +1496,13 @@ class OrderController extends Controller
                                 $order->couponDiscount = $coupon->discount;
                                 $order->couponDiscountAmount = 0;
                             }
-                            $order->timestamps = false;
-                            if ($order->update()) {
+                            if ($order->updateWithoutTimestamp()) {
                                 session()->put('couponMessageSuccess', 'کپن شما با موفقیت ثبت شد!');
                             } else {
                                 $coupon->usageNumber = $coupon->usageNumber - 1;
                                 $coupon->update();
                                 session()->put('couponMessageError', "خطای پایگاه داده در ثبت کپن!");
                             }
-                            $order->timestamps = true;
                         } else {
                             session()->put('couponMessageError', "خطای پایگاه داده در ثبت کپن!");
                         }
@@ -1689,24 +1547,45 @@ class OrderController extends Controller
      */
     public function removeCoupon(Request $request)
     {
-        $user = $request->user();
-        //ToDo : there is not order_id in session any more
-        if(isset($user))
+        if($request->has("order_id"))
         {
-            $order = $user->openOrders()->get()->first();
+            $order = Order::Find($request->get("order_id"));
             if(isset($order))
             {
                 $result = $order->detachCoupon();
                 if ($result)
-                        session()->put('couponMessageSuccess', "کپن سفارش شما با موفیت حذف شد");
+                {
+                    $responseStatusCode = Response::HTTP_OK;
+                    $responseMessage = "کپن سفارش شما با موفیت حذف شد";
+                    $sessionIndex = "couponMessageSuccess";
+                }
                 else
-                    session()->put('couponMessageError', "خطای پایگاه داده");
+                {
+                    $responseStatusCode = Response::HTTP_SERVICE_UNAVAILABLE;
+                    $responseMessage = "خطای پایگاه داده";
+                    $sessionIndex = "couponMessageError";
+                }
+            }else
+            {
+                $responseStatusCode = Response::HTTP_BAD_REQUEST;
+                $responseMessage = "سفارش مورد نظر یافت نشد";
+                $sessionIndex = "couponMessageError";
             }
+
         }else{
-            session()->put('couponMessageError', "کاربر یافت نشد");
+            $responseStatusCode = Response::HTTP_BAD_REQUEST;
+            $responseMessage = "سفارش مورد نظر یافت نشد";
+            $sessionIndex = "couponMessageError";
         }
 
-        return redirect()->back();
+        if($request->ajax())
+        {
+           return response()->setStatusCode($responseStatusCode)->setContent($responseMessage);
+        }
+        else{
+            session()->put( $sessionIndex, $responseMessage);
+            return redirect()->back();
+        }
     }
 
     public function exitAdminInsertOrder()
@@ -1741,9 +1620,7 @@ class OrderController extends Controller
             $orderCost = $newOpenOrder->obtainOrderCost(true, false);
             $newOpenOrder->cost = $orderCost["rawCostWithDiscount"];
             $newOpenOrder->costwithoutcoupon = $orderCost["rawCostWithoutDiscount"];
-            $newOpenOrder->timestamps = false;
-            $updateFlag = $newOpenOrder->update();
-            $newOpenOrder->timestamps = true;
+            $updateFlag = $newOpenOrder->updateWithoutTimestamp();
             $cost = $newOpenOrder->totalCost();
 
             if ($updateFlag) {
@@ -1820,9 +1697,7 @@ class OrderController extends Controller
         $orderCost = $oldOrder->obtainOrderCost(true, false, "REOBTAIN");
         $oldOrder->cost = $orderCost["rawCostWithDiscount"];
         $oldOrder->costwithoutcoupon = $orderCost["rawCostWithoutDiscount"];
-        $oldOrder->timestamps = false;
-        $oldOrderDone = $oldOrder->update();
-        $oldOrder->timestamps = true;
+        $oldOrderDone = $oldOrder->updateWithoutTimestamp();
         if ($oldOrderDone) {
 
             /**
@@ -2154,9 +2029,7 @@ class OrderController extends Controller
                 $orderCost = $openOrder->obtainOrderCost(true, false);
                 $openOrder->cost = $orderCost["rawCostWithDiscount"];
                 $openOrder->costwithoutcoupon = $orderCost["rawCostWithoutDiscount"];
-                $openOrder->timestamps = false;
-                $updateFlag = $openOrder->update();
-                $openOrder->timestamps = true;
+                $updateFlag = $openOrder->updateWithoutTimestamp();
                 $cost = $openOrder->totalCost();
 
                 if ($updateFlag)

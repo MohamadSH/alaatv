@@ -113,6 +113,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post("myTransaction/{transaction}", "TransactionController@limitedUpdate");
     Route::get('getUnverifiedTransactions', 'TransactionController@getUnverifiedTransactions');
     Route::any('paymentRedirect', 'TransactionController@paymentRedirect');
+
     Route::get('exitAdminInsertOrder', 'OrderController@exitAdminInsertOrder');
     Route::post('exchangeOrderproduct/{order}', 'OrderController@exchangeOrderproduct');
     Route::get('MBTI-Participation', "MbtianswerController@create");
@@ -229,6 +230,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('adminGenerateRandomCoupon', "HomeController@adminGenerateRandomCoupon");
 });
+
+Route::get('verifyPayment/offline/{paymentMethod}', 'OfflinePaymentController@verifyPayment');
 
 /*
 Route::group(['prefix' => 'product'], function () {

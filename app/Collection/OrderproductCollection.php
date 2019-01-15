@@ -165,11 +165,7 @@ class OrderproductCollection extends Collection
      * @return OrderproductCollection
      */
     public function whereType(array $type){
-        //ToDo : Should be modified after setting orderproduct types
-        if(in_array(config("constants.ORDER_PRODUCT_TYPE_DEFAULT") , $type))
-            return $this->where("orderproducttype_id" , null);
-        else
-            return $this->whereIn("orderproducttype_id" , $type);
+        return $this->whereIn("orderproducttype_id" , $type);
     }
 
 

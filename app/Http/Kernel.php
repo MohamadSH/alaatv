@@ -71,10 +71,11 @@ class Kernel extends HttpKernel
         'CheckPermissionForSendOrderId' => \App\Http\Middleware\CheckPermissionForSendOrderId::class,
         'CheckHasOpenOrder' => \App\Http\Middleware\CheckHasOpenOrder::class,
         'AddCookieToCart' => \App\Http\Middleware\AddCookieToCart::class,
-        'checkPermissionForSendExtraAttributesCost' => \App\Http\Middleware\checkPermissionForSendExtraAttributesCost::class,
+        'CheckPermissionForSendExtraAttributesCost' => \App\Http\Middleware\CheckPermissionForSendExtraAttributesCost::class,
         'StoreOrderproductCookieInOpenOrder'    => \App\Http\Middleware\StoreOrderproductCookieInOpenOrder::class,
         'OrderCheckoutReview'    => \App\Http\Middleware\OrderCheckoutReview::class,
         'OrderCheckoutPayment'    => \App\Http\Middleware\OrderCheckoutPayment::class,
         'SubmitOrderCoupon'    => \App\Http\Middleware\SubmitOrderCoupon::class,
+        'OfflineVerifyPayment'    => \App\Http\Middleware\OfflineVerifyPayment::class,
     ];
 }

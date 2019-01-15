@@ -37,19 +37,16 @@ class CheckHasOpenOrder
     {
         if (Auth::guard($guard)->check()) {
             $this->user = $this->request->user();
-            $openOrder = $this->user->openOrders()->get();
+            $openOrder = $this->user->openOrders;
             if ($openOrder->isEmpty()) {
-                $this->request->offsetSet("paymentstatus_id", Config::get("constants.PAYMENT_STATUS_UNPAID"));
-                $this->request->offsetSet("orderstatus_id", Config::get("constants.ORDER_STATUS_OPEN"));
+                $this->request->offsetSet("paymentstatus_id", config("constants.PAYMENT_STATUS_UNPAID"));
+                $this->request->offsetSet("orderstatus_id", config("constants.ORDER_STATUS_OPEN"));
                 $this->request->offsetSet("user_id", $this->user->id);
                 $controller = $this->orderController;
                 $controller->store($this->request);
             }
-            return $next($request);
-        } else {
-            return response()->json([
-                'error' => 'Unauthenticated'
-            ], Response::HTTP_UNAUTHORIZED);
         }
+
+        return $next($request);
     }
 }

@@ -16,8 +16,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 abstract class CallControllerStoreFacade
 {
-    use RequestCommon;
-
     /**
      * Calls store method of intended controller class
      *
@@ -25,21 +23,9 @@ abstract class CallControllerStoreFacade
      * @return mixed
      */
     public function callStore(array $data){
-        $storeRequest = $this->getStoreRequest();
-        $storeRequest->merge($data);
-        RequestCommon::convertRequestToAjax($storeRequest);
         $controllerObject = $this->getControllerObject();
-        $response = $controllerObject->store($data);
-        return $response;
-    }
-
-    /**
-     * Make appropriate request for Store method
-     *
-     * @return mixed
-     */
-    protected function getStoreRequest():FormRequest{
-        return new FormRequest();
+        $orderproducts = $controllerObject->new($data);
+        return $orderproducts;
     }
 
     /**

@@ -352,7 +352,7 @@ class TransactionController extends Controller
 
     public function paymentRedirect(Request $request)
     {
-        $gateway = $request->get('gateway');
+        $gateway = $request->get('.');
         $description = "";
         /**
          *  Finding and authorizing the order to be paid
@@ -399,9 +399,7 @@ class TransactionController extends Controller
         if ($request->has("customerDescription")) {
             $customerDescription = $request->get("customerDescription");
             $order->customerDescription = $customerDescription;
-            $order->timestamps = false;
-            $order->update();
-            $order->timestamps = true;
+            $order->updateWithoutTimestamp();
         }
         /**
          *  end
@@ -448,8 +446,7 @@ class TransactionController extends Controller
                 if (isset($cost) && $cost > 0) {
                     $this->zarinReqeust($order, (int)$cost, $description);
                 } else {
-                    session()->put("closedOrder_id", $order->id);
-                    return redirect(action("OrderController@verifyPayment"));
+                    return redirect(action("OrderController@verifyPayment") , ["closedOrder_id"=>$order->id]);
                 }
                 break;
             case "enbank":
@@ -762,12 +759,10 @@ class TransactionController extends Controller
                         $transactionMessage = "تراکنش شما با موفقیت درج شد.مسئولین سایت در اسرع وقت اطلاعات بانکی ثبت شده را بررسی خواهند کرد  و تراکنش شما را تایید خواهند نمود.";
                     }
                 else $transactionMessage = "تراکنش با موفقیت درج شد";
-                $order->timestamps = false;
-                if (!$order->update()) {
+                if (!$order->updateWithoutTimestamp()) {
                     session()->put("error", "خطای پایگاه داده در به روز رسانی سفارش شما");
                     return redirect()->back();
                 }
-                $order->timestamps = true;
                 session()->put("success", $transactionMessage);
                 return redirect()->back();
             }

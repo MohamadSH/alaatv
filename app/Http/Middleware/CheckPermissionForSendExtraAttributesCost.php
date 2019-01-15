@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
-class checkPermissionForSendExtraAttributesCost
+class CheckPermissionForSendExtraAttributesCost
 {
     /**
      * @var OrderController
