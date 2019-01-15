@@ -60,10 +60,8 @@ trait HasWallet
     /**
      * Move credits to this account
      *
-     * @param  integer $amount
-     * @param  string  $type
-     * @param  array   $meta
-     *
+     * @param integer $amount
+     * @param null $walletType
      * @return array
      */
     public function deposit($amount = 0, $walletType = null)
