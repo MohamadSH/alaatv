@@ -62,9 +62,6 @@ Route::group(['prefix' => 'checkout'], function () {
         Route::get('review', "OrderController@checkoutReview");
         Route::get('payment', "OrderController@checkoutPayment");
     });
-    Route::get('successfulPayment', "OnlinePaymentController@successfulPayment");
-    Route::get('failedPayment', "OnlinePaymentController@failedPayment");
-    Route::get('returnFromPayment', "OnlinePaymentController@otherPayment");
     Route::any('verifyPayment/online/{paymentMethod}/{device}', "OnlinePaymentController@verifyPayment");
     Route::any('verifyPayment/online/{status}/{paymentMethod}/{device}', "OnlinePaymentController@showPaymentStatus");
 });

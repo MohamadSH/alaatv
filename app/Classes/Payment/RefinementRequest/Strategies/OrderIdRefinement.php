@@ -29,7 +29,11 @@ class OrderIdRefinement extends Refinement
         if(isset($this->order)) {
             $this->user = $this->order->user;
             $this->getOrderCost();
-            $this->order->cancelOpenOnlineTransactions();
+            // ToDo: if sent open order_id user can't use wallet
+            $this->donateCost = $this->order->getDonateCost();
+            if($this->canDeductFromWallet()) {
+                $this->payByWallet();
+            }
             $result = $this->getNewTransaction();
             $this->statusCode = $result['statusCode'];
             $this->message = $result['message'];

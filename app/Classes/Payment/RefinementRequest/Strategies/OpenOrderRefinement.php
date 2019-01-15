@@ -32,7 +32,9 @@ class OpenOrderRefinement extends Refinement
             $this->order = $this->openOrder;
             $this->getOrderCost();
             $this->donateCost = $this->order->getDonateCost();
-            $this->order->cancelOpenOnlineTransactions();
+            if($this->canDeductFromWallet()) {
+                $this->payByWallet();
+            }
             $result = $this->getNewTransaction();
             $this->statusCode = $result['statusCode'];
             $this->message = $result['message'];

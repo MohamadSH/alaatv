@@ -26,9 +26,11 @@ class TransactionRefinement extends Refinement
         $this->getTransaction();
         if($this->transaction) {
             $this->getOrder();
-            $this->order->cancelOpenOnlineTransactions();
             $this->user = $this->order->user;
             $this->cost = $this->transaction->cost;
+            if($this->canDeductFromWallet()) {
+                $this->payByWallet();
+            }
             $this->statusCode = Response::HTTP_OK;
             $this->setDescription();
         } else {

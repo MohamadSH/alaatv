@@ -60,6 +60,10 @@ class OnlinePaymentController extends Controller
      */
     private $donateCost;
     /**
+     * @var int
+     */
+    private $paidFromWalletCost;
+    /**
      * @var string
      */
     private $description;
@@ -87,7 +91,7 @@ class OnlinePaymentController extends Controller
      * @param string $device
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function paymentRedirect(Request $request, string $paymentMethod, string $device)
+    public function paymentRedirect(string $paymentMethod, string $device, Request $request)
     {
 //        $request->offsetSet("order_id", 137);
 //        $request->offsetSet("transaction_id", 65);
@@ -112,18 +116,13 @@ class OnlinePaymentController extends Controller
 
         $this->setCustomerDescription($request);
 
-        if ($request->has("payByWallet")) {
-            $remainedCost = $this->payByWallet();
-            $this->cost = (int)$remainedCost;
-        }
-
         if ($this->isRedirectable()) {
             if($paymentMethod == 'zarinpal') {
                 $this->zarinRequest();
             }
             return redirect(action("HomeController@error404"));
         } else {
-            return redirect(action('OnlinePaymentController@verifyPayment', ['type' => 'offline', 'paymentMethod' => 'wallet', 'coi' => $this->order->id]));
+            return redirect(action('OfflinePaymentController@verifyPayment', ['device' => $device, 'paymentMethod' => 'wallet', 'coi' => $this->order->id]));
         }
     }
 
@@ -151,12 +150,11 @@ class OnlinePaymentController extends Controller
         $zarinpal->isZarinGate(); // active zarinGate mode
 
         //ToDo : putting verify url in .env or database
-        $results = $zarinpal->request(action('OnlinePaymentController@verifyPayment', ['type' => 'online', 'paymentMethod' => 'zarinpal', 'device' => $this->device]), (int)$this->transaction->cost, $this->description);
+        $results = $zarinpal->request(action('OnlinePaymentController@verifyPayment', ['paymentMethod' => 'zarinpal', 'device' => $this->device]), (int)$this->transaction->cost, $this->description);
 
 //        $answer = $zarinpal->request(action("OrderController@verifyPayment"), (int)$cost, $description);
 
         if (isset($results['Authority']) && strlen($results['Authority']) > 0) {
-            $data["apirequest"] = true;
             $data["gateway"] = $zarinpal;
             $data["destinationBankAccount_id"] = 1;
             $data["authority"] = $results['Authority'];
@@ -187,27 +185,6 @@ class OnlinePaymentController extends Controller
             else
                 $this->description .= "یک محصول نامشخص , ";
         }
-    }
-
-    /**
-     * @return int
-     */
-    private function payByWallet(): int
-    {
-        $deductibleCostFromWallet = $this->cost - $this->donateCost;
-        $remainedCost = $deductibleCostFromWallet;
-        $walletPayResult = $this->payOrderCostByWallet($this->user, $this->order, $deductibleCostFromWallet);
-        if ($walletPayResult["result"]) {
-            $remainedCost = $walletPayResult["cost"];
-
-            $this->order->close(config("constants.PAYMENT_STATUS_INDEBTED"));
-            //ToDo : use updateWithoutTimestamp
-            $this->order->timestamps = false;
-            $this->order->update();
-            $this->order->timestamps = true;
-        }
-        $remainedCost = $remainedCost + $this->donateCost;
-        return $remainedCost;
     }
 
     /**
@@ -265,76 +242,9 @@ class OnlinePaymentController extends Controller
         //'Status'(index) going to be 'success', 'error' or 'canceled'
         return redirect(action("OnlinePaymentController@showPaymentStatus", [
             'status' => $status,
-            'paymentMethod' => $paymentMethod
+            'paymentMethod' => $paymentMethod,
+            'device' => $device
         ]));
-    }
-
-    /**
-     * Successful payments
-     *
-     * @param  \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\Response
-     */
-    function successfulPayment(Request $request)
-    {
-        if (session()->has("verifyPayment")) {
-            $flag = true;
-            session()->forget("verifyPayment");
-        } else {
-            $flag = false;
-        }
-
-        if (!$flag)
-            return redirect(action("HomeController@error403"));
-        if ($request->has("result")) {
-            $result = $request->get("result");
-            return view('order.checkout.verification', compact('result'));
-        } else {
-            return redirect(action("HomeController@error403"));
-        }
-    }
-
-    /**
-     *  repeat an old payment
-     *
-     * @param  \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\Response
-     */
-    function failedPayment(Request $request)
-    {
-        if (session()->has("verifyPayment")) {
-            $flag = true;
-            session()->forget("verifyPayment");
-        } else {
-            $flag = false;
-        }
-
-        if (!$flag)
-            return redirect(action("HomeController@error403"));
-        if ($request->has("result")) {
-            $result = $request->get("result");
-            return view('order.checkout.verification', compact('result'));
-        } else {
-            return redirect(action("HomeController@error403"));
-        }
-    }
-
-    /**
-     * Payments other than successful and failed
-     * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|null
-     */
-    function otherPayment(Request $request)
-    {
-        if ($request->has("result")) {
-            $result = $request->get("result");
-            return view('order.checkout.verification', compact('result'));
-        } else {
-            abort(404);
-            return null;
-        }
     }
 
     /**
@@ -422,14 +332,6 @@ class OnlinePaymentController extends Controller
         return $result;
     }
 
-    private function copyOrderWithOpenAndUnpaidStatus(): void
-    {
-        $request = new Request();
-        $request->offsetSet("paymentstatus_id", config("constants.PAYMENT_STATUS_UNPAID"));
-        $request->offsetSet("orderstatus_id", config("constants.ORDER_STATUS_OPEN"));
-        $this->orderController->copy($this->order, $request);
-    }
-
     /**
      * @param array $result
      * @return array
@@ -459,69 +361,22 @@ class OnlinePaymentController extends Controller
     {
         $result['Status'] = 'canceled';
 
-        if ($this->order->orderstatus_id == config("constants.ORDER_STATUS_OPEN")) {
-            $result = $this->zarinpalCanceledStatusHandleOpenOrder($result);
-        } else if ($this->order->orderstatus_id == config("constants.ORDER_STATUS_OPEN_DONATE")) {
-            /*$order->close(config("constants.PAYMENT_STATUS_UNPAID"), config("constants.ORDER_STATUS_CANCELED"));
-            //ToDo : use updateWithoutTimestamp
-            $order->timestamps = false;
-            $updateStatus = $order->update();
-            $order->timestamps = true;*/
-            $result["tryAgain"] = false;
-        } else {
-            $result = $this->zarinpalCanceledStatusHandleOtherTypeOrder($result);
-        }
-        return $result;
-    }
-
-    /**
-     * @param array $result
-     * @return array
-     */
-    private function zarinpalCanceledStatusHandleOpenOrder(array $result): array
-    {
-        $result["tryAgain"] = true;
-
         $this->order->close(config("constants.PAYMENT_STATUS_UNPAID"), config("constants.ORDER_STATUS_CANCELED"));
         //ToDo : use updateWithoutTimestamp
         $this->order->timestamps = false;
-        $updateStatus = $this->order->update();
+        $this->order->update();
         $this->order->timestamps = true;
 
-        $this->changeTransactionStatusToUnsuccessful();
+        $this->transaction->transactionstatus_id = config("constants.TRANSACTION_STATUS_UNSUCCESSFUL");
+        $this->transaction->update();
 
-        if ($updateStatus) {
-            $this->copyOrderWithOpenAndUnpaidStatus();
-        }/*else {
-            last order is not closed and no action is necessary
-        }*/
-        return $result;
-    }
-
-    /**
-     * @param array $result
-     * @return array
-     */
-    private function zarinpalCanceledStatusHandleOtherTypeOrder(array $result): array
-    {
-        $result["tryAgain"] = false;
-
-        $refundWalletTransactionResult = $this->order->refundWalletTransaction();
-        $totalWalletRefund = $refundWalletTransactionResult['totalWalletRefund'];
-        $closeOrderFlag = $refundWalletTransactionResult['closeOrderFlag'];
+        $totalWalletRefund = $this->order->refundWalletTransaction();
 
         if ($totalWalletRefund > 0) {
-            $result["walletAmount"] = $totalWalletRefund;
-            $result["walletRefund"] = true;
+            $result['walletAmount'] = $totalWalletRefund;
+            $result['walletRefund'] = true;
         }
 
-        if ($closeOrderFlag) {
-            $this->order->close(config("constants.PAYMENT_STATUS_UNPAID"), config("constants.ORDER_STATUS_CANCELED"));
-            //ToDo : use updateWithoutTimestamp
-            $this->order->timestamps = false;
-            $this->order->update();
-            $this->order->timestamps = true;
-        }
         return $result;
     }
 
@@ -584,13 +439,6 @@ class OnlinePaymentController extends Controller
         $data['completed_at'] = Carbon::now();
         $data['transactionID'] = $this->zarinpalRefId;
         $data['transactionstatus_id'] = config("constants.TRANSACTION_STATUS_SUCCESSFUL");
-        $this->transactionController->modify($this->transaction, $data);
-    }
-
-    private function changeTransactionStatusToUnsuccessful(): void
-    {
-        $data['completed_at'] = Carbon::now();
-        $data['transactionstatus_id'] = config("constants.TRANSACTION_STATUS_UNSUCCESSFUL");
         $this->transactionController->modify($this->transaction, $data);
     }
 

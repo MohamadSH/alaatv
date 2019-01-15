@@ -622,18 +622,6 @@ class Order extends Model
         return $done;
     }
 
-    public function cancelOpenOnlineTransactions()
-    {
-        $openOnlineTransactions = $this->onlinetransactions->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_TRANSFERRED_TO_PAY"));
-        if ($openOnlineTransactions->isNotEmpty()) {
-            foreach ($openOnlineTransactions as $openOnlineTransaction) {
-                $openOnlineTransaction->transactionstatus_id = config("constants.TRANSACTION_STATUS_UNSUCCESSFUL");
-                $openOnlineTransaction->update();
-            }
-        }
-    }
-
-
     /**
      * Recalculates order's cost and updates it's cost
      *
@@ -808,42 +796,22 @@ class Order extends Model
     }
 
     /**
-     * @return array
+     * @return int $totalWalletRefund
      */
-    public function refundWalletTransaction(): array
+    public function refundWalletTransaction(): int
     {
         $walletTransactions = $this->suspendedTransactions()
-            ->walletMethod();
+            ->walletMethod()->get();
+
         $totalWalletRefund = 0;
-        $closeOrderFlag = false;
         foreach ($walletTransactions as $transaction) {
             $response = $transaction->depositThisWalletTransaction();
             if ($response["result"]) {
                 $transaction->delete();
                 $totalWalletRefund += $transaction->cost;
             }
-
-//            $wallet = $transaction->wallet;
-//            $amount = $transaction->cost;
-//            if (isset($wallet)) {
-//                $response = $wallet->deposit($amount);
-//                if ($response["result"]) {
-//                    $transaction->delete();
-//                    $totalWalletRefund += $amount;
-//                }/*else {}*/
-//            }/*else {
-//                $response = $user->deposit($amount, config("constants.WALLET_TYPE_GIFT"));
-//                if ($response["result"]) {
-//                    $transaction->delete();
-//                    $totalWalletRefund += $amount;
-//                } else {}
-//            }*/
-            $closeOrderFlag = true;
         }
 
-        return array(
-            'totalWalletRefund'=>$totalWalletRefund,
-            'closeOrderFlag'=>$closeOrderFlag
-        );
+        return $totalWalletRefund;
     }
 }

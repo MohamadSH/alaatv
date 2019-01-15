@@ -248,9 +248,7 @@ class Transaction extends Model
         if (isset($wallet)) {
             $response = $wallet->deposit($amount);
         } else {
-            $response = [
-                "result"       => false,
-            ];
+            $response = ["result"=> false];
         }
         return $response;
     }

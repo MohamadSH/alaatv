@@ -12,11 +12,14 @@ use App\User;
 use App\Order;
 use App\Coupon;
 use App\Transaction;
+use App\Traits\OrderCommon;
 use Illuminate\Http\{Request, Response};
 use App\Http\Controllers\TransactionController;
 
 abstract class Refinement
 {
+    use OrderCommon;
+
     /**
      * @var Request
      */
@@ -46,6 +49,11 @@ abstract class Refinement
      * @var int
      */
     public $cost;
+
+    /**
+     * @var int
+     */
+    public $paidFromWalletCost;
 
     /**
      * @var int
@@ -103,6 +111,11 @@ abstract class Refinement
     }
 
     /**
+     * @return Refinement
+     */
+    abstract function loadData(): Refinement;
+
+    /**
      * @return array
      */
     public function getData(): array
@@ -141,18 +154,47 @@ abstract class Refinement
     protected function getNewTransaction()
     {
         $result = null;
-        $data['gateway'] = true;
-        $data['cost'] = $this->cost;
-        $data['order_id'] = $this->order->id;
-        $data['destinationBankAccount_id'] = 1;
-        $data['paymentmethod_id'] = config("constants.PAYMENT_METHOD_ONLINE");
-        $data['transactionstatus_id'] = config("constants.TRANSACTION_STATUS_TRANSFERRED_TO_PAY");
-        $result = $this->transactionController->storeTransaction($data);
+        if($this->cost>0) {
+            $data['gateway'] = true;
+            $data['cost'] = $this->cost;
+            $data['order_id'] = $this->order->id;
+            $data['destinationBankAccount_id'] = 1;
+            $data['paymentmethod_id'] = config("constants.PAYMENT_METHOD_ONLINE");
+            $data['transactionstatus_id'] = config("constants.TRANSACTION_STATUS_TRANSFERRED_TO_PAY");
+            $result = $this->transactionController->storeTransaction($data);
+        }
         return $result;
     }
 
+
     /**
-     * @return Refinement
+     * @return bool
      */
-    abstract function loadData(): Refinement;
+    protected function canDeductFromWallet()
+    {
+        if (isset($this->inputData['payByWallet']) && $this->inputData['payByWallet']==true) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    protected function payByWallet(): void
+    {
+        $deductibleCostFromWallet = $this->cost - $this->donateCost;
+        $remainedCost = $deductibleCostFromWallet;
+        $walletPayResult = $this->payOrderCostByWallet($this->user, $this->order, $deductibleCostFromWallet);
+        if ($walletPayResult["result"]) {
+            $remainedCost = $walletPayResult["cost"];
+
+            $this->order->close(config("constants.PAYMENT_STATUS_INDEBTED"));
+            //ToDo : use updateWithoutTimestamp
+            $this->order->timestamps = false;
+            $this->order->update();
+            $this->order->timestamps = true;
+        }
+        $remainedCost = $remainedCost + $this->donateCost;
+        $this->cost = $remainedCost;
+        $this->paidFromWalletCost = $deductibleCostFromWallet - $remainedCost;
+    }
 }
