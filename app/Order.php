@@ -622,22 +622,12 @@ class Order extends Model
         return $done;
     }
 
-    public function cancelOpenOnlineTransactions()
-    {
-        $openOnlineTransactions = $this->onlinetransactions->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_TRANSFERRED_TO_PAY"));
-        if ($openOnlineTransactions->isNotEmpty()) {
-            foreach ($openOnlineTransactions as $openOnlineTransaction) {
-                $openOnlineTransaction->transactionstatus_id = config("constants.TRANSACTION_STATUS_UNSUCCESSFUL");
-                $openOnlineTransaction->update();
-            }
-        }
-    }
-
     /**
      * Recalculates order's cost and updates it's cost
      *
      * @return array
      */
+    //ToDo : must refresh donate product cost
     public function refreshCost()
     {
         $orderCost = $this->obtainOrderCost(true);
@@ -773,5 +763,55 @@ class Order extends Model
             }
         }
         return $notDuplicateProduct;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDonateCost(): int
+    {
+        $donateCost = 0;
+        $orderProducts = $this->orderproducts->whereIn('product_id', Product::DONATE_PRODUCT);
+        foreach ($orderProducts as $orderProduct) {
+            $donateCost += $orderProduct->cost;
+        }
+        return $donateCost;
+    }
+
+    public function closeOrderWithIndebtedStatus()
+    {
+        $this->close(config("constants.PAYMENT_STATUS_INDEBTED"));
+        $this->timestamps = false;
+        $this->update();
+        $this->timestamps = true;
+    }
+
+    public function detachUnusedCoupon()
+    {
+        $usedCoupon = $this->hasProductsThatUseItsCoupon();
+        if (!$usedCoupon) {
+            /** if order has not used coupon reverse it    */
+            $this->detachCoupon();
+        }
+    }
+
+    /**
+     * @return int $totalWalletRefund
+     */
+    public function refundWalletTransaction(): int
+    {
+        $walletTransactions = $this->suspendedTransactions()
+            ->walletMethod()->get();
+
+        $totalWalletRefund = 0;
+        foreach ($walletTransactions as $transaction) {
+            $response = $transaction->depositThisWalletTransaction();
+            if ($response["result"]) {
+                $transaction->delete();
+                $totalWalletRefund += $transaction->cost;
+            }
+        }
+
+        return $totalWalletRefund;
     }
 }

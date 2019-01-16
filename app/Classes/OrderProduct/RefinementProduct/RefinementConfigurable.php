@@ -9,6 +9,7 @@
 namespace App\Classes\OrderProduct\RefinementProduct;
 
 use App\Product;
+use App\Collection\ProductCollection;
 
 class RefinementConfigurable implements RefinementInterface
 {
@@ -24,16 +25,20 @@ class RefinementConfigurable implements RefinementInterface
         }
     }
 
-    public function getProducts() {
+    /**
+     * @return ProductCollection|null
+     */
+    public function getProducts(): ?ProductCollection {
         $children = $this->product->children;
+        $simpleProduct = new ProductCollection();
         foreach ($children as $child) {
             $childHasAllAttributes = $this->checkAttributesOfChild($this->attributes, $child);
             if($childHasAllAttributes) {
-                $simpleProduct = collect();
                 $simpleProduct->push($child);
-                return $simpleProduct;
+                break;
             }
         }
+        return $simpleProduct;
     }
 
     private function checkAttributesOfChild($attributes, $child) {

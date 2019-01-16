@@ -3,10 +3,14 @@
 namespace App\Http\Middleware;
 
 use App\Http\Controllers\OrderController;
+use App\User;
 use Closure;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+
+use App\Userbon;
+use DB;
 
 class CheckPermissionForSendOrderId
 {
@@ -42,6 +46,8 @@ class CheckPermissionForSendOrderId
         $sampleData = $this->getSampleData('simple1', $this->user, $request); // simple product
         $sampleData = $this->getSampleData('simple2', $this->user, $request);// 270 is gift of 155
         $sampleData = $this->getSampleData('simple3', $this->user, $request);// 157 is child of 155 and gift of 155 is 270
+        $sampleData = $this->getSampleData('donate1', $this->user, $request);// 5000
+        $sampleData = $this->getSampleData('donate2', $this->user, $request);// custom
         $sampleData = $this->getSampleData('selectable', $this->user, $request);
         $sampleData = $this->getSampleData('configurable', $this->user, $request);
         $request->offsetSet('order_id', $sampleData['orderId']);
@@ -72,11 +78,11 @@ class CheckPermissionForSendOrderId
     /**
      * generate sample data for test store orderProduct
      * @param $case
-     * @param $user
+     * @param User $user
      * @param Request $request
      * @return array
      */
-//    private function getSampleData($case, $user, Request &$request) {
+//    private function getSampleData($case, User $user, Request &$request) {
 //
 //
 //
@@ -166,6 +172,34 @@ class CheckPermissionForSendOrderId
 //                                'cost'=>700
 //                            ]
 //                        ]
+//                    ]
+//                ];
+//            case 'donate1':
+//                /**
+//                 * donate product
+//                 * 5000
+//                 */
+//                return [
+//                    'orderId' => $orderId,
+//                    'productId' => 180,
+//                    'data' => [
+//                        'products' => [],
+//                        'attribute' => [],
+//                        'extraAttribute' => []
+//                    ]
+//                ];
+//            case 'donate2':
+//                /**
+//                 * donate product
+//                 * custom
+//                 */
+//                return [
+//                    'orderId' => $orderId,
+//                    'productId' => 181,
+//                    'data' => [
+//                        'products' => [],
+//                        'attribute' => [],
+//                        'extraAttribute' => []
 //                    ]
 //                ];
 //            case 'selectable':

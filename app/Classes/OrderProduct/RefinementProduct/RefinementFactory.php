@@ -13,7 +13,6 @@ use Mockery\Exception;
 
 class RefinementFactory
 {
-    private $RefinementClass;
     private $product;
     private $data;
 

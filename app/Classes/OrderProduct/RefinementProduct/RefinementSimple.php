@@ -9,6 +9,7 @@
 namespace App\Classes\OrderProduct\RefinementProduct;
 
 use App\Product;
+use App\Collection\ProductCollection;
 
 class RefinementSimple implements RefinementInterface
 {
@@ -18,8 +19,8 @@ class RefinementSimple implements RefinementInterface
         $this->product = $product;
     }
 
-    public function getProducts() {
-        $simpleProduct = collect();
+    public function getProducts(): ?ProductCollection {
+        $simpleProduct = new ProductCollection();
         $simpleProduct->push($this->product);
         return $simpleProduct;
     }

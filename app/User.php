@@ -165,11 +165,11 @@ use Schema;
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\User onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereAddress($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereAllergy($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereBio($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereBirthdate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereBloodtypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereAddress($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereAllergy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereBio($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereBirthdate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereBloodtypeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereCity($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereDeletedAt($value)
@@ -236,6 +236,7 @@ use Schema;
  * @property-read \App\Collection\OrderproductCollection|\App\Orderproduct[] $closedorderproducts
  * @property-read mixed $number_of_products_in_basket
  * @property-read mixed $short_name
+ * @property mixed mobile
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User active()
  */
 class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, MustVerifyEmail
