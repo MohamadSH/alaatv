@@ -3,18 +3,31 @@
 namespace App\Http\ViewComposers;
 
 
+use App\User;
 use Illuminate\View\View;
 
 class ProfileComposer
 {
 
     /**
+     * @var Request
+     */
+    protected $request;
+
+    /**
+     * @var User
+     */
+    protected $user;
+
+    /**
      * Create a new Profile composer.
      *
-     * @return void
+     * @param Request $request
      */
-    public function __construct()
+    public function __construct(Request $request)
     {
+        $this->request = $request;
+        $this->user = $this->request->user();
     }
 
     /**
@@ -26,6 +39,25 @@ class ProfileComposer
      */
     public function compose(View $view)
     {
-        //        $view->with('count', $this->users->count());
+
+        $genders = Gender::pluck('name', 'id')
+            ->prepend("نامشخص");
+        $majors = Major::pluck('name', 'id')
+            ->prepend("نامشخص");
+        $sideBarMode = "closed";
+
+        /** LOTTERY */
+        [
+            $exchangeAmount,
+            $userPoints,
+            $userLottery,
+            $prizeCollection,
+            $lotteryRank,
+            $lottery,
+            $lotteryMessage,
+            $lotteryName,
+        ] = $this->user->getLottery();
+
+        $view->with(compact('genders', 'majors', 'sideBarMode', 'exchangeAmount', 'userPoints', 'userLottery', 'prizeCollection', 'lotteryRank', 'lottery', 'lotteryMessage', 'lotteryName'));
     }
 }

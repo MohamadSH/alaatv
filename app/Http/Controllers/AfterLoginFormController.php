@@ -11,9 +11,10 @@ class AfterLoginFormController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $afterLoginFormFields = Afterloginformcontrol::all()
                                                      ->sortBy("order");
@@ -33,7 +34,15 @@ class AfterLoginFormController extends Controller
         ]);
         $sideBarMode = "closed";
         $section = "afterLoginForm";
-        return view("admin.siteConfiguration.afterLoginForm", compact("afterLoginFormFields", "availableFields", "sideBarMode", "section"));
+
+        if ($request->ajax()) {
+            return response([
+                'afterLoginFormFields' => $afterLoginFormFields,
+                'availableFields' => $availableFields
+            ], Response::HTTP_OK);
+        } else {
+            return view("admin.siteConfiguration.afterLoginForm", compact("afterLoginFormFields", "availableFields", "sideBarMode", "section"));
+        }
     }
 
     /**

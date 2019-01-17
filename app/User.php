@@ -257,6 +257,13 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     |--------------------------------------------------------------------------
     */
 
+    protected $appends = [
+        'major',
+        'grade',
+        'gender',
+        'completion'
+        ];
+
     protected $cascadeDeletes = [
         'orders',
         'userbons',
@@ -314,13 +321,6 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
      * @var array
      */
     protected $fillable = [
-        'firstName',
-        'lastName',
-        'nameSlug',
-        'mobile',
-        'nationalCode',
-        'userstatus_id',
-        'techCode',
         'province',
         'city',
         'address',
@@ -347,6 +347,18 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
      * @var array
      */
     protected $hidden = [
+        'id',
+        'major_id',
+        'grade_id',
+        'gender_id',
+        'mobile_verified_code',
+        'mobileNumberVerification',
+        'phone',
+        'userstatus_id',
+        'birthdate',
+        'passwordRegenerated_at',
+        'deleted_at',
+        'techCode',
         'password',
         'remember_token',
     ];
@@ -1344,4 +1356,57 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     {
         return self::$beProtected;
     }
+
+    public function getMajorAttribute()
+    {
+        $major = $this->major()->get();
+        if ($major->isNotEmpty()) {
+            $majorReturn = [
+                'id'   => $major->id,
+                'name' => $major->name,
+                'majortype_id' => $major->majortype_id,
+                'description' => $major->description,
+            ];
+        } else {
+            $majorReturn = null;
+        }
+        return $majorReturn;
+    }
+
+    public function getGradeAttribute()
+    {
+        $grade = $this->grade()->get();
+        if ($grade->isNotEmpty()) {
+            $gradeReturn = [
+                'id'   => $grade->id,
+                'name' => $grade->name,
+                'displayName' => $grade->displayName,
+                'description' => $grade->description,
+            ];
+        } else {
+            $gradeReturn = null;
+        }
+        return $gradeReturn;
+    }
+
+    public function getGenderAttribute()
+    {
+        $gender = $this->gender()->get();
+        if ($gender->isNotEmpty()) {
+            $genderReturn = [
+                'id'   => $gender->id,
+                'name' => $gender->name,
+                'description' => $gender->description
+            ];
+        } else {
+            $genderReturn = null;
+        }
+        return $genderReturn;
+    }
+
+    public function getCompletionAttribute()
+    {
+        return (int)$this->completion();
+    }
+
 }

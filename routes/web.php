@@ -132,6 +132,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put("v", "UserController@submitVoucherRequest");
 
     Route::group(['prefix' => 'user'], function () {
+
+
+        Route::get('profile', 'UserController@show');
+        Route::post('profile/update', 'UserController@update');
+
         Route::get('info', "UserController@informationPublicUrl");
         Route::get('{user}/info', 'UserController@information');
         Route::post('{user}/completeInfo', 'UserController@completeInformation');
