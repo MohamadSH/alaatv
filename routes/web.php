@@ -64,7 +64,7 @@ Route::group(['prefix' => 'checkout'], function () {
     });
     Route::any('verifyPayment/online/{paymentMethod}/{device}', "OnlinePaymentController@verifyPayment");
     Route::any('verifyPayment/online/{status}/{paymentMethod}/{device}', "OnlinePaymentController@showPaymentStatus");
-    Route::get('verifyPayment/offline/{paymentMethod}/{device}', 'OfflinePaymentController@verifyPayment');
+    Route::any('verifyPayment/offline/{paymentMethod}/{device}', 'OfflinePaymentController@verifyPayment');
 });
 Route::group(['prefix' => 'orderproduct'], function () {
     Route::get('store', 'OrderproductController@store');

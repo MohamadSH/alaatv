@@ -46,11 +46,8 @@ class OfflinePaymentController extends Controller
         if(!$this->processVerification( $order , $paymentMethod))
             return response()->setStatusCode(Response::HTTP_BAD_REQUEST)->setContent(["message"=>"Invalid inputs"]);
 
-        //ToDo : replace after merging to Ali
-        if ($request->has("customerDescription")) {
-            $customerDescription = optional($request)->customerDescription;
-            $order->customerDescription = $customerDescription;
-        }
+        $customerDescription = optional($request)->customerDescription;
+        $order->customerDescription = $customerDescription;
 
         if($order->updateWithoutTimestamp())
             $result = array_add($result, "saveOrder", 1);
