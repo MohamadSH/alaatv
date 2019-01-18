@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Afterloginformcontrol;
 use App\Bankaccount;
 use App\Bon;
+use App\Classes\OrderProduct\RefinementProduct\RefinementFactory;
 use App\Classes\Pricing\Alaa\AlaaInvoiceGenerator;
 use App\Collection\OrderproductCollection;
 use App\Coupon;
@@ -1846,20 +1847,20 @@ class OrderController extends Controller
             $grandParentProductId = optional($cookieOrderproduct)->product_id;
             $childrenIds = optional($cookieOrderproduct)->productIds;
             $attributes = optional($cookieOrderproduct)->attributes;
+            $extraAttributes = optional($cookieOrderproduct)->extraAttributes;
 
-            $data = [
-                "atttibutes" => $attributes ,
-                "products" => $childrenIds
-            ];
             $grandParentProduct = Product::Find($grandParentProductId);
             if(!isset($grandParentProduct))
                 continue;
 
-//          ToDo : send request to appropriate class for analyzing prdocuts' input data
-//            $products = (new RefinementFactory( $grandParentProduct, $data ))->getRefinementClass()->getProducts();
+            $data = [
+                "products" => $childrenIds,
+                "atttibutes" => $attributes ,
+                'extraAttribute' => $extraAttributes,
+            ];
 
-            //Fake data
-            $products = Product::whereIn("id", [264])->get();
+            $products = (new RefinementFactory($grandParentProduct, $data))->getRefinementClass()->getProducts();
+
             foreach ($products as $product) {
                 $fakeOrderproduct = new Orderproduct();
                 $fakeOrderproduct->id = $product->id;

@@ -79,10 +79,15 @@ class OnlinePaymentController extends Controller
     private $zarinpalRefId;
     private $zarinpalError;
 
-    public function __construct(OrderController $orderController, TransactionController $transactionController)
+    const GATE_WAYS = [
+        "zarinpal"
+    ];
+
+    public function __construct(OrderController $orderController, TransactionController $transactionController , RefinementLauncher $refinementLauncher)
     {
-        $this->orderController = $orderController;
+        $this->orderController       = $orderController;
         $this->transactionController = $transactionController;
+        $this->refinementRequest    = $refinementLauncher;
     }
 
     /**
@@ -93,6 +98,16 @@ class OnlinePaymentController extends Controller
      */
     public function paymentRedirect(string $paymentMethod, string $device, Request $request)
     {
+        if(!$this->isGatewaySupported($paymentMethod))
+            return response()->json([
+                       'error' => true,
+                        [
+                            'data' => [
+                                'message' => 'Gateway is not supported'
+                            ]
+                        ]
+                ], Response::HTTP_BAD_REQUEST);
+
 //        $request->offsetSet("order_id", 137);
 //        $request->offsetSet("transaction_id", 65);
         $request->offsetSet("payByWallet", true);
@@ -114,12 +129,15 @@ class OnlinePaymentController extends Controller
 
         $this->setDescription();
 
-        $this->setCustomerDescription($request);
+        $this->setOrderCustomerDescription($request);
+
+        $this->order->updateWithoutTimestamp();
 
         if ($this->isRedirectable()) {
-            if($paymentMethod == 'zarinpal') {
-                $this->zarinRequest();
-            }
+            $method = $paymentMethod."Request";
+            $result = $this->$method;
+
+            //If user wasn't redirected to the gateway:
             return redirect(action("HomeController@error404"));
         } else {
             return redirect(action('OfflinePaymentController@verifyPayment', ['device' => $device, 'paymentMethod' => 'wallet', 'coi' => $this->order->id]));
@@ -141,7 +159,7 @@ class OnlinePaymentController extends Controller
      * Making request to ZarinPal gateway
      * @return mixed
      */
-    protected function zarinRequest()
+    protected function zarinpalRequest()
     {
         $zarinGate = Transactiongateway::where('name', 'zarinpal')->first();
         $merchant = $zarinGate->merchantNumber;
@@ -149,29 +167,24 @@ class OnlinePaymentController extends Controller
         $zarinpal->enableSandbox(); // active sandbox mod for test env
         $zarinpal->isZarinGate(); // active zarinGate mode
 
-        //ToDo : putting verify url in .env or database
         $results = $zarinpal->request(action('OnlinePaymentController@verifyPayment', ['paymentMethod' => 'zarinpal', 'device' => $this->device]), (int)$this->transaction->cost, $this->description);
-
-//        $answer = $zarinpal->request(action("OrderController@verifyPayment"), (int)$cost, $description);
 
         if (isset($results['Authority']) && strlen($results['Authority']) > 0) {
             $data["gateway"] = $zarinpal;
-            $data["destinationBankAccount_id"] = 1;
+            $data["destinationBankAccount_id"] = 1; //ToDo : hard code
             $data["authority"] = $results['Authority'];
             $data["transactiongateway_id"] = $zarinGate->id;
             $data["paymentmethod_id"] = config("constants.PAYMENT_METHOD_ONLINE");
             $result = $this->transactionController->modify($this->transaction, $data);
             if ($result['statusCode'] == Response::HTTP_OK) {
                 $zarinpal->redirect();
-                return null;
             }
-            else {
-                dd("مشکل در برقراری ارتباط با درگاه زرین پال");
-                return null;
-            }
-        } else {
-            return $results['error'];
         }
+
+        return [
+            "error" => true,
+            "data"  => $result
+        ];
     }
 
     private function setDescription()
@@ -190,17 +203,10 @@ class OnlinePaymentController extends Controller
     /**
      * @param Request $request
      */
-    private function setCustomerDescription(Request $request): void
+    private function setOrderCustomerDescription(Request $request): void
     {
-        if ($request->has("customerDescription")) {
-            $customerDescription = $request->get("customerDescription");
-            $this->order->customerDescription = $customerDescription;
-            //ToDo : use updateWithoutTimestamp
-            $this->order->timestamps = false;
-            $this->order->update();
-            $this->order->timestamps = true;
-
-        }
+        $customerDescription = optional($request->customerDescription);
+        $this->order->customerDescription = $customerDescription;
     }
 
     /**
@@ -310,7 +316,7 @@ class OnlinePaymentController extends Controller
      * @param array $result
      * @return array
      */
-    private function updateOrderPaymentStatus(array $result): array
+    private function updateOrderPymentStatus(array $result): array
     {
         $paymentstatus_id = null;
         if ((int)$this->order->totalPaidCost() < (int)$this->order->totalCost())
@@ -319,11 +325,7 @@ class OnlinePaymentController extends Controller
             $paymentstatus_id = config("constants.PAYMENT_STATUS_PAID");
         $this->order->close($paymentstatus_id);
 
-        //ToDo : use updateWithoutTimestamp
-        $this->order->timestamps = false;
-        $orderUpdateStatus = $this->order->update();
-        $this->order->timestamps = true;
-
+        $orderUpdateStatus = $this->order->updateWithoutTimestamp();
 
         if ($orderUpdateStatus)
             $result = array_add($result, "saveOrder", 1);
@@ -362,10 +364,7 @@ class OnlinePaymentController extends Controller
         $result['Status'] = 'canceled';
 
         $this->order->close(config("constants.PAYMENT_STATUS_UNPAID"), config("constants.ORDER_STATUS_CANCELED"));
-        //ToDo : use updateWithoutTimestamp
-        $this->order->timestamps = false;
-        $this->order->update();
-        $this->order->timestamps = true;
+        $this->order->updateWithoutTimestamp();
 
         $this->transaction->transactionstatus_id = config("constants.TRANSACTION_STATUS_UNSUCCESSFUL");
         $this->transaction->update();
@@ -449,8 +448,7 @@ class OnlinePaymentController extends Controller
      */
     private function launchRefinementRequest(array $inputData, Refinement $refinementRequestStrategy): array
     {
-        $this->refinementRequest = new RefinementLauncher($inputData, $refinementRequestStrategy);
-        $data = $this->refinementRequest->getData();
+        $data = $this->refinementRequest->getData($inputData , $refinementRequestStrategy);
 
         $this->user = $data['user'];
         $this->order = $data['order'];
@@ -476,5 +474,9 @@ class OnlinePaymentController extends Controller
             'device' => $device,
             'result' => $result
         ]);
+    }
+
+    private function isGatewaySupported(string $gateway){
+        return in_array($gateway , self::GATE_WAYS);
     }
 }

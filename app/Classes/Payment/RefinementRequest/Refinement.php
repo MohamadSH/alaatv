@@ -86,9 +86,9 @@ abstract class Refinement
 
     /**
      * @param array $inputData
-     * @return $this
+     * @return Refinement
      */
-    public function setData(array $inputData) {
+    public function setData(array $inputData): Refinement {
         $this->inputData = $inputData;
         $this->transactionController = $this->inputData['transactionController'];
         $this->user = $this->inputData['user'];
@@ -99,14 +99,13 @@ abstract class Refinement
      * @return Refinement
      */
     public function validateData(): Refinement {
-        if(!isset($this->user)) {
+        if(!isset($this->user))
             $this->message = 'user not set';
-            $this->statusCode = Response::HTTP_BAD_REQUEST;
-        }
-        if(!isset($this->transactionController)) {
+
+        if(!isset($this->transactionController))
             $this->message = 'transactionController not set';
-            $this->statusCode = Response::HTTP_BAD_REQUEST;
-        }
+
+        $this->statusCode = Response::HTTP_BAD_REQUEST;
         return $this;
     }
 
@@ -188,10 +187,7 @@ abstract class Refinement
             $remainedCost = $walletPayResult["cost"];
 
             $this->order->close(config("constants.PAYMENT_STATUS_INDEBTED"));
-            //ToDo : use updateWithoutTimestamp
-            $this->order->timestamps = false;
-            $this->order->update();
-            $this->order->timestamps = true;
+            $this->order->updateWithoutTimestamp();
         }
         $remainedCost = $remainedCost + $this->donateCost;
         $this->cost = $remainedCost;

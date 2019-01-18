@@ -10,34 +10,17 @@ namespace App\Classes\Payment\RefinementRequest;
 
 class RefinementLauncher
 {
-    /**
-     * @var Refinement
-     */
-    private $refinement;
 
     /**
-     * @var array
-     */
-    private $inputData;
-
-    /**
-     * RefinementLauncher constructor.
      * @param array $inputData
      * @param Refinement $refinement
-     */
-    public function __construct(array $inputData, Refinement $refinement) {
-        $this->refinement = $refinement;
-        $this->inputData = $inputData;
-    }
-
-    /**
      * @return array: [statusCode, message, user, order, cost, donateCost, transaction]
      */
-    public function getData() {
-        return $this->refinement
-            ->setData($this->inputData)
-            ->validateData()
-            ->loadData()
-            ->getData();
+    public function getData(array $inputData, Refinement $refinement) {
+        return $refinement
+                ->setData($inputData)
+                ->validateData()
+                ->loadData()
+                ->getData();
     }
 }
