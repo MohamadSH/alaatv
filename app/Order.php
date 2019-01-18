@@ -600,6 +600,7 @@ class Order extends Model
     {
         $done = false;
         if (isset($this->coupon)) {
+            //ToDo: Put in a separate function in Coupon model
             $coupon = $this->coupon;
             $coupon->usageNumber--;
             if ($coupon->update())
@@ -607,6 +608,7 @@ class Order extends Model
                 $this->coupon_id = null;
                 $this->couponDiscount = 0;
                 $this->couponDiscountAmount = 0;
+                //ToDo : Don't update here
                 if($this->updateWithoutTimestamp())
                 {
                     $done = true;
