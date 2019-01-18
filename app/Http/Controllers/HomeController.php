@@ -103,7 +103,7 @@ class HomeController extends Controller
         //            $authException = ['index' , 'getImage' , 'error404' , 'error403' , 'error500' , 'errorPage' , 'siteMapXML', 'download' ];
         //        }else{
         $authException = [
-            'debug',
+//            'debug',
             'download',
             'telgramAgent',
             'index',
@@ -193,7 +193,6 @@ class HomeController extends Controller
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
         try{
-
 //            $set = Contentset::findOrFail(1);
 //            dd($set->contents_count);
             //
