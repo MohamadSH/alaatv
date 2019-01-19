@@ -756,6 +756,7 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
             if (!empty($parentsArray)) {
                 foreach ($parentsArray as $parent) {
                     // ToDo : It does not check parents in a hierarchy to the root
+                    /** @var Product $parent */
                     $bons = $parent->getBons($bonName);
                     if ($bons->isNotEmpty())
                         break;
@@ -776,6 +777,7 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
     {
         $key = "product:BoneName:" . $this->cacheKey() . "-bone:" . $bonName;
         return Cache::remember($key, Config::get("constants.CACHE_600"), function () use ($bonName, $enable) {
+            /** @var Bon $bons */
             $bons = $this->bons();
             if (strlen($bonName) > 0)
                 $bons = $bons->where("name", $bonName);
@@ -1617,8 +1619,7 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
     public function attributevalues($attributeType = null)
     {
         if (isset($attributeType)) {
-            $attributeType = Attributetype::all()
-                                          ->where("name", $attributeType)
+            $attributeType = Attributetype::where("name", $attributeType)
                                           ->first();
             $attributesArray = [];
             foreach ($this->attributeset->attributes()
@@ -1815,10 +1816,10 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
     }
 
     /**
-     * @param string $bonName
+     * @param $bon
      * @return bool
      */
-    public function canApplyBon(string $bonName) {
+    public function canApplyBon($bon) {
         return (
             !(
                 $this->isFree ||
@@ -1829,7 +1830,7 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
                 $this->basePrice != 0
             )
             &&
-            $this->getTotalBons($bonName)->isNotEmpty()
+            $bon->isNotEmpty()
         );
     }
 

@@ -2,12 +2,15 @@
 
 namespace App\Http\Middleware;
 
+use App\Attributevalue;
 use App\Http\Controllers\OrderController;
 use App\Product;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+//use Nexmo\Call\Collection;
+use Illuminate\Database\Eloquent\Collection;
 
 class checkPermissionForSendExtraAttributesCost
 {
@@ -41,13 +44,11 @@ class checkPermissionForSendExtraAttributesCost
         if (Auth::guard($guard)->check()) {
             if ($request->has('extraAttribute')) {
                 if (!$this->user->can(config("constants.ATTACH_EXTRA_ATTRIBUTE_ACCESS"))) {
-
                     $productId = $request->get('product_id');
                     $product = Product::findOrFail($productId);
-
                     $attributesValues = $this->getAttributesValuesFromProduct($request, $product);
-
                     $this->syncExtraAttributesCost($request, $attributesValues);
+                    $request->offsetSet("parentProduct", $product);
                 }
             }
         } else {
@@ -60,15 +61,16 @@ class checkPermissionForSendExtraAttributesCost
 
     /**
      * @param Request $request
-     * @param array $attributesValues
+     * @param Collection $attributesValues
      */
-    public function syncExtraAttributesCost(Request $request, $attributesValues)
+    public function syncExtraAttributesCost(Request $request, Collection $attributesValues)
     {
         $extraAttributes = $request->get('extraAttribute');
         foreach ($attributesValues as $key => $attributesValue) {
             foreach ($extraAttributes as $key1 => $extraAttribute) {
                 if ($extraAttribute['id'] == $attributesValue['id']) {
                     $extraAttributes[$key1]['cost'] = $attributesValue->pivot->extraCost;
+                    $extraAttributes[$key1]['object'] = $attributesValue;
                 }
             }
         }
@@ -78,9 +80,9 @@ class checkPermissionForSendExtraAttributesCost
     /**
      * @param Request $request
      * @param Product $product
-     * @return mixed
+     * @return Collection|null
      */
-    public function getAttributesValuesFromProduct(Request $request, Product $product)
+    public function getAttributesValuesFromProduct(Request $request, Product $product): ?Collection
     {
         $extraAttributes = $request->get('extraAttribute');
         $extraAttributesId = array_column($extraAttributes, 'id');

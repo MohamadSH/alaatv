@@ -9,6 +9,7 @@ use App\Collection\OrderproductCollection;
 use App\Traits\ProductCommon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 
@@ -93,6 +94,12 @@ class Orderproduct extends Model
         'checkoutstatus_id',
     ];
     protected $touches = [
+        // ToDo: Query reduction
+        /**
+         * Ali Esmaeeli: in orderProduct@store create 8 query
+         * To comment this line, you need to find all the places where
+         * the orderProduct has been changed and clear the cache
+        */
         'attributevalues',
     ];
 
@@ -106,6 +113,9 @@ class Orderproduct extends Model
         return $this->belongsTo('\App\Product');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany|Attributevalue|Collection
+     */
     public function attributevalues()
     {
         return $this->belongsToMany('\App\Attributevalue', 'attributevalue_orderproduct', 'orderproduct_id', 'value_id')
@@ -279,6 +289,9 @@ class Orderproduct extends Model
 //    }
 
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany|Orderproduct|Collection
+     */
     public function parents()
     {
         return $this->belongsToMany('App\Orderproduct', 'orderproduct_orderproduct', 'op2_id', 'op1_id')

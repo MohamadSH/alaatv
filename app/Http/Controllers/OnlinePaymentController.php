@@ -162,7 +162,7 @@ class OnlinePaymentController extends Controller
             $data["paymentmethod_id"] = config("constants.PAYMENT_METHOD_ONLINE");
             $result = $this->transactionController->modify($this->transaction, $data);
             if ($result['statusCode'] == Response::HTTP_OK) {
-                $zarinpal->redirect();
+//                $zarinpal->redirect();
                 return null;
             }
             else {

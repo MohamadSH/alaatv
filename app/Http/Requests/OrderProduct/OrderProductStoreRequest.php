@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class OrderProductStoreRequest extends FormRequest
 {
-    private $hasePermition = false;
+    private $hasPermission = false;
 
     /**
      * Determine if the user is authorized to make this request.
@@ -19,9 +19,9 @@ class OrderProductStoreRequest extends FormRequest
 
         if ($user) {
             if ($user->can(config("constants.INSERT_ORDERPRODUCT_ACCESS"))) {
-                $this->hasePermition = true;
+                $this->hasPermission = true;
             } else {
-                $this->hasePermition = false;
+                $this->hasPermission = false;
             }
             return true;
         }
@@ -35,6 +35,7 @@ class OrderProductStoreRequest extends FormRequest
      */
     public function rules()
     {
+        return [];
         $rules = [
             'product_id' => 'required|exists:products,id|activeProduct',
             'products.*' => 'sometimes|exists:products,id|activeProduct',
@@ -42,7 +43,7 @@ class OrderProductStoreRequest extends FormRequest
             'extraAttribute.*.id' => 'sometimes|exists:attributevalues,id',
             'withoutBon' => 'sometimes|boolean'
         ];
-        if ($this->hasePermition) {
+        if ($this->hasPermission) {
             $rules['order_id'] = 'required|exists:orders,id';
             $rules['product_id'] = 'required|exists:products,id';
             $rules['products.*'] = 'sometimes|exists:products,id';

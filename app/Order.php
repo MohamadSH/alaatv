@@ -146,7 +146,7 @@ class Order extends Model
     ];
 
     protected $appends = [
-        "invoice"
+//        "invoice"
     ];
 
     const  OPEN_ORDER_STATUSES = [
@@ -289,6 +289,7 @@ class Order extends Model
      * @param boolean $calculateOrderCost
      * @param boolean $calculateOrderproductCost
      *
+     * @param string $mode
      * @return array
      */
     public function obtainOrderCost($calculateOrderCost = false, $calculateOrderproductCost = true, $mode = "DEFAULT")
@@ -635,6 +636,7 @@ class Order extends Model
         $calculatedOrderproducts->updateCostValues();
 
         $calculatedOrderproducts = $orderCost["calculatedOrderproducts"];
+        /** @var Orderproduct $orderproduct */
         foreach ($calculatedOrderproducts as $orderproduct)
         {
             $newPriceInfo = $orderproduct->newPriceInfo ;
@@ -750,10 +752,10 @@ class Order extends Model
 
 
     /**
-     * @param $products
+     * @param ProductCollection $products
      * @return ProductCollection
      */
-    public function checkProductsExistInOrderProducts($products): ProductCollection {
+    public function checkProductsExistInOrderProducts(ProductCollection $products): ProductCollection {
         $notDuplicateProduct = new ProductCollection();
         foreach ($products as $product) {
             if($this->hasTheseProducts([$product->id])) {

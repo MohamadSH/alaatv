@@ -38,26 +38,26 @@ use Illuminate\Support\Facades\Config;
  * @property-read \App\User                                                    $user
  * @property-read \App\Userbonstatus|null                                      $userbonstatus
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|\App\Userbon onlyTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Userbon onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Userbon whereBonId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Userbon whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Userbon whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Userbon whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Userbon whereOrderproductId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Userbon whereTotalNumber($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Userbon whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Userbon whereUsedNumber($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Userbon whereUserId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Userbon whereUserbonstatusId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Userbon whereValidSince($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Userbon whereValidUntil($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Userbon withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Userbon withoutTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Userbon whereBonId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Userbon whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Userbon whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Userbon whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Userbon whereOrderproductId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Userbon whereTotalNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Userbon whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Userbon whereUsedNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Userbon whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Userbon whereUserbonstatusId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Userbon whereValidSince($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Userbon whereValidUntil($value)
+ * @method static \Illuminate\Database\Query\Builder|Userbon withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Userbon withoutTrashed()
  * @mixin \Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Userbon newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Userbon newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Userbon query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Userbon newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Userbon newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Userbon query()
  */
 class Userbon extends Model
 {
@@ -111,7 +111,7 @@ class Userbon extends Model
     /**
      * Validates a bon
      *
-     * @return \Illuminate\Http\Response
+     * @return int
      */
     public function validateBon()
     {
