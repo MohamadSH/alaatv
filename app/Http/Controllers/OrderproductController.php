@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Attribute;
+use App\Attributevalue;
 use App\Bon;
 use App\Checkoutstatus;
+use App\Collection\ProductCollection;
 use App\Http\Requests\InsertUserBonRequest;
 use App\Http\Requests\OrderProduct\AttachExtraAttributesRequest;
 use App\Order;
@@ -23,6 +25,7 @@ use App\Traits\OrderCommon;
 use Illuminate\Support\Collection;
 
 use App\Classes\OrderProduct\RefinementProduct\RefinementFactory;
+use Kalnoy\Nestedset\QueryBuilder;
 
 class OrderproductController extends Controller
 {
@@ -54,7 +57,7 @@ class OrderproductController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function index()
     {
@@ -64,7 +67,7 @@ class OrderproductController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function create()
     {
@@ -161,9 +164,8 @@ class OrderproductController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\Response
+     * @param OrderProductStoreRequest $request
+     * @return Response
      */
     public function store(OrderProductStoreRequest $request)
     {
@@ -207,6 +209,7 @@ class OrderproductController extends Controller
 //        $order->load('orderproducts');
         $user = $order->user;
 
+        /** @var ProductCollection $simpleProducts */
         $simpleProducts = (new RefinementFactory($product, $data))->getRefinementClass()->getProducts();
 
         if($simpleProducts->isEmpty()) {
@@ -607,7 +610,7 @@ class OrderproductController extends Controller
      *
      * @param  int $id
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function show($id)
     {
@@ -619,7 +622,7 @@ class OrderproductController extends Controller
      *
      * @param  \App\Orderproduct $orderproduct
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function edit($orderproduct)
     {
@@ -628,12 +631,14 @@ class OrderproductController extends Controller
         $extraCheckboxCollection = collect();
         $attributeSet = $orderproduct->product->attributeset;
         $extraAttributes = Attribute::whereHas("attributegroups", function ($q) use ($attributeSet) {
+            /** @var QueryBuilder $q */
             $q->where("attributetype_id", 2);
             $q->where("attributeset_id", $attributeSet->id);
         })->get();
         foreach ($extraAttributes as $attribute) {
             $orderproductAttributevalues = $orderproduct->attributevalues->where("attribute_id", $attribute->id);
             $controlName = $attribute->attributecontrol->name;
+            /** @var Collection|Attributevalue $attributevalues */
             $attributevalues = $attribute->attributevalues->where("attribute_id", $attribute->id)
                 ->sortBy("order");
             if (!$attributevalues->isEmpty()) {
@@ -696,8 +701,8 @@ class OrderproductController extends Controller
      *
      * @param  \Illuminate\Http\Request $request
      * @param  \App\Orderproduct $orderproduct
-     *
-     * @return \Illuminate\Http\Response
+     * @param UserbonController $userbonController
+     * @return Response
      */
     public function update(Request $request, $orderproduct, UserbonController $userbonController)
     {
@@ -754,9 +759,9 @@ class OrderproductController extends Controller
                             $response = $userbonController->store($request);
                             if ($response->getStatusCode() == 200) {
                                 //ToDo : Appropriate response
-                            } else {
+                            }/* else {
 
-                            }
+                            }*/
                         }
                     }
                 }
@@ -805,7 +810,7 @@ class OrderproductController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  Orderproduct $orderproduct
-     * @return \Illuminate\Http\Response
+     * @return Response
      * @throws \Exception
      */
     public function destroy(Orderproduct $orderproduct)
@@ -854,7 +859,7 @@ class OrderproductController extends Controller
      *
      * @param  \Illuminate\Http\Request $request
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function checkOutOrderproducts(Request $request)
     {

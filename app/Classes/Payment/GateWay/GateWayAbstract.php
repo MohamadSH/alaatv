@@ -1,0 +1,180 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Alaaa
+ * Date: 1/21/2019
+ * Time: 1:34 PM
+ */
+
+namespace App\Classes\Payment\GateWay;
+
+use App\Bon;
+use App\Http\Controllers\TransactionController;
+use App\Order;
+use Carbon\Carbon;
+use App\Transaction;
+use Illuminate\Http\Request;
+
+abstract class GateWayAbstract
+{
+    /**
+     * @var string $description
+     */
+    protected $description;
+
+    /**
+     * @var string $device
+     */
+    protected $device;
+
+    /**
+     * @var string $callbackUrl
+     */
+    protected $callbackUrl;
+
+    /**
+     * @var Transaction $transaction
+     */
+    protected $transaction;
+
+    /**
+     * @var TransactionController $transactionController
+     */
+    protected $transactionController;
+
+    /**
+     * @var Order $order
+     */
+    protected $order;
+
+    /**
+     * @var Request $request
+     */
+    protected $request;
+
+    /**
+     * @var array $result
+     */
+    protected $result;
+
+    public function __construct()
+    {
+        $this->description = '';
+    }
+
+    protected function givesOrderBonsToUser()
+    {
+        $bonName = config('constants.BON1');
+        $bon = Bon::ofName($bonName)->first();
+
+        if (isset($bon)) {
+            list($givenBonNumber, $failedBonNumber) = $this->order->giveUserBons($bonName);
+
+            if ($givenBonNumber == 0)
+                if ($failedBonNumber > 0)
+                    $this->result = array_add($this->result, 'saveBon', -1);
+                else
+                    $this->result = array_add($this->result, 'saveBon', 0);
+            else
+                $this->result = array_add($this->result, 'saveBon', $givenBonNumber);
+
+            $bonDisplayName = $bon->displayName;
+            $this->result = array_add($this->result, 'bonName', $bonDisplayName);
+        }
+    }
+
+    protected function updateOrderPaymentStatus()
+    {
+        $paymentstatus_id = null;
+        if ((int)$this->order->totalPaidCost() < (int)$this->order->totalCost())
+            $paymentstatus_id = config('constants.PAYMENT_STATUS_INDEBTED');
+        else
+            $paymentstatus_id = config('constants.PAYMENT_STATUS_PAID');
+        $this->order->close($paymentstatus_id);
+
+        //ToDo : use updateWithoutTimestamp
+        $this->order->timestamps = false;
+        $orderUpdateStatus = $this->order->update();
+        $this->order->timestamps = true;
+
+        if ($orderUpdateStatus)
+            $this->result = array_add($this->result, 'saveOrder', 1);
+        else
+            $this->result = array_add($this->result, 'saveOrder', 0);
+    }
+
+    protected function changeTransactionStatusToSuccessful(string $transactionID): void
+    {
+        $data['completed_at'] = Carbon::now();
+        $data['transactionID'] = $transactionID;
+        $data['transactionstatus_id'] = config("constants.TRANSACTION_STATUS_SUCCESSFUL");
+        $this->transactionController->modify($this->transaction, $data);
+    }
+
+    abstract public function redirect();
+
+    abstract public function verify(): array;
+
+    /**
+     * @param array $data
+     * @return $this
+     */
+    public function loadForRedirect(array $data) {
+        $this->setDescription($data['description'])
+            ->setTransaction($data['transaction'])
+            ->setCallbackUrl($data['device']);
+        return $this;
+    }
+
+    public function loadForVerify(array $data) {
+        $this->setRequest($data['request'])
+            ->setResult($data['result']);
+        return $this;
+    }
+
+    /**
+     * @param string $description
+     * @return $this
+     */
+    public function setDescription(string $description) {
+        $this->description = $description;
+        return $this;
+    }
+
+    /**
+     * @param Transaction $transaction
+     * @return $this
+     */
+    public function setTransaction(Transaction $transaction) {
+        $this->transaction = $transaction;
+        return $this;
+    }
+
+    /**
+     * @param string $device
+     * @return $this
+     */
+    public function setCallbackUrl(string $device) {
+        $this->device = $device;
+        $this->callbackUrl = action('OnlinePaymentController@verifyPayment', ['paymentMethod' => 'zarinpal', 'device' => $this->device]);
+        return $this;
+    }
+
+    /**
+     * @param Request $request
+     * @return $this
+     */
+    public function setRequest(Request $request) {
+        $this->request = $request;
+        return $this;
+    }
+
+    /**
+     * @param array $result
+     * @return $this
+     */
+    public function setResult(array $result) {
+        $this->result = $result;
+        return $this;
+    }
+}

@@ -96,7 +96,7 @@ class Orderproduct extends Model
     protected $touches = [
         // ToDo: Query reduction
         /**
-         * Ali Esmaeeli: in orderProduct@store create 8 query
+         * Ali Esmaeeli: in OrderProductController@store create 8 query
          * To comment this line, you need to find all the places where
          * the orderProduct has been changed and clear the cache
         */
@@ -122,6 +122,9 @@ class Orderproduct extends Model
             ->withPivot("extraCost");
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function userbons()
     {
         return $this->belongsToMany('\App\Userbon')

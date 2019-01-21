@@ -339,26 +339,11 @@ class TransactionController extends Controller
     /**
      * Show the form for creating a new resource  = making the request to payment gateway
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function create()
     {
         //
-    }
-
-
-    /** checks whether the order belongs to the user or not
-     *
-     * @param  \app\Order
-     *
-     * @return boolean
-     */
-    private function checkOrderAuthority(Order $order)
-    {
-        if ($order->user_id == Auth::user()->id)
-            return true;
-        else
-            return false;
     }
 
     /**
@@ -445,19 +430,42 @@ class TransactionController extends Controller
      */
     public function store(InsertTransactionRequest $request)
     {
-        $result = $this->storeTransaction($request->all());
+        $order = Order::find($request->get('order_id'));
+        if(!isset($order)) {
+            $result = [
+                'statusCode' => Response::HTTP_NOT_FOUND,
+                'message' => 'سفارش شما یافت نشد.'
+            ];
+            return response()->json([
+                'error' => $result['message']
+            ], $result['statusCode']);
+        }
+
+        $canInsertTransaction = $request->user()->can(config("constants.INSERT_TRANSACTION_ACCESS"));
+        $isOrderOwner = ($order->user_id == $request->user()->id);
+
+        if (!$canInsertTransaction && !$isOrderOwner) {
+            $result = [
+                'statusCode' => Response::HTTP_FORBIDDEN,
+                'message' => 'سفارش مورد نظر متعلق به شما نمی باشد'
+            ];
+            return response()->json([
+                'error' => $result['message']
+            ], $result['statusCode']);
+        }
+
+        $result = $this->new($request->all());
 
         return response()->json([
             'error' => $result['message']
         ], $result['statusCode']);
-
-        /*$result['statusCode'] = Response::HTTP_OK;
-        $result['message'] = $transactionMessage;
-        $result['transaction'] = $transaction;
-        $result['order'] = $order;*/
     }
 
-    public function storeTransaction($data)
+    /**
+     * @param array $data
+     * @return array
+     */
+    public function new(array $data)
     {
         $result = [
             'statusCode' => Response::HTTP_OK,
@@ -465,216 +473,50 @@ class TransactionController extends Controller
             'transaction' => null
         ];
 
-        $order = Order::find($data["order_id"]);
+        $transaction = new Transaction();
+        $transaction->fill($data);
 
-        if(!isset($order)) {
-            $result = [
-                'statusCode' => Response::HTTP_NOT_FOUND,
-                'message' => 'سفارش شما یافت نشد.',
-                'transaction' => null
-            ];
-            return $result;
-        }
-        /**
-         *  Check to find whether it comes from admin panel or user panel
-         */
-        $previousRoute = app('router')
-            ->getRoutes()
-            ->match(app('request')->create(URL::previous()))
-            ->getName();
-        if (strcmp($previousRoute, "order.edit") == 0) {
-            $comesFromAdmin = true;
-        } else {
-            $comesFromAdmin = false;
-        }
-        /**
-         *  end
-         */
-
-        if (isset($data["comesFromAdmin"])) {
-            if (!Auth::user()->can(Config::get("constants.INSERT_TRANSACTION_ACCESS"))) {
-                $result['statusCode'] = Response::HTTP_FORBIDDEN;
-                $result['message'] = "سفارش مورد نظر متعلق به شما نمی باشد";
-                return $result;
-            }
-            $comesFromAdmin = true;
-        }
-
-        /**
-         * Check the order authority
-         */
-        if (!$comesFromAdmin && !$this->checkOrderAuthority($order)) {
-            $result['statusCode'] = Response::HTTP_FORBIDDEN;
-            $result['message'] = "سفارش مورد نظر متعلق به شما نمی باشد";
-            return $result;
-        }
-        /**
-         *  end
-         */
-
-        $newTransaction = true;
-        /**
-         *  For inserting online transactions
-         */
-        if (isset($data["authority"])) {
-            $transaction = Transaction::where("authority", $data["authority"])->first();
-            if (isset($transaction)) {
-                $newTransaction = false;
+        $mustNullVariableInArray = [
+            'referenceNumber',
+            'traceNumber',
+            'transactionID',
+            'authority',
+            'paycheckNumber',
+        ];
+        foreach ($mustNullVariableInArray as $variable) {
+            if (strlen($transaction->$variable) == 0) {
+                $transaction->$variable = null;
             }
         }
-        /**
-         *  end
-         */
-        if ($newTransaction) {
-            $transaction = new Transaction();
-            $transaction->fill($data);
-        } else {
-            /**
-             *  For inserting online transactions
-             */
-
-            if($result['statusCode'] != Response::HTTP_OK) {
-                return $result;
-            }
-
-            if ($transaction->order->user->id != $order->user->id) {
-                $result['statusCode'] = Response::HTTP_FORBIDDEN;
-                $result['message'] = "تراکنشی با این شماره Authority قبلا برای شخص دیگری ثبت شده است";
-                return $result;
-            }
-            if ($data["cost"] != $transaction->cost) {
-                $result['statusCode'] = Response::HTTP_FORBIDDEN;
-                $result['message'] = "مبلغ وارد شده با تراکنش تصدیق نشده ای که یافت شد همخوانی ندارد";
-                return $result;
-            }
-            /**
-             * Verifying transactions
-             **/
-            $zarinGate = Transactiongateway::where('name', 'zarinpal')->first();
-            $merchant = $zarinGate->merchantNumber;
-            $zarinPal = new Zarinpal($merchant, new SoapDriver(), "zarinGate");
-            $result = $zarinPal->verifyWithExtra($transaction->cost, $transaction->authority);
-            if (strcmp($result["Status"], "success") == 0) {
-                $transaction->transactionID = $result["RefID"];
-                $transaction->order_id = $order->id;
-                $transaction->transactionstatus_id = Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL");
-                if ($transaction->update()) {
-                    $result['statusCode'] = Response::HTTP_OK;
-                    $result['message'] = "تراکنش با موفقیت تصدیق شد و اطلاعات آن ثبت گردید";
-                    $result['transaction'] = $transaction;
-                    return $result;
-                } else {
-                    $result['statusCode'] = Response::HTTP_INTERNAL_SERVER_ERROR;
-                    $result['message'] = "خطای پایگاه داده در ثبت تراکنش";
-                    return $result;
-                }
-            } else if (strcmp($result["Status"], "verified before") == 0) {
-                $transaction->transactionID = $result["RefID"];
-                $transaction->order_id = $order->id;
-                $transaction->transactionstatus_id = Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL");
-                if ($transaction->update()) {
-                    $result['statusCode'] = Response::HTTP_OK;
-                    $result['message'] = "این تراکنش قبلا تصدیق شده بود. اطلاعات تراکنش ثبت شد";
-                    $result['transaction'] = $transaction;
-                    return $result;
-                } else {
-                    $result['statusCode'] = Response::HTTP_INTERNAL_SERVER_ERROR;
-                    $result['message'] = "خطای پایگاه داده در ثبت تراکنش";
-                    return $result;
-                }
-            } else if (strcmp($result["Status"], "error") == 0) {
-                $result['statusCode'] = Response::HTTP_INTERNAL_SERVER_ERROR;
-                $result['message'] = "پاسخ سرویس دهنده خطای " . $result["error"] . " می باشد";
-                return $result;
-            } else {
-                $result['statusCode'] = Response::HTTP_INTERNAL_SERVER_ERROR;
-                $result['message'] = "پاسخ نامعتبر از سرویس دهنده";
-                return $result;
-            }
 
 
-            /**
-             *  end
-             */
+        $fillableDate = [
+            'completed_at',
+            'deadline_at',
+        ];
+        foreach ($fillableDate as $date) {
+            if (isset($data[$date]) && strlen($data[$date]) > 0) {
+                $parsedDate = Carbon::parse($data[$date])->format('Y-m-d');
+                $transaction->$date = $parsedDate;
+            }
         }
 
-        if (strlen($transaction->referenceNumber) == 0)
-            $transaction->referenceNumber = null;
-        if (strlen($transaction->traceNumber) == 0)
-            $transaction->traceNumber = null;
-        if (strlen($transaction->transactionID) == 0)
-            $transaction->transactionID = null;
-        if (strlen($transaction->authority) == 0)
-            $transaction->authority = null;
-        if (strlen($transaction->paycheckNumber) == 0)
-            $transaction->paycheckNumber = null;
-        $gateway = $data["gateway"];//for requests coming from checkout/payment and user order list
-
-        if (isset($data["completed_at"]) && strlen($data["completed_at"]) > 0) {
-            $completed_at = Carbon::parse($data["completed_at"])
-                ->format('Y-m-d');
-            $transaction->completed_at = $completed_at;
-
-        } else {
-            $transaction->completed_at = Carbon::now();
-        }
-
-        if (isset($data["deadline_at"]) && strlen($data["deadline_at"]) > 0) {
-            $deadline_at = Carbon::parse($data["deadline_at"])
-                ->format('Y-m-d');
-            $transaction->deadline_at = $deadline_at;
-            $transaction->completed_at = null;
-        }
         if ($transaction->save()) {
-            /**
-             *  An online transaction
-             */
-            if (isset($gateway)) {
-                $result['statusCode'] = Response::HTTP_OK;
-                $result['message'] = "تراکنش با موفقیت ثبت شد.";
-                $result['transaction'] = $transaction;
-                return $result;
-            } /**
-             *  An offline transaction
-             */
-            else {
-                if (!$comesFromAdmin)
-                    if ($order->totalPaidCost() >= (int)$order->totalCost()) {
-                        $order->paymentstatus_id = Config::get("constants.PAYMENT_STATUS_PAID");
-                        $transactionMessage = "تراکنش شما با موفقیت درج شد.مسئولین سایت در اسرع وقت اطلاعات بانکی ثبت شده را بررسی خواهند کرد  و سفارش شما را تایید خواهند نمود. سفارش شما در حال حاضر در وضعیت منتظر تایید می باشد.";
-                    } else {
-                        $order->paymentstatus_id = Config::get("constants.PAYMENT_STATUS_INDEBTED");
-                        $transactionMessage = "تراکنش شما با موفقیت درج شد.مسئولین سایت در اسرع وقت اطلاعات بانکی ثبت شده را بررسی خواهند کرد  و تراکنش شما را تایید خواهند نمود.";
-                    }
-                else $transactionMessage = "تراکنش با موفقیت درج شد";
-                $order->timestamps = false;
-                if (!$order->update()) {
-                    $result['statusCode'] = Response::HTTP_INTERNAL_SERVER_ERROR;
-                    $result['message'] = "خطای پایگاه داده در به روز رسانی سفارش شما";
-                    $result['transaction'] = $transaction;
-                    return $result;
-                }
-                $order->timestamps = true;
-
-                $result['statusCode'] = Response::HTTP_OK;
-                $result['message'] = $transactionMessage;
-                $result['transaction'] = $transaction;
-                $result['order'] = $order;
-                return $result;
-            }
+            $result['statusCode'] = Response::HTTP_OK;
+            $result['message'] = 'تراکنش با موفقیت ثبت شد.';
+            $result['transaction'] = $transaction;
         } else {
             $result['statusCode'] = Response::HTTP_INTERNAL_SERVER_ERROR;
-            $result['message'] = "خطای پایگاه داده در ثبت تراکنش";
-            return $result;
+            $result['message'] = 'خطای پایگاه داده در ثبت تراکنش';
         }
+        return $result;
     }
 
     /**
      * Display the specified resource.
      *
      * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function show($id)
     {

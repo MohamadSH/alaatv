@@ -2,14 +2,12 @@
 
 namespace App\Http\Middleware;
 
-use App\Attributevalue;
 use App\Http\Controllers\OrderController;
 use App\Product;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-//use Nexmo\Call\Collection;
 use Illuminate\Database\Eloquent\Collection;
 
 class checkPermissionForSendExtraAttributesCost
@@ -34,8 +32,8 @@ class checkPermissionForSendExtraAttributesCost
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Closure $next
+     * @param Request $request
+     * @param Closure $next
      * @param null $guard
      * @return mixed
      */
@@ -82,7 +80,7 @@ class checkPermissionForSendExtraAttributesCost
      * @param Product $product
      * @return Collection|null
      */
-    public function getAttributesValuesFromProduct(Request $request, Product $product): ?Collection
+    private function getAttributesValuesFromProduct(Request $request, Product $product): ?Collection
     {
         $extraAttributes = $request->get('extraAttribute');
         $extraAttributesId = array_column($extraAttributes, 'id');

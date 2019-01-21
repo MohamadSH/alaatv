@@ -10,6 +10,7 @@ trait HasWallet
 {
     /**
      * Retrieve the wallet of this user
+     * @return mixed
      */
     public function wallets()
     {
@@ -44,6 +45,8 @@ trait HasWallet
 
     /**
      * Retrieve the balance of this user's wallet
+     * @param int $type
+     * @return int
      */
     public function getWalletBalance($type = 1)
     {
@@ -126,10 +129,8 @@ trait HasWallet
      * Attempt to move credits from this account
      *
      * @param  integer $amount
-     * @param  string  $type
-     * @param  array   $meta
+     * @param null $walletType
      * @param  boolean $shouldAccept
-     *
      * @return array
      */
     public function withdraw($amount, $walletType = null, $shouldAccept = true)
@@ -183,9 +184,8 @@ trait HasWallet
      * Move credits from this account
      *
      * @param  integer $amount
-     * @param  string  $type
-     * @param  array   $meta
-     * @param  boolean $shouldAccept
+     * @param $walletType
+     * @return array
      */
     public function forceWithdraw($amount, $walletType)
     {
@@ -199,7 +199,7 @@ trait HasWallet
      * Returns the actual balance for this wallet.
      * Might be different from the balance property if the database is manipulated
      *
-     * @return float balance
+     * @return void balance
      */
     public function actualBalance()
     {

@@ -4,7 +4,6 @@ namespace App;
 
 use App\Traits\DateTrait;
 use App\Traits\Helper;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 

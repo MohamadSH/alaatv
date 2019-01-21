@@ -35,8 +35,15 @@ class OrderProductStoreRequest extends FormRequest
      */
     public function rules()
     {
-        return [];
         $rules = [
+            'product_id' => 'required|numeric',
+            'products.*' => 'sometimes|numeric',
+            'attribute.*' => 'sometimes|numeric',
+            'extraAttribute.*.id' => 'sometimes|numeric',
+            'withoutBon' => 'sometimes|boolean'
+        ];
+
+        /*$rules = [
             'product_id' => 'required|exists:products,id|activeProduct',
             'products.*' => 'sometimes|exists:products,id|activeProduct',
             'attribute.*' => 'sometimes|exists:attributevalues,id',
@@ -47,7 +54,7 @@ class OrderProductStoreRequest extends FormRequest
             $rules['order_id'] = 'required|exists:orders,id';
             $rules['product_id'] = 'required|exists:products,id';
             $rules['products.*'] = 'sometimes|exists:products,id';
-        }
+        }*/
         return $rules;
     }
 }

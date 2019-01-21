@@ -41,9 +41,9 @@ class CheckHasOpenOrder
             $this->user = $request->user()->load('openOrders');
             $openOrder = $this->user->openOrders;
             if ($openOrder->isEmpty()) {
-                $request->offsetSet("paymentstatus_id", config("constants.PAYMENT_STATUS_UNPAID"));
-                $request->offsetSet("orderstatus_id", config("constants.ORDER_STATUS_OPEN"));
-                $request->offsetSet("user_id", $this->user->id);
+                $request->offsetSet('paymentstatus_id', config('constants.PAYMENT_STATUS_UNPAID'));
+                $request->offsetSet('orderstatus_id', config('constants.ORDER_STATUS_OPEN'));
+                $request->offsetSet('user_id', $this->user->id);
                 $controller = $this->orderController;
                 $openOrder = $controller->store($request);
             }
@@ -92,9 +92,9 @@ class CheckHasOpenOrder
         $openOrder = $user->openOrders;
 
 //        if ($openOrder->isEmpty()) {
-//            $request->offsetSet("paymentstatus_id", config("constants.PAYMENT_STATUS_UNPAID"));
-//            $request->offsetSet("orderstatus_id", config("constants.ORDER_STATUS_OPEN"));
-//            $request->offsetSet("user_id", $user->id);
+//            $request->offsetSet('paymentstatus_id', config('constants.PAYMENT_STATUS_UNPAID'));
+//            $request->offsetSet('orderstatus_id', config('constants.ORDER_STATUS_OPEN'));
+//            $request->offsetSet('user_id', $user->id);
 //            $controller = $this->orderController;
 //            $order = $controller->store($request);
 //        } else {
@@ -305,6 +305,6 @@ class CheckHasOpenOrder
 //        DB::table('orderproducts')->delete();
 //        DB::table('attributevalue_orderproduct')->delete();
 
-        /*dd('OrdersReset Done!');*/
+        dd('OrdersReset Done!');
     }
 }

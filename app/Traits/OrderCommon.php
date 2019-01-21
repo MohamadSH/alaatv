@@ -3,8 +3,8 @@
 use App\Order;
 use App\Orderproduct;
 use App\Product;
+use App\User;
 use App\Wallet;
-use Illuminate\Support\Facades\Config;
 
 trait OrderCommon
 {
@@ -68,5 +68,23 @@ trait OrderCommon
         $giftOrderproduct->parents()
             ->attach($orderproduct, ["relationtype_id" => config("constants.ORDER_PRODUCT_INTERRELATION_PARENT_CHILD")]);
         return $giftOrderproduct;
+    }
+
+    /**
+     * @param User $user
+     * @return Order|User|\Illuminate\Database\Eloquent\Model|object|null
+     */
+    public function firstOrCreateOpenOrder(User $user) {
+
+        $openOrder = $user->openOrders()->first();
+        if(!isset($openOrder)) {
+            $openOrder = new Order();
+            $openOrder->user_id = $user->id;
+            $openOrder->orderstatus_id = config('constants.ORDER_STATUS_OPEN');
+            $openOrder->paymentstatus_id = config('constants.PAYMENT_STATUS_UNPAID');
+            $openOrder->save();
+            $openOrder = $user->openOrders()->first();
+        }
+        return $openOrder;
     }
 }
