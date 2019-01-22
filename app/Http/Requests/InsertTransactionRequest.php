@@ -27,70 +27,19 @@ class InsertTransactionRequest extends FormRequest
      */
     public function rules()
     {
-        $customeRules = [];
-        $customeRules["referenceNumber"] = "";
-        $customeRules["traceNumber"] = "";
-        $customeRules["authority"] = "";
-        $customeRules["paycheckNumber"] = "";
-        $input = $this->request->all();
-        if (isset($input["transactionstatus_id"]) && $input["transactionstatus_id"] == Config::get("constants.TRANSACTION_STATUS_UNPAID")) {
-            $customeRules["paymentmethod_id"] = "";
-            $unpaid = true;
-        } else {
-            $customeRules["paymentmethod_id"] = "required|";
-            $unpaid = false;
-        }
-        if (isset($input["paymentMethodName"]) && !$unpaid) {
-            $paymentMethod = $input["paymentMethodName"];
-            switch ($paymentMethod) {
-                case "online":
-                    $customeRules["authority"] = "required|";
-                    break;
-                case "ATM":
-                    $customeRules["referenceNumber"] = "required_without_all:traceNumber,transactionID|";
-                    $customeRules["traceNumber"] = "required_without_all:referenceNumber,transactionID|";
-                    $customeRules["transactionID"] = "required_without_all:referenceNumber,traceNumber|";
-                    break;
-                case "POS":
-                    $customeRules["referenceNumber"] = "required_without_all:traceNumber,transactionID|";
-                    $customeRules["traceNumber"] = "required_without_all:referenceNumber,transactionID|";
-                    $customeRules["transactionID"] = "required_without_all:referenceNumber,traceNumber|";
-                    break;
-                case "paycheck":
-                    $customeRules["paycheckNumber"] = "required|";
-                    break;
-                //            case "cash":
-                //                break;
-                default:
-                    break;
-            }
-        }
         $rules = [
             'order_id'             => 'required',
             'cost'                 => 'required|integer',
             'transactionstatus_id' => 'required|exists:transactionstatuses,id',
-            'paymentmethod_id'     => $customeRules["paymentmethod_id"] . 'exists:paymentmethods,id',
-            'referenceNumber'      => $customeRules["referenceNumber"] . 'unique:transactions,referenceNumber,NULL,id,deleted_at,NULL|numeric|nullable',
-            'traceNumber'          => $customeRules["traceNumber"] . 'unique:transactions,traceNumber,NULL,id,deleted_at,NULL|numeric|nullable',
-            'authority'            => $customeRules["authority"] . 'numeric|nullable',
-            'paycheckNumber'       => $customeRules["paycheckNumber"] . 'unique:transactions,paycheckNumber,NULL,id,deleted_at,NULL|nullable',
+            'paymentmethod_id'     => 'required|',
+            'referenceNumber'      => 'sometimes|min:2',
+            'traceNumber'          => 'sometimes|min:2',
+            'authority'            => 'sometimes|min:2',
+            'paycheckNumber'       => 'sometimes|min:2',
+            'completed_at'       => 'sometimes|date_format:Y-m-d',
+            'deadline_at'       => 'sometimes|date_format:Y-m-d'
         ];
         return $rules;
-    }
-
-    /**
-     * Configure the validator instance.
-     *
-     * @param  \Illuminate\Validation\Validator $validator
-     *
-     * @return void
-     */
-    public function withValidator($validator)
-    {
-        if ($validator->fails()) {
-            $this->session()
-                 ->put("validationFailed", "insertTransaction");
-        }
     }
 
     public function prepareForValidation()

@@ -11,7 +11,7 @@ namespace App\Classes\Payment\GateWay;
 
 use App\Http\Controllers\TransactionController;
 
-class GateWay
+class GateWayFactory
 {
     private $transactionController;
 
@@ -27,7 +27,7 @@ class GateWay
 
     /**
      * @param string $gateWay
-     * @return GateWay
+     * @return GateWayAbstract
      */
     public function setGateWay(string $gateWay)
     {
@@ -37,16 +37,6 @@ class GateWay
         } else {
             throw new Exception('GateWay {' . $className . '} not found.');
         }
-        return $this;
-    }
-
-    public function redirect(array $data) {
-        return $this->gateWayClass->loadForRedirect($data)
-            ->redirect();
-    }
-
-    public function verify(array $data) {
-        return $this->gateWayClass->loadForVerify($data)
-            ->verify();
+        return $this->gateWayClass;
     }
 }

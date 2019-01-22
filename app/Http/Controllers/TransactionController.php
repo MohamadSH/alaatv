@@ -441,6 +441,8 @@ class TransactionController extends Controller
             ], $result['statusCode']);
         }
 
+        // ToDo: just admin can insert payed transaction (check request and user permission)
+
         $canInsertTransaction = $request->user()->can(config("constants.INSERT_TRANSACTION_ACCESS"));
         $isOrderOwner = ($order->user_id == $request->user()->id);
 
@@ -475,31 +477,6 @@ class TransactionController extends Controller
 
         $transaction = new Transaction();
         $transaction->fill($data);
-
-        $mustNullVariableInArray = [
-            'referenceNumber',
-            'traceNumber',
-            'transactionID',
-            'authority',
-            'paycheckNumber',
-        ];
-        foreach ($mustNullVariableInArray as $variable) {
-            if (strlen($transaction->$variable) == 0) {
-                $transaction->$variable = null;
-            }
-        }
-
-
-        $fillableDate = [
-            'completed_at',
-            'deadline_at',
-        ];
-        foreach ($fillableDate as $date) {
-            if (isset($data[$date]) && strlen($data[$date]) > 0) {
-                $parsedDate = Carbon::parse($data[$date])->format('Y-m-d');
-                $transaction->$date = $parsedDate;
-            }
-        }
 
         if ($transaction->save()) {
             $result['statusCode'] = Response::HTTP_OK;

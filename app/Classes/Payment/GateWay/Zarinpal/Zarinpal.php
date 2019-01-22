@@ -8,9 +8,10 @@
 
 namespace App\Classes\Payment\GateWay\Zarinpal;
 
+use App\Bankaccount;
 use App\Transaction;
 use App\Transactiongateway;
-use Illuminate\Http\{Request, Response};
+use Illuminate\Http\Response;
 use Zarinpal\Zarinpal as ZarinpalComposer;
 use App\Http\Controllers\TransactionController;
 use App\Classes\Payment\GateWay\GateWayAbstract;
@@ -20,9 +21,11 @@ class Zarinpal extends GateWayAbstract
     private $error;
     private $refId;
     private $status;
+    private $amount;
     private $authority;
+    private $merchantID;
     private $cardPanHash;
-    private $merchantNumber;
+    private $cardPanMask;
     private $zarinpalComposer;
     private $transactiongatewayId;
 
@@ -30,10 +33,12 @@ class Zarinpal extends GateWayAbstract
     {
         parent::__construct();
         $zarinGate = Transactiongateway::where('name', 'zarinpal')->first();
-        $this->merchantNumber = $zarinGate->merchantNumber;
+        $this->merchantID = $zarinGate->merchantNumber;
         $this->transactiongatewayId = $zarinGate->id;
-        $this->zarinpalComposer = new ZarinpalComposer($this->merchantNumber);
-        $this->zarinpalComposer->enableSandbox(); // active sandbox mod for test env
+        $this->zarinpalComposer = new ZarinpalComposer($this->merchantID);
+        if(config('app.env')!='deployment' && config('Zarinpal.Sandbox')) {
+            $this->zarinpalComposer->enableSandbox(); // active sandbox mod for test env
+        }
         $this->zarinpalComposer->isZarinGate(); // active zarinGate mode
         $this->transactionController = $transactionController;
     }
@@ -41,10 +46,12 @@ class Zarinpal extends GateWayAbstract
     /**
      * Making request to ZarinPal gateway
      * must loadForRedirect before
+     * @param array $data
      * @return string
      */
-    public function redirect()
+    public function redirect(array $data)
     {
+        parent::redirect($data);
         $results = $this->zarinpalComposer->request($this->callbackUrl, (int)$this->transaction->cost, $this->description);
 
         if (isset($results['Authority']) && strlen($results['Authority']) > 0) {
@@ -69,13 +76,22 @@ class Zarinpal extends GateWayAbstract
     /**
      * verify ZarinPal callback request
      * must loadForVerify before
+     * @param array $data
      * @return array $this->result
      */
-    public function verify(): array
+    public function verify(array $data): array
     {
+        parent::verify($data);
         $this->result['isAdminOrder'] = false;
 
         $this->init();
+
+        if(!isset($this->order)) {
+            $this->result['Status'] = 'error';
+            /*array_push($this->result['Message'], 'Order not found');*/
+            $this->result['Message'][] = 'Order not found';// can't use array_push
+            return $this->result;
+        }
 
         $this->order->detachUnusedCoupon();
 
@@ -179,17 +195,20 @@ class Zarinpal extends GateWayAbstract
 
     }
 
-
-
-    /**
-     * @param Request $request
-     */
     private function init(): void
     {
-        $this->authority = $this->request->get('Authority');
-        $this->status = $this->request->get('Status');
-        $this->transaction = Transaction::with(['order'])->authority($this->authority)->firstOrFail();
-        $this->order = $this->transaction->order;
+        $this->authority = $this->callbackData['Authority'];
+        $this->status = $this->callbackData['Status'];
+        $this->transaction = Transaction::authority($this->authority)->first();
+
+        if(!isset($this->transaction)) {
+            $this->result['Status'] = 'error';
+            /*array_push($this->result['Message'], 'Transaction not found');*/
+            $this->result['Message'][] = 'Transaction not found';// can't use array_push
+        } else {
+            $this->amount = $this->transaction->cost;
+            $this->order = $this->transaction->order;
+        }
     }
 
     /**
@@ -202,7 +221,7 @@ class Zarinpal extends GateWayAbstract
         /**
          * $result['Status'] going to be 'success', 'error' or 'canceled'
          */
-        $result = $this->zarinpalComposer->verify($this->status, $this->transaction->cost, $this->authority);
+        $result = $this->zarinpalComposer->verify($this->status, $this->amount, $this->authority);
 
         $this->error = (strcmp($result['Status'], 'error') == 0)? $result['error'] : null;
 
@@ -210,6 +229,7 @@ class Zarinpal extends GateWayAbstract
             $this->refId = $result['RefID'];
             $this->status = 'success';
             $this->cardPanHash = $result['ExtraDetail']['Transaction']['CardPanHash'];
+            $this->cardPanMask = $result['ExtraDetail']['Transaction']['CardPanMask'];
         } else if (strcmp($result['Status'], 'canceled') == 0 ||
             (strcmp($result['Status'], 'error') == 0 && (
                     strcmp($result['error'], '-22') == 0 || //وارد درگاه بانک شده و انصراف زده
@@ -222,9 +242,14 @@ class Zarinpal extends GateWayAbstract
         return $result;
     }
 
-    private function handleSuccessStatus()
+    private function handleSuccessStatus(): void
     {
-        $this->changeTransactionStatusToSuccessful($this->refId);
+        $bankAccount = null;
+        if(isset($this->cardPanMask) && strlen($this->cardPanMask)>0) {
+            $bankAccount = Bankaccount::firstOrCreate(['accountNumber'=>$this->cardPanMask]);
+        }
+
+        $this->changeTransactionStatusToSuccessful($this->refId, $bankAccount->id);
 
         $this->order->closeWalletPendingTransactions();
 
@@ -238,7 +263,7 @@ class Zarinpal extends GateWayAbstract
         $this->result['Status'] = 'success';
     }
 
-    private function handleCanceledStatus()
+    private function handleCanceledStatus(): void
     {
         $this->result['Status'] = 'canceled';
 
@@ -257,5 +282,29 @@ class Zarinpal extends GateWayAbstract
             $this->result['walletAmount'] = $totalWalletRefund;
             $this->result['walletRefund'] = true;
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function getUnverifiedTransactions() {
+        $inputs = [
+            'MerchantID' => $this->merchantID
+        ];
+        $result = $this->zarinpalComposer->getDriver()->unverifiedTransactions($inputs);
+        return $result;
+    }
+
+    /**
+     * @param int $amount
+     * @param string $authority
+     * @return array
+     */
+    public function forceVerify(int $amount, string $authority) {
+        $this->status = 'OK';
+        $this->amount = $amount;
+        $this->authority = $authority;
+        $verifyZarinpalResult = $this->verifyZarinpal();
+        return $verifyZarinpalResult;
     }
 }

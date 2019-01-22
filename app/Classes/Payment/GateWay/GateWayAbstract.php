@@ -13,7 +13,6 @@ use App\Http\Controllers\TransactionController;
 use App\Order;
 use Carbon\Carbon;
 use App\Transaction;
-use Illuminate\Http\Request;
 
 abstract class GateWayAbstract
 {
@@ -48,9 +47,9 @@ abstract class GateWayAbstract
     protected $order;
 
     /**
-     * @var Request $request
+     * @var array $request
      */
-    protected $request;
+    protected $callbackData;
 
     /**
      * @var array $result
@@ -103,17 +102,26 @@ abstract class GateWayAbstract
             $this->result = array_add($this->result, 'saveOrder', 0);
     }
 
-    protected function changeTransactionStatusToSuccessful(string $transactionID): void
+    /**
+     * @param string $transactionID
+     * @param int|null $bankAccountId
+     */
+    protected function changeTransactionStatusToSuccessful(string $transactionID, int $bankAccountId=null): void
     {
         $data['completed_at'] = Carbon::now();
         $data['transactionID'] = $transactionID;
+        $data['destinationBankAccount_id'] = $bankAccountId;
         $data['transactionstatus_id'] = config("constants.TRANSACTION_STATUS_SUCCESSFUL");
         $this->transactionController->modify($this->transaction, $data);
     }
 
-    abstract public function redirect();
+    public function redirect(array $data) {
+        $this->loadForRedirect($data);
+    }
 
-    abstract public function verify(): array;
+    public function verify(array $data) {
+        $this->loadForVerify($data);
+    }
 
     /**
      * @param array $data
@@ -161,11 +169,11 @@ abstract class GateWayAbstract
     }
 
     /**
-     * @param Request $request
+     * @param array $callbackData
      * @return $this
      */
-    public function setRequest(Request $request) {
-        $this->request = $request;
+    public function setRequest(array $callbackData) {
+        $this->callbackData = $callbackData;
         return $this;
     }
 

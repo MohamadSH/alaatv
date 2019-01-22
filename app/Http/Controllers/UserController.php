@@ -60,6 +60,9 @@ use Kalnoy\Nestedset\QueryBuilder;
 use PHPUnit\Framework\Exception;
 use SEO;
 use stdClass;
+use App\Classes\Payment\GateWay\Zarinpal\Zarinpal;
+use App\Classes\Payment\GateWay\GateWayFactory;
+use Zarinpal\Zarinpal as ZarinpalComposer;
 
 class UserController extends Controller
 {
@@ -534,8 +537,38 @@ class UserController extends Controller
         }
 
 
-//        $userCompletion = (int)$user->completion();
-//        $mobileVerificationCode = $user->getMobileVerificationCode();
+        /**
+        $zarinGate = Transactiongateway::where('name', 'zarinpal')->first();
+        $zarinpal = new ZarinpalComposer($zarinGate->merchantNumber);
+        $authority = '000000000000000000000000000082710110';
+        return json_encode($zarinpal->verify('OK', 5000, $authority));
+        {
+            "Status": "success",
+            "RefID": 44545481710,
+            "ExtraDetail": {
+                "Transaction": {
+                    "CardPanHash": "2A7C73AE5DB08EE02E5A3F16EC4DB64E2210B564",
+                    "CardPanMask": "603799******2458"
+                }
+            }
+        }
+        */
+
+
+
+
+
+//        $zarinpal = new Zarinpal((new TransactionController()));
+//        $result = $zarinpal->getUnverifiedTransactions();
+//        return $result;
+
+
+
+
+
+//        $zarinpal = new Zarinpal((new TransactionController()));
+//        $result = $zarinpal->getUnverifiedTransactions();
+//        return $result;
 
         return response($user, Response::HTTP_OK);
 

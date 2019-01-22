@@ -16,20 +16,20 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Carbon\Carbon|null                                              $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Bankaccount[] $backaccounts
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|\App\Bank onlyTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Bank onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Bank whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Bank whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Bank whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Bank whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Bank whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Bank whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Bank withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Bank withoutTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Bank whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bank whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bank whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bank whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bank whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bank whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|Bank withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Bank withoutTrashed()
  * @mixin \Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Bank newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Bank newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Bank query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Bank newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Bank newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Bank query()
  */
 class Bank extends Model
 {

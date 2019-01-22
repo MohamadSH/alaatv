@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Classes\Payment\GateWay\GateWay;
 use App\User;
 use App\Order;
 use App\Transaction;
 use App\Traits\OrderCommon;
 use Illuminate\Http\{Request, Response};
+use App\Classes\Payment\GateWay\GateWayFactory;
 use App\Classes\Payment\RefinementRequest\Refinement;
 use App\Classes\Payment\RefinementRequest\RefinementLauncher;
 use App\Classes\Payment\RefinementRequest\Strategies\{OpenOrderRefinement, OrderIdRefinement, TransactionRefinement};
@@ -82,9 +82,9 @@ class OnlinePaymentController extends Controller
      */
     public function paymentRedirect(string $paymentMethod, string $device, Request $request)
     {
-        /*$request->offsetSet("order_id", 137);*/
-        /*$request->offsetSet("transaction_id", 65);*/
-        $request->offsetSet("payByWallet", true);
+        /*$request->offsetSet('order_id", 137);*/
+        /*$request->offsetSet('transaction_id", 65);*/
+        $request->offsetSet('payByWallet', true);
 
         $this->device = $device;
 
@@ -112,7 +112,7 @@ class OnlinePaymentController extends Controller
                 'transaction' => $this->transaction,
                 'device' => $this->device,
             ];
-            $gateWay = new GateWay($this->transactionController);
+            $gateWay = new GateWayFactory($this->transactionController);
             $gateWay->setGateWay($paymentMethod)->redirect($data);
 
             /*return response()->json([
@@ -196,11 +196,11 @@ class OnlinePaymentController extends Controller
         $this->device = $device;
 
         $data = [
-            'request' => $request,
+            'callbackData' => $request->all(),
             'result' => $result
         ];
-        $gateWay = new GateWay($this->transactionController);
-        $result = $gateWay->setGateWay($paymentMethod)->verify($data);
+//        $gateWay = new GateWay($this->transactionController);
+//        $result = $gateWay->setGateWay($paymentMethod)->verify($data);
 
         /*$sendSMS = $result['sendSMS'];
         if ($sendSMS && isset($this->order)) {
