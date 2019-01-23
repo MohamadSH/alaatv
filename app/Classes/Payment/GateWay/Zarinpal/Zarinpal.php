@@ -12,20 +12,14 @@ use App\Bankaccount;
 use App\Transaction;
 use App\Transactiongateway;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Validator;
 use Zarinpal\Zarinpal as ZarinpalComposer;
 use App\Http\Controllers\TransactionController;
 use App\Classes\Payment\GateWay\GateWayAbstract;
 
 class Zarinpal extends GateWayAbstract
 {
-    private $error;
-    private $refId;
-    private $status;
-    private $amount;
-    private $authority;
     private $merchantID;
-    private $cardPanHash;
-    private $cardPanMask;
     private $zarinpalComposer;
     private $transactiongatewayId;
 
@@ -46,241 +40,180 @@ class Zarinpal extends GateWayAbstract
     /**
      * Making request to ZarinPal gateway
      * must loadForRedirect before
-     * @param array $data
-     * @return string
+     * @param Transaction $transaction
+     * @param string $callbackUrl
+     * @param string|null $description
+     * @return array
      */
-    public function redirect(array $data)
+    public function redirect(Transaction $transaction, string $callbackUrl, string $description=null): array
     {
-        parent::redirect($data);
-        $results = $this->zarinpalComposer->request($this->callbackUrl, (int)$this->transaction->cost, $this->description);
+        $zarinpalResponse = $this->zarinpalComposer->request($callbackUrl, (int)$transaction->cost, $description);
 
-        if (isset($results['Authority']) && strlen($results['Authority']) > 0) {
-            $data['gateway'] = $this->zarinpalComposer;
-            $data['destinationBankAccount_id'] = 1;
-            $data['authority'] = $results['Authority'];
+        if (isset($zarinpalResponse['Authority']) && strlen($zarinpalResponse['Authority']) > 0) {
+            $data['destinationBankAccount_id'] = 1; // ToDo: Hard Code
+            $data['authority'] = $zarinpalResponse['Authority'];
             $data['transactiongateway_id'] = $this->transactiongatewayId;
             $data['paymentmethod_id'] = config('constants.PAYMENT_METHOD_ONLINE');
-            $result = $this->transactionController->modify($this->transaction, $data);
-            if ($result['statusCode'] == Response::HTTP_OK) {
+            $transactionModifyResult = $this->transactionController->modify($transaction, $data);
+            if ($transactionModifyResult['statusCode'] == Response::HTTP_OK) {
                 $this->zarinpalComposer->redirect();
-                return null;
+                $this->result['status'] = true;
+                $this->result['message'][] = 'ریدایرکت به درگاه با موفقیت انجام شد.';
             }
             else {
-                return 'مشکل در برقراری ارتباط با درگاه زرین پال';
+                $this->result['status'] = false;
+                $this->result['message'][] = 'مشکلی در ویرایش تراکنش رخ داده است.';
+                $this->result['data']['transactionModifyResult'] = $transactionModifyResult;
             }
         } else {
-            return $results['error'];
+            $this->result['status'] = false;
+            $this->result['message'][] = 'مشکل در برقراری ارتباط با درگاه زرین پال';
+            $this->result['data']['zarinpalResponse'] = $zarinpalResponse;
         }
+        return $this->result;
     }
 
     /**
      * verify ZarinPal callback request
      * must loadForVerify before
-     * @param array $data
+     * @param array $callbackData
      * @return array $this->result
      */
-    public function verify(array $data): array
+    public function verify(array $callbackData): array
     {
-        parent::verify($data);
-        $this->result['isAdminOrder'] = false;
+        [$authority, $status] = $this->validateCallbackData($callbackData);
 
-        $this->init();
-
-        if(!isset($this->order)) {
-            $this->result['Status'] = 'error';
-            /*array_push($this->result['Message'], 'Order not found');*/
-            $this->result['Message'][] = 'Order not found';// can't use array_push
+        if (!$this->result['status']) {
             return $this->result;
         }
 
-        $this->order->detachUnusedCoupon();
+        $transaction = $this->getTransaction($authority);
 
-        $verifyZarinpalResult = $this->verifyZarinpal();
+        if(!isset($transaction)) {
+            return $this->result;
+        }
+
+        $transaction->order->detachUnusedCoupon();
+        $this->result['data']['order'] = $transaction->order;
+
+        $verifyZarinpalResult = $this->verifyZarinpal($status, $transaction->cost, $authority);
 
         if (!isset($verifyZarinpalResult)) {
-            $this->result['Status'] = 'error';
+            $this->result['status'] = false;
+            $this->result['message'][] = 'مشکل در برقراری ارتباط با زرین پال';
+            $this->result['data']['verifyZarinpalResult'] = $verifyZarinpalResult;
             return $this->result;
         }
 
-        if ($this->status === 'success') {
-            $this->handleSuccessStatus();
-        } else if ($this->status === 'canceled') {
-            $this->handleCanceledStatus();
+        if ($verifyZarinpalResult['Status'] === 'success') {
+            $cardPanMask = isset($verifyZarinpalResult['ExtraDetail']['Transaction']['CardPanMask'])?$verifyZarinpalResult['ExtraDetail']['Transaction']['CardPanMask']:null;
+            $this->handleSuccessStatus($verifyZarinpalResult['RefID'], $transaction, $cardPanMask);
+        } else {
+            $this->handleCanceledStatus($transaction);
         }
 
         return $this->result;
-
-
-//        $newTransaction = true;
-//        if (isset($data["authority"])) {
-//            $transaction = Transaction::where("authority", $data["authority"])->first();
-//            if (isset($transaction)) {
-//        if ($transaction->order->user->id != $order->user->id) {
-//            $result['statusCode'] = Response::HTTP_FORBIDDEN;
-//            $result['message'] = "تراکنشی با این شماره Authority قبلا برای شخص دیگری ثبت شده است";
-//            return $result;
-//        }
-//        if ($data["cost"] != $transaction->cost) {
-//            $result['statusCode'] = Response::HTTP_FORBIDDEN;
-//            $result['message'] = "مبلغ وارد شده با تراکنش تصدیق نشده ای که یافت شد همخوانی ندارد";
-//            return $result;
-//        }
-//        $zarinGate = Transactiongateway::where('name', 'zarinpal')->first();
-//        $merchant = $zarinGate->merchantNumber;
-//        $zarinPal = new Zarinpal($merchant);
-//        /*$zarinPal->enableSandbox(); // active sandbox mod for test env*/
-//        /*$zarinPal->isZarinGate(); // active zarinGate mode*/
-//        $result = $zarinPal->verifyWithExtra($transaction->cost, $transaction->authority);
-//        if (strcmp($result["Status"], "success") == 0) {
-//            $transaction->transactionID = $result["RefID"];
-//            $transaction->order_id = $data["order_id"];
-//            $transaction->transactionstatus_id = Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL");
-//            if ($transaction->update()) {
-//                $result['statusCode'] = Response::HTTP_OK;
-//                $result['message'] = "تراکنش با موفقیت تصدیق شد و اطلاعات آن ثبت گردید";
-//                $result['transaction'] = $transaction;
-//                return $result;
-//            } else {
-//                $result['statusCode'] = Response::HTTP_INTERNAL_SERVER_ERROR;
-//                $result['message'] = "خطای پایگاه داده در ثبت تراکنش";
-//                return $result;
-//            }
-//        } else if (strcmp($result["Status"], "verified before") == 0) {
-//            $transaction->transactionID = $result["RefID"];
-//            $transaction->order_id = $data["order_id"];
-//            $transaction->transactionstatus_id = Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL");
-//            if ($transaction->update()) {
-//                $result['statusCode'] = Response::HTTP_OK;
-//                $result['message'] = "این تراکنش قبلا تصدیق شده بود. اطلاعات تراکنش ثبت شد";
-//                $result['transaction'] = $transaction;
-//                return $result;
-//            } else {
-//                $result['statusCode'] = Response::HTTP_INTERNAL_SERVER_ERROR;
-//                $result['message'] = "خطای پایگاه داده در ثبت تراکنش";
-//                return $result;
-//            }
-//        } else if (strcmp($result["Status"], "error") == 0) {
-//            $result['statusCode'] = Response::HTTP_INTERNAL_SERVER_ERROR;
-//            $result['message'] = "پاسخ سرویس دهنده خطای " . $result["error"] . " می باشد";
-//            return $result;
-//        } else {
-//            $result['statusCode'] = Response::HTTP_INTERNAL_SERVER_ERROR;
-//            $result['message'] = "پاسخ نامعتبر از سرویس دهنده";
-//            return $result;
-//        }
-
-
-
-//        if (!$comesFromAdmin)
-//            if ($order->totalPaidCost() >= (int)$order->totalCost()) {
-//                $order->paymentstatus_id = config("constants.PAYMENT_STATUS_PAID");
-//                $transactionMessage = "تراکنش شما با موفقیت درج شد.مسئولین سایت در اسرع وقت اطلاعات بانکی ثبت شده را بررسی خواهند کرد  و سفارش شما را تایید خواهند نمود. سفارش شما در حال حاضر در وضعیت منتظر تایید می باشد.";
-//            } else {
-//                $order->paymentstatus_id = config("constants.PAYMENT_STATUS_INDEBTED");
-//                $transactionMessage = "تراکنش شما با موفقیت درج شد.مسئولین سایت در اسرع وقت اطلاعات بانکی ثبت شده را بررسی خواهند کرد  و تراکنش شما را تایید خواهند نمود.";
-//            }
-//        else $transactionMessage = "تراکنش با موفقیت درج شد";
-//        $order->timestamps = false;
-//        if (!$order->update()) {
-//            $result['statusCode'] = Response::HTTP_INTERNAL_SERVER_ERROR;
-//            $result['message'] = "خطای پایگاه داده در به روز رسانی سفارش شما";
-//            $result['transaction'] = $transaction;
-//            return $result;
-//        }
-//        $order->timestamps = true;
-
-
-//            }
-//        }
-
-    }
-
-    private function init(): void
-    {
-        $this->authority = $this->callbackData['Authority'];
-        $this->status = $this->callbackData['Status'];
-        $this->transaction = Transaction::authority($this->authority)->first();
-
-        if(!isset($this->transaction)) {
-            $this->result['Status'] = 'error';
-            /*array_push($this->result['Message'], 'Transaction not found');*/
-            $this->result['Message'][] = 'Transaction not found';// can't use array_push
-        } else {
-            $this->amount = $this->transaction->cost;
-            $this->order = $this->transaction->order;
-        }
     }
 
     /**
+     * @param string $authority
+     * @return Transaction|null
+     */
+    private function getTransaction(string $authority): ?Transaction
+    {
+        $transaction = Transaction::authority($authority)->first();
+        if(!isset($transaction)) {
+            $this->result['status'] = false;
+            $this->result['message'][] = 'تراکنش متناظر با authority یافت نشد.';
+            $this->result['data']['authority'] = $authority;
+        } else {
+            $this->result['data']['transaction'] = $transaction;
+        }
+        return $transaction;
+    }
+
+    /**
+     * @param string $status
+     * @param int $amount
+     * @param string $authority
      * @return array
      */
-    private function verifyZarinpal(): array
+    private function verifyZarinpal(string $status, int $amount, string $authority): array
     {
-        /*$merchant = $this->transaction->transactiongateway->merchantNumber;*/
-
-        /**
-         * $result['Status'] going to be 'success', 'error' or 'canceled'
-         */
-        $result = $this->zarinpalComposer->verify($this->status, $this->amount, $this->authority);
-
-        $this->error = (strcmp($result['Status'], 'error') == 0)? $result['error'] : null;
+        $result = $this->zarinpalComposer->verify($status, $amount, $authority);
+        $this->result['data']['zarinpalVerifyResult'] = $result;
 
         if (isset($result['RefID']) && strcmp($result['Status'], 'success') == 0) {
-            $this->refId = $result['RefID'];
-            $this->status = 'success';
-            $this->cardPanHash = $result['ExtraDetail']['Transaction']['CardPanHash'];
-            $this->cardPanMask = $result['ExtraDetail']['Transaction']['CardPanMask'];
-        } else if (strcmp($result['Status'], 'canceled') == 0 ||
-            (strcmp($result['Status'], 'error') == 0 && (
-                    strcmp($result['error'], '-22') == 0 || //وارد درگاه بانک شده و انصراف زده
-                    strcmp($result['error'], '-21') == 0 // قبل از ورود به درگاه بانک در همان صفحه زرین پال انصراف زده
-                ))) {
-            $this->status = 'canceled';
+            $this->result['status'] = true;
+            //$this->result['data']['zarinpalVerifyResult'] = $result;
+            //$this->result['data']['RefID'] = $result['RefID'];
+            //$this->cardPanHash = isset($result['ExtraDetail']['Transaction']['CardPanHash'])?$result['ExtraDetail']['Transaction']['CardPanHash']:null;
+            //$this->cardPanMask = isset($result['ExtraDetail']['Transaction']['CardPanMask'])?$result['ExtraDetail']['Transaction']['CardPanMask']:null;
         } else {
-            $this->status = 'canceled';
+            $this->result['status'] = false;
+            if (strcmp($result['Status'], 'canceled') == 0) {
+                $this->result['message'][] = 'کاربر از پرداخت انصراف داده است.';
+            } else if (strcmp($result['Status'], 'verified_before') ==0) {
+                $this->result['message'][] = 'عملیات پرداخت با موفقیت انجام شده ولی قبلا عملیات PaymentVertification بر روی این تراکنش انجام شده است';
+            } else {
+                if(strcmp($result['error'], '-21') == 0) {
+                    $this->result['message'][] = 'کاربر قبل از ورود به درگاه بانک در همان صفحه زرین پال منصرف شده است.';
+                } else if(strcmp($result['error'], '-22') == 0) {
+                    $this->result['message'][] = 'کاربر بعد از ورود به درگاه بانک منصرف شده است.';
+                } else {
+                    $this->result['message'][] = 'خطایی در پرداخت رخ داده است.';
+                }
+            }
         }
         return $result;
     }
 
-    private function handleSuccessStatus(): void
+    /**
+     * @param string $refId
+     * @param Transaction $transaction
+     * @param string|null $cardPanMask
+     */
+    private function handleSuccessStatus(string $refId, Transaction $transaction, string $cardPanMask=null): void
     {
-        $bankAccount = null;
-        if(isset($this->cardPanMask) && strlen($this->cardPanMask)>0) {
-            $bankAccount = Bankaccount::firstOrCreate(['accountNumber'=>$this->cardPanMask]);
+        $bankAccountId = null;
+
+        if($cardPanMask!=null) {
+            $bankAccount = Bankaccount::firstOrCreate(['accountNumber'=>$cardPanMask]);
+            $bankAccountId = $bankAccount->id;
         }
 
-        $this->changeTransactionStatusToSuccessful($this->refId, $bankAccount->id);
+        $this->changeTransactionStatusToSuccessful($refId, $transaction, $bankAccountId);
 
-        $this->order->closeWalletPendingTransactions();
+        $transaction->order->closeWalletPendingTransactions();
 
-        $this->updateOrderPaymentStatus();
+        $this->updateOrderPaymentStatus($transaction);
 
         /** Attaching user bons for this order */
-        $this->givesOrderBonsToUser();
+        $this->givesOrderBonsToUser($transaction);
 
-        $this->result['transactionID'] = $this->refId;
-        $this->result['sendSMS'] = true;
-        $this->result['Status'] = 'success';
+        $this->result['status'] = true;
+        $this->result['message'][] = 'تراکنش با موفقیت انجام شد.';
+        $this->result['data']['transactionID'] = $refId;
     }
 
-    private function handleCanceledStatus(): void
+    private function handleCanceledStatus(Transaction $transaction): void
     {
-        $this->result['Status'] = 'canceled';
+        $this->result['status'] = false;
 
-        $this->order->close(config('constants.PAYMENT_STATUS_UNPAID'), config('constants.ORDER_STATUS_CANCELED'));
+        $transaction->order->close(config('constants.PAYMENT_STATUS_UNPAID'), config('constants.ORDER_STATUS_CANCELED'));
         //ToDo : use updateWithoutTimestamp
-        $this->order->timestamps = false;
-        $this->order->update();
-        $this->order->timestamps = true;
+        $transaction->order->timestamps = false;
+        $transaction->order->update();
+        $transaction->order->timestamps = true;
 
-        $this->transaction->transactionstatus_id = config('constants.TRANSACTION_STATUS_UNSUCCESSFUL');
-        $this->transaction->update();
+        $transaction->transactionstatus_id = config('constants.TRANSACTION_STATUS_UNSUCCESSFUL');
+        $transaction->update();
 
-        $totalWalletRefund = $this->order->refundWalletTransaction();
+        $totalWalletRefund = $transaction->order->refundWalletTransaction();
 
         if ($totalWalletRefund > 0) {
-            $this->result['walletAmount'] = $totalWalletRefund;
-            $this->result['walletRefund'] = true;
+            $this->result['data']['walletAmount'] = $totalWalletRefund;
+            $this->result['data']['walletRefund'] = true;
         }
     }
 
@@ -301,10 +234,30 @@ class Zarinpal extends GateWayAbstract
      * @return array
      */
     public function forceVerify(int $amount, string $authority) {
-        $this->status = 'OK';
-        $this->amount = $amount;
-        $this->authority = $authority;
-        $verifyZarinpalResult = $this->verifyZarinpal();
+        $verifyZarinpalResult = $this->verifyZarinpal('OK', $amount, $authority);
         return $verifyZarinpalResult;
+    }
+
+    /**
+     * @param array $callbackData
+     * @return array
+     */
+    private function validateCallbackData(array $callbackData): array
+    {
+        $validator = Validator::make($callbackData, [
+            'Authority' => 'required|string|min:36|max:36',
+            'Status' => 'required|string|min:2|max:3',
+        ]);
+        if ($validator->fails()) {
+            $this->result['status'] = false;
+            foreach ($validator->messages()->getMessages() as $field_name => $messages) {
+                $this->result['message'][] = $messages;
+            }
+            $this->result['data']['callbackData'] = $callbackData;
+        }
+        return [
+            (isset($callbackData['Authority'])?$callbackData['Authority']:null),
+            (isset($callbackData['Status'])?$callbackData['Status']:null)
+        ];
     }
 }

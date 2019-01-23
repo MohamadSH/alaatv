@@ -8,8 +8,8 @@
 
 namespace App\Classes\OrderProduct\RefinementProduct;
 
-use App\Attributevalue;
 use App\Product;
+use App\Attributevalue;
 use Illuminate\Support\Collection;
 use App\Collection\ProductCollection;
 

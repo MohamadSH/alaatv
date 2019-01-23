@@ -31,12 +31,22 @@ class GateWayFactory
      */
     public function setGateWay(string $gateWay)
     {
-        $className = __NAMESPACE__ . '\\' . ucfirst($gateWay) . '\\' . ucfirst($gateWay);
+        $className = $this->getGatewayNameSpace($gateWay);
         if (class_exists($className)) {
             $this->gateWayClass = new $className($this->transactionController);
         } else {
             throw new Exception('GateWay {' . $className . '} not found.');
         }
         return $this->gateWayClass;
+    }
+
+    /**
+     * @param string $gateWay
+     * @return string
+     */
+    private function getGatewayNameSpace(string $gateWay): string
+    {
+        $className = __NAMESPACE__ . '\\' . ucfirst($gateWay) . '\\' . ucfirst($gateWay);
+        return $className;
     }
 }

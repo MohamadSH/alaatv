@@ -26,48 +26,6 @@ class OnlinePaymentController extends Controller
      */
     private $transactionController;
 
-    /**
-     * @var Order
-     */
-    private $order;
-
-    /**
-     * @var Transaction
-     */
-    private $transaction;
-
-    /**
-     * @var User
-     */
-    private $user;
-
-    /**
-     * @var Refinement
-     */
-    private $refinementRequest;
-
-    /**
-     * @var int
-     */
-    private $cost;
-    /**
-     * @var int
-     */
-    private $donateCost;
-    /**
-     * @var int
-     */
-    private $paidFromWalletCost;
-    /**
-     * @var string
-     */
-    private $description;
-
-    /**
-     * @var string
-     */
-    private $device;
-
     public function __construct(OrderController $orderController, TransactionController $transactionController)
     {
         $this->orderController = $orderController;
@@ -82,11 +40,9 @@ class OnlinePaymentController extends Controller
      */
     public function paymentRedirect(string $paymentMethod, string $device, Request $request)
     {
-        /*$request->offsetSet('order_id", 137);*/
-        /*$request->offsetSet('transaction_id", 65);*/
+        /*$request->offsetSet('order_id', 137);*/
+        /*$request->offsetSet('transaction_id', 65);*/
         $request->offsetSet('payByWallet', true);
-
-        $this->device = $device;
 
         $refinementRequestStrategy = $this->gteRefinementRequestStrategy($request);
 
@@ -95,79 +51,93 @@ class OnlinePaymentController extends Controller
         $inputData['user'] = $request->user();
         $data = $this->launchRefinementRequest($inputData, $refinementRequestStrategy);
 
+        /** @var User $user */
+        $user = $data['user'];
+        /** @var Order $order */
+        $order = $data['order'];
+        /** @var int $cost */
+        $cost = (int)$data['cost'];
+        /** @var Transaction $transaction */
+        $transaction = $data['transaction'];
+        /** @var string $description */
+        $description = $data['description'];
+
+
         if($data['statusCode']!=Response::HTTP_OK) {
             return response()->json([
                 'error' => $data['message']
             ], $data['statusCode']);
         }
 
-        $this->setDescription();
+        $description = $this->setDescription($description, $order, $user);
 
-        $this->setCustomerDescription($request);
+        $this->setCustomerDescription($request, $order);
 
 
-        if ($this->isRedirectable()) {
-            $data = [
-                'description' => $this->description,
-                'transaction' => $this->transaction,
-                'device' => $this->device,
-            ];
+        if ($this->isRedirectable($cost)) {
+
+            $callbackUrl = action('OnlinePaymentController@verifyPayment', ['paymentMethod' => $paymentMethod, 'device' => $device]);
+
             $gateWay = new GateWayFactory($this->transactionController);
-            $gateWay->setGateWay($paymentMethod)->redirect($data);
+            $gateWay->setGateWay($paymentMethod)->redirect($transaction, $callbackUrl, $description);
 
             /*return response()->json([
                 'message' => 'done'
             ], Response::HTTP_OK);*/
 
-            return redirect(action("HomeController@error404"));
+            return redirect(action('HomeController@error404'));
         } else {
-            return redirect(action('OfflinePaymentController@verifyPayment', ['device' => $device, 'paymentMethod' => 'wallet', 'coi' => $this->order->id]));
+            return redirect(action('OfflinePaymentController@verifyPayment', ['device' => $device, 'paymentMethod' => 'wallet', 'coi' => $order->id]));
         }
     }
 
 
-
-
-
-
     /**
+     * @param int $cost
      * @return bool
      */
-    private function isRedirectable() {
-        if ($this->cost > 0) {
+    private function isRedirectable(int $cost) {
+        if ($cost > 0) {
             return true;
         } else {
             return false;
         }
     }
 
-    private function setDescription()
+    /**
+     * @param string $description
+     * @param Order $order
+     * @param User $user
+     * @return string
+     */
+    private function setDescription(string $description, Order $order, User $user): string
     {
-        $this->description .= "آلاء - " . $this->user->mobile . " - محصولات: ";
+        $description .= 'آلاء - ' . $user->mobile . ' - محصولات: ';
 
-        $orderProducts = $this->order->orderproducts->load('product');
+        $orderProducts = $order->orderproducts->load('product');
 
         foreach ($orderProducts as $orderProduct) {
             if (isset($orderProduct->product->id))
-                $this->description .= $orderProduct->product->name . " , ";
+                $description .= $orderProduct->product->name . ' , ';
             else
-                $this->description .= "یک محصول نامشخص , ";
+                $description .= 'یک محصول نامشخص , ';
         }
+        return $description;
     }
 
     /**
      * @param Request $request
+     * @param Order $order
      */
-    private function setCustomerDescription(Request $request): void
+    private function setCustomerDescription(Request $request, Order $order): void
     {
-        if ($request->has("customerDescription")) {
-            $customerDescription = $request->get("customerDescription");
-            $this->order->customerDescription = $customerDescription;
+        if ($request->has('customerDescription')) {
+            $customerDescription = $request->get('customerDescription');
+            $order->customerDescription = $customerDescription;
             //ToDo : use updateWithoutTimestamp
-            $this->order->timestamps = false;
-            $this->order->update();
-            $this->order->timestamps = true;
-
+            $order->timestamps = false;
+            $order->update();
+            $order->timestamps = true;
         }
     }
 
@@ -188,38 +158,27 @@ class OnlinePaymentController extends Controller
      */
     public function verifyPayment(string $paymentMethod, string $device, Request $request)
     {
-        $result = [
-            'sendSMS' => false,
-            'Status' => 'error'
-        ];
+        $gateWay = new GateWayFactory($this->transactionController);
+        $result = $gateWay->setGateWay($paymentMethod)->verify($request->all());
 
-        $this->device = $device;
-
-        $data = [
-            'callbackData' => $request->all(),
-            'result' => $result
-        ];
-//        $gateWay = new GateWay($this->transactionController);
-//        $result = $gateWay->setGateWay($paymentMethod)->verify($data);
-
-        /*$sendSMS = $result['sendSMS'];
-        if ($sendSMS && isset($this->order)) {
-            $user = $this->order->user;
-            $this->order = $this->order->fresh();
-            $user->notify(new InvoicePaid($this->order));
-            Cache::tags('bon')->flush();
-        }*/
+//        if ($result['status'] && isset($result['data']['order'])) {
+//            /** @var Order $order */
+//            $order = $result['data']['order'];
+//            $user = $order->user;
+//            $order = $order->fresh();
+//            $user->notify(new InvoicePaid($order));
+//            Cache::tags('bon')->flush();
+//        }
 
         $request->session()->flash('result', $result);
 
-        if (isset($result['transactionID'])) {
+        if ($result['status']) {
             $status = 'successful';
         } else {
             $status = 'failed';
         }
 
-        //'Status'(index) going to be 'success', 'error' or 'canceled'
-        return redirect(action("OnlinePaymentController@showPaymentStatus", [
+        return redirect(action('OnlinePaymentController@showPaymentStatus', [
             'status' => $status,
             'paymentMethod' => $paymentMethod,
             'device' => $device
@@ -248,15 +207,9 @@ class OnlinePaymentController extends Controller
      */
     private function launchRefinementRequest(array $inputData, Refinement $refinementRequestStrategy): array
     {
-        $this->refinementRequest = new RefinementLauncher($inputData, $refinementRequestStrategy);
-        $data = $this->refinementRequest->getData();
+        $refinementLauncher = new RefinementLauncher($inputData, $refinementRequestStrategy);
+        $data = $refinementLauncher->getData();
 
-        $this->user = $data['user'];
-        $this->order = $data['order'];
-        $this->cost = (int)$data['cost'];
-        $this->donateCost = $data['donateCost'];
-        $this->transaction = $data['transaction'];
-        $this->description = $data['description'];
         return $data;
     }
 
@@ -269,7 +222,6 @@ class OnlinePaymentController extends Controller
      */
     public function showPaymentStatus(string $status, string $paymentMethod, string $device, Request $request) {
         $result = $request->session()->get('result');
-        $this->device = $device;
         return [
             'status' => $status,
             'paymentMethod' => $paymentMethod,

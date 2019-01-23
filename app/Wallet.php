@@ -164,8 +164,6 @@ class Wallet extends Model
         /**
          * unused variable
         */
-        /*$failed = true;*/
-        /*$responseText = "";*/
 
         $newBalance = $this->balance + $amount;
         $this->balance = $newBalance;
