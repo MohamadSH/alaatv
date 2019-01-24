@@ -1881,10 +1881,10 @@ class UserController extends Controller
 
     /**
      * @param array $data
-     * @param User|null $registerer
+     * @param User|null $authenticatedUser
      * @return array
      */
-    public function new(array $data , User $registerer=null) : array
+    public function new(array $data , User $authenticatedUser=null) : array
     {
         //ToDo : To be placed in a middleware
         $softDeletedUsers = User::onlyTrashed()
@@ -1903,8 +1903,7 @@ class UserController extends Controller
 
         $user = new User();
         try {
-            //ToDo : pass authenticated user
-            $this->fillContentFromRequest($data, $user);
+            $this->fillContentFromRequest($data , $authenticatedUser , $user);
         } catch (FileNotFoundException $e) {
             return [
                 "error" => true,
@@ -1920,7 +1919,7 @@ class UserController extends Controller
         $error = false;
         if ($user->save()) {
             if (in_array("roles" , $data))
-                $this->attachRoles($data["roles"], $registerer, $user);
+                $this->attachRoles($data["roles"], $authenticatedUser, $user);
 
             $resultCode = Response::HTTP_OK;
 
