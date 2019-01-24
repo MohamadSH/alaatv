@@ -16,7 +16,8 @@ use Iatstuti\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
-use phpDocumentor\Reflection\DocBlock\Tags\Uses;
+use Kalnoy\Nestedset\QueryBuilder;
+use phpDocumentor\Reflection\Types\This;
 
 /**
  * App\Order
@@ -68,30 +69,30 @@ use phpDocumentor\Reflection\DocBlock\Tags\Uses;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[]         $unpaidTransactions
  * @property-read \App\User|null                                                      $user
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|\App\Order onlyTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Order onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Order whereCheckOutDateTime($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Order whereCompletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Order whereCost($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Order whereCostwithoutcoupon($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Order whereCouponDiscount($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Order whereCouponDiscountAmount($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Order whereCouponId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Order whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Order whereCustomerDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Order whereCustomerExtraInfo($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Order whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Order whereDiscount($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Order whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Order whereOrderstatusId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Order wherePaymentstatusId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Order whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Order whereUserId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Order withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Order withoutTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereCheckOutDateTime($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereCompletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereCost($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereCostwithoutcoupon($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereCouponDiscount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereCouponDiscountAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereCouponId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereCustomerDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereCustomerExtraInfo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereDiscount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderstatusId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order wherePaymentstatusId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereUserId($value)
+ * @method static \Illuminate\Database\Query\Builder|Order withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Order withoutTrashed()
  * @mixin \Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Order newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Order newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Order newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Order newQuery()
  * @property-read array|bool $coupon_discount_type
  * @property-read mixed $number_of_products
  */
@@ -146,10 +147,10 @@ class Order extends Model
     ];
 
     protected $appends = [
-        "invoice"
+//        "invoice"
     ];
 
-    const  OPEN_ORDER_STATUSES = [
+    const OPEN_ORDER_STATUSES = [
         1,
         4,
         8,
@@ -169,17 +170,22 @@ class Order extends Model
 
     public static function orderStatusFilter($orders, $orderStatusesId)
     {
+        /** @var Order $orders */
         return $orders->whereIn('orderstatus_id', $orderStatusesId);
     }
 
     public static function UserMajorFilter($orders, $majorsId)
     {
+        /** @var Order $orders */
         if (in_array(0, $majorsId))
-            $orders = $orders->whereHas('user', function ($q) use ($majorsId) {
+            $orders = $orders->whereHas(
+                'user', function ($q) use ($majorsId) {
+                /** @var QueryBuilder $q */
                 $q->whereDoesntHave("major");
             });
         else
             $orders = $orders->whereHas('user', function ($q) use ($majorsId) {
+                /** @var QueryBuilder $q */
                 $q->whereIn("major_id", $majorsId);
             });
         return $orders;
@@ -187,6 +193,7 @@ class Order extends Model
 
     public static function paymentStatusFilter($orders, $paymentStatusesId)
     {
+        /** @var QueryBuilder $orders */
         return $orders->whereIn('paymentstatus_id', $paymentStatusesId);
     }
 
@@ -220,6 +227,7 @@ class Order extends Model
     {
         return $this->hasMany('App\Transaction')
             ->where(function ($q) {
+                /** @var QueryBuilder $q */
                 $q->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
                     ->orWhere("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUSPENDED"));
             });
@@ -237,6 +245,9 @@ class Order extends Model
             ->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_UNPAID"));
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany|Transaction
+     */
     public function suspendedTransactions()
     {
         return $this->hasMany('App\Transaction')
@@ -268,6 +279,7 @@ class Order extends Model
     {
         return $this->hasMany('App\Orderproduct')
                     ->where(function ($q) {
+                        /** @var QueryBuilder $q */
                         $q->whereNull("orderproducttype_id")
                             ->orWhere("orderproducttype_id", config("constants.ORDER_PRODUCT_TYPE_DEFAULT"));
                     });
@@ -289,6 +301,7 @@ class Order extends Model
      * @param boolean $calculateOrderCost
      * @param boolean $calculateOrderproductCost
      *
+     * @param string $mode
      * @return array
      */
     public function obtainOrderCost($calculateOrderCost = false, $calculateOrderproductCost = true, $mode = "DEFAULT")
@@ -464,7 +477,10 @@ class Order extends Model
 
     public function CompletedAt_Jalali()
     {
-        $explodedDateTime = explode(" ", $this->completed_at);
+        /**
+         * Unnecessary variable
+        */
+        /*$explodedDateTime = explode(" ", $this->completed_at);*/
         //        $explodedTime = $explodedDateTime[1] ;
         return $this->convertDate($this->completed_at, "toJalali");
     }
@@ -533,12 +549,19 @@ class Order extends Model
         return $this->orderproducts->count();
     }
 
+    /**
+     * @param null $type
+     * @param array $filters
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany|Orderproduct
+     */
     public function orderproducts($type = null , $filters = [])
     {
         if (isset($type))
             if ($type == config("constants.ORDER_PRODUCT_TYPE_DEFAULT")) {
                 $relation =  $this->hasMany('App\Orderproduct')
-                            ->where(function ($q) use ($type) {
+                            ->where(
+                                function ($q) use ($type) {
+                                /** @var QueryBuilder $q */
                                 $q->where("orderproducttype_id", $type)
                                   ->orWhereNull("orderproducttype_id");
                             });
@@ -637,6 +660,7 @@ class Order extends Model
         $calculatedOrderproducts->updateCostValues();
 
         $calculatedOrderproducts = $orderCost["calculatedOrderproducts"];
+        /** @var Orderproduct $orderproduct */
         foreach ($calculatedOrderproducts as $orderproduct)
         {
             $newPriceInfo = $orderproduct->newPriceInfo ;
@@ -655,7 +679,7 @@ class Order extends Model
      *
      * @param string $bonName
      *
-     * @return array
+     * @return array [$totalSuccessfulBons, $totalFailedBons]
      */
     public function giveUserBons($bonName)
     {
@@ -672,6 +696,7 @@ class Order extends Model
             if ($user->userbons->where("orderproduct_id", $orderproduct->id)
                                ->isNotEmpty())
                 continue;
+            /** @var Product $simpleProduct */
             $simpleProduct = $orderproduct->product;
             $bons = $simpleProduct->bons->where("name", $bonName);
             if ($bons->isEmpty()) {
@@ -728,12 +753,16 @@ class Order extends Model
 
     }
 
-
     public function closeWalletPendingTransactions()
     {
-        $walletTransactions = $this->suspendedTransactions
+        /**
+         * for reduce query
+        */
+        /*$walletTransactions = $this->suspendedTransactions*/
+        $walletTransactions = $this->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUSPENDED"))
             ->where("paymentmethod_id", config("constants.PAYMENT_METHOD_WALLET"));
         foreach ($walletTransactions as $transaction) {
+            /** @var Transaction $transaction */
             $transaction->transactionstatus_id = config("constants.TRANSACTION_STATUS_SUCCESSFUL");
             $transaction->update();
         }
@@ -748,10 +777,10 @@ class Order extends Model
 
 
     /**
-     * @param $products
+     * @param ProductCollection $products
      * @return ProductCollection
      */
-    public function checkProductsExistInOrderProducts($products): ProductCollection {
+    public function checkProductsExistInOrderProducts(ProductCollection $products): ProductCollection {
         $notDuplicateProduct = new ProductCollection();
         foreach ($products as $product) {
             if($this->hasTheseProducts([$product->id])) {

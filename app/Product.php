@@ -14,6 +14,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\{Eloquent\Builder, Eloquent\Model, Eloquent\SoftDeletes};
 use Illuminate\Support\{Collection, Facades\Cache, Facades\Config};
+use Kalnoy\Nestedset\QueryBuilder;
 
 /**
  * App\Product
@@ -99,6 +100,7 @@ use Illuminate\Support\{Collection, Facades\Cache, Facades\Config};
  * @method static Builder|Product wherePageView($value)
  * @property string|null $redirectUrl آدرسی که صفحه محصول به آن به صورت همیشگی ریدایرکت می شود
  * @method static Builder|Product whereRedirectUrl($value)
+ *
  */
 class Product extends Model implements Advertisable, Taggable, SeoInterface, FavorableInterface
 {
@@ -241,6 +243,7 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
      */
     public static function getProducts($configurable = 0, $enable = 0, $excluded = [], $orderBy = "", $orderMethod = "")
     {
+        /** @var Product $products */
         if ($configurable == 1) {
             $products = Product::configurable();
             if ($enable == 1)
@@ -321,9 +324,9 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
     /**
      * Scope a query to only include active Products.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param Builder $query
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function scopeActive($query)
     {
@@ -334,9 +337,9 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
     /**
      * Scope a query to only include enable(or disable) Products.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param Builder $query
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function scopeEnable($query)
     {
@@ -346,9 +349,9 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
     /**
      * Scope a query to only include configurable Products.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param Builder $query
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function scopeConfigurable($query)
     {
@@ -358,9 +361,9 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
     /**
      * Scope a query to only include simple Products.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param Builder $query
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function scopeSimple($query)
     {
@@ -376,9 +379,9 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
     /**
      * Scope a query to only include valid Products.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param Builder $query
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function scopeValid($query)
     {
@@ -387,10 +390,12 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
 
         return $query
             ->where(function ($q) use ($now) {
+                /** @var QueryBuilder $q */
                 $q->where('validSince', '<', $now)
                   ->orWhereNull('validSince');
             })
             ->where(function ($q) use ($now) {
+                /** @var QueryBuilder $q */
                 $q->where('validUntil', '>', $now)
                   ->orWhereNull('validUntil');
             });
@@ -756,6 +761,7 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
             if (!empty($parentsArray)) {
                 foreach ($parentsArray as $parent) {
                     // ToDo : It does not check parents in a hierarchy to the root
+                    /** @var Product $parent */
                     $bons = $parent->getBons($bonName);
                     if ($bons->isNotEmpty())
                         break;
@@ -776,6 +782,7 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
     {
         $key = "product:BoneName:" . $this->cacheKey() . "-bone:" . $bonName;
         return Cache::remember($key, Config::get("constants.CACHE_600"), function () use ($bonName, $enable) {
+            /** @var Bon $bons */
             $bons = $this->bons();
             if (strlen($bonName) > 0)
                 $bons = $bons->where("name", $bonName);
@@ -1032,6 +1039,7 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
     {
         $product = $this;
 
+        /** @var Productfile $files */
         $files = $product->hasMany('\App\Productfile')
                          ->getQuery()
                          ->enable();
@@ -1618,8 +1626,7 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
     {
         //ToDo : Shouls be deprecated . It is being used in some blades
         if (isset($attributeType)) {
-            $attributeType = Attributetype::all()
-                                          ->where("name", $attributeType)
+            $attributeType = Attributetype::where("name", $attributeType)
                                           ->first();
             $attributesArray = [];
             foreach ($this->attributeset->attributes()
@@ -1689,6 +1696,7 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
             if (!empty($parentsArray)) {
                 foreach ($parentsArray as $parent) {
                     // ToDo : It does not check parents in a hierarchy to the root
+                    /** @var Product $parent */
                     $bons = $parent->getBons($bonName);
                     if ($bons->isNotEmpty()) {
                         $bon = $bons->first();
@@ -1816,10 +1824,11 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
     }
 
     /**
-     * @param string $bonName
+     * @param $bon
      * @return bool
      */
-    public function canApplyBon(string $bonName) {
+    public function canApplyBon($bon) {
+        /** @var Collection $bon */
         return (
             !(
                 $this->isFree ||
@@ -1830,7 +1839,7 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
                 $this->basePrice != 0
             )
             &&
-            $this->getTotalBons($bonName)->isNotEmpty()
+            $bon->isNotEmpty()
         );
     }
 

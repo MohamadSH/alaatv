@@ -26,23 +26,23 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read \App\Attributetype|null                                        $attributetype
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Attributevalue[] $attributevalues
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|\App\Attribute onlyTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Attribute onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Attribute whereAttributecontrolId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Attribute whereAttributetypeId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Attribute whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Attribute whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Attribute whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Attribute whereDisplayName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Attribute whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Attribute whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Attribute whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Attribute withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Attribute withoutTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Attribute whereAttributecontrolId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Attribute whereAttributetypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Attribute whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Attribute whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Attribute whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Attribute whereDisplayName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Attribute whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Attribute whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Attribute whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|Attribute withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Attribute withoutTrashed()
  * @mixin \Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Attribute newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Attribute newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Attribute query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Attribute newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Attribute newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Attribute query()
  */
 class Attribute extends Model
 {
@@ -86,6 +86,9 @@ class Attribute extends Model
         return $this->belongsTo('App\Attributetype');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany|Attributevalue
+     */
     public function attributevalues()
     {
         return $this->hasMany('App\Attributevalue');

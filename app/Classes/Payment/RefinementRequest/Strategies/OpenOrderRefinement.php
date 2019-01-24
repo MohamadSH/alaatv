@@ -23,8 +23,9 @@ class OpenOrderRefinement extends Refinement
         if($this->statusCode!=Response::HTTP_OK) {
             return $this;
         }
-        $openOrder =  $this->getOpenOrder();
-        if ($openOrder !== false && $openOrder->orderproducts->isNotEmpty()) {
+        $openOrder = $this->getOpenOrder();
+        $openOrder->load('orderproducts');
+        if ($openOrder->orderproducts->isNotEmpty()) {
             $this->order = $openOrder;
             $this->getOrderCost();
             $this->donateCost = $this->order->getDonateCost();
@@ -44,15 +45,10 @@ class OpenOrderRefinement extends Refinement
     }
 
     /**
-     * @return bool|Order
+     * @return Order
      */
-    private function getOpenOrder()
+    private function getOpenOrder(): Order
     {
-        $openOrder = $this->user->openOrders->first();
-        $openOrder->load(['transactions', 'coupon' , 'orderproducts']);
-        if(isset($openOrder))
-            return $openOrder;
-        else
-            return false;
+        return $this->firstOrCreateOpenOrder($this->user);
     }
 }

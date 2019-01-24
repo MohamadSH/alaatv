@@ -8,6 +8,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Collection;
 
 class CheckPermissionForSendExtraAttributesCost
 {
@@ -31,8 +32,8 @@ class CheckPermissionForSendExtraAttributesCost
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Closure $next
+     * @param Request $request
+     * @param Closure $next
      * @param null $guard
      * @return mixed
      */
@@ -41,13 +42,11 @@ class CheckPermissionForSendExtraAttributesCost
         if (Auth::guard($guard)->check()) {
             if ($request->has('extraAttribute')) {
                 if (!$this->user->can(config("constants.ATTACH_EXTRA_ATTRIBUTE_ACCESS"))) {
-
                     $productId = $request->get('product_id');
                     $product = Product::findOrFail($productId);
-
                     $attributesValues = $this->getAttributesValuesFromProduct($request, $product);
-
                     $this->syncExtraAttributesCost($request, $attributesValues);
+                    $request->offsetSet("parentProduct", $product);
                 }
             }
         } else {
@@ -60,15 +59,16 @@ class CheckPermissionForSendExtraAttributesCost
 
     /**
      * @param Request $request
-     * @param array $attributesValues
+     * @param Collection $attributesValues
      */
-    public function syncExtraAttributesCost(Request $request, $attributesValues)
+    public function syncExtraAttributesCost(Request $request, Collection $attributesValues)
     {
         $extraAttributes = $request->get('extraAttribute');
         foreach ($attributesValues as $key => $attributesValue) {
             foreach ($extraAttributes as $key1 => $extraAttribute) {
                 if ($extraAttribute['id'] == $attributesValue['id']) {
                     $extraAttributes[$key1]['cost'] = $attributesValue->pivot->extraCost;
+                    $extraAttributes[$key1]['object'] = $attributesValue;
                 }
             }
         }
@@ -78,9 +78,9 @@ class CheckPermissionForSendExtraAttributesCost
     /**
      * @param Request $request
      * @param Product $product
-     * @return mixed
+     * @return Collection|null
      */
-    public function getAttributesValuesFromProduct(Request $request, Product $product)
+    private function getAttributesValuesFromProduct(Request $request, Product $product): ?Collection
     {
         $extraAttributes = $request->get('extraAttribute');
         $extraAttributesId = array_column($extraAttributes, 'id');

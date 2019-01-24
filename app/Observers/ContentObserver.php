@@ -77,7 +77,6 @@ class ContentObserver
         //
     }
 
-
     /**
      * When issuing a mass update via Eloquent,
      * the saved and updated model events will not be fired for the updated models.

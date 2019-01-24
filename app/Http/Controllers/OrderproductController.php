@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Attribute;
+use App\Attributevalue;
 use App\Bon;
 use App\Checkoutstatus;
+use App\Collection\ProductCollection;
 use App\Collection\OrderproductCollection;
 use App\Http\Requests\InsertUserBonRequest;
 use App\Http\Requests\OrderProduct\AttachExtraAttributesRequest;
@@ -16,14 +18,17 @@ use App\User;
 use App\Websitesetting;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\URL;
 use App\Http\Requests\OrderProduct\OrderProductStoreRequest;
 use App\Traits\OrderCommon;
-
+//use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 
 use App\Classes\OrderProduct\RefinementProduct\RefinementFactory;
+use Kalnoy\Nestedset\QueryBuilder;
 
 class OrderproductController extends Controller
 {
@@ -45,7 +50,7 @@ class OrderproductController extends Controller
         $this->middleware([
             'CheckHasOpenOrder',
             'CheckPermissionForSendOrderId',
-            'CheckPermissionForSendExtraAttributesCost'
+//            'checkPermissionForSendExtraAttributesCost'
         ], [
             'only' => ['store']
         ]);
@@ -55,7 +60,7 @@ class OrderproductController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function index()
     {
@@ -65,7 +70,7 @@ class OrderproductController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function create()
     {
@@ -76,33 +81,34 @@ class OrderproductController extends Controller
      * @param array $data
      * @param User $user
      * @param Orderproduct $orderProduct
+     * @param Product $product
      */
-    private function applyOrderProductBon(array $data, User $user, Orderproduct $orderProduct): void
+    private function applyOrderProductBon(array $data, User $user, Orderproduct $orderProduct, Product $product): void
     {
         $bonName = config("constants.BON1");
 
-        $canApplyBon = $this->canApplyBonForRequest($data, $bonName, $orderProduct);
-        if ($canApplyBon) {
+        $bon = $product->getTotalBons($bonName);
 
-            $bon = $orderProduct->product->getTotalBons($bonName)->first();
-            $userValidBons = $user->userValidBons($bon);
+        $canApplyBon = $this->canApplyBonForRequest($data, $product, $bon);
+        if ($canApplyBon) {
+            $userValidBons = $user->userValidBons($bon->first());
 
             if ($userValidBons->isNotEmpty()) {
-                $orderProduct->applyBons($userValidBons, $bon);
+                $orderProduct->applyBons($userValidBons, $bon->first());
             }
         }
     }
 
     /**
      * @param array $data
-     * @param string $bonName
-     * @param Orderproduct $orderProduct
+     * @param Product $product
+     * @param Collection $bon
      * @return bool
      */
-    private function canApplyBonForRequest(array $data, string $bonName, Orderproduct $orderProduct)
+    private function canApplyBonForRequest(array $data, Product $product, Collection $bon): bool
     {
         if (!isset($data["withoutBon"]) || !$data["withoutBon"]) {
-            return $orderProduct->product->canApplyBon($bonName);
+            return $product->canApplyBon($bon);
         } else {
             return false;
         }
@@ -118,9 +124,44 @@ class OrderproductController extends Controller
         foreach ($extraAttributes as $value) {
             $orderProduct->attributevalues()->attach(
                 $value['id'],
-                ["extraCost" => $value['cost']]
+                [
+                    "extraCost" => $value['cost']
+                ]
             );
         }
+    }
+
+
+
+    /**
+     * @param Request $request
+     * @param Collection $attributesValues
+     */
+    public function syncExtraAttributesCost(Request $request, Collection $attributesValues)
+    {
+        $extraAttributes = $request->get('extraAttribute');
+        foreach ($attributesValues as $key => $attributesValue) {
+            foreach ($extraAttributes as $key1 => $extraAttribute) {
+                if ($extraAttribute['id'] == $attributesValue['id']) {
+                    $extraAttributes[$key1]['cost'] = $attributesValue->pivot->extraCost;
+                    $extraAttributes[$key1]['object'] = $attributesValue;
+                }
+            }
+        }
+        $request->offsetSet("extraAttribute", $extraAttributes);
+    }
+
+    /**
+     * @param Request $request
+     * @param Product $product
+     * @return Collection|null
+     */
+    public function getAttributesValuesFromProduct(Request $request, Product $product): ?Collection
+    {
+        $extraAttributes = $request->get('extraAttribute');
+        $extraAttributesId = array_column($extraAttributes, 'id');
+        $attributesValues = $product->getAttributesValueByIds($extraAttributesId);
+        return $attributesValues;
     }
 
     /**
@@ -144,7 +185,7 @@ class OrderproductController extends Controller
      *
      * @param  int $id
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function show($id)
     {
@@ -156,7 +197,7 @@ class OrderproductController extends Controller
      *
      * @param  \App\Orderproduct $orderproduct
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function edit($orderproduct)
     {
@@ -165,12 +206,14 @@ class OrderproductController extends Controller
         $extraCheckboxCollection = collect();
         $attributeSet = $orderproduct->product->attributeset;
         $extraAttributes = Attribute::whereHas("attributegroups", function ($q) use ($attributeSet) {
+            /** @var QueryBuilder $q */
             $q->where("attributetype_id", 2);
             $q->where("attributeset_id", $attributeSet->id);
         })->get();
         foreach ($extraAttributes as $attribute) {
             $orderproductAttributevalues = $orderproduct->attributevalues->where("attribute_id", $attribute->id);
             $controlName = $attribute->attributecontrol->name;
+            /** @var Collection|Attributevalue $attributevalues */
             $attributevalues = $attribute->attributevalues->where("attribute_id", $attribute->id)
                 ->sortBy("order");
             if (!$attributevalues->isEmpty()) {
@@ -233,8 +276,8 @@ class OrderproductController extends Controller
      *
      * @param  \Illuminate\Http\Request $request
      * @param  \App\Orderproduct $orderproduct
-     *
-     * @return \Illuminate\Http\Response
+     * @param UserbonController $userbonController
+     * @return Response
      */
     public function update(Request $request, $orderproduct, UserbonController $userbonController)
     {
@@ -291,7 +334,9 @@ class OrderproductController extends Controller
                             $response = $userbonController->store($request);
                             if ($response->getStatusCode() == 200) {
                                 //ToDo : Appropriate response
-                            }
+                            }/* else {
+
+                            }*/
                         }
                     }
                 }
@@ -337,9 +382,9 @@ class OrderproductController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \app\Orderproduct $orderproduct
-     *
-     * @return \Illuminate\Http\Response
+     * @param  Orderproduct $orderproduct
+     * @return Response
+     * @throws \Exception
      */
     public function destroy(Orderproduct $orderproduct)
     {
@@ -385,7 +430,7 @@ class OrderproductController extends Controller
      *
      * @param  \Illuminate\Http\Request $request
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function checkOutOrderproducts(Request $request)
     {
