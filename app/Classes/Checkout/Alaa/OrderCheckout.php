@@ -39,7 +39,7 @@ class OrderCheckout extends CheckoutInvoker
     {
         $chainCells = [];
 
-        if ($this->recheckIncludedOrderproductsInCoupon) {
+        if ($this->recheckIncludedOrderproductsInCoupon && $this->order->coupon_id) {
             $chainCells = ["AlaaOrderproductCouponChecker"];
         }
 
@@ -77,13 +77,14 @@ class OrderCheckout extends CheckoutInvoker
         }
         $alaaCashier = new AlaaCashier();
         $alaaCashier->setOrder($this->order)
-                    ->setOrderCoupon($this->order->coupon)
                     ->setOrderDiscountCostAmount($this->order->discount)
                     ->setOrderCouponDiscountPercentage($couponDiscountPercentage)
                     ->setOrderCouponDiscountCostAmount($couponDiscountCostAmount)
                     ->setRawOrderproductsToCalculateFromBase($orderproductsToCalculateFromBase)
                     ->setRawOrderproductsToCalculateFromRecord($orderproductsToCalculateFromRecord);
 
+        if($this->order->coupon_id)
+            $alaaCashier->setOrderCoupon($this->order->coupon);
         return $alaaCashier;
     }
 

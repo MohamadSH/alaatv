@@ -384,7 +384,8 @@ class ProductController extends Controller
         $productType = $product->producttype->id;
 
         $allAttributeCollection = $product->getAllAttributes();
-        $this->addSimpleInfoAttributes($product); // ToDo : $product["simpleInfoAttributes"] has not been used
+        return $allAttributeCollection;
+        $this->addSimpleInfoAttributes($product);
         $selectCollection = $allAttributeCollection["selectCollection"];
         $groupedCheckboxCollection = $allAttributeCollection["groupedCheckboxCollection"];
         $extraSelectCollection = $allAttributeCollection["extraSelectCollection"];

@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
-class OrderCheckoutPayment
+class RemoveOrderCoupon
 {
     /**
      * Handle an incoming request.
@@ -17,20 +17,13 @@ class OrderCheckoutPayment
      */
     public function handle($request, Closure $next , $guard=null)
     {
-        $previousPath = url()->previous();
-        if (strcmp($previousPath, action("OrderController@checkoutReview")) != 0 &&
-            strcmp($previousPath, action("OrderController@checkoutPayment")) != 0)
-        {
-            return redirect(action("OrderController@checkoutReview"));
-        }
-
         if (Auth::guard($guard)->check())
         {
             $user = Auth::guard($guard)->user();
 
             if($request->has("order_id"))
             {
-                if(!$user->can("constants.SHOW_ORDER_PAYMENT_ACCESS"))
+                if(!$user->can("constants.REMOVE_COUPON_ACCESS"))
                     return response([] , Response::HTTP_FORBIDDEN);
             }else
             {
@@ -38,8 +31,6 @@ class OrderCheckoutPayment
                 if(isset($openOrder))
                     $request->offsetSet("order_id" , $openOrder->id);
             }
-        } else {
-            return redirect(action("OrderController@checkoutAuth"));
         }
 
         return $next($request);

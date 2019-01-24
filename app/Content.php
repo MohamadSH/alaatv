@@ -725,7 +725,6 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
     {
         $content = $this;
         $files = collect();
-        $this->timestamps = false;
         switch ($content->template->name) {
             case "video1":
                 $file = $content->files->where("pivot.label", "hd")
@@ -855,8 +854,7 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
 
         //        dd($files);
         $this->file = $files;
-        $this->update();
-        $this->timestamps = true;
+        $this->updateWithoutTimestamp();
 
         Artisan::call('cache:clear');
     }

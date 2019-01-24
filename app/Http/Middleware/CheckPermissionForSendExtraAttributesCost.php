@@ -10,7 +10,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Collection;
 
-class checkPermissionForSendExtraAttributesCost
+class CheckPermissionForSendExtraAttributesCost
 {
     /**
      * @var OrderController

@@ -383,6 +383,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         "roles",
     ];
 
+
     /** Setter mutator for major_id
      *
      * @param $value

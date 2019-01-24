@@ -306,6 +306,8 @@ class Order extends Model
      */
     public function obtainOrderCost($calculateOrderCost = false, $calculateOrderproductCost = true, $mode = "DEFAULT")
     {
+        $this->load('user' , 'user.wallets'  , 'normalOrderproducts' , 'normalOrderproducts.product' , 'normalOrderproducts.userbons' , 'normalOrderproducts.product.parents' , 'normalOrderproducts.product.parents.parents'  , 'normalOrderproducts.attributevalues' , 'normalOrderproducts.product.attributevalues' );
+
         if($calculateOrderCost) {
             $orderproductsToCalculateFromBaseIds = [];
             if($calculateOrderproductCost)
@@ -377,33 +379,13 @@ class Order extends Model
      *
      * @return bool
      */
-    public function hasProductsThatUseItsCoupon()
+    public function hasProductsThatUseItsCoupon():bool
     {
-        $flag = false;
-        if (isset($this->coupon->id)) {
-            if ($this->coupon->coupontype->id == config("constants.COUPON_TYPE_PARTIAL")) {
-                foreach ($this->orderproducts(config("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->get() as $orderproduct) {
-                    $hasCoupon = true;
-                    if (!in_array($this->coupon->id, $orderproduct->product->coupons->pluck('id')->toArray())) {
-                        $hasCoupon = false;
-                        $parentsArray = $this->makeParentArray($orderproduct->product);
-                        foreach ($parentsArray as $parent) {
-                            if (in_array($this->coupon->id, $parent->coupons->pluck('id')->toArray())) {
-                                $hasCoupon = true;
-                                break;
-                            }
-                        }
-                    }
-
-                    if ($hasCoupon) {
-                        $flag = true;
-                        break;
-                    }
-                }
-            } else {
-                $flag = true;
-            }
-        }
+        $flag = true;
+        $notIncludedProducts = $this->reviewCouponProducts();
+        $orderproductCount = $this->orderproducts->whereType([config("constants.ORDER_PRODUCT_TYPE_DEFAULT")])->count();
+        if($orderproductCount == $notIncludedProducts->count())
+            $flag = false;
 
         return $flag;
     }
@@ -412,13 +394,33 @@ class Order extends Model
      * Determines if this order has given products
      *
      * @param array $products
-     * @return array
+     * @return bool
      */
-    public function hasTheseProducts(array $products)
+    public function hasTheseProducts(array $products):bool
     {
         return $this->orderproducts
             ->whereIn("product_id", $products)
             ->isNotEmpty();
+    }
+
+
+    /**
+     * Indicated whether order cost has been determined or not
+     *
+     * @return bool
+     */
+    public function hasCost():bool
+    {
+        return (isset($this->cost) || isset($this->costwithoutcoupon));
+    }
+
+    /**
+     * @param $user
+     * @return bool
+     */
+    public function doesBelongToThisUser($user): bool
+    {
+        return optional($this->user)->id == $user->id;
     }
 
     /**
@@ -527,7 +529,7 @@ class Order extends Model
         $coupon = $this->coupon;
         $notIncludedProducts = new  ProductCollection();
         if(isset($coupon))
-            foreach ($orderproducts->products as $product)
+            foreach ($orderproducts->getProducts() as $product)
             {
                 if(!$coupon->hasProduct($product))
                     $notIncludedProducts->push($product);
@@ -623,6 +625,7 @@ class Order extends Model
     {
         $done = false;
         if (isset($this->coupon)) {
+            //ToDo: Put in a separate function in Coupon model
             $coupon = $this->coupon;
             $coupon->usageNumber--;
             if ($coupon->update())
@@ -630,8 +633,8 @@ class Order extends Model
                 $this->coupon_id = null;
                 $this->couponDiscount = 0;
                 $this->couponDiscountAmount = 0;
-                $this->timestamps = false;
-                if($this->update())
+                //ToDo : Don't update here
+                if($this->updateWithoutTimestamp())
                 {
                     $done = true;
                 }
@@ -639,7 +642,6 @@ class Order extends Model
                     $coupon->usageNumber++;
                     $coupon->update();
                 }
-                $this->timestamps = true;
             }
         }
         return $done;
@@ -663,16 +665,12 @@ class Order extends Model
         {
             $newPriceInfo = $orderproduct->newPriceInfo ;
             $orderproduct->fillCostValues($newPriceInfo);
-            $this->timestamps = false;
-            $orderproduct->update();
-            $this->timestamps = true;
+            $orderproduct->updateWithoutTimestamp();
         }
 
         $this->cost = $orderCost["rawCostWithDiscount"];
         $this->costwithoutcoupon = $orderCost["rawCostWithoutDiscount"];
-        $this->timestamps = false;
-        $this->update();
-        $this->timestamps = true;
+        $this->updateWithoutTimestamp();
         return ["newCost" => $orderCost];
     }
 

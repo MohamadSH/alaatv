@@ -138,14 +138,7 @@ class OnlinePaymentController extends Controller
      */
     private function setCustomerDescription(Request $request, Order $order): void
     {
-        if ($request->has('customerDescription')) {
-            $customerDescription = $request->get('customerDescription');
-            $order->customerDescription = $customerDescription;
-            //ToDo : use updateWithoutTimestamp
-            $order->timestamps = false;
-            $order->update();
-            $order->timestamps = true;
-        }
+        $order->customerDescription = optional($request->customerDescription);
     }
 
     /**

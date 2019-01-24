@@ -44,7 +44,8 @@ abstract class ProductPriceCalculator
         $bonName = config("constants.BON1");
         $this->bonName = $bonName;
         $this->totalBonNumber = (int)optional($user)->userHasBon($bonName);
-        $this->bonDiscountPercentage = $product->obtainBonDiscount($bonName);
+        if(isset($user)) //Note: With out this if we query the database every time even when there is nothing to do with bon discount like calculating order's cost
+            $this->bonDiscountPercentage = $product->obtainBonDiscount($bonName);
     }
 
     /*

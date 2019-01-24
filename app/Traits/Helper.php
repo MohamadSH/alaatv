@@ -94,4 +94,19 @@ trait Helper
 
         return $merge;
     }
+
+    /**
+     * Update model without touching it's updated_at
+     *
+     * @return bool
+     */
+    public function updateWithoutTimestamp():bool
+    {
+        $this->timestamps = false;
+        $flag = false;
+        if ($this->update())
+            $flag = true;
+        $this->timestamps = true;
+        return $flag;
+    }
 }

@@ -25,7 +25,7 @@ class AlaaOrderPayablePriceByWalletCalculator extends OrderPayablePriceByWalletC
               "isArray"   => true,
           ]
         ];
-        $donateOrderProducts = $order->orderproducts(config("constants.ORDER_PRODUCT_TYPE_DEFAULT") , $filters)->get();
+        $donateOrderProducts = $order->normalOrderproducts;
 
 
         $donateCost = 0;
