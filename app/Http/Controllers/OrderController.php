@@ -529,7 +529,7 @@ class OrderController extends Controller
      *
      * @param  \Illuminate\Http\Request $request
      *
-     * @return \App\Order
+     * @return \App\Order|null
      */
     public function store(Request $request)
     {
@@ -538,7 +538,7 @@ class OrderController extends Controller
         if ($order->save())
             return $order;
         else
-            return false;
+            return null;
     }
 
     /**

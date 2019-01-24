@@ -102,7 +102,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('teleMarketingAdminPanel', 'HomeController@adminTeleMarketing');
     Route::post('adminSendSMS', 'HomeController@sendSMS');
     Route::get('asset', 'UserController@userProductFiles');
-    Route::get('profile', 'UserController@showProfile');
+    Route::get('profile', 'UserController@show');
     Route::get('complete-register', 'UserController@completeRegister');
     Route::get('survey', 'UserController@showSurvey');
     Route::get('97', 'HomeController@submitKonkurResult');
@@ -132,6 +132,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put("v", "UserController@submitVoucherRequest");
 
     Route::group(['prefix' => 'user'], function () {
+
+
+        Route::get('profile', 'UserController@show');
+        Route::post('profile/update', 'UserController@update');
+
         Route::get('info', "UserController@informationPublicUrl");
         Route::get('{user}/info', 'UserController@information');
         Route::post('{user}/completeInfo', 'UserController@completeInformation');

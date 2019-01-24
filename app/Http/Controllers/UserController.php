@@ -8,6 +8,7 @@ use App\{Afterloginformcontrol,
     Bon,
     Classes\Search\UserSearch,
     Classes\SEO\SeoDummyTags,
+    Collection\ProductCollection,
     Contact,
     Employeeschedule,
     Employeetimesheet,
@@ -32,6 +33,7 @@ use App\{Afterloginformcontrol,
     Traits\DateTrait,
     Traits\Helper,
     Traits\MetaCommon,
+    Traits\OrderCommon,
     Traits\ProductCommon,
     Traits\RequestCommon,
     Traits\SearchCommon,
@@ -54,9 +56,13 @@ use Illuminate\{Foundation\Http\FormRequest,
     Support\Facades\Storage,
     Support\Facades\View};
 use Jenssegers\Agent\Agent;
+use Kalnoy\Nestedset\QueryBuilder;
 use PHPUnit\Framework\Exception;
 use SEO;
 use stdClass;
+use App\Classes\Payment\GateWay\Zarinpal\Zarinpal;
+use App\Classes\Payment\GateWay\GateWayFactory;
+use Zarinpal\Zarinpal as ZarinpalComposer;
 
 class UserController extends Controller
 {
@@ -74,6 +80,7 @@ class UserController extends Controller
     use UserCommon;
     use SearchCommon;
     use MetaCommon;
+    use OrderCommon;
 
     /*
     |--------------------------------------------------------------------------
@@ -107,7 +114,7 @@ class UserController extends Controller
      */
     private function getAuthExceptionArray(Agent $agent): array
     {
-        $authException = [];
+        $authException = ['show'];
         return $authException;
     }
 
@@ -127,7 +134,7 @@ class UserController extends Controller
     /**
      * @param Collection $items
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     private function makeJsonForAndroidApp(Collection $items)
     {
@@ -161,11 +168,11 @@ class UserController extends Controller
      * Display a listing of the resource.
      *
      * @param UserIndexRequest $request
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index(UserIndexRequest $request)
     {
-        $tags = $request->get('tags');
+        /*$tags = $request->get('tags');*/
         $filters = array_filter($request->all()); //Removes null fields
         $isApp = $this->isRequestFromApp($request);
         $items = collect();
@@ -319,7 +326,7 @@ class UserController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -331,7 +338,7 @@ class UserController extends Controller
      *
      * @param  \app\Http\Requests\InsertUserRequest $request
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function store(InsertUserRequest $request)
     {
@@ -400,23 +407,45 @@ class UserController extends Controller
      */
     private function fillContentFromRequest(FormRequest $request, User &$user): void
     {
-        $inputData = $request->all();
-        $hasMobileVerifiedAt = $request->has("mobileNumberVerification");
-        $hasPassword = $request->has("password");
-        $hasLockProfile = $request->has("lockProfile");
+        $user->fill($request->all());
 
-        $user->fill($inputData);
+        if ($request->user()->can(config('constants.EDIT_USER_ACCESS'))) {
+            $hasMobileVerifiedAt = $request->has("mobileNumberVerification");
+            $hasPassword = $request->has("password");
+            $hasLockProfile = $request->has("lockProfile");
+            $hasFirstName = $request->has("firstName");
+            $hasLastName = $request->has("lastName");
+            $hasNameSlug = $request->has("nameSlug");
+            $hasMobile = $request->has("mobile");
+            $hasNationalCode = $request->has("nationalCode");
+            $hasUserStatusId = $request->has("userstatus_id");
+            $hasTechCode = $request->has("techCode");
 
-        if ($hasMobileVerifiedAt)
-            $user->mobile_verified_at = ($request->get("mobileNumberVerification") == "1") ? Carbon::now()
-                                                                                                   ->setTimezone("Asia/Tehran") : null;
+            if ($hasMobileVerifiedAt)
+                $user->mobile_verified_at = ($request->get("mobileNumberVerification") == "1") ? Carbon::now()
+                    ->setTimezone("Asia/Tehran") : null;
+            if ($hasPassword)
+                $user->password = bcrypt($request->get("password"));
+            if ($hasFirstName)
+                $user->firstName = $request->get("firstName");
+            if ($hasLastName)
+                $user->lastName = $request->get("lastName");
+            if ($hasNameSlug)
+                $user->nameSlug = $request->get("nameSlug");
+            if ($hasMobile)
+                $user->mobile = $request->get("mobile");
+            if ($hasNationalCode)
+                $user->nationalCode = $request->get("nationalCode");
+            if ($hasUserStatusId)
+                $user->userstatus_id = $request->get("userstatus_id");
+            if ($hasTechCode)
+                $user->techCode = $request->get("techCode");
+            if ($hasLockProfile)
+                $user->lockProfile = $request->get("lockProfile") == "1" ? 1 : 0;
+        }
 
-
-        if ($hasPassword)
-            $user->password = bcrypt($request->get("password"));
-
-        if ($hasLockProfile)
-            $user->lockProfile = $request->get("lockProfile") == "1" ? 1 : 0;
+        if ($request->has("roles"))
+            $this->attachRoles($request->get("roles"), $request->user(), $user);
 
         $file = $this->getRequestFile($request, "photo");
         if ($file !== false)
@@ -491,56 +520,64 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  User $user
      *
-     * @return \Illuminate\Http\Response
+     * @param User $user
+     * @param Request $request
+     * @return Response
      */
-    public function show($user)
+    public function show(Request $request, User $user=null)
     {
-        if (!$this->canSeeProfile($user))
-            abort(403);
+        if($user===null) {
+            $user = $request->user();
+        } elseif (
+            ($user->id !== $request->user()->id) &&
+            !($user->can(config('constants.SHOW_USER_ACCESS')))
+        ) {
+                abort(403);
+        }
 
-        $genders = Gender::pluck('name', 'id')
-                         ->prepend("نامشخص");
-        $majors = Major::pluck('name', 'id')
-                       ->prepend("نامشخص");
-        $sideBarMode = "closed";
 
-        /** LOTTERY */
-        [
-            $exchangeAmount,
-            $userPoints,
-            $userLottery,
-            $prizeCollection,
-            $lotteryRank,
-            $lottery,
-            $lotteryMessage,
-            $lotteryName,
-        ] = $user->getLottery();
+        /**
+        $zarinGate = Transactiongateway::where('name', 'zarinpal')->first();
+        $zarinpal = new ZarinpalComposer($zarinGate->merchantNumber);
+        $authority = '000000000000000000000000000082710110';
+        return json_encode($zarinpal->verify('OK', 5000, $authority));
+        {
+            "Status": "success",
+            "RefID": 44545481710,
+            "ExtraDetail": {
+                "Transaction": {
+                    "CardPanHash": "2A7C73AE5DB08EE02E5A3F16EC4DB64E2210B564",
+                    "CardPanMask": "603799******2458"
+                }
+            }
+        }
+        */
 
-        $userCompletion = (int)$user->completion();
-        $mobileVerificationCode = $user->getMobileVerificationCode();
 
-        return view("user.profile.profile", compact("genders", "majors", "sideBarMode", "user", "userCompletion", "hasRequestedVerificationCode", "mobileVerificationCode", //lottery variables
-                                                    "exchangeAmount", "userPoints", "userLottery", "prizeCollection", "lotteryRank", "lottery", "lotteryMessage", "lotteryName"
 
-        ));
 
-    }
 
-    /**
-     * Checks whether user can see profile
-     *
-     * @param $user
-     *
-     * @return bool
-     */
-    private function canSeeProfile($user): bool
-    {
-        if (Auth::check())
-            return (($user->id === Auth::id()) || (Auth::user()
-                                                       ->hasRole(config('constants.ROLE_ADMIN'))) || ($user->hasRole(config('constants.ROLE_TECH')))); else
-            return false;
+//        $zarinpal = new Zarinpal((new TransactionController()));
+//        $result = $zarinpal->getUnverifiedTransactions();
+//        return $result;
+
+
+
+
+
+//        $zarinpal = new Zarinpal((new TransactionController()));
+//        $result = $zarinpal->getUnverifiedTransactions();
+//        return $result;
+
+        return response($user, Response::HTTP_OK);
+
+        if ($request->ajax()) {
+            return response($user, Response::HTTP_OK);
+        } else {
+            return view("user.profile.profile", compact("user", "userCompletion",
+                "hasRequestedVerificationCode", "mobileVerificationCode"));
+        }
     }
 
     /**
@@ -548,7 +585,7 @@ class UserController extends Controller
      *
      * @param Request $request
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function userOrders(Request $request)
     {
@@ -599,7 +636,7 @@ class UserController extends Controller
      *
      * @param Request $request
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function userProductFiles(Request $request)
     {
@@ -608,13 +645,14 @@ class UserController extends Controller
         $user = $request->user();
         $products = $user->products();
 
-
+        /** @var ProductCollection $products */
         $key = "user:userProductFiles:" . $user->cacheKey() . ":P=" . md5($products->pluck("id")
                                                                                    ->implode('-'));
         [
             $videos,
             $pamphlets,
         ] = Cache::remember($key, config("constants.CACHE_60"), function () use ($products) {
+            /** @var ProductCollection $products */
             $products->load('complimentaryproducts');
             $products->load('children');
             $products->load('validProductfiles');
@@ -682,6 +720,7 @@ class UserController extends Controller
      * @param            $productArray
      * @param Collection $pamphlets
      * @param Collection $videos
+     * @param string $mode
      */
     private function addVideoPamphlet($productArray, Collection &$pamphlets, Collection &$videos , $mode = "default")
     {
@@ -740,9 +779,8 @@ class UserController extends Controller
     /**
      * Show authenticated user belongings
      *
-     * @param
-     *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
     public function showBelongings(Request $request)
     {
@@ -755,7 +793,7 @@ class UserController extends Controller
     /**
      * Showing a survey to user to take part in
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function showSurvey()
     {
@@ -861,7 +899,7 @@ class UserController extends Controller
      *
      * @param  User $user
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function edit($user)
     {
@@ -884,7 +922,7 @@ class UserController extends Controller
      *
      * @param  User $user
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      * @throws \Exception
      */
     public function destroy($user)
@@ -898,7 +936,7 @@ class UserController extends Controller
      *
      * @param Request $request
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function informationPublicUrl(Request $request)
     {
@@ -908,14 +946,15 @@ class UserController extends Controller
     /**
      * Show the form for completing information of the specified resource.(Created for orduatalaee 97)
      *
-     * @param $user
+     * @param User $user
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function information($user)
+    public function information(User $user)
     {
         $validOrders = $user->orders()
                             ->whereHas("orderproducts", function ($q) {
+                                /** @var QueryBuilder $q */
                                 $q->whereIn("product_id", config("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT"))
                                   ->orwhereIn("product_id", config("constants.ORDOO_HOZOORI_NOROOZ_97_PRODUCT"))
                                   ->orwhereIn("product_id", [
@@ -944,6 +983,7 @@ class UserController extends Controller
         $orderproduct = $order->orderproducts(config("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
                               ->get()
                               ->first();
+        /** @var Product $product */
         $product = $orderproduct->product;
         if (in_array($product->id, config("constants.ORDOO_HOZOORI_NOROOZ_97_PRODUCT")))
             $userHasMedicalQuestions = true; else $userHasMedicalQuestions = false;
@@ -968,6 +1008,7 @@ class UserController extends Controller
                                 ->get();
         $parentsNumber = collect();
         foreach ($parents as $parent) {
+            /** @var Collection|Contact $parentContacts */
             $parentContacts = $user->contacts->where("relative_id", $parent->id)
                                              ->where("contacttype_id", $simpleContact->id);
             if ($parentContacts->isNotEmpty()) {
@@ -1057,7 +1098,7 @@ class UserController extends Controller
     /**
      * Display a page where user can upaload his consulting questions
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function uploadConsultingQuestion()
     {
@@ -1070,7 +1111,7 @@ class UserController extends Controller
      *
      * @param Request $request
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function uploads(Request $request)
     {
@@ -1085,7 +1126,7 @@ class UserController extends Controller
      *
      * @param \App\Http\Requests\PasswordRecoveryRequest $request
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function sendGeneratedPassword(PasswordRecoveryRequest $request)
     {
@@ -1140,7 +1181,7 @@ class UserController extends Controller
      *
      * @param Request $request
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function completeRegister(Request $request)
     {
@@ -1183,7 +1224,7 @@ class UserController extends Controller
      * @param \App\Http\Controllers\EmployeetimesheetController $employeetimesheetController
      * @param \App\Http\Controllers\HomeController              $homeController
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function submitWorkTime(Request $request, EmployeetimesheetController $employeetimesheetController, HomeController $homeController)
     {
@@ -1230,7 +1271,7 @@ class UserController extends Controller
      *
      * @param Request $request
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function removeFromLottery(Request $request)
     {
@@ -1352,10 +1393,16 @@ class UserController extends Controller
     /**
      * Store the complentary information of specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  User                     $user
+     * @param  User $user
      *
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request $request
+     * @param UserController $userController
+     * @param PhoneController $phoneController
+     * @param ContactController $contactController
+     * @param OrderController $orderController
+     * @return Response
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function completeInformation(User $user, Request $request, UserController $userController, PhoneController $phoneController, ContactController $contactController, OrderController $orderController)
     {
@@ -1523,15 +1570,18 @@ class UserController extends Controller
      * Update the specified resource in storage.
      * Note: Requests to this method must pass \App\Http\Middleware\trimUserRequest middle ware
      *
-     * @param  \app\Http\Requests\EditUserRequest $request
-     * @param  User                               $user
-     *
-     * @return \Illuminate\Http\Response
+     * @param EditUserRequest $request
+     * @param User $user
+     * @return Response
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
-    public function update(EditUserRequest $request, $user)
+    public function update(EditUserRequest $request, User $user=null)
     {
-        $user->fill($request->all());
+        if($user===null) {
+            $user = $request->user();
+        } elseif (!$request->user()->can(config('constants.EDIT_USER_ACCESS'))) {
+                abort(Response::HTTP_FORBIDDEN);
+        }
 
         $this->fillContentFromRequest($request, $user);
 
@@ -1559,12 +1609,7 @@ class UserController extends Controller
         //            session()->put("error", $confirmation["message"]);
         //        }
 
-
-        $isAjax = false;
         if ($user->update()) {
-
-            if ($request->has("roles"))
-                $this->attachRoles($request->get("roles"), $request->user(), $user);
 
             $newPhotoSrc = route('image', [
                 'category' => '1',
@@ -1574,24 +1619,15 @@ class UserController extends Controller
             ]);
 
             $message = "اطلاعات با موفقیت اصلاح شد";
-            if ($request->ajax()) {
-                $isAjax = true;
-                $status = Response::HTTP_OK;
-            } else {
-                session()->flash("success", $message);
-            }
+            $status = Response::HTTP_OK;
+            session()->flash("success", $message);
         } else {
-
             $message = \Lang::get("responseText.Database error.");
-            if ($request->ajax()) {
-                $isAjax = true;
-                $status = Response::HTTP_SERVICE_UNAVAILABLE;
-            } else {
-                session()->flash("error", $message);
-            }
+            $status = Response::HTTP_SERVICE_UNAVAILABLE;
+            session()->flash("error", $message);
         }
 
-        if ($isAjax)
+        if ($request->ajax()) {
             return response(
                 [
                     "newPhoto" => isset($newPhotoSrc) ? $newPhotoSrc : null,
@@ -1599,8 +1635,10 @@ class UserController extends Controller
                 ],
                 $status
             );
-        else
+        }
+        else {
             return redirect()->back();
+        }
     }
 
     /**
@@ -1609,7 +1647,7 @@ class UserController extends Controller
      * @param  \App\Http\Requests\RegisterForSanatiSharifHighSchoolRequest $request
      * @param EventresultController                                        $eventResultController
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     public function registerForSanatiSharifHighSchool(RegisterForSanatiSharifHighSchoolRequest $request, EventresultController $eventResultController)
@@ -1697,7 +1735,7 @@ class UserController extends Controller
      *
      * @param  Request $request
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function voucherRequest(Request $request)
     {
@@ -1772,7 +1810,7 @@ class UserController extends Controller
      *
      * @param  \App\Http\Requests\InsertVoucherRequest InsertVoucherRequest
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     public function submitVoucherRequest(InsertVoucherRequest $request)

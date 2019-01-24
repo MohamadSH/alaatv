@@ -9,6 +9,8 @@
 namespace App\Classes\OrderProduct\RefinementProduct;
 
 use App\Product;
+use App\Attributevalue;
+use Illuminate\Support\Collection;
 use App\Collection\ProductCollection;
 
 class RefinementConfigurable implements RefinementInterface
@@ -29,7 +31,7 @@ class RefinementConfigurable implements RefinementInterface
      * @return ProductCollection|null
      */
     public function getProducts(): ?ProductCollection {
-        $children = $this->product->children;
+        $children = $this->product->children->load('attributevalues');
         $simpleProduct = new ProductCollection();
         foreach ($children as $child) {
             $childHasAllAttributes = $this->checkAttributesOfChild($this->attributes, $child);
@@ -43,6 +45,7 @@ class RefinementConfigurable implements RefinementInterface
 
     private function checkAttributesOfChild($attributes, $child) {
         $flag = true;
+        /** @var Attributevalue|Collection $attributesOfChild */
         $attributesOfChild = $child->attributevalues;
         foreach ($attributes as $attribute) {
             if (!$attributesOfChild->contains($attribute)) {

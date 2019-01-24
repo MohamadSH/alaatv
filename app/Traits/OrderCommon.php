@@ -3,7 +3,8 @@
 use App\Order;
 use App\Orderproduct;
 use App\Product;
-use Illuminate\Support\Facades\Config;
+use App\User;
+use App\Wallet;
 
 trait OrderCommon
 {
@@ -11,6 +12,7 @@ trait OrderCommon
     {
         $walletPaidFlag = false;
         $wallets = $user->wallets->sortByDesc("wallettype_id"); //Chon mikhastim aval az kife poole hedie kam shavad!
+        /** @var Wallet $wallet */
         foreach ($wallets as $wallet) {
             if ($cost < 0)
                 break;
@@ -46,7 +48,7 @@ trait OrderCommon
         }
     }
 
-    /** Attaches a gift to the order of this orderproduct which is related to this orderproduct
+    /** Attaches a gift to the order of this orderproduct
      *
      * @param Order $order
      * @param Product $gift
@@ -56,7 +58,7 @@ trait OrderCommon
     public function attachGift(Order $order, Product $gift, Orderproduct $orderproduct): Orderproduct
     {
         $giftOrderproduct = new Orderproduct();
-        $giftOrderproduct->orderproducttype_id = Config::get("constants.ORDER_PRODUCT_GIFT");
+        $giftOrderproduct->orderproducttype_id = config("constants.ORDER_PRODUCT_GIFT");
         $giftOrderproduct->order_id = $order->id;
         $giftOrderproduct->product_id = $gift->id;
         $giftOrderproduct->cost = $gift->calculatePayablePrice()["cost"];
@@ -64,7 +66,29 @@ trait OrderCommon
         $giftOrderproduct->save();
 
         $giftOrderproduct->parents()
-            ->attach($orderproduct, ["relationtype_id" => Config::get("constants.ORDER_PRODUCT_INTERRELATION_PARENT_CHILD")]);
+            ->attach($orderproduct, ["relationtype_id" => config("constants.ORDER_PRODUCT_INTERRELATION_PARENT_CHILD")]);
         return $giftOrderproduct;
+    }
+
+    /**
+     * this method select exist OpenOrder or create new object and insert that then select all field of new open order
+     * but firstOrCreate method in laravel just return inserted values and does not return other fields when create and
+     * insert new OpenOrder
+     * 
+     * @param User $user
+     * @return Order|User|\Illuminate\Database\Eloquent\Model|object|null
+     */
+    public function firstOrCreateOpenOrder(User $user) {
+
+        $openOrder = $user->openOrders()->first();
+        if(!isset($openOrder)) {
+            $openOrder = new Order();
+            $openOrder->user_id = $user->id;
+            $openOrder->orderstatus_id = config('constants.ORDER_STATUS_OPEN');
+            $openOrder->paymentstatus_id = config('constants.PAYMENT_STATUS_UNPAID');
+            $openOrder->save();
+            $openOrder = $user->openOrders()->first();
+        }
+        return $openOrder;
     }
 }

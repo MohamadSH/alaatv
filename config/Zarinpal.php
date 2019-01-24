@@ -12,5 +12,9 @@ return [
     | driver
     |--------------------------------------------------------------------------
     */
-    'driver'     => 'Rest'
+    'driver'     => 'Rest',
+
+    'Sandbox'     => true,
+
+    'ZarinGate'     => true
 ];

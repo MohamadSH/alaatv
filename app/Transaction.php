@@ -2,9 +2,8 @@
 
 namespace App;
 
-use App\Traits\DateTrait;
 use App\Traits\Helper;
-use Carbon\Carbon;
+use App\Traits\DateTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -88,6 +87,7 @@ class Transaction extends Model
     use Helper;
     use DateTrait;
     use SoftDeletes;
+
     /**      * The attributes that should be mutated to dates.        */
     protected $dates = [
         'created_at',
