@@ -193,6 +193,9 @@ class HomeController extends Controller
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
         try{
+
+            $order = \App\Order::find(245778);
+            return $order->obtainOrderCost(true);
 //            $set = Contentset::findOrFail(1);
 //            dd($set->contents_count);
             //

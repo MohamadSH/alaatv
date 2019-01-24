@@ -293,6 +293,8 @@ class Order extends Model
      */
     public function obtainOrderCost($calculateOrderCost = false, $calculateOrderproductCost = true, $mode = "DEFAULT")
     {
+        $this->load('user' , 'user.wallets'  , 'normalOrderproducts' , 'normalOrderproducts.product' , 'normalOrderproducts.userbons' , 'normalOrderproducts.product.parents' , 'normalOrderproducts.product.parents.parents'  , 'normalOrderproducts.attributevalues' , 'normalOrderproducts.product.attributevalues' );
+
         if($calculateOrderCost) {
             $orderproductsToCalculateFromBaseIds = [];
             if($calculateOrderproductCost)
