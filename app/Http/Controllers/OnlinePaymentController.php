@@ -32,6 +32,12 @@ class OnlinePaymentController extends Controller
         $this->transactionController = $transactionController;
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | Redirect
+    |--------------------------------------------------------------------------
+    */
+
     /**
      * @param Request $request
      * @param string $paymentMethod
@@ -49,7 +55,9 @@ class OnlinePaymentController extends Controller
         $inputData = $request->all();
         $inputData['transactionController'] = $this->transactionController;
         $inputData['user'] = $request->user();
-        $data = $this->launchRefinementRequest($inputData, $refinementRequestStrategy);
+
+        $refinementLauncher = new RefinementLauncher($inputData, $refinementRequestStrategy);
+        $data = $refinementLauncher->getData();
 
         /** @var User $user */
         $user = $data['user'];
@@ -90,7 +98,6 @@ class OnlinePaymentController extends Controller
             return redirect(action('OfflinePaymentController@verifyPayment', ['device' => $device, 'paymentMethod' => 'wallet', 'coi' => $order->id]));
         }
     }
-
 
     /**
      * @param int $cost
@@ -141,13 +148,26 @@ class OnlinePaymentController extends Controller
         }
     }
 
+    /**
+     * @param Request $request
+     * @return Refinement
+     */
+    private function gteRefinementRequestStrategy(Request $request): Refinement
+    {
+        if ($request->has('transaction_id')) { // closed order
+            return new TransactionRefinement();
+        } else if ($request->has('order_id')) { // closed order
+            return new OrderIdRefinement();
+        } else { // open order
+            return new OpenOrderRefinement();
+        }
+    }
 
-
-
-
-
-
-
+    /*
+    |--------------------------------------------------------------------------
+    | VerifyPayment
+    |--------------------------------------------------------------------------
+    */
 
     /**
      * Verify customer online payment after coming back from payment gateway
@@ -164,53 +184,18 @@ class OnlinePaymentController extends Controller
 //        if ($result['status'] && isset($result['data']['order'])) {
 //            /** @var Order $order */
 //            $order = $result['data']['order'];
-//            $user = $order->user;
-//            $order = $order->fresh();
-//            $user->notify(new InvoicePaid($order));
-//            Cache::tags('bon')->flush();
+//            optional($order->user)->notify(new InvoicePaid($order));
 //        }
+
+        Cache::tags('bon')->flush();
 
         $request->session()->flash('result', $result);
 
-        if ($result['status']) {
-            $status = 'successful';
-        } else {
-            $status = 'failed';
-        }
-
         return redirect(action('OnlinePaymentController@showPaymentStatus', [
-            'status' => $status,
+            'status' => ($result['status'])?'successful':'failed',
             'paymentMethod' => $paymentMethod,
             'device' => $device
         ]));
-    }
-
-    /**
-     * @param Request $request
-     * @return Refinement
-     */
-    private function gteRefinementRequestStrategy(Request $request): Refinement
-    {
-        if ($request->has('transaction_id')) { // closed order
-            return new TransactionRefinement();
-        } else if ($request->has('order_id')) { // closed order
-            return new OrderIdRefinement();
-        } else { // open order
-            return new OpenOrderRefinement();
-        }
-    }
-
-    /**
-     * @param array $inputData
-     * @param Refinement $refinementRequestStrategy
-     * @return array
-     */
-    private function launchRefinementRequest(array $inputData, Refinement $refinementRequestStrategy): array
-    {
-        $refinementLauncher = new RefinementLauncher($inputData, $refinementRequestStrategy);
-        $data = $refinementLauncher->getData();
-
-        return $data;
     }
 
     /**
@@ -218,22 +203,15 @@ class OnlinePaymentController extends Controller
      * @param string $paymentMethod
      * @param string $device
      * @param Request $request
-     * @return array
+     * @return void
      */
     public function showPaymentStatus(string $status, string $paymentMethod, string $device, Request $request) {
         $result = $request->session()->get('result');
-        return [
+        dd([
             'status' => $status,
             'paymentMethod' => $paymentMethod,
             'device' => $device,
             'result' => $result
-        ];
-
-        /*dd([
-            'status' => $status,
-            'paymentMethod' => $paymentMethod,
-            'device' => $device,
-            'result' => $result
-        ]);*/
+        ]);
     }
 }

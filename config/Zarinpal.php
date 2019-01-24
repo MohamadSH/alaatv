@@ -14,5 +14,7 @@ return [
     */
     'driver'     => 'Rest',
 
-    'Sandbox'     => true
+    'Sandbox'     => true,
+
+    'ZarinGate'     => true
 ];

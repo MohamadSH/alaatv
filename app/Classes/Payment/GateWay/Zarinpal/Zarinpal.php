@@ -22,6 +22,19 @@ class Zarinpal extends GateWayAbstract
     private $merchantID;
     private $zarinpalComposer;
     private $transactiongatewayId;
+    const EXCEPTION = array(
+        -1 => 'اطلاعات ارسال شده ناقص است.',
+        -2 => 'IP و یا مرچنت کد پذیرنده صحیح نیست',
+        -3 => 'رقم باید بالای 100 تومان باشد',
+        -4 => 'سطح پذیرنده پایین تر از سطح نقره ای است',
+        -11 => 'درخواست مورد نظر یافت نشد',
+        -21 => 'هیچ نوع عملیات مالی برای این تراکنش یافت نشد. کاربر قبل از ورود به درگاه بانک در همان صفحه زرین پال منصرف شده است.',
+        -22 => 'تراکنش ناموفق می باشد. کاربر بعد از ورود به درگاه بانک منصرف شده است.',
+        -33 => 'رقم تراکنش با رقم پرداخت شده مطابقت ندارد',
+        -54 => 'درخواست مورد نظر آرشیو شده',
+        100 => 'عملیات با موفقیت انجام شد',
+        101 => 'عملیات پرداخت با موفقیت انجام شده ولی قبلا عملیات PaymentVertification بر روی این تراکنش انجام شده است',
+    );
 
     public function __construct(TransactionController $transactionController)
     {
@@ -30,10 +43,12 @@ class Zarinpal extends GateWayAbstract
         $this->merchantID = $zarinGate->merchantNumber;
         $this->transactiongatewayId = $zarinGate->id;
         $this->zarinpalComposer = new ZarinpalComposer($this->merchantID);
-        if(config('app.env')!='deployment' && config('Zarinpal.Sandbox')) {
+        if(config('app.env', 'deployment')!='deployment' && config('Zarinpal.Sandbox', false)) {
             $this->zarinpalComposer->enableSandbox(); // active sandbox mod for test env
         }
-        $this->zarinpalComposer->isZarinGate(); // active zarinGate mode
+        if(config('Zarinpal.ZarinGate', false)) {
+            $this->zarinpalComposer->isZarinGate(); // active zarinGate mode
+        }
         $this->transactionController = $transactionController;
     }
 
@@ -81,11 +96,14 @@ class Zarinpal extends GateWayAbstract
      */
     public function verify(array $callbackData): array
     {
-        [$authority, $status] = $this->validateCallbackData($callbackData);
+        $this->validateCallbackData($callbackData);
 
         if (!$this->result['status']) {
             return $this->result;
         }
+
+        $authority = $this->result['data']['callbackData']['Authority'];
+        $status = $this->result['data']['callbackData']['Status'];
 
         $transaction = $this->getTransaction($authority);
 
@@ -94,7 +112,6 @@ class Zarinpal extends GateWayAbstract
         }
 
         $transaction->order->detachUnusedCoupon();
-        $this->result['data']['order'] = $transaction->order;
 
         $verifyZarinpalResult = $this->verifyZarinpal($status, $transaction->cost, $authority);
 
@@ -111,6 +128,8 @@ class Zarinpal extends GateWayAbstract
         } else {
             $this->handleCanceledStatus($transaction);
         }
+        $this->result['data']['transaction'] = $transaction;
+        $this->result['data']['order'] = $transaction->order;
 
         return $this->result;
     }
@@ -126,8 +145,6 @@ class Zarinpal extends GateWayAbstract
             $this->result['status'] = false;
             $this->result['message'][] = 'تراکنش متناظر با authority یافت نشد.';
             $this->result['data']['authority'] = $authority;
-        } else {
-            $this->result['data']['transaction'] = $transaction;
         }
         return $transaction;
     }
@@ -145,23 +162,16 @@ class Zarinpal extends GateWayAbstract
 
         if (isset($result['RefID']) && strcmp($result['Status'], 'success') == 0) {
             $this->result['status'] = true;
-            //$this->result['data']['zarinpalVerifyResult'] = $result;
-            //$this->result['data']['RefID'] = $result['RefID'];
-            //$this->cardPanHash = isset($result['ExtraDetail']['Transaction']['CardPanHash'])?$result['ExtraDetail']['Transaction']['CardPanHash']:null;
-            //$this->cardPanMask = isset($result['ExtraDetail']['Transaction']['CardPanMask'])?$result['ExtraDetail']['Transaction']['CardPanMask']:null;
         } else {
             $this->result['status'] = false;
             if (strcmp($result['Status'], 'canceled') == 0) {
                 $this->result['message'][] = 'کاربر از پرداخت انصراف داده است.';
             } else if (strcmp($result['Status'], 'verified_before') ==0) {
-                $this->result['message'][] = 'عملیات پرداخت با موفقیت انجام شده ولی قبلا عملیات PaymentVertification بر روی این تراکنش انجام شده است';
+                $this->result['message'][] = self::EXCEPTION[101];
             } else {
-                if(strcmp($result['error'], '-21') == 0) {
-                    $this->result['message'][] = 'کاربر قبل از ورود به درگاه بانک در همان صفحه زرین پال منصرف شده است.';
-                } else if(strcmp($result['error'], '-22') == 0) {
-                    $this->result['message'][] = 'کاربر بعد از ورود به درگاه بانک منصرف شده است.';
-                } else {
-                    $this->result['message'][] = 'خطایی در پرداخت رخ داده است.';
+                $this->result['message'][] = 'خطایی در پرداخت رخ داده است.';
+                if (isset($result['error'])) {
+                    $this->result['message'][] = self::EXCEPTION[$result['error']];
                 }
             }
         }
@@ -177,7 +187,7 @@ class Zarinpal extends GateWayAbstract
     {
         $bankAccountId = null;
 
-        if($cardPanMask!=null) {
+        if(isset($cardPanMask)) {
             $bankAccount = Bankaccount::firstOrCreate(['accountNumber'=>$cardPanMask]);
             $bankAccountId = $bankAccount->id;
         }
@@ -240,9 +250,9 @@ class Zarinpal extends GateWayAbstract
 
     /**
      * @param array $callbackData
-     * @return array
+     * @return void
      */
-    private function validateCallbackData(array $callbackData): array
+    private function validateCallbackData(array $callbackData): void
     {
         $validator = Validator::make($callbackData, [
             'Authority' => 'required|string|min:36|max:36',
@@ -253,11 +263,7 @@ class Zarinpal extends GateWayAbstract
             foreach ($validator->messages()->getMessages() as $field_name => $messages) {
                 $this->result['message'][] = $messages;
             }
-            $this->result['data']['callbackData'] = $callbackData;
         }
-        return [
-            (isset($callbackData['Authority'])?$callbackData['Authority']:null),
-            (isset($callbackData['Status'])?$callbackData['Status']:null)
-        ];
+        $this->result['data']['callbackData'] = $callbackData;
     }
 }
