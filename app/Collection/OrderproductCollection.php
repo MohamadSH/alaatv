@@ -8,14 +8,11 @@
 
 namespace App\Collection;
 
-use App\Classes\Abstracts\Pricing\OrderproductPriceCalculator;
-use App\Classes\Checkout\Alaa\GroupOrderproductCheckout;
-use App\Classes\Facade\ControllerFacades\CallOrderproductControllerStoreFacade;
-use App\Http\Controllers\OrderproductController;
-use App\Order;
 use App\Orderproduct;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\Request;
+use App\Http\Controllers\OrderproductController;
+use App\Classes\Checkout\Alaa\GroupOrderproductCheckout;
+use App\Classes\Abstracts\Pricing\OrderproductPriceCalculator;
 
 class OrderproductCollection extends Collection
 {
@@ -95,6 +92,7 @@ class OrderproductCollection extends Collection
      * Updates orderproduct items' cost up to new conditions
      *
      * @return void
+     * @throws \Exception
      */
     public function reCheckOrderproducs():void
     {

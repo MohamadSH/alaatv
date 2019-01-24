@@ -4,42 +4,37 @@ namespace App\Http\Controllers;
 
 use App\Afterloginformcontrol;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Http\Response;
 
 class AfterLoginFormController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $afterLoginFormFields = Afterloginformcontrol::all()
                                                      ->sortBy("order");
-        $availableFields = Schema::getColumnListing("users");
-        foreach ($availableFields as $key => $availableField) {
-            unset($availableFields[$key]);
-            if (strcmp(Schema::getColumnType("users", $availableField), "string") == 0)
-                $availableFields[$availableField] = $availableField;
-            else if (strpos($availableField, "_id"))
-                $availableFields[$availableField] = $availableField;
-        }
-        $availableFields = array_diff($availableFields, [
-            "remember_token",
-            "password",
-            "mobile",
-            "nationalCode",
-        ]);
+
         $sideBarMode = "closed";
         $section = "afterLoginForm";
-        return view("admin.siteConfiguration.afterLoginForm", compact("afterLoginFormFields", "availableFields", "sideBarMode", "section"));
+
+        if ($request->ajax()) {
+            return response([
+                'afterLoginFormFields' => $afterLoginFormFields,
+            ], Response::HTTP_OK);
+        } else {
+            return view("admin.siteConfiguration.afterLoginForm", compact("afterLoginFormFields", "availableFields", "sideBarMode", "section"));
+        }
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function create()
     {
@@ -51,7 +46,7 @@ class AfterLoginFormController extends Controller
      *
      * @param  \Illuminate\Http\Request $request
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function store(Request $request)
     {
@@ -70,7 +65,7 @@ class AfterLoginFormController extends Controller
      *
      * @param  int $id
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function show($id)
     {
@@ -82,7 +77,7 @@ class AfterLoginFormController extends Controller
      *
      * @param  int $id
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function edit($id)
     {
@@ -93,9 +88,9 @@ class AfterLoginFormController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  int                      $id
+     * @param  int $id
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function update(Request $request, $id)
     {
@@ -106,8 +101,8 @@ class AfterLoginFormController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Afterloginformcontrol $field
-     *
-     * @return \Illuminate\Http\Response
+     * @return Response
+     * @throws \Exception
      */
     public function destroy(Afterloginformcontrol $field)
     {

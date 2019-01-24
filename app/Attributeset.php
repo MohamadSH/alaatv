@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
+use Kalnoy\Nestedset\QueryBuilder;
+use MongoDB\Driver\Query;
 
 /**
  * App\Attributeset
@@ -72,13 +74,13 @@ class Attributeset extends Model
         $key = "Attributeset:" . $this->cacheKey();
         return Cache::remember($key, Config::get("constants.CACHE_60"), function () {
             $result = DB::table('attributesets')
-                        ->join('attributegroups', function ($join) {
+                        ->join(
+                            'attributegroups', function ($join) {
                             $join->on('attributesets.id', '=', 'attributegroups.attributeset_id')
                                  ->whereNull('attributegroups.deleted_at');
                         })
                         ->join('attribute_attributegroup', function ($join) {
                             $join->on('attribute_attributegroup.attributegroup_id', '=', 'attributegroups.id');
-
                         })
                         ->join('attributes', function ($join) {
                             $join->on('attributes.id', '=', 'attribute_attributegroup.attribute_id')

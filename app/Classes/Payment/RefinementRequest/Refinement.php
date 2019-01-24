@@ -161,7 +161,7 @@ abstract class Refinement
             $data['destinationBankAccount_id'] = 1;
             $data['paymentmethod_id'] = config("constants.PAYMENT_METHOD_ONLINE");
             $data['transactionstatus_id'] = config("constants.TRANSACTION_STATUS_TRANSFERRED_TO_PAY");
-            $result = $this->transactionController->storeTransaction($data);
+            $result = $this->transactionController->new($data);
         }
         return $result;
     }

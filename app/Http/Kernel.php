@@ -76,5 +76,6 @@ class Kernel extends HttpKernel
         'OrderCheckoutReview'    => \App\Http\Middleware\OrderCheckoutReview::class,
         'OrderCheckoutPayment'    => \App\Http\Middleware\OrderCheckoutPayment::class,
         'SubmitOrderCoupon'    => \App\Http\Middleware\SubmitOrderCoupon::class,
+
     ];
 }

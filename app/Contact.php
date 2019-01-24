@@ -26,22 +26,22 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read \App\Relative|null                                    $relative
  * @property-read \App\User|null                                        $user
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|\App\Contact onlyTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Contact onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Contact whereContacttypeId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Contact whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Contact whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Contact whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Contact whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Contact whereRelativeId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Contact whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Contact whereUserId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Contact withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Contact withoutTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Contact whereContacttypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contact whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contact whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contact whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contact whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contact whereRelativeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contact whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contact whereUserId($value)
+ * @method static \Illuminate\Database\Query\Builder|Contact withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Contact withoutTrashed()
  * @mixin \Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Contact newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Contact newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Contact query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Contact newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Contact newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Contact query()
  */
 class Contact extends Model
 {

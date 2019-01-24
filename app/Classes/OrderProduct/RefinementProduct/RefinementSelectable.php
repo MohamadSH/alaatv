@@ -17,6 +17,12 @@ class RefinementSelectable implements RefinementInterface
     private $selectedProductsIds;
     private $product;
 
+    /**
+     * RefinementSelectable constructor.
+     * @param Product $product
+     * @param $data
+     * @throws Exception
+     */
     public function __construct(Product $product, $data) {
         if(isset($data['products'])) {
             $this->selectedProductsIds = $data["products"];
@@ -30,6 +36,7 @@ class RefinementSelectable implements RefinementInterface
      * @return ProductCollection|null
      */
     public function getProducts(): ?ProductCollection {
+        /** @var ProductCollection $selectedProductsItems */
         $selectedProductsItems = Product::whereIn('id', $this->selectedProductsIds)->get();
 
         $selectedProductsItems->keepOnlyParents();

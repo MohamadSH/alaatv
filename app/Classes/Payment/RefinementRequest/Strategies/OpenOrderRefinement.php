@@ -28,6 +28,7 @@ class OpenOrderRefinement extends Refinement
             return $this;
         }
         $this->getOpenOrder();
+        $this->openOrder->load('orderproducts');
         if ($this->openOrder && $this->openOrder->orderproducts->isNotEmpty()) {
             $this->order = $this->openOrder;
             $this->getOrderCost();
@@ -49,6 +50,6 @@ class OpenOrderRefinement extends Refinement
 
     private function getOpenOrder(): void
     {
-        $this->openOrder = $this->user->openOrders()->with(['transactions', 'coupon'])->first();
+        $this->openOrder = $this->firstOrCreateOpenOrder($this->user);
     }
 }

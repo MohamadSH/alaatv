@@ -24,27 +24,27 @@ use Illuminate\Support\Facades\Config;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Product[] $products
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Userbon[] $userbons
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\User[]    $users
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Bon enable()
+ * @method static \Illuminate\Database\Eloquent\Builder|Bon enable()
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|\App\Bon onlyTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Bon onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Bon whereBontypeId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Bon whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Bon whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Bon whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Bon whereDisplayName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Bon whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Bon whereIsEnable($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Bon whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Bon whereOrder($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Bon whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Bon withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Bon withoutTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Bon whereBontypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bon whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bon whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bon whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bon whereDisplayName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bon whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bon whereIsEnable($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bon whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bon whereOrder($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bon whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|Bon withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Bon withoutTrashed()
  * @mixin \Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Bon ofName($name)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Bon newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Bon newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Bon query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Bon ofName($name)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bon newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Bon newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Bon query()
  */
 class Bon extends Model
 {
@@ -70,8 +70,8 @@ class Bon extends Model
     public static function getAlaaBonDisplayName()
     {
         return Cache::tags('bon')
-                    ->remember('getAlaaBon', Config::get('constants.CACHE_600'), function () {
-                        $myBone = \App\Bon::where("name", Config::get("constants.BON1"))
+                    ->remember('getAlaaBon', config('constants.CACHE_600'), function () {
+                        $myBone = Bon::where("name", config("constants.BON1"))
                                           ->get();
                         $bonName = null;
                         if ($myBone->isNotEmpty()) {
