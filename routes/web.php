@@ -64,6 +64,7 @@ Route::group(['prefix' => 'checkout'], function () {
     });
     Route::any('verifyPayment/online/{paymentMethod}/{device}', "OnlinePaymentController@verifyPayment");
     Route::any('verifyPayment/online/{status}/{paymentMethod}/{device}', "OnlinePaymentController@showPaymentStatus");
+    Route::any('verifyPayment/offline/{paymentMethod}/{device}', 'OfflinePaymentController@verifyPayment');
 });
 Route::group(['prefix' => 'orderproduct'], function () {
     Route::get('store', 'OrderproductController@store');
@@ -112,7 +113,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('getUnverifiedTransactions', 'TransactionController@getUnverifiedTransactions');
     Route::any('paymentRedirect/{paymentMethod}/{device}', 'OnlinePaymentController@paymentRedirect');
 
-    Route::view('testPage','pages.test');
     Route::get('exitAdminInsertOrder', 'OrderController@exitAdminInsertOrder');
     Route::post('exchangeOrderproduct/{order}', 'OrderController@exchangeOrderproduct');
     Route::get('MBTI-Participation', "MbtianswerController@create");

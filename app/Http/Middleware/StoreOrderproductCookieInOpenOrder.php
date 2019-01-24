@@ -2,14 +2,24 @@
 
 namespace App\Http\Middleware;
 
-use App\Traits\OrderproductControllerCommon;
+use App\Http\Controllers\OrderproductController;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 
 class StoreOrderproductCookieInOpenOrder
 {
 
-    use OrderproductControllerCommon;
+    private $orderproductController;
+
+    /**
+     * StoreOrderproductCookieInOpenOrder constructor.
+     * @param OrderproductController $orderproductController
+     */
+    public function __construct(OrderproductController $orderproductController)
+    {
+        $this->orderproductController = $orderproductController ;
+    }
+
 
     /**
      * Handle an incoming request.
@@ -20,19 +30,22 @@ class StoreOrderproductCookieInOpenOrder
      */
     public function handle($request, Closure $next ,$guard = null)
     {
+//        Sample:
+//        $_COOKIE["cartItems"]='[{"product_id": 257,"products": [259,261]}]';
         if (Auth::guard($guard)->check()) {
             $user = Auth::guard($guard)->user();
 
-            $cookieOrderproducts = json_decode($request->header("cartItems"));
+            $cookieOrderproducts = [];
+            if(isset($_COOKIE["cartItems"]))
+                $cookieOrderproducts = json_decode($_COOKIE["cartItems"]);
             if($this->validateCookieOrderproducts($cookieOrderproducts))
             {
-                $openOrder = $user->openOrders()->get()->first();
-                //ToDo : Make sure there is an open order in a middleware before this
+                $openOrder = $user->openOrders->first();
                 if(isset($openOrder))
                 {
                     foreach ($cookieOrderproducts as $cookieOrderproduct) {
                         $data = [ "order_id" => $openOrder->id ];
-                        $this->storeOrderproductJsonObject($cookieOrderproduct, $data);
+                        $this->orderproductController->storeOrderproductJsonObject($cookieOrderproduct, $data);
                     }
 
                     //ToDo : empty cookies

@@ -14,10 +14,6 @@ use App\Classes\Payment\RefinementRequest\{Refinement, RefinementInterface};
 
 class OpenOrderRefinement extends Refinement
 {
-    /**
-     * @var Order
-     */
-    private $openOrder;
 
     /**
      * @return Refinement
@@ -27,10 +23,10 @@ class OpenOrderRefinement extends Refinement
         if($this->statusCode!=Response::HTTP_OK) {
             return $this;
         }
-        $this->getOpenOrder();
-        $this->openOrder->load('orderproducts');
-        if ($this->openOrder && $this->openOrder->orderproducts->isNotEmpty()) {
-            $this->order = $this->openOrder;
+        $openOrder = $this->getOpenOrder();
+        $openOrder->load('orderproducts');
+        if ($openOrder->orderproducts->isNotEmpty()) {
+            $this->order = $openOrder;
             $this->getOrderCost();
             $this->donateCost = $this->order->getDonateCost();
             if($this->canDeductFromWallet()) {
@@ -48,8 +44,11 @@ class OpenOrderRefinement extends Refinement
         return $this;
     }
 
-    private function getOpenOrder(): void
+    /**
+     * @return Order
+     */
+    private function getOpenOrder(): Order
     {
-        $this->openOrder = $this->firstOrCreateOpenOrder($this->user);
+        return $this->firstOrCreateOpenOrder($this->user);
     }
 }

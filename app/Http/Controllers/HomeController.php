@@ -9,8 +9,6 @@ use App\{Assignmentstatus,
     Block,
     Bon,
     Checkoutstatus,
-    Classes\Checkout\Alaa\AlaaCashier,
-    Classes\Checkout\Alaa\OrderproductCheckout,
     Classes\Format\BlockCollectionFormatter,
     Classes\Format\webBlockCollectionFormatter,
     Classes\Format\webSetCollectionFormatter,
@@ -105,7 +103,7 @@ class HomeController extends Controller
         //            $authException = ['index' , 'getImage' , 'error404' , 'error403' , 'error500' , 'errorPage' , 'siteMapXML', 'download' ];
         //        }else{
         $authException = [
-            'debug',
+//            'debug',
             'download',
             'telgramAgent',
             'index',
@@ -196,6 +194,8 @@ class HomeController extends Controller
     {
         try{
 
+            $order = \App\Order::find(245778);
+            return $order->obtainOrderCost(true);
 //            $set = Contentset::findOrFail(1);
 //            dd($set->contents_count);
             //

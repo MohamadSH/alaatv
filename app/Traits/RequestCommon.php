@@ -3,21 +3,18 @@
 trait RequestCommon
 {
     /**
-     * @param \Illuminate\Http\Request $request
+     * @param array $data
      * @param         $index
      *
      * @return array|bool|\Illuminate\Http\UploadedFile|mixed|null
      */
-    public function getRequestFile(\Illuminate\Http\Request $request, $index)
+    public function getRequestFile(array $data, $index)
     {
         $hasFile = true;
-        if ($request->has($index)) {
-            $file = $request->file($index);
-            if (!isset($file)) {
-                $file = $request->get($index);
-                if (!is_file($file))
-                    $hasFile = false;
-            }
+        if (in_array($index , $data)) {
+            $file = $data[$index];
+            if (!is_file($file))
+                $hasFile = false;
         } else {
             $hasFile = false;
         }

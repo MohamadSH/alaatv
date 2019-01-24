@@ -1612,8 +1612,8 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
                 $cost += $this->basePrice;
             }
 
-        // Adding attributes extra cost
-        $attributevalues = $this->attributevalues('main')->get();
+        // ToDo: Hard code
+        $attributevalues = $this->attributevalues->where("attributetype_id", 1);
         foreach ($attributevalues as $attributevalue) {
             if (isset($attributevalue->pivot->extraCost))
                 $cost += $attributevalue->pivot->extraCost;
@@ -1624,6 +1624,7 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
 
     public function attributevalues($attributeType = null)
     {
+        //ToDo : Shouls be deprecated . It is being used in some blades
         if (isset($attributeType)) {
             $attributeType = Attributetype::where("name", $attributeType)
                                           ->first();

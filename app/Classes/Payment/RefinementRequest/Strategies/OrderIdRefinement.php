@@ -11,11 +11,10 @@ namespace App\Classes\Payment\RefinementRequest\Strategies;
 
 use App\Order;
 use App\Classes\Payment\RefinementRequest\Refinement;
+use Illuminate\Http\Response;
 
 class OrderIdRefinement extends Refinement
 {
-    private $orderId;
-
     /**
      * @return Refinement
      */
@@ -24,9 +23,10 @@ class OrderIdRefinement extends Refinement
         if($this->statusCode!=Response::HTTP_OK) {
             return $this;
         }
-        $this->orderId = $this->inputData['order_id'];
-        $this->getOrder();
-        if(isset($this->order)) {
+        $orderId = $this->inputData['order_id'];
+        $order = $this->getOrder($orderId);
+        if($order !== false) {
+            $this->order = $order;
             $this->user = $this->order->user;
             $this->getOrderCost();
             // ToDo: if sent open order_id user can't use wallet
@@ -46,8 +46,16 @@ class OrderIdRefinement extends Refinement
         return $this;
     }
 
-    private function getOrder(): void
+    /**
+     * @param int $orderId
+     * @return bool|Order
+     */
+    private function getOrder(int $orderId)
     {
-        $this->order = Order::with(['transactions', 'coupon'])->find($this->orderId);
+        $order =  Order::with(['transactions', 'coupon'])->find($orderId);
+        if(isset($order))
+            return $order;
+        else
+            return false;
     }
 }

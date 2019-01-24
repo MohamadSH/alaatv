@@ -26,7 +26,7 @@ class SubmitOrderCoupon
                     return response([] , 403);
             }else
             {
-                $openOrder = $user->openOrders()->get()->first();
+                $openOrder = $user->openOrders->first();
                 if(isset($openOrder))
                     $request->offsetSet("order_id" , $openOrder->id);
             }

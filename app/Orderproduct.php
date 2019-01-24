@@ -6,6 +6,7 @@ namespace App;
 use App\Classes\Checkout\Alaa\AlaaOrderproductGroupPriceCalculatorFromNewBase;
 use App\Classes\Checkout\Alaa\OrderproductCheckout;
 use App\Collection\OrderproductCollection;
+use App\Traits\Helper;
 use App\Traits\ProductCommon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -70,6 +71,7 @@ use Illuminate\Support\Facades\Config;
  */
 class Orderproduct extends Model
 {
+    use Helper;
     use SoftDeletes;
     /**      * The attributes that should be mutated to dates.        */
     protected $dates = [

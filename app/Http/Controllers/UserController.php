@@ -44,7 +44,8 @@ use App\{Afterloginformcontrol,
     Websitesetting};
 use Auth;
 use Carbon\Carbon;
-use Illuminate\{Foundation\Http\FormRequest,
+use Illuminate\{Contracts\Filesystem\FileNotFoundException,
+    Foundation\Http\FormRequest,
     Http\Request,
     Http\Response,
     Support\Collection,
@@ -343,44 +344,19 @@ class UserController extends Controller
     public function store(InsertUserRequest $request)
     {
         try {
-            //ToDo : To be placed in a middleware
-            $softDeletedUsers = User::onlyTrashed()
-                                    ->where("mobile", $request->get("mobile"))
-                                    ->where("nationalCode", $request->get("nationalCode"))
-                                    ->get();
+            $result =  $this->new($request->all() , $request->user());
 
-            if ($softDeletedUsers->isNotEmpty()) {
-                $softDeletedUsers->first()
-                                 ->restore();
-                return response(
-                    [],
-                    Response::HTTP_OK
-                );
-            }
-
-            $user = new User();
-            $this->fillContentFromRequest($request, $user);
-
-            $done = false;
-            if ($user->save()) {
-                if ($request->has("roles"))
-                    $this->attachRoles($request->get("roles"), $request->user(), $user);
-
-                $responseStatusCode = Response::HTTP_OK;
-                $responseContent = "درج کاربر با موفقیت انجام شد";
-                $done = true;
-
-            } else {
-                $responseStatusCode = Response::HTTP_SERVICE_UNAVAILABLE;
+            if($result["error"])
                 $responseContent = "خطا در ذخیره کاربر";
-            }
+            else
+                $responseContent = "درج کاربر با موفقیت انجام شد";
 
             return response(
                 [
                     "message" => $responseContent,
-                    "user"    => ($done ? $user : null),
+                    "user"    => $result["user"],
                 ],
-                $responseStatusCode
+                $result["data"]["resultCode"]
             );
         }
         catch (\Exception    $e) {
@@ -399,55 +375,56 @@ class UserController extends Controller
     }
 
     /**
-     * @param FormRequest $request
-     * @param User        $user
+     * @param array $inputData
+     * @param User $user
+     * @param User $authenticatedUser
      *
      * @return void
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
-    private function fillContentFromRequest(FormRequest $request, User &$user): void
+    private function fillContentFromRequest(array $inputData , User $authenticatedUser, User &$user): void
     {
-        $user->fill($request->all());
+        $user->fill($inputData);
 
-        if ($request->user()->can(config('constants.EDIT_USER_ACCESS'))) {
-            $hasMobileVerifiedAt = $request->has("mobileNumberVerification");
-            $hasPassword = $request->has("password");
-            $hasLockProfile = $request->has("lockProfile");
-            $hasFirstName = $request->has("firstName");
-            $hasLastName = $request->has("lastName");
-            $hasNameSlug = $request->has("nameSlug");
-            $hasMobile = $request->has("mobile");
-            $hasNationalCode = $request->has("nationalCode");
-            $hasUserStatusId = $request->has("userstatus_id");
-            $hasTechCode = $request->has("techCode");
+        if ($authenticatedUser->can(config('constants.EDIT_USER_ACCESS'))) {
+            $hasMobileVerifiedAt = in_array("mobileNumberVerification" , $inputData);
+            $hasPassword = in_array("password" , $inputData);
+            $hasLockProfile = in_array("lockProfile" , $inputData);
+            $hasFirstName = in_array("firstName" , $inputData);
+            $hasLastName = in_array("lastName" , $inputData);
+            $hasNameSlug = in_array("nameSlug" , $inputData);
+            $hasMobile = in_array("mobile" , $inputData);
+            $hasNationalCode = in_array("nationalCode" , $inputData);
+            $hasUserStatusId = in_array("userstatus_id" , $inputData);
+            $hasTechCode = in_array("techCode" , $inputData);
 
             if ($hasMobileVerifiedAt)
-                $user->mobile_verified_at = ($request->get("mobileNumberVerification") == "1") ? Carbon::now()
+                $user->mobile_verified_at = ($inputData["mobileNumberVerification"] == "1") ? Carbon::now()
                     ->setTimezone("Asia/Tehran") : null;
             if ($hasPassword)
-                $user->password = bcrypt($request->get("password"));
+                $user->password = bcrypt($inputData["password"]);
             if ($hasFirstName)
-                $user->firstName = $request->get("firstName");
+                $user->firstName = $inputData["firstName"];
             if ($hasLastName)
-                $user->lastName = $request->get("lastName");
+                $user->lastName = $inputData["lastName"];
             if ($hasNameSlug)
-                $user->nameSlug = $request->get("nameSlug");
+                $user->nameSlug = $inputData["nameSlug"];
             if ($hasMobile)
-                $user->mobile = $request->get("mobile");
+                $user->mobile = $inputData["mobile"];
             if ($hasNationalCode)
-                $user->nationalCode = $request->get("nationalCode");
+                $user->nationalCode = $inputData["nationalCode"];
             if ($hasUserStatusId)
-                $user->userstatus_id = $request->get("userstatus_id");
+                $user->userstatus_id = $inputData["userstatus_id"];
             if ($hasTechCode)
-                $user->techCode = $request->get("techCode");
+                $user->techCode = $inputData["techCode"];
             if ($hasLockProfile)
-                $user->lockProfile = $request->get("lockProfile") == "1" ? 1 : 0;
+                $user->lockProfile = $inputData["lockProfile"] == "1" ? 1 : 0;
         }
 
-        if ($request->has("roles"))
-            $this->attachRoles($request->get("roles"), $request->user(), $user);
+        if (in_array("roles" , $inputData))
+            $this->attachRoles($inputData["roles"], $request->user(), $user);
 
-        $file = $this->getRequestFile($request, "photo");
+        $file = $this->getRequestFile($inputData, "photo");
         if ($file !== false)
             $this->storePhotoOfUser($user, $file);
     }
@@ -485,7 +462,7 @@ class UserController extends Controller
      */
     private function attachRoles(array $newRoleIds = [], User $staffUser, User $user): void
     {
-        if ($staffUser->can(config('constants.INSET_USER_ROLE'))) {
+        if (isset($staffUser) && $staffUser->can(config('constants.INSET_USER_ROLE'))) {
             $oldRolesIds = $user->roles->pluck("id")
                                        ->toArray();
             $totalRoles = array_merge($oldRolesIds, $newRoleIds);
@@ -1087,9 +1064,7 @@ class UserController extends Controller
         if ($completionPercentage == 100) {
             if ($user->completion("lockProfile") == 100) {
                 $user->lockProfile();
-                $user->timestamps = false;
-                $user->update();
-                $user->timestamps = true;
+                $user->updateWithoutTimestamp();
             }
         }
         return view("user.completeInfo", compact("user", "parentsNumber", "majors", "genders", "bloodTypes", "grades", "userProduct", "order", "orderFiles", "userHasMedicalQuestions", "lockedFields", "completionPercentage", "customerExtraInfo"));
@@ -1583,7 +1558,7 @@ class UserController extends Controller
                 abort(Response::HTTP_FORBIDDEN);
         }
 
-        $this->fillContentFromRequest($request, $user);
+        $this->fillContentFromRequest($request->all() , $request->user(), $user);
 
         if ($user->completion("lockProfile") == 100)
             $user->lockProfile();
@@ -1902,5 +1877,63 @@ class UserController extends Controller
         }
 
         return redirect()->back();
+    }
+
+    /**
+     * @param array $data
+     * @param User|null $authenticatedUser
+     * @return array
+     */
+    public function new(array $data , User $authenticatedUser=null) : array
+    {
+        //ToDo : To be placed in a middleware
+        $softDeletedUsers = User::onlyTrashed()
+            ->where("mobile", $data["mobile"])
+            ->where("nationalCode", $data["nationalCode"])
+            ->get();
+
+        if ($softDeletedUsers->isNotEmpty()) {
+            $softDeletedUsers->first()
+                ->restore();
+            return response(
+                [],
+                Response::HTTP_OK
+            );
+        }
+
+        $user = new User();
+        try {
+            $this->fillContentFromRequest($data , $authenticatedUser , $user);
+        } catch (FileNotFoundException $e) {
+            return [
+                "error" => true,
+                "data" => [
+                    "resultCode" => Response::HTTP_INTERNAL_SERVER_ERROR ,
+                    "text"       => $e->getMessage(),
+                    "line"       => $e->getLine(),
+                    "file"       => $e->getFile()
+                ]
+            ];
+        }
+
+        $error = false;
+        if ($user->save()) {
+            if (in_array("roles" , $data))
+                $this->attachRoles($data["roles"], $authenticatedUser, $user);
+
+            $resultCode = Response::HTTP_OK;
+
+        } else {
+            $error = true;
+            $resultCode = Response::HTTP_SERVICE_UNAVAILABLE;
+        }
+
+        return [
+            "error" => $error ,
+            "data" => [
+                "resultCode" => $resultCode,
+                "user"       => (!$error)?$user:null
+            ]
+        ];
     }
 }

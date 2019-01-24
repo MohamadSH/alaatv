@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 class OrderCheckoutReview
@@ -22,16 +23,11 @@ class OrderCheckoutReview
 
             if($request->has("order_id"))
             {
-                if($user->can("constants.SHOW_ORDER_INVOICE_ACCESS"))
-                {
-
-                }else
-                {
-                    return response([] , 403);
-                }
+                if(!$user->can("constants.SHOW_ORDER_INVOICE_ACCESS"))
+                    return response([] , Response::HTTP_FORBIDDEN);
             }else
             {
-                $openOrder = $user->openOrders()->get()->first();
+                $openOrder = $user->openOrders->first();
                 if(isset($openOrder))
                     $request->offsetSet("order_id" , $openOrder->id);
             }

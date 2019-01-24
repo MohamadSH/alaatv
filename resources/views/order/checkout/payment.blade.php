@@ -192,7 +192,7 @@
                                                                 {{($credit>0)?"جمع کل:":"مبلغ قابل پرداخت:"}}
                                                                 <lable id="totalCost"
                                                                        style="text-decoration: line-through;">
-                                                                    {{number_format($invoiceInfo["totalRawCost"])}}
+                                                                    {{number_format($invoiceInfo["totalCost"])}}
                                                                 </lable>
                                                             تومان
                                                             </span>

@@ -7,6 +7,7 @@ use App\Attributevalue;
 use App\Bon;
 use App\Checkoutstatus;
 use App\Collection\ProductCollection;
+use App\Collection\OrderproductCollection;
 use App\Http\Requests\InsertUserBonRequest;
 use App\Http\Requests\OrderProduct\AttachExtraAttributesRequest;
 use App\Order;
@@ -14,8 +15,10 @@ use App\Orderproduct;
 use App\Product;
 use App\Traits\ProductCommon;
 use App\User;
+use App\Websitesetting;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\URL;
@@ -34,9 +37,9 @@ class OrderproductController extends Controller
 
     protected $response;
 
-    function __construct()
+    function __construct( Websitesetting $setting , Response $response)
     {
-        $this->response = new Response();
+        $this->response = $response;
         $this->middleware('auth', [
             'only' => [
                 'destroy',
@@ -51,7 +54,7 @@ class OrderproductController extends Controller
         ], [
             'only' => ['store']
         ]);
-        $this->middleware('checkPermissionForSendExtraAttributesCost', ['only' => ['attachExtraAttributes']]);
+        $this->middleware('CheckPermissionForSendExtraAttributesCost', ['only' => ['attachExtraAttributes']]);
     }
 
     /**
@@ -165,444 +168,16 @@ class OrderproductController extends Controller
      * Store a newly created resource in storage.
      *
      * @param OrderProductStoreRequest $request
-     * @return Response
+     *
+     * @return \Illuminate\Http\Response
      */
     public function store(OrderProductStoreRequest $request)
     {
+        $orderproducts = $this->new($request->all());
 
-        $productId = $request->get('product_id');
-        $orderId = $request->get('order_id');
-
-        /**
-         * orderStatus set on CheckPermissionForSendOrderId middleware
-         * with openOrder or sentOrder values for reduce query
-         */
-        if($request->user()->openOrders->isNotEmpty()) {
-            $order = $request->user()->openOrders->first();
-        } else {
-            $order = Order::FindorFail($orderId);
-        }
-
-
-        // ToDO: decide  better approach
-        /**
-         * we can use checkPermissionForSendExtraAttributesCost middleware and put $product in request
-         * or do checkPermissionForSendExtraAttributesCost middleware process in method and get $product directly
-         */
-        /*$product = $request->get('parentProduct');*/
-
-        $product = Product::FindorFail($productId);
-//        $product->load('children');
-        if ($request->has('extraAttribute')) {
-            if (!$request->user()->can(config("constants.ATTACH_EXTRA_ATTRIBUTE_ACCESS"))) {
-                $attributesValues = $this->getAttributesValuesFromProduct($request, $product);
-                $this->syncExtraAttributesCost($request, $attributesValues);
-            }
-        }
-        $data = [
-            'products' => $request->get('products'),
-            'attribute' => $request->get('attribute'),
-            'extraAttribute' => $request->get('extraAttribute'),
-            'withoutBon' => $request->get('withoutBon')
-        ];
-
-//        $order->load('orderproducts');
-        $user = $order->user;
-
-        /** @var ProductCollection $simpleProducts */
-        $simpleProducts = (new RefinementFactory($product, $data))->getRefinementClass()->getProducts();
-
-        if($simpleProducts->isEmpty()) {
-            return response()->json([
-                'error' => 'محصول مورد نظر یافت نشد.'
-            ], Response::HTTP_NOT_FOUND);
-        }
-
-        $notDuplicateProduct = $order->checkProductsExistInOrderProducts($simpleProducts);
-
-        /**
-         * save orderproduct and attach extraAttribute
-         * @var Product $productItem
-         */
-        foreach ($notDuplicateProduct as $key => $productItem) {
-            $orderProduct = new Orderproduct();
-            $orderProduct->product_id = $productItem->id;
-            $orderProduct->order_id = $order->id;
-            $orderProduct->orderproducttype_id = config("constants.ORDER_PRODUCT_TYPE_DEFAULT");
-            if ($orderProduct->save()) {
-
-                $productItem->decreaseProductAmountWithValue(1);
-
-                $attachExtraAttributesRequest =new AttachExtraAttributesRequest();
-                $attachExtraAttributesRequest->offsetSet('extraAttribute', $data['extraAttribute']);
-                $this->attachExtraAttributes($attachExtraAttributesRequest, $orderProduct);
-
-                $this->applyOrderProductBon($data, $user, $orderProduct, $productItem);
-
-                $this->applyOrderGifts($order, $orderProduct, $productItem);
-            }
-        }
-
-        return response()->json([
-            'message' => 'ذخیره شد.'
-        ], Response::HTTP_OK);
-
-//        return $order->orderproducts()->get();
-
-
-//
-//
-//        $product_id = $request->get("product_id");
-//
-//        $product = Product::FindorFail($product_id);
-//        if ($request->has("userId_bhrk")) {
-//            $userId = $request->get("userId_bhrk");
-//            $user = User::FindOrFail($userId);
-//        } else {
-//            $user = Auth::user();
-//        }
-//        $ajax = request()->ajax();
-//
-//        if ((Auth::check() &&
-//                !$user->can(Config::get('constants.ORDER_ANY_THING'))) &&
-//            !session()->has("adminOrder_id") &&
-//            !$request->has("forceStore_bhrk")) {
-//            $validateProduct = $product->validateProduct();
-//            if (strlen($validateProduct) != 0) {
-//                if ($ajax) {
-//                    return $this->response->setStatusCode(503)
-//                                          ->setContent(["message" => $validateProduct]);
-//                } else {
-//                    session()->put("error", $validateProduct);
-//                    return redirect()->back();
-//                }
-//
-//            }
-//        }
-//
-//        $parentProductType = $product->producttype->name;
-//        if ($request->has("attribute") ||
-//            $product->producttype_id == Config::get("constants.PRODUCT_TYPE_SIMPLE")
-//        ) {
-//            switch ($parentProductType) {
-//                case "configurable" :
-//                    if (session()->has("adminOrder_id")) {
-//                        $children = $product->children;
-//                    } else {
-//                        $children = $product->children->where("enable", 1);
-//                    }
-//
-//                    foreach ($children as $child) {
-//                        $attributevalues = $child->attributevalues;
-//                        $flag = true;
-//                        foreach ($request->get("attribute") as $value) {
-//                            if (!$attributevalues->contains($value)) {
-//                                $flag = false;
-//                                break;
-//                            }
-//                        }
-//                        if ($flag && $attributevalues->count() == count($request->get("attribute"))) {
-//                            $simpleProducts = [$child];
-//                            break;
-//                        }
-//
-//                    }
-//                    break;
-//                case "simple" :
-//                    if (session()->has("adminOrder_id"))
-//                        $children = $product->children;
-//                    else $children = $product->children->where("enable", 1);
-//
-//                    $simpleProducts = [$product];
-//                    break;
-//                default:
-//                    break;
-//            }
-//        } else if ($request->has("products")) {
-//            $products = $request->get("products");
-//            $simpleProducts = [];
-//            foreach ($products as $key => $productId) {
-//                $simpleProduct = Product::FindOrFail($productId);
-//                if (!$simpleProduct->enable)
-//                    continue;
-//                if ($simpleProduct->hasParents()) {
-//                    if (in_array($simpleProduct->parents->first()->id, $products)) {
-//                        array_forget($products, $key);
-//                        $childrenArray = $simpleProduct->children;
-//                        foreach ($childrenArray as $child) {
-//                            array_forget($products, array_flip($products)[$child->id]);
-//                        }
-//                    }
-//                }
-//                if (in_array($productId, $products))
-//                    array_push($simpleProducts, $simpleProduct);
-//            }
-//        } else {
-//            $message = "لطفا ابتدا در قسمت \"انتخاب محصول\" تیک محصولات مورد نظرتون رو بزنید(انتخاب کنید)";
-//            if ($ajax) {
-//                return $this->response->setStatusCode(503)
-//                                      ->setContent(["message" => $message]);
-//            } else {
-//                session()->put("error", $message);
-//                return redirect()->back();
-//            }
-//        }
-//        if (isset($simpleProducts)) {
-//            if ($parentProductType != "simple")
-//                foreach ($simpleProducts as $simpleProduct) {
-//                    $validateProduct = $simpleProduct->validateProduct();
-//                    if (strlen($validateProduct) != 0) {
-//                        session()->put("warning", $validateProduct);
-//                        return redirect()->back();
-//                    }
-//                }
-//        } else {
-//            $message = "محصول مورد نظر شما غیر فعال شده است";
-//            if ($ajax) {
-//                return $this->response->setStatusCode(503)
-//                                      ->setContent(["message" => $message]);
-//            } else {
-//                session()->put("warning", $message);
-//                return redirect()->back();
-//            }
-//        }
-//        //ToDo : replace with better approach
-//        if (Auth::check()) {
-//            /**
-//             * Determines it is an order by admin or by a user
-//             */
-//            if ($request->has("order_id")) {
-//                $order_id = $request->get("order_id");
-//            } else if (session()->has("adminOrder_id")) {
-//                if (!$user->can(Config::get('constants.INSERT_ORDER_ACCESS'))) {
-//                    if ($ajax) {
-//                        return $this->response->setStatusCode(403);
-//                    } else {
-//                        return redirect(action("HomeController@error403"));
-//                    }
-//                }
-//
-//                $order_id = session()->get("adminOrder_id");
-//                $user_id = session()->get("customer_id");
-//                $user = User::FindOrFail($user_id);
-//            } else {
-//                $order_id = session()->get("order_id");
-//
-//            }
-//
-//            $order = Order::FindorFail($order_id);
-//            if ($order->user->id != $user->id) {
-//                if ($ajax) {
-//                    return $this->response->setStatusCode(403);
-//                } else {
-//                    return redirect(action("HomeController@error403"));
-//                }
-//            }
-//            /**
-//             * end
-//             */
-//            $hasPishtazExtraValue = false;
-//            $attachedGifts = collect();
-//            foreach ($simpleProducts as $simpleProduct) {
-//                $orderproduct = new Orderproduct();
-//                $orderproduct->product_id = $simpleProduct->id;
-//                $orderstatus = $order->orderstatus->id;
-//
-//                $donateFlag = false;
-//                if (isset($orderstatus) && $orderstatus == config("constants.ORDER_STATUS_OPEN_DONATE"))
-//                    $donateFlag = true;
-//
-//                if ($order->orderproducts->isNotEmpty()) {
-//                    $orderHasProduct = false;
-//                    foreach ($order->orderproducts as $singleOrderproduct) {
-//                        if ($donateFlag) {
-//                            $singleOrderproduct->delete();
-//                        } else if ($simpleProduct->id == $singleOrderproduct->product->id) {
-//                            $orderHasProduct = true;
-//                            continue;
-//                        }
-//
-//                    }
-//                    if ($orderHasProduct)
-//                        continue;
-//                }
-//                $orderproduct->order_id = $order->id;
-//                if ($orderproduct->save()) {
-//                    /**
-//                     * Adding selected extra attributes to the orderproduct
-//                     */
-//                    $extraAttributes = $request->get("extraAttribute");
-//                    if (isset($extraAttributes))
-//                        foreach ($extraAttributes as $value) {
-//                            $myParent = $this->makeParentArray($simpleProduct);
-//                            $myParent = end($myParent);
-//                            $attributevalue = $myParent->attributevalues->where("id", $value);
-//                            if ($attributevalue->isNotEmpty()) {
-//                                if ($attributevalue->first()->id != 48 || !$hasPishtazExtraValue)
-//                                    $orderproduct->attributevalues()
-//                                                 ->attach($attributevalue->first()->id, ["extraCost" => $attributevalue->first()->pivot->extraCost]);
-//                                if ($attributevalue->first()->id == 48)
-//                                    $hasPishtazExtraValue = true;
-//                            }
-//                        }
-//                    /**
-//                     * end
-//                     */
-//
-//                    /**
-//                     * Obtaining product amount
-//                     */
-//                    if (isset($simpleProduct->amount)) {
-//                        $simpleProduct->amount = $simpleProduct->amount - 1;
-//                        $simpleProduct->update();
-//                    }
-//                    /**
-//                     * end
-//                     */
-//
-//                    $isFreeFlag = ($simpleProduct->isFree || ($simpleProduct->hasParents() && $simpleProduct->parents()
-//                                                                                                            ->first()->isFree));
-//                    if (!$isFreeFlag &&
-//                        $simpleProduct->basePrice != 0 &&
-//                        $simpleProduct->basePrice != 0 &&
-//                        !$request->has("withoutBon")) {
-//                        /**
-//                         *  User bon discount for this orderproduct
-//                         */
-//                        $bonName = Config::get("constants.BON1");
-//                        $bons = $simpleProduct->bons->where("name", $bonName)
-//                                                    ->where("pivot.discount", ">", "0")
-//                                                    ->where("isEnable", 1);
-//                        if ($bons->isEmpty()) {
-//                            $parentsArray = $this->makeParentArray($simpleProduct);
-//                            if (!empty($parentsArray)) {
-//                                foreach ($parentsArray as $parent) {
-//                                    $bons = $parent->bons->where("name", $bonName)
-//                                                         ->where("pivot.discount", ">", "0")
-//                                                         ->where("isEnable", 1);
-//                                    if (!$bons->isEmpty())
-//                                        break;
-//                                }
-//                            }
-//                        }
-//                        if (!$bons->isEmpty()) {
-//                            $bon = $bons->first();
-//                            $userbons = $user->userValidBons($bon);
-//                            if (!$userbons->isEmpty()) {
-//                                foreach ($userbons as $userbon) {
-//                                    $totalBonNumber = $userbon->totalNumber - $userbon->usedNumber;
-//                                    $orderproduct->userbons()
-//                                                 ->attach($userbon->id, [
-//                                                     "usageNumber" => $totalBonNumber,
-//                                                     "discount"    => $bon->pivot->discount,
-//                                                 ]);
-//                                    $userbon->usedNumber = $userbon->usedNumber + $totalBonNumber;
-//                                    $userbon->userbonstatus_id = Config::get("constants.USERBON_STATUS_USED");
-//                                    $userbon->update();
-//                                }
-//
-//                                Cache::tags('bon')
-//                                     ->flush();
-//                            }
-//                        }
-//                        /**
-//                         * end
-//                         */
-//                    }
-//
-//                    /**
-//                     * Saving orderproduct cost
-//                     */
-//                    $costArray = [];
-//
-//                    if ($request->has("cost_bhrk")) {
-//                        $costArray["cost"] = $request->get("cost_bhrk");
-//                    } else {
-//                        $costArray = $orderproduct->obtainOrderproductCost();
-//                    }
-//                    $orderproduct->fillCostValues($costArray);
-//
-//                    $updateFlag = $orderproduct->update();
-//                    /**
-//                     *  end
-//                     */
-//
-//                    /**
-//                     * Attaching simple product gifts to the order
-//                     */
-//                    $gifts = $simpleProduct->getGifts();
-//                    foreach ($gifts as $gift) {
-//                        if ($attachedGifts->contains($gift->id))
-//                            continue;
-//                        else
-//                            $attachedGifts->push($gift->id);
-//                        if ($order->orderproducts(Config::get("constants.ORDER_PRODUCT_GIFT"))
-//                                  ->whereHas("product", function ($q) use ($gift) {
-//                                      $q->where("id", $gift->id);
-//                                  })
-//                                  ->get()
-//                                  ->isNotEmpty())
-//                            continue;
-//                        $orderproduct->attachGift($gift);
-//                    }
-//                    /**
-//                     *    end
-//                     */
-//
-//                }
-//                //ToDo : replace with appropriate error page
-//                //                    else exit("خطای پایگاه داده");
-//            }
-//
-//        } else {
-//            if (!session()->has('orderproducts')) {
-//                $products = [];
-//            } else {
-//                $products = session()->pull("orderproducts");
-//            }
-//            $orderproductAttributes = [];
-//            foreach ($simpleProducts as $simpleProduct) {
-//                $gifts = $simpleProduct->getGifts();
-//                if (!array_has($products, $simpleProduct->id))
-//                    $products = array_add($products, $simpleProduct->id, [
-//                        "amount" => 1,
-//                        "gifts"  => $gifts,
-//                    ]);
-//
-//
-//                $extraAttributes = $request->get("extraAttribute");
-//                if (isset($extraAttributes)) {
-//                    $extraAttributeArray = [];
-//                    foreach ($extraAttributes as $value) {
-//                        $myParent = $this->makeParentArray($simpleProduct);
-//                        $myParent = end($myParent);
-//                        $attributevalue = $myParent->attributevalues->where("id", $value);
-//
-//                        if ($attributevalue->isNotEmpty()) {
-//                            $extraAttributeArray = array_add($extraAttributeArray, $attributevalue->first()->id, $attributevalue->first()->pivot->extraCost);
-//                        }
-//                    }
-//                    if (array_has($orderproductAttributes, $simpleProduct->id))
-//                        array_set($orderproductAttributes, $simpleProduct->id, $extraAttributeArray);
-//                    else
-//                        $orderproductAttributes = array_add($orderproductAttributes, $simpleProduct->id, $extraAttributeArray);
-//                    session()->put("orderproductAttributes", $orderproductAttributes);
-//                }
-//            }
-//
-//            session()->put("orderproducts", $products);
-//
-//            session()->save();
-//        }
-//
-//        if ($ajax) {
-//            return $this->response->setStatusCode(200)
-//                                  ->setContent(["redirectUrl" => action("OrderController@checkoutAuth")]);
-//        } else {
-//            return redirect(action("OrderController@checkoutAuth"));
-//        }
-
-
+        return response()->setStatusCode(200)->setContent([
+            "orderproducts" => $orderproducts,
+        ]);
     }
 
     /**
@@ -794,9 +369,7 @@ class OrderproductController extends Controller
                 $orderCost = $orderproduct->order->obtainOrderCost(true, false);
                 $orderproduct->order->cost = $orderCost["rawCostWithDiscount"];
                 $orderproduct->order->costwithoutcoupon = $orderCost["rawCostWithoutDiscount"];
-                $orderproduct->order->timestamps = false;
-                $orderproduct->order->update();
-                $orderproduct->order->timestamps = true;
+                $orderproduct->order->updateWithoutTimestamp();
             }
             session()->put("success", "محصول سفارش با موفقیت اصلاح شد");
         } else {
@@ -834,9 +407,7 @@ class OrderproductController extends Controller
             $orderCost = $orderproduct->order->obtainOrderCost(true, false);
             $orderproduct->order->cost = $orderCost["rawCostWithDiscount"];
             $orderproduct->order->costwithoutcoupon = $orderCost["rawCostWithoutDiscount"];
-            $orderproduct->order->timestamps = false;
-            $orderproduct->order->update();
-            $orderproduct->order->timestamps = true;
+            $orderproduct->order->updateWithoutTimestamp();
         }
 
         if ($deleteFlag) {
@@ -872,5 +443,87 @@ class OrderproductController extends Controller
             $orderproduct->update();
         }
         return $this->response->setStatusCode(200);
+    }
+
+
+    /**
+     * Saves a new Orderproduct
+     *
+     * @param array $data
+     * @return OrderproductCollection
+     */
+    public function new(array $data):OrderproductCollection
+    {
+        $productId = $data['product_id'];
+        $orderId = $data['order_id'];
+        $data = [
+            'products' => isset($data['products'])?$data['products']:null,
+            'attribute' => isset($data['attribute'])?$data['attribute']:null,
+            'extraAttribute' => isset($data['extraAttribute'])?$data['extraAttribute']:null,
+            'withoutBon' => isset($data['withoutBon'])?$data['withoutBon']:null
+        ];
+
+        $order = Order::FindorFail($orderId);
+        $product = Product::FindorFail($productId);
+        $user = $order->user;
+
+        $simpleProducts = (new RefinementFactory($product, $data))->getRefinementClass()->getProducts();
+
+        $notDuplicateProduct = $order->checkProductsExistInOrderProducts($simpleProducts);
+
+        $storedOrderproducts = new OrderproductCollection();
+        /**
+         * save orderproduct and attach extraAttribute
+         */
+        foreach ($notDuplicateProduct as $key => $productItem) {
+            $orderProduct = new Orderproduct();
+            $orderProduct->product_id = $productItem->id;
+            $orderProduct->order_id = $order->id;
+            $orderProduct->orderproducttype_id = config("constants.ORDER_PRODUCT_TYPE_DEFAULT");
+            if ($orderProduct->save()) {
+
+                $productItem->decreaseProductAmountWithValue(1);
+
+                if(isset($data['extraAttribute']))
+                {
+                    $attachExtraAttributesRequest =new AttachExtraAttributesRequest();
+                    $attachExtraAttributesRequest->offsetSet('extraAttribute', $data['extraAttribute']);
+                    $this->attachExtraAttributes($attachExtraAttributesRequest, $orderProduct);
+                }
+
+                $this->applyOrderProductBon($data, $user, $orderProduct);
+
+                $this->applyOrderGifts($order, $orderProduct, $productItem);
+
+                $storedOrderproducts->push($orderProduct);
+            }
+        }
+
+        return $storedOrderproducts;
+    }
+
+    /**
+     * Stores an array of json objects , each containing of an orderproduct info
+     *
+     * @param $orderproductJsonObject
+     * @param array $data
+     * @return mixed
+     */
+    public function storeOrderproductJsonObject($orderproductJsonObject , array $data)
+    {
+        $grandParentProductId = optional($orderproductJsonObject)->product_id;
+        $productIds = optional($orderproductJsonObject)->productIds;
+        $attributes = optional($orderproductJsonObject)->attributes;
+
+        $orderproductData["product_id"] = $grandParentProductId;
+        $orderproductData["products"] = $productIds;
+        $orderproductData["attributes"] = $attributes;
+        $orderproductData["order_id"] = isset($data["order_id"])?$data["order_id"]:null;
+        if(isset($this->orderproductController))
+            $response = $this->new($orderproductData);
+        else
+            $response = false;
+
+        return $response;
     }
 }
