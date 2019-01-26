@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use Cache;
+use App\Bon;
 use App\User;
 use App\Order;
+use Carbon\Carbon;
 use App\Transaction;
+use App\Bankaccount;
 use App\Traits\OrderCommon;
+use App\Transactiongateway;
 use Illuminate\Http\{Request, Response};
 use App\Classes\Payment\GateWay\GateWayFactory;
 use App\Classes\Payment\RefinementRequest\Refinement;
@@ -32,11 +37,9 @@ class OnlinePaymentController extends Controller
         $this->transactionController = $transactionController;
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Redirect
-    |--------------------------------------------------------------------------
-    */
+    /**********************************************************
+     * Redirect
+     ***********************************************************/
 
     /**
      * @param Request $request
@@ -50,14 +53,21 @@ class OnlinePaymentController extends Controller
         /*$request->offsetSet('transaction_id', 65);*/
         $request->offsetSet('payByWallet', true);
 
+        $transactiongateway = Transactiongateway::where('name', $paymentMethod)->first();
+        if(!isset($transactiongateway)) {
+            return response()->json([
+                'error' => 'اطلاعات درگاه مورد نظر یافت نشد.'
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
         $refinementRequestStrategy = $this->gteRefinementRequestStrategy($request);
 
         $inputData = $request->all();
         $inputData['transactionController'] = $this->transactionController;
         $inputData['user'] = $request->user();
 
-        $refinementLauncher = new RefinementLauncher($inputData, $refinementRequestStrategy);
-        $data = $refinementLauncher->getData();
+        $refinementLauncher = new RefinementLauncher();
+        $data = $refinementLauncher->getData($inputData, $refinementRequestStrategy);
 
         /** @var User $user */
         $user = $data['user'];
@@ -69,7 +79,6 @@ class OnlinePaymentController extends Controller
         $transaction = $data['transaction'];
         /** @var string $description */
         $description = $data['description'];
-
 
         if($data['statusCode']!=Response::HTTP_OK) {
             return response()->json([
@@ -86,12 +95,25 @@ class OnlinePaymentController extends Controller
 
             $callbackUrl = action('OnlinePaymentController@verifyPayment', ['paymentMethod' => $paymentMethod, 'device' => $device]);
 
-            $gateWay = new GateWayFactory($this->transactionController);
-            $gateWay->setGateWay($paymentMethod)->redirect($transaction, $callbackUrl, $description);
+            $gateWay = (new GateWayFactory())->setGateWay($paymentMethod, $transactiongateway->merchantNumber);
+            $result = $gateWay->paymentRequest($transaction->cost, $callbackUrl, $description);
 
-            /*return response()->json([
-                'message' => 'done'
-            ], Response::HTTP_OK);*/
+            if ($result['status']) {
+
+                $transactionModifyResult = $this->setAuthorityForTransaction($result['data']['Authority'], $transactiongateway->id, $transaction);
+
+                if ($transactionModifyResult['statusCode'] == Response::HTTP_OK) {
+                    $gateWay->redirect();
+                } else {
+                    return response()->json([
+                        'message' => 'مشکلی در ویرایش تراکنش رخ داده است.'
+                    ], Response::HTTP_INTERNAL_SERVER_ERROR);
+                }
+            } else {
+                return response()->json([
+                    'message' => $result['message']
+                ], Response::HTTP_SERVICE_UNAVAILABLE);
+            }
 
             return redirect(action('HomeController@error404'));
         } else {
@@ -156,11 +178,25 @@ class OnlinePaymentController extends Controller
         }
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | VerifyPayment
-    |--------------------------------------------------------------------------
-    */
+    /**
+     * @param string $authority
+     * @param int $transactiongatewayId
+     * @param Transaction $transaction
+     * @return array
+     */
+    private function setAuthorityForTransaction(string $authority, int $transactiongatewayId, Transaction $transaction): array
+    {
+        $data['destinationBankAccount_id'] = 1; // ToDo: Hard Code
+        $data['authority'] = $authority;
+        $data['transactiongateway_id'] = $transactiongatewayId;
+        $data['paymentmethod_id'] = config('constants.PAYMENT_METHOD_ONLINE');
+        $transactionModifyResult = $this->transactionController->modify($transaction, $data);
+        return $transactionModifyResult;
+    }
+
+    /**********************************************************
+     * VerifyPayment
+    ***********************************************************/
 
     /**
      * Verify customer online payment after coming back from payment gateway
@@ -171,8 +207,34 @@ class OnlinePaymentController extends Controller
      */
     public function verifyPayment(string $paymentMethod, string $device, Request $request)
     {
-        $gateWay = new GateWayFactory($this->transactionController);
-        $result = $gateWay->setGateWay($paymentMethod)->verify($request->all());
+        $transactiongateway = Transactiongateway::where('name', $paymentMethod)->first();
+        if(!isset($transactiongateway)) {
+            return response()->json([
+                'error' => 'اطلاعات درگاه مورد نظر یافت نشد.'
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        $gateWay = (new GateWayFactory())->setGateWay($paymentMethod, $transactiongateway->merchantNumber);
+        $callbackData = $gateWay->getCallbackData();
+        $authority = $callbackData['Authority'];
+
+        $transaction = Transaction::authority($authority)->first();
+
+        if(!isset($transaction)) {
+            return response()->json([
+                'error' => 'تراکنشی متناظر با شماره تراکنش ارسالی یافت نشد.'
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        $gateWayVerify = $gateWay->verify($transaction->cost);
+
+        $transaction->order->detachUnusedCoupon();
+
+        if ($gateWayVerify['status']) {
+            $this->handleSuccessStatus($gateWayVerify['data']['RefID'], $transaction, $gateWayVerify['data']['cardPanMask']);
+        } else {
+            $this->handleCanceledStatus($transaction);
+        }
 
 //        if ($result['status'] && isset($result['data']['order'])) {
 //            /** @var Order $order */
@@ -182,13 +244,130 @@ class OnlinePaymentController extends Controller
 
         Cache::tags('bon')->flush();
 
-        $request->session()->flash('result', $result);
+        $request->session()->flash('gateWayVerify', $gateWayVerify);
 
         return redirect(action('OnlinePaymentController@showPaymentStatus', [
-            'status' => ($result['status'])?'successful':'failed',
+            'status' => ($gateWayVerify['status'])?'successful':'failed',
             'paymentMethod' => $paymentMethod,
             'device' => $device
         ]));
+    }
+
+    /**
+     * @param string $refId
+     * @param Transaction $transaction
+     * @param string|null $cardPanMask
+     */
+    private function handleSuccessStatus(string $refId, Transaction $transaction, string $cardPanMask=null): void
+    {
+        $bankAccountId = null;
+
+        if(isset($cardPanMask)) {
+            $bankAccount = Bankaccount::firstOrCreate(['accountNumber'=>$cardPanMask]);
+            $bankAccountId = $bankAccount->id;
+        }
+
+        $this->changeTransactionStatusToSuccessful($refId, $transaction, $bankAccountId);
+
+        $transaction->order->closeWalletPendingTransactions();
+
+        $this->updateOrderPaymentStatus($transaction);
+
+        /** Attaching user bons for this order */
+        $this->givesOrderBonsToUser($transaction);
+
+        $this->result['status'] = true;
+        $this->result['message'][] = 'تراکنش با موفقیت انجام شد.';
+        $this->result['data']['transactionID'] = $refId;
+    }
+
+    /**
+     * @param Transaction $transaction
+     */
+    private function handleCanceledStatus(Transaction $transaction): void
+    {
+        $this->result['status'] = false;
+
+        $transaction->order->close(config('constants.PAYMENT_STATUS_UNPAID'), config('constants.ORDER_STATUS_CANCELED'));
+        //ToDo : use updateWithoutTimestamp
+        $transaction->order->timestamps = false;
+        $transaction->order->update();
+        $transaction->order->timestamps = true;
+
+        $transaction->transactionstatus_id = config('constants.TRANSACTION_STATUS_UNSUCCESSFUL');
+        $transaction->update();
+
+        $totalWalletRefund = $transaction->order->refundWalletTransaction();
+
+        if ($totalWalletRefund > 0) {
+            $this->result['data']['walletAmount'] = $totalWalletRefund;
+            $this->result['data']['walletRefund'] = true;
+        }
+    }
+
+    /**
+     * @param string $transactionID
+     * @param Transaction $transaction
+     * @param int|null $bankAccountId
+     */
+    protected function changeTransactionStatusToSuccessful(string $transactionID, Transaction $transaction, int $bankAccountId = null): void
+    {
+        $data['completed_at'] = Carbon::now();
+        $data['transactionID'] = $transactionID;
+        $data['destinationBankAccount_id'] = $bankAccountId;
+        $data['transactionstatus_id'] = config("constants.TRANSACTION_STATUS_SUCCESSFUL");
+        $this->transactionController->modify($transaction, $data);
+    }
+
+    /**
+     * @param Transaction $transaction
+     */
+    protected function givesOrderBonsToUser(Transaction $transaction): void
+    {
+        $bonName = config('constants.BON1');
+        $bon = Bon::ofName($bonName)->first();
+
+        if (isset($bon)) {
+            list($givenBonNumber, $failedBonNumber) = $transaction->order->giveUserBons($bonName);
+            if ($givenBonNumber == 0) {
+                if ($failedBonNumber > 0) {
+                    $this->result['data']['saveBon'] = -1;
+                }
+                else {
+                    $this->result['data']['saveBon'] = 0;
+                }
+            }
+            else {
+                $this->result['data']['saveBon'] = $givenBonNumber;
+            }
+
+            $bonDisplayName = $bon->displayName;
+            $this->result['data']['bonName'] = $bonDisplayName;
+        }
+    }
+
+    /**
+     * @param Transaction $transaction
+     */
+    protected function updateOrderPaymentStatus(Transaction $transaction): void
+    {
+        $paymentstatus_id = null;
+        if ((int)$transaction->order->totalPaidCost() < (int)$transaction->order->totalCost())
+            $paymentstatus_id = config('constants.PAYMENT_STATUS_INDEBTED');
+        else
+            $paymentstatus_id = config('constants.PAYMENT_STATUS_PAID');
+        $transaction->order->close($paymentstatus_id);
+
+        //ToDo : use updateWithoutTimestamp
+        $transaction->order->timestamps = false;
+        $orderUpdateStatus = $transaction->order->update();
+        $transaction->order->timestamps = true;
+
+        if ($orderUpdateStatus) {
+            $this->result['data']['saveOrder'] = 1;
+        } else {
+            $this->result['data']['saveOrder'] = 0;
+        }
     }
 
     /**
@@ -199,12 +378,12 @@ class OnlinePaymentController extends Controller
      * @return void
      */
     public function showPaymentStatus(string $status, string $paymentMethod, string $device, Request $request) {
-        $result = $request->session()->get('result');
+        $result = $request->session()->get('gateWayVerify');
         dd([
             'status' => $status,
             'paymentMethod' => $paymentMethod,
             'device' => $device,
-            'result' => $result
+            'gateWayVerify' => $result
         ]);
     }
 }

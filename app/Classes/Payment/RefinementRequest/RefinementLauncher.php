@@ -10,7 +10,6 @@ namespace App\Classes\Payment\RefinementRequest;
 
 class RefinementLauncher
 {
-
     /**
      * @param array $inputData
      * @param Refinement $refinement

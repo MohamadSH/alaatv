@@ -8,20 +8,15 @@
 
 namespace App\Classes\Payment\GateWay\Zarinpal;
 
-use App\Bankaccount;
-use App\Transaction;
-use App\Transactiongateway;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use Zarinpal\Zarinpal as ZarinpalComposer;
-use App\Http\Controllers\TransactionController;
 use App\Classes\Payment\GateWay\GateWayAbstract;
 
 class Zarinpal extends GateWayAbstract
 {
     private $merchantID;
+    private $returnStatus;
     private $zarinpalComposer;
-    private $transactiongatewayId;
     const EXCEPTION = array(
         -1 => 'اطلاعات ارسال شده ناقص است.',
         -2 => 'IP و یا مرچنت کد پذیرنده صحیح نیست',
@@ -36,132 +31,118 @@ class Zarinpal extends GateWayAbstract
         101 => 'عملیات پرداخت با موفقیت انجام شده ولی قبلا عملیات PaymentVertification بر روی این تراکنش انجام شده است',
     );
 
-    public function __construct(TransactionController $transactionController)
+    public function __construct(string $merchantID)
     {
         parent::__construct();
-        $zarinGate = Transactiongateway::where('name', 'zarinpal')->first();
-        $this->merchantID = $zarinGate->merchantNumber;
-        $this->transactiongatewayId = $zarinGate->id;
+        $this->merchantID = $merchantID;
         $this->zarinpalComposer = new ZarinpalComposer($this->merchantID);
+
         if(config('app.env', 'deployment')!='deployment' && config('Zarinpal.Sandbox', false)) {
             $this->zarinpalComposer->enableSandbox(); // active sandbox mod for test env
         }
         if(config('Zarinpal.ZarinGate', false)) {
             $this->zarinpalComposer->isZarinGate(); // active zarinGate mode
         }
-        $this->transactionController = $transactionController;
     }
 
     /**
      * Making request to ZarinPal gateway
      * must loadForRedirect before
-     * @param Transaction $transaction
+     * @param int $amount
      * @param string $callbackUrl
      * @param string|null $description
      * @return array
      */
-    public function redirect(Transaction $transaction, string $callbackUrl, string $description=null): array
+    public function paymentRequest(int $amount, string $callbackUrl, string $description=null): array
     {
-        $zarinpalResponse = $this->zarinpalComposer->request($callbackUrl, (int)$transaction->cost, $description);
+        $result = [
+            'status'=>false,
+            'message'=>[],
+            'data'=>[]
+        ];
 
+        $zarinpalResponse = $this->zarinpalComposer->request($callbackUrl, $amount, $description);
         if (isset($zarinpalResponse['Authority']) && strlen($zarinpalResponse['Authority']) > 0) {
-            $data['destinationBankAccount_id'] = 1; // ToDo: Hard Code
-            $data['authority'] = $zarinpalResponse['Authority'];
-            $data['transactiongateway_id'] = $this->transactiongatewayId;
-            $data['paymentmethod_id'] = config('constants.PAYMENT_METHOD_ONLINE');
-            $transactionModifyResult = $this->transactionController->modify($transaction, $data);
-            if ($transactionModifyResult['statusCode'] == Response::HTTP_OK) {
-                $this->zarinpalComposer->redirect();
-                $this->result['status'] = true;
-                $this->result['message'][] = 'ریدایرکت به درگاه با موفقیت انجام شد.';
-            }
-            else {
-                $this->result['status'] = false;
-                $this->result['message'][] = 'مشکلی در ویرایش تراکنش رخ داده است.';
-                $this->result['data']['transactionModifyResult'] = $transactionModifyResult;
-            }
+            $result['status'] = true;
+            $result['message'][] = 'درخواست پرداخت با موفقیت ارسال و نتیجه آن دریافت شد.';
+            $result['data']['Authority'] = $zarinpalResponse['Authority'];
+            $result['data']['zarinpalResponse'] = $zarinpalResponse;
         } else {
-            $this->result['status'] = false;
-            $this->result['message'][] = 'مشکل در برقراری ارتباط با درگاه زرین پال';
-            $this->result['data']['zarinpalResponse'] = $zarinpalResponse;
+            $result['status'] = false;
+            $result['message'][] = 'مشکل در برقراری ارتباط با درگاه زرین پال';
+            $result['data']['zarinpalResponse'] = $zarinpalResponse;
         }
-        return $this->result;
+        return $result;
+    }
+
+    /**
+     * Making request to ZarinPal gateway
+     * must loadForRedirect before
+     * @return void
+     */
+    public function redirect(): void
+    {
+        $this->zarinpalComposer->redirect();
     }
 
     /**
      * verify ZarinPal callback request
      * must loadForVerify before
-     * @param array $callbackData
      * @return array $this->result
      */
-    public function verify(array $callbackData): array
+    public function getCallbackData(): array
     {
-        $this->validateCallbackData($callbackData);
+        $this->validateCallbackData($this->request->all());
 
         if (!$this->result['status']) {
             return $this->result;
         }
 
-        $authority = $this->result['data']['callbackData']['Authority'];
-        $status = $this->result['data']['callbackData']['Status'];
-
-        $transaction = $this->getTransaction($authority);
-
-        if(!isset($transaction)) {
-            return $this->result;
-        }
-
-        $transaction->order->detachUnusedCoupon();
-
-        $verifyZarinpalResult = $this->verifyZarinpal($status, $transaction->cost, $authority);
-
-        if (!isset($verifyZarinpalResult)) {
-            $this->result['status'] = false;
-            $this->result['message'][] = 'مشکل در برقراری ارتباط با زرین پال';
-            $this->result['data']['verifyZarinpalResult'] = $verifyZarinpalResult;
-            return $this->result;
-        }
-
-        if ($verifyZarinpalResult['Status'] === 'success') {
-            $cardPanMask = isset($verifyZarinpalResult['ExtraDetail']['Transaction']['CardPanMask'])?$verifyZarinpalResult['ExtraDetail']['Transaction']['CardPanMask']:null;
-            $this->handleSuccessStatus($verifyZarinpalResult['RefID'], $transaction, $cardPanMask);
+        $this->returnStatus = $this->result['data']['callbackData']['Authority'];
+        if($this->returnStatus=='OK') {
+            $this->result['status'] = true;
+            $this->result['message'][] = 'کاربر پرداخت را انجام داده است و پرداخت وی می بایست تایید شود.';
+            $this->result['Authority'] = $this->result['data']['callbackData']['Authority'];
         } else {
-            $this->handleCanceledStatus($transaction);
+            $this->result['status'] = false;
+            $this->result['message'][] = 'پرداخت کاربر به درستی انجام نشده است.';
+            $this->result['Authority'] = $this->result['data']['callbackData']['Authority'];
         }
-        $this->result['data']['transaction'] = $transaction;
-        $this->result['data']['order'] = $transaction->order;
 
         return $this->result;
     }
 
     /**
-     * @param string $authority
-     * @return Transaction|null
-     */
-    private function getTransaction(string $authority): ?Transaction
-    {
-        $transaction = Transaction::authority($authority)->first();
-        if(!isset($transaction)) {
-            $this->result['status'] = false;
-            $this->result['message'][] = 'تراکنش متناظر با authority یافت نشد.';
-            $this->result['data']['authority'] = $authority;
-        }
-        return $transaction;
-    }
-
-    /**
-     * @param string $status
      * @param int $amount
-     * @param string $authority
+     * @param array $data
      * @return array
      */
-    private function verifyZarinpal(string $status, int $amount, string $authority): array
+    public function verify(int $amount, array $data=null): array
     {
+        if (isset($data['Authority'])) {
+            $authority = $data['Authority'];
+        } else {
+            $authority = $this->request->get('Authority');
+        }
+        if (isset($data['Status'])) {
+            $status = $data['Status'];
+        } else {
+            $status = $this->request->get('Status');
+        }
+
         $result = $this->zarinpalComposer->verify($status, $amount, $authority);
         $this->result['data']['zarinpalVerifyResult'] = $result;
 
+        if (!isset($result)) {
+            $this->result['status'] = false;
+            $this->result['message'][] = 'مشکل در برقراری ارتباط با زرین پال';
+            return $this->result;
+        }
+
         if (isset($result['RefID']) && strcmp($result['Status'], 'success') == 0) {
             $this->result['status'] = true;
+            $this->result['data']['RefID'] = $result['RefID'];
+            $this->result['data']['cardPanMask'] = isset($result['ExtraDetail']['Transaction']['CardPanMask'])?$result['ExtraDetail']['Transaction']['CardPanMask']:null;;
         } else {
             $this->result['status'] = false;
             if (strcmp($result['Status'], 'canceled') == 0) {
@@ -175,56 +156,7 @@ class Zarinpal extends GateWayAbstract
                 }
             }
         }
-        return $result;
-    }
-
-    /**
-     * @param string $refId
-     * @param Transaction $transaction
-     * @param string|null $cardPanMask
-     */
-    private function handleSuccessStatus(string $refId, Transaction $transaction, string $cardPanMask=null): void
-    {
-        $bankAccountId = null;
-
-        if(isset($cardPanMask)) {
-            $bankAccount = Bankaccount::firstOrCreate(['accountNumber'=>$cardPanMask]);
-            $bankAccountId = $bankAccount->id;
-        }
-
-        $this->changeTransactionStatusToSuccessful($refId, $transaction, $bankAccountId);
-
-        $transaction->order->closeWalletPendingTransactions();
-
-        $this->updateOrderPaymentStatus($transaction);
-
-        /** Attaching user bons for this order */
-        $this->givesOrderBonsToUser($transaction);
-
-        $this->result['status'] = true;
-        $this->result['message'][] = 'تراکنش با موفقیت انجام شد.';
-        $this->result['data']['transactionID'] = $refId;
-    }
-
-    private function handleCanceledStatus(Transaction $transaction): void
-    {
-        $this->result['status'] = false;
-
-        $transaction->order->close(config('constants.PAYMENT_STATUS_UNPAID'), config('constants.ORDER_STATUS_CANCELED'));
-        //ToDo : use updateWithoutTimestamp
-        $transaction->order->timestamps = false;
-        $transaction->order->update();
-        $transaction->order->timestamps = true;
-
-        $transaction->transactionstatus_id = config('constants.TRANSACTION_STATUS_UNSUCCESSFUL');
-        $transaction->update();
-
-        $totalWalletRefund = $transaction->order->refundWalletTransaction();
-
-        if ($totalWalletRefund > 0) {
-            $this->result['data']['walletAmount'] = $totalWalletRefund;
-            $this->result['data']['walletRefund'] = true;
-        }
+        return $this->result;
     }
 
     /**
@@ -236,16 +168,6 @@ class Zarinpal extends GateWayAbstract
         ];
         $result = $this->zarinpalComposer->getDriver()->unverifiedTransactions($inputs);
         return $result;
-    }
-
-    /**
-     * @param int $amount
-     * @param string $authority
-     * @return array
-     */
-    public function forceVerify(int $amount, string $authority) {
-        $verifyZarinpalResult = $this->verifyZarinpal('OK', $amount, $authority);
-        return $verifyZarinpalResult;
     }
 
     /**

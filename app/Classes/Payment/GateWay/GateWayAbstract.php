@@ -8,26 +8,25 @@
 
 namespace App\Classes\Payment\GateWay;
 
-use App\Bon;
-use Carbon\Carbon;
-use App\Transaction;
-use App\Http\Controllers\TransactionController;
+use App\Http\Requests\Request;
 
 abstract class GateWayAbstract
 {
-
-    /**
-     * @var TransactionController $transactionController
-     */
-    protected $transactionController;
 
     /**
      * @var array $result
      */
     protected $result;
 
+    /**
+     * @var Request $request
+     */
+    protected $request;
+
+
     public function __construct()
     {
+        $this->request = app('request');
         $this->result = [
             'status' => true,
             'message' => [],
@@ -35,82 +34,40 @@ abstract class GateWayAbstract
         ];
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | PaymentRequest
+    |--------------------------------------------------------------------------
+    */
+
     /**
-     * @param Transaction $transaction
+     * @param int $amount
      * @param string $callbackUrl
      * @param string|null $description
      * @return array
      */
-    abstract public function redirect(Transaction $transaction, string $callbackUrl, string $description = null): array;
+    abstract public function paymentRequest(int $amount, string $callbackUrl, string $description = null): array;
+
+    /*
+    |--------------------------------------------------------------------------
+    | Redirect
+    |--------------------------------------------------------------------------
+    */
+
+    abstract public function redirect(): void;
+
+    /*
+    |--------------------------------------------------------------------------
+    | Verify
+    |--------------------------------------------------------------------------
+    */
+
+    abstract public function getCallbackData(): array;
 
     /**
-     * @param array $callbackData
+     * @param int $amount
+     * @param array|null $data
      * @return array
      */
-    abstract public function verify(array $callbackData): array;
-
-    /**
-     * @param Transaction $transaction
-     */
-    protected function givesOrderBonsToUser(Transaction $transaction): void
-    {
-        $bonName = config('constants.BON1');
-        $bon = Bon::ofName($bonName)->first();
-
-        if (isset($bon)) {
-            list($givenBonNumber, $failedBonNumber) = $transaction->order->giveUserBons($bonName);
-            if ($givenBonNumber == 0) {
-                if ($failedBonNumber > 0) {
-                    $this->result['data']['saveBon'] = -1;
-                }
-                else {
-                    $this->result['data']['saveBon'] = 0;
-                }
-            }
-            else {
-                $this->result['data']['saveBon'] = $givenBonNumber;
-            }
-
-            $bonDisplayName = $bon->displayName;
-            $this->result['data']['bonName'] = $bonDisplayName;
-        }
-    }
-
-    /**
-     * @param Transaction $transaction
-     */
-    protected function updateOrderPaymentStatus(Transaction $transaction): void
-    {
-        $paymentstatus_id = null;
-        if ((int)$transaction->order->totalPaidCost() < (int)$transaction->order->totalCost())
-            $paymentstatus_id = config('constants.PAYMENT_STATUS_INDEBTED');
-        else
-            $paymentstatus_id = config('constants.PAYMENT_STATUS_PAID');
-        $transaction->order->close($paymentstatus_id);
-
-        //ToDo : use updateWithoutTimestamp
-        $transaction->order->timestamps = false;
-        $orderUpdateStatus = $transaction->order->update();
-        $transaction->order->timestamps = true;
-
-        if ($orderUpdateStatus) {
-            $this->result['data']['saveOrder'] = 1;
-        } else {
-            $this->result['data']['saveOrder'] = 0;
-        }
-    }
-
-    /**
-     * @param string $transactionID
-     * @param Transaction $transaction
-     * @param int|null $bankAccountId
-     */
-    protected function changeTransactionStatusToSuccessful(string $transactionID, Transaction $transaction, int $bankAccountId = null): void
-    {
-        $data['completed_at'] = Carbon::now();
-        $data['transactionID'] = $transactionID;
-        $data['destinationBankAccount_id'] = $bankAccountId;
-        $data['transactionstatus_id'] = config("constants.TRANSACTION_STATUS_SUCCESSFUL");
-        $this->transactionController->modify($transaction, $data);
-    }
+    abstract public function verify(int $amount, array $data=null): array;
 }

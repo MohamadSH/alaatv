@@ -9,31 +9,23 @@
 namespace App\Classes\Payment\GateWay;
 
 
-use App\Http\Controllers\TransactionController;
-
 class GateWayFactory
 {
-    private $transactionController;
-
     /**
      * @var GateWayAbstract $gateWayClass
      */
     private $gateWayClass;
 
-    public function __construct(TransactionController $transactionController)
-    {
-        $this->transactionController = $transactionController;
-    }
-
     /**
      * @param string $gateWay
+     * @param string $merchantID
      * @return GateWayAbstract
      */
-    public function setGateWay(string $gateWay)
+    public function setGateWay(string $gateWay, string $merchantID)
     {
         $className = $this->getGatewayNameSpace($gateWay);
         if (class_exists($className)) {
-            $this->gateWayClass = new $className($this->transactionController);
+            $this->gateWayClass = new $className($merchantID);
         } else {
             throw new Exception('GateWay {' . $className . '} not found.');
         }

@@ -99,13 +99,14 @@ abstract class Refinement
      * @return Refinement
      */
     public function validateData(): Refinement {
-        if(!isset($this->user))
+        if(!isset($this->user)) {
             $this->message = 'user not set';
-
-        if(!isset($this->transactionController))
+            $this->statusCode = Response::HTTP_BAD_REQUEST;
+        }
+        if(!isset($this->transactionController)) {
             $this->message = 'transactionController not set';
-
-        $this->statusCode = Response::HTTP_BAD_REQUEST;
+            $this->statusCode = Response::HTTP_BAD_REQUEST;
+        }
         return $this;
     }
 
