@@ -62,7 +62,7 @@ class HandleUnverifiedTransactions extends Command
         $paymentMethod = 'zarinpal';
         $transactiongateway = Transactiongateway::where('name', $paymentMethod)->first();
         $this->merchantNumber = $transactiongateway->merchantNumber;
-        $this->gateWay = (new GateWayFactory())->setGateWay($paymentMethod, $this->merchantNumber);
+        $this->gateWay = (new GateWayFactory())->setGateway($paymentMethod, $this->merchantNumber);
     }
 
     /**

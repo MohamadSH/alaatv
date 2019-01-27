@@ -8,15 +8,28 @@
 
 namespace App\Classes\Payment\GateWay\Zarinpal;
 
+use App\Classes\Payment\GateWay\GateWay;
 use Illuminate\Support\Facades\Validator;
 use Zarinpal\Zarinpal as ZarinpalComposer;
 use App\Classes\Payment\GateWay\GateWayAbstract;
 
-class Zarinpal extends GateWayAbstract
+class Zarinpal implements GateWay
 {
+    /**
+     * @var array $result
+     */
+    protected $result;
+
+    /**
+     * @var string $merchantID
+     */
     private $merchantID;
-    private $returnStatus;
+
+    /**
+     * @var ZarinpalComposer $zarinpalComposer
+     */
     private $zarinpalComposer;
+
     const EXCEPTION = array(
         -1 => 'اطلاعات ارسال شده ناقص است.',
         -2 => 'IP و یا مرچنت کد پذیرنده صحیح نیست',
@@ -31,11 +44,16 @@ class Zarinpal extends GateWayAbstract
         101 => 'عملیات پرداخت با موفقیت انجام شده ولی قبلا عملیات PaymentVertification بر روی این تراکنش انجام شده است',
     );
 
-    public function __construct(string $merchantID)
+    public function __construct(array $data)
     {
-        parent::__construct();
-        $this->merchantID = $merchantID;
+        $this->merchantID = $data['merchantID'];
         $this->zarinpalComposer = new ZarinpalComposer($this->merchantID);
+
+        $this->result = [
+            'status' => true,
+            'message' => [],
+            'data' => [],
+        ];
 
         if(config('app.env', 'deployment')!='deployment' && config('Zarinpal.Sandbox', false)) {
             $this->zarinpalComposer->enableSandbox(); // active sandbox mod for test env
@@ -48,12 +66,10 @@ class Zarinpal extends GateWayAbstract
     /**
      * Making request to ZarinPal gateway
      * must loadForRedirect before
-     * @param int $amount
-     * @param string $callbackUrl
-     * @param string|null $description
+     * @param array $data
      * @return array
      */
-    public function paymentRequest(int $amount, string $callbackUrl, string $description=null): array
+    public function paymentRequest(array $data): array
     {
         $result = [
             'status'=>false,
@@ -61,7 +77,7 @@ class Zarinpal extends GateWayAbstract
             'data'=>[]
         ];
 
-        $zarinpalResponse = $this->zarinpalComposer->request($callbackUrl, $amount, $description);
+        $zarinpalResponse = $this->zarinpalComposer->request($data['callbackUrl'], $data['amount'], $data['description']);
         if (isset($zarinpalResponse['Authority']) && strlen($zarinpalResponse['Authority']) > 0) {
             $result['status'] = true;
             $result['message'][] = 'درخواست پرداخت با موفقیت ارسال و نتیجه آن دریافت شد.';
@@ -78,9 +94,10 @@ class Zarinpal extends GateWayAbstract
     /**
      * Making request to ZarinPal gateway
      * must loadForRedirect before
+     * @param array $data
      * @return void
      */
-    public function redirect(): void
+    public function redirect(array $data): void
     {
         $this->zarinpalComposer->redirect();
     }
@@ -88,46 +105,39 @@ class Zarinpal extends GateWayAbstract
     /**
      * verify ZarinPal callback request
      * must loadForVerify before
+     * @param array $data
      * @return array $this->result
      */
-    public function getCallbackData(): array
+    public function getCallbackData(array $data): array
     {
-        $this->validateCallbackData($this->request->all());
+        $this->validateCallbackData($data);
 
         if (!$this->result['status']) {
             return $this->result;
         }
 
-        if($this->request->get('Status')=='OK') {
+        if($data['Status']=='OK') {
             $this->result['status'] = true;
             $this->result['message'][] = 'کاربر پرداخت را انجام داده است و پرداخت وی می بایست تایید شود.';
-            $this->result['Authority'] = $this->request->get('Authority');
+            $this->result['data']['Authority'] = $data['Authority'];
         } else {
             $this->result['status'] = false;
             $this->result['message'][] = 'پرداخت کاربر به درستی انجام نشده است.';
-            $this->result['Authority'] = $this->request->get('Authority');
+            $this->result['data']['Authority'] = $data['Authority'];
         }
 
         return $this->result;
     }
 
     /**
-     * @param int $amount
      * @param array $data
      * @return array
      */
-    public function verify(int $amount, array $data=null): array
+    public function verify(array $data): array
     {
-        if (isset($data['Authority'])) {
-            $authority = $data['Authority'];
-        } else {
-            $authority = $this->request->get('Authority');
-        }
-        if (isset($data['Status'])) {
-            $status = $data['Status'];
-        } else {
-            $status = $this->request->get('Status');
-        }
+        $amount = $data['amount'];
+        $status = $data['Status'];
+        $authority = $data['Authority'];
 
         $result = $this->zarinpalComposer->verify($status, $amount, $authority);
         $this->result['data']['zarinpalVerifyResult'] = $result;

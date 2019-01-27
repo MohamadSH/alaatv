@@ -14,6 +14,9 @@ use App\Transactiongateway;
 use Illuminate\Http\{Request, Response};
 use App\Classes\Payment\GateWay\GateWayFactory;
 use App\Classes\Payment\RefinementRequest\RefinementLauncher;
+use App\Classes\Payment\RefinementRequest\Refinement;
+use App\Classes\Payment\RefinementRequest\Strategies\
+{OpenOrderRefinement, OrderIdRefinement, TransactionRefinement, ChargingWalletRefinement};
 
 class OnlinePaymentController extends Controller
 {
@@ -65,7 +68,7 @@ class OnlinePaymentController extends Controller
         $inputData['transactionController'] = $this->transactionController;
         $inputData['user'] = $request->user();
 
-        $refinementLauncher = new RefinementLauncher();
+        $refinementLauncher = new RefinementLauncher($this->gteRefinementRequestStrategy($inputData));
         $data = $refinementLauncher->getData($inputData);
 
         /** @var User $user */
@@ -85,7 +88,7 @@ class OnlinePaymentController extends Controller
             ], $data['statusCode']);
         }
 
-        $description = $this->setTransactionDescription($description, $order, $user);
+        $description = $this->setTransactionDescription($description, $user, $order);
 
         if(isset($order)) {
             $this->setCustomerDescriptionForOrder($request, $order);
@@ -95,8 +98,13 @@ class OnlinePaymentController extends Controller
 
             $callbackUrl = action('OnlinePaymentController@verifyPayment', ['paymentMethod' => $paymentMethod, 'device' => $device]);
 
-            $gateWay = (new GateWayFactory())->setGateWay($paymentMethod, $transactiongateway->merchantNumber);
-            $result = $gateWay->paymentRequest($cost, $callbackUrl, $description);
+            $gateWay = (new GateWayFactory())->setGateway($paymentMethod, $this->setDataForGateway($transactiongateway, $paymentMethod));
+            $paymentRequestData = [
+                'cost'=>$cost,
+                'callbackUrl'=>$callbackUrl,
+                'description'=>$description
+            ];
+            $result = $gateWay->paymentRequest($paymentRequestData);
 
             if ($result['status']) {
 
@@ -122,6 +130,24 @@ class OnlinePaymentController extends Controller
     }
 
     /**
+     * @param Transactiongateway $transactiongateway
+     * @param string $paymentMethod
+     * @return array
+     */
+    private function setDataForGateway(Transactiongateway $transactiongateway, string $paymentMethod): array {
+        $data = [];
+        switch ($paymentMethod) {
+            case 'zarinpal':
+                $data['merchantID'] = $transactiongateway->merchantNumber;
+        break;
+            default:
+                // zarinpal
+                $data['merchantID'] = $transactiongateway->merchantNumber;
+        }
+        return $data;
+    }
+
+    /**
      * @param int $cost
      * @return bool
      */
@@ -135,11 +161,11 @@ class OnlinePaymentController extends Controller
 
     /**
      * @param string $description
-     * @param Order|null $order
      * @param User $user
+     * @param Order|null $order
      * @return string
      */
-    private function setTransactionDescription(string $description, Order $order=null, User $user): string
+    private function setTransactionDescription(string $description, User $user, Order $order=null): string
     {
         $description .= 'آلاء - ' . $user->mobile . ' - محصولات: ';
 
@@ -182,6 +208,23 @@ class OnlinePaymentController extends Controller
         return $transactionModifyResult;
     }
 
+    /**
+     * @param array $inputData
+     * @return Refinement
+     */
+    private function gteRefinementRequestStrategy(array $inputData): Refinement
+    {
+        if (isset($inputData['transaction_id'])) { // closed order
+            return new TransactionRefinement();
+        } else if (isset($inputData['order_id'])) { // closed order
+            return new OrderIdRefinement();
+        } else if (isset($inputData['walletId']) && isset($inputData['walletChargingAmount'])) { // Charging Wallet
+            return new ChargingWalletRefinement();
+        } else { // open order
+            return new OpenOrderRefinement();
+        }
+    }
+
     /**********************************************************
      * VerifyPayment
     ***********************************************************/
@@ -202,7 +245,7 @@ class OnlinePaymentController extends Controller
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        $gateWay = (new GateWayFactory())->setGateWay($paymentMethod, $transactiongateway->merchantNumber);
+        $gateWay = (new GateWayFactory())->setGateway($paymentMethod, $transactiongateway->merchantNumber);
         $callbackData = $gateWay->getCallbackData();
         $authority = $callbackData['Authority'];
 

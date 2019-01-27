@@ -8,24 +8,25 @@
 
 namespace App\Classes\Payment\GateWay;
 
+use App\Classes\Payment\GateWay\GateWay;
 
 class GateWayFactory
 {
     /**
-     * @var GateWayAbstract $gateWayClass
+     * @var GateWay $gateWayClass
      */
     private $gateWayClass;
 
     /**
      * @param string $gateWay
-     * @param string $merchantID
-     * @return GateWayAbstract
+     * @param array $data
+     * @return GateWay
      */
-    public function setGateWay(string $gateWay, string $merchantID)
+    public function setGateway(string $gateWay, array $data)
     {
         $className = $this->getGatewayNameSpace($gateWay);
         if (class_exists($className)) {
-            $this->gateWayClass = new $className($merchantID);
+            $this->gateWayClass = new $className($data);
         } else {
             throw new Exception('GateWay {' . $className . '} not found.');
         }
