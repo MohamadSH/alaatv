@@ -98,15 +98,14 @@ class Zarinpal extends GateWayAbstract
             return $this->result;
         }
 
-        $this->returnStatus = $this->result['data']['callbackData']['Authority'];
-        if($this->returnStatus=='OK') {
+        if($this->request->get('Status')=='OK') {
             $this->result['status'] = true;
             $this->result['message'][] = 'کاربر پرداخت را انجام داده است و پرداخت وی می بایست تایید شود.';
-            $this->result['Authority'] = $this->result['data']['callbackData']['Authority'];
+            $this->result['Authority'] = $this->request->get('Authority');
         } else {
             $this->result['status'] = false;
             $this->result['message'][] = 'پرداخت کاربر به درستی انجام نشده است.';
-            $this->result['Authority'] = $this->result['data']['callbackData']['Authority'];
+            $this->result['Authority'] = $this->request->get('Authority');
         }
 
         return $this->result;

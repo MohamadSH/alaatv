@@ -156,10 +156,11 @@ class Wallet extends Model
     /**
      * Attempt to move credits from this wallet
      *
-     * @param  integer $amount
+     * @param integer $amount
+     * @param bool $withoutTransaction
      * @return array
      */
-    public function deposit($amount)
+    public function deposit(int $amount, bool $withoutTransaction=false): array
     {
         /**
          * unused variable
@@ -169,7 +170,7 @@ class Wallet extends Model
         $this->balance = $newBalance;
         $result = $this->update();
         if ($result) {
-            if ($amount > 0) {
+            if ($amount > 0 && !$withoutTransaction) {
                 $completed_at = Carbon::now();
                 $transactionStatus = config("constants.TRANSACTION_STATUS_SUCCESSFUL");
                 $this->transactions()

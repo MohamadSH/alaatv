@@ -13,7 +13,7 @@ use App\Order;
 use App\Coupon;
 use App\Transaction;
 use App\Traits\OrderCommon;
-use Illuminate\Http\{Request, Response};
+use Illuminate\Http\Response;
 use App\Http\Controllers\TransactionController;
 
 abstract class Refinement
@@ -21,55 +21,64 @@ abstract class Refinement
     use OrderCommon;
 
     /**
-     * @var Request
+     * @var array $inputData
      */
     public $inputData;
 
     /**
-     * @var int
+     * @var int $statusCode
      */
     public $statusCode;
 
     /**
-     * @var string
+     * @var string $message
      */
     public $message;
 
     /**
-     * @var User
+     * @var User $user
      */
     public $user;
 
     /**
-     * @var Order
+     * @var Order $order
      */
     public $order;
 
     /**
-     * @var int
+     * @var int $cost
      */
     public $cost;
 
     /**
-     * @var int
+     * @var int $paidFromWalletCost
      */
     public $paidFromWalletCost;
 
     /**
-     * @var int
+     * @var int $donateCost
      */
     public $donateCost;
 
     /**
-     * @var Transaction
+     * @var Transaction $transaction
      */
     public $transaction;
 
     /**
-     * @var string
+     * @var string $description
      */
     public $description;
 
+    /**
+     * @var int $walletId
+     */
+    public $walletId;
+
+    /**
+     * @var int $walletChargingAmount
+     */
+    public $walletChargingAmount;
 
     /**
      * @var TransactionController
@@ -92,6 +101,8 @@ abstract class Refinement
         $this->inputData = $inputData;
         $this->transactionController = $this->inputData['transactionController'];
         $this->user = $this->inputData['user'];
+        $this->walletId = (isset($this->inputData['walletId'])?$this->inputData['walletId']:null);
+        $this->walletChargingAmount = (isset($this->inputData['walletChargingAmount'])?$this->inputData['walletChargingAmount']:null);
         return $this;
     }
 
@@ -155,17 +166,17 @@ abstract class Refinement
     {
         $result = null;
         if($this->cost>0) {
-            $data['gateway'] = true;
-            $data['cost'] = $this->cost;
-            $data['order_id'] = $this->order->id;
-            $data['destinationBankAccount_id'] = 1;
-            $data['paymentmethod_id'] = config("constants.PAYMENT_METHOD_ONLINE");
-            $data['transactionstatus_id'] = config("constants.TRANSACTION_STATUS_TRANSFERRED_TO_PAY");
+            $data['cost'] = (isset($this->walletId))?($this->cost*(-1)):$this->cost;
+            $data['description'] = $this->description;
+            $data['order_id'] = (isset($this->order))?$this->order->id:null;
+            $data['wallet_id'] = (isset($this->walletId))?$this->walletId:null;
+            $data['destinationBankAccount_id'] = 1; // ToDo: Hard Code
+            $data['paymentmethod_id'] = config('constants.PAYMENT_METHOD_ONLINE');
+            $data['transactionstatus_id'] = config('constants.TRANSACTION_STATUS_TRANSFERRED_TO_PAY');
             $result = $this->transactionController->new($data);
         }
         return $result;
     }
-
 
     /**
      * @return bool
@@ -184,10 +195,10 @@ abstract class Refinement
         $deductibleCostFromWallet = $this->cost - $this->donateCost;
         $remainedCost = $deductibleCostFromWallet;
         $walletPayResult = $this->payOrderCostByWallet($this->user, $this->order, $deductibleCostFromWallet);
-        if ($walletPayResult["result"]) {
-            $remainedCost = $walletPayResult["cost"];
+        if ($walletPayResult['result']) {
+            $remainedCost = $walletPayResult['cost'];
 
-            $this->order->close(config("constants.PAYMENT_STATUS_INDEBTED"));
+            $this->order->close(config('constants.PAYMENT_STATUS_INDEBTED'));
             $this->order->updateWithoutTimestamp();
         }
         $remainedCost = $remainedCost + $this->donateCost;

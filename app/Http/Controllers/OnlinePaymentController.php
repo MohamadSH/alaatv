@@ -13,9 +13,7 @@ use App\Traits\OrderCommon;
 use App\Transactiongateway;
 use Illuminate\Http\{Request, Response};
 use App\Classes\Payment\GateWay\GateWayFactory;
-use App\Classes\Payment\RefinementRequest\Refinement;
 use App\Classes\Payment\RefinementRequest\RefinementLauncher;
-use App\Classes\Payment\RefinementRequest\Strategies\{OpenOrderRefinement, OrderIdRefinement, TransactionRefinement};
 
 class OnlinePaymentController extends Controller
 {
@@ -53,6 +51,9 @@ class OnlinePaymentController extends Controller
         /*$request->offsetSet('transaction_id', 65);*/
         $request->offsetSet('payByWallet', true);
 
+        $request->offsetSet('walletId', 1);
+        $request->offsetSet('walletChargingAmount', 50000);
+
         $transactiongateway = Transactiongateway::where('name', $paymentMethod)->first();
         if(!isset($transactiongateway)) {
             return response()->json([
@@ -60,14 +61,12 @@ class OnlinePaymentController extends Controller
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        $refinementRequestStrategy = $this->gteRefinementRequestStrategy($request);
-
         $inputData = $request->all();
         $inputData['transactionController'] = $this->transactionController;
         $inputData['user'] = $request->user();
 
         $refinementLauncher = new RefinementLauncher();
-        $data = $refinementLauncher->getData($inputData, $refinementRequestStrategy);
+        $data = $refinementLauncher->getData($inputData);
 
         /** @var User $user */
         $user = $data['user'];
@@ -86,17 +85,18 @@ class OnlinePaymentController extends Controller
             ], $data['statusCode']);
         }
 
-        $description = $this->setDescription($description, $order, $user);
+        $description = $this->setTransactionDescription($description, $order, $user);
 
-        $this->setCustomerDescription($request, $order);
-
+        if(isset($order)) {
+            $this->setCustomerDescriptionForOrder($request, $order);
+        }
 
         if ($this->isRedirectable($cost)) {
 
             $callbackUrl = action('OnlinePaymentController@verifyPayment', ['paymentMethod' => $paymentMethod, 'device' => $device]);
 
             $gateWay = (new GateWayFactory())->setGateWay($paymentMethod, $transactiongateway->merchantNumber);
-            $result = $gateWay->paymentRequest($transaction->cost, $callbackUrl, $description);
+            $result = $gateWay->paymentRequest($cost, $callbackUrl, $description);
 
             if ($result['status']) {
 
@@ -117,7 +117,7 @@ class OnlinePaymentController extends Controller
 
             return redirect(action('HomeController@error404'));
         } else {
-            return redirect(action('OfflinePaymentController@verifyPayment', ['device' => $device, 'paymentMethod' => 'wallet', 'coi' => $order->id]));
+            return redirect(action('OfflinePaymentController@verifyPayment', ['device' => $device, 'paymentMethod' => 'wallet', 'coi' => (isset($order)?$order->id:null)]));
         }
     }
 
@@ -135,22 +135,25 @@ class OnlinePaymentController extends Controller
 
     /**
      * @param string $description
-     * @param Order $order
+     * @param Order|null $order
      * @param User $user
      * @return string
      */
-    private function setDescription(string $description, Order $order, User $user): string
+    private function setTransactionDescription(string $description, Order $order=null, User $user): string
     {
         $description .= 'آلاء - ' . $user->mobile . ' - محصولات: ';
 
-        $orderProducts = $order->orderproducts->load('product');
+        if(isset($order)) {
+            $orderProducts = $order->orderproducts->load('product');
 
-        foreach ($orderProducts as $orderProduct) {
-            if (isset($orderProduct->product->id))
-                $description .= $orderProduct->product->name . ' , ';
-            else
-                $description .= 'یک محصول نامشخص , ';
+            foreach ($orderProducts as $orderProduct) {
+                if (isset($orderProduct->product->id))
+                    $description .= $orderProduct->product->name . ' , ';
+                else
+                    $description .= 'یک محصول نامشخص , ';
+            }
         }
+
         return $description;
     }
 
@@ -158,24 +161,9 @@ class OnlinePaymentController extends Controller
      * @param Request $request
      * @param Order $order
      */
-    private function setCustomerDescription(Request $request, Order $order): void
+    private function setCustomerDescriptionForOrder(Request $request, Order $order): void
     {
         $order->customerDescription = optional($request->customerDescription);
-    }
-
-    /**
-     * @param Request $request
-     * @return Refinement
-     */
-    private function gteRefinementRequestStrategy(Request $request): Refinement
-    {
-        if ($request->has('transaction_id')) { // closed order
-            return new TransactionRefinement();
-        } else if ($request->has('order_id')) { // closed order
-            return new OrderIdRefinement();
-        } else { // open order
-            return new OpenOrderRefinement();
-        }
     }
 
     /**
@@ -226,15 +214,22 @@ class OnlinePaymentController extends Controller
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        $gateWayVerify = $gateWay->verify($transaction->cost);
-
-        $transaction->order->detachUnusedCoupon();
-
-        if ($gateWayVerify['status']) {
-            $this->handleSuccessStatus($gateWayVerify['data']['RefID'], $transaction, $gateWayVerify['data']['cardPanMask']);
-        } else {
-            $this->handleCanceledStatus($transaction);
+        if (isset($transaction->order_id)) {
+            $gateWayVerify = $gateWay->verify($transaction->cost);
+            $transaction->order->detachUnusedCoupon();
+            if ($gateWayVerify['status']) {
+                $this->handleOrderSuccessPayment($gateWayVerify['data']['RefID'], $transaction, $gateWayVerify['data']['cardPanMask']);
+            } else {
+                $this->handleOrderCanceledPayment($transaction);
+            }
+        } else if (isset($transaction->wallet_id)) {
+            $gateWayVerify = $gateWay->verify($transaction->cost*(-1));
+            if ($gateWayVerify['status']) {
+                $transaction->wallet->deposit($transaction->cost*(-1), true);
+            }
         }
+
+
 
 //        if ($result['status'] && isset($result['data']['order'])) {
 //            /** @var Order $order */
@@ -258,7 +253,7 @@ class OnlinePaymentController extends Controller
      * @param Transaction $transaction
      * @param string|null $cardPanMask
      */
-    private function handleSuccessStatus(string $refId, Transaction $transaction, string $cardPanMask=null): void
+    private function handleOrderSuccessPayment(string $refId, Transaction $transaction, string $cardPanMask=null): void
     {
         $bankAccountId = null;
 
@@ -284,7 +279,7 @@ class OnlinePaymentController extends Controller
     /**
      * @param Transaction $transaction
      */
-    private function handleCanceledStatus(Transaction $transaction): void
+    private function handleOrderCanceledPayment(Transaction $transaction): void
     {
         $this->result['status'] = false;
 
