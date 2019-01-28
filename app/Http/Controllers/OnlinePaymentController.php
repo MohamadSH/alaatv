@@ -57,6 +57,7 @@ class OnlinePaymentController extends Controller
 //        $request->offsetSet('walletId', 1);
 //        $request->offsetSet('walletChargingAmount', 50000);
 
+        //ToDo: Put in cache
         $transactiongateway = Transactiongateway::where('name', $paymentMethod)->first();
         if(!isset($transactiongateway)) {
             return response()->json([
@@ -90,9 +91,9 @@ class OnlinePaymentController extends Controller
 
         $description = $this->setTransactionDescription($description, $user, $order);
 
-        if(isset($order)) {
+        if(isset($order))
             $this->setCustomerDescriptionForOrder($request, $order);
-        }
+
 
         if ($this->isRedirectable($cost)) {
 

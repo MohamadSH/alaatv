@@ -8,7 +8,7 @@
 
 namespace App\Classes\Payment\Gateway;
 
-use App\Classes\Payment\Gateway\Gatewayay;
+use PHPUnit\Framework\Exception;
 
 class GatewayFactory
 {
