@@ -305,6 +305,6 @@ class CheckHasOpenOrder
 //        DB::table('orderproducts')->delete();
 //        DB::table('attributevalue_orderproduct')->delete();
 
-        dd('OrdersReset Done!');
+//        dd('OrdersReset Done!');
     }
 }

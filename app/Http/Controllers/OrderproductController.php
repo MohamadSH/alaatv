@@ -2,29 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Attribute;
-use App\Attributevalue;
 use App\Bon;
-use App\Checkoutstatus;
-use App\Collection\ProductCollection;
+use App\User;
+use App\Order;
+use App\Product;
+use App\Attribute;
 use App\Collection\OrderproductCollection;
 use App\Http\Requests\InsertUserBonRequest;
 use App\Http\Requests\OrderProduct\AttachExtraAttributesRequest;
-use App\Order;
 use App\Orderproduct;
-use App\Product;
-use App\Traits\ProductCommon;
-use App\User;
+use App\Attributevalue;
 use App\Websitesetting;
+use App\Checkoutstatus;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
+use App\Traits\ProductCommon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\URL;
 use App\Http\Requests\OrderProduct\OrderProductStoreRequest;
 use App\Traits\OrderCommon;
-//use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Collection;
 
 use App\Classes\OrderProduct\RefinementProduct\RefinementFactory;
@@ -175,7 +172,7 @@ class OrderproductController extends Controller
     {
         $orderproducts = $this->new($request->all());
 
-        return response()->setStatusCode(200)->setContent([
+        return $this->response->setStatusCode(200)->setContent([
             "orderproducts" => $orderproducts,
         ]);
     }
@@ -331,10 +328,10 @@ class OrderproductController extends Controller
                             $request->offsetSet("totalNumber", $bonPlus);
                             $request->offsetSet("orderproduct_id", $orderproduct->id);
                             $request->offsetSet("userbonstatus_id", Config::get("constants.USERBON_STATUS_ACTIVE"));
-                            $response = $userbonController->store($request);
-                            if ($response->getStatusCode() == 200) {
+                            /*$response = */$userbonController->store($request);
+                            /*if ($response->getStatusCode() == 200) {
                                 //ToDo : Appropriate response
-                            }/* else {
+                            } else {
 
                             }*/
                         }
@@ -491,7 +488,7 @@ class OrderproductController extends Controller
                     $this->attachExtraAttributes($attachExtraAttributesRequest, $orderProduct);
                 }
 
-                $this->applyOrderProductBon($data, $user, $orderProduct);
+                $this->applyOrderProductBon($data, $user, $orderProduct, $productItem);
 
                 $this->applyOrderGifts($order, $orderProduct, $productItem);
 

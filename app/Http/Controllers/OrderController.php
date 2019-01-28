@@ -67,11 +67,11 @@ class OrderController extends Controller
     {
         $this->response = new Response();
 
-        $this->middleware('permission:' . Config::get('constants.LIST_ORDER_ACCESS'), ['only' => 'index']);
-        $this->middleware('permission:' . Config::get('constants.INSERT_ORDER_ACCESS'), ['only' => 'create']);
-        $this->middleware('permission:' . Config::get('constants.REMOVE_ORDER_ACCESS'), ['only' => 'destroy']);
-        $this->middleware('permission:' . Config::get('constants.SHOW_ORDER_ACCESS'), ['only' => 'edit']);
-        $this->middleware('permission:' . Config::get('constants.INSERT_ORDER_ACCESS'), ['only' => 'exitAdminInsertOrder']);
+        $this->middleware('permission:' . config('constants.LIST_ORDER_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:' . config('constants.INSERT_ORDER_ACCESS'), ['only' => 'create']);
+        $this->middleware('permission:' . config('constants.REMOVE_ORDER_ACCESS'), ['only' => 'destroy']);
+        $this->middleware('permission:' . config('constants.SHOW_ORDER_ACCESS'), ['only' => 'edit']);
+        $this->middleware('permission:' . config('constants.INSERT_ORDER_ACCESS'), ['only' => 'exitAdminInsertOrder']);
         $this->middleware(['CheckHasOpenOrder','StoreOrderproductCookieInOpenOrder','OrderCheckoutReview',], ['only' => ['checkoutReview',],]);
         $this->middleware(['CheckHasOpenOrder','OrderCheckoutPayment',], ['only' => ['checkoutPayment'],]);
         $this->middleware('SubmitOrderCoupon', ['only' => ['submitCoupon'],]);
@@ -87,11 +87,11 @@ class OrderController extends Controller
     public function index()
     {
         $user = Auth::user();
-        if ($user->can(Config::get('constants.SHOW_OPENBYADMIN_ORDER')))
-            $orders = Order::where("orderstatus_id", "<>", Config::get("constants.ORDER_STATUS_OPEN"));
+        if ($user->can(config('constants.SHOW_OPENBYADMIN_ORDER')))
+            $orders = Order::where("orderstatus_id", "<>", config("constants.ORDER_STATUS_OPEN"));
         else
-            $orders = Order::where("orderstatus_id", "<>", Config::get("constants.ORDER_STATUS_OPEN"))
-                           ->where("orderstatus_id", "<>", Config::get("constants.ORDER_STATUS_OPEN_BY_ADMIN"));
+            $orders = Order::where("orderstatus_id", "<>", config("constants.ORDER_STATUS_OPEN"))
+                           ->where("orderstatus_id", "<>", config("constants.ORDER_STATUS_OPEN_BY_ADMIN"));
 
 
         $createdSinceDate = Input::get('createdSinceDate');
@@ -160,7 +160,7 @@ class OrderController extends Controller
             $products = Product::whereIn('id', $productsId)
                                ->get();
             foreach ($products as $product) {
-                if ($product->producttype_id == Config::get("constants.PRODUCT_TYPE_CONFIGURABLE"))
+                if ($product->producttype_id == config("constants.PRODUCT_TYPE_CONFIGURABLE"))
                     if ($product->hasChildren()) {
                         $productsId = array_merge($productsId, Product::whereHas('parents', function ($q) use ($productsId) {
                             $q->whereIn("parent_id", $productsId);
@@ -464,7 +464,7 @@ class OrderController extends Controller
         $myOrderproducts = [];
         if (isset($productsId))
             foreach ($orders as $order) {
-                $checkoutOrderproducts = $order->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
+                $checkoutOrderproducts = $order->orderproducts(config("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
                                                ->where(function ($q) {
                                                    $q->where("checkoutstatus_id", 1)
                                                      ->orWhereNull("checkoutstatus_id");
@@ -496,11 +496,11 @@ class OrderController extends Controller
     {
         $customer_id = Input::get("customer_id");
         $customer = User::FindOrFail($customer_id);
-        $openOrders = $customer->orders->where("orderstatus_id", Config::get("constants.ORDER_STATUS_OPEN_BY_ADMIN"));
+        $openOrders = $customer->orders->where("orderstatus_id", config("constants.ORDER_STATUS_OPEN_BY_ADMIN"));
         if ($openOrders->isEmpty()) {
             $request = new Request();
-            $request->offsetSet("paymentstatus_id", Config::get("constants.PAYMENT_STATUS_UNPAID"));
-            $request->offsetSet("orderstatus_id", Config::get("constants.ORDER_STATUS_OPEN_BY_ADMIN"));
+            $request->offsetSet("paymentstatus_id", config("constants.PAYMENT_STATUS_UNPAID"));
+            $request->offsetSet("orderstatus_id", config("constants.ORDER_STATUS_OPEN_BY_ADMIN"));
             $request->offsetSet("user_id", $customer->id);
             $controller = new OrderController();
             $order = $controller->store($request);
@@ -582,7 +582,7 @@ class OrderController extends Controller
         $orderArchivedTransactions = $order->archivedSuccessfulTransactions;
         $transactionPaymentmethods = Paymentmethod::pluck('displayName', 'name')
                                                   ->toArray();
-        $offlineTransactionPaymentMethods = Paymentmethod::where("id", "<>", Config::get("constants.PAYMENT_METHOD_ONLINE"))
+        $offlineTransactionPaymentMethods = Paymentmethod::where("id", "<>", config("constants.PAYMENT_METHOD_ONLINE"))
                                                          ->pluck('displayName', 'id')
                                                          ->toArray();
         $transactionStatuses = Transactionstatus::where("name", "<>", "transferredToPay")
@@ -697,7 +697,7 @@ class OrderController extends Controller
             if ($file !== false) {
                 $extension = $file->getClientOriginalExtension();
                 $fileName = basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
-                if (Storage::disk(Config::get('constants.DISK10'))
+                if (Storage::disk(config('constants.DISK10'))
                            ->put($fileName, File::get($file))) {
                     $orderFileRequest = new Request();
                     $orderFileRequest->offsetSet("order_id", $order->id);
@@ -979,9 +979,9 @@ class OrderController extends Controller
     /**
      * Makes a copy from an order
      *
-     * @param Order                                 $order
-     * @param  \Illuminate\Http\Request             $request
-     * @param \App\Http\Controllers\OrderController $orderController
+     * @param Order $order
+     * @param  \Illuminate\Http\Request $request
+     * @return Response
      */
     public function copy(Order $order, Request $request)
     {
@@ -1024,18 +1024,18 @@ class OrderController extends Controller
                         if (!$attributevalue->isEmpty()) {
                             $newOrderproduct->attributevalues()
                                             ->attach($attributevalue->first()->id, ["extraCost" => $attributevalue->first()->pivot->extraCost]);
-                        } else {
-                        }
+                        }/* else {
+                        }*/
                     }
                     $failed = false;
-                } else {
+                }/* else {
                     // he just lost one of last orders items in his new order
-                }
+                }*/
             }
 
-        } else {
+        }/* else {
             // the new order was not created and no action is necessary.in fact he just lost his last order to add to.
-        }
+        }*/
 
         if ($request->ajax()) {
             if (!$failed)
@@ -1044,9 +1044,9 @@ class OrderController extends Controller
             else
                 return $this->response
                     ->setStatusCode(503);
-        } else {
+        }/* else {
 
-        }
+        }*/
     }
 
     /**
@@ -1078,7 +1078,7 @@ class OrderController extends Controller
                                     $coupon->usageNumber = $coupon->usageNumber + 1;
                                     if ($coupon->update()) {
                                         $order->coupon_id = $coupon->id;
-                                        if ($coupon->discounttype_id == Config::get("constants.DISCOUNT_TYPE_COST")) {
+                                        if ($coupon->discounttype_id == config("constants.DISCOUNT_TYPE_COST")) {
                                             $order->couponDiscount = 0;
                                             $order->couponDiscountAmount = (int)$coupon->discount;
                                         } else {
@@ -1107,7 +1107,7 @@ class OrderController extends Controller
                         $coupon->usageNumber = $coupon->usageNumber + 1;
                         if ($coupon->update()) {
                             $order->coupon_id = $coupon->id;
-                            if ($coupon->discounttype_id == Config::get("constants.DISCOUNT_TYPE_COST")) {
+                            if ($coupon->discounttype_id == config("constants.DISCOUNT_TYPE_COST")) {
                                 $order->couponDiscount = 0;
                                 $order->couponDiscountAmount = (int)$coupon->discount;
                             } else {
@@ -1284,7 +1284,7 @@ class OrderController extends Controller
 
         $oldOrder = Order::FindOrFail($orderId);
 
-        if ($orderproducts->count() >= $oldOrder->orderproducts->where("orderproducttype_id", "<>", Config::get("constants.ORDER_PRODUCT_GIFT"))
+        if ($orderproducts->count() >= $oldOrder->orderproducts->where("orderproducttype_id", "<>", config("constants.ORDER_PRODUCT_GIFT"))
                                                                ->count())
             return $this->response->setStatusCode(503)
                                   ->setContent(["message" => "شما نمی توانید سفارش را خالی کنید"]);
@@ -1348,7 +1348,7 @@ class OrderController extends Controller
                         $newTransaction->destinationBankAccount_id = $transaction->destinationBankAccount_id;;
                         $newTransaction->paymentmethod_id = $transaction->paymentmethod_id;
                         $newTransaction->transactiongateway_id = $transaction->transactiongateway_id;
-                        $newTransaction->transactionstatus_id = Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL");
+                        $newTransaction->transactionstatus_id = config("constants.TRANSACTION_STATUS_SUCCESSFUL");
                         $newTransaction->cost = $newCost;
                         $newTransaction->order_id = $newOrder->id;
                         $newTransaction->save();
@@ -1358,25 +1358,25 @@ class OrderController extends Controller
                         $newTransaction2->destinationBankAccount_id = $transaction->destinationBankAccount_id;
                         $newTransaction2->paymentmethod_id = $transaction->paymentmethod_id;
                         $newTransaction2->transactiongateway_id = $transaction->transactiongateway_id;
-                        $newTransaction2->transactionstatus_id = Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL");
+                        $newTransaction2->transactionstatus_id = config("constants.TRANSACTION_STATUS_SUCCESSFUL");
                         $newTransaction2->order_id = $oldOrder->id;
                         $newTransaction2->save();
 
                         if ($transaction->getGrandParent() !== false) {
                             $grandTransaction = $transaction->getGrandParent();
                             $newTransaction->parents()
-                                           ->attach($grandTransaction->id, ["relationtype_id" => Config::get("constants.TRANSACTION_INTERRELATION_PARENT_CHILD")]);
+                                           ->attach($grandTransaction->id, ["relationtype_id" => config("constants.TRANSACTION_INTERRELATION_PARENT_CHILD")]);
                             $newTransaction2->parents()
-                                            ->attach($grandTransaction->id, ["relationtype_id" => Config::get("constants.TRANSACTION_INTERRELATION_PARENT_CHILD")]);
+                                            ->attach($grandTransaction->id, ["relationtype_id" => config("constants.TRANSACTION_INTERRELATION_PARENT_CHILD")]);
                             $grandTransaction->children()
                                              ->detach($transaction->id);
                             $transaction->delete();
                         } else {
                             $newTransaction->parents()
-                                           ->attach($transaction->id, ["relationtype_id" => Config::get("constants.TRANSACTION_INTERRELATION_PARENT_CHILD")]);
+                                           ->attach($transaction->id, ["relationtype_id" => config("constants.TRANSACTION_INTERRELATION_PARENT_CHILD")]);
                             $newTransaction2->parents()
-                                            ->attach($transaction->id, ["relationtype_id" => Config::get("constants.TRANSACTION_INTERRELATION_PARENT_CHILD")]);
-                            $transaction->transactionstatus_id = Config::get("constants.TRANSACTION_STATUS_ARCHIVED_SUCCESSFUL");
+                                            ->attach($transaction->id, ["relationtype_id" => config("constants.TRANSACTION_INTERRELATION_PARENT_CHILD")]);
+                            $transaction->transactionstatus_id = config("constants.TRANSACTION_STATUS_ARCHIVED_SUCCESSFUL");
                             $transaction->update();
                         }
 
@@ -1393,7 +1393,7 @@ class OrderController extends Controller
                  */
 
                 if ($newOrder->totalPaidCost() >= (int)$newOrder->totalCost()) {
-                    $newOrder->paymentstatus_id = Config::get("constants.PAYMENT_STATUS_PAID");
+                    $newOrder->paymentstatus_id = config("constants.PAYMENT_STATUS_PAID");
                     $newOrder->update();
                 }
 
@@ -1616,7 +1616,7 @@ class OrderController extends Controller
                 $restorableProducts = Product::DONATE_PRODUCT;
                 $createFlag = true;
                 if (in_array($product->id, $restorableProducts)) {
-                    $oldOrderproduct = $openOrder->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
+                    $oldOrderproduct = $openOrder->orderproducts(config("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
                                                  ->whereIn("product_id", $restorableProducts)
                                                  ->onlyTrashed()
                                                  ->get();

@@ -127,7 +127,7 @@ class OfflinePaymentController extends Controller
                                 $result = array_add($result, "saveBon", $givenBonNumber);
 
                             $bonDisplayName = $bon->displayName;
-                            $result = array_add($result, "bonName", $bonDisplayName);
+                            /*$result = */array_add($result, "bonName", $bonDisplayName);
                         }
                         /** End */
 
