@@ -6,11 +6,11 @@
  * Time: 1:39 PM
  */
 
-namespace App\Classes\Payment\GateWay;
+namespace App\Classes\Payment\Gateway;
 
-use App\Classes\Payment\GateWay\GateWay;
+use App\Classes\Payment\Gateway\Gatewayay;
 
-class GateWayFactory
+class GatewayFactory
 {
     /**
      * @var GateWay $gateWayClass

@@ -6,14 +6,14 @@
  * Time: 1:31 PM
  */
 
-namespace App\Classes\Payment\GateWay\Zarinpal;
+namespace App\Classes\Payment\Gateway\Zarinpal;
 
-use App\Classes\Payment\GateWay\GateWay;
+use PHPUnit\Framework\Exception;
+use App\Classes\Payment\Gateway\Gateway;
 use Illuminate\Support\Facades\Validator;
 use Zarinpal\Zarinpal as ZarinpalComposer;
-use App\Classes\Payment\GateWay\GateWayAbstract;
 
-class Zarinpal implements GateWay
+class Zarinpal implements Gateway
 {
     /**
      * @var array $result
@@ -46,14 +46,23 @@ class Zarinpal implements GateWay
 
     public function __construct(array $data)
     {
-        $this->merchantID = $data['merchantID'];
-        $this->zarinpalComposer = new ZarinpalComposer($this->merchantID);
-
         $this->result = [
             'status' => true,
             'message' => [],
             'data' => [],
         ];
+
+        $roles = [
+            'merchantID' => 'required|string|size:36'
+        ];
+        $this->dataValidation($data, $roles);
+        if (!$this->result['status']) {
+            throw new Exception('The merchantID must be 36 characters.');
+            /*return $this->result;*/
+        } else {
+            $this->merchantID = $data['merchantID'];
+            $this->zarinpalComposer = new ZarinpalComposer($this->merchantID);
+        }
 
         if(config('app.env', 'deployment')!='deployment' && config('Zarinpal.Sandbox', false)) {
             $this->zarinpalComposer->enableSandbox(); // active sandbox mod for test env
@@ -71,24 +80,29 @@ class Zarinpal implements GateWay
      */
     public function paymentRequest(array $data): array
     {
-        $result = [
-            'status'=>false,
-            'message'=>[],
-            'data'=>[]
+        $roles = [
+            'callbackUrl' => 'required|string',
+            'amount' => 'required|integer|min:100',
+            'description' => 'sometimes|string|min:1',
         ];
+
+        $this->dataValidation($data, $roles);
+        if (!$this->result['status']) {
+            return $this->result;
+        }
 
         $zarinpalResponse = $this->zarinpalComposer->request($data['callbackUrl'], $data['amount'], $data['description']);
         if (isset($zarinpalResponse['Authority']) && strlen($zarinpalResponse['Authority']) > 0) {
-            $result['status'] = true;
-            $result['message'][] = 'درخواست پرداخت با موفقیت ارسال و نتیجه آن دریافت شد.';
-            $result['data']['Authority'] = $zarinpalResponse['Authority'];
-            $result['data']['zarinpalResponse'] = $zarinpalResponse;
+            $this->result['status'] = true;
+            $this->result['message'][] = 'درخواست پرداخت با موفقیت ارسال و نتیجه آن دریافت شد.';
+            $this->result['data']['Authority'] = $zarinpalResponse['Authority'];
+            $this->result['data']['zarinpalResponse'] = $zarinpalResponse;
         } else {
-            $result['status'] = false;
-            $result['message'][] = 'مشکل در برقراری ارتباط با درگاه زرین پال';
-            $result['data']['zarinpalResponse'] = $zarinpalResponse;
+            $this->result['status'] = false;
+            $this->result['message'][] = 'مشکل در برقراری ارتباط با درگاه زرین پال';
+            $this->result['data']['zarinpalResponse'] = $zarinpalResponse;
         }
-        return $result;
+        return $this->result;
     }
 
     /**
@@ -108,10 +122,14 @@ class Zarinpal implements GateWay
      * @param array $data
      * @return array $this->result
      */
-    public function getCallbackData(array $data): array
+    public function readCallbackData(array $data): array
     {
-        $this->validateCallbackData($data);
+        $roles = [
+            'Authority' => 'required|string|size:36',
+            'Status' => 'required|string|min:2|max:3',
+        ];
 
+        $this->dataValidation($data, $roles);
         if (!$this->result['status']) {
             return $this->result;
         }
@@ -135,6 +153,19 @@ class Zarinpal implements GateWay
      */
     public function verify(array $data): array
     {
+        $this->result['status'] = true;
+
+        $roles = [
+            'amount' => 'required|integer|min:100',
+            'Authority' => 'required|string|size:36',
+            'Status' => 'required|string|min:2|max:3',
+        ];
+
+        $this->dataValidation($data, $roles);
+        if (!$this->result['status']) {
+            return $this->result;
+        }
+
         $amount = $data['amount'];
         $status = $data['Status'];
         $authority = $data['Authority'];
@@ -152,6 +183,7 @@ class Zarinpal implements GateWay
             $this->result['status'] = true;
             $this->result['data']['RefID'] = $result['RefID'];
             $this->result['data']['cardPanMask'] = isset($result['ExtraDetail']['Transaction']['CardPanMask'])?$result['ExtraDetail']['Transaction']['CardPanMask']:null;;
+            $this->result['message'][] = 'پرداخت کاربر تایید شد.';
         } else {
             $this->result['status'] = false;
             if (strcmp($result['Status'], 'canceled') == 0) {
@@ -180,21 +212,19 @@ class Zarinpal implements GateWay
     }
 
     /**
-     * @param array $callbackData
+     * @param array $data
+     * @param array $roles
      * @return void
      */
-    private function validateCallbackData(array $callbackData): void
+    private function dataValidation(array $data, array $roles): void
     {
-        $validator = Validator::make($callbackData, [
-            'Authority' => 'required|string|min:36|max:36',
-            'Status' => 'required|string|min:2|max:3',
-        ]);
+        $validator = Validator::make($data, $roles);
         if ($validator->fails()) {
             $this->result['status'] = false;
             foreach ($validator->messages()->getMessages() as $field_name => $messages) {
                 $this->result['message'][] = $messages;
             }
+            $this->result['data']['WrongInput'] = $data;
         }
-        $this->result['data']['callbackData'] = $callbackData;
     }
 }

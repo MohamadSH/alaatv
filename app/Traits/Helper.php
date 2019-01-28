@@ -103,9 +103,7 @@ trait Helper
     public function updateWithoutTimestamp():bool
     {
         $this->timestamps = false;
-        $flag = false;
-        if ($this->update())
-            $flag = true;
+        $flag = $this->update();
         $this->timestamps = true;
         return $flag;
     }

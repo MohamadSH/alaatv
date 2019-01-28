@@ -2,13 +2,14 @@
 
 namespace App\Console\Commands;
 
+use App\Transaction;
 use App\Transactiongateway;
 use App\Http\Controllers\OnlinePaymentController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Requests\Request;
 use Illuminate\Console\Command;
-use App\Classes\Payment\GateWay\Zarinpal\Zarinpal;
-use App\Classes\Payment\GateWay\GateWayFactory;
+use App\Classes\Payment\Gateway\Zarinpal\Zarinpal;
+use App\Classes\Payment\Gateway\GatewayFactory;
 use Zarinpal\Zarinpal as ZarinpalComposer;
 
 class HandleUnverifiedTransactions extends Command
@@ -62,7 +63,8 @@ class HandleUnverifiedTransactions extends Command
         $paymentMethod = 'zarinpal';
         $transactiongateway = Transactiongateway::where('name', $paymentMethod)->first();
         $this->merchantNumber = $transactiongateway->merchantNumber;
-        $this->gateWay = (new GateWayFactory())->setGateway($paymentMethod, $this->merchantNumber);
+        $data['merchantID'] = $this->merchantNumber;
+        $this->gateWay = (new GatewayFactory())->setGateway($paymentMethod, $data);
     }
 
     /**
@@ -150,7 +152,8 @@ class HandleUnverifiedTransactions extends Command
     }
 
     private function getUnverifiedTransactions() {
-        $zarinpal = new Zarinpal($this->merchantNumber);
+        $data['merchantID'] = $this->merchantNumber;
+        $zarinpal = new Zarinpal($data);
         $result = $zarinpal->getUnverifiedTransactions();
         return $result;
     }
