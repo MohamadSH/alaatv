@@ -6,15 +6,18 @@ use App\{Afterloginformcontrol,
     Bankaccount,
     Bloodtype,
     Bon,
-    Classes\Search\UserSearch,
-    Classes\SEO\SeoDummyTags,
-    Collection\ProductCollection,
+    Role,
+    Major,
+    Order,
+    Event,
+    Grade,
+    Gender,
     Contact,
     Employeeschedule,
     Employeetimesheet,
-    Event,
-    Gender,
-    Grade,
+    Classes\Search\UserSearch,
+    Classes\SEO\SeoDummyTags,
+    Collection\ProductCollection,
     Http\Controllers\Auth\RegisterController,
     Http\Requests\EditUserRequest,
     Http\Requests\InsertUserRequest,
@@ -23,12 +26,8 @@ use App\{Afterloginformcontrol,
     Http\Requests\RegisterForSanatiSharifHighSchoolRequest,
     Http\Requests\UserIndexRequest,
     Lottery,
-    Major,
-    Order,
-    Phone,
     Product,
     Province,
-    Role,
     Traits\CharacterCommon,
     Traits\DateTrait,
     Traits\Helper,
@@ -45,7 +44,6 @@ use App\{Afterloginformcontrol,
 use Auth;
 use Carbon\Carbon;
 use Illuminate\{Contracts\Filesystem\FileNotFoundException,
-    Foundation\Http\FormRequest,
     Http\Request,
     Http\Response,
     Support\Collection,
@@ -61,9 +59,6 @@ use Kalnoy\Nestedset\QueryBuilder;
 use PHPUnit\Framework\Exception;
 use SEO;
 use stdClass;
-use App\Classes\Payment\GateWay\Zarinpal\Zarinpal;
-use App\Classes\Payment\GateWay\GateWayFactory;
-use Zarinpal\Zarinpal as ZarinpalComposer;
 
 class UserController extends Controller
 {

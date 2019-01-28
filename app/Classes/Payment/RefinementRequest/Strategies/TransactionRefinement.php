@@ -79,9 +79,9 @@ class TransactionRefinement extends Refinement
      */
     private function getDescription(): string
     {
-        $description = "";
-        if (isset($this->inputData["transaction_id"]))
-            $description = "پرداخت قسط -";
+        $description = '';
+        if (isset($this->inputData['transaction_id']))
+            $description = 'پرداخت قسط -';
 
         return $description;
     }
