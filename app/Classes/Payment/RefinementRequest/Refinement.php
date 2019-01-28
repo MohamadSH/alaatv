@@ -23,62 +23,62 @@ abstract class Refinement
     /**
      * @var array $inputData
      */
-    public $inputData;
+    private $inputData;
 
     /**
      * @var int $statusCode
      */
-    public $statusCode;
+    protected $statusCode;
 
     /**
      * @var string $message
      */
-    public $message;
+    protected $message;
 
     /**
      * @var User $user
      */
-    public $user;
+    protected $user;
 
     /**
      * @var Order $order
      */
-    public $order;
+    protected $order;
 
     /**
      * @var int $cost
      */
-    public $cost;
+    protected $cost;
 
     /**
      * @var int $paidFromWalletCost
      */
-    public $paidFromWalletCost;
+    protected $paidFromWalletCost;
 
     /**
      * @var int $donateCost
      */
-    public $donateCost;
+    protected $donateCost;
 
     /**
      * @var Transaction $transaction
      */
-    public $transaction;
+    protected $transaction;
 
     /**
      * @var string $description
      */
-    public $description;
+    protected $description;
 
     /**
      * @var int $walletId
      */
-    public $walletId;
+    protected $walletId;
 
     /**
      * @var int $walletChargingAmount
      */
-    public $walletChargingAmount;
+    protected $walletChargingAmount;
 
     /**
      * @var TransactionController
@@ -99,10 +99,10 @@ abstract class Refinement
      */
     public function setData(array $inputData): Refinement {
         $this->inputData = $inputData;
-        $this->transactionController = $this->inputData['transactionController'];
-        $this->user = $this->inputData['user'];
-        $this->walletId = (isset($this->inputData['walletId'])?$this->inputData['walletId']:null);
-        $this->walletChargingAmount = (isset($this->inputData['walletChargingAmount'])?$this->inputData['walletChargingAmount']:null);
+        $this->transactionController = $this->inputData['transactionController']??null;
+        $this->user = $this->inputData['user']??null;
+        $this->walletId = $this->inputData['walletId']??null;
+        $this->walletChargingAmount = $this->inputData['walletChargingAmount']??null;
         return $this;
     }
 
@@ -160,13 +160,19 @@ abstract class Refinement
     }
 
     /**
+     * @param bool $deposit
      * @return array|null
      */
-    protected function getNewTransaction()
+    protected function getNewTransaction($deposit = true)
     {
         $result = null;
         if($this->cost>0) {
-            $data['cost'] = (isset($this->walletId))?($this->cost*(-1)):$this->cost;
+            if($deposit) {
+                $data['cost'] = $this->cost;
+            } else {
+                $data['cost'] = ($this->cost*(-1));
+            }
+
             $data['description'] = $this->description;
             $data['order_id'] = (isset($this->order))?$this->order->id:null;
             $data['wallet_id'] = (isset($this->walletId))?$this->walletId:null;

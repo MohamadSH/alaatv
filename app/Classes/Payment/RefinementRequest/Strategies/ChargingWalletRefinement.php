@@ -25,7 +25,7 @@ class ChargingWalletRefinement extends Refinement
 
         $this->description .= 'شارژ کیف پول -';
         $this->cost = $this->walletChargingAmount;
-        $result = $this->getNewTransaction();
+        $result = $this->getNewTransaction(false);
         $this->statusCode = $result['statusCode'];
         $this->message = $result['message'];
         $this->transaction = $result['transaction'];
