@@ -6,34 +6,27 @@
  * Time: 1:39 PM
  */
 
-namespace App\Classes\Payment\GateWay;
+namespace App\Classes\Payment\Gateway;
 
+use App\Classes\Payment\Gateway\Gatewayay;
 
-use App\Http\Controllers\TransactionController;
-
-class GateWayFactory
+class GatewayFactory
 {
-    private $transactionController;
-
     /**
-     * @var GateWayAbstract $gateWayClass
+     * @var GateWay $gateWayClass
      */
     private $gateWayClass;
 
-    public function __construct(TransactionController $transactionController)
-    {
-        $this->transactionController = $transactionController;
-    }
-
     /**
      * @param string $gateWay
-     * @return GateWayAbstract
+     * @param array $data
+     * @return GateWay
      */
-    public function setGateWay(string $gateWay)
+    public function setGateway(string $gateWay, array $data)
     {
         $className = $this->getGatewayNameSpace($gateWay);
         if (class_exists($className)) {
-            $this->gateWayClass = new $className($this->transactionController);
+            $this->gateWayClass = new $className($data);
         } else {
             throw new Exception('GateWay {' . $className . '} not found.');
         }

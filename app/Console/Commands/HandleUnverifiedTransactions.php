@@ -2,13 +2,14 @@
 
 namespace App\Console\Commands;
 
+use App\Transaction;
 use App\Transactiongateway;
 use App\Http\Controllers\OnlinePaymentController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Requests\Request;
 use Illuminate\Console\Command;
-use App\Classes\Payment\GateWay\Zarinpal\Zarinpal;
-use App\Classes\Payment\GateWay\GateWayFactory;
+use App\Classes\Payment\Gateway\Zarinpal\Zarinpal;
+use App\Classes\Payment\Gateway\GatewayFactory;
 use Zarinpal\Zarinpal as ZarinpalComposer;
 
 class HandleUnverifiedTransactions extends Command
@@ -58,9 +59,12 @@ class HandleUnverifiedTransactions extends Command
         $this->request = $request;
         $this->transactionController = $transactionController;
         $this->onlinePaymentController = $onlinePaymentController;
-        $this->gateWay = new GateWayFactory($this->transactionController);
-        $zarinGate = Transactiongateway::where('name', 'zarinpal')->first();
-        $this->merchantNumber = $zarinGate->merchantNumber;
+
+        $paymentMethod = 'zarinpal';
+        $transactiongateway = Transactiongateway::where('name', $paymentMethod)->first();
+        $this->merchantNumber = $transactiongateway->merchantNumber;
+        $data['merchantID'] = $this->merchantNumber;
+        $this->gateWay = (new GatewayFactory())->setGateway($paymentMethod, $data);
     }
 
     /**
@@ -73,31 +77,37 @@ class HandleUnverifiedTransactions extends Command
         $notExistTransactions = [];
         $unverifiedTransactionsDueToError = [];
 
+        $this->info('getting data from zarinpal ...');
         $result = $this->getUnverifiedTransactions();
         if($result['Status'] == 'success') {
+            $this->info('Untrusted transactions received.');
             $transactions = $result['Authorities'];
             foreach ($transactions as $transaction) {
-                $result = [
+
+                /*$result = [
                     'sendSMS' => false,
                     'Status' => 'error'
-                ];
+                ];*/
                 $this->request->offsetSet('Authority', $transaction['Authority']);
                 $this->request->offsetSet('Status', 'OK');
-                $data = [
+                /*$data = [
                     'request' => $this->request,
                     'result' => $result
-                ];
-                $result = $this->gateWay->setGateWay('zarinpal')->verify($data);
+                ];*/
+                $this->info($transaction['Authority']);
 
-                if($result['Status'] == 'error' &&
-                    (
-                        array_search( 'Transaction not found', $result['Message']) !== false ||
-                        array_search( 'Order not found', $result['Message']) !== false
-                    )
-                ) {
+                $transaction = Transaction::authority($transaction['Authority'])->first();
+
+                if(!isset($transaction)) {
                     array_push($notExistTransactions, $transaction);
-                } else if($result['Status'] == 'error') {
+                } else {
+                    $transaction['Status'] = 'OK';
                     array_push($unverifiedTransactionsDueToError, $transaction);
+//                    $gateWayVerify = $this->gateWay->verify($transaction->cost, $transaction);
+//
+//                    if($gateWayVerify['Status'] == 'error') {
+//                        array_push($unverifiedTransactionsDueToError, $transaction);
+//                    }
                 }
             }
 
@@ -107,9 +117,9 @@ class HandleUnverifiedTransactions extends Command
                     $authority = $item['Authority'];
                     $amount = $item['Amount'];
                     $channel = $item['Channel'];
-                    $callbackURL = $item['CallbackURL'];
+                    /*$callbackURL = $item['CallbackURL'];
                     $referer = $item['Referer'];
-                    $email = $item['Email'];
+                    $email = $item['Email'];*/
                     $cellPhone = $item['CellPhone'];
                     $date = $item['Date'];
                     $this->info('authority: {'.$authority.'} amount: {'.$amount.'} channel: {'.$channel.'} cellPhone: {'.$cellPhone.'} date: {'.$date.'}');
@@ -121,9 +131,9 @@ class HandleUnverifiedTransactions extends Command
                     $authority = $item['Authority'];
                     $amount = $item['Amount'];
                     $channel = $item['Channel'];
-                    $callbackURL = $item['CallbackURL'];
+                    /*$callbackURL = $item['CallbackURL'];
                     $referer = $item['Referer'];
-                    $email = $item['Email'];
+                    $email = $item['Email'];*/
                     $cellPhone = $item['CellPhone'];
                     $date = $item['Date'];
                     $this->info('authority: {'.$authority.'} amount: {'.$amount.'} channel: {'.$channel.'} cellPhone: {'.$cellPhone.'} date: {'.$date.'}');
@@ -136,12 +146,14 @@ class HandleUnverifiedTransactions extends Command
                 }
             }
         } else {
-            $this->info('get zarinpal Unverified Transactions Status: '.$result['Status']);
+            $this->info('There is a problem with receiving unverified transactions with Status: '.$result['Status']);
         }
+        return null;
     }
 
     private function getUnverifiedTransactions() {
-        $zarinpal = new Zarinpal((new TransactionController()));
+        $data['merchantID'] = $this->merchantNumber;
+        $zarinpal = new Zarinpal($data);
         $result = $zarinpal->getUnverifiedTransactions();
         return $result;
     }

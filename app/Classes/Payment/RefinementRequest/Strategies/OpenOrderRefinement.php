@@ -14,7 +14,6 @@ use App\Classes\Payment\RefinementRequest\{Refinement, RefinementInterface};
 
 class OpenOrderRefinement extends Refinement
 {
-
     /**
      * @return Refinement
      */
