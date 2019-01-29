@@ -936,10 +936,16 @@ class OrderController extends Controller
             $orderHasDonate = $order->hasTheseProducts(Product::DONATE_PRODUCT);
             $gateways = Transactiongateway::enable()->get()->sortBy("order")->pluck("displayName", "name");
 
-            $couponValidationStatus = optional($order->coupon)->validateCoupon();
+            $coupon = $order->coupon;
+            $couponValidationStatus = optional($coupon)->validateCoupon();
             if(in_array($couponValidationStatus , [Coupon::COUPON_VALIDATION_STATUS_DISABLED , Coupon::COUPON_VALIDATION_STATUS_USAGE_TIME_NOT_BEGUN , Coupon::COUPON_VALIDATION_STATUS_EXPIRED]))
             {
                 $order->detachCoupon();
+                if($order->updateWithoutTimestamp()) {
+                    $coupon->decreaseUseNumber();
+                    $coupon->update();
+                }
+
                 $order = $order->fresh();
             }
             $coupon = $order->coupon;
@@ -1165,32 +1171,29 @@ class OrderController extends Controller
      */
     public function removeCoupon(Request $request)
     {
-        if($request->has("order_id"))
+        $order = Order::Find($request->get("order_id"));
+        if(isset($order))
         {
-            $order = Order::Find($request->get("order_id"));
-            if(isset($order))
+            $order->load("coupon");
+            $coupon = $order->coupon;
+            if(isset($coupon))
             {
-                $result = $order->detachCoupon();
-                if ($result)
-                {
+                $order->detachCoupon();
+                if($order->updateWithoutTimestamp()) {
+                    $coupon->decreaseUseNumber();
+                    $coupon->update();
                     $responseStatusCode = Response::HTTP_OK;
                     $responseMessage = "کپن سفارش شما با موفیت حذف شد";
                     $sessionIndex = "couponMessageSuccess";
-                }
-                else
-                {
+                }else{
                     $responseStatusCode = Response::HTTP_SERVICE_UNAVAILABLE;
                     $responseMessage = "خطای پایگاه داده";
                     $sessionIndex = "couponMessageError";
                 }
-            }else
-            {
-                $responseStatusCode = Response::HTTP_BAD_REQUEST;
-                $responseMessage = "سفارش مورد نظر یافت نشد";
-                $sessionIndex = "couponMessageError";
             }
 
-        }else{
+        }else
+        {
             $responseStatusCode = Response::HTTP_BAD_REQUEST;
             $responseMessage = "سفارش مورد نظر یافت نشد";
             $sessionIndex = "couponMessageError";

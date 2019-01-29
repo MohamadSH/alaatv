@@ -299,4 +299,12 @@ class Coupon extends Model
         return $flag;
     }
 
+    public function decreaseUseNumber(){
+        $this->usageNumber--;
+    }
+
+    public function encreaseUserNumber(){
+        $this->usageNumber++;
+    }
+
 }

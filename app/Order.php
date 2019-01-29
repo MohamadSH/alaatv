@@ -620,32 +620,12 @@ class Order extends Model
     /**
      * Detaches coupon from this order
      *
-     * @return bool
      */
-    public function detachCoupon():bool
+    public function detachCoupon():void
     {
-        $done = false;
-        if (isset($this->coupon)) {
-            //ToDo: Put in a separate function in Coupon model
-            $coupon = $this->coupon;
-            $coupon->usageNumber--;
-            if ($coupon->update())
-            {
-                $this->coupon_id = null;
-                $this->couponDiscount = 0;
-                $this->couponDiscountAmount = 0;
-                //ToDo : Don't update here
-                if($this->updateWithoutTimestamp())
-                {
-                    $done = true;
-                }
-                else{
-                    $coupon->usageNumber++;
-                    $coupon->update();
-                }
-            }
-        }
-        return $done;
+        $this->coupon_id = null;
+        $this->couponDiscount = 0;
+        $this->couponDiscountAmount = 0;
     }
 
     /**
@@ -819,7 +799,15 @@ class Order extends Model
         $usedCoupon = $this->hasProductsThatUseItsCoupon();
         if (!$usedCoupon) {
             /** if order has not used coupon reverse it    */
-            $this->detachCoupon();
+            $coupon = $this->coupon;
+            if(isset($coupon))
+            {
+                $this->detachCoupon();
+                if($this->updateWithoutTimestamp()) {
+                    $coupon->decreaseUseNumber();
+                    $coupon->update();
+                }
+            }
         }
     }
 

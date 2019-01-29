@@ -90,7 +90,15 @@ class OfflinePaymentController extends Controller
                 $usedCoupon = $order->hasProductsThatUseItsCoupon();
                 if (!$usedCoupon) {
                     /** if order has not used coupon reverse it    */
-                    $order->detachCoupon();
+                    $coupon = $order->coupon;
+                    if(isset($coupon))
+                    {
+                        $order->detachCoupon();
+                        if($this->updateWithoutTimestamp()) {
+                            $coupon->decreaseUseNumber();
+                            $coupon->update();
+                        }
+                    }
                 }
 
                 $orderPaymentStatus = config("constants.PAYMENT_STATUS_UNPAID");
