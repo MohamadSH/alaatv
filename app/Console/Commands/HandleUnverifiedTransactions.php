@@ -60,6 +60,7 @@ class HandleUnverifiedTransactions extends Command
         $this->transactionController = $transactionController;
         $this->onlinePaymentController = $onlinePaymentController;
 
+        //ToDo : At this time this only works for Zarinpal
         $paymentMethod = 'zarinpal';
         $transactiongateway = Transactiongateway::where('name', $paymentMethod)->first();
         $this->merchantNumber = $transactiongateway->merchantNumber;
