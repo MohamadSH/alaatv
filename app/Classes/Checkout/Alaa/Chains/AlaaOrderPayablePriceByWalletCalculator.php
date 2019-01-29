@@ -18,13 +18,6 @@ class AlaaOrderPayablePriceByWalletCalculator extends OrderPayablePriceByWalletC
     protected function calculateAmountPaidByWallet(Order $order, $finalPrice)
     {
         $user = $order->user;
-        $filters = [
-          [
-              "attribute" => "product_id" ,
-              "value"     => Product::DONATE_PRODUCT,
-              "isArray"   => true,
-          ]
-        ];
         $donateOrderProducts = $order->normalOrderproducts;
 
 

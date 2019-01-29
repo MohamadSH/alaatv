@@ -15,10 +15,9 @@ class AddDescriptionToTransactions extends Migration
     {
         Schema::table('transactions', function (Blueprint $table) {
             $table->string('description')
-                ->nullable()
-                ->default(null)
-                ->comment('توضیح تراکنش')
-                ->after('transactionstatus_id');
+                        ->nullable()
+                        ->comment('توضیح تراکنش')
+                        ->after('transactionstatus_id');
         });
     }
 

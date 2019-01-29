@@ -335,30 +335,6 @@
     {!! Form::close() !!}
 
 
-    <div class="panel panel-success">
-        <div class="panel-heading">پنل ساخت کد تخفیف</div>
-        <div class="panel-body">
-
-
-            <form method="post" action="{{ action('couponController@create') }}" accept-charset="UTF-8">
-
-            <select class="js-selectProduct-single" name="state" style="width: 100%;">
-                <option value="AL">Alabama</option>
-                <option value="WY">Wyoming</option>
-            </select>
-            <br>
-                <input type="submit" value="ساخت کد" class="btn btn-info" >
-            <hr>
-
-            <div class="alert alert-success" role="alert">کد تخفیف ساخته شده: <strong id="createdCoupon">{{ $createdCoupon }}</strong></div>
-            <div class="alert alert-danger" role="alert">مشکلی در ساخت کد تخفیف رخ داده است.</div>
-
-
-            </form>
-
-        </div>
-    </div>
-
 @endsection
 @section("page-js")
     {{--<script src="{{ mix('/js/product-show.js') }}"></script>--}}
