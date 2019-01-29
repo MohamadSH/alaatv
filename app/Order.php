@@ -306,7 +306,7 @@ class Order extends Model
      */
     public function obtainOrderCost($calculateOrderCost = false, $calculateOrderproductCost = true, $mode = "DEFAULT")
     {
-        $this->load('user' , 'user.wallets'  , 'normalOrderproducts' , 'normalOrderproducts.product' , 'normalOrderproducts.userbons' , 'normalOrderproducts.product.parents' , 'normalOrderproducts.product.parents.parents'  , 'normalOrderproducts.attributevalues' , 'normalOrderproducts.product.attributevalues' );
+        $this->load('user' , 'user.wallets'  , 'normalOrderproducts' , 'normalOrderproducts.product' , 'normalOrderproducts.userbons' , 'normalOrderproducts.product.parents'   , 'normalOrderproducts.attributevalues' , 'normalOrderproducts.product.attributevalues' );
 
         if($calculateOrderCost) {
             $orderproductsToCalculateFromBaseIds = [];
@@ -323,6 +323,7 @@ class Order extends Model
         else{
             $alaaCashierFacade = new ReObtainOrderFromRecords($this);
         }
+
 
         $priceInfo = $alaaCashierFacade->checkout();
 
@@ -420,6 +421,7 @@ class Order extends Model
      */
     public function doesBelongToThisUser($user): bool
     {
+        //ToDo: Bug on paying by wallet
         return optional($this->user)->id == $user->id;
     }
 
