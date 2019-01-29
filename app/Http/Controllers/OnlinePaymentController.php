@@ -477,6 +477,7 @@ class OnlinePaymentController extends Controller
         $result = $request->session()->get('verifyResult');
         dd([
             'status' => $status,
+            'status' => csrf_token(),
             'paymentMethod' => $paymentMethod,
             'device' => $device,
             'verifyResult' => $result
