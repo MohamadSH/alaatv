@@ -2,20 +2,13 @@
 
 namespace Tests\Feature;
 
-use App\Http\Controllers\OrderController;
-use App\Order;
 use App\Traits\OrderCommon;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Tests\TestCase;
 use App\Userbon;
-use DB;
 use App\User;
 use Illuminate\Http\Request;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class OrderProductTest extends TestCase
 {
@@ -51,11 +44,9 @@ class OrderProductTest extends TestCase
             'withoutBon' => false
         ];
 
-        Log::debug('before factory');
-        $user11 = factory(User::class)->create();
 
         Log::debug('before actingAs');
-        $this->actingAs($user11);
+        $this->actingAs($user);
         Log::debug('after actingAs');
 
 
