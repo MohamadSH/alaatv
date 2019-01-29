@@ -36,21 +36,23 @@ class CheckHasOpenOrder
         if (Auth::guard($guard)->check()) {
             $this->user = $request->user()->load('openOrders');
 
-            $this->resetOrders();
 
-//        $sampleData = $this->getSampleData('simple1', $this->user, $request); // simple product
-//        $sampleData = $this->getSampleData('simple2', $this->user, $request);// 270 is gift of 155
-//        $sampleData = $this->getSampleData('simple3', $this->user, $request);// 157 is child of 155 and gift of 155 is 270
-//        $sampleData = $this->getSampleData('donate1', $this->user, $request);// 5000
-//        $sampleData = $this->getSampleData('donate2', $this->user, $request);// custom
-//        $sampleData = $this->getSampleData('selectable', $this->user, $request);
-            $sampleData = $this->getSampleData('configurable', $this->user, $request);
-            $request->offsetSet('order_id', $sampleData['orderId']);
-            $request->offsetSet('product_id', $sampleData['productId']);
-            $request->offsetSet('products', $sampleData['data']['products']);
-            $request->offsetSet('attribute', $sampleData['data']['attribute']);
-            $request->offsetSet('extraAttribute', $sampleData['data']['extraAttribute']);
-            $request->offsetSet('withoutBon', false);
+
+//            $this->resetOrders();
+//
+////        $sampleData = $this->getSampleData('simple1', $this->user, $request); // simple product
+////        $sampleData = $this->getSampleData('simple2', $this->user, $request);// 270 is gift of 155
+////        $sampleData = $this->getSampleData('simple3', $this->user, $request);// 157 is child of 155 and gift of 155 is 270
+////        $sampleData = $this->getSampleData('donate1', $this->user, $request);// 5000
+////        $sampleData = $this->getSampleData('donate2', $this->user, $request);// custom
+////        $sampleData = $this->getSampleData('selectable', $this->user, $request);
+//            $sampleData = $this->getSampleData('configurable', $this->user, $request);
+//            $request->offsetSet('order_id', $sampleData['orderId']);
+//            $request->offsetSet('product_id', $sampleData['productId']);
+//            $request->offsetSet('products', $sampleData['data']['products']);
+//            $request->offsetSet('attribute', $sampleData['data']['attribute']);
+//            $request->offsetSet('extraAttribute', $sampleData['data']['extraAttribute']);
+//            $request->offsetSet('withoutBon', false);
 
 
 

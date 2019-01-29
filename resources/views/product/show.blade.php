@@ -316,14 +316,11 @@
 
     {!! Form::open(['route' => 'orderproduct.store']) !!}
 
-    <div class="form-group">
-        {!! Form::label('order_id', 'Your Name') !!}
-        {!! Form::text('order_id', 76, ['class' => 'form-control']) !!}
-    </div>
+    {!! Form::token() !!}
 
     <div class="form-group">
         {!! Form::label('email', 'E-mail Address') !!}
-        {!! Form::text('email', null, ['class' => 'form-control']) !!}
+        {!! Form::hidden('product_id', 259, ['class' => 'form-control']) !!}
     </div>
 
     <div class="form-group">

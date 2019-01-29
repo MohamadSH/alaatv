@@ -4,7 +4,10 @@ namespace Tests\Feature;
 
 use App\Http\Controllers\OrderController;
 use App\Order;
+use App\Traits\OrderCommon;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Tests\TestCase;
 use App\Userbon;
@@ -16,11 +19,13 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class OrderProductTest extends TestCase
 {
+    use OrderCommon;
+
     public function testAddToOrder() {
 
         Session::start();
         $this->resetOrders();
-        $user = User::find(1);
+        $user = User::find(1)->first();
         $request = new Request();
 
 //        $sampleData = $this->getSampleData('simple1', $this->user, $request); // simple product
@@ -29,7 +34,7 @@ class OrderProductTest extends TestCase
 //        $sampleData = $this->getSampleData('donate1', $this->user, $request);// 5000
 //        $sampleData = $this->getSampleData('donate2', $this->user, $request);// custom
 //        $sampleData = $this->getSampleData('selectable', $this->user, $request);
-        $sampleData = $this->getSampleData('configurable', $user, $request);
+        $sampleData = $this->getSampleData('configurable', $user);
         $request->offsetSet('order_id', $sampleData['orderId']);
         $request->offsetSet('product_id', $sampleData['productId']);
         $request->offsetSet('products', $sampleData['data']['products']);
@@ -38,7 +43,6 @@ class OrderProductTest extends TestCase
         $request->offsetSet('withoutBon', false);
 
         $data = [
-            '_token' => csrf_token(),
             'order_id' => $sampleData['orderId'],
             'product_id' => $sampleData['productId'],
             'products' => $sampleData['data']['products'],
@@ -46,13 +50,28 @@ class OrderProductTest extends TestCase
             'extraAttribute' => $sampleData['data']['extraAttribute'],
             'withoutBon' => false
         ];
-        $response = $this->actingAs($user)
+
+        Log::debug('before factory');
+        $user11 = factory(User::class)->create();
+
+        Log::debug('before actingAs');
+        $this->actingAs($user11);
+        Log::debug('after actingAs');
+
+
+        $response = $this
+//            ->visit('/')
+//            ->see('Hello, '.$user->name);
+
             ->call('POST', 'orderproduct', $data);
-//
-        $response->assertStatus(Response::HTTP_OK)
-//            ->assertJson([
-//                'created' => true,
-//            ])
+
+        Log::debug('before assertJson');
+
+        $response
+//            ->assertStatus(Response::HTTP_OK)
+            ->assertJson([
+                'created' => true,
+            ])
         ;
 
 //            ->seeJsonStructure([
@@ -77,24 +96,11 @@ class OrderProductTest extends TestCase
      * generate sample data for test store orderProduct
      * @param $case
      * @param User $user
-     * @param Request $request
      * @return array
      */
-    private function getSampleData($case, User $user, Request &$request) {
+    private function getSampleData($case, User $user) {
 
-        $openOrder = $user->openOrders;
-
-        if ($openOrder->isEmpty()) {
-            $request->offsetSet('paymentstatus_id', config('constants.PAYMENT_STATUS_UNPAID'));
-            $request->offsetSet('orderstatus_id', config('constants.ORDER_STATUS_OPEN'));
-            $request->offsetSet('user_id', $user->id);
-            $order = new Order();
-            $order->fill($request->all());
-            $order->save();
-        } else {
-            $order = $openOrder->first();
-        }
-        $orderId = $order->id;
+        $orderId = $this->firstOrCreateOpenOrder($user);
 
         switch ($case) {
             case 'simple1':
