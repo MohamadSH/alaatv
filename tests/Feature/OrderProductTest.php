@@ -1,42 +1,27 @@
 <?php
 
-namespace App\Http\Middleware;
+namespace Tests\Feature;
 
 use App\Http\Controllers\OrderController;
-use Closure;
-use Illuminate\Http\Request;
+use App\Order;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Session;
+use Tests\TestCase;
 use App\Userbon;
 use DB;
 use App\User;
+use Illuminate\Http\Request;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class CheckHasOpenOrder
+class OrderProductTest extends TestCase
 {
-    private $orderController;
-    private $user;
+    public function testAddToOrder() {
 
-    public function __construct(OrderController $controller)
-    {
-        $this->orderController = $controller;
-    }
-
-    /**
-     * Handle an incoming request.
-     * set id of an open Order in request
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Closure $next
-     * @param null $guard
-     * @return mixed
-     */
-    public function handle(Request $request, Closure $next, $guard = null)
-    {
-        if (Auth::guard($guard)->check()) {
-            $this->user = $request->user()->load('openOrders');
-
-            $this->resetOrders();
+        Session::start();
+        $this->resetOrders();
+        $user = User::find(1);
+        $request = new Request();
 
 //        $sampleData = $this->getSampleData('simple1', $this->user, $request); // simple product
 //        $sampleData = $this->getSampleData('simple2', $this->user, $request);// 270 is gift of 155
@@ -44,32 +29,47 @@ class CheckHasOpenOrder
 //        $sampleData = $this->getSampleData('donate1', $this->user, $request);// 5000
 //        $sampleData = $this->getSampleData('donate2', $this->user, $request);// custom
 //        $sampleData = $this->getSampleData('selectable', $this->user, $request);
-            $sampleData = $this->getSampleData('configurable', $this->user, $request);
-            $request->offsetSet('order_id', $sampleData['orderId']);
-            $request->offsetSet('product_id', $sampleData['productId']);
-            $request->offsetSet('products', $sampleData['data']['products']);
-            $request->offsetSet('attribute', $sampleData['data']['attribute']);
-            $request->offsetSet('extraAttribute', $sampleData['data']['extraAttribute']);
-            $request->offsetSet('withoutBon', false);
+        $sampleData = $this->getSampleData('configurable', $user, $request);
+        $request->offsetSet('order_id', $sampleData['orderId']);
+        $request->offsetSet('product_id', $sampleData['productId']);
+        $request->offsetSet('products', $sampleData['data']['products']);
+        $request->offsetSet('attribute', $sampleData['data']['attribute']);
+        $request->offsetSet('extraAttribute', $sampleData['data']['extraAttribute']);
+        $request->offsetSet('withoutBon', false);
+
+        $data = [
+            '_token' => csrf_token(),
+            'order_id' => $sampleData['orderId'],
+            'product_id' => $sampleData['productId'],
+            'products' => $sampleData['data']['products'],
+            'attribute' => $sampleData['data']['attribute'],
+            'extraAttribute' => $sampleData['data']['extraAttribute'],
+            'withoutBon' => false
+        ];
+        $response = $this->actingAs($user)
+            ->call('POST', 'orderproduct', $data);
+//
+        $response->assertStatus(Response::HTTP_OK)
+//            ->assertJson([
+//                'created' => true,
+//            ])
+        ;
+
+//            ->seeJsonStructure([
+//            'orderproducts' => [
+//                'id',
+//                'order_id',
+//                'product_id',
+//                'updated_at',
+//                'created_ats',
+//                'attributevalues',
+//                'orderproducttype_id'
+//            ]
+//        ]);
+
+//        $this->assertEquals(200, $response->status());
 
 
-
-            $openOrder = $this->user->openOrders;
-            if ($openOrder->isEmpty()) {
-                $request->offsetSet('paymentstatus_id', config('constants.PAYMENT_STATUS_UNPAID'));
-                $request->offsetSet('orderstatus_id', config('constants.ORDER_STATUS_OPEN'));
-                $request->offsetSet('user_id', $this->user->id);
-                $controller = $this->orderController;
-                $openOrder = $controller->store($request);
-            }
-            $request->user()->load('openOrders');
-
-            return $next($request);
-        } else {
-            return response()->json([
-                'error' => 'Unauthenticated'
-            ], Response::HTTP_UNAUTHORIZED);
-        }
     }
 
 
@@ -88,8 +88,9 @@ class CheckHasOpenOrder
             $request->offsetSet('paymentstatus_id', config('constants.PAYMENT_STATUS_UNPAID'));
             $request->offsetSet('orderstatus_id', config('constants.ORDER_STATUS_OPEN'));
             $request->offsetSet('user_id', $user->id);
-            $controller = $this->orderController;
-            $order = $controller->store($request);
+            $order = new Order();
+            $order->fill($request->all());
+            $order->save();
         } else {
             $order = $openOrder->first();
         }

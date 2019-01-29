@@ -46,7 +46,7 @@ class CheckPermissionForSendOrderId
                     ], Response::HTTP_FORBIDDEN);
                 }
             } else {
-                $request->offsetSet('order_id', $request->user()->openOrders->id);
+                $request->offsetSet('order_id', $request->user()->openOrders->first()->id);
             }
         } else {
             return response()->json([
