@@ -98,6 +98,8 @@ use phpDocumentor\Reflection\Types\This;
  */
 class Order extends Model
 {
+    protected $table = 'orders';
+
     /*
     |--------------------------------------------------------------------------
     | Traits methods
