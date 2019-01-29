@@ -14,13 +14,18 @@ class AddAttributecontrolsIdToAfterloginformcontrolsTable extends Migration
     public function up()
     {
         Schema::table('afterloginformcontrols', function (Blueprint $table) {
-            $table->unsignedInteger('attributecontrols_id');
-            $table->foreign('attributecontrols_id')
+            $table->unsignedInteger('control_id')
+                ->nullable()
+                ->comment('آی دی مشخص کننده کنترل فیلد مثلا تکس باکس')
+                ->after('displayName');
+            $table->foreign('control_id')
                 ->references('id')
                 ->on('attributecontrols')
-                ->onDelete('cascade');
+                ->onDelete('cascade')
+                ->onupdate('cascade');
             $table->string('source')
                 ->nullable()
+                ->after('control_id')
                 ->comment('مسیر سرور جهت تغذیه فیلد (مثلا تغذیه آیتم های دراپ دان)');
         });
     }

@@ -40,6 +40,7 @@ class OrderCheckout extends CheckoutInvoker
         $chainCells = [];
 
         if ($this->recheckIncludedOrderproductsInCoupon && $this->order->coupon_id) {
+            //For the sake of reducing queries
             $chainCells = ["AlaaOrderproductCouponChecker"];
         }
 
@@ -83,6 +84,7 @@ class OrderCheckout extends CheckoutInvoker
                     ->setRawOrderproductsToCalculateFromBase($orderproductsToCalculateFromBase)
                     ->setRawOrderproductsToCalculateFromRecord($orderproductsToCalculateFromRecord);
 
+        //For the sake of reducing queries
         if($this->order->coupon_id)
             $alaaCashier->setOrderCoupon($this->order->coupon);
         return $alaaCashier;

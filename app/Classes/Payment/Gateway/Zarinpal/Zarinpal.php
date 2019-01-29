@@ -52,10 +52,10 @@ class Zarinpal implements Gateway
             'data' => [],
         ];
 
-        $roles = [
+        $rules = [
             'merchantID' => 'required|string|size:36'
         ];
-        $this->dataValidation($data, $roles);
+        $this->dataValidation($data, $rules);
         if (!$this->result['status']) {
             throw new Exception('The merchantID must be 36 characters.');
             /*return $this->result;*/
@@ -64,10 +64,10 @@ class Zarinpal implements Gateway
             $this->zarinpalComposer = new ZarinpalComposer($this->merchantID);
         }
 
-        if(config('app.env', 'deployment')!='deployment' && config('Zarinpal.Sandbox', false)) {
+        if($this->isSandboxOn()) {
             $this->zarinpalComposer->enableSandbox(); // active sandbox mod for test env
         }
-        if(config('Zarinpal.ZarinGate', false)) {
+        if($this->isZarinGateOn()) {
             $this->zarinpalComposer->isZarinGate(); // active zarinGate mode
         }
     }
@@ -80,13 +80,13 @@ class Zarinpal implements Gateway
      */
     public function paymentRequest(array $data): array
     {
-        $roles = [
+        $rules = [
             'callbackUrl' => 'required|string',
             'amount' => 'required|integer|min:100',
             'description' => 'sometimes|string|min:1',
         ];
 
-        $this->dataValidation($data, $roles);
+        $this->dataValidation($data, $rules);
         if (!$this->result['status']) {
             return $this->result;
         }
@@ -124,12 +124,12 @@ class Zarinpal implements Gateway
      */
     public function readCallbackData(array $data): array
     {
-        $roles = [
+        $rules = [
             'Authority' => 'required|string|size:36',
             'Status' => 'required|string|min:2|max:3',
         ];
 
-        $this->dataValidation($data, $roles);
+        $this->dataValidation($data, $rules);
         if (!$this->result['status']) {
             return $this->result;
         }
@@ -155,13 +155,13 @@ class Zarinpal implements Gateway
     {
         $this->result['status'] = true;
 
-        $roles = [
+        $rules = [
             'amount' => 'required|integer|min:100',
             'Authority' => 'required|string|size:36',
             'Status' => 'required|string|min:2|max:3',
         ];
 
-        $this->dataValidation($data, $roles);
+        $this->dataValidation($data, $rules);
         if (!$this->result['status']) {
             return $this->result;
         }
@@ -213,12 +213,12 @@ class Zarinpal implements Gateway
 
     /**
      * @param array $data
-     * @param array $roles
+     * @param array $rules
      * @return void
      */
-    private function dataValidation(array $data, array $roles): void
+    private function dataValidation(array $data, array $rules): void
     {
-        $validator = Validator::make($data, $roles);
+        $validator = Validator::make($data, $rules);
         if ($validator->fails()) {
             $this->result['status'] = false;
             foreach ($validator->messages()->getMessages() as $field_name => $messages) {
@@ -226,5 +226,21 @@ class Zarinpal implements Gateway
             }
             $this->result['data']['WrongInput'] = $data;
         }
+    }
+
+    /**
+     * @return bool
+     */
+    private function isSandboxOn(): bool
+    {
+        return config('app.env', 'deployment') != 'deployment' && config('Zarinpal.Sandbox', false);
+    }
+
+    /**
+     * @return \Illuminate\Config\Repository|mixed
+     */
+    private function isZarinGateOn()
+    {
+        return config('Zarinpal.ZarinGate', false);
     }
 }

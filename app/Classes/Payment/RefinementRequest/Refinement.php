@@ -23,7 +23,7 @@ abstract class Refinement
     /**
      * @var array $inputData
      */
-    private $inputData;
+    protected $inputData;
 
     /**
      * @var int $statusCode

@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Classes\Payment\Gateway\GatewayFactory;
 use App\Transaction;
 use App\Transactiongateway;
 use App\Http\Controllers\OnlinePaymentController;
@@ -9,7 +10,6 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Requests\Request;
 use Illuminate\Console\Command;
 use App\Classes\Payment\Gateway\Zarinpal\Zarinpal;
-use App\Classes\Payment\Gateway\GatewayFactory;
 use Zarinpal\Zarinpal as ZarinpalComposer;
 
 class HandleUnverifiedTransactions extends Command
@@ -60,6 +60,7 @@ class HandleUnverifiedTransactions extends Command
         $this->transactionController = $transactionController;
         $this->onlinePaymentController = $onlinePaymentController;
 
+        //ToDo : At this time this only works for Zarinpal
         $paymentMethod = 'zarinpal';
         $transactiongateway = Transactiongateway::where('name', $paymentMethod)->first();
         $this->merchantNumber = $transactiongateway->merchantNumber;
@@ -103,11 +104,11 @@ class HandleUnverifiedTransactions extends Command
                 } else {
                     $transaction['Status'] = 'OK';
                     array_push($unverifiedTransactionsDueToError, $transaction);
-//                    $gateWayVerify = $this->gateWay->verify($transaction->cost, $transaction);
-//
-//                    if($gateWayVerify['Status'] == 'error') {
-//                        array_push($unverifiedTransactionsDueToError, $transaction);
-//                    }
+                    $gateWayVerify = $this->gateWay->verify($transaction->cost, $transaction);
+
+                    if($gateWayVerify['Status'] == 'error') {
+                        array_push($unverifiedTransactionsDueToError, $transaction);
+                    }
                 }
             }
 
@@ -139,7 +140,7 @@ class HandleUnverifiedTransactions extends Command
                     $this->info('authority: {'.$authority.'} amount: {'.$amount.'} channel: {'.$channel.'} cellPhone: {'.$cellPhone.'} date: {'.$date.'}');
                 }
                 if ($this->confirm('The above transactions are not available. \n\rDo you wish to force verify?', true)) {
-                    foreach ($unverifiedTransactionsDueToError as $item) {
+                    foreach ($notExistTransactions as $item) {
                         $zarinpal = new ZarinpalComposer($this->merchantNumber);
                         $zarinpal->verify('OK', $item['Amount'], $item['Authority']);
                     }
