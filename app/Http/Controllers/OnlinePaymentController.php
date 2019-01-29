@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Cache;
 use App\Bon;
 use App\User;
 use App\Order;
@@ -17,6 +16,7 @@ use App\Classes\Payment\RefinementRequest\RefinementLauncher;
 use App\Classes\Payment\RefinementRequest\Refinement;
 use App\Classes\Payment\RefinementRequest\Strategies\
 {OpenOrderRefinement, OrderIdRefinement, TransactionRefinement, ChargingWalletRefinement};
+use Illuminate\Support\Facades\Cache;
 
 class OnlinePaymentController extends Controller
 {
@@ -56,9 +56,8 @@ class OnlinePaymentController extends Controller
 
 //        $request->offsetSet('walletId', 1);
 //        $request->offsetSet('walletChargingAmount', 50000);
+        $transactiongateway = $this->getGateway($paymentMethod);
 
-        //ToDo: Put in cache
-        $transactiongateway = Transactiongateway::where('name', $paymentMethod)->first();
         if(!isset($transactiongateway)) {
             return response()->json([
                 'error' => 'اطلاعات درگاه مورد نظر یافت نشد.'
@@ -221,7 +220,7 @@ class OnlinePaymentController extends Controller
      */
     public function verifyPayment(string $paymentMethod, string $device, Request $request)
     {
-        $transactiongateway = Transactiongateway::where('name', $paymentMethod)->first();
+        $transactiongateway = $this->getGateway($paymentMethod);
         if(!isset($transactiongateway)) {
             return response()->json([
                 'error' => 'اطلاعات درگاه مورد نظر یافت نشد.'
@@ -482,5 +481,19 @@ class OnlinePaymentController extends Controller
             'device' => $device,
             'verifyResult' => $result
         ]);
+    }
+
+    /**
+     * @param string $paymentMethod
+     * @return mixed
+     */
+    private function getGateway(string $paymentMethod)
+    {
+        $key = 'onlineGateways:';
+        $transactiongateway = Cache::remember($key , config('constants.CACHE_600') , function () use ($paymentMethod){
+            return Transactiongateway::where('name', $paymentMethod)->first();
+        });
+
+        return $transactiongateway;
     }
 }
