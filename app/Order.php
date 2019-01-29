@@ -421,8 +421,7 @@ class Order extends Model
      */
     public function doesBelongToThisUser($user): bool
     {
-        //ToDo: Bug on paying by wallet
-        return optional($this->user)->id == $user->id;
+        return optional($this->user)->id == optional($user)->id;
     }
 
     /**
