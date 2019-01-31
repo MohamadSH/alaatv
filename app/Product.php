@@ -638,7 +638,7 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
         return Cache::remember($key, Config::get("constants.CACHE_60"), function () use ($depth) {
             $counter = 0;
             $myProduct = $this;
-            while (!$myProduct->parents->isEmpty()) {
+            while ($myProduct->parents->isNotEmpty()) {
                 if ($counter >= $depth)
                     break;
                 $myProduct = $myProduct->parents->first();
@@ -1093,7 +1093,9 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
     public function parents()
     {
         return $this->belongsToMany('App\Product', 'childproduct_parentproduct', 'child_id', 'parent_id')
-                    ->withPivot("isDefault", "control_id", "description");
+                    ->withPivot("isDefault", "control_id", "description")
+//                    ->with('parents')
+            ;
     }
 
     /**Determines whether this product has any complimentaries or not

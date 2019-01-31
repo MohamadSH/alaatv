@@ -28,6 +28,7 @@ class OrderCheckout extends CheckoutInvoker
     public function __construct(Order $order , array $orderproductsToCalculateFromBaseIds = [] , $recheckIncludedOrderproductsInCoupon = false)
     {
         $this->order = $order;
+        $this->order->load('user' , 'user.wallets'  , 'normalOrderproducts' , 'normalOrderproducts.product' ,'normalOrderproducts.product.parents' , 'normalOrderproducts.userbons' , 'normalOrderproducts.attributevalues' , 'normalOrderproducts.product.attributevalues' );
         $this->orderproductsToCalculateFromBaseIds = $orderproductsToCalculateFromBaseIds;
         $this->recheckIncludedOrderproductsInCoupon = $recheckIncludedOrderproductsInCoupon;
     }
@@ -87,6 +88,7 @@ class OrderCheckout extends CheckoutInvoker
         //For the sake of reducing queries
         if($this->order->coupon_id)
             $alaaCashier->setOrderCoupon($this->order->coupon);
+
         return $alaaCashier;
     }
 
