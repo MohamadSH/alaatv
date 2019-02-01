@@ -96,6 +96,22 @@ class Slideshow extends Model
                     });
 
     }
+    public static function getShopBanner()
+    {
+        return Cache::tags([
+            'banner',
+            'page',
+        ])
+                    ->remember('getShopBanner', config('constants.CACHE_600'), function () {
+                        return Websitepage::where('url', "/shop")
+                                          ->first()
+                                          ->slides()
+                                          ->where("isEnable", 1)
+                                          ->orderBy("order")
+                                          ->get();
+                    });
+
+    }
 
     public function websitepage()
     {

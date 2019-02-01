@@ -18,7 +18,7 @@
                 </a>
             </li>
             <li class = "m-menu__item  @if(isset($pageName) && strcmp($pageName , "productsPortfolio")==0) m-menu__item--active @endif" aria-haspopup = "true">
-                <a href = "{{ action("ProductController@search") }}" class = "m-menu__link ">
+                <a href = "{{ action("ShopPageController") }}" class = "m-menu__link ">
                     <span class = "m-menu__item-here"></span>
                     <i class = "m-menu__link-icon flaticon-shopping-basket"></i>
                     <span class = "m-menu__link-text">محصولات آموزشی</span>

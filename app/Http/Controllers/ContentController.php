@@ -164,7 +164,7 @@ class ContentController extends Controller
         $result->offsetSet('product', $this->productSearch->get($filters));
 
         $pageName = "content-search";
-        if (request ()->ajax()) {
+        if (request ()->ajax() || true) {
             return $this->response
                 ->setStatusCode(Response::HTTP_OK)
                 ->setContent([
@@ -249,15 +249,14 @@ class ContentController extends Controller
 
             $userCanSeeCounter = optional(auth()->user())->CanSeeCounter();
 
-            $result = compact("seenCount", "author", "content", "rootContentType", "childContentType", "contentSet", "contentsWithSameSet", "videosWithSameSet", "pamphletsWithSameSet", "contentSetName", "videoSources"
-                , "tags", "sideBarMode", "userCanSeeCounter", "adItems", "videosWithSameSetL", "videosWithSameSetR", "contentId");
 
-            if (request()->ajax()) {
+            if (request()->ajax() || true) {
                 return $this->response
                     ->setStatusCode(Response::HTTP_OK)
-                    ->setContent($result);
+                    ->setContent($content);
             }
-            return view("content.show", $result);
+            return view("content.show", compact("seenCount", "author", "content", "contentsWithSameSet", "videosWithSameSet", "pamphletsWithSameSet", "contentSetName"
+                , "tags", "userCanSeeCounter", "adItems", "videosWithSameSetL", "videosWithSameSetR"));
         } else
             abort(403);
     }

@@ -6,6 +6,7 @@ use App\Block;
 use App\Classes\Format\webBlockCollectionFormatter;
 use App\Classes\Format\webSetCollectionFormatter;
 use App\Classes\SEO\SeoDummyTags;
+use App\Slideshow;
 use App\Traits\MetaCommon;
 use App\Websitesetting;
 use Illuminate\Http\Request;
@@ -52,8 +53,9 @@ class ShopPageController extends Controller
             'filename' => $this->setting->site->siteLogo,
         ]), '100', '100', null));
 
-        $slides = collect();
-        if (request()->ajax() || true) {
+        //$slides = collect();
+        $slides = Slideshow::getShopBanner();
+        if (request()->ajax()) {
             return $this->response
                 ->setStatusCode(Response::HTTP_OK)
                 ->setContent([
@@ -74,12 +76,11 @@ class ShopPageController extends Controller
                     ]
                 ]);
         }
-        $sections = (new webBlockCollectionFormatter(new webSetCollectionFormatter()))->format($blocks);
-
         $pageName = "shop";
-        return view('pages.dashboard1', compact(
+//        dd($blocks->first()->products);
+        return view('pages.shop', compact(
             'pageName',
-            'sections',
+            'blocks',
             'slides'
         ));
     }

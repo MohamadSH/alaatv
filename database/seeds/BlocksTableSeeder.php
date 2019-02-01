@@ -208,6 +208,7 @@ class BlocksTableSeeder extends Seeder
         \App\Block::find(6)
                   ->products()
                   ->saveMany(\App\Product::find([
+                      275,
                       265,
                       266,
                       267,
@@ -217,7 +218,7 @@ class BlocksTableSeeder extends Seeder
                       272,
                       226,
                       225,
-                      275
+
                   ]));
         \App\Block::find(7)
                   ->products()

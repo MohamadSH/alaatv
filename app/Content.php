@@ -193,6 +193,10 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
       'author_id',
       'template_id',
       'slug',
+      'contentsets',
+      'contentset_id',
+      'template',
+      'contenttype'
     ];
 
 
