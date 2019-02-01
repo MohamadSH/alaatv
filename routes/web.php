@@ -14,6 +14,7 @@
 
 Route::get('embed/c/{content}', "ContentController@embed");
 Route::get('/', 'IndexPageController');
+Route::get('shop', 'ShopPageController');
 Route::get('home', 'HomeController@home');
 Route::get('404', 'HomeController@error404');
 Route::get('403', 'HomeController@error403');

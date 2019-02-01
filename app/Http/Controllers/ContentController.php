@@ -164,7 +164,7 @@ class ContentController extends Controller
         $result->offsetSet('product', $this->productSearch->get($filters));
 
         $pageName = "content-search";
-        if (request ()->ajax() || true) {
+        if (request ()->ajax()) {
             return $this->response
                 ->setStatusCode(Response::HTTP_OK)
                 ->setContent([

@@ -64,6 +64,21 @@ class Slideshow extends Model
         'order',
         'isEnable',
     ];
+    protected $appends = [
+        'url'
+    ];
+
+    protected $hidden = [
+        'websitepage_id',
+        'photo',
+        'isEnable',
+        'deleted_at',
+        'created_at'
+    ];
+    public function getUrlAttribute($value): string
+    {
+        return route('image', ['category'=>9,'w'=>'1280' , 'h'=>'500' ,  'filename' =>  $this->photo ]);
+    }
 
     public static function getMainBanner()
     {

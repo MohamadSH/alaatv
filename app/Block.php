@@ -38,50 +38,98 @@ use Illuminate\Support\Facades\Cache;
  */
 class Block extends Model
 {
+    public static $BLOCK_TYPE_MAIN = 1;
+    public static $BLOCK_TYPE_SHOP = 2;
     protected $cascadeDeletes = [
         'blockables',
     ];
-    protected $dates          = [
+    protected $dates = [
         'created_at',
         'updated_at',
     ];
-    protected $fillable       = [
+    protected $fillable = [
         'title',
         'tags',
         'class',
         'order',
         'enable',
+        'type',
     ];
 
     protected $appends = [
-      'url'
+        'url',
     ];
-    protected $hidden =[
+    protected $hidden = [
         'enable',
         'tags',
-        'created_at'
+        'created_at',
+        'class',
     ];
+
+
+    /**
+     * Scope a query to only blocks for shop.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeShop($query)
+    {
+        return $query->where('type', '=', 2);
+    }
+
+    /**
+     * Scope a query to only blocks for HomePage.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeMain($query)
+    {
+        return $query->where('type', '=', 1);
+    }
 
     /**
      * @param $value
+     *
      * @return string
      */
-    public function getUrlAttribute($value):?string
+    public function getUrlAttribute($value): ?string
     {
-        return urldecode(action("ContentController@index" , ["tags" => $this->tags]));
+        return $this->type == self::$BLOCK_TYPE_MAIN ? urldecode(action("ContentController@index", ["tags" => $this->tags])) : urldecode(action("ProductController@index", ["tags" => $this->tags]));
     }
 
-    public static function getBlocks()
+    public static function getShopBlocks()
     {
         $blocks = Cache::tags('block')
-                       ->remember('getBlocks', config('constants.CACHE_600'), function () {
-                           $blocks = Block::all()
+                       ->remember('getShopBlocks', config('constants.CACHE_600'), function () {
+                           $blocks = Block::shop()->get()
                                           ->sortBy('order')
                                           ->loadMissing([
-                                                            'contents',
-                                                            'sets',
-                                                            'products',
-                                                        ]);
+                                              'contents',
+                                              'sets',
+                                              'products',
+                                              'banners',
+                                          ]);
+                           return $blocks;
+                       });
+        return $blocks;
+    }
+
+    public static function getMainBlocks()
+    {
+        $blocks = Cache::tags('block')
+                       ->remember('getMainBlocks', config('constants.CACHE_600'), function () {
+                           $blocks = Block::main()->get()
+                                          ->sortBy('order')
+                                          ->loadMissing([
+                                              'contents',
+                                              'sets',
+                                              'products',
+                                              'banners',
+                                          ]);
                            return $blocks;
                        });
         return $blocks;
@@ -108,6 +156,7 @@ class Block extends Model
      * Scope a query to only include enable Blocks.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeEnable($query)
@@ -142,6 +191,12 @@ class Block extends Model
     public function products()
     {
         return $this->morphedByMany('App\Product', 'blockable')
+                    ->withTimestamps();
+    }
+
+    public function banners()
+    {
+        return $this->morphedByMany('App\Slideshow', 'blockable')
                     ->withTimestamps();
     }
 }

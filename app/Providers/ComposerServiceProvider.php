@@ -40,10 +40,11 @@ class ComposerServiceProvider extends ServiceProvider
          *  lessons
          */
         View::composer([
-            'pages.dashboard1',
+//            'pages.dashboard1',
             'partials.sidebar',
         ], function ($view) {
-            $sections = (new webBlockCollectionFormatter(new webSetCollectionFormatter()))->format(Block::getBlocks());
+//            $sections = (new webBlockCollectionFormatter(new webSetCollectionFormatter()))->format(Block::getMainBlocks());
+            $sections = collect();
 //            dd($sections);
             $view->with(compact('sections'));
         });

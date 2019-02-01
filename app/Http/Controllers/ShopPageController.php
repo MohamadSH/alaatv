@@ -6,19 +6,29 @@ use App\Block;
 use App\Classes\Format\webBlockCollectionFormatter;
 use App\Classes\Format\webSetCollectionFormatter;
 use App\Classes\SEO\SeoDummyTags;
-use App\Slideshow;
 use App\Traits\MetaCommon;
 use App\Websitesetting;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class IndexPageController extends Controller
+class ShopPageController extends Controller
 {
-
     use MetaCommon;
-    private $setting;
     protected $response;
 
+    /**
+     * PHP 5 allows developers to declare constructor methods for classes.
+     * Classes which have a constructor method call this method on each newly-created object,
+     * so it is suitable for any initialization that the object may need before it is used.
+     *
+     * Note: Parent constructors are not called implicitly if the child class defines a constructor.
+     * In order to run a parent constructor, a call to parent::__construct() within the child constructor is required.
+     *
+     * param [ mixed $args [, $... ]]
+     * @link https://php.net/manual/en/language.oop5.decon.php
+     * @param Response $response
+     * @param Websitesetting $setting
+     */
     public function __construct(Response $response, Websitesetting $setting)
     {
         $this->setting = $setting->setting;
@@ -28,12 +38,12 @@ class IndexPageController extends Controller
     /**
      * Handle the incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request $request
+     * @return Response
      */
     public function __invoke(Request $request)
     {
-        $blocks = Block::getMainBlocks();
+        $blocks = Block::getShopBlocks();
         $url = $request->url();
         $this->generateSeoMetaTags(new SeoDummyTags($this->setting->site->seo->homepage->metaTitle, $this->setting->site->seo->homepage->metaDescription, $url, $url, route('image', [
             'category' => '11',
@@ -42,9 +52,8 @@ class IndexPageController extends Controller
             'filename' => $this->setting->site->siteLogo,
         ]), '100', '100', null));
 
-        $slides = Slideshow::getMainBanner();
-
-        if (request()->ajax()) {
+        $slides = collect();
+        if (request()->ajax() || true) {
             return $this->response
                 ->setStatusCode(Response::HTTP_OK)
                 ->setContent([
@@ -66,7 +75,8 @@ class IndexPageController extends Controller
                 ]);
         }
         $sections = (new webBlockCollectionFormatter(new webSetCollectionFormatter()))->format($blocks);
-        $pageName = "dashboard";
+
+        $pageName = "shop";
         return view('pages.dashboard1', compact(
             'pageName',
             'sections',
