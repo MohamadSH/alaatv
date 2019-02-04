@@ -12,7 +12,7 @@ interface Gateway
 {
     public function paymentRequest(array $data): array;
 
-    public function redirect(array $data): void;
+    public function getRedirectData(array $data): array;
 
     public function readCallbackData(array $data): array;
 

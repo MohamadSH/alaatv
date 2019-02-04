@@ -109,11 +109,16 @@ class Zarinpal implements Gateway
      * Making request to ZarinPal gateway
      * must loadForRedirect before
      * @param array $data
-     * @return void
+     * @return array
      */
-    public function redirect(array $data): void
+    public function getRedirectData(array $data): array
     {
-        $this->zarinpalComposer->redirect();
+        $redirectData = [
+            'url' => $this->zarinpalComposer->redirectUrl(),
+            'input' => [],
+            'method' => 'GET'
+        ];
+        return $redirectData;
     }
 
     /**

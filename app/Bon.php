@@ -45,6 +45,7 @@ use Illuminate\Support\Facades\Config;
  * @method static \Illuminate\Database\Eloquent\Builder|Bon newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Bon newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Bon query()
+ * @method static where(string $string, $get)
  */
 class Bon extends Model
 {

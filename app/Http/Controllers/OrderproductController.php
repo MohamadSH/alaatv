@@ -19,6 +19,7 @@ use Illuminate\Http\Response;
 use App\Traits\ProductCommon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
 use App\Http\Requests\OrderProduct\OrderProductStoreRequest;
 use App\Traits\OrderCommon;
@@ -45,9 +46,9 @@ class OrderproductController extends Controller
             ],
         ]);
         $this->middleware([
-            'CheckHasOpenOrder',
+            /*'CheckHasOpenOrder',*/
             'CheckPermissionForSendOrderId',
-//            'checkPermissionForSendExtraAttributesCost'
+            /*'checkPermissionForSendExtraAttributesCost'*/
         ], [
             'only' => ['store']
         ]);
@@ -172,8 +173,9 @@ class OrderproductController extends Controller
     {
         $orderproducts = $this->new($request->all());
 
-        return $this->response->setStatusCode(200)->setContent([
-            "orderproducts" => $orderproducts,
+        return $this->response->setStatusCode(Response::HTTP_OK)->setContent([
+//            "orderproducts" => $orderproducts,
+            'product saved'
         ]);
     }
 
@@ -451,6 +453,11 @@ class OrderproductController extends Controller
      */
     public function new(array $data):OrderproductCollection
     {
+        $report = [
+            'status' => true,
+            'message' => [],
+            'data' => [],
+        ];
         $productId = $data['product_id'];
         $orderId = $data['order_id'];
         $data = [
@@ -460,13 +467,30 @@ class OrderproductController extends Controller
             'withoutBon' => isset($data['withoutBon'])?$data['withoutBon']:null
         ];
 
-        $order = Order::FindorFail($orderId);
+        /** @var Order $order */
+        if(isset($data['order'])) {
+            $order = $data['order'];
+        } else {
+            $order = Order::FindorFail($orderId)->first();
+        }
+
         $product = Product::FindorFail($productId);
+
         $user = $order->user;
 
         $simpleProducts = (new RefinementFactory($product, $data))->getRefinementClass()->getProducts();
 
         $notDuplicateProduct = $order->checkProductsExistInOrderProducts($simpleProducts);
+
+        if(count($simpleProducts)!=0 && count($notDuplicateProduct)==0) {
+            $report['status'] = false;
+            $report['message'][] = 'کالای انتخاب شده پیش از این ثبت شده است.';
+            $report['data']['products'] = $simpleProducts;
+        } else if (count($simpleProducts)==0) {
+            $report['status'] = false;
+            $report['message'][] = 'کالایی برای ثبت انتخاب نشده است.';
+            $report['data']['products'] = $simpleProducts;
+        }
 
         $storedOrderproducts = new OrderproductCollection();
         /**
@@ -495,6 +519,8 @@ class OrderproductController extends Controller
                 $storedOrderproducts->push($orderProduct);
             }
         }
+
+        $report['data']['storedOrderproducts'] = $storedOrderproducts;
 
         return $storedOrderproducts;
     }

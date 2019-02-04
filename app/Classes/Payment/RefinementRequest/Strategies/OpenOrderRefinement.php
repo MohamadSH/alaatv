@@ -48,6 +48,6 @@ class OpenOrderRefinement extends Refinement
      */
     private function getOpenOrder(): Order
     {
-        return $this->firstOrCreateOpenOrder($this->user);
+        return $this->user->getOpenOrder();
     }
 }

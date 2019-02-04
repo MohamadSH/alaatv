@@ -47,6 +47,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeeschedule newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeeschedule newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeeschedule query()
+ * @method static where(string $string, int $userId)
  */
 class Employeeschedule extends Model
 {

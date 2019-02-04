@@ -5,77 +5,83 @@ namespace App;
 use App\Traits\DateTrait;
 use App\Traits\Helper;
 use Carbon\Carbon;
+use Barryvdh\LaravelIdeHelper\Eloquent;
+use Illuminate\Database\Eloquent as EloquentAlias;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\Employeetimesheet
  *
- * @property int                        $id
- * @property int                        $user_id                آیدی مشخص کننده کارمند
- * @property string                     $date                   تاریخ ساعت کاری
- * @property string|null                $userBeginTime          ساعت شروع شیفت کارمند
- * @property string|null                $userFinishTime         ساعت پایان شیفت کارمند
- * @property int|null                   $allowedLunchBreakInSec مدت زمان مجاز برای استراحت ناهار
- * @property string|null                $clockIn                زمان ورود به محل کار
- * @property string|null                $beginLunchBreak        زمان خروج برای استراحت ناهار
- * @property string|null                $finishLunchBreak       زمان پایان استراحت ناهار
- * @property string|null                $clockOut               زمان خروج از مجل کار
- * @property int                        $breakDurationInSeconds زمان استراحت و کسری ساعت کاری بر حسب ثانیه
- * @property int                        $timeSheetLock          قفل بودن ساعت کاری
- * @property int|null                   $workdaytype_id         نوع روز کاری
- * @property int                        $isPaid                 مشخص کننده تسویه یا تسویه ساعت کاری
- * @property string|null                $managerComment         توضیحات مدیر
- * @property string|null                $employeeComment        توضیح کارمند
- * @property int|null                   $modifier_id            آیدی مشخص کننده کاربری که آخرین بار رکورد را اصلاح کرده
- *           است
- * @property string                     $created_at
- * @property string                     $updated_at
- * @property \Carbon\Carbon|null        $deleted_at
- * @property string                     $allowedlunchbreakinsec
- * @property string                     $beginlunchbreak
- * @property string                     $breakdurationinseconds
- * @property string                     $clockin
- * @property string                     $clockout
- * @property string                     $finishlunchbreak
- * @property-read string                $ispaid
- * @property-read string                $timesheetlock
- * @property string                     $userbegintime
- * @property string                     $userfinishtime
- * @property-read \App\User|null        $modifier
- * @property-write mixed                $employeecomment
- * @property-write mixed                $managercomment
- * @property-read \App\User             $user
+ * @property int $id
+ * @property int $user_id آیدی مشخص کننده کارمند
+ * @property string $date تاریخ ساعت کاری
+ * @property string|null $userBeginTime ساعت شروع شیفت کارمند
+ * @property string|null $userFinishTime ساعت پایان شیفت کارمند
+ * @property int|null $allowedLunchBreakInSec مدت زمان مجاز برای استراحت ناهار
+ * @property string|null $clockIn زمان ورود به محل کار
+ * @property string|null $beginLunchBreak زمان خروج برای استراحت ناهار
+ * @property string|null $finishLunchBreak زمان پایان استراحت ناهار
+ * @property string|null $clockOut زمان خروج از مجل کار
+ * @property int $breakDurationInSeconds زمان استراحت و کسری ساعت کاری بر حسب ثانیه
+ * @property int $timeSheetLock قفل بودن ساعت کاری
+ * @property int|null $workdaytype_id نوع روز کاری
+ * @property int $isPaid مشخص کننده تسویه یا تسویه ساعت کاری
+ * @property string|null $managerComment توضیحات مدیر
+ * @property string|null $employeeComment توضیح کارمند
+ * @property int|null $modifier_id آیدی مشخص کننده کاربری که آخرین بار رکورد را اصلاح کرده است
+ * @property string $created_at
+ * @property string $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
+ * @property string $allowedlunchbreakinsec
+ * @property string $beginlunchbreak
+ * @property string $breakdurationinseconds
+ * @property string $clockin
+ * @property string $clockout
+ * @property string $finishlunchbreak
+ * @property-read string $ispaid
+ * @property-read string $timesheetlock
+ * @property string $userbegintime
+ * @property string $userfinishtime
+ * @property-read \App\User|null $modifier
+ * @property-write mixed $employeecomment
+ * @property-write mixed $managercomment
+ * @property-read \App\User $user
  * @property-read \App\Workdaytype|null $workdaytype
+ * @property bool overtime_confirmation
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|\App\Employeetimesheet onlyTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Employeetimesheet onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereAllowedLunchBreakInSec($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereBeginLunchBreak($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereBreakDurationInSeconds($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereClockIn($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereClockOut($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereEmployeeComment($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereFinishLunchBreak($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereIsPaid($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereManagerComment($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereModifierId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereTimeSheetLock($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereUserBeginTime($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereUserFinishTime($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereUserId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereWorkdaytypeId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Employeetimesheet withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Employeetimesheet withoutTrashed()
- * @mixin \Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet query()
+ * @method static EloquentAlias\Builder|Employeetimesheet whereAllowedLunchBreakInSec($value)
+ * @method static EloquentAlias\Builder|Employeetimesheet whereBeginLunchBreak($value)
+ * @method static EloquentAlias\Builder|Employeetimesheet whereBreakDurationInSeconds($value)
+ * @method static EloquentAlias\Builder|Employeetimesheet whereClockIn($value)
+ * @method static EloquentAlias\Builder|Employeetimesheet whereClockOut($value)
+ * @method static EloquentAlias\Builder|Employeetimesheet whereCreatedAt($value)
+ * @method static EloquentAlias\Builder|Employeetimesheet whereDate($value)
+ * @method static EloquentAlias\Builder|Employeetimesheet whereDeletedAt($value)
+ * @method static EloquentAlias\Builder|Employeetimesheet whereEmployeeComment($value)
+ * @method static EloquentAlias\Builder|Employeetimesheet whereFinishLunchBreak($value)
+ * @method static EloquentAlias\Builder|Employeetimesheet whereId($value)
+ * @method static EloquentAlias\Builder|Employeetimesheet whereIsPaid($value)
+ * @method static EloquentAlias\Builder|Employeetimesheet whereManagerComment($value)
+ * @method static EloquentAlias\Builder|Employeetimesheet whereModifierId($value)
+ * @method static EloquentAlias\Builder|Employeetimesheet whereTimeSheetLock($value)
+ * @method static EloquentAlias\Builder|Employeetimesheet whereUpdatedAt($value)
+ * @method static EloquentAlias\Builder|Employeetimesheet whereUserBeginTime($value)
+ * @method static EloquentAlias\Builder|Employeetimesheet whereUserFinishTime($value)
+ * @method static EloquentAlias\Builder|Employeetimesheet whereUserId($value)
+ * @method static EloquentAlias\Builder|Employeetimesheet whereWorkdaytypeId($value)
+ * @method static \Illuminate\Database\Query\Builder|Employeetimesheet withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Employeetimesheet withoutTrashed()
+ * @method static where(string $string, \static $today)
+ * @method count()
+ * @method isNotEmpty()
+ * @method first()
+ * @method static orderBy(string $string, string $string1)
+ * @method whereIn(string $string, $usersId)
+ * @method whereBetween(string $string, array $array)
+ * @mixin Eloquent
  */
 class Employeetimesheet extends Model
 {
@@ -111,7 +117,6 @@ class Employeetimesheet extends Model
      * Set the employeeTimeSheet's clockIn.
      *
      * @param  string $value
-     *
      * @return void
      */
     public function setClockinAttribute($value)
@@ -136,7 +141,6 @@ class Employeetimesheet extends Model
      * Set the employeeTimeSheet's clockIn.
      *
      * @param  string $value
-     *
      * @return void
      */
     public function setBeginlunchbreakAttribute($value)
@@ -161,7 +165,6 @@ class Employeetimesheet extends Model
      * Set the employeeTimeSheet's clockIn.
      *
      * @param  string $value
-     *
      * @return void
      */
     public function setFinishlunchbreakAttribute($value)
@@ -186,7 +189,6 @@ class Employeetimesheet extends Model
      * Set the employeeTimeSheet's clockIn.
      *
      * @param  string $value
-     *
      * @return void
      */
     public function setClockoutAttribute($value)
@@ -211,7 +213,6 @@ class Employeetimesheet extends Model
      * Set the employeeTimeSheet's userBeginTime.
      *
      * @param  string $value
-     *
      * @return void
      */
     public function setUserbegintimeAttribute($value)
@@ -235,7 +236,6 @@ class Employeetimesheet extends Model
      * Set the employeeTimeSheet's userFinishTime.
      *
      * @param  string $value
-     *
      * @return void
      */
     public function setUserfinishtimeAttribute($value)
@@ -259,14 +259,13 @@ class Employeetimesheet extends Model
      * Set the employeeTimeSheet's breakDurationInSeconds.
      *
      * @param  string $value
-     *
      * @return void
      */
     public function setBreakdurationinsecondsAttribute($value)
     {
         if (strcmp(gettype($value), "integer") == 0) {
             $this->attributes['breakDurationInSeconds'] = $value;
-        } else if (strlen(preg_replace('/\s+/', '', $value)) != 0) {
+        } elseif (strlen(preg_replace('/\s+/', '', $value)) != 0) {
             $breakTime = explode(":", $value);
             $this->attributes['breakDurationInSeconds'] = $breakTime[0] * 3600 + $breakTime[1] * 60;
         }
@@ -276,7 +275,6 @@ class Employeetimesheet extends Model
      * Set the employeeTimeSheet's managerComment.
      *
      * @param  string $value
-     *
      * @return void
      */
     public function setManagercommentAttribute($value)
@@ -291,7 +289,6 @@ class Employeetimesheet extends Model
      * Set the employeeTimeSheet's employeeComment.
      *
      * @param  string $value
-     *
      * @return void
      */
     public function setEmployeecommentAttribute($value)
@@ -326,7 +323,7 @@ class Employeetimesheet extends Model
     {
         if (strcmp(gettype($value), "integer") == 0) {
             $this->attributes['allowedLunchBreakInSec'] = $value;
-        } else if (strlen(preg_replace('/\s+/', '', $value)) != 0) {
+        } elseif (strlen(preg_replace('/\s+/', '', $value)) != 0) {
             $breakTime = explode(":", $value);
             $this->attributes['allowedLunchBreakInSec'] = $breakTime[0] * 3600 + $breakTime[1] * 60;
         }
@@ -422,7 +419,6 @@ class Employeetimesheet extends Model
      * Get the employeeTimeSheet's breakDurationInSeconds.
      *
      * @param  string $value
-     *
      * @return string
      */
     public function getAllowedlunchbreakinsecAttribute($value)
@@ -436,7 +432,6 @@ class Employeetimesheet extends Model
      * Get the Employeeschedule's lunchBreakInSeconds.
      *
      * @param  string $value
-     *
      * @return string
      */
     public function getBreakdurationinsecondsAttribute($value)
@@ -448,7 +443,6 @@ class Employeetimesheet extends Model
      * Get the Employeeschedule's timeSheetLock.
      *
      * @param  string $value
-     *
      * @return string
      */
     public function getTimesheetlockAttribute($value)
@@ -462,7 +456,6 @@ class Employeetimesheet extends Model
      * Get the Employeeschedule's isPaid.
      *
      * @param  string $value
-     *
      * @return string
      */
     public function getIspaidAttribute($value)
@@ -476,13 +469,12 @@ class Employeetimesheet extends Model
      * Get the Employeeschedule's updated_at.
      *
      * @param  string $value
-     *
      * @return string
      */
     public function getUpdatedAtAttribute($value)
     {
-        $explodedDateTime = explode(" ", $value);
-        //        $explodedTime = $explodedDateTime[1] ;
+        /*$explodedDateTime = explode(" ", $value);*/
+        /*$explodedTime = $explodedDateTime[1] ;*/
         return $this->convertDate($value, "toJalali");
     }
 
@@ -490,13 +482,12 @@ class Employeetimesheet extends Model
      * Get the Employeeschedule's created_at.
      *
      * @param  string $value
-     *
      * @return string
      */
     public function getCreatedAtAttribute($value)
     {
-        $explodedDateTime = explode(" ", $value);
-        //        $explodedTime = $explodedDateTime[1] ;
+        /*$explodedDateTime = explode(" ", $value);*/
+        /*$explodedTime = $explodedDateTime[1] ;*/
         return $this->convertDate($value, "toJalali");
     }
 
@@ -504,7 +495,6 @@ class Employeetimesheet extends Model
      * Get the Employeeschedule's date.
      *
      * @param  string $value
-     *
      * @return string
      */
     public function getDateAttribute($value)
@@ -515,24 +505,23 @@ class Employeetimesheet extends Model
     /**
      * Get the Employeeschedule's date.
      *
-     * @param  string $value
-     *
+     * @param $mode
      * @return string
      */
     public function getDate($mode)
     {
         switch ($mode) {
             case "WEEK_DAY":
-                return $this->convertToJalaliDay(Carbon::parse($this->getOriginal("date"))
-                                                       ->format('l'));
+                return $this->convertToJalaliDay(Carbon::parse($this->getOriginal("date"))->format('l'));
             default:
-                break;
+                return null;
         }
-
     }
 
     /**
      * Obtain the employeeTimeSheet workAndShiftDiff
+     * @param string $mode
+     * @return bool|false|int|string
      */
     public function obtainWorkAndShiftDiff($mode = "IN_SECONDS")
     {
@@ -553,9 +542,9 @@ class Employeetimesheet extends Model
                     $finishTime = Carbon::parse($this->obtainShiftTime());
                     $workAndShiftDiff = $finishTime->diffInSeconds($beginTime, false);
                     if ($workAndShiftDiff < 0) {
-                        return "-" . gmdate("H:i", abs($workAndShiftDiff));
+                        return gmdate("H:i", abs($workAndShiftDiff))." منفی";
                     } else {
-                        return "+" . gmdate("H:i", abs($workAndShiftDiff));
+                        return gmdate("H:i", abs($workAndShiftDiff));
                     }
                 } else {
                     return false;
@@ -590,13 +579,14 @@ class Employeetimesheet extends Model
                     return false;
                 }
             default:
-                break;
+                return false;
         }
-
     }
 
     /**
      * Obtain the employeeTimeSheet realWorkTime
+     * @param string $mode
+     * @return bool|int|string
      */
     public function obtainRealWorkTime($mode = "IN_SECONDS")
     {
@@ -623,9 +613,8 @@ class Employeetimesheet extends Model
                 }
                 break;
             default:
-                break;
+                return false;
         }
-
     }
 
     /**
@@ -694,6 +683,8 @@ class Employeetimesheet extends Model
 
     /**
      * Obtain the employeeTimeSheet shiftTime
+     * @param string $mode
+     * @return array|bool|int|string
      */
     public function obtainShiftTime($mode = "HOUR_FORMAT")
     {
@@ -784,5 +775,9 @@ class Employeetimesheet extends Model
     public function workdaytype()
     {
         return $this->belongsTo("\App\Workdaytype");
+    }
+
+    public function getObtainWorkAndShiftDiffInHourAttribute() {
+        return $this->obtainWorkAndShiftDiff('HOUR_FORMAT');
     }
 }
