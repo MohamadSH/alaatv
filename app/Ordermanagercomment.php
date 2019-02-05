@@ -2,9 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 /**
  * App\Ordermanagercomment
  *
@@ -33,6 +30,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Ordermanagercomment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Ordermanagercomment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Ordermanagercomment query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Ordermanagercomment extends BaseModel
 {

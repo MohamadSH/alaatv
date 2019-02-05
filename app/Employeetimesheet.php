@@ -2,11 +2,7 @@
 
 namespace App;
 
-use App\Traits\DateTrait;
-use App\Traits\Helper;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\Employeetimesheet
@@ -76,6 +72,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Employeetimesheet extends BaseModel
 {

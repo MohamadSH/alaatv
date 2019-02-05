@@ -2,9 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 /**
  * App\Productvoucher
  *
@@ -38,6 +35,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Productvoucher newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Productvoucher newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Productvoucher query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Productvoucher extends BaseModel
 {

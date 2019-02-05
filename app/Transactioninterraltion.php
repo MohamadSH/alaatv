@@ -2,8 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
 /**
  * App\Transactioninterraltion
  *
@@ -25,6 +23,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Transactioninterraltion newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Transactioninterraltion newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Transactioninterraltion query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Transactioninterraltion extends BaseModel
 {

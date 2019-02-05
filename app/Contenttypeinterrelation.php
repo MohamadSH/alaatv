@@ -2,9 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 /**
  * App\Contenttypeinterrelation
  *
@@ -31,6 +28,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contenttypeinterrelation newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contenttypeinterrelation newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contenttypeinterrelation query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Contenttypeinterrelation extends BaseModel
 {

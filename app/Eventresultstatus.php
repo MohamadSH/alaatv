@@ -2,8 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
 /**
  * App\Eventresultstatus
  *
@@ -25,6 +23,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresultstatus newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresultstatus newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresultstatus query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Eventresultstatus extends BaseModel
 {

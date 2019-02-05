@@ -21,6 +21,8 @@ namespace App;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Workdaytype newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Workdaytype newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Workdaytype query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Workdaytype extends BaseModel
 {

@@ -2,9 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 /**
  * App\Bloodtype
  *
@@ -29,6 +26,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Bloodtype newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Bloodtype newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Bloodtype query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Bloodtype extends BaseModel
 {

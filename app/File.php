@@ -2,8 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 use Webpatser\Uuid\Uuid;
 
@@ -33,6 +31,8 @@ use Webpatser\Uuid\Uuid;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\File newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\File newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\File query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class File extends BaseModel
 {

@@ -2,11 +2,6 @@
 
 namespace App;
 
-use App\Traits\DateTrait;
-use App\Traits\Helper;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 /**
  * App\Eventresult
  *
@@ -48,6 +43,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresult newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresult newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresult query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Eventresult extends BaseModel
 {

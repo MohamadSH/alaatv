@@ -2,11 +2,6 @@
 
 namespace App;
 
-use App\Traits\DateTrait;
-use App\Traits\Helper;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 /**
  * App\Phone
  *
@@ -38,6 +33,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Phone newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Phone newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Phone query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Phone extends BaseModel
 {

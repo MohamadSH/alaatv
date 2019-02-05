@@ -3,10 +3,7 @@
 namespace App;
 
 
-use App\Traits\DateTrait;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\Employeeschedule
@@ -47,6 +44,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeeschedule newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeeschedule newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeeschedule query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Employeeschedule extends BaseModel
 {

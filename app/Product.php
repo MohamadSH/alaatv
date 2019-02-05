@@ -9,16 +9,10 @@ use App\Classes\{Advertisable,
     SEO\SeoMetaTagsGenerator,
     Taggable};
 use App\Collection\ProductCollection;
-use App\Traits\{APIRequestCommon,
-    CharacterCommon,
-    DateTrait,
-    favorableTraits,
-    Helper,
-    ModelTrackerTrait,
-    ProductCommon};
+use App\Traits\{APIRequestCommon, favorableTraits, ModelTrackerTrait, ProductCommon};
 use Carbon\Carbon;
 use Exception;
-use Illuminate\Database\{Eloquent\Builder, Eloquent\Model, Eloquent\SoftDeletes};
+use Illuminate\Database\{Eloquent\Builder};
 use Illuminate\Support\{Collection, Facades\Cache, Facades\Config};
 
 /**
@@ -126,6 +120,8 @@ use Illuminate\Support\{Collection, Facades\Cache, Facades\Config};
  * @property-read mixed $url
  * @property-read \App\Product $grand
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereGrandId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Product extends BaseModel implements Advertisable, Taggable, SeoInterface, FavorableInterface
 {

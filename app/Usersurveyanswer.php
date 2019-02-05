@@ -2,9 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 /**
  * App\Usersurveyanswer
  *
@@ -39,6 +36,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Usersurveyanswer newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Usersurveyanswer newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Usersurveyanswer query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Usersurveyanswer extends BaseModel
 {

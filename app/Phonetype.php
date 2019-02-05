@@ -2,9 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 /**
  * App\Phonetype
  *
@@ -34,6 +31,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Phonetype newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Phonetype newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Phonetype query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Phonetype extends BaseModel
 {

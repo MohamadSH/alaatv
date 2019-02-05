@@ -2,10 +2,6 @@
 
 namespace App;
 
-use App\Traits\Helper;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 /**
  * App\Productfiletype
  *
@@ -33,6 +29,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Productfiletype newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Productfiletype newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Productfiletype query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Productfiletype extends BaseModel
 {

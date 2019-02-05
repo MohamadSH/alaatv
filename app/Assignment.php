@@ -3,11 +3,6 @@
 namespace App;
 
 
-use App\Traits\DateTrait;
-use App\Traits\Helper;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 /**
  * App\Assignment
  *
@@ -54,6 +49,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Assignment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Assignment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Assignment query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Assignment extends BaseModel
 {

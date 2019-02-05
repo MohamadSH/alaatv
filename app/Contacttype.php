@@ -2,9 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 /**
  * App\Contacttype
  *
@@ -34,6 +31,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contacttype newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contacttype newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contacttype query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Contacttype extends BaseModel
 {

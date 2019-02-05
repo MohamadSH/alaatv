@@ -2,9 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 /**
  * App\Attributevalue
  *
@@ -38,6 +35,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributevalue newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributevalue newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributevalue query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Attributevalue extends BaseModel
 {

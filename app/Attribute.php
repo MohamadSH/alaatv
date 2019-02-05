@@ -2,11 +2,6 @@
 
 namespace App;
 
-use App\Traits\DateTrait;
-use App\Traits\Helper;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 /**
  * App\Attribute
  *
@@ -43,6 +38,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Attribute newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Attribute newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Attribute query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Attribute extends BaseModel
 {

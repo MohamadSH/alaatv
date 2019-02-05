@@ -2,9 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 /**
  * App\Userbonstatus
  *
@@ -35,6 +32,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Userbonstatus newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Userbonstatus newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Userbonstatus query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Userbonstatus extends BaseModel
 {

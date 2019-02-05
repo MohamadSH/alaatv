@@ -2,9 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 /**
  * App\Wallettype
  *
@@ -32,6 +29,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallettype newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallettype newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallettype query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Wallettype extends BaseModel
 {

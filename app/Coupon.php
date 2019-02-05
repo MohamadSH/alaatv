@@ -2,11 +2,7 @@
 
 namespace App;
 
-use App\Traits\DateTrait;
-use App\Traits\Helper;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\Coupon
@@ -64,6 +60,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read mixed $coupon_type
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon enable()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon valid()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Coupon extends BaseModel
 {

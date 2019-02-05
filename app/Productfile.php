@@ -2,11 +2,7 @@
 
 namespace App;
 
-use App\Traits\DateTrait;
-use App\Traits\Helper;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\Productfile
@@ -50,6 +46,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Productfile newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Productfile newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Productfile query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Productfile extends BaseModel
 {

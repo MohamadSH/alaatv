@@ -11,14 +11,10 @@ use App\Classes\SEO\SeoMetaTagsGenerator;
 use App\Classes\Taggable;
 use App\Collection\ContentCollection;
 use App\Traits\APIRequestCommon;
-use App\Traits\DateTrait;
 use App\Traits\favorableTraits;
-use App\Traits\Helper;
 use App\Traits\ModelTrackerTrait;
 use Carbon\Carbon;
 use Exception;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\{Artisan, Cache, Config};
 use Stevebauman\Purify\Facades\Purify;
@@ -111,6 +107,8 @@ use Stevebauman\Purify\Facades\Purify;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Content query()
  * @property-read mixed $author_name
  * @property-read mixed $url
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Content extends BaseModel implements Advertisable, Taggable, SeoInterface, FavorableInterface
 {

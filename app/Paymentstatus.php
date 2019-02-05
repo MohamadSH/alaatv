@@ -2,9 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 /**
  * App\Paymentstatus
  *
@@ -32,6 +29,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Paymentstatus newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Paymentstatus newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Paymentstatus query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Paymentstatus extends BaseModel
 {

@@ -4,7 +4,6 @@ namespace App;
 
 
 use App\Collection\BlockCollection;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 
 /**
@@ -30,11 +29,21 @@ use Illuminate\Support\Facades\Cache;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Block whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Block whereUpdatedAt($value)
  * @mixin \Eloquent
- * @property string|null                                           $class
+ * @property string|null                                                    $class
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Block whereClass($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Block newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Block newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Block query()
+ * @property int                                                            $type
+ * @property \Illuminate\Support\Carbon|null                                $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Slideshow[] $banners
+ * @property-read string                                                    $url
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Block main()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Block shop()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Block whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Block whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Block extends BaseModel
 {

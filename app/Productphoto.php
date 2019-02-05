@@ -2,10 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Log;
-
 /**
  * App\Productphoto
  *
@@ -41,6 +37,8 @@ use Illuminate\Support\Facades\Log;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Productphoto newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Productphoto query()
  * @property-read mixed $url
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Productphoto extends BaseModel
 {

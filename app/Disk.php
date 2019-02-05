@@ -2,9 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 /**
  * App\Disk
  *
@@ -31,6 +28,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Disk newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Disk newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Disk query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Disk extends BaseModel
 {

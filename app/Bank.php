@@ -27,6 +27,8 @@ namespace App;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Bank newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Bank newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Bank query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Bank extends BaseModel
 {

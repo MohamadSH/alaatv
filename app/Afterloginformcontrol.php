@@ -2,9 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 /**
  * App\Afterloginformcontrol
  *
@@ -33,6 +30,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Afterloginformcontrol newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Afterloginformcontrol newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Afterloginformcontrol query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Afterloginformcontrol extends BaseModel
 {

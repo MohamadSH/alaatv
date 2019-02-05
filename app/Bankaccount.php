@@ -34,6 +34,8 @@ namespace App;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Bankaccount newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Bankaccount newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Bankaccount query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Bankaccount extends BaseModel
 {

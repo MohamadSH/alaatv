@@ -2,9 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 /**
  * App\Websitesetting
  *
@@ -29,6 +26,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Websitesetting newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Websitesetting newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Websitesetting query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Websitesetting extends BaseModel
 {

@@ -3,11 +3,6 @@
 namespace App;
 
 
-use App\Traits\DateTrait;
-use App\Traits\Helper;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 /**
  * App\Article
  *
@@ -46,6 +41,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Article newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Article newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Article query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Article extends BaseModel
 {

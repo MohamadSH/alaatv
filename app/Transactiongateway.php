@@ -2,9 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 /**
  * App\Transactiongateway
  *
@@ -58,6 +55,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Transactiongateway newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Transactiongateway newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Transactiongateway query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Transactiongateway extends BaseModel
 {

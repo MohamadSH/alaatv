@@ -3,8 +3,6 @@
 namespace App;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\Wallet
@@ -36,6 +34,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Wallet extends BaseModel
 {

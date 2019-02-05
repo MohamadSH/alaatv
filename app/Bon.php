@@ -2,8 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 
@@ -45,6 +43,8 @@ use Illuminate\Support\Facades\Config;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Bon newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Bon newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Bon query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Bon extends BaseModel
 {

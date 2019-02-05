@@ -87,6 +87,8 @@ use Illuminate\Support\Facades\Config;
  * @property-read array|bool $coupon_discount_type
  * @property-read mixed $number_of_products
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Order query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Order extends BaseModel
 {

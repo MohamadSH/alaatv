@@ -2,11 +2,6 @@
 
 namespace App;
 
-use App\Traits\DateTrait;
-use App\Traits\Helper;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 /**
  * App\Userupload
  *
@@ -43,6 +38,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Userupload newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Userupload newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Userupload query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Userupload extends BaseModel
 {

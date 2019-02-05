@@ -2,9 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 /**
  * App\Lottery
  *
@@ -37,6 +34,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Lottery newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Lottery newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Lottery query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Lottery extends BaseModel
 {

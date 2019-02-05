@@ -3,11 +3,6 @@
 namespace App;
 
 
-use App\Traits\DateTrait;
-use App\Traits\Helper;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 /**
  * App\Consultation
  *
@@ -51,6 +46,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Consultation newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Consultation newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Consultation query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Consultation extends BaseModel
 {

@@ -2,8 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 
 /**
@@ -41,6 +39,9 @@ use Illuminate\Support\Facades\Cache;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Slideshow newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Slideshow newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Slideshow query()
+ * @property-read mixed $url
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Slideshow extends BaseModel
 {

@@ -2,9 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 /**
  * App\Attributecontrol
  *
@@ -30,6 +27,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributecontrol newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributecontrol newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributecontrol query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Attributecontrol extends BaseModel
 {

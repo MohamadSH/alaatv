@@ -6,8 +6,6 @@ namespace App;
 use App\Classes\Taggable;
 use App\Collection\SetCollection;
 use App\Traits\favorableTraits;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 
@@ -51,6 +49,8 @@ use Illuminate\Support\Facades\Config;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset query()
  * @property-read mixed $author
  * @property-read mixed $url
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
 class Contentset extends BaseModel implements Taggable
 {
