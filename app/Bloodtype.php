@@ -2,9 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 /**
  * App\Bloodtype
  *
@@ -29,17 +26,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Bloodtype newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Bloodtype newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Bloodtype query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
-class Bloodtype extends Model
+class Bloodtype extends BaseModel
 {
-    use SoftDeletes;
-
-    /**      * The attributes that should be mutated to dates.        */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
 
     protected $fillable = [
         'name',

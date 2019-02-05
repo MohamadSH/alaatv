@@ -23,7 +23,7 @@
 @section("content")
     <!-- BEGIN LOGO -->
     <div class="logo">
-        {{--<a href="{{action("HomeController@index")}}">--}}
+        {{--<a href="{{action("IndexPageController")}}">--}}
         {{--<img src="/assets/pages/img/logo-big.png" alt="" /> </a>--}}
         <h3 class="bg-font-dark bold">تکمیل ثبت نام</h3>
     </div>

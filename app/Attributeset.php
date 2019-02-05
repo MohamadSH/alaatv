@@ -2,10 +2,6 @@
 
 namespace App;
 
-use App\Traits\DateTrait;
-use App\Traits\Helper;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
@@ -40,23 +36,11 @@ use MongoDB\Driver\Query;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributeset newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributeset newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributeset query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
-class Attributeset extends Model
+class Attributeset extends BaseModel
 {
-    use SoftDeletes;
-    use Helper;
-    use DateTrait;
-
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
     /**
      * @var array
      */

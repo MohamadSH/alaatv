@@ -13,3 +13,6 @@
 .a--radius-2{
     border-radius: 2rem;
 }
+.a--font-line-height-10 {
+    line-height: 10px !important;
+}

@@ -3,8 +3,6 @@
 namespace App;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\Wallet
@@ -21,32 +19,26 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[] $transactions
  * @property-read \App\User|null                                              $user
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|Wallet onlyTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Wallet onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|Wallet whereBalance($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Wallet whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Wallet whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Wallet whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Wallet whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Wallet whereUserId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Wallet whereWallettypeId($value)
- * @method static \Illuminate\Database\Query\Builder|Wallet withTrashed()
- * @method static \Illuminate\Database\Query\Builder|Wallet withoutTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet whereBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet whereWallettypeId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Wallet withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Wallet withoutTrashed()
  * @mixin \Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|Wallet newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Wallet newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Wallet query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
-class Wallet extends Model
+class Wallet extends BaseModel
 {
-    use SoftDeletes;
-    /**      * The attributes that should be mutated to dates.        */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
-
     /**
      * @var array
      */

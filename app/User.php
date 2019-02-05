@@ -164,54 +164,54 @@ use Schema;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Wallet[]
  *                    $wallets
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|User onlyTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\User onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|User whereAddress($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereAllergy($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereBio($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereBirthdate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereBloodtypeId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereCity($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereDiet($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereFirstName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereGenderId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereGradeId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereIntroducedBy($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereLastName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereLockProfile($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereMajorId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereMedicalCondition($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereMobile($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereMobileNumberVerification($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereNationalCode($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User wherePasswordRegeneratedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User wherePermissionIs($permission = '')
- * @method static \Illuminate\Database\Eloquent\Builder|User wherePhone($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User wherePhoto($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User wherePostalCode($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereProvince($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereRoleIs($role = '')
- * @method static \Illuminate\Database\Eloquent\Builder|User whereSchool($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereSkype($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereTechCode($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereUserstatusId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereWhatsapp($value)
- * @method static \Illuminate\Database\Query\Builder|User withTrashed()
- * @method static \Illuminate\Database\Query\Builder|User withoutTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereAddress($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereAllergy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereBio($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereBirthdate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereBloodtypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereCity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereDiet($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereFirstName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereGenderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereGradeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereIntroducedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereLastName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereLockProfile($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereMajorId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereMedicalCondition($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereMobile($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereMobileNumberVerification($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereNationalCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User wherePassword($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User wherePasswordRegeneratedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User wherePermissionIs($permission = '')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User wherePhone($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User wherePhoto($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User wherePostalCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereProvince($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereRememberToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereRoleIs($role = '')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereSchool($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereSkype($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereTechCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereUserstatusId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereWhatsapp($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\User withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\User withoutTrashed()
  * @mixin \Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|User role($roles)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User role($roles)
  * @property string|null
  *               $nameSlug                 اسلاگ شده نام
  * @property-read mixed
  *                    $full_name_reverse
- * @method static \Illuminate\Database\Eloquent\Builder|User whereNameSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereNameSlug($value)
  * @property string|null
  *               $mobile_verified_code     کد تایید شماره موبایل
  * @property string|null
@@ -222,23 +222,22 @@ use Schema;
  *                    $favoredProduct
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Contentset[]
  *                    $favoredSet
- * @method static \Illuminate\Database\Eloquent\Builder|User whereMobileVerifiedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereMobileVerifiedCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereMobileVerifiedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereMobileVerifiedCode($value)
  * @property string|null $email_verified_at
  * @property-read mixed  $reverse_full_name
  * @property-write mixed $first_name
  * @property-write mixed $last_name
  * @property-write mixed $medical_condition
  * @property-write mixed $postal_code
- * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|User query()
- * @method static \Illuminate\Database\Eloquent\Builder|User whereEmailVerifiedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereEmailVerifiedAt($value)
  * @property-read \App\Collection\OrderproductCollection|\App\Orderproduct[] $closedorderproducts
  * @property-read mixed $number_of_products_in_basket
  * @property-read mixed $short_name
- * @property mixed mobile
- * @method static \Illuminate\Database\Eloquent\Builder|User active()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User active()
  */
 class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, MustVerifyEmail
 {
@@ -366,6 +365,8 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         'password',
         'remember_token',
         'wallets',
+        'full_name',
+        'photo',
     ];
 
     private static $secureFillable = [
@@ -1051,10 +1052,10 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     public function cacheKey()
     {
         $key = $this->getKey();
-        $time = isset($this->update) ? $this->updated_at->timestamp : $this->created_at->timestamp;
+        $time = isset($this->update_at) ? $this->updated_at->timestamp : $this->created_at->timestamp;
         return sprintf(
-            "%s-%s",
-            //$this->getTable(),
+            "%s:%s-%s",
+            $this->getTable(),
             $key,
             $time
         );

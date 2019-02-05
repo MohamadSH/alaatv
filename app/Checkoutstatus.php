@@ -2,7 +2,7 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+
 
 /**
  * App\Checkoutstatus
@@ -25,8 +25,10 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Checkoutstatus newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Checkoutstatus newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Checkoutstatus query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
-class Checkoutstatus extends Model
+class Checkoutstatus extends BaseModel
 {
     //
 }

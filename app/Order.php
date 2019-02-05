@@ -6,18 +6,10 @@ use App\Classes\Checkout\Alaa\OrderCheckout;
 use App\Classes\Checkout\Alaa\ReObtainOrderFromRecords;
 use App\Classes\Pricing\Alaa\AlaaInvoiceGenerator;
 use App\Collection\OrderCollections;
-use App\Collection\ProductCollection;
-use App\Traits\DateTrait;
-use App\Traits\Helper;
 use App\Traits\ProductCommon;
 use Auth;
 use Carbon\Carbon;
-use Iatstuti\Database\Support\CascadeSoftDeletes;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\DB;
-use Kalnoy\Nestedset\QueryBuilder;
-use phpDocumentor\Reflection\Types\This;
+use Illuminate\Support\Facades\Config;
 
 /**
  * App\Order
@@ -95,8 +87,11 @@ use phpDocumentor\Reflection\Types\This;
  * @method static \Illuminate\Database\Eloquent\Builder|Order newQuery()
  * @property-read array|bool $coupon_discount_type
  * @property-read mixed $number_of_products
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Order query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
-class Order extends Model
+class Order extends BaseModel
 {
     protected $table = 'orders';
 
@@ -105,10 +100,6 @@ class Order extends Model
     | Traits methods
     |--------------------------------------------------------------------------
     */
-
-    use SoftDeletes, CascadeSoftDeletes;
-    use Helper;
-    use DateTrait;
     use ProductCommon;
 
     /*
@@ -121,14 +112,6 @@ class Order extends Model
         'transactions',
         'files',
     ];
-
-    /** The attributes that should be mutated to dates */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
-
     /**
      * @var array
      */
@@ -704,7 +687,7 @@ class Order extends Model
             $simpleProduct = $orderproduct->product;
             $bons = $simpleProduct->bons->where("name", $bonName);
             if ($bons->isEmpty()) {
-                $grandParent = $simpleProduct->getGrandParent();
+                $grandParent = $simpleProduct->GrandParent();
                 if ($grandParent !== false) {
                     $simpleProduct = $grandParent;
                     $bons = $grandParent->bons->where("name", $bonName)

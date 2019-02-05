@@ -17,6 +17,7 @@ class ContentSearch extends SearchAbstract
 {
     protected $model        = "App\Content";
     protected $pageName     = 'contentPage';
+//    protected $numberOfItemInEachPage = 2;
     protected $validFilters = [
         'name',
         'tags',
@@ -25,7 +26,37 @@ class ContentSearch extends SearchAbstract
         'createdAtTill',
     ];
 
-    public function apply(array $filters): LengthAwarePaginator
+    public function get(array ...$params) {
+        $filters = $this->getFromParams($params,"filters");
+        $contentTypes = $this->getFromParams($params,"contentTypes");
+        $items = collect();
+        foreach ($contentTypes as $contentType) {
+            ${$contentType . 'Result'} = $this->getFiltered($filters,['contentType' => (array) $contentType]);
+            $items->offsetSet($contentType,${$contentType . 'Result'});
+        }
+        return $items;
+    }
+
+    /**
+     * @param array ...$filters
+     * @return LengthAwarePaginator|null
+     */
+    private function getFiltered(array ...$filters) :?LengthAwarePaginator
+    {
+        $filters = array_merge(...$filters);
+        $contentType = array_get($filters,"contentType");
+        if(is_null($contentType))
+            throw new \InvalidArgumentException("filters[contentType] should be set.");
+        return $this->setPageName($contentType[0] . 'Page')
+            ->apply($filters);
+    }
+
+    /**
+     * @param array $filters
+     *
+     * @return mixed
+     */
+    protected function apply(array $filters): LengthAwarePaginator
     {
         $this->pageNum = $this->setPageNum($filters);
         $key = $this->makeCacheKey($filters);
@@ -38,7 +69,7 @@ class ContentSearch extends SearchAbstract
                         //            dump("in cache");
                         $query = $this->applyDecoratorsFromFiltersArray($filters, $this->model->newQuery());
 
-                        return $this->getResults($query);
+                        return $this->getResults($query)->appends($filters);
                     });
     }
 

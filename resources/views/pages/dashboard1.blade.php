@@ -5,17 +5,6 @@
 @section("content")
     @include("partials.slideShow1" ,["marginBottom"=>"25"])
     <div class = "m--clearfix"></div>
-    @if(Session::has("customer_id"))
-        <div class="note bg-yellow-lemon">
-            <h3 class="block"><strong>توجه!</strong></h3>
-            <p><strong> شما در وضعیت درج سفارش
-                        برای {{Session::get("customer_firstName")}} {{Session::get("customer_lastName")}} می باشید.
-                    <a href="{{action("OrderController@exitAdminInsertOrder")}}" class="btn btn-lg red">بیرون
-                                                                                                        آمدن از وضعیت درج سفارش
-                                                                                                        برای {{Session::get("customer_firstName")}} {{Session::get("customer_lastName")}}</a></strong>
-            </p>
-        </div>
-    @endif
     <!--begin:: Widgets/Stats-->
     <div class = "m-portlet ">
         <div class = "m-portlet__body  m-portlet__body--no-padding">
@@ -97,32 +86,33 @@
     </div>
     <!--end:: Widgets/Stats-->
     @foreach($sections as $section)
-        <div class = "row {{$section["class"]}}">
-            <div class = "col-xl-12 m--margin-bottom-5">
-                <a href = "{{urldecode(action("ContentController@index" , ["tags" => $section["tags"]]))}}" class = "m-link m-link--primary">
-                    <h3 style = "font-weight: bold">{{$section["descriptiveName"]}} </h3>
-                </a>
+        @if($section['lessons']->count() > 0)
+            <div class = "row {{$section["class"]}}">
+                <div class = "col-xl-12 m--margin-bottom-5">
+                    <a href = "{{urldecode(action("ContentController@index" , ["tags" => $section["tags"]]))}}" class = "m-link m-link--primary">
+                        <h3 style = "font-weight: bold">{{$section["descriptiveName"]}} </h3>
+                    </a>
+                </div>
+                <div class="owl-carousel owl-theme">
+                @foreach($section["lessons"] as $lesson)
+                    @include('partials.widgets.set1',[
+                    'widgetActionName' => $section["descriptiveName"].'/ نمایش همه',
+                    'widgetActionLink' => $section["url"],
+                    'widgetTitle'      => $lesson["displayName"],
+                    'widgetPic'        => (isset($lesson["pic"]) && strlen($lesson["pic"])>0 ?  $lesson["pic"]."?w=253&h=142" : 'https://via.placeholder.com/235x142'),
+                    'widgetAuthor' => $lesson["author"],
+                    'widgetLink'       => (isset($lesson["content_id"]) && $lesson["content_id"]>0 ? action("ContentController@show", $lesson["content_id"]):""),
+                    'widgetCount' => $lesson["content_count"],
+                    'widgetScroll' => 1
+                    ])
+                @endforeach
+                </div>
             </div>
-            <div class="owl-carousel owl-theme">
-            @foreach($section["lessons"] as $lesson)
-                @include('partials.widgets.set1',[
-                'widgetActionName' => $section["descriptiveName"].'/ نمایش همه',
-                'widgetActionLink' => urldecode(action("ContentController@index" , ["tags" => $section["tags"]])),
-                'widgetTitle'      => $lesson["displayName"],
-                'widgetPic'        => (isset($lesson["pic"]) && strlen($lesson["pic"])>0 ?  $lesson["pic"]."?w=253&h=142" : 'https://via.placeholder.com/235x142'),
-                'widgetAuthor' => $lesson["author"],
-                'widgetLink'       => (isset($lesson["content_id"]) && $lesson["content_id"]>0 ? action("ContentController@show", $lesson["content_id"]):""),
-                'widgetCount' => $lesson["content_count"],
-                'widgetScroll' => 1
-                ])
-
+            <hr/>
+            @foreach($section["ads"] as $image => $link)
+                @include('partials.bannerAds', ['img'=>$image , 'link'=>$link])
             @endforeach
-            </div>
-        </div>
-        <hr/>
-        @foreach($section["ads"] as $image => $link)
-            @include('partials.bannerAds', ['img'=>$image , 'link'=>$link])
-        @endforeach
+        @endif
     @endforeach
 
 

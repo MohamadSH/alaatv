@@ -1,36 +1,21 @@
 @if($items->isNotEmpty())
-    <ul class="feeds">
+    <div class = "col-xl-12 m--margin-bottom-5">
+        <a href = "#" class = "m-link m-link--primary">
+            <h3 style = "font-weight: bold"><i class="la la-file-pdf-o"></i>جزوات آلاء</h3>
+        </a>
+        <hr>
+    </div>
     @foreach($items as $content)
-        <!-- TIMELINE ITEM -->
-            <li>
-                <a href="{{action("ContentController@show", $content->id)}}">
-                    <div class="col1">
-                        <div class="cont">
-                            <div class="cont-col1">
-                                <div class="label label-sm label-danger">
-                                    <i class="fa fa-file-pdf-o"></i>
-                                </div>
-                            </div>
-                            <div class="cont-col2">
-                                <div class="desc">
-                                    {{$content->name}}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col2">
-                        {{--<div class="date">{{$content["validSince_Jalali"]}}</div>--}}
-                    </div>
-                </a>
-            </li>
-            <!-- END TIMELINE ITEM -->
-        @endforeach
-    </ul>
-@else
-    <p class="text-center">
-        موردی یافت نشد
-    </p>
+        @include('partials.widgets.pamphlet1',[
+        'widgetActionName' => ''.'پخش / دانلود',
+        'widgetActionLink' => action("ContentController@show" , $content),
+        'widgetTitle'      => $content->name ?? $content->name ,
+        'widgetPic'        => $content->thumbnail ??  $content->thumbnail,
+        'widgetAuthor'     => optional($content->author),
+        'widgetLink'       => action("ContentController@show" , $content),
+        'widgetCount'      => 0,
+        'widgetScroll'     => 0
+        ])
+    @endforeach
+    <input id="owl--js-var-next-page-pamphlet-url" class = "m--hide" type = "hidden" value = '{{ $items->nextPageUrl() }}'>
 @endif
-<div class="row text-center">
-    {{ $items->links() }}
-</div>

@@ -2,10 +2,7 @@
 
 namespace App;
 
-use App\Traits\Helper;
-use App\Traits\DateTrait;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Config;
 
 /**
  * App\Transaction
@@ -44,57 +41,44 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[] $children
  * @property-read \App\Bankaccount                                            $destinationBankAccount
  * @property-read \App\Order|null                                             $order
- * @property-read \Illuminate\Database\Eloquent\Collection|Transaction[] $parents
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[] $parents
  * @property-read \App\Paymentmethod|null                                     $paymentmethod
  * @property-read \App\Bankaccount                                            $sourceBankAccount
  * @property-read \App\Transactiongateway|null                                $transactiongateway
  * @property-read \App\Transactionstatus|null                                 $transactionstatus
  * @property-read \App\Wallet|null                                            $wallet
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|Transaction onlyTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Transaction onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereAuthority($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereCompletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereCost($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereDeadlineAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereDestinationBankAccountId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereManagerComment($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereOrderId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Transaction wherePaycheckNumber($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Transaction wherePaymentmethodId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereReferenceNumber($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereSourceBankAccountId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereTraceNumber($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereTransactionID($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereTransactiongatewayId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereTransactionstatusId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereWalletId($value)
- * @method static \Illuminate\Database\Query\Builder|Transaction withTrashed()
- * @method static \Illuminate\Database\Query\Builder|Transaction withoutTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereAuthority($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereCompletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereCost($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereDeadlineAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereDestinationBankAccountId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereManagerComment($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereOrderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction wherePaycheckNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction wherePaymentmethodId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereReferenceNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereSourceBankAccountId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereTraceNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereTransactionID($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereTransactiongatewayId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereTransactionstatusId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereWalletId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Transaction withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Transaction withoutTrashed()
  * @mixin \Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|Transaction newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Transaction newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Transaction query()
- * @method static \Illuminate\Database\Eloquent\Builder|Transaction authority(string $authority)
- * @method static \Illuminate\Database\Eloquent\Builder|Transaction walletMethod()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction query()
  */
-class Transaction extends Model
+class Transaction extends BaseModel
 {
-    use Helper;
-    use DateTrait;
-    use SoftDeletes;
-
-    /**      * The attributes that should be mutated to dates.        */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
-
     /**
      * @var array
      */

@@ -23,7 +23,7 @@
                         </a>
                     </li>--}}
                     <li class = "m-nav__item">
-                        <a href = "{{ action("HomeController@rules") }}" class = "m-nav__link">
+                        <a href = "{{ action("RulesPageController") }}" class = "m-nav__link">
                             <span class = "m-nav__link-text">قوانین</span>
                         </a>
                     </li>
@@ -38,7 +38,7 @@
                         </a>
                     </li>
                     <li class = "m-nav__item m-nav__item">
-                        <a href = "{{ action("HomeController@contactUs") }}" class = "m-nav__link" data-toggle = "m-tooltip" title = "@lang('page.contact us')" data-placement = "left">
+                        <a href = "{{ action("ContactUsController") }}" class = "m-nav__link" data-toggle = "m-tooltip" title = "@lang('page.contact us')" data-placement = "left">
                             <i class = "m-nav__link-icon flaticon-info m--icon-font-size-lg3"></i>
                         </a>
                     </li>

@@ -393,7 +393,7 @@ class MergeProductCommand extends Command
 
             if($allCategoryProduct->hasParents())
             {
-                $grandParent =  $allCategoryProduct->getGrandParent();
+                $grandParent =  $allCategoryProduct->grandParent;
             }
             else
             {

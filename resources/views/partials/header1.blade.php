@@ -11,7 +11,7 @@
             <div class = "m-stack__item m-brand  m-brand--skin-dark ">
                 <div class = "m-stack m-stack--ver m-stack--general">
                     <div class = "m-stack__item m-stack__item--middle m-brand__logo">
-                        <a href = "{{action("HomeController@index")}}" class = "m-brand__logo-wrapper">
+                        <a href = "{{action("IndexPageController")}}" class = "m-brand__logo-wrapper">
                             <img alt = "لوگوی سایت آلاء" src = "{{route('image', ['category'=>'11','w'=>'135' , 'h'=>'67' ,  'filename' =>  optional($wSetting->site)->siteLogo ])}}"/>
                         </a>
                     </div>

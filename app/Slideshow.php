@@ -2,8 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 
 /**
@@ -41,17 +39,12 @@ use Illuminate\Support\Facades\Cache;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Slideshow newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Slideshow newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Slideshow query()
+ * @property-read mixed $url
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
-class Slideshow extends Model
+class Slideshow extends BaseModel
 {
-    use SoftDeletes;
-    /**      * The attributes that should be mutated to dates.        */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
-
     /**
      * @var array
      */
@@ -64,6 +57,21 @@ class Slideshow extends Model
         'order',
         'isEnable',
     ];
+    protected $appends = [
+        'url'
+    ];
+
+    protected $hidden = [
+        'websitepage_id',
+        'photo',
+        'isEnable',
+        'deleted_at',
+        'created_at'
+    ];
+    public function getUrlAttribute($value): string
+    {
+        return route('image', ['category'=>9,'w'=>'1280' , 'h'=>'500' ,  'filename' =>  $this->photo ]);
+    }
 
     public static function getMainBanner()
     {
@@ -73,6 +81,22 @@ class Slideshow extends Model
                            ])
                     ->remember('getMainBanner', config('constants.CACHE_600'), function () {
                         return Websitepage::where('url', "/home")
+                                          ->first()
+                                          ->slides()
+                                          ->where("isEnable", 1)
+                                          ->orderBy("order")
+                                          ->get();
+                    });
+
+    }
+    public static function getShopBanner()
+    {
+        return Cache::tags([
+            'banner',
+            'page',
+        ])
+                    ->remember('getShopBanner', config('constants.CACHE_600'), function () {
+                        return Websitepage::where('url', "/shop")
                                           ->first()
                                           ->slides()
                                           ->where("isEnable", 1)
