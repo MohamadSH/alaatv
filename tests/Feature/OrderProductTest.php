@@ -2,11 +2,10 @@
 
 namespace Tests\Feature;
 
-use App\Product;
 use App\User;
 use App\Wallet;
+use App\Product;
 use App\Userbon;
-use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 use App\Traits\OrderCommon;
 use Illuminate\Http\Response;
@@ -31,7 +30,7 @@ class OrderProductTest extends TestCase
             'balance' => 1000,
             'user_id' => $user->id
         ]);
-        $produc = factory(Product::class)->create([
+        $product = factory(Product::class)->create([
             'producttype_id'=>1,
             'attributeset_id'=>3
         ]);
@@ -41,7 +40,7 @@ class OrderProductTest extends TestCase
 
         $data = [
             'order_id' => $orderId,
-            'product_id' => $produc->id,
+            'product_id' => $product->id,
             'products' => [],
             'attribute' => [],
             'extraAttribute' => [],
@@ -81,7 +80,7 @@ class OrderProductTest extends TestCase
         ;
 
         $user->forceDelete();
-        $produc->forceDelete();
+        $product->forceDelete();
 
     }
 

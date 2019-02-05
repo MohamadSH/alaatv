@@ -7,6 +7,7 @@ use App\Traits\Helper;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Kalnoy\Nestedset\QueryBuilder;
 
 /**
  * App\Productfile
@@ -27,29 +28,29 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read \App\Product              $product
  * @property-read \App\Productfiletype|null $productfiletype
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|\App\Productfile onlyTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Productfile onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Productfile whereCloudFile($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Productfile whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Productfile whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Productfile whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Productfile whereEnable($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Productfile whereFile($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Productfile whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Productfile whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Productfile whereOrder($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Productfile whereProductId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Productfile whereProductfiletypeId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Productfile whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Productfile whereValidSince($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Productfile withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Productfile withoutTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Productfile whereCloudFile($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Productfile whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Productfile whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Productfile whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Productfile whereEnable($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Productfile whereFile($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Productfile whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Productfile whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Productfile whereOrder($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Productfile whereProductId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Productfile whereProductfiletypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Productfile whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Productfile whereValidSince($value)
+ * @method static \Illuminate\Database\Query\Builder|Productfile withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Productfile withoutTrashed()
  * @mixin \Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Productfile enable()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Productfile valid()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Productfile newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Productfile newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Productfile query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Productfile enable()
+ * @method static \Illuminate\Database\Eloquent\Builder|Productfile valid()
+ * @method static \Illuminate\Database\Eloquent\Builder|Productfile newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Productfile newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Productfile query()
  */
 class Productfile extends Model
 {
@@ -113,7 +114,9 @@ class Productfile extends Model
 
     public function scopeValid($query)
     {
+        /** @var QueryBuilder $query */
         return $query->where(function ($q) {
+            /** @var QueryBuilder $q */
             $q->where('validSince', '<', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
                                                ->timezone('Asia/Tehran'))
               ->orwhereNull('validSince');

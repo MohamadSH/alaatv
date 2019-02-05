@@ -68,15 +68,29 @@ abstract class Gateway
 
     /********************************
      * manipulate Result
-     *********************************/
+     ********************************/
+
+
+
+
+    /**
+     * @param bool $status
+     */
     final protected function setResultStatus(bool $status): void {
         $this->result['status'] = $status;
     }
 
+    /**
+     * @param string $message
+     */
     final protected function addResultMessage(string $message): void {
         $this->result['message'][] = $message;
     }
 
+    /**
+     * @param string $key
+     * @param $value
+     */
     final protected function setResultData(string $key, $value): void {
         $this->result['data'][$key] = $value;
     }
@@ -93,6 +107,10 @@ abstract class Gateway
         return $this->result['status'];
     }
 
+    /**
+     * @param bool $refreshResult
+     * @return array
+     */
     final public function getResult(bool $refreshResult=false): array {
         $result = $this->result;
         if ($refreshResult) {

@@ -100,6 +100,8 @@ use Kalnoy\Nestedset\QueryBuilder;
  * @method static Builder|Product wherePageView($value)
  * @property string|null $redirectUrl آدرسی که صفحه محصول به آن به صورت همیشگی ریدایرکت می شود
  * @method static Builder|Product whereRedirectUrl($value)
+ * @method static Builder|Product enable()
+ * @method static Builder|Product valid()
  *
  */
 class Product extends Model implements Advertisable, Taggable, SeoInterface, FavorableInterface
@@ -330,6 +332,7 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
      */
     public function scopeActive($query)
     {
+        /** @var Product $query */
         return $query->enable()
                      ->valid();
     }
@@ -986,6 +989,9 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
         return $productSamplePhotos;
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany|Productphoto
+     */
     public function photos()
     {
         $photos = $this->hasMany('\App\Productphoto');
@@ -1035,6 +1041,11 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
 
     }
 
+    /**
+     * @param string $fileType
+     * @param int $getValid
+     * @return Productfile
+     */
     public function validProductfiles($fileType = "", $getValid = 1)
     {
         $product = $this;
@@ -1749,7 +1760,7 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
      * Enables the product
      *
      */
-    public function enable():void
+    public function setEnable():void
     {
         $this->enable = 1;
     }

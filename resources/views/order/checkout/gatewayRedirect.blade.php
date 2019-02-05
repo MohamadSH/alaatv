@@ -10,6 +10,11 @@
         <link href = "{{ mix('/css/all.css') }}" rel = "stylesheet" type = "text/css"/>
         <!--end::Global Theme Styles -->
         <style>
+            body {
+                background-image: linear-gradient(to left, #00bcff, #00d1ff, #00e4f2, #00f4ce, #00ff9b);
+            }
+        </style>
+        <style>
             #spinningSquaresG{
                 position:relative;
                 width:168px;
@@ -191,7 +196,7 @@
     <div class="container">
         <div class="row align-items-center m--margin-top-100">
             <div class="col align-self-center text-center">
-                <img src="{{ $paymentMethodImage }}">
+                <img src="{{ $paymentMethodImage }}" class="img-responsive img-thumbnail rounded">
             </div>
             <div class="col align-self-center text-center">
                 <div id="spinningSquaresG">
@@ -206,7 +211,7 @@
                 </div>
             </div>
             <div class="col align-self-center text-center">
-                <img src="{{ asset('acm/extra/Alaa-logo.gif') }}">
+                <img src="{{ asset('acm/extra/Alaa-logo.gif') }}" class="img-responsive">
             </div>
         </div>
     </div>
@@ -224,7 +229,7 @@
         $(document).ready(function () {
             setTimeout( function () {
                 $('form').submit();
-            }, 3000);
+            }, 4000);
         });
 
     </script>
