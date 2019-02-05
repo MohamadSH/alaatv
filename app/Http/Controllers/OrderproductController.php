@@ -26,6 +26,7 @@ use Illuminate\Support\Collection;
 
 use App\Classes\OrderProduct\RefinementProduct\RefinementFactory;
 use Kalnoy\Nestedset\QueryBuilder;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class OrderproductController extends Controller
 {
@@ -453,18 +454,26 @@ class OrderproductController extends Controller
     {
         $productId = $data['product_id'];
         $orderId = $data['order_id'];
-        $data = [
-            'products' => isset($data['products'])?$data['products']:null,
-            'attribute' => isset($data['attribute'])?$data['attribute']:null,
-            'extraAttribute' => isset($data['extraAttribute'])?$data['extraAttribute']:null,
-            'withoutBon' => isset($data['withoutBon'])?$data['withoutBon']:null
-        ];
-
-        $order = Order::FindorFail($orderId);
-        $product = Product::FindorFail($productId);
+        $data = array_merge([
+                    'products' => null,
+                    'attribute' => null,
+                    'extraAttribute' => null,
+                    'withoutBon' => null,
+                ],$data);
+        
+        try {
+            $order = Order::FindorFail($orderId);
+            $product = Product::FindorFail($productId);
+        } catch (ModelNotFoundException $e) {
+             report($e);
+             return new OrderproductCollection();
+        }
+        
         $user = $order->user;
 
-        $simpleProducts = (new RefinementFactory($product, $data))->getRefinementClass()->getProducts();
+        $simpleProducts = (new RefinementFactory($product, $data))
+                            ->getRefinementClass()
+                            ->getProducts();
 
         $notDuplicateProduct = $order->checkProductsExistInOrderProducts($simpleProducts);
 
