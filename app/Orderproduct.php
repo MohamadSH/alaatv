@@ -6,7 +6,6 @@ namespace App;
 use App\Classes\Checkout\Alaa\AlaaOrderproductGroupPriceCalculatorFromNewBase;
 use App\Classes\Checkout\Alaa\OrderproductCheckout;
 use App\Collection\OrderproductCollection;
-use App\Traits\Helper;
 use App\Traits\ProductCommon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;

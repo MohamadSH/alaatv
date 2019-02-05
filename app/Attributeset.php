@@ -5,8 +5,6 @@ namespace App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
-use Kalnoy\Nestedset\QueryBuilder;
-use MongoDB\Driver\Query;
 
 /**
  * App\Attributeset

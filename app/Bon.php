@@ -3,7 +3,6 @@
 namespace App;
 
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Config;
 
 /**
  * App\Bon

@@ -113,16 +113,17 @@ use Kalnoy\Nestedset\QueryBuilder;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Product newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Product query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Product valid()
- * @property int|null $grand_id
+ * @property int|null              $grand_id
  * @property-read \Collection|null $attributes
- * @property-read mixed $gift
- * @property-read mixed $grand_parent
- * @property-read mixed $type
- * @property-read mixed $url
- * @property-read \App\Product $grand
+ * @property-read mixed            $gift
+ * @property-read mixed            $grand_parent
+ * @property-read mixed            $type
+ * @property-read mixed            $url
+ * @property-read \App\Product     $grand
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereGrandId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @property-read mixed            $active
  */
 class Product extends BaseModel implements Advertisable, Taggable, SeoInterface, FavorableInterface
 {
