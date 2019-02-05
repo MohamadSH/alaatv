@@ -35,18 +35,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Relative newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Relative query()
  */
-class Relative extends Model
+class Relative extends BaseModel
 {
-    use SoftDeletes;
-    use Helper;
-    use DateTrait;
-    /**      * The attributes that should be mutated to dates.        */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
-
     /**
      * @var array
      */

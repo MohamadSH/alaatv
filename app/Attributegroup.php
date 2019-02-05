@@ -39,21 +39,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributegroup newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributegroup query()
  */
-class Attributegroup extends Model
+class Attributegroup extends BaseModel
 {
-    use SoftDeletes;
-    use Helper;
-    use DateTrait;
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
 
     protected $fillable = [
         'name',

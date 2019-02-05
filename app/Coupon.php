@@ -65,7 +65,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon enable()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon valid()
  */
-class Coupon extends Model
+class Coupon extends BaseModel
 {
 
     /*
@@ -74,24 +74,11 @@ class Coupon extends Model
     |--------------------------------------------------------------------------
     */
 
-    use SoftDeletes;
-    use Helper;
-    use DateTrait;
-
-
     /*
     |--------------------------------------------------------------------------
     | Properties
     |--------------------------------------------------------------------------
     */
-
-    /**      * The attributes that should be mutated to dates.        */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
-
     /**
      * @var array
      */

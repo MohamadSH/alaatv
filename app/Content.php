@@ -112,7 +112,7 @@ use Stevebauman\Purify\Facades\Purify;
  * @property-read mixed $author_name
  * @property-read mixed $url
  */
-class Content extends Model implements Advertisable, Taggable, SeoInterface, FavorableInterface
+class Content extends BaseModel implements Advertisable, Taggable, SeoInterface, FavorableInterface
 {
     /*
     |--------------------------------------------------------------------------
@@ -121,9 +121,6 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
     */
 
     use APIRequestCommon;
-    use SoftDeletes;
-    use Helper;
-    use DateTrait;
     use favorableTraits;
     use ModelTrackerTrait;
 
@@ -401,17 +398,7 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
                     });
     }
 
-    public function cacheKey()
-    {
-        $key = $this->getKey();
-        $time = isset($this->update) ? $this->updated_at->timestamp : $this->created_at->timestamp;
-        return sprintf(
-            "%s-%s",
-            //$this->getTable(),
-            $key,
-            $time
-        );
-    }
+
 
     /**
      * Get the content's thumbnail .

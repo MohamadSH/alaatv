@@ -330,7 +330,7 @@ class ProductController extends Controller
 
         $this->generateSeoMetaTags($product);
 
-        if (request()->ajax()) {
+        if (request()->ajax() || true) {
             return $this->response
                 ->setStatusCode(Response::HTTP_OK)
                ->setContent($product);

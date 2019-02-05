@@ -36,17 +36,14 @@ use Illuminate\Support\Facades\Cache;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Block newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Block query()
  */
-class Block extends Model
+class Block extends BaseModel
 {
     public static $BLOCK_TYPE_MAIN = 1;
     public static $BLOCK_TYPE_SHOP = 2;
     protected $cascadeDeletes = [
         'blockables',
     ];
-    protected $dates = [
-        'created_at',
-        'updated_at',
-    ];
+
     protected $fillable = [
         'title',
         'tags',

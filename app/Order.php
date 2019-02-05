@@ -5,14 +5,9 @@ namespace App;
 use App\Classes\Checkout\Alaa\OrderCheckout;
 use App\Classes\Checkout\Alaa\ReObtainOrderFromRecords;
 use App\Collection\OrderCollections;
-use App\Traits\DateTrait;
-use App\Traits\Helper;
 use App\Traits\ProductCommon;
 use Auth;
 use Carbon\Carbon;
-use Iatstuti\Database\Support\CascadeSoftDeletes;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Config;
 
 /**
@@ -93,17 +88,13 @@ use Illuminate\Support\Facades\Config;
  * @property-read mixed $number_of_products
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Order query()
  */
-class Order extends Model
+class Order extends BaseModel
 {
     /*
     |--------------------------------------------------------------------------
     | Traits methods
     |--------------------------------------------------------------------------
     */
-
-    use SoftDeletes, CascadeSoftDeletes;
-    use Helper;
-    use DateTrait;
     use ProductCommon;
 
     /*
@@ -116,14 +107,6 @@ class Order extends Model
         'transactions',
         'files',
     ];
-
-    /** The attributes that should be mutated to dates */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
-
     /**
      * @var array
      */

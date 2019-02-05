@@ -34,17 +34,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Productfiletype newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Productfiletype query()
  */
-class Productfiletype extends Model
+class Productfiletype extends BaseModel
 {
-    use SoftDeletes;
-    use Helper;
-    /**      * The attributes that should be mutated to dates.        */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
-
     /**
      * @var array
      */

@@ -2,7 +2,7 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+
 
 /**
  * App\Checkoutstatus
@@ -26,7 +26,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Checkoutstatus newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Checkoutstatus query()
  */
-class Checkoutstatus extends Model
+class Checkoutstatus extends BaseModel
 {
     //
 }

@@ -81,18 +81,8 @@ use Illuminate\Support\Facades\Config;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction query()
  */
-class Transaction extends Model
+class Transaction extends BaseModel
 {
-    use Helper;
-    use DateTrait;
-    use SoftDeletes;
-    /**      * The attributes that should be mutated to dates.        */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
-
     /**
      * @var array
      */

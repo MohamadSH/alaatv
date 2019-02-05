@@ -26,7 +26,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Discounttype newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Discounttype query()
  */
-class Discounttype extends Model
+class Discounttype extends BaseModel
 {
     //
 }

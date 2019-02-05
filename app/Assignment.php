@@ -55,11 +55,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Assignment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Assignment query()
  */
-class Assignment extends Model
+class Assignment extends BaseModel
 {
-    use SoftDeletes;
-    use Helper;
-    use DateTrait;
     /**
      * The attributes that should be mutated to dates.
      *

@@ -150,9 +150,22 @@ class HomeController extends Controller
 
     }
 
+    public function test(Product $product)
+    {
+        return $product;
+    }
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
         try{
+
+
+//            return $this->test(226);
+            $product = Product::find(226);
+            return  $product;
+            dump("product:".$product->id);
+            return $product->sample_photos;
+//            return $product->attributes;
+
             $contentsets = [
                 [
                     'id'          => '224',

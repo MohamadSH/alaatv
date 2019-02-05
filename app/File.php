@@ -34,17 +34,8 @@ use Webpatser\Uuid\Uuid;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\File newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\File query()
  */
-class File extends Model
+class File extends BaseModel
 {
-    use SoftDeletes;
-
-    /**      * The attributes that should be mutated to dates.        */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
-
     protected $fillable = [
         'name',
         'uuid',

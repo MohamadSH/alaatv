@@ -37,16 +37,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet query()
  */
-class Wallet extends Model
+class Wallet extends BaseModel
 {
-    use SoftDeletes;
-    /**      * The attributes that should be mutated to dates.        */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
-
     /**
      * @var array
      */
@@ -69,6 +61,8 @@ class Wallet extends Model
      *
      * @param  integer $amount
      * @param  boolean $shouldAccept
+     *
+     * @return array
      */
     public function forceWithdraw($amount)
     {
@@ -79,8 +73,7 @@ class Wallet extends Model
      * Attempt to add credits to this wallet
      *
      * @param  integer $amount
-     * @param  string  $type
-     * @param  array   $meta
+     * @param null     $orderId
      * @param  boolean $shouldAccept
      *
      * @return array
@@ -155,9 +148,6 @@ class Wallet extends Model
      * Attempt to move credits from this wallet
      *
      * @param  integer $amount
-     * @param  string  $type
-     * @param  array   $meta
-     * @param  boolean $shouldAccept
      *
      * @return array
      */

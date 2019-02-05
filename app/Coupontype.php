@@ -33,16 +33,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupontype newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupontype query()
  */
-class Coupontype extends Model
+class Coupontype extends BaseModel
 {
-    use SoftDeletes;
-    /**      * The attributes that should be mutated to dates.        */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
-
     /**
      * @var array
      */

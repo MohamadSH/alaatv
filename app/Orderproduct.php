@@ -67,15 +67,8 @@ use Illuminate\Support\Facades\Config;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct query()
  * @property-read float|int $discount_percentage
  */
-class Orderproduct extends Model
+class Orderproduct extends BaseModel
 {
-    use SoftDeletes;
-    /**      * The attributes that should be mutated to dates.        */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
     use ProductCommon;
 
     /**

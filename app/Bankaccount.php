@@ -2,9 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 /**
  * App\Bankaccount
  *
@@ -38,19 +35,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Bankaccount newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Bankaccount query()
  */
-class Bankaccount extends Model
+class Bankaccount extends BaseModel
 {
-    use SoftDeletes;
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
 
     /**
      * The attributes that are mass assignable.

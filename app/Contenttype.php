@@ -40,17 +40,8 @@ use Illuminate\Support\Facades\Cache;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contenttype newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contenttype query()
  */
-class Contenttype extends Model
+class Contenttype extends BaseModel
 {
-    use SoftDeletes;
-
-    /**      * The attributes that should be mutated to dates.        */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
-
     protected $fillable = [
         'name',
         'displayName',

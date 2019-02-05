@@ -33,16 +33,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderpostinginfo newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderpostinginfo query()
  */
-class Orderpostinginfo extends Model
+class Orderpostinginfo extends BaseModel
 {
-    use SoftDeletes;
-    /**      * The attributes that should be mutated to dates.        */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
-
     /**
      * The attributes that are mass assignable.
      *

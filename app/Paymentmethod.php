@@ -33,16 +33,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Paymentmethod newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Paymentmethod query()
  */
-class Paymentmethod extends Model
+class Paymentmethod extends BaseModel
 {
-    use SoftDeletes;
-    /**      * The attributes that should be mutated to dates.        */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
-
     /**
      * @var array
      */

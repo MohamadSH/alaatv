@@ -2,8 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
 /**
  * App\Workdaytype
  *
@@ -24,7 +22,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Workdaytype newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Workdaytype query()
  */
-class Workdaytype extends Model
+class Workdaytype extends BaseModel
 {
     //
 }

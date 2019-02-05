@@ -48,17 +48,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeeschedule newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeeschedule query()
  */
-class Employeeschedule extends Model
+class Employeeschedule extends BaseModel
 {
-    use SoftDeletes;
-    use DateTrait;
-    /**      * The attributes that should be mutated to dates.        */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
-
     protected $fillable = [
         'user_id',
         'day',

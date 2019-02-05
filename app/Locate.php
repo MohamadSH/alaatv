@@ -12,8 +12,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Locate newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Locate query()
  */
-class Locate extends Model
+class Locate extends BaseModel
 {
+
     /**
      * @var array
      */

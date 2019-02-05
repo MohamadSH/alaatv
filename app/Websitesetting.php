@@ -30,16 +30,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Websitesetting newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Websitesetting query()
  */
-class Websitesetting extends Model
+class Websitesetting extends BaseModel
 {
-    use SoftDeletes;
-    /**      * The attributes that should be mutated to dates.        */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
-
     protected $fillable = [
         'setting',
         'version',

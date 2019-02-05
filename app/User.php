@@ -1039,10 +1039,10 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     public function cacheKey()
     {
         $key = $this->getKey();
-        $time = isset($this->update) ? $this->updated_at->timestamp : $this->created_at->timestamp;
+        $time = isset($this->update_at) ? $this->updated_at->timestamp : $this->created_at->timestamp;
         return sprintf(
-            "%s-%s",
-            //$this->getTable(),
+            "%s:%s-%s",
+            $this->getTable(),
             $key,
             $time
         );

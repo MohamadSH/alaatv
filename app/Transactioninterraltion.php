@@ -26,7 +26,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Transactioninterraltion newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Transactioninterraltion query()
  */
-class Transactioninterraltion extends Model
+class Transactioninterraltion extends BaseModel
 {
     //
 }

@@ -44,21 +44,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Attribute newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Attribute query()
  */
-class Attribute extends Model
+class Attribute extends BaseModel
 {
-    use SoftDeletes;
-    use Helper;
-    use DateTrait;
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
     /**
      * @var array
      */

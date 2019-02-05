@@ -58,11 +58,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Userbon newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Userbon query()
  */
-class Userbon extends Model
+class Userbon extends BaseModel
 {
-    use SoftDeletes;
-    use Helper;
-    use DateTrait;
     /**
      * @var array
      */
@@ -76,12 +73,6 @@ class Userbon extends Model
         'orderproduct_id',
         'userbonstatus_id',
     ];
-    protected $dates    = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
-
     public function userbonstatus()
     {
         return $this->belongsTo('App\Userbonstatus');

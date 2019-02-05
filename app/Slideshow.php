@@ -42,16 +42,8 @@ use Illuminate\Support\Facades\Cache;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Slideshow newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Slideshow query()
  */
-class Slideshow extends Model
+class Slideshow extends BaseModel
 {
-    use SoftDeletes;
-    /**      * The attributes that should be mutated to dates.        */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
-
     /**
      * @var array
      */

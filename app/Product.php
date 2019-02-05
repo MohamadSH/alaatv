@@ -127,7 +127,7 @@ use Illuminate\Support\{Collection, Facades\Cache, Facades\Config};
  * @property-read \App\Product $grand
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereGrandId($value)
  */
-class Product extends Model implements Advertisable, Taggable, SeoInterface, FavorableInterface
+class Product extends BaseModel implements Advertisable, Taggable, SeoInterface, FavorableInterface
 {
     /*
     |--------------------------------------------------------------------------
@@ -135,13 +135,9 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
     |--------------------------------------------------------------------------
     */
 
-    use SoftDeletes;
     //    use Searchable;
     use ProductCommon;
-    use CharacterCommon;
-    use Helper;
     use APIRequestCommon;
-    use DateTrait;
     use favorableTraits;
     use ModelTrackerTrait;
 
@@ -172,18 +168,6 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
         91,
         92,
     ];
-
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
-
     protected $fillable = [
         'name',
         'basePrice',
@@ -258,6 +242,8 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
     | overwrite methods
     |--------------------------------------------------------------------------
     */
+
+
 
     public static function getDonateProductCost()
     {
@@ -634,7 +620,7 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
                         ])));
                 }
             }
-            return $attributesResult;
+            return  $attributesResult->count() > 0  ? $attributesResult : null;
         });
     }
 
@@ -702,14 +688,6 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
             }
             return $image;
         });
-    }
-
-    public function cacheKey()
-    {
-        $key = $this->getKey();
-        $time = isset($this->update) ? $this->updated_at->timestamp : $this->created_at->timestamp;
-        return sprintf("%s-%s", //$this->getTable(),
-            $key, $time);
     }
 
     /** Determines whether this product has parent or not
@@ -1908,7 +1886,6 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
                                 ->enable()
                                 ->get();
 
-
             $photos = $photos->merge($thisPhotos);
             $allChildren = $this->getAllChildren();
             foreach ($allChildren as $child) {
@@ -1917,7 +1894,7 @@ class Product extends Model implements Advertisable, Taggable, SeoInterface, Fav
                                      ->get();
                 $photos = $photos->merge($childPhotos);
             }
-            return $photos->sortBy("order");
+            return $photos->sortBy("order")->values();
         });
 
         return $productSamplePhotos->count() > 0 ? $productSamplePhotos : null;

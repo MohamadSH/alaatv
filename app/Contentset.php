@@ -52,18 +52,9 @@ use Illuminate\Support\Facades\Config;
  * @property-read mixed $author
  * @property-read mixed $url
  */
-class Contentset extends Model implements Taggable
+class Contentset extends BaseModel implements Taggable
 {
-    use SoftDeletes;
     use favorableTraits;
-
-    /**      * The attributes that should be mutated to dates.        */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
-
     /**
      * @var array
      */

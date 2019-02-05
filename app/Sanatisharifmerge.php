@@ -103,16 +103,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge query()
  */
-class Sanatisharifmerge extends Model
+class Sanatisharifmerge extends BaseModel
 {
-    use SoftDeletes;
-    /**      * The attributes that should be mutated to dates.        */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
-
     /**
      * @var array
      */

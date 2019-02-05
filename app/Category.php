@@ -38,7 +38,7 @@ use Kalnoy\Nestedset\NodeTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Category newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Category query()
  */
-class Category extends Model
+class Category extends BaseModel
 {
     use NodeTrait;
 
@@ -47,11 +47,6 @@ class Category extends Model
         'tags',
         'enable',
         'description',
-    ];
-
-    protected $dates = [
-        'created_at',
-        'updated_at',
     ];
 
     public function scopeActive($query)

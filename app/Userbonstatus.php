@@ -36,10 +36,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Userbonstatus newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Userbonstatus query()
  */
-class Userbonstatus extends Model
+class Userbonstatus extends BaseModel
 {
-    use SoftDeletes;
-
     /**
      * @var array
      */

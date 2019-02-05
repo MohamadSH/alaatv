@@ -26,7 +26,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresultstatus newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresultstatus query()
  */
-class Eventresultstatus extends Model
+class Eventresultstatus extends BaseModel
 {
     //
 }

@@ -26,7 +26,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproductinterrelation newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproductinterrelation query()
  */
-class Orderproductinterrelation extends Model
+class Orderproductinterrelation extends BaseModel
 {
     //
 }
