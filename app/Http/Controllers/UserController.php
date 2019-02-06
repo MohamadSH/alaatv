@@ -174,7 +174,7 @@ class UserController extends Controller
         $items = collect();
         $pageName = 'userPage';
         $userResult = (new UserSearch)->setPageName($pageName)
-            ->apply($filters);
+            ->get($filters);
         if ($isApp) {
             $items->push($userResult->getCollection());
         } else {
@@ -959,7 +959,7 @@ class UserController extends Controller
         $product = $orderproduct->product;
         if (in_array($product->id, config("constants.ORDOO_HOZOORI_NOROOZ_97_PRODUCT")))
             $userHasMedicalQuestions = true; else $userHasMedicalQuestions = false;
-        $grandParent = $product->getGrandParent();
+        $grandParent = $product->grandParent;
         if ($grandParent !== false) {
             $userProduct = $grandParent->name;
         } else {
@@ -1158,7 +1158,7 @@ class UserController extends Controller
         if ($request->has("redirectTo"))
             $targetUrl = $request->get("redirectTo");
         else
-            $targetUrl = action("HomeController@index");
+            $targetUrl = action("IndexPageController");
 
         if ($request->user()
                     ->completion("afterLoginForm") == 100) {

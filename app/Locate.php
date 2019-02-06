@@ -2,8 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
 /**
  * App\Locate
  *
@@ -11,9 +9,12 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Locate newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Locate newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Locate query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
-class Locate extends Model
+class Locate extends BaseModel
 {
+
     /**
      * @var array
      */

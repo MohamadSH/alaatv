@@ -57,6 +57,7 @@ class webBlockCollectionFormatter implements BlockCollectionFormatter
 
             ],
             'class'           => $block->class,
+            'url'             => $block->url,
         ];
         return $section;
     }

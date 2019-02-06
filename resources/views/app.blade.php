@@ -57,7 +57,7 @@
 <!-- end::Head -->
 
 <!-- begin::Body -->
-<body class = "m-page--fluid m--skin- m-content--skin-light2 m-header--fixed m-header--fixed-mobile m-aside-left--enabled m-aside-left--skin-dark m-aside-left--fixed m-aside-left--offcanvas m-aside-right--enabled m-footer--push m-aside--offcanvas-default">
+<body class = "m-page--fluid m--skin- m-content--skin-light2 m-header--fixed m-header--fixed-mobile m-aside-left--enabled m-aside-left--skin-dark m-aside-left--fixed m-aside-left--offcanvas m-aside-right--enabled m-footer--push m-aside--offcanvas-default {{ isset($closedSideBar) && $closedSideBar ? 'm-aside-left--hide':''  }}">
 
 <!-- Google Tag Manager (noscript) -->
 <noscript>
@@ -115,7 +115,7 @@
                                 <br>
                                 اینگونه هست که ما بهترین فیلم های آموزشی را تولید می کنیم.
                                 <br>
-                                <a href="{{ action("HomeController@donate") }}" class="m-link m--font-boldest">
+                                <a href="{{ action("DonateController") }}" class="m-link m--font-boldest">
                                     ما برای حفظ و توسعه خدمات، نیاز به کمک های مالی شما آلایی ها داریم.
                                 </a>
                             </p>

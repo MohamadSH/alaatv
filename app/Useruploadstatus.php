@@ -2,9 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 /**
  * App\Useruploadstatus
  *
@@ -34,17 +31,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Useruploadstatus newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Useruploadstatus newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Useruploadstatus query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
-class Useruploadstatus extends Model
+class Useruploadstatus extends BaseModel
 {
-    use SoftDeletes;
-    /**      * The attributes that should be mutated to dates.        */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
-
     /**
      * @var array
      */

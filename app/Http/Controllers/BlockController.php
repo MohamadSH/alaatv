@@ -27,7 +27,7 @@ class BlockController extends Controller
      */
     public function index(Request $request)
     {
-        $blocks = Block::getBlocks();
+        $blocks = Block::getMainBlocks();
         return ($request->expectsJson() ? response()->json($blocks) : $blocks);
 
     }

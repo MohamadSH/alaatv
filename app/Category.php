@@ -2,7 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Kalnoy\Nestedset\NodeTrait;
 
@@ -37,8 +36,10 @@ use Kalnoy\Nestedset\NodeTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Category newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Category newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Category query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
-class Category extends Model
+class Category extends BaseModel
 {
     use NodeTrait;
 
@@ -47,11 +48,6 @@ class Category extends Model
         'tags',
         'enable',
         'description',
-    ];
-
-    protected $dates = [
-        'created_at',
-        'updated_at',
     ];
 
     public function scopeActive($query)
