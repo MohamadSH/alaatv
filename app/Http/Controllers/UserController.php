@@ -417,7 +417,7 @@ class UserController extends Controller
         }
 
         if (in_array("roles" , $inputData))
-            $this->attachRoles($inputData["roles"], $request->user(), $user);
+            $this->attachRoles($inputData["roles"], $authenticatedUser , $user);
 
         $file = $this->getRequestFile($inputData, "photo");
         if ($file !== false)

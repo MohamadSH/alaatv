@@ -72,7 +72,7 @@ class OrderController extends Controller
         $this->middleware('permission:' . config('constants.REMOVE_ORDER_ACCESS'), ['only' => 'destroy']);
         $this->middleware('permission:' . config('constants.SHOW_ORDER_ACCESS'), ['only' => 'edit']);
         $this->middleware('permission:' . config('constants.INSERT_ORDER_ACCESS'), ['only' => 'exitAdminInsertOrder']);
-        $this->middleware(['CheckHasOpenOrder','StoreOrderproductCookieInOpenOrder','OrderCheckoutReview',], ['only' => ['checkoutReview',],]);
+        $this->middleware(['StoreOrderproductCookieInOpenOrder','OrderCheckoutReview',], ['only' => ['checkoutReview',],]);
         $this->middleware(['CheckHasOpenOrder','OrderCheckoutPayment',], ['only' => ['checkoutPayment'],]);
         $this->middleware('SubmitOrderCoupon', ['only' => ['submitCoupon'],]);
         $this->middleware('RemoveOrderCoupon', ['only' => ['removeCoupon'],]);
@@ -931,7 +931,6 @@ class OrderController extends Controller
 
         $order = Order::Find($request->order_id);
         if(isset($order)) {
-            $order->load(["user" , "coupon" , "coupon.products" ,"orderproducts" , "orderproducts.userbons" , "orderproducts.attributevalues" , "orderproducts.product" ]);
             $credit = optional($order->user)->getTotalWalletBalance();
             $orderHasDonate = $order->hasTheseProducts(Product::DONATE_PRODUCT);
             $gateways = Transactiongateway::enable()->get()->sortBy("order")->pluck("displayName", "name");

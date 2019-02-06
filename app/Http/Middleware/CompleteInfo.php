@@ -23,17 +23,13 @@ class CompleteInfo
                                      ->completion("afterLoginForm") != 100) {
             switch ($request->fullUrl()) {
                 case action("OrderController@checkoutReview") :
-                    return redirect(action("OrderController@checkoutCompleteInfo"));
-                    break;
                 case action("OrderController@checkoutPayment") :
                     return redirect(action("OrderController@checkoutCompleteInfo"));
                     break;
                 default :
-                    {
-                        session()->put("redirectTo", $request->fullUrl());
-                        return redirect(action("UserController@completeRegister"));
-                        break;
-                    }
+                    session()->put("redirectTo", $request->fullUrl());
+                    return redirect(action("UserController@completeRegister"));
+                    break;
             }
         }
         return $next($request);
