@@ -43,9 +43,7 @@
         "watson/sitemap": "^2.0",
         "webpatser/laravel-uuid": "^3.0",
         "yab/laravel-scout-mysql-driver": "^2.0",
-        "zarinpal/zarinpal": "^1.3",
-      "ext-soap": "*",
-      "ext-mysql_xdevapi": "*"
+        "zarinpal/zarinpal": "^1.3"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.4",

@@ -124,6 +124,7 @@ class UserController extends Controller
         $this->middleware('permission:' . config('constants.REMOVE_USER_ACCESS'), ['only' => 'destroy']);
         $this->middleware('permission:' . config('constants.SHOW_USER_ACCESS'), ['only' => 'edit']);
         $this->middleware('trimUserUpdateRequest', ['only' => 'update']);
+        $this->middleware('completeInfo', ['only' => ['uploadConsultingQuestion' , 'uploadConsultingQuestion']]);
     }
 
     /**
@@ -416,7 +417,7 @@ class UserController extends Controller
         }
 
         if (in_array("roles" , $inputData))
-            $this->attachRoles($inputData["roles"], $authenticatedUser, $user);
+            $this->attachRoles($inputData["roles"], $authenticatedUser , $user);
 
         $file = $this->getRequestFile($inputData, "photo");
         if ($file !== false)
@@ -507,45 +508,12 @@ class UserController extends Controller
                 abort(403);
         }
 
-
-        /**
-        $zarinGate = Transactiongateway::where('name', 'zarinpal')->first();
-        $zarinpal = new ZarinpalComposer($zarinGate->merchantNumber);
-        $authority = '000000000000000000000000000082710110';
-        return json_encode($zarinpal->verify('OK', 5000, $authority));
-        {
-            "Status": "success",
-            "RefID": 44545481710,
-            "ExtraDetail": {
-                "Transaction": {
-                    "CardPanHash": "2A7C73AE5DB08EE02E5A3F16EC4DB64E2210B564",
-                    "CardPanMask": "603799******2458"
-                }
-            }
-        }
-        */
-
-
-
-
-
-//        $zarinpal = new Zarinpal((new TransactionController()));
-//        $result = $zarinpal->getUnverifiedTransactions();
-//        return $result;
-
-
-//        $zarinpal = new Zarinpal((new TransactionController()));
-//        $result = $zarinpal->getUnverifiedTransactions();
-//        return $result;
-
-        return response($user, Response::HTTP_OK);
-
         if ($request->ajax()) {
             return response($user, Response::HTTP_OK);
-        } else {
-            return view("user.profile.profile", compact("user", "userCompletion",
-                "hasRequestedVerificationCode", "mobileVerificationCode"));
         }
+
+        return view("user.profile.profile", compact("user", "userCompletion",
+                "hasRequestedVerificationCode", "mobileVerificationCode"));
     }
 
     /**
@@ -956,7 +924,7 @@ class UserController extends Controller
         if (in_array($product->id, config("constants.ORDOO_HOZOORI_NOROOZ_97_PRODUCT")))
             $userHasMedicalQuestions = true; else $userHasMedicalQuestions = false;
         $grandParent = $product->grandParent;
-        if ($grandParent !== false) {
+        if (isset($grandParent)) {
             $userProduct = $grandParent->name;
         } else {
             $userProduct = $product->name;

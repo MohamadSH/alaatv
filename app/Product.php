@@ -681,7 +681,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return Cache::remember($key, Config::get("constants.CACHE_600"), function () {
             $image = "";
             $grandParent = $this->grandParent;
-            if ($grandParent !== false) {
+            if (isset($grandParent)) {
                 if (isset($grandParent->image))
                     $image = $grandParent->image;
             } else {
@@ -704,7 +704,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return Cache::remember($key, Config::get("constants.CACHE_60"), function () use ($depth) {
             $counter = 0;
             $myProduct = $this;
-            while (!$myProduct->parents->isEmpty()) {
+            while ($myProduct->parents->isNotEmpty()) {
                 if ($counter >= $depth)
                     break;
                 $myProduct = $myProduct->parents->first();
@@ -1132,7 +1132,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
             if (in_array($this->id, self::DONATE_PRODUCT))
                 return true;
             $grandParent = $this->grandParent;
-            if ($grandParent !== false) {
+            if (isset($grandParent)) {
                 if (!$grandParent->enable)
                     return false;
             }
@@ -1181,7 +1181,9 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function parents()
     {
         return $this->belongsToMany('App\Product', 'childproduct_parentproduct', 'child_id', 'parent_id')
-                    ->withPivot("isDefault", "control_id", "description");
+                    ->withPivot("isDefault", "control_id", "description")
+//                    ->with('parents')
+            ;
     }
 
     /**Determines whether this product has any complimentaries or not
@@ -1636,7 +1638,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return Cache::remember($key, Config::get("constants.CACHE_60"), function () {
             $link = "";
             $grandParent = $this->grandParent;
-            if ($grandParent !== false) {
+            if (isset($grandParent)) {
                 if ($grandParent->enable)
                     $link = action("ProductController@show", $this->grandParent);
             } else {
@@ -1754,7 +1756,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         $discount = 0;
         if ($this->hasParents()) {
-            $grandParent = $this->getGrandParent();
+            $grandParent = $this->grandParent;
             $grandParentProductType = $grandParent->producttype_id;
             if ($grandParentProductType == config("constants.PRODUCT_TYPE_CONFIGURABLE")) {
                 if ($this->discount > 0)
@@ -1877,13 +1879,6 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
             return $children;
         });
     }
-
-    public function photos()
-    {
-        $photos = $this->hasMany('\App\Productphoto');
-        return $photos;
-    }
-
 
     /**
      * Makes a collection of product phoots

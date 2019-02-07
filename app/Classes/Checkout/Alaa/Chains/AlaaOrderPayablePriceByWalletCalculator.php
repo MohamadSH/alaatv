@@ -26,7 +26,7 @@ class AlaaOrderPayablePriceByWalletCalculator extends OrderPayablePriceByWalletC
             $donateCost = $donateOrderProducts->sum("cost");
         }
 
-        $credit = $user->getTotalWalletBalance();
+        $credit = optional($user)->getTotalWalletBalance();
         $costWithWallet = $finalPrice - $donateCost;
         $payableByWallet = min($costWithWallet, $credit);
         $priceToPay = max($finalPrice - $payableByWallet, 0);

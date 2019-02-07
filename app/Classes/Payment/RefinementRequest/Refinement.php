@@ -152,9 +152,14 @@ abstract class Refinement
 
     protected function validateCoupon(): void
     {
-        $couponValidationStatus = optional($this->order->coupon)->validateCoupon();
+        $coupon = $this->order->coupon;
+        $couponValidationStatus = optional($coupon)->validateCoupon();
         if ($couponValidationStatus != Coupon::COUPON_VALIDATION_STATUS_OK && $couponValidationStatus != Coupon::COUPON_VALIDATION_STATUS_USAGE_LIMIT_FINISHED) {
             $this->order->detachCoupon();
+            if($this->order->updateWithoutTimestamp()) {
+                $coupon->decreaseUseNumber();
+                $coupon->update();
+            }
             $this->order->fresh();
         }
     }

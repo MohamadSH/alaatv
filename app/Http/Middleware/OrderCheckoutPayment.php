@@ -34,9 +34,9 @@ class OrderCheckoutPayment
                     return response([] , Response::HTTP_FORBIDDEN);
             }else
             {
+                //ToDo $openOrder = $user->getOpenOrder();
                 $openOrder = $user->openOrders->first();
-                if(isset($openOrder))
-                    $request->offsetSet("order_id" , $openOrder->id);
+                $request->offsetSet("order_id" , $openOrder->id);
             }
         } else {
             return redirect(action("OrderController@checkoutAuth"));
