@@ -471,8 +471,14 @@ class OrderproductController extends Controller
         if(isset($data['order'])) {
             $order = $data['order'];
         } else {
-            $order = Order::FindorFail($orderId)->first();
+            $order = Order::Find($orderId);
+            if (!isset($order)) {
+                return response()->json([
+                    'error' => 'Order not found. (OrderId: '.$orderId.')'
+                ], Response::HTTP_NOT_FOUND);
+            }
         }
+        $order->load('giftOrderproducts');
 
         $product = Product::FindorFail($productId);
 
@@ -493,9 +499,7 @@ class OrderproductController extends Controller
         }
 
         $storedOrderproducts = new OrderproductCollection();
-        /**
-         * save orderproduct and attach extraAttribute
-         */
+
         foreach ($notDuplicateProduct as $key => $productItem) {
             $orderProduct = new Orderproduct();
             $orderProduct->product_id = $productItem->id;

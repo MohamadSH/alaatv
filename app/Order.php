@@ -288,6 +288,11 @@ class Order extends Model
 
     }
 
+    public function giftOrderproducts()
+    {
+        return $this->orderproducts(config('constants.ORDER_PRODUCT_GIFT'));
+    }
+
     public function debt()
     {
         $cost = $this->obtainOrderCost()["totalCost"];

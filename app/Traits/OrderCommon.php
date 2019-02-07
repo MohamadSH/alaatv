@@ -41,10 +41,14 @@ trait OrderCommon
      * @param Orderproduct $orderProduct
      * @param Product $product
      */
-    private function applyOrderGifts(Order $order, Orderproduct $orderProduct, Product $product) {
+    private function applyOrderGifts(Order &$order, Orderproduct $orderProduct, Product $product) {
         $giftsOfProduct = $product->getGifts();
+        $orderGifts = $order->giftOrderproducts;
         foreach ($giftsOfProduct as $giftItem) {
-            $this->attachGift($order, $giftItem, $orderProduct);
+            if (!$orderGifts->contains($giftItem)) {
+                $this->attachGift($order, $giftItem, $orderProduct);
+                $order->giftOrderproducts->push($giftItem);
+            }
         }
     }
 
@@ -87,7 +91,6 @@ trait OrderCommon
             $openOrder->orderstatus_id = config('constants.ORDER_STATUS_OPEN');
             $openOrder->paymentstatus_id = config('constants.PAYMENT_STATUS_UNPAID');
             $openOrder->save();
-            $openOrder = $user->openOrders()->first();
         }
         return $openOrder;
     }
