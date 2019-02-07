@@ -39,7 +39,7 @@ class AlaaInvoiceGenerator extends OrderInvoiceGenerator
         $paidByWallet = $orderPriceArray["amountPaidByWallet"];
 
         return [
-          "purchasedOrderproducts"  => $orderproducts,
+          "orderItems"              => $orderproducts,
           "costCollection"          => $costCollection,
           "orderproductsRawCost"    => $orderproductsRawCost,
           "totalCost"               => $totalCost,

@@ -76,13 +76,12 @@ class SendEmployeeTimeSheetCommand extends Command
     {
         $employeeSchedule = Employeeschedule::where("user_id", $employee->id)
                                             ->where("day", $dayOfWeekJalali)
-                                            ->get()
                                             ->first();
         $employeeTimeSheet = Employeetimesheet::where("user_id", $employee->id)
                                               ->where("date", $toDayDate)
-                                              ->get();
+                                              ->first();
         $done = false;
-        if ($employeeTimeSheet->isEmpty()) {
+        if (isset($employeeTimeSheet)) {
             $newEmplployeeTimeSheet = new Employeetimesheet();
 
             $newEmplployeeTimeSheet->date = $toDayDate;
@@ -104,12 +103,15 @@ class SendEmployeeTimeSheetCommand extends Command
             $newEmplployeeTimeSheet->workdaytype_id = 1;
 
             if ($newEmplployeeTimeSheet->save())
+            {
+                $realWorkTime = $newEmplployeeTimeSheet->obtainRealWorkTime('IN_SECONDS');
                 $done = $newEmplployeeTimeSheet->id;
+            }
             else
+            {
                 $done = false;
-        } else if (!$employeeTimeSheet->first()
-                                      ->getOriginal("timeSheetLock")) {
-            $employeeTimeSheet = $employeeTimeSheet->first();
+            }
+        } else if (!$employeeTimeSheet->getOriginal("timeSheetLock")) {
             if (strcmp($employeeTimeSheet->clockIn, "00:00:00") == 0) {
                 if (strcmp($employeeTimeSheet->beginLunchBreak, "00:00:00") != 0)
                     $employeeTimeSheet->clockIn = $employeeTimeSheet->beginLunchBreak;
@@ -141,6 +143,11 @@ class SendEmployeeTimeSheetCommand extends Command
 
 //            $employeeTimeSheet->managerComment = $employeeTimeSheet->managerComment . " ثبت توسط سیستم : مرخصی یا تعطیلی غیر رسمی";
             $employeeTimeSheet->timeSheetLock = 1;
+
+            $realWorkTime = $employeeTimeSheet->obtainRealWorkTime('IN_SECONDS');
+            if($realWorkTime<=0) {
+                $employeeTimeSheet->overtime_confirmation = true;
+            }
 
             if ($employeeTimeSheet->update())
                 $done = $employeeTimeSheet->id;

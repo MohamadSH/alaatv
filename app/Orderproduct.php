@@ -95,6 +95,22 @@ class Orderproduct extends BaseModel
         'attributevalues',
     ];
 
+    protected $appends=[
+        'orderproducttypeInfo',
+    ];
+
+    protected $hidden=[
+        'product_id',
+        'orderproducttype_id',
+        'orderproducttype',
+        'checkoutstatus_id',
+        'includedInCoupon',
+        'created_at',
+        'updated_at',
+        'userbons',
+        'deleted_at',
+    ];
+
     public function order()
     {
         return $this->belongsTo('\App\Order');
@@ -102,7 +118,26 @@ class Orderproduct extends BaseModel
 
     public function product()
     {
-        return $this->belongsTo('\App\Product');
+        return $this->belongsTo('\App\Product')
+//                    ->with('parents')
+            ;
+    }
+
+    public function getOrderproducttypeInfoAttribute()
+    {
+        $orderproducttype = $this->orderproducttype;
+        return [
+            'name'          => $orderproducttype->name,
+            'hint'   => $orderproducttype->displayName
+        ];
+    }
+
+    public function getAttributeValuesInfo()
+    {
+        if($this->attributevalues->isNotEmpty())
+            return $this->attributevalues;
+        else
+            return null;
     }
 
     /**
