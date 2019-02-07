@@ -1,47 +1,46 @@
 @if(count($product->children)>0)
     <li class = "m-nav__item  m-nav__item--active">
-        <a class = "m-nav__link a--radius-2" role = "tab" id = "m_nav_link_{{ $product->id }}" aria-expanded = " false">
+        <a  class = "m-nav__link a--radius-2" role = "tab" id = "m_nav_link_{{ $product->id }}" data-toggle="collapse" href="#m_nav_sub_{{ $product->id }}" aria-expanded = " false">
 @else
     <li class = "m-nav__item">
         <a class = "m-nav__link ">
 @endif
-            <span class = "m-nav__link-title">
-            <span class = "m-nav__link-wrap">
-                <span class = "m-nav__link-text">
-                    <div class = "form-group m-form__group row">
-                        <div>
-
-                            @if(isset($product->pivot->control_id) && ( $product->pivot->control_id ==  Config::get("constants.CONTROL_SWITCH") || $product->pivot->control_id == Config::get("constants.CONTROL_GROUPED_CHECKBOX") ))
-                                <span class = "m-switch m-switch--icon {{ $color > 0 ? 'm-switch--primary' : 'm-switch--warning' }}">
-                                    <label>
-                                        <input name = "products[]" value = "{{ $product->id }}" type = "checkbox" class = "hasParent_{{ $product->pivot->parent_id }} {{ count($product->children)>0 ? "hasChildren" : "" }} product"
-                                                {{ isset($product->pivot->isDefault) && $product->pivot->isDefault ? 'checked="checked"':'' }}>
-                                        <span></span>
-                                    </label>
+            <span class = "m-nav__link-title a--full-width">
+                <span class = "m-nav__link-wrap">
+                    <span class = "m-nav__link-text">
+                        @if(isset($product->pivot->control_id) && ( $product->pivot->control_id ==  Config::get("constants.CONTROL_SWITCH") || $product->pivot->control_id == Config::get("constants.CONTROL_GROUPED_CHECKBOX") ))
+                            <span class = "m-switch m-switch--icon {{ $colors[$color] }} float-left a--font-line-height-10 m--padding-right-5">
+                                        <label class="m--marginless">
+                                            <input name = "products[]" value = "{{ $product->id }}" type = "checkbox" class = "hasParent_{{ $product->pivot->parent_id }} {{ count($product->children)>0 ? "hasChildren" : "" }} product"
+                                                    {{ isset($product->pivot->isDefault) && $product->pivot->isDefault ? 'checked="checked"':'' }}>
+                                            <span></span>
+                                        </label>
+                            </span>
+                        @else
+                        @endif
+                        <div class="m--padding-5">
+                            {{$product->name}}
+                            {{--@if((int)$product->cost > 0)--}}
+                            <span class = "m-nav__link-badge float-right">
+                                <span class = "m-badge m-badge--danger m-badge--wide m-badge--rounded">
+                                    {{ $product->priceText }}
                                 </span>
-                            @else
-                            @endif
+                            </span>
+                            {{--@endif--}}
                         </div>
-                        <label class = "col-form-label">{{$product->name}}</label>
-                    </div>
-                </span>
-                {{--@if((int)$product->cost > 0)--}}
-                <span class = "m-nav__link-badge">
-                        <span class = "m-badge m-badge--danger m-badge--wide m-badge--rounded">
-                            {{ $product->priceText }}
-                        </span>
+                        <div class="m--clearfix"></div>
                     </span>
-                {{--@endif--}}
+
+                </span>
             </span>
-        </span>
         @if(count($product->children)>0)
             <span class = "m-nav__link-arrow"></span>
         @endif
         </a>
         @if(count($product->children)>0)
-            <ul class = "m-nav__sub collapse show children_{{$product->id}}" id = "m_nav_sub_{{ $product->id }}" role = "tabpanel" aria-labelledby = "m_nav_link_{{ $product->id }}" data-parent = "#m_nav">
+            <ul class = "m-nav__sub collapse show children_{{$product->id}} m--padding-top-5" id = "m_nav_sub_{{ $product->id }}" role = "tabpanel" aria-labelledby = "m_nav_link_{{ $product->id }}" data-parent = "#m_nav_link_{{ $product->id }}">
                 @foreach($product->children as $p)
-                    @include('product.partials.showChildren',['product' => $p, 'color' => $color * -1])
+                    @include('product.partials.showChildren',['product' => $p, 'color' => $color + 1])
                 @endforeach
             </ul>
         @endif

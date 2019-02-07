@@ -13,7 +13,8 @@
 
 
 Route::get('embed/c/{content}', "ContentController@embed");
-Route::get('/', 'HomeController@index');
+Route::get('/', 'IndexPageController');
+Route::get('shop', 'ShopPageController');
 Route::get('home', 'HomeController@home');
 Route::get('404', 'HomeController@error404');
 Route::get('403', 'HomeController@error403');
@@ -21,8 +22,8 @@ Route::get('500', 'HomeController@error500');
 Route::get('error', 'HomeController@errorPage');
 Route::get('download', "HomeController@download");
 Route::get('d/{data}', "HomeController@newDownload");
-Route::get('contactUs', 'HomeController@contactUs');
-Route::get('rules', 'HomeController@rules');
+Route::get('contactUs', 'ContactUsController');
+Route::get('rules', 'RulesPageController');
 Route::get('articleList', 'ArticleController@showList');
 Route::get("debug", 'HomeController@debug');
 Route::get("telgramAgent2", "HomeController@telgramAgent");
@@ -229,11 +230,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get("copycontenttotakhtekhak", "SanatisharifmergeController@copyContent");
     Route::get("tagbot", "HomeController@tagbot");
 
-    Route::get("donate", "HomeController@donate");
+    Route::get("donate", "DonateController");
     Route::post("donateOrder", "OrderController@donateOrder");
-
-    Route::get('cTest/{set}', "HomeController@contentSetListTest");
-
     Route::get('adminGenerateRandomCoupon', "HomeController@adminGenerateRandomCoupon");
 });
 
@@ -242,6 +240,10 @@ Route::group(['prefix' => 'product'], function () {
 
 });
 */
+
+/*Route::group(['prefix' => 's'], function(){
+    Route::get('{set}', "SetController@show");
+});*/
 
 Route::group(['prefix' => 'c'], function () {
 
@@ -264,7 +266,7 @@ Route::group(['prefix' => 'product'], function () {
 });
 
 Route::get("ctag", "ContentController@retrieveTags");
-Route::resource('set', 'ContentsetController');
+Route::resource('set', 'SetController');
 Route::resource('product', 'ProductController');
 
 Route::resource('c', 'ContentController');

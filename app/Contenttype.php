@@ -2,8 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 
 /**
@@ -39,18 +37,11 @@ use Illuminate\Support\Facades\Cache;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contenttype newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contenttype newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contenttype query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
-class Contenttype extends Model
+class Contenttype extends BaseModel
 {
-    use SoftDeletes;
-
-    /**      * The attributes that should be mutated to dates.        */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
-
     protected $fillable = [
         'name',
         'displayName',
@@ -58,6 +49,16 @@ class Contenttype extends Model
         'order',
         'enable',
     ];
+
+    public static function List() :array
+    {
+        return [
+            "video",
+            "pamphlet",
+            "article",
+        ];
+    }
+
 
     public static function getRootContentType()
     {

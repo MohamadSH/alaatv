@@ -2,11 +2,6 @@
 
 namespace App;
 
-use App\Traits\DateTrait;
-use App\Traits\Helper;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 /**
  * App\Attribute
  *
@@ -40,25 +35,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|Attribute withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Attribute withoutTrashed()
  * @mixin \Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|Attribute newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Attribute newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Attribute query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Attribute newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Attribute newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Attribute query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
-class Attribute extends Model
+class Attribute extends BaseModel
 {
-    use SoftDeletes;
-    use Helper;
-    use DateTrait;
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
     /**
      * @var array
      */

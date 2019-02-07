@@ -71,7 +71,7 @@ class UserSearch extends SearchAbstract
         'hasSeenSitePages'
     ];
 
-    public function apply(array $filters): LengthAwarePaginator
+    protected function apply(array $filters): LengthAwarePaginator
     {
         $this->pageNum = $this->setPageNum($filters);
         $key = $this->makeCacheKey($filters);

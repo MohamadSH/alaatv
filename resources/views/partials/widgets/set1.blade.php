@@ -10,7 +10,7 @@
                 'widgetScroll' => 1
                 ])
                 --}}
-<div class = "@if($widgetScroll) item @else col-xl-3 col-md-3 col-xs-3 @endif">
+<div class = "@if($widgetScroll) item @else col-lg-3 col-xl-4 col-md-4 col-xs-4 @endif">
     <!--begin:: Widgets/Blog-->
     <div class = "m-portlet m-portlet--bordered-semi m-portlet--full-height  m-portlet--rounded-force" style="min-height-: 286px">
         <div class = "m-portlet__head m-portlet__head--fit">
@@ -34,7 +34,7 @@
                 <div class = "m-widget19__content">
                     <div class = "m-widget19__header">
                         <div class = "m-widget19__user-img">
-                            <img class = "m-widget19__img" src = "{{ $widgetAuthor->photo }}" alt = "{{ $widgetAuthor->name }}">
+                            <img class = "m-widget19__img" src = "{{ $widgetAuthor->photo }}" alt = "{{ $widgetAuthor->full_name }}">
                         </div>
                         <div class = "m-widget19__info">
                                             <span class = "m-widget19__username">

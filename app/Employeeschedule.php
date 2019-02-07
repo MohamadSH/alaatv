@@ -3,10 +3,7 @@
 namespace App;
 
 
-use App\Traits\DateTrait;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\Employeeschedule
@@ -48,18 +45,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeeschedule newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeeschedule query()
  * @method static where(string $string, int $userId)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
-class Employeeschedule extends Model
+class Employeeschedule extends BaseModel
 {
-    use SoftDeletes;
-    use DateTrait;
-    /**      * The attributes that should be mutated to dates.        */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
-
     protected $fillable = [
         'user_id',
         'day',

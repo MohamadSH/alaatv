@@ -6,8 +6,6 @@ namespace App;
 use App\Classes\Taggable;
 use App\Collection\SetCollection;
 use App\Traits\favorableTraits;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 
@@ -49,19 +47,14 @@ use Illuminate\Support\Facades\Config;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset query()
+ * @property-read mixed $author
+ * @property-read mixed $url
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
-class Contentset extends Model implements Taggable
+class Contentset extends BaseModel implements Taggable
 {
-    use SoftDeletes;
     use favorableTraits;
-
-    /**      * The attributes that should be mutated to dates.        */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
-
     /**
      * @var array
      */
@@ -76,6 +69,20 @@ class Contentset extends Model implements Taggable
         'contents',
     ];
 
+    protected $appends = [
+        'url',
+        'shortName',
+        'author'
+    ];
+
+    protected $hidden = [
+        'deleted_at',
+        'small_name',
+        'pivot',
+        'enable',
+        'display',
+
+    ];
     /**
      * Create a new Eloquent Collection instance.
      *
@@ -162,6 +169,30 @@ class Contentset extends Model implements Taggable
     {
         return json_decode($value);
     }
+
+    public function getUrlAttribute($value): string
+    {
+//        return action("ContentsetController@show",$this);
+        $contentId = optional($this->getLastContent())->id;
+        return isset($contentId) ? action("ContentController@show", $contentId) : "";
+    }
+
+    /**
+     * @param $value
+     * @return User|null
+     */
+    public function getAuthorAttribute($value): ?User
+    {
+//        return action("ContentsetController@show",$this);
+        return optional(optional($this->getLastContent())->author)
+            ->setVisible([
+                'id',
+                'firstName',
+                'lastName',
+                'photo'
+            ]);
+    }
+
 
     public function retrievingTags()
     {

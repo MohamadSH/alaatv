@@ -8,7 +8,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <i class="flaticon-home-2"></i>
-                <a href="{{action("HomeController@index")}}">@lang('page.Home')</a>
+                <a href="{{action("IndexPageController")}}">@lang('page.Home')</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">
                 محصولات
@@ -33,7 +33,6 @@
                 'widgetPrice'      => $product->priceText,
                 'widgetPriceLabel' => ($product->isFree || $product->basePrice == 0 ? 0 : 1)
                 ])
-
             @endforeach
         @endif
     </div>

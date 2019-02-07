@@ -2,9 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 /**
  * App\Orderstatus
  *
@@ -17,32 +14,26 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Carbon\Carbon|null                                        $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Order[] $orders
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|Orderstatus onlyTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Orderstatus onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|Orderstatus whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Orderstatus whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Orderstatus whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Orderstatus whereDisplayName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Orderstatus whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Orderstatus whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Orderstatus whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|Orderstatus withTrashed()
- * @method static \Illuminate\Database\Query\Builder|Orderstatus withoutTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderstatus whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderstatus whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderstatus whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderstatus whereDisplayName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderstatus whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderstatus whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderstatus whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Orderstatus withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Orderstatus withoutTrashed()
  * @mixin \Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|Orderstatus newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Orderstatus newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Orderstatus query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderstatus newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderstatus newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderstatus query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
-class Orderstatus extends Model
+class Orderstatus extends BaseModel
 {
-    use SoftDeletes;
-    /**      * The attributes that should be mutated to dates.        */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
-
     /**
      * @var array
      */

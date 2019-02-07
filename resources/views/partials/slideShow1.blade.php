@@ -19,7 +19,7 @@
                                 <a href="{{$slide->link}}">
                                     @endif
                                     <img class="d-block w-100"
-                                         src="{{ route('image', ['category'=>$slideDisk,'w'=>'1280' , 'h'=>'500' ,  'filename' =>  $slide->photo ]) }}"
+                                         src="{{ $slide->url }}"
                                          alt="عکس اسلاید @if(isset($slide->title[0])) {{$slide->title}} @endif">
                                     <div class="carousel-caption d-none d-md-block">
                                         @if(isset($slide->title[0]))<h4 class="bold">{{$slide->title}}</h4>@endif

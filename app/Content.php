@@ -11,14 +11,10 @@ use App\Classes\SEO\SeoMetaTagsGenerator;
 use App\Classes\Taggable;
 use App\Collection\ContentCollection;
 use App\Traits\APIRequestCommon;
-use App\Traits\DateTrait;
 use App\Traits\favorableTraits;
-use App\Traits\Helper;
 use App\Traits\ModelTrackerTrait;
 use Carbon\Carbon;
 use Exception;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\{Artisan, Cache, Config};
 use Stevebauman\Purify\Facades\Purify;
@@ -110,8 +106,11 @@ use Stevebauman\Purify\Facades\Purify;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Content newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Content query()
  * @property-read mixed $author_name
+ * @property-read mixed $url
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
-class Content extends Model implements Advertisable, Taggable, SeoInterface, FavorableInterface
+class Content extends BaseModel implements Advertisable, Taggable, SeoInterface, FavorableInterface
 {
     /*
     |--------------------------------------------------------------------------
@@ -120,11 +119,9 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
     */
 
     use APIRequestCommon;
-    use SoftDeletes;
-    use Helper;
-    use DateTrait;
     use favorableTraits;
     use ModelTrackerTrait;
+
 
     /*
     |--------------------------------------------------------------------------
@@ -169,6 +166,34 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
         'isFree',
         'enable',
     ];
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'url',
+        'author'
+    ];
+
+    protected $hidden = [
+      'user',
+      'deleted_at',
+      'validSince',
+      'enable',
+      'metaKeywords',
+      'metaDescription',
+      'metaTitle',
+      'author_id',
+      'template_id',
+      'slug',
+      'contentsets',
+      'contentset_id',
+      'template',
+      'contenttype'
+    ];
+
 
     /**
      * @return array
@@ -273,6 +298,11 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
     |--------------------------------------------------------------------------
     */
 
+    public function getUrlAttribute($value): string
+    {
+        return action("ContentController@show",$this);
+    }
+
     /**
      * Get the content's title .
      *
@@ -366,17 +396,7 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
                     });
     }
 
-    public function cacheKey()
-    {
-        $key = $this->getKey();
-        $time = isset($this->update) ? $this->updated_at->timestamp : $this->created_at->timestamp;
-        return sprintf(
-            "%s-%s",
-            //$this->getTable(),
-            $key,
-            $time
-        );
-    }
+
 
     /**
      * Get the content's thumbnail .
@@ -407,7 +427,12 @@ class Content extends Model implements Advertisable, Taggable, SeoInterface, Fav
         $key = "content:author" . $content->cacheKey();
         return Cache::tags(["user"])
                        ->remember($key, Config::get("constants.CACHE_60"), function () use ($content) {
-                           return $this->user;
+                           return $this->user->setVisible([
+                               'id',
+                               'firstName',
+                               'lastName',
+                               'photo'
+                           ]);
                        });
     }
 

@@ -2,9 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 /**
  * App\Attributevalue
  *
@@ -38,20 +35,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributevalue newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributevalue newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributevalue query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
-class Attributevalue extends Model
+class Attributevalue extends BaseModel
 {
-    use SoftDeletes;
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
     /**
      * @var array
      */

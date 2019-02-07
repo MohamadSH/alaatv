@@ -23,9 +23,14 @@ class ComposerServiceProvider extends ServiceProvider
         // Using class based composers...
         View::composer('pages.search', 'App\Http\ViewComposers\ContentSearchComposer');
 
-        View::composer('content.show', function ($view) {
-            $sideBarMode = "closed";
-            $view->with(compact('sideBarMode'));
+        View::composer([
+            'content.show',
+            'pages.product-search',
+            'product.show',
+            'pages.content-search'
+        ], function ($view) {
+            $closedSideBar = true;
+            $view->with(compact('closedSideBar'));
         });
 
 
@@ -36,10 +41,11 @@ class ComposerServiceProvider extends ServiceProvider
          *  lessons
          */
         View::composer([
-            'pages.dashboard1',
+//            'pages.dashboard1',
             'partials.sidebar',
         ], function ($view) {
-            $sections = (new webBlockCollectionFormatter(new webSetCollectionFormatter()))->format(Block::getBlocks());
+//            $sections = (new webBlockCollectionFormatter(new webSetCollectionFormatter()))->format(Block::getMainBlocks());
+            $sections = collect();
 //            dd($sections);
             $view->with(compact('sections'));
         });

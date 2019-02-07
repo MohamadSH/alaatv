@@ -10,6 +10,7 @@ namespace App\Classes\Search;
 
 
 use App\Classes\Search\{Filters\Tags, Tag\ProductTagManagerViaApi};
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\{Builder};
 use Illuminate\Support\Facades\{Cache};
 
@@ -28,9 +29,10 @@ class ProductSearch extends SearchAbstract
      *
      * @return mixed
      */
-    public function apply(array $filters)
+    protected function apply(array $filters) : LengthAwarePaginator
     {
         $this->pageNum = $this->setPageNum($filters);
+//        dd($this->pageNum);
         $key = $this->makeCacheKey($filters);
         return Cache::tags([
                                'product',
@@ -38,6 +40,7 @@ class ProductSearch extends SearchAbstract
                            ])
                     ->remember($key, $this->cacheTime, function () use ($filters) {
                         $query = $this->applyDecoratorsFromFiltersArray($filters, $this->model->newQuery());
+//                        dd($this->getResults($query));
                         return $this->getResults($query);
                     });
     }
