@@ -2,9 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 /**
  * App\Bontype
  *
@@ -32,18 +29,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Bontype newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Bontype newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Bontype query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
-class Bontype extends Model
+class Bontype extends BaseModel
 {
-    use SoftDeletes;
-
-    /**      * The attributes that should be mutated to dates.        */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
-
     protected $fillable = [
         'name',
         'displayName',

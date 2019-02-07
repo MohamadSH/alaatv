@@ -2,9 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 /**
  * App\Gender
  *
@@ -32,17 +29,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Gender newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Gender newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Gender query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
-class Gender extends Model
+class Gender extends BaseModel
 {
-    use SoftDeletes;
-    /**      * The attributes that should be mutated to dates.        */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
-
     /**
      * @var array
      */

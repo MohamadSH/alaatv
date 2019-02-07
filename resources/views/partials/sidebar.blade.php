@@ -11,14 +11,14 @@
                 <i class = "m-menu__section-icon flaticon-more-v2"></i>
             </li>
             <li class = "m-menu__item  @if(isset($pageName) && strcmp($pageName , "dashboard")==0) m-menu__item--active @endif" aria-haspopup = "true">
-                <a href = "{{ action("HomeController@index") }}" class = "m-menu__link ">
+                <a href = "{{ action("IndexPageController") }}" class = "m-menu__link ">
                     <span class = "m-menu__item-here"></span>
                     <i class = "m-menu__link-icon flaticon-line-graph"></i>
                     <span class = "m-menu__link-text">صفحه اصلی</span>
                 </a>
             </li>
             <li class = "m-menu__item  @if(isset($pageName) && strcmp($pageName , "productsPortfolio")==0) m-menu__item--active @endif" aria-haspopup = "true">
-                <a href = "{{ action("ProductController@search") }}" class = "m-menu__link ">
+                <a href = "{{ action("ShopPageController") }}" class = "m-menu__link ">
                     <span class = "m-menu__item-here"></span>
                     <i class = "m-menu__link-icon flaticon-shopping-basket"></i>
                     <span class = "m-menu__link-text">محصولات آموزشی</span>
@@ -57,7 +57,7 @@
             </li>
 
             <li class = "m-menu__item @if(isset($pageName) && strcmp($pageName , "donate")==0) m-menu__item--active @endif" aria-haspopup = "true" m-menu-link-redirect = "1">
-                <a href = "{{ action("HomeController@donate") }}" class = "m-menu__link ">
+                <a href = "{{ action("DonateController") }}" class = "m-menu__link ">
                     <span class = "m-menu__item-here"></span>
                     <i class = "m-menu__link-icon flaticon-suitcase"></i>
                     <span class = "m-menu__link-text">کمک مالی به آلاء</span>
@@ -73,14 +73,14 @@
             </li>
             @endif
             <li class = "m-menu__item @if(isset($pageName) && strcmp($pageName , "rules")==0) m-menu__item--active @endif" aria-haspopup = "true" m-menu-link-redirect = "1">
-                <a href = "{{ action("HomeController@rules") }}" class = "m-menu__link ">
+                <a href = "{{ action("RulesPageController") }}" class = "m-menu__link ">
                     <span class = "m-menu__item-here"></span>
                     <i class = "m-menu__link-icon flaticon-warning-sign"></i>
                     <span class = "m-menu__link-text">قوانین</span>
                 </a>
             </li>
             <li class = "m-menu__item @if(isset($pageName) && strcmp($pageName , "contactUs")==0) m-menu__item--active @endif" aria-haspopup = "true" m-menu-link-redirect = "1">
-                <a href = "{{ action("HomeController@contactUs") }}" class = "m-menu__link ">
+                <a href = "{{ action("ContactUsController") }}" class = "m-menu__link ">
                     <span class = "m-menu__item-here"></span>
                     <i class = "m-menu__link-icon flaticon-support"></i>
                     <span class = "m-menu__link-text">@lang('page.contact us')</span>

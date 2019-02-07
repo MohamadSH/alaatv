@@ -2,11 +2,6 @@
 
 namespace App;
 
-use App\Traits\DateTrait;
-use App\Traits\Helper;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 /**
  * App\Contact
  *
@@ -39,22 +34,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|Contact withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Contact withoutTrashed()
  * @mixin \Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|Contact newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Contact newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Contact query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Contact newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Contact newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Contact query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
-class Contact extends Model
+class Contact extends BaseModel
 {
-    use SoftDeletes;
-    use Helper;
-    use DateTrait;
-    /**      * The attributes that should be mutated to dates.        */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
-
     /**
      * @var array
      */

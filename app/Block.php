@@ -4,7 +4,6 @@ namespace App;
 
 
 use App\Collection\BlockCollection;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 
 /**
@@ -30,40 +29,113 @@ use Illuminate\Support\Facades\Cache;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Block whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Block whereUpdatedAt($value)
  * @mixin \Eloquent
- * @property string|null                                           $class
+ * @property string|null                                                    $class
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Block whereClass($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Block newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Block newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Block query()
+ * @property int                                                            $type
+ * @property \Illuminate\Support\Carbon|null                                $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Slideshow[] $banners
+ * @property-read string                                                    $url
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Block main()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Block shop()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Block whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Block whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
-class Block extends Model
+class Block extends BaseModel
 {
+    public static $BLOCK_TYPE_MAIN = 1;
+    public static $BLOCK_TYPE_SHOP = 2;
     protected $cascadeDeletes = [
         'blockables',
     ];
-    protected $dates          = [
-        'created_at',
-        'updated_at',
-    ];
-    protected $fillable       = [
+
+    protected $fillable = [
         'title',
         'tags',
         'class',
         'order',
         'enable',
+        'type',
     ];
 
-    public static function getBlocks()
+    protected $appends = [
+        'url',
+    ];
+    protected $hidden = [
+        'enable',
+        'tags',
+        'created_at',
+        'class',
+    ];
+
+
+    /**
+     * Scope a query to only blocks for shop.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeShop($query)
+    {
+        return $query->where('type', '=', 2);
+    }
+
+    /**
+     * Scope a query to only blocks for HomePage.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeMain($query)
+    {
+        return $query->where('type', '=', 1);
+    }
+
+    /**
+     * @param $value
+     *
+     * @return string
+     */
+    public function getUrlAttribute($value): ?string
+    {
+        return $this->type == self::$BLOCK_TYPE_MAIN ? urldecode(action("ContentController@index", ["tags" => $this->tags])) : urldecode(action("ProductController@index", ["tags" => $this->tags]));
+    }
+
+    public static function getShopBlocks()
     {
         $blocks = Cache::tags('block')
-                       ->remember('getBlocks', config('constants.CACHE_600'), function () {
-                           $blocks = Block::all()
+                       ->remember('getShopBlocks', config('constants.CACHE_600'), function () {
+                           $blocks = Block::shop()->get()
                                           ->sortBy('order')
                                           ->loadMissing([
-                                                            'contents',
-                                                            'sets',
-                                                            'products',
-                                                        ]);
+                                              'contents',
+                                              'sets',
+                                              'products',
+                                              'banners',
+                                          ]);
+                           return $blocks;
+                       });
+        return $blocks;
+    }
+
+    public static function getMainBlocks()
+    {
+        $blocks = Cache::tags('block')
+                       ->remember('getMainBlocks', config('constants.CACHE_600'), function () {
+                           $blocks = Block::main()->get()
+                                          ->sortBy('order')
+                                          ->loadMissing([
+                                              'contents',
+                                              'sets',
+                                              'products',
+                                              'banners',
+                                          ]);
                            return $blocks;
                        });
         return $blocks;
@@ -90,7 +162,6 @@ class Block extends Model
      * Scope a query to only include enable Blocks.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param int                                   $enable
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
@@ -126,6 +197,12 @@ class Block extends Model
     public function products()
     {
         return $this->morphedByMany('App\Product', 'blockable')
+                    ->withTimestamps();
+    }
+
+    public function banners()
+    {
+        return $this->morphedByMany('App\Slideshow', 'blockable')
                     ->withTimestamps();
     }
 }

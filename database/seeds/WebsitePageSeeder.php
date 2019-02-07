@@ -12,7 +12,7 @@ class WebsitePageSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('websitepages')
+        /*DB::table('websitepages')
           ->delete();
         $data = [
             [
@@ -22,6 +22,15 @@ class WebsitePageSeeder extends Seeder
             [
                 'url'         => '/لیست-مقالات',
                 'displayName' => 'مقالات',
+            ],
+        ];
+        DB::table('websitepages')
+          ->insert($data); // Query Builder*/
+
+        $data = [
+            [
+                'url'         => '/shop',
+                'displayName' => 'صفحه اصلی فروشگاه',
             ],
         ];
         DB::table('websitepages')

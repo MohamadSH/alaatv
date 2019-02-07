@@ -27,7 +27,7 @@ class FreeInternetAccept extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        $this->user = $notifiable;
+        //$this->user = $notifiable;
         return [
             MedianaPatternChannel::class,
             'mail',

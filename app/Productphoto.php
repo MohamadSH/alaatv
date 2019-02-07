@@ -2,23 +2,20 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 /**
  * App\Productphoto
  *
- * @property int                 $id
- * @property int                 $product_id  آیدی مشخص کننده محصول عکس
- * @property string|null         $file        فایل عکس
- * @property string|null         $title       تایتل عکس
- * @property string              $description توضیح کوتاه یا تیتر دوم عکس
- * @property int                 $order       ترتیب عکس
- * @property int                 $enable      فعال/غیر فعال بودن عکس
+ * @property int $id
+ * @property int $product_id  آیدی مشخص کننده محصول عکس
+ * @property string|null $file        فایل عکس
+ * @property string|null $title       تایتل عکس
+ * @property string $description توضیح کوتاه یا تیتر دوم عکس
+ * @property int $order       ترتیب عکس
+ * @property int $enable      فعال/غیر فعال بودن عکس
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property \Carbon\Carbon|null $deleted_at
- * @property-read \App\Product   $product
+ * @property-read \App\Product $product
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|Productphoto onlyTrashed()
  * @method static bool|null restore()
@@ -39,16 +36,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Productphoto newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Productphoto newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Productphoto query()
+ * @property-read mixed $url
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
-class Productphoto extends Model
+class Productphoto extends BaseModel
 {
-    use SoftDeletes;
-    /**      * The attributes that should be mutated to dates.        */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
 
     /**
      * @var array
@@ -58,6 +51,21 @@ class Productphoto extends Model
         'description',
         'file',
         'product_id',
+    ];
+
+    protected $hidden = [
+        'id',
+        'file',
+        'order',
+        'deleted_at',
+        'created_at',
+        'enable',
+        'updated_at',
+        'product_id'
+    ];
+
+    protected $appends = [
+        'url'
     ];
 
     public function product()
@@ -75,5 +83,19 @@ class Productphoto extends Model
     public function scopeEnable($query)
     {
         return $query->where('enable', '=', 1);
+    }
+
+    public function url($w, $h){
+        return route('image', [
+            'category' => '4',
+            'w'        => $w,
+            'h'        => $h,
+            'filename' => $this->file
+        ]);
+    }
+
+    public function getUrlAttribute($value): string
+    {
+        return $this->url('1400','2000');
     }
 }

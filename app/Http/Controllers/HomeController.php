@@ -80,7 +80,6 @@ class HomeController extends Controller
     use Helper;
     use APIRequestCommon;
     use ProductCommon;
-    use DateTrait;
     use CharacterCommon;
     use UserCommon;
     use RequestCommon;
@@ -150,57 +149,2733 @@ class HomeController extends Controller
 
     }
 
-    public function contentSetListTest(Request $request, Contentset $set)
+    public function test(Product $product)
     {
-        $contents = $set->contents()
-                        ->get();
-        return view('listTest', compact('set', 'contents'));
+        return $product;
     }
-
-    /*private function slug($title, $separator = '-')
-    {
-        $title = str_replace("‌",' ',$title);
-        $title = mb_strtolower($title, "utf-8");
-        // Convert all dashes/underscores into separator
-        $flip = $separator == '-' ? '_' : '-';
-
-        $title = preg_replace('!['.preg_quote($flip).']+!u', $separator, $title);
-
-        // Replace @ with the word 'at'
-        $title = str_replace('@', $separator.'at'.$separator, $title);
-
-        // Remove all characters that are not the separator, letters, numbers, or whitespace.
-        $title = preg_replace('![^'.preg_quote($separator).'\pL\pN\s]+!u', '', mb_strtolower($title));
-
-        // Replace all separator characters and whitespace by a single separator
-        $title = preg_replace('!['.preg_quote($separator).'\s]+!u', $separator, $title);
-
-        $title = trim($title, $separator);
-        $title = preg_replace("/[^a-z0-9_\s-ء-يپچژکگیۃۂۀہ]/u", '', $title);
-        $title = preg_replace("/[^a-z0-9_\s-ءاآؤئبپتثجچحخدذرزژسشصضطظعغفقكکگلمنوهی]/u", '', $title);
-
-        $title = preg_replace("/[\s-_]+/", ' ', $title);
-        $title = preg_replace("/[\s_]/", $separator, $title);
-        return $title;
-    }*/
-
-    public function telgramAgent(Request $request)
-    {
-        //        Log::debug($request->headers->all());
-
-    }
-
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
         try{
 
-            $order = \App\Order::find(245778);
-            return $order->obtainOrderCost(true);
-//            $set = Contentset::findOrFail(1);
-//            dd($set->contents_count);
-            //
-            $sections = (new webBlockCollectionFormatter(new webSetCollectionFormatter()))->format(Block::getBlocks());
-            dd($sections);
+
+//            return $this->test(226);
+            $product = Product::find(226);
+            return  $product;
+            dump("product:".$product->id);
+            return $product->sample_photos;
+//            return $product->attributes;
+
+            $contentsets = [
+                [
+                    'id'          => '224',
+                    'name'        => 'صفر تا صد شیمی دوازدهم(نظام آموزشی جدید) (1397-1398) گودرزی',
+                    'small_name'  => '0 تا 100 شیمی دوازدهم',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/shimi_1810151046.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["شیمی","کنکور","رشته_تجربی","رشته_ریاضی","احسان_گودرزی" , "نظام_آموزشی_جدید" , "متوسطه2" , "دوره_آموزشی","ضبط_استودیو" , "صفر_تا_صد" , "دوازدهم"]}',
+                    'enable'      => false,
+                    'display'     => false,
+                    'created_at'  => '2018-10-15 10:45:42',
+                    'updated_at'  => '2018-10-15 10:45:42',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '223',
+                    'name'        => 'صفر تا صد شیمی یازدهم(نظام آموزشی جدید) (1397-1398) گودرزی',
+                    'small_name'  => '0 تا 100 شیمی یازدهم',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/shimi_1810151045.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["شیمی","کنکور","رشته_تجربی","رشته_ریاضی","احسان_گودرزی" , "نظام_آموزشی_جدید" , "متوسطه2" , "دوره_آموزشی","ضبط_استودیو" , "صفر_تا_صد" , "یازدهم"]}',
+                    'enable'      => false,
+                    'display'     => false,
+                    'created_at'  => '2018-10-15 10:45:08',
+                    'updated_at'  => '2018-10-15 10:45:08',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '222',
+                    'name'        => 'صفر تا صد شیمی دهم(نظام آموزشی جدید) (1397-1398) گودرزی',
+                    'small_name'  => '0 تا 100 شیمی دهم',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/shimi_1810151044.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["شیمی","کنکور","رشته_تجربی","رشته_ریاضی","احسان_گودرزی" , "نظام_آموزشی_جدید" , "متوسطه2" , "دوره_آموزشی","ضبط_استودیو" , "صفر_تا_صد" , "دهم"]}',
+                    'enable'      => false,
+                    'display'     => false,
+                    'created_at'  => '2018-10-15 10:44:36',
+                    'updated_at'  => '2018-10-15 10:44:36',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '221',
+                    'name'        => 'صفر تا صد ریاضی تجربی کنکور(نظام آموزشی جدید) (1397-1398)امینی راد',
+                    'small_name'  => '0 تا 100 ریاضی تجربی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/riyazi_tajrobi_1810081340.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["ریاضی_تجربی","کنکور","رشته_تجربی","مهدی_امینی_راد" , "نظام_آموزشی_جدید" , "متوسطه2" , "دوره_آموزشی","ضبط_استودیو" , "صفر_تا_صد"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2018-10-08 13:39:07',
+                    'updated_at'  => '2018-10-08 13:39:07',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '220',
+                    'name'        => 'صفر تا صد زیست شناسی دوازدهم(نظام آموزشی جدید) (1397-1398) امینی راد',
+                    'small_name'  => '0 تا 100 زیست دوازدهم',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/zist_1810061800.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["زیست_شناسی","کنکور","دوازدهم","رشته_تجربی","محمد_علی_امینی_راد" , "نظام_آموزشی_جدید" , "متوسطه2" , "دوره_آموزشی","ضبط_استودیو" , "صفر_تا_صد"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2018-10-06 18:01:12',
+                    'updated_at'  => '2018-10-06 18:01:12',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '219',
+                    'name'        => 'صفر تا صد زبان دوازدهم(نظام آموزشی جدید) (1397-1398) عزتی',
+                    'small_name'  => '0 تا 100 زبان دوازدهم',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/zaban12_1810071005.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["زبان_انگلیسی","کنکور","دوازدهم","رشته_تجربی","رشته_ریاضی","رشته_انسانی","علی_اکبر_عزتی" , "نظام_آموزشی_جدید" , "متوسطه2" , "دوره_آموزشی","ضبط_استودیو" , "صفر_تا_صد"]}',
+                    'enable'      => false,
+                    'display'     => false,
+                    'created_at'  => '2018-10-07 10:07:02',
+                    'updated_at'  => '2018-10-07 10:07:02',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '218',
+                    'name'        => 'صفر تا صد زبان یازدهم(نظام آموزشی جدید) (1397-1398) عزتی',
+                    'small_name'  => '0 تا 100 زبان یازدهم',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/zaban11_1810070959.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u0632\\u0628\\u0627\\u0646_\\u0627\\u0646\\u06af\\u0644\\u06cc\\u0633\\u06cc","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u06cc\\u0627\\u0632\\u062f\\u0647\\u0645","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0639\\u0644\\u06cc_\\u0627\\u06a9\\u0628\\u0631_\\u0639\\u0632\\u062a\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u062c\\u062f\\u06cc\\u062f","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648","\\u0635\\u0641\\u0631_\\u062a\\u0627_\\u0635\\u062f","\\u067e\\u0627\\u06cc\\u0647"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2018-10-07 10:04:29',
+                    'updated_at'  => '2018-10-09 10:52:32',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '217',
+                    'name'        => 'صفر تا صد ریاضی تجربی کنکور(نظام آموزشی جدید) (1397-1398) ثابتی',
+                    'small_name'  => '0 تا 100 ریاضی تجربی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/riyazi_tajrobi_1809261626.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["ریاضی_تجربی","کنکور","رشته_تجربی","محمد_صادق_ثابتی" , "نظام_آموزشی_جدید" , "متوسطه2" , "دوره_آموزشی","ضبط_استودیو" , "صفر_تا_صد"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2018-09-26 16:36:59',
+                    'updated_at'  => '2018-09-26 16:36:59',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '216',
+                    'name'        => 'صفر تا صد عربی کنکور(نظام آموزشی جدید) (1397-1398) پدرام علیمرادی',
+                    'small_name'  => '0 تا 100 عربی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/arabi_1806091641.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["عربی","کنکور","رشته_تجربی","رشته_ریاضی", "رشته_انسانی","پدرام_علیمرادی" , "نظام_آموزشی_جدید" , "متوسطه2" , "دوره_آموزشی","ضبط_استودیو" , "صفر_تا_صد"]}',
+                    'enable'      => false,
+                    'display'     => false,
+                    'created_at'  => '2018-09-06 15:45:43',
+                    'updated_at'  => '2018-09-06 15:45:43',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '215',
+                    'name'        => 'تخته نگار زیست دهم(نظام آموزشی جدید) (1397-1398)',
+                    'small_name'  => 'تخته نگاز زیست',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/takhtenegar_zist.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u0632\\u06cc\\u0633\\u062a_\\u0634\\u0646\\u0627\\u0633\\u06cc","\\u062a\\u062e\\u062a\\u0647_\\u0646\\u06af\\u0627\\u0631","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u062f\\u0647\\u0645","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u0647\\u062f\\u06cc_\\u0646\\u0627\\u0635\\u0631_\\u0634\\u0631\\u06cc\\u0639\\u062a","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u062c\\u062f\\u06cc\\u062f","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648","\\u067e\\u0627\\u06cc\\u0647"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2018-08-16 13:22:52',
+                    'updated_at'  => '2018-10-09 10:49:24',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '214',
+                    'name'        => 'صفر تا صد حسابان کنکور(نظام آموزشی جدید) (1397-1398) ثابتی',
+                    'small_name'  => '0 تا 100 حسابان کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/hesaban_1806091555.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["حسابان","کنکور","رشته_ریاضی","محمد_صادق_ثابتی" , "نظام_آموزشی_جدید" , "متوسطه2" , "دوره_آموزشی","ضبط_استودیو" , "صفر_تا_صد"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2018-09-26 17:30:00',
+                    'updated_at'  => '2018-09-26 17:30:00',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '208',
+                    'name'        => 'صفر تا صد شیمی کنکور(نظام آموزشی جدید) (1397-1398) صنیعی',
+                    'small_name'  => '0 تا 100 شیمی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/shimi_1809301705.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["شیمی","کنکور","رشته_تجربی","رشته_ریاضی","مهدی_صنیعی_طهرانی" , "نظام_آموزشی_جدید" , "متوسطه2" , "دوره_آموزشی","ضبط_استودیو" , "صفر_تا_صد"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2018-09-30 17:06:27',
+                    'updated_at'  => '2018-09-30 17:06:27',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '207',
+                    'name'        => 'صفر تا صد شیمی دوازدهم(نظام آموزشی جدید) (1397-1398) معینی',
+                    'small_name'  => '0 تا 100 شیمی دوازدهم',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/shimi_davazdahom_1827101353.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["شیمی","کنکور","دوازدهم","رشته_تجربی","رشته_ریاضی","محسن_معینی" , "نظام_آموزشی_جدید" , "متوسطه2" , "دوره_آموزشی","ضبط_استودیو" , "صفر_تا_صد"]}',
+                    'enable'      => false,
+                    'display'     => false,
+                    'created_at'  => '2018-10-27 13:56:16',
+                    'updated_at'  => '2018-10-27 13:56:16',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '205',
+                    'name'        => 'صفر تا صد زیست شناسی کنکور(نظام آموزشی جدید) (1397-1398) امینی راد',
+                    'small_name'  => '0 تا 100 زیست کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/zist_konkor_1810271208.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["زیست_شناسی","کنکور","کنکور","رشته_تجربی","محمد_علی_امینی_راد" , "نظام_آموزشی_جدید" , "متوسطه2" , "دوره_آموزشی","ضبط_استودیو" , "صفر_تا_صد"]}',
+                    'enable'      => false,
+                    'display'     => false,
+                    'created_at'  => '2018-10-27 12:09:03',
+                    'updated_at'  => '2018-10-27 12:09:03',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '204',
+                    'name'        => 'صفر تا صد زیست یازدهم(نظام آموزشی جدید) (1397-1398) موقاری',
+                    'small_name'  => '0 تا 100 زیست یازدهم',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/zist_yazdahom_1810011438.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u0632\\u06cc\\u0633\\u062a_\\u0634\\u0646\\u0627\\u0633\\u06cc","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u06cc\\u0627\\u0632\\u062f\\u0647\\u0645","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u062c\\u0644\\u0627\\u0644_\\u0645\\u0648\\u0642\\u0627\\u0631\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u062c\\u062f\\u06cc\\u062f","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648","\\u067e\\u0627\\u06cc\\u0647"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2018-10-01 14:38:52',
+                    'updated_at'  => '2018-10-09 10:46:44',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '203',
+                    'name'        => 'کارگاه تست زیست دهم(نظام آموزشی جدید) (1397-1398) موقاری',
+                    'small_name'  => 'کارگاه تست زیست دهم',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/kargahe_zist_rsz.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u0632\\u06cc\\u0633\\u062a_\\u0634\\u0646\\u0627\\u0633\\u06cc","\\u06a9\\u0627\\u0631\\u06af\\u0627\\u0647_\\u062a\\u0633\\u062a","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u062f\\u0647\\u0645","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u062c\\u0644\\u0627\\u0644_\\u0645\\u0648\\u0642\\u0627\\u0631\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u062c\\u062f\\u06cc\\u062f","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648","\\u067e\\u0627\\u06cc\\u0647"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2018-08-05 17:27:36',
+                    'updated_at'  => '2018-10-09 10:43:50',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '202',
+                    'name'        => 'صفر تا صد فیزیک کنکور(نظام آموزشی جدید) (1397-1398) کازرانیان',
+                    'small_name'  => '0 تا 100 فیزیک کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/physics1809261648.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["فیزیک","کنکور", "رشته_تجربی" ,"رشته_ریاضی" ,"کازرانیان" , "نظام_آموزشی_جدید" , "متوسطه2" , "دوره_آموزشی" , "دهم" , "صفر_تا_صد" , "یازدهم" , "دوازدهم"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2018-09-26 16:00:00',
+                    'updated_at'  => '2018-09-26 16:00:00',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '201',
+                    'name'        => 'اگر آلاء طراح کنکور بود',
+                    'small_name'  => 'اگر آلاء طراح کنکور بود',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/alaakonkor_1806261436.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["فیزیک","ریاضی_تجربی","کنکور","پیش" , "رشته_تجربی" ,"رشته_ریاضی" ,"پیمان_طلوعی" ,"محمدامین_نباخته", "نظام_آموزشی_قدیم" , "متوسطه2" , "دوره_آموزشی"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2018-06-26 14:49:08',
+                    'updated_at'  => '2018-06-26 14:49:08',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '200',
+                    'name'        => 'جمع بندی تصاویر زیست دوم دبیرستان محمد علی امینی راد',
+                    'small_name'  => 'تصاویر زیست دوم',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/180529175930.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["زیست_شناسی","کنکور","پیش" ,"دوم_دبیرستان", "همایش" ,"جمع_بندی", "رشته_تجربی" ,"محمد_علی_امینی_راد" , "نظام_آموزشی_قدیم" , "متوسطه2" , "دوره_آموزشی"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2018-05-29 18:12:07',
+                    'updated_at'  => '2018-05-29 18:12:07',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '199',
+                    'name'        => 'نمونه تدریس های همایش های طلایی 97',
+                    'small_name'  => 'نمونه همایش طلایی',
+                    'description' => null,
+                    'photo'       => null,
+                    'tags'        => '{"bucket":"contentset","tags":["کنکور","پیش" , "اول_دبیرستان" , "دوم_دبیرستان" , "سوم_دبیرستان" , "چهارم_دبیرستان" ,  "همایش" ,"جمع_بندی", "رشته_ریاضی" , "رشته_تجربی" , "رشته_انسانی","وحیده_کاعذی","محمد_چلاجور" ,"محمد_صادق_ثابتی","پیمان_طلوعی","هامون_سبطی","مهدی_امینی_راد","مهدی_صنیعی_طهرانی", "نظام_آموزشی_قدیم" , "متوسطه2" , "دوره_آموزشی"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2018-05-13 20:54:40',
+                    'updated_at'  => '2018-05-13 20:54:40',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '198',
+                    'name'        => 'جمع بندی 14 ساعته عربی کنکور',
+                    'small_name'  => 'عربی کنکور در 14 ساعت',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/180305198.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["رشته_ریاضی","رشته_تجربی" , "رشته_انسانی" , "عربی" , "متوسطه2" , "ضبط_استودیویی" , "نظام_آموزشی_قدیم" , "پیش" , "کنکور" ,"میلاد_ناصح_زاده" , "دوره_آموزشی"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-07-06 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '197',
+                    'name'        => 'زبان و ادبیات فارسی جمع بندی (97-1396) هامون سبطی',
+                    'small_name'  => 'جمع بندی زبان و ادبیات فارسی',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/180205102229.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u062c\\u0645\\u0639_\\u0628\\u0646\\u062f\\u06cc","\\u0647\\u0645\\u0627\\u06cc\\u0634","\\u0632\\u0628\\u0627\\u0646_\\u0648_\\u0627\\u062f\\u0628\\u06cc\\u0627\\u062a_\\u0641\\u0627\\u0631\\u0633\\u06cc","\\u0647\\u0627\\u0645\\u0648\\u0646_\\u0633\\u0628\\u0637\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-07-05 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '196',
+                    'name'        => 'آمار و مدلسازی جمع بندی (97-1396) وحید کبریایی',
+                    'small_name'  => 'جمع بندی آمار مدلسازی',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/180204101957.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u062c\\u0645\\u0639_\\u0628\\u0646\\u062f\\u06cc","\\u0647\\u0645\\u0627\\u06cc\\u0634","\\u0622\\u0645\\u0627\\u0631_\\u0648_\\u0645\\u062f\\u0644\\u0633\\u0627\\u0632\\u06cc","\\u0631\\u06cc\\u0627\\u0636\\u06cc_\\u067e\\u0627\\u06cc\\u0647","\\u0648\\u062d\\u06cc\\u062f_\\u06a9\\u0628\\u0631\\u06cc\\u0627\\u06cc\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-07-04 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '195',
+                    'name'        => 'زیست ترکیبی کنکور ابوالفضل جعفری',
+                    'small_name'  => 'زیست ترکیبی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/171125105021.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0646\\u06a9\\u062a\\u0647_\\u0648_\\u062a\\u0633\\u062a","\\u0632\\u06cc\\u0633\\u062a_\\u0634\\u0646\\u0627\\u0633\\u06cc","\\u0627\\u0628\\u0648\\u0627\\u0644\\u0641\\u0636\\u0644_\\u062c\\u0639\\u0641\\u0631\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-07-03 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '194',
+                    'name'        => 'زیست شناسی یازدهم(نظام آموزشی جدید) (97-1396) عباس راستی بروجنی',
+                    'small_name'  => '0 تا 100 زیست یازدهم',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/171019113948.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06cc\\u0627\\u0632\\u062f\\u0647\\u0645","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u062c\\u062f\\u06cc\\u062f","\\u067e\\u0627\\u06cc\\u0647","\\u0632\\u06cc\\u0633\\u062a_\\u0634\\u0646\\u0627\\u0633\\u06cc","\\u0639\\u0628\\u0627\\u0633_\\u0631\\u0627\\u0633\\u062a\\u06cc_\\u0628\\u0631\\u0648\\u062c\\u0646\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-07-02 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '193',
+                    'name'        => 'فیزیک یازدهم(نظام آموزشی جدید) (97-1396) پیمان طلوعی',
+                    'small_name'  => 'فیزیک یازدهم',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/171017054931.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06cc\\u0627\\u0632\\u062f\\u0647\\u0645","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u062c\\u062f\\u06cc\\u062f","\\u067e\\u0627\\u06cc\\u0647","\\u0641\\u06cc\\u0632\\u06cc\\u06a9","\\u067e\\u06cc\\u0645\\u0627\\u0646_\\u0637\\u0644\\u0648\\u0639\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-07-01 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '192',
+                    'name'        => 'عربی یازدهم(نظام آموزشی جدید) (97-1396) ناصر حشمتی',
+                    'small_name'  => 'عربی یازدهم',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/171005033219.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06cc\\u0627\\u0632\\u062f\\u0647\\u0645","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u062c\\u062f\\u06cc\\u062f","\\u067e\\u0627\\u06cc\\u0647","\\u0639\\u0631\\u0628\\u06cc","\\u0646\\u0627\\u0635\\u0631_\\u062d\\u0634\\u0645\\u062a\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-06-30 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '191',
+                    'name'        => 'صفر تا صد منطق  کنکور - سید حسام الدین جلالی',
+                    'small_name'  => '0 تا 100 منطق کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/171005032754.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u0627\\u06cc\\u0647","\\u0635\\u0641\\u0631_\\u062a\\u0627_\\u0635\\u062f","\\u0645\\u0646\\u0637\\u0642","\\u0633\\u06cc\\u062f_\\u062d\\u0633\\u0627\\u0645_\\u0627\\u0644\\u062f\\u06cc\\u0646_\\u062c\\u0644\\u0627\\u0644\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u062c\\u062f\\u06cc\\u062f","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-06-29 14:09:00',
+                    'updated_at'  => '2018-10-03 11:23:08',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '190',
+                    'name'        => 'ریاضی پایه دهم(نظام آموزشی جدید) (97-1396) مهدی امینی راد',
+                    'small_name'  => 'ریاضی دهم',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/171003105152.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u062f\\u0647\\u0645","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u062c\\u062f\\u06cc\\u062f","\\u067e\\u0627\\u06cc\\u0647","\\u0631\\u06cc\\u0627\\u0636\\u06cc_\\u067e\\u0627\\u06cc\\u0647","\\u0645\\u0647\\u062f\\u06cc_\\u0627\\u0645\\u06cc\\u0646\\u06cc_\\u0631\\u0627\\u062f"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-06-28 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '189',
+                    'name'        => 'ریاضی تجربی نکته و تست کنکور (97-1396) مهدی امینی راد',
+                    'small_name'  => 'نکته و تست ریاضی تجربی',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170925061125.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0646\\u06a9\\u062a\\u0647_\\u0648_\\u062a\\u0633\\u062a","\\u0631\\u06cc\\u0627\\u0636\\u06cc_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u0647\\u062f\\u06cc_\\u0627\\u0645\\u06cc\\u0646\\u06cc_\\u0631\\u0627\\u062f"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-06-27 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '188',
+                    'name'        => 'دیفرانسیل نکته و تست کنکور (97-1396) محمد صادق ثابتی',
+                    'small_name'  => 'نکته و تست دیفرانسیل',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170925061008.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0646\\u06a9\\u062a\\u0647_\\u0648_\\u062a\\u0633\\u062a","\\u062f\\u06cc\\u0641\\u0631\\u0627\\u0646\\u0633\\u06cc\\u0644","\\u0645\\u062d\\u0645\\u062f_\\u0635\\u0627\\u062f\\u0642_\\u062b\\u0627\\u0628\\u062a\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-06-26 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '187',
+                    'name'        => 'فیزیک نکته و تست کنکور (97-1396) پیمان طلوعی',
+                    'small_name'  => 'نکته و تست فیزیک',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170925055613.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0646\\u06a9\\u062a\\u0647_\\u0648_\\u062a\\u0633\\u062a","\\u0641\\u06cc\\u0632\\u06cc\\u06a9","\\u067e\\u06cc\\u0645\\u0627\\u0646_\\u0637\\u0644\\u0648\\u0639\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-06-25 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '186',
+                    'name'        => 'ریاضی تجربی صفر تا صد کنکور (97-1396) محمدامین نباخته',
+                    'small_name'  => '0 تا 100 ریاضی تجربی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170920051451.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u0627\\u06cc\\u0647","\\u0635\\u0641\\u0631_\\u062a\\u0627_\\u0635\\u062f","\\u0631\\u06cc\\u0627\\u0636\\u06cc_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062d\\u0645\\u062f\\u0627\\u0645\\u06cc\\u0646_\\u0646\\u0628\\u0627\\u062e\\u062a\\u0647"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-06-24 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '185',
+                    'name'        => 'عربی دهم(نظام آموزشی جدید) (97-1396) مهدی ناصر شریعت',
+                    'small_name'  => 'عربی دهم',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170920050758.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u062f\\u0647\\u0645","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u062c\\u062f\\u06cc\\u062f","\\u067e\\u0627\\u06cc\\u0647","\\u0639\\u0631\\u0628\\u06cc","\\u0645\\u0647\\u062f\\u06cc_\\u0646\\u0627\\u0635\\u0631_\\u0634\\u0631\\u06cc\\u0639\\u062a","\\u062a\\u062e\\u062a\\u0647_\\u0646\\u06af\\u0627\\u0631"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-06-23 14:09:00',
+                    'updated_at'  => '2018-10-03 11:02:34',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '184',
+                    'name'        => 'ریاضی و آمار دهم(نظام آموزشی جدید) (97-1396) مهدی امینی راد',
+                    'small_name'  => 'ریاضی و آمار دهم',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170920045708.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u062f\\u0647\\u0645","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u062c\\u062f\\u06cc\\u062f","\\u067e\\u0627\\u06cc\\u0647","\\u0631\\u06cc\\u0627\\u0636\\u06cc_\\u0648_\\u0622\\u0645\\u0627\\u0631","\\u0645\\u0647\\u062f\\u06cc_\\u0627\\u0645\\u06cc\\u0646\\u06cc_\\u0631\\u0627\\u062f"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-06-22 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '183',
+                    'name'        => 'فیزیک صفر تا صد چهارم دبیرستان (97-1396) حمید فدایی فرد',
+                    'small_name'  => 'فیزیک چهارم دبیرستان',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170920042821.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u0686\\u0647\\u0627\\u0631\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u0627\\u06cc\\u0647","\\u0635\\u0641\\u0631_\\u062a\\u0627_\\u0635\\u062f","\\u0641\\u06cc\\u0632\\u06cc\\u06a9","\\u062d\\u0645\\u06cc\\u062f_\\u0641\\u062f\\u0627\\u06cc\\u06cc_\\u0641\\u0631\\u062f"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-06-21 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '182',
+                    'name'        => 'شیمی یازدهم(نظام آموزشی جدید) (97-1396) مهدی صنیعی طهرانی',
+                    'small_name'  => 'شیمی یازدهم',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170920042138.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06cc\\u0627\\u0632\\u062f\\u0647\\u0645","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u062c\\u062f\\u06cc\\u062f","\\u067e\\u0627\\u06cc\\u0647","\\u0634\\u06cc\\u0645\\u06cc","\\u0645\\u0647\\u062f\\u06cc_\\u0635\\u0646\\u06cc\\u0639\\u06cc_\\u0637\\u0647\\u0631\\u0627\\u0646\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-06-20 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '181',
+                    'name'        => 'صفر تا صد فیزیک یازدهم(نظام آموزشی جدید) (98-1397) فرشید داداشی',
+                    'small_name'  => 'فیزیک یازدهم',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170920041635.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["فیزیک", "رشته_تجربی" ,"رشته_ریاضی" ,"فرشید_داداشی" , "نظام_آموزشی_جدید" , "متوسطه2" , "دوره_آموزشی" , "یازدهم" , "صفر_تا_صد" , "پایه" , "ضبط_استودیو"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-06-19 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '180',
+                    'name'        => 'تحلیلی صفر تا صد کنکور (97-1396) محمد صادق ثابتی',
+                    'small_name'  => '0 تا 100 تحلیلی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170920034810.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u0627\\u06cc\\u0647","\\u0635\\u0641\\u0631_\\u062a\\u0627_\\u0635\\u062f","\\u062a\\u062d\\u0644\\u06cc\\u0644\\u06cc","\\u0645\\u062d\\u0645\\u062f_\\u0635\\u0627\\u062f\\u0642_\\u062b\\u0627\\u0628\\u062a\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-06-18 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '179',
+                    'name'        => 'شیمی صفر تا صد کنکور (97-1396) مهدی صنیعی طهرانی',
+                    'small_name'  => '0 تا 100 شیمی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170920034146.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u0627\\u06cc\\u0647","\\u0635\\u0641\\u0631_\\u062a\\u0627_\\u0635\\u062f","\\u0634\\u06cc\\u0645\\u06cc","\\u0645\\u0647\\u062f\\u06cc_\\u0635\\u0646\\u06cc\\u0639\\u06cc_\\u0637\\u0647\\u0631\\u0627\\u0646\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-06-17 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '178',
+                    'name'        => 'حسابان یازدهم(نظام آموزشی جدید) (97-1396) محمدرضا مقصودی',
+                    'small_name'  => 'حسابان کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170920033407.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06cc\\u0627\\u0632\\u062f\\u0647\\u0645","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u062c\\u062f\\u06cc\\u062f","\\u067e\\u0627\\u06cc\\u0647","\\u062d\\u0633\\u0627\\u0628\\u0627\\u0646","\\u0631\\u06cc\\u0627\\u0636\\u06cc_\\u067e\\u0627\\u06cc\\u0647","\\u0645\\u062d\\u0645\\u062f\\u0631\\u0636\\u0627_\\u0645\\u0642\\u0635\\u0648\\u062f\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-06-16 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '177',
+                    'name'        => 'زیست شناسی دهم(نظام آموزشی جدید) (97-1396) جلال موقاری',
+                    'small_name'  => '0 تا 100 زیست دهم',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170920031050.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u062f\\u0647\\u0645","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u062c\\u062f\\u06cc\\u062f","\\u067e\\u0627\\u06cc\\u0647","\\u0632\\u06cc\\u0633\\u062a_\\u0634\\u0646\\u0627\\u0633\\u06cc","\\u062c\\u0644\\u0627\\u0644_\\u0645\\u0648\\u0642\\u0627\\u0631\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-06-15 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '176',
+                    'name'        => 'دین و زندگی دهم(نظام آموزشی جدید) (97-1396) جعفر رنجبرزاده',
+                    'small_name'  => '0 تا 100 معارف دهم',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170920021018.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u062f\\u0647\\u0645","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u062c\\u062f\\u06cc\\u062f","\\u067e\\u0627\\u06cc\\u0647","\\u062f\\u06cc\\u0646_\\u0648_\\u0632\\u0646\\u062f\\u06af\\u06cc","\\u062c\\u0639\\u0641\\u0631_\\u0631\\u0646\\u062c\\u0628\\u0631\\u0632\\u0627\\u062f\\u0647"]}',
+                    'enable'      => false,
+                    'display'     => true,
+                    'created_at'  => '2017-06-14 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '175',
+                    'name'        => 'عربی صفر تا صد کنکور (97-1396) محسن  آهویی',
+                    'small_name'  => '0 تا 100 عربی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/arabi2.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u0627\\u06cc\\u0647","\\u0635\\u0641\\u0631_\\u062a\\u0627_\\u0635\\u062f","\\u0639\\u0631\\u0628\\u06cc","\\u0645\\u062d\\u0633\\u0646_\\u0622\\u0647\\u0648\\u06cc\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-06-13 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '174',
+                    'name'        => 'عربی دهم(نظام آموزشی جدید) (97-1396) ناصر حشمتی',
+                    'small_name'  => '0 تا 100 عربی دهم',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170920012145.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u062f\\u0647\\u0645","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u062c\\u062f\\u06cc\\u062f","\\u067e\\u0627\\u06cc\\u0647","\\u0639\\u0631\\u0628\\u06cc","\\u0646\\u0627\\u0635\\u0631_\\u062d\\u0634\\u0645\\u062a\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-06-12 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '173',
+                    'name'        => 'صفر تا صد فیزیک دهم(نظام آموزشی جدید) (97-1396) فرشید داداشی',
+                    'small_name'  => '0 تا 100 فیزیک دهم',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170920011342.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u062f\\u0647\\u0645","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u062c\\u062f\\u06cc\\u062f","\\u067e\\u0627\\u06cc\\u0647","\\u0641\\u06cc\\u0632\\u06cc\\u06a9","\\u0641\\u0631\\u0634\\u06cc\\u062f_\\u062f\\u0627\\u062f\\u0627\\u0634\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-06-11 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '172',
+                    'name'        => 'صفر تا صد شیمی دهم(نظام آموزشی جدید) (97-1396) حامد پویان نظر',
+                    'small_name'  => '0 تا 100 شیمی دهم',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170920125924.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u062f\\u0647\\u0645","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u062c\\u062f\\u06cc\\u062f","\\u067e\\u0627\\u06cc\\u0647","\\u0634\\u06cc\\u0645\\u06cc","\\u062d\\u0627\\u0645\\u062f_\\u067e\\u0648\\u06cc\\u0627\\u0646_\\u0646\\u0638\\u0631"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-06-10 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '171',
+                    'name'        => 'حسابان یازدهم(نظام آموزشی جدید) (97-1396) محمد صادق ثابتی',
+                    'small_name'  => 'حسابان یازدهم',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170920123654.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06cc\\u0627\\u0632\\u062f\\u0647\\u0645","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u062c\\u062f\\u06cc\\u062f","\\u067e\\u0627\\u06cc\\u0647","\\u062d\\u0633\\u0627\\u0628\\u0627\\u0646","\\u0631\\u06cc\\u0627\\u0636\\u06cc_\\u067e\\u0627\\u06cc\\u0647","\\u0645\\u062d\\u0645\\u062f_\\u0635\\u0627\\u062f\\u0642_\\u062b\\u0627\\u0628\\u062a\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-06-09 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '170',
+                    'name'        => 'آرایه های ادبی کنکور دکتر هامون سبطی هامون سبطی',
+                    'small_name'  => 'آرایه ادبی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170917011741.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["دوم_دبیرستان","نظام_آموزشی_قدیم","پیش","اول_دبیرستان","زبان_و_ادبیات_فارسی","متوسطه2","کنکور","دهم","چهارم_دبیرستان","سوم_دبیرستان","صفر_تا_صد","نظام_آموزشی_جدید","ضبط_استودیویی","رشته_انسانی","رشته_ریاضی","رشته_تجربی","آرایه_های_ادبی_کنکور","پایه","هامون_سبطی","دوره_آموزشی","یازدهم"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-06-08 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '169',
+                    'name'        => 'ریاضی تجربی یازدهم(نظام آموزشی جدید) (97-1396) علی صدری',
+                    'small_name'  => 'ریاضی تجربی یازدهم',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170917010549.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06cc\\u0627\\u0632\\u062f\\u0647\\u0645","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u062c\\u062f\\u06cc\\u062f","\\u067e\\u0627\\u06cc\\u0647","\\u0631\\u06cc\\u0627\\u0636\\u06cc_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0639\\u0644\\u06cc_\\u0635\\u062f\\u0631\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-06-07 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '168',
+                    'name'        => 'انگلیسی دهم(نظام آموزشی جدید) (97-1396) علی اکبر عزتی',
+                    'small_name'  => 'زبان دهم',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170917125730.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u062f\\u0647\\u0645","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u062c\\u062f\\u06cc\\u062f","\\u067e\\u0627\\u06cc\\u0647","\\u0632\\u0628\\u0627\\u0646_\\u0627\\u0646\\u06af\\u0644\\u06cc\\u0633\\u06cc","\\u0639\\u0644\\u06cc_\\u0627\\u06a9\\u0628\\u0631_\\u0639\\u0632\\u062a\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-06-06 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '167',
+                    'name'        => 'شیمی همایش (96-1395) محمد رضا آقاجانی',
+                    'small_name'  => 'همایش شیمی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/default.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0647\\u0645\\u0627\\u06cc\\u0634","\\u0634\\u06cc\\u0645\\u06cc","\\u0645\\u062d\\u0645\\u062f_\\u0631\\u0636\\u0627_\\u0622\\u0642\\u0627\\u062c\\u0627\\u0646\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-06-05 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '166',
+                    'name'        => 'حسابان امتحان نهایی سوم شهروز رحیمی',
+                    'small_name'  => 'امتحان نهایی حسابان',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170607032308.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u0633\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u0627\\u06cc\\u0647","\\u0627\\u0645\\u062a\\u062d\\u0627\\u0646_\\u0646\\u0647\\u0627\\u06cc\\u06cc","\\u062d\\u0633\\u0627\\u0628\\u0627\\u0646","\\u0631\\u06cc\\u0627\\u0636\\u06cc_\\u067e\\u0627\\u06cc\\u0647","\\u0634\\u0647\\u0631\\u0648\\u0632_\\u0631\\u062d\\u06cc\\u0645\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-06-04 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '165',
+                    'name'        => 'شیمی تحلیل آزمون (97-1396) مهدی صنیعی طهرانی',
+                    'small_name'  => 'تحلیل آزمون شیمی',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170603040951.jpeg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u062a\\u062d\\u0644\\u06cc\\u0644_\\u0622\\u0632\\u0645\\u0648\\u0646","\\u0634\\u06cc\\u0645\\u06cc","\\u0645\\u0647\\u062f\\u06cc_\\u0635\\u0646\\u06cc\\u0639\\u06cc_\\u0637\\u0647\\u0631\\u0627\\u0646\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-06-03 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '164',
+                    'name'        => 'ریاضی تجربی جمع بندی آلاء (97-1396) سیروس نصیری',
+                    'small_name'  => 'همایش ریاضی تجربی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170415024503.gif',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u062c\\u0645\\u0639_\\u0628\\u0646\\u062f\\u06cc","\\u0647\\u0645\\u0627\\u06cc\\u0634","\\u0631\\u06cc\\u0627\\u0636\\u06cc_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0633\\u06cc\\u0631\\u0648\\u0633_\\u0646\\u0635\\u06cc\\u0631\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-06-02 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '163',
+                    'name'        => 'ریاضی انسانی جمع بندی آلاء (97-1396) خسرو محمد زاده',
+                    'small_name'  => 'همایش ریاضی انسانی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170408122003.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u062c\\u0645\\u0639_\\u0628\\u0646\\u062f\\u06cc","\\u0647\\u0645\\u0627\\u06cc\\u0634","\\u0631\\u06cc\\u0627\\u0636\\u06cc_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u062e\\u0633\\u0631\\u0648_\\u0645\\u062d\\u0645\\u062f_\\u0632\\u0627\\u062f\\u0647"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-06-01 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '162',
+                    'name'        => 'دیفرانسیل جمع بندی آلاء (97-1396) سیروس نصیری',
+                    'small_name'  => 'همایش دیفرانسیل کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170408112610.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u062c\\u0645\\u0639_\\u0628\\u0646\\u062f\\u06cc","\\u0647\\u0645\\u0627\\u06cc\\u0634","\\u062f\\u06cc\\u0641\\u0631\\u0627\\u0646\\u0633\\u06cc\\u0644","\\u0633\\u06cc\\u0631\\u0648\\u0633_\\u0646\\u0635\\u06cc\\u0631\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-05-31 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '161',
+                    'name'        => 'دیفرانسیل در 90 ثانیه (96-1395) محمد صادق ثابتی',
+                    'small_name'  => 'دیفرانسیل در 90 ثانیه',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170406025832.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u062f\\u06cc\\u0641\\u0631\\u0627\\u0646\\u0633\\u06cc\\u0644","\\u0645\\u062d\\u0645\\u062f_\\u0635\\u0627\\u062f\\u0642_\\u062b\\u0627\\u0628\\u062a\\u06cc"]}',
+                    'enable'      => false,
+                    'display'     => true,
+                    'created_at'  => '2017-05-30 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '160',
+                    'name'        => 'زیست شناسی جمع بندی آلاء (97-1396) مسعود حدادی',
+                    'small_name'  => 'همایش زیست کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170405035409.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u062c\\u0645\\u0639_\\u0628\\u0646\\u062f\\u06cc","\\u0647\\u0645\\u0627\\u06cc\\u0634","\\u0632\\u06cc\\u0633\\u062a_\\u0634\\u0646\\u0627\\u0633\\u06cc","\\u0645\\u0633\\u0639\\u0648\\u062f_\\u062d\\u062f\\u0627\\u062f\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-05-29 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '159',
+                    'name'        => 'فیزیک جمع بندی آلاء (97-1396)',
+                    'small_name'  => 'همایش فیزیک کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170405034314.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u062c\\u0645\\u0639_\\u0628\\u0646\\u062f\\u06cc","\\u0647\\u0645\\u0627\\u06cc\\u0634","\\u0641\\u06cc\\u0632\\u06cc\\u06a9","\\u0646\\u0627\\u062f\\u0631\\u06cc\\u0627\\u0646"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-05-28 14:09:00',
+                    'updated_at'  => '2018-07-08 17:47:58',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '158',
+                    'name'        => 'شیمی جمع بندی آلاء (97-1396) محمد حسین انوشه',
+                    'small_name'  => 'همایش شیمی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170405030131.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u062c\\u0645\\u0639_\\u0628\\u0646\\u062f\\u06cc","\\u0647\\u0645\\u0627\\u06cc\\u0634","\\u0634\\u06cc\\u0645\\u06cc","\\u0645\\u062d\\u0645\\u062f_\\u062d\\u0633\\u06cc\\u0646_\\u0627\\u0646\\u0648\\u0634\\u0647"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-05-27 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '157',
+                    'name'        => 'گسسته جمع بندی آلاء (97-1396) سروش معینی',
+                    'small_name'  => 'همایش گسسته کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170330105321.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u062c\\u0645\\u0639_\\u0628\\u0646\\u062f\\u06cc","\\u0647\\u0645\\u0627\\u06cc\\u0634","\\u06af\\u0633\\u0633\\u062a\\u0647","\\u0633\\u0631\\u0648\\u0634_\\u0645\\u0639\\u06cc\\u0646\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-05-26 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '156',
+                    'name'        => 'حسابان صفر تا صد سوم دبیرستان (96-1395) شهروز رحیمی',
+                    'small_name'  => '0 تا 100 حسابان',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/default.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u0633\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u0627\\u06cc\\u0647","\\u0635\\u0641\\u0631_\\u062a\\u0627_\\u0635\\u062f","\\u062d\\u0633\\u0627\\u0628\\u0627\\u0646","\\u0631\\u06cc\\u0627\\u0636\\u06cc_\\u067e\\u0627\\u06cc\\u0647","\\u0634\\u0647\\u0631\\u0648\\u0632_\\u0631\\u062d\\u06cc\\u0645\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-05-25 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '155',
+                    'name'        => 'عربی جمع بندی آلاء (97-1396) عمار  تاج بخش',
+                    'small_name'  => 'همایش عربی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170327102702.jpeg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u062c\\u0645\\u0639_\\u0628\\u0646\\u062f\\u06cc","\\u0647\\u0645\\u0627\\u06cc\\u0634","\\u0639\\u0631\\u0628\\u06cc","\\u0639\\u0645\\u0627\\u0631_\\u062a\\u0627\\u062c_\\u0628\\u062e\\u0634"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-05-24 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '154',
+                    'name'        => 'فیزیک دهم(نظام آموزشی جدید) (96-1395) پیمان طلوعی',
+                    'small_name'  => 'فیزیک دهم',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/phisycs-dahom.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u062f\\u0647\\u0645","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u062c\\u062f\\u06cc\\u062f","\\u067e\\u0627\\u06cc\\u0647","\\u0641\\u06cc\\u0632\\u06cc\\u06a9","\\u067e\\u06cc\\u0645\\u0627\\u0646_\\u0637\\u0644\\u0648\\u0639\\u06cc"]}',
+                    'enable'      => false,
+                    'display'     => false,
+                    'created_at'  => '2017-05-23 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '153',
+                    'name'        => 'ریاضی پایه دهم(نظام آموزشی جدید) (96-1395) جواد نایب کبیر',
+                    'small_name'  => 'ریاضی دهم',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/161231015030.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u062f\\u0647\\u0645","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u062c\\u062f\\u06cc\\u062f","\\u067e\\u0627\\u06cc\\u0647","\\u0631\\u06cc\\u0627\\u0636\\u06cc_\\u067e\\u0627\\u06cc\\u0647","\\u062c\\u0648\\u0627\\u062f_\\u0646\\u0627\\u06cc\\u0628_\\u06a9\\u0628\\u06cc\\u0631"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-05-22 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '152',
+                    'name'        => 'آمار و مدلسازی صفر تا صد کنکور (96-1395) مهدی امینی راد',
+                    'small_name'  => 'آمار مدلسازی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/161231013618.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0635\\u0641\\u0631_\\u062a\\u0627_\\u0635\\u062f","\\u0622\\u0645\\u0627\\u0631_\\u0648_\\u0645\\u062f\\u0644\\u0633\\u0627\\u0632\\u06cc","\\u0631\\u06cc\\u0627\\u0636\\u06cc_\\u067e\\u0627\\u06cc\\u0647","\\u0645\\u0647\\u062f\\u06cc_\\u0627\\u0645\\u06cc\\u0646\\u06cc_\\u0631\\u0627\\u062f","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-05-21 14:09:00',
+                    'updated_at'  => '2018-09-16 10:23:03',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '151',
+                    'name'        => 'زیست شناسی صفر تا صد چهارم دبیرستان (96-1395) عباس راستی بروجنی',
+                    'small_name'  => '0 تا 100 زیست چهارم دبیرستان',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/161112090754.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u0686\\u0647\\u0627\\u0631\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u0627\\u06cc\\u0647","\\u0635\\u0641\\u0631_\\u062a\\u0627_\\u0635\\u062f","\\u0632\\u06cc\\u0633\\u062a_\\u0634\\u0646\\u0627\\u0633\\u06cc","\\u0639\\u0628\\u0627\\u0633_\\u0631\\u0627\\u0633\\u062a\\u06cc_\\u0628\\u0631\\u0648\\u062c\\u0646\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-05-20 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '150',
+                    'name'        => 'صفر تا صد زیست شناسی دهم(نظام آموزشی جدید) (96-1395) عباس راستی بروجنی',
+                    'small_name'  => '0 تا 100 زیست دهم',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/zist.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u062f\\u0647\\u0645","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u062c\\u062f\\u06cc\\u062f","\\u067e\\u0627\\u06cc\\u0647","\\u0632\\u06cc\\u0633\\u062a_\\u0634\\u0646\\u0627\\u0633\\u06cc","\\u0639\\u0628\\u0627\\u0633_\\u0631\\u0627\\u0633\\u062a\\u06cc_\\u0628\\u0631\\u0648\\u062c\\u0646\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-05-19 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '149',
+                    'name'        => 'زیست شناسی صفر تا صد سوم دبیرستان (96-1395) محمد علی امینی راد',
+                    'small_name'  => 'زیست سوم دبیرستان',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/161016023718.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u0633\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u0627\\u06cc\\u0647","\\u0635\\u0641\\u0631_\\u062a\\u0627_\\u0635\\u062f","\\u0632\\u06cc\\u0633\\u062a_\\u0634\\u0646\\u0627\\u0633\\u06cc","\\u0645\\u062d\\u0645\\u062f_\\u0639\\u0644\\u06cc_\\u0627\\u0645\\u06cc\\u0646\\u06cc_\\u0631\\u0627\\u062f"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-05-18 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '148',
+                    'name'        => 'شیمی دهم(نظام آموزشی جدید) (96-1395) محمد حسین انوشه',
+                    'small_name'  => 'شیمی دهم',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/1808071355.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u062f\\u0647\\u0645","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u062c\\u062f\\u06cc\\u062f","\\u067e\\u0627\\u06cc\\u0647","\\u0634\\u06cc\\u0645\\u06cc","\\u0645\\u062d\\u0645\\u062f_\\u062d\\u0633\\u06cc\\u0646_\\u0627\\u0646\\u0648\\u0634\\u0647"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-05-17 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '147',
+                    'name'        => 'انگلیسی شب کنکور (96-1395) علی اکبر عزتی',
+                    'small_name'  => 'شب کنکور زبان',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/160914010200.jpeg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628_\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0632\\u0628\\u0627\\u0646_\\u0627\\u0646\\u06af\\u0644\\u06cc\\u0633\\u06cc","\\u0639\\u0644\\u06cc_\\u0627\\u06a9\\u0628\\u0631_\\u0639\\u0632\\u062a\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-05-16 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '146',
+                    'name'        => 'دین و زندگی شب کنکور (96-1395) جعفر رنجبرزاده',
+                    'small_name'  => 'شب کنکور معارف',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/160914125844.jpeg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628_\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u062f\\u06cc\\u0646_\\u0648_\\u0632\\u0646\\u062f\\u06af\\u06cc","\\u062c\\u0639\\u0641\\u0631_\\u0631\\u0646\\u062c\\u0628\\u0631\\u0632\\u0627\\u062f\\u0647"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-05-15 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '145',
+                    'name'        => 'عربی شب کنکور (96-1395) حامد امیراللهی',
+                    'small_name'  => 'شب کنکور عربی',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/160914124928.jpeg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628_\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0639\\u0631\\u0628\\u06cc","\\u062d\\u0627\\u0645\\u062f_\\u0627\\u0645\\u06cc\\u0631\\u0627\\u0644\\u0644\\u0647\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-05-14 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '144',
+                    'name'        => 'شیمی شب کنکور (96-1395) روح الله حاجی سلیمانی',
+                    'small_name'  => 'شب کنکور شیمی',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/160914123132.jpeg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628_\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0634\\u06cc\\u0645\\u06cc","\\u0631\\u0648\\u062d_\\u0627\\u0644\\u0644\\u0647_\\u062d\\u0627\\u062c\\u06cc_\\u0633\\u0644\\u06cc\\u0645\\u0627\\u0646\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-05-13 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '143',
+                    'name'        => 'فیزیک شب کنکور (96-1395) حمید فدایی فرد',
+                    'small_name'  => 'شب کنکور فیزیک',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/160914120310.jpeg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628_\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0641\\u06cc\\u0632\\u06cc\\u06a9","\\u062d\\u0645\\u06cc\\u062f_\\u0641\\u062f\\u0627\\u06cc\\u06cc_\\u0641\\u0631\\u062f"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-05-12 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '142',
+                    'name'        => 'معرفی رشته ماز (96-1395)',
+                    'small_name'  => 'معرفی رشته',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/160816082400.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u062f\\u0647\\u0645","\\u06cc\\u0627\\u0632\\u062f\\u0647\\u0645","\\u0627\\u0648\\u0644_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u062f\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0633\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0686\\u0647\\u0627\\u0631\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u062c\\u062f\\u06cc\\u062f","\\u0645\\u0634\\u0627\\u0648\\u0631\\u0647","\\u0645\\u0627\\u0632","\\u067e\\u06cc\\u0634","\\u067e\\u0627\\u06cc\\u0647","\\u0645\\u0639\\u0631\\u0641\\u06cc_\\u0631\\u0634\\u062a\\u0647"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-05-11 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '141',
+                    'name'        => 'شیمی صفر تا صد کنکور (96-1395) محمد رضا آقاجانی',
+                    'small_name'  => '0 تا 100 شیمی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/160815115032.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0635\\u0641\\u0631_\\u062a\\u0627_\\u0635\\u062f","\\u0634\\u06cc\\u0645\\u06cc","\\u0645\\u062d\\u0645\\u062f_\\u0631\\u0636\\u0627_\\u0622\\u0642\\u0627\\u062c\\u0627\\u0646\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-05-10 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '140',
+                    'name'        => 'فیزیک صفر تا صد کنکور (96-1395) پیمان طلوعی',
+                    'small_name'  => '0 تا 100 فیزیک کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/160815114117.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0635\\u0641\\u0631_\\u062a\\u0627_\\u0635\\u062f","\\u0641\\u06cc\\u0632\\u06cc\\u06a9","\\u067e\\u06cc\\u0645\\u0627\\u0646_\\u0637\\u0644\\u0648\\u0639\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-05-09 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '139',
+                    'name'        => 'گسسته صفر تا صد کنکور (96-1395) بهمن مؤذنی پور',
+                    'small_name'  => '0 تا 100 گسسته کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/160815113247.gif',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0635\\u0641\\u0631_\\u062a\\u0627_\\u0635\\u062f","\\u06af\\u0633\\u0633\\u062a\\u0647","\\u0628\\u0647\\u0645\\u0646_\\u0645\\u0624\\u0630\\u0646\\u06cc_\\u067e\\u0648\\u0631"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-05-08 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '138',
+                    'name'        => 'زبان و ادبیات فارسی صفر تا صد کنکور (96-1395) داریوش راوش',
+                    'small_name'  => '0 تا 100 زبان و ادبیات فارسی',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/160815111559.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0635\\u0641\\u0631_\\u062a\\u0627_\\u0635\\u062f","\\u0632\\u0628\\u0627\\u0646_\\u0648_\\u0627\\u062f\\u0628\\u06cc\\u0627\\u062a_\\u0641\\u0627\\u0631\\u0633\\u06cc","\\u062f\\u0627\\u0631\\u06cc\\u0648\\u0634_\\u0631\\u0627\\u0648\\u0634"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-05-07 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '137',
+                    'name'        => 'هندسه پایه دهم(نظام آموزشی جدید) (96-1395) وحید کبریایی',
+                    'small_name'  => 'هندسه دهم',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/160814054658.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u062f\\u0647\\u0645","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u062c\\u062f\\u06cc\\u062f","\\u067e\\u0627\\u06cc\\u0647","\\u0647\\u0646\\u062f\\u0633\\u0647_\\u067e\\u0627\\u06cc\\u0647","\\u0648\\u062d\\u06cc\\u062f_\\u06a9\\u0628\\u0631\\u06cc\\u0627\\u06cc\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-05-06 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '136',
+                    'name'        => 'منطق صفر تا صد کنکور (96-1395) رضا آقاجانی',
+                    'small_name'  => 'منطق کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/160814052928.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0635\\u0641\\u0631_\\u062a\\u0627_\\u0635\\u062f","\\u0645\\u0646\\u0637\\u0642","\\u0631\\u0636\\u0627_\\u0622\\u0642\\u0627\\u062c\\u0627\\u0646\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-05-05 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '135',
+                    'name'        => 'دیفرانسیل صفر تا صد کنکور (96-1395) محمد صادق ثابتی',
+                    'small_name'  => '0 تا 100 دیفرانسیل کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/160814052123.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0635\\u0641\\u0631_\\u062a\\u0627_\\u0635\\u062f","\\u062f\\u06cc\\u0641\\u0631\\u0627\\u0646\\u0633\\u06cc\\u0644","\\u0645\\u062d\\u0645\\u062f_\\u0635\\u0627\\u062f\\u0642_\\u062b\\u0627\\u0628\\u062a\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-05-04 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '134',
+                    'name'        => 'ریاضی انسانی صفر تا صد کنکور (96-1395) مهدی امینی راد',
+                    'small_name'  => '0 تا 100 ریاضی انسانی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/160814051657.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0635\\u0641\\u0631_\\u062a\\u0627_\\u0635\\u062f","\\u0631\\u06cc\\u0627\\u0636\\u06cc_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u0647\\u062f\\u06cc_\\u0627\\u0645\\u06cc\\u0646\\u06cc_\\u0631\\u0627\\u062f"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-05-03 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '133',
+                    'name'        => 'ریاضی تجربی صفر تا صد کنکور (96-1395) مهدی امینی راد',
+                    'small_name'  => '0 تا 100 ریاضی تجربی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/160814044847.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0635\\u0641\\u0631_\\u062a\\u0627_\\u0635\\u062f","\\u0631\\u06cc\\u0627\\u0636\\u06cc_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u0647\\u062f\\u06cc_\\u0627\\u0645\\u06cc\\u0646\\u06cc_\\u0631\\u0627\\u062f"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-05-02 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '132',
+                    'name'        => 'عربی صفر تا صد کنکور (96-1395) مهدی جلادتی',
+                    'small_name'  => '0 تا 100 عربی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/160814035839.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0635\\u0641\\u0631_\\u062a\\u0627_\\u0635\\u062f","\\u0639\\u0631\\u0628\\u06cc","\\u0645\\u0647\\u062f\\u06cc_\\u062c\\u0644\\u0627\\u062f\\u062a\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-05-01 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '131',
+                    'name'        => 'شیمی تیپ تست کنکور (96-1395) محمد رضا آقاجانی',
+                    'small_name'  => 'تیپ تست شیمی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/160525024322.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0646\\u06a9\\u062a\\u0647_\\u0648_\\u062a\\u0633\\u062a","\\u0634\\u06cc\\u0645\\u06cc","\\u0645\\u062d\\u0645\\u062f_\\u0631\\u0636\\u0627_\\u0622\\u0642\\u0627\\u062c\\u0627\\u0646\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-04-30 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '130',
+                    'name'        => 'زیست شناسی امتحان نهایی سوم محمد علی امینی راد',
+                    'small_name'  => 'شب امتحان زیست سوم',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/160523111556.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u0633\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u0627\\u06cc\\u0647","\\u0627\\u0645\\u062a\\u062d\\u0627\\u0646_\\u0646\\u0647\\u0627\\u06cc\\u06cc","\\u0632\\u06cc\\u0633\\u062a_\\u0634\\u0646\\u0627\\u0633\\u06cc","\\u0645\\u062d\\u0645\\u062f_\\u0639\\u0644\\u06cc_\\u0627\\u0645\\u06cc\\u0646\\u06cc_\\u0631\\u0627\\u062f"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-04-29 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '129',
+                    'name'        => 'عربی نهم (نظام آموزشی جدید) (96-1395)',
+                    'small_name'  => 'عربی نهم',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/160515115714.jpeg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06471","\\u0646\\u0647\\u0645","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u062c\\u062f\\u06cc\\u062f","\\u067e\\u0627\\u06cc\\u0647","\\u0639\\u0631\\u0628\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-04-28 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '128',
+                    'name'        => ' فیزیک دوران طلایی ( جمع بندی ) (95-1394) آقای کازرانیان',
+                    'small_name'  => 'همایش فیزیک کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/160410120715.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0647\\u0645\\u0627\\u06cc\\u0634","\\u062c\\u0645\\u0639_\\u0628\\u0646\\u062f\\u06cc","\\u0641\\u06cc\\u0632\\u06cc\\u06a9","کازرانیان"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-04-27 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '127',
+                    'name'        => 'زیست شناسی دوران طلایی ( جمع بندی ) (95-1394) پوریا رحیمی',
+                    'small_name'  => 'همایش زیست کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/160331100335.jpeg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0647\\u0645\\u0627\\u06cc\\u0634","\\u062c\\u0645\\u0639_\\u0628\\u0646\\u062f\\u06cc","\\u0632\\u06cc\\u0633\\u062a_\\u0634\\u0646\\u0627\\u0633\\u06cc","\\u067e\\u0648\\u0631\\u06cc\\u0627_\\u0631\\u062d\\u06cc\\u0645\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-04-26 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '126',
+                    'name'        => 'جبر و احتمال دوران طلایی ( جمع بندی ) (95-1394) حسین کرد',
+                    'small_name'  => 'همایش جبر و احتمال کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/jabr.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0647\\u0645\\u0627\\u06cc\\u0634","\\u062c\\u0645\\u0639_\\u0628\\u0646\\u062f\\u06cc","\\u062c\\u0628\\u0631_\\u0648_\\u0627\\u062d\\u062a\\u0645\\u0627\\u0644","\\u0631\\u06cc\\u0627\\u0636\\u06cc_\\u067e\\u0627\\u06cc\\u0647","\\u062d\\u0633\\u06cc\\u0646_\\u06a9\\u0631\\u062f"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-04-25 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '125',
+                    'name'        => 'شیمی دوران طلایی ( جمع بندی ) (95-1394) محمد رضا آقاجانی',
+                    'small_name'  => 'همایش شیمی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/shimi-126.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0647\\u0645\\u0627\\u06cc\\u0634","\\u062c\\u0645\\u0639_\\u0628\\u0646\\u062f\\u06cc","\\u0634\\u06cc\\u0645\\u06cc","\\u0645\\u062d\\u0645\\u062f_\\u0631\\u0636\\u0627_\\u0622\\u0642\\u0627\\u062c\\u0627\\u0646\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-04-24 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '124',
+                    'name'        => 'عربی دوران طلایی ( جمع بندی ) (95-1394) میلاد ناصح زاده',
+                    'small_name'  => 'همایش عربی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/arabi-124.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0647\\u0645\\u0627\\u06cc\\u0634","\\u062c\\u0645\\u0639_\\u0628\\u0646\\u062f\\u06cc","\\u0639\\u0631\\u0628\\u06cc","\\u0645\\u06cc\\u0644\\u0627\\u062f_\\u0646\\u0627\\u0635\\u062d_\\u0632\\u0627\\u062f\\u0647"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-04-23 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '123',
+                    'name'        => 'آرایه های ادبی کنکور دوران طلایی ( جمع بندی ) (95-1394) میثم حسین خانی',
+                    'small_name'  => 'آرایه ادبی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/160317013234.jpeg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0647\\u0645\\u0627\\u06cc\\u0634","\\u062c\\u0645\\u0639_\\u0628\\u0646\\u062f\\u06cc","\\u0622\\u0631\\u0627\\u06cc\\u0647_\\u0647\\u0627\\u06cc_\\u0627\\u062f\\u0628\\u06cc_\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0632\\u0628\\u0627\\u0646_\\u0648_\\u0627\\u062f\\u0628\\u06cc\\u0627\\u062a_\\u0641\\u0627\\u0631\\u0633\\u06cc","\\u0645\\u06cc\\u062b\\u0645_\\u062d\\u0633\\u06cc\\u0646_\\u062e\\u0627\\u0646\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-04-22 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '122',
+                    'name'        => 'ادبیات و زبان فارسی انسانی انسانی کنکور(اول تا چهارم دبیرستان) (95-1394) محمد صادقی',
+                    'small_name'  => 'ادبیات تخصصی انسانی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/160102111824.jpeg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0627\\u0648\\u0644_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u062f\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0633\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0686\\u0647\\u0627\\u0631\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u067e\\u0627\\u06cc\\u0647","\\u0632\\u0628\\u0627\\u0646_\\u0648_\\u0627\\u062f\\u0628\\u06cc\\u0627\\u062a_\\u0641\\u0627\\u0631\\u0633\\u06cc_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062d\\u0645\\u062f_\\u0635\\u0627\\u062f\\u0642\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-04-21 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '121',
+                    'name'        => 'ریاضی تجربی کلاس کنکور(1) (95-1394) محمد رضا  حسینی فرد',
+                    'small_name'  => 'کلاس ریاضی تجربی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/151121032001.jpeg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0631\\u06cc\\u0627\\u0636\\u06cc_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062d\\u0645\\u062f_\\u0631\\u0636\\u0627_\\u062d\\u0633\\u06cc\\u0646\\u06cc_\\u0641\\u0631\\u062f"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-04-20 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '120',
+                    'name'        => 'المپیاد فیزیک المپیادهای علمی (95-1394) مصطفی جعفری نژاد',
+                    'small_name'  => 'کلاس المپیاد فیزیک',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/151109022452.jpeg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u0627\\u0644\\u0645\\u067e\\u06cc\\u0627\\u062f_\\u0639\\u0644\\u0645\\u06cc","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u0627\\u06cc\\u0647","\\u0627\\u0644\\u0645\\u067e\\u06cc\\u0627\\u062f_\\u0641\\u06cc\\u0632\\u06cc\\u06a9","\\u0645\\u0635\\u0637\\u0641\\u06cc_\\u062c\\u0639\\u0641\\u0631\\u06cc_\\u0646\\u0698\\u0627\\u062f"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-04-19 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '119',
+                    'name'        => 'ریاضی تجربی کلاس کنکور(2) (95-1394) رضا شامیزاده',
+                    'small_name'  => 'کلاس ریاضی تجربی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/151014044408.jpeg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0631\\u06cc\\u0627\\u0636\\u06cc_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0636\\u0627_\\u0634\\u0627\\u0645\\u06cc\\u0632\\u0627\\u062f\\u0647"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-04-18 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '118',
+                    'name'        => 'ریاضی انسانی انسانی کنکور(اول تا چهارم دبیرستان) (95-1394) خسرو محمد زاده',
+                    'small_name'  => 'کلاس ریاضی انسانی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/151008024810.jpeg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0627\\u0648\\u0644_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u062f\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0633\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0686\\u0647\\u0627\\u0631\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u067e\\u0627\\u06cc\\u0647","\\u0631\\u06cc\\u0627\\u0636\\u06cc_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u062e\\u0633\\u0631\\u0648_\\u0645\\u062d\\u0645\\u062f_\\u0632\\u0627\\u062f\\u0647"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-04-17 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '117',
+                    'name'        => 'المپیاد نجوم المپیادهای علمی (95-1394) یاشار بهمند',
+                    'small_name'  => 'کلاس المپیاد نجوم',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/151004012349.jpeg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u0627\\u0644\\u0645\\u067e\\u06cc\\u0627\\u062f_\\u0639\\u0644\\u0645\\u06cc","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u0627\\u06cc\\u0647","\\u0627\\u0644\\u0645\\u067e\\u06cc\\u0627\\u062f_\\u0646\\u062c\\u0648\\u0645","\\u06cc\\u0627\\u0634\\u0627\\u0631_\\u0628\\u0647\\u0645\\u0646\\u062f"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-04-16 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '116',
+                    'name'        => 'دین و زندگی کلاس کنکور(2) (95-1394) جعفر رنجبرزاده',
+                    'small_name'  => 'کلاس معارف کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/141009032429.jpeg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u062f\\u06cc\\u0646_\\u0648_\\u0632\\u0646\\u062f\\u06af\\u06cc","\\u062c\\u0639\\u0641\\u0631_\\u0631\\u0646\\u062c\\u0628\\u0631\\u0632\\u0627\\u062f\\u0647"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-04-15 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '115',
+                    'name'        => 'هندسه پایه کلاس کنکور(1) (95-1394) وحید کبریایی',
+                    'small_name'  => 'کلاس هندسه پایه کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/hendesepaye-1.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0647\\u0646\\u062f\\u0633\\u0647_\\u067e\\u0627\\u06cc\\u0647","\\u0648\\u062d\\u06cc\\u062f_\\u06a9\\u0628\\u0631\\u06cc\\u0627\\u06cc\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-04-14 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '114',
+                    'name'        => 'تحلیلی کلاس کنکور(1) (95-1394) رضا شامیزاده',
+                    'small_name'  => 'کلاس تحلیلی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/geometry.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u062a\\u062d\\u0644\\u06cc\\u0644\\u06cc","\\u0631\\u0636\\u0627_\\u0634\\u0627\\u0645\\u06cc\\u0632\\u0627\\u062f\\u0647"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-04-13 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '113',
+                    'name'        => 'دین و زندگی کلاس کنکور(1) (95-1394) مهدی تفتی',
+                    'small_name'  => 'کلاس معارف کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/dini-1.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u062f\\u06cc\\u0646_\\u0648_\\u0632\\u0646\\u062f\\u06af\\u06cc","\\u0645\\u0647\\u062f\\u06cc_\\u062a\\u0641\\u062a\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-04-12 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '112',
+                    'name'        => 'گسسته کلاس کنکور(1) (95-1394) رضا شامیزاده',
+                    'small_name'  => 'کلاس گسسته کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/gosaste.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u06af\\u0633\\u0633\\u062a\\u0647","\\u0631\\u0636\\u0627_\\u0634\\u0627\\u0645\\u06cc\\u0632\\u0627\\u062f\\u0647"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-04-11 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '111',
+                    'name'        => 'دیفرانسیل کلاس کنکور(1) (95-1394) محسن شهریان',
+                    'small_name'  => 'کلاس دیفرانسیل کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/dif-2.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u062f\\u06cc\\u0641\\u0631\\u0627\\u0646\\u0633\\u06cc\\u0644","\\u0645\\u062d\\u0633\\u0646_\\u0634\\u0647\\u0631\\u06cc\\u0627\\u0646"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-04-10 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '110',
+                    'name'        => 'انگلیسی کلاس کنکور(1) (95-1394) علی اکبر عزتی',
+                    'small_name'  => 'کلاس زبان کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/zaban-4.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0632\\u0628\\u0627\\u0646_\\u0627\\u0646\\u06af\\u0644\\u06cc\\u0633\\u06cc","\\u0639\\u0644\\u06cc_\\u0627\\u06a9\\u0628\\u0631_\\u0639\\u0632\\u062a\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-04-09 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '109',
+                    'name'        => 'زبان و ادبیات فارسی کلاس کنکور(1) (95-1394) عبدالرضا مرادی',
+                    'small_name'  => 'کلاس ادبیات و زبان فارسی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/adabiyat.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0632\\u0628\\u0627\\u0646_\\u0648_\\u0627\\u062f\\u0628\\u06cc\\u0627\\u062a_\\u0641\\u0627\\u0631\\u0633\\u06cc","\\u0639\\u0628\\u062f\\u0627\\u0644\\u0631\\u0636\\u0627_\\u0645\\u0631\\u0627\\u062f\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-04-08 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '108',
+                    'name'        => 'عربی کلاس کنکور(1) (95-1394) پدرام علیمرادی',
+                    'small_name'  => 'کلاس عربی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/192.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0639\\u0631\\u0628\\u06cc","\\u067e\\u062f\\u0631\\u0627\\u0645_\\u0639\\u0644\\u06cc\\u0645\\u0631\\u0627\\u062f\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-04-07 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '107',
+                    'name'        => 'هندسه پایه کلاس کنکور(2) (95-1394) محمد رضا  حسینی فرد',
+                    'small_name'  => 'کلاس هندسه پایه کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/hendesepaye-6.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0647\\u0646\\u062f\\u0633\\u0647_\\u067e\\u0627\\u06cc\\u0647","\\u0645\\u062d\\u0645\\u062f_\\u0631\\u0636\\u0627_\\u062d\\u0633\\u06cc\\u0646\\u06cc_\\u0641\\u0631\\u062f"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-04-06 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '106',
+                    'name'        => 'تحلیلی کلاس کنکور(2) (95-1394) محمد رضا  حسینی فرد',
+                    'small_name'  => 'کلاس تحلیلی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/geometry.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u062a\\u062d\\u0644\\u06cc\\u0644\\u06cc","\\u0645\\u062d\\u0645\\u062f_\\u0631\\u0636\\u0627_\\u062d\\u0633\\u06cc\\u0646\\u06cc_\\u0641\\u0631\\u062f"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-04-05 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '105',
+                    'name'        => 'ریاضی پایه کلاس کنکور(2) (95-1394) محسن شهریان',
+                    'small_name'  => 'کلاس ریاضی پایه کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/140929040429.jpeg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0631\\u06cc\\u0627\\u0636\\u06cc_\\u067e\\u0627\\u06cc\\u0647","\\u0645\\u062d\\u0633\\u0646_\\u0634\\u0647\\u0631\\u06cc\\u0627\\u0646"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-04-04 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '104',
+                    'name'        => 'گسسته کلاس کنکور(2) (95-1394) آقای شاه محمدی',
+                    'small_name'  => 'کلاس گسسته کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/gosaste-1.png',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u06af\\u0633\\u0633\\u062a\\u0647" , "شاه_محمدی"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-04-03 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '103',
+                    'name'        => 'دیفرانسیل کلاس کنکور(2) (95-1394) رضا شامیزاده',
+                    'small_name'  => 'کلاس دیفرانسیل کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/dif-Lesson.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u062f\\u06cc\\u0641\\u0631\\u0627\\u0646\\u0633\\u06cc\\u0644","\\u0631\\u0636\\u0627_\\u0634\\u0627\\u0645\\u06cc\\u0632\\u0627\\u062f\\u0647"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-04-02 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '102',
+                    'name'        => 'شیمی کلاس کنکور(2) (95-1394) محمد رضا آقاجانی',
+                    'small_name'  => 'کلاس شیمی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/shimi-7.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0634\\u06cc\\u0645\\u06cc","\\u0645\\u062d\\u0645\\u062f_\\u0631\\u0636\\u0627_\\u0622\\u0642\\u0627\\u062c\\u0627\\u0646\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-04-01 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '101',
+                    'name'        => 'فیزیک کلاس کنکور(2) (95-1394)',
+                    'small_name'  => 'کلاس فیزیک کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/physic-4.png',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0641\\u06cc\\u0632\\u06cc\\u06a9","کازرانیان"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-03-31 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '100',
+                    'name'        => 'انگلیسی کلاس کنکور(2) (95-1394) کیاوش فراهانی',
+                    'small_name'  => 'کلاس زبان کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/rsz_english.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0632\\u0628\\u0627\\u0646_\\u0627\\u0646\\u06af\\u0644\\u06cc\\u0633\\u06cc","\\u06a9\\u06cc\\u0627\\u0648\\u0634_\\u0641\\u0631\\u0627\\u0647\\u0627\\u0646\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-03-30 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '99',
+                    'name'        => 'زبان و ادبیات فارسی کلاس کنکور(2) (95-1394) کاظم کاظمی',
+                    'small_name'  => 'کلاس ادبیات و زبان فارسی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/adabiyat.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0632\\u0628\\u0627\\u0646_\\u0648_\\u0627\\u062f\\u0628\\u06cc\\u0627\\u062a_\\u0641\\u0627\\u0631\\u0633\\u06cc","\\u06a9\\u0627\\u0638\\u0645_\\u06a9\\u0627\\u0638\\u0645\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-03-29 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '98',
+                    'name'        => 'عربی کلاس کنکور(2) (95-1394) میلاد ناصح زاده',
+                    'small_name'  => 'کلاس عربی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/arabi.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0639\\u0631\\u0628\\u06cc","\\u0645\\u06cc\\u0644\\u0627\\u062f_\\u0646\\u0627\\u0635\\u062d_\\u0632\\u0627\\u062f\\u0647"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-03-28 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '97',
+                    'name'        => 'معرفی رشته مشاوره',
+                    'small_name'  => 'معرفی رشته',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/150729033654.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u062f\\u0647\\u0645","\\u06cc\\u0627\\u0632\\u062f\\u0647\\u0645","\\u0627\\u0648\\u0644_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u062f\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0633\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0686\\u0647\\u0627\\u0631\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u062c\\u062f\\u06cc\\u062f","\\u0645\\u0634\\u0627\\u0648\\u0631\\u0647","\\u067e\\u06cc\\u0634","\\u067e\\u0627\\u06cc\\u0647","\\u0645\\u0639\\u0631\\u0641\\u06cc_\\u0631\\u0634\\u062a\\u0647"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-03-27 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '96',
+                    'name'        => 'زیست شناسی کلاس کنکور(1) (95-1394) دکتر ارشی',
+                    'small_name'  => 'کلاس زیست کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/zist-4.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0632\\u06cc\\u0633\\u062a_\\u0634\\u0646\\u0627\\u0633\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-03-26 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '95',
+                    'name'        => 'ریاضی پایه کلاس کنکور(1) (95-1394) محسن شهریان',
+                    'small_name'  => 'کلاس ریاضی پایه کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/140929040429.jpeg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0631\\u06cc\\u0627\\u0636\\u06cc_\\u067e\\u0627\\u06cc\\u0647","\\u0645\\u062d\\u0633\\u0646_\\u0634\\u0647\\u0631\\u06cc\\u0627\\u0646"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-03-25 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '94',
+                    'name'        => 'فیزیک کلاس کنکور(1) (95-1394) حمید فدایی فرد',
+                    'small_name'  => 'کلاس فیزیک کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/physic-6.png',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0641\\u06cc\\u0632\\u06cc\\u06a9","\\u062d\\u0645\\u06cc\\u062f_\\u0641\\u062f\\u0627\\u06cc\\u06cc_\\u0641\\u0631\\u062f"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-03-24 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '93',
+                    'name'        => 'شیمی کلاس کنکور(1) (95-1394) محمد حسین شکیباییان',
+                    'small_name'  => 'کلاس شیمی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/shimi-5.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0634\\u06cc\\u0645\\u06cc","\\u0645\\u062d\\u0645\\u062f_\\u062d\\u0633\\u06cc\\u0646_\\u0634\\u06a9\\u06cc\\u0628\\u0627\\u06cc\\u06cc\\u0627\\u0646"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-03-23 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '92',
+                    'name'        => 'شیمی 10 سال کنکور (95-1394) روح الله حاجی سلیمانی',
+                    'small_name'  => 'حل تست شیمی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/shimi-1.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0646\\u06a9\\u062a\\u0647_\\u0648_\\u062a\\u0633\\u062a","\\u0634\\u06cc\\u0645\\u06cc","\\u0631\\u0648\\u062d_\\u0627\\u0644\\u0644\\u0647_\\u062d\\u0627\\u062c\\u06cc_\\u0633\\u0644\\u06cc\\u0645\\u0627\\u0646\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-03-22 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '91',
+                    'name'        => 'زبان و ادبیات فارسی دوران طلایی ( جمع بندی ) (95-1394) محمد صادقی',
+                    'small_name'  => 'همایش ادبیات و زبان فارسی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/adabiat.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0647\\u0645\\u0627\\u06cc\\u0634","\\u062c\\u0645\\u0639_\\u0628\\u0646\\u062f\\u06cc","\\u0632\\u0628\\u0627\\u0646_\\u0648_\\u0627\\u062f\\u0628\\u06cc\\u0627\\u062a_\\u0641\\u0627\\u0631\\u0633\\u06cc","\\u0645\\u062d\\u0645\\u062f_\\u0635\\u0627\\u062f\\u0642\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-03-21 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '90',
+                    'name'        => 'زبان و ادبیات فارسی دوران طلایی(جمع بندی) کاظم کاظمی',
+                    'small_name'  => 'همایش ادبیات و زبان فارسی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/adabiyat.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0647\\u0645\\u0627\\u06cc\\u0634","\\u062c\\u0645\\u0639_\\u0628\\u0646\\u062f\\u06cc","\\u0632\\u0628\\u0627\\u0646_\\u0648_\\u0627\\u062f\\u0628\\u06cc\\u0627\\u062a_\\u0641\\u0627\\u0631\\u0633\\u06cc","\\u06a9\\u0627\\u0638\\u0645_\\u06a9\\u0627\\u0638\\u0645\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-03-20 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '89',
+                    'name'        => 'عربی دوران طلایی(جمع بندی) میلاد ناصح زاده',
+                    'small_name'  => 'همایش عربی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/arabi2.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0647\\u0645\\u0627\\u06cc\\u0634","\\u062c\\u0645\\u0639_\\u0628\\u0646\\u062f\\u06cc","\\u0639\\u0631\\u0628\\u06cc","\\u0645\\u06cc\\u0644\\u0627\\u062f_\\u0646\\u0627\\u0635\\u062d_\\u0632\\u0627\\u062f\\u0647"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-03-19 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '88',
+                    'name'        => 'دین و زندگی دوران طلایی(جمع بندی) جعفر رنجبرزاده',
+                    'small_name'  => 'همایش معارف کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/141009032429.jpeg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0647\\u0645\\u0627\\u06cc\\u0634","\\u062c\\u0645\\u0639_\\u0628\\u0646\\u062f\\u06cc","\\u062f\\u06cc\\u0646_\\u0648_\\u0632\\u0646\\u062f\\u06af\\u06cc","\\u062c\\u0639\\u0641\\u0631_\\u0631\\u0646\\u062c\\u0628\\u0631\\u0632\\u0627\\u062f\\u0647"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-03-18 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '87',
+                    'name'        => 'ریاضی تجربی صفر تا صد سوم دبیرستان (94-1393) محمدرضا مقصودی',
+                    'small_name'  => 'ریاضی تجربی سوم دبیرستان',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/140429065154.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u0633\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u0627\\u06cc\\u0647","\\u0635\\u0641\\u0631_\\u062a\\u0627_\\u0635\\u062f","\\u0631\\u06cc\\u0627\\u0636\\u06cc_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062d\\u0645\\u062f\\u0631\\u0636\\u0627_\\u0645\\u0642\\u0635\\u0648\\u062f\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-03-17 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '86',
+                    'name'        => 'عربی صفر تا صد سوم دبیرستان (94-1393) جعفر رنجبرزاده',
+                    'small_name'  => '0 تا 100 عربی سوم دبیرستان',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/arabi2.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u0633\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u0627\\u06cc\\u0647","\\u0635\\u0641\\u0631_\\u062a\\u0627_\\u0635\\u062f","\\u0639\\u0631\\u0628\\u06cc","\\u062c\\u0639\\u0641\\u0631_\\u0631\\u0646\\u062c\\u0628\\u0631\\u0632\\u0627\\u062f\\u0647"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-03-16 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '85',
+                    'name'        => 'زیست شناسی صفر تا صد سوم دبیرستان (94-1393)',
+                    'small_name'  => '0 تا 100 زیست سوم دبیرستان',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/140925050924.png',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u0633\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u0627\\u06cc\\u0647","\\u0635\\u0641\\u0631_\\u062a\\u0627_\\u0635\\u062f","\\u0632\\u06cc\\u0633\\u062a_\\u0634\\u0646\\u0627\\u0633\\u06cc"]}',
+                    'enable'      => false,
+                    'display'     => false,
+                    'created_at'  => '2017-03-15 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '84',
+                    'name'        => 'جبر و احتمال صفر تا صد سوم دبیرستان (94-1393) حسین کرد',
+                    'small_name'  => '0 تا 100 جبر و احتمال',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/140205012736.gif',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u0633\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u0627\\u06cc\\u0647","\\u0635\\u0641\\u0631_\\u062a\\u0627_\\u0635\\u062f","\\u062c\\u0628\\u0631_\\u0648_\\u0627\\u062d\\u062a\\u0645\\u0627\\u0644","\\u0631\\u06cc\\u0627\\u0636\\u06cc_\\u067e\\u0627\\u06cc\\u0647","\\u062d\\u0633\\u06cc\\u0646_\\u06a9\\u0631\\u062f"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-03-14 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '83',
+                    'name'        => 'حسابان صفر تا صد سوم دبیرستان (94-1393) معین کریمی',
+                    'small_name'  => '0 تا 100 حسابان',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/math.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u0633\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u0627\\u06cc\\u0647","\\u0635\\u0641\\u0631_\\u062a\\u0627_\\u0635\\u062f","\\u062d\\u0633\\u0627\\u0628\\u0627\\u0646","\\u0631\\u06cc\\u0627\\u0636\\u06cc_\\u067e\\u0627\\u06cc\\u0647","\\u0645\\u0639\\u06cc\\u0646_\\u06a9\\u0631\\u06cc\\u0645\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-03-13 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '82',
+                    'name'        => 'جبر و احتمال صفر تا صد سوم دبیرستان (94-1393) باقر رضا خانی',
+                    'small_name'  => '0 تا 100 جبر و احتمال',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/140205012736.gif',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u0633\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u0627\\u06cc\\u0647","\\u0635\\u0641\\u0631_\\u062a\\u0627_\\u0635\\u062f","\\u062c\\u0628\\u0631_\\u0648_\\u0627\\u062d\\u062a\\u0645\\u0627\\u0644","\\u0631\\u06cc\\u0627\\u0636\\u06cc_\\u067e\\u0627\\u06cc\\u0647","\\u0628\\u0627\\u0642\\u0631_\\u0631\\u0636\\u0627_\\u062e\\u0627\\u0646\\u06cc"]}',
+                    'enable'      => false,
+                    'display'     => false,
+                    'created_at'  => '2017-03-12 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '81',
+                    'name'        => 'زبان و ادبیات فارسی صفر تا صد سوم دبیرستان (94-1393) محمد صادقی',
+                    'small_name'  => '0 تا 100 ادبیات و زبان فارسی سوم دبیرستان',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/adabiyat.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u0633\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u0627\\u06cc\\u0647","\\u0635\\u0641\\u0631_\\u062a\\u0627_\\u0635\\u062f","\\u0632\\u0628\\u0627\\u0646_\\u0648_\\u0627\\u062f\\u0628\\u06cc\\u0627\\u062a_\\u0641\\u0627\\u0631\\u0633\\u06cc","\\u0645\\u062d\\u0645\\u062f_\\u0635\\u0627\\u062f\\u0642\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-03-11 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '80',
+                    'name'        => 'هندسه پایه صفر تا صد سوم دبیرستان (94-1393) محمد رضا  حسینی فرد',
+                    'small_name'  => '0 تا 100 هندسه سوم دبیرستان',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/hendesepaye-5.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u0633\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u0627\\u06cc\\u0647","\\u0635\\u0641\\u0631_\\u062a\\u0627_\\u0635\\u062f","\\u0647\\u0646\\u062f\\u0633\\u0647_\\u067e\\u0627\\u06cc\\u0647","\\u0645\\u062d\\u0645\\u062f_\\u0631\\u0636\\u0627_\\u062d\\u0633\\u06cc\\u0646\\u06cc_\\u0641\\u0631\\u062f"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-03-10 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '79',
+                    'name'        => 'انگلیسی صفر تا صد سوم دبیرستان (94-1393) کیاوش فراهانی',
+                    'small_name'  => '0 تا 100 زبان سوم دبیرستان',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/zaban-1.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u0633\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u0627\\u06cc\\u0647","\\u0635\\u0641\\u0631_\\u062a\\u0627_\\u0635\\u062f","\\u0632\\u0628\\u0627\\u0646_\\u0627\\u0646\\u06af\\u0644\\u06cc\\u0633\\u06cc","\\u06a9\\u06cc\\u0627\\u0648\\u0634_\\u0641\\u0631\\u0627\\u0647\\u0627\\u0646\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-03-09 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '78',
+                    'name'        => 'فیزیک صفر تا صد سوم دبیرستان (94-1393) حمید فدایی فرد',
+                    'small_name'  => '0 تا 100 فیزیک سوم دبیرستان',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/physic-5.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u0633\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u0627\\u06cc\\u0647","\\u0635\\u0641\\u0631_\\u062a\\u0627_\\u0635\\u062f","\\u0641\\u06cc\\u0632\\u06cc\\u06a9","\\u062d\\u0645\\u06cc\\u062f_\\u0641\\u062f\\u0627\\u06cc\\u06cc_\\u0641\\u0631\\u062f"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-03-08 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '77',
+                    'name'        => 'ریاضی 10 سال کنکور (95-1394) رضا شامیزاده',
+                    'small_name'  => 'حل تست ریاضی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/150228030423.jpeg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0646\\u06a9\\u062a\\u0647_\\u0648_\\u062a\\u0633\\u062a","\\u0631\\u06cc\\u0627\\u0636\\u06cc_\\u067e\\u0627\\u06cc\\u0647","\\u0631\\u0636\\u0627_\\u0634\\u0627\\u0645\\u06cc\\u0632\\u0627\\u062f\\u0647"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-03-07 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '76',
+                    'name'        => 'زیست شناسی دوم دبیرستان (94-1393) محمد علی امینی راد',
+                    'small_name'  => 'کلاس زیست دوم دبیرستان',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/zist-2.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u062f\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u0627\\u06cc\\u0647","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0632\\u06cc\\u0633\\u062a_\\u0634\\u0646\\u0627\\u0633\\u06cc","\\u0645\\u062d\\u0645\\u062f_\\u0639\\u0644\\u06cc_\\u0627\\u0645\\u06cc\\u0646\\u06cc_\\u0631\\u0627\\u062f"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-03-06 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '75',
+                    'name'        => 'دین و زندگی پیش آزمون (94-1393) جعفر رنجبرزاده',
+                    'small_name'  => 'پیش آزمون معارف کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/141009032429.jpeg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u067e\\u06cc\\u0634_\\u0622\\u0632\\u0645\\u0648\\u0646","\\u062f\\u06cc\\u0646_\\u0648_\\u0632\\u0646\\u062f\\u06af\\u06cc","\\u062c\\u0639\\u0641\\u0631_\\u0631\\u0646\\u062c\\u0628\\u0631\\u0632\\u0627\\u062f\\u0647"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-03-05 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '74',
+                    'name'        => 'شیمی صفر تا صد سوم دبیرستان (94-1393) محمد رضا آقاجانی',
+                    'small_name'  => '0 تا 100 شیمی سوم دبیرستان',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/shimi-1.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u0633\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u0627\\u06cc\\u0647","\\u0635\\u0641\\u0631_\\u062a\\u0627_\\u0635\\u062f","\\u0634\\u06cc\\u0645\\u06cc","\\u0645\\u062d\\u0645\\u062f_\\u0631\\u0636\\u0627_\\u0622\\u0642\\u0627\\u062c\\u0627\\u0646\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-03-04 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '73',
+                    'name'        => 'دین و زندگی کلاس کنکور(2) (94-1393) جعفر رنجبرزاده',
+                    'small_name'  => 'کلاس دینی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/141009032429.jpeg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u062f\\u06cc\\u0646_\\u0648_\\u0632\\u0646\\u062f\\u06af\\u06cc","\\u062c\\u0639\\u0641\\u0631_\\u0631\\u0646\\u062c\\u0628\\u0631\\u0632\\u0627\\u062f\\u0647"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-03-03 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '72',
+                    'name'        => 'اخلاق کلاس کنکور(2) (94-1393) علی نقی طباطبایی',
+                    'small_name'  => 'اخلاق',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/140929063136.jpeg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0627\\u062e\\u0644\\u0627\\u0642","\\u0639\\u0644\\u06cc_\\u0646\\u0642\\u06cc_\\u0637\\u0628\\u0627\\u0637\\u0628\\u0627\\u06cc\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-03-02 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '71',
+                    'name'        => 'ریاضی پایه کلاس کنکور(2) (94-1393) رضا شامیزاده',
+                    'small_name'  => 'کلاس ریاضی پایه کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/140929040429.jpeg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0631\\u06cc\\u0627\\u0636\\u06cc_\\u067e\\u0627\\u06cc\\u0647","\\u0631\\u0636\\u0627_\\u0634\\u0627\\u0645\\u06cc\\u0632\\u0627\\u062f\\u0647"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-03-01 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '69',
+                    'name'        => 'هندسه پایه کلاس کنکور(2) (94-1393) رضا شامیزاده',
+                    'small_name'  => 'کلاس هندسه کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/hendesepaye-6.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0647\\u0646\\u062f\\u0633\\u0647_\\u067e\\u0627\\u06cc\\u0647","\\u0631\\u0636\\u0627_\\u0634\\u0627\\u0645\\u06cc\\u0632\\u0627\\u062f\\u0647"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-02-28 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '68',
+                    'name'        => 'زیست شناسی سوم دبیرستان (94-1393) دکتر ارشی',
+                    'small_name'  => 'کلاس زیست سوم دبیرستان',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/140925050924.png',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u0633\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u0627\\u06cc\\u0647","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0632\\u06cc\\u0633\\u062a_\\u0634\\u0646\\u0627\\u0633\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-02-27 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '66',
+                    'name'        => 'انگلیسی کلاس کنکور(2) (94-1393) آقای درویش',
+                    'small_name'  => 'کلاس زبان کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/zaban-3.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0632\\u0628\\u0627\\u0646_\\u0627\\u0646\\u06af\\u0644\\u06cc\\u0633\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-02-26 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '65',
+                    'name'        => 'هندسه پایه کلاس کنکور(1) (94-1393) وحید کبریایی',
+                    'small_name'  => 'کلاس هندسه کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/hendesepaye-1.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0647\\u0646\\u062f\\u0633\\u0647_\\u067e\\u0627\\u06cc\\u0647","\\u0648\\u062d\\u06cc\\u062f_\\u06a9\\u0628\\u0631\\u06cc\\u0627\\u06cc\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-02-25 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '64',
+                    'name'        => 'زبان و ادبیات فارسی کلاس کنکور(1) (94-1393) عبدالرضا مرادی',
+                    'small_name'  => 'کلاس ادبیات و زبان فارسی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/adabiyat.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0632\\u0628\\u0627\\u0646_\\u0648_\\u0627\\u062f\\u0628\\u06cc\\u0627\\u062a_\\u0641\\u0627\\u0631\\u0633\\u06cc","\\u0639\\u0628\\u062f\\u0627\\u0644\\u0631\\u0636\\u0627_\\u0645\\u0631\\u0627\\u062f\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-02-24 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '63',
+                    'name'        => 'شیمی کلاس کنکور(1) (94-1393) روح الله حاجی سلیمانی',
+                    'small_name'  => 'کلاس شیمی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/shimi-5.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0634\\u06cc\\u0645\\u06cc","\\u0631\\u0648\\u062d_\\u0627\\u0644\\u0644\\u0647_\\u062d\\u0627\\u062c\\u06cc_\\u0633\\u0644\\u06cc\\u0645\\u0627\\u0646\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-02-23 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '62',
+                    'name'        => 'انگلیسی کلاس کنکور(1) (94-1393) علی اکبر عزتی',
+                    'small_name'  => 'کلاس زبان کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/zaban-4.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0632\\u0628\\u0627\\u0646_\\u0627\\u0646\\u06af\\u0644\\u06cc\\u0633\\u06cc","\\u0639\\u0644\\u06cc_\\u0627\\u06a9\\u0628\\u0631_\\u0639\\u0632\\u062a\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-02-22 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '61',
+                    'name'        => 'دین و زندگی کلاس کنکور(1) (94-1393) مهدی تفتی',
+                    'small_name'  => 'کلاس معارف کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/dini.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u062f\\u06cc\\u0646_\\u0648_\\u0632\\u0646\\u062f\\u06af\\u06cc","\\u0645\\u0647\\u062f\\u06cc_\\u062a\\u0641\\u062a\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-02-21 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '60',
+                    'name'        => 'زبان و ادبیات فارسی سوم دبیرستان (94-1393) عبدالرضا مرادی',
+                    'small_name'  => 'کلاس ادبیات و زبان فارسی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/adabiyat.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u0633\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u0627\\u06cc\\u0647","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0632\\u0628\\u0627\\u0646_\\u0648_\\u0627\\u062f\\u0628\\u06cc\\u0627\\u062a_\\u0641\\u0627\\u0631\\u0633\\u06cc","\\u0639\\u0628\\u062f\\u0627\\u0644\\u0631\\u0636\\u0627_\\u0645\\u0631\\u0627\\u062f\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-02-20 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '59',
+                    'name'        => 'دین و زندگی سوم دبیرستان (94-1393) علی نقی طباطبایی',
+                    'small_name'  => 'کلاس معارف کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/dini.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u0633\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u0627\\u06cc\\u0647","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u062f\\u06cc\\u0646_\\u0648_\\u0632\\u0646\\u062f\\u06af\\u06cc","\\u0639\\u0644\\u06cc_\\u0646\\u0642\\u06cc_\\u0637\\u0628\\u0627\\u0637\\u0628\\u0627\\u06cc\\u06cc"]}',
+                    'enable'      => false,
+                    'display'     => false,
+                    'created_at'  => '2017-02-19 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '58',
+                    'name'        => 'انگلیسی سوم دبیرستان (94-1393) کیاوش فراهانی',
+                    'small_name'  => 'کلاس زبان سوم دبیرستان',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/zaban-1.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u0633\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u0627\\u06cc\\u0647","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0632\\u0628\\u0627\\u0646_\\u0627\\u0646\\u06af\\u0644\\u06cc\\u0633\\u06cc","\\u06a9\\u06cc\\u0627\\u0648\\u0634_\\u0641\\u0631\\u0627\\u0647\\u0627\\u0646\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-02-18 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '57',
+                    'name'        => 'عربی سوم دبیرستان (94-1393) پدرام علیمرادی',
+                    'small_name'  => 'کلاس عربی سوم دبیرستان',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/192.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u0633\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u0627\\u06cc\\u0647","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0639\\u0631\\u0628\\u06cc","\\u067e\\u062f\\u0631\\u0627\\u0645_\\u0639\\u0644\\u06cc\\u0645\\u0631\\u0627\\u062f\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-02-17 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '56',
+                    'name'        => 'جبر و احتمال سوم دبیرستان (94-1393)',
+                    'small_name'  => 'کلاس جبر و احتمال سوم',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/140205012736.gif',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u0633\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u0627\\u06cc\\u0647","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u062c\\u0628\\u0631_\\u0648_\\u0627\\u062d\\u062a\\u0645\\u0627\\u0644","\\u0631\\u06cc\\u0627\\u0636\\u06cc_\\u067e\\u0627\\u06cc\\u0647"]}',
+                    'enable'      => false,
+                    'display'     => false,
+                    'created_at'  => '2017-02-16 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '54',
+                    'name'        => 'هندسه پایه سوم دبیرستان (94-1393) حسن مرصعی',
+                    'small_name'  => 'کلاس هندسه سوم دبیرستان',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/hendesepaye-5.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u0633\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u0627\\u06cc\\u0647","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0647\\u0646\\u062f\\u0633\\u0647_\\u067e\\u0627\\u06cc\\u0647","\\u062d\\u0633\\u0646_\\u0645\\u0631\\u0635\\u0639\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-02-15 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '53',
+                    'name'        => 'شیمی سوم دبیرستان (94-1393) آقای جعفری',
+                    'small_name'  => 'کلاس شیمی سوم دبیرستان',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/shimi-6.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u0633\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u0627\\u06cc\\u0647","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0634\\u06cc\\u0645\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-02-14 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '52',
+                    'name'        => 'فیزیک سوم دبیرستان (94-1393) آقای جهان بخش',
+                    'small_name'  => 'کلاس فیزیک سوم دبیرستان',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/physic-5.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u0633\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u0627\\u06cc\\u0647","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0641\\u06cc\\u0632\\u06cc\\u06a9" , "جهانبخش"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-02-13 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '51',
+                    'name'        => 'ریاضی تجربی کلاس کنکور(2) (94-1393) رضا شامیزاده',
+                    'small_name'  => 'کلاس ریاضی تجربی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/140701100443.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0631\\u06cc\\u0627\\u0636\\u06cc_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0636\\u0627_\\u0634\\u0627\\u0645\\u06cc\\u0632\\u0627\\u062f\\u0647"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-02-12 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '50',
+                    'name'        => 'زیست شناسی کلاس کنکور(2) (94-1393) محمد پازوکی',
+                    'small_name'  => 'کلاس زیست کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/131001125425.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0632\\u06cc\\u0633\\u062a_\\u0634\\u0646\\u0627\\u0633\\u06cc","\\u0645\\u062d\\u0645\\u062f_\\u067e\\u0627\\u0632\\u0648\\u06a9\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-02-11 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '48',
+                    'name'        => 'عربی کلاس کنکور(2) (94-1393) میلاد ناصح زاده',
+                    'small_name'  => 'کلاس عربی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/arabi.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0639\\u0631\\u0628\\u06cc","\\u0645\\u06cc\\u0644\\u0627\\u062f_\\u0646\\u0627\\u0635\\u062d_\\u0632\\u0627\\u062f\\u0647"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-02-10 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '47',
+                    'name'        => 'دیفرانسیل کلاس کنکور(2) (94-1393) رضا شامیزاده',
+                    'small_name'  => 'کلاس دیفرانسیل کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/dif-Lesson.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u062f\\u06cc\\u0641\\u0631\\u0627\\u0646\\u0633\\u06cc\\u0644","\\u0631\\u0636\\u0627_\\u0634\\u0627\\u0645\\u06cc\\u0632\\u0627\\u062f\\u0647"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-02-09 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '46',
+                    'name'        => 'تحلیلی کلاس کنکور(2) (94-1393) رضا شامیزاده',
+                    'small_name'  => 'کلاس تحلیلی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/geometry.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u062a\\u062d\\u0644\\u06cc\\u0644\\u06cc","\\u0631\\u0636\\u0627_\\u0634\\u0627\\u0645\\u06cc\\u0632\\u0627\\u062f\\u0647"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-02-08 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '45',
+                    'name'        => 'گسسته کلاس کنکور(2) (94-1393) رضا شامیزاده',
+                    'small_name'  => 'کلاس گسسته کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/gosaste-1.png',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u06af\\u0633\\u0633\\u062a\\u0647","\\u0631\\u0636\\u0627_\\u0634\\u0627\\u0645\\u06cc\\u0632\\u0627\\u062f\\u0647"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-02-07 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '44',
+                    'name'        => 'فیزیک کلاس کنکور(2) (94-1393) حمید فدایی فرد',
+                    'small_name'  => 'کلاس فیزیک کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/physic-4.png',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0641\\u06cc\\u0632\\u06cc\\u06a9","\\u062d\\u0645\\u06cc\\u062f_\\u0641\\u062f\\u0627\\u06cc\\u06cc_\\u0641\\u0631\\u062f"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-02-06 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '43',
+                    'name'        => 'شیمی کلاس کنکور(2) (94-1393) محسن معینی',
+                    'small_name'  => 'کلاس شیمی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/shimi-7.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0634\\u06cc\\u0645\\u06cc","\\u0645\\u062d\\u0633\\u0646_\\u0645\\u0639\\u06cc\\u0646\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-02-05 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '42',
+                    'name'        => 'زبان و ادبیات فارسی کلاس کنکور(2) (94-1393) عبدالرضا مرادی',
+                    'small_name'  => 'کلاس ادبیات و زبان فارسی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/adabiyat.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0632\\u0628\\u0627\\u0646_\\u0648_\\u0627\\u062f\\u0628\\u06cc\\u0627\\u062a_\\u0641\\u0627\\u0631\\u0633\\u06cc","\\u0639\\u0628\\u062f\\u0627\\u0644\\u0631\\u0636\\u0627_\\u0645\\u0631\\u0627\\u062f\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-02-04 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '41',
+                    'name'        => 'زیست شناسی کلاس کنکور(1) (94-1393) مسعود حدادی',
+                    'small_name'  => 'کلاس زیست کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/zist-4.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0632\\u06cc\\u0633\\u062a_\\u0634\\u0646\\u0627\\u0633\\u06cc","\\u0645\\u0633\\u0639\\u0648\\u062f_\\u062d\\u062f\\u0627\\u062f\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-02-03 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '40',
+                    'name'        => 'تحلیلی کلاس کنکور(1) (94-1393) رضا شامیزاده',
+                    'small_name'  => 'کلاس تحلیلی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/geometry.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u062a\\u062d\\u0644\\u06cc\\u0644\\u06cc","\\u0631\\u0636\\u0627_\\u0634\\u0627\\u0645\\u06cc\\u0632\\u0627\\u062f\\u0647"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-02-02 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '39',
+                    'name'        => 'عربی کلاس کنکور(1) (94-1393) پدرام علیمرادی',
+                    'small_name'  => 'کلاس عربی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/192.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0639\\u0631\\u0628\\u06cc","\\u067e\\u062f\\u0631\\u0627\\u0645_\\u0639\\u0644\\u06cc\\u0645\\u0631\\u0627\\u062f\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-02-01 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '38',
+                    'name'        => 'هدایت تحصیلی مشاوره امید زاهدی',
+                    'small_name'  => 'مشاوره',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/140701010616.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u062f\\u0647\\u0645","\\u06cc\\u0627\\u0632\\u062f\\u0647\\u0645","\\u0627\\u0648\\u0644_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u062f\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0633\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0686\\u0647\\u0627\\u0631\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u062c\\u062f\\u06cc\\u062f","\\u0645\\u0634\\u0627\\u0648\\u0631\\u0647","\\u067e\\u06cc\\u0634","\\u067e\\u0627\\u06cc\\u0647","\\u0647\\u062f\\u0627\\u06cc\\u062a_\\u062a\\u062d\\u0635\\u06cc\\u0644\\u06cc","\\u0627\\u0645\\u06cc\\u062f_\\u0632\\u0627\\u0647\\u062f\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-01-31 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '37',
+                    'name'        => 'مشاوره و برنامه ریزی مشاوره محمد علی امینی راد',
+                    'small_name'  => 'مشاوره',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/140701010549.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u062f\\u0647\\u0645","\\u06cc\\u0627\\u0632\\u062f\\u0647\\u0645","\\u0627\\u0648\\u0644_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u062f\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0633\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0686\\u0647\\u0627\\u0631\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u062c\\u062f\\u06cc\\u062f","\\u0645\\u0634\\u0627\\u0648\\u0631\\u0647","\\u067e\\u06cc\\u0634","\\u067e\\u0627\\u06cc\\u0647","\\u0645\\u0634\\u0627\\u0648\\u0631\\u0647_\\u0648_\\u0628\\u0631\\u0646\\u0627\\u0645\\u0647_\\u0631\\u06cc\\u0632\\u06cc","\\u0645\\u062d\\u0645\\u062f_\\u0639\\u0644\\u06cc_\\u0627\\u0645\\u06cc\\u0646\\u06cc_\\u0631\\u0627\\u062f"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-01-30 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '36',
+                    'name'        => 'ریاضی تجربی کلاس کنکور(1) (94-1393) علی صدری',
+                    'small_name'  => 'کلاس ریاضی تجربی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/140701100443.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0631\\u06cc\\u0627\\u0636\\u06cc_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0639\\u0644\\u06cc_\\u0635\\u062f\\u0631\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-01-29 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '35',
+                    'name'        => 'گسسته کلاس کنکور(1) (94-1393) رضا شامیزاده',
+                    'small_name'  => 'کلاس گسسته کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/gosaste.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u06af\\u0633\\u0633\\u062a\\u0647","\\u0631\\u0636\\u0627_\\u0634\\u0627\\u0645\\u06cc\\u0632\\u0627\\u062f\\u0647"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-01-28 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '33',
+                    'name'        => 'فیزیک کلاس کنکور(1) (94-1393) رفیع رفیعی',
+                    'small_name'  => 'کلاس فیزیک کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/physic-6.png',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0641\\u06cc\\u0632\\u06cc\\u06a9","\\u0631\\u0641\\u06cc\\u0639_\\u0631\\u0641\\u06cc\\u0639\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-01-27 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '32',
+                    'name'        => 'دیفرانسیل کلاس کنکور(1) (94-1393) محسن شهریان',
+                    'small_name'  => 'کلاس دیفرانسیل کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/dif-2.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u062f\\u06cc\\u0641\\u0631\\u0627\\u0646\\u0633\\u06cc\\u0644","\\u0645\\u062d\\u0633\\u0646_\\u0634\\u0647\\u0631\\u06cc\\u0627\\u0646"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-01-26 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '31',
+                    'name'        => 'المپیاد فیزیک المپیادهای علمی (94-1393) مصطفی جعفری نژاد',
+                    'small_name'  => 'کلاس المپیاد فیزیک',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/140617070607.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u0627\\u0644\\u0645\\u067e\\u06cc\\u0627\\u062f_\\u0639\\u0644\\u0645\\u06cc","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u0627\\u06cc\\u0647","\\u0627\\u0644\\u0645\\u067e\\u06cc\\u0627\\u062f_\\u0641\\u06cc\\u0632\\u06cc\\u06a9","\\u0645\\u0635\\u0637\\u0641\\u06cc_\\u062c\\u0639\\u0641\\u0631\\u06cc_\\u0646\\u0698\\u0627\\u062f"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-01-25 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '30',
+                    'name'        => 'همایش ریاضی تجربی دوران طلایی(جمع بندی) رضا شامیزاده',
+                    'small_name'  => 'همایش ریاضی تجربی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/140429065154.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0647\\u0645\\u0627\\u06cc\\u0634","\\u062c\\u0645\\u0639_\\u0628\\u0646\\u062f\\u06cc","\\u0631\\u06cc\\u0627\\u0636\\u06cc_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0636\\u0627_\\u0634\\u0627\\u0645\\u06cc\\u0632\\u0627\\u062f\\u0647"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-01-24 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '29',
+                    'name'        => 'همایش ریاضیات گسسته و جبرواحتمال دوران طلایی(جمع بندی) رضا شامیزاده',
+                    'small_name'  => 'همایش گسسته و جبر و احتمال کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/140420082242.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0647\\u0645\\u0627\\u06cc\\u0634","\\u062c\\u0645\\u0639_\\u0628\\u0646\\u062f\\u06cc","\\u06af\\u0633\\u0633\\u062a\\u0647","\\u062c\\u0628\\u0631_\\u0648_\\u0627\\u062d\\u062a\\u0645\\u0627\\u0644","\\u067e\\u0627\\u06cc\\u0647","\\u0633\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0631\\u0636\\u0627_\\u0634\\u0627\\u0645\\u06cc\\u0632\\u0627\\u062f\\u0647"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-01-23 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '28',
+                    'name'        => 'آزمون ورودی اول دبیرستان (93-1392)',
+                    'small_name'  => 'آزمون ورودی دبیرستان',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/140416090231.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u0627\\u0648\\u0644_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u0627\\u06cc\\u0647","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0622\\u0632\\u0645\\u0648\\u0646_\\u0648\\u0631\\u0648\\u062f\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-01-22 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '27',
+                    'name'        => 'ویژگی های ماده
+(چگالی و فشار) دوران طلایی(جمع بندی) حمید فدایی فرد',
+                    'small_name'  => 'جمع بندی ویژگی های ماده',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/140412081845.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0647\\u0645\\u0627\\u06cc\\u0634","\\u062c\\u0645\\u0639_\\u0628\\u0646\\u062f\\u06cc","\\u0641\\u06cc\\u0632\\u06cc\\u06a9","\\u062d\\u0645\\u06cc\\u062f_\\u0641\\u062f\\u0627\\u06cc\\u06cc_\\u0641\\u0631\\u062f"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-01-21 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '26',
+                    'name'        => 'گرما و قانون گازها دوران طلایی(جمع بندی) حمید فدایی فرد',
+                    'small_name'  => 'جمع بندی گرما و قانون گازها',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/140407110606.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0647\\u0645\\u0627\\u06cc\\u0634","\\u062c\\u0645\\u0639_\\u0628\\u0646\\u062f\\u06cc","\\u0641\\u06cc\\u0632\\u06cc\\u06a9","\\u062d\\u0645\\u06cc\\u062f_\\u0641\\u062f\\u0627\\u06cc\\u06cc_\\u0641\\u0631\\u062f"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-01-20 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '25',
+                    'name'        => 'زبان سوم و چهارم دبیرستان دوران طلایی(جمع بندی) کیاوش فراهانی',
+                    'small_name'  => 'جمع بندی زبان انگلیسی',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/140327081735.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0647\\u0645\\u0627\\u06cc\\u0634","\\u062c\\u0645\\u0639_\\u0628\\u0646\\u062f\\u06cc","\\u0632\\u0628\\u0627\\u0646_\\u0627\\u0646\\u06af\\u0644\\u06cc\\u0633\\u06cc","\\u0633\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0686\\u0647\\u0627\\u0631\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u06a9\\u06cc\\u0627\\u0648\\u0634_\\u0641\\u0631\\u0627\\u0647\\u0627\\u0646\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-01-19 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '23',
+                    'name'        => 'شیمی امتحان نهایی سوم محسن معینی',
+                    'small_name'  => 'شب امتحان شیمی',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/140316072915.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u0633\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u0627\\u06cc\\u0647","\\u0627\\u0645\\u062a\\u062d\\u0627\\u0646_\\u0646\\u0647\\u0627\\u06cc\\u06cc","\\u0634\\u06cc\\u0645\\u06cc","\\u0645\\u062d\\u0633\\u0646_\\u0645\\u0639\\u06cc\\u0646\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-01-18 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '22',
+                    'name'        => 'بازتاب و شکست نور دوران طلایی(جمع بندی) حمید فدایی فرد',
+                    'small_name'  => 'جمع بندی نور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/140313073020.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0647\\u0645\\u0627\\u06cc\\u0634","\\u062c\\u0645\\u0639_\\u0628\\u0646\\u062f\\u06cc","\\u0641\\u06cc\\u0632\\u06cc\\u06a9","\\u062d\\u0645\\u06cc\\u062f_\\u0641\\u062f\\u0627\\u06cc\\u06cc_\\u0641\\u0631\\u062f"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-01-17 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '21',
+                    'name'        => 'آمار و مدلسازی دوران طلایی(جمع بندی) رضا شامیزاده',
+                    'small_name'  => 'جمع بندی آمار و مدلسازی',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/140206120424.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0647\\u0645\\u0627\\u06cc\\u0634","\\u062c\\u0645\\u0639_\\u0628\\u0646\\u062f\\u06cc","\\u0622\\u0645\\u0627\\u0631_\\u0648_\\u0645\\u062f\\u0644\\u0633\\u0627\\u0632\\u06cc","\\u0631\\u06cc\\u0627\\u0636\\u06cc_\\u067e\\u0627\\u06cc\\u0647","\\u0631\\u0636\\u0627_\\u0634\\u0627\\u0645\\u06cc\\u0632\\u0627\\u062f\\u0647"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-01-16 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '20',
+                    'name'        => 'جبر و احتمال امتحان نهایی سوم',
+                    'small_name'  => 'شب امتحان جبر و احتمال',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/140205012736.gif',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u0633\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0636\\u0628\\u0637_\\u0627\\u0633\\u062a\\u0648\\u062f\\u06cc\\u0648\\u06cc\\u06cc","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u0627\\u06cc\\u0647","\\u0627\\u0645\\u062a\\u062d\\u0627\\u0646_\\u0646\\u0647\\u0627\\u06cc\\u06cc","\\u062c\\u0628\\u0631_\\u0648_\\u0627\\u062d\\u062a\\u0645\\u0627\\u0644","\\u0631\\u06cc\\u0627\\u0636\\u06cc_\\u067e\\u0627\\u06cc\\u0647"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-01-15 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '18',
+                    'name'        => 'جزوه زیست شناسی دوم دبیرستان (93-1392) محمد علی امینی راد',
+                    'small_name'  => 'جزوه زیست دوم دبیرستان',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/zist-6.png',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u062f\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u0627\\u06cc\\u0647","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0632\\u06cc\\u0633\\u062a_\\u0634\\u0646\\u0627\\u0633\\u06cc","\\u0645\\u062d\\u0645\\u062f_\\u0639\\u0644\\u06cc_\\u0627\\u0645\\u06cc\\u0646\\u06cc_\\u0631\\u0627\\u062f"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-01-14 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '17',
+                    'name'        => 'دین و زندگی کلاس کنکور (93-1392) مهدی تفتی',
+                    'small_name'  => 'کلاس معارف کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/dini-1.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u062f\\u06cc\\u0646_\\u0648_\\u0632\\u0646\\u062f\\u06af\\u06cc","\\u0645\\u0647\\u062f\\u06cc_\\u062a\\u0641\\u062a\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-01-13 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '16',
+                    'name'        => 'جزوه زیست شناسی اول دبیرستان (93-1392) محمد علی امینی راد',
+                    'small_name'  => 'جزوه زیست اول دبیرستان',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/zist-2.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u0627\\u0648\\u0644_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u0627\\u06cc\\u0647","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0632\\u06cc\\u0633\\u062a_\\u0634\\u0646\\u0627\\u0633\\u06cc","\\u0645\\u062d\\u0645\\u062f_\\u0639\\u0644\\u06cc_\\u0627\\u0645\\u06cc\\u0646\\u06cc_\\u0631\\u0627\\u062f"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-01-12 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '13',
+                    'name'        => 'حسابان سوم دبیرستان (94-1393) محمدرضا مقصودی',
+                    'small_name'  => 'حسابان سوم دبیرستان',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/math.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u0633\\u0648\\u0645_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u0627\\u06cc\\u0647","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u062d\\u0633\\u0627\\u0628\\u0627\\u0646","\\u0631\\u06cc\\u0627\\u0636\\u06cc_\\u067e\\u0627\\u06cc\\u0647","\\u0645\\u062d\\u0645\\u062f\\u0631\\u0636\\u0627_\\u0645\\u0642\\u0635\\u0648\\u062f\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-01-11 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '12',
+                    'name'        => 'ریاضی پایه اول دبیرستان (93-1392) محمدرضا مقصودی',
+                    'small_name'  => 'ریاضی اول دبیرستان',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/riazipaie3.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u0627\\u0648\\u0644_\\u062f\\u0628\\u06cc\\u0631\\u0633\\u062a\\u0627\\u0646","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u0627\\u06cc\\u0647","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0631\\u06cc\\u0627\\u0636\\u06cc_\\u067e\\u0627\\u06cc\\u0647","\\u0645\\u062d\\u0645\\u062f\\u0631\\u0636\\u0627_\\u0645\\u0642\\u0635\\u0648\\u062f\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-01-10 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '11',
+                    'name'        => 'فیزیک کلاس کنکور (93-1392) علیرضا رمضانی',
+                    'small_name'  => 'کلاس فیزیک کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/physics.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0641\\u06cc\\u0632\\u06cc\\u06a9","\\u0639\\u0644\\u06cc\\u0631\\u0636\\u0627_\\u0631\\u0645\\u0636\\u0627\\u0646\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-01-09 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '10',
+                    'name'        => 'شیمی کلاس کنکور (93-1392) روح الله حاجی سلیمانی',
+                    'small_name'  => 'کلاس شیمی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/shimi-1.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0634\\u06cc\\u0645\\u06cc","\\u0631\\u0648\\u062d_\\u0627\\u0644\\u0644\\u0647_\\u062d\\u0627\\u062c\\u06cc_\\u0633\\u0644\\u06cc\\u0645\\u0627\\u0646\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-01-08 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '9',
+                    'name'        => 'هندسه پایه کلاس کنکور (93-1392) رضا شامیزاده',
+                    'small_name'  => 'کلاس هندسه کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/hendesepaye-4.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0647\\u0646\\u062f\\u0633\\u0647_\\u067e\\u0627\\u06cc\\u0647","\\u0631\\u0636\\u0627_\\u0634\\u0627\\u0645\\u06cc\\u0632\\u0627\\u062f\\u0647"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-01-07 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '8',
+                    'name'        => 'انگلیسی کلاس کنکور (93-1392) علی اکبر عزتی',
+                    'small_name'  => 'کلاس زبان کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/zaban-2.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0632\\u0628\\u0627\\u0646_\\u0627\\u0646\\u06af\\u0644\\u06cc\\u0633\\u06cc","\\u0639\\u0644\\u06cc_\\u0627\\u06a9\\u0628\\u0631_\\u0639\\u0632\\u062a\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-01-06 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '6',
+                    'name'        => 'زبان و ادبیات فارسی کلاس کنکور (93-1392) عبدالرضا مرادی',
+                    'small_name'  => 'کلاس ادبیات و زبان فارسی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/adabiyat.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0632\\u0628\\u0627\\u0646_\\u0648_\\u0627\\u062f\\u0628\\u06cc\\u0627\\u062a_\\u0641\\u0627\\u0631\\u0633\\u06cc","\\u0639\\u0628\\u062f\\u0627\\u0644\\u0631\\u0636\\u0627_\\u0645\\u0631\\u0627\\u062f\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-01-05 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '5',
+                    'name'        => 'عربی کلاس کنکور (93-1392) پدرام علیمرادی',
+                    'small_name'  => 'کلاس عربی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/192.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u062a\\u062c\\u0631\\u0628\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0627\\u0646\\u0633\\u0627\\u0646\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0639\\u0631\\u0628\\u06cc","\\u067e\\u062f\\u0631\\u0627\\u0645_\\u0639\\u0644\\u06cc\\u0645\\u0631\\u0627\\u062f\\u06cc"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-01-04 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '4',
+                    'name'        => 'دیفرانسیل کلاس کنکور (93-1392) محسن شهریان',
+                    'small_name'  => 'کلاس دیفرانسیل کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/diff.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u062f\\u06cc\\u0641\\u0631\\u0627\\u0646\\u0633\\u06cc\\u0644","\\u0645\\u062d\\u0633\\u0646_\\u0634\\u0647\\u0631\\u06cc\\u0627\\u0646"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-01-03 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => '3',
+                    'name'        => 'تحلیلی کلاس کنکور (93-1392) رضا شامیزاده',
+                    'small_name'  => 'کلاس تحلیلی کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/geometry.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u062a\\u062d\\u0644\\u06cc\\u0644\\u06cc","\\u0631\\u0636\\u0627_\\u0634\\u0627\\u0645\\u06cc\\u0632\\u0627\\u062f\\u0647"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-01-02 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:01',
+                    'deleted_at'  => null,
+                ],
+                [
+                    'id'          => true,
+                    'name'        => 'گسسته کلاس کنکور (93-1392) رضا شامیزاده',
+                    'small_name'  => 'کلاس گسسته کنکور',
+                    'description' => null,
+                    'photo'       => 'https://cdn.sanatisharif.ir/upload/contentset/lesson/gosaste.jpg',
+                    'tags'        => '{"bucket":"contentset","tags":["\\u062f\\u0648\\u0631\\u0647_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc","\\u0631\\u0634\\u062a\\u0647_\\u0631\\u06cc\\u0627\\u0636\\u06cc","\\u0645\\u062a\\u0648\\u0633\\u0637\\u06472","\\u06a9\\u0646\\u06a9\\u0648\\u0631","\\u0636\\u0628\\u0637_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u0646\\u0638\\u0627\\u0645_\\u0622\\u0645\\u0648\\u0632\\u0634\\u06cc_\\u0642\\u062f\\u06cc\\u0645","\\u067e\\u06cc\\u0634","\\u0634\\u0628\\u06cc\\u0647_\\u0633\\u0627\\u0632_\\u06a9\\u0644\\u0627\\u0633_\\u062f\\u0631\\u0633","\\u06af\\u0633\\u0633\\u062a\\u0647","\\u0631\\u0636\\u0627_\\u0634\\u0627\\u0645\\u06cc\\u0632\\u0627\\u062f\\u0647"]}',
+                    'enable'      => true,
+                    'display'     => true,
+                    'created_at'  => '2017-01-01 14:09:00',
+                    'updated_at'  => '2018-05-03 09:39:00',
+                    'deleted_at'  => null,
+                ],
+            ];
+
+
+            $c = collect(["a" => 1,"b" => 2]);
+            $c->pushAt("a",2);
+            $c->pushAt("a",collect(["m","s"]));
+//            dump($c->pushAt("a",2));
+            return $c;
+            dump(collect($c));
+            dd(collect(1));
+
+            $product = Product::findOrFail(232)->load('children');
+            return $product;
+
+            dd(collect($keyoardButtom)->flatten(1));
+
+            $sections = (new webBlockCollectionFormatter(new webSetCollectionFormatter()))->format(Block::getMainBlocks());
+            return json_encode($sections);
 
             $users = User::whereIn("id" , [1,2,3])->get();
             foreach ($users as $user)
@@ -261,125 +2936,6 @@ class HomeController extends Controller
     public function search(Request $request)
     {
         return redirect(action("ContentController@index"), Response::HTTP_REDIRECT_PERM);
-    }
-
-    /**
-     * Show the application dashboard.
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request)
-    {
-        $url = $request->url();
-        $title = $this->setting->site->seo->homepage->metaTitle;
-        SEO::setTitle($title);
-        SEO::opengraph()
-           ->setUrl($url);
-        SEO::setCanonical($url);
-        SEO::twitter()
-           ->setSite("آلاء");
-        SEO::setDescription($this->setting->site->seo->homepage->metaDescription);
-        SEO::opengraph()
-           ->addImage(route('image', [
-               'category' => '11',
-               'w'        => '100',
-               'h'        => '100',
-               'filename' => $this->setting->site->siteLogo,
-           ]), [
-                          'height' => 100,
-                          'width'  => 100,
-                      ]);
-
-        //        $consultationstatus_active = Consultationstatus::all()->where("name", "active")->first();
-        //        $consultingQuestionCount = Userupload::all()->count();
-        //        $consultations = Consultation::all()->sortByDesc("created_at")->where("consultationstatus_id", $consultationstatus_active->id);
-        //        $consultationCount = $consultations->count();
-        //        $userCount = User::count();
-
-        //        $todayDate = $this->convertDate(Carbon::now()->toDateTimeString(), "toJalali");
-        //        $todayDate = explode("/", $todayDate);
-        //        $currentDay = $todayDate[2];
-        //        $currentMonth = $todayDate[1];
-        //        $currentYear = $todayDate[0];
-        //        $contents = Content::enable()
-        //            ->valid()
-        //            ->orderBy("validSince", "DESC")
-        //            ->take(10)
-        //            ->get();
-        //        $contentCollection = collect();
-        //        foreach ($contents as $content) {
-        //            $contentCollection
-        //                ->push([
-        //                    "id" => $content->id,
-        //                    "displayName" => $content->display_name,
-        //                    "validSince_Jalali" => explode(" ", $content->validSince_Jalali())[0]
-        //                ]);
-        //        }
-
-        $slides = Slideshow::getMainBanner();
-        $slideCounter = 1;
-        $slideDisk = 9;
-
-        if (Config::has("constants.HOME_EXCLUDED_PRODUCTS"))
-            $excludedProducts = Config::get("constants.HOME_EXCLUDED_PRODUCTS");
-        else
-            $excludedProducts = [];
-
-        if (Config::has("constants.HOME_PRODUCTS_OFFER")) {
-            $productIds = Config::get("constants.HOME_PRODUCTS_OFFER");
-            $products = Product::getProducts(0, 1)
-                               ->orderBy('order')
-                               ->whereIn("id", $productIds)
-                               ->whereNotIn("id", $excludedProducts)
-                               ->take(3)
-                               ->get();
-        } else {
-            //            $products = Product::recentProducts(2)
-            //                ->whereNotIn("id", $excludedProducts)
-            //                ->get();
-            $products = collect();
-        }
-
-        //        $costCollection = $this->makeCostCollection($products);
-        $costCollection = collect();
-        /**
-         * Ordroo registration statistics
-         *
-         * //   BOYS SECTION
-         * $boysBlocks = collect([["displayName"=>"سالن ۱" , "capacity"=>"30"] ,["displayName"=>"سالن ۲" , "capacity"=>"30"] ]);
-         * $boysOrdooRegisteredCount = Order::whereHas('orderproducts', function($q)
-         * {
-         * $q->whereIn("product_id",  Product::whereHas('parents', function($q)
-         * {
-         * $q->whereIn("parent_id",  [1] );
-         * })->pluck("id") );
-         * })->whereIn("orderstatus_id" , [2])->count();
-         *
-         * // GIRLS SECTION
-         * $girlsBlocks = collect([["displayName"=>"سالن ۱" , "capacity"=>"30"] ,["displayName"=>"سالن ۲" , "capacity"=>"30"] ]);
-         * $girlsOrdooRegisteredCount = Order::whereHas('orderproducts', function($q)
-         * {
-         * $q->whereIn("product_id",  Product::whereHas('parents', function($q)
-         * {
-         * $q->whereIn("parent_id",  [13] );
-         * })->pluck("id") );
-         * })->whereIn("orderstatus_id" , [2])->count();
-         * /**
-         *  end of code
-         */
-
-
-        $pageName = "dashboard";
-        return view('pages.dashboard1', compact(
-            'pageName',
-            'slides',
-            'slideCounter',
-            'products',
-            'costCollection',
-            'slideDisk'
-        ));
     }
 
     public function home()
@@ -1536,474 +4092,6 @@ class HomeController extends Controller
                 ->setLastModified(Carbon::createFromTimestamp($lastModified));
         }
         return redirect(action("HomeController@error404"));
-    }
-
-    function aboutUs(Request $request)
-    {
-        $url = $request->url();
-        $title = "آلاء|درباره ما";
-        SEO::setTitle($title);
-        SEO::opengraph()
-           ->setUrl($url);
-        SEO::setCanonical($url);
-        SEO::twitter()
-           ->setSite("آلاء");
-        SEO::setDescription($this->setting->site->seo->homepage->metaDescription);
-        SEO::opengraph()
-           ->addImage(route('image', [
-               'category' => '11',
-               'w'        => '100',
-               'h'        => '100',
-               'filename' => $this->setting->site->siteLogo,
-           ]), [
-                          'height' => 100,
-                          'width'  => 100,
-                      ]);
-
-        return view("pages.aboutUs");
-    }
-
-    function contactUs(Request $request)
-    {
-        $url = $request->url();
-        $title = "آلاء|تماس با ما";
-        SEO::setTitle($title);
-        SEO::opengraph()
-           ->setUrl($url);
-        SEO::setCanonical($url);
-        SEO::twitter()
-           ->setSite("آلاء");
-        SEO::setDescription($this->setting->site->seo->homepage->metaDescription);
-        SEO::opengraph()
-           ->addImage(route('image', [
-               'category' => '11',
-               'w'        => '100',
-               'h'        => '100',
-               'filename' => $this->setting->site->siteLogo,
-           ]), [
-                          'height' => 100,
-                          'width'  => 100,
-                      ]);
-
-        $emergencyContacts = collect();
-        foreach ($this->setting->branches->main->emergencyContacts as $emergencyContact) {
-            $number = "";
-            if (isset($emergencyContact->number) && strlen($emergencyContact->number) > 0)
-                $number = $emergencyContact->number;
-
-            $description = "";
-            if (isset($emergencyContact->description) && strlen($emergencyContact->description) > 0)
-                $description = $emergencyContact->description;
-
-            if (strlen($number) > 0 || strlen($description) > 0)
-                $emergencyContacts->push([
-                                             "number"      => $number,
-                                             "description" => $description,
-                                         ]);
-        }
-        return view("pages.contactUs", compact("emergencyContacts"));
-    }
-
-    function rules(Request $request)
-    {
-        $url = $request->url();
-        $title = "آلاء|قوانین";
-        SEO::setTitle($title);
-        SEO::opengraph()
-           ->setUrl($url);
-        SEO::setCanonical($url);
-        SEO::twitter()
-           ->setSite("آلاء");
-        SEO::setDescription($this->setting->site->seo->homepage->metaDescription);
-        SEO::opengraph()
-           ->addImage(route('image', [
-               'category' => '11',
-               'w'        => '100',
-               'h'        => '100',
-               'filename' => $this->setting->site->siteLogo,
-           ]), [
-                          'height' => 100,
-                          'width'  => 100,
-                      ]);
-
-        return view("pages.rules");
-    }
-
-    function donate(Request $request)
-    {
-        $url = $request->url();
-        $title = "آلاء|کمک مالی";
-        SEO::setTitle($title);
-        SEO::opengraph()
-           ->setUrl($url);
-        SEO::setCanonical($url);
-        SEO::twitter()
-           ->setSite("آلاء");
-        SEO::setDescription($this->setting->site->seo->homepage->metaDescription);
-        SEO::opengraph()
-           ->addImage(route('image', [
-               'category' => '11',
-               'w'        => '100',
-               'h'        => '100',
-               'filename' => $this->setting->site->siteLogo,
-           ]), [
-                          'height' => 100,
-                          'width'  => 100,
-                      ]);
-
-        /** INITIAL VALUES    */
-
-        $monthToPeriodConvert = collect([
-                                            [
-                                                "month"       => "مهر",
-                                                "periodBegin" => "2018-09-23",
-                                                "periodEnd"   => "2018-10-23",
-                                            ],
-                                            [
-                                                "month"       => "آبان",
-                                                "periodBegin" => "2018-10-23",
-                                                "periodEnd"   => "2018-11-22",
-                                            ],
-                                            [
-                                                "month"       => "آذر",
-                                                "periodBegin" => "2018-11-22",
-                                                "periodEnd"   => "2018-12-22",
-                                            ],
-                                            [
-                                                "month"       => "دی",
-                                                "periodBegin" => "2018-12-22",
-                                                "periodEnd"   => "2019-01-21",
-                                            ],
-                                            [
-                                                "month"       => "بهمن",
-                                                "periodBegin" => "2019-01-21",
-                                                "periodEnd"   => "2019-02-20",
-                                            ],
-                                            [
-                                                "month"       => "اسفند",
-                                                "periodBegin" => "2019-02-20",
-                                                "periodEnd"   => "2019-03-21",
-                                            ],
-                                            [
-                                                "month"       => "فروردین",
-                                                "periodBegin" => "2019-03-21",
-                                                "periodEnd"   => "2019-04-21",
-                                            ],
-                                            [
-                                                "month"       => "اردیبهشت",
-                                                "periodBegin" => "2019-04-21",
-                                                "periodEnd"   => "2019-05-22",
-                                            ],
-                                            [
-                                                "month"       => "خرداد",
-                                                "periodBegin" => "2019-05-22",
-                                                "periodEnd"   => "2019-06-22",
-                                            ],
-                                            [
-                                                "month"       => "تیر",
-                                                "periodBegin" => "2019-06-22",
-                                                "periodEnd"   => "2019-07-23",
-                                            ],
-                                            [
-                                                "month"       => "مرداد",
-                                                "periodBegin" => "2019-07-23",
-                                                "periodEnd"   => "2019-08-23",
-                                            ],
-                                            [
-                                                "month"       => "شهریور",
-                                                "periodBegin" => "2019-08-23",
-                                                "periodEnd"   => "2019-09-23",
-                                            ],
-                                        ]);
-        $firstMonth = $monthToPeriodConvert->first()["month"];
-        $MONTH_SPEND = 25000000;
-        $LATEST_WEEK_NUMBER = 3;
-        $LATEST_MAX_NUMBER = 3;
-
-        /** END OF INITIALIZING   */
-
-        $donateProductArray = Product::DONATE_PRODUCT;
-        array_push($donateProductArray, Product::CUSTOM_DONATE_PRODUCT);
-        $orders = Order::whereHas("orderproducts", function ($q) use ($donateProductArray) {
-            $q->whereIn("product_id", $donateProductArray);
-        })
-                       ->where("orderstatus_id", config("constants.ORDER_STATUS_CLOSED"))
-                       ->where("paymentstatus_id", config("constants.PAYMENT_STATUS_PAID"))
-                       ->orderBy("completed_at", "DESC")
-                       ->get();
-
-        $currentGregorianDate = Carbon::now()
-                                      ->timezone('Asia/Tehran');
-        $delimiter = "/";
-        $currentJalaliDate = $this->gregorian_to_jalali($currentGregorianDate->year, $currentGregorianDate->month, $currentGregorianDate->day, $delimiter);
-        $currentJalaliDateSplit = explode($delimiter, $currentJalaliDate);
-        $currentJalaliYear = $currentJalaliDateSplit[0];
-        $currentJalaliMonth = $currentJalaliDateSplit[1];
-        $currentJalaliDay = $currentJalaliDateSplit[2];
-        $currentJalaliMonthString = $this->convertToJalaliMonth($currentJalaliMonth);
-        $currentJalaliMonthDays = $this->getJalaliMonthDays($currentJalaliMonthString);
-
-        $currentJalaliDateString = $currentJalaliDay . " " . $currentJalaliMonthString;
-
-
-        /** THIS WEEK/TODAY LATEST DONATES **/
-        $latestDonors = collect();
-        $donates = $orders->take($LATEST_WEEK_NUMBER);
-        foreach ($donates as $donate) {
-            if (isset($donate->user->id)) {
-                $firstName = $donate->user->firstName;
-                $lastName = $donate->user->lastName;
-                $avatar = $donate->user->photo;
-            }
-
-            $donateAmount = $donate->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
-                                   ->whereIn("product_id", $donateProductArray)
-                                   ->get()
-                                   ->sum("cost");
-
-            $latestDonors->push([
-                                    "firstName"    => (isset($firstName)) ? $firstName : "",
-                                    "lastName"     => (isset($lastName)) ? $lastName : "",
-                                    "donateAmount" => $donateAmount,
-                                    "avatar"       => (isset($avatar)) ? $avatar : "",
-                                ]);
-        }
-        /** END **/
-
-        /** CURRENT MONTH MAXIMUM DONATES **/
-        $today = $monthToPeriodConvert->where("month", $currentJalaliMonthString)
-                                      ->first();
-        $today = $today["periodBegin"];
-        $today = explode("-", $today);
-        $todayYear = $today[0];
-        $todayMonth = $today[1];
-        $todayDay = $today[2];
-        $date = Carbon::createMidnightDate($todayYear, $todayMonth, $todayDay);
-        $thisMonthDonates = $orders->where("completed_at", ">=", $date)
-                                   ->pluck("id")
-                                   ->toArray();
-        $maxDonates = Orderproduct::whereIn("order_id", $thisMonthDonates)
-                                  ->where(function ($q) {
-                                      $q->where("orderproducttype_id", Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
-                                        ->orWhereNull("orderproducttype_id");
-                                  })
-                                  ->whereIn("product_id", $donateProductArray)
-                                  ->orderBy("cost", "DESC")
-                                  ->orderBy("created_at", "DESC")
-                                  ->take($LATEST_MAX_NUMBER)
-                                  ->get();
-        $maxDonors = collect();
-        foreach ($maxDonates as $maxDonate) {
-            if (isset($maxDonate->order->user->id)) {
-                $firstName = $maxDonate->order->user->firstName;
-                $lastName = $maxDonate->order->user->lastName;
-                $avatar = $maxDonate->order->user->photo;
-            }
-
-            $donateAmount = $maxDonate->cost;
-
-            $maxDonors->push([
-                                 "firstName"    => (isset($firstName)) ? $firstName : "",
-                                 "lastName"     => (isset($lastName)) ? $lastName : "",
-                                 "donateAmount" => $donateAmount,
-                                 "avatar"       => (isset($avatar)) ? $avatar : "",
-                             ]);
-
-        }
-        /** END **/
-
-        /** DONATES CHART **/
-        $allMonths = [
-            "مهر",
-            "آبان",
-            "آذر",
-            "دی",
-            "بهمن",
-            "اسفند",
-            "فروردین",
-            "اردیبهشت",
-            "خرداد",
-            "تیر",
-            "مرداد",
-            "شهریور",
-        ];
-        $allDays = [
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6",
-            "7",
-            "8",
-            "9",
-            "10",
-            "11",
-            "12",
-            "13",
-            "14",
-            "15",
-            "16",
-            "17",
-            "18",
-            "19",
-            "20",
-            "21",
-            "22",
-            "23",
-            "24",
-            "25",
-            "26",
-            "27",
-            "28",
-            "29",
-            "30",
-        ];
-
-        $chartData = collect();
-        $totalSpend = 0;
-        $totalIncome = 0;
-
-        if ($currentJalaliMonthString == $firstMonth) {
-            $currentDayKey = array_search($currentJalaliDay, $allDays);
-            $days = array_splice($allDays, 0, $currentDayKey + 1);
-            $date = $monthToPeriodConvert->where("month", $currentJalaliMonthString)
-                                         ->first();
-            foreach ($days as $day) {
-                $mehrGregorianMonth = Carbon::createFromFormat("Y-m-d", $date["periodBegin"])
-                                            ->setTimezone("Asia/Tehran")
-                    ->month;
-
-                $mehrGregorianEndDay = Carbon::createFromFormat("Y-m-d", $date["periodEnd"])
-                                             ->setTimezone("Asia/Tehran")
-                        ->day + ($day - 1);
-
-                if ($mehrGregorianEndDay > 30) {
-                    $mehrGregorianMonth++;
-                    $mehrGregorianEndDay = $mehrGregorianEndDay - 30;
-                    if ($mehrGregorianEndDay < 10)
-                        $mehrGregorianEndDay = "0" . $mehrGregorianEndDay;
-                }
-                if ($mehrGregorianMonth < 10) {
-                    $mehrGregorianMonth = "0" . $mehrGregorianMonth;
-                }
-
-                $donates = $orders->where("completed_at", ">=", "2018-$mehrGregorianMonth-$mehrGregorianEndDay 00:00:00")
-                                  ->where("completed_at", "<=", "2018-$mehrGregorianMonth-$mehrGregorianEndDay 23:59:59");
-
-                $totalMonthIncome = 0;
-                foreach ($donates as $donate) {
-
-                    $amount = $donate->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
-                                     ->whereIn("product_id", $donateProductArray)
-                                     ->get()
-                                     ->sum("cost");
-
-                    $totalMonthIncome += $amount;
-                }
-                $dayRatio = 1 / $currentJalaliMonthDays;
-                $totalMonthSpend = (int)round($MONTH_SPEND * $dayRatio);
-
-                $totalIncome += $totalMonthIncome;
-                $totalSpend += $totalMonthSpend;
-
-                $monthData = $day . " " . $currentJalaliMonthString;
-                $chartData->push([
-                                     "month"       => $monthData,
-                                     "totalIncome" => $totalMonthIncome,
-                                     "totalSpend"  => $totalMonthSpend,
-                                 ]);
-            }
-        } else {
-            $currentMonthKey = array_search($currentJalaliMonthString, $allMonths);
-            $months = array_splice($allMonths, 0, $currentMonthKey + 1);
-
-            foreach ($months as $month) {
-                switch ($month) {
-                    // Example for static data
-                    //                case "مهر" :
-                    //                    $totalMonthIncome = 2491700;
-                    //                    $totalMonthSpend = $MONTH_SPEND;
-                    //                    break;
-                    default:
-                        $date = $monthToPeriodConvert->where("month", $month)
-                                                     ->first();
-                        $donates = $orders->where("completed_at", ">=", $date["periodBegin"])
-                                          ->where("completed_at", "<=", $date["periodEnd"]);
-
-                        $totalMonthIncome = 0;
-                        foreach ($donates as $donate) {
-                            $amount = $donate->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
-                                             ->whereIn("product_id", $donateProductArray)
-                                             ->get()
-                                             ->sum("cost");
-
-                            $totalMonthIncome += $amount;
-                        }
-                        if ($month == $currentJalaliMonthString) {
-                            $dayRatio = $currentJalaliDay / $currentJalaliMonthDays;
-                            $totalMonthSpend = (int)round($MONTH_SPEND * $dayRatio);
-                        } else {
-                            $totalMonthSpend = $MONTH_SPEND;
-                        }
-                        break;
-                }
-                $totalIncome += $totalMonthIncome;
-                $totalSpend += $totalMonthSpend;
-                if ($month == $currentJalaliMonthString)
-                    $monthData = $currentJalaliDay . " " . $month;
-                else
-                    $monthData = $month;
-
-                $chartData->push([
-                                     "month"       => $monthData,
-                                     "totalIncome" => $totalMonthIncome,
-                                     "totalSpend"  => $totalMonthSpend,
-                                 ]);
-
-            }
-        }
-        /** END **/
-
-        if (Auth::check()) {
-            $baseUrl = url("/");
-            $contentPath = str_replace($baseUrl, "", action("HomeController@donate"));
-        }
-
-
-        return view("pages.donate", compact("latestDonors", "maxDonors", "months"
-            , "chartData", "totalSpend", "totalIncome", "currentJalaliDateString", "currentJalaliMonthString"));
-    }
-
-    function siteMap(Request $request)
-    {
-
-        $url = $request->url();
-        $title = 'آلاء|نقشه سایت';
-        SEO::setTitle($title);
-        SEO::opengraph()
-           ->setUrl($url);
-        SEO::setCanonical($url);
-        SEO::twitter()
-           ->setSite("آلاء");
-        SEO::setDescription($this->setting->site->seo->homepage->metaDescription);
-        SEO::opengraph()
-           ->addImage(route('image', [
-               'category' => '11',
-               'w'        => '100',
-               'h'        => '100',
-               'filename' => $this->setting->site->siteLogo,
-           ]), [
-                          'height' => 100,
-                          'width'  => 100,
-                      ]);
-
-        $products = Product::getProducts(0, 1)
-                           ->orderBy("order")
-                           ->get();
-        //        $articlecategories = Articlecategory::where('enable', 1)->orderBy('order')->get();
-        //        $articlesWithoutCategory = Article::where('articlecategory_id', null)->get();
-        return view("pages.siteMap", compact('products', 'articlecategories', 'articlesWithoutCategory'));
     }
 
     function siteMapXML()

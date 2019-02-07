@@ -772,10 +772,10 @@
         <div class="form-actions" style="text-align: center">
             @if(isset($formByPass) && !$formByPass)
                 <button type="button" class="btn blue"
-                        onclick="location.href = '@if(session()->has("redirectTo"))  {{session()->get("redirectTo")}}@else {{action("HomeController@index")}} @endif' ">
+                        onclick="location.href = '@if(session()->has("redirectTo"))  {{session()->get("redirectTo")}}@else {{action("IndexPageController")}} @endif' ">
                     بعدا پر می کنم
                 </button>
-            @elseif(isset($hasHomeButton)) <a href="{{action("HomeController@index")}}" class="btn red"> @lang('page.Home') </a>
+            @elseif(isset($hasHomeButton)) <a href="{{action("IndexPageController")}}" class="btn red"> @lang('page.Home') </a>
             @endif
             @if(!Auth::user()->lockProfile)
                 <button type="submit" class="btn green"> ادامه</button>

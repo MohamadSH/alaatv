@@ -43,7 +43,7 @@ trait Helper
      *
      * @param int $length
      *
-     * @return string
+     * @return array
      */
     public function generateRandomPassword($length)
     {

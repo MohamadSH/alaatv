@@ -10,6 +10,7 @@ namespace App\Classes\Search;
 
 
 use App\Classes\Search\Filters\Filter;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Config;
 use LogicException;
@@ -39,7 +40,12 @@ abstract class SearchAbstract
         $this->model = (new $this->model);
     }
 
-    abstract public function apply(array $filters);
+    public function get(array ...$params){
+//        dd($params[0]);
+        return $this->apply($params[0]);
+    }
+
+    abstract protected function apply(array $filters);
 
     /**
      * @param int $numberOfItemInEachPage
@@ -121,5 +127,14 @@ abstract class SearchAbstract
     {
         return isset($filters[$this->pageName]) ? $filters[$this->pageName] : SearchAbstract::DEFAULT_PAGE_NUMBER;
 
+    }
+
+    /**
+     * @param array $params
+     * @return array
+     */
+    protected function getFromParams(array $params, $index): array
+    {
+        return (array)array_get(array_merge(...$params), $index);
     }
 }

@@ -2,9 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 /**
  * App\Orderproducttype
  *
@@ -32,17 +29,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproducttype newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproducttype newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproducttype query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
-class Orderproducttype extends Model
+class Orderproducttype extends BaseModel
 {
-    use SoftDeletes;
-    /**      * The attributes that should be mutated to dates.        */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
-
     /**
      * @var array
      */
