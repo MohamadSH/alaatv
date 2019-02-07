@@ -497,14 +497,17 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
 
         $setMates = Cache::tags(["content"])
                          ->remember($key, Config::get("constants.CACHE_60"), function () use ($content) {
+//                             dump("h1");
                              $contentSet = $content->set;
                              $contentSetName = optional($contentSet)->name;
                              if (isset($contentSet)) {
+//                                 dump("h3");
                                  $sameContents = $contentSet->contents()
                                                             ->active()
                                                             ->get()
                                                             ->sortBy("order")
                                                             ->load('contenttype');
+//                                 dump($sameContents);
                              } else
                                  $sameContents = new ContentCollection([]);
                              return [
@@ -512,6 +515,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
                                  $contentSetName,
                              ];
                          });
+//        dd("h2");
         return $setMates;
 
     }

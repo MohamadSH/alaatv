@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AlterTableContentAddColumns extends Migration
+class AlterTableEducationalcontentAddColumns extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class AlterTableContentAddColumns extends Migration
      */
     public function up()
     {
-        Schema::table('contents', function (Blueprint $table) {
+        Schema::table('educationalcontents', function (Blueprint $table) {
             $table->unsignedInteger("template_id")
                   ->nullable()
                   ->comment("آی دی مشخص کننده قالب این گرافیکی این محتوا")
@@ -60,25 +60,25 @@ class AlterTableContentAddColumns extends Migration
      */
     public function down()
     {
-        Schema::table('contents', function (Blueprint $table) {
-            if (Schema::hasColumn('contents', 'template_id')) {
-                $table->dropForeign('contents_template_id_foreign');
+        Schema::table('educationalcontents', function (Blueprint $table) {
+            if (Schema::hasColumn('educationalcontents', 'template_id')) {
+                $table->dropForeign('educationalcontent_template_id_foreign');
                 $table->dropColumn('template_id');
             }
-            if (Schema::hasColumn('contents', 'author_id')) {
-                $table->dropForeign('contents_author_id_foreign');
+            if (Schema::hasColumn('educationalcontents', 'author_id')) {
+                $table->dropForeign('educationalcontent_author_id_foreign');
                 $table->dropColumn('author_id');
             }
-            if (Schema::hasColumn('contents', 'metaTitle')) {
+            if (Schema::hasColumn('educationalcontents', 'metaTitle')) {
                 $table->dropColumn('metaTitle');
             }
-            if (Schema::hasColumn('contents', 'metaDescription')) {
+            if (Schema::hasColumn('educationalcontents', 'metaDescription')) {
                 $table->dropColumn('metaDescription');
             }
-            if (Schema::hasColumn('contents', 'metaKeywords')) {
+            if (Schema::hasColumn('educationalcontents', 'metaKeywords')) {
                 $table->dropColumn('metaKeywords');
             }
-            if (Schema::hasColumn('contents', 'tags')) {
+            if (Schema::hasColumn('educationalcontents', 'tags')) {
                 $table->dropColumn('tags');
             }
         });

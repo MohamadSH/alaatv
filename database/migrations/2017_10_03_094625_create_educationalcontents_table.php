@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class CreateContentsTable extends Migration
+class CreateEducationalcontentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class CreateContentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('contents', function (Blueprint $table) {
+        Schema::create('educationalcontents', function (Blueprint $table) {
             $table->increments('id');
             $table->string("name")
                   ->nullable()
@@ -35,7 +35,7 @@ class CreateContentsTable extends Migration
             $table->softDeletes();
 
         });
-        DB::statement("ALTER TABLE `contents` comment 'جدول محتواهای آموزشی مانند جزوه و آزمون و غیره'");
+        DB::statement("ALTER TABLE `educationalcontents` comment 'جدول محتواهای آموزشی مانند جزوه و آزمون و غیره'");
     }
 
     /**
@@ -45,6 +45,6 @@ class CreateContentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('contents');
+        Schema::dropIfExists('educationalcontents');
     }
 }

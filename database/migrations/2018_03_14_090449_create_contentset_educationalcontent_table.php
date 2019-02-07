@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class CreateContentsetContentTable extends Migration
+class CreateContentsetEducationalcontentTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class CreateContentsetContentTable extends Migration
      */
     public function up()
     {
-        Schema::create('contentset_content', function (Blueprint $table) {
+        Schema::create('contentset_educationalcontent', function (Blueprint $table) {
             $table->unsignedInteger('contentset_id');
             $table->unsignedInteger('edc_id');
             $table->integer("order")
@@ -36,11 +36,11 @@ class CreateContentsetContentTable extends Migration
 
             $table->foreign('edc_id')
                   ->references('id')
-                  ->on('contents')
+                  ->on('educationalcontents')
                   ->onDelete('cascade')
                   ->onupdate('cascade');
         });
-        DB::statement("ALTER TABLE `contentset_content` comment 'رابطه چند به چند دسته محتوا با محتوا'");
+        DB::statement("ALTER TABLE `contentset_educationalcontent` comment 'رابطه چند به چند دسته محتوا با محتوا'");
     }
 
     /**
@@ -50,6 +50,6 @@ class CreateContentsetContentTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('contentset_content');
+        Schema::dropIfExists('contentset_educationalcontent');
     }
 }
