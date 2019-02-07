@@ -99,7 +99,9 @@ use Kalnoy\Nestedset\QueryBuilder;
  * @property string|null $page_view
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Product wherePageView($value)
  * @property string|null $redirectUrl آدرسی که صفحه محصول به آن به صورت همیشگی ریدایرکت می شود
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereRedirectUrl($value)
+ * @method static Builder|Product whereRedirectUrl($value)
+ * @method static Builder|Product enable()
+ * @method static Builder|Product valid()
  * @property-read \App\Collection\UserCollection|\App\User[] $favoriteBy
  * @property-read mixed $photo
  * @property-read null|string $price_text
@@ -108,11 +110,9 @@ use Kalnoy\Nestedset\QueryBuilder;
  * @property-write mixed $short_description
  * @property-write mixed $special_description
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Product active()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product enable()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Product newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Product newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Product query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product valid()
  * @property int|null              $grand_id
  * @property-read \Collection|null $attributes
  * @property-read mixed            $gift
@@ -368,6 +368,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
      */
     public function scopeActive($query)
     {
+        /** @var Product $query */
         return $query->enable()
                      ->valid();
     }
@@ -1040,7 +1041,14 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     */
 
 
-
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany|Productphoto
+     */
+    public function photos()
+    {
+        $photos = $this->hasMany('\App\Productphoto');
+        return $photos;
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
@@ -1082,6 +1090,11 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
 
     }
 
+    /**
+     * @param string $fileType
+     * @param int $getValid
+     * @return Productfile
+     */
     public function validProductfiles($fileType = "", $getValid = 1)
     {
         $product = $this;
@@ -1841,7 +1854,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
      * Enables the product
      *
      */
-    public function enable(): void
+    public function setEnable():void
     {
         $this->enable = 1;
     }
@@ -1866,13 +1879,6 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
             return $children;
         });
     }
-
-    public function photos()
-    {
-        $photos = $this->hasMany('\App\Productphoto');
-        return $photos;
-    }
-
 
     /**
      * Makes a collection of product phoots

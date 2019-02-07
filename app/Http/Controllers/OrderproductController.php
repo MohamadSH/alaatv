@@ -24,6 +24,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
 use Kalnoy\Nestedset\QueryBuilder;
 
@@ -45,9 +46,9 @@ class OrderproductController extends Controller
             ],
         ]);
         $this->middleware([
-            'CheckHasOpenOrder',
+            /*'CheckHasOpenOrder',*/
             'CheckPermissionForSendOrderId',
-            //            'checkPermissionForSendExtraAttributesCost'
+            /*'checkPermissionForSendExtraAttributesCost'*/
         ], [
             'only' => ['store'],
         ]);
@@ -173,8 +174,9 @@ class OrderproductController extends Controller
     {
         $orderproducts = $this->new($request->all());
 
-        return $this->response->setStatusCode(200)->setContent([
-            "orderproducts" => $orderproducts,
+        return $this->response->setStatusCode(Response::HTTP_OK)->setContent([
+//            "orderproducts" => $orderproducts,
+            'product saved'
         ]);
     }
 
@@ -456,15 +458,32 @@ class OrderproductController extends Controller
      */
     public function new(array $data): OrderproductCollection
     {
-        $productId = $data['product_id'];
-        $orderId = $data['order_id'];
+        $report = [
+            'status' => true,
+            'message' => [],
+            'data' => [],
+        ];
+
+        //ToDo : discuss getting order from request
+        /** @var Order $order */
+        /*if(isset($data['order'])) {
+            $order = $data['order'];
+        } else {
+            $order = Order::FindorFail($orderId)->first();
+        }*/
+
         $data = array_merge([
+            'product_id'       => null,
+            'order_id'      => null,
             'products'       => null,
             'attribute'      => null,
             'extraAttribute' => null,
             'withoutBon'     => null,
         ], $data);
 
+        $productId = $data['product_id'];
+        $orderId = $data['order_id'];
+      
         try {
             $order = Order::FindorFail($orderId);
             $product = Product::FindorFail($productId);
@@ -472,7 +491,6 @@ class OrderproductController extends Controller
             report($e);
             return new OrderproductCollection();
         }
-
         $user = $order->user;
 
         $simpleProducts = (new RefinementFactory($product, $data))
@@ -480,6 +498,16 @@ class OrderproductController extends Controller
             ->getProducts();
 
         $notDuplicateProduct = $order->checkProductsExistInOrderProducts($simpleProducts);
+
+        if(count($simpleProducts)!=0 && count($notDuplicateProduct)==0) {
+            $report['status'] = false;
+            $report['message'][] = 'کالای انتخاب شده پیش از این ثبت شده است.';
+            $report['data']['products'] = $simpleProducts;
+        } else if (count($simpleProducts)==0) {
+            $report['status'] = false;
+            $report['message'][] = 'کالایی برای ثبت انتخاب نشده است.';
+            $report['data']['products'] = $simpleProducts;
+        }
 
         $storedOrderproducts = new OrderproductCollection();
         /**
@@ -507,6 +535,8 @@ class OrderproductController extends Controller
                 $storedOrderproducts->push($orderProduct);
             }
         }
+
+        $report['data']['storedOrderproducts'] = $storedOrderproducts;
 
         return $storedOrderproducts;
     }

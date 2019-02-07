@@ -36,6 +36,7 @@ class OrderProductStoreRequest extends FormRequest
     public function rules()
     {
         $rules = [
+            'order_id' => 'required|numeric',
             'product_id' => 'required|numeric',
             'products.*' => 'sometimes|numeric',
             'attribute.*' => 'sometimes|numeric',

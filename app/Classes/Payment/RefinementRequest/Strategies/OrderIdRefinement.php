@@ -10,8 +10,8 @@ namespace App\Classes\Payment\RefinementRequest\Strategies;
 
 
 use App\Order;
-use App\Classes\Payment\RefinementRequest\Refinement;
 use Illuminate\Http\Response;
+use App\Classes\Payment\RefinementRequest\Refinement;
 
 class OrderIdRefinement extends Refinement
 {

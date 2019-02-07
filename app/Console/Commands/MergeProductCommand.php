@@ -498,7 +498,7 @@ class MergeProductCommand extends Command
             ///////////////////////////////////////
             //Update grandparent and setting tags///
             ////////////////////////////////////////
-            $grandParent->enable();
+            $grandParent->setEnable();
             $grandParent->update();
             $this->setTags($grandParent);
             ///////////////////////////
@@ -507,7 +507,7 @@ class MergeProductCommand extends Command
 
             $allCategoryProduct->basePrice = $totalGrandChildrenCost;
             $allCategoryProduct->discount = $totalGrandChildrenDiscount;
-            $allCategoryProduct->enable();
+            $allCategoryProduct->setEnable();
             $allCategoryProduct->update();
 
             $this->info("\n\n");
