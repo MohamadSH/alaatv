@@ -79,23 +79,27 @@
                                                             {{--@endforeach--}}
 
 
-                                                            @foreach($product->attributes['information'] as $key => $informationItem)
-                                                                <a href="#" class="m-list-search__result-item">
-                                                                    <span class="m-list-search__result-item-icon"><i class="flaticon-like m--font-info"></i></span>
-                                                                    <span class="m-list-search__result-item-text">{{ $informationItem->title . ': ' . $informationItem->data[0]->name }}</span>
-                                                                </a>
-                                                            @endforeach
-                                                            @foreach($product->attributes['main'] as $key => $informationItem)
-                                                                <a href="#" class="m-list-search__result-item">
-                                                                    <span class="m-list-search__result-item-icon"><i class="flaticon-like m--font-warning"></i></span>
-                                                                    <span class="m-list-search__result-item-text">{{ $informationItem->title . ': ' . $informationItem->data[0]->name }}</span>
-                                                                </a>
-                                                                @foreach($informationItem->data as $k => $info)
-                                                                    @if(isset($info->id))
-                                                                        <input type = "hidden" value = "{{ $info->id }}" name = "attribute[]">
-                                                                    @endif
+                                                            @if(optional($product->attributes->get('information'))->count()> 0)
+                                                                @foreach($product->attributes->get('information') as $key => $informationItem)
+                                                                    <a href = "#" class = "m-list-search__result-item">
+                                                                        <span class = "m-list-search__result-item-icon"><i class = "flaticon-like m--font-info"></i></span>
+                                                                        <span class = "m-list-search__result-item-text">{{ $informationItem->title . ': ' . $informationItem->data[0]->name }}</span>
+                                                                    </a>
                                                                 @endforeach
-                                                            @endforeach
+                                                            @endif
+                                                            @if(optional($product->attributes->get('main'))->count()> 0)
+                                                                @foreach($product->attributes->get('main') as $key => $informationItem)
+                                                                    <a href = "#" class = "m-list-search__result-item">
+                                                                        <span class = "m-list-search__result-item-icon"><i class = "flaticon-like m--font-warning"></i></span>
+                                                                        <span class = "m-list-search__result-item-text">{{ $informationItem->title . ': ' . $informationItem->data[0]->name }}</span>
+                                                                    </a>
+                                                                    @foreach($informationItem->data as $k => $info)
+                                                                        @if(isset($info->id))
+                                                                            <input type = "hidden" value = "{{ $info->id }}" name = "attribute[]">
+                                                                        @endif
+                                                                    @endforeach
+                                                                @endforeach
+                                                            @endif
 
                                                         </div>
                                                     </div>
@@ -349,26 +353,6 @@
             <!--end::Portlet-->
         </div>
     </div>
-
-
-    {!! Form::open(['route' => 'orderproduct.store']) !!}
-
-    {!! Form::token() !!}
-
-    <div class="form-group">
-        {!! Form::label('email', 'E-mail Address') !!}
-        {!! Form::hidden('product_id', 259, ['class' => 'form-control']) !!}
-    </div>
-
-    <div class="form-group">
-        {!! Form::textarea('msg', null, ['class' => 'form-control']) !!}
-    </div>
-
-    {!! Form::submit('Submit', ['class' => 'btn btn-info']) !!}
-
-    {!! Form::close() !!}
-
-
 @endsection
 @section("page-js")
     {{--<script src="{{ mix('/js/product-show.js') }}"></script>--}}

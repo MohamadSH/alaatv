@@ -47,17 +47,22 @@ class ComposerServiceProvider extends ServiceProvider
         });
         view()->share('bonName', Bon::getAlaaBonDisplayName());
         view()->share('userIpAddress', Request::ip());
-        $colors = [
-            '1' => 'm-switch--primary',
-            '2' => 'm-switch--warning',
-            '3' => 'm-switch--accent',
-            '4' => 'm-switch--success',
-            '5' => 'm-switch--brand',
-            '6' => 'm-switch--info',
-            '7' => 'm-switch--metal',
-            '8' => 'm-switch--danger',
-        ];
-        view()->share('product.partials.showChildren', $colors);
+
+        View::composer([
+            'product.partials.showChildren',
+        ], function ($view) {
+            $colors = [
+                '1' => 'm-switch--primary',
+                '2' => 'm-switch--warning',
+                '3' => 'm-switch--accent',
+                '4' => 'm-switch--success',
+                '5' => 'm-switch--brand',
+                '6' => 'm-switch--info',
+                '7' => 'm-switch--metal',
+                '8' => 'm-switch--danger',
+            ];
+            $view->with(compact('colors'));
+        });
     }
 
     /**

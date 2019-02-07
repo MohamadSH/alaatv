@@ -22,7 +22,6 @@ use App\{Attribute,
     Traits\ProductCommon,
     Traits\RequestCommon,
     Traits\SearchCommon,
-    User,
     Websitesetting};
 use Auth;
 use Illuminate\Foundation\Http\{FormRequest};
@@ -335,6 +334,7 @@ class ProductController extends Controller
                 ->setStatusCode(Response::HTTP_OK)
                ->setContent($product);
         }
+//        dd((array)$product->attributes->get('main'));
         return view("product.show", compact("product" ));
     }
 
