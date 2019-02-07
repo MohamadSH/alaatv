@@ -1878,13 +1878,6 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         });
     }
 
-    public function photos()
-    {
-        $photos = $this->hasMany('\App\Productphoto');
-        return $photos;
-    }
-
-
     /**
      * Makes a collection of product phoots
      *

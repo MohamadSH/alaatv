@@ -3,7 +3,10 @@
 namespace App\Http\ViewComposers;
 
 
+use App\Gender;
+use App\Major;
 use App\User;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class ProfileComposer
