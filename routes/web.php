@@ -13,7 +13,8 @@
 
 
 Route::get('embed/c/{content}', "ContentController@embed");
-Route::get('/', 'HomeController@index');
+Route::get('/', 'IndexPageController');
+Route::get('shop', 'ShopPageController');
 Route::get('home', 'HomeController@home');
 Route::get('404', 'HomeController@error404');
 Route::get('403', 'HomeController@error403');
@@ -21,8 +22,8 @@ Route::get('500', 'HomeController@error500');
 Route::get('error', 'HomeController@errorPage');
 Route::get('download', "HomeController@download");
 Route::get('d/{data}', "HomeController@newDownload");
-Route::get('contactUs', 'HomeController@contactUs');
-Route::get('rules', 'HomeController@rules');
+Route::get('contactUs', 'ContactUsController');
+Route::get('rules', 'RulesPageController');
 Route::get('articleList', 'ArticleController@showList');
 Route::get("debug", 'HomeController@debug');
 Route::get("telgramAgent2", "HomeController@telgramAgent");
@@ -58,10 +59,8 @@ Route::group(['prefix' => 'sitemap'], function () {
 Route::group(['prefix' => 'checkout'], function () {
     Route::get('auth', "OrderController@checkoutAuth");
     Route::get('completeInfo', 'OrderController@checkoutCompleteInfo');
-    Route::group(['middleware' => ['completeInfo']], function () {
-        Route::get('review', "OrderController@checkoutReview");
-        Route::get('payment', "OrderController@checkoutPayment");
-    });
+    Route::get('review', "OrderController@checkoutReview");
+    Route::get('payment', "OrderController@checkoutPayment");
     Route::any('verifyPayment/online/{paymentMethod}/{device}', "OnlinePaymentController@verifyPayment");
     Route::any('verifyPayment/online/{status}/{paymentMethod}/{device}', "OnlinePaymentController@showPaymentStatus");
     Route::any('verifyPayment/offline/{paymentMethod}/{device}', 'OfflinePaymentController@verifyPayment');
@@ -149,8 +148,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('removeFromLottery', 'UserController@removeFromLottery');
         Route::post('addToArabiHozouri', 'OrderController@addToArabiHozouri');
         Route::post('removeArabiHozouri', 'OrderController@removeArabiHozouri');
-        Route::get('uploadQuestion', 'UserController@uploadConsultingQuestion')
-             ->middleware('completeInfo');
+        Route::get('uploadQuestion', 'UserController@uploadConsultingQuestion');
         Route::get('orders', 'UserController@userOrders');
         Route::get('question', 'UserController@uploads');
         Route::get('getVerificationCode', 'UserController@sendVerificationCode');
@@ -160,8 +158,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('removeFromLottery', 'UserController@removeFromLottery');
         Route::post('addToArabiHozouri', 'OrderController@addToArabiHozouri');
         Route::post('removeArabiHozouri', 'OrderController@removeArabiHozouri');
-        Route::get('uploadQuestion', 'UserController@uploadConsultingQuestion')
-             ->middleware('completeInfo');
+        Route::get('uploadQuestion', 'UserController@uploadConsultingQuestion');
     });
     Route::group(['prefix' => 'order'], function () {
         Route::post('detachorderproduct', 'OrderController@detachOrderproduct');
@@ -227,11 +224,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get("copycontenttotakhtekhak", "SanatisharifmergeController@copyContent");
     Route::get("tagbot", "HomeController@tagbot");
 
-    Route::get("donate", "HomeController@donate");
+    Route::get("donate", "DonateController");
     Route::post("donateOrder", "OrderController@donateOrder");
-
-    Route::get('cTest/{set}', "HomeController@contentSetListTest");
-
     Route::get('adminGenerateRandomCoupon', "HomeController@adminGenerateRandomCoupon");
 });
 
@@ -240,6 +234,10 @@ Route::group(['prefix' => 'product'], function () {
 
 });
 */
+
+/*Route::group(['prefix' => 's'], function(){
+    Route::get('{set}', "SetController@show");
+});*/
 
 Route::group(['prefix' => 'c'], function () {
 
@@ -262,7 +260,7 @@ Route::group(['prefix' => 'product'], function () {
 });
 
 Route::get("ctag", "ContentController@retrieveTags");
-Route::resource('set', 'ContentsetController');
+Route::resource('set', 'SetController');
 Route::resource('product', 'ProductController');
 
 Route::resource('orderproduct', 'OrderproductController');

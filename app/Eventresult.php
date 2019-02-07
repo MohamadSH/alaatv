@@ -2,11 +2,6 @@
 
 namespace App;
 
-use App\Traits\DateTrait;
-use App\Traits\Helper;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 /**
  * App\Eventresult
  *
@@ -48,20 +43,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresult newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresult newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresult query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
-class Eventresult extends Model
+class Eventresult extends BaseModel
 {
-    use SoftDeletes;
-    use Helper;
-    use DateTrait;
-
-    /**      * The attributes that should be mutated to dates.        */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
-
     /**
      * @var array
      */

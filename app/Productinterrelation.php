@@ -2,8 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
 /**
  * App\Productinterrelation
  *
@@ -25,8 +23,10 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Productinterrelation newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Productinterrelation newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Productinterrelation query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
-class Productinterrelation extends Model
+class Productinterrelation extends BaseModel
 {
     //
 }

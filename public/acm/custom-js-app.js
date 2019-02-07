@@ -3,7 +3,7 @@ jQuery(document).ready( function() {
     owl.each(function () {
         $(this).owlCarousel({
             stagePadding: 40,
-            loop: true,
+            loop: false,
             rtl:true,
             nav:false,
             dots: false,

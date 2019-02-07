@@ -84,7 +84,7 @@
                                                             {{$orderproduct->product->name}}
                                                         </div>
                                                     </div>
-                                                    @if($orderproduct->product->getGrandParent() && $orderproduct->product->getGrandParent()->producttype_id == Config::get("constants.PRODUCT_TYPE_SELECTABLE"))
+                                                    @if($orderproduct->product->grandParent && $orderproduct->product->grandParent->producttype_id == Config::get("constants.PRODUCT_TYPE_SELECTABLE"))
                                                         @if($orderproduct->product->attributevalueTree('main')->isNotEmpty())
                                                             <div class="row static-info">
                                                                 <div class="col-md-4 name" style="font-style: italic">

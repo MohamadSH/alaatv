@@ -72,8 +72,8 @@ class OrderController extends Controller
         $this->middleware('permission:' . config('constants.REMOVE_ORDER_ACCESS'), ['only' => 'destroy']);
         $this->middleware('permission:' . config('constants.SHOW_ORDER_ACCESS'), ['only' => 'edit']);
         $this->middleware('permission:' . config('constants.INSERT_ORDER_ACCESS'), ['only' => 'exitAdminInsertOrder']);
-        $this->middleware(['StoreOrderproductCookieInOpenOrder','OrderCheckoutReview',], ['only' => ['checkoutReview',],]);
-        $this->middleware(['CheckHasOpenOrder','OrderCheckoutPayment',], ['only' => ['checkoutPayment'],]);
+        $this->middleware(['completeInfo','OrderCheckoutReview',], ['only' => ['checkoutReview',],]);
+        $this->middleware(['completeInfo','OrderCheckoutPayment',], ['only' => ['checkoutPayment'],]);
         $this->middleware('SubmitOrderCoupon', ['only' => ['submitCoupon'],]);
         $this->middleware('RemoveOrderCoupon', ['only' => ['removeCoupon'],]);
         $this->setting = $setting->setting;
@@ -599,9 +599,10 @@ class OrderController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \app\Http\Requests\EditOrderRequest $request
-     * @param  \App\Order                          $order
+     * @param  \App\Order $order
      *
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     public function update(EditOrderRequest $request, Order $order)
     {
@@ -856,7 +857,7 @@ class OrderController extends Controller
                 $fakeOrderproducts = $this->convertOrderproductObjectsToCollection($cookieOrderproducts);
                 $groupPriceInfo =  $fakeOrderproducts->calculateGroupPrice();
 
-                $invoiceInfo["purchasedOrderproducts"] = $fakeOrderproducts;
+                $invoiceInfo["orderItems"] = $fakeOrderproducts;
                 $invoiceInfo["costCollection"]         = $groupPriceInfo["newPrices"];
                 $invoiceInfo["orderproductsRawCost"]   = $groupPriceInfo["rawCost"];
                 $invoiceInfo["payableCost"]            = $invoiceInfo["totalCost"] = $groupPriceInfo["customerCost"];
@@ -865,10 +866,10 @@ class OrderController extends Controller
             $response = response(["invoiceInfo"=>$invoiceInfo] , Response::HTTP_OK);
         }
 
-        if($request->ajax())
+        if($request->ajax() || true)
             return $response;
-        else
-            return view("order.checkout.review", compact("invoiceInfo"));
+
+        return view("order.checkout.review", compact("invoiceInfo"));
     }
 
 
@@ -968,8 +969,8 @@ class OrderController extends Controller
 
         if($request->ajax())
             return $response;
-        else
-            return view("order.checkout.payment" ,
+
+        return view("order.checkout.payment" ,
                    compact(
                "gateways",
                         "coupon",

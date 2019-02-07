@@ -9,6 +9,7 @@ use App\{Adapter\AlaaSftpAdapter,
     Observers\ProductObserver,
     Product,
     Traits\UserCommon};
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\{Auth, Schema, Storage, Validator};
 use Illuminate\Support\ServiceProvider;
 use Laravel\Horizon\Horizon;
@@ -54,9 +55,14 @@ class AppServiceProvider extends ServiceProvider
 
         });
 
+        Collection::macro('pushAt', function ($key, $item) {
+            return $this->put($key, collect($this->get($key))->push($item));
+        });
+
         Validator::extend('activeProduct', function ($attribute, $value, $parameters, $validator) {
             return Product::findOrFail($value)->active;
         });
+
     }
 
     /**

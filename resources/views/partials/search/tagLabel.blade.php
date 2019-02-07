@@ -1,5 +1,7 @@
 <div class="m-list-badge m--margin-bottom-10">
+    @if(!isset($inlineTags))
     <div class="m-list-badge__label m--font-brand">تگ ها</div>
+    @endif
     <div class="m-list-badge__items ">
         @foreach($tags as $key=>$tag)
             <span class="m-list-badge__item m-list-badge__item--focus m--padding-10 m--margin-top-5 m--block-inline {{(isset($spanClass))?$spanClass:""}} tag_{{$key}}">

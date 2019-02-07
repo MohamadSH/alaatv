@@ -18,9 +18,7 @@ class CompleteInfo
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if (Auth::guard($guard)
-                ->check() && $request->user()
-                                     ->completion("afterLoginForm") != 100) {
+        if (Auth::guard($guard)->check() && $request->user()->completion("afterLoginForm") != 100) {
             switch ($request->fullUrl()) {
                 case action("OrderController@checkoutReview") :
                 case action("OrderController@checkoutPayment") :

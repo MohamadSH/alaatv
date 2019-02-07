@@ -26,11 +26,7 @@
                     </div>
                     <div class = "m-widget19__content ">
                         <div class = "m--font-primary m--icon-font-size-sm1 m--font-bolder m--margin-top-15">
-                            <span>{{ $widgetPrice }}
-                                @if($widgetPriceLabel)
-                                    <span>تومان</span>
-                                @endif
-                            </span>
+                            <span>{{ $widgetPrice }}</span>
                         </div>
                         <h2 class="m--icon-font-size-sm2">{{ $widgetTitle }}</h2>
                     </div>

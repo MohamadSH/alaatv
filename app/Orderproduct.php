@@ -6,11 +6,7 @@ namespace App;
 use App\Classes\Checkout\Alaa\AlaaOrderproductGroupPriceCalculatorFromNewBase;
 use App\Classes\Checkout\Alaa\OrderproductCheckout;
 use App\Collection\OrderproductCollection;
-use App\Traits\Helper;
 use App\Traits\ProductCommon;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 
@@ -68,17 +64,11 @@ use Illuminate\Support\Facades\Config;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct query()
  * @property-read float|int $discount_percentage
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
-class Orderproduct extends Model
+class Orderproduct extends BaseModel
 {
-    use Helper;
-    use SoftDeletes;
-    /**      * The attributes that should be mutated to dates.        */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
     use ProductCommon;
 
     /**
@@ -105,6 +95,22 @@ class Orderproduct extends Model
         'attributevalues',
     ];
 
+    protected $appends=[
+        'orderproducttypeInfo',
+    ];
+
+    protected $hidden=[
+        'product_id',
+        'orderproducttype_id',
+        'orderproducttype',
+        'checkoutstatus_id',
+        'includedInCoupon',
+        'created_at',
+        'updated_at',
+        'userbons',
+        'deleted_at',
+    ];
+
     public function order()
     {
         return $this->belongsTo('\App\Order');
@@ -115,6 +121,23 @@ class Orderproduct extends Model
         return $this->belongsTo('\App\Product')
 //                    ->with('parents')
             ;
+    }
+
+    public function getOrderproducttypeInfoAttribute()
+    {
+        $orderproducttype = $this->orderproducttype;
+        return [
+            'name'          => $orderproducttype->name,
+            'hint'   => $orderproducttype->displayName
+        ];
+    }
+
+    public function getAttributeValuesInfo()
+    {
+        if($this->attributevalues->isNotEmpty())
+            return $this->attributevalues;
+        else
+            return null;
     }
 
     /**
@@ -377,7 +400,7 @@ class Orderproduct extends Model
     public function renewAttributeValue():void
     {
         $extraAttributes = $this->attributevalues;
-        $myParent = $this->product->getGrandParent();
+        $myParent = $this->product->grandParent;
 
         foreach ($extraAttributes as $extraAttribute) {
             $productAttributevalue = $myParent->attributevalues->where("id", $extraAttribute->id)->first();

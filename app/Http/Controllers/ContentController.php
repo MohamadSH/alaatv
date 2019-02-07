@@ -3,10 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Classes\Search\ContentSearch;
+use App\Classes\Search\ContentsetSearch;
+use App\Classes\Search\ProductSearch;
+use App\Collection\ContentCollection;
 use App\Content;
 use App\Contentset;
 use App\Contenttype;
 use App\Http\Requests\{ContentIndexRequest, EditContentRequest, InsertContentRequest, Request};
+use App\Product;
 use App\Traits\{APIRequestCommon,
     CharacterCommon,
     FileCommon,
@@ -19,6 +23,8 @@ use App\User;
 use App\Websitesetting;
 use Carbon\Carbon;
 use Exception;
+use http\Exception\InvalidArgumentException;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
@@ -57,6 +63,15 @@ class ContentController extends Controller
      * @var ContentSearch
      */
     private $contentSearch;
+    /**
+     * @var ContentsetSearch
+     */
+    private $setSearch;
+
+    /**
+     * @var ProductSearch
+     */
+    private $productSearch;
 
     /*
     |--------------------------------------------------------------------------
@@ -64,13 +79,15 @@ class ContentController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    public function __construct(Agent $agent, Response $response, Websitesetting $setting, ContentSearch $contentSearch)
+    public function __construct(Agent $agent, Response $response, Websitesetting $setting, ContentSearch $contentSearch, ContentsetSearch $setSearch, ProductSearch $productSearch)
     {
         $this->response = $response;
         $this->setting = $setting->setting;
         $authException = $this->getAuthExceptionArray($agent);
         $this->callMiddlewares($authException);
         $this->contentSearch = $contentSearch;
+        $this->setSearch = $setSearch;
+        $this->productSearch = $productSearch;
     }
 
     /**
@@ -133,126 +150,29 @@ class ContentController extends Controller
      *
      * @param ContentIndexRequest $request
      *
+     *
      * @return \Illuminate\Http\Response
      */
     public function index(ContentIndexRequest $request)
     {
-        $contentTypes = array_filter($request->get('contentType',
-                                                   [
-                                                       "video",
-                                                       "pamphlet",
-                                                       "article",
-                                                   ]
-        ));
-        $tags = $request->get('tags');
+        $contentTypes = array_filter($request->get('contentType',Contenttype::List()));
+        $tags = (array)$request->get('tags');
         $filters = $request->all();
-        $isApp = $this->isRequestFromApp($request);
 
-        $items = collect();
-        foreach ($contentTypes as $contentType) {
-            $filters['contentType'] = [$contentType];
-            ${$contentType . 'Result'} = $this->contentSearch
-                ->setPageName($contentType . 'Page')
-                ->apply($filters);
+        $result = $this->contentSearch->get(compact('filters','contentTypes'));
+        $result->offsetSet('set', $this->setSearch->get($filters));
+        $result->offsetSet('product', $this->productSearch->get($filters));
 
-//            dump(${$contentType . 'Result'});
-            if ($isApp) {
-                $data = ${$contentType . 'Result'}->getCollection();
-            } else {
-                $partialSearch = $partialIndex = null;
-                if (${$contentType . 'Result'}->total() > 0) {
-                    $partialSearch = $this->getPartialSearchFromIds(${$contentType . 'Result'}, self::PARTIAL_SEARCH_TEMPLATE_ROOT . "." . $contentType);
-                    $partialIndex = $this->getPartialSearchFromIds(${$contentType . 'Result'}, self::PARTIAL_INDEX_TEMPLATE);
-                }
-                $data = [
-                    "type"       => $contentType,
-                    "totalitems" => ${$contentType . 'Result'}->total(),
-                    "view"       => $partialSearch,
-                    "indexView"  => $partialIndex,
-                    "tagLabels"  => $tags,
-                ];
-            }
-            $items->push($data);
-        }
-
-//        dd(".");
-        if ($isApp) {
-            $response = $this->makeJsonForAndroidApp($items);
-            return response()->json($response, Response::HTTP_OK);
-        }
-        if (request()->ajax()) {
+        $pageName = "content-search";
+        if (request ()->ajax() || true) {
             return $this->response
                 ->setStatusCode(Response::HTTP_OK)
                 ->setContent([
-                                 "items"     => $items,
-                                 "itemTypes" => $contentTypes,
-                                 "tagLabels" => $tags,
-                             ]);
+                    'result' => $result,
+                    'tags' => $tags
+                ]);
         }
-        return view("pages.search", compact("items", "contentTypes", 'tags'));
-    }
-
-    /**
-     * @param Collection $items
-     *
-     * @return mixed
-     */
-    private function makeJsonForAndroidApp(Collection $items)
-    {
-
-        //        dd($items);
-        $items = $items->pop();
-        $key = md5($items->pluck("id")
-                         ->implode(","));
-        $response = Cache::remember($key, Config::get("constants.CACHE_60"), function () use ($items) {
-            $response = collect();
-            $items->load('files');
-            foreach ($items as $item) {
-                $hq = "";
-                $h240 = "";
-                if (isset($item->files)) {
-                    $hq = $item->files->where('pivot.label', 'hq')
-                                      ->first();
-
-                    if (isset($hq)) {
-                        $hq = $hq->name;
-                        $h240 = $hq;
-                    }
-                }
-
-                if (isset($item->files)) {
-                    $temp = $item->files->where('pivot.label', '240p')
-                                        ->first();
-                    if (isset($temp)) {
-                        $h240 = $temp->name;
-                    }
-                }
-
-                $thumbnail = $item->files->where('pivot.label', 'thumbnail')
-                                         ->first();
-                $contenSets = $item->set;
-                $sessionNumber = $contenSets->pivot->order;
-                $response->push(
-                    [
-                        "videoId"          => $item->id,
-                        "name"             => $item->display_name,
-                        "videoDescribe"    => $item->description,
-                        "url"              => action('ContentController@show', $item),
-                        "videoLink480"     => $hq,
-                        "videoLink240"     => $h240,
-                        "videoviewcounter" => "0",
-                        "videoDuration"    => 0,
-                        "session"          => $sessionNumber . "",
-                        "thumbnail"        => (isset($thumbnail->name)) ? $thumbnail->name : "",
-                    ]
-                );
-                //dd($response);
-                //return response()->make("ok");
-            }
-            $response->push(json_decode("{}"));
-            return $response;
-        });
-        return $response;
+        return view("pages.content-search", compact("result", "contentTypes", 'tags','pageName'));
     }
 
     public function embed(Request $request, Content $content)
@@ -329,15 +249,14 @@ class ContentController extends Controller
 
             $userCanSeeCounter = optional(auth()->user())->CanSeeCounter();
 
-            $result = compact("seenCount", "author", "content", "rootContentType", "childContentType", "contentSet", "contentsWithSameSet", "videosWithSameSet", "pamphletsWithSameSet", "contentSetName", "videoSources"
-                , "tags", "sideBarMode", "userCanSeeCounter", "adItems", "videosWithSameSetL", "videosWithSameSetR", "contentId");
 
-            if (request()->ajax()) {
+            if (request()->ajax() || true) {
                 return $this->response
                     ->setStatusCode(Response::HTTP_OK)
-                    ->setContent($result);
+                    ->setContent($content);
             }
-            return view("content.show", $result);
+            return view("content.show", compact("seenCount", "author", "content", "contentsWithSameSet", "videosWithSameSet", "pamphletsWithSameSet", "contentSetName"
+                , "tags", "userCanSeeCounter", "adItems", "videosWithSameSetL", "videosWithSameSetR"));
         } else
             abort(403);
     }
@@ -443,6 +362,7 @@ class ContentController extends Controller
         return $this->response
             ->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
     }
+
 
     /**
      * @param FormRequest $request

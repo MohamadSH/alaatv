@@ -2,13 +2,7 @@
 
 namespace App;
 
-use App\Collection\ProductCollection;
-use App\Traits\DateTrait;
-use App\Traits\Helper;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Collection;
 
 /**
  * App\Coupon
@@ -66,8 +60,10 @@ use Illuminate\Support\Collection;
  * @property-read mixed $coupon_type
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon enable()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon valid()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
-class Coupon extends Model
+class Coupon extends BaseModel
 {
 
     /*
@@ -76,24 +72,11 @@ class Coupon extends Model
     |--------------------------------------------------------------------------
     */
 
-    use SoftDeletes;
-    use Helper;
-    use DateTrait;
-
-
     /*
     |--------------------------------------------------------------------------
     | Properties
     |--------------------------------------------------------------------------
     */
-
-    /**      * The attributes that should be mutated to dates.        */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
-
     /**
      * @var array
      */

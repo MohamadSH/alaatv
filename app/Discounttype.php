@@ -2,8 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
 /**
  * App\Discounttype
  *
@@ -25,8 +23,10 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Discounttype newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Discounttype newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Discounttype query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
-class Discounttype extends Model
+class Discounttype extends BaseModel
 {
     //
 }
