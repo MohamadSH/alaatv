@@ -72,8 +72,8 @@ class OrderController extends Controller
         $this->middleware('permission:' . config('constants.REMOVE_ORDER_ACCESS'), ['only' => 'destroy']);
         $this->middleware('permission:' . config('constants.SHOW_ORDER_ACCESS'), ['only' => 'edit']);
         $this->middleware('permission:' . config('constants.INSERT_ORDER_ACCESS'), ['only' => 'exitAdminInsertOrder']);
-        $this->middleware(['CheckHasOpenOrder','StoreOrderproductCookieInOpenOrder','OrderCheckoutReview',], ['only' => ['checkoutReview',],]);
-        $this->middleware(['CheckHasOpenOrder','OrderCheckoutPayment',], ['only' => ['checkoutPayment'],]);
+        $this->middleware(['completeInfo','OrderCheckoutReview',], ['only' => ['checkoutReview',],]);
+        $this->middleware(['completeInfo','OrderCheckoutPayment',], ['only' => ['checkoutPayment'],]);
         $this->middleware('SubmitOrderCoupon', ['only' => ['submitCoupon'],]);
         $this->middleware('RemoveOrderCoupon', ['only' => ['removeCoupon'],]);
         $this->setting = $setting->setting;
@@ -599,9 +599,10 @@ class OrderController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \app\Http\Requests\EditOrderRequest $request
-     * @param  \App\Order                          $order
+     * @param  \App\Order $order
      *
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     public function update(EditOrderRequest $request, Order $order)
     {
@@ -856,7 +857,7 @@ class OrderController extends Controller
                 $fakeOrderproducts = $this->convertOrderproductObjectsToCollection($cookieOrderproducts);
                 $groupPriceInfo =  $fakeOrderproducts->calculateGroupPrice();
 
-                $invoiceInfo["purchasedOrderproducts"] = $fakeOrderproducts;
+                $invoiceInfo["orderItems"] = $fakeOrderproducts;
                 $invoiceInfo["costCollection"]         = $groupPriceInfo["newPrices"];
                 $invoiceInfo["orderproductsRawCost"]   = $groupPriceInfo["rawCost"];
                 $invoiceInfo["payableCost"]            = $invoiceInfo["totalCost"] = $groupPriceInfo["customerCost"];
@@ -865,10 +866,10 @@ class OrderController extends Controller
             $response = response(["invoiceInfo"=>$invoiceInfo] , Response::HTTP_OK);
         }
 
-        if($request->ajax())
+        if($request->ajax() || true)
             return $response;
-        else
-            return view("order.checkout.review", compact("invoiceInfo"));
+
+        return view("order.checkout.review", compact("invoiceInfo"));
     }
 
 
@@ -931,15 +932,20 @@ class OrderController extends Controller
 
         $order = Order::Find($request->order_id);
         if(isset($order)) {
-            $order->load(["user" , "coupon" , "coupon.products" ,"orderproducts" , "orderproducts.userbons" , "orderproducts.attributevalues" , "orderproducts.product" ]);
             $credit = optional($order->user)->getTotalWalletBalance();
             $orderHasDonate = $order->hasTheseProducts(Product::DONATE_PRODUCT);
             $gateways = Transactiongateway::enable()->get()->sortBy("order")->pluck("displayName", "name");
 
-            $couponValidationStatus = optional($order->coupon)->validateCoupon();
+            $coupon = $order->coupon;
+            $couponValidationStatus = optional($coupon)->validateCoupon();
             if(in_array($couponValidationStatus , [Coupon::COUPON_VALIDATION_STATUS_DISABLED , Coupon::COUPON_VALIDATION_STATUS_USAGE_TIME_NOT_BEGUN , Coupon::COUPON_VALIDATION_STATUS_EXPIRED]))
             {
                 $order->detachCoupon();
+                if($order->updateWithoutTimestamp()) {
+                    $coupon->decreaseUseNumber();
+                    $coupon->update();
+                }
+
                 $order = $order->fresh();
             }
             $coupon = $order->coupon;
@@ -963,8 +969,8 @@ class OrderController extends Controller
 
         if($request->ajax())
             return $response;
-        else
-            return view("order.checkout.payment" ,
+
+        return view("order.checkout.payment" ,
                    compact(
                "gateways",
                         "coupon",
@@ -1165,32 +1171,29 @@ class OrderController extends Controller
      */
     public function removeCoupon(Request $request)
     {
-        if($request->has("order_id"))
+        $order = Order::Find($request->get("order_id"));
+        if(isset($order))
         {
-            $order = Order::Find($request->get("order_id"));
-            if(isset($order))
+            $order->load("coupon");
+            $coupon = $order->coupon;
+            if(isset($coupon))
             {
-                $result = $order->detachCoupon();
-                if ($result)
-                {
+                $order->detachCoupon();
+                if($order->updateWithoutTimestamp()) {
+                    $coupon->decreaseUseNumber();
+                    $coupon->update();
                     $responseStatusCode = Response::HTTP_OK;
                     $responseMessage = "کپن سفارش شما با موفیت حذف شد";
                     $sessionIndex = "couponMessageSuccess";
-                }
-                else
-                {
+                }else{
                     $responseStatusCode = Response::HTTP_SERVICE_UNAVAILABLE;
                     $responseMessage = "خطای پایگاه داده";
                     $sessionIndex = "couponMessageError";
                 }
-            }else
-            {
-                $responseStatusCode = Response::HTTP_BAD_REQUEST;
-                $responseMessage = "سفارش مورد نظر یافت نشد";
-                $sessionIndex = "couponMessageError";
             }
 
-        }else{
+        }else
+        {
             $responseStatusCode = Response::HTTP_BAD_REQUEST;
             $responseMessage = "سفارش مورد نظر یافت نشد";
             $sessionIndex = "couponMessageError";

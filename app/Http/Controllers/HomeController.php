@@ -157,13 +157,9 @@ class HomeController extends Controller
     {
         try{
 
-
-//            return $this->test(226);
-            $product = Product::find(226);
-            return  $product;
-            dump("product:".$product->id);
-            return $product->sample_photos;
-//            return $product->attributes;
+            $order = Order::find(248133);
+            dump("here");
+            dd($order->orderproducts->first()->orderproducttype);
 
             $contentsets = [
                 [
