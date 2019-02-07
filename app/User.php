@@ -24,6 +24,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\{Auth, Cache, Config, DB};
 use Kalnoy\Nestedset\QueryBuilder;
 use Laratrust\Traits\LaratrustUserTrait;
+use Laravel\Passport\HasApiTokens;
 use Schema;
 
 /**
@@ -246,6 +247,7 @@ use Schema;
  */
 class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, MustVerifyEmail
 {
+    use HasApiTokens;
     use MustVerifyMobileNumberTrait;
     use Helper;
     use DateTrait;
