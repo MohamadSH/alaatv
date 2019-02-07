@@ -508,12 +508,33 @@ class UserController extends Controller
                 abort(403);
         }
 
+
+
         if ($request->ajax()) {
             return response($user, Response::HTTP_OK);
         }
 
+        $genders = Gender::pluck('name', 'id')
+            ->prepend("نامشخص");
+        $majors = Major::pluck('name', 'id')
+            ->prepend("نامشخص");
+        $sideBarMode = "closed";
+
+        /** LOTTERY */
+        [
+            $exchangeAmount,
+            $userPoints,
+            $userLottery,
+            $prizeCollection,
+            $lotteryRank,
+            $lottery,
+            $lotteryMessage,
+            $lotteryName,
+        ] = $user->getLottery();
+
         return view("user.profile.profile", compact("user", "userCompletion",
-                "hasRequestedVerificationCode", "mobileVerificationCode"));
+                "hasRequestedVerificationCode", "mobileVerificationCode",
+            'genders', 'majors', 'sideBarMode', 'exchangeAmount', 'userPoints', 'userLottery', 'prizeCollection', 'lotteryRank', 'lottery', 'lotteryMessage', 'lotteryName'));
     }
 
     /**
