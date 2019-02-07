@@ -29,7 +29,7 @@ class CheckPermissionForSendOrderId
      * @param Request $request
      * @param OrderController $controller
      */
-    public function __construct(Request $request, OrderController $controller)
+    public function __construct(Request $request, OrderController $controller, $guard = null)
     {
         $this->orderController = $controller;
         $this->user = $request->user();

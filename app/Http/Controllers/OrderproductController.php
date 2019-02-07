@@ -467,6 +467,7 @@ class OrderproductController extends Controller
             'withoutBon' => isset($data['withoutBon'])?$data['withoutBon']:null
         ];
 
+
         /** @var Order $order */
         if(isset($data['order'])) {
             $order = $data['order'];

@@ -5,6 +5,7 @@ use App\Orderproduct;
 use App\Product;
 use App\User;
 use App\Wallet;
+use Illuminate\Support\Facades\Log;
 
 trait OrderCommon
 {
