@@ -87,6 +87,7 @@ class OrderCheckout extends CheckoutInvoker
         //For the sake of reducing queries
         if($this->order->coupon_id)
             $alaaCashier->setOrderCoupon($this->order->coupon);
+
         return $alaaCashier;
     }
 

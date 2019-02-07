@@ -10,7 +10,7 @@ namespace App\Classes\Payment\RefinementRequest\Strategies;
 
 use App\Order;
 use Illuminate\Http\Response;
-use App\Classes\Payment\RefinementRequest\{Refinement, RefinementInterface};
+use App\Classes\Payment\RefinementRequest\Refinement;
 
 class OpenOrderRefinement extends Refinement
 {
@@ -48,6 +48,6 @@ class OpenOrderRefinement extends Refinement
      */
     private function getOpenOrder(): Order
     {
-        return $this->firstOrCreateOpenOrder($this->user);
+        return $this->user->getOpenOrder();
     }
 }

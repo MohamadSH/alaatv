@@ -9,6 +9,11 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 //class paymentTest extends TestCase
 //{
 //    public function testRedirect() {
-//        $this->assertTrue(true);
+////        $user = User::find(1)->first();
+////        $response = $this
+////            ->actingAs($user)
+////            ->call('GET', 'paymentRedirect/zarinpal/web');
+//
+////        $response->assertRedirect($uri);
 //    }
 //}

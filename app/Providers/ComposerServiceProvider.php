@@ -35,7 +35,6 @@ class ComposerServiceProvider extends ServiceProvider
 
 
         View::composer('partials.header1', 'App\Http\ViewComposers\HeaderComposer');
-        View::composer('user.profile.profile', 'App\Http\ViewComposers\ProfileComposer');
 
         /**
          *  lessons

@@ -282,4 +282,12 @@ class Coupon extends BaseModel
         return $flag;
     }
 
+    public function decreaseUseNumber(){
+        $this->usageNumber--;
+    }
+
+    public function encreaseUserNumber(){
+        $this->usageNumber++;
+    }
+
 }

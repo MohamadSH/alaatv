@@ -2,309 +2,558 @@
 
 namespace Tests\Feature;
 
-use App\Http\Controllers\OrderController;
-use App\Order;
+use App\Attribute;
+use App\Attributevalue;
+use App\Bon;
+use App\User;
+use App\Wallet;
+use App\Product;
+use App\Userbon;
+//use Illuminate\Contracts\Session\Session;
+use Session;
+use Illuminate\Support\Facades\Log;
+use Tests\TestCase;
 use App\Traits\OrderCommon;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Session;
-use Tests\TestCase;
-use App\Userbon;
-use DB;
-use App\User;
-use Illuminate\Http\Request;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
+//use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class OrderProductTest extends TestCase
 {
+//    use RefreshDatabase;
     use OrderCommon;
 
     public function testAddToOrder() {
 
-        Session::start();
-        $this->resetOrders();
-        $user = User::find(1)->first();
-        $request = new Request();
+        $user = factory(User::class)->create();
+        $bon = Bon::find(1);
+        $gift = factory(Product::class)->create([
+            'producttype_id' => 1
+        ]);
 
-//        $sampleData = $this->getSampleData('simple1', $this->user, $request); // simple product
-//        $sampleData = $this->getSampleData('simple2', $this->user, $request);// 270 is gift of 155
-//        $sampleData = $this->getSampleData('simple3', $this->user, $request);// 157 is child of 155 and gift of 155 is 270
-//        $sampleData = $this->getSampleData('donate1', $this->user, $request);// 5000
-//        $sampleData = $this->getSampleData('donate2', $this->user, $request);// custom
-//        $sampleData = $this->getSampleData('selectable', $this->user, $request);
-        $sampleData = $this->getSampleData('configurable', $user);
-        $request->offsetSet('order_id', $sampleData['orderId']);
-        $request->offsetSet('product_id', $sampleData['productId']);
-        $request->offsetSet('products', $sampleData['data']['products']);
-        $request->offsetSet('attribute', $sampleData['data']['attribute']);
-        $request->offsetSet('extraAttribute', $sampleData['data']['extraAttribute']);
-        $request->offsetSet('withoutBon', false);
+        $orderId = $user->getOpenOrder()->id;
+
+        $this->assertion0(); // logout user
+        $this->assertion1($user, $bon, $orderId, $gift); // simple product with gift and bon
+        $this->assertion2($user, $bon, $orderId, $gift); // simple product has father and father has gift and bon
+        $this->assertion3($user, $bon, $orderId, $gift); // selectable product with gift and bon
+        $this->assertion4($user, $bon, $orderId, $gift); // configurable product with gift and bon
+
+        $user->forceDelete();
+        $gift->forceDelete();
+    }
+
+    /**
+     * logout user
+     */
+    public function assertion0()
+    {
+        /** @var User $user */
+        $user = factory(User::class)->create();
+
+        $product = factory(Product::class)->create([
+            'producttype_id' => 1
+        ]);
 
         $data = [
-            'order_id' => $sampleData['orderId'],
-            'product_id' => $sampleData['productId'],
-            'products' => $sampleData['data']['products'],
-            'attribute' => $sampleData['data']['attribute'],
-            'extraAttribute' => $sampleData['data']['extraAttribute'],
+            'product_id' => $product->id,
+            'products' => [],
+            'attribute' => [],
+            'extraAttribute' => [],
             'withoutBon' => false
         ];
 
-        Log::debug('before factory');
-        $user11 = factory(User::class)->create();
-
-        Log::debug('before actingAs');
-        $this->actingAs($user11);
-        Log::debug('after actingAs');
-
 
         $response = $this
-//            ->visit('/')
-//            ->see('Hello, '.$user->name);
-
+            /*->actingAs($user)*/
             ->call('POST', 'orderproduct', $data);
-
-        Log::debug('before assertJson');
-
         $response
-//            ->assertStatus(Response::HTTP_OK)
-            ->assertJson([
-                'created' => true,
-            ])
-        ;
-
-//            ->seeJsonStructure([
-//            'orderproducts' => [
-//                'id',
-//                'order_id',
-//                'product_id',
-//                'updated_at',
-//                'created_ats',
-//                'attributevalues',
-//                'orderproducttype_id'
-//            ]
-//        ]);
-
-//        $this->assertEquals(200, $response->status());
-
-
+            ->assertStatus(Response::HTTP_FOUND);
+        $user->forceDelete();
+        $product->forceDelete();
     }
 
-
     /**
-     * generate sample data for test store orderProduct
-     * @param $case
+     * simple product with gift
      * @param User $user
-     * @return array
+     * @param Bon $bon
+     * @param Userbon $userbon
+     * @param int $orderId
+     * @param Product $gift
      */
-    private function getSampleData($case, User $user) {
+    public function assertion1(User $user, Bon $bon, int $orderId, Product $gift)
+    {
+        $product = factory(Product::class)->create([
+            'producttype_id' => 1
+        ]);
+        $bonDiscount = 10;
+        $product->bons()
+            ->attach($bon->id, ['discount'=>$bonDiscount]);
+        $userbon = factory(Userbon::class)->create([
+            'user_id' => $user->id,
+            'bon_id' => $bon->id,
+            'totalNumber' => 10,
+            'usedNumber' => 0
+        ]);
 
-        $orderId = $this->firstOrCreateOpenOrder($user);
+        $product->gifts()
+            ->attach($gift->id, ['relationtype_id' => config("constants.PRODUCT_INTERRELATION_GIFT")]);
 
-        switch ($case) {
-            case 'simple1':
-                /**
-                 * simple product
-                 * without bon
-                 * don't have extraAttribute
-                 */
-                return [
-                    'orderId' => $orderId,
-                    'productId' => 259,
-                    'data' => [
-                        'products' => [241, 247],
-                        'attribute' => [1,3,9,49,53],
-                        'extraAttribute' => [
-                            [
-                                'id'=>60,
-                                'cost'=>600
-                            ],
-                            [
-                                'id'=>21,
-                                'cost'=>700
-                            ]
-                        ]
-                    ]
-                ];
-            case 'simple2':
-                /**
-                 * simple product
-                 * has bon
-                 * 270 is gift of 155
-                 * don't have extraAttribute
-                 */
-                return [
-                    'orderId' => $orderId,
-                    'productId' => 270,
-                    'data' => [
-                        'products' => [],
-                        'attribute' => [],
-                        'extraAttribute' => [
-                            [
-                                'id'=>60,
-                                'cost'=>600
-                            ],
-                            [
-                                'id'=>21,
-                                'cost'=>700
-                            ]
-                        ]
-                    ]
-                ];
-            case 'simple3':
-                /**
-                 * simple product
-                 * 157 is child of 155 and gift of 155 is 270
-                 * with bon from father
-                 */
-                return [
-                    'orderId' => $orderId,
-                    'productId' => 157,
-                    'data' => [
-                        'products' => [241, 247],
-                        'attribute' => [1,3,9,49,53],
-                        'extraAttribute' => [
-                            [
-                                'id'=>60,
-                                'cost'=>600
-                            ],
-                            [
-                                'id'=>21,
-                                'cost'=>700
-                            ]
-                        ]
-                    ]
-                ];
-            case 'donate1':
-                /**
-                 * donate product
-                 * 5000
-                 */
-                return [
-                    'orderId' => $orderId,
-                    'productId' => 180,
-                    'data' => [
-                        'products' => [],
-                        'attribute' => [],
-                        'extraAttribute' => []
-                    ]
-                ];
-            case 'donate2':
-                /**
-                 * donate product
-                 * custom
-                 */
-                return [
-                    'orderId' => $orderId,
-                    'productId' => 181,
-                    'data' => [
-                        'products' => [],
-                        'attribute' => [],
-                        'extraAttribute' => []
-                    ]
-                ];
-            case 'selectable':
-                /**
-                 * selectable product
-                 * 241 children: 247, 248
-                 * 247 children: 219, 220, 258
-                 * 248 children: 259, 260
-                 * don't have extraAttribute
-                 */
-                return [
-                    'orderId' => $orderId,
-                    'productId' => 240,
-                    'data' => [
-                        'products' => [
-//                            241,
-//
-//                                247,
-//                                    219,
-//                                    220,
-//                                    258,
+        $data = [
+            /*'order_id' => $orderId,*/
+            'product_id' => $product->id,
+            'products' => [],
+            'attribute' => [],
+            'extraAttribute' => [],
+            'withoutBon' => false
+        ];
 
-//                                248,
-                            259,
-                            260
-                        ],
-                        'attribute' => [1,3,9,49,53],
-                        'extraAttribute' => [
-                            [
-                                'id'=>60,
-                                'cost'=>600
-                            ],
-                            [
-                                'id'=>21,
-                                'cost'=>700
-                            ]
-                        ]
-                    ]
-                ];
-            case 'configurable':
-                /**
-                 * configurable product
-                 * gift of 155 is 270
-                 * has bon
-                 * configure product with child (156, 157)
-                 */
-                return [
-                    'orderId' => $orderId,
-                    'productId' => 155,
-                    'data' => [
-                        'products' => [241, 247],
-                        'attribute' => [1,3,9,49,53], // => 156
-                        'extraAttribute' => [
-                            [
-                                'id'=>60,
-                                'cost'=>600
-                            ],
-                            [
-                                'id'=>21,
-                                'cost'=>700
-                            ]
-                        ]
-                    ]
-                ];
-            default:
-                /**
-                 * simple product
-                 * without bon
-                 * don't have extraAttribute
-                 */
-                return [
-                    'orderId' => $orderId,
-                    'productId' => 259,
-                    'data' => [
-                        'products' => [241, 247],
-                        'attribute' => [1,3,9,49,53],
-                        'extraAttribute' => [
-                            [
-                                'id'=>60,
-                                'cost'=>600
-                            ],
-                            [
-                                'id'=>21,
-                                'cost'=>700
-                            ]
-                        ]
-                    ]
-                ];
-        }
+        $response = $this
+            ->actingAs($user)
+            ->call('POST', 'orderproduct', $data);
+        $response
+            ->assertStatus(Response::HTTP_OK)
+            ->assertJson([
+                'product saved'
+            ]);
+        $this->assertDatabaseHas('orders', [
+            'id' => $orderId
+        ]);
+        $this->assertDatabaseHas('orderproducts', [
+            'order_id' => $orderId,
+            'product_id' => $product->id
+        ]);
+        $this->assertDatabaseHas('orderproduct_userbon', [
+            'userbon_id' => $userbon->id,
+            'discount' => $bonDiscount
+        ]);
+        $this->assertDatabaseHas('orderproducts', [
+            'order_id' => $orderId,
+            'product_id' => $gift->id
+        ]);
+        $product->forceDelete();
     }
 
     /**
-     *reset order and orderProduct and user bons for test store orderProduct
+     * simple product has father and father has gift
+     * @param User $user
+     * @param Bon $bon
+     * @param Userbon $userbon
+     * @param int $orderId
+     * @param Product $gift
      */
-    private function resetOrders() {
-        $Userbon = Userbon::findOrFail(1);
-        $Userbon->usedNumber = 0;
-        $Userbon->userbonstatus_id = 1;
-        $Userbon->update();
-        DB::table('orders')->delete();
-        /*DB::table('orderproducts')->delete();
-        DB::table('attributevalue_orderproduct')->delete();*/
+    public function assertion2(User $user, Bon $bon, int $orderId, Product $gift)
+    {
+        $fatherProduct = factory(Product::class)->create([
+            'producttype_id' => 1
+        ]);
+        $bonDiscount = 10;
+        $fatherProduct->bons()
+            ->attach($bon->id, ['discount'=>$bonDiscount]);
+        $userbon = factory(Userbon::class)->create([
+            'user_id' => $user->id,
+            'bon_id' => $bon->id,
+            'totalNumber' => 10,
+            'usedNumber' => 0
+        ]);
+        $childProduct = factory(Product::class)->create([
+            'producttype_id' => 1
+        ]);
+        $fatherProduct->children()
+            ->attach($childProduct->id);
+        $fatherProduct->gifts()
+            ->attach($gift->id, ['relationtype_id' => config("constants.PRODUCT_INTERRELATION_GIFT")]);
 
-        /*dd('OrdersReset Done!');*/
+        $data = [
+            /*'order_id' => $orderId,*/
+            'product_id' => $childProduct->id,
+            'products' => [],
+            'attribute' => [],
+            'extraAttribute' => [],
+            'withoutBon' => false
+        ];
+
+        $response = $this
+            ->actingAs($user)
+            ->call('POST', 'orderproduct', $data);
+        $response
+            ->assertStatus(Response::HTTP_OK)
+            ->assertJson([
+                'product saved'
+            ]);
+        $this->assertDatabaseHas('orders', [
+            'id' => $orderId
+        ]);
+        $this->assertDatabaseHas('orderproducts', [
+            'order_id' => $orderId,
+            'product_id' => $childProduct->id
+        ]);
+        $this->assertDatabaseHas('orderproducts', [
+            'order_id' => $orderId,
+            'product_id' => $gift->id
+        ]);
+        $this->assertDatabaseHas('orderproduct_userbon', [
+            'userbon_id' => $userbon->id,
+            'discount' => $bonDiscount
+        ]);
+        $fatherProduct->forceDelete();
+        $childProduct->forceDelete();
+    }
+
+    /**
+     * selectable product with gift
+     * @param User $user
+     * @param Bon $bon
+     * @param Userbon $userbon
+     * @param int $orderId
+     * @param Product $gift
+     */
+    public function assertion3(User $user, Bon $bon, int $orderId, Product $gift)
+    {
+        $grandfatherProduct = factory(Product::class)->create([
+            'producttype_id' => 3
+        ]);
+        $bonDiscount = 10;
+        $grandfatherProduct->bons()
+            ->attach($bon->id, ['discount'=>$bonDiscount]);
+        $userbon = factory(Userbon::class)->create([
+            'user_id' => $user->id,
+            'bon_id' => $bon->id,
+            'totalNumber' => 10,
+            'usedNumber' => 0
+        ]);
+        $fatherProduct1 = factory(Product::class)->create([
+            'producttype_id' => 1,
+            'grand_id' => $grandfatherProduct->id
+        ]);
+        $fatherProduct2 = factory(Product::class)->create([
+            'producttype_id' => 1,
+            'grand_id' => $grandfatherProduct->id
+        ]);
+        $childProduct11 = factory(Product::class)->create([
+            'producttype_id' => 1,
+            'grand_id' => $grandfatherProduct->id
+        ]);
+        $childProduct12 = factory(Product::class)->create([
+            'producttype_id' => 1,
+            'grand_id' => $grandfatherProduct->id
+        ]);
+        $childProduct21 = factory(Product::class)->create([
+            'producttype_id' => 1,
+            'grand_id' => $grandfatherProduct->id
+        ]);
+        $childProduct22 = factory(Product::class)->create([
+            'producttype_id' => 1,
+            'grand_id' => $grandfatherProduct->id
+        ]);
+        $childProduct111 = factory(Product::class)->create([
+            'producttype_id' => 1,
+            'grand_id' => $grandfatherProduct->id
+        ]);
+        $childProduct112 = factory(Product::class)->create([
+            'producttype_id' => 1,
+            'grand_id' => $grandfatherProduct->id
+        ]);
+        $childProduct121 = factory(Product::class)->create([
+            'producttype_id' => 1,
+            'grand_id' => $grandfatherProduct->id
+        ]);
+        $childProduct122 = factory(Product::class)->create([
+            'producttype_id' => 1,
+            'grand_id' => $grandfatherProduct->id
+        ]);
+        $childProduct211 = factory(Product::class)->create([
+            'producttype_id' => 1,
+            'grand_id' => $grandfatherProduct->id
+        ]);
+        $childProduct212 = factory(Product::class)->create([
+            'producttype_id' => 1,
+            'grand_id' => $grandfatherProduct->id
+        ]);
+        $childProduct221 = factory(Product::class)->create([
+            'producttype_id' => 1,
+            'grand_id' => $grandfatherProduct->id
+        ]);
+        $childProduct222 = factory(Product::class)->create([
+            'producttype_id' => 1,
+            'grand_id' => $grandfatherProduct->id
+        ]);
+
+        $grandfatherProduct->children()
+            ->attach($fatherProduct1->id);
+        $grandfatherProduct->children()
+            ->attach($fatherProduct2->id);
+        $fatherProduct1->children()
+            ->attach($childProduct11->id);
+        $fatherProduct1->children()
+            ->attach($childProduct12->id);
+        $fatherProduct2->children()
+            ->attach($childProduct21->id);
+        $fatherProduct2->children()
+            ->attach($childProduct22->id);
+        $childProduct11->children()
+            ->attach($childProduct111->id);
+        $childProduct11->children()
+            ->attach($childProduct112->id);
+        $childProduct12->children()
+            ->attach($childProduct121->id);
+        $childProduct12->children()
+            ->attach($childProduct122->id);
+        $childProduct21->children()
+            ->attach($childProduct211->id);
+        $childProduct21->children()
+            ->attach($childProduct212->id);
+        $childProduct22->children()
+            ->attach($childProduct221->id);
+        $childProduct22->children()
+            ->attach($childProduct222->id);
+
+        $grandfatherProduct->gifts()
+            ->attach($gift, ['relationtype_id' => config("constants.PRODUCT_INTERRELATION_GIFT")]);
+
+        /**
+         * p:
+         *  1
+         *      11
+         *          111 $
+         *          112 $
+         *      12
+         *          121 $
+         *          122
+         *  2
+         *     21 $
+         *          211
+         *          212
+         *     22 $
+         *          221 $
+         *          222
+         */
+        $data = [
+            /*'order_id' => $orderId,*/
+            'product_id' => $grandfatherProduct->id,
+            'products' => [
+                $childProduct111->id,
+                $childProduct112->id,
+                $childProduct121->id,
+                $childProduct21->id,
+                $childProduct22->id,
+                $childProduct221->id
+            ],
+            'attribute' => [],
+            'extraAttribute' => [],
+            'withoutBon' => false
+        ];
+
+        $response = $this
+            ->actingAs($user)
+            ->call('POST', 'orderproduct', $data);
+        $response
+            ->assertStatus(Response::HTTP_OK)
+            ->assertJson([
+                'product saved'
+            ]);
+        $this->assertDatabaseHas('orders', [
+            'id' => $orderId
+        ]);
+        $this->assertDatabaseHas('orderproducts', [
+            'order_id' => $orderId,
+            'product_id' => $childProduct11->id
+        ]);
+        $this->assertDatabaseHas('orderproducts', [
+            'order_id' => $orderId,
+            'product_id' => $childProduct121->id
+        ]);
+        $this->assertDatabaseHas('orderproducts', [
+            'order_id' => $orderId,
+            'product_id' => $fatherProduct2->id
+        ]);
+        $this->assertDatabaseMissing('orderproducts', [
+            'order_id' => $orderId,
+            'product_id' => $childProduct111->id
+        ]);
+        $this->assertDatabaseMissing('orderproducts', [
+            'order_id' => $orderId,
+            'product_id' => $childProduct112->id
+        ]);
+        $this->assertDatabaseMissing('orderproducts', [
+            'order_id' => $orderId,
+            'product_id' => $childProduct21->id
+        ]);
+        $this->assertDatabaseMissing('orderproducts', [
+            'order_id' => $orderId,
+            'product_id' => $childProduct221->id
+        ]);
+        $this->assertDatabaseHas('orderproducts', [
+            'order_id' => $orderId,
+            'product_id' => $gift->id
+        ]);
+        $this->assertDatabaseHas('orderproduct_userbon', [
+            'userbon_id' => $userbon->id,
+            'discount' => $bonDiscount
+        ]);
+        $fatherProduct1->forceDelete();
+        $fatherProduct2->forceDelete();
+        $childProduct11->forceDelete();
+        $childProduct12->forceDelete();
+        $childProduct21->forceDelete();
+        $childProduct22->forceDelete();
+        $childProduct111->forceDelete();
+        $childProduct112->forceDelete();
+        $childProduct121->forceDelete();
+        $childProduct122->forceDelete();
+        $childProduct211->forceDelete();
+        $childProduct212->forceDelete();
+        $childProduct221->forceDelete();
+        $childProduct222->forceDelete();
+        $grandfatherProduct->forceDelete();
+    }
+
+    /**
+     * configurable product with gift
+     * @param User $user
+     * @param Bon $bon
+     * @param Userbon $userbon
+     * @param int $orderId
+     * @param Product $gift
+     */
+    public function assertion4(User $user, Bon $bon, int $orderId, Product $gift)
+    {
+        $fatherProduct = factory(Product::class)->create([
+            'producttype_id' => 2
+        ]);
+        $bonDiscount = 10;
+        $fatherProduct->bons()
+            ->attach($bon->id, ['discount'=>$bonDiscount]);
+        $userbon = factory(Userbon::class)->create([
+            'user_id' => $user->id,
+            'bon_id' => $bon->id,
+            'totalNumber' => 10,
+            'usedNumber' => 0
+        ]);
+        $product1 = factory(Product::class)->create([
+            'producttype_id' => 1,
+            'grand_id' => $fatherProduct->id
+        ]);
+        $product2 = factory(Product::class)->create([
+            'producttype_id' => 1,
+            'grand_id' => $fatherProduct->id
+        ]);
+        $product3 = factory(Product::class)->create([
+            'producttype_id' => 1,
+            'grand_id' => $fatherProduct->id
+        ]);
+        $product4 = factory(Product::class)->create([
+            'producttype_id' => 1,
+            'grand_id' => $fatherProduct->id
+        ]);
+
+        $attribute1 = factory(Attribute::class)->create();
+        $attribute2 = factory(Attribute::class)->create();
+        $attributevalue11 = factory(Attributevalue::class)->create([
+            'attribute_id'=>$attribute1->id
+        ]);
+        $attributevalue12 = factory(Attributevalue::class)->create([
+            'attribute_id'=>$attribute1->id
+        ]);
+        $attributevalue21 = factory(Attributevalue::class)->create([
+            'attribute_id'=>$attribute2->id
+        ]);
+        $attributevalue22 = factory(Attributevalue::class)->create([
+            'attribute_id'=>$attribute2->id
+        ]);
+
+        $fatherProduct->children()
+            ->attach($product1->id);
+        $fatherProduct->children()
+            ->attach($product2->id);
+        $fatherProduct->children()
+            ->attach($product3->id);
+        $fatherProduct->children()
+            ->attach($product4->id);
+
+        $fatherProduct->attributevalues()
+            ->attach($attributevalue11->id);
+        $fatherProduct->attributevalues()
+            ->attach($attributevalue12->id);
+        $fatherProduct->attributevalues()
+            ->attach($attributevalue21->id);
+        $fatherProduct->attributevalues()
+            ->attach($attributevalue22->id);
+
+        $product1->attributevalues()
+            ->attach($attributevalue11->id);
+        $product1->attributevalues()
+            ->attach($attributevalue21->id);
+        $product2->attributevalues()
+            ->attach($attributevalue12->id);
+        $product2->attributevalues()
+            ->attach($attributevalue22->id);
+        $product3->attributevalues()
+            ->attach($attributevalue11->id);
+        $product3->attributevalues()
+            ->attach($attributevalue22->id);
+        $product4->attributevalues()
+            ->attach($attributevalue12->id);
+        $product4->attributevalues()
+            ->attach($attributevalue21->id);
+
+        $fatherProduct->gifts()
+            ->attach($gift, ['relationtype_id' => config("constants.PRODUCT_INTERRELATION_GIFT")]);
+
+        $data = [
+            /*'order_id' => $orderId,*/
+            'product_id' => $fatherProduct->id,
+            'products' => [],
+            'attribute' => [
+                $attributevalue11->id,
+                $attributevalue22->id
+            ],
+            'extraAttribute' => [],
+            'withoutBon' => false
+        ];
+
+        $response = $this
+            ->actingAs($user)
+            ->call('POST', 'orderproduct', $data);
+        $response
+            ->assertStatus(Response::HTTP_OK)
+            ->assertJson([
+                'product saved'
+            ]);
+        $this->assertDatabaseHas('orders', [
+            'id' => $orderId
+        ]);
+        $this->assertDatabaseHas('orderproducts', [
+            'order_id' => $orderId,
+            'product_id' => $product3->id
+        ]);
+        $this->assertDatabaseHas('orderproducts', [
+            'order_id' => $orderId,
+            'product_id' => $gift->id
+        ]);
+        $this->assertDatabaseMissing('orderproducts', [
+            'order_id' => $orderId,
+            'product_id' => $product1->id
+        ]);
+        $this->assertDatabaseMissing('orderproducts', [
+            'order_id' => $orderId,
+            'product_id' => $product2->id
+        ]);
+        $this->assertDatabaseMissing('orderproducts', [
+            'order_id' => $orderId,
+            'product_id' => $product4->id
+        ]);
+        $this->assertDatabaseHas('orderproduct_userbon', [
+            'userbon_id' => $userbon->id,
+            'discount' => $bonDiscount
+        ]);
+
+        $product1->forceDelete();
+        $product2->forceDelete();
+        $product3->forceDelete();
+        $product4->forceDelete();
+        $fatherProduct->forceDelete();
+        $attribute1->forceDelete();
+        $attribute2->forceDelete();
     }
 }

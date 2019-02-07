@@ -45,9 +45,15 @@ class OrderproductCheckout extends CheckoutInvoker
         $orderproductsToCalculateFromBase = new OrderproductCollection();
         $orderproductsToCalculateFromRecord = new OrderproductCollection();
         if($this->recalculate)
+        {
+            $this->orderproduct->load('product' , 'product.parents' , 'userbons' , 'attributevalues' , 'product.attributevalues' );
             $orderproductsToCalculateFromBase = new OrderproductCollection([$this->orderproduct]);
+        }
         else
+        {
+            $this->orderproduct->load( 'userbons' , 'attributevalues'  );
             $orderproductsToCalculateFromRecord = new OrderproductCollection([$this->orderproduct]);
+        }
 
         $alaaCashier = new AlaaCashier();
         $alaaCashier->setRawOrderproductsToCalculateFromBase($orderproductsToCalculateFromBase);

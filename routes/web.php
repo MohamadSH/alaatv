@@ -59,10 +59,8 @@ Route::group(['prefix' => 'sitemap'], function () {
 Route::group(['prefix' => 'checkout'], function () {
     Route::get('auth', "OrderController@checkoutAuth");
     Route::get('completeInfo', 'OrderController@checkoutCompleteInfo');
-    Route::group(['middleware' => ['completeInfo']], function () {
-        Route::get('review', "OrderController@checkoutReview");
-        Route::get('payment', "OrderController@checkoutPayment");
-    });
+    Route::get('review', "OrderController@checkoutReview");
+    Route::get('payment', "OrderController@checkoutPayment");
     Route::any('verifyPayment/online/{paymentMethod}/{device}', "OnlinePaymentController@verifyPayment");
     Route::any('verifyPayment/online/{status}/{paymentMethod}/{device}', "OnlinePaymentController@showPaymentStatus");
     Route::any('verifyPayment/offline/{paymentMethod}/{device}', 'OfflinePaymentController@verifyPayment');
@@ -132,6 +130,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get("v/asiatech", "UserController@voucherRequest");
     Route::put("v", "UserController@submitVoucherRequest");
 
+    Route::resource('orderproduct', 'OrderproductController');
+
     Route::group(['prefix' => 'user'], function () {
 
 
@@ -150,8 +150,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('removeFromLottery', 'UserController@removeFromLottery');
         Route::post('addToArabiHozouri', 'OrderController@addToArabiHozouri');
         Route::post('removeArabiHozouri', 'OrderController@removeArabiHozouri');
-        Route::get('uploadQuestion', 'UserController@uploadConsultingQuestion')
-             ->middleware('completeInfo');
+        Route::get('uploadQuestion', 'UserController@uploadConsultingQuestion');
         Route::get('orders', 'UserController@userOrders');
         Route::get('question', 'UserController@uploads');
         Route::get('getVerificationCode', 'UserController@sendVerificationCode');
@@ -161,8 +160,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('removeFromLottery', 'UserController@removeFromLottery');
         Route::post('addToArabiHozouri', 'OrderController@addToArabiHozouri');
         Route::post('removeArabiHozouri', 'OrderController@removeArabiHozouri');
-        Route::get('uploadQuestion', 'UserController@uploadConsultingQuestion')
-             ->middleware('completeInfo');
+        Route::get('uploadQuestion', 'UserController@uploadConsultingQuestion');
     });
     Route::group(['prefix' => 'order'], function () {
         Route::post('detachorderproduct', 'OrderController@detachOrderproduct');
@@ -266,8 +264,6 @@ Route::group(['prefix' => 'product'], function () {
 Route::get("ctag", "ContentController@retrieveTags");
 Route::resource('set', 'SetController');
 Route::resource('product', 'ProductController');
-
-Route::resource('orderproduct', 'OrderproductController');
 
 Route::resource('c', 'ContentController');
 Route::resource("sanatisharifmerge", "SanatisharifmergeController");

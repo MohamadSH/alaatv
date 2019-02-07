@@ -44,6 +44,7 @@ use Carbon\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeeschedule newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeeschedule newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeeschedule query()
+ * @method static where(string $string, int $userId)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */

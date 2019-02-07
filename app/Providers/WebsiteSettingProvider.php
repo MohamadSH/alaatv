@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use App\Websitesetting;
-use Illuminate\Support\Facades\{Cache, Config};
+use Illuminate\Support\Facades\{Cache, Config, Schema};
 use Illuminate\Support\ServiceProvider;
 
 class WebsiteSettingProvider extends ServiceProvider
@@ -15,17 +15,12 @@ class WebsiteSettingProvider extends ServiceProvider
      */
     public function boot()
     {
-        $key = "AppServiceProvider:websitesettings";
-        $setting = Cache::remember($key, Config::get("constants.CACHE_600"), function () {
-            return Websitesetting::where("version", 1)
-                                 ->get()
-                                 ->first();
-        });
+        $setting = $this->getSetting();
 
-        view()->share('wSetting', $setting->setting);
+        view()->share('wSetting', optional($setting)->setting);
         view()->share('setting', $setting);
 
-        if (isset($wSetting->site->name))
+        if (isset(optional(optional($setting)->site)->name))
             Config::set("constants.SITE_NAME", $setting->setting->site->name);
 
         $this->app->singleton('App\Websitesetting', function ($app) use ($setting) {
@@ -41,5 +36,21 @@ class WebsiteSettingProvider extends ServiceProvider
     public function register()
     {
 
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSetting()
+    {
+        $key = "AppServiceProvider:websitesettings";
+        if (Schema::hasTable('websitesettings')) {
+            return Cache::remember($key, Config::get("constants.CACHE_600"), function () {
+                return Websitesetting::where("version", 1)
+                    ->get()
+                    ->first();
+            });
+        }
+        return new Websitesetting();
     }
 }

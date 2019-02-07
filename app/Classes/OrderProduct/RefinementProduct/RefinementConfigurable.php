@@ -12,6 +12,7 @@ use App\Product;
 use App\Attributevalue;
 use Illuminate\Support\Collection;
 use App\Collection\ProductCollection;
+use Illuminate\Support\Facades\Log;
 
 class RefinementConfigurable implements RefinementInterface
 {

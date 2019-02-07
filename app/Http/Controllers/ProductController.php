@@ -330,7 +330,7 @@ class ProductController extends Controller
 
         $this->generateSeoMetaTags($product);
 
-        if (request()->ajax() || true) {
+        if (request()->ajax()) {
             return $this->response
                 ->setStatusCode(Response::HTTP_OK)
                ->setContent($product);
@@ -753,7 +753,6 @@ class ProductController extends Controller
         }
         return redirect(action("ProductController@edit", $product));
     }
-
 
     /**
      * Show the form for setting pivots for attributevalues

@@ -271,6 +271,11 @@ class Order extends BaseModel
 
     }
 
+    public function giftOrderproducts()
+    {
+        return $this->orderproducts(config('constants.ORDER_PRODUCT_GIFT'));
+    }
+
     public function debt()
     {
         $cost = $this->obtainOrderCost()["totalCost"];
@@ -291,8 +296,7 @@ class Order extends BaseModel
      */
     public function obtainOrderCost($calculateOrderCost = false, $calculateOrderproductCost = true, $mode = "DEFAULT")
     {
-        $this->load('user' , 'user.wallets'  , 'normalOrderproducts' , 'normalOrderproducts.product' , 'normalOrderproducts.userbons' , 'normalOrderproducts.product.parents'   , 'normalOrderproducts.attributevalues' , 'normalOrderproducts.product.attributevalues' );
-
+        $this->load('user' , 'user.wallets'  , 'normalOrderproducts' , 'normalOrderproducts.product' ,'normalOrderproducts.product.parents' , 'normalOrderproducts.userbons' , 'normalOrderproducts.attributevalues' , 'normalOrderproducts.product.attributevalues' );
         if($calculateOrderCost) {
             $orderproductsToCalculateFromBaseIds = [];
             if($calculateOrderproductCost)
@@ -308,7 +312,6 @@ class Order extends BaseModel
         else{
             $alaaCashierFacade = new ReObtainOrderFromRecords($this);
         }
-
 
         $priceInfo = $alaaCashierFacade->checkout();
 
@@ -406,8 +409,7 @@ class Order extends BaseModel
      */
     public function doesBelongToThisUser($user): bool
     {
-        //ToDo: Bug on paying by wallet
-        return optional($this->user)->id == $user->id;
+        return optional($this->user)->id == optional($user)->id;
     }
 
     /**
@@ -606,32 +608,12 @@ class Order extends BaseModel
     /**
      * Detaches coupon from this order
      *
-     * @return bool
      */
-    public function detachCoupon():bool
+    public function detachCoupon():void
     {
-        $done = false;
-        if (isset($this->coupon)) {
-            //ToDo: Put in a separate function in Coupon model
-            $coupon = $this->coupon;
-            $coupon->usageNumber--;
-            if ($coupon->update())
-            {
-                $this->coupon_id = null;
-                $this->couponDiscount = 0;
-                $this->couponDiscountAmount = 0;
-                //ToDo : Don't update here
-                if($this->updateWithoutTimestamp())
-                {
-                    $done = true;
-                }
-                else{
-                    $coupon->usageNumber++;
-                    $coupon->update();
-                }
-            }
-        }
-        return $done;
+        $this->coupon_id = null;
+        $this->couponDiscount = 0;
+        $this->couponDiscountAmount = 0;
     }
 
     /**
@@ -805,7 +787,15 @@ class Order extends BaseModel
         $usedCoupon = $this->hasProductsThatUseItsCoupon();
         if (!$usedCoupon) {
             /** if order has not used coupon reverse it    */
-            $this->detachCoupon();
+            $coupon = $this->coupon;
+            if(isset($coupon))
+            {
+                $this->detachCoupon();
+                if($this->updateWithoutTimestamp()) {
+                    $coupon->decreaseUseNumber();
+                    $coupon->update();
+                }
+            }
         }
     }
 

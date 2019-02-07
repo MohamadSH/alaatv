@@ -102,7 +102,6 @@ class UserController extends Controller
         $this->callMiddlewares($authException);
     }
 
-
     /**
      * @param Agent $agent
      *
@@ -125,6 +124,7 @@ class UserController extends Controller
         $this->middleware('permission:' . config('constants.REMOVE_USER_ACCESS'), ['only' => 'destroy']);
         $this->middleware('permission:' . config('constants.SHOW_USER_ACCESS'), ['only' => 'edit']);
         $this->middleware('trimUserUpdateRequest', ['only' => 'update']);
+        $this->middleware('completeInfo', ['only' => ['uploadConsultingQuestion' , 'uploadConsultingQuestion']]);
     }
 
     /**
@@ -417,7 +417,7 @@ class UserController extends Controller
         }
 
         if (in_array("roles" , $inputData))
-            $this->attachRoles($inputData["roles"], $request->user(), $user);
+            $this->attachRoles($inputData["roles"], $authenticatedUser , $user);
 
         $file = $this->getRequestFile($inputData, "photo");
         if ($file !== false)
@@ -508,48 +508,31 @@ class UserController extends Controller
                 abort(403);
         }
 
-
-        /**
-        $zarinGate = Transactiongateway::where('name', 'zarinpal')->first();
-        $zarinpal = new ZarinpalComposer($zarinGate->merchantNumber);
-        $authority = '000000000000000000000000000082710110';
-        return json_encode($zarinpal->verify('OK', 5000, $authority));
-        {
-            "Status": "success",
-            "RefID": 44545481710,
-            "ExtraDetail": {
-                "Transaction": {
-                    "CardPanHash": "2A7C73AE5DB08EE02E5A3F16EC4DB64E2210B564",
-                    "CardPanMask": "603799******2458"
-                }
-            }
-        }
-        */
-
-
-
-
-
-//        $zarinpal = new Zarinpal((new TransactionController()));
-//        $result = $zarinpal->getUnverifiedTransactions();
-//        return $result;
-
-
-
-
-
-//        $zarinpal = new Zarinpal((new TransactionController()));
-//        $result = $zarinpal->getUnverifiedTransactions();
-//        return $result;
-
-        return response($user, Response::HTTP_OK);
-
         if ($request->ajax()) {
             return response($user, Response::HTTP_OK);
-        } else {
-            return view("user.profile.profile", compact("user", "userCompletion",
-                "hasRequestedVerificationCode", "mobileVerificationCode"));
         }
+
+        $genders = Gender::pluck('name', 'id')
+            ->prepend("نامشخص");
+        $majors = Major::pluck('name', 'id')
+            ->prepend("نامشخص");
+        $sideBarMode = "closed";
+
+        /** LOTTERY */
+        [
+            $exchangeAmount,
+            $userPoints,
+            $userLottery,
+            $prizeCollection,
+            $lotteryRank,
+            $lottery,
+            $lotteryMessage,
+            $lotteryName,
+        ] = $user->getLottery();
+
+        return view("user.profile.profile", compact("user",
+
+            'genders', 'majors', 'sideBarMode', 'exchangeAmount', 'userPoints', 'userLottery', 'prizeCollection', 'lotteryRank', 'lottery', 'lotteryMessage', 'lotteryName'));
     }
 
     /**
@@ -960,7 +943,7 @@ class UserController extends Controller
         if (in_array($product->id, config("constants.ORDOO_HOZOORI_NOROOZ_97_PRODUCT")))
             $userHasMedicalQuestions = true; else $userHasMedicalQuestions = false;
         $grandParent = $product->grandParent;
-        if ($grandParent !== false) {
+        if (isset($grandParent)) {
             $userProduct = $grandParent->name;
         } else {
             $userProduct = $product->name;
@@ -1198,40 +1181,51 @@ class UserController extends Controller
      */
     public function submitWorkTime(Request $request, EmployeetimesheetController $employeetimesheetController, HomeController $homeController)
     {
-        $userId = $request->user()->id;
-        $request->offsetSet("user_id", $userId);
-        $request->offsetSet("date", Carbon::today('Asia/Tehran')
-                                          ->format("Y-m-d"));
-
-        $toDayJalali = $this->convertToJalaliDay(Carbon::today('Asia/Tehran')
-                                                       ->format('l'));
-        $employeeSchedule = Employeeschedule::where("user_id", $userId)
-                                            ->where("day", $toDayJalali)
-                                            ->get()
-                                            ->first();
-        if (isset($employeeSchedule)) {
-            $request->offsetSet("userBeginTime", $employeeSchedule->getOriginal("beginTime"));
-            $request->offsetSet("userFinishTime", $employeeSchedule->getOriginal("finishTime"));
-            $request->offsetSet("allowedLunchBreakInSec", gmdate("H:i:s", $employeeSchedule->getOriginal("lunchBreakInSeconds")));
+        if($request->has('action')) {
+            $presentTime = Carbon::now('Asia/Tehran')->format('H:i:s');
+            $action = $request->get('action');
+            if($action=='action-clockIn') {
+                $request->offsetSet('clockIn' , $presentTime);
+            } else if($action=='action-beginLunchBreak') {
+                $request->offsetSet('beginLunchBreak' , $presentTime);
+            } else if($action=='action-finishLunchBreak') {
+                $request->offsetSet('finishLunchBreak' , $presentTime);
+            } else if($action=='action-clockOut') {
+                $request->offsetSet('clockOut' , $presentTime);
+            }
         }
 
-        $request->offsetSet("modifier_id", $userId);
-        $request->offsetSet("serverSide", true);
-        $insertRequest = new \App\Http\Requests\InsertEmployeeTimeSheet($request->all());
-        $userTimeSheets = Employeetimesheet::where("date", Carbon::today('Asia/Tehran'))
-                                           ->where("user_id", $userId->id)
-                                           ->get();
-        if ($userTimeSheets->count() == 0) {
-            $done = $employeetimesheetController->store($insertRequest);
-        } else if ($userTimeSheets->count() == 1) {
-            $done = $employeetimesheetController->update($insertRequest, $userTimeSheets->first());
-        } else {
-            $message = "شما بیش از یک ساعت کاری برای امروز ثبت نموده اید!";
-            return $homeController->errorPage($message);
+        $userId = Auth::user()->id ;
+        $request->offsetSet('user_id' , $userId);
+        $request->offsetSet('date' , Carbon::today('Asia/Tehran')->format('Y-m-d'));
+
+        $toDayJalali = $this->convertToJalaliDay(Carbon::today('Asia/Tehran')->format('l')) ;
+        $employeeSchedule = Employeeschedule::where('user_id', $userId)->where('day' , $toDayJalali)->get()->first();
+        if (isset($employeeSchedule))
+        {
+            $request->offsetSet('userBeginTime' , $employeeSchedule->getOriginal('beginTime'));
+            $request->offsetSet('userFinishTime' , $employeeSchedule->getOriginal('finishTime'));
+            $request->offsetSet('allowedLunchBreakInSec' , gmdate('H:i:s',$employeeSchedule->getOriginal('lunchBreakInSeconds')));
         }
-        if ($done)
-            session()->flash("success", "ساعت کاری با موفقیت ذخیره شد"); else
-            session()->flash("error", \Lang::get("responseText.Database error."));
+
+        $request->offsetSet( 'modifier_id' , $userId  ) ;
+        $request->offsetSet( 'serverSide' , true  ) ;
+        $insertRequest = new \App\Http\Requests\InsertEmployeeTimeSheet($request->all()) ;
+        $userTimeSheets = Employeetimesheet::where('date' , Carbon::today('Asia/Tehran'))->where('user_id' , Auth::user()->id)->get() ;
+        if($userTimeSheets->count() == 0)
+        {
+            $done = $employeetimesheetController->store($insertRequest) ;
+        }elseif($userTimeSheets->count() == 1)
+        {
+            $done = $employeetimesheetController->update($insertRequest , $userTimeSheets->first()) ;
+        }else{
+            $message = 'شما بیش از یک ساعت کاری برای امروز ثبت نموده اید!';
+            return $homeController->errorPage($message) ;
+        }
+        if($done)
+            session()->flash('success', 'ساعت کاری با موفقیت ذخیره شد') ;
+        else
+            session()->flash('error', 'خطای پایگاه داده') ;
 
         return redirect()->back();
     }

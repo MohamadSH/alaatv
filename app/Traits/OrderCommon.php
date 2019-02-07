@@ -5,6 +5,7 @@ use App\Orderproduct;
 use App\Product;
 use App\User;
 use App\Wallet;
+use Illuminate\Support\Facades\Log;
 
 trait OrderCommon
 {
@@ -41,10 +42,14 @@ trait OrderCommon
      * @param Orderproduct $orderProduct
      * @param Product $product
      */
-    private function applyOrderGifts(Order $order, Orderproduct $orderProduct, Product $product) {
+    private function applyOrderGifts(Order &$order, Orderproduct $orderProduct, Product $product) {
         $giftsOfProduct = $product->getGifts();
+        $orderGifts = $order->giftOrderproducts;
         foreach ($giftsOfProduct as $giftItem) {
-            $this->attachGift($order, $giftItem, $orderProduct);
+            if (!$orderGifts->contains($giftItem)) {
+                $this->attachGift($order, $giftItem, $orderProduct);
+                $order->giftOrderproducts->push($giftItem);
+            }
         }
     }
 
@@ -74,11 +79,11 @@ trait OrderCommon
      * this method select exist OpenOrder or create new object and insert that then select all field of new open order
      * but firstOrCreate method in laravel just return inserted values and does not return other fields when create and
      * insert new OpenOrder
-     * 
+     *
      * @param User $user
-     * @return Order|User|\Illuminate\Database\Eloquent\Model|object|null
+     * @return Order
      */
-    public function firstOrCreateOpenOrder(User $user) {
+    public function firstOrCreateOpenOrder(User $user): Order {
 
         $openOrder = $user->openOrders()->first();
         if(!isset($openOrder)) {
@@ -87,7 +92,6 @@ trait OrderCommon
             $openOrder->orderstatus_id = config('constants.ORDER_STATUS_OPEN');
             $openOrder->paymentstatus_id = config('constants.PAYMENT_STATUS_UNPAID');
             $openOrder->save();
-            $openOrder = $user->openOrders()->first();
         }
         return $openOrder;
     }

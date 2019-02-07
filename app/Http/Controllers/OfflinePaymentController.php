@@ -21,7 +21,7 @@ class OfflinePaymentController extends Controller
      */
     public function __construct(Request $request)
     {
-        $this->middleware('OfflineVerifyPayment', ['only' => ['verifyPayment'],]);
+//        $this->middleware('OfflineVerifyPayment', ['only' => ['verifyPayment'],]);
 
         $this->user = $request->user();
 
@@ -29,19 +29,25 @@ class OfflinePaymentController extends Controller
 
     /**
      * @param Request $request
+     * @param string $paymentMethod
+     * @param string $device
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function verifyPayment(Request $request){
-        $paymentMethod = optional($request)->paymentMethod;
-        $orderId = optional($request)->order_id;
+    public function verifyPayment(Request $request , string $paymentMethod , string $device){
         $result = [];
 
-        $order = $this->getOrder($orderId);
+        // We had middleware called OfflineVerifyPayment for this,
+        //but after reconsidering about queries in middleware I put the code in here
+        $getOrder = $this->getOrder($request);
+        if($getOrder["error"])
+            return response()->setStatusCode($getOrder["httpStatusCode"])->setContent($getOrder["text"]);
+
+        $order = $getOrder["data"]["order"];
+
         $check =  $this->checkOrder($order);
         if($check["error"])
-        {
             return response()->setStatusCode($check["httpStatusCode"])->setContent($check["text"]);
-        }
+
 
         if(!$this->processVerification( $order , $paymentMethod))
             return response()->setStatusCode(Response::HTTP_BAD_REQUEST)->setContent(["message"=>"Invalid inputs"]);
@@ -75,8 +81,6 @@ class OfflinePaymentController extends Controller
     private function processVerification( Order $order , string $paymentMethod):bool
     {
         $done = true;
-        if(!isset($order))
-            $done = false;
 
         switch ($paymentMethod) {
             case "inPersonPayment" :
@@ -86,7 +90,15 @@ class OfflinePaymentController extends Controller
                 $usedCoupon = $order->hasProductsThatUseItsCoupon();
                 if (!$usedCoupon) {
                     /** if order has not used coupon reverse it    */
-                    $order->detachCoupon();
+                    $coupon = $order->coupon;
+                    if(isset($coupon))
+                    {
+                        $order->detachCoupon();
+                        if($this->updateWithoutTimestamp()) {
+                            $coupon->decreaseUseNumber();
+                            $coupon->update();
+                        }
+                    }
                 }
 
                 $orderPaymentStatus = config("constants.PAYMENT_STATUS_UNPAID");
@@ -145,16 +157,34 @@ class OfflinePaymentController extends Controller
     }
 
     /**
-     * @param int $orderId
-     * @return Order
+     * @param Request $request
+     * @return array
      */
-    private function getOrder(int $orderId):Order
+    private function getOrder(Request $request):array
     {
-        $order = Order::Find($orderId);
+        if($request->has("coi"))
+            $order = Order::Find($request->coi);
+        elseif(isset($user))
+            $order = $this->user->openOrders->first();
 
-        $order->load("orderproducts" , "coupon");
+        $error = false;
+        $response = Response::HTTP_OK;
+        if(!isset($order)){
+            $error = true;
+            $response = Response::HTTP_BAD_REQUEST;
+            $text = 'No order found';
+        }
 
-        return $order;
+        $result = [
+            'error'           => $error,
+            'httpStatusCode'  => $response,
+            'text'            => isset($text)?$text:"",
+            'data'            => [
+                    'order' => isset($order)?$order:null
+            ]
+        ];
+
+        return $result;
     }
 
     /**

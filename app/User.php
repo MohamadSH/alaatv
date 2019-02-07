@@ -12,6 +12,7 @@ use App\Traits\DateTrait;
 use App\Traits\HasWallet;
 use App\Traits\Helper;
 use App\Traits\MustVerifyMobileNumberTrait;
+use App\Traits\OrderCommon;
 use Carbon\Carbon;
 use Hash;
 use Iatstuti\Database\Support\CascadeSoftDeletes;
@@ -21,7 +22,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\{Auth, Cache, Config, DB};
+use Illuminate\Support\Facades\{Auth, Cache, Config, DB, Log};
 use Kalnoy\Nestedset\QueryBuilder;
 use Laratrust\Traits\LaratrustUserTrait;
 use Laravel\Passport\HasApiTokens;
@@ -226,7 +227,7 @@ use Schema;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereMobileVerifiedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereMobileVerifiedCode($value)
  * @property string|null $email_verified_at
- * @property-read mixed  $reverse_full_name
+ * @property-read mixed $reverse_full_name
  * @property-write mixed $first_name
  * @property-write mixed $last_name
  * @property-write mixed $medical_condition
@@ -236,9 +237,14 @@ use Schema;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereEmailVerifiedAt($value)
  * @property-read \App\Collection\OrderproductCollection|\App\Orderproduct[] $closedorderproducts
+ * @property mixed mobile
+ * @property string lastName
+ * @property string firstName
+ * @property int id
+ * @method static \Illuminate\Database\Eloquent\Builder|User active()
+ * @method static select()
  * @property-read mixed                                                      $number_of_products_in_basket
  * @property-read mixed                                                      $short_name
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User active()
  * @property-read mixed                                                      $completion_info
  * @property-read mixed                                                      $gender_info
  * @property-read mixed                                                      $grade_info
@@ -257,6 +263,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     use Notifiable;
     use APIRequestCommon;
     use CharacterCommon;
+    use OrderCommon;
 
     /*
     |--------------------------------------------------------------------------
@@ -279,7 +286,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         'bankaccounts',
         'contacts',
         'mbtianswers',
-        'favorables',
+//        'favorables',
     ];
     /**      * The attributes that should be mutated to dates.        */
     protected $dates       = [
@@ -1443,4 +1450,8 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         return $walletsArrayForReturn;
     }
 
+    public function getOpenOrder(): Order {
+        $openOrder = $this->firstOrCreateOpenOrder($this);
+        return $openOrder;
+    }
 }

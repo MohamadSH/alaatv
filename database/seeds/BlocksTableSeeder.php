@@ -77,7 +77,7 @@ class BlocksTableSeeder extends Seeder
           ->insert($data); // Query Builder
         \App\Block::find(1)
                   ->sets()
-                  ->saveMany(\App\Contentset::find([
+                  ->attach(\App\Contentset::find([
                                                        202,
                                                        208,
                                                        214,
@@ -89,7 +89,7 @@ class BlocksTableSeeder extends Seeder
                                                    ]));
         \App\Block::find(2)
                   ->sets()
-                  ->saveMany(\App\Contentset::find([
+                  ->attach(\App\Contentset::find([
                                                        195,
                                                        170,
                                                        37,
@@ -109,7 +109,7 @@ class BlocksTableSeeder extends Seeder
                                                    ]));
         \App\Block::find(3)
                   ->sets()
-                  ->saveMany(\App\Contentset::find([
+                  ->attach(\App\Contentset::find([
                                                        218,
                                                        204,
                                                        181,
@@ -121,7 +121,7 @@ class BlocksTableSeeder extends Seeder
                                                    ]));
         \App\Block::find(4)
                   ->sets()
-                  ->saveMany(\App\Contentset::find([
+                  ->attach(\App\Contentset::find([
                                                        203,
                                                        215,
                                                        185,
@@ -136,7 +136,7 @@ class BlocksTableSeeder extends Seeder
                                                    ]));
         \App\Block::find(5)
                   ->sets()
-                  ->saveMany(\App\Contentset::find([
+                  ->attach(\App\Contentset::find([
                                                        163,
                                                        157,
                                                        159,
@@ -207,7 +207,7 @@ class BlocksTableSeeder extends Seeder
           ->insert($data); // Query Builder
         \App\Block::find(6)
                   ->products()
-                  ->saveMany(\App\Product::find([
+                  ->attach(\App\Product::find([
                       275,
                       265,
                       266,
@@ -222,7 +222,7 @@ class BlocksTableSeeder extends Seeder
                   ]));
         \App\Block::find(7)
                   ->products()
-                  ->saveMany(\App\Product::find([
+                  ->attach(\App\Product::find([
                       210,
                       213,
                       222,
@@ -237,13 +237,13 @@ class BlocksTableSeeder extends Seeder
                   ]));
         \App\Block::find(8)
                   ->products()
-                  ->saveMany(\App\Product::find([
+                  ->attach(\App\Product::find([
                       275,
                       226
                   ]));
         \App\Block::find(9)
                   ->products()
-                  ->saveMany(\App\Product::find([
+                  ->attach(\App\Product::find([
                       181,
                       225
                   ]));

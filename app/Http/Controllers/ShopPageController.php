@@ -77,6 +77,7 @@ class ShopPageController extends Controller
                 ]);
         }
         $pageName = "shop";
+//        dd($blocks,$slides);
 //        dd($blocks->first()->products);
         return view('pages.shop', compact(
             'pageName',
