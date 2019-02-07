@@ -8,16 +8,16 @@
             <span class = "m-nav__link-title a--full-width">
                 <span class = "m-nav__link-wrap">
                     <span class = "m-nav__link-text">
-                        @if(isset($product->pivot->control_id) && ( $product->pivot->control_id ==  Config::get("constants.CONTROL_SWITCH") || $product->pivot->control_id == Config::get("constants.CONTROL_GROUPED_CHECKBOX") ))
+                        {{--@if(isset($product->pivot->control_id) && ( $product->pivot->control_id ==  config("constants.CONTROL_SWITCH") || $product->pivot->control_id == Config::get("constants.CONTROL_GROUPED_CHECKBOX") ))--}}
                             <span class = "m-switch m-switch--icon {{ $colors[$color] }} float-left a--font-line-height-10 m--padding-right-5">
-                                        <label class="m--marginless">
-                                            <input name = "products[]" value = "{{ $product->id }}" type = "checkbox" class = "hasParent_{{ $product->pivot->parent_id }} {{ count($product->children)>0 ? "hasChildren" : "" }} product"
-                                                    {{ isset($product->pivot->isDefault) && $product->pivot->isDefault ? 'checked="checked"':'' }}>
-                                            <span></span>
-                                        </label>
+                                <label class="m--marginless">
+                                    <input name = "products[]" value = "{{ $product->id }}" type = "checkbox" class = "hasParent_{{ $product->pivot->parent_id }} {{ count($product->children)>0 ? "hasChildren" : "" }} product"
+                                            {{ isset($product->pivot->isDefault) && $product->pivot->isDefault ? 'checked="checked"':'' }}>
+                                    <span></span>
+                                </label>
                             </span>
-                        @else
-                        @endif
+                        {{--@else--}}
+                        {{--@endif--}}
                         <div class="m--padding-5">
                             {{$product->name}}
                             {{--@if((int)$product->cost > 0)--}}
