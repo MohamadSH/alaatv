@@ -29,43 +29,21 @@ class HandleUnverifiedTransactions extends Command
     protected $description = 'Confirm Unverified Transactions';
 
     /**
-     * @var TransactionController $transactionController
-     */
-    private $transactionController;
-
-    /**
-     * @var OnlinePaymentController $onlinePaymentController
-     */
-    private $onlinePaymentController;
-
-    /**
      * @var Request $request
      */
     private $request;
 
-    private $merchantNumber;
-
-    private $gateWay;
     /**
      * Create a new command instance.
      *
-     * @param TransactionController $transactionController
-     * @param OnlinePaymentController $onlinePaymentController
      * @param Request $request
      */
-    public function __construct(TransactionController $transactionController, OnlinePaymentController $onlinePaymentController, Request $request)
+    public function __construct(Request $request)
     {
         parent::__construct();
         $this->request = $request;
-        $this->transactionController = $transactionController;
-        $this->onlinePaymentController = $onlinePaymentController;
 
-        //ToDo : At this time this only works for Zarinpal
-        $paymentMethod = 'zarinpal';
-        $transactiongateway = Transactiongateway::where('name', $paymentMethod)->first();
-        $this->merchantNumber = $transactiongateway->merchantNumber;
-        $data['merchantID'] = $this->merchantNumber;
-        $this->gateWay = (new GatewayFactory())->setGateway($paymentMethod, $data);
+        
     }
 
     /**
@@ -75,6 +53,14 @@ class HandleUnverifiedTransactions extends Command
      */
     public function handle()
     {
+        //ToDo : At this time this only works for Zarinpal
+        $paymentMethod = 'zarinpal';
+
+        $transactiongateway = Transactiongateway::where('name', $paymentMethod)->first();
+        $data['merchantID'] = $transactiongateway->merchantNumber;
+
+        $gateWay = (new GatewayFactory())->setGateway($paymentMethod, $data);
+        
         $notExistTransactions = [];
         $unverifiedTransactionsDueToError = [];
 
@@ -104,7 +90,7 @@ class HandleUnverifiedTransactions extends Command
                 } else {
                     $transaction['Status'] = 'OK';
                     array_push($unverifiedTransactionsDueToError, $transaction);
-                    $gateWayVerify = $this->gateWay->verify($transaction->cost, $transaction);
+                    $gateWayVerify = $gateWay->verify($transaction->cost, $transaction);
 
                     if($gateWayVerify['Status'] == 'error') {
                         array_push($unverifiedTransactionsDueToError, $transaction);

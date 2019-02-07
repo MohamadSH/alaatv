@@ -508,8 +508,6 @@ class UserController extends Controller
                 abort(403);
         }
 
-
-
         if ($request->ajax()) {
             return response($user, Response::HTTP_OK);
         }
@@ -532,8 +530,8 @@ class UserController extends Controller
             $lotteryName,
         ] = $user->getLottery();
 
-        return view("user.profile.profile", compact("user", "userCompletion",
-                "hasRequestedVerificationCode", "mobileVerificationCode",
+        return view("user.profile.profile", compact("user",
+
             'genders', 'majors', 'sideBarMode', 'exchangeAmount', 'userPoints', 'userLottery', 'prizeCollection', 'lotteryRank', 'lottery', 'lotteryMessage', 'lotteryName'));
     }
 
