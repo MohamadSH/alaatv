@@ -4,7 +4,7 @@
         <ol class = "breadcrumb">
             <li class = "breadcrumb-item">
                 <i class = "flaticon-home-2 m--padding-right-5"></i>
-                <a class = "m-link" href = "{{action("HomeController@index")}}">@lang('page.Home')</a>
+                <a class = "m-link" href = "{{action("IndexPageController")}}">@lang('page.Home')</a>
             </li>
             <li class = "breadcrumb-item">
                 <i class = "flaticon-photo-camera m--padding-right-5"></i>
