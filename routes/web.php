@@ -66,7 +66,7 @@ Route::group(['prefix' => 'checkout'], function () {
     Route::any('verifyPayment/offline/{paymentMethod}/{device}', 'OfflinePaymentController@verifyPayment');
 });
 Route::group(['prefix' => 'orderproduct'], function () {
-    Route::get('store', 'OrderproductController@store');
+//    Route::get('store', 'OrderproductController@store');
     Route::post('checkout', 'OrderproductController@checkOutOrderproducts');
 });
 
@@ -129,6 +129,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get("specialAddUser", "HomeController@specialAddUser");
     Route::get("v/asiatech", "UserController@voucherRequest");
     Route::put("v", "UserController@submitVoucherRequest");
+
+    Route::resource('orderproduct', 'OrderproductController');
 
     Route::group(['prefix' => 'user'], function () {
 
@@ -262,8 +264,6 @@ Route::group(['prefix' => 'product'], function () {
 Route::get("ctag", "ContentController@retrieveTags");
 Route::resource('set', 'SetController');
 Route::resource('product', 'ProductController');
-
-Route::resource('orderproduct', 'OrderproductController');
 
 Route::resource('c', 'ContentController');
 Route::resource("sanatisharifmerge", "SanatisharifmergeController");

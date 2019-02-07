@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Schema;
 
 /**
  * App\Bon
@@ -70,6 +71,9 @@ class Bon extends BaseModel
 
     public static function getAlaaBonDisplayName()
     {
+        if (!Schema::hasTable('bons')) {
+            return null;
+        }
         return Cache::tags('bon')
                     ->remember('getAlaaBon', config('constants.CACHE_600'), function () {
                         $myBone = Bon::where("name", config("constants.BON1"))

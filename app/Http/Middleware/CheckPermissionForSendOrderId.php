@@ -29,7 +29,7 @@ class CheckPermissionForSendOrderId
      * @param Request $request
      * @param OrderController $controller
      */
-    public function __construct(Request $request, OrderController $controller)
+    public function __construct(Request $request, OrderController $controller, $guard = null)
     {
         $this->orderController = $controller;
         $this->user = $request->user();
@@ -46,30 +46,29 @@ class CheckPermissionForSendOrderId
      */
     public function handle(Request $request, Closure $next, $guard = null)
     {
-        if (Auth::guard($guard)->check()) {
 
-            $this->user = $request->user()->load('openOrders');
-            $this->resetOrders();
+//            $this->user = $request->user()->load('openOrders');
+//            $this->resetOrders();
 //
-//        $sampleData = $this->getSampleData('simple1', $this->user, $request); // simple product
-//        $sampleData = $this->getSampleData('simple2', $this->user, $request);// 270 is gift of 155
-//        $sampleData = $this->getSampleData('simple3', $this->user, $request);// 157 is child of 155 and gift of 155 is 270
-//        $sampleData = $this->getSampleData('donate1', $this->user, $request);// 5000
-//        $sampleData = $this->getSampleData('donate2', $this->user, $request);// custom
-//        $sampleData = $this->getSampleData('selectable', $this->user, $request);
-            $sampleData = $this->getSampleData('configurable1111', $this->user, $request);
-            $request->offsetSet('order_id', $sampleData['orderId']);
-            $request->offsetSet('product_id', $sampleData['productId']);
-            $request->offsetSet('products', $sampleData['data']['products']);
-            $request->offsetSet('attribute', $sampleData['data']['attribute']);
-            $request->offsetSet('extraAttribute', $sampleData['data']['extraAttribute']);
-            $request->offsetSet('withoutBon', false);
+////        $sampleData = $this->getSampleData('simple1', $this->user, $request); // simple product
+////        $sampleData = $this->getSampleData('simple2', $this->user, $request);// 270 is gift of 155
+////        $sampleData = $this->getSampleData('simple3', $this->user, $request);// 157 is child of 155 and gift of 155 is 270
+////        $sampleData = $this->getSampleData('donate1', $this->user, $request);// 5000
+////        $sampleData = $this->getSampleData('donate2', $this->user, $request);// custom
+////        $sampleData = $this->getSampleData('selectable', $this->user, $request);
+//            $sampleData = $this->getSampleData('configurable1111', $this->user, $request);
+//            $request->offsetSet('order_id', $sampleData['orderId']);
+//            $request->offsetSet('product_id', $sampleData['productId']);
+//            $request->offsetSet('products', $sampleData['data']['products']);
+//            $request->offsetSet('attribute', $sampleData['data']['attribute']);
+//            $request->offsetSet('extraAttribute', $sampleData['data']['extraAttribute']);
+//            $request->offsetSet('withoutBon', false);
 
 
             if($request->has('order_id')) {
                 if(!$this->user->can(config('constants.INSERT_ORDERPRODUCT_ACCESS'))) {
                     return response()->json([
-                        'error' => 'Forbidden'
+                        'error' => 'You are not allowed to submit order_id: '.$request->get('order_id')
                     ], Response::HTTP_FORBIDDEN);
                 }
             } else {
@@ -77,11 +76,6 @@ class CheckPermissionForSendOrderId
                 $request->offsetSet('order_id', $openOrder->id);
                 $request->offsetSet('openOrder', $openOrder);
             }
-        } else {
-            return response()->json([
-                'error' => 'Unauthenticated'
-            ], Response::HTTP_UNAUTHORIZED);
-        }
         return $next($request);
     }
 
@@ -271,9 +265,16 @@ class CheckPermissionForSendOrderId
                  */
                 return [
                     'orderId' => $orderId,
-                    'productId' => 277,
+                    'productId' => 501,
                     'data' => [
-                        'products' => [],
+                        'products' => [
+                            508,
+                            509,
+                            510,
+                            514,
+                            506,
+                            507
+                        ],
                         'attribute' => [],
                         'extraAttribute' => []
                     ]

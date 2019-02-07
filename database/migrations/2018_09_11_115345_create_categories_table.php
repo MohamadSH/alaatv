@@ -16,7 +16,8 @@ class CreateCategoriesTable extends Migration
         Schema::dropIfExists('categories');
         Schema::create('categories', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
+            $table->string('name')
+                  ->nullable();
             $table->string('description')
                   ->nullable();
             $table->boolean('enable')

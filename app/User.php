@@ -22,7 +22,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\{Auth, Cache, Config, DB};
+use Illuminate\Support\Facades\{Auth, Cache, Config, DB, Log};
 use Kalnoy\Nestedset\QueryBuilder;
 use Laratrust\Traits\LaratrustUserTrait;
 use Schema;

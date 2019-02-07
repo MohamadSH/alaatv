@@ -483,7 +483,7 @@ class OrderproductController extends Controller
 
         $productId = $data['product_id'];
         $orderId = $data['order_id'];
-      
+
         try {
             $order = Order::FindorFail($orderId);
             $product = Product::FindorFail($productId);

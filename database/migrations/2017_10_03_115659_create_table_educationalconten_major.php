@@ -14,7 +14,7 @@ class CreateTableEducationalcontenMajor extends Migration
      */
     public function up()
     {
-        Schema::create('content_major', function (Blueprint $table) {
+        Schema::create('educationalcontent_major', function (Blueprint $table) {
             $table->unsignedInteger('content_id');
             $table->unsignedInteger('major_id');
             $table->primary([
@@ -24,7 +24,7 @@ class CreateTableEducationalcontenMajor extends Migration
 
             $table->foreign('content_id')
                   ->references('id')
-                  ->on('contents')
+                  ->on('educationalcontents')
                   ->onDelete('cascade')
                   ->onupdate('cascade');
 
@@ -35,7 +35,7 @@ class CreateTableEducationalcontenMajor extends Migration
                   ->onupdate('cascade');
 
         });
-        DB::statement("ALTER TABLE `content_major` comment 'رابطه چند به چند محتواهای آموزشی با رشته'");
+        DB::statement("ALTER TABLE `educationalcontent_major` comment 'رابطه چند به چند محتواهای آموزشی با رشته'");
     }
 
     /**
@@ -45,6 +45,6 @@ class CreateTableEducationalcontenMajor extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('content_major');
+        Schema::dropIfExists('educationalcontent_major');
     }
 }

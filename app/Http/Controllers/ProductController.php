@@ -754,7 +754,6 @@ class ProductController extends Controller
         return redirect(action("ProductController@edit", $product));
     }
 
-
     /**
      * Show the form for setting pivots for attributevalues
      *

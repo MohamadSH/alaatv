@@ -144,7 +144,7 @@ class CreateSanatisharifmergesTable extends Migration
 
             $table->foreign('content_id')
                   ->references('id')
-                  ->on('contents')
+                  ->on('educationalcontents')
                   ->onDelete('cascade')
                   ->onupdate('cascade');
 
