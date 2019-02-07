@@ -38,51 +38,71 @@
     <hr>
 </div>
 <div class="col-md-5 col-sm-5">
-    <div class="form-group">
-        <label class=" col-md-3 col-sm-3 control-label" for="clockIn" style="text-align: center">ورود</label>
-        <div class="col-md-4 col-sm-4">
-            {!! Form::text('clockIn', null, ['class' => 'form-control text-center', 'id' => 'clockIn' , 'placeholder'=>'00:00' , 'dir'=>'ltr' ]) !!}
-        </div>
-        @if(!Auth::user()->can(Config::get('constants.INSERT_EMPLOPYEE_WORK_SHEET')))
-            <div class="col-md-5 col-sm-5 col-xs-12 text-stat text-center">
-                <span class="label label-sm label-info"> شروع شیفت: @if(isset($employeeSchedule)){{$employeeSchedule->beginTime}}@endif </span>
+
+
+        @if(Auth::user()->can(Config::get('constants.INSERT_EMPLOPYEE_WORK_SHEET')))
+            <div class="form-group">
+                <label class=" col-md-3 col-sm-3 control-label" for="clockIn"  style="text-align: center">ورود</label>
+                <div class="col-md-4 col-sm-4">
+                    {!! Form::text('clockIn', null, ['class' => 'form-control text-center', 'id' => 'clockIn' , 'placeholder'=>'00:00' , 'dir'=>'ltr' ]) !!}
+                </div>
+                <div class="col-md-5 col-sm-5 col-xs-12 text-stat text-center">
+                        <span class="label label-sm label-info"> شروع شیفت: @if(isset($employeeSchedule)){{$employeeSchedule->beginTime}}@endif </span>
+                    </div>
+            </div>
+            <div class="form-group">
+                <label class=" col-md-3 col-sm-3 control-label" for="beginLunchBreak" style="text-align: center">خروج ناهار</label>
+                <div class="col-md-4 col-sm-4">
+                    {!! Form::text('beginLunchBreak', null, ['class' => 'form-control text-center', 'id' => 'beginLunchBreak' , 'placeholder'=>'00:00' , 'dir'=>'ltr' ]) !!}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class=" col-md-3 col-sm-3 control-label" for="finishLunchBreak" style="text-align: center">ورود بعد ناهار</label>
+                <div class="col-md-4 col-sm-4">
+                    {!! Form::text('finishLunchBreak', null, ['class' => 'form-control text-center', 'id' => 'finishLunchBreak' , 'placeholder'=>'00:00' , 'dir'=>'ltr' ]) !!}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class=" col-md-3 col-sm-3 control-label" for="clockOut" style="text-align: center">خروج نهایی</label>
+                <div class="col-md-4 col-sm-4">
+                    {!! Form::text('clockOut', null, ['class' => 'form-control text-center', 'id' => 'clockOut' , 'placeholder'=>'00:00' , 'dir'=>'ltr' ]) !!}
+                </div>
+                <div class="col-md-5 col-sm-5 col-xs-12 text-stat">
+                    <span class="label label-sm label-info text-center"> پایان شیفت: @if(isset($employeeSchedule)){{$employeeSchedule->finishTime}}@endif </span>
+                </div>
             </div>
         @else
-            <label class=" col-md-2 col-sm-2 control-label" for="userBeginTime" style="text-align: center">شروع
-                شیفت:</label>
-            <div class="col-md-3 col-sm-3">
-                {!! Form::text('userBeginTime', null, ['class' => 'form-control text-center', 'id' => 'userBeginTime' , 'placeholder'=>'00:00' , 'dir'=>'ltr' ]) !!}
+            <div class="form-group">
+                <button type="submit" name="action" value="action-clockIn" class="btn btn-success btn-sm col-md-3 col-sm-3"><i class="fa fa-check pull-left"></i> آمدم </button>
+                <div class="col-md-4 col-sm-4">
+                    {!! Form::text('clockIn', null, ['class' => 'form-control text-center', 'id' => 'clockIn' , 'placeholder'=>'00:00' , 'dir'=>'ltr', 'disabled' ]) !!}
+                </div>
+                <label class=" col-md-2 col-sm-2 control-userBeginTime text-left" for="userBeginTime">شروع شیفت:</label>
+                <div class="col-md-3 col-sm-3">
+                    {!! Form::text('userBeginTime', null, ['class' => 'form-control text-center', 'id' => 'userBeginTime' , 'placeholder'=>'00:00' , 'dir'=>'ltr', 'disabled' ]) !!}
+                </div>
             </div>
-        @endif
-    </div>
-    <div class="form-group">
-        <label class=" col-md-3 col-sm-3 control-label" for="beginLunchBreak" style="text-align: center">خروج
-            ناهار</label>
-        <div class="col-md-4 col-sm-4">
-            {!! Form::text('beginLunchBreak', null, ['class' => 'form-control text-center', 'id' => 'beginLunchBreak' , 'placeholder'=>'00:00' , 'dir'=>'ltr' ]) !!}
-        </div>
-    </div>
-    <div class="form-group">
-        <label class=" col-md-3 col-sm-3 control-label" for="finishLunchBreak" style="text-align: center">ورود بعد
-            ناهار</label>
-        <div class="col-md-4 col-sm-4">
-            {!! Form::text('finishLunchBreak', null, ['class' => 'form-control text-center', 'id' => 'finishLunchBreak' , 'placeholder'=>'00:00' , 'dir'=>'ltr' ]) !!}
-        </div>
-    </div>
-    <div class="form-group">
-        <label class=" col-md-3 col-sm-3 control-label" for="clockOut" style="text-align: center">خروج نهایی</label>
-        <div class="col-md-4 col-sm-4">
-            {!! Form::text('clockOut', null, ['class' => 'form-control text-center', 'id' => 'clockOut' , 'placeholder'=>'00:00' , 'dir'=>'ltr' ]) !!}
-        </div>
-        @if(!Auth::user()->can(Config::get('constants.INSERT_EMPLOPYEE_WORK_SHEET')))
-            <div class="col-md-5 col-sm-5 col-xs-12 text-stat">
-                <span class="label label-sm label-info text-center"> پایان شیفت: @if(isset($employeeSchedule)){{$employeeSchedule->finishTime}}@endif </span>
+            <div class="form-group">
+                <button type="submit" name="action" value="action-beginLunchBreak" class="btn btn-success btn-sm col-md-3 col-sm-3"><i class="fa fa-check pull-left"></i> رفتم ناهار </button>
+                <div class="col-md-4 col-sm-4">
+                    {!! Form::text('beginLunchBreak', null, ['class' => 'form-control text-center', 'id' => 'beginLunchBreak' , 'placeholder'=>'00:00' , 'dir'=>'ltr', 'disabled' ]) !!}
+                </div>
             </div>
-        @else
-            <label class=" col-md-2 col-sm-2 control-label" for="userFinishTime" style="text-align: center">پایان
-                شیفت:</label>
-            <div class="col-md-3 col-sm-3">
-                {!! Form::text('userFinishTime', null, ['class' => 'form-control text-center', 'id' => 'userFinishTime' , 'placeholder'=>'00:00' , 'dir'=>'ltr' ]) !!}
+            <div class="form-group">
+                <button type="submit" name="action" value="action-finishLunchBreak" class="btn btn-success btn-sm col-md-3 col-sm-3"><i class="fa fa-check pull-left"></i> از ناهار برگشتم </button>
+                <div class="col-md-4 col-sm-4">
+                    {!! Form::text('finishLunchBreak', null, ['class' => 'form-control text-center', 'id' => 'finishLunchBreak' , 'placeholder'=>'00:00' , 'dir'=>'ltr', 'disabled' ]) !!}
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="submit" name="action" value="action-clockOut" class="btn btn-success btn-sm col-md-3 col-sm-3"><i class="fa fa-check pull-left"></i> رفتم خونه </button>
+                <div class="col-md-4 col-sm-4">
+                    {!! Form::text('clockOut', null, ['class' => 'form-control text-center', 'id' => 'clockOut' , 'placeholder'=>'00:00' , 'dir'=>'ltr', 'disabled' ]) !!}
+                </div>
+                <label class=" col-md-2 col-sm-2 control-label" for="userFinishTime"  style="text-align: center">پایان شیفت:</label>
+                <div class="col-md-3 col-sm-3">
+                    {!! Form::text('userFinishTime', null, ['class' => 'form-control text-center', 'id' => 'userFinishTime' , 'placeholder'=>'00:00' , 'dir'=>'ltr', 'disabled' ]) !!}
+                </div>
             </div>
         @endif
     </div>
@@ -112,25 +132,30 @@
 
 </div>
 <div class="col-md-12">
-    <div class="form-group text-center">
-        <div class="col-md-12">
-            <div class="input-group">
-                <div class="icheck-inline">
-                    <label>
-                        {!! Form::checkbox('timeSheetLock', '1', (isset($employeetimesheet) )? $employeetimesheet->getOriginal("timeSheetLock") : null ,  ['value' => '1'  , 'class'=>'icheck' ,'data-checkbox'=>'icheckbox_line-red' , 'data-label'=>'قفل کردن'  ]) !!}
-                    </label>
-                    <label>
-                        {!! Form::checkbox('isExtraDay', '1', (isset($isExtra))? $isExtra : null,  ['value' => '1'  , 'class'=>'icheck' ,'data-checkbox'=>'icheckbox_line-orange' , 'data-label'=>'به عنوان روز خاص ثبت شود' ]) !!}
-                    </label>
-                    {{--@permission((Config::get('constants.INSERT_EMPLOPYEE_WORK_SHEET')))--}}
-                    <label>
-                        {!! Form::checkbox('isPaid', '1', (isset($employeetimesheet) )? $employeetimesheet->getOriginal("isPaid") : null,  ['value' => '1'  , 'class'=>'icheck' ,'data-checkbox'=>'icheckbox_line-blue' , 'data-label'=>'تسویه شده' , (isset($employeetimesheet) )? "" : "checked"  ]) !!}
-                    </label>
-                    {{--@endpermission--}}
+<div class="form-group text-center">
+    <div class="col-md-12">
+        <div class="input-group">
+            <div class="icheck-inline">
+                <label>
+                    {!! Form::checkbox('timeSheetLock', '1', (isset($employeetimesheet) )? $employeetimesheet->getOriginal("timeSheetLock") : null ,  ['value' => '1'  , 'class'=>'icheck' ,'data-checkbox'=>'icheckbox_line-red' , 'data-label'=>'قفل کردن'  ]) !!}
+                </label>
+                <label>
+                    {!! Form::checkbox('isExtraDay', '1', (isset($isExtra))? $isExtra : null,  ['value' => '1'  , 'class'=>'icheck' ,'data-checkbox'=>'icheckbox_line-orange' , 'data-label'=>'به عنوان روز خاص ثبت شود' ]) !!}
+                </label>
+                {{--@permission((Config::get('constants.INSERT_EMPLOPYEE_WORK_SHEET')))--}}
+                <label>
+                    {!! Form::checkbox('isPaid', '1', (isset($employeetimesheet) )? $employeetimesheet->getOriginal("isPaid") : null,  ['value' => '1'  , 'class'=>'icheck' ,'data-checkbox'=>'icheckbox_line-blue' , 'data-label'=>'تسویه شده' , (isset($employeetimesheet) )? "" : "checked"  ]) !!}
+                </label>
+                {{--@endpermission--}}
+                @permission((Config::get('constants.EDIT_EMPLOPYEE_WORK_SHEET')))
+                <label>
+                    {!! Form::checkbox('overtime_confirmation', '1', (isset($employeetimesheet) )? $employeetimesheet->getOriginal('overtime_confirmation') : null,  ['value' => '1'  , 'class'=>'icheck' ,'data-checkbox'=>'icheckbox_line-green' , 'data-label'=>'تاییدیه اضافه کاری' , (isset($employeetimesheet) )? "" : "checked"  ]) !!}
+                </label>
+                @endpermission
 
-                </div>
             </div>
         </div>
+    </div>
     </div>
 </div>
 <div class="col-md-12">

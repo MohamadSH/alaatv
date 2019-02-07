@@ -102,7 +102,6 @@ class UserController extends Controller
         $this->callMiddlewares($authException);
     }
 
-
     /**
      * @param Agent $agent
      *
@@ -417,7 +416,7 @@ class UserController extends Controller
         }
 
         if (in_array("roles" , $inputData))
-            $this->attachRoles($inputData["roles"], $request->user(), $user);
+            $this->attachRoles($inputData["roles"], $authenticatedUser, $user);
 
         $file = $this->getRequestFile($inputData, "photo");
         if ($file !== false)
@@ -533,9 +532,6 @@ class UserController extends Controller
 //        $zarinpal = new Zarinpal((new TransactionController()));
 //        $result = $zarinpal->getUnverifiedTransactions();
 //        return $result;
-
-
-
 
 
 //        $zarinpal = new Zarinpal((new TransactionController()));
@@ -1198,40 +1194,51 @@ class UserController extends Controller
      */
     public function submitWorkTime(Request $request, EmployeetimesheetController $employeetimesheetController, HomeController $homeController)
     {
-        $userId = $request->user()->id;
-        $request->offsetSet("user_id", $userId);
-        $request->offsetSet("date", Carbon::today('Asia/Tehran')
-                                          ->format("Y-m-d"));
-
-        $toDayJalali = $this->convertToJalaliDay(Carbon::today('Asia/Tehran')
-                                                       ->format('l'));
-        $employeeSchedule = Employeeschedule::where("user_id", $userId)
-                                            ->where("day", $toDayJalali)
-                                            ->get()
-                                            ->first();
-        if (isset($employeeSchedule)) {
-            $request->offsetSet("userBeginTime", $employeeSchedule->getOriginal("beginTime"));
-            $request->offsetSet("userFinishTime", $employeeSchedule->getOriginal("finishTime"));
-            $request->offsetSet("allowedLunchBreakInSec", gmdate("H:i:s", $employeeSchedule->getOriginal("lunchBreakInSeconds")));
+        if($request->has('action')) {
+            $presentTime = Carbon::now('Asia/Tehran')->format('H:i:s');
+            $action = $request->get('action');
+            if($action=='action-clockIn') {
+                $request->offsetSet('clockIn' , $presentTime);
+            } else if($action=='action-beginLunchBreak') {
+                $request->offsetSet('beginLunchBreak' , $presentTime);
+            } else if($action=='action-finishLunchBreak') {
+                $request->offsetSet('finishLunchBreak' , $presentTime);
+            } else if($action=='action-clockOut') {
+                $request->offsetSet('clockOut' , $presentTime);
+            }
         }
 
-        $request->offsetSet("modifier_id", $userId);
-        $request->offsetSet("serverSide", true);
-        $insertRequest = new \App\Http\Requests\InsertEmployeeTimeSheet($request->all());
-        $userTimeSheets = Employeetimesheet::where("date", Carbon::today('Asia/Tehran'))
-                                           ->where("user_id", $userId->id)
-                                           ->get();
-        if ($userTimeSheets->count() == 0) {
-            $done = $employeetimesheetController->store($insertRequest);
-        } else if ($userTimeSheets->count() == 1) {
-            $done = $employeetimesheetController->update($insertRequest, $userTimeSheets->first());
-        } else {
-            $message = "شما بیش از یک ساعت کاری برای امروز ثبت نموده اید!";
-            return $homeController->errorPage($message);
+        $userId = Auth::user()->id ;
+        $request->offsetSet('user_id' , $userId);
+        $request->offsetSet('date' , Carbon::today('Asia/Tehran')->format('Y-m-d'));
+
+        $toDayJalali = $this->convertToJalaliDay(Carbon::today('Asia/Tehran')->format('l')) ;
+        $employeeSchedule = Employeeschedule::where('user_id', $userId)->where('day' , $toDayJalali)->get()->first();
+        if (isset($employeeSchedule))
+        {
+            $request->offsetSet('userBeginTime' , $employeeSchedule->getOriginal('beginTime'));
+            $request->offsetSet('userFinishTime' , $employeeSchedule->getOriginal('finishTime'));
+            $request->offsetSet('allowedLunchBreakInSec' , gmdate('H:i:s',$employeeSchedule->getOriginal('lunchBreakInSeconds')));
         }
-        if ($done)
-            session()->flash("success", "ساعت کاری با موفقیت ذخیره شد"); else
-            session()->flash("error", \Lang::get("responseText.Database error."));
+
+        $request->offsetSet( 'modifier_id' , $userId  ) ;
+        $request->offsetSet( 'serverSide' , true  ) ;
+        $insertRequest = new \App\Http\Requests\InsertEmployeeTimeSheet($request->all()) ;
+        $userTimeSheets = Employeetimesheet::where('date' , Carbon::today('Asia/Tehran'))->where('user_id' , Auth::user()->id)->get() ;
+        if($userTimeSheets->count() == 0)
+        {
+            $done = $employeetimesheetController->store($insertRequest) ;
+        }elseif($userTimeSheets->count() == 1)
+        {
+            $done = $employeetimesheetController->update($insertRequest , $userTimeSheets->first()) ;
+        }else{
+            $message = 'شما بیش از یک ساعت کاری برای امروز ثبت نموده اید!';
+            return $homeController->errorPage($message) ;
+        }
+        if($done)
+            session()->flash('success', 'ساعت کاری با موفقیت ذخیره شد') ;
+        else
+            session()->flash('error', 'خطای پایگاه داده') ;
 
         return redirect()->back();
     }
