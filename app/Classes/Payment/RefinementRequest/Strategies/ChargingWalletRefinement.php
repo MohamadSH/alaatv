@@ -9,7 +9,7 @@
 namespace App\Classes\Payment\RefinementRequest\Strategies;
 
 use Illuminate\Http\Response;
-use App\Classes\Payment\RefinementRequest\{Refinement, RefinementInterface};
+use App\Classes\Payment\RefinementRequest\Refinement;
 
 class ChargingWalletRefinement extends Refinement
 {

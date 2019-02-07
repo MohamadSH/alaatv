@@ -13,17 +13,16 @@ use App\Classes\Payment\Gateway\Gateway;
 use Illuminate\Support\Facades\Validator;
 use Zarinpal\Zarinpal as ZarinpalComposer;
 
-class Zarinpal implements Gateway
+class Zarinpal extends Gateway
 {
-    /**
-     * @var array $result
-     */
-    protected $result;
-
     /**
      * @var string $merchantID
      */
     private $merchantID;
+    /**
+     * @var string $authority
+     */
+    private $authority;
 
     /**
      * @var ZarinpalComposer $zarinpalComposer
@@ -46,17 +45,12 @@ class Zarinpal implements Gateway
 
     public function __construct(array $data)
     {
-        $this->result = [
-            'status' => true,
-            'message' => [],
-            'data' => [],
-        ];
-
+        $this->refreshResult();
         $rules = [
             'merchantID' => 'required|string|size:36'
         ];
         $this->dataValidation($data, $rules);
-        if (!$this->result['status']) {
+        if (!$this->getResultStatus()) {
             throw new Exception('The merchantID must be 36 characters.');
             /*return $this->result;*/
         } else {
@@ -64,6 +58,7 @@ class Zarinpal implements Gateway
             $this->zarinpalComposer = new ZarinpalComposer($this->merchantID);
         }
 
+        $this->authority = null;
         if($this->isSandboxOn()) {
             $this->zarinpalComposer->enableSandbox(); // active sandbox mod for test env
         }
@@ -74,11 +69,10 @@ class Zarinpal implements Gateway
 
     /**
      * Making request to ZarinPal gateway
-     * must loadForRedirect before
      * @param array $data
      * @return array
      */
-    public function paymentRequest(array $data): array
+    protected function gatewayPaymentRequest(array $data)
     {
         $rules = [
             'callbackUrl' => 'required|string',
@@ -87,38 +81,27 @@ class Zarinpal implements Gateway
         ];
 
         $this->dataValidation($data, $rules);
-        if (!$this->result['status']) {
-            return $this->result;
+        if (!$this->getResultStatus()) {
+            return $this->getResult();
         }
 
         $zarinpalResponse = $this->zarinpalComposer->request($data['callbackUrl'], $data['amount'], $data['description']);
         if (isset($zarinpalResponse['Authority']) && strlen($zarinpalResponse['Authority']) > 0) {
-            $this->result['status'] = true;
-            $this->result['message'][] = 'درخواست پرداخت با موفقیت ارسال و نتیجه آن دریافت شد.';
-            $this->result['data']['Authority'] = $zarinpalResponse['Authority'];
-            $this->result['data']['zarinpalResponse'] = $zarinpalResponse;
+            $this->setResultStatus(true);
+            $this->addResultMessage('درخواست پرداخت با موفقیت ارسال و نتیجه آن دریافت شد.');
+            $this->setResultData('Authority', $zarinpalResponse['Authority']);
+            $this->authority = $zarinpalResponse['Authority'];
+            $this->setResultData('zarinpalResponse', $zarinpalResponse);
         } else {
-            $this->result['status'] = false;
-            $this->result['message'][] = 'مشکل در برقراری ارتباط با درگاه زرین پال';
-            $this->result['data']['zarinpalResponse'] = $zarinpalResponse;
+            $this->setResultStatus(false);
+            $this->addResultMessage('مشکل در برقراری ارتباط با درگاه زرین پال');
+            $this->setResultData('zarinpalResponse', $zarinpalResponse);
         }
-        return $this->result;
-    }
-
-    /**
-     * Making request to ZarinPal gateway
-     * must loadForRedirect before
-     * @param array $data
-     * @return void
-     */
-    public function redirect(array $data): void
-    {
-        $this->zarinpalComposer->redirect();
+        return $this->getResult();
     }
 
     /**
      * verify ZarinPal callback request
-     * must loadForVerify before
      * @param array $data
      * @return array $this->result
      */
@@ -130,21 +113,21 @@ class Zarinpal implements Gateway
         ];
 
         $this->dataValidation($data, $rules);
-        if (!$this->result['status']) {
-            return $this->result;
+        if (!$this->getResultStatus()) {
+            return $this->getResult();
         }
 
         if($data['Status']=='OK') {
-            $this->result['status'] = true;
-            $this->result['message'][] = 'کاربر پرداخت را انجام داده است و پرداخت وی می بایست تایید شود.';
-            $this->result['data']['Authority'] = $data['Authority'];
+            $this->setResultStatus(true);
+            $this->addResultMessage('کاربر پرداخت را انجام داده است و پرداخت وی می بایست تایید شود.');
+            $this->setResultData('Authority', $data['Authority']);
         } else {
-            $this->result['status'] = false;
-            $this->result['message'][] = 'پرداخت کاربر به درستی انجام نشده است.';
-            $this->result['data']['Authority'] = $data['Authority'];
+            $this->setResultStatus(false);
+            $this->addResultMessage('پرداخت کاربر به درستی انجام نشده است.');
+            $this->setResultData('Authority', $data['Authority']);
         }
 
-        return $this->result;
+        return $this->getResult();
     }
 
     /**
@@ -153,7 +136,7 @@ class Zarinpal implements Gateway
      */
     public function verify(array $data): array
     {
-        $this->result['status'] = true;
+        $this->setResultStatus(true);
 
         $rules = [
             'amount' => 'required|integer|min:100',
@@ -162,8 +145,8 @@ class Zarinpal implements Gateway
         ];
 
         $this->dataValidation($data, $rules);
-        if (!$this->result['status']) {
-            return $this->result;
+        if (!$this->getResultStatus()) {
+            return $this->getResult();
         }
 
         $amount = $data['amount'];
@@ -171,33 +154,33 @@ class Zarinpal implements Gateway
         $authority = $data['Authority'];
 
         $result = $this->zarinpalComposer->verify($status, $amount, $authority);
-        $this->result['data']['zarinpalVerifyResult'] = $result;
+        $this->setResultData('zarinpalVerifyResult', $result);
 
         if (!isset($result)) {
-            $this->result['status'] = false;
-            $this->result['message'][] = 'مشکل در برقراری ارتباط با زرین پال';
-            return $this->result;
+            $this->setResultStatus(false);
+            $this->addResultMessage('مشکل در برقراری ارتباط با زرین پال');
+            return $this->getResult();
         }
 
         if (isset($result['RefID']) && strcmp($result['Status'], 'success') == 0) {
-            $this->result['status'] = true;
-            $this->result['data']['RefID'] = $result['RefID'];
-            $this->result['data']['cardPanMask'] = isset($result['ExtraDetail']['Transaction']['CardPanMask'])?$result['ExtraDetail']['Transaction']['CardPanMask']:null;;
-            $this->result['message'][] = 'پرداخت کاربر تایید شد.';
+            $this->setResultStatus(true);
+            $this->setResultData('RefID', $result['RefID']);
+            $this->setResultData('cardPanMask', isset($result['ExtraDetail']['Transaction']['CardPanMask'])?$result['ExtraDetail']['Transaction']['CardPanMask']:null);
+            $this->addResultMessage('پرداخت کاربر تایید شد.');
         } else {
-            $this->result['status'] = false;
+            $this->setResultStatus(false);
             if (strcmp($result['Status'], 'canceled') == 0) {
-                $this->result['message'][] = 'کاربر از پرداخت انصراف داده است.';
+                $this->addResultMessage('کاربر از پرداخت انصراف داده است.');
             } else if (strcmp($result['Status'], 'verified_before') ==0) {
-                $this->result['message'][] = self::EXCEPTION[101];
+                $this->addResultMessage(self::EXCEPTION[101]);
             } else {
-                $this->result['message'][] = 'خطایی در پرداخت رخ داده است.';
+                $this->addResultMessage('خطایی در پرداخت رخ داده است.');
                 if (isset($result['error'])) {
-                    $this->result['message'][] = self::EXCEPTION[$result['error']];
+                    $this->addResultMessage(self::EXCEPTION[$result['error']]);
                 }
             }
         }
-        return $this->result;
+        return $this->getResult();
     }
 
     /**
@@ -220,11 +203,11 @@ class Zarinpal implements Gateway
     {
         $validator = Validator::make($data, $rules);
         if ($validator->fails()) {
-            $this->result['status'] = false;
+            $this->setResultStatus(false);
             foreach ($validator->messages()->getMessages() as $field_name => $messages) {
-                $this->result['message'][] = $messages;
+                $this->addResultMessage($messages);
             }
-            $this->result['data']['WrongInput'] = $data;
+            $this->setResultData('WrongInput',$data);
         }
     }
 
@@ -242,5 +225,25 @@ class Zarinpal implements Gateway
     private function isZarinGateOn()
     {
         return config('Zarinpal.ZarinGate', false);
+    }
+
+    protected function getAuthority(): string
+    {
+        return $this->authority;
+    }
+
+    protected function gatewayRedirectUrl(array $data): string
+    {
+        return $this->zarinpalComposer->redirectUrl();
+    }
+
+    protected function gatewayRedirectMethod(array $data): string
+    {
+        return 'GET';
+    }
+
+    protected function gatewayRedirectInputs(array $data): array
+    {
+        return [];
     }
 }

@@ -52,10 +52,11 @@ class OnlinePaymentController extends Controller
     {
         /*$request->offsetSet('order_id', 137);*/
         /*$request->offsetSet('transaction_id', 65);*/
-//        $request->offsetSet('payByWallet', true);
+        /*$request->offsetSet('payByWallet', true);*/
 
-//        $request->offsetSet('walletId', 1);
-//        $request->offsetSet('walletChargingAmount', 50000);
+        /*$request->offsetSet('walletId', 1);*/
+        /*$request->offsetSet('walletChargingAmount', 50000);*/
+
         $transactiongateway = $this->getGateway($paymentMethod);
 
         if(!isset($transactiongateway)) {
@@ -90,9 +91,9 @@ class OnlinePaymentController extends Controller
 
         $description = $this->setTransactionDescription($description, $user, $order);
 
-        if(isset($order))
+        if(isset($order)) {
             $this->setCustomerDescriptionForOrder($request, $order);
-
+        }
 
         if ($this->isRedirectable($cost)) {
 
@@ -111,7 +112,13 @@ class OnlinePaymentController extends Controller
                 $transactionModifyResult = $this->setAuthorityForTransaction($result['data']['Authority'], $transactiongateway->id, $transaction);
 
                 if ($transactionModifyResult['statusCode'] == Response::HTTP_OK) {
-                    $gateWay->redirect([]);
+                    $redirectData = $gateWay->getRedirectData([]);
+                    $paymentMethodImage = $this->getPaymentMethodImage($paymentMethod);
+                    return view("order.checkout.gatewayRedirect", compact('redirectData', 'paymentMethodImage'));
+//
+//                    return response()->json([
+//                        'message' => 'مشکلی در انتقال به درگاه وجود دارد.'
+//                    ], Response::HTTP_INTERNAL_SERVER_ERROR);
                 } else {
                     return response()->json([
                         'message' => 'مشکلی در ویرایش تراکنش رخ داده است.'
@@ -122,10 +129,18 @@ class OnlinePaymentController extends Controller
                     'message' => $result['message']
                 ], Response::HTTP_SERVICE_UNAVAILABLE);
             }
-
-            return redirect(action('HomeController@error404'));
         } else {
             return redirect(action('OfflinePaymentController@verifyPayment', ['device' => $device, 'paymentMethod' => 'wallet', 'coi' => (isset($order)?$order->id:null)]));
+        }
+    }
+
+    private function getPaymentMethodImage(string $paymentMethod) {
+        switch ($paymentMethod) {
+            case 'zarinpal':
+                return asset('acm/extra/payment/gateway/zarinpal.png');
+            default:
+                // zarinpal
+                return asset('acm/extra/payment/gateway/zarinpal.png');
         }
     }
 
@@ -477,7 +492,6 @@ class OnlinePaymentController extends Controller
         $result = $request->session()->get('verifyResult');
         dd([
             'status' => $status,
-            'status' => csrf_token(),
             'paymentMethod' => $paymentMethod,
             'device' => $device,
             'verifyResult' => $result

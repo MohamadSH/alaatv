@@ -38,10 +38,28 @@
         <td>@if($employeeTimeSheet->obtainRealWorkTime("HOUR_FORMAT")) {{ $employeeTimeSheet->obtainRealWorkTime("HOUR_FORMAT") }} @else
                 _  @endif</td>
         <td>@if($employeeTimeSheet->obtainLunchTime()) {{ $employeeTimeSheet->obtainLunchTime() }} @else  _  @endif</td>
-        <td>@if($employeeTimeSheet->obtainTotalBreakTime()) {{ $employeeTimeSheet->obtainTotalBreakTime() }} @else
-                _ @endif</td>
-        <td dir="ltr">@if($employeeTimeSheet->obtainWorkAndShiftDiff()) {{ $employeeTimeSheet->obtainWorkAndShiftDiff("HOUR_FORMAT") }} @else
-                _ @endif</td>
+        <td>@if($employeeTimeSheet->obtainTotalBreakTime()) {{ $employeeTimeSheet->obtainTotalBreakTime() }} @else _ @endif</td>
+        <td dir="ltr" >
+            @if(
+                    $employeeTimeSheet->obtain_work_and_shift_diff_in_hour &&
+                    $employeeTimeSheet->obtain_work_and_shift_diff_in_hour !='00:00'
+                )
+                @if(strpos($employeeTimeSheet->obtain_work_and_shift_diff_in_hour,'منفی')!=false)
+                    {{ $employeeTimeSheet->obtain_work_and_shift_diff_in_hour }}
+                @else
+                    @if(
+                        isset($employeeTimeSheet->overtime_confirmation) &&
+                        $employeeTimeSheet->overtime_confirmation==1
+                    )
+                            {{ $employeeTimeSheet->obtain_work_and_shift_diff_in_hour }} <span class="label label-sm label-success"> اضافه کاری تایید شده </span>
+                    @else
+                            {{ $employeeTimeSheet->obtain_work_and_shift_diff_in_hour }} <span class="label label-sm label-danger"> اضافه کاری تایید نشده </span>
+                    @endif
+                @endif
+            @else
+                _
+            @endif
+        </td>
         <td>{{ $employeeTimeSheet->userBeginTime }}</td>
         <td>{{ $employeeTimeSheet->userFinishTime }}</td>
         <td>{{ $employeeTimeSheet->clockIn }}</td>

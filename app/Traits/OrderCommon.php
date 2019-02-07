@@ -74,11 +74,11 @@ trait OrderCommon
      * this method select exist OpenOrder or create new object and insert that then select all field of new open order
      * but firstOrCreate method in laravel just return inserted values and does not return other fields when create and
      * insert new OpenOrder
-     * 
+     *
      * @param User $user
-     * @return Order|User|\Illuminate\Database\Eloquent\Model|object|null
+     * @return Order
      */
-    public function firstOrCreateOpenOrder(User $user) {
+    public function firstOrCreateOpenOrder(User $user): Order {
 
         $openOrder = $user->openOrders()->first();
         if(!isset($openOrder)) {

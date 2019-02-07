@@ -46,7 +46,7 @@ class CheckPermissionForSendExtraAttributesCost
                     $product = Product::findOrFail($productId);
                     $attributesValues = $this->getAttributesValuesFromProduct($request, $product);
                     $this->syncExtraAttributesCost($request, $attributesValues);
-                    $request->offsetSet("parentProduct", $product);
+                    $request->offsetSet('parentProduct', $product);
                 }
             }
         } else {
