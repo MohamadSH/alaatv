@@ -79,7 +79,7 @@
                                                             {{--@endforeach--}}
 
 
-                                                            @if($product->attributes->get('information')->count()> 0)
+                                                            @if(optional($product->attributes->get('information'))->count()> 0)
                                                                 @foreach($product->attributes->get('information') as $key => $informationItem)
                                                                     <a href = "#" class = "m-list-search__result-item">
                                                                         <span class = "m-list-search__result-item-icon"><i class = "flaticon-like m--font-info"></i></span>
@@ -87,7 +87,7 @@
                                                                     </a>
                                                                 @endforeach
                                                             @endif
-                                                            @if($product->attributes->get('main')->count()> 0)
+                                                            @if(optional($product->attributes->get('main'))->count()> 0)
                                                                 @foreach($product->attributes->get('main') as $key => $informationItem)
                                                                     <a href = "#" class = "m-list-search__result-item">
                                                                         <span class = "m-list-search__result-item-icon"><i class = "flaticon-like m--font-warning"></i></span>
