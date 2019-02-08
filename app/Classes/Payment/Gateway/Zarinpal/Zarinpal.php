@@ -19,10 +19,6 @@ class Zarinpal extends Gateway
      * @var string $merchantID
      */
     private $merchantID;
-    /**
-     * @var string $authority
-     */
-    private $authority;
 
     /**
      * @var ZarinpalComposer $zarinpalComposer
@@ -58,7 +54,6 @@ class Zarinpal extends Gateway
             $this->zarinpalComposer = new ZarinpalComposer($this->merchantID);
         }
 
-        $this->authority = null;
         if($this->isSandboxOn()) {
             $this->zarinpalComposer->enableSandbox(); // active sandbox mod for test env
         }
@@ -70,34 +65,19 @@ class Zarinpal extends Gateway
     /**
      * Making request to ZarinPal gateway
      * @param array $data
-     * @return array
+     * @return string|null
      */
-    protected function gatewayPaymentRequest(array $data)
+    protected function getPaymentRequestToken(array $data): ?string
     {
-        $rules = [
-            'callbackUrl' => 'required|string',
-            'amount' => 'required|integer|min:100',
-            'description' => 'sometimes|string|min:1',
-        ];
-
-        $this->dataValidation($data, $rules);
-        if (!$this->getResultStatus()) {
-            return $this->getResult();
-        }
-
         $zarinpalResponse = $this->zarinpalComposer->request($data['callbackUrl'], $data['amount'], $data['description']);
-        if (isset($zarinpalResponse['Authority']) && strlen($zarinpalResponse['Authority']) > 0) {
-            $this->setResultStatus(true);
-            $this->addResultMessage('درخواست پرداخت با موفقیت ارسال و نتیجه آن دریافت شد.');
-            $this->setResultData('Authority', $zarinpalResponse['Authority']);
-            $this->authority = $zarinpalResponse['Authority'];
+        $authority = $zarinpalResponse['Authority'];
+        if (isset($authority[0])) {
             $this->setResultData('zarinpalResponse', $zarinpalResponse);
+            return $authority;
         } else {
-            $this->setResultStatus(false);
-            $this->addResultMessage('مشکل در برقراری ارتباط با درگاه زرین پال');
             $this->setResultData('zarinpalResponse', $zarinpalResponse);
+            return null;
         }
-        return $this->getResult();
     }
 
     /**
@@ -211,6 +191,16 @@ class Zarinpal extends Gateway
         }
     }
 
+    protected function getPaymentRequestInputRules(array $data): array
+    {
+        return  [
+            'callbackUrl' => 'required|string',
+            'amount' => 'required|integer|min:100',
+            'description' => 'sometimes|string|min:1',
+        ];
+    }
+
+
     /**
      * @return bool
      */
@@ -225,11 +215,6 @@ class Zarinpal extends Gateway
     private function isZarinGateOn()
     {
         return config('Zarinpal.ZarinGate', false);
-    }
-
-    protected function getAuthority(): string
-    {
-        return $this->authority;
     }
 
     protected function gatewayRedirectUrl(array $data): string

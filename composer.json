@@ -31,6 +31,7 @@
         "kalnoy/nestedset": "^4.3",
         "laravel/framework": "5.7.*",
         "laravel/horizon": "^1.2",
+        "laravel/passport": "^7.1",
         "laravel/scout": "^4.0",
         "laravel/telescope": "^1.0",
         "laravel/tinker": "^1.0",
