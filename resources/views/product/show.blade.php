@@ -4,7 +4,7 @@
         <ol class = "breadcrumb">
             <li class = "breadcrumb-item">
                 <i class = "flaticon-home-2 m--padding-right-5"></i>
-                <a class = "m-link" href = "{{action("HomeController@index")}}">@lang('page.Home')</a>
+                <a class = "m-link" href = "{{action("IndexPageController")}}">@lang('page.Home')</a>
             </li>
             <li class = "breadcrumb-item">
                 <i class = "flaticon-photo-camera m--padding-right-5"></i>
@@ -66,39 +66,80 @@
                                                             <span class="m-list-search__result-category m-list-search__result-category--first">
                                                                 ویژگی‌ها
                                                             </span>
-                                                            @foreach($simpleInfoAttributes as $key => $simpleInfoAttribute)
-                                                                <a href="#" class="m-list-search__result-item">
-                                                                    <span class="m-list-search__result-item-icon"><i class="flaticon-like m--font-warning"></i></span>
-                                                                    <span class="m-list-search__result-item-text">{{$key . ': ' . collect($simpleInfoAttribute)->implode('name',',') }}</span>
-                                                                </a>
-                                                                @foreach($simpleInfoAttribute as $k => $info)
-                                                                    @if(isset($info["type"]) && strcmp($info["type"],"information") != 0 )
-                                                                        <input type = "hidden" value = "{{ $info["value"] }}" name = "attribute[]">
-                                                                    @endif
+                                                            {{--@foreach($simpleInfoAttributes as $key => $simpleInfoAttribute)--}}
+                                                                {{--<a href="#" class="m-list-search__result-item">--}}
+                                                                    {{--<span class="m-list-search__result-item-icon"><i class="flaticon-like m--font-warning"></i></span>--}}
+                                                                    {{--<span class="m-list-search__result-item-text">{{$key . ': ' . collect($simpleInfoAttribute)->implode('name',',') }}</span>--}}
+                                                                {{--</a>--}}
+                                                                {{--@foreach($simpleInfoAttribute as $k => $info)--}}
+                                                                    {{--@if(isset($info["type"]) && strcmp($info["type"],"information") != 0 )--}}
+                                                                        {{--<input type = "hidden" value = "{{ $info["value"] }}" name = "attribute[]">--}}
+                                                                    {{--@endif--}}
+                                                                {{--@endforeach--}}
+                                                            {{--@endforeach--}}
+
+
+                                                            @if(optional($product->attributes->get('information'))->count()> 0)
+                                                                @foreach($product->attributes->get('information') as $key => $informationItem)
+                                                                    <a href = "#" class = "m-list-search__result-item">
+                                                                        <span class = "m-list-search__result-item-icon"><i class = "flaticon-like m--font-info"></i></span>
+                                                                        <span class = "m-list-search__result-item-text">{{ $informationItem->title . ': ' . $informationItem->data[0]->name }}</span>
+                                                                    </a>
                                                                 @endforeach
-                                                            @endforeach
+                                                            @endif
+                                                            @if(optional($product->attributes->get('main'))->count()> 0)
+                                                                @foreach($product->attributes->get('main') as $key => $informationItem)
+                                                                    <a href = "#" class = "m-list-search__result-item">
+                                                                        <span class = "m-list-search__result-item-icon"><i class = "flaticon-like m--font-warning"></i></span>
+                                                                        <span class = "m-list-search__result-item-text">{{ $informationItem->title . ': ' . $informationItem->data[0]->name }}</span>
+                                                                    </a>
+                                                                    @foreach($informationItem->data as $k => $info)
+                                                                        @if(isset($info->id))
+                                                                            <input type = "hidden" value = "{{ $info->id }}" name = "attribute[]">
+                                                                        @endif
+                                                                    @endforeach
+                                                                @endforeach
+                                                            @endif
 
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-6">
-                                                    @if(isset($checkboxInfoAttributes) && !$checkboxInfoAttributes->isEmpty())
-                                                        <div class="m-list-search">
-                                                            <div class="m-list-search__results">
-                                                            <span class="m-list-search__result-category m-list-search__result-category--first">
-                                                                دارای
-                                                            </span>
-                                                                @foreach($checkboxInfoAttributes as $checkboxArray)
-                                                                    @foreach($checkboxArray as $info)
-                                                                        <a href="#" class="m-list-search__result-item">
-                                                                            <span class="m-list-search__result-item-icon"><i class="la la-check m--font-focus"></i></span>
-                                                                            <span class="m-list-search__result-item-text">{{ $info["index"]  }}</span>
-                                                                        </a>
-                                                                    @endforeach
-                                                                @endforeach
-                                                            </div>
-                                                        </div>
-                                                    @endif
+                                                    {{--@if(isset($product->type['type']) && $product->type['type']=='selectable' && $product->children->isNotEmpty()   )--}}
+                                                        {{--<div class="m-list-search">--}}
+                                                            {{--<div class="m-list-search__results">--}}
+                                                        {{--<span class="m-list-search__result-category m-list-search__result-category--first">--}}
+                                                            {{--دارای--}}
+                                                        {{--</span>--}}
+                                                                {{--@foreach($product->children as $child)--}}
+                                                                    {{--@foreach($checkboxArray as $info)--}}
+                                                                        {{--<a href="#" class="m-list-search__result-item">--}}
+                                                                            {{--<span class="m-list-search__result-item-icon"><i class="la la-check m--font-focus"></i></span>--}}
+                                                                            {{--<span class="m-list-search__result-item-text">{{ $info["index"]  }}</span>--}}
+                                                                        {{--</a>--}}
+                                                                    {{--@endforeach--}}
+                                                                {{--@endforeach--}}
+                                                            {{--</div>--}}
+                                                        {{--</div>--}}
+                                                    {{--@endif--}}
+
+                                                    {{--@if(isset($checkboxInfoAttributes) && !$checkboxInfoAttributes->isEmpty())--}}
+                                                        {{--<div class="m-list-search">--}}
+                                                            {{--<div class="m-list-search__results">--}}
+                                                            {{--<span class="m-list-search__result-category m-list-search__result-category--first">--}}
+                                                                {{--دارای--}}
+                                                            {{--</span>--}}
+                                                                {{--@foreach($checkboxInfoAttributes as $checkboxArray)--}}
+                                                                    {{--@foreach($checkboxArray as $info)--}}
+                                                                        {{--<a href="#" class="m-list-search__result-item">--}}
+                                                                            {{--<span class="m-list-search__result-item-icon"><i class="la la-check m--font-focus"></i></span>--}}
+                                                                            {{--<span class="m-list-search__result-item-text">{{ $info["index"]  }}</span>--}}
+                                                                        {{--</a>--}}
+                                                                    {{--@endforeach--}}
+                                                                {{--@endforeach--}}
+                                                            {{--</div>--}}
+                                                        {{--</div>--}}
+                                                    {{--@endif--}}
                                                 </div>
                                             </div>
                                                 <div class = "m-separator m-separator--space m-separator--dashed"></div>
@@ -122,7 +163,7 @@
                                                     <div class = "m-separator m-separator--space m-separator--dashed"></div>
                                                 @endif
 
-                                                @if(in_array($productType ,[Config::get("constants.PRODUCT_TYPE_SELECTABLE")]))
+                                                @if(in_array($product->type['id'] ,[config("constants.PRODUCT_TYPE_SELECTABLE")]))
 
                                                     <ul class = "m-nav m-nav--active-bg" id = "m_nav" role = "tablist">
                                                         @if(isset($product->children) && !empty($product->children))
@@ -132,9 +173,9 @@
                                                         @endif
                                                     </ul>
                                                     <div class = "m-separator m-separator--space m-separator--dashed"></div>
-                                                @elseif(in_array($productType ,[Config::get("constants.PRODUCT_TYPE_SIMPLE")]))
+                                                @elseif(in_array($product->type['id'] ,[Config::get("constants.PRODUCT_TYPE_SIMPLE")]))
 
-                                                @elseif(in_array($productType, [Config::get("constants.PRODUCT_TYPE_CONFIGURABLE")]))
+                                                @elseif(in_array($product->type['id'], [Config::get("constants.PRODUCT_TYPE_CONFIGURABLE")]))
                                                         @if((isset($selectCollection) && !$selectCollection->isEmpty()) ||
                                                          (isset($groupedCheckboxCollection) && !$groupedCheckboxCollection->isEmpty()))
                                                             <li style="margin: 0% 5% 0% 5%">
@@ -312,26 +353,6 @@
             <!--end::Portlet-->
         </div>
     </div>
-
-
-    {!! Form::open(['route' => 'orderproduct.store']) !!}
-
-    {!! Form::token() !!}
-
-    <div class="form-group">
-        {!! Form::label('email', 'E-mail Address') !!}
-        {!! Form::hidden('product_id', 259, ['class' => 'form-control']) !!}
-    </div>
-
-    <div class="form-group">
-        {!! Form::textarea('msg', null, ['class' => 'form-control']) !!}
-    </div>
-
-    {!! Form::submit('Submit', ['class' => 'btn btn-info']) !!}
-
-    {!! Form::close() !!}
-
-
 @endsection
 @section("page-js")
     {{--<script src="{{ mix('/js/product-show.js') }}"></script>--}}

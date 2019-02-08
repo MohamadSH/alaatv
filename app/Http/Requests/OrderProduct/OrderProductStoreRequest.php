@@ -15,17 +15,7 @@ class OrderProductStoreRequest extends FormRequest
      */
     public function authorize()
     {
-        $user = Auth()->user();
-
-        if ($user) {
-            if ($user->can(config("constants.INSERT_ORDERPRODUCT_ACCESS"))) {
-                $this->hasPermission = true;
-            } else {
-                $this->hasPermission = false;
-            }
-            return true;
-        }
-        return false;
+        return true;
     }
 
     /**
@@ -43,19 +33,6 @@ class OrderProductStoreRequest extends FormRequest
             'extraAttribute.*.id' => 'sometimes|numeric',
             'withoutBon' => 'sometimes|boolean'
         ];
-
-        /*$rules = [
-            'product_id' => 'required|exists:products,id|activeProduct',
-            'products.*' => 'sometimes|exists:products,id|activeProduct',
-            'attribute.*' => 'sometimes|exists:attributevalues,id',
-            'extraAttribute.*.id' => 'sometimes|exists:attributevalues,id',
-            'withoutBon' => 'sometimes|boolean'
-        ];
-        if ($this->hasPermission) {
-            $rules['order_id'] = 'required|exists:orders,id';
-            $rules['product_id'] = 'required|exists:products,id';
-            $rules['products.*'] = 'sometimes|exists:products,id';
-        }*/
         return $rules;
     }
 }

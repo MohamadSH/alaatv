@@ -17,7 +17,7 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{{action("HomeController@index")}}"> خانه</a>
+                <a href = "{{action("IndexPageController")}}"> خانه</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>

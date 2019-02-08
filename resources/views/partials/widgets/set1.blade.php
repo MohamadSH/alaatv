@@ -34,11 +34,11 @@
                 <div class = "m-widget19__content">
                     <div class = "m-widget19__header">
                         <div class = "m-widget19__user-img">
-                            <img class = "m-widget19__img" src = "{{ $widgetAuthor->photo }}" alt = "{{ $widgetAuthor->full_name }}">
+                            <img class = "m-widget19__img" src = "{{ optional($widgetAuthor)->photo }}" alt = "{{ optional($widgetAuthor)->full_name }}">
                         </div>
                         <div class = "m-widget19__info">
                                             <span class = "m-widget19__username">
-                                            {{ $widgetAuthor->full_name }}
+                                            {{ optional($widgetAuthor)->full_name }}
                                             </span>
                             <br>
                             <span class = "m-widget19__time">

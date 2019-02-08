@@ -23,10 +23,25 @@ class ProductCollection extends Collection
     public function keepOnlyParents(): void
     {
         foreach ($this as $key => $simpleProduct) {
+            $this->removeProductDescendants($simpleProduct);
             $parent = $simpleProduct->parents->first();
-            if (isset($parent) && $this->contains($parent)) {
-                $this->forget($key);
-                $this->removeProductDescendants($simpleProduct);
+            if (isset($parent)) {
+                if ($this->contains($parent)) {
+                    $this->forget($key);
+                } else {
+                    // if all children selected and father not selected then select father and remove all children
+                    $children = $parent->children;
+                    $allChildIsChecked = true;
+                    foreach ($children as $child) {
+                        if (!$this->contains($child)) {
+                            $allChildIsChecked = false;
+                        }
+                    }
+                    if ($allChildIsChecked) {
+                        $this->removeProductDescendants($parent);
+                        $this->push($parent);
+                    }
+                }
             }
         }
     }
@@ -43,8 +58,8 @@ class ProductCollection extends Collection
         $children = $product->children;
 
         foreach ($children as $child) {
-//          $ck = $this->search($child); // didn't work!!
-            $findChildInCollection = $this->where("id" , $child->id);
+          /*$ck = $this->search($child); // didn't work!!*/
+            $findChildInCollection = $this->where('id' , $child->id);
             foreach ($findChildInCollection as $key => $grandChild)
             {
                 $ck = $key ;

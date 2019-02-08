@@ -2,10 +2,7 @@
 
 namespace App\Providers;
 
-use App\Block;
 use App\Bon;
-use App\Classes\Format\webBlockCollectionFormatter;
-use App\Classes\Format\webSetCollectionFormatter;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -35,7 +32,6 @@ class ComposerServiceProvider extends ServiceProvider
 
 
         View::composer('partials.header1', 'App\Http\ViewComposers\HeaderComposer');
-        View::composer('user.profile.profile', 'App\Http\ViewComposers\ProfileComposer');
 
         /**
          *  lessons
@@ -51,6 +47,22 @@ class ComposerServiceProvider extends ServiceProvider
         });
         view()->share('bonName', Bon::getAlaaBonDisplayName());
         view()->share('userIpAddress', Request::ip());
+
+        View::composer([
+            'product.partials.showChildren',
+        ], function ($view) {
+            $colors = [
+                '1' => 'm-switch--primary',
+                '2' => 'm-switch--warning',
+                '3' => 'm-switch--accent',
+                '4' => 'm-switch--success',
+                '5' => 'm-switch--brand',
+                '6' => 'm-switch--info',
+                '7' => 'm-switch--metal',
+                '8' => 'm-switch--danger',
+            ];
+            $view->with(compact('colors'));
+        });
     }
 
     /**

@@ -249,8 +249,9 @@ class ContentController extends Controller
 
             $userCanSeeCounter = optional(auth()->user())->CanSeeCounter();
 
-
-            if (request()->ajax() || true) {
+//            dd($content->set->contents()->active()->get());
+//            dd($videosWithSameSet);
+            if (request()->ajax()) {
                 return $this->response
                     ->setStatusCode(Response::HTTP_OK)
                     ->setContent($content);
