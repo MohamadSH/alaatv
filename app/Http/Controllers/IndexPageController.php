@@ -44,7 +44,7 @@ class IndexPageController extends Controller
 
         $slides = Slideshow::getMainBanner();
 
-        if (request()->ajax()) {
+        if (request()->expectsJson()) {
             return $this->response
                 ->setStatusCode(Response::HTTP_OK)
                 ->setContent([

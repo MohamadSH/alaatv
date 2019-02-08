@@ -16,10 +16,8 @@ use App\Transactionstatus;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use Zarinpal\Zarinpal;
 
@@ -358,7 +356,7 @@ class TransactionController extends Controller
     {
         $result = $this->modify($transaction, $request->all());
 
-        if ($request->ajax()) {
+        if ($request->expectsJson()) {
             return $this->response->setStatusCode($result['statusCode']);
         } else {
             session()->put("success", $result['message']);

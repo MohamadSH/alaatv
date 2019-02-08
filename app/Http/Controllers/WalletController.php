@@ -52,7 +52,7 @@ class WalletController extends Controller
             $done = true;
 
         if ($done) {
-            if ($request->ajax()) {
+            if ($request->expectsJson()) {
                 return $this->response
                     ->setStatusCode(200)
                     ->setContent(["wallet" => $wallet]);
@@ -60,7 +60,7 @@ class WalletController extends Controller
 
             }
         } else {
-            if ($request->ajax()) {
+            if ($request->expectsJson()) {
                 return $this->response
                     ->setStatusCode(503);
             } else {
@@ -111,14 +111,14 @@ class WalletController extends Controller
             $done = true;
 
         if ($done) {
-            if ($request->ajax()) {
+            if ($request->expectsJson()) {
                 return $this->response
                     ->setStatusCode(200);
             } else {
 
             }
         } else {
-            if ($request->ajax()) {
+            if ($request->expectsJson()) {
                 return $this->response
                     ->setStatusCode(503);
             } else {

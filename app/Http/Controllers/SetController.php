@@ -65,7 +65,7 @@ class SetController extends Controller
             'filename' => $this->setting->site->siteLogo,
         ]), '100', '100', null));
 
-        if (request()->ajax() || true) {
+        if (request()->expectsJson() || true) {
             return $this->response
                 ->setStatusCode(Response::HTTP_OK)
                 ->setContent([

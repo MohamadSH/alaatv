@@ -6,18 +6,15 @@ use App\{Afterloginformcontrol,
     Bankaccount,
     Bloodtype,
     Bon,
-    Role,
-    Major,
-    Order,
-    Event,
-    Grade,
-    Gender,
-    Contact,
-    Employeeschedule,
-    Employeetimesheet,
     Classes\Search\UserSearch,
     Classes\SEO\SeoDummyTags,
     Collection\ProductCollection,
+    Contact,
+    Employeeschedule,
+    Employeetimesheet,
+    Event,
+    Gender,
+    Grade,
     Http\Controllers\Auth\RegisterController,
     Http\Requests\EditUserRequest,
     Http\Requests\InsertUserRequest,
@@ -26,8 +23,11 @@ use App\{Afterloginformcontrol,
     Http\Requests\RegisterForSanatiSharifHighSchoolRequest,
     Http\Requests\UserIndexRequest,
     Lottery,
+    Major,
+    Order,
     Product,
     Province,
+    Role,
     Traits\CharacterCommon,
     Traits\DateTrait,
     Traits\Helper,
@@ -204,7 +204,7 @@ class UserController extends Controller
             $response = $this->makeJsonForAndroidApp($items);
             return response()->json($response, Response::HTTP_OK);
         }
-        if (request()->ajax()) {
+        if (request()->expectsJson()) {
             return response(
                 [
                     "items"     => $items,
@@ -508,7 +508,7 @@ class UserController extends Controller
                 abort(403);
         }
 
-        if ($request->ajax()) {
+        if ($request->expectsJson()) {
             return response($user, Response::HTTP_OK);
         }
 
@@ -1591,7 +1591,7 @@ class UserController extends Controller
             session()->flash("error", $message);
         }
 
-        if ($request->ajax()) {
+        if ($request->expectsJson()) {
             return response(
                 [
                     "newPhoto" => isset($newPhotoSrc) ? $newPhotoSrc : null,

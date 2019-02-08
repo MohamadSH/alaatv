@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Block;
-use App\Classes\Format\webBlockCollectionFormatter;
-use App\Classes\Format\webSetCollectionFormatter;
 use App\Classes\SEO\SeoDummyTags;
 use App\Slideshow;
 use App\Traits\MetaCommon;
@@ -55,7 +53,7 @@ class ShopPageController extends Controller
 
         //$slides = collect();
         $slides = Slideshow::getShopBanner();
-        if (request()->ajax()) {
+        if (request()->expectsJson()) {
             return $this->response
                 ->setStatusCode(Response::HTTP_OK)
                 ->setContent([

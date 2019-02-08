@@ -137,7 +137,7 @@ class ProductController extends Controller
             'filename' => $this->setting->site->siteLogo,
         ]), '100', '100', null));
 
-        if (request()->ajax()) {
+        if (request()->expectsJson()()) {
             return $this->response
                 ->setStatusCode(Response::HTTP_OK)
                 ->setContent([
@@ -329,7 +329,7 @@ class ProductController extends Controller
 
         $this->generateSeoMetaTags($product);
 
-        if (request()->ajax()) {
+        if (request()->expectsJson()()) {
             return $this->response
                 ->setStatusCode(Response::HTTP_OK)
                ->setContent($product);
@@ -442,7 +442,7 @@ class ProductController extends Controller
         if ($product->delete())
             $done = true;
 
-        if ($request->ajax()) {
+        if ($request->expectsJson()()) {
             if ($done)
                 return $this->response->setStatusCode(Response::HTTP_OK); else
                 return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);

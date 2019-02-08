@@ -31,7 +31,6 @@ use App\{Assignmentstatus,
     Notifications\GiftGiven,
     Notifications\UserRegisterd,
     Order,
-    Orderproduct,
     Orderstatus,
     Paymentmethod,
     Paymentstatus,
@@ -42,10 +41,8 @@ use App\{Assignmentstatus,
     Productvoucher,
     Question,
     Role,
-    Slideshow,
     Traits\APIRequestCommon,
     Traits\CharacterCommon,
-    Traits\DateTrait,
     Traits\Helper,
     Traits\ProductCommon,
     Traits\RequestCommon,
@@ -6967,7 +6964,7 @@ class HomeController extends Controller
             } else
                 session()->put("error", $giftOrderMessage);
 
-            if ($request->ajax()) {
+            if ($request->expectsJson()) {
                 if ($giftOrderDone) {
                     return $this->response
                         ->setStatusCode(200);

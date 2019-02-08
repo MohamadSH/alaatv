@@ -140,7 +140,7 @@ class EventresultController extends Controller
         if ($eventResult->save()) {
             if ($userUpdate)
                 $user->update();
-            if ($request->ajax()) {
+            if ($request->expectsJson()) {
                 $participationCode = $eventResult->participationCode;
                 $message = "نتیجه با موفقیت درج شد";
                 $status = 200;
@@ -148,14 +148,14 @@ class EventresultController extends Controller
                 session()->put("success", "کارنامه با موفقیت درج شد");
             }
         } else {
-            if ($request->ajax()) {
+            if ($request->expectsJson()) {
                 $message = "خطا در درج نتیجه";
                 $status = 503;
             } else {
                 session()->put("error", \Lang::get("responseText.Database error."));
             }
         }
-        if ($request->ajax())
+        if ($request->expectsJson())
             return $this->response->setStatusCode($status)
                                   ->setContent([
                                                    "message"           => $message,
@@ -201,7 +201,7 @@ class EventresultController extends Controller
     {
         $eventResult->fill($request->all());
         $updateResult = $eventResult->update();
-        if ($request->ajax()) {
+        if ($request->expectsJson()) {
             return $this->response->setStatusCode(200);
         } else {
             if ($updateResult) {

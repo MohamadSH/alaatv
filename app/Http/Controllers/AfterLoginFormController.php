@@ -22,7 +22,7 @@ class AfterLoginFormController extends Controller
         $sideBarMode = "closed";
         $section = "afterLoginForm";
 
-        if ($request->ajax()) {
+        if ($request->expectsJson()) {
             return response([
                 'afterLoginFormFields' => $afterLoginFormFields,
             ], Response::HTTP_OK);

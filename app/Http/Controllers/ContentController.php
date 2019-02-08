@@ -5,12 +5,10 @@ namespace App\Http\Controllers;
 use App\Classes\Search\ContentSearch;
 use App\Classes\Search\ContentsetSearch;
 use App\Classes\Search\ProductSearch;
-use App\Collection\ContentCollection;
 use App\Content;
 use App\Contentset;
 use App\Contenttype;
 use App\Http\Requests\{ContentIndexRequest, EditContentRequest, InsertContentRequest, Request};
-use App\Product;
 use App\Traits\{APIRequestCommon,
     CharacterCommon,
     FileCommon,
@@ -23,12 +21,9 @@ use App\User;
 use App\Websitesetting;
 use Carbon\Carbon;
 use Exception;
-use http\Exception\InvalidArgumentException;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\{Cache, Config, View};
+use Illuminate\Support\Facades\{Config};
 use Illuminate\Support\Str;
 use Jenssegers\Agent\Agent;
 
@@ -164,7 +159,7 @@ class ContentController extends Controller
         $result->offsetSet('product', $this->productSearch->get($filters));
 
         $pageName = "content-search";
-        if (request ()->ajax() || true) {
+        if (request()->expectsJson() || true) {
             return $this->response
                 ->setStatusCode(Response::HTTP_OK)
                 ->setContent([
@@ -251,7 +246,7 @@ class ContentController extends Controller
 
 //            dd($content->set->contents()->active()->get());
 //            dd($videosWithSameSet);
-            if (request()->ajax()) {
+            if (request()->expectsJson()) {
                 return $this->response
                     ->setStatusCode(Response::HTTP_OK)
                     ->setContent($content);

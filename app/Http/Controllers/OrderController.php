@@ -3,19 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Afterloginformcontrol;
-use App\Bankaccount;
-use App\Bon;
 use App\Classes\OrderProduct\RefinementProduct\RefinementFactory;
 use App\Classes\Pricing\Alaa\AlaaInvoiceGenerator;
 use App\Collection\OrderproductCollection;
 use App\Coupon;
-use App\Helpers\ENPayment;
 use App\Http\Requests\CheckoutReviewRequest;
 use App\Http\Requests\DonateRequest;
 use App\Http\Requests\EditOrderRequest;
 use App\Http\Requests\InsertTransactionRequest;
 use App\Http\Requests\SubmitCouponRequest;
-use App\Notifications\InvoicePaid;
 use App\Notifications\OrderStatusChanged;
 use App\Notifications\PostCodeNotification;
 use App\Order;
@@ -41,17 +37,13 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
-use SEO;
 use Zarinpal\Drivers\SoapDriver;
-use Zarinpal\Zarinpal;
 
 class OrderController extends Controller
 {
@@ -866,7 +858,7 @@ class OrderController extends Controller
             $response = response(["invoiceInfo"=>$invoiceInfo] , Response::HTTP_OK);
         }
 
-        if($request->ajax() || true)
+        if ($request->expectsJson() || true)
             return $response;
 
         return view("order.checkout.review", compact("invoiceInfo"));
@@ -967,7 +959,7 @@ class OrderController extends Controller
             $response = response(["message"=>"Order not found"] , Response::HTTP_BAD_REQUEST);
         }
 
-        if($request->ajax())
+        if ($request->expectsJson())
             return $response;
 
         return view("order.checkout.payment" ,
@@ -1043,7 +1035,7 @@ class OrderController extends Controller
             // the new order was not created and no action is necessary.in fact he just lost his last order to add to.
         }*/
 
-        if ($request->ajax()) {
+        if ($request->expectsJson()) {
             if (!$failed)
                 return $this->response
                     ->setStatusCode(200);
@@ -1157,7 +1149,7 @@ class OrderController extends Controller
             session()->put('couponMessageError', "کد وارد شده اشتباه می باشد");
         }
 
-        if($request->ajax())
+        if ($request->expectsJson())
             return response([],Response::HTTP_OK);
         else
             return redirect()->back();
@@ -1199,7 +1191,7 @@ class OrderController extends Controller
             $sessionIndex = "couponMessageError";
         }
 
-        if($request->ajax())
+        if ($request->expectsJson())
         {
            return response()->setStatusCode($responseStatusCode)->setContent($responseMessage);
         }
