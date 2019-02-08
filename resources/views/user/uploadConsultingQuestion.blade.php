@@ -13,7 +13,7 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{{action("IndexPageController")}}">@lang('page.Home')</a>
+                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
@@ -42,9 +42,8 @@
                     <p>شما می توانید پس از ضبط صوتی سؤال مشاوره ای خود ، فایل آن را از طریق پنل زیر آپلود نمایید. فایل
                         صوتی سؤال شما در فیلم مشاوره ای با ذکر نام شما پخش خواهد شد و سپس مشاور محترم پاسخ سؤال شما را
                         به صورت تصویری خواهند داد.</p>
-                    <p>پس از آپلود موفقیت آمیز سؤال ، می توانید وضعیت آن را با مراجعه به <a
-                                href="{{action("UserController@uploads")}}" class="btn red btn-outline">لیست سوالات
-                            خود</a> مشاهده نمایید.</p>
+                    <p>پس از آپلود موفقیت آمیز سؤال ، می توانید وضعیت آن را با مراجعه به <a href = "{{action("Web\UserController@uploads")}}" class = "btn red btn-outline">لیست سوالات
+                                                                                                                                                                            خود</a> مشاهده نمایید.</p>
                 </div>
                 <form id="my-awesome-dropzone" class="col-md-12 dropzone dropzone-file-area needsclick dz-clickable">
                     {{ csrf_field() }}
@@ -88,8 +87,9 @@
                     <p>پس از تکمیل اطلاعات پروفایل با مراجعه به این صفحه قادر خواهید بود سؤالات مشاوره ای خود را ، که به
                         صورت فایل صوتی ضبط نموده اید ، آپلود نموده و همچنین به لیست سؤالات مشاوره ای خود دسترسی داشته
                         باشید </p>
-                    <p><a href="{{ action("UserController@show",Auth::user()) }}" class="btn green-haze btn-outline">تکمیل
-                            اطلاعات پروفایل</a></p>
+                    <p>
+                        <a href = "{{ action("Web\UserController@show",Auth::user()) }}" class = "btn green-haze btn-outline">تکمیل
+                                                                                                                              اطلاعات پروفایل</a></p>
                 </div>
             </div>
         @endif
@@ -110,7 +110,7 @@
         Dropzone.options.myAwesomeDropzone = { // The camelized version of the ID of the form element
 
             // The configuration we've talked about above
-            url: "{{action("UseruploadController@store")}}",
+            url: "{{action("Web\UseruploadController@store")}}",
             paramName: "consultingAudioQuestions",
             autoProcessQueue: false,
             uploadMultiple: false,

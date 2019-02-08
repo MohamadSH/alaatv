@@ -14,7 +14,7 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{{action("IndexPageController")}}">@lang('page.Home')</a>
+                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
@@ -35,9 +35,8 @@
             <div class="portlet light">
                 <div class="portlet-body">
                     {{(isset($params["pointGiven"]) && $params["pointGiven"])?"✅":""}}<span class="bold"
-                                                                                            style="font-size: larger">1.</span>&nbsp;&nbsp;<a
-                            class="btn btn-default" href="{{action("HomeController@pointBot")}}"
-                            {{(isset($params["pointGiven"]) && $params["pointGiven"])?"disabled":""}} target="_blank">اهدای
+                                                                                            style="font-size: larger">1.</span>&nbsp;&nbsp;<a class = "btn btn-default" href = "{{action("Web\HomeController@pointBot")}}"
+                                                                                                                                              {{(isset($params["pointGiven"]) && $params["pointGiven"])?"disabled":""}} target="_blank">اهدای
                         امتیاز به کاربران</a>
                     <hr>
                 </div>

@@ -2,8 +2,7 @@
 @foreach($items as $item)
     <tr>
         <th></th>
-        <td>@if(isset($item->name) && strlen($item->name)>0) <a target="_blank"
-                                                                href="{{action("ProductController@show" , $item)}}"> {{ $item->name }} </a> @else
+        <td>@if(isset($item->name) && strlen($item->name)>0) <a target="_blank" href = "{{action("Web\ProductController@show" , $item)}}"> {{ $item->name }} </a> @else
                 <span class="label label-sm label-danger"> درج نشده </span> @endif </td>
         <td>@if(isset($item->basePrice) && strlen($item->basePrice)>0) {{ $item->basePrice }} @else <span
                     class="label label-sm label-danger"> درج نشده </span> @endif </td>
@@ -25,8 +24,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a target="_blank" class="btn default btn-outline"
-                                   href="{{action("HomeController@download" , ["content"=>"عکس محصول","fileName"=>$item->image ])}}">
+                                <a target="_blank" class="btn default btn-outline" href = "{{action("Web\HomeController@download" , ["content"=>"عکس محصول","fileName"=>$item->image ])}}">
                                     <i class="icon-link"></i>
                                 </a>
                             </li>
@@ -86,8 +84,7 @@
                     class="label label-sm label-danger"> غیر فعال </span> @endif</td>
         <td>@if(isset($item->amount) ) {{$item->amount}} @else  بدون محدودیت  @endif</td>
         <td>@if(isset($item->file) && strlen($item->file)>0)
-                <a target="_blank"
-                   href="{{action("HomeController@download" , ["content"=>"کاتالوگ محصول","fileName"=>$item->file ])}}"
+                <a target="_blank" href = "{{action("Web\HomeController@download" , ["content"=>"کاتالوگ محصول","fileName"=>$item->file ])}}"
                    class="btn btn-icon-only blue"><i class="fa fa-download"></i></a>@else <span
                         class="label label-sm label-danger"> درج نشده </span> @endif</td>
         <td>@if(isset($item->slogan) && strlen($item->slogan)>0) {!!   $item->slogan !!} @else <span
@@ -117,7 +114,7 @@
                 <ul class="dropdown-menu" role="menu">
                     @permission((Config::get('constants.SHOW_PRODUCT_ACCESS')))
                     <li>
-                        <a target="_blank" href="{{action("ProductController@edit" , $item)}}">
+                        <a target = "_blank" href = "{{action("Web\ProductController@edit" , $item)}}">
                             <i class="fa fa-pencil"></i> اصلاح </a>
                     </li>
                     @endpermission
@@ -129,7 +126,7 @@
                     @endpermission
                     @permission((Config::get('constants.COPY_PRODUCT_ACCESS')))
                     <li>
-                        <a class="copyProduct" data-action="{{action("ProductController@copy" , $item)}}"
+                        <a class = "copyProduct" data-action = "{{action("Web\ProductController@copy" , $item)}}"
                            data-target="#copyProductModal" data-toggle="modal">
                             <i class="fa fa-files-o"></i> کپی از محصول </a>
                     </li>
@@ -146,8 +143,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" data-dismiss="modal" class="btn btn-outline dark">خیر</button>
-                        <button type="button" data-dismiss="modal" class="btn green"
-                                onclick="removeProduct('{{action("ProductController@destroy" , $item)}}');">بله
+                        <button type="button" data-dismiss="modal" class="btn green" onclick = "removeProduct('{{action("Web\ProductController@destroy" , $item)}}');">بله
                         </button>
                     </div>
                 </div>

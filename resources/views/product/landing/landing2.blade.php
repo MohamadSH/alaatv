@@ -173,10 +173,10 @@
                             </div>
                             <div class="arrow-down arrow-grey"></div>
                             <div class="price-table-footer">
-                                {{--<a href="{{action("ProductController@show", 184) }}" class="btn green btn-outline sbold uppercase price-button">اطلاعات اردو دختران</a>--}}
+                                {{--<a href="{{action("Web\ProductController@show", 184) }}" class="btn green btn-outline sbold uppercase price-button">اطلاعات اردو دختران</a>--}}
 
-                                {{--<a href="{{action("ProductController@show", 184) }}" class="btn green btn-outline price-button sbold uppercase">اطلاعت اردو پسران</a>--}}
-                                <a href="{{action("ProductController@show", 184) }}"
+                                {{--<a href="{{action("Web\ProductController@show", 184) }}" class="btn green btn-outline price-button sbold uppercase">اطلاعت اردو پسران</a>--}}
+                                <a href = "{{action("Web\ProductController@show", 184) }}"
                                    class="btn green btn-outline sbold uppercase price-button">اطلاعات اردوی حضوری</a>
                             </div>
                         </div>
@@ -228,7 +228,7 @@
                     {{--</div>--}}
                     {{--<div class="arrow-down arrow-grey"></div>--}}
                     {{--<div class="price-table-footer">--}}
-                    {{--<a href="{{action("ProductController@show", Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_ROOT")) }}?dp={{$gheireHozoori}}" class="btn green btn-outline sbold uppercase price-button">اطلاعات اردوطلایی غیر حضوری</a>--}}
+                    {{--<a href="{{action("Web\ProductController@show", Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_ROOT")) }}?dp={{$gheireHozoori}}" class="btn green btn-outline sbold uppercase price-button">اطلاعات اردوطلایی غیر حضوری</a>--}}
                     {{--</div>--}}
                     {{--</div>--}}
                     {{--</div>--}}

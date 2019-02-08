@@ -17,7 +17,7 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{{action("IndexPageController")}}">@lang('page.Home')</a>
+                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
@@ -229,7 +229,7 @@
                 if ($.inArray(parseInt(majorCode), insertedMajorCodes) == -1)
                     $.ajax({
                         type: "GET",
-                        url: "{{action("MajorController@index")}}",
+                        url: "{{action("Web\MajorController@index")}}",
                         data: {majorCode: [majorCode], majorParent: parentMajorId},
                         statusCode: {
                             //The status for when action was successful

@@ -17,12 +17,12 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{{action("IndexPageController")}}">@lang('page.Home')</a>
+                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
                 <i class="fa fa-list-alt"></i>
-                <a href="{{action("HomeController@consultantEntekhabReshteList")}}">لیست دانش آموزان</a>
+                <a href = "{{action("Web\HomeController@consultantEntekhabReshteList")}}">لیست دانش آموزان</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
@@ -111,7 +111,7 @@
     @include("systemMessage.flash")
     <div class="row">
         <div class="col-md-12">
-            <form method="POST" action="{{action("HomeController@consultantStoreEntekhabReshte")}}">
+            <form method = "POST" action = "{{action("Web\HomeController@consultantStoreEntekhabReshte")}}">
                 <input type="hidden" value="1" name="parentMajor">
                 <input type="hidden" value="{{$user->id}}" name="user">
                 {{ csrf_field() }}
@@ -333,7 +333,7 @@
                 if ($.inArray(parseInt(majorCode), insertedMajorCodes) == -1)
                     $.ajax({
                         type: "GET",
-                        url: "{{action("MajorController@index")}}",
+                        url: "{{action("Web\MajorController@index")}}",
                         data: {majorCode: [majorCode], majorParent: parentMajorId},
                         statusCode: {
                             //The status for when action was successful

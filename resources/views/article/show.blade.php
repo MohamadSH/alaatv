@@ -12,11 +12,11 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{{action("IndexPageController")}}">@lang('page.Home')</a>
+                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
-                <a href="{{action("ArticleController@showList")}}">لیست مقالات</a>
+                <a href = "{{action("Web\ArticleController@showList")}}">لیست مقالات</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
@@ -145,7 +145,7 @@
                         <ul>
                             @foreach($otherArticles as $otherArticle)
                                 <li>
-                                    <a href="{{action("ArticleController@show", $otherArticle)}}">{{$otherArticle->title}}</a>
+                                    <a href = "{{action("Web\ArticleController@show", $otherArticle)}}">{{$otherArticle->title}}</a>
                                 </li>
                             @endforeach
                         </ul>

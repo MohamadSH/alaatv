@@ -97,8 +97,7 @@
                                                 </td>
                                                 <td class="hidden-xs"> {{$consultation->CreatedAt_Jalali()}} </td>
                                                 <td style="direction: ltr; width: 25%;">
-                                                    <a class="hidden"
-                                                       href="{{action("HomeController@download" , ["content"=>"سؤال مشاوره ای","fileName"=>$consultation->file ])}}"
+                                                    <a class="hidden" href = "{{action("Web\HomeController@download" , ["content"=>"سؤال مشاوره ای","fileName"=>$consultation->file ])}}"
                                                        id="link_{{$counter}}"></a>
                                                     <div id="jquery_jplayer_{{$counter}}" class="jp-jplayer"></div>
                                                     <div id="jp_container_{{$counter}}" class="jp-audio-stream"

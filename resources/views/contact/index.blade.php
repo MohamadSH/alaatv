@@ -12,7 +12,7 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{{action("HomeController@admin")}}">مدیریت کاربران</a>
+                <a href = "{{action("Web\HomeController@admin")}}">مدیریت کاربران</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
@@ -36,7 +36,7 @@
                     </div>
                     <div class="actions">
                         <div class="btn-group">
-                            <a class="btn btn-sm dark dropdown-toggle" href="{{action("HomeController@admin")}}"> بازگشت
+                            <a class = "btn btn-sm dark dropdown-toggle" href = "{{action("Web\HomeController@admin")}}"> بازگشت
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         </div>
@@ -83,8 +83,8 @@
                                         <td>
                                             <div class="form-group">
                                                 <div class="col-md-4">
-                                                    <a class="btn"
-                                                       href="{{action("ContactController@edit", $contact)}}"><i
+                                                    <a class="btn" href = "{{action("Web\ContactController@edit", $contact)}}">
+                                                        <i
                                                                 class="fa fa-pencil"></i> اصلاح </a>
                                                 </div>
                                                 <div class="col-md-1">

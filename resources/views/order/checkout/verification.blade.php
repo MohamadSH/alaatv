@@ -94,7 +94,7 @@
                                                     مشاهده نمایید .
                                                 </p>
                                                 @if($result["tryAgain"])
-                                                    <a href="{{action("OrderController@checkoutAuth")}}"
+                                                    <a href = "{{action("Web\OrderController@checkoutAuth")}}"
                                                        class="btn green btn-outline">پرداخت مجدد</a>
                                                 @endif
                                             </div>
@@ -158,7 +158,7 @@
                                                             لطفا دوباره اقدام نمایید.</h4>
                                                     @endif
 
-                                                    <a href="{{action("OrderController@checkoutAuth")}}"
+                                                    <a href = "{{action("Web\OrderController@checkoutAuth")}}"
                                                        class="btn green btn-outline">ثبت مجدد</a>
                                                 @endif
                                                 @if(isset($result["isAdminOrder"]) && !$result["isAdminOrder"])
@@ -207,7 +207,7 @@
                                                             لطفا دوباره اقدام نمایید.</h4>
                                                     @endif
 
-                                                    <a href="{{action("OrderController@checkoutAuth")}}"
+                                                    <a href = "{{action("Web\OrderController@checkoutAuth")}}"
                                                        class="btn green btn-outline">ثبت مجدد</a>
                                                 @endif
                                                 @if(isset($result["isAdminOrder"]) &&  !$result["isAdminOrder"])
@@ -255,7 +255,7 @@
                                                         <h4 class="bold">متاسفانه خطایی در ثبت سفارش شما اتفاق افتاد
                                                             لطفا دوباره اقدام نمایید.</h4>
                                                     @endif
-                                                    <a href="{{action("OrderController@checkoutAuth")}}"
+                                                    <a href = "{{action("Web\OrderController@checkoutAuth")}}"
                                                        class="btn green btn-outline">ثبت مجدد</a>
                                                 @endif
                                                 @if(isset($result["isAdminOrder"]) &&  !$result["isAdminOrder"])

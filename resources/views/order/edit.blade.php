@@ -25,16 +25,15 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{{action("IndexPageController")}}">@lang('page.Home')</a>
+                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
-                <a href="{{action("HomeController@adminOrder")}}">پنل مدیریت سفارش ها</a>
+                <a href = "{{action("Web\HomeController@adminOrder")}}">پنل مدیریت سفارش ها</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
-                <span>اصلاح اطلاعات سفارش <a target="_blank"
-                                             href="{{action("UserController@edit" , $order->user)}}">{{$order->user->firstName}} {{$order->user->lastName}}</a></span>
+                <span>اصلاح اطلاعات سفارش <a target="_blank" href = "{{action("Web\UserController@edit" , $order->user)}}">{{$order->user->firstName}} {{$order->user->lastName}}</a></span>
             </li>
         </ul>
     </div>
@@ -148,8 +147,7 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <a target="_blank"
-                                               href="@if($orderproduct->product->hasParents()) {{action("ProductController@show" , $orderproduct->product->parents->first())}}@else {{action("ProductController@show" , $orderproduct->product)}} @endif"> {{$orderproduct->product->name}} </a>
+                                            <a target="_blank" href = "@if($orderproduct->product->hasParents()) {{action("Web\ProductController@show" , $orderproduct->product->parents->first())}}@else {{action("Web\ProductController@show" , $orderproduct->product)}} @endif"> {{$orderproduct->product->name}} </a>
                                         </td>
                                         <td class="hidden-xs">
                                             @if($order->orderproducts)
@@ -207,7 +205,7 @@
                                             @endif
                                         </td>
                                         <td class="text-center">
-                                            <a href="{{action("OrderproductController@edit" , $orderproduct)}}"
+                                            <a href = "{{action("Web\OrderproductController@edit" , $orderproduct)}}"
                                                class="btn blue btn-sm btn-outline sbold uppercase">
                                                 <i class="fa fa-pencil-square-o"></i> اصلاح </a>
                                             <button class="btn red btn-sm btn-outline sbold removeOrderproduct"
@@ -528,8 +526,8 @@
                                             <td style="text-align: center">@if(strlen($transaction->managerComment)>0){{$transaction->managerComment}} @else
                                                     <span class="label label-sm label-info "> ندارد </span> @endif</td>
                                             <td style="text-align: center">
-                                                <a target="_blank" class="edit"
-                                                   href="{{action("TransactionController@edit" , $transaction)}}"><i
+                                                <a target="_blank" class="edit" href = "{{action("Web\TransactionController@edit" , $transaction)}}">
+                                                    <i
                                                             class="fa fa-pencil-square fa-lg font-green"
                                                             aria-hidden="true"></i></a>
                                             </td>

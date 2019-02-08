@@ -26,14 +26,14 @@
                                     <ul class="dropdown-menu pull-right" role="menu">
                                         @if(strlen($assignment->questionFile)>0)
                                             <li>
-                                                <a href="{{action("HomeController@download" , ["content"=>"تمرین","fileName"=>$assignment->questionFile ])}}">دانلود
-                                                    تمرین </a>
+                                                <a href = "{{action("Web\HomeController@download" , ["content"=>"تمرین","fileName"=>$assignment->questionFile ])}}">دانلود
+                                                                                                                                                                    تمرین </a>
                                             </li>
                                         @endif
                                         @if(strlen($assignment->solutionFile)>0)
                                             <li>
-                                                <a href="{{action("HomeController@download" , ["content"=>"پاسخ تمرین","fileName"=>$assignment->solutionFile ])}}">دانلود
-                                                    کلید تمرین </a>
+                                                <a href = "{{action("Web\HomeController@download" , ["content"=>"پاسخ تمرین","fileName"=>$assignment->solutionFile ])}}">دانلود
+                                                                                                                                                                         کلید تمرین </a>
                                             </li>
                                         @endif
                                         @if(strlen($assignment->analysisVideoLink)>0)
@@ -75,11 +75,9 @@
                     <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
             <td>@if(isset($assignment->numberOfQuestions) && strlen($assignment->numberOfQuestions)>0) {{ $assignment->numberOfQuestions }} @else
                     <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
-            <td>@if(isset($assignment->questionFile) && strlen($assignment->questionFile)>0) <a
-                        href="{{action("HomeController@download" , ["content"=>"تمرین","fileName"=>$assignment->questionFile ])}}">
+            <td>@if(isset($assignment->questionFile) && strlen($assignment->questionFile)>0) <a href = "{{action("Web\HomeController@download" , ["content"=>"تمرین","fileName"=>$assignment->questionFile ])}}">
                     دانلود </a> @else <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
-            <td>@if(isset($assignment->solutionFile) && strlen($assignment->solutionFile)>0) <a
-                        href="{{action("HomeController@download" , ["content"=>"پاسخ تمرین","fileName"=>$assignment->solutionFile ])}}">
+            <td>@if(isset($assignment->solutionFile) && strlen($assignment->solutionFile)>0) <a href = "{{action("Web\HomeController@download" , ["content"=>"پاسخ تمرین","fileName"=>$assignment->solutionFile ])}}">
                     دانلود </a> @else <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
             <td>@if(isset($assignment->analysisVideoLink) && strlen($assignment->analysisVideoLink)>0) <a
                         href="{{ $assignment->analysisVideoLink }}"> دانلود </a> @else <span
@@ -106,7 +104,7 @@
                     <ul class="dropdown-menu" role="menu">
                         @permission((Config::get('constants.SHOW_ASSIGNMENT_ACCESS')))
                         <li>
-                            <a href="{{action("AssignmentController@edit" , $assignment)}}">
+                            <a href = "{{action("Web\AssignmentController@edit" , $assignment)}}">
                                 <i class="fa fa-pencil"></i> اصلاح </a>
                         </li>
                         @endpermission
@@ -128,8 +126,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" data-dismiss="modal" class="btn btn-outline dark">خیر</button>
-                            <button type="button" data-dismiss="modal" class="btn green"
-                                    onclick="removeAssignment('{{action("AssignmentController@destroy" , $assignment)}}');">
+                            <button type="button" data-dismiss="modal" class="btn green" onclick = "removeAssignment('{{action("Web\AssignmentController@destroy" , $assignment)}}');">
                                 بله
                             </button>
                         </div>

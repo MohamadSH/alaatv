@@ -18,10 +18,10 @@ class OrderCheckoutPayment
     public function handle($request, Closure $next , $guard=null)
     {
         $previousPath = url()->previous();
-        if (strcmp($previousPath, action("OrderController@checkoutReview")) != 0 &&
-            strcmp($previousPath, action("OrderController@checkoutPayment")) != 0)
+        if (strcmp($previousPath, action("Web\OrderController@checkoutReview")) != 0 &&
+            strcmp($previousPath, action("Web\OrderController@checkoutPayment")) != 0)
         {
-            return redirect(action("OrderController@checkoutReview"));
+            return redirect(action("Web\OrderController@checkoutReview"));
         }
 
         if (Auth::guard($guard)->check())
@@ -39,7 +39,7 @@ class OrderCheckoutPayment
                 $request->offsetSet("order_id" , $openOrder->id);
             }
         } else {
-            return redirect(action("OrderController@checkoutAuth"));
+            return redirect(action("Web\OrderController@checkoutAuth"));
         }
 
         return $next($request);

@@ -35,11 +35,11 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{{action("IndexPageController")}}">@lang('page.Home')</a>
+                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
-                <a href="{{action("HomeController@adminContent")}}">پنل مدیریتی</a>
+                <a href = "{{action("Web\HomeController@adminContent")}}">پنل مدیریتی</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
@@ -47,8 +47,7 @@
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
-                <span><a target="_blank"
-                         href="{{action("ContentController@show" , $content->id)}}">{{$content->name}}</a></span>
+                <span><a target="_blank" href = "{{action("Web\ContentController@show" , $content->id)}}">{{$content->name}}</a></span>
             </li>
         </ul>
     </div>

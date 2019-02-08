@@ -31,7 +31,7 @@
                 <ul class="dropdown-menu" role="menu">
                     @permission((Config::get('constants.SHOW_ATTRIBUTEGROUP_ACCESS')))
                     <li>
-                        <a href="{{action("AttributegroupController@edit" , $attributegroup)}}">
+                        <a href = "{{action("Web\AttributegroupController@edit" , $attributegroup)}}">
                             <i class="fa fa-pencil"></i> اصلاح </a>
                     </li>
                     @endpermission
@@ -53,8 +53,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" data-dismiss="modal" class="btn btn-outline dark">خیر</button>
-                        <button type="button" data-dismiss="modal" class="btn green"
-                                onclick="removeAttributegroup('{{action("AttributegroupController@destroy" , $attributegroup)}}');">
+                        <button type="button" data-dismiss="modal" class="btn green" onclick = "removeAttributegroup('{{action("Web\AttributegroupController@destroy" , $attributegroup)}}');">
                             بله
                         </button>
                     </div>

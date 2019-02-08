@@ -166,7 +166,7 @@
                                 </div>
                                 <div class="separator clear-left">
                                     <p class="">
-                                        <a href="{{action("ProductController@show" , $product)}}"
+                                        <a href = "{{action("Web\ProductController@show" , $product)}}"
                                            class="btn btn-lg green hidden-sm"><i class="fa fa-cart-plus"></i>سفارش</a>
                                     </p>
                                 </div>
@@ -222,7 +222,7 @@
             $("#content-table-loading").removeClass("hidden");
             $.ajax({
                 type: "GET",
-                url: "{{action("ContentController@index")}}",
+                url: "{{action("Web\ContentController@index")}}",
                 data: formData,
                 success: function (result) {
                     // console.log(result);

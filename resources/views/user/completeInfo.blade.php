@@ -503,9 +503,8 @@
                                         <ul>
                                             <h5 class="bold">فایل های آپلود شده:</h5>
                                             @forelse($orderFiles as $orderFile)
-                                                {{--<li><a target="_blank" class="btn blue" href="{{action("HomeController@download" , ["content"=>"فایل سفارش","fileName"=>$orderFile->file ])}}"><i class="fa fa-download"></i>{{$orderFile->file}}</a></li>--}}
-                                                <li><a target="_blank"
-                                                       href="{{action("HomeController@download" , ["content"=>"فایل سفارش","fileName"=>$orderFile->file ])}}">{{$orderFile->file}}</a>
+                                                {{--<li><a target="_blank" class="btn blue" href="{{action("Web\HomeController@download" , ["content"=>"فایل سفارش","fileName"=>$orderFile->file ])}}"><i class="fa fa-download"></i>{{$orderFile->file}}</a></li>--}}
+                                                <li><a target="_blank" href = "{{action("Web\HomeController@download" , ["content"=>"فایل سفارش","fileName"=>$orderFile->file ])}}">{{$orderFile->file}}</a>
                                                 </li>
                                             @empty
                                                 <p class="bold font-red-mint">تاکنون فایلی آپلود نشده است</p>

@@ -12,11 +12,11 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{{action("IndexPageController")}}">@lang('page.Home')</a>
+                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
-                <a href="{{action("HomeController@adminContent")}}">پنل مدیریتی</a>
+                <a href = "{{action("Web\HomeController@adminContent")}}">پنل مدیریتی</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>

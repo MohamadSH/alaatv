@@ -41,7 +41,7 @@
             @else
         {
             thumb: '{{(isset($item["thumbnail"]))?$item["thumbnail"]:""}}',
-            url: '{{action("ContentController@show" , $item["content"])}}',
+            url: '{{action("Web\ContentController@show" , $item["content"])}}',
             title: ' {{($item["content"]->display_name)}}',
             duration: '20:00'
         },
@@ -62,7 +62,7 @@
             endAction: 'related',
 
             shareTitle: '{{ $video->display_name }}',
-            shareUrl: '{{action("ContentController@show" , $video)}}',
+            shareUrl: '{{action("Web\ContentController@show" , $video)}}',
             shareEmbed: '<iframe src="{{action('ContentController@embed' , $video)}}" width="640" height="360" frameborder="0" allowfullscreen></iframe>'
         });
     });

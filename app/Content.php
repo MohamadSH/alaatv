@@ -300,7 +300,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
 
     public function getUrlAttribute($value): string
     {
-        return action("ContentController@show",$this);
+        return action("Web\ContentController@show", $this);
     }
 
     /**

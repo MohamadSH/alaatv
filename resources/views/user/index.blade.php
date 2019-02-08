@@ -20,7 +20,7 @@
         {{--</a>--}}
         {{--</li>--}}
         {{--<li>--}}
-        {{--<a target="_blank" class="btn default btn-outline" href="{{action("HomeController@download" , ["content"=>"عکس پروفایل","fileName"=>$item->photo ])}}">--}}
+        {{--<a target="_blank" class="btn default btn-outline" href="{{action("Web\HomeController@download" , ["content"=>"عکس پروفایل","fileName"=>$item->photo ])}}">--}}
         {{--<i class="icon-link"></i>--}}
         {{--</a>--}}
         {{--</li>--}}
@@ -92,7 +92,7 @@
                 <ul class="dropdown-menu" role="menu" id="{{$item->id}}">
                     @permission((Config::get('constants.SHOW_USER_ACCESS')))
                     <li>
-                        <a target="_blank" href="{{action("UserController@edit" , $item)}}">
+                        <a target = "_blank" href = "{{action("Web\UserController@edit" , $item)}}">
                             <i class="fa fa-pencil"></i> اصلاح </a>
                     </li>
                     @endpermission
@@ -104,7 +104,8 @@
                     @endpermission
                     @permission((Config::get('constants.INSERT_ORDER_ACCESS')))
                     <li>
-                        <a target="_blank" href="{{action("OrderController@create" , ["customer_id"=>$item->id])}}"><i
+                        <a target = "_blank" href = "{{action("Web\OrderController@create" , ["customer_id"=>$item->id])}}">
+                            <i
                                     class="fa fa-plus" aria-hidden="true"></i> درج سفارش </a>
                     </li>
                     @endpermission
@@ -122,7 +123,7 @@
                     @endpermission
                     {{--@permission((Config::get('constants.SEND_SMS_TO_USER_ACCESS')))--}}
                     <li>
-                        <a href="{{action("ContactController@index", ["user" => $item])}}">
+                        <a href = "{{action("Web\ContactController@index", ["user" => $item])}}">
                             <i class="fa fa-address-book"></i> دفترچه تلفن </a>
                     </li>
                     {{--@endpermission--}}
