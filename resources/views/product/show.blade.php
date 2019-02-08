@@ -58,7 +58,7 @@
                                 <div class = "col-lg-6">
                                     <div class = "m-demo" data-code-preview = "true" data-code-html = "true" data-code-js = "false">
                                         <div class = "m-demo__preview">
-                                            {!! Form::open(['method' => 'POST','action' => ['OrderproductController@store'] ]) !!}
+                                            {!! Form::open(['method' => 'POST','action' => ['Web\OrderproductController@store'] ]) !!}
                                             <div class="row">
                                                 <div class="col-lg-6">
                                                     <div class="m-list-search">
