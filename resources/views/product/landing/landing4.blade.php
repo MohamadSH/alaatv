@@ -1521,7 +1521,7 @@
     $('a.link').click(function () {
         var id = $(this).data('role');
         $.ajax({
-            url: '{{ action('OrderproductController@store') }}',
+            url: '{{ action('Web\OrderproductController@store') }}',
             type: 'POST',
             // contentType: 'application/json; charset=UTF-8',
             // dataType: 'json',
