@@ -22,7 +22,7 @@ class GatewayFactory
      * @param array $data
      * @return GateWay
      */
-    public function setGateway(string $gateWay, array $data)
+    public function buildGateway(string $gateWay, array $data)
     {
         $className = $this->getGatewayNameSpace($gateWay);
         if (class_exists($className)) {

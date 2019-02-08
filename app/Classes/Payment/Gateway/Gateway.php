@@ -8,7 +8,8 @@
 
 namespace App\Classes\Payment\Gateway;
 
-use mysql_xdevapi\Exception;
+use Illuminate\Support\Facades\Validator;
+use PHPUnit\Framework\Exception;
 
 abstract class Gateway
 {
@@ -17,19 +18,27 @@ abstract class Gateway
      */
     private $result;
 
-    abstract protected function gatewayPaymentRequest(array $data);
+    abstract protected function getPaymentRequestInputRules(array $data): array;
 
-    abstract protected function getAuthority(): string;
+    abstract protected function getPaymentRequestToken(array $data):?string ;
 
     final public function paymentRequest(array $data): array {
         $this->refreshResult();
-        $this->gatewayPaymentRequest($data);
-        $authority = $this->getAuthority();
+        $rules = $this->getPaymentRequestInputRules($data);
+        $this->dataValidation($data, $rules);
+        if (!$this->getResultStatus())
+            return $this->getResult();
+
+        $authority = $this->getPaymentRequestToken($data);
         if (isset($authority)) {
+            $this->setResultStatus(true);
+            $this->addResultMessage('درخواست پرداخت با موفقیت ارسال و نتیجه آن دریافت شد.');
             $this->setResultData('Authority', $authority);
         } else {
-            throw new Exception('Authority not set in class');
+            $this->setResultStatus(false);
+            $this->addResultMessage('مشکل در برقراری ارتباط با درگاه زرین پال');
         }
+
         return $this->getResult();
     }
 
@@ -65,6 +74,16 @@ abstract class Gateway
 
     abstract public function verify(array $data): array;
 
+    protected function dataValidation(array $data , array $rules){
+        $validator = Validator::make($data, $rules);
+        if ($validator->fails()) {
+            $this->setResultStatus(false);
+            foreach ($validator->messages()->getMessages() as $field_name => $messages) {
+                $this->addResultMessage($messages);
+            }
+            $this->setResultData('WrongInput',$data);
+        }
+    }
 
     /********************************
      * manipulate Result
@@ -112,10 +131,9 @@ abstract class Gateway
      * @return array
      */
     final public function getResult(bool $refreshResult=false): array {
-        $result = $this->result;
         if ($refreshResult) {
             $this->refreshResult();
         }
-        return $result;
+        return $this->result;
     }
 }
