@@ -39,6 +39,7 @@
         "league/flysystem-sftp": "~1.0",
         "paulvl/backup": "3.*",
         "propaganistas/laravel-phone": "^4.0",
+      "psr/http-factory": "^1.0",
         "santigarcor/laratrust": "5.0.*",
         "stevebauman/purify": "2.0.*",
         "watson/sitemap": "^2.0",

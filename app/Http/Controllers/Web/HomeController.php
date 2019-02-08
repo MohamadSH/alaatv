@@ -154,9 +154,9 @@ class HomeController extends Controller
     {
         try{
 
-            $order = Order::find(248133);
-            dump("here");
-            dd($order->orderproducts->first()->orderproducttype);
+            return response()->json([
+                'debug' => 1,
+            ]);
 
             $contentsets = [
                 [

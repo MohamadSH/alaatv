@@ -52,10 +52,10 @@ class RoleController extends Controller
         }
     }
 
-    public function edit($role)
+    public function edit($role, HomeController $homeController)
     {
         if ($role->isDefault) {
-            $homeController = new HomeController();
+
             $message = "این نقش قابل اصلاح نمی باشد";
             return $homeController->errorPage($message);
         }
@@ -66,10 +66,9 @@ class RoleController extends Controller
         return view('role.edit', compact('role', 'permissions', 'rolePermissions'));
     }
 
-    public function update(EditRoleRequest $request, $role)
+    public function update(EditRoleRequest $request, $role, HomeController $homeController)
     {
         if ($role->isDefault) {
-            $homeController = new HomeController();
             $message = "این نقش قابل اصلاح نمی باشد";
             return $homeController->errorPage($message);
         }
@@ -86,10 +85,9 @@ class RoleController extends Controller
         return redirect()->back();
     }
 
-    public function destroy($role)
+    public function destroy($role, HomeController $homeController)
     {
         if ($role->isDefault) {
-            $homeController = new HomeController();
             $message = "این نقش قابل حذف نمی باشد";
             return $homeController->errorPage($message);
         }
