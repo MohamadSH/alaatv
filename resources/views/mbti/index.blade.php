@@ -21,9 +21,8 @@
                 </button>
                 <ul class="dropdown-menu" role="menu">
                     <li>
-                        <a target="_blank"
-                           href="{{action("MbtianswerController@create" , ["action"=>"correctExam","user_id"=>$mbtiAnswer->user->id])}}">مشاهده
-                            پاسخنامه</a>
+                        <a target="_blank" href = "{{action("Web\MbtianswerController@create" , ["action"=>"correctExam","user_id"=>$mbtiAnswer->user->id])}}">مشاهده
+                                                                                                                                                               پاسخنامه</a>
                     </li>
                 </ul>
             </div>

@@ -120,7 +120,7 @@
                     <div class="col-md-10 text-center heading-section ftco-animate">
                         <h2 class="h2">دانلود نمونه فیلم همایش</h2>
                         <p>
-                            <a href="{{action("ContentController@show",7884)}}" class="btn btn-primary mt-3 py-1 px-2">
+                            <a href = "{{action("Web\ContentController@show",7884)}}" class = "btn btn-primary mt-3 py-1 px-2">
                                 <img src="{{ asset('assets\extra\landing5\images\دانلود-نمونه-فیلم-همایش.png') }}" class="downloadVideoImage"/>
                             </a>
                         </p>

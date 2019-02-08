@@ -144,10 +144,10 @@ class LoginController extends Controller
         }
 
         if (Auth::user()->completion("afterLoginForm") != 100) {
-            if (strcmp(URL::previous(), action("OrderController@checkoutAuth")) == 0) {
-                $redirectTo = action("OrderController@checkoutCompleteInfo");
+            if (strcmp(URL::previous(), action("Web\OrderController@checkoutAuth")) == 0) {
+                $redirectTo = action("Web\OrderController@checkoutCompleteInfo");
             } else {
-                $redirectTo = action("UserController@completeRegister", ["redirect" => $redirectTo]);
+                $redirectTo = action("Web\UserController@completeRegister", ["redirect" => $redirectTo]);
             }
         }
         return $redirectTo;

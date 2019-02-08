@@ -3,8 +3,7 @@
     <tr id="{{$transaction->id}}">
         <th></th>
         <td>@if(isset($transaction->order->user->id)) @if(strlen($transaction->order->user->reverse_full_name) > 0)
-                <a target="_blank"
-                   href="{{action("UserController@edit" , $transaction->order->user)}}">{{$transaction->order->user->reverse_full_name}}</a> @else
+                <a target="_blank" href = "{{action("Web\UserController@edit" , $transaction->order->user)}}">{{$transaction->order->user->reverse_full_name}}</a> @else
                 <span class="label label-sm label-danger"> درج نشده </span> @endif @endif</td>
         <td>@if($transaction->hasParents())<a target="_blank"
                                               href="{{action('TransactionController@edit' , $transaction->getGrandParent())}}">رفتن
@@ -43,10 +42,12 @@
                 <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
         <td>
             @permission((Config::get('constants.EDIT_TRANSACTION_ACCESS')))
-            <a target="_blank" class="btn btn-success" href="{{action("TransactionController@edit" , $transaction)}}"><i
+            <a target = "_blank" class = "btn btn-success" href = "{{action("Web\TransactionController@edit" , $transaction)}}">
+                <i
                         class="fa fa-pencil"></i> اصلاح </a>
             @if(isset($transaction->order->id))
-                <a target="_blank" class="btn blue" href="{{action("OrderController@edit" , $transaction->order)}}"><i
+                <a target = "_blank" class = "btn blue" href = "{{action("Web\OrderController@edit" , $transaction->order)}}">
+                    <i
                             class="fa fa-pencil"></i> رفتن به سفارش </a>
             @endif
             @endpermission
@@ -58,8 +59,7 @@
                        data-action="{{action('TransactionController@convertToDonate' , $transaction)}}">تبدیل به
                         دونیت</a>
                     <button class="btn purple completeTransactionInfo transactionSpecialButton transactionSpecialButton_{{$transaction->id}}"
-                            data-role="{{$transaction->id}}"
-                            data-action="{{action("TransactionController@completeTransaction" , $transaction->id)}}"
+                            data-role="{{$transaction->id}}" data-action = "{{action("Web\TransactionController@completeTransaction" , $transaction->id)}}"
                             data-target="#completeTransactionInfo" data-toggle="modal">
                         وارد کردن کد تراکنش
                     </button>
@@ -76,7 +76,7 @@
         {{--<ul class="dropdown-menu" role="menu">--}}
         {{--@permission((Config::get('constants.SHOW_ORDER_ACCESS')))--}}
         {{--<li>--}}
-        {{--<a href="{{action("OrderController@edit" , $order)}}">--}}
+        {{--<a href="{{action("Web\OrderController@edit" , $order)}}">--}}
         {{--<i class="fa fa-pencil"></i> اصلاح </a>--}}
         {{--</li>--}}
         {{--@endpermission--}}

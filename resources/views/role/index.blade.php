@@ -32,7 +32,7 @@
                     <ul class="dropdown-menu" role="menu">
                         @role((Config::get("constants.ROLE_ADMIN")))
                         <li>
-                            <a href="{{action("RoleController@edit" , $role)}}">
+                            <a href = "{{action("Web\RoleController@edit" , $role)}}">
                                 <i class="fa fa-pencil"></i> اصلاح </a>
                         </li>
 
@@ -52,8 +52,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" data-dismiss="modal" class="btn btn-outline dark">خیر</button>
-                            <button type="button" data-dismiss="modal" class="btn green"
-                                    onclick="removeRole('{{action("RoleController@destroy" , $role)}}');">بله
+                            <button type="button" data-dismiss="modal" class="btn green" onclick = "removeRole('{{action("Web\RoleController@destroy" , $role)}}');">بله
                             </button>
                         </div>
                     </div>

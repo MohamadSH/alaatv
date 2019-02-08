@@ -17,7 +17,7 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{{action("IndexPageController")}}">@lang('page.Home')</a>
+                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
@@ -60,7 +60,7 @@
                                 <div class="caption caption-md">
                                     <i class="icon-bar-chart theme-font hide"></i>
                                     <span class="caption-subject font-blue-madison bold uppercase">جدول فیلدهای فرم</span>
-                                    {{--<span class="caption-helper"><a href="{{action("UserController@completeRegister")}}">رفتن به صفحه ی تکمیل اطلاعات</a></span>--}}
+                                    {{--<span class="caption-helper"><a href="{{action("Web\UserController@completeRegister")}}">رفتن به صفحه ی تکمیل اطلاعات</a></span>--}}
                                 </div>
                                 <div class="actions">
                                     <div class="btn-group btn-group-devided" data-toggle="buttons">

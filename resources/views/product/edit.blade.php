@@ -23,11 +23,11 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{{action("IndexPageController")}}">@lang('page.Home')</a>
+                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
-                <a href="{{action("HomeController@adminProduct")}}">پنل مدیریتی محصولات</a>
+                <a href = "{{action("Web\HomeController@adminProduct")}}">پنل مدیریتی محصولات</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
@@ -35,8 +35,7 @@
             </li>
         </ul>
         <ul class="text-right margin-bottom-10 margin-top-10 margin-right-10">
-            <a class="btn btn-sm dark dropdown-toggle"
-               href="@if($product->hasParents()) {{action("ProductController@edit" , $product->parents->first())}} @else{{action("HomeController@adminProduct")}}@endif">
+            <a class="btn btn-sm dark dropdown-toggle" href = "@if($product->hasParents()) {{action("Web\ProductController@edit" , $product->parents->first())}} @else{{action("Web\HomeController@adminProduct")}}@endif">
                 بازگشت
                 <i class="fa fa-angle-left"></i>
             </a>
@@ -55,8 +54,7 @@
                 <div class="portlet-title">
                     <div class="caption">
                         <i class="icon-settings font-dark"></i>
-                        <span class="caption-subject font-dark sbold uppercase">اصلاح اطلاعات <a
-                                    href="{{action("ProductController@show" , $product)}}">{{$product->name}}</a></span>
+                        <span class="caption-subject font-dark sbold uppercase">اصلاح اطلاعات <a href = "{{action("Web\ProductController@show" , $product)}}">{{$product->name}}</a></span>
                     </div>
                     <div class="actions">
                         <div class="btn-group">
@@ -74,7 +72,7 @@
         {{--<div class="col-md-6">--}}
         {{--<div class="actions">--}}
         {{--<div class="btn-group">--}}
-        {{--<a class="btn btn-sm btn-info dropdown-toggle" href="{{action("ProductController@editAttributevalues", $product)}}" >اصلاح مقدار صفت ها--}}
+        {{--<a class="btn btn-sm btn-info dropdown-toggle" href="{{action("Web\ProductController@editAttributevalues", $product)}}" >اصلاح مقدار صفت ها--}}
         {{--<i class="fa fa-angle-left"></i>--}}
         {{--</a>--}}
         {{--</div>--}}

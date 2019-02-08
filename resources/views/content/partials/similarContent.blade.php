@@ -16,7 +16,7 @@
                         <div class="list-datetime"> @if($content->grades->isNotEmpty()){{$content->grades->first()->displayName}}@endif   </div>
                         <div class="list-item-content">
                             <h5 class="uppercase bold">
-                                <a href="{{action("ContentController@show" , $content)}}">{{$content->display_name}}</a>
+                                <a href = "{{action("Web\ContentController@show" , $content)}}">{{$content->display_name}}</a>
                             </h5>
                         </div>
                     </li>

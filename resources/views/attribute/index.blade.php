@@ -23,7 +23,7 @@
                 <ul class="dropdown-menu" role="menu">
                     @permission((Config::get('constants.SHOW_ATTRIBUTE_ACCESS')))
                     <li>
-                        <a href="{{action("AttributeController@edit" , $attribute->id)}}">
+                        <a href = "{{action("Web\AttributeController@edit" , $attribute->id)}}">
                             <i class="fa fa-pencil"></i> اصلاح </a>
                     </li>
                     @endpermission
@@ -44,8 +44,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" data-dismiss="modal" class="btn btn-outline dark">خیر</button>
-                        <button type="button" data-dismiss="modal" class="btn green"
-                                onclick="removeAttributes('{{action("AttributeController@destroy" , $attribute)}}');">
+                        <button type="button" data-dismiss="modal" class="btn green" onclick = "removeAttributes('{{action("Web\AttributeController@destroy" , $attribute)}}');">
                             بله
                         </button>
                     </div>

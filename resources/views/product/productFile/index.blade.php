@@ -7,7 +7,7 @@
         @permission((Config::get('constants.INSERT_PRODUCT_FILE_ACCESS')))
         <div class="actions">
             <div class="btn-group">
-                <a target="_blank" href="{{action("ProductfileController@create" , ["product"=>$product->id])}}"
+                <a target = "_blank" href = "{{action("Web\ProductfileController@create" , ["product"=>$product->id])}}"
                    class="btn btn-sm blue-dark"><i class="fa fa-plus-circle"></i>آپلود فایل</a>
                 <a class="btn btn-sm dark dropdown-toggle" data-toggle="modal" href="#createProductFile"><i
                             class="fa fa-plus-circle"></i>درج فایل با لینک</a>
@@ -62,8 +62,7 @@
                             <td>@if(isset($file->productfiletype->id)){{$file->productfiletype->displayName}}@else <span
                                         class="label label-sm label-warning"> نا مشخص </span> @endif</td>
                             <td>
-                                <a class="btn yellow"
-                                   href="{{action("HomeController@download" , ["content"=>"فایل محصول","fileName"=>$file->file , "pId"=>$file->product_id ])}}">
+                                <a class="btn yellow" href = "{{action("Web\HomeController@download" , ["content"=>"فایل محصول","fileName"=>$file->file , "pId"=>$file->product_id ])}}">
                                     <i class="fa fa-download"></i>
                                     دانلود </a>
                             </td>
@@ -71,7 +70,7 @@
                                         class="label label-sm label-danger"> غیر فعال </span>  @endif</td>
                             <td>
                                 @permission((Config::get('constants.EDIT_PRODUCT_FILE_ACCESS')))
-                                <a class="btn btn-info" href="{{action("ProductfileController@edit" , $file)}}">
+                                <a class = "btn btn-info" href = "{{action("Web\ProductfileController@edit" , $file)}}">
                                     <i class="fa fa-pencil"></i> اصلاح </a>
                                 @endpermission
                             </td>

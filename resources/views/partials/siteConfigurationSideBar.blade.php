@@ -41,24 +41,24 @@
         <ul class="nav">
             @permission((Config::get('constants.SHOW_SITE_CONFIG_ACCESS')))
             <li @if(strcmp($section , "websiteSetting") == 0) class="active" @endif >
-                <a href="{{action("HomeController@adminSiteConfig")}}">
+                <a href = "{{action("Web\HomeController@adminSiteConfig")}}">
                     <i class="icon-settings"></i> تنظیمات سایت </a>
             </li>
             @endpermission
             @permission((Config::get('constants.LIST_SLIDESHOW_ACCESS')))
             <li @if(strcmp($section , "slideShow") == 0) class="active" @endif >
-                <a href="{{action("HomeController@adminSlideShow")}}">
+                <a href = "{{action("Web\HomeController@adminSlideShow")}}">
                     <i class="fa fa-picture-o" aria-hidden="true"></i> اسلاید شو صفحه اصلی </a>
             </li>
             @endpermission
             {{--@permission((Config::get('constants.LIST_SLIDESHOW_ACCESS')))--}}
             {{--<li @if(strcmp($section , "articleSlideShow") == 0) class="active" @endif >--}}
-            {{--<a href="{{action("HomeController@adminArticleSlideShow")}}">--}}
+            {{--<a href="{{action("Web\HomeController@adminArticleSlideShow")}}">--}}
             {{--<i class="fa fa-picture-o" aria-hidden="true"></i> اسلاید شو صفحه مقالات </a>--}}
             {{--</li>--}}
             {{--@endpermission--}}
             <li @if(strcmp($section , "afterLoginForm") == 0) class="active" @endif >
-                <a href="{{action("AfterLoginFormController@index")}}">
+                <a href = "{{action("Web\AfterLoginFormController@index")}}">
                     <i class="icon-info"></i> فرم تکمیل ثبت نام </a>
             </li>
         </ul>

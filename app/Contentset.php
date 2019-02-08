@@ -172,9 +172,9 @@ class Contentset extends BaseModel implements Taggable
 
     public function getUrlAttribute($value): string
     {
-//        return action("ContentsetController@show",$this);
+//        return action("Web\ContentsetController@show",$this);
         $contentId = optional($this->getLastContent())->id;
-        return isset($contentId) ? action("ContentController@show", $contentId) : "";
+        return isset($contentId) ? action("Web\ContentController@show", $contentId) : "";
     }
 
     /**
@@ -183,7 +183,7 @@ class Contentset extends BaseModel implements Taggable
      */
     public function getAuthorAttribute($value): ?User
     {
-//        return action("ContentsetController@show",$this);
+//        return action("Web\ContentsetController@show",$this);
         return optional(optional($this->getLastContent())->author)
             ->setVisible([
                 'id',

@@ -65,7 +65,7 @@
                                                         @endif
                                                         <span class="input-group-btn">
                                                                         @if(isset($coupon))
-                                                                <a href="{{action("OrderController@removeCoupon")}}"
+                                                                <a href = "{{action("Web\OrderController@removeCoupon")}}"
                                                                    class="btn red">حذف کد تخفیف</a>
                                                             @else
                                                                 {!! Form::submit('ثبت کد تخفیف',['class' => 'btn blue']) !!}
@@ -123,7 +123,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <div class="col-lg-12" style="text-align: center;">
-                                                    <a href="{{action("OrderController@checkoutReview")}}"
+                                                    <a href = "{{action("Web\OrderController@checkoutReview")}}"
                                                        class="btn dark btn-outline"><i class="fa fa-chevron-right"
                                                                                        aria-hidden="true"></i>بازبینی</a>
                                                     <button type="submit" class="btn green btn-outline">ثبت نهایی
@@ -143,7 +143,7 @@
                                                 <span class="label bg-green-soft" style="font-size: 15px">مبلغ قابل پرداخت: {{number_format($invoiceInfo["totalCost"])}}</span>
                                             </div>
                                             <div class="col-md-12 margin-top-20" style="text-align: center;">
-                                                <a href="{{action("OrderController@checkoutReview")}}"
+                                                <a href = "{{action("Web\OrderController@checkoutReview")}}"
                                                    class="btn dark btn-outline" style="width: 100px"><i
                                                             class="fa fa-chevron-right"
                                                             aria-hidden="true"></i>بازبینی</a>
@@ -240,7 +240,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <div class="col-lg-12 col-md-12 margin-top-10 text-center">
-                                                    <a href="{{action("OrderController@checkoutReview")}}"
+                                                    <a href = "{{action("Web\OrderController@checkoutReview")}}"
                                                        class="btn dark btn-outline" style="width: 100px">
                                                         <i class="fa fa-chevron-right" aria-hidden="true"></i>
                                                         بازبینی
@@ -364,7 +364,7 @@
                 }
                 cancelDonateAjax = $.ajax({
                     type: "DELETE",
-                    url: "{{action("OrderController@removeOrderproduct" , 180)}}",
+                    url: "{{action("Web\OrderController@removeOrderproduct" , 180)}}",
                     contentType: "application/json",
                     dataType: "json",
                     statusCode: {

@@ -31,8 +31,8 @@
                                 </div>
                             </div>
                             <div class="row static-info margin-top-40" style="text-align: center;">
-                                <a href="{{action("ProductController@search")}}" class="btn yellow btn-outline">اردوها و
-                                    همایش ها</a>
+                                <a href = "{{action("Web\ProductController@search")}}" class = "btn yellow btn-outline">اردوها و
+                                                                                                                        همایش ها</a>
                             </div>
                         @else
                             <div class="col-md-12" id="printBill-div" style="direction: rtl">
@@ -57,7 +57,7 @@
                                         {{--</div>--}}
                                         {{--</div>--}}
                                         {{--<div class="row static-info margin-top-40" style="text-align: center;">--}}
-                                        {{--<a href="{{action("ProductController@search")}}"   class="btn yellow-casablanca btn-outline">اردوها و همایش ها</a>--}}
+                                        {{--<a href="{{action("Web\ProductController@search")}}"   class="btn yellow-casablanca btn-outline">اردوها و همایش ها</a>--}}
                                         {{--</div>--}}
                                         {{--@else--}}
                                         <div class="clearfix" style="height: 15px;"></div>
@@ -122,7 +122,7 @@
                                                             <div class="col-md-8 value font-red"> رایگان</div>
                                                         </div>
                                                         {{--<div class="row static-info margin-top-40 no-print" style="text-align: center;">--}}
-                                                        {{--<a href="{{action("OrderController@verifyPayment")}}"   class="btn green btn-outline">تکمیل سفارش<i class="fa fa-arrow-left" aria-hidden="true"></i></a>--}}
+                                                        {{--<a href="{{action("Web\OrderController@verifyPayment")}}"   class="btn green btn-outline">تکمیل سفارش<i class="fa fa-arrow-left" aria-hidden="true"></i></a>--}}
                                                         {{--</div>--}}
                                                     @else
                                                         @if($invoiceInfo["costCollection"][$orderproduct->id]["cost"] == 0)
@@ -211,8 +211,7 @@
                                                         @if($orderproduct->orderproducttype_id == Config::get("constants.ORDER_PRODUCT_GIFT"))
                                                             <img src="/acm/extra/gift-box.png">
                                                         @elseif(($orderproduct->product_id != Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_DEFAULT")) || ($orderproduct->product_id == Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_DEFAULT") && !$orderHasOrdrooGheireHozoori))
-                                                            <button class="btn red btn-outline btn-circle btn-lg removeOrderproduct"
-                                                                    data-action="{{action("OrderproductController@destroy",$orderproduct->id)}}">
+                                                            <button class="btn red btn-outline btn-circle btn-lg removeOrderproduct" data-action = "{{action("Web\OrderproductController@destroy",$orderproduct->id)}}">
                                                                 <i class="fa fa-times" aria-hidden="true"></i></button>
                                                         @endif
                                                     </div>
@@ -268,14 +267,14 @@
                                                             </button>
                                                         </div>
                                                         <div class="col-md-4 col-lg-4 col-sm-4 col-xs-12">
-                                                            <a href="{{action("ProductController@search")}}"
+                                                            <a href = "{{action("Web\ProductController@search")}}"
                                                                class="btn blue-madison btn-outline"
                                                                style="width: 150px"><i class="fa fa-plus"
                                                                                        aria-hidden="true"></i> افزودن
                                                                 محصول</a>
                                                         </div>
                                                         <div class="col-md-4 col-lg-4 col-sm-4 col-xs-12">
-                                                            <a href="{{action("OrderController@checkoutPayment")}}"
+                                                            <a href = "{{action("Web\OrderController@checkoutPayment")}}"
                                                                class="btn green btn-outline" style="width: 150px">انتخاب
                                                                 روش پرداخت<i class="fa fa-chevron-left"
                                                                              aria-hidden="true"></i></a>

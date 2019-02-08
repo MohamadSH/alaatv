@@ -8,7 +8,7 @@
                 @if(isset($withCloseIcon)  && $withCloseIcon)
                     <a class="m-link removeTagLabel m--padding-left-10" data-role="{{$key}}"><i class="fa fa-remove"></i></a>
                 @endif
-                <a class="m-link m--font-light" href="{{urldecode(action("ContentController@index" , ["tags"=>[$tag]]))}}">{{$tag}}</a>
+                <a class = "m-link m--font-light" href = "{{urldecode(action("Web\ContentController@index" , ["tags"=>[$tag]]))}}">{{$tag}}</a>
                 @if(isset($withInput) && $withInput)
                     <input class="m--hide" id="tagInput_{{$key}}" name="tags[]" type="hidden" value="{{$tag}}">
                 @endif

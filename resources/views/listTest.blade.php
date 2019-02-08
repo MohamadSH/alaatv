@@ -46,8 +46,7 @@
                             <tbody>
                             @foreach($contents as $content )
                                 <tr>
-                                    <td><a target="_blank"
-                                           href="{{action("ContentController@edit" , $content->id)}}">{{ $content->id }}</a>
+                                    <td><a target="_blank" href = "{{action("Web\ContentController@edit" , $content->id)}}">{{ $content->id }}</a>
                                     </td>
                                     <td><img src="{{ $content->thumbnail }}" class="img-responsive"/></td>
                                     <td> {{ $content->pivot->order }}</td>

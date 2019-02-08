@@ -15,7 +15,7 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{{action("IndexPageController")}}">@lang('page.Home')</a>
+                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
                 <i class="fa fa-angle-left"></i>
             </li>
 
@@ -46,11 +46,10 @@
                                          src="{{ route('image', [ 'category'=>'8','w'=>'60' , 'h'=>'60' , 'filename' =>  $article->image ]) }}"/>
                                 </div>
                                 <br>
-                                <h4 class="bold" style="text-align: right"><a
-                                            href="{{action("ArticleController@show", $article->id)}}"> {{$article->title}}</a>
+                                <h4 class="bold" style="text-align: right"><a href = "{{action("Web\ArticleController@show", $article->id)}}"> {{$article->title}}</a>
                                 </h4>
                                 <p style="text-align: j"> {!! $article->brief !!}</p>
-                                <a href="{{action("ArticleController@show", $article->id)}}"
+                                <a href = "{{action("Web\ArticleController@show", $article->id)}}"
                                    class="btn btn-circle blue-hoki btn-outline sbold uppercase">خواندن ادامه</a>
                                 <hr>
                             @endforeach
@@ -76,15 +75,13 @@
                             @foreach($articlecategories as $articlecategory)
                                 <li class="blog-single-desc">
                                     <a class="bold"
-                                       style="@if(isset($categoryId) && $categoryId == $articlecategory->id) color:red; background-color: #eeeeee; @endif"
-                                       href="{{action("ArticleController@showList", ['categoryId' => $articlecategory->id])}}"> {{$articlecategory->name}}</a>
+                                       style="@if(isset($categoryId) && $categoryId == $articlecategory->id) color:red; background-color: #eeeeee; @endif" href = "{{action("Web\ArticleController@showList", ['categoryId' => $articlecategory->id])}}"> {{$articlecategory->name}}</a>
                                 </li>
                             @endforeach
                             @if($countWithoutCategory != 0 )
                                 <li class="blog-single-img">
                                     <a class="bold"
-                                       style="@if(!isset($categoryId) || $categoryId == null) color:red; background-color: #eeeeee; @endif"
-                                       href="{{action("ArticleController@showList", ['categoryId' => 'else'])}}">
+                                       style="@if(!isset($categoryId) || $categoryId == null) color:red; background-color: #eeeeee; @endif" href = "{{action("Web\ArticleController@showList", ['categoryId' => 'else'])}}">
                                         سایر</a>
                                 </li>
                             @endif
@@ -96,7 +93,7 @@
                         <ul>
                             @foreach($recentArticles as $recentArticle)
                                 <li>
-                                    <a href="{{action("ArticleController@show", $recentArticle)}}">{{$recentArticle->title}}</a>
+                                    <a href = "{{action("Web\ArticleController@show", $recentArticle)}}">{{$recentArticle->title}}</a>
                                 </li>
                             @endforeach
                         </ul>
