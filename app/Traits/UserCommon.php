@@ -157,8 +157,8 @@ trait UserCommon
                 \Illuminate\Validation\Rule::phone()->mobile()->country('AUTO,IR'),
                 \Illuminate\Validation\Rule::unique('users')
                     ->where(function ($query) use ($data) {
-                        $query->where('nationalCode', $data["nationalCode"])
-                            ->where('deleted_at', null);
+                        $query->where('nationalCode', array_get($data, "nationalCode"))
+                              ->where('deleted_at', null);
                     }),
             ],
             'password'      => 'required|min:6',
@@ -168,8 +168,8 @@ trait UserCommon
                 'validate:nationalCode',
                 \Illuminate\Validation\Rule::unique('users')
                     ->where(function ($query) use ($data) {
-                        $query->where('mobile', $data["mobile"])
-                            ->where('deleted_at', null);
+                        $query->where('mobile', array_get($data, "mobile"))
+                              ->where('deleted_at', null);
                     }),
             ],
             'userstatus_id' => 'required|exists:userstatuses,id',

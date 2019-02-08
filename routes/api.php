@@ -13,7 +13,7 @@
 
 Auth::routes(['verify' => true]);
 
-Route::post('uploadFile', 'HomeController@uploadFile');
+Route::post('uploadFile', 'Web\HomeController@uploadFile');
 
 Route::group(['prefix' => 'v1'], function () {
     Route::group(['prefix' => 'rt'], function () {
@@ -25,4 +25,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('flush', "Api\TagController@flush");
 
     });
+
+    Route::get('debug', 'Api\HomeController@debug');
+    Route::get('authTest', 'Api\HomeController@authTest');
 });

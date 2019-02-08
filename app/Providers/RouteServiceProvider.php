@@ -73,7 +73,8 @@ class RouteServiceProvider extends ServiceProvider
                                ])
                         ->remember($key, Config::get("constants.CACHE_5"), function () use ($value) {
                             return User::where('id', $value)
-                                       ->first() ?? abort(404);
+                                       ->first()
+                                ?? abort(404);
                         });
 
         });

@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 //use App\Classes\Search\Tag\ProductTagManagerViaApi;
-use App\Http\Controllers\ProductController;
+use App\Http\Controllers\Web\ProductController;
 use App\Orderproduct;
 use App\Product;
 use App\Traits\APIRequestCommon;

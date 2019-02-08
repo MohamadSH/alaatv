@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 
@@ -16,7 +15,7 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         'Illuminate\Auth\Events\Registered' => [
             //            SendMobileVerificationNotification::class,
-            SendEmailVerificationNotification::class,
+            //            SendEmailVerificationNotification::class,
         ],
         'App\Events\MobileVerified'         => [
             'App\Listeners\MobileVerifiedListener',

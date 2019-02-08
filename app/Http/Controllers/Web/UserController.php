@@ -377,11 +377,11 @@ class UserController extends Controller
      * @return void
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
-    private function fillContentFromRequest(array $inputData , User $authenticatedUser, User &$user): void
+    private function fillContentFromRequest(array $inputData, User $authenticatedUser = null, User &$user = null): void
     {
         $user->fill($inputData);
 
-        if ($authenticatedUser->can(config('constants.EDIT_USER_ACCESS'))) {
+        if (optional($authenticatedUser)->can(config('constants.EDIT_USER_ACCESS'))) {
             $hasMobileVerifiedAt = in_array("mobileNumberVerification" , $inputData);
             $hasPassword = in_array("password" , $inputData);
             $hasLockProfile = in_array("lockProfile" , $inputData);
@@ -1173,9 +1173,9 @@ class UserController extends Controller
     /**
      * Storing user's work time (for employees)
      *
-     * @param Request                                           $request
-     * @param \App\Http\Controllers\EmployeetimesheetController $employeetimesheetController
-     * @param \App\Http\Controllers\HomeController              $homeController
+     * @param Request                                               $request
+     * @param \App\Http\Controllers\Web\EmployeetimesheetController $employeetimesheetController
+     * @param \App\Http\Controllers\Web\HomeController              $homeController
      *
      * @return Response
      */

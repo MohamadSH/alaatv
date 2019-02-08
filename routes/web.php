@@ -44,7 +44,7 @@ Route::get('SanatiSharif-News', 'Web\HomeController@home');
 Route::get('Alaa-App/{mod?}', 'Web\SanatisharifmergeController@AlaaApp');
 Route::get('image/{category}/{w}/{h}/{filename}', [
     'as'   => 'image',
-    'uses' => 'HomeController@getImage',
+    'uses' => 'Web\HomeController@getImage',
 ]);
 Route::get("sharif", "Web\HomeController@schoolRegisterLanding");
 Route::post("registerForSanatiSharifHighSchool", "Web\UserController@registerForSanatiSharifHighSchool");
